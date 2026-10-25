@@ -1,0 +1,1484 @@
+# The units that an ambassador calls in by the points of influence (see world_mother_offers.yml): nameless mercenaries (one look for all the ambassadors, but they belong to the faction that
+# called them and have its headset and its IFF), and the unarmed medics and engineers of the three great factions. Made by tools; the look of the mercenaries is that of the freelancers,
+# the medics and the engineers have the look of their faction and no weapon.
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: RUMCHeadsetUnitUPP
+  name: UPP unit headset
+  description: A headset of the units that the UPP ambassador has called in.
+  suffix: RUMC, UPP
+  components:
+  - type: RMCHeadset
+    channels:
+    - UPPSOF
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: RUMCHeadsetUnitTWE
+  name: TWE unit headset
+  description: A headset of the units that the TWE ambassador has called in.
+  suffix: RUMC, TWE
+  components:
+  - type: RMCHeadset
+    channels:
+    - TWESOF
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: RUMCHeadsetUnitUA
+  name: UA unit headset
+  description: A headset of the units that the UA ambassador has called in.
+  suffix: RUMC, UA
+  components:
+  - type: RMCHeadset
+    channels:
+    - UASOF
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: RUMCHeadsetUnitICSC
+  name: ICSC unit headset
+  description: A headset of the units that the ICSC ambassador has called in.
+  suffix: RUMC, ICSC
+  components:
+  - type: RMCHeadset
+    channels:
+    - ICSCSOF
+
+- type: startingGear
+  id: RUMCGearMercBase
+  equipment:
+    mask: RMCMaskScarfTan
+    back: RMCSatchelLightpackFreelancerStandard
+    belt: RMCMAR40BeltFilled
+    suitstorage: WeaponRifleMAR40
+    gloves: RMCHandsVeteranPMC
+    jumpsuit: RMCJumpsuitFreelancer
+    outerClothing: CMArmorFreelancer
+    shoes: RMCBootsSPPFilled
+    pocket1: RMCPouchFirstAidERTFill
+    pocket2: RMCPouchFlareFilled
+
+- type: startingGear
+  parent: RUMCGearMercBase
+  id: RUMCGearMercLeaderBase
+  equipment:
+    belt: RMCMAR50BeltFilled
+    suitstorage: RMCWeaponMar50LMG
+    back: RMCSatchelLightpackFreelancerLeader
+
+- type: startingGear
+  parent: RUMCGearMercLeaderBase
+  id: RUMCGearUPPMercLeader
+  equipment:
+    id: RUMCIDCardUPPMercLeader
+    ears: RUMCHeadsetUnitUPP
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardUPPMercLeader
+  name: unit ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobUPPMercLeader
+  - type: ItemIFF
+    factions:
+    - FactionUPPSOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobUPPMercLeader
+  name: Nameless mercenary
+  suffix: RUMC, UPP
+  components:
+  - type: NpcFactionMember
+    factions:
+    - AUUpp
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobuppmercleader-name
+    description: rumc-unit-rumcjobuppmercleader-desc
+    reregister: false
+    job: RUMCJobUPPMercLeader
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobuppmercleader-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobUPPMercLeader
+  roundSide: ThirdParty
+  roundForce: UPP
+  roundRole: RUMCUPPMercLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 1
+      RMCSkillSpecialistWeapons: 1
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-mercleader
+  name: rumc-unit-rumcjobuppmercleader-name
+  description: rumc-unit-rumcjobuppmercleader-desc
+  playTimeTracker: RUMCJobUPPMercLeader
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearUPPMercLeader
+  spawnMenuRoleName: Nameless mercenary UPP (ambassador unit)
+  greeting: rumc-unit-rumcjobuppmercleader-greeting
+  icon: RMCJobIconFreelancerLeader
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobUPPMercLeader
+  isHumanoid: true
+
+- type: startingGear
+  parent: RUMCGearMercBase
+  id: RUMCGearUPPMerc
+  equipment:
+    id: RUMCIDCardUPPMerc
+    ears: RUMCHeadsetUnitUPP
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardUPPMerc
+  name: unit ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobUPPMerc
+  - type: ItemIFF
+    factions:
+    - FactionUPPSOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobUPPMerc
+  name: Nameless mercenary
+  suffix: RUMC, UPP
+  components:
+  - type: NpcFactionMember
+    factions:
+    - AUUpp
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobuppmerc-name
+    description: rumc-unit-rumcjobuppmerc-desc
+    reregister: false
+    job: RUMCJobUPPMerc
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobuppmerc-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobUPPMerc
+  roundSide: ThirdParty
+  roundForce: UPP
+  roundRole: RUMCUPPMerc
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 1
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-merc
+  name: rumc-unit-rumcjobuppmerc-name
+  description: rumc-unit-rumcjobuppmerc-desc
+  playTimeTracker: RUMCJobUPPMerc
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearUPPMerc
+  spawnMenuRoleName: Nameless mercenary UPP (ambassador unit)
+  greeting: rumc-unit-rumcjobuppmerc-greeting
+  icon: RMCJobIconFreelancerStandard
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobUPPMerc
+  isHumanoid: true
+
+- type: startingGear
+  parent: RUMCGearMercLeaderBase
+  id: RUMCGearTWEMercLeader
+  equipment:
+    id: RUMCIDCardTWEMercLeader
+    ears: RUMCHeadsetUnitTWE
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardTWEMercLeader
+  name: unit ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobTWEMercLeader
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobTWEMercLeader
+  name: Nameless mercenary
+  suffix: RUMC, TWE
+  components:
+  - type: NpcFactionMember
+    factions:
+    - CMUTWE
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobtwemercleader-name
+    description: rumc-unit-rumcjobtwemercleader-desc
+    reregister: false
+    job: RUMCJobTWEMercLeader
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobtwemercleader-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobTWEMercLeader
+  roundSide: ThirdParty
+  roundForce: TWE
+  roundRole: RUMCTWEMercLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_rifleman
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 1
+      RMCSkillSpecialistWeapons: 1
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-mercleader
+  name: rumc-unit-rumcjobtwemercleader-name
+  description: rumc-unit-rumcjobtwemercleader-desc
+  playTimeTracker: RUMCJobTWEMercLeader
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearTWEMercLeader
+  spawnMenuRoleName: Nameless mercenary TWE (ambassador unit)
+  greeting: rumc-unit-rumcjobtwemercleader-greeting
+  icon: RMCJobIconFreelancerLeader
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobTWEMercLeader
+  isHumanoid: true
+
+- type: startingGear
+  parent: RUMCGearMercBase
+  id: RUMCGearTWEMerc
+  equipment:
+    id: RUMCIDCardTWEMerc
+    ears: RUMCHeadsetUnitTWE
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardTWEMerc
+  name: unit ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobTWEMerc
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobTWEMerc
+  name: Nameless mercenary
+  suffix: RUMC, TWE
+  components:
+  - type: NpcFactionMember
+    factions:
+    - CMUTWE
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobtwemerc-name
+    description: rumc-unit-rumcjobtwemerc-desc
+    reregister: false
+    job: RUMCJobTWEMerc
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobtwemerc-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobTWEMerc
+  roundSide: ThirdParty
+  roundForce: TWE
+  roundRole: RUMCTWEMerc
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_rifleman
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 1
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-merc
+  name: rumc-unit-rumcjobtwemerc-name
+  description: rumc-unit-rumcjobtwemerc-desc
+  playTimeTracker: RUMCJobTWEMerc
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearTWEMerc
+  spawnMenuRoleName: Nameless mercenary TWE (ambassador unit)
+  greeting: rumc-unit-rumcjobtwemerc-greeting
+  icon: RMCJobIconFreelancerStandard
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobTWEMerc
+  isHumanoid: true
+
+- type: startingGear
+  parent: RUMCGearMercLeaderBase
+  id: RUMCGearUAMercLeader
+  equipment:
+    id: RUMCIDCardUAMercLeader
+    ears: RUMCHeadsetUnitUA
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardUAMercLeader
+  name: unit ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobUAMercLeader
+  - type: ItemIFF
+    factions:
+    - FactionUASOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobUAMercLeader
+  name: Nameless mercenary
+  suffix: RUMC, UA
+  components:
+  - type: NpcFactionMember
+    factions:
+    - AUUnitedAmericas
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobuamercleader-name
+    description: rumc-unit-rumcjobuamercleader-desc
+    reregister: false
+    job: RUMCJobUAMercLeader
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobuamercleader-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobUAMercLeader
+  roundSide: ThirdParty
+  roundForce: UA
+  roundRole: RUMCUAMercLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: private
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 1
+      RMCSkillSpecialistWeapons: 1
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-mercleader
+  name: rumc-unit-rumcjobuamercleader-name
+  description: rumc-unit-rumcjobuamercleader-desc
+  playTimeTracker: RUMCJobUAMercLeader
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearUAMercLeader
+  spawnMenuRoleName: Nameless mercenary UA (ambassador unit)
+  greeting: rumc-unit-rumcjobuamercleader-greeting
+  icon: RMCJobIconFreelancerLeader
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobUAMercLeader
+  isHumanoid: true
+
+- type: startingGear
+  parent: RUMCGearMercBase
+  id: RUMCGearUAMerc
+  equipment:
+    id: RUMCIDCardUAMerc
+    ears: RUMCHeadsetUnitUA
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardUAMerc
+  name: unit ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobUAMerc
+  - type: ItemIFF
+    factions:
+    - FactionUASOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobUAMerc
+  name: Nameless mercenary
+  suffix: RUMC, UA
+  components:
+  - type: NpcFactionMember
+    factions:
+    - AUUnitedAmericas
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobuamerc-name
+    description: rumc-unit-rumcjobuamerc-desc
+    reregister: false
+    job: RUMCJobUAMerc
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobuamerc-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobUAMerc
+  roundSide: ThirdParty
+  roundForce: UA
+  roundRole: RUMCUAMerc
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: private
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 1
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-merc
+  name: rumc-unit-rumcjobuamerc-name
+  description: rumc-unit-rumcjobuamerc-desc
+  playTimeTracker: RUMCJobUAMerc
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearUAMerc
+  spawnMenuRoleName: Nameless mercenary UA (ambassador unit)
+  greeting: rumc-unit-rumcjobuamerc-greeting
+  icon: RMCJobIconFreelancerStandard
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobUAMerc
+  isHumanoid: true
+
+- type: startingGear
+  parent: RUMCGearMercLeaderBase
+  id: RUMCGearICSCMercLeader
+  equipment:
+    id: RUMCIDCardICSCMercLeader
+    ears: RUMCHeadsetUnitICSC
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardICSCMercLeader
+  name: unit ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobICSCMercLeader
+  - type: ItemIFF
+    factions:
+    - FactionICSCSOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobICSCMercLeader
+  name: Nameless mercenary
+  suffix: RUMC, ICSC
+  components:
+  - type: NpcFactionMember
+    factions:
+    - CMUFreelancers
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobicscmercleader-name
+    description: rumc-unit-rumcjobicscmercleader-desc
+    reregister: false
+    job: RUMCJobICSCMercLeader
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobicscmercleader-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobICSCMercLeader
+  roundSide: ThirdParty
+  roundForce: CMUFreelancers
+  roundRole: RUMCICSCMercLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 1
+      RMCSkillSpecialistWeapons: 1
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-mercleader
+  name: rumc-unit-rumcjobicscmercleader-name
+  description: rumc-unit-rumcjobicscmercleader-desc
+  playTimeTracker: RUMCJobICSCMercLeader
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearICSCMercLeader
+  spawnMenuRoleName: Nameless mercenary ICSC (ambassador unit)
+  greeting: rumc-unit-rumcjobicscmercleader-greeting
+  icon: RMCJobIconFreelancerLeader
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobICSCMercLeader
+  isHumanoid: true
+
+- type: startingGear
+  parent: RUMCGearMercBase
+  id: RUMCGearICSCMerc
+  equipment:
+    id: RUMCIDCardICSCMerc
+    ears: RUMCHeadsetUnitICSC
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardICSCMerc
+  name: unit ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobICSCMerc
+  - type: ItemIFF
+    factions:
+    - FactionICSCSOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobICSCMerc
+  name: Nameless mercenary
+  suffix: RUMC, ICSC
+  components:
+  - type: NpcFactionMember
+    factions:
+    - CMUFreelancers
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobicscmerc-name
+    description: rumc-unit-rumcjobicscmerc-desc
+    reregister: false
+    job: RUMCJobICSCMerc
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobicscmerc-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobICSCMerc
+  roundSide: ThirdParty
+  roundForce: CMUFreelancers
+  roundRole: RUMCICSCMerc
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 1
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-merc
+  name: rumc-unit-rumcjobicscmerc-name
+  description: rumc-unit-rumcjobicscmerc-desc
+  playTimeTracker: RUMCJobICSCMerc
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearICSCMerc
+  spawnMenuRoleName: Nameless mercenary ICSC (ambassador unit)
+  greeting: rumc-unit-rumcjobicscmerc-greeting
+  icon: RMCJobIconFreelancerStandard
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobICSCMerc
+  isHumanoid: true
+
+- type: startingGear
+  id: RUMCGearUPPMedic
+  equipment:
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: CMJumpsuitSPPEngi
+    shoes: RMCBootsSPPFilled
+    head: RMCHardhatOrange
+    belt: AU14BeltMedicBagProdigyFilled
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelLightpackFreelancerMedic
+    eyes: RMCGlassesMedicalHUDGlasses
+    id: RUMCIDCardUPPMedic
+    ears: RUMCHeadsetUnitUPP
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardUPPMedic
+  name: medic ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobUPPMedic
+  - type: ItemIFF
+    factions:
+    - FactionUPPSOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobUPPMedic
+  name: Medic
+  suffix: RUMC, UPP
+  components:
+  - type: NpcFactionMember
+    factions:
+    - AUUpp
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobuppmedic-name
+    description: rumc-unit-rumcjobuppmedic-desc
+    reregister: false
+    job: RUMCJobUPPMedic
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobuppmedic-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobUPPMedic
+  roundSide: ThirdParty
+  roundForce: UPP
+  roundRole: RUMCUPPMedic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+      RMCSkillFireman: 2
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-medic
+  name: rumc-unit-rumcjobuppmedic-name
+  description: rumc-unit-rumcjobuppmedic-desc
+  playTimeTracker: RUMCJobUPPMedic
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearUPPMedic
+  spawnMenuRoleName: Medic UPP (ambassador unit)
+  greeting: rumc-unit-rumcjobuppmedic-greeting
+  icon: RMCJobIconFreelancerMedic
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobUPPMedic
+  isHumanoid: true
+
+- type: startingGear
+  id: RUMCGearUPPEngineer
+  equipment:
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: CMJumpsuitSPPEngi
+    shoes: RMCBootsSPPFilled
+    head: RMCHardhatOrange
+    belt: CMBeltUtilityFilled
+    pocket1: AU14PouchIFAKFill
+    back: AU14MolleBackpack
+    eyes: RMCWeldingGoggles
+    id: RUMCIDCardUPPEngineer
+    ears: RUMCHeadsetUnitUPP
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardUPPEngineer
+  name: engineer ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobUPPEngineer
+  - type: ItemIFF
+    factions:
+    - FactionUPPSOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobUPPEngineer
+  name: Engineer
+  suffix: RUMC, UPP
+  components:
+  - type: NpcFactionMember
+    factions:
+    - AUUpp
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobuppengineer-name
+    description: rumc-unit-rumcjobuppengineer-desc
+    reregister: false
+    job: RUMCJobUPPEngineer
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobuppengineer-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobUPPEngineer
+  roundSide: ThirdParty
+  roundForce: UPP
+  roundRole: RUMCUPPEngineer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillFireman: 2
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-engineer
+  name: rumc-unit-rumcjobuppengineer-name
+  description: rumc-unit-rumcjobuppengineer-desc
+  playTimeTracker: RUMCJobUPPEngineer
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearUPPEngineer
+  spawnMenuRoleName: Engineer UPP (ambassador unit)
+  greeting: rumc-unit-rumcjobuppengineer-greeting
+  icon: RMCJobIconFreelancerStandard
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobUPPEngineer
+  isHumanoid: true
+
+- type: startingGear
+  id: RUMCGearTWEMedic
+  equipment:
+    head: RMCHeadParaBeret
+    jumpsuit: RMCJumpsuitMarineParaPDW90
+    outerClothing: RMCArmorParaVest
+    gloves: RMCHandsVeteranRoyalMarine
+    shoes: RMCBootsRoyalFilled
+    belt: RMCMedicalL75RCMFillPara
+    pocket1: RMCPouchFirstAidSplintsGauzeOintment
+    pocket2: RMCPouchFlareL96Filled
+    back: RMCBackpackRCMMedicPVPFilledParaMedic
+    eyes: RMCGlassesMedicalHUDGlasses
+    id: RUMCIDCardTWEMedic
+    ears: RUMCHeadsetUnitTWE
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardTWEMedic
+  name: medic ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobTWEMedic
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobTWEMedic
+  name: Medic
+  suffix: RUMC, TWE
+  components:
+  - type: NpcFactionMember
+    factions:
+    - CMUTWE
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobtwemedic-name
+    description: rumc-unit-rumcjobtwemedic-desc
+    reregister: false
+    job: RUMCJobTWEMedic
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobtwemedic-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobTWEMedic
+  roundSide: ThirdParty
+  roundForce: TWE
+  roundRole: RUMCTWEMedic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_rifleman
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+      RMCSkillFireman: 2
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-medic
+  name: rumc-unit-rumcjobtwemedic-name
+  description: rumc-unit-rumcjobtwemedic-desc
+  playTimeTracker: RUMCJobTWEMedic
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearTWEMedic
+  spawnMenuRoleName: Medic TWE (ambassador unit)
+  greeting: rumc-unit-rumcjobtwemedic-greeting
+  icon: RMCJobIconFreelancerMedic
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobTWEMedic
+  isHumanoid: true
+
+- type: startingGear
+  id: RUMCGearTWEEngineer
+  equipment:
+    head: RMCHeadParaBeret
+    jumpsuit: RMCJumpsuitMarineParaPDW90
+    outerClothing: RMCArmorParaVest
+    gloves: RMCHandsVeteranRoyalMarine
+    shoes: RMCBootsRoyalFilled
+    belt: CMBeltUtilityFilled
+    pocket1: RMCPouchFirstAidSplintsGauzeOintment
+    pocket2: RMCPouchFlareL96Filled
+    back: RMCSatchelLightpackFilledPara
+    eyes: RMCWeldingGoggles
+    id: RUMCIDCardTWEEngineer
+    ears: RUMCHeadsetUnitTWE
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardTWEEngineer
+  name: engineer ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobTWEEngineer
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobTWEEngineer
+  name: Engineer
+  suffix: RUMC, TWE
+  components:
+  - type: NpcFactionMember
+    factions:
+    - CMUTWE
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobtweengineer-name
+    description: rumc-unit-rumcjobtweengineer-desc
+    reregister: false
+    job: RUMCJobTWEEngineer
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobtweengineer-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobTWEEngineer
+  roundSide: ThirdParty
+  roundForce: TWE
+  roundRole: RUMCTWEEngineer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_rifleman
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillFireman: 2
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-engineer
+  name: rumc-unit-rumcjobtweengineer-name
+  description: rumc-unit-rumcjobtweengineer-desc
+  playTimeTracker: RUMCJobTWEEngineer
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearTWEEngineer
+  spawnMenuRoleName: Engineer TWE (ambassador unit)
+  greeting: rumc-unit-rumcjobtweengineer-greeting
+  icon: RMCJobIconFreelancerStandard
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobTWEEngineer
+  isHumanoid: true
+
+- type: startingGear
+  id: RUMCGearUAMedic
+  equipment:
+    outerClothing: AU14ArmorUSArmyNormal
+    jumpsuit: AU14ArmyJumpsuitArmored
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: AU14BootsUSArmyFilled
+    head: AU14HelmetUSArmy
+    belt: AU14BeltMedicBagSupportSynthRMC
+    pocket1: AU14PouchIFAKFill
+    back: AU14MolleBackpack
+    eyes: RMCGlassesMedicalHUDGlasses
+    id: RUMCIDCardUAMedic
+    ears: RUMCHeadsetUnitUA
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardUAMedic
+  name: medic ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobUAMedic
+  - type: ItemIFF
+    factions:
+    - FactionUASOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobUAMedic
+  name: Medic
+  suffix: RUMC, UA
+  components:
+  - type: NpcFactionMember
+    factions:
+    - AUUnitedAmericas
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobuamedic-name
+    description: rumc-unit-rumcjobuamedic-desc
+    reregister: false
+    job: RUMCJobUAMedic
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobuamedic-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobUAMedic
+  roundSide: ThirdParty
+  roundForce: UA
+  roundRole: RUMCUAMedic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: private
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+      RMCSkillFireman: 2
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-medic
+  name: rumc-unit-rumcjobuamedic-name
+  description: rumc-unit-rumcjobuamedic-desc
+  playTimeTracker: RUMCJobUAMedic
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearUAMedic
+  spawnMenuRoleName: Medic UA (ambassador unit)
+  greeting: rumc-unit-rumcjobuamedic-greeting
+  icon: RMCJobIconFreelancerMedic
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobUAMedic
+  isHumanoid: true
+
+- type: startingGear
+  id: RUMCGearUAEngineer
+  equipment:
+    outerClothing: AU14ArmorUSArmyNormal
+    jumpsuit: AU14ArmyJumpsuitArmored
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: AU14BootsUSArmyFilled
+    head: AU14HelmetUSArmy
+    belt: AU14BeltUtilityCombatFilled
+    pocket1: AU14PouchIFAKFill
+    back: AU14MolleBackpack
+    eyes: RMCWeldingGoggles
+    id: RUMCIDCardUAEngineer
+    ears: RUMCHeadsetUnitUA
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RUMCIDCardUAEngineer
+  name: engineer ID card
+  components:
+  - type: PresetIdCard
+    job: RUMCJobUAEngineer
+  - type: ItemIFF
+    factions:
+    - FactionUASOF
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: RUMCJobUAEngineer
+  name: Engineer
+  suffix: RUMC, UA
+  components:
+  - type: NpcFactionMember
+    factions:
+    - AUUnitedAmericas
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rumc-unit-rumcjobuaengineer-name
+    description: rumc-unit-rumcjobuaengineer-desc
+    reregister: false
+    job: RUMCJobUAEngineer
+    raffle:
+      settings: short
+    rules: rumc-unit-rumcjobuaengineer-rules
+
+- type: job
+  parent: CMJobBase
+  id: RUMCJobUAEngineer
+  roundSide: ThirdParty
+  roundForce: UA
+  roundRole: RUMCUAEngineer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: private
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillFireman: 2
+  - type: JobPrefix
+    prefix: rumc-unit-prefix-engineer
+  name: rumc-unit-rumcjobuaengineer-name
+  description: rumc-unit-rumcjobuaengineer-desc
+  playTimeTracker: RUMCJobUAEngineer
+  ranks:
+    RMCRankCivilian: []
+  startingGear: RUMCGearUAEngineer
+  spawnMenuRoleName: Engineer UA (ambassador unit)
+  greeting: rumc-unit-rumcjobuaengineer-greeting
+  icon: RMCJobIconFreelancerStandard
+  joinNotifyCrew: false
+  supervisors: rumc-unit-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: RUMCJobUAEngineer
+  isHumanoid: true
+
+# ---- the parties
+
+- type: partySpawn
+  id: RUMCMercsSpawnUPP
+  leadersToSpawn:
+    RUMCJobUPPMercLeader: 1
+  gruntsToSpawn:
+    RUMCJobUPPMerc: 3
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: RUMCMercsUPP
+  displayName: Nameless mercenaries (UPP)
+  announceAsSurvivors: false
+  announcearrival: ''
+  announceinbound: ''
+  partyspawn: RUMCMercsSpawnUPP
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: RUMCMercsSpawnTWE
+  leadersToSpawn:
+    RUMCJobTWEMercLeader: 1
+  gruntsToSpawn:
+    RUMCJobTWEMerc: 3
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: RUMCMercsTWE
+  displayName: Nameless mercenaries (TWE)
+  announceAsSurvivors: false
+  announcearrival: ''
+  announceinbound: ''
+  partyspawn: RUMCMercsSpawnTWE
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: RUMCMercsSpawnUA
+  leadersToSpawn:
+    RUMCJobUAMercLeader: 1
+  gruntsToSpawn:
+    RUMCJobUAMerc: 3
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: RUMCMercsUA
+  displayName: Nameless mercenaries (UA)
+  announceAsSurvivors: false
+  announcearrival: ''
+  announceinbound: ''
+  partyspawn: RUMCMercsSpawnUA
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: RUMCMercsSpawnICSC
+  leadersToSpawn:
+    RUMCJobICSCMercLeader: 1
+  gruntsToSpawn:
+    RUMCJobICSCMerc: 3
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: RUMCMercsICSC
+  displayName: Nameless mercenaries (ICSC)
+  announceAsSurvivors: false
+  announcearrival: ''
+  announceinbound: ''
+  partyspawn: RUMCMercsSpawnICSC
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: RUMCMedicsSpawnUPP
+  leadersToSpawn:
+    RUMCJobUPPMedic: 1
+  gruntsToSpawn:
+    RUMCJobUPPMedic: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: RUMCMedicsUPP
+  displayName: UPP medics
+  announceAsSurvivors: false
+  partyspawn: RUMCMedicsSpawnUPP
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: RUMCEngineersSpawnUPP
+  leadersToSpawn:
+    RUMCJobUPPEngineer: 1
+  gruntsToSpawn:
+    RUMCJobUPPEngineer: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: RUMCEngineersUPP
+  displayName: UPP engineers
+  announceAsSurvivors: false
+  partyspawn: RUMCEngineersSpawnUPP
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: RUMCMedicsSpawnTWE
+  leadersToSpawn:
+    RUMCJobTWEMedic: 1
+  gruntsToSpawn:
+    RUMCJobTWEMedic: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: RUMCMedicsTWE
+  displayName: TWE medics
+  announceAsSurvivors: false
+  partyspawn: RUMCMedicsSpawnTWE
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: RUMCEngineersSpawnTWE
+  leadersToSpawn:
+    RUMCJobTWEEngineer: 1
+  gruntsToSpawn:
+    RUMCJobTWEEngineer: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: RUMCEngineersTWE
+  displayName: TWE engineers
+  announceAsSurvivors: false
+  partyspawn: RUMCEngineersSpawnTWE
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: RUMCMedicsSpawnUA
+  leadersToSpawn:
+    RUMCJobUAMedic: 1
+  gruntsToSpawn:
+    RUMCJobUAMedic: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: RUMCMedicsUA
+  displayName: UA medics
+  announceAsSurvivors: false
+  partyspawn: RUMCMedicsSpawnUA
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: RUMCEngineersSpawnUA
+  leadersToSpawn:
+    RUMCJobUAEngineer: 1
+  gruntsToSpawn:
+    RUMCJobUAEngineer: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: RUMCEngineersUA
+  displayName: UA engineers
+  announceAsSurvivors: false
+  partyspawn: RUMCEngineersSpawnUA
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false

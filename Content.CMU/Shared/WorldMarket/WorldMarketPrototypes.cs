@@ -1,0 +1,612 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+using Content.Shared.CMU14.Threats;
+using Robust.Shared.Prototypes;
+
+namespace Content.Shared.CMU14.WorldMarket;
+
+// A price index of the world outside the colony (metals, fuel, gems, weapons). It wanders by itself and is shaken by the events of the world; the companies' prices of the goods that
+// belong to it follow it. 100 is the usual price.
+[Prototype("worldMarketCategory")]
+public sealed partial class WorldMarketCategoryPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField]
+    public Color Color = Color.White;
+
+    // The contracts of the companies whose goods follow this index. An index with none (the weapons) is the price of what the black market sells.
+    [DataField]
+    public List<string> Contracts = new();
+
+    [DataField]
+    public float Start = 100f;
+
+    // How far the index wanders in a tick, in percent of itself, and how much of the way back to the usual price it comes in a tick.
+    [DataField]
+    public float Volatility = 1.4f;
+
+    [DataField]
+    public float Pull = 0.06f;
+
+    [DataField]
+    public float Min = 45f;
+
+    [DataField]
+    public float Max = 210f;
+}
+
+// Something that happens in the world: it shakes the indices, can close a company to the colony for a while, can hold up the voyages, and is told to the colony as news.
+[Prototype("worldMarketEvent")]
+public sealed partial class WorldMarketEventPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Headline;
+
+    [DataField]
+    public float Weight = 1f;
+
+    // How long it is told as going on (for the embargo it is how long the company refuses to trade).
+    [DataField]
+    public int DurationSeconds = 240;
+
+    // The change of the indices at once, in percent (12 is a rise of an eighth, -10 is a fall of a tenth).
+    [DataField]
+    public Dictionary<string, float> Shifts = new();
+
+    // The companies (the name of the company of a contract) that refuse to trade with the colony for the duration.
+    [DataField]
+    public List<string> Embargo = new();
+
+    // The voyages are put off by this long.
+    [DataField]
+    public int VoyageDelaySeconds;
+}
+
+// An agreement that the colony can sign with a company: for a time, and for a price, the company charges less duty on what it sells to the colony, pays more for what it buys of it,
+// and an embargo of the world does not reach it.
+[Prototype("tradeAgreement")]
+public sealed partial class TradeAgreementPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public LocId Description;
+
+    // The name of the company of the contracts that it is with.
+    [DataField(required: true)]
+    public LocId Company;
+
+    [DataField]
+    public int DurationSeconds = 900;
+
+    // What it costs of the treasury of the colony.
+    [DataField]
+    public int Cost = 600;
+
+    // How many points of the import duty the colony does not pay, and how many percent more the company pays for what it buys.
+    [DataField]
+    public int DutyCut = 10;
+
+    [DataField]
+    public int SellBonus = 5;
+}
+
+// What the mother company asks of the colony: so much of a good sold through the trade platforms before the time is out. A quota done is paid; one that is not costs a fine and brings
+// an inspection.
+[Prototype("metropolisQuota")]
+public sealed partial class MetropolisQuotaPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Text;
+
+    [DataField(required: true)]
+    public string Stack = string.Empty;
+
+    [DataField]
+    public int Amount = 40;
+
+    [DataField]
+    public int DurationSeconds = 720;
+
+    [DataField]
+    public int Reward = 900;
+
+    [DataField]
+    public int Fine = 500;
+
+    [DataField]
+    public float Weight = 1f;
+}
+
+// An organization outside the law: it sells what is not sold otherwise, and it buys what the companies do not.
+[Prototype("underworldOrg")]
+public sealed partial class UnderworldOrgPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public LocId Description;
+
+    [DataField]
+    public Color Color = Color.White;
+
+    [DataField]
+    public List<UnderworldWare> Wares = new();
+
+    [DataField]
+    public List<UnderworldOrder> Orders = new();
+}
+
+// A crate that the organization sells: it comes with the next voyage and stands on the platform of the colony. The price follows the index of the weapons.
+[DataDefinition]
+public sealed partial class UnderworldWare
+{
+    [DataField(required: true)]
+    public string Id = string.Empty;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public EntProtoId Crate;
+
+    [DataField]
+    public int Price = 1000;
+
+    // How much attention of the law it draws.
+    [DataField]
+    public int Heat = 10;
+}
+
+// What the organization wants brought to the platform: so much of a good, paid for by the piece to whoever brings it, and with no tax. The colony has to agree to the order first.
+[DataDefinition]
+public sealed partial class UnderworldOrder
+{
+    [DataField(required: true)]
+    public string Id = string.Empty;
+
+    [DataField(required: true)]
+    public LocId Text;
+
+    [DataField(required: true)]
+    public string Stack = string.Empty;
+
+    [DataField]
+    public int Amount = 20;
+
+    [DataField]
+    public int PricePerUnit = 5;
+
+    [DataField]
+    public int Heat = 12;
+
+    // What the colony is paid for it when it is done.
+    [DataField]
+    public int Bonus = 300;
+
+    [DataField]
+    public int DurationSeconds = 600;
+}
+
+// A city of the world map: the globe of the console shows it where it lies. What it can do is its capabilities, and its favour is won with gifts (see WorldMarketSystem.Cities).
+[Prototype("worldCity")]
+public sealed partial class WorldCityPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public LocId Description;
+
+    // A port stands on a coast, any other city inland. Where exactly is decided by the map of the round (see WorldMapTerrain.PlaceCities): it is made at random.
+    [DataField]
+    public bool Coastal;
+
+    [DataField]
+    public Color Color = Color.White;
+
+    [DataField]
+    public List<CityCapability> Capabilities = new();
+
+    // What a gift costs the colony; every gift gives the same favour.
+    [DataField]
+    public int GiftCost = 400;
+}
+
+// What a city can do for the colony. Each has a text of its own (rumc-city-capability-<name>); for now only the trade hub does something (it takes a part off the duty).
+[Serializable]
+public enum CityCapability : byte
+{
+    TradeHub,
+    ArmsMarket,
+    Intelligence,
+    BlackMarket,
+}
+
+// A biome of the world map: what a cell of the globe is (the sea, the ice, the forest...), with its colour and its description, which the console shows when a cell is picked.
+[Prototype("worldBiome")]
+public sealed partial class WorldBiomePrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public LocId Description;
+
+    [DataField]
+    public Color Color = Color.Gray;
+}
+
+// What a road of the map is (the roads are made of the places of the cities of the round: see WorldMarketSystem.Cities).
+[Serializable]
+public enum WorldRoadKind : byte
+{
+    Road,
+    Trail,
+    SeaRoute,
+}
+
+// A trouble that a city of the map can fall into (an epidemic, a fire...). It lasts for a time; what is done against it is the actions (see WorldCityActionPrototype), and if nobody does
+// anything the favour of every faction in the city falls when it ends.
+[Prototype("worldCityCrisis")]
+public sealed partial class WorldCrisisPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public LocId Description;
+
+    [DataField]
+    public int DurationSeconds = 240;
+
+    // How often it happens, against the others.
+    [DataField]
+    public float Weight = 1f;
+
+    // What every faction loses of its favour in the city if the crisis ends with nothing done.
+    [DataField]
+    public int Penalty = 5;
+}
+
+// Something that an ambassador can do for a city of the map for the favour of it: dig wells, mend roads, keep stores, put a hospital up, feed a fund... Some of it is done at once, some is
+// built over a time, some stands for a time or for good and brings in money or keeps a trouble away. It is paid from the budget of the console.
+[Prototype("worldCityAction")]
+public sealed partial class WorldCityActionPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public LocId Description;
+
+    // The order in the list of the console.
+    [DataField]
+    public int Order;
+
+    [DataField]
+    public int Cost = 300;
+
+    // The favour that it gives (when it is built, if it takes time). If it ends a crisis, the sooner the more of it.
+    [DataField]
+    public int Influence = 5;
+
+    // The favour of the faction in the city that it takes to do it.
+    [DataField]
+    public int MinInfluence;
+
+    // How long it takes to be built, and how long it stands after that (nothing: for good).
+    [DataField]
+    public int BuildSeconds;
+
+    [DataField]
+    public int EffectSeconds;
+
+    // What it brings in (or costs, if it is below nothing) to the budget of the faction while it stands.
+    [DataField]
+    public float IncomePerMinute;
+
+    // What of the cost comes back, in percent, when it ends (a fund).
+    [DataField]
+    public int ReturnPercent;
+
+    // The troubles that it keeps away from the city while it stands.
+    [DataField]
+    public List<ProtoId<WorldCrisisPrototype>> Protects = new();
+
+    // The troubles that it takes on itself: a charge of it is spent, the trouble does not come, and the faction gets AbsorbInfluence.
+    [DataField]
+    public List<ProtoId<WorldCrisisPrototype>> Absorbs = new();
+
+    [DataField]
+    public int Charges;
+
+    [DataField]
+    public int AbsorbInfluence = 12;
+
+    // The troubles that it ends when it is ordered (and it can be ordered against them at any other time too, unless OnlyInCrisis).
+    [DataField]
+    public List<ProtoId<WorldCrisisPrototype>> Resolves = new();
+
+    [DataField]
+    public bool OnlyInCrisis;
+
+    // It can be ordered again while it stands (a fund).
+    [DataField]
+    public bool Stackable;
+
+    // The roads of the city are drawn whole on the globe while it stands.
+    [DataField]
+    public bool RepairsRoads;
+
+    // The points of influence with the mother faction that it costs (besides the money; a building bought for the reputation is not sent by the roads, it is put up at once).
+    [DataField]
+    public int PointCost;
+
+    // A great building that brings the faction PointsPerPeriod points of influence with the mother faction every PointEverySeconds while it stands (nothing: no points).
+    [DataField]
+    public int PointEverySeconds;
+
+    [DataField]
+    public int PointsPerPeriod = 1;
+
+    // A big work of two factions: the one that offers it pays Cost, the other pays Cost too, and then both have it (the favour, the income) while both keep Influence 20 in the city.
+    [DataField]
+    public bool Joint;
+}
+
+// Something that an ambassador can order of the mother faction for the points of influence that it has with it (see WorldMarketSystem.Mother): a private military company of a faction (as many
+// as there is influence for), crates of food or of medicine, workers, a holiday from a tax. The points are earned in the cities of the map and can be changed for money at a set rate.
+[Prototype("worldMotherOffer")]
+public sealed partial class WorldMotherOfferPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public LocId Description;
+
+    [DataField(required: true)]
+    public MotherOfferGroup Group;
+
+    // The faction that it comes from, for a company (the name of it, for the list).
+    [DataField]
+    public string Faction = string.Empty;
+
+    // The ambassador faction whose company it is (by the name that the console has: UPP, United Americas, ...). Its own faction orders it at the price; a faction that has a pact with the home
+    // faction borrows it for twice the price; any other cannot. A company with no home (a corporation, a cell) is for everyone.
+    [DataField]
+    public string Home = string.Empty;
+
+    // The points of influence that it costs.
+    [DataField]
+    public int Cost = 1;
+
+    // The order in the list.
+    [DataField]
+    public int Order;
+
+    // A company or a party of workers: what is called in (as the ambassador calls a third party).
+    [DataField]
+    public ProtoId<ThirdPartyPrototype>? Party;
+
+    // A party that is the same for all but belongs to whoever calls it: the one for each ambassador faction (by the name that the console has). Used instead of Party where it has the faction.
+    [DataField]
+    public Dictionary<string, ProtoId<ThirdPartyPrototype>> Parties = new();
+
+    // Food or medicine: what is put down at the console, and how many of them.
+    [DataField]
+    public EntProtoId? Crate;
+
+    [DataField]
+    public int Amount = 1;
+
+    // A holiday from a tax: which tax, by how many points of percent it is lower, and for how long.
+    [DataField]
+    public WorldTaxKind Tax;
+
+    [DataField]
+    public float TaxPoints = 5f;
+
+    [DataField]
+    public int DurationSeconds = 600;
+
+    // A transport: how long it takes to come, and whether it takes people out of a city in trouble (then it is sent to a city, not to a console).
+    [DataField]
+    public int DelaySeconds = 60;
+
+    [DataField]
+    public bool Evacuation;
+}
+
+// What an offer of the mother faction is.
+[Serializable]
+public enum MotherOfferGroup : byte
+{
+    Pmc,
+    Food,
+    Medicine,
+    Workers,
+    Tax,
+    Transport,
+    Support,
+}
+
+// The taxes that can be lowered for a time.
+[Serializable]
+public enum WorldTaxKind : byte
+{
+    Sales,
+    Income,
+    Trade,
+    Duty,
+}
+
+// What the mother faction asks of an ambassador: a report (often, short, and it must be sent by hand) or a mission (seldom, longer, done by itself when it is done). It is a list of
+// requirements (nothing in a number: not asked) that are counted from the time it was given, and a reward. If the time runs out the trust of the mother faction falls.
+[Prototype("worldMotherTask")]
+public sealed partial class WorldMotherTaskPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public LocId Description;
+
+    // A report is sent by the ambassador when it is ready; a mission is done when its requirements are met.
+    [DataField]
+    public bool Report;
+
+    [DataField]
+    public int DurationSeconds = 150;
+
+    // The cities in which the favour of the faction is at least CityInfluence.
+    [DataField]
+    public int Cities;
+
+    [DataField]
+    public int CityInfluence = 25;
+
+    // What the standing things in the cities have brought in, in money.
+    [DataField]
+    public int Earn;
+
+    // How many things have been ordered for the cities, how many troubles have been ended or kept off, how many parties of workers have been ordered.
+    [DataField]
+    public int Projects;
+
+    [DataField]
+    public int Crises;
+
+    [DataField]
+    public int Workers;
+
+    [DataField]
+    public int RewardPoints = 1;
+
+    [DataField]
+    public int RewardMoney;
+
+    // A crate of rare things that is put down at the console.
+    [DataField]
+    public EntProtoId? RewardCrate;
+
+    // The trust of the mother faction that it gives and that is lost if it is not done.
+    [DataField]
+    public int TrustGain = 6;
+
+    [DataField]
+    public int TrustLoss = 8;
+}
+
+// A good thing that can happen in a city of the map (a holiday, a fair, a visit of a delegation). The factions pay to support it, and when it ends the favour that it gives (Reward) is shared
+// between them by what each has paid, as much of it as the money reaches the Goal; another faction may spoil it, and then it gives less.
+[Prototype("worldCityEvent")]
+public sealed partial class WorldCityEventPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public LocId Description;
+
+    [DataField]
+    public int DurationSeconds = 300;
+
+    [DataField]
+    public float Weight = 1f;
+
+    // The favour that it gives, all of it, to share.
+    [DataField]
+    public int Reward = 18;
+
+    // The money that has to be put in for all of it.
+    [DataField]
+    public int Goal = 800;
+}
+
+// A hazard on the map: a storm (weather: it cannot be sent away), or a threat (a raid, a plague, a fire: a private military company can be hired against it). It is a circle round a place for a
+// time. It closes the roads that pass through it, and the work in the cities inside it brings in less.
+[Prototype("worldHazard")]
+public sealed partial class WorldHazardPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public LocId Name;
+
+    [DataField(required: true)]
+    public LocId Description;
+
+    // Weather comes on the sea routes and cannot be sent away.
+    [DataField]
+    public bool Weather;
+
+    [DataField]
+    public int DurationSeconds = 240;
+
+    // The radius, in degrees.
+    [DataField]
+    public float Radius = 10f;
+
+    [DataField]
+    public float Weight = 1f;
+
+    // Which roads it closes.
+    [DataField]
+    public bool ClosesSea;
+
+    [DataField]
+    public bool ClosesLand;
+
+    // What the work in the cities inside it brings in, of what it should (one: all of it).
+    [DataField]
+    public float IncomeFactor = 1f;
+
+    // What it costs to hire a company against it (nothing: it cannot be sent away), and the favour that the one who did it gets in the nearest city.
+    [DataField]
+    public int RemoveCost;
+
+    [DataField]
+    public int RemoveInfluence = 8;
+}

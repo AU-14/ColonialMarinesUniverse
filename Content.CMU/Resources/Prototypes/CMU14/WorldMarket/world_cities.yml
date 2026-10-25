@@ -1,0 +1,188 @@
+﻿# The cities of the world map (a few of them are taken at random in every round), to try it out with, each with a different thing that it can do for the colony (see WorldCityPrototype). The place of a city is not set here: the map is made at random every round,
+# and the cities are put on its land (a city with coastal is a port and stands on a coast).
+
+# A trade hub: the favour of it takes a part off the duty (one percent for every twenty-five of favour).
+- type: worldCity
+  id: RUMCCityWhitehall
+  coastal: true
+  name: rumc-city-whitehall-name
+  description: rumc-city-whitehall-desc
+  color: "#6aa8ff"
+  capabilities:
+  - TradeHub
+  giftCost: 400
+
+# An arms market, and a hub as well.
+- type: worldCity
+  id: RUMCCityIronfall
+  name: rumc-city-ironfall-name
+  description: rumc-city-ironfall-desc
+  color: "#ff7a6a"
+  capabilities:
+  - ArmsMarket
+  - TradeHub
+  giftCost: 700
+
+# A city of the learned: intelligence.
+- type: worldCity
+  id: RUMCCityEden
+  name: rumc-city-eden-name
+  description: rumc-city-eden-desc
+  color: "#7ee08a"
+  capabilities:
+  - Intelligence
+  giftCost: 500
+
+# A harbour of the black market.
+- type: worldCity
+  id: RUMCCityCorsair
+  coastal: true
+  name: rumc-city-corsair-name
+  description: rumc-city-corsair-desc
+  color: "#c58bff"
+  capabilities:
+  - BlackMarket
+  giftCost: 600
+
+# A city of the mountain passes in the far north: a hub of the northern trade.
+- type: worldCity
+  id: RUMCCityFrostgate
+  name: rumc-city-frostgate-name
+  description: rumc-city-frostgate-desc
+  color: "#9fd4ff"
+  capabilities:
+  - TradeHub
+  - Intelligence
+  giftCost: 450
+
+# A city of the caravans on the edge of the desert.
+- type: worldCity
+  id: RUMCCitySunreach
+  name: rumc-city-sunreach-name
+  description: rumc-city-sunreach-desc
+  color: "#ffd166"
+  capabilities:
+  - TradeHub
+  - BlackMarket
+  giftCost: 550
+
+# A mining town of the southern continent.
+- type: worldCity
+  id: RUMCCityDustwell
+  name: rumc-city-dustwell-name
+  description: rumc-city-dustwell-desc
+  color: "#ff9f5a"
+  capabilities:
+  - ArmsMarket
+  giftCost: 500
+
+# A harbour at the southern end of the dark continent.
+- type: worldCity
+  id: RUMCCityCapeharbour
+  coastal: true
+  name: rumc-city-capeharbour-name
+  description: rumc-city-capeharbour-desc
+  color: "#5ee0c8"
+  capabilities:
+  - TradeHub
+  giftCost: 400
+
+# A fishing city on the isthmus between the two western continents.
+- type: worldCity
+  id: RUMCCityGreywater
+  coastal: true
+  name: rumc-city-greywater-name
+  description: rumc-city-greywater-desc
+  color: "#b0b8c8"
+  capabilities:
+  - Intelligence
+  giftCost: 350
+
+- type: worldCity
+  id: RUMCCityAshport
+  coastal: true
+  name: rumc-city-ashport-name
+  description: rumc-city-ashport-desc
+  color: "#58c4dd"
+  capabilities:
+  - TradeHub
+  giftCost: 450
+
+- type: worldCity
+  id: RUMCCityRedmoor
+  name: rumc-city-redmoor-name
+  description: rumc-city-redmoor-desc
+  color: "#e05a47"
+  capabilities:
+  - ArmsMarket
+  giftCost: 600
+
+- type: worldCity
+  id: RUMCCitySilverhold
+  name: rumc-city-silverhold-name
+  description: rumc-city-silverhold-desc
+  color: "#c0c8d8"
+  capabilities:
+  - Intelligence
+  - TradeHub
+  giftCost: 650
+
+- type: worldCity
+  id: RUMCCityBlackwater
+  coastal: true
+  name: rumc-city-blackwater-name
+  description: rumc-city-blackwater-desc
+  color: "#8a5cc2"
+  capabilities:
+  - BlackMarket
+  giftCost: 550
+
+- type: worldCity
+  id: RUMCCityGoldspire
+  name: rumc-city-goldspire-name
+  description: rumc-city-goldspire-desc
+  color: "#f0c040"
+  capabilities:
+  - TradeHub
+  giftCost: 500
+
+- type: worldCity
+  id: RUMCCityStormhaven
+  coastal: true
+  name: rumc-city-stormhaven-name
+  description: rumc-city-stormhaven-desc
+  color: "#4f8fe0"
+  capabilities:
+  - ArmsMarket
+  - TradeHub
+  giftCost: 700
+
+- type: worldCity
+  id: RUMCCityOldwell
+  name: rumc-city-oldwell-name
+  description: rumc-city-oldwell-desc
+  color: "#9acd8a"
+  capabilities:
+  - Intelligence
+  giftCost: 400
+
+- type: worldCity
+  id: RUMCCityBrightsands
+  coastal: true
+  name: rumc-city-brightsands-name
+  description: rumc-city-brightsands-desc
+  color: "#ffb86b"
+  capabilities:
+  - BlackMarket
+  - TradeHub
+  giftCost: 600
+
+- type: worldCity
+  id: RUMCCityIronhollow
+  name: rumc-city-ironhollow-name
+  description: rumc-city-ironhollow-desc
+  color: "#b07a50"
+  capabilities:
+  - ArmsMarket
+  - BlackMarket
+  giftCost: 650
