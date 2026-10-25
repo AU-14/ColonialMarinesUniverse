@@ -21,10 +21,12 @@ public sealed partial class GuardianAbsorbComponent : Component
     [DataField, AutoNetworkedField]  
     public bool IgnoreGuardianResistances = true;  
 }  
-  
+
+[Serializable, NetSerializable]
 public enum GuardianAbsorbType  
 {  
     Generic,
     AuraLink,
     DirectLink,
+    PassiveCritSave,
 }
