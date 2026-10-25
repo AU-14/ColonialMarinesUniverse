@@ -245,3 +245,11 @@
     state: not_enough_co2
   name: cmu-alert-drugcraving-name
   description: cmu-alert-drugcraving-desc
+
+- type: alert
+  id: CMUCaffeineCraving
+  icons:
+  - sprite: /Textures/Interface/Alerts/breathing.rsi
+    state: not_enough_co2
+  name: cmu-alert-caffeinecraving-name
+  description: cmu-alert-caffeinecraving-desc

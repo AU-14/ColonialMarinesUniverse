@@ -189,10 +189,10 @@
     sections:
     - name: Food
       entries:
-      - id: CMMRE
-        name: MRE
+      - id: CMUMREFSR
+        name: FSR
         amount: 30
-      - id: RMCBoxMRE
+      - id: CMUBoxMREFSR
         amount: 5
       - id: CMCanteen
         amount: 30
@@ -827,6 +827,11 @@
     - AU14JobGOVFORSquadSergeantUPP
     - AU14JobGOVFORSquadSergeantWYPMC
     sections:
+    - name: cmu-vendor-section-sl-scopes
+      choices: { CMUSquadLeaderScope: 1 }
+      entries:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+      - id: CMUAttachmentNightVisionScope
     - name: Headgear
       choices: { CMHat: 1 }
       entries:
@@ -919,8 +924,9 @@
     Standard issue across the frontier where threats can appear without warning.
     Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
 
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+    For immediate combat readiness: select a primary weapon and a sidearm.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -930,31 +936,46 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponMCX
-      - id: AU14KitWeaponM39
+      - id: AU14WeaponRifleprodigyrifleAR
+      - id: WeaponSMGM63
     - name: Rifle Ammunition
       entries:
       - id: AU14WeaponRifleprodigyrifleMagazineStandard
-        amount: 60
+        amount: 120
       - id: CMMagazineSMGM63
-        amount: 60
+        amount: 120
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: AU14KitWeaponTPR23B
-      - id: CMU14KitWeaponGlock75
+      - id: AU14WeaponPistolTPR23BEmpty
+      - id: CMU14WeaponPistolGlock75
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
-        amount: 60
+        amount: 120
       - id: CMU14MagazinePistolGlock75
-        amount: 60
-    - name: Attachments
+        amount: 120
+    - name: Unrestricted Attachments
+      entries:
+      - id: RMCAttachmentRailFlashlight
+        maxPerUser: 1
+      - id: AU14AttachmentTwoPointSling
+        maxPerUser: 1
+    - name: Restricted Attachments
       choices: { CMUAttachmentsVendor: 1 }
       entries:
       - id: RMCAttachmentS5RedDotSight
       - id: RMCAttachmentS6ReflexSight
-      - id: AU14AttachmentTwoPointSling
+    - name: Special Ammunition
+      choices: { CMUSpecialAmmo: 2 }
+      entries:
+      - id: AU14WeaponRifleprodigyrifleMagazineAP
+      - id: CMMagazineSMGM63AP
+      - id: RMCMagazinePistolM1984AP
+      - id: RMCMagazinePistolM1984HP
+      - id: CMU14MagazinePistolGlock75AP
+      - id: CMU14MagazinePistolGlock75HP
+      - id: CMMagazineSMGM63Ext
 
 - type: entity
   parent: ColMarTechBase
@@ -967,6 +988,7 @@
 
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -1007,6 +1029,7 @@
   name: prodigy automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]
@@ -1176,6 +1199,8 @@
         amount: 5
     - name: Rail Attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight

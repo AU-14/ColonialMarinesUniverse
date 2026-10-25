@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobUPPLineMedic
+  chevrons:
+    UPP_SeniorGefreiter:
+      entity: AU14ChevronUPPNISeniorGefreiter
+      requirements: []
   roundSide: ThirdParty
   roundForce: UPPLine
   roundRole: UPPLineMedic
@@ -27,7 +31,7 @@
     - Mandarin
     currentLanguage: Russian
     defaultLanguage: Russian
-  name: cmu-uppline-name-medic
+  name: cmu-uppline-name-medic-title
   description: cmu-uppline-description
   playTimeTracker: CMUJobUPPLineMedic
   ranks:

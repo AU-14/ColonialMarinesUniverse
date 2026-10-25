@@ -41,21 +41,12 @@
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours
+  # chaplain, cook and correspondent don't fight, so the rifleman disability list doesn't apply
   - !type:TraitsRequirement
     inverted: true
     traits:
-    - Epilepsy
     - NoEnglish
-    - CMUProstheticLeftArm
-    - CMUProstheticRightArm
-    - CMUProstheticLeftLeg
-    - CMUProstheticRightLeg
-    - SlowRunner
-    - Anemic
-    - Asthmatic
-    - CMUAlcoholic
-    - CMUDrugAddict
-    - CMUBadLeg
+    - CMUWeakThrow
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -84,7 +75,6 @@
   equipment:
     id: AU14IDCardGOVFORCombatCorrespondent
     ears: AU14HeadsetGovforCommand
-    pocket2: RMCCorrespondentMicrophone
 
 - type: startingGear
   id: AU14GearGOVFORCombatCorrespondentDummy
@@ -116,6 +106,7 @@
   id: JobAU14JobGOVFORCombatCorrespondent
   points: 7
   groups:
+  - CMUAuxiliaryStaffRole
   - MarineBackpack
   - EyewearRMCPVE
   - MasksRMCPVE
@@ -125,20 +116,140 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
-  - CombatCorrespondentCamera
 
+# Auxiliary staff pick what work they do in their loadout. The job keeps its combat correspondent IDs so players
+# keep their preferences and playtime.
 - type: loadoutGroup
-  id: CombatCorrespondentCamera
-  name: rmc-loadout-group-miscellaneous
+  id: CMUAuxiliaryStaffRole
+  name: cmu-loadout-group-auxiliary-staff
   minLimit: 1
-  hidden: true
+  maxLimit: 1
   loadouts:
-  - CombatCorrespondentCameraLoadout
+  - CMUAuxiliaryStaffCombatCorrespondent
+  - CMUAuxiliaryStaffChaplain
+  - CMUAuxiliaryStaffMessTechnician
 
 - type: loadout
-  id: CombatCorrespondentCameraLoadout
+  id: CMUAuxiliaryStaffCombatCorrespondent
+  dummyEntity: CMUAuxiliaryStaffDummyCombatCorrespondent
   inhand:
-  - RMCCameraBroadcasting
+  - CMUKitAuxiliaryStaffCombatCorrespondent
+  effects:
+  - !type:CMUAuxiliaryStaffLoadoutEffect
+    title: cmu-auxiliary-staff-combat-correspondent
+    prefix: au14-job-prefix-govforcombatcorrespondent
+
+- type: loadout
+  id: CMUAuxiliaryStaffChaplain
+  dummyEntity: CMUAuxiliaryStaffDummyChaplain
+  inhand:
+  - CMUKitAuxiliaryStaffChaplain
+  effects:
+  - !type:CMUAuxiliaryStaffLoadoutEffect
+    title: cmu-auxiliary-staff-chaplain
+    prefix: cmu-auxiliary-staff-prefix-chaplain
+    requiresReligion: true
+    holyBook: true
+
+- type: loadout
+  id: CMUAuxiliaryStaffMessTechnician
+  dummyEntity: CMUAuxiliaryStaffDummyMessTechnician
+  inhand:
+  - CMUKitAuxiliaryStaffMessTechnician
+  effects:
+  - !type:CMUAuxiliaryStaffLoadoutEffect
+    title: cmu-auxiliary-staff-mess-technician
+    prefix: cmu-auxiliary-staff-prefix-mess-technician
+    access:
+    - CMUAccessKitchen
+
+# Each role's gear comes in a kit.
+- type: entity
+  abstract: true
+  parent: RMCKitBase
+  id: CMUKitAuxiliaryStaffBase
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,3,1
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+
+- type: entity
+  parent: CMUKitAuxiliaryStaffBase
+  id: CMUKitAuxiliaryStaffCombatCorrespondent
+  name: combat correspondent kit
+  description: A case holding a combat correspondent's broadcasting camera, microphone, boom mic and photo camera.
+  components:
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,6,1
+  - type: StorageFill
+    contents:
+    - id: RMCCameraBroadcasting
+    - id: RMCCorrespondentMicrophone
+    - id: CMUBoomMic
+    - id: CMUPhotoCamera
+    - id: CMUCameraFilm
+      amount: 2
+
+- type: entity
+  parent: CMUKitAuxiliaryStaffBase
+  id: CMUKitAuxiliaryStaffChaplain
+  name: chaplain kit
+  description: A case holding a chaplain's helmet patch and the holy book of their faith.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCHelmetGarbChaplainPatch
+
+- type: entity
+  parent: CMUKitAuxiliaryStaffBase
+  id: CMUKitAuxiliaryStaffMessTechnician
+  name: mess technician kit
+  description: A case holding a mess technician's chef's apron and hat.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCChefApron
+    - id: ClothingHeadHatChef
+
+# What each choice shows as in the character menu.
+- type: entity
+  id: CMUAuxiliaryStaffDummyCombatCorrespondent
+  name: Combat Correspondent
+  description: Embed with the unit and get the story, with a broadcasting camera and a microphone.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/broadcasting_camera.rsi
+    state: icon
+
+- type: entity
+  id: CMUAuxiliaryStaffDummyChaplain
+  name: Chaplain
+  description: See to the unit's spirits. Needs a religion other than atheism.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/Books/Bibles/bible.rsi
+    state: icon
+
+- type: entity
+  id: CMUAuxiliaryStaffDummyMessTechnician
+  name: Mess Technician
+  description: Run the DEFAC. Opens the kitchen shutters for business.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Labcoats/medicalapron.rsi
+    state: icon
 
 - type: job
   parent: AU14JobGOVFORCombatCorrespondentBase
@@ -146,7 +257,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORRifleman"
-  spawnMenuRoleName: Combat Correspondent (OPFOR)
+  spawnMenuRoleName: cmu-spawn-role-auxiliary-staff-opfor
   supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearOPFORCombatCorrespondent
   dummyStartingGear: AU14GearOPFORCombatCorrespondentDummy
@@ -159,7 +270,6 @@
   equipment:
     id: AU14IDCardOPFORCombatCorrespondent
     ears: AU14HeadsetOpforCommand
-    pocket2: RMCCorrespondentMicrophone
 
 - type: startingGear
   id: AU14GearOPFORCombatCorrespondentDummy

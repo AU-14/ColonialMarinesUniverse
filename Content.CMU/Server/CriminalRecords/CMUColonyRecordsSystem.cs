@@ -1,4 +1,6 @@
 using Content.Server.CriminalRecords.Systems;
+using Content.Server.Traits;
+using Content.Shared.Preferences;
 using Content.Shared.CMU14.CriminalRecords;
 using Content.Shared.CriminalRecords;
 using Content.Shared.Forensics.Components;
@@ -36,7 +38,7 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete, after: [typeof(StationRecordsSystem)]);
+        SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete, after: [typeof(StationRecordsSystem), typeof(TraitSystem)]);
     }
 
     private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent args)
@@ -44,7 +46,27 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
         if (args.JobId == null || !IsRecordedJob(args.JobId))
             return;
 
-        EnsureCharacterRecord(args.Mob, args.Profile.Name, args.Profile.Age, args.Profile.Gender);
+        if (EnsureCharacterRecord(args.Mob, args.Profile.Name, args.Profile.Age, args.Profile.Gender) is { } key)
+            FillArrival(key, args.Mob, args.Profile);
+    }
+
+    /// <summary>
+    ///     Takes their mugshot and description from how they arrived.
+    /// </summary>
+    private void FillArrival(StationRecordKey key, EntityUid mob, HumanoidCharacterProfile profile)
+    {
+        if (_records.TryGetRecord<GeneralStationRecord>(key, out var general))
+        {
+            general.CMUPortrait = new CMURecordPortrait
+            {
+                Species = profile.Species,
+                Sex = profile.Sex,
+                Appearance = profile.Appearance,
+            };
+            general.CMUHeight = string.IsNullOrWhiteSpace(profile.Height) ? null : profile.Height;
+        }
+
+        _records.Synchronize(key);
     }
 
     /// <summary>

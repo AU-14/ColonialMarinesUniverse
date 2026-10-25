@@ -1,0 +1,42 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: The radio jammer can be switched on and off and actually jams
+  type: Fix
+- message: Expedition faction squads wear their own boots and packs, UACG no longer
+    carry USCM rifles and vests
+  type: Fix
+- message: Auxiliary Staff can take disability traits
+  type: Fix
+- message: Clusters already on a comms tower turn into a pylon once the takeover time
+    passes
+  type: Fix
+- message: Larvae no longer get stuck catatonic when the infecting hugger skips the
+    claim prompt
+  type: Fix
+- message: UPP commandos and snipers can use their thermal cloaks
+  type: Fix
+- message: Welders repair barricades again
+  type: Fix
+- message: Distress Signal threats spawn again when the queen volunteer doesn't have
+    the playtime for her
+  type: Fix
+- message: IASF enlisted speak the same languages as their leaders
+  type: Fix
+- message: The Reaper can no longer revive a dead Queen
+  type: Fix
+- message: Shots fired through a floor lose damage over the height they cover, buckshot
+    no longer point blanks through holes
+  type: Fix
+- message: Distress Signal ends when the last xeno is gibbed or deleted instead of
+    hanging
+  type: Fix
+- message: Youngbloods always arrive on the hunter ship
+  type: Fix
+- message: Blooding console party sizes match what spawns, and dialog windows can
+    be resized
+  type: Fix
+- message: The fighter VTOL pad can be packed back up
+  type: Fix
+time: '2026-10-23T20:15:09.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2266

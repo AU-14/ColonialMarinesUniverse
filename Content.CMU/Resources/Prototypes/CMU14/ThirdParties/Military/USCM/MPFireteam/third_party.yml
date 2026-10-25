@@ -1,0 +1,323 @@
+# USCM Military Police fireteam, called in through the UA intel list. A team leader and an officer with M39s and
+# two officers with M37A1 shotguns, all in MP armour with the MP security belt (taser, flash, baton, cuffs).
+
+- type: entity
+  parent: SquadBase
+  id: CMUSquadUSCMMP
+  name: USCM MP
+  components:
+  - type: SquadTeam
+    color: "#b30000"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: CMUUSCMMP
+  - type: Tag
+    tags:
+    - CMUSquadUSCMMP
+
+- type: Tag
+  id: CMUSquadUSCMMP
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUSCMMPTeamLeader
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: USCM
+  roundRole: CMUJobUSCMMPTeamLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: mp
+  - type: Skills
+    preset: AU14SkillPresetMilitaryPolice
+  - type: JobPrefix
+    prefix: cmu-job-prefix-uscm-mp
+  name: cmu-job-title-uscm-mp-team-leader
+  description: cmu-job-description-uscm-mp
+  playTimeTracker: CMUJobUSCMMPTeamLeader
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
+  spawnMenuRoleName: USCM MP Team Leader (MP Fireteam)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUSCMMPTeamLeader
+  greeting: cmu-job-greeting-uscm-mp
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-uscm-mp
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  suffix: CMU, USCM, MP Fireteam
+  id: CMUJobUSCMMPTeamLeader
+  name: USCM MP Team Leader (MP Fireteam)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUSCMMP
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-uscm-mp-team-leader
+    description: cmu-job-description-uscm-mp
+    reregister: false
+    job: CMUJobUSCMMPTeamLeader
+    raffle:
+      settings: short
+    rules: cmu-job-rules-uscm-mp
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUSCMMPTeamLeader
+  name: USCM military police ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUSCMMPTeamLeader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobUSCMMPTeamLeader
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUSCMMPOfficer
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: USCM
+  roundRole: CMUJobUSCMMPOfficer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: mp
+  - type: Skills
+    preset: AU14SkillPresetMilitaryPolice
+  - type: JobPrefix
+    prefix: cmu-job-prefix-uscm-mp
+  name: cmu-job-title-uscm-mp-officer
+  description: cmu-job-description-uscm-mp
+  playTimeTracker: CMUJobUSCMMPOfficer
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements: []
+  spawnMenuRoleName: USCM MP Officer (MP Fireteam, M39)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUSCMMPOfficer
+  greeting: cmu-job-greeting-uscm-mp
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-uscm-mp
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  suffix: CMU, USCM, MP Fireteam
+  id: CMUJobUSCMMPOfficer
+  name: USCM MP Officer (MP Fireteam, M39)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUSCMMP
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-uscm-mp-officer
+    description: cmu-job-description-uscm-mp
+    reregister: false
+    job: CMUJobUSCMMPOfficer
+    raffle:
+      settings: short
+    rules: cmu-job-rules-uscm-mp
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUSCMMPOfficer
+  name: USCM military police ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUSCMMPOfficer
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobUSCMMPOfficer
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUSCMMPOfficerShotgun
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: USCM
+  roundRole: CMUJobUSCMMPOfficerShotgun
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: mp
+  - type: Skills
+    preset: AU14SkillPresetMilitaryPolice
+  - type: JobPrefix
+    prefix: cmu-job-prefix-uscm-mp
+  name: cmu-job-title-uscm-mp-officer
+  description: cmu-job-description-uscm-mp
+  playTimeTracker: CMUJobUSCMMPOfficerShotgun
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements: []
+  spawnMenuRoleName: USCM MP Officer (MP Fireteam, M37A1)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUSCMMPOfficerShotgun
+  greeting: cmu-job-greeting-uscm-mp
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-uscm-mp
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  suffix: CMU, USCM, MP Fireteam
+  id: CMUJobUSCMMPOfficerShotgun
+  name: USCM MP Officer (MP Fireteam, M37A1)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUSCMMP
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-uscm-mp-officer
+    description: cmu-job-description-uscm-mp
+    reregister: false
+    job: CMUJobUSCMMPOfficerShotgun
+    raffle:
+      settings: short
+    rules: cmu-job-rules-uscm-mp
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUSCMMPOfficerShotgun
+  name: USCM military police ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUSCMMPOfficerShotgun
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobUSCMMPOfficerShotgun
+
+- type: startingGear
+  id: CMUGearUSCMMPBase
+  equipment:
+    jumpsuit: CMJumpsuitMP
+    outerClothing: CMArmorM2MP
+    head: CMArmorHelmetM10MP
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    ears: AU14HeadsetGovforMarineMP
+    belt: CMBeltSecurityMPFilled
+    pocket2: AU14PouchIFAKFill
+    back: CMSatchel
+
+- type: startingGear
+  parent: CMUGearUSCMMPBase
+  id: CMUGearUSCMMPTeamLeader
+  equipment:
+    id: CMUIDCardUSCMMPTeamLeader
+    head: CMHeadBeretCMP
+    suitstorage: WeaponSMGM63
+    pocket1: CMU14PouchMagazineLargeM39
+  storage:
+    back:
+    - CMMagazineSMGM63Ext
+    - CMMagazineSMGM63Ext
+    - RMCHandcuffs
+    - RMCHandcuffs
+
+- type: startingGear
+  parent: CMUGearUSCMMPBase
+  id: CMUGearUSCMMPOfficer
+  equipment:
+    id: CMUIDCardUSCMMPOfficer
+    suitstorage: WeaponSMGM63
+    pocket1: CMU14PouchMagazineLargeM39
+  storage:
+    back:
+    - CMMagazineSMGM63Ext
+    - CMMagazineSMGM63Ext
+    - RMCHandcuffs
+    - RMCHandcuffs
+
+- type: startingGear
+  parent: CMUGearUSCMMPBase
+  id: CMUGearUSCMMPOfficerShotgun
+  equipment:
+    id: CMUIDCardUSCMMPOfficerShotgun
+    suitstorage: RMCWeaponShotgunM37A1Filled
+    pocket1: AU14PouchShotgunLargeBuckshot
+  storage:
+    back:
+    # A full shell box won't fit in the satchel; spare handfuls do.
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - RMCHandcuffs
+    - RMCHandcuffs
+
+- type: partySpawn
+  id: CMUUSCMMPFireteamSpawn
+  leadersToSpawn:
+    CMUJobUSCMMPTeamLeader: 1
+  gruntsToSpawn:
+    CMUJobUSCMMPOfficer: 1
+    CMUJobUSCMMPOfficerShotgun: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUSCMMPFireteam
+  displayName: USCM Military Police Fireteam
+  partyspawn: CMUUSCMMPFireteamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 4
+  roundstart: false

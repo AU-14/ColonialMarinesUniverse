@@ -1,0 +1,17 @@
+- type: gameMap
+  id: CMUJeepTest
+  mapName: Jeep Test
+  mapPath: /Maps/Test/jeep_test.yml
+  maxRandomOffset: 0
+  randomRotation: false
+  minPlayers: 0
+  stations:
+    Dev:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Jeep Test"
+        - type: StationJobs
+          availableJobs:
+            Passenger: [ -1, -1 ]
+            CMRifleman: [ -1, -1 ]

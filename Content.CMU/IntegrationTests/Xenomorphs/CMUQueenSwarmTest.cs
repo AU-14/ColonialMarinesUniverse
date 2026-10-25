@@ -41,6 +41,7 @@ public sealed class CMUQueenSwarmTest : GameTest
                 var hives = SEntMan.System<SharedXenoHiveSystem>();
                 var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
                 var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+                SEntMan.EnsureComponent<XenoAttachedOvipositorComponent>(queen);
                 hives.SetHive(queen, hive);
                 hives.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));
                 hives.SetHive(SEntMan.SpawnEntity("HiveCoreXeno", map.GridCoords), hive);
@@ -54,7 +55,7 @@ public sealed class CMUQueenSwarmTest : GameTest
                     var action = new CMUSummonSwarmActionEvent { Performer = queen };
                     SEntMan.EventBus.RaiseLocalEvent(queen, action);
                     Assert.That(action.Handled, Is.EqualTo(expected));
-                    Assert.That(swarm.Members.Count, Is.EqualTo(count + (expected ? swarm.SpawnCount : 0)));
+                    Assert.That(swarm.Members.Count, Is.EqualTo(expected ? Math.Min(20, count + swarm.SpawnCount) : count));
                     if (!expected)
                         Assert.That(swarm.NextSummon, Is.EqualTo(SGameTiming.CurTime), "Disabled summons must not consume cooldown.");
                 }
@@ -272,6 +273,7 @@ public sealed class CMUQueenSwarmTest : GameTest
             var hiveSystem = SEntMan.System<SharedXenoHiveSystem>();
             var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
             var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+            SEntMan.EnsureComponent<XenoAttachedOvipositorComponent>(queen);
             SEntMan.GetComponent<CMUQueenSwarmComponent>(queen).Enabled = true;
             hiveSystem.SetHive(queen, hive);
             hiveSystem.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));
@@ -289,13 +291,18 @@ public sealed class CMUQueenSwarmTest : GameTest
             Assert.That(eyeOrder.Handled, Is.True, "Eye commands must use hive vision rather than body line of sight.");
 
             SEntMan.EventBus.RaiseLocalEvent(queen, new QueenEyeActionEvent { Performer = queen });
-            var visibleOrder = new CMUGuardSwarmActionEvent { Performer = queen, Target = map.GridCoords };
+            Assert.That(SEntMan.System<QueenEyeSystem>().IsInQueenEye(queen), Is.False);
+            Assert.That(SEntMan.HasComponent<XenoAttachedOvipositorComponent>(queen), Is.True);
+            // Ovi attachment snaps the body to the tile center, beside the test wall's corner.
+            var visibleOrder = new CMUGuardSwarmActionEvent { Performer = queen, Target = SEntMan.GetComponent<TransformComponent>(queen).Coordinates };
             SEntMan.EventBus.RaiseLocalEvent(queen, visibleOrder);
             Assert.That(visibleOrder.Handled, Is.True, "The same actions remain usable after leaving eye mode.");
+            // Restore the directly attached test body before the fixture advances physics.
+            SEntMan.RemoveComponent<XenoAttachedOvipositorComponent>(queen);
         });
     }
     [Test]
-    public async Task SummonsAccumulateOnlyAfterHiveCooldown()
+    public async Task SummonsRespectCooldownAndLivingCapAndReplaceLosses()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -303,6 +310,7 @@ public sealed class CMUQueenSwarmTest : GameTest
             var hiveSystem = SEntMan.System<SharedXenoHiveSystem>();
             var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
             var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+            SEntMan.EnsureComponent<XenoAttachedOvipositorComponent>(queen);
             SEntMan.GetComponent<CMUQueenSwarmComponent>(queen).Enabled = true;
             hiveSystem.SetHive(queen, hive);
             hiveSystem.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));
@@ -329,8 +337,24 @@ public sealed class CMUQueenSwarmTest : GameTest
             var second = new CMUSummonSwarmActionEvent { Performer = queen };
             SEntMan.EventBus.RaiseLocalEvent(queen, second);
             Assert.That(second.Handled, Is.True);
-            Assert.That(swarm.Members, Has.Count.EqualTo(survivors.Length * 2));
+            Assert.That(swarm.Members, Has.Count.EqualTo(20));
             Assert.That(swarm.Members, Is.SupersetOf(survivors));
+
+            swarm.NextSummon = SGameTiming.CurTime;
+            var full = new CMUSummonSwarmActionEvent { Performer = queen };
+            SEntMan.EventBus.RaiseLocalEvent(queen, full);
+            Assert.That(full.Handled, Is.False);
+            Assert.That(swarm.NextSummon, Is.EqualTo(SGameTiming.CurTime), "A full hive must not consume its cooldown.");
+            Assert.That(swarm.Members, Has.Count.EqualTo(20));
+
+            SEntMan.System<Content.Shared.Mobs.Systems.MobStateSystem>().ChangeMobState(survivors[0], Content.Shared.Mobs.MobState.Dead);
+            SEntMan.DeleteEntity(survivors[1]);
+            var replacement = new CMUSummonSwarmActionEvent { Performer = queen };
+            SEntMan.EventBus.RaiseLocalEvent(queen, replacement);
+            Assert.That(replacement.Handled, Is.True);
+            Assert.That(swarm.Members, Has.Count.EqualTo(20));
+            Assert.That(swarm.Members, Does.Not.Contain(survivors[0]).And.Not.Contain(survivors[1]));
+            Assert.That(swarm.NextSummon, Is.GreaterThan(SGameTiming.CurTime));
         });
     }
 
@@ -344,6 +368,7 @@ public sealed class CMUQueenSwarmTest : GameTest
             var hives = SEntMan.System<SharedXenoHiveSystem>();
             var hive = SEntMan.SpawnEntity("CMUCorruptedHive", map.GridCoords);
             var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+            SEntMan.EnsureComponent<XenoAttachedOvipositorComponent>(queen);
             SEntMan.GetComponent<CMUQueenSwarmComponent>(queen).Enabled = true;
             hives.SetHive(queen, hive);
             hives.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));
@@ -472,6 +497,7 @@ public sealed class CMUQueenSwarmTest : GameTest
             var hiveSystem = SEntMan.System<SharedXenoHiveSystem>();
             var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
             var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+            SEntMan.EnsureComponent<XenoAttachedOvipositorComponent>(queen);
             SEntMan.GetComponent<CMUQueenSwarmComponent>(queen).Enabled = true;
             hiveSystem.SetHive(queen, hive);
             hiveSystem.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));

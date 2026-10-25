@@ -6,10 +6,11 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14CLFObjectiveWeaponsVendor
-  name: CLF Requisitions Rack
-  description: A high-value weapons cache accessible only with CLF operational funds.
-  suffix: CLF, Objective Points
+  name: INSFOR Requisitions Rack
+  description: A high-value weapons cache accessible only with INSFOR operational funds.
+  suffix: INSFOR, Objective Points
   components:
+  - type: CMUVendGunsOnSafety
   - type: Pullable
   - type: Sprite
     sprite: CMU14/Structures/Vendors/genericweaponrack.rsi
@@ -27,7 +28,7 @@
         points: 2
       - id: AU14WeaponRifleAR10
         amount: 3
-        points: 4
+        points: 6
       - id: AU14WeaponRifleM16A2
         amount: 3
         points: 4
@@ -138,6 +139,9 @@
         points: 15
     - name: Attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
+        points: 3
       - id: AU14AttachmentTwoPointSling
         amount: 5
         points: 0
@@ -173,6 +177,9 @@
       - id: CMUMagazineRifleM16Extended
         amount: 8
         points: 2
+      - id: CMUMagazineRifleAR10
+        amount: 20
+        points: 3
       - id: RMCMagazineRifleL42A
         amount: 45
         points: 1
@@ -387,6 +394,9 @@
         points: 0
     - name: Special Equipment
       entries:
+      - id: CMUFlareJeepDropCLF
+        amount: 1
+        points: 200
       - id: CMUDeployableZLevelLadder
         amount: 2
         points: 10
@@ -460,8 +470,8 @@
 - type: entity
   parent: RMCBaseEquipmentCase
   id: AU14CLFCellKit
-  name: heavy CLF cell kit
-  description: A heavy, low-profile field case used to establish a CLF cell hideout.
+  name: heavy INSFOR cell kit
+  description: A heavy, low-profile field case used to establish an INSFOR cell hideout.
   components:
   - type: Sprite
     layers:
@@ -518,8 +528,8 @@
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateCLFinitalTools
-  name: CLF tool cache
-  description: A field cache of weapons, utilities, and repair tools for a newly established CLF cell.
+  name: INSFOR tool cache
+  description: A field cache of weapons, utilities, and repair tools for a newly established INSFOR cell.
   components:
   - type: Sprite
     state: crate
@@ -555,8 +565,8 @@
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateCLFRecruitmentKit
-  name: CLF recruitment cache
-  description: A compact cache for inducting new CLF members and handing out covert cell comms.
+  name: INSFOR recruitment cache
+  description: A compact cache for inducting new INSFOR members and handing out covert cell comms.
   components:
   - type: Sprite
     state: crate
@@ -602,7 +612,7 @@
   name: Tattoo Gun
   parent: BaseStorageItem
   id: AU14TattooGun
-  description: Used to induct people into the CLF.
+  description: Used to induct people into INSFOR.
   components:
   - type: TattooGun
   - type: Sprite

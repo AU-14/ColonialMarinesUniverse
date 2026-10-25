@@ -59,7 +59,7 @@
     mayTransfer: True
     whitelist:
       tags:
-      - AU14MagazineRifleC10A6BR
+      - AU14CartridgeRifleC10A6BR
     proto: AU14CartridgeRifleC10A6BR
     capacity: 15
   - type: Sprite

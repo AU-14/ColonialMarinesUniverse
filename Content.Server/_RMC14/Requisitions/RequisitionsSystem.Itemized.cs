@@ -497,7 +497,18 @@ public sealed partial class RequisitionsSystem
 
         account.Balance -= (int) totalCost;
         Dirty(computer.Comp.Account.Value, account);
+        // cmu edit start: who bought each shipment, for the colony firearm registry
+        var firstShipment = elevator.Comp.Orders.Count;
+        // cmu edit end
         elevator.Comp.Orders.AddRange(shipments);
+        // cmu edit start
+        for (var i = 0; i < shipments.Count; i++)
+        {
+            var bought = new Content.Server.CMU14.Requisitions.CMURequisitionsOrderBoughtEvent(elevator, firstShipment + i, actor,
+                computer.Comp.Faction);
+            RaiseLocalEvent(ref bought);
+        }
+        // cmu edit end
         Dirty(elevator);
         SendCheckoutResult(computer, actor, args.RequestId, RequisitionsCheckoutResult.Success);
         SendUIStateAll();

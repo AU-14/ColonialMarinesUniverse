@@ -7,7 +7,8 @@ using Robust.Shared.Timing;
 namespace Content.Server.CMU14.Requisitions.StockConsole;
 
 /// <summary>
-/// Fills requisitions stock consoles with what the automated requisitions vendors on the same map have left.
+/// Fills requisitions stock consoles with what the automated requisitions vendors on the same map have left, and prints
+/// order slips for them.
 /// </summary>
 public sealed partial class CMURequisitionsStockConsoleSystem : EntitySystem
 {
@@ -22,11 +23,14 @@ public sealed partial class CMURequisitionsStockConsoleSystem : EntitySystem
 
         SubscribeLocalEvent<CMURequisitionsStockConsoleComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<CMURequisitionsStockConsoleComponent, CMURequisitionsStockConsoleRefreshBuiMsg>(OnRefresh);
+        InitializeSlips();
     }
 
     private void OnUiOpened(Entity<CMURequisitionsStockConsoleComponent> ent, ref BoundUIOpenedEvent args)
     {
         UpdateUi(ent);
+        _ui.ServerSendUiMessage(ent.Owner, CMURequisitionsStockConsoleUiKey.Key,
+            new CMURequisitionsStockConsoleSlipLimitBuiMsg(GetMaxSlipItems(ent, args.Actor)), args.Actor);
     }
 
     private void OnRefresh(Entity<CMURequisitionsStockConsoleComponent> ent, ref CMURequisitionsStockConsoleRefreshBuiMsg args)
@@ -80,6 +84,7 @@ public sealed partial class CMURequisitionsStockConsoleSystem : EntitySystem
                         Name = GetEntryName(entry),
                         Amount = entry.Amount,
                         Max = entry.Max,
+                        Orderable = IsOrderable(entry),
                     });
                 }
 

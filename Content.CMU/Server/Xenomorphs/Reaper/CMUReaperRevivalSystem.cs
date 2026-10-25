@@ -1,8 +1,6 @@
 using Content.Server.EUI;
 using Content.Server.Ghost;
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared._RMC14.Xenonids.Evolution;
-using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.CMU14.Xenomorphs.Reaper;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
@@ -14,7 +12,6 @@ namespace Content.Server.CMU14.Xenomorphs.Reaper;
 public sealed partial class CMUReaperRevivalSystem : EntitySystem
 {
     [Dependency] private EuiManager _eui = default!;
-    [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private ISharedPlayerManager _players = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -44,11 +41,6 @@ public sealed partial class CMUReaperRevivalSystem : EntitySystem
 
     private void OnRevived(Entity<XenoComponent> xeno, ref CMUReaperRevivedEvent args)
     {
-        // Death clears the hive's queen reference. Restore it only if no successor took over.
-        if (HasComp<XenoEvolutionGranterComponent>(xeno) && _hive.GetHive(xeno.Owner) is { } hive
-            && hive.Comp.CurrentQueen == null)
-            _hive.SetHiveQueen(xeno, hive);
-
         OfferReturnToBody(xeno);
     }
 

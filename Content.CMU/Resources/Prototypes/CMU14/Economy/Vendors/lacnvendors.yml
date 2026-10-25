@@ -849,6 +849,11 @@
     - AU14JobGOVFORSquadSergeantUPP
     - AU14JobGOVFORSquadSergeantWYPMC
     sections:
+    - name: cmu-vendor-section-sl-scopes
+      choices: { CMUSquadLeaderScope: 1 }
+      entries:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+      - id: CMUAttachmentNightVisionScope
     - name: Headgear
       choices: { CMHat: 2 }
       entries:
@@ -954,8 +959,9 @@
     Standard issue across the frontier where threats can appear without warning.
     Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
 
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+    For immediate combat readiness: select a primary weapon and a sidearm.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -965,25 +971,41 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponKramer
-      - id: CMUKitWeaponKramerKarbine
+      - id: AU14WeaponRifleKramerAR
+      - id: CMUWeaponRifleKramerKarbine
     - name: Rifle Ammunition
       entries:
       - id: AU14WeaponRifleKramerMagazineStandard
-        amount: 60
+        amount: 120
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: AU14KitWeaponTPR23B
+      - id: AU14WeaponPistolTPR23BEmpty
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
-        amount: 60
-    - name: Attachments
+        amount: 120
+    - name: Unrestricted Attachments
+      entries:
+      - id: RMCAttachmentRailFlashlight
+        maxPerUser: 1
+      - id: AU14AttachmentTwoPointSling
+        maxPerUser: 1
+    - name: Restricted Attachments
       choices: { CMUAttachmentsVendor: 1 }
       entries:
-      - id: AU14AttachmentTwoPointSling
       - id: CMULACNAttachmentKramerSmartScope
+    - name: Kramer Stocks
+      choices: { CMUKramerStocks: 1 }
+      entries:
+      - id: CMULACNAttachmentKramerStock
+      - id: CMULACNAttachmentKarbineStock
+    - name: Special Ammunition
+      choices: { CMUSpecialAmmo: 2 }
+      entries:
+      - id: AU14WeaponRifleKramerMagazineAP
+      - id: RMCMagazinePistolM1984AP
+      - id: RMCMagazinePistolM1984HP
 
 - type: entity
   parent: AU14SpecVend
@@ -996,6 +1018,7 @@
 
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMAutomatedVendor
     sections:
     - name: Weapons Specialist Sets
@@ -1111,6 +1134,7 @@
   name: LACN automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"], ["AU14AccessOpforReq"] ]
@@ -1154,6 +1178,8 @@
         amount: 200
       - id: AU14WeaponRifleKramerMagazineAP
         amount: 15
+      - id: CMUWeaponRifleKramerMagazineHP
+        amount: 5
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette
@@ -1254,6 +1280,8 @@
         amount: 2
     - name: Rail Attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight
@@ -1477,6 +1505,7 @@
   name: LACN requisitions staff equipment rack
   description: An automated rack hooked up to a small storage of Latin American Colonial Navy requisitions and logistics gear.
   components:
+  - type: CMUVendGunsOnSafety
   - type: Sprite
     sprite: CMU14/Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
@@ -1640,10 +1669,10 @@
     - name: Tool Storage
       choices: { CMUCTToolStorage: 1 }
       entries:
-      - id: AU14BeltUtilityCombatFilled
+      - id: CMULACNBeltUtilityCombatFilled
         name: LACN utility tools rig (filled)
         recommended: true
-      - id: RMCBeltConstruction
+      - id: CMULACNBeltConstruction
         name: LACN construction rig
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)

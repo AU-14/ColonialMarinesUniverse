@@ -378,7 +378,7 @@
     muzzleFlash: MuzzleFlashEffectVehicleOver
 
 - type: entity
-  parent: CMBulletSentry10x50mm
+  parent: VehicleBulletSentry10x50mm
   id: VehicleBulletAPCFrontalCannon10x50mm
   name: bullet (10x50mm)
   categories: [ HideSpawnMenu ]
@@ -394,7 +394,7 @@
       falloff: 5
 
 - type: entity
-  parent: CMBulletSentry10x50mm
+  parent: VehicleBulletSentry10x50mm
   id: VehicleBulletAPCFrontCannon10x50mm
   name: bullet (10x50mm)
   categories: [ HideSpawnMenu ]
@@ -407,7 +407,7 @@
     amount: 15
 
 - type: entity
-  parent: CMBulletSentry10x50mm
+  parent: VehicleBulletSentry10x50mm
   id: VehicleBulletBoyarsDualCannon10x50mm
   name: bullet (10x50mm)
   categories: [ HideSpawnMenu ]
@@ -425,7 +425,7 @@
       falloff: 5
 
 - type: entity
-  parent: CMBulletSentry10x50mm
+  parent: VehicleBulletSentry10x50mm
   id: VehicleBulletRERotaryCannon10x50mm
   name: bullet (10x50mm)
   categories: [ HideSpawnMenu ]

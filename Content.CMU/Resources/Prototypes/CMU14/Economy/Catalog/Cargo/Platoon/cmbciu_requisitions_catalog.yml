@@ -1,7 +1,7 @@
 - type: entity
   abstract: false
   id: CMBCIUCargoCatalog
-  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor ]
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor, CMUASRSJeepKits ]
   components:
   - type: RequisitionsComputer
     categories:
@@ -145,6 +145,8 @@
         crate: RMCCrateGearParachute
       - cost: 800
         crate: RMCCrateAttachmentSmartScope
+      - cost: 2500
+        crate: CMUCrateAttachmentNightVisionScope
     - name: Pouches
       entries:
       - cost: 150
@@ -446,10 +448,8 @@
       entries:
       - cost: 250
         crate: RMCCrateBoxMagazineSmartPistol
-      - cost: 500
-        crate: CMUCrateBoxMagazineRifleM16APExt
       - cost: 300
-        crate: CMUCrateBoxMagazineRifleM16AP
+        crate: CMUCrateBoxMagazineRifleM20AAP
       - cost: 400
         crate: RMCCrateBoxShellsShotgunBreaching
       - cost: 650

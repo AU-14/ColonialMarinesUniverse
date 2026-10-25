@@ -21,7 +21,7 @@
   - type: RMCNameItemOnVend
     item: PrimaryGun
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/HMGs/m2c.rsi
+    sprite: CMU14/Objects/Weapons/Guns/HMGs/m2c.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/HMGs/m2c.rsi
     layers:
     - state: m2c_gun_mount
     - state: mag-0

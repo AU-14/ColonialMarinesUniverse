@@ -65,7 +65,12 @@ public sealed class CMUSwarmStairsTest : GameTest
                             new Vector2i(i * 4, 0), Tile.Empty);
                     }
                 }
+            });
 
+            // Fresh maps have no navmesh yet, lessers spawned now get NoPath and sit out the stair cooldown
+            await Pair.RunTicksSync(60);
+            await Server.WaitAssertion(() =>
+            {
                 var hive = SEntMan.SpawnEntity("CMXenoHive", new EntityCoordinates(maps[0], new Vector2(0.5f, -3.5f)));
                 anchor = SEntMan.SpawnEntity("CMUSwarmGuardMarker", new EntityCoordinates(maps[2], new Vector2(4.5f, 3.5f)));
                 var swarm = SEntMan.AddComponent<CMUSwarmControllerComponent>(hive);

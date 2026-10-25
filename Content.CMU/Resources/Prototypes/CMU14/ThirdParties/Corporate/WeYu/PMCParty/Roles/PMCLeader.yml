@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: AU14JobWYPMCPartyLeader #m41a/2
+  chevrons:
+    AU14RankWeYuEnforcerLead:
+      entity: AU14ChevronWeYuEnforcerLead
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYPMCPartyLeader
@@ -92,7 +96,7 @@
     back:
     - CMSurgicalLine
     - CMSynthGraft
-    - RMCMREWeYa
+    - RMCMREWeYaPMC
     - RMCRangefinder
     - CMStunbaton
     - RMCHandcuffs
