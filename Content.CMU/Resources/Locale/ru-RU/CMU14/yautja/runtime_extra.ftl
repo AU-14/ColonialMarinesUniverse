@@ -301,7 +301,6 @@ cmu-yautja-lobby-bracer = Наруч
 cmu-yautja-lobby-bracer-material = Стиль наруча
 cmu-yautja-lobby-cape = Накидка
 cmu-yautja-lobby-caster = Наплечный кастер
-cmu-yautja-lobby-eyes = Цвет глаз
 cmu-yautja-lobby-flavor = Описание персонажа
 cmu-yautja-lobby-flavor-limit = { $count } / { $max } символов максимум
 cmu-yautja-lobby-flavor-limit-tooltip = Максимум { $max } символов.

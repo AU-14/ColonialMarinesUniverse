@@ -1188,7 +1188,6 @@ cmu-yautja-lobby-age = Age
 cmu-yautja-lobby-sex = Sex
 cmu-yautja-lobby-gender = Gender
 cmu-yautja-lobby-skin = Skin color
-cmu-yautja-lobby-eyes = Eye color
 cmu-yautja-lobby-hair = Dreadlock color
 cmu-yautja-lobby-preview-without-gear = Preview without gear
 cmu-yautja-lobby-summary-set = Set: { $value }
