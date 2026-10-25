@@ -38,7 +38,8 @@ public sealed class GuardianAbsorbSystem : EntitySystem
                 interruptsDoAfters: false,  
                 origin: args.Origin);  
   
-            _popup.PopupEntity(Loc.GetString("guardian-absorbing-damage"), ent.Comp.Guardian, ent.Comp.Guardian);  
+            if (ent.Comp.Guardian is { } guardian)  
+                _popup.PopupEntity(Loc.GetString("guardian-absorbing-damage"), guardian, PopupType.Small);  
         }  
     }  
   
