@@ -10,8 +10,7 @@ public sealed class GuardianAbsorbSystem : EntitySystem
   
     public override void Initialize()  
     {  
-        SubscribeLocalEvent<GuardianAbsorbComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);  
-        SubscribeLocalEvent<GuardianAbsorbComponent, EntityTerminatingEvent>(OnGuardianAbsorbRemoved);  
+        SubscribeLocalEvent<GuardianAbsorbComponent, DamageModifyAfterResistEvent>(OnDamageModify);  
     }  
   
     private void OnBeforeDamageChanged(Entity<GuardianAbsorbComponent> ent, ref BeforeDamageChangedEvent args)  
