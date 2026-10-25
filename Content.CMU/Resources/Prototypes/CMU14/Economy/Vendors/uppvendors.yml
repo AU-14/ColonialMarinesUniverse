@@ -585,6 +585,7 @@
     - name: Flight Mask
       choices: { CMUPlatoonAirCrewFlightMask: 1 }
       entries:
+      - id: AU14MaskUPPPilotOxygen
       - id: AU14MaskUSASFPilotOxygen
     - name: Webbings
       choices: { CMUPlatoonAirCrewWebbings: 1 }
