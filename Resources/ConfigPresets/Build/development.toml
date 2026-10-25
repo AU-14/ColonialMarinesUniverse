@@ -40,6 +40,10 @@ tickrate = 30
 max_rapid_connections = 413
 max_ip_connections = 413
 
+[status]
+# localhost only, matches the net.bindto flag in the ss14 wrapper
+bind = "127.0.0.1:1212"
+
 [physics]
 # Makes mapping annoying
 grid_splitting = false
