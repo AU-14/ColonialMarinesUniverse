@@ -1,5 +1,7 @@
+using Content.Shared._RMC14.Xenonids;  
 using Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;  
 using Content.Shared._RMC14.Xenonids.Hive;  
+using Content.Shared.Damage;  
 using Content.Shared.Damage.Components;  
 using Content.Shared.FixedPoint;  
 using Content.Shared.Mobs.Components;  
@@ -19,6 +21,16 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
   
     private readonly HashSet<Entity<MobStateComponent>> _nearby = new();  
   
+    public override void Initialize()  
+    {  
+        SubscribeLocalEvent<GuardianCritSaveComponent, DamageChangedEvent>(OnGuardianDamageChanged);  
+    }  
+  
+    private void OnGuardianDamageChanged(Entity<GuardianCritSaveComponent> ent, ref DamageChangedEvent args)  
+    {  
+        ent.Comp.CachedDamage = args.Damageable.TotalDamage;  
+    }  
+  
     public override void Update(float frameTime)  
     {  
         var time = _timing.CurTime;  
@@ -30,14 +42,10 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
   
             save.NextCheck = time + save.CheckEvery;  
   
-            
-            if (!_mobThresholds.TryGetIncapThreshold(uid, out var incapThreshold) ||  
-                !TryComp<DamageableComponent>(uid, out var selfDamageable))  
-            {  
+            if (!_mobThresholds.TryGetIncapThreshold(uid, out var incapThreshold))  
                 continue;  
-            }  
   
-            var remaining = incapThreshold.Value - selfDamageable.TotalDamage;  
+            var remaining = incapThreshold.Value - save.CachedDamage;  
             if (remaining <= save.MinimumHealth)  
             {  
                 foreach (var old in save.ActiveTargets)  
