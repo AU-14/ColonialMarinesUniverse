@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.Lobby.UI;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.CCVar;
 using Content.Shared.Dataset;
@@ -89,6 +90,9 @@ public sealed partial class LoadoutWindow : FancyWindow
                 };
             }
         }
+
+        // CMU14: dress the window in the lobby CRT theme to match Character setup behind it.
+        CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true);
     }
 
     public void RefreshLoadouts(RoleLoadout loadout, ICommonSession session, IDependencyCollection collection)
@@ -97,5 +101,8 @@ public sealed partial class LoadoutWindow : FancyWindow
         {
             group.RefreshLoadouts(Profile, loadout, session, collection);
         }
+
+        // CMU14: re-walk so the freshly rebuilt loadout buttons wear the theme too.
+        CrtLobbyTheme.Apply(this, useCrtTypography: true);
     }
 }
