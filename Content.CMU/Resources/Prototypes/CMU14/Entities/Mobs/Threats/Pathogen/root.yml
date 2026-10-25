@@ -28,6 +28,7 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenPheromones
     - CMU14ActionXenoPathogenGuardianLink
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
@@ -95,7 +96,8 @@
         components:
         - XenoHeavy
   - type: XenoGuardian
-    linkDuration: 300 
+    linkDuration: 300
+  - type: GuardianCritSave
   - type: RMCSize
     size: Big
   - type: RMCXenoDamageVisuals
