@@ -14,16 +14,22 @@ public sealed class GuardianAbsorbSystem : EntitySystem
         SubscribeLocalEvent<GuardianAbsorbComponent, EntityTerminatingEvent>(OnGuardianAbsorbRemoved);
     }  
   
-    private void OnBeforeDamageChanged(Entity<GuardianAbsorbComponent> ent, ref BeforeDamageChangedEvent args)  
+    private void OnBeforeDamageChanged(Entity<GuardianAbsorbComponent> ent, ref DamageModifyAfterResistEvent args)  
     {  
-        if (args.Cancelled || ent.Comp.Guardian is not { } guardian || !args.Damage.AnyPositive())  
+        if (TerminatingOrDeleted(ent.Comp.Guardian))  
             return;  
   
-        if (TerminatingOrDeleted(guardian) || Deleted(guardian))  
-        {  
-            RemComp<GuardianAbsorbComponent>(ent);  
+        if (!args.Damage.AnyPositive())  
             return;  
-        }  
+  
+        var redirected = args.Damage * ent.Comp.AbsorbPercent;  
+        var remaining = args.Damage * (1 - ent.Comp.AbsorbPercent);  
+  
+        args.Damage = remaining;  
+  
+        if (redirected.AnyPositive())  
+            _damageable.TryChangeDamage(ent.Comp.Guardian, redirected, ent.Comp.IgnoreGuardianResistances, origin: args.Origin, tool: args.Tool);
+    }  
   
         var redirected = args.Damage * ent.Comp.AbsorbPercent;  
         args.Damage -= redirected; // victim only takes the remainder  
