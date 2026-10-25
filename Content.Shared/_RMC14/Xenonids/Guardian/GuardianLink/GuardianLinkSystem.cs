@@ -1,5 +1,5 @@
-using Content.Shared._RMC14.Xenonids.Guardian;
-using Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;
+using Content.Shared._RMC14.Xenonids.Guardian;  
+using Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;  
 using Content.Shared._RMC14.Xenonids.Hive;  
 using Content.Shared._RMC14.Xenonids.Plasma;  
 using Content.Shared.Actions;  
@@ -9,16 +9,16 @@ using Content.Shared.Popups;
 using Robust.Shared.Network;  
 using Robust.Shared.Timing;  
   
-namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianLink;
+namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianLink;  
   
-public sealed partial class GuardianLinkSystem : EntitySystem 
+public sealed partial class GuardianLinkSystem : EntitySystem  
 {  
     [Dependency] private readonly ExamineSystemShared _examine = default!;  
     [Dependency] private readonly GuardianAbsorbSystem _guardianAbsorb = default!;  
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;  
-    [Dependency] private readonly MobStateSystem _mobState = default!;  
     [Dependency] private readonly INetManager _net = default!;  
+    [Dependency] private readonly MobStateSystem _mobState = default!;  
     [Dependency] private readonly SharedPopupSystem _popup = default!;  
+    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;  
     [Dependency] private readonly IGameTiming _timing = default!;  
     [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;  
   
@@ -29,21 +29,11 @@ public sealed partial class GuardianLinkSystem : EntitySystem
   
     private void OnGuardianLinkAction(Entity<XenoGuardianComponent> xeno, ref XenoGuardianLinkActionEvent args)  
     {  
-        if (args.Handled)  
-            return;  
-  
-        var target = args.Target;
-
-        if (!HasComp<XenoComponent>(target))  
-        {  
-            var msg = Loc.GetString("rmc-xeno-guardian-link-start-self", ("target", target));  
-            _popup.PopupClient(msg, xeno, xeno, PopupType.Medium);  
-            return;  
-        }
+        var target = args.Target;  
   
         if (!HasComp<XenoComponent>(target))  
         {  
-            var msg = Loc.GetString("rmc-xeno-not-same-hive");  
+            var msg = Loc.GetString("rmc-xeno-heal-sisters");  
             _popup.PopupClient(msg, xeno, xeno, PopupType.SmallCaution);  
             return;  
         }  
@@ -69,26 +59,19 @@ public sealed partial class GuardianLinkSystem : EntitySystem
             return;  
         }  
   
-        if (!_examine.InRangeUnOccluded(xeno.Owner, target, xeno.Comp.Range))  
-        {  
-            var msg = Loc.GetString("rmc-xeno-guardian-link-see-fail");  
-            _popup.PopupClient(msg, xeno, xeno, PopupType.SmallCaution);  
-            return;  
-        }  
-  
         if (!_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.LinkCost))  
             return;  
   
         args.Handled = true;  
   
-        _guardianAbsorb.SetAbsorb(target, xeno, GuardianAbsorbType.DirectLink, xeno.Comp.AbsorbPercent);  
-  
         var linked = EnsureComp<GuardianLinkedComponent>(target);  
         linked.ExpiresAt = _timing.CurTime + xeno.Comp.LinkDuration;  
         Dirty(target, linked);  
   
+        _guardianAbsorb.SetAbsorb(target, xeno.Owner, GuardianAbsorbType.DirectLink, xeno.Comp.AbsorbPercent);  
+  
         var selfMsg = Loc.GetString("rmc-xeno-guardian-link-start-self", ("target", target));  
-        _popup.PopupClient(selfMsg, target, xeno);  
+        _popup.PopupClient(selfMsg, xeno, xeno, PopupType.Medium);  
   
         var targetMsg = Loc.GetString("rmc-xeno-guardian-link-start-target", ("user", xeno));  
         _popup.PopupEntity(targetMsg, target, target);  
