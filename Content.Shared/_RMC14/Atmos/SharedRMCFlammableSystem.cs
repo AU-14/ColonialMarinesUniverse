@@ -943,6 +943,20 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
                 stepping.ArmorMultiplier *= mod.DebuffModifier;
         }
 
+        var canIgnite = CanBeIgnited(uid, fireEntity, ignite.Intensity);
+        // Ignition-resistant wearers get the same fire protection while walking as while standing.
+        var fireProtection = 1f;
+        if (!canIgnite)
+        {
+            var ev = new GetFireProtectionEvent();
+            RaiseLocalEvent(uid, ref ev);
+
+            if (_inventoryQuery.TryComp(uid, out var inv))
+                _inventory.RelayEvent((uid, inv), ref ev);
+
+            fireProtection = ev.Multiplier;
+        }
+
         var coords = _transform.GetMoverCoordinates(uid);
         if (stepping.LastPosition is { } last &&
             last.TryDistance(EntityManager, _transform, coords, out var distance))
@@ -953,15 +967,12 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
                 stepping.Distance = 0;
                 if (CanFireBypassImmunity(fireEntity, uid))
                     // CMU14: fire growth and synthetic resistance.
-                    DamageFromFire(uid, tile * ignite.Intensity, penetrating: ignite.FirePenetrating);
+                    DamageFromFire(uid, tile * ignite.Intensity * fireProtection, penetrating: ignite.FirePenetrating);
             }
         }
 
         if (!_flammableQuery.TryComp(ent.Owner, out var flammable))
             return;
-
-        // Check for ignition immunity before igniting
-        var canIgnite = CanBeIgnited(uid, fireEntity, ignite.Intensity);
 
         if (canIgnite)
         {
@@ -983,16 +994,10 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         {
             // Damaging entities that are immune to being ignited but NOT immune to the fire's damage
             // Same update rate as FlammableSystem
-            var ev = new GetFireProtectionEvent();
-            RaiseLocalEvent(uid, ref ev);
-
-            if (_inventoryQuery.TryComp(uid, out var inv))
-                _inventory.RelayEvent((uid, inv), ref ev);
-
             if (ent.Comp.UpdateAt <= timing)
             {
                 // CMU14: fire growth and synthetic resistance.
-                DamageFromFire(uid, ignite.Intensity / 5f * flammable.Damage * ev.Multiplier, interruptsDoAfters: false, penetrating: ignite.FirePenetrating);
+                DamageFromFire(uid, ignite.Intensity / 5f * flammable.Damage * fireProtection, interruptsDoAfters: false, penetrating: ignite.FirePenetrating);
                 ent.Comp.UpdateAt = timing + ent.Comp.UpdateTime;
             }
         }
