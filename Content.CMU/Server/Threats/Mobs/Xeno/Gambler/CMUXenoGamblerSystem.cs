@@ -7,6 +7,8 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Events;
 using Content.Shared.CMU14.Threats.Mobs.Xeno.Gambler;
+using Content.Shared.Interaction;
+using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Robust.Server.Audio;
 using Robust.Shared.Prototypes;
@@ -23,12 +25,14 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
     [Dependency] private SharedRMCExplosionSystem _explosion = default!;
     [Dependency] private SharedXenoFruitSystem _fruit = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private RMCMapSystem _map = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     public override void Initialize()
     {
@@ -37,6 +41,7 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
         SubscribeLocalEvent<CMUXenoGamblerComponent, CMUXenoGambleExplodeActionEvent>(OnExplode);
         SubscribeLocalEvent<CMUXenoGamblerComponent, CMUXenoGambleFruitRainActionEvent>(OnFruitRain);
 
+        SubscribeLocalEvent<CMUXenoGambleStateComponent, EntityUnpausedEvent>(OnStateUnpaused);
         SubscribeLocalEvent<CMUXenoGambleGrantedActionComponent, ActionPerformedEvent>(OnGrantedActionPerformed);
     }
 
@@ -57,28 +62,23 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
 
         args.Handled = true;
 
-        ClearGrants(ent);
+        var state = EnsureComp<CMUXenoGambleStateComponent>(ent);
+        ClearGrants((ent, state));
         ClearReels(ent);
 
-        ent.Comp.WinnerIcons.Clear();
-        ent.Comp.WinnerOverlays.Clear();
-        ent.Comp.WinnerTiers.Clear();
-        foreach (var roll in rolls)
+        foreach (var _ in rolls)
         {
             if (_actions.AddAction(ent, ent.Comp.ReelAction) is { } reel)
                 ent.Comp.Reels.Add(reel);
-
-            ent.Comp.WinnerIcons.Add(GetReward(pool, roll).Icon);
-            ent.Comp.WinnerOverlays.Add(pool.Tiers[roll.Tier].Overlay ?? ent.Comp.DefaultOverlay);
-            ent.Comp.WinnerTiers.Add(roll.Tier);
         }
 
-        ent.Comp.PendingRolls = rolls;
-        ent.Comp.GambleAction = args.Action;
+        ent.Comp.SpinRolls = rolls;
         ent.Comp.SpinStart = _timing.CurTime;
-        ent.Comp.LastTickStep = 0;
-        ent.Comp.ReelsStopped = 0;
         Dirty(ent);
+
+        state.GambleAction = args.Action;
+        state.LastTickStep = 0;
+        state.ReelsStopped = 0;
 
         _audio.PlayPvs(ent.Comp.SpinSound, ent);
     }
@@ -110,9 +110,15 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
         for (var attempt = 0; attempt < 10; attempt++)
         {
             var offset = _random.NextVector2(ent.Comp.Radius);
-            var target = origin.Offset(offset);
-            if (_map.IsTileBlocked(target))
+            if (!_turf.TryGetTileRef(origin.Offset(offset), out var tile) || _turf.IsSpace(tile.Value))
                 continue;
+
+            var target = _turf.GetTileCenter(tile.Value);
+            if (_map.IsTileBlocked(target) ||
+                !_interaction.InRangeUnobstructed(ent.Owner, target, ent.Comp.Radius + 1))
+            {
+                continue;
+            }
 
             var fruit = SpawnAtPosition(_random.Pick(ent.Comp.Fruits), target);
 
@@ -142,12 +148,27 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
             canCreateVacuum: false);
     }
 
+    private void OnStateUnpaused(Entity<CMUXenoGambleStateComponent> ent, ref EntityUnpausedEvent args)
+    {
+        ent.Comp.LastStepSound += args.PausedTime;
+        foreach (var grant in ent.Comp.Grants)
+        {
+            grant.GrantedAt += args.PausedTime;
+        }
+
+        foreach (var granted in ent.Comp.GrantedComponents.Values)
+        {
+            if (granted.RemoveAt is { } removeAt)
+                granted.RemoveAt = removeAt + args.PausedTime;
+        }
+    }
+
     private void OnGrantedActionPerformed(Entity<CMUXenoGambleGrantedActionComponent> ent, ref ActionPerformedEvent args)
     {
-        if (!TryComp(ent.Comp.Gambler, out CMUXenoGamblerComponent? gambler))
+        if (!TryComp(ent.Comp.Gambler, out CMUXenoGambleStateComponent? state))
             return;
 
-        foreach (var grant in gambler.Grants)
+        foreach (var grant in state.Grants)
         {
             if (grant.Action == ent.Owner)
                 grant.Used = true;
@@ -201,37 +222,28 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
         return pool.Tiers.Count - 1;
     }
 
-    private static CMUXenoGambleReward GetReward(CMUXenoGamblePoolPrototype pool, CMUXenoGambleRoll roll)
-    {
-        return pool.Tiers[roll.Tier].Rewards[roll.Reward];
-    }
-
-    private static bool SameRoll(CMUXenoGambleRoll a, CMUXenoGambleRoll b)
-    {
-        return a.Tier == b.Tier && a.Reward == b.Reward;
-    }
-
-    private void FinishSpin(Entity<CMUXenoGamblerComponent> ent, CMUXenoGamblePoolPrototype pool)
+    private void FinishSpin(Entity<CMUXenoGamblerComponent, CMUXenoGambleStateComponent> ent, CMUXenoGamblePoolPrototype pool)
     {
         ClearReels(ent);
 
         var time = _timing.CurTime;
         var names = new List<string>();
         CMUXenoGambleTier? bestTier = null;
-        foreach (var roll in ent.Comp.PendingRolls)
+        foreach (var roll in ent.Comp1.SpinRolls)
         {
-            var tier = pool.Tiers[roll.Tier];
+            if (!roll.TryGet(pool, out var tier, out var reward))
+                continue;
+
             if (bestTier == null || tier.Priority > bestTier.Priority)
                 bestTier = tier;
-
-            var reward = tier.Rewards[roll.Reward];
-            GrantComponents(ent, roll, reward);
 
             if (_actions.AddAction(ent, reward.Action) is not { } action)
                 continue;
 
+            GrantComponents((ent, ent.Comp2), roll, reward);
+
             EnsureComp<CMUXenoGambleGrantedActionComponent>(action).Gambler = ent;
-            ent.Comp.Grants.Add(new CMUXenoGambleGrant
+            ent.Comp2.Grants.Add(new CMUXenoGambleGrant
             {
                 Action = action,
                 Roll = roll,
@@ -241,15 +253,12 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
             names.Add(Name(action));
         }
 
-        ent.Comp.PendingRolls.Clear();
-        ent.Comp.WinnerIcons.Clear();
-        ent.Comp.WinnerOverlays.Clear();
-        ent.Comp.WinnerTiers.Clear();
-        ent.Comp.SpinStart = null;
-        Dirty(ent);
+        ent.Comp1.SpinRolls.Clear();
+        ent.Comp1.SpinStart = null;
+        Dirty(ent, ent.Comp1);
 
-        if (ent.Comp.GambleAction is { } gamble)
-            _actions.SetCooldown(gamble, ent.Comp.SpinCooldown);
+        if (ent.Comp2.GambleAction is { } gamble)
+            _actions.SetCooldown(gamble, ent.Comp1.SpinCooldown);
 
         if (bestTier != null)
         {
@@ -266,7 +275,7 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
         }
     }
 
-    private void GrantComponents(Entity<CMUXenoGamblerComponent> ent, CMUXenoGambleRoll roll, CMUXenoGambleReward reward)
+    private void GrantComponents(Entity<CMUXenoGambleStateComponent> ent, CMUXenoGambleRoll roll, CMUXenoGambleReward reward)
     {
         foreach (var (name, entry) in reward.Components)
         {
@@ -275,7 +284,7 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
             {
                 granted.RemoveAt = null;
 
-                if (SameRoll(granted.Source, roll))
+                if (granted.Source.Matches(roll))
                     continue;
 
                 granted.Source = roll;
@@ -291,7 +300,7 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
         }
     }
 
-    private void RemoveGrant(Entity<CMUXenoGamblerComponent> ent, int index)
+    private void RemoveGrant(Entity<CMUXenoGambleStateComponent> ent, int index)
     {
         var grant = ent.Comp.Grants[index];
         ent.Comp.Grants.RemoveAt(index);
@@ -299,15 +308,18 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
         if (Exists(grant.Action))
             _actions.RemoveAction(grant.Action);
 
-        var removeAt = _timing.CurTime + ent.Comp.ComponentLinger;
+        var removeAt = _timing.CurTime + (TryComp(ent, out CMUXenoGamblerComponent? gambler)
+            ? gambler.ComponentLinger
+            : TimeSpan.Zero);
+
         foreach (var granted in ent.Comp.GrantedComponents.Values)
         {
-            if (granted.RemoveAt == null && SameRoll(granted.Source, grant.Roll))
+            if (granted.RemoveAt == null && granted.Source.Matches(grant.Roll))
                 granted.RemoveAt = removeAt;
         }
     }
 
-    private void ClearGrants(Entity<CMUXenoGamblerComponent> ent)
+    private void ClearGrants(Entity<CMUXenoGambleStateComponent> ent)
     {
         for (var i = ent.Comp.Grants.Count - 1; i >= 0; i--)
         {
@@ -331,7 +343,7 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
         if (grant.Used || !Exists(grant.Action))
             return true;
 
-        if (pool == null || !GetReward(pool, grant.Roll).ConsumeOnCooldown)
+        if (pool == null || !grant.Roll.TryGet(pool, out _, out var reward) || !reward.ConsumeOnCooldown)
             return false;
 
         return _actions.GetAction(grant.Action) is { Comp.Cooldown: { } cooldown } &&
@@ -339,67 +351,72 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
                cooldown.End > time;
     }
 
-    private void UpdateGambler(Entity<CMUXenoGamblerComponent> ent, TimeSpan time)
+    private void UpdateSpin(Entity<CMUXenoGamblerComponent, CMUXenoGambleStateComponent> ent,
+        CMUXenoGamblePoolPrototype? pool,
+        TimeSpan start,
+        TimeSpan time)
     {
-        _prototypes.TryIndex(ent.Comp.Pool, out var pool);
-
-        if (ent.Comp.SpinStart is { } start)
+        var (gambler, state) = (ent.Comp1, ent.Comp2);
+        var reels = gambler.SpinRolls.Count;
+        var stopped = 0;
+        while (stopped < reels && time >= CMUXenoGambleSpin.GetStopTime(gambler, start, stopped))
         {
-            var reels = ent.Comp.PendingRolls.Count;
-            var stopped = 0;
-            while (stopped < reels && time >= CMUXenoGambleSpin.GetStopTime(ent.Comp, start, stopped))
-            {
-                stopped++;
-            }
+            stopped++;
+        }
 
-            if (stopped > ent.Comp.ReelsStopped)
+        if (stopped > state.ReelsStopped)
+        {
+            state.ReelsStopped = stopped;
+            state.LastStepSound = time;
+            _audio.PlayPvs(gambler.ReelStopSound, ent);
+        }
+        else if (stopped < reels)
+        {
+            var step = (int) CMUXenoGambleSpin.GetReelPosition(gambler, start, time, stopped);
+            if (step > state.LastTickStep && time >= state.LastStepSound + gambler.MinStepSoundInterval)
             {
-                ent.Comp.ReelsStopped = stopped;
-                ent.Comp.LastStepSound = time;
-                _audio.PlayPvs(ent.Comp.ReelStopSound, ent);
-            }
-            else if (stopped < reels)
-            {
-                var step = (int) CMUXenoGambleSpin.GetReelPosition(ent.Comp, start, time, stopped);
-                if (step > ent.Comp.LastTickStep && time >= ent.Comp.LastStepSound + ent.Comp.MinStepSoundInterval)
-                {
-                    ent.Comp.LastTickStep = step;
-                    ent.Comp.LastStepSound = time;
-                    _audio.PlayPvs(ent.Comp.StepSound, ent);
-                }
-            }
-
-            if (pool == null)
-            {
-                ent.Comp.PendingRolls.Clear();
-                ent.Comp.WinnerIcons.Clear();
-                ent.Comp.WinnerOverlays.Clear();
-                ent.Comp.WinnerTiers.Clear();
-                ent.Comp.SpinStart = null;
-                ClearReels(ent);
-                Dirty(ent);
-            }
-            else if (time >= start + CMUXenoGambleSpin.GetDuration(ent.Comp, reels) + ent.Comp.ResultHold)
-            {
-                FinishSpin(ent, pool);
+                state.LastTickStep = step;
+                state.LastStepSound = time;
+                _audio.PlayPvs(gambler.StepSound, ent);
             }
         }
 
-        for (var i = ent.Comp.Grants.Count - 1; i >= 0; i--)
+        if (pool == null)
         {
-            if (IsSpent(ent.Comp.Grants[i], pool, time))
-                RemoveGrant(ent, i);
+            gambler.SpinRolls.Clear();
+            gambler.SpinStart = null;
+            ClearReels((ent, gambler));
+            Dirty(ent, gambler);
+        }
+        else if (time >= start + CMUXenoGambleSpin.GetDuration(gambler, reels) + gambler.ResultHold)
+        {
+            FinishSpin(ent, pool);
+        }
+    }
+
+    private void UpdateGambler(Entity<CMUXenoGamblerComponent, CMUXenoGambleStateComponent> ent, TimeSpan time)
+    {
+        _prototypes.TryIndex(ent.Comp1.Pool, out var pool);
+
+        if (ent.Comp1.SpinStart is { } start)
+            UpdateSpin(ent, pool, start, time);
+
+        var state = ent.Comp2;
+        for (var i = state.Grants.Count - 1; i >= 0; i--)
+        {
+            if (IsSpent(state.Grants[i], pool, time))
+                RemoveGrant((ent, state), i);
         }
 
-        if (ent.Comp.GrantedComponents.Count == 0)
+        if (state.GrantedComponents.Count == 0)
             return;
 
-        foreach (var (name, granted) in ent.Comp.GrantedComponents.ToArray())
+        foreach (var (name, granted) in state.GrantedComponents.ToArray())
         {
             if (granted.RemoveAt is not { } removeAt || removeAt > time)
                 continue;
 
-            ent.Comp.GrantedComponents.Remove(name);
+            state.GrantedComponents.Remove(name);
             RemCompDeferred(ent, _componentFactory.GetRegistration(name).Type);
         }
     }
@@ -408,13 +425,13 @@ public sealed partial class CMUXenoGamblerSystem : EntitySystem
     {
         var time = _timing.CurTime;
 
-        var gamblers = EntityQueryEnumerator<CMUXenoGamblerComponent>();
-        while (gamblers.MoveNext(out var uid, out var gambler))
+        var gamblers = EntityQueryEnumerator<CMUXenoGamblerComponent, CMUXenoGambleStateComponent>();
+        while (gamblers.MoveNext(out var uid, out var gambler, out var state))
         {
-            if (gambler.SpinStart == null && gambler.Grants.Count == 0 && gambler.GrantedComponents.Count == 0)
+            if (gambler.SpinStart == null && state.Grants.Count == 0 && state.GrantedComponents.Count == 0)
                 continue;
 
-            UpdateGambler((uid, gambler), time);
+            UpdateGambler((uid, gambler, state), time);
         }
 
         var rains = EntityQueryEnumerator<CMUXenoGambleFruitRainComponent>();

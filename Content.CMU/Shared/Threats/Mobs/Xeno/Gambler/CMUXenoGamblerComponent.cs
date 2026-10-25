@@ -1,12 +1,13 @@
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.CMU14.Threats.Mobs.Xeno.Gambler;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class CMUXenoGamblerComponent : Component
 {
     [DataField(required: true)]
@@ -62,56 +63,27 @@ public sealed partial class CMUXenoGamblerComponent : Component
     [DataField]
     public TimeSpan MinStepSoundInterval = TimeSpan.FromSeconds(0.08);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan LastStepSound;
-
     [DataField]
     public SoundSpecifier? ReelStopSound = new SoundPathSpecifier("/Audio/_RMC14/Effects/motion_detector.ogg", AudioParams.Default.WithVolume(-3));
 
     [DataField]
     public SpriteSpecifier BlankIcon = new SpriteSpecifier.Rsi(new ResPath("_RMC14/Actions/xeno_actions.rsi"), "blank");
 
+    [DataField]
+    public SpriteSpecifier DefaultOverlay = new SpriteSpecifier.Rsi(new ResPath("CMU14/Actions/Xeno/gambler.rsi"), "template_won");
+
     [DataField, AutoNetworkedField]
     public List<EntityUid> Reels = new();
 
     [DataField, AutoNetworkedField]
-    public List<SpriteSpecifier> WinnerIcons = new();
+    public List<CMUXenoGambleRoll> SpinRolls = new();
 
-    [DataField, AutoNetworkedField]
-    public List<SpriteSpecifier> WinnerOverlays = new();
-
-    [DataField, AutoNetworkedField]
-    public List<int> WinnerTiers = new();
-
-    [DataField]
-    public SpriteSpecifier DefaultOverlay = new SpriteSpecifier.Rsi(new ResPath("CMU14/Actions/Xeno/gambler.rsi"), "template_won");
-
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan? SpinStart;
-
-    [DataField]
-    public EntityUid? GambleAction;
-
-    [DataField]
-    public List<CMUXenoGambleRoll> PendingRolls = new();
-
-    [DataField]
-    public int LastTickStep;
-
-    [DataField]
-    public int ReelsStopped;
-
-    [DataField]
-    public bool ResultPlayed;
-
-    [DataField]
-    public List<CMUXenoGambleGrant> Grants = new();
-
-    [DataField]
-    public Dictionary<string, CMUXenoGambleGrantedComponent> GrantedComponents = new();
 }
 
-[DataDefinition]
+/// <summary>A pool reward, by its tier and its index in that tier.</summary>
+[DataDefinition, Serializable, NetSerializable]
 public sealed partial class CMUXenoGambleRoll
 {
     [DataField]
@@ -119,30 +91,26 @@ public sealed partial class CMUXenoGambleRoll
 
     [DataField]
     public int Reward;
-}
 
-[DataDefinition]
-public sealed partial class CMUXenoGambleGrant
-{
-    [DataField]
-    public EntityUid Action;
+    public bool Matches(CMUXenoGambleRoll other)
+    {
+        return Tier == other.Tier && Reward == other.Reward;
+    }
 
-    [DataField]
-    public CMUXenoGambleRoll Roll = new();
+    public bool TryGet(CMUXenoGamblePoolPrototype pool,
+        out CMUXenoGambleTier tier,
+        out CMUXenoGambleReward reward)
+    {
+        tier = default!;
+        reward = default!;
+        if (Tier < 0 || Tier >= pool.Tiers.Count)
+            return false;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan GrantedAt;
+        tier = pool.Tiers[Tier];
+        if (Reward < 0 || Reward >= tier.Rewards.Count)
+            return false;
 
-    [DataField]
-    public bool Used;
-}
-
-[DataDefinition]
-public sealed partial class CMUXenoGambleGrantedComponent
-{
-    [DataField]
-    public CMUXenoGambleRoll Source = new();
-
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan? RemoveAt;
+        reward = tier.Rewards[Reward];
+        return true;
+    }
 }

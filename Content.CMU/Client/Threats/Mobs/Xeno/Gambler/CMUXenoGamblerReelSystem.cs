@@ -38,7 +38,7 @@ public sealed partial class CMUXenoGamblerReelSystem : EntitySystem
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private IGameTiming _timing = default!;
 
-    public const string WonLayer = "cmu-gamble-won";
+    public const string FrameLayer = "cmu-gamble-frame";
     public const string FlashLayer = "cmu-gamble-flash";
 
     private readonly Dictionary<EntityUid, (TimeSpan Start, List<CMUXenoGambleReelStrip> Reels)> _strips = new();
@@ -58,7 +58,7 @@ public sealed partial class CMUXenoGamblerReelSystem : EntitySystem
     public bool TryGetSpin(EntityUid uid, CMUXenoGamblerComponent gambler, out List<CMUXenoGambleReelStrip> reels)
     {
         reels = default!;
-        if (gambler.SpinStart is not { } start || gambler.WinnerIcons.Count == 0)
+        if (gambler.SpinStart is not { } start || gambler.SpinRolls.Count == 0)
             return false;
 
         if (!_strips.TryGetValue(uid, out var cached) || cached.Start != start)
@@ -139,7 +139,7 @@ public sealed partial class CMUXenoGamblerReelSystem : EntitySystem
                 _sprite.LayerSetScale(icon, scale);
             }
 
-            if (_sprite.TryGetLayer((reel, sprite), WonLayer, out var frame, false))
+            if (_sprite.TryGetLayer((reel, sprite), FrameLayer, out var frame, false))
             {
                 _sprite.LayerSetTexture(frame, GetFrame(entry.Frame, time));
                 _sprite.LayerSetScale(frame, scale);
@@ -155,16 +155,24 @@ public sealed partial class CMUXenoGamblerReelSystem : EntitySystem
         }
     }
 
+    /// <summary> pool tier & reward reel lands on</summary>
+    private bool TryGetWinner(CMUXenoGamblerComponent gambler,
+        int reel,
+        out CMUXenoGambleTier tier,
+        out CMUXenoGambleReward reward)
+    {
+        tier = default!;
+        reward = default!;
+        return reel < gambler.SpinRolls.Count &&
+               _prototypes.TryIndex(gambler.Pool, out var pool) &&
+               gambler.SpinRolls[reel].TryGet(pool, out tier, out reward);
+    }
+
     public Color GetPopColor(CMUXenoGamblerComponent gambler, int reel, TimeSpan time)
     {
-        if (reel >= gambler.WinnerTiers.Count || !_prototypes.TryIndex(gambler.Pool, out var pool))
+        if (!TryGetWinner(gambler, reel, out var tier, out _))
             return Color.White;
 
-        var index = gambler.WinnerTiers[reel];
-        if (index < 0 || index >= pool.Tiers.Count)
-            return Color.White;
-
-        var tier = pool.Tiers[index];
         if (!tier.StopPopRainbow)
             return tier.StopPopColor;
 
@@ -175,23 +183,18 @@ public sealed partial class CMUXenoGamblerReelSystem : EntitySystem
     public float GetPop(CMUXenoGamblerComponent gambler, int reel, TimeSpan time)
     {
         if (gambler.SpinStart is not { } start ||
-            reel >= gambler.WinnerTiers.Count ||
             gambler.ReelPopDuration <= TimeSpan.Zero ||
-            !_prototypes.TryIndex(gambler.Pool, out var pool))
+            !TryGetWinner(gambler, reel, out var tier, out _))
         {
             return 0;
         }
-
-        var tier = gambler.WinnerTiers[reel];
-        if (tier < 0 || tier >= pool.Tiers.Count)
-            return 0;
 
         var since = time - CMUXenoGambleSpin.GetStopTime(gambler, start, reel);
         if (since < TimeSpan.Zero || since >= gambler.ReelPopDuration)
             return 0;
 
         var remaining = 1 - (float) (since / gambler.ReelPopDuration);
-        return pool.Tiers[tier].StopPop * remaining * remaining;
+        return tier.StopPop * remaining * remaining;
     }
 
     private List<CMUXenoGambleReelStrip> BuildReels(CMUXenoGamblerComponent gambler)
@@ -199,7 +202,7 @@ public sealed partial class CMUXenoGamblerReelSystem : EntitySystem
         _prototypes.TryIndex(gambler.Pool, out var pool);
 
         var reels = new List<CMUXenoGambleReelStrip>();
-        for (var i = 0; i < gambler.WinnerIcons.Count; i++)
+        for (var i = 0; i < gambler.SpinRolls.Count; i++)
         {
             // Icons -1 through steps + 1, with winner on the line once reel stops
             var steps = CMUXenoGambleSpin.GetReelSteps(gambler, i);
@@ -209,8 +212,8 @@ public sealed partial class CMUXenoGamblerReelSystem : EntitySystem
                 entries.Add(PickFiller(gambler, pool));
             }
 
-            var frame = i < gambler.WinnerOverlays.Count ? gambler.WinnerOverlays[i] : gambler.DefaultOverlay;
-            entries[steps + 1] = new CMUXenoGambleReelEntry(_sprite.Frame0(gambler.WinnerIcons[i]), frame);
+            if (TryGetWinner(gambler, i, out var tier, out var reward))
+                entries[steps + 1] = new CMUXenoGambleReelEntry(_sprite.Frame0(reward.Icon), tier.Overlay ?? gambler.DefaultOverlay);
             reels.Add(new CMUXenoGambleReelStrip(entries));
         }
 

@@ -30,7 +30,7 @@
       map: ["enum.ActionVisuals.Icon"]
     - sprite: CMU14/Actions/Xeno/gambler.rsi
       state: template_won
-      map: ["cmu-gamble-won"]
+      map: ["cmu-gamble-frame"]
       visible: false
     - sprite: CMU14/Actions/Xeno/gambler.rsi
       state: flash
