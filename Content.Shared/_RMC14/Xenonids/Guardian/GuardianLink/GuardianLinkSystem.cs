@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Xenonids.Guardian;
+using Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;
 using Content.Shared._RMC14.Xenonids.Hive;  
 using Content.Shared._RMC14.Xenonids.Plasma;  
 using Content.Shared.Actions;  
