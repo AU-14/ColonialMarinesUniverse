@@ -60,6 +60,19 @@ internal static class CrtLobbyTheme
         Apply(window, includeChat, useCrtTypography);
     }
 
+    // CMU14: FancyWindow carries the same chrome setters as DefaultWindow but a different
+    // base class, so the DefaultWindow overload cannot take it.
+    public static void ApplyWindow(FancyWindow window, bool includeChat = false, bool useCrtTypography = false)
+    {
+        if (!StyleNano.CrtUiEnabled)
+            return;
+
+        AddClass(window, StyleNano.StyleClassCrtWindow);
+        window.HeaderClass = StyleNano.StyleClassCrtWindowHeader;
+        window.TitleClass = StyleNano.StyleClassCrtWindowTitle;
+        Apply(window, includeChat, useCrtTypography);
+    }
+
     /// <summary>
     ///     Swaps an <see cref="OutputPanel"/>'s scrollbar to the chat log's bracket-capped thumb
     ///     instead of the plain <see cref="StyleNano.StyleClassCrtScrollBar"/> every other scrollbar
