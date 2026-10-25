@@ -23,4 +23,11 @@ public sealed partial class YautjaLeapingComponent : Component
     /// </summary>
     public bool SnapToDestination;
 
+    /// <summary>
+    /// CMU14: a rising leap climbs straight up before it travels sideways. The throw carries the hunter immediately,
+    /// which clipped the ceiling next to a one-tile opening and dropped the leap every time; the throw is fired once
+    /// the hunter is on the destination deck instead.
+    /// </summary>
+    public bool RiseBeforeThrow;
+
 }

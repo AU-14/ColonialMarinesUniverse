@@ -264,6 +264,7 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
                 crossLeap.Destination = new MapCoordinates(landingPosition, destinationMapId);
                 crossLeap.Direction = direction.Normalized();
                 crossLeap.SnapToDestination = true;
+                crossLeap.RiseBeforeThrow = args.ZOffset > 0;
             }
 
             var zPhysics = EnsureComp<CMUZPhysicsComponent>(ent.Owner);
@@ -288,13 +289,23 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
             leap.SnapToDestination = true;
         }
 
-        _throwing.TryThrow(
-            ent.Owner,
-            direction,
-            ent.Comp.LeapThrowSpeed,
-            ent.Owner,
-            animated: true,
-            compensateFriction: true);
+        // CMU14: a rising leap must clear the deck before it travels - throwing straight away gave the hunter sideways
+        // speed on the first tick, so it hit the ceiling beside a one-tile opening and fell back. Update() fires this
+        // throw once the hunter is on the destination deck.
+        var risingFirst = args.ZOffset > 0 &&
+                          TryComp<YautjaLeapingComponent>(ent.Owner, out var pendingRise) &&
+                          pendingRise.RiseBeforeThrow;
+
+        if (!risingFirst)
+        {
+            _throwing.TryThrow(
+                ent.Owner,
+                direction,
+                ent.Comp.LeapThrowSpeed,
+                ent.Owner,
+                animated: true,
+                compensateFriction: true);
+        }
 
         args.Handled = true;
     }
@@ -324,6 +335,28 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
         var leaping = EntityQueryEnumerator<YautjaLeapingComponent, TransformComponent>();
         while (leaping.MoveNext(out var uid, out var leap, out var xform))
         {
+            if (leap.RiseBeforeThrow)
+            {
+                // The hunter climbs straight up out of its own deck; once the deck has been cleared - the transform
+                // reports the destination map - the sideways part of the leap starts and it flies to the landing tile.
+                if (_transform.GetMapId((uid, xform)) != leap.Destination.MapId)
+                    continue;
+
+                leap.RiseBeforeThrow = false;
+                var travel = leap.Destination.Position - xform.Coordinates.Position;
+                if (TryComp<YautjaComponent>(uid, out var leapSpeed) &&
+                    travel.LengthSquared() > 0.0001f)
+                {
+                    _throwing.TryThrow(
+                        uid,
+                        travel,
+                        leapSpeed.LeapThrowSpeed,
+                        uid,
+                        animated: true,
+                        compensateFriction: true);
+                }
+            }
+
             if (!leap.SnapToDestination)
                 continue;
 
@@ -464,10 +497,13 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
         EntityUid gridUid;
         MapGridComponent grid;
 
+        var usedClickedGrid = false;
         if (destinationGrid is { } netGrid && TryGetEntity(netGrid, out var gridEnt) &&
-            TryComp(gridEnt.Value, out grid!))
+            TryComp(gridEnt.Value, out grid!) &&
+            _transform.GetMapId(gridEnt.Value) == landing.MapId)
         {
             gridUid = gridEnt.Value;
+            usedClickedGrid = true;
         }
         else if (!_map.TryFindGridAt(landing, out gridUid, out grid!))
         {
@@ -476,7 +512,7 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
 
         // Re-resolve against the deck when the cursor was on one, so a moving ship is checked where it is now.
         var position = landing.Position;
-        if (gridLocalPosition is { } local)
+        if (usedClickedGrid && gridLocalPosition is { } local)
             position = _transform.ToMapCoordinates(new EntityCoordinates(gridUid, local)).Position;
 
         if (!_map.TryGetTileRef(gridUid, grid, position, out var tileRef) || tileRef.Tile.IsEmpty)

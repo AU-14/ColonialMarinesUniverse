@@ -535,11 +535,17 @@ public sealed partial class YautjaCharacterProfile
         return profile;
     }
 
-    public YautjaCharacterProfile WithSkinColor(YautjaSkinColor skinColor)
+    /// <summary>
+    /// Applies a skin tone. <paramref name="markSelected"/> records that the tone was chosen, which is what keeps the
+    /// spawn-time randomiser off it. The save/load path passes the stored flag instead of assuming, because restoring
+    /// a saved colour is not the same as the player picking one.
+    /// </summary>
+    public YautjaCharacterProfile WithSkinColor(YautjaSkinColor skinColor, bool markSelected = true)
     {
         var color = GetSkinColorColor(skinColor);
         var profile = WithAppearance(Appearance.WithSkinColor(color));
-        profile.SkinColorSelected = true;
+        if (markSelected)
+            profile.SkinColorSelected = true;
         return profile;
     }
 

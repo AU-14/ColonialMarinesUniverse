@@ -285,7 +285,7 @@ public sealed class YautjaLeapValidationTest
             Assert.That(HasLeapDoAfter(entMan, hunter), Is.True);
         });
 
-        // Right after the wind-up the hunter must be flying, not already on the other map.
+        // Right after the wind-up the hunter must be climbing, not already on the other map.
         await pair.RunTicksSync(pair.SecondsToTicks(0.18f));
 
         await server.WaitAssertion(() =>
@@ -295,14 +295,17 @@ public sealed class YautjaLeapValidationTest
             {
                 Assert.That(entMan.GetComponent<TransformComponent>(hunter).MapID, Is.EqualTo(lowerMapId),
                     "the hunter is still climbing: crossing a deck is movement, not a teleport");
-                Assert.That(entMan.HasComponent<ThrownItemComponent>(hunter), Is.True,
-                    "the leap is still the normal animated throw");
+                // CMU14: the rise is vertical first. A throw at launch carried the hunter sideways on the first tick,
+                // which clipped the ceiling beside a one-tile opening, so the forward throw waits for the deck to clear.
+                Assert.That(entMan.HasComponent<ThrownItemComponent>(hunter), Is.False,
+                    "the forward throw waits until the hunter is through the opening");
                 Assert.That(entMan.HasComponent<CMUZFallingComponent>(hunter), Is.True,
                     "z-physics is carrying the hunter upward");
             });
         });
 
-        await pair.RunTicksSync(pair.SecondsToTicks(1f));
+        // Longer than one second: the leap is now two-phase, climb then travel to the landing tile.
+        await pair.RunTicksSync(pair.SecondsToTicks(1.6f));
 
         await server.WaitAssertion(() =>
         {

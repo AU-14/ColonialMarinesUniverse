@@ -7,6 +7,7 @@ using Content.Client.Humanoid;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
+using Content.Server.Database;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Armor;
@@ -1098,4 +1099,32 @@ public sealed class YautjaCharacterProfileTest
         int Bio,
         int Explosion,
         int AntiHug);
+
+    [Test]
+    public void SkinChoiceSurvivesTheSavedProfileRoundTrip()
+    {
+        // A profile saved without ever picking a tone must come back as "not picked", so the spawn randomiser still
+        // runs; a deliberate pick - including the default green, which is otherwise indistinguishable from untouched -
+        // must come back as picked and stay put.
+        var saved = YautjaProfileSerializer.SerializeYautjaProfile(YautjaCharacterProfile.Default);
+        var loaded = YautjaProfileSerializer.DeserializeYautjaProfile(saved);
+
+        var pickedGreen = YautjaProfileSerializer.SerializeYautjaProfile(
+            YautjaCharacterProfile.Default.WithSkinColor(YautjaSkinColor.Green));
+        var loadedGreen = YautjaProfileSerializer.DeserializeYautjaProfile(pickedGreen);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(loaded.SkinColorSelected, Is.False,
+                "loading a saved profile is not the player choosing a colour");
+            Assert.That(loaded.Appearance.SkinColor,
+                Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green)),
+                "the saved colour is still restored");
+
+            Assert.That(loadedGreen.SkinColorSelected, Is.True,
+                "an explicitly chosen tone is remembered as chosen");
+            Assert.That(loadedGreen.Appearance.SkinColor,
+                Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green)));
+        });
+    }
 }
