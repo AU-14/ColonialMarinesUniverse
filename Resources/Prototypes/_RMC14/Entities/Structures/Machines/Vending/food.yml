@@ -23,21 +23,23 @@
         amount: 25
     - name: Prepared Meals
       entries:
+      # CMU14 Begin: doubled prepared meal stock, base stock sold out around hour two
       - id: CMMRE
         name: Meal Ready to Eat
-        amount: 25
+        amount: 50
       - id: CMMarinePreparedMealChicken
-        amount: 20
+        amount: 40
       - id: CMMarinePreparedMealCornbread
-        amount: 20
+        amount: 40
       - id: CMMarinePreparedMealPasta
-        amount: 20
+        amount: 40
       - id: CMMarinePreparedMealPizza
-        amount: 20
+        amount: 40
       - id: CMMarinePreparedMealPork
-        amount: 20
+        amount: 40
       - id: CMMarinePreparedMealTofu
-        amount: 20
+        amount: 40
+      # CMU14 End
       - id: CMMarineProteinBar
         amount: 50
     - name: Flasks
@@ -79,15 +81,15 @@
     - name: Prepared Meals
       entries:
       - id: CMMarinePreparedMealChicken
-        amount: 20
+        amount: 40
       - id: CMMarinePreparedMealCornbread
-        amount: 20
+        amount: 40
       - id: CMMarinePreparedMealPasta
-        amount: 20
+        amount: 40
       - id: CMMarinePreparedMealPizza
-        amount: 20
+        amount: 40
       - id: CMMarinePreparedMealPork
-        amount: 20
+        amount: 40
     - name: Utensils
       entries:
       - id: RMCForkPlastic
@@ -128,30 +130,32 @@
     sections:
     - name: Prepared Meals
       entries:
+      # CMU14 Begin: doubled prepared meal stock, base stock sold out around hour two
       - id: RMCMRESPP
         name: UPP Combat Ration
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPBanush
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPChowMein
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPCuban
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPFrankfurter
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPJiaozi
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPLuncheon
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPShrimp
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPMeatballs
         amount: 1 # parity amount is 0 but i think this is funnier
       - id: RMCMarinePreparedMealSPPWursts
-        amount: 15
+        amount: 30
       - id: RMCSurvivalRationSPP
         name: SPP Survival Ration
-        amount: 15
+        amount: 30
+      # CMU14 End
     - name: Flasks
       entries:
       - id: RMCDrinkWaterSPP
