@@ -1,0 +1,1625 @@
+# CMU14: Legacy exact IDs for downstream maps; active maps use the functional parents directly.
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExact011bb973d1897052
+
+- type: entity
+  parent: CMSheetPhoron
+  id: CMUBosenmoriExact0205f38238095685
+  components:
+  - type: Sprite
+    offset: 0.09375,0.09375
+
+- type: entity
+  parent: RMCPickaxe
+  id: CMUBosenmoriExact024f32536b8651be
+  components:
+  - type: Sprite
+    offset: -0.0625,-0.1875
+
+- type: entity
+  parent: CMRodMetal
+  id: CMUBosenmoriExact03494948b3921f7a
+  components:
+  - type: Sprite
+    offset: 0.1875,0.0625
+
+- type: entity
+  parent: RMCFoodSnackBarcaridine
+  id: CMUBosenmoriExact034baa67bb03efec
+
+- type: entity
+  parent: CMPen
+  id: CMUBosenmoriExact037c2a562f8ac86f
+  components:
+  - type: Sprite
+    offset: -0.28125,-0.15625
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExact05e3053b6ba1a7f4
+  components:
+  - type: Sprite
+    offset: -0.0625,0.53125
+
+- type: entity
+  parent: RMCIntelDetector
+  id: CMUBosenmoriExact0694a1708b03131f
+
+- type: entity
+  parent: AU14HeadHelmetRMC
+  id: CMUBosenmoriExact078c85f1cf46c6b5
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExact092fb8e6a88548e0
+  components:
+  - type: Sprite
+    offset: -0.125,-0.15625
+
+- type: entity
+  parent: RMCArmorMercenaryMiner
+  id: CMUBosenmoriExact09cdfc6cd9571f26
+
+- type: entity
+  parent: RMCGogglesKutjevo
+  id: CMUBosenmoriExact0a3e8ea8f2860d09
+  components:
+  - type: Sprite
+    offset: 0.25,-0.21875
+
+- type: entity
+  parent: RMCBoxPizzaVegetable
+  id: CMUBosenmoriExact0bc0e9dab3933c46
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExact0c1d5b40f37c7419
+  components:
+  - type: Sprite
+    offset: -0.34375,0.125
+
+- type: entity
+  parent: RMCCondimentSmallSalt
+  id: CMUBosenmoriExact0d7af27d653334af
+
+- type: entity
+  parent: BeachBall
+  id: CMUBosenmoriExact0f0d35926e35311d
+  components:
+  - type: Sprite
+    offset: 0,0.875
+
+- type: entity
+  parent: RMCBoxPizzaMeat
+  id: CMUBosenmoriExact10520c2010647326
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExact11ca31e8bd916406
+
+- type: entity
+  parent: RMCSpaceCash200
+  id: CMUBosenmoriExact12333d750cb66a9c
+  components:
+  - type: Sprite
+    offset: 0.28125,-0.0625
+
+- type: entity
+  parent: CMHeadBandRed
+  id: CMUBosenmoriExact1242c8c30ad41e07
+
+- type: entity
+  parent: RMCDeskBell
+  id: CMUBosenmoriExact135d10d356759835
+  components:
+  - type: Sprite
+    offset: 0.1875,0.34375
+
+- type: entity
+  parent: CMRollerBed
+  id: CMUBosenmoriExact1415a3199a4b9651
+
+- type: entity
+  parent: RMCPouchAutoinjector
+  id: CMUBosenmoriExact185f1b7da481765b
+  components:
+  - type: Sprite
+    offset: 0.0625,-0.09375
+
+- type: entity
+  parent: RMCSheetPlastic1
+  id: CMUBosenmoriExact1885d92183c7be23
+  components:
+  - type: Sprite
+    offset: 0.125,-0.21875
+
+- type: entity
+  parent: CMWindowReinforcedWhite
+  id: CMUBosenmoriExact1a87b421dd34293c
+
+- type: entity
+  parent: RMCSuitRadiation
+  id: CMUBosenmoriExact1ba045b5fcaa1c60
+
+- type: entity
+  parent: CMDrinkCanBobdaClassic
+  id: CMUBosenmoriExact1de99e5b84c998ec
+  components:
+  - type: Sprite
+    offset: -0.28125,0.15625
+
+- type: entity
+  parent: CrayonOrange
+  id: CMUBosenmoriExact1df8f5a4d9edf0f0
+  components:
+  - type: Sprite
+    offset: 0.3125,0.1875
+
+- type: entity
+  parent: RMCGrenadeCustomMetalFoam
+  id: CMUBosenmoriExact1e98e9912db920c6
+  components:
+  - type: Sprite
+    offset: 0.25,0.3125
+
+- type: entity
+  parent: RMCCigarCase
+  id: CMUBosenmoriExact1ecad3d63ec2d013
+
+- type: entity
+  parent: CMRodMetal
+  id: CMUBosenmoriExact200e219a748781ec
+  components:
+  - type: Sprite
+    offset: 0.15625,0.40625
+
+- type: entity
+  parent: RMCVialBox
+  id: CMUBosenmoriExact2056adc5992958f8
+  components:
+  - type: Sprite
+    offset: 0,0.0625
+
+- type: entity
+  parent: RMCPonchoDesert
+  id: CMUBosenmoriExact2099bd5259c88ec6
+  components:
+  - type: Sprite
+    offset: -0.09375,0.125
+
+- type: entity
+  parent: CMPenClicky
+  id: CMUBosenmoriExact20b564d81b18d8a5
+  components:
+  - type: Sprite
+    offset: -0.25,0
+
+- type: entity
+  parent: CMPen
+  id: CMUBosenmoriExact2189fa63539170aa
+  components:
+  - type: Sprite
+    offset: 0.1875,-0.0625
+
+- type: entity
+  parent: RMCCrayonPurple
+  id: CMUBosenmoriExact2207e4f5f14edcc4
+  components:
+  - type: Sprite
+    offset: 0.125,-0.09375
+
+- type: entity
+  parent: CMBackpack
+  id: CMUBosenmoriExact22d12a66687eb7b2
+
+- type: entity
+  parent: AU14HeadHelmetRMC
+  id: CMUBosenmoriExact248f9e0c94d7eaaa
+  components:
+  - type: Sprite
+    offset: -0.0625,0.25
+
+- type: entity
+  parent: RMCAshtray
+  id: CMUBosenmoriExact25109753f183a5b1
+  components:
+  - type: Sprite
+    offset: -0.21875,0.25
+
+- type: entity
+  parent: RMCPouchBayonet
+  id: CMUBosenmoriExact2737a1a5d8c78b0b
+  components:
+  - type: Sprite
+    offset: -0.0625,0.25
+
+- type: entity
+  parent: RMCCigarCase
+  id: CMUBosenmoriExact29098644892ae144
+  components:
+  - type: Sprite
+    offset: -0.03125,0.28125
+
+- type: entity
+  parent: CMPaper
+  id: CMUBosenmoriExact2a58d42021b490a7
+  components:
+  - type: Sprite
+    offset: -0.25,-0.125
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExact2da09fa58cb9e3ee
+  components:
+  - type: Sprite
+    offset: 0.03125,0
+
+- type: entity
+  parent: RMCTarbackTube
+  id: CMUBosenmoriExact2dfe1e0c7896a904
+  components:
+  - type: Sprite
+    offset: 0.09375,0.375
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExact2f55680f11329172
+  components:
+  - type: Sprite
+    offset: -0.28125,-0.1875
+
+- type: entity
+  parent: RMCMaskKutjevoRespirator
+  id: CMUBosenmoriExact2f5949c68a46ac05
+  components:
+  - type: Sprite
+    offset: -0.34375,0.125
+
+- type: entity
+  parent: RMCPouchVial
+  id: CMUBosenmoriExact2fa46a938e34d5c0
+  components:
+  - type: Sprite
+    offset: 0,0.1875
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExact2fae64074bbc6f71
+  components:
+  - type: Sprite
+    offset: -0.1875,0.21875
+
+- type: entity
+  parent: CMPen
+  id: CMUBosenmoriExact2fb6cfcdda42339f
+  components:
+  - type: Sprite
+    offset: -0.03125,0.0625
+
+- type: entity
+  parent: CMRodMetal
+  id: CMUBosenmoriExact3006a16a4eb56311
+  components:
+  - type: Sprite
+    offset: 0.15625,-0.03125
+
+- type: entity
+  parent: RMCHeadRoyalTurban
+  id: CMUBosenmoriExact30491ef453081a8f
+  components:
+  - type: Sprite
+    offset: -0.3125,0.3125
+
+- type: entity
+  parent: RMCAshtray
+  id: CMUBosenmoriExact31b36b7104f11e83
+  components:
+  - type: Sprite
+    offset: 0.1875,-0.3125
+
+- type: entity
+  parent: RMCArmorVest
+  id: CMUBosenmoriExact3618d3a47290cfae
+  components:
+  - type: Sprite
+    offset: -0.3125,0.34375
+
+- type: entity
+  parent: RMCPouchRadio
+  id: CMUBosenmoriExact36477f0c91360beb
+
+- type: entity
+  parent: CMBedsheetBrown
+  id: CMUBosenmoriExact36728298c6569c8f
+
+- type: entity
+  parent: RMCSheetPlastic1
+  id: CMUBosenmoriExact3706baa83bc952b6
+
+- type: entity
+  parent: RMCLightReplacer
+  id: CMUBosenmoriExact370d07041a01cff6
+  components:
+  - type: Sprite
+    offset: -0.25,0.03125
+
+- type: entity
+  parent: RMCExplosiveBreachingChargeRubber
+  id: CMUBosenmoriExact37e0cc7c2defbd8b
+  components:
+  - type: Sprite
+    offset: -0.25,0.25
+
+- type: entity
+  parent: RMCSpaceCash50
+  id: CMUBosenmoriExact3938306fc97a9db2
+  components:
+  - type: Sprite
+    offset: -0.1875,0.28125
+
+- type: entity
+  parent: RMCHelmetGarbGunOil
+  id: CMUBosenmoriExact395dfc2afe6dbd80
+  components:
+  - type: Sprite
+    offset: 0.125,0.40625
+
+- type: entity
+  parent: CMBeltUtility
+  id: CMUBosenmoriExact3994a86c3e7facdc
+  components:
+  - type: Sprite
+    offset: 0.0625,0.34375
+
+- type: entity
+  parent: RMCKitchenKnife
+  id: CMUBosenmoriExact3a79ac8baeb57758
+
+- type: entity
+  parent: RMCBinocularsCiv
+  id: CMUBosenmoriExact3b75a6f4687b1a65
+
+- type: entity
+  parent: RMCHandsBrownMarine
+  id: CMUBosenmoriExact3c4842363fa146cd
+
+- type: entity
+  parent: RMCArmorVest
+  id: CMUBosenmoriExact3dd00cb92091eca8
+  components:
+  - type: Sprite
+    offset: 0.15625,0.125
+
+- type: entity
+  parent: RMCMaintenanceJack
+  id: CMUBosenmoriExact3df061cf4d462155
+
+- type: entity
+  parent: CMUInflatableWall
+  id: CMUBosenmoriExact3e70cfd102cce574
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExact3ee9c8f2b0c2ee06
+  components:
+  - type: Sprite
+    offset: -0.25,0.125
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExact3eef10fe80d6bb26
+  components:
+  - type: Sprite
+    offset: -0.09375,0.46875
+
+- type: entity
+  parent: CMPenClicky
+  id: CMUBosenmoriExact3f1e9ff3be981c19
+
+- type: entity
+  parent: CMRodMetal
+  id: CMUBosenmoriExact3f5be120ec7a4cfb
+  components:
+  - type: Sprite
+    offset: -0.21875,0.3125
+
+- type: entity
+  parent: RMCPickaxe
+  id: CMUBosenmoriExact4101567b9ce36b9b
+  components:
+  - type: Sprite
+    offset: -0.1875,-0.125
+
+- type: entity
+  parent: CMBedsheetBrown
+  id: CMUBosenmoriExact4137ca1392b72ae1
+  components:
+  - type: Sprite
+    offset: 0,0.40625
+
+- type: entity
+  parent: RMCShovel
+  id: CMUBosenmoriExact413ea3bd94be39b4
+  components:
+  - type: Sprite
+    offset: 0,0.3125
+
+- type: entity
+  parent: RMCPouchTools
+  id: CMUBosenmoriExact41c5cb4206368f3d
+
+- type: entity
+  parent: CMBedsheetMedical
+  id: CMUBosenmoriExact41df9582cd30be36
+
+- type: entity
+  parent: RMCKitchenKnife
+  id: CMUBosenmoriExact42db4e2785b4c7fc
+  components:
+  - type: Sprite
+    offset: -0.125,0
+
+- type: entity
+  parent: CMPen
+  id: CMUBosenmoriExact430d252624d85189
+  components:
+  - type: Sprite
+    offset: -0.03125,-0.375
+
+- type: entity
+  parent: CMSheetPhoron
+  id: CMUBosenmoriExact442af91df3529ead
+  components:
+  - type: Sprite
+    offset: -0.09375,0.34375
+
+- type: entity
+  parent: Cigarette
+  id: CMUBosenmoriExact46a2d57919cf0825
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExact47393a415aaea812
+  components:
+  - type: Sprite
+    offset: -0.1875,0.1875
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExact4788de4b73ba02bc
+  components:
+  - type: Sprite
+    offset: 0.03125,0.03125
+
+- type: entity
+  parent: RMCTarbackCase
+  id: CMUBosenmoriExact478e378aefd47dc1
+
+- type: entity
+  parent: RMCStasisBagUsed
+  id: CMUBosenmoriExact4977b879b59b77d4
+  components:
+  - type: Sprite
+    offset: -0.25,0
+
+- type: entity
+  parent: RMCFoodPacketCHUNKTrash
+  id: CMUBosenmoriExact49d6ec39f96ec2fd
+  components:
+  - type: Sprite
+    offset: 0.125,0.375
+
+- type: entity
+  parent: RMCHelmetGarbPrescription
+  id: CMUBosenmoriExact4cfab4e0fb89cc7a
+  components:
+  - type: Sprite
+    offset: -0.15625,0.6875
+
+- type: entity
+  parent: CMPenClicky
+  id: CMUBosenmoriExact4e054f4831ed31c0
+  components:
+  - type: Sprite
+    offset: 0.1875,0.03125
+
+- type: entity
+  parent: CMPaperBin5
+  id: CMUBosenmoriExact4e9051191b646c13
+  components:
+  - type: Sprite
+    offset: 0,0.125
+
+- type: entity
+  parent: RMCSpaceCash500
+  id: CMUBosenmoriExact50ab7ebb36bb1f10
+
+- type: entity
+  parent: CMCoatMessTech
+  id: CMUBosenmoriExact526a6954254abd06
+
+- type: entity
+  parent: CMRodMetal
+  id: CMUBosenmoriExact527e16d2a3032624
+
+- type: entity
+  parent: RMCPickaxe
+  id: CMUBosenmoriExact530216aa3da07e56
+
+- type: entity
+  parent: RMCToolSpade
+  id: CMUBosenmoriExact547dc8575afcf3d0
+  components:
+  - type: Sprite
+    offset: 0.1875,-0.125
+
+- type: entity
+  parent: RMCGlassesJensen
+  id: CMUBosenmoriExact56b91fcb8d361e6b
+
+- type: entity
+  parent: RMCJumpsuitLiaisonGreyWorkwear
+  id: CMUBosenmoriExact57bbcd52fa35bd40
+  components:
+  - type: Sprite
+    offset: 0.21875,-0.15625
+
+- type: entity
+  parent: RMCKitchenKnife
+  id: CMUBosenmoriExact588e904827b8f117
+  components:
+  - type: Sprite
+    offset: 0.1875,0.28125
+
+- type: entity
+  parent: CMPenClicky
+  id: CMUBosenmoriExact592c43296d0ba608
+  components:
+  - type: Sprite
+    offset: 0.09375,0.25
+
+- type: entity
+  parent: RMCHelmetWelding
+  id: CMUBosenmoriExact595ca1994c28d5bd
+
+- type: entity
+  parent: RMCGrenadeCustomMetalFoam
+  id: CMUBosenmoriExact59c8c1df0cd831df
+  components:
+  - type: Sprite
+    offset: 0.1875,0.1875
+
+- type: entity
+  parent: RMCMotionDetectorCompact
+  id: CMUBosenmoriExact5a91902a55b137a2
+  components:
+  - type: Sprite
+    offset: -0.125,-0.09375
+
+- type: entity
+  parent: RMCFoodPacketEATBarTrash
+  id: CMUBosenmoriExact5bbe0fdd9f94d801
+  components:
+  - type: Sprite
+    offset: 0.34375,0.15625
+
+- type: entity
+  parent: RMCWeldingGoggles
+  id: CMUBosenmoriExact5c4ca846dcea6684
+
+- type: entity
+  parent: RMCPouchFirstResponder
+  id: CMUBosenmoriExact5c677c59b7d2aa3c
+  components:
+  - type: Sprite
+    offset: -0.09375,0.21875
+
+- type: entity
+  parent: AU14PacketPillsEmpty
+  id: CMUBosenmoriExact5ccde8c7c7fdcaba
+  components:
+  - type: Sprite
+    offset: -0.1875,0.09375
+
+- type: entity
+  parent: RMCEngineerKit
+  id: CMUBosenmoriExact5e9512975723f67d
+  components:
+  - type: Sprite
+    offset: 0.21875,0.03125
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExact6118e2277effb156
+  components:
+  - type: Sprite
+    offset: 0.1875,-0.0625
+
+- type: entity
+  parent: CMDefibrillator
+  id: CMUBosenmoriExact63a077739d0519d9
+  components:
+  - type: Sprite
+    offset: -0.1875,0.21875
+
+- type: entity
+  parent: CMPaperBin5
+  id: CMUBosenmoriExact6407861352a5a1b2
+  components:
+  - type: Sprite
+    offset: -0.15625,0.25
+
+- type: entity
+  parent: CMEntrenchingTool
+  id: CMUBosenmoriExact6438e1811a80e0a0
+  components:
+  - type: Sprite
+    offset: 0.25,0.15625
+
+- type: entity
+  parent: RMCSpaceCash1000
+  id: CMUBosenmoriExact645c57a6dec81118
+  components:
+  - type: Sprite
+    offset: 0.0625,-0.0625
+
+- type: entity
+  parent: RMCPickaxe
+  id: CMUBosenmoriExact64d7784956dac32b
+  components:
+  - type: Sprite
+    offset: -0.15625,0.15625
+
+- type: entity
+  parent: RMCPortableVendorCorporate
+  id: CMUBosenmoriExact65daa7809311483d
+
+- type: entity
+  parent: RMCEarmuffs
+  id: CMUBosenmoriExact66849952b8488f07
+  components:
+  - type: Sprite
+    offset: 0.09375,-0.09375
+
+- type: entity
+  parent: RMCArmorVest
+  id: CMUBosenmoriExact66d2e0f3ed391fa0
+  components:
+  - type: Sprite
+    offset: 0.375,0
+
+- type: entity
+  parent: RMCMaskKutjevoRespirator
+  id: CMUBosenmoriExact67676034d1f80bc7
+  components:
+  - type: Sprite
+    offset: -0.0625,-0.0625
+
+- type: entity
+  parent: RMCHeadCapCorrespondent
+  id: CMUBosenmoriExact68a88a28f987ef7a
+  components:
+  - type: Sprite
+    offset: -0.0625,0.3125
+
+- type: entity
+  parent: CrayonGreen
+  id: CMUBosenmoriExact6aa19aef51df2018
+  components:
+  - type: Sprite
+    offset: -0.34375,0.25
+
+- type: entity
+  parent: RMCOrbitalCannonCableConnector
+  id: CMUBosenmoriExact6aa6da6cad9bbb09
+
+- type: entity
+  parent: RMCMotionDetectorCompact
+  id: CMUBosenmoriExact6b5bc680ddbb1974
+
+- type: entity
+  parent: RMCDrinkCoffee
+  id: CMUBosenmoriExact6b9e4ddc720ba277
+  components:
+  - type: Sprite
+    offset: -0.03125,0.3125
+
+- type: entity
+  parent: CMCrowbarRed
+  id: CMUBosenmoriExact6ca8a3afe42c9aad
+
+- type: entity
+  parent: CMPaperBin5
+  id: CMUBosenmoriExact6d144be1871b0193
+  components:
+  - type: Sprite
+    offset: -0.21875,0.28125
+
+- type: entity
+  parent: RMCPouchSling
+  id: CMUBosenmoriExact6dfdefd24eb31e63
+  components:
+  - type: Sprite
+    offset: -0.15625,0
+
+- type: entity
+  parent: RMCPouchSyringe
+  id: CMUBosenmoriExact6e3beff95b900248
+  components:
+  - type: Sprite
+    offset: 0,-0.125
+
+- type: entity
+  parent: RMCBeltUtilityGeneralRCM
+  id: CMUBosenmoriExact706f6001994fc005
+
+- type: entity
+  parent: RMCPickaxe
+  id: CMUBosenmoriExact70e7832866873300
+  components:
+  - type: Sprite
+    offset: 0.0625,-0.0625
+
+- type: entity
+  parent: CMPen
+  id: CMUBosenmoriExact71f557075dc62699
+  components:
+  - type: Sprite
+    offset: 0.125,0.0625
+
+- type: entity
+  parent: RMCBackpackRCMSmall
+  id: CMUBosenmoriExact73cbe33c5e1f733a
+  components:
+  - type: Sprite
+    offset: 0.0625,0.25
+
+- type: entity
+  parent: RMCArmorHelmetMercenary
+  id: CMUBosenmoriExact73e029f58513d566
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExact74e73071ae286664
+  components:
+  - type: Sprite
+    offset: -0.15625,-0.09375
+
+- type: entity
+  parent: RMCMaskKutjevoRespirator
+  id: CMUBosenmoriExact75d5ba307960e581
+  components:
+  - type: Sprite
+    offset: 0.15625,0.1875
+
+- type: entity
+  parent: CMWrench
+  id: CMUBosenmoriExact7677742180789811
+  components:
+  - type: Sprite
+    offset: 0.03125,0.1875
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: CMUBosenmoriExact77743cddeb9e6054
+  components:
+  - type: Sprite
+    offset: -0.09375,0
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExact7776b4f06f313871
+  components:
+  - type: Sprite
+    offset: 0.25,0.1875
+
+- type: entity
+  parent: RMCCondimentSmallPepper
+  id: CMUBosenmoriExact7929ab9ecc9e3281
+  components:
+  - type: Sprite
+    offset: 0.15625,0.28125
+
+- type: entity
+  parent: RMCCustomGrenade
+  id: CMUBosenmoriExact7a706a74c340f34f
+  components:
+  - type: Sprite
+    offset: -0.15625,0.25
+
+- type: entity
+  parent: RMCToolSpade
+  id: CMUBosenmoriExact7ad78a81b739ff00
+  components:
+  - type: Sprite
+    offset: 0.34375,-0.0625
+
+- type: entity
+  parent: CMRollerBed
+  id: CMUBosenmoriExact7bd47c6ecbbb6e54
+  components:
+  - type: Sprite
+    offset: 0.125,0.34375
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExact7c12c12849882825
+  components:
+  - type: Sprite
+    offset: -0.5,0.125
+
+- type: entity
+  parent: RMCArmorRoyalLight
+  id: CMUBosenmoriExact7c3acddcdd5e89ff
+
+- type: entity
+  parent: RMCArmorVest
+  id: CMUBosenmoriExact7c3bbc278005e58e
+  components:
+  - type: Sprite
+    offset: -0.15625,-0.34375
+
+- type: entity
+  parent: CMPenClicky
+  id: CMUBosenmoriExact7cceed2c6008c0af
+  components:
+  - type: Sprite
+    offset: 0.15625,0.15625
+
+- type: entity
+  parent: RMCAshtray
+  id: CMUBosenmoriExact7d98b5f4faedc228
+  components:
+  - type: Sprite
+    offset: 0.25,0.3125
+
+- type: entity
+  parent: RMCGogglesKutjevo
+  id: CMUBosenmoriExact7e131f3cb775f8a4
+
+- type: entity
+  parent: RMCEngineerKit
+  id: CMUBosenmoriExact7fbf1c9e14d07514
+  components:
+  - type: Sprite
+    offset: -0.09375,-0.25
+
+- type: entity
+  parent: RMCBackpackRCMLarge
+  id: CMUBosenmoriExact830ff607f8931a80
+
+- type: entity
+  parent: RMCPouchElectronics
+  id: CMUBosenmoriExact83f7f6f454d5171d
+
+- type: entity
+  parent: CMPenClicky
+  id: CMUBosenmoriExact897c5bc3724b505d
+  components:
+  - type: Sprite
+    offset: -0.1875,-0.1875
+
+- type: entity
+  parent: RMCSpaceCash100
+  id: CMUBosenmoriExact898c4af5bcecd98e
+  components:
+  - type: Sprite
+    offset: 0.09375,0.4375
+
+- type: entity
+  parent: CMPaperBin5
+  id: CMUBosenmoriExact898e84572d5eb149
+  components:
+  - type: Sprite
+    offset: -0.21875,0.21875
+
+- type: entity
+  parent: CMPenClicky
+  id: CMUBosenmoriExact899247a64605fd5f
+  components:
+  - type: Sprite
+    offset: -0.15625,0.125
+
+- type: entity
+  parent: CMHeadBandGray
+  id: CMUBosenmoriExact8999c32fe1a45d6f
+
+- type: entity
+  parent: RMCTablePartTan
+  id: CMUBosenmoriExact89a88079cb84125c
+  components:
+  - type: Sprite
+    offset: 0.09375,0.09375
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExact89f10e3f621a8c08
+  components:
+  - type: Sprite
+    offset: 0.0625,-0.09375
+
+- type: entity
+  parent: RMCPouchFlare
+  id: CMUBosenmoriExact8a2b54bd20cb480d
+
+- type: entity
+  parent: RMCCondimentSmallPepper
+  id: CMUBosenmoriExact8a5cbf77377c9734
+  components:
+  - type: Sprite
+    offset: 0.125,-0.15625
+
+- type: entity
+  parent: RMCBinocularsCiv
+  id: CMUBosenmoriExact8abab2c53e0cda29
+  components:
+  - type: Sprite
+    offset: 0.03125,0
+
+- type: entity
+  parent: AU14PacketPillsEmpty
+  id: CMUBosenmoriExact8af85683c4451347
+  components:
+  - type: Sprite
+    offset: 0.25,0.125
+
+- type: entity
+  parent: Cigarette
+  id: CMUBosenmoriExact8c2a51906dd8b8bb
+  components:
+  - type: Sprite
+    offset: 0.1875,-0.09375
+
+- type: entity
+  parent: RMCHelmetGarbPrescription
+  id: CMUBosenmoriExact8ca68331798a5b93
+  components:
+  - type: Sprite
+    offset: 0.03125,0.46875
+
+- type: entity
+  parent: RMCHelmetWelding
+  id: CMUBosenmoriExact8e1a2849fba5878d
+  components:
+  - type: Sprite
+    offset: 0.6875,-0.3125
+
+- type: entity
+  parent: RMCHandsLatexMarine
+  id: CMUBosenmoriExact9122fd7685aca94f
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExact9303ed6ea26ce87b
+  components:
+  - type: Sprite
+    offset: 0.1875,0.21875
+
+- type: entity
+  parent: RMCFoodPacketBarcaridineTrash
+  id: CMUBosenmoriExact9456e9b0205acc4a
+  components:
+  - type: Sprite
+    offset: -0.1875,0.28125
+
+- type: entity
+  parent: RMCArmorRoyalPointman
+  id: CMUBosenmoriExact95f65fe6c1e24411
+
+- type: entity
+  parent: CMPaperBin5
+  id: CMUBosenmoriExact97c4242b5fe07450
+  components:
+  - type: Sprite
+    offset: -0.21875,0.25
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: CMUBosenmoriExact97e57fd4f4586dd2
+  components:
+  - type: Sprite
+    offset: -0.03125,0.09375
+
+- type: entity
+  parent: CMPaper
+  id: CMUBosenmoriExact981b5bb4781b0ce7
+  components:
+  - type: Sprite
+    offset: -0.1875,0.375
+
+- type: entity
+  parent: RMCEarmuffs
+  id: CMUBosenmoriExact9899497b5951b3bc
+  components:
+  - type: Sprite
+    offset: -0.0625,0.15625
+
+- type: entity
+  parent: RMCFoodPacketBarcaridineTrash
+  id: CMUBosenmoriExact99866a51588a4361
+  components:
+  - type: Sprite
+    offset: 0.25,-0.3125
+
+- type: entity
+  parent: RMCCoatCorrespondent
+  id: CMUBosenmoriExact99a59f0ceaa130e3
+
+- type: entity
+  parent: CMSatchelMarineIntel
+  id: CMUBosenmoriExact99d919da85135fd9
+
+- type: entity
+  parent: CMPaperBin5
+  id: CMUBosenmoriExact9a383f4ef1eb4377
+
+- type: entity
+  parent: RMCHeadRadiationHood
+  id: CMUBosenmoriExact9bcce548b05c523d
+
+- type: entity
+  parent: RMCCondimentSmallSalt
+  id: CMUBosenmoriExact9ed866fe744d1178
+  components:
+  - type: Sprite
+    offset: -0.03125,0.4375
+
+- type: entity
+  parent: RMCArmorVest
+  id: CMUBosenmoriExact9f9abd749d85327a
+  components:
+  - type: Sprite
+    offset: 0.09375,0.3125
+
+- type: entity
+  parent: RMCBriefcase
+  id: CMUBosenmoriExacta058e6d1a31be9c7
+
+- type: entity
+  parent: RMCDeskBell
+  id: CMUBosenmoriExacta0b7d3d445c401f4
+  components:
+  - type: Sprite
+    offset: -0.3125,0.28125
+
+- type: entity
+  parent: RMCArmorVest
+  id: CMUBosenmoriExacta0b9e567e4664ee9
+  components:
+  - type: Sprite
+    offset: 0,-0.1875
+
+- type: entity
+  parent: RMCTablePartTan
+  id: CMUBosenmoriExacta37f8b281272171b
+  components:
+  - type: Sprite
+    offset: -0.0625,-0.09375
+
+- type: entity
+  parent: RMCPowerCellHyperEmpty
+  id: CMUBosenmoriExacta4932e61a8ec1e1b
+  components:
+  - type: Sprite
+    offset: 0.15625,0
+
+- type: entity
+  parent: RMCVialBox
+  id: CMUBosenmoriExacta856457598c6b75a
+
+- type: entity
+  parent: RMCBackpackRCMSmall
+  id: CMUBosenmoriExacta97a38872a738e0f
+
+- type: entity
+  parent: RMCDrinkCoffee
+  id: CMUBosenmoriExactaaf41708439cc15e
+  components:
+  - type: Sprite
+    offset: -0.25,0.375
+
+- type: entity
+  parent: RMCMaintenanceJack
+  id: CMUBosenmoriExactad2d9fca29084ed4
+  components:
+  - type: Sprite
+    offset: 0.09375,0.15625
+
+- type: entity
+  parent: RMCToolSpade
+  id: CMUBosenmoriExactae8f12b7d5a4cbcb
+  components:
+  - type: Sprite
+    offset: -0.15625,-0.1875
+
+- type: entity
+  parent: RMCSpaceCash1000
+  id: CMUBosenmoriExactaf8908b1d760bcb2
+  components:
+  - type: Sprite
+    offset: -0.25,0.34375
+
+- type: entity
+  parent: RMCPouchReagentCanister
+  id: CMUBosenmoriExactb603812e90e81911
+  components:
+  - type: Sprite
+    offset: -0.0625,0.15625
+
+- type: entity
+  parent: RMCPortableDialysis
+  id: CMUBosenmoriExactb62b5a71339a38f9
+
+- type: entity
+  parent: CMBeltUtility
+  id: CMUBosenmoriExactb664178172941bd4
+  components:
+  - type: Sprite
+    offset: -0.125,0
+
+- type: entity
+  parent: RMCPortableDialysis
+  id: CMUBosenmoriExactb8fa23fc7f56f691
+  components:
+  - type: Sprite
+    offset: 0.25,0.03125
+
+- type: entity
+  parent: RMCArmorVest
+  id: CMUBosenmoriExactbb1463ad2b23a26e
+  components:
+  - type: Sprite
+    offset: 0.3125,0
+
+- type: entity
+  parent: RMCPouchTools
+  id: CMUBosenmoriExactbd9624fddbafca84
+  components:
+  - type: Sprite
+    offset: 0.03125,0
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExactbe6b1f26d7175c05
+  components:
+  - type: Sprite
+    offset: -0.0625,0.375
+
+- type: entity
+  parent: RMCPouchFlareFilled
+  id: CMUBosenmoriExactbef39825dd5a00aa
+
+- type: entity
+  parent: RMCFlashlight
+  id: CMUBosenmoriExactbf4dc3e6c5e27969
+  components:
+  - type: Sprite
+    offset: -0.15625,-0.125
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExactc02332fd8a6c8a50
+  components:
+  - type: Sprite
+    offset: 0,0.125
+
+- type: entity
+  parent: RMCPouchConstruction
+  id: CMUBosenmoriExactc270afd88f038175
+
+- type: entity
+  parent: RMCShovel
+  id: CMUBosenmoriExactc2e387b65784f08f
+  components:
+  - type: Sprite
+    offset: 0.09375,0.03125
+
+- type: entity
+  parent: RMCHelmetGarbGunOil
+  id: CMUBosenmoriExactc4be97238617141a
+  components:
+  - type: Sprite
+    offset: -0.21875,0.0625
+
+- type: entity
+  parent: RMCAshtray
+  id: CMUBosenmoriExactc52642b8d60ac239
+  components:
+  - type: Sprite
+    offset: 0.3125,0
+
+- type: entity
+  parent: RMCPouchPistol
+  id: CMUBosenmoriExactc5694ab4535253ff
+  components:
+  - type: Sprite
+    offset: 0.25,-0.0625
+
+- type: entity
+  parent: RMCShovel
+  id: CMUBosenmoriExactc599a0bcea03a1d8
+
+- type: entity
+  parent: RMCCigarettePackLadyFingers
+  id: CMUBosenmoriExactc668c690036f91b7
+  components:
+  - type: Sprite
+    offset: 0.21875,-0.1875
+
+- type: entity
+  parent: RMCArmorHelmetMercenaryMiner
+  id: CMUBosenmoriExactc7571c4060c7fcdb
+
+- type: entity
+  parent: CMPenFountain
+  id: CMUBosenmoriExactc8d44c2aff7a097a
+
+- type: entity
+  parent: RMCPouchSyringe
+  id: CMUBosenmoriExactc9422826fe99abf7
+  components:
+  - type: Sprite
+    offset: 0.15625,0.21875
+
+- type: entity
+  parent: RMCVialBox
+  id: CMUBosenmoriExactc97fd08911a3f8f4
+  components:
+  - type: Sprite
+    offset: 0,-0.15625
+
+- type: entity
+  parent: RMCSyringeDrugs
+  id: CMUBosenmoriExactca9c6c838192cd58
+  components:
+  - type: Sprite
+    offset: -0.09375,-0.3125
+
+- type: entity
+  parent: RMCEngineerKit
+  id: CMUBosenmoriExactcb21f4af4f117183
+
+- type: entity
+  parent: CMArmorRiotOld
+  id: CMUBosenmoriExactcc08fe8333a140fd
+
+- type: entity
+  parent: RMCTablePartGambling
+  id: CMUBosenmoriExactcd69d4960cb68878
+
+- type: entity
+  parent: RMCHelmetGarbGunOil
+  id: CMUBosenmoriExactcdb8d24ca6ece880
+  components:
+  - type: Sprite
+    offset: 0.25,0.25
+
+- type: entity
+  parent: RMCVialBox
+  id: CMUBosenmoriExactcdde9f33e32778c2
+  components:
+  - type: Sprite
+    offset: 0,0.28125
+
+- type: entity
+  parent: RMCMedalGoldExceptionalHeroism
+  id: CMUBosenmoriExactce4334e8974a3967
+  components:
+  - type: Sprite
+    offset: -0.21875,0.40625
+
+- type: entity
+  parent: RMCArmorVest
+  id: CMUBosenmoriExactcf48a42bb4955364
+  components:
+  - type: Sprite
+    offset: -0.21875,0.09375
+
+- type: entity
+  parent: ArmorHelmetRiotOld
+  id: CMUBosenmoriExactcf92ac8c95a5af4d
+
+- type: entity
+  parent: CMRollerBed
+  id: CMUBosenmoriExactcfaa811879174f72
+
+- type: entity
+  parent: RMCPressurizedCanister
+  id: CMUBosenmoriExactd1df1e014d75c178
+  components:
+  - type: Sprite
+    offset: 0.1875,0.3125
+
+- type: entity
+  parent: RMCSuitBioGeneral
+  id: CMUBosenmoriExactd3642af98aefccad
+
+- type: entity
+  parent: RMCPouchChem
+  id: CMUBosenmoriExactd423cae9875577f5
+
+- type: entity
+  parent: RMCPouchFlare
+  id: CMUBosenmoriExactd514731abd1f840b
+  components:
+  - type: Sprite
+    offset: -0.125,0.09375
+
+- type: entity
+  parent: RMCVestTan
+  id: CMUBosenmoriExactd7577983756b61e3
+
+- type: entity
+  parent: ClothingEyesGlassesCheapSunglasses
+  id: CMUBosenmoriExactd827a1df2a290681
+  components:
+  - type: Sprite
+    offset: 0.03125,0.21875
+
+- type: entity
+  parent: RMCPouchRadio
+  id: CMUBosenmoriExactd95b005a87d7b9e4
+  components:
+  - type: Sprite
+    offset: 0.09375,0.34375
+
+- type: entity
+  parent: RMCArmorVest
+  id: CMUBosenmoriExactdbb61766dd88fd59
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExactdd211dac3882b7a2
+  components:
+  - type: Sprite
+    offset: -0.1875,0.25
+
+- type: entity
+  parent: CMWelder
+  id: CMUBosenmoriExactdd97fdc15d14f219
+
+- type: entity
+  parent: RMCCondimentSmallPepper
+  id: CMUBosenmoriExactdf24ec1ff7d1b7bb
+  components:
+  - type: Sprite
+    offset: 0.125,0.125
+
+- type: entity
+  parent: RMCCondimentSmallSalt
+  id: CMUBosenmoriExacte03a5067efdf88c2
+  components:
+  - type: Sprite
+    offset: -0.03125,-0.0625
+
+- type: entity
+  parent: RMCPouchSling
+  id: CMUBosenmoriExacte12905ae45d97c99
+  components:
+  - type: Sprite
+    offset: 0.15625,0.25
+
+- type: entity
+  parent: RMCAshtray
+  id: CMUBosenmoriExacte28b8d7874613cee
+  components:
+  - type: Sprite
+    offset: 0.09375,-0.0625
+
+- type: entity
+  parent: RMCPamphletVulture
+  id: CMUBosenmoriExacte2bf9681af4fbbef
+  components:
+  - type: Sprite
+    offset: -0.15625,0.1875
+
+- type: entity
+  parent: RMCToolSpade
+  id: CMUBosenmoriExacte46f9a524054b069
+
+- type: entity
+  parent: RMCStethoscope
+  id: CMUBosenmoriExacte7a5e2672daffc89
+
+- type: entity
+  parent: CMPenClicky
+  id: CMUBosenmoriExacte7fc419955d7f7c7
+  components:
+  - type: Sprite
+    offset: 0.0625,0
+
+- type: entity
+  parent: RMCHoodBioGeneral
+  id: CMUBosenmoriExacte8e6b0ab75e8c72f
+
+- type: entity
+  parent: RMCPVEArmorPaintSkull
+  id: CMUBosenmoriExactea51da4b86a7431a
+  components:
+  - type: Sprite
+    offset: 0.25,0.03125
+
+- type: entity
+  parent: RMCDeskBell
+  id: CMUBosenmoriExactea69facbacaa5918
+  components:
+  - type: Sprite
+    offset: 0.15625,0
+
+- type: entity
+  parent: RMCMedalGoldExceptionalHeroism
+  id: CMUBosenmoriExacteade50c5886fb007
+  components:
+  - type: Sprite
+    offset: 0.375,0.21875
+
+- type: entity
+  parent: RMCPouchRadio
+  id: CMUBosenmoriExacteb4b60842b041ed0
+  components:
+  - type: Sprite
+    offset: 0,0.125
+
+- type: entity
+  parent: RMCLightReplacer
+  id: CMUBosenmoriExactebcdfd6e029168ca
+
+- type: entity
+  parent: RMCCigarCase
+  id: CMUBosenmoriExactec065af2a48f4106
+  components:
+  - type: Sprite
+    offset: 0.09375,-0.09375
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExacted0459404e5663ba
+  components:
+  - type: Sprite
+    offset: -0.1875,0.5
+
+- type: entity
+  parent: CMBedsheetBlue
+  id: CMUBosenmoriExactedcae71c222b1c83
+
+- type: entity
+  parent: CMHeadFlapCap
+  id: CMUBosenmoriExacteebdac86100fdaac
+
+- type: entity
+  parent: RMCOrbitalCannonCable
+  id: CMUBosenmoriExactef794bae74f7265c
+
+- type: entity
+  parent: RMCExplosiveBreachingChargeRubber
+  id: CMUBosenmoriExactf1b7731aa254f606
+  components:
+  - type: Sprite
+    offset: 0.40625,0
+
+- type: entity
+  parent: RMCStool
+  id: CMUBosenmoriExactf1f289344389d166
+  components:
+  - type: Sprite
+    offset: 0.125,0.34375
+
+- type: entity
+  parent: RMCTablePartReinforced
+  id: CMUBosenmoriExactf243524c62605484
+
+- type: entity
+  parent: RMCSpaceCash100
+  id: CMUBosenmoriExactf252aa3abdfa3472
+  components:
+  - type: Sprite
+    offset: 0.15625,-0.1875
+
+- type: entity
+  parent: RMCPickaxe
+  id: CMUBosenmoriExactf30f012c21de382d
+  components:
+  - type: Sprite
+    offset: -0.0625,0.03125
+
+- type: entity
+  parent: CMPaperBin5
+  id: CMUBosenmoriExactf47bbc2a2e0c27b5
+  components:
+  - type: Sprite
+    offset: 0.1875,0.375
+
+- type: entity
+  parent: CMPen
+  id: CMUBosenmoriExactf60e729303952223
+
+- type: entity
+  parent: AU14PacketPillsEmpty
+  id: CMUBosenmoriExactf69dc31565be868a
+  components:
+  - type: Sprite
+    offset: 0,0.3125
+
+- type: entity
+  parent: RMCDrinkCoffee
+  id: CMUBosenmoriExactf6d7b87a82e70107
+  components:
+  - type: Sprite
+    offset: 0.1875,0.1875
+
+- type: entity
+  parent: RMCAshtray
+  id: CMUBosenmoriExactf6eb9879236de73b
+  components:
+  - type: Sprite
+    offset: 0.53125,-0.03125
+
+- type: entity
+  parent: RMCBoonieTan
+  id: CMUBosenmoriExactf87e809a299309fb
+  components:
+  - type: Sprite
+    offset: 0.25,0.03125
+
+- type: entity
+  parent: CMPen
+  id: CMUBosenmoriExactf9b32278516998bc
+  components:
+  - type: Sprite
+    offset: 0.15625,-0.0625
+
+- type: entity
+  parent: RMCMotionDetectorCompact
+  id: CMUBosenmoriExactfa97ec63456263d9
+  components:
+  - type: Sprite
+    offset: -0.125,0.15625
+
+- type: entity
+  parent: RMCTarbackTube
+  id: CMUBosenmoriExactfb6e1008b49fb8ed
+  components:
+  - type: Sprite
+    offset: -0.15625,0.40625
+
+- type: entity
+  parent: CMIV
+  id: CMUBosenmoriExactfbec1ba58d163dec
+
+- type: entity
+  parent: RMCPonchoDesert
+  id: CMUBosenmoriExactfcba2c65e3f6b0c0
+  components:
+  - type: Sprite
+    offset: 0.09375,-0.0625
+
+- type: entity
+  parent: RMCTablePartAlmayer
+  id: CMUBosenmoriExactfce5bad32e9a591c
+
+- type: entity
+  parent: RMCPowerCellHigh
+  id: CMUBosenmoriExactfd24a0346a94e6b0
+  components:
+  - type: Sprite
+    offset: -0.21875,0.3125
+
+- type: entity
+  parent: CMSatchel
+  id: CMUBosenmoriExactfd8f682f1f03516b
+
+- type: entity
+  parent: CMPen
+  id: CMUBosenmoriExactfdc6964175ad138c
+  components:
+  - type: Sprite
+    offset: 0.03125,0.15625
+
+- type: entity
+  parent: RMCCigarCase
+  id: CMUBosenmoriExactffdeab09a1d8864e
+  components:
+  - type: Sprite
+    offset: 0,0.0625

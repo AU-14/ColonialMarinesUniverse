@@ -1,0 +1,185 @@
+# CMU14: Legacy tile IDs mapped to the functional tiles used by the current Bosenmori map.
+
+- type: tile
+  parent: CMUBosenmoriCoveredFloorSteelPlanetBlueFull
+  id: CMUBosenmoriCoveredCMUBosenmoriExact103c10c90bd42017
+
+- type: tile
+  parent: CMUBosenmoriCoveredFloorWarningYellow2
+  id: CMUBosenmoriCoveredCMUBosenmoriExact33bb35301abf7ff9
+
+- type: tile
+  parent: CMUBosenmoriCoveredFloorTComms
+  id: CMUBosenmoriCoveredCMUBosenmoriExact66b0de159b0c15c5
+
+- type: tile
+  parent: CMUBosenmoriCoveredFloorSteelShivaPlate
+  id: CMUBosenmoriCoveredCMUBosenmoriExact93f730d271a121f9
+
+- type: tile
+  parent: CMUBosenmoriCoveredFloorSteelShivaMultiTile
+  id: CMUBosenmoriCoveredCMUBosenmoriExact954361d14f9ec125
+
+- type: tile
+  parent: CMUBosenmoriCoveredFloorRedYellowFull
+  id: CMUBosenmoriCoveredCMUBosenmoriExacta77eb44c355bd64b
+
+- type: tile
+  parent: CMUBosenmoriCoveredFloorSteelShivaMultiTile
+  id: CMUBosenmoriCoveredCMUBosenmoriExactdadc6df0e2c8f84d
+
+- type: tile
+  parent: CMFloorSteelPlanetBlueFull
+  id: CMUBosenmoriExact103c10c90bd42017
+
+- type: tile
+  parent: CMUBosenmoriFloorWarningCorner
+  id: CMUBosenmoriExact1093d1b84374c419
+
+- type: tile
+  parent: CMUBosenmoriFloorFiltrationSideWest
+  id: CMUBosenmoriExact1ce6de74cae9decc
+
+- type: tile
+  parent: RMCPlanetDesertWaterShoreCorner0
+  id: CMUBosenmoriExact247a752584dcd21a
+
+- type: tile
+  parent: RMCWoodInside
+  id: CMUBosenmoriExact26d204550cac6a48
+
+- type: tile
+  parent: CMUBosenmoriFloorCatwalkPlating
+  id: CMUBosenmoriExact30c5ac3525c1c3ce
+
+- type: tile
+  parent: CMUBosenmoriFloorWarningCorner
+  id: CMUBosenmoriExact3382f163dceaacf7
+
+- type: tile
+  parent: CMUBosenmoriFloorWarningYellow2
+  id: CMUBosenmoriExact33bb35301abf7ff9
+
+- type: tile
+  parent: CMUBosenmoriFloorFiltrationSideWest
+  id: CMUBosenmoriExact38e6df894d4c22e7
+
+- type: tile
+  parent: RMCFloorPlatingStriped
+  id: CMUBosenmoriExact40a365888e916637
+
+- type: tile
+  parent: CMPlanetPlasticFloor1
+  id: CMUBosenmoriExact4f1141cdf862bd1e
+
+- type: tile
+  parent: CMUBosenmoriFloorFiltrationSideWest
+  id: CMUBosenmoriExact512586c934fb2767
+
+- type: tile
+  parent: CMUBosenmoriFloorAICatwalkPlating
+  id: CMUBosenmoriExact56d5fd8a6ccdee20
+
+- type: tile
+  parent: RMCFloorTComms
+  id: CMUBosenmoriExact66b0de159b0c15c5
+
+- type: tile
+  parent: CMUBosenmoriFloorWarningYellow1
+  id: CMUBosenmoriExact690809b1e794a816
+
+- type: tile
+  parent: CMUBosenmoriFloorContainmentCorner4
+  id: CMUBosenmoriExact6d274f672a351ee3
+
+- type: tile
+  parent: CMUBosenmoriFloorFiltrationSideWest
+  id: CMUBosenmoriExact6e4ddee9acf12afe
+
+- type: tile
+  parent: CMFloorOuterHullPlate
+  id: CMUBosenmoriExact71458b9636ce49b2
+
+- type: tile
+  parent: CMUBosenmoriFloorFiltrationSideWest
+  id: CMUBosenmoriExact79b8f78e5002f1a6
+
+- type: tile
+  parent: CMFloorSteelShivaPlate
+  id: CMUBosenmoriExact93f730d271a121f9
+
+- type: tile
+  parent: CMFloorSteelShivaMultiTile
+  id: CMUBosenmoriExact954361d14f9ec125
+
+- type: tile
+  parent: RMCPlanetDesertWaterShoreCorner3
+  id: CMUBosenmoriExacta19958615384b143
+
+- type: tile
+  parent: CMUBosenmoriFloorRedYellowFull
+  id: CMUBosenmoriExacta77eb44c355bd64b
+
+- type: tile
+  parent: CMUBosenmoriFloorWarningYellow0
+  id: CMUBosenmoriExactab8251ee5c239b14
+
+- type: tile
+  parent: RMCFloorResearchContainmentEast
+  id: CMUBosenmoriExactad02ed385ec0290f
+
+- type: tile
+  parent: RMCFloorPlatingStriped
+  id: CMUBosenmoriExactaed0c4297b2926bf
+
+- type: tile
+  parent: CMUBosenmoriFloorWarningCorner
+  id: CMUBosenmoriExactb2a41c460b582db8
+
+- type: tile
+  parent: RMCFloorResearchContainmentFloor2North
+  id: CMUBosenmoriExactb78a603081ca15fa
+
+- type: tile
+  parent: CMUBosenmoriFloorAICatwalkPlatingWhite
+  id: CMUBosenmoriExactb7a930fbbff0674a
+
+- type: tile
+  parent: CMUBosenmoriFloorContainmentCorner2
+  id: CMUBosenmoriExactc23826c4eddf6edd
+
+- type: tile
+  parent: CMUBosenmoriFloorContainmentCorner3
+  id: CMUBosenmoriExactc89ef7d1baa4ed75
+
+- type: tile
+  parent: RMCPlanetDesertWaterShoreCorner9
+  id: CMUBosenmoriExactcd4ae5b4a2423514
+
+- type: tile
+  parent: RMCFloorResearchContainmentEast
+  id: CMUBosenmoriExactda3eac70cae1a077
+
+- type: tile
+  parent: CMFloorSteelShivaMultiTile
+  id: CMUBosenmoriExactdadc6df0e2c8f84d
+
+- type: tile
+  parent: CMFloorSteelShiva
+  id: CMUBosenmoriExacte226c64e27d3490c
+
+- type: tile
+  parent: CMUBosenmoriFloorAsteroid
+  id: CMUBosenmoriExactf24210d1e86c999b
+
+- type: tile
+  parent: RMCWoodInside
+  id: CMUBosenmoriExactf66d2aecbffb91d1
+
+- type: tile
+  parent: CMUBosenmoriFloorWarningCorner
+  id: CMUBosenmoriExactf98665d1c0ab4ca2
+
+- type: tile
+  parent: RMCFloorResearchContainmentFloor2West
+  id: CMUBosenmoriExactfb4d03cac4eb1266

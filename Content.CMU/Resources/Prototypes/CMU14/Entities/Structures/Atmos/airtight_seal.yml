@@ -1,3 +1,16 @@
+# CMU14: Retain the legacy door-seal prototype for older maps and extensions.
+# Current CMU maps no longer place it.
+- type: entity
+  id: CMUAirtightSeal
+  name: airtight seal
+  description: A structural membrane sealing the hull. It should never be visible.
+  suffix: CMU
+  components:
+  - type: Transform
+  - type: Airtight
+    fixVacuum: true
+    noAirWhenFullyAirBlocked: false
+
 # An airtight heavy hull that has no visual or physical obstruction.
 - type: entity
   parent: CMWallReinforcedHeavyAlmayer

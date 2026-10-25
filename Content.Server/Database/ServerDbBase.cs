@@ -1187,17 +1187,31 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             await db.DbContext.SaveChangesAsync();
         }
 
-        // CMU14: aggregate only outcomes in the selected dashboard period.
-        public async Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
+        // CMU14: retain the previous all-time dashboard query for existing callers.
+        public Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
+            int recentRounds,
+            CancellationToken cancel = default)
+            => GetCMURoundStatisticsDashboardCore(recentRounds, null, cancel);
+
+        // CMU14: retain the exact filtered signature as well as the all-time overload.
+        public Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
             int recentRounds,
             DateTime from,
             CancellationToken cancel = default)
+            => GetCMURoundStatisticsDashboardCore(recentRounds, from, cancel);
+
+        private async Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboardCore(
+            int recentRounds,
+            DateTime? from,
+            CancellationToken cancel)
         {
             await using var db = await GetDb();
 
-            var records = (await db.DbContext.CMURoundOutcomes
-                    .AsNoTracking()
-                    .Where(outcome => outcome.RecordedAt >= from)
+            var outcomes = db.DbContext.CMURoundOutcomes.AsNoTracking();
+            if (from is { } start)
+                outcomes = outcomes.Where(outcome => outcome.RecordedAt >= start);
+
+            var records = (await outcomes
                     .OrderByDescending(outcome => outcome.RecordedAt)
                     .ToListAsync(cancel))
                 .Select(MakeCMURoundOutcomeRecord)

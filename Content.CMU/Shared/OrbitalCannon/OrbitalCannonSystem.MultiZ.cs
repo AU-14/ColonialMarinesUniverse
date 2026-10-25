@@ -1,10 +1,22 @@
 using System.Collections.Generic;
+using Content.Shared.CMU14.ZLevels.Ordnance;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.OrbitalCannon;
 
 public sealed partial class OrbitalCannonSystem
 {
+    // Preserve the previous API for callers that select the ordnance permission gate.
+    public void SpawnExplosion(EntProtoId prototype, EntityCoordinates coordinates, CMUTopDownOrdnanceKind kind)
+    {
+        if (_net.IsClient)
+            return;
+
+        var source = Spawn(prototype, coordinates);
+        EnsureComp<CMUOrbitalExplosionKindComponent>(source).Kind = kind;
+    }
+
     public List<MapCoordinates> GetOrbitalExplosionLayers(MapCoordinates impact, bool multiZ)
     {
         var layers = new List<MapCoordinates>();
@@ -29,10 +41,17 @@ public sealed partial class OrbitalCannonSystem
 
     private void CMUFireOrbitalExplosionStep(EntityUid source, bool multiZ, OrbitalCannonExplosion step, MapCoordinates impact)
     {
+        var kind = TryComp<CMUOrbitalExplosionKindComponent>(source, out var ordnance)
+            ? ordnance.Kind
+            : CMUTopDownOrdnanceKind.OrbitalBombardment;
+
         foreach (var layer in GetOrbitalExplosionLayers(impact, multiZ))
         {
             var coordinates = _transform.ToCoordinates(layer);
-            if (step.CheckProtectionPer && !_area.CanOrbitalBombard(coordinates, out _))
+            if (step.CheckProtectionPer && kind != CMUTopDownOrdnanceKind.Scuttle &&
+                !(kind == CMUTopDownOrdnanceKind.Mortar
+                    ? _area.CanMortarFire(coordinates)
+                    : _area.CanOrbitalBombard(coordinates, out _)))
                 continue;
 
             if (step.ExplosionEffect is { } effectPrototype)

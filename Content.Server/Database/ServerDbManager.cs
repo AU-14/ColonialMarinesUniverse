@@ -255,6 +255,10 @@ namespace Content.Server.Database
         Task<Round> GetRound(int id);
         Task AddRoundPlayers(int id, params Guid[] playerIds);
         Task UpsertCMURoundOutcome(CMURoundOutcomeRecord record);
+        // CMU14: keep the all-time query available to existing dashboard callers.
+        Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
+            int recentRounds,
+            CancellationToken cancel = default);
         // CMU14: time-filtered round outcomes.
         Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
             int recentRounds,
@@ -1023,6 +1027,15 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.UpsertCMURoundOutcome(record));
+        }
+
+        // CMU14: keep the previous all-time query signature available to callers.
+        public Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
+            int recentRounds,
+            CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetCMURoundStatisticsDashboard(recentRounds, cancel));
         }
 
         // CMU14: time-filtered round outcomes.
