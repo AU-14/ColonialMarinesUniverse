@@ -1,6 +1,6 @@
 using Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;  
 using Content.Shared._RMC14.Xenonids.Hive;  
-using Content.Shared.Damage;  
+using Content.Shared.Damage.DamageableSystems;  
 using Content.Shared.Mobs;  
 using Content.Shared.Mobs.Components;  
 using Content.Shared.Mobs.Systems;  
