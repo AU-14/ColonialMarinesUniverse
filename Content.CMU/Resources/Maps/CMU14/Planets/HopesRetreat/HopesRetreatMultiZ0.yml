@@ -4,8 +4,8 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/25/2026 02:24:26
-  entityCount: 40457
+  time: 10/25/2026 15:04:29
+  entityCount: 40474
 maps:
 - 1
 grids:
@@ -115227,120 +115227,120 @@ entities:
         -59,-25: CMUAreaRetreatOCResearchEast
         -64,-23: CMUAreaRetreatOCResearchEast
         -63,-23: CMUAreaRetreatOCResearchEast
-        -71,-23: CMUAreaRetreatOCResearchEast
-        -71,-24: CMUAreaRetreatOCResearchEast
-        -71,-25: CMUAreaRetreatOCResearchEast
-        -71,-26: CMUAreaRetreatOCResearchEast
-        -71,-27: CMUAreaRetreatOCResearchEast
-        -71,-28: CMUAreaRetreatOCResearchEast
-        -71,-29: CMUAreaRetreatOCResearchEast
-        -71,-30: CMUAreaRetreatOCResearchEast
-        -71,-31: CMUAreaRetreatOCResearchEast
-        -71,-32: CMUAreaRetreatOCResearchEast
-        -71,-33: CMUAreaRetreatOCResearchEast
-        -71,-34: CMUAreaRetreatOCResearchEast
-        -71,-35: CMUAreaRetreatOCResearchEast
-        -71,-36: CMUAreaRetreatOCResearchEast
-        -71,-37: CMUAreaRetreatOCResearchEast
-        -71,-38: CMUAreaRetreatOCResearchEast
-        -71,-39: CMUAreaRetreatOCResearchEast
-        -71,-40: CMUAreaRetreatOCResearchEast
-        -71,-41: CMUAreaRetreatOCResearchEast
-        -71,-42: CMUAreaRetreatOCResearchEast
-        -71,-43: CMUAreaRetreatOCResearchEast
-        -71,-44: CMUAreaRetreatOCResearchEast
-        -71,-45: CMUAreaRetreatOCResearchEast
-        -71,-46: CMUAreaRetreatOCResearchEast
-        -71,-47: CMUAreaRetreatOCResearchEast
-        -71,-48: CMUAreaRetreatOCResearchEast
-        -71,-49: CMUAreaRetreatOCResearchEast
-        -70,-23: CMUAreaRetreatOCResearchEast
-        -70,-24: CMUAreaRetreatOCResearchEast
-        -70,-25: CMUAreaRetreatOCResearchEast
-        -70,-26: CMUAreaRetreatOCResearchEast
-        -70,-27: CMUAreaRetreatOCResearchEast
-        -70,-28: CMUAreaRetreatOCResearchEast
-        -70,-29: CMUAreaRetreatOCResearchEast
-        -70,-30: CMUAreaRetreatOCResearchEast
-        -70,-31: CMUAreaRetreatOCResearchEast
-        -70,-32: CMUAreaRetreatOCResearchEast
-        -70,-33: CMUAreaRetreatOCResearchEast
-        -70,-34: CMUAreaRetreatOCResearchEast
-        -70,-35: CMUAreaRetreatOCResearchEast
-        -70,-36: CMUAreaRetreatOCResearchEast
-        -70,-37: CMUAreaRetreatOCResearchEast
-        -70,-39: CMUAreaRetreatOCResearchEast
-        -70,-40: CMUAreaRetreatOCResearchEast
-        -70,-41: CMUAreaRetreatOCResearchEast
-        -70,-42: CMUAreaRetreatOCResearchEast
-        -70,-38: CMUAreaRetreatOCResearchEast
-        -70,-45: CMUAreaRetreatOCResearchEast
-        -70,-46: CMUAreaRetreatOCResearchEast
-        -70,-47: CMUAreaRetreatOCResearchEast
-        -70,-48: CMUAreaRetreatOCResearchEast
-        -70,-49: CMUAreaRetreatOCResearchEast
-        -70,-44: CMUAreaRetreatOCResearchEast
-        -69,-24: CMUAreaRetreatOCResearchEast
-        -69,-25: CMUAreaRetreatOCResearchEast
-        -69,-26: CMUAreaRetreatOCResearchEast
-        -70,-43: CMUAreaRetreatOCResearchEast
-        -69,-27: CMUAreaRetreatOCResearchEast
-        -69,-29: CMUAreaRetreatOCResearchEast
-        -69,-30: CMUAreaRetreatOCResearchEast
-        -69,-31: CMUAreaRetreatOCResearchEast
-        -69,-32: CMUAreaRetreatOCResearchEast
-        -69,-33: CMUAreaRetreatOCResearchEast
-        -69,-34: CMUAreaRetreatOCResearchEast
-        -69,-28: CMUAreaRetreatOCResearchEast
-        -69,-36: CMUAreaRetreatOCResearchEast
-        -69,-23: CMUAreaRetreatOCResearchEast
-        -69,-37: CMUAreaRetreatOCResearchEast
-        -69,-35: CMUAreaRetreatOCResearchEast
-        -69,-39: CMUAreaRetreatOCResearchEast
-        -69,-40: CMUAreaRetreatOCResearchEast
-        -69,-41: CMUAreaRetreatOCResearchEast
-        -69,-42: CMUAreaRetreatOCResearchEast
-        -69,-38: CMUAreaRetreatOCResearchEast
-        -69,-44: CMUAreaRetreatOCResearchEast
-        -69,-47: CMUAreaRetreatOCResearchEast
-        -69,-45: CMUAreaRetreatOCResearchEast
-        -68,-23: CMUAreaRetreatOCResearchEast
-        -69,-49: CMUAreaRetreatOCResearchEast
-        -69,-48: CMUAreaRetreatOCResearchEast
-        -68,-24: CMUAreaRetreatOCResearchEast
-        -69,-46: CMUAreaRetreatOCResearchEast
-        -68,-25: CMUAreaRetreatOCResearchEast
-        -69,-43: CMUAreaRetreatOCResearchEast
-        -68,-26: CMUAreaRetreatOCResearchEast
-        -68,-27: CMUAreaRetreatOCResearchEast
-        -68,-28: CMUAreaRetreatOCResearchEast
-        -68,-29: CMUAreaRetreatOCResearchEast
-        -68,-30: CMUAreaRetreatOCResearchEast
-        -68,-31: CMUAreaRetreatOCResearchEast
-        -68,-32: CMUAreaRetreatOCResearchEast
-        -68,-33: CMUAreaRetreatOCResearchEast
-        -68,-34: CMUAreaRetreatOCResearchEast
-        -68,-35: CMUAreaRetreatOCResearchEast
-        -68,-36: CMUAreaRetreatOCResearchEast
-        -68,-37: CMUAreaRetreatOCResearchEast
-        -68,-38: CMUAreaRetreatOCResearchEast
-        -68,-39: CMUAreaRetreatOCResearchEast
-        -68,-41: CMUAreaRetreatOCResearchEast
-        -68,-42: CMUAreaRetreatOCResearchEast
-        -68,-43: CMUAreaRetreatOCResearchEast
-        -68,-44: CMUAreaRetreatOCResearchEast
-        -68,-45: CMUAreaRetreatOCResearchEast
-        -68,-46: CMUAreaRetreatOCResearchEast
-        -68,-47: CMUAreaRetreatOCResearchEast
-        -68,-48: CMUAreaRetreatOCResearchEast
-        -68,-49: CMUAreaRetreatOCResearchEast
+        -71,-23: CMUAreaRetreatOCResearchWest
+        -71,-24: CMUAreaRetreatOCResearchWest
+        -71,-25: CMUAreaRetreatOCResearchWest
+        -71,-26: CMUAreaRetreatOCResearchWest
+        -71,-27: CMUAreaRetreatOCResearchWest
+        -71,-28: CMUAreaRetreatOCResearchWest
+        -71,-29: CMUAreaRetreatOCResearchWest
+        -71,-30: CMUAreaRetreatOCResearchWest
+        -71,-31: CMUAreaRetreatOCResearchWest
+        -71,-32: CMUAreaRetreatOCResearchWest
+        -71,-33: CMUAreaRetreatOCResearchWest
+        -71,-34: CMUAreaRetreatOCResearchWest
+        -71,-35: CMUAreaRetreatOCResearchWest
+        -71,-36: CMUAreaRetreatOCResearchWest
+        -71,-37: CMUAreaRetreatOCResearchWest
+        -71,-38: CMUAreaRetreatOCResearchWest
+        -71,-39: CMUAreaRetreatOCResearchWest
+        -71,-40: CMUAreaRetreatOCResearchWest
+        -71,-41: CMUAreaRetreatOCResearchWest
+        -71,-42: CMUAreaRetreatOCResearchWest
+        -71,-43: CMUAreaRetreatOCResearchWest
+        -71,-44: CMUAreaRetreatOCResearchWest
+        -71,-45: CMUAreaRetreatOCResearchWest
+        -71,-46: CMUAreaRetreatOCResearchWest
+        -71,-47: CMUAreaRetreatOCResearchWest
+        -71,-48: CMUAreaRetreatOCResearchWest
+        -71,-49: CMUAreaRetreatOCResearchWest
+        -70,-23: CMUAreaRetreatOCResearchWest
+        -70,-24: CMUAreaRetreatOCResearchWest
+        -70,-25: CMUAreaRetreatOCResearchWest
+        -70,-26: CMUAreaRetreatOCResearchWest
+        -70,-27: CMUAreaRetreatOCResearchWest
+        -70,-28: CMUAreaRetreatOCResearchWest
+        -70,-29: CMUAreaRetreatOCResearchWest
+        -70,-30: CMUAreaRetreatOCResearchWest
+        -70,-31: CMUAreaRetreatOCResearchWest
+        -70,-32: CMUAreaRetreatOCResearchWest
+        -70,-33: CMUAreaRetreatOCResearchWest
+        -70,-34: CMUAreaRetreatOCResearchWest
+        -70,-35: CMUAreaRetreatOCResearchWest
+        -70,-36: CMUAreaRetreatOCResearchWest
+        -70,-37: CMUAreaRetreatOCResearchWest
+        -70,-39: CMUAreaRetreatOCResearchWest
+        -70,-40: CMUAreaRetreatOCResearchWest
+        -70,-41: CMUAreaRetreatOCResearchWest
+        -70,-42: CMUAreaRetreatOCResearchWest
+        -70,-38: CMUAreaRetreatOCResearchWest
+        -70,-45: CMUAreaRetreatOCResearchWest
+        -70,-46: CMUAreaRetreatOCResearchWest
+        -70,-47: CMUAreaRetreatOCResearchWest
+        -70,-48: CMUAreaRetreatOCResearchWest
+        -70,-49: CMUAreaRetreatOCResearchWest
+        -70,-44: CMUAreaRetreatOCResearchWest
+        -69,-24: CMUAreaRetreatOCResearchWest
+        -69,-25: CMUAreaRetreatOCResearchWest
+        -69,-26: CMUAreaRetreatOCResearchWest
+        -70,-43: CMUAreaRetreatOCResearchWest
+        -69,-27: CMUAreaRetreatOCResearchWest
+        -69,-29: CMUAreaRetreatOCResearchWest
+        -69,-30: CMUAreaRetreatOCResearchWest
+        -69,-31: CMUAreaRetreatOCResearchWest
+        -69,-32: CMUAreaRetreatOCResearchWest
+        -69,-33: CMUAreaRetreatOCResearchWest
+        -69,-34: CMUAreaRetreatOCResearchWest
+        -69,-28: CMUAreaRetreatOCResearchWest
+        -69,-36: CMUAreaRetreatOCResearchWest
+        -69,-23: CMUAreaRetreatOCResearchWest
+        -69,-37: CMUAreaRetreatOCResearchWest
+        -69,-35: CMUAreaRetreatOCResearchWest
+        -69,-39: CMUAreaRetreatOCResearchWest
+        -69,-40: CMUAreaRetreatOCResearchWest
+        -69,-41: CMUAreaRetreatOCResearchWest
+        -69,-42: CMUAreaRetreatOCResearchWest
+        -69,-38: CMUAreaRetreatOCResearchWest
+        -69,-44: CMUAreaRetreatOCResearchWest
+        -69,-47: CMUAreaRetreatOCResearchWest
+        -69,-45: CMUAreaRetreatOCResearchWest
+        -68,-23: CMUAreaRetreatOCResearchWest
+        -69,-49: CMUAreaRetreatOCResearchWest
+        -69,-48: CMUAreaRetreatOCResearchWest
+        -68,-24: CMUAreaRetreatOCResearchWest
+        -69,-46: CMUAreaRetreatOCResearchWest
+        -68,-25: CMUAreaRetreatOCResearchWest
+        -69,-43: CMUAreaRetreatOCResearchWest
+        -68,-26: CMUAreaRetreatOCResearchWest
+        -68,-27: CMUAreaRetreatOCResearchWest
+        -68,-28: CMUAreaRetreatOCResearchWest
+        -68,-29: CMUAreaRetreatOCResearchWest
+        -68,-30: CMUAreaRetreatOCResearchWest
+        -68,-31: CMUAreaRetreatOCResearchWest
+        -68,-32: CMUAreaRetreatOCResearchWest
+        -68,-33: CMUAreaRetreatOCResearchWest
+        -68,-34: CMUAreaRetreatOCResearchWest
+        -68,-35: CMUAreaRetreatOCResearchWest
+        -68,-36: CMUAreaRetreatOCResearchWest
+        -68,-37: CMUAreaRetreatOCResearchWest
+        -68,-38: CMUAreaRetreatOCResearchWest
+        -68,-39: CMUAreaRetreatOCResearchWest
+        -68,-41: CMUAreaRetreatOCResearchWest
+        -68,-42: CMUAreaRetreatOCResearchWest
+        -68,-43: CMUAreaRetreatOCResearchWest
+        -68,-44: CMUAreaRetreatOCResearchWest
+        -68,-45: CMUAreaRetreatOCResearchWest
+        -68,-46: CMUAreaRetreatOCResearchWest
+        -68,-47: CMUAreaRetreatOCResearchWest
+        -68,-48: CMUAreaRetreatOCResearchWest
+        -68,-49: CMUAreaRetreatOCResearchWest
         -67,-23: CMUAreaRetreatOCResearchEast
         -67,-24: CMUAreaRetreatOCResearchEast
         -67,-25: CMUAreaRetreatOCResearchEast
         -67,-26: CMUAreaRetreatOCResearchEast
         -67,-27: CMUAreaRetreatOCResearchEast
         -67,-28: CMUAreaRetreatOCResearchEast
-        -68,-40: CMUAreaRetreatOCResearchEast
+        -68,-40: CMUAreaRetreatOCResearchWest
         -67,-30: CMUAreaRetreatOCResearchEast
         -67,-31: CMUAreaRetreatOCResearchEast
         -67,-32: CMUAreaRetreatOCResearchEast
@@ -115416,383 +115416,383 @@ entities:
         -65,-47: CMUAreaRetreatOCResearchEast
         -65,-48: CMUAreaRetreatOCResearchEast
         -65,-49: CMUAreaRetreatOCResearchEast
-        -71,-50: CMUAreaRetreatOCResearchEast
-        -71,-51: CMUAreaRetreatOCResearchEast
-        -70,-50: CMUAreaRetreatOCResearchEast
-        -70,-51: CMUAreaRetreatOCResearchEast
-        -69,-50: CMUAreaRetreatOCResearchEast
-        -69,-51: CMUAreaRetreatOCResearchEast
-        -68,-50: CMUAreaRetreatOCResearchEast
-        -68,-51: CMUAreaRetreatOCResearchEast
+        -71,-50: CMUAreaRetreatOCResearchWest
+        -71,-51: CMUAreaRetreatOCResearchWest
+        -70,-50: CMUAreaRetreatOCResearchWest
+        -70,-51: CMUAreaRetreatOCResearchWest
+        -69,-50: CMUAreaRetreatOCResearchWest
+        -69,-51: CMUAreaRetreatOCResearchWest
+        -68,-50: CMUAreaRetreatOCResearchWest
+        -68,-51: CMUAreaRetreatOCResearchWest
         -67,-50: CMUAreaRetreatOCResearchEast
         -67,-51: CMUAreaRetreatOCResearchEast
         -66,-50: CMUAreaRetreatOCResearchEast
         -66,-51: CMUAreaRetreatOCResearchEast
         -65,-50: CMUAreaRetreatOCResearchEast
         -65,-51: CMUAreaRetreatOCResearchEast
-        -72,-51: CMUAreaRetreatOCResearchSterileLab
-        -72,-50: CMUAreaRetreatOCResearchSterileLab
-        -72,-49: CMUAreaRetreatOCResearchSterileLab
-        -72,-48: CMUAreaRetreatOCResearchSterileLab
-        -72,-47: CMUAreaRetreatOCResearchSterileLab
-        -72,-46: CMUAreaRetreatOCResearchSterileLab
-        -72,-45: CMUAreaRetreatOCResearchSterileLab
-        -72,-44: CMUAreaRetreatOCResearchSterileLab
-        -72,-43: CMUAreaRetreatOCResearchSterileLab
-        -72,-41: CMUAreaRetreatOCResearchSterileLab
-        -72,-40: CMUAreaRetreatOCResearchSterileLab
-        -72,-39: CMUAreaRetreatOCResearchSterileLab
-        -73,-51: CMUAreaRetreatOCResearchSterileLab
-        -73,-50: CMUAreaRetreatOCResearchSterileLab
-        -73,-49: CMUAreaRetreatOCResearchSterileLab
-        -72,-42: CMUAreaRetreatOCResearchSterileLab
-        -73,-48: CMUAreaRetreatOCResearchSterileLab
-        -73,-47: CMUAreaRetreatOCResearchSterileLab
-        -73,-46: CMUAreaRetreatOCResearchSterileLab
-        -73,-45: CMUAreaRetreatOCResearchSterileLab
-        -73,-44: CMUAreaRetreatOCResearchSterileLab
-        -73,-43: CMUAreaRetreatOCResearchSterileLab
-        -73,-42: CMUAreaRetreatOCResearchSterileLab
-        -73,-41: CMUAreaRetreatOCResearchSterileLab
-        -73,-40: CMUAreaRetreatOCResearchSterileLab
-        -73,-39: CMUAreaRetreatOCResearchSterileLab
-        -74,-51: CMUAreaRetreatOCResearchSterileLab
-        -74,-50: CMUAreaRetreatOCResearchSterileLab
-        -74,-49: CMUAreaRetreatOCResearchSterileLab
-        -74,-48: CMUAreaRetreatOCResearchSterileLab
-        -74,-47: CMUAreaRetreatOCResearchSterileLab
-        -74,-46: CMUAreaRetreatOCResearchSterileLab
-        -74,-45: CMUAreaRetreatOCResearchSterileLab
-        -74,-44: CMUAreaRetreatOCResearchSterileLab
-        -74,-43: CMUAreaRetreatOCResearchSterileLab
-        -74,-42: CMUAreaRetreatOCResearchSterileLab
-        -74,-41: CMUAreaRetreatOCResearchSterileLab
-        -74,-40: CMUAreaRetreatOCResearchSterileLab
-        -74,-39: CMUAreaRetreatOCResearchSterileLab
-        -75,-51: CMUAreaRetreatOCResearchSterileLab
-        -75,-50: CMUAreaRetreatOCResearchSterileLab
-        -75,-48: CMUAreaRetreatOCResearchSterileLab
-        -75,-47: CMUAreaRetreatOCResearchSterileLab
-        -75,-46: CMUAreaRetreatOCResearchSterileLab
-        -75,-49: CMUAreaRetreatOCResearchSterileLab
-        -75,-45: CMUAreaRetreatOCResearchSterileLab
-        -75,-44: CMUAreaRetreatOCResearchSterileLab
-        -75,-40: CMUAreaRetreatOCResearchSterileLab
-        -75,-42: CMUAreaRetreatOCResearchSterileLab
-        -76,-51: CMUAreaRetreatOCResearchSterileLab
-        -75,-39: CMUAreaRetreatOCResearchSterileLab
-        -76,-49: CMUAreaRetreatOCResearchSterileLab
-        -76,-48: CMUAreaRetreatOCResearchSterileLab
-        -76,-50: CMUAreaRetreatOCResearchSterileLab
-        -76,-47: CMUAreaRetreatOCResearchSterileLab
-        -75,-43: CMUAreaRetreatOCResearchSterileLab
-        -76,-46: CMUAreaRetreatOCResearchSterileLab
-        -76,-45: CMUAreaRetreatOCResearchSterileLab
-        -76,-44: CMUAreaRetreatOCResearchSterileLab
-        -76,-43: CMUAreaRetreatOCResearchSterileLab
-        -76,-42: CMUAreaRetreatOCResearchSterileLab
-        -76,-41: CMUAreaRetreatOCResearchSterileLab
-        -76,-40: CMUAreaRetreatOCResearchSterileLab
-        -76,-39: CMUAreaRetreatOCResearchSterileLab
-        -77,-50: CMUAreaRetreatOCResearchSterileLab
-        -77,-49: CMUAreaRetreatOCResearchSterileLab
-        -77,-48: CMUAreaRetreatOCResearchSterileLab
-        -77,-47: CMUAreaRetreatOCResearchSterileLab
-        -77,-46: CMUAreaRetreatOCResearchSterileLab
-        -77,-51: CMUAreaRetreatOCResearchSterileLab
-        -77,-44: CMUAreaRetreatOCResearchSterileLab
-        -77,-43: CMUAreaRetreatOCResearchSterileLab
-        -77,-42: CMUAreaRetreatOCResearchSterileLab
-        -77,-41: CMUAreaRetreatOCResearchSterileLab
-        -77,-40: CMUAreaRetreatOCResearchSterileLab
-        -77,-39: CMUAreaRetreatOCResearchSterileLab
-        -77,-45: CMUAreaRetreatOCResearchSterileLab
-        -78,-50: CMUAreaRetreatOCResearchSterileLab
-        -78,-49: CMUAreaRetreatOCResearchSterileLab
-        -78,-48: CMUAreaRetreatOCResearchSterileLab
-        -78,-47: CMUAreaRetreatOCResearchSterileLab
-        -78,-46: CMUAreaRetreatOCResearchSterileLab
-        -78,-51: CMUAreaRetreatOCResearchSterileLab
-        -78,-43: CMUAreaRetreatOCResearchSterileLab
-        -78,-45: CMUAreaRetreatOCResearchSterileLab
-        -78,-41: CMUAreaRetreatOCResearchSterileLab
-        -78,-40: CMUAreaRetreatOCResearchSterileLab
-        -78,-39: CMUAreaRetreatOCResearchSterileLab
-        -79,-51: CMUAreaRetreatOCResearchSterileLab
-        -79,-50: CMUAreaRetreatOCResearchSterileLab
-        -79,-49: CMUAreaRetreatOCResearchSterileLab
-        -78,-42: CMUAreaRetreatOCResearchSterileLab
-        -78,-44: CMUAreaRetreatOCResearchSterileLab
-        -79,-46: CMUAreaRetreatOCResearchSterileLab
-        -79,-45: CMUAreaRetreatOCResearchSterileLab
-        -79,-48: CMUAreaRetreatOCResearchSterileLab
-        -79,-47: CMUAreaRetreatOCResearchSterileLab
-        -79,-42: CMUAreaRetreatOCResearchSterileLab
-        -79,-41: CMUAreaRetreatOCResearchSterileLab
-        -79,-44: CMUAreaRetreatOCResearchSterileLab
-        -79,-43: CMUAreaRetreatOCResearchSterileLab
-        -80,-51: CMUAreaRetreatOCResearchSterileLab
-        -80,-50: CMUAreaRetreatOCResearchSterileLab
-        -79,-40: CMUAreaRetreatOCResearchSterileLab
-        -80,-48: CMUAreaRetreatOCResearchSterileLab
-        -80,-47: CMUAreaRetreatOCResearchSterileLab
-        -79,-39: CMUAreaRetreatOCResearchSterileLab
-        -80,-45: CMUAreaRetreatOCResearchSterileLab
-        -80,-44: CMUAreaRetreatOCResearchSterileLab
-        -80,-42: CMUAreaRetreatOCResearchSterileLab
-        -80,-41: CMUAreaRetreatOCResearchSterileLab
-        -80,-40: CMUAreaRetreatOCResearchSterileLab
-        -80,-39: CMUAreaRetreatOCResearchSterileLab
-        -81,-51: CMUAreaRetreatOCResearchSterileLab
-        -80,-43: CMUAreaRetreatOCResearchSterileLab
-        -81,-50: CMUAreaRetreatOCResearchSterileLab
-        -81,-49: CMUAreaRetreatOCResearchSterileLab
-        -81,-47: CMUAreaRetreatOCResearchSterileLab
-        -81,-46: CMUAreaRetreatOCResearchSterileLab
-        -81,-45: CMUAreaRetreatOCResearchSterileLab
-        -81,-44: CMUAreaRetreatOCResearchSterileLab
-        -81,-43: CMUAreaRetreatOCResearchSterileLab
-        -81,-48: CMUAreaRetreatOCResearchSterileLab
-        -81,-41: CMUAreaRetreatOCResearchSterileLab
-        -80,-46: CMUAreaRetreatOCResearchSterileLab
-        -81,-40: CMUAreaRetreatOCResearchSterileLab
-        -82,-51: CMUAreaRetreatOCCavernCentral
-        -80,-49: CMUAreaRetreatOCResearchSterileLab
-        -81,-42: CMUAreaRetreatOCResearchSterileLab
+        -72,-51: CMUAreaRetreatOCCavernCentral
+        -72,-50: CMUAreaRetreatOCCavernCentral
+        -72,-49: CMUAreaRetreatOCCavernCentral
+        -72,-48: CMUAreaRetreatOCResearchWest
+        -72,-47: CMUAreaRetreatOCResearchWest
+        -72,-46: CMUAreaRetreatOCResearchWest
+        -72,-45: CMUAreaRetreatOCResearchWest
+        -72,-44: CMUAreaRetreatOCResearchWest
+        -72,-43: CMUAreaRetreatOCResearchWest
+        -72,-41: CMUAreaRetreatOCResearchWest
+        -72,-40: CMUAreaRetreatOCResearchWest
+        -72,-39: CMUAreaRetreatOCResearchWest
+        -73,-51: CMUAreaRetreatOCCavernCentral
+        -73,-50: CMUAreaRetreatOCCavernCentral
+        -73,-49: CMUAreaRetreatOCCavernCentral
+        -72,-42: CMUAreaRetreatOCResearchWest
+        -73,-48: CMUAreaRetreatOCResearchWest
+        -73,-47: CMUAreaRetreatOCResearchWest
+        -73,-46: CMUAreaRetreatOCResearchWest
+        -73,-45: CMUAreaRetreatOCResearchWest
+        -73,-44: CMUAreaRetreatOCResearchWest
+        -73,-43: CMUAreaRetreatOCResearchWest
+        -73,-42: CMUAreaRetreatOCResearchWest
+        -73,-41: CMUAreaRetreatOCResearchWest
+        -73,-40: CMUAreaRetreatOCResearchWest
+        -73,-39: CMUAreaRetreatOCResearchWest
+        -74,-51: CMUAreaRetreatOCCavernCentral
+        -74,-50: CMUAreaRetreatOCCavernCentral
+        -74,-49: CMUAreaRetreatOCCavernCentral
+        -74,-48: CMUAreaRetreatOCResearchWest
+        -74,-47: CMUAreaRetreatOCResearchWest
+        -74,-46: CMUAreaRetreatOCResearchWest
+        -74,-45: CMUAreaRetreatOCResearchWest
+        -74,-44: CMUAreaRetreatOCResearchWest
+        -74,-43: CMUAreaRetreatOCResearchWest
+        -74,-42: CMUAreaRetreatOCResearchWest
+        -74,-41: CMUAreaRetreatOCResearchWest
+        -74,-40: CMUAreaRetreatOCResearchWest
+        -74,-39: CMUAreaRetreatOCResearchWest
+        -75,-51: CMUAreaRetreatOCCavernCentral
+        -75,-50: CMUAreaRetreatOCCavernCentral
+        -75,-48: CMUAreaRetreatOCResearchWest
+        -75,-47: CMUAreaRetreatOCResearchWest
+        -75,-46: CMUAreaRetreatOCResearchWest
+        -75,-49: CMUAreaRetreatOCCavernCentral
+        -75,-45: CMUAreaRetreatOCResearchWest
+        -75,-44: CMUAreaRetreatOCResearchWest
+        -75,-40: CMUAreaRetreatOCResearchWest
+        -75,-42: CMUAreaRetreatOCResearchWest
+        -76,-51: CMUAreaRetreatOCCavernCentral
+        -75,-39: CMUAreaRetreatOCResearchWest
+        -76,-49: CMUAreaRetreatOCCavernCentral
+        -76,-48: CMUAreaRetreatOCResearchWest
+        -76,-50: CMUAreaRetreatOCCavernCentral
+        -76,-47: CMUAreaRetreatOCResearchWest
+        -75,-43: CMUAreaRetreatOCResearchWest
+        -76,-46: CMUAreaRetreatOCResearchWest
+        -76,-45: CMUAreaRetreatOCResearchWest
+        -76,-44: CMUAreaRetreatOCResearchWest
+        -76,-43: CMUAreaRetreatOCResearchWest
+        -76,-42: CMUAreaRetreatOCResearchWest
+        -76,-41: CMUAreaRetreatOCResearchWest
+        -76,-40: CMUAreaRetreatOCResearchWest
+        -76,-39: CMUAreaRetreatOCResearchWest
+        -77,-50: CMUAreaRetreatOCCavernCentral
+        -77,-49: CMUAreaRetreatOCCavernCentral
+        -77,-48: CMUAreaRetreatOCResearchWest
+        -77,-47: CMUAreaRetreatOCResearchWest
+        -77,-46: CMUAreaRetreatOCResearchWest
+        -77,-51: CMUAreaRetreatOCCavernCentral
+        -77,-44: CMUAreaRetreatOCResearchWest
+        -77,-43: CMUAreaRetreatOCResearchWest
+        -77,-42: CMUAreaRetreatOCResearchWest
+        -77,-41: CMUAreaRetreatOCResearchWest
+        -77,-40: CMUAreaRetreatOCResearchWest
+        -77,-39: CMUAreaRetreatOCResearchWest
+        -77,-45: CMUAreaRetreatOCResearchWest
+        -78,-50: CMUAreaRetreatOCCavernCentral
+        -78,-49: CMUAreaRetreatOCCavernCentral
+        -78,-48: CMUAreaRetreatOCCavernCentral
+        -78,-47: CMUAreaRetreatOCCavernCentral
+        -78,-46: CMUAreaRetreatOCCavernCentral
+        -78,-51: CMUAreaRetreatOCCavernCentral
+        -78,-43: CMUAreaRetreatOCResearchWest
+        -78,-45: CMUAreaRetreatOCResearchWest
+        -78,-41: CMUAreaRetreatOCResearchWest
+        -78,-40: CMUAreaRetreatOCResearchWest
+        -78,-39: CMUAreaRetreatOCResearchWest
+        -79,-51: CMUAreaRetreatOCCavernCentral
+        -79,-50: CMUAreaRetreatOCCavernCentral
+        -79,-49: CMUAreaRetreatOCCavernCentral
+        -78,-42: CMUAreaRetreatOCResearchWest
+        -78,-44: CMUAreaRetreatOCResearchWest
+        -79,-46: CMUAreaRetreatOCCavernCentral
+        -79,-45: CMUAreaRetreatOCResearchWest
+        -79,-48: CMUAreaRetreatOCCavernCentral
+        -79,-47: CMUAreaRetreatOCCavernCentral
+        -79,-42: CMUAreaRetreatOCResearchWest
+        -79,-41: CMUAreaRetreatOCResearchWest
+        -79,-44: CMUAreaRetreatOCResearchWest
+        -79,-43: CMUAreaRetreatOCResearchWest
+        -80,-51: CMUAreaRetreatOCCavernCentral
+        -80,-50: CMUAreaRetreatOCCavernCentral
+        -79,-40: CMUAreaRetreatOCResearchWest
+        -80,-48: CMUAreaRetreatOCCavernCentral
+        -80,-47: CMUAreaRetreatOCCavernCentral
+        -79,-39: CMUAreaRetreatOCResearchWest
+        -80,-45: CMUAreaRetreatOCResearchWest
+        -80,-44: CMUAreaRetreatOCResearchWest
+        -80,-42: CMUAreaRetreatOCResearchWest
+        -80,-41: CMUAreaRetreatOCResearchWest
+        -80,-40: CMUAreaRetreatOCResearchWest
+        -80,-39: CMUAreaRetreatOCResearchWest
+        -81,-51: CMUAreaRetreatOCCavernCentral
+        -80,-43: CMUAreaRetreatOCResearchWest
+        -81,-50: CMUAreaRetreatOCCavernCentral
+        -81,-49: CMUAreaRetreatOCCavernCentral
+        -81,-47: CMUAreaRetreatOCCavernCentral
+        -81,-46: CMUAreaRetreatOCCavernCentral
+        -81,-45: CMUAreaRetreatOCResearchWest
+        -81,-44: CMUAreaRetreatOCResearchWest
+        -81,-43: CMUAreaRetreatOCResearchWest
+        -81,-48: CMUAreaRetreatOCCavernCentral
+        -81,-41: CMUAreaRetreatOCResearchWest
+        -80,-46: CMUAreaRetreatOCCavernCentral
+        -81,-40: CMUAreaRetreatOCResearchWest
+        -82,-51: CMUAreaRetreatOutofBounds
+        -80,-49: CMUAreaRetreatOCCavernCentral
+        -81,-42: CMUAreaRetreatOCResearchWest
         -82,-48: CMUAreaRetreatOCCavernCentral
         -82,-47: CMUAreaRetreatOCCavernCentral
-        -81,-39: CMUAreaRetreatOCResearchSterileLab
-        -82,-45: CMUAreaRetreatOCResearchSterileLab
-        -82,-43: CMUAreaRetreatOCResearchSterileLab
-        -82,-42: CMUAreaRetreatOCResearchSterileLab
-        -82,-41: CMUAreaRetreatOCResearchSterileLab
-        -82,-40: CMUAreaRetreatOCResearchSterileLab
-        -82,-39: CMUAreaRetreatOCResearchSterileLab
-        -82,-44: CMUAreaRetreatOCResearchSterileLab
+        -81,-39: CMUAreaRetreatOCResearchWest
+        -82,-45: CMUAreaRetreatOCResearchWest
+        -82,-43: CMUAreaRetreatOCResearchWest
+        -82,-42: CMUAreaRetreatOCResearchWest
+        -82,-41: CMUAreaRetreatOCResearchWest
+        -82,-40: CMUAreaRetreatOCResearchWest
+        -82,-39: CMUAreaRetreatOCResearchWest
+        -82,-44: CMUAreaRetreatOCResearchWest
         -82,-46: CMUAreaRetreatOCCavernCentral
         -82,-50: CMUAreaRetreatOCCavernCentral
         -82,-49: CMUAreaRetreatOCCavernCentral
-        -83,-51: CMUAreaRetreatOCCavernCentral
-        -83,-50: CMUAreaRetreatOCCavernCentral
+        -83,-51: CMUAreaRetreatOutofBounds
+        -83,-50: CMUAreaRetreatOutofBounds
         -83,-49: CMUAreaRetreatOCCavernCentral
         -83,-47: CMUAreaRetreatOCCavernCentral
         -83,-48: CMUAreaRetreatOCCavernCentral
         -83,-46: CMUAreaRetreatOCCavernCentral
-        -83,-45: CMUAreaRetreatOCResearchSterileLab
-        -83,-44: CMUAreaRetreatOCResearchSterileLab
-        -83,-43: CMUAreaRetreatOCResearchSterileLab
-        -83,-42: CMUAreaRetreatOCResearchSterileLab
-        -83,-41: CMUAreaRetreatOCResearchSterileLab
-        -83,-40: CMUAreaRetreatOCResearchSterileLab
-        -83,-39: CMUAreaRetreatOCResearchSterileLab
-        -84,-51: CMUAreaRetreatOCCavernCentral
-        -84,-50: CMUAreaRetreatOCCavernCentral
-        -84,-49: CMUAreaRetreatOCCavernCentral
-        -84,-48: CMUAreaRetreatOCCavernCentral
-        -84,-47: CMUAreaRetreatOCCavernCentral
-        -84,-46: CMUAreaRetreatOCCavernCentral
-        -84,-43: CMUAreaRetreatOCResearchSterileLab
-        -84,-44: CMUAreaRetreatOCResearchSterileLab
-        -84,-45: CMUAreaRetreatOCResearchSterileLab
-        -84,-42: CMUAreaRetreatOCResearchSterileLab
-        -84,-41: CMUAreaRetreatOCResearchSterileLab
-        -84,-40: CMUAreaRetreatOCResearchSterileLab
-        -84,-39: CMUAreaRetreatOCResearchSterileLab
-        -85,-51: CMUAreaRetreatOCCavernCentral
-        -85,-49: CMUAreaRetreatOCCavernCentral
-        -85,-50: CMUAreaRetreatOCCavernCentral
-        -85,-48: CMUAreaRetreatOCCavernCentral
-        -85,-46: CMUAreaRetreatOCCavernCentral
-        -85,-47: CMUAreaRetreatOCCavernCentral
-        -85,-45: CMUAreaRetreatOCResearchSterileLab
-        -85,-44: CMUAreaRetreatOCResearchSterileLab
-        -85,-43: CMUAreaRetreatOCResearchSterileLab
-        -85,-42: CMUAreaRetreatOCResearchSterileLab
-        -75,-41: CMUAreaRetreatOCResearchSterileLab
-        -85,-41: CMUAreaRetreatOCResearchSterileLab
-        -85,-39: CMUAreaRetreatOCResearchSterileLab
-        -85,-40: CMUAreaRetreatOCResearchSterileLab
-        -87,-38: CMUAreaRetreatOCResearchSterileLab
-        -87,-37: CMUAreaRetreatOCResearchSterileLab
-        -87,-36: CMUAreaRetreatOCResearchSterileLab
-        -87,-35: CMUAreaRetreatOCResearchSterileLab
-        -87,-34: CMUAreaRetreatOCResearchSterileLab
-        -87,-33: CMUAreaRetreatOCResearchSterileLab
-        -87,-32: CMUAreaRetreatOCResearchSterileLab
-        -86,-37: CMUAreaRetreatOCResearchSterileLab
-        -86,-36: CMUAreaRetreatOCResearchSterileLab
-        -86,-35: CMUAreaRetreatOCResearchSterileLab
-        -86,-34: CMUAreaRetreatOCResearchSterileLab
-        -86,-33: CMUAreaRetreatOCResearchSterileLab
-        -86,-38: CMUAreaRetreatOCResearchSterileLab
-        -85,-38: CMUAreaRetreatOCResearchSterileLab
-        -85,-37: CMUAreaRetreatOCResearchSterileLab
-        -85,-35: CMUAreaRetreatOCResearchSterileLab
-        -85,-34: CMUAreaRetreatOCResearchSterileLab
-        -86,-32: CMUAreaRetreatOCResearchSterileLab
-        -85,-33: CMUAreaRetreatOCResearchSterileLab
-        -84,-38: CMUAreaRetreatOCResearchSterileLab
-        -84,-37: CMUAreaRetreatOCResearchSterileLab
-        -84,-36: CMUAreaRetreatOCResearchSterileLab
-        -85,-36: CMUAreaRetreatOCResearchSterileLab
-        -84,-34: CMUAreaRetreatOCResearchSterileLab
-        -85,-32: CMUAreaRetreatOCResearchSterileLab
-        -84,-35: CMUAreaRetreatOCResearchSterileLab
-        -84,-33: CMUAreaRetreatOCResearchSterileLab
-        -84,-32: CMUAreaRetreatOCResearchSterileLab
-        -83,-36: CMUAreaRetreatOCResearchSterileLab
-        -83,-35: CMUAreaRetreatOCResearchSterileLab
-        -83,-37: CMUAreaRetreatOCResearchSterileLab
-        -83,-38: CMUAreaRetreatOCResearchSterileLab
-        -83,-33: CMUAreaRetreatOCResearchSterileLab
-        -83,-34: CMUAreaRetreatOCResearchSterileLab
-        -82,-38: CMUAreaRetreatOCResearchSterileLab
-        -83,-32: CMUAreaRetreatOCResearchSterileLab
-        -82,-37: CMUAreaRetreatOCResearchSterileLab
-        -82,-36: CMUAreaRetreatOCResearchSterileLab
-        -82,-35: CMUAreaRetreatOCResearchSterileLab
-        -82,-34: CMUAreaRetreatOCResearchSterileLab
-        -82,-33: CMUAreaRetreatOCResearchSterileLab
-        -82,-32: CMUAreaRetreatOCResearchSterileLab
-        -81,-38: CMUAreaRetreatOCResearchSterileLab
-        -81,-37: CMUAreaRetreatOCResearchSterileLab
-        -81,-36: CMUAreaRetreatOCResearchSterileLab
-        -81,-35: CMUAreaRetreatOCResearchSterileLab
-        -81,-34: CMUAreaRetreatOCResearchSterileLab
-        -81,-33: CMUAreaRetreatOCResearchSterileLab
-        -81,-32: CMUAreaRetreatOCResearchSterileLab
-        -80,-38: CMUAreaRetreatOCResearchSterileLab
-        -80,-37: CMUAreaRetreatOCResearchSterileLab
-        -80,-36: CMUAreaRetreatOCResearchSterileLab
-        -80,-35: CMUAreaRetreatOCResearchSterileLab
-        -80,-34: CMUAreaRetreatOCResearchSterileLab
-        -80,-33: CMUAreaRetreatOCResearchSterileLab
-        -80,-32: CMUAreaRetreatOCResearchSterileLab
-        -79,-38: CMUAreaRetreatOCResearchSterileLab
-        -79,-37: CMUAreaRetreatOCResearchSterileLab
-        -79,-36: CMUAreaRetreatOCResearchSterileLab
-        -79,-35: CMUAreaRetreatOCResearchSterileLab
-        -79,-34: CMUAreaRetreatOCResearchSterileLab
-        -79,-33: CMUAreaRetreatOCResearchSterileLab
-        -79,-32: CMUAreaRetreatOCResearchSterileLab
-        -78,-38: CMUAreaRetreatOCResearchSterileLab
-        -78,-37: CMUAreaRetreatOCResearchSterileLab
-        -78,-36: CMUAreaRetreatOCResearchSterileLab
-        -78,-35: CMUAreaRetreatOCResearchSterileLab
-        -78,-34: CMUAreaRetreatOCResearchSterileLab
-        -78,-33: CMUAreaRetreatOCResearchSterileLab
-        -78,-32: CMUAreaRetreatOCResearchSterileLab
-        -77,-38: CMUAreaRetreatOCResearchSterileLab
-        -77,-37: CMUAreaRetreatOCResearchSterileLab
-        -77,-36: CMUAreaRetreatOCResearchSterileLab
-        -77,-35: CMUAreaRetreatOCResearchSterileLab
-        -77,-34: CMUAreaRetreatOCResearchSterileLab
-        -77,-33: CMUAreaRetreatOCResearchSterileLab
-        -77,-32: CMUAreaRetreatOCResearchSterileLab
-        -76,-38: CMUAreaRetreatOCResearchSterileLab
-        -76,-37: CMUAreaRetreatOCResearchSterileLab
-        -76,-36: CMUAreaRetreatOCResearchSterileLab
-        -76,-35: CMUAreaRetreatOCResearchSterileLab
-        -76,-34: CMUAreaRetreatOCResearchSterileLab
-        -76,-33: CMUAreaRetreatOCResearchSterileLab
-        -76,-32: CMUAreaRetreatOCResearchSterileLab
-        -75,-38: CMUAreaRetreatOCResearchSterileLab
-        -75,-37: CMUAreaRetreatOCResearchSterileLab
-        -75,-36: CMUAreaRetreatOCResearchSterileLab
-        -75,-35: CMUAreaRetreatOCResearchSterileLab
-        -75,-34: CMUAreaRetreatOCResearchSterileLab
-        -75,-33: CMUAreaRetreatOCResearchSterileLab
-        -75,-32: CMUAreaRetreatOCResearchSterileLab
-        -74,-38: CMUAreaRetreatOCResearchSterileLab
-        -74,-37: CMUAreaRetreatOCResearchSterileLab
-        -74,-36: CMUAreaRetreatOCResearchSterileLab
-        -74,-35: CMUAreaRetreatOCResearchSterileLab
-        -74,-34: CMUAreaRetreatOCResearchSterileLab
-        -74,-33: CMUAreaRetreatOCResearchSterileLab
-        -74,-32: CMUAreaRetreatOCResearchSterileLab
-        -73,-38: CMUAreaRetreatOCResearchSterileLab
-        -73,-37: CMUAreaRetreatOCResearchSterileLab
-        -73,-36: CMUAreaRetreatOCResearchSterileLab
-        -73,-35: CMUAreaRetreatOCResearchSterileLab
-        -73,-34: CMUAreaRetreatOCResearchSterileLab
-        -73,-33: CMUAreaRetreatOCResearchSterileLab
-        -73,-32: CMUAreaRetreatOCResearchSterileLab
-        -72,-38: CMUAreaRetreatOCResearchSterileLab
-        -72,-37: CMUAreaRetreatOCResearchSterileLab
-        -72,-36: CMUAreaRetreatOCResearchSterileLab
-        -72,-35: CMUAreaRetreatOCResearchSterileLab
-        -72,-34: CMUAreaRetreatOCResearchSterileLab
-        -72,-33: CMUAreaRetreatOCResearchSterileLab
-        -72,-32: CMUAreaRetreatOCResearchSterileLab
-        -82,-31: CMUAreaRetreatOCResearchSterileLab
-        -82,-30: CMUAreaRetreatOCResearchSterileLab
-        -82,-29: CMUAreaRetreatOCResearchSterileLab
-        -82,-28: CMUAreaRetreatOCResearchSterileLab
-        -81,-31: CMUAreaRetreatOCResearchSterileLab
-        -81,-30: CMUAreaRetreatOCResearchSterileLab
-        -81,-29: CMUAreaRetreatOCResearchSterileLab
-        -81,-28: CMUAreaRetreatOCResearchSterileLab
-        -80,-31: CMUAreaRetreatOCResearchSterileLab
-        -80,-30: CMUAreaRetreatOCResearchSterileLab
-        -80,-29: CMUAreaRetreatOCResearchSterileLab
-        -80,-28: CMUAreaRetreatOCResearchSterileLab
-        -79,-31: CMUAreaRetreatOCResearchSterileLab
-        -79,-30: CMUAreaRetreatOCResearchSterileLab
-        -79,-29: CMUAreaRetreatOCResearchSterileLab
-        -79,-28: CMUAreaRetreatOCResearchSterileLab
-        -78,-31: CMUAreaRetreatOCResearchSterileLab
-        -78,-30: CMUAreaRetreatOCResearchSterileLab
-        -78,-29: CMUAreaRetreatOCResearchSterileLab
-        -78,-28: CMUAreaRetreatOCResearchSterileLab
-        -77,-31: CMUAreaRetreatOCResearchSterileLab
-        -77,-30: CMUAreaRetreatOCResearchSterileLab
-        -77,-29: CMUAreaRetreatOCResearchSterileLab
-        -77,-28: CMUAreaRetreatOCResearchSterileLab
-        -76,-31: CMUAreaRetreatOCResearchSterileLab
-        -76,-29: CMUAreaRetreatOCResearchSterileLab
-        -76,-28: CMUAreaRetreatOCResearchSterileLab
-        -75,-31: CMUAreaRetreatOCResearchSterileLab
-        -75,-30: CMUAreaRetreatOCResearchSterileLab
-        -76,-30: CMUAreaRetreatOCResearchSterileLab
-        -75,-28: CMUAreaRetreatOCResearchSterileLab
-        -74,-31: CMUAreaRetreatOCResearchSterileLab
-        -75,-29: CMUAreaRetreatOCResearchSterileLab
-        -74,-30: CMUAreaRetreatOCResearchSterileLab
-        -74,-29: CMUAreaRetreatOCResearchSterileLab
-        -74,-28: CMUAreaRetreatOCResearchSterileLab
-        -73,-31: CMUAreaRetreatOCResearchSterileLab
-        -73,-30: CMUAreaRetreatOCResearchSterileLab
-        -73,-29: CMUAreaRetreatOCResearchSterileLab
-        -73,-28: CMUAreaRetreatOCResearchSterileLab
-        -72,-31: CMUAreaRetreatOCResearchSterileLab
-        -72,-30: CMUAreaRetreatOCResearchSterileLab
-        -72,-29: CMUAreaRetreatOCResearchSterileLab
-        -72,-28: CMUAreaRetreatOCResearchSterileLab
-        -78,-27: CMUAreaRetreatOCResearchSterileLab
-        -77,-27: CMUAreaRetreatOCResearchSterileLab
-        -76,-27: CMUAreaRetreatOCResearchSterileLab
-        -75,-27: CMUAreaRetreatOCResearchSterileLab
-        -74,-27: CMUAreaRetreatOCResearchSterileLab
-        -73,-27: CMUAreaRetreatOCResearchSterileLab
-        -72,-27: CMUAreaRetreatOCResearchSterileLab
-        -72,-23: CMUAreaRetreatOCResearchSterileLab
-        -72,-24: CMUAreaRetreatOCResearchSterileLab
-        -72,-25: CMUAreaRetreatOCResearchSterileLab
-        -73,-23: CMUAreaRetreatOCResearchSterileLab
-        -73,-24: CMUAreaRetreatOCResearchSterileLab
-        -73,-25: CMUAreaRetreatOCResearchSterileLab
-        -73,-26: CMUAreaRetreatOCResearchSterileLab
-        -72,-26: CMUAreaRetreatOCResearchSterileLab
-        -74,-24: CMUAreaRetreatOCResearchSterileLab
-        -74,-26: CMUAreaRetreatOCResearchSterileLab
-        -75,-24: CMUAreaRetreatOCResearchSterileLab
-        -75,-25: CMUAreaRetreatOCResearchSterileLab
-        -75,-26: CMUAreaRetreatOCResearchSterileLab
-        -76,-24: CMUAreaRetreatOCResearchSterileLab
-        -76,-25: CMUAreaRetreatOCResearchSterileLab
-        -76,-26: CMUAreaRetreatOCResearchSterileLab
-        -74,-25: CMUAreaRetreatOCResearchSterileLab
-        -77,-26: CMUAreaRetreatOCResearchSterileLab
+        -83,-45: CMUAreaRetreatOCResearchWest
+        -83,-44: CMUAreaRetreatOCResearchWest
+        -83,-43: CMUAreaRetreatOCResearchWest
+        -83,-42: CMUAreaRetreatOCResearchWest
+        -83,-41: CMUAreaRetreatOCResearchWest
+        -83,-40: CMUAreaRetreatOCResearchWest
+        -83,-39: CMUAreaRetreatOCResearchWest
+        -84,-51: CMUAreaRetreatOutofBounds
+        -84,-50: CMUAreaRetreatOutofBounds
+        -84,-49: CMUAreaRetreatOutofBounds
+        -84,-48: CMUAreaRetreatOutofBounds
+        -84,-47: CMUAreaRetreatOutofBounds
+        -84,-46: CMUAreaRetreatOutofBounds
+        -84,-43: CMUAreaRetreatOCResearchWest
+        -84,-44: CMUAreaRetreatOCResearchWest
+        -84,-45: CMUAreaRetreatOCResearchWest
+        -84,-42: CMUAreaRetreatOCResearchWest
+        -84,-41: CMUAreaRetreatOCResearchWest
+        -84,-40: CMUAreaRetreatOCResearchWest
+        -84,-39: CMUAreaRetreatOCResearchWest
+        -85,-51: CMUAreaRetreatOutofBounds
+        -85,-49: CMUAreaRetreatOutofBounds
+        -85,-50: CMUAreaRetreatOutofBounds
+        -85,-48: CMUAreaRetreatOutofBounds
+        -85,-46: CMUAreaRetreatOutofBounds
+        -85,-47: CMUAreaRetreatOutofBounds
+        -85,-45: CMUAreaRetreatOCResearchWest
+        -85,-44: CMUAreaRetreatOCResearchWest
+        -85,-43: CMUAreaRetreatOCResearchWest
+        -85,-42: CMUAreaRetreatOCResearchWest
+        -75,-41: CMUAreaRetreatOCResearchWest
+        -85,-41: CMUAreaRetreatOCResearchWest
+        -85,-39: CMUAreaRetreatOCResearchWest
+        -85,-40: CMUAreaRetreatOCResearchWest
+        -87,-38: CMUAreaRetreatOCResearchWest
+        -87,-37: CMUAreaRetreatOCResearchWest
+        -87,-36: CMUAreaRetreatOCResearchWest
+        -87,-35: CMUAreaRetreatOCResearchWest
+        -87,-34: CMUAreaRetreatOCResearchWest
+        -87,-33: CMUAreaRetreatOCResearchWest
+        -87,-32: CMUAreaRetreatOCResearchWest
+        -86,-37: CMUAreaRetreatOCResearchWest
+        -86,-36: CMUAreaRetreatOCResearchWest
+        -86,-35: CMUAreaRetreatOCResearchWest
+        -86,-34: CMUAreaRetreatOCResearchWest
+        -86,-33: CMUAreaRetreatOCResearchWest
+        -86,-38: CMUAreaRetreatOCResearchWest
+        -85,-38: CMUAreaRetreatOCResearchWest
+        -85,-37: CMUAreaRetreatOCResearchWest
+        -85,-35: CMUAreaRetreatOCResearchWest
+        -85,-34: CMUAreaRetreatOCResearchWest
+        -86,-32: CMUAreaRetreatOCResearchWest
+        -85,-33: CMUAreaRetreatOCResearchWest
+        -84,-38: CMUAreaRetreatOCResearchWest
+        -84,-37: CMUAreaRetreatOCResearchWest
+        -84,-36: CMUAreaRetreatOCResearchWest
+        -85,-36: CMUAreaRetreatOCResearchWest
+        -84,-34: CMUAreaRetreatOCResearchWest
+        -85,-32: CMUAreaRetreatOCResearchWest
+        -84,-35: CMUAreaRetreatOCResearchWest
+        -84,-33: CMUAreaRetreatOCResearchWest
+        -84,-32: CMUAreaRetreatOCResearchWest
+        -83,-36: CMUAreaRetreatOCResearchWest
+        -83,-35: CMUAreaRetreatOCResearchWest
+        -83,-37: CMUAreaRetreatOCResearchWest
+        -83,-38: CMUAreaRetreatOCResearchWest
+        -83,-33: CMUAreaRetreatOCResearchWest
+        -83,-34: CMUAreaRetreatOCResearchWest
+        -82,-38: CMUAreaRetreatOCResearchWest
+        -83,-32: CMUAreaRetreatOCResearchWest
+        -82,-37: CMUAreaRetreatOCResearchWest
+        -82,-36: CMUAreaRetreatOCResearchWest
+        -82,-35: CMUAreaRetreatOCResearchWest
+        -82,-34: CMUAreaRetreatOCResearchWest
+        -82,-33: CMUAreaRetreatOCResearchWest
+        -82,-32: CMUAreaRetreatOCResearchWest
+        -81,-38: CMUAreaRetreatOCResearchWest
+        -81,-37: CMUAreaRetreatOCResearchWest
+        -81,-36: CMUAreaRetreatOCResearchWest
+        -81,-35: CMUAreaRetreatOCResearchWest
+        -81,-34: CMUAreaRetreatOCResearchWest
+        -81,-33: CMUAreaRetreatOCResearchWest
+        -81,-32: CMUAreaRetreatOCResearchWest
+        -80,-38: CMUAreaRetreatOCResearchWest
+        -80,-37: CMUAreaRetreatOCResearchWest
+        -80,-36: CMUAreaRetreatOCResearchWest
+        -80,-35: CMUAreaRetreatOCResearchWest
+        -80,-34: CMUAreaRetreatOCResearchWest
+        -80,-33: CMUAreaRetreatOCResearchWest
+        -80,-32: CMUAreaRetreatOCResearchWest
+        -79,-38: CMUAreaRetreatOCResearchWest
+        -79,-37: CMUAreaRetreatOCResearchWest
+        -79,-36: CMUAreaRetreatOCResearchWest
+        -79,-35: CMUAreaRetreatOCResearchWest
+        -79,-34: CMUAreaRetreatOCResearchWest
+        -79,-33: CMUAreaRetreatOCResearchWest
+        -79,-32: CMUAreaRetreatOCResearchWest
+        -78,-38: CMUAreaRetreatOCResearchWest
+        -78,-37: CMUAreaRetreatOCResearchWest
+        -78,-36: CMUAreaRetreatOCResearchWest
+        -78,-35: CMUAreaRetreatOCResearchWest
+        -78,-34: CMUAreaRetreatOCResearchWest
+        -78,-33: CMUAreaRetreatOCResearchWest
+        -78,-32: CMUAreaRetreatOCResearchWest
+        -77,-38: CMUAreaRetreatOCResearchWest
+        -77,-37: CMUAreaRetreatOCResearchWest
+        -77,-36: CMUAreaRetreatOCResearchWest
+        -77,-35: CMUAreaRetreatOCResearchWest
+        -77,-34: CMUAreaRetreatOCResearchWest
+        -77,-33: CMUAreaRetreatOCResearchWest
+        -77,-32: CMUAreaRetreatOCResearchWest
+        -76,-38: CMUAreaRetreatOCResearchWest
+        -76,-37: CMUAreaRetreatOCResearchWest
+        -76,-36: CMUAreaRetreatOCResearchWest
+        -76,-35: CMUAreaRetreatOCResearchWest
+        -76,-34: CMUAreaRetreatOCResearchWest
+        -76,-33: CMUAreaRetreatOCResearchWest
+        -76,-32: CMUAreaRetreatOCResearchWest
+        -75,-38: CMUAreaRetreatOCResearchWest
+        -75,-37: CMUAreaRetreatOCResearchWest
+        -75,-36: CMUAreaRetreatOCResearchWest
+        -75,-35: CMUAreaRetreatOCResearchWest
+        -75,-34: CMUAreaRetreatOCResearchWest
+        -75,-33: CMUAreaRetreatOCResearchWest
+        -75,-32: CMUAreaRetreatOCResearchWest
+        -74,-38: CMUAreaRetreatOCResearchWest
+        -74,-37: CMUAreaRetreatOCResearchWest
+        -74,-36: CMUAreaRetreatOCResearchWest
+        -74,-35: CMUAreaRetreatOCResearchWest
+        -74,-34: CMUAreaRetreatOCResearchWest
+        -74,-33: CMUAreaRetreatOCResearchWest
+        -74,-32: CMUAreaRetreatOCResearchWest
+        -73,-38: CMUAreaRetreatOCResearchWest
+        -73,-37: CMUAreaRetreatOCResearchWest
+        -73,-36: CMUAreaRetreatOCResearchWest
+        -73,-35: CMUAreaRetreatOCResearchWest
+        -73,-34: CMUAreaRetreatOCResearchWest
+        -73,-33: CMUAreaRetreatOCResearchWest
+        -73,-32: CMUAreaRetreatOCResearchWest
+        -72,-38: CMUAreaRetreatOCResearchWest
+        -72,-37: CMUAreaRetreatOCResearchWest
+        -72,-36: CMUAreaRetreatOCResearchWest
+        -72,-35: CMUAreaRetreatOCResearchWest
+        -72,-34: CMUAreaRetreatOCResearchWest
+        -72,-33: CMUAreaRetreatOCResearchWest
+        -72,-32: CMUAreaRetreatOCResearchWest
+        -82,-31: CMUAreaRetreatOCResearchWest
+        -82,-30: CMUAreaRetreatOCResearchWest
+        -82,-29: CMUAreaRetreatOCResearchWest
+        -82,-28: CMUAreaRetreatOCResearchWest
+        -81,-31: CMUAreaRetreatOCResearchWest
+        -81,-30: CMUAreaRetreatOCResearchWest
+        -81,-29: CMUAreaRetreatOCResearchWest
+        -81,-28: CMUAreaRetreatOCResearchWest
+        -80,-31: CMUAreaRetreatOCResearchWest
+        -80,-30: CMUAreaRetreatOCResearchWest
+        -80,-29: CMUAreaRetreatOCResearchWest
+        -80,-28: CMUAreaRetreatOCResearchWest
+        -79,-31: CMUAreaRetreatOCResearchWest
+        -79,-30: CMUAreaRetreatOCResearchWest
+        -79,-29: CMUAreaRetreatOCResearchWest
+        -79,-28: CMUAreaRetreatOCResearchWest
+        -78,-31: CMUAreaRetreatOCResearchWest
+        -78,-30: CMUAreaRetreatOCResearchWest
+        -78,-29: CMUAreaRetreatOCResearchWest
+        -78,-28: CMUAreaRetreatOCResearchWest
+        -77,-31: CMUAreaRetreatOCResearchWest
+        -77,-30: CMUAreaRetreatOCResearchWest
+        -77,-29: CMUAreaRetreatOCResearchWest
+        -77,-28: CMUAreaRetreatOCResearchWest
+        -76,-31: CMUAreaRetreatOCResearchWest
+        -76,-29: CMUAreaRetreatOCResearchWest
+        -76,-28: CMUAreaRetreatOCResearchWest
+        -75,-31: CMUAreaRetreatOCResearchWest
+        -75,-30: CMUAreaRetreatOCResearchWest
+        -76,-30: CMUAreaRetreatOCResearchWest
+        -75,-28: CMUAreaRetreatOCResearchWest
+        -74,-31: CMUAreaRetreatOCResearchWest
+        -75,-29: CMUAreaRetreatOCResearchWest
+        -74,-30: CMUAreaRetreatOCResearchWest
+        -74,-29: CMUAreaRetreatOCResearchWest
+        -74,-28: CMUAreaRetreatOCResearchWest
+        -73,-31: CMUAreaRetreatOCResearchWest
+        -73,-30: CMUAreaRetreatOCResearchWest
+        -73,-29: CMUAreaRetreatOCResearchWest
+        -73,-28: CMUAreaRetreatOCResearchWest
+        -72,-31: CMUAreaRetreatOCResearchWest
+        -72,-30: CMUAreaRetreatOCResearchWest
+        -72,-29: CMUAreaRetreatOCResearchWest
+        -72,-28: CMUAreaRetreatOCResearchWest
+        -78,-27: CMUAreaRetreatOCResearchWest
+        -77,-27: CMUAreaRetreatOCResearchWest
+        -76,-27: CMUAreaRetreatOCResearchWest
+        -75,-27: CMUAreaRetreatOCResearchWest
+        -74,-27: CMUAreaRetreatOCResearchWest
+        -73,-27: CMUAreaRetreatOCResearchWest
+        -72,-27: CMUAreaRetreatOCResearchWest
+        -72,-23: CMUAreaRetreatOCResearchWest
+        -72,-24: CMUAreaRetreatOCResearchWest
+        -72,-25: CMUAreaRetreatOCResearchWest
+        -73,-23: CMUAreaRetreatOCResearchWest
+        -73,-24: CMUAreaRetreatOCResearchWest
+        -73,-25: CMUAreaRetreatOCResearchWest
+        -73,-26: CMUAreaRetreatOCResearchWest
+        -72,-26: CMUAreaRetreatOCResearchWest
+        -74,-24: CMUAreaRetreatOCResearchWest
+        -74,-26: CMUAreaRetreatOCResearchWest
+        -75,-24: CMUAreaRetreatOCResearchWest
+        -75,-25: CMUAreaRetreatOCResearchWest
+        -75,-26: CMUAreaRetreatOCResearchWest
+        -76,-24: CMUAreaRetreatOCResearchWest
+        -76,-25: CMUAreaRetreatOCResearchWest
+        -76,-26: CMUAreaRetreatOCResearchWest
+        -74,-25: CMUAreaRetreatOCResearchWest
+        -77,-26: CMUAreaRetreatOCResearchWest
         -36,-12: CMUAreaRetreatOCCavernNorth
         -35,-12: CMUAreaRetreatOCCavernNorth
         -34,-12: CMUAreaRetreatOCCavernNorth
@@ -143425,16 +143425,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -32.5,-75.5
-  - uid: 9975
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: -56.5,-35.5
-    - type: Physics
-      canCollide: False
-    - type: Fixtures
-      fixtures: {}
   - uid: 9993
     components:
     - type: Transform
@@ -143539,6 +143529,12 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: -25.5,15.5
+  - uid: 18149
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: -56.5,-35.5
   - uid: 19958
     components:
     - type: Transform
@@ -173360,11 +173356,6 @@ entities:
       pos: 36.5,32.5
 - proto: RMCCrateInflatableBarriers
   entities:
-  - uid: 18149
-    components:
-    - type: Transform
-      parent: 1
-      pos: -69.5,-32.5
   - uid: 19883
     components:
     - type: Transform
@@ -173665,7 +173656,7 @@ entities:
       pos: -29.5,-46.5
     - type: Door
       state: Closing
-      secondsUntilStateChange: -129253.67
+      secondsUntilStateChange: -129515.5
   - uid: 9768
     components:
     - type: Transform
@@ -178583,6 +178574,12 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 25.5,10.5
+  - uid: 9975
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: -79.5,-33.5
   - uid: 9984
     components:
     - type: Transform
@@ -178791,6 +178788,97 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: -18.5,-39.5
+  - uid: 20110
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: -82.5,-45.5
+  - uid: 20111
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: -78.5,-45.5
+  - uid: 20112
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: -75.5,-48.5
+  - uid: 20118
+    components:
+    - type: Transform
+      parent: 1
+      pos: -78.5,-43.5
+  - uid: 20119
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: -70.5,-39.5
+  - uid: 20120
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: -70.5,-34.5
+  - uid: 20121
+    components:
+    - type: Transform
+      parent: 1
+      pos: -72.5,-39.5
+  - uid: 20122
+    components:
+    - type: Transform
+      parent: 1
+      pos: -76.5,-39.5
+  - uid: 20123
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: -74.5,-45.5
+  - uid: 20124
+    components:
+    - type: Transform
+      parent: 1
+      pos: -74.5,-43.5
+  - uid: 20129
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: -73.5,-33.5
+  - uid: 20130
+    components:
+    - type: Transform
+      parent: 1
+      pos: -73.5,-31.5
+  - uid: 20132
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: -82.5,-32.5
+  - uid: 20133
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: -85.5,-35.5
+  - uid: 20134
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: -83.5,-38.5
+  - uid: 20135
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: -83.5,-42.5
   - uid: 71560
     components:
     - type: Transform
@@ -180217,6 +180305,12 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: -75.5,-32.5
+  - uid: 20131
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: -80.5,-29.5
   - uid: 71596
     components:
     - type: Transform
