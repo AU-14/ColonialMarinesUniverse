@@ -1673,7 +1673,7 @@
   possibleships:
       - USSBushRedux
   CompatibleDropships:
-  - /Maps/CMU14/Dropships/osprey.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.ym
   - /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
   compatibleFighters:
   - /Maps/CMU14/Dropships/f84owl.yml
