@@ -392,11 +392,6 @@
         Piercing: 31
   - type: CMArmorPiercing
     amount: 25
-  - type: RMCProjectileAccuracy
-    accuracy: 105
-    thresholds:
-    - range: 13
-      falloff: 10
 
 - type: entity
   parent: CMBaseCartridgeRifle
