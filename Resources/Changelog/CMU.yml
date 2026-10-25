@@ -15039,5 +15039,54 @@
   id: 871
   time: '2026-10-24T12:39:34.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2277
+- author: TheHellFireo
+  changes:
+  - message: Expedition guards recognize distant contacts gradually while prioritizing
+      nearby threats.
+    type: Tweak
+  - message: Expedition guards inspect remembered contact and sound locations before
+      returning to orders, without inspecting through walls or pursuing stale evidence
+      indefinitely.
+    type: Fix
+  id: 872
+  time: '2026-10-24T16:47:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2282
+- author: TheHellFireo
+  changes:
+  - message: Queens can command individual lessers and squads, set aggression, and
+      place order flags and hive tactical markers while on their ovipositor.
+    type: Add
+  - message: Unassigned lessers roam wider areas, pause, rest, and wake. Assigned
+      orders continue after the Queen detaches.
+    type: Tweak
+  - message: Each hive can have up to twenty living swarm lessers, with summons filling
+      available slots.
+    type: Tweak
+  id: 873
+  time: '2026-10-24T16:47:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2280
+- author: TheHellFireo
+  changes:
+  - message: Fixed oversized survivor groups caused by unready players and incorrect
+      threat counts. Survivor announcements now adjust if the roster changes at round
+      start.
+    type: Fix
+  id: 874
+  time: '2026-10-24T18:13:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2284
+- author: Kadeo64
+  changes:
+  - message: two eggs in clearance X crate
+    type: Tweak
+  id: 875
+  time: '2026-10-24T21:43:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2279
+- author: ArturUr1
+  changes:
+  - message: Replacing the hardcoded newmed localization with localization keys.
+    type: Code
+  id: 876
+  time: '2026-10-25T11:59:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2290
 Name: CMU
 Order: -1
