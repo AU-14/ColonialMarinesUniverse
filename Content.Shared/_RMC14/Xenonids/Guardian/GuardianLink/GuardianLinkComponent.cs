@@ -1,21 +1,12 @@
 using Robust.Shared.GameStates;  
-using Content.Shared.FixedPoint;  
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;  
   
 namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianLink;  
   
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]  
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]  
 [Access(typeof(GuardianLinkSystem))]  
-public sealed partial class XenoGuardianComponent : Component  
+public sealed partial class GuardianLinkedComponent : Component  
 {  
-    [DataField, AutoNetworkedField]  
-    public float Range = 10;  
-  
-    [DataField, AutoNetworkedField]  
-    public FixedPoint2 LinkCost = FixedPoint2.New(50);  
-  
-    [DataField, AutoNetworkedField]  
-    public TimeSpan LinkDuration = TimeSpan.FromSeconds(15);  
-  
-    [DataField, AutoNetworkedField]  
-    public float AbsorbPercent = 0.5f;  
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]  
+    public TimeSpan ExpiresAt;  
 }
