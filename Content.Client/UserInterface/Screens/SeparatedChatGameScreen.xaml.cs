@@ -60,6 +60,13 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
 
         ScreenContainer.OnSplitResizeFinished += OnSplitResizeFinished;
 
+        // CMU14: the splitter's RespectChildrenMinSize can't protect the panel — MeasureCore
+        // clamps DesiredSize to the offered width, so the panel's "minimum" reads back as
+        // whatever it already occupies and the clamp is circular. Clamp the split ourselves
+        // so the chat pane never drops below the menu bar's real key widths; below that point
+        // BoxContainer collapses the tail keys (admin/sandbox/escape) onto each other.
+        ScreenContainer.OnSplitCenterChanging += OnSplitCenterChanging;
+
         ViewportContainer.OnResized += ResizeActionContainer;
         SeparatedChatPanel.OnResized += UpdateChatPanelScale;
 
@@ -143,6 +150,31 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         _pendingChatSplitFrames--;
         if (_pendingChatSplitFrames == 0)
             _pendingChatSplitFraction = null;
+    }
+
+    private void OnSplitCenterChanging(SplitContainer.SplitCenterChangingEventArgs args)
+    {
+        var visible = 0;
+        var barMinWidth = 0f;
+        foreach (var child in TopBar.Children)
+        {
+            if (!child.Visible)
+                continue;
+
+            visible++;
+            barMinWidth += child.MinWidth;
+        }
+
+        if (visible > 1)
+            barMinWidth += (visible - 1) * (TopBar.SeparationOverride ?? 5);
+
+        // menu bar band content margins (12) + chat housing patch margins (24) + slack.
+        var panelFloor = barMinWidth + 40;
+
+        // Panel width is total minus the split center and half the splitter; keep it >= floor.
+        var maxCenter = ScreenContainer.Size.X - panelFloor - ScreenContainer.SplitWidth / 2;
+        if (maxCenter > 0 && args.SplitCenter > maxCenter)
+            args.SplitCenter = maxCenter;
     }
 
     private void OnSplitResizeFinished()
