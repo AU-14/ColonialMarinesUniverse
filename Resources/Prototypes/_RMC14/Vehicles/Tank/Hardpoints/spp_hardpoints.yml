@@ -262,7 +262,7 @@
 - type: entity
   parent: VehicleTankArmorBallistic
   id: VehicleUPPTankReactiveArmor
-  name: "Huanji" reactive armor plating
+  name: '"Huanji" reactive armor plating'
   description: Reactive armor plating for a UPP tank.
   components:
   - type: HardpointIntegrity
