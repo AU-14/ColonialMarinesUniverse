@@ -14,7 +14,7 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
     [Dependency] private readonly GuardianAbsorbSystem _guardianAbsorb = default!;  
     [Dependency] private readonly SharedXenoHiveSystem _hive = default!;  
     [Dependency] private readonly MobStateSystem _mobState = default!;  
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;  
+    [Dependency] private readonly MobThresholdSystem _mobThresholds = default!;  
     [Dependency] private readonly IGameTiming _timing = default!;  
   
     private readonly HashSet<Entity<MobStateComponent>> _nearby = new();  
@@ -22,8 +22,8 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
     public override void Update(float frameTime)  
     {  
         var time = _timing.CurTime;  
-        var query = EntityQueryEnumerator<GuardianCritSaveComponent, DamageableComponent>();  
-        while (query.MoveNext(out var uid, out var save, out var damageable))  
+        var query = EntityQueryEnumerator<GuardianCritSaveComponent>();  
+        while (query.MoveNext(out var uid, out var save))  
         {  
             if (time < save.NextCheck)  
                 continue;  
@@ -31,25 +31,24 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
             save.NextCheck = time + save.CheckEvery;  
   
             
-            var selfOk = false;  
-            if (_mobThreshold.TryGetIncapThreshold(uid, out var critThreshold))  
+            if (!_mobThresholds.TryGetIncapThreshold(uid, out var incapThreshold) ||  
+                !TryComp<DamageableComponent>(uid, out var selfDamageable))  
             {  
-                var remaining = critThreshold.Value - damageable.Damage.GetTotal();  
-                selfOk = remaining >= save.MinimumHealth;  
+                continue;  
             }  
   
-            if (!selfOk)  
+            var remaining = incapThreshold.Value - selfDamageable.TotalDamage;  
+            if (remaining <= save.MinimumHealth)  
             {  
-                foreach (var target in save.ActiveTargets)  
-                {  
-                    _guardianAbsorb.RemoveAbsorb(target, GuardianAbsorbType.PassiveCritSave);  
-                }  
+                foreach (var old in save.ActiveTargets)  
+                    _guardianAbsorb.RemoveAbsorb(old, GuardianAbsorbType.PassiveCritSave);  
+  
                 save.ActiveTargets.Clear();  
                 continue;  
             }  
   
             _nearby.Clear();  
-            _lookup.GetEntitiesInRange(uid, save.Range, _nearby);  
+            _lookup.GetEntitiesInRange(Transform(uid).Coordinates, save.Range, _nearby);  
   
             var stillActive = new HashSet<EntityUid>();  
             foreach (var nearby in _nearby)  
