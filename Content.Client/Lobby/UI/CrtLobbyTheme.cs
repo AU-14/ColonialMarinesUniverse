@@ -78,6 +78,21 @@ internal static class CrtLobbyTheme
         AddClass(scrollBar, StyleNano.StyleClassCrtChatScrollBar);
     }
 
+    // CMU14: ScrollContainer overload. A form pane (bug report window) has the same complaint
+    // about the wide default thumb as a chat log, and ScrollContainer parents its scrollbar
+    // the same way OutputPanel does.
+    public static void ApplyChatScrollBar(ScrollContainer container)
+    {
+        if (!StyleNano.CrtUiEnabled)
+            return;
+
+        if (container.Children.OfType<VScrollBar>().FirstOrDefault() is not { } scrollBar)
+            return;
+
+        scrollBar.RemoveStyleClass(StyleNano.StyleClassCrtScrollBar);
+        AddClass(scrollBar, StyleNano.StyleClassCrtChatScrollBar);
+    }
+
     public static void ApplyToOptionButton(OptionButton option)
     {
         if (!StyleNano.CrtUiEnabled)

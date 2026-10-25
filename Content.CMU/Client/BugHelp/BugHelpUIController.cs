@@ -43,8 +43,8 @@ public sealed class BugHelpUIController : UIController
         _window.TalkToStaffButton.OnPressed += _ =>
         {
             // StaffHelpUIController injects this controller, so resolve it lazily to avoid a
-            // constructor loop.
-            UIManager.GetUIController<StaffHelpUIController>().OpenMentorOrHelpWindow();
+            // constructor loop. "Staff Help" is the mockup's title for this door (pane 3).
+            UIManager.GetUIController<StaffHelpUIController>().OpenMentorOrHelpWindow("Staff Help");
             _window.Close();
         };
         _window.OnSubmit += window =>
