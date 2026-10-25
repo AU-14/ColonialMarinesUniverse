@@ -32,7 +32,14 @@ public sealed partial class GuardianLinkSystem : EntitySystem
         if (args.Handled)  
             return;  
   
-        var target = args.Target;  
+        var target = args.Target;
+
+        if (!HasComp<XenoComponent>(target))  
+        {  
+            var msg = Loc.GetString("rmc-xeno-heal-sisters"); // change later
+            _popup.PopupClient(msg, xeno, xeno, PopupType.SmallCaution);  
+            return;  
+        }
   
         if (!HasComp<XenoComponent>(target))  
         {  
