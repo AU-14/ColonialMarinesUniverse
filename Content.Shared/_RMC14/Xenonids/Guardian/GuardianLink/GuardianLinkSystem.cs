@@ -10,7 +10,7 @@ using Robust.Shared.Timing;
   
 namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianLink;
   
-public sealed partial class XenoGuardianSystem : EntitySystem  
+public sealed partial class GuardianLinkSystem : EntitySystem 
 {  
     [Dependency] private readonly ExamineSystemShared _examine = default!;  
     [Dependency] private readonly GuardianAbsorbSystem _guardianAbsorb = default!;  
