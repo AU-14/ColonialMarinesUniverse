@@ -42,6 +42,7 @@
   - AuPlanetKutjevo
   - AuPlanetShivasSnowball
   - AuPlanetChances
+  - CMUPlanetLV624
   rules:
   - AuVoteRule
   - PlatoonSpawn
