@@ -122,3 +122,141 @@ cmu-ui-options-vault-on-bump = Vault by walking into ledges and railings
 cmu-ui-options-vault-on-bump-tooltip = Walking into a ledge or railing you can vault over starts vaulting it. Tables and barricades are left out. Keep pushing into it to finish, or step away to cancel.
 cmu-ui-options-no-shake-when-resting = Stay down when resting
 cmu-ui-options-no-shake-when-resting-tooltip = While you lie down on purpose, others can't shake you back up. Being stunned, knocked down or unconscious still lets them.
+
+# Audio, video, tab and filter keys used by the options UI (consolidated from _CMU14 locale).
+cmu-ui-options-tab-gameplay = Gameplay
+
+cmu-ui-options-tab-interface = Interface
+
+cmu-ui-options-tab-chat = Chat
+
+cmu-ui-options-tab-video = Video
+
+cmu-ui-options-group-combat = Combat
+
+cmu-ui-options-group-general = General
+
+cmu-ui-options-group-xeno = Xenomorph
+
+cmu-ui-options-group-motion = Motion
+
+cmu-ui-options-group-vision = Vision & content
+
+cmu-ui-options-group-performance = Performance
+
+cmu-ui-options-group-viewport = Viewport
+
+cmu-ui-options-group-species-sounds = Species sounds
+
+cmu-ui-options-species-column = Species
+cmu-ui-options-species-arachnid = Arachnid
+cmu-ui-options-species-avali = Avali
+cmu-ui-options-species-diona = Diona
+cmu-ui-options-species-dwarf = Dwarf
+cmu-ui-options-species-felinid = Felinid
+cmu-ui-options-species-feroxi = Feroxi
+cmu-ui-options-species-human = Human
+cmu-ui-options-species-moth = Moth
+cmu-ui-options-species-reptilian = Reptilian
+cmu-ui-options-species-rodentia = Rodentia
+cmu-ui-options-species-skrell = Skrell
+cmu-ui-options-species-slime = Slime
+cmu-ui-options-species-vulpkanin = Vulpkanin
+
+cmu-ui-options-filter-placeholder = Filter settings and keybinds
+
+cmu-ui-options-filter-matches = { $count ->
+    [one] 1 MATCH
+   *[other] { $count } MATCHES
+
+cmu-ui-options-filter-none = NO MATCHES
+
+cmu-ui-options-auto-eject-magazines = Auto-eject magazines
+
+cmu-ui-options-auto-eject-magazines-tooltip = Automatically ejects magazines from your guns.
+
+cmu-ui-options-damage-yourself = Allow hurting yourself
+
+cmu-ui-options-damage-yourself-tooltip = Lets you hurt yourself with melee weapons and guns.
+
+cmu-ui-options-auto-punctuate = Auto-punctuate IC messages
+
+cmu-ui-options-auto-punctuate-tooltip = Automatically adds punctuation to your in-character messages.
+
+cmu-ui-options-master-volume = Master volume
+
+cmu-ui-options-midi-volume = MIDI (instrument) volume
+
+cmu-ui-options-ambient-music-volume = Ambient music volume
+
+cmu-ui-options-ambience-volume = Ambience volume
+
+cmu-ui-options-lobby-volume = Lobby and round-end volume
+
+cmu-ui-options-interface-volume = Interface volume
+
+cmu-ui-options-cassettes-volume = Cassette volume
+
+cmu-ui-options-hijack-song-volume = Hijack song volume
+
+cmu-ui-options-ambience-max-sounds = Ambience simultaneous sounds
+
+cmu-ui-options-ambience-max-sounds-tooltip = How many ambient sounds can play at the same time.
+
+cmu-ui-options-lobby-music = Lobby and round-end music
+
+cmu-ui-options-restart-sounds = Round restart sounds
+
+cmu-ui-options-event-music = Event music
+
+cmu-ui-options-admin-sounds = Play admin sounds
+
+cmu-ui-options-bwoink-sound = Play AHelp notification sound
+
+cmu-ui-options-area-echo = Area echo
+
+cmu-ui-options-area-echo-tooltip = Applies echo to audio in large open spaces.
+
+cmu-ui-options-area-echo-highres = High-quality echo
+
+cmu-ui-options-area-echo-highres-tooltip = Improved echo calculations. Slower, so turn it off if area echo costs you frame rate.
+
+cmu-ui-options-ui-scale = UI scale
+
+cmu-ui-options-parallax-low-quality = Low-quality parallax
+
+cmu-ui-options-parallax-low-quality-tooltip = Uses a simpler version of the moving space background.
+
+cmu-ui-options-ambient-occlusion = Ambient occlusion
+
+cmu-ui-options-lighting-quality = Lighting quality
+
+cmu-ui-options-vp-integer-scaling = Integer scaling
+
+cmu-ui-options-vp-scale = Fixed viewport scale
+
+cmu-ui-options-vp-width = Viewport width
+
+cmu-ui-options-explosion-screen-shake-ignore-far = Ignore distant explosions
+
+cmu-ui-options-explosion-screen-shake-ignore-far-tooltip = Explosions more than 25 tiles away don't shake your screen.
+
+cmu-ui-options-alternate-sprites = Trypophobia-safe sprites
+
+cmu-ui-options-alternate-sprites-tooltip = Uses alternate sprites that avoid patterns that can trigger trypophobia.
+
+cmu-ui-options-zlevel-blur = Z-level blur
+
+cmu-ui-options-faint-look-up-opacity = Faint look-up opacity
+
+cmu-ui-options-chat-housing-off = Off
+
+cmu-ui-options-chat-housing-gunmetal = Gunmetal
+
+cmu-ui-options-chat-housing-olive = Olive drab
+
+cmu-ui-options-chat-housing-beige = Beige
+
+cmu-ui-options-menu-bar-style-outlined = Outlined
+
+cmu-ui-options-menu-bar-style-raised = Raised
