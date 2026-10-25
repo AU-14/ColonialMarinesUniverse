@@ -301,15 +301,12 @@ namespace Content.Server.CMU14.Round
                     }
                 }
 
-                // Filter planets by their MinPlayers/MaxPlayers so planets intended for
-                // specific player counts cannot be voted for when out of range.
+                // Planets intended for specific player counts cannot be voted for when out of range.
                 var playerCount = _playerManager.PlayerCount;
-                planetProtos.RemoveAll(p =>
-                    // If MinPlayers is set (>0) and current players are fewer, exclude.
-                    (p.Planet.MinPlayers > 0 && playerCount < p.Planet.MinPlayers) ||
-                    // If MaxPlayers is set (>0) and current players exceed it, exclude.
-                    (p.Planet.MaxPlayers > 0 && playerCount > p.Planet.MaxPlayers)
-                );
+                planetProtos.RemoveAll(p => !AuRoundSelectionRules.IsPlanetInPopulationRange(
+                    p.Planet,
+                    _prototypeManager.TryIndex<GameMapPrototype>(p.Planet.MapId, out var map) ? map : null,
+                    playerCount));
 
                 if (planetProtos.Count == 0)
                 {

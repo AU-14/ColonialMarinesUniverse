@@ -87,7 +87,7 @@
   - /Maps/CMU14/Planets/PortNereid/portneroidmultiz1.yml
   - /Maps/CMU14/Planets/PortNereid/portneroidmultiz2.yml
   minPlayers: 0
-  maxPlayers: 200
+  maxPlayers: 500
   maxRandomOffset: 0
   randomRotation: false
   stations:

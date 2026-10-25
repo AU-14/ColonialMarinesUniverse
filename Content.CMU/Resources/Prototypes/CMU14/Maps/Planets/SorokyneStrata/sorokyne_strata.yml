@@ -88,7 +88,7 @@
   - /Maps/CMU14/Planets/SorokyneStrata/sorokyne1.yml
   - /Maps/CMU14/Planets/SorokyneStrata/sorokyne2.yml
   minPlayers: 0
-  maxPlayers: 200
+  maxPlayers: 500
   maxRandomOffset: 0
   randomRotation: false
   stations:
