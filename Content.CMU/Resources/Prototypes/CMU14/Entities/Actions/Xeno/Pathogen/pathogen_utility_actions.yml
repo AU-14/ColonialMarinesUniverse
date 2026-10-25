@@ -11,9 +11,10 @@
       sprite: _RMC14/Actions/xeno_actions.rsi  
       state: guardian_link  
     useDelay: 20  
-  - type: TargetAction  
-    checkCanAccess: false  
-    range: -1  
+  - type: TargetAction
+    TargetCheckCanInteract: false
+    checkCanAccess: true 
+    range: 30
   - type: EntityTargetAction  
     event: !type:XenoGuardianLinkActionEvent  
     canTargetSelf: false  
