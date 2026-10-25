@@ -6,15 +6,19 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.CMU14.Round;
 
 /// <summary>
-/// Restores jobs on the planet station with the counts the map declared in
-/// StationJobs availableJobs, e.g. the colonist population after RemoveAllJobs.
+/// Restores a fixed colonist roster on the planet station after RemoveAllJobs.
 /// </summary>
 [RegisterComponent]
 public sealed partial class AddColonistRuleComponent : Component
 {
-    /// <summary>
-    /// Optional filter; omitted means every job the planet map declares.
-    /// </summary>
+    /// <summary>Exact slot count restored per job.</summary>
     [DataField("jobs")]
-    public HashSet<ProtoId<JobPrototype>>? Jobs { get; set; }
+    public Dictionary<ProtoId<JobPrototype>, int> Jobs { get; set; } = new();
+
+    /// <summary>
+    /// One slot goes to one randomly picked job from this list, e.g. the round's
+    /// ambassador allegiance. Only map-declared jobs are picked.
+    /// </summary>
+    [DataField("randomJobs")]
+    public List<ProtoId<JobPrototype>> RandomJobs { get; set; } = new();
 }

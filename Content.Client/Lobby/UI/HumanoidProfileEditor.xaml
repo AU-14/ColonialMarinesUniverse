@@ -388,13 +388,30 @@
                     <!-- cmu edit end -->
                 </BoxContainer>
                 <!-- cmu edit end -->
-                <!-- CMU14: colony roles for colony-side gamemodes, replacing the retired insurgency tab -->
-                <BoxContainer Orientation="Vertical" Margin="10">
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="ColonyRolesJobList" Orientation="Vertical" />
-                        <!-- CMU14: antag opt-ins for colony rounds; restores the surface lost with the insurgency tab -->
-                        <BoxContainer Name="ColonyRolesAntagList" Orientation="Vertical" />
-                    </ScrollContainer>
+                <!-- CMU14: insurgency role lists; the FoF corner annotation was snipped once FoF got its own dedicated tab -->
+                <BoxContainer Orientation="Vertical">
+                    <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyGovernmentJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyInsurgentJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyCivilianJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" Margin="10">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyAntagList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                    </TabContainer>
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical">
                     <TabContainer Name="ColonyFallTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
