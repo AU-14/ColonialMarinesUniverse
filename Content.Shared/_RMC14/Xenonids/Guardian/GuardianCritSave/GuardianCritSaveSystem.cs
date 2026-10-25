@@ -1,5 +1,7 @@
 using Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;  
 using Content.Shared._RMC14.Xenonids.Hive;  
+using Content.Shared.Damage.Components;  
+using Content.Shared.FixedPoint;  
 using Content.Shared.Mobs;  
 using Content.Shared.Mobs.Systems;  
 using Robust.Shared.Timing;  
@@ -8,72 +10,75 @@ namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianCritSave;
   
 public sealed partial class GuardianCritSaveSystem : EntitySystem  
 {  
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;  
     [Dependency] private readonly GuardianAbsorbSystem _guardianAbsorb = default!;  
+    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;  
     [Dependency] private readonly MobStateSystem _mobState = default!;  
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;  
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;  
     [Dependency] private readonly IGameTiming _timing = default!;  
+  
+    private readonly HashSet<Entity<MobStateComponent>> _nearby = new();  
   
     public override void Update(float frameTime)  
     {  
         var time = _timing.CurTime;  
-        var query = EntityQueryEnumerator<GuardianCritSaveComponent>();  
-        while (query.MoveNext(out var uid, out var guardian))  
+        var query = EntityQueryEnumerator<GuardianCritSaveComponent, DamageableComponent>();  
+        while (query.MoveNext(out var uid, out var save, out var damageable))  
         {  
-            if (guardian.NextCheck > time)  
+            if (time < save.NextCheck)  
                 continue;  
   
-            guardian.NextCheck = time + guardian.CheckEvery;  
+            save.NextCheck = time + save.CheckEvery;  
   
-             
-            if (_mobThreshold.TryGetIncapPercentage(uid, GetGuardianDamage(uid), out var incapPercent) &&  
-                incapPercent > guardian.MaxSelfDamagePercent)  
+            // Self-gate: only functions while the Guardian has MinimumHealth above its own crit threshold  
+            var selfOk = false;  
+            if (_mobThreshold.TryGetIncapThreshold(uid, out var critThreshold))  
             {  
-                ClearAllTargets(uid, guardian);  
+                var remaining = critThreshold.Value - damageable.Damage.GetTotal();  
+                selfOk = remaining >= save.MinimumHealth;  
+            }  
+  
+            if (!selfOk)  
+            {  
+                foreach (var target in save.ActiveTargets)  
+                {  
+                    _guardianAbsorb.RemoveAbsorb(target, GuardianAbsorbType.PassiveCritSave);  
+                }  
+                save.ActiveTargets.Clear();  
                 continue;  
             }  
   
-            ScanForCritAllies(uid, guardian);  
-        }  
-    }  
+            _nearby.Clear();  
+            _lookup.GetEntitiesInRange(uid, save.Range, _nearby);  
   
-    private void ScanForCritAllies(EntityUid uid, GuardianCritSaveComponent guardian)  
-    {  
-        var inRange = new HashSet<EntityUid>();  
-  
-        foreach (var ally in _hive.GetNearbyMembers(uid, guardian.Range)) 
-        {  
-            if (ally == uid)  
-                continue;  
-  
-            if (!_mobState.IsCritical(ally))  
-                continue;  
-  
-            inRange.Add(ally);  
-  
-            if (!guardian.ActiveTargets.Contains(ally))  
+            var stillActive = new HashSet<EntityUid>();  
+            foreach (var nearby in _nearby)  
             {  
-                _guardianAbsorb.SetAbsorb(ally, uid, GuardianAbsorbType.PassiveCritSave, percent: 1f, ignoreResistances: false);  
-                guardian.ActiveTargets.Add(ally);  
+                if (nearby.Owner == uid)  
+                    continue;  
+  
+                if (!HasComp<XenoComponent>(nearby.Owner))  
+                    continue;  
+  
+                if (!_hive.FromSameHive(uid, nearby.Owner))  
+                    continue;  
+  
+                if (!_mobState.IsCritical(nearby.Owner, nearby.Comp))  
+                    continue;  
+  
+                _guardianAbsorb.SetAbsorb(nearby.Owner, uid, GuardianAbsorbType.PassiveCritSave, save.AbsorbPercent);  
+                stillActive.Add(nearby.Owner);  
             }  
+  
+            foreach (var old in save.ActiveTargets)  
+            {  
+                if (!stillActive.Contains(old))  
+                    _guardianAbsorb.RemoveAbsorb(old, GuardianAbsorbType.PassiveCritSave);  
+            }  
+  
+            save.ActiveTargets.Clear();  
+            foreach (var active in stillActive)  
+                save.ActiveTargets.Add(active);  
         }  
-  
-       
-        foreach (var target in new List<EntityUid>(guardian.ActiveTargets))  
-        {  
-            if (inRange.Contains(target))  
-                continue;  
-  
-            _guardianAbsorb.RemoveAbsorb(target, GuardianAbsorbType.PassiveCritSave);  
-            guardian.ActiveTargets.Remove(target);  
-        }  
-    }  
-  
-    private void ClearAllTargets(EntityUid uid, GuardianCritSaveComponent guardian)  
-    {  
-        foreach (var target in guardian.ActiveTargets)  
-            _guardianAbsorb.RemoveAbsorb(target, GuardianAbsorbType.PassiveCritSave);  
-  
-        guardian.ActiveTargets.Clear();  
     }  
 }
