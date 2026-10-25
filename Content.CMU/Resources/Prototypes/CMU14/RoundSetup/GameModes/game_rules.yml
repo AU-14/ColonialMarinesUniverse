@@ -166,9 +166,26 @@
   parent: BaseGameRule
   id: AddColonist
   name: Add Colonists
-  description: Restores the planet map's declared jobs, e.g. the colonist population after RemoveAllJobs. Slot counts come from the map's own StationJobs availableJobs.
+  description: Restores a small fixed colonist roster on the planet after RemoveAllJobs. One ambassador allegiance is picked at random from the jobs the planet declares.
   components:
   - type: AddColonistRule
+    jobs:
+      AU14JobCivilianColonyAdminAssistant: 1
+      AU14JobCivilianHeadPhysician: 1
+      AU14JobCivilianPhysician: 4
+      AU14JobCivilianNurse: 2
+      AU14JobCivilianEmergencyResponseOfficer: 3
+      AU14JobCivilianColonySynthetic: 2
+      AU14JobCivilianColonist: 5
+      AU14JobCivilianCMBMarshal: 1
+      AU14JobCivilianCMBDeputy: 2
+      AU14JobCivilianPrisoner: 2
+    randomJobs:
+    - AU14JobCivilianAmbassadorCCA
+    - AU14JobCivilianAmbassadorICSC
+    - AU14JobCivilianAmbassadorTWE
+    - AU14JobCivilianAmbassadorUA
+    - AU14JobCivilianAmbassadorUPP
 
 - type: entity
   id: FoFTimeLimitRule

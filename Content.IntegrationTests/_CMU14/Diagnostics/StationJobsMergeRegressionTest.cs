@@ -394,7 +394,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
     }
 
     [Test]
-    public async Task AssignJobsForceOnForceReadsDistressSignalPreferences()
+    public async Task AssignJobsForceOnForceReadsOwnStorePreferences()
     {
         var jobs = Server.System<StationJobsSystem>();
         var stations = Server.System<StationSystem>();
@@ -410,12 +410,12 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         });
 
         var dummies = await Server.AddDummySessions(2);
-        // The editor writes military role preferences under the DistressSignal key.
+        // The Force on Force tab edits military role preferences under the ForceOnForce key.
         // The flatten below mirrors what GameTicker.SpawnPlayers does before AssignJobs.
         var profiles = dummies.ToDictionary(
             session => session.UserId,
             _ => new HumanoidCharacterProfile()
-                .WithGamemodeJobPriority("DistressSignal", GovforNurse, JobPriority.High)
+                .WithGamemodeJobPriority("ForceOnForce", GovforNurse, JobPriority.High)
                 .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
 
         try
