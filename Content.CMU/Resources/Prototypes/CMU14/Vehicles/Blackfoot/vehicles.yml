@@ -138,12 +138,12 @@
     takeoffDuration: 23.66
     landingDuration: 19
   - type: BlackfootFuelPower
-    fuel: 600
-    maxFuel: 600
-    battery: 600
-    maxBattery: 600
+    fuel: 2000
+    maxFuel: 2000
+    battery: 2000
+    maxBattery: 2000
     idleFuelDrain: 0.5
-    vtolFuelDrain: 3
+    vtolFuelDrain: 2
     flightFuelDrain: 1
     sensorBatteryDrain: 1
     minimumTakeoffFuel: 30
