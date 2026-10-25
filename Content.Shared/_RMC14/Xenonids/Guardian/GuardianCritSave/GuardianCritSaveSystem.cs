@@ -16,28 +16,26 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
     [Dependency] private readonly GuardianAbsorbSystem _guardianAbsorb = default!;  
     [Dependency] private readonly SharedXenoHiveSystem _hive = default!;  
     [Dependency] private readonly MobStateSystem _mobState = default!;  
+    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;  
     [Dependency] private readonly IGameTiming _timing = default!;  
+  
+    private readonly HashSet<Entity<MobStateComponent>> _nearby = new();  
   
     public override void Initialize()  
     {  
-        base.Initialize();  
-  
         SubscribeLocalEvent<GuardianCritSaveComponent, DamageChangedEvent>(OnGuardianDamageChanged);  
     }  
   
     private void OnGuardianDamageChanged(Entity<GuardianCritSaveComponent> ent, ref DamageChangedEvent args)  
     {  
-        if (args.DamageDelta == null)  
+        if (args.DamageDelta is not { } delta)  
             return;  
   
-        ent.Comp.CachedDamage += args.DamageDelta.GetTotal();  
-        Dirty(ent);  
+        ent.Comp.CachedDamage += delta.GetTotal();  
     }  
   
     public override void Update(float frameTime)  
     {  
-        base.Update(frameTime);  
-  
         var time = _timing.CurTime;  
         var query = EntityQueryEnumerator<GuardianCritSaveComponent>();  
         while (query.MoveNext(out var uid, out var save))  
@@ -47,8 +45,12 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
   
             save.NextCheck = time + save.CheckEvery;  
   
-            var remaining = save.MinimumHealth - save.CachedDamage;  
-            if (remaining <= FixedPoint2.Zero)  
+            // Self-gate: stop tanking if within MinimumHealth of the Guardian's own crit threshold  
+            if (!_mobThreshold.TryGetIncapThreshold(uid, out var incapThreshold))  
+                continue;  
+  
+            var remaining = incapThreshold.Value - save.CachedDamage;  
+            if (remaining <= save.MinimumHealth)  
             {  
                 foreach (var old in save.ActiveTargets)  
                     _guardianAbsorb.RemoveAbsorb(old, GuardianAbsorbType.PassiveCritSave);  
@@ -57,23 +59,23 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
                 continue;  
             }  
   
-            var nearby = new HashSet<Entity<MobStateComponent>>();  
-            _lookup.GetEntitiesInRange(uid, save.Range, nearby, LookupFlags.Uncontained);  
+            _nearby.Clear();  
+            _lookup.GetEntitiesInRange(uid, save.Range, _nearby, LookupFlags.Uncontained);  
   
             var stillActive = new HashSet<EntityUid>();  
-            foreach (var target in nearby)  
+            foreach (var nearby in _nearby)  
             {  
-                if (!HasComp<XenoComponent>(target.Owner))  
+                if (!HasComp<XenoComponent>(nearby.Owner))  
                     continue;  
   
-                if (!_hive.FromSameHive(uid, target.Owner))  
+                if (!_hive.FromSameHive(uid, nearby.Owner))  
                     continue;  
   
-                if (!_mobState.IsCritical(target.Owner, target.Comp))  
+                if (!_mobState.IsCritical(nearby.Owner, nearby.Comp))  
                     continue;  
   
-                _guardianAbsorb.SetAbsorb(target.Owner, uid, GuardianAbsorbType.PassiveCritSave, save.AbsorbPercent);  
-                stillActive.Add(target.Owner);  
+                _guardianAbsorb.SetAbsorb(nearby.Owner, uid, GuardianAbsorbType.PassiveCritSave, save.AbsorbPercent);  
+                stillActive.Add(nearby.Owner);  
             }  
   
             foreach (var old in save.ActiveTargets)  
@@ -88,3 +90,4 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
         }  
     }  
 }
+
