@@ -89,7 +89,6 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         return humanoidProfile;
     }
 
-    public static int DebugApplied;
     private void OnHumanoidProfileMapInit(Entity<HumanoidProfileComponent> ent, ref MapInitEvent args)
     {
         if (!TryComp<YautjaAppliedProfileComponent>(ent.Owner, out var applied) ||
@@ -132,11 +131,14 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
             profile = profile.WithName(
                 $"{_random.Pick(_prototypes.Index(YautjaFirstName))} {_random.Pick(_prototypes.Index(YautjaLastName))}");
         // CMU14: CM-SS13's load_race only rolls a tone when the player has not chosen one (prefs override it). The
-        // default appearance is built with Green, so treat that as "unchosen" and roll from PRED_SKIN_COLOR; an explicit
-        // pick (Red, Blue, ...) must survive. Overwriting unconditionally here threw away the chosen colour and made
-        // every hunter render the same random tan variant.
-        if (profile.Appearance.SkinColor == YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green))
+        // default appearance is built with Green, so an untouched profile is Green with SkinColorSelected false: that
+        // is the only case rolled from PRED_SKIN_COLOR. An explicit pick - including an explicit Green - sets the
+        // selection flag and is kept.
+        if (!profile.SkinColorSelected &&
+            profile.Appearance.SkinColor == YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green))
+        {
             profile = profile.WithSkinColor(_random.Pick(YautjaCharacterProfile.SkinColorOrder[..6]));
+        }
 
         var rank = capabilities.ForStatus(profile.Status).Rank;
         EnsureComp<YautjaAppliedProfileComponent>(uid).Profile = profile.Clone();

@@ -138,9 +138,9 @@ public sealed partial class StepTriggerSystem : EntitySystem
         if (!component.Active || component.CurrentlySteppedOn.Contains(otherUid))
             return false;
 
-        // CMU14: a Yautja does not set off traps - resin traps, M20 claymores, tripwire mines. The check lives here
-        // because every step-triggered trap routes through this one gate, so it covers new trap prototypes too.
-        if (HasComp<YautjaComponent>(otherUid))
+        // CMU14: a Yautja does not set off traps. Scoped to entities that actually are traps, so step-triggered
+        // teleporters, slips, shards and chasms still trigger for them.
+        if (HasComp<YautjaComponent>(otherUid) && YautjaTrapIgnore.IsTrap(EntityManager, uid))
             return false;
 
         // Can't trigger if we don't ignore weightless entities

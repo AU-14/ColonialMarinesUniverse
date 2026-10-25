@@ -17,6 +17,7 @@ using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.Map.Components;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.Interaction;
 
 namespace Content.Server.CMU14.Yautja;
 
@@ -36,6 +37,15 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private CMUZLevelShootingSystem _zLevelShooting = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+
+    /// <summary>
+    /// CMU14: upward speed handed to z-physics for a rising leap. One z level is 1.0 of local z height and gravity is
+    /// <see cref="CMUZLevelsSystem.ZGravityForce"/>, so this clears a level with a little room for frame stepping and
+    /// lets the ordinary arc carry the hunter the rest of the way onto the upper deck.
+    /// </summary>
+    private static readonly float LeapRiseSpeed = MathF.Sqrt(2f * CMUZLevelsSystem.ZGravityForce * 1.25f);
 
     private EntityQuery<YautjaLeapingComponent> _leapingQuery;
 
@@ -45,6 +55,7 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, YautjaLeapActionEvent>(OnLeap);
         SubscribeLocalEvent<YautjaComponent, YautjaLeapDoAfterEvent>(OnLeapDoAfter);
         SubscribeLocalEvent<YautjaLeapingComponent, StopThrowEvent>(OnLeapStopped);
+        SubscribeLocalEvent<YautjaLeapingComponent, CMUZLevelMoveEvent>(OnLeapCrossedDeck);
         SubscribeLocalEvent<YautjaLeapingComponent, ComponentRemove>(OnLeapComponentRemoved);
         SubscribeLocalEvent<YautjaComponent, YautjaButcherActionEvent>(OnButcher);
         SubscribeLocalEvent<YautjaComponent, YautjaMarkForHuntActionEvent>(OnMarkForHunt);
@@ -160,6 +171,12 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
         }
 
         var landingCoords = _transform.ToCoordinates(landing);
+        if (!CanLeapTo(ent, zOffset, origin, landing, destinationGrid, gridLocalPosition))
+        {
+            args.Handled = false;
+            return;
+        }
+
         var warning = SpawnAtPosition(ent.Comp.LeapWarningPrototype, landingCoords);
 
         var doAfter = new DoAfterArgs(
@@ -221,12 +238,9 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
         // self-inflicted blunt damage.
         _obstacleSlamming.MakeImmune(ent.Owner, 0.5f);
 
-        // CMU14: a cross-level leap cannot be an animated single-map throw, so it uses the same Z transition the
-        // ladder climbs with (CMUZLevelsSystem.TryMove), landing on the destination's world position.
+        var landingPosition = origin.Position + direction;
         if (args.ZOffset != 0)
         {
-            var landingPosition = target.Position;
-            EntityUid? destinationGrid = null;
             if (args.DestinationGrid is { } netGrid &&
                 TryGetEntity(netGrid, out var gridUid) &&
                 !Deleted(gridUid.Value) &&
@@ -236,45 +250,32 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
             {
                 // resolve now, not at targeting time: the deck may have moved during the wind-up
                 landingPosition = _transform.ToMapCoordinates(new EntityCoordinates(gridUid.Value, localPosition)).Position;
-                destinationGrid = gridUid.Value;
             }
 
-            // CMU14: this branch does not go through ThrowingSystem, so StopThrowEvent never fires and the
-            // collision masks prepared above would stay leap-permissive - letting the hunter walk through
-            // impassable terrain and mobs. End the leap on both the success and failure paths.
-            if (!_zLevels.TryMove(ent.Owner, args.ZOffset, worldPosition: landingPosition))
+            var destinationMapId = origin.MapId;
+            if (Transform(ent.Owner).MapUid is { } fromMap &&
+                _zLevels.TryMapOffset(fromMap, args.ZOffset, out var targetMap))
             {
-                FinishLeapWithoutThrow(ent.Owner);
-                return;
+                destinationMapId = _transform.GetMapId(targetMap.Value.Owner);
             }
 
-            if (destinationGrid is { } deck && args.GridLocalPosition is { } tile)
-                _transform.SetCoordinates(ent.Owner, new EntityCoordinates(deck, tile));
-
-            // CMU14: a leap is a controlled arrival, not a fall. Without settling z-physics here the hunter keeps the
-            // transition's z state, WakeZPhysics finds no support, and the resulting touchdown raises
-            // CMUZLevelHitEvent - whose handler both knocks the victim down and applies Blunt fall damage
-            // (OnFallDamage, CMUSharedZLevelsSystem.Movement.cs:191). The ladder settles identically after climbing.
-            if (TryComp<CMUZPhysicsComponent>(ent.Owner, out var zPhysics))
+            if (TryComp<YautjaLeapingComponent>(ent.Owner, out var crossLeap))
             {
-                _zLevels.SetZVelocity((ent.Owner, zPhysics), 0f);
-                _zLevels.SetZLocalPosition((ent.Owner, zPhysics), 0f);
+                crossLeap.Destination = new MapCoordinates(landingPosition, destinationMapId);
+                crossLeap.Direction = direction.Normalized();
+                crossLeap.SnapToDestination = true;
             }
 
-            RemComp<CMUZFallingComponent>(ent.Owner);
-
-            FinishLeapWithoutThrow(ent.Owner);
-
-            args.Handled = true;
-            return;
+            var zPhysics = EnsureComp<CMUZPhysicsComponent>(ent.Owner);
+            EnsureComp<CMUZFallingComponent>(ent.Owner);
+            _zLevels.SetZVelocity((ent.Owner, zPhysics), args.ZOffset > 0 ? LeapRiseSpeed : 0f);
         }
-
         // CMU14: the throw compensates friction using the LAUNCH tile's friction, so the hunter stops wherever that
         // estimate lands - typically short of the cursor on a different surface. Record the intended destination and
         // snap to it once the body reaches it, mirroring XenoLeapSystem's leap end.
-        if (TryComp<YautjaLeapingComponent>(ent.Owner, out var leap))
+        else if (TryComp<YautjaLeapingComponent>(ent.Owner, out var leap))
         {
-            leap.Destination = new MapCoordinates(origin.Position + direction, origin.MapId);
+            leap.Destination = new MapCoordinates(landingPosition, origin.MapId);
             if (args.DestinationGrid is { } deck &&
                 args.GridLocalPosition is { } tile &&
                 TryGetEntity(deck, out var deckUid) &&
@@ -349,6 +350,10 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
             FinishLeapWithoutThrow(uid);
         }
     }
+    private void OnLeapCrossedDeck(Entity<YautjaLeapingComponent> ent, ref CMUZLevelMoveEvent args)
+    {
+        _zLevels.EndLookUpCycle(ent.Owner);
+    }
 
     private void OnLeapStopped(Entity<YautjaLeapingComponent> ent, ref StopThrowEvent args)
     {
@@ -402,6 +407,99 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
                                                CollisionGroup.LowImpassable |
                                                CollisionGroup.MobCollision);
         return originalMask & ~passableDuringLeap;
+    }
+
+    /// <summary>
+    /// CMU14: refuses a leap the hunter cannot make. Two separate rules, deliberately not conflated:
+    /// <list type="bullet">
+    /// <item>Crossing a deck needs an opening at the hunter's feet - the deck above when leaping up, its own deck when
+    /// dropping through - so a leap can never pass a solid floor or ceiling. The landing tile must also exist and be
+    /// free of anything impassable.</item>
+    /// <item>On one deck the leap needs unobstructed line of sight to the landing tile, which is what stops a hunter
+    /// leaping to a spot it cannot see through a wall or a closed door. There is no view cone in this engine and
+    /// CM-SS13 leaps in any direction, so the rule is sight line, not field of view; targets at the edge of the visible
+    /// area stay valid because the range allowance covers the configured leap range.</item>
+    /// </list>
+    /// </summary>
+    private bool CanLeapTo(
+        Entity<YautjaComponent> ent,
+        int zOffset,
+        MapCoordinates origin,
+        MapCoordinates landing,
+        NetEntity? destinationGrid,
+        Vector2? gridLocalPosition)
+    {
+        if (zOffset != 0)
+        {
+            if (Transform(ent.Owner).MapUid is not { } originMap ||
+                !_zLevels.TryMapOffset(originMap, zOffset, out var targetMap) ||
+                targetMap is not { } destinationMap)
+            {
+                return false;
+            }
+
+            // The deck being crossed is the destination's floor when rising and the hunter's own floor when dropping.
+            // An opening there is both what makes the other level visible and what the rise has to pass through.
+            var crossedDeck = zOffset > 0 ? destinationMap.Owner : originMap;
+            if (!_zLevels.IsZShotPathOpen(crossedDeck, origin.Position, origin.Position))
+                return false;
+
+            if (!IsLeapLandingFree(landing, destinationGrid, gridLocalPosition))
+                return false;
+
+            // The hunter emerges on the far deck and flies to the landing tile there, so that part of the flight has to
+            // be clear too - this is what stops a closed door or window on the upper deck being leapt over.
+            var farLanding = new MapCoordinates(landing.Position, _transform.GetMapId(destinationMap.Owner));
+            return _interaction.InRangeUnobstructed(
+                new MapCoordinates(origin.Position, farLanding.MapId),
+                farLanding,
+                ent.Comp.LeapMaxRange + 0.5f);
+        }
+
+        return _interaction.InRangeUnobstructed(ent.Owner, landing, ent.Comp.LeapMaxRange + 0.5f);
+    }
+
+    private bool IsLeapLandingFree(MapCoordinates landing, NetEntity? destinationGrid, Vector2? gridLocalPosition)
+    {
+        EntityUid gridUid;
+        MapGridComponent grid;
+
+        if (destinationGrid is { } netGrid && TryGetEntity(netGrid, out var gridEnt) &&
+            TryComp(gridEnt.Value, out grid!))
+        {
+            gridUid = gridEnt.Value;
+        }
+        else if (!_map.TryFindGridAt(landing, out gridUid, out grid!))
+        {
+            return false;
+        }
+
+        // Re-resolve against the deck when the cursor was on one, so a moving ship is checked where it is now.
+        var position = landing.Position;
+        if (gridLocalPosition is { } local)
+            position = _transform.ToMapCoordinates(new EntityCoordinates(gridUid, local)).Position;
+
+        if (!_map.TryGetTileRef(gridUid, grid, position, out var tileRef) || tileRef.Tile.IsEmpty)
+            return false;
+
+        foreach (var anchored in _map.GetAnchoredEntities(gridUid, grid, new MapCoordinates(position, landing.MapId)))
+        {
+            if (!TryComp<PhysicsComponent>(anchored, out var body) || !body.CanCollide)
+                continue;
+
+            if (!TryComp<FixturesComponent>(anchored, out var fixtures))
+                continue;
+
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                if (fixture.Hard && (fixture.CollisionLayer & (int) CollisionGroup.Impassable) != 0)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private static Vector2 ClampLeapDirection(Entity<YautjaComponent> ent, Vector2 direction)

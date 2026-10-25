@@ -115,8 +115,8 @@
         Bloodloss: -1
     damageBleedModifiers: CMBloodlossHuman
   - type: MovementSpeedModifier
-    baseWalkSpeed: 3.7
-    baseSprintSpeed: 7.1
+    baseWalkSpeed: 4.2
+    baseSprintSpeed: 8.0
   # cmss13 /datum/pain/yautja: nothing until horrible, and horrible only gives the distressing slowdown
   - type: PainShock
     minimumFeltTier: Shock
@@ -358,8 +358,8 @@
         Bloodloss: -1
     damageBleedModifiers: CMBloodlossHuman
   - type: MovementSpeedModifier
-    baseWalkSpeed: 4.4
-    baseSprintSpeed: 8.4
+    baseWalkSpeed: 4.2
+    baseSprintSpeed: 8.0
   - type: PainShock
     minimumFeltTier: Shock
     maximumFeltTier: Severe

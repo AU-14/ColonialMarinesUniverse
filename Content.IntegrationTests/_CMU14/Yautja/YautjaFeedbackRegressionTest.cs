@@ -59,6 +59,54 @@ public sealed class YautjaFeedbackRegressionTest
     }
 
     [Test]
+    public async Task SpawnKeepsAnExplicitGreenSkinAndStillRollsUnchosenProfiles()
+    {
+        var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
+        EntityUid explicitGreen = default;
+        EntityUid unchosen = default;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var apply = entMan.System<YautjaProfileApplySystem>();
+
+                explicitGreen = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+                apply.ApplyProfile(explicitGreen,
+                    YautjaCharacterProfile.Default.WithSkinColor(YautjaSkinColor.Green), equipProfileGear: false);
+
+                unchosen = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+                apply.ApplyProfile(unchosen, YautjaCharacterProfile.Default, equipProfileGear: false);
+            });
+
+            await server.WaitRunTicks(2);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var green = entMan.GetComponent<YautjaAppliedProfileComponent>(explicitGreen).Profile;
+                var rolled = entMan.GetComponent<YautjaAppliedProfileComponent>(unchosen).Profile;
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(green.SkinColor, Is.EqualTo(YautjaSkinColor.Green),
+                        "an explicit Green pick is kept instead of being re-rolled");
+                    Assert.That(green.SkinColorSelected, Is.True);
+                    Assert.That(YautjaCharacterProfile.SkinColorOrder[..6], Does.Contain(rolled.SkinColor),
+                        "an unchosen default profile still receives a CM-SS13 tone");
+                    Assert.That(rolled.SkinColorSelected, Is.True,
+                        "the roll marks the profile as having a tone applied");
+                });
+            });
+        }
+        finally
+        {
+            server.Dispose();
+        }
+    }
+
+    [Test]
     public async Task PlayerSpawnBracerPreservesBasePrototypeAndTracksEveryProfileMaterialAndLegacyVisual()
     {
         var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);

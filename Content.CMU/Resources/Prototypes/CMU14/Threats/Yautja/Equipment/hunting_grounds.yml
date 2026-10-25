@@ -82,7 +82,5 @@
   parent: MarkerBase
   id: CMUYautjaYoungbloodSpawn
   name: Yautja youngblood spawn
-  description: Old landing marker for youngblood blooding calls, kept so the maps still load.
+  description: Invisible spawn marker for a youngblood called out for its blooding.
   categories: [ HideSpawnMenu ]
-  # blooding arrives on the hunter ship's marker. with a spawn point here too, the console picked whichever it
-  # found first, so youngbloods landed in the preserve half the time

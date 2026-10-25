@@ -157,8 +157,8 @@
   - type: YautjaRelayDestination
   - type: YautjaPredatorSpawnPoint
     kind: HuntingGroundsYoungblood
-  - type: YautjaHuntSpawnPoint
-    kind: Youngblood
+  # CMU14: no YautjaHuntSpawnPoint here any more - the youngblood blooding markers live on the hunter ship's
+  # lower-deck bedrolls, and this untagged point would compete with them for the spawn.
 
 - type: entity
   parent: MarkerBase

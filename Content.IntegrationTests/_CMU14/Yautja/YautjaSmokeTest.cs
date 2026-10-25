@@ -337,8 +337,8 @@ public sealed class YautjaSmokeTest
                 Assert.That(inventory.TryGetSlotEntity(hunter, "pocket2", out _), Is.False);
 
                 var movement = entMan.GetComponent<MovementSpeedModifierComponent>(hunter);
-                Assert.That(movement.BaseWalkSpeed, Is.EqualTo(3.7f));
-                Assert.That(movement.BaseSprintSpeed, Is.EqualTo(7.1f));
+                Assert.That(movement.BaseWalkSpeed, Is.EqualTo(4.2f));
+                Assert.That(movement.BaseSprintSpeed, Is.EqualTo(8.0f));
                 Assert.That(server.ProtoMan.Index(YautjaRadioChannel).KeyCode, Is.EqualTo('g'));
 
                 foreach (var action in VoiceActionIds)

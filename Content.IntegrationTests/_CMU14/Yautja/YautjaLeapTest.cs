@@ -218,7 +218,7 @@ public sealed class YautjaLeapTest
     }
 
     [Test]
-    public async Task LeapActionPrototypeHasCmss13CooldownRangeAndEvent()
+    public async Task LeapActionPrototypeHasConfiguredCooldownRangeAndEvent()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -234,7 +234,7 @@ public sealed class YautjaLeapTest
 
             Assert.Multiple(() =>
             {
-                Assert.That(action!.UseDelay, Is.EqualTo(TimeSpan.FromSeconds(15)), "15 second cooldown.");
+                Assert.That(action!.UseDelay, Is.EqualTo(TimeSpan.FromSeconds(5)), "5 second cooldown.");
                 Assert.That(target!.Range, Is.EqualTo(7f), "7 tile target range.");
                 Assert.That(target.CheckCanAccess, Is.False);
                 Assert.That(world!.Event, Is.TypeOf<YautjaLeapActionEvent>(), "World-targeted leap event.");
@@ -242,6 +242,60 @@ public sealed class YautjaLeapTest
 
             // The action id the component grants on the role lifecycle.
             Assert.That(new YautjaComponent().LeapActionId.Id, Is.EqualTo("CMUActionYautjaLeap"));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LeapPreparationMatchesTheConfiguredPerDirectionWindUps()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid hunter = default;
+        EntityUid action = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var yautjaComponent = new YautjaComponent();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(yautjaComponent.LeapWindup, Is.EqualTo(TimeSpan.FromSeconds(0.6)),
+                    "a level leap prepares for 0.6 seconds");
+                Assert.That(yautjaComponent.LeapUpWindup, Is.EqualTo(TimeSpan.FromSeconds(1)),
+                    "an upward leap prepares for one second");
+                Assert.That(yautjaComponent.LeapDownWindup, Is.EqualTo(TimeSpan.FromSeconds(0.6)),
+                    "a downward leap prepares for 0.6 seconds too");
+            });
+
+            hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            action = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
+            var actionComp = entMan.EnsureComponent<ActionComponent>(action);
+            var ev = new YautjaLeapActionEvent
+            {
+                Performer = hunter,
+                Action = (action, actionComp),
+                Target = map.GridCoords.Offset(new Vector2(4, 0)),
+            };
+
+            entMan.EventBus.RaiseLocalEvent(hunter, ev);
+
+            var doAfter = entMan.GetComponent<DoAfterComponent>(hunter);
+            var leap = doAfter.DoAfters.Values.Single(active => active.Args.Event is YautjaLeapDoAfterEvent);
+            Assert.That(leap.Args.Delay, Is.EqualTo(TimeSpan.FromSeconds(0.6)),
+                "a level leap's running wind-up uses the 0.6 second preparation");
+        });
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            if (hunter != default && !entMan.Deleted(hunter))
+                entMan.DeleteEntity(hunter);
+            if (action != default && !entMan.Deleted(action))
+                entMan.DeleteEntity(action);
         });
 
         await pair.CleanReturnAsync();

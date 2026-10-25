@@ -43,10 +43,10 @@ public sealed partial class YautjaComponent : Component
     public YautjaRank ClanRank = YautjaRank.Blooded;
 
     [DataField]
-    public float BaseWalkSpeed = 3.7f;
+    public float BaseWalkSpeed = 4.2f;
 
     [DataField]
-    public float BaseSprintSpeed = 7.1f;
+    public float BaseSprintSpeed = 8.0f;
 
     [DataField]
     public float UnarmedAttackRate = 1.15f;
@@ -190,10 +190,10 @@ public sealed partial class YautjaComponent : Component
     /// CMU14: CM-SS13 winds up twice as long when leaping upward (yaut_actions.dm:461: 2s up, 1s otherwise).
     /// </summary>
     [DataField]
-    public TimeSpan LeapUpWindup = TimeSpan.FromSeconds(2);
+    public TimeSpan LeapUpWindup = TimeSpan.FromSeconds(1);
 
     [DataField]
-    public TimeSpan LeapDownWindup = TimeSpan.FromSeconds(1);
+    public TimeSpan LeapDownWindup = TimeSpan.FromSeconds(0.6);
 
     [DataField]
     public EntProtoId LeapWarningPrototype = "CMUYautjaLeapWarning";

@@ -349,11 +349,6 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     /// CMU14: rolls a CM-SS13 palette tone onto a youngblood that already has a profile (console spawns build one from the
     /// species default). Same palette call the hunter randomiser uses.
     /// </summary>
-    public void EnsureYoungbloodTone(EntityUid uid)
-    {
-        ApplyYoungbloodProfile(uid);
-    }
-
     private void ApplyYoungbloodProfile(EntityUid uid)
     {
         // No YautjaComponent requirement: CMUMobYautjaYoungblood's prototype does not carry one (it parents
@@ -391,10 +386,14 @@ public sealed partial class YautjaStatsSystem : EntitySystem
             return;
 
         // CMU14: same rule for hunters and youngbloods - CM-SS13 picks the tone from PRED_SKIN_COLOR (load_race),
-        // so the HSV band that produced colours the reference does not offer is gone.
-        _humanoidAppearance.TrySetSkinColor(
-            ent,
-            YautjaCharacterProfile.GetSkinColorColor(_random.Pick(YautjaCharacterProfile.SkinColorOrder[..6])));
+        // so the HSV band that produced colours the reference does not offer is gone. The roll is written into the
+        // stored profile as well when there is one, so the rendered tone and the profile cannot disagree and a rolled
+        // Green is recorded as a chosen colour instead of being re-rolled as the "unchosen" sentinel later.
+        var tone = _random.Pick(YautjaCharacterProfile.SkinColorOrder[..6]);
+        if (TryComp<YautjaAppliedProfileComponent>(ent.Owner, out var applied))
+            applied.Profile = applied.Profile.WithSkinColor(tone);
+
+        _humanoidAppearance.TrySetSkinColor(ent.Owner, YautjaCharacterProfile.GetSkinColorColor(tone));
     }
 
     private void GrantAllSkills(Entity<YautjaComponent> ent)

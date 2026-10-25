@@ -130,9 +130,10 @@ public sealed partial class TriggerSystem
                 if (colliding.LinearVelocity.Length() < trigger.TriggerSpeed)
                     continue;
 
-                // CMU14: a Yautja does not set off traps. Step-triggered traps (resin traps, M20 claymores, tripwires)
-                // are gated in StepTriggerSystem.CanTrigger; proximity-triggered mines land here instead.
-                if (HasComp<YautjaComponent>(collidingUid))
+                // CMU14: a Yautja does not set off traps. Step-triggered traps are gated in
+                // StepTriggerSystem.CanTrigger; proximity-triggered mines land here instead. Both use the same
+                // trap-component test so only actual traps are exempt.
+                if (HasComp<YautjaComponent>(collidingUid) && YautjaTrapIgnore.IsTrap(EntityManager, uid))
                     continue;
 
                 // Trigger!

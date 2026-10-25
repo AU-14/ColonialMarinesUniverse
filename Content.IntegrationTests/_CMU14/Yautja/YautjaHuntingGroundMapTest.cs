@@ -277,10 +277,10 @@ public sealed class YautjaHuntingGroundMapTest
                 Assert.That(CountMapPrototypeEntities(resources, DesertMoonPath, "CMUYautjaHuntingGroundPreserveEdge"), Is.EqualTo(3));
                 Assert.That(CountMapPrototypeEntities(resources, DesertMoonCavesPath, "CMUYautjaHuntingGroundPreserveEdge"), Is.EqualTo(14));
 
-                Assert.That(CountMapPrototypes(resources, JungleMoonPath).GetValueOrDefault("CMUYautjaYoungbloodSpawn"), Is.GreaterThanOrEqualTo(1));
+                Assert.That(CountMapPrototypes(resources, JungleMoonPath).GetValueOrDefault("CMUYautjaYoungbloodSpawn"), Is.Zero);
                 Assert.That(CountMapPrototypes(resources, DesertMoonCavesPath).GetValueOrDefault("CMUYautjaHuntDestinationDesertMoon"), Is.GreaterThanOrEqualTo(1));
                 Assert.That(CountMapPrototypes(resources, DesertMoonCavesPath).GetValueOrDefault("CMUYautjaYoungbloodDestinationDesertMoon"), Is.GreaterThanOrEqualTo(1));
-                Assert.That(CountMapPrototypes(resources, DesertMoonCavesPath).GetValueOrDefault("CMUYautjaYoungbloodSpawn"), Is.GreaterThanOrEqualTo(1));
+                Assert.That(CountMapPrototypes(resources, DesertMoonCavesPath).GetValueOrDefault("CMUYautjaYoungbloodSpawn"), Is.Zero);
             });
         });
 
@@ -327,7 +327,6 @@ public sealed class YautjaHuntingGroundMapTest
                     prototype.ID is not (
                         "CMUYautjaHuntDestinationDesertMoon" or
                         "CMUYautjaYoungbloodDestinationDesertMoon" or
-                        "CMUYautjaYoungbloodSpawn" or
                         "CMUYautjaHuntingGroundPreserveShutter" or
                         "CMUYautjaHuntingGroundPreserveEdge" or
                         "CMUYautjaHuntingGroundEscapeConsole"))
@@ -354,17 +353,11 @@ public sealed class YautjaHuntingGroundMapTest
                 "CMUYautjaYoungbloodDestinationDesertMoon",
                 [new Vector2(76.5f, 39.5f)],
                 Angle.Zero);
-            AssertLandmarks(
-                landmarks,
-                "CMUYautjaYoungbloodSpawn",
-                [new Vector2(76.5f, 39.5f)],
-                Angle.Zero);
 
             foreach (var prototypeId in new[]
                      {
                          "CMUYautjaHuntDestinationDesertMoon",
                          "CMUYautjaYoungbloodDestinationDesertMoon",
-                         "CMUYautjaYoungbloodSpawn",
                      })
             {
                 foreach (var landmark in landmarks[prototypeId])
@@ -454,7 +447,6 @@ public sealed class YautjaHuntingGroundMapTest
                         "CMUYautjaHuntDestinationDesertMoon" or
                         "CMUYautjaYoungbloodDestinationDesertMoon" or
                         "CMUYautjaHuntPreySpawn" or
-                        "CMUYautjaYoungbloodSpawn" or
                         "CMUYautjaHuntingGroundPreserveShutter" or
                         "CMUYautjaHuntingGroundPreserveEdge" or
                         "CMUYautjaHuntingGroundEscapeConsole"))
@@ -479,7 +471,6 @@ public sealed class YautjaHuntingGroundMapTest
                              "CMUYautjaHuntDestinationDesertMoon",
                              "CMUYautjaYoungbloodDestinationDesertMoon",
                              "CMUYautjaHuntPreySpawn",
-                             "CMUYautjaYoungbloodSpawn",
                          })
             {
                 Assert.That(landmarks.GetValueOrDefault(prototypeId), Is.Not.Empty, prototypeId);
@@ -487,8 +478,7 @@ public sealed class YautjaHuntingGroundMapTest
 
             foreach (var landmark in landmarks["CMUYautjaHuntDestinationDesertMoon"]
                              .Concat(landmarks["CMUYautjaYoungbloodDestinationDesertMoon"])
-                             .Concat(landmarks["CMUYautjaHuntPreySpawn"])
-                             .Concat(landmarks["CMUYautjaYoungbloodSpawn"]))
+                             .Concat(landmarks["CMUYautjaHuntPreySpawn"]))
             {
                 var xform = entMan.GetComponent<TransformComponent>(landmark.Uid);
                     if (!xform.GridUid.HasValue ||

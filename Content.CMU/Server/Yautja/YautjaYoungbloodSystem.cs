@@ -100,7 +100,6 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
         "CMU14JobPathogenVenator",
     };
 
-    [Dependency] private YautjaStatsSystem _stats = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private IBanManager _banManager = default!;
     [Dependency] private IChatManager _chat = default!;
@@ -217,10 +216,6 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
         var yautja = EnsureComp<YautjaComponent>(ent.Owner);
         yautja.ClanRank = YautjaRank.YoungBlood;
         Dirty(ent.Owner, yautja);
-
-        // Roll the shared Yautja palette now that the components are in place, so the youngblood does not keep the tan
-        // species default it spawned with.
-        _stats.EnsureYoungbloodTone(ent.Owner);
 
         ent.Comp.SetupComplete = true;
 

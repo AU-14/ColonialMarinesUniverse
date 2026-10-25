@@ -47,8 +47,6 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedSynthSystem _synth = default!;
-    [Dependency] private SharedCMUWoundsSystem _cmuWounds = default!; // CMU14
-    [Dependency] private CMUMedicalBodyIndexSystem _cmuMedicalIndex = default!; // CMU14
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private RMCRepairableSystem _repairable = default!;
     [Dependency] private WoundsSystem _wounds = default!;
@@ -279,21 +277,6 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
     private void OnStepClampBleedComplete(Entity<CMSurgeryClampBleedEffectComponent> ent, ref CMSurgeryStepEvent args)
     {
         _wounds.RemoveWounds(args.Body, WoundType.Surgery);
-
-        // CMU14: clamping is how a procedure is closed out, so the patient leaves the table wound-free. The CMU
-        // wound ledger was only ever cleared by dressings and chems, which left the operation's own wounds (and the
-        // patient's pre-existing ones) behind after a completed surgery. This only runs on a successful step.
-        if (!_net.IsClient)
-        {
-            foreach (var part in _cmuMedicalIndex.GetBodyParts(args.Body))
-            {
-                // Both halves: the ledger entries (cuts, burns, organ damage) and the bleed state, which lives on
-                // parts that do not necessarily carry a wound ledger at all.
-                _cmuWounds.ClearAllWounds((part.Owner, null));
-                _cmuWounds.StopSurfaceBleedingOnPart(part.Owner);
-                _cmuWounds.ClearInternalBleed(part.Owner);
-            }
-        }
     }
 
     private void OnStepScreamComplete(Entity<CMSurgeryStepEmoteEffectComponent> ent, ref CMSurgeryStepEvent args)

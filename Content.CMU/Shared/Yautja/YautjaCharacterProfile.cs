@@ -309,6 +309,9 @@ public sealed partial class YautjaCharacterProfile
     public HumanoidCharacterAppearance Appearance { get; private set; } = BuildDefaultAppearance();
 
     [DataField]
+    public bool SkinColorSelected { get; private set; }
+
+    [DataField]
     public YautjaDreadColor DreadColor { get; private set; } = YautjaDreadColor.MatchSkin;
 
     [DataField]
@@ -468,6 +471,7 @@ public sealed partial class YautjaCharacterProfile
         Gender = isFemale ? Gender.Female : Gender.Male;
         DreadColor = SanitizeDreadColor(other.DreadColor);
         Appearance = SanitizeAppearance(other.Appearance, DreadColor);
+        SkinColorSelected = other.SkinColorSelected;
         ArmorMaterial = SanitizeEnum(other.ArmorMaterial, YautjaGearMaterial.Ebony);
         ArmorStyle = other.ArmorStyle is >= 1 and <= 8 ? other.ArmorStyle : DefaultArmorStyle;
         MaskMaterial = SanitizeEnum(other.MaskMaterial, YautjaGearMaterial.Ebony);
@@ -534,7 +538,9 @@ public sealed partial class YautjaCharacterProfile
     public YautjaCharacterProfile WithSkinColor(YautjaSkinColor skinColor)
     {
         var color = GetSkinColorColor(skinColor);
-        return WithAppearance(Appearance.WithSkinColor(color));
+        var profile = WithAppearance(Appearance.WithSkinColor(color));
+        profile.SkinColorSelected = true;
+        return profile;
     }
 
     public YautjaCharacterProfile WithEyeColor(YautjaEyeColor eyeColor)

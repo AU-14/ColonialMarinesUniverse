@@ -813,7 +813,7 @@
   description: Leap to a target location.
   components:
   - type: Action
-    useDelay: 15
+    useDelay: 5
   - type: TargetAction
     range: 7
     checkCanAccess: false

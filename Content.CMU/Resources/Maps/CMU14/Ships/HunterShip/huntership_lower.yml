@@ -5,7 +5,7 @@ meta:
   forkId: cmu14
   forkVersion: huntership-port-visual-1to1
   time: "2026-06-03T17:16:10.789Z"
-  entityCount: 5374
+  entityCount: 5407
 maps:
 - 100001
 grids:
@@ -28441,3 +28441,260 @@ entities:
     - type: Transform
       pos: 48.5,80.5
       parent: 100002
+- proto: CMUYautjaYoungbloodSpawn
+  entities:
+  - uid: 105375
+    components:
+    - type: Transform
+      pos: 65.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105376
+    components:
+    - type: Transform
+      pos: 65.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+  - uid: 105377
+    components:
+    - type: Transform
+      pos: 65.5,45.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105378
+    components:
+    - type: Transform
+      pos: 65.5,45.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+  - uid: 105379
+    components:
+    - type: Transform
+      pos: 66.5,46.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105380
+    components:
+    - type: Transform
+      pos: 66.5,46.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+  - uid: 105381
+    components:
+    - type: Transform
+      pos: 67.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105382
+    components:
+    - type: Transform
+      pos: 67.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+  - uid: 105383
+    components:
+    - type: Transform
+      pos: 67.5,45.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105384
+    components:
+    - type: Transform
+      pos: 67.5,45.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+  - uid: 105385
+    components:
+    - type: Transform
+      pos: 67.5,47.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105386
+    components:
+    - type: Transform
+      pos: 67.5,47.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+  - uid: 105387
+    components:
+    - type: Transform
+      pos: 69.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105388
+    components:
+    - type: Transform
+      pos: 69.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+  - uid: 105389
+    components:
+    - type: Transform
+      pos: 69.5,46.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105390
+    components:
+    - type: Transform
+      pos: 69.5,46.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+  - uid: 105391
+    components:
+    - type: Transform
+      pos: 69.5,47.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105392
+    components:
+    - type: Transform
+      pos: 69.5,47.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+  - uid: 105393
+    components:
+    - type: Transform
+      pos: 71.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105394
+    components:
+    - type: Transform
+      pos: 71.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+  - uid: 105395
+    components:
+    - type: Transform
+      pos: 71.5,45.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: desert_moon
+  - uid: 105396
+    components:
+    - type: Transform
+      pos: 71.5,45.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
+- proto: CMUYautjaYoungbloodSpawn
+  entities:
+  - uid: 105397
+    components:
+    - type: Transform
+      pos: 65.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+  - uid: 105398
+    components:
+    - type: Transform
+      pos: 65.5,45.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+  - uid: 105399
+    components:
+    - type: Transform
+      pos: 66.5,46.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+  - uid: 105400
+    components:
+    - type: Transform
+      pos: 67.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+  - uid: 105401
+    components:
+    - type: Transform
+      pos: 67.5,45.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+  - uid: 105402
+    components:
+    - type: Transform
+      pos: 67.5,47.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+  - uid: 105403
+    components:
+    - type: Transform
+      pos: 69.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+  - uid: 105404
+    components:
+    - type: Transform
+      pos: 69.5,46.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+  - uid: 105405
+    components:
+    - type: Transform
+      pos: 69.5,47.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+  - uid: 105406
+    components:
+    - type: Transform
+      pos: 71.5,44.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+  - uid: 105407
+    components:
+    - type: Transform
+      pos: 71.5,45.5
+      parent: 100002
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood

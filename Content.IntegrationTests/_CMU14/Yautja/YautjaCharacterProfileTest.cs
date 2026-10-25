@@ -93,6 +93,30 @@ public sealed class YautjaCharacterProfileTest
     }
 
     [Test]
+    public void ExplicitSkinChoiceIsDistinguishableFromTheDefaultProfile()
+    {
+        var untouched = YautjaCharacterProfile.Default;
+        var explicitGreen = YautjaCharacterProfile.Default.WithSkinColor(YautjaSkinColor.Green);
+        var explicitRed = YautjaCharacterProfile.Default.WithSkinColor(YautjaSkinColor.Red);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(untouched.SkinColorSelected, Is.False,
+                "the default profile has not had a colour chosen");
+            Assert.That(untouched.SkinColor, Is.EqualTo(YautjaSkinColor.Green),
+                "the default profile still uses the Green sentinel");
+            Assert.That(explicitGreen.SkinColorSelected, Is.True,
+                "an explicit Green pick is a choice");
+            Assert.That(explicitGreen.SkinColor, Is.EqualTo(YautjaSkinColor.Green));
+            Assert.That(explicitRed.SkinColorSelected, Is.True);
+            Assert.That(explicitRed.SkinColor, Is.EqualTo(YautjaSkinColor.Red));
+            Assert.That(explicitGreen.Clone().SkinColorSelected, Is.True,
+                "the choice survives a clone");
+            Assert.That(explicitRed.Clone().SkinColor, Is.EqualTo(YautjaSkinColor.Red));
+        });
+    }
+
+    [Test]
     public void DefaultYautjaProfileMatchesCmss13PickerDefaults()
     {
         var yautja = YautjaCharacterProfile.Default;

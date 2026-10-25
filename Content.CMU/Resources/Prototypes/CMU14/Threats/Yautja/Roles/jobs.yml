@@ -588,8 +588,8 @@
   - type: Skills
     preset: CMUSkillPresetYautjaWarrior
   - type: MovementSpeedModifier
-    baseWalkSpeed: 3.7
-    baseSprintSpeed: 7.1
+    baseWalkSpeed: 4.2
+    baseSprintSpeed: 8.0
   - type: Damageable
     damageModifierSet: CMUYautja
   # cmss13 armour deflection zeroes anything below armour*2, and the 0.28 species mod lands first,

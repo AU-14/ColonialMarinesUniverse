@@ -6,6 +6,11 @@ namespace Content.Shared.StepTrigger.Systems;
 
 public sealed partial class StepTriggerSystem
 {
+    public bool CanTriggerStep(EntityUid trigger, EntityUid tripper)
+    {
+        return TryComp<StepTriggerComponent>(trigger, out var stepTrigger) && CanTrigger(trigger, tripper, stepTrigger);
+    }
+
     [SubscribeLocalEvent]
     private void OnStepTriggerGetState(Entity<StepTriggerComponent> ent, ref ComponentGetState args)
     {
