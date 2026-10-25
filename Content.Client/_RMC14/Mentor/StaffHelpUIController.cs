@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using Content.Client.Administration.Managers;
@@ -176,7 +176,10 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
             if (!IsMentor)
             {
                 if (OpenWindow(ref _mentorHelpWindow,
-                        CreateMentorHelpWindow,
+                        // CMU14: CreateMentorHelpWindow takes an optional title now, so the bare
+                        // method group no longer converts to Func<MentorHelpWindow>.
+                        // CreateMentorHelpWindow,
+                        () => CreateMentorHelpWindow(),
                         () => _mentorHelpWindow = null,
                         window => window.Chat,
                         _ => _player.LocalUser))
@@ -311,8 +314,11 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         };
     }
 
-    // CMU14: public entry for the bug report window's Talk-to-staff button.
-    public void OpenMentorOrHelpWindow()
+    // CMU14: public entry for the bug report window's Talk-to-staff button. The title retitles
+    // the player chat window for the door it was opened from (mockup pane 3: "Staff Help" from
+    // the bug door); null keeps the mentor card's "Mentor Help". Staff never see it - they get
+    // the console regardless of door.
+    public void OpenMentorOrHelpWindow(string? title = null)
     {
         SetAHelpButtonPressed(false);
         _unread = false;
@@ -340,7 +346,7 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         else
         {
             if (OpenWindow(ref _mentorHelpWindow,
-                    CreateMentorHelpWindow,
+                    () => CreateMentorHelpWindow(title),
                     () => _mentorHelpWindow = null,
                     window => window.Chat,
                     _ => _player.LocalUser))
@@ -350,9 +356,13 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         }
     }
 
-    private MentorHelpWindow CreateMentorHelpWindow()
+    private MentorHelpWindow CreateMentorHelpWindow(string? title = null)
     {
         var window = new MentorHelpWindow();
+        // CMU14: retitle for the bug report door - a player asking about a stuck flamer should
+        // not land in a window titled "Mentor Help" (design §4.1, §12.6).
+        if (title != null)
+            window.Title = title;
         ApplyCrtChrome(window);
         window.ReMentorButton.OnPressed += _ => _net.ClientSendMessage(new ReMentorMsg());
         window.ReMentorButton.Visible = _canReMentor;

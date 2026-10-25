@@ -2,26 +2,42 @@
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:bugHelp="clr-namespace:Content.Client.CMU14.BugHelp"
+    xmlns:ui="clr-namespace:Content.Client.CMU14.Interface"
     Title="{Loc 'cmu-bughelp-window-title'}"
+    SetSize="600 560"
     MinWidth="480" MinHeight="540">
     <!-- One-shot report form. Player-typed context is minimal on purpose: the server snapshots
-         everything it can observe, so the only fields here are what the player alone knows. -->
-    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+         everything it can observe, so the only fields here are what the player alone knows.
+         TextEdits draw no box in either stylesheet, so each sits on a CrtInsetPanel like every
+         other multiline field in the codebase; the labels cap at DescriptionWidth and the
+         scroll pane stops feeding them an unbounded measure. -->
+    <ScrollContainer Name="FormScroll" HorizontalExpand="True" VerticalExpand="True"
+                     HScrollEnabled="False">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="12" SeparationOverride="8">
-            <RichTextLabel Text="{Loc 'cmu-bughelp-dualmode'}" />
+            <RichTextLabel Text="{Loc 'cmu-bughelp-dualmode'}"
+                           MaxWidth="{x:Static ui:CmuPanelMetrics.DescriptionWidth}" />
             <Button Name="TalkToStaffButton" Text="{Loc 'cmu-bughelp-talk-to-staff'}"
                     HorizontalExpand="True" Access="Public" />
             <Label Text="{Loc 'cmu-bughelp-what-happened'}" />
-            <TextEdit Name="WhatHappened" MinHeight="110" HorizontalExpand="True" Access="Public" />
+            <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
+                <TextEdit Name="WhatHappened" MinHeight="110" HorizontalExpand="True" Access="Public" />
+            </PanelContainer>
             <Label Text="{Loc 'cmu-bughelp-expected'}" />
-            <TextEdit Name="Expected" MinHeight="55" HorizontalExpand="True" Access="Public" />
+            <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
+                <TextEdit Name="Expected" MinHeight="55" HorizontalExpand="True" Access="Public" />
+            </PanelContainer>
             <Label Text="{Loc 'cmu-bughelp-steps'}" />
-            <TextEdit Name="Steps" MinHeight="55" HorizontalExpand="True" Access="Public" />
+            <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
+                <TextEdit Name="Steps" MinHeight="55" HorizontalExpand="True" Access="Public" />
+            </PanelContainer>
             <Label Text="{Loc 'cmu-bughelp-item'}" />
             <LineEdit Name="ItemQuery" PlaceHolder="{Loc 'cmu-bughelp-item-placeholder'}" HorizontalExpand="True" Access="Public" />
             <Label Text="{Loc 'cmu-bughelp-examine'}" />
-            <TextEdit Name="ExamineText" MinHeight="55" HorizontalExpand="True" Access="Public" />
-            <RichTextLabel Text="{Loc 'cmu-bughelp-autocontext'}" />
+            <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
+                <TextEdit Name="ExamineText" MinHeight="55" HorizontalExpand="True" Access="Public" />
+            </PanelContainer>
+            <RichTextLabel Text="{Loc 'cmu-bughelp-autocontext'}"
+                           MaxWidth="{x:Static ui:CmuPanelMetrics.DescriptionWidth}" />
             <Button Name="SubmitButton" Text="{Loc 'cmu-bughelp-submit'}" Disabled="True"
                     HorizontalExpand="True" Access="Public" />
         </BoxContainer>
