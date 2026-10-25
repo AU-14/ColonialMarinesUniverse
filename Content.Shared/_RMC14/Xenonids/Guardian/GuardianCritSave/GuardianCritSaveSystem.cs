@@ -60,7 +60,8 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
             }  
   
             _nearby.Clear();  
-            _lookup.GetEntitiesInRange(uid, save.Range, _nearby, LookupFlags.Uncontained);  
+            var coords = Transform(uid).Coordinates;  
+            _lookup.GetEntitiesInRange(coords, save.Range, _nearby, LookupFlags.Uncontained); 
   
             var stillActive = new HashSet<EntityUid>();  
             foreach (var nearby in _nearby)  
