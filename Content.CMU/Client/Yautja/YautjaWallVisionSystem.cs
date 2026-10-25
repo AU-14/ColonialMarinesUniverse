@@ -4,6 +4,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Yautja;
 
@@ -12,6 +13,7 @@ public sealed partial class YautjaWallVisionSystem : EntitySystem
     [Dependency] private IOverlayManager _overlay = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private ContentEyeSystem _contentEye = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     /// <summary>
     /// CMU14: whether this system is currently holding the local player's field of view switched off for the clan
@@ -34,6 +36,9 @@ public sealed partial class YautjaWallVisionSystem : EntitySystem
         // While the mask's bio overlay (thermals) is up, the player sees through walls, so a field of view cone drawn
         // over that would only hide the thing the overlay exists to show. Only the transition is applied, and the
         // player's own FOV preference is handed back as soon as the overlay goes away.
+        if (!_timing.InPrediction || !_timing.IsFirstTimePredicted)
+            return;
+
         var thermal = HasActiveThermalOverlay(viewer);
         if (thermal == _fovSuppressed)
             return;

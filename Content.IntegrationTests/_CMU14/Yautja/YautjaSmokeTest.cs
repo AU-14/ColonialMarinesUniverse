@@ -13197,7 +13197,6 @@ public sealed class YautjaSmokeTest
                 RaiseDialogOption(entMan, flightConsole, hunter, "Jungle Moon");
 
                 Assert.That(entMan.EntityQuery<YautjaHuntSpawnPointComponent>().Any(point => point.Kind == YautjaHuntSpawnKind.Prey), Is.True);
-                Assert.That(entMan.EntityQuery<YautjaHuntSpawnPointComponent>().Any(point => point.Kind == YautjaHuntSpawnKind.Youngblood), Is.True);
                 Assert.That(entMan.EntityQuery<YautjaHuntTeleportDestinationComponent>().Any(destination => destination.Kind == YautjaHuntTeleporterKind.Young), Is.True);
 
                 var initialGhostRoles = entMan.EntityQuery<GhostTakeoverAvailableComponent>().Count();

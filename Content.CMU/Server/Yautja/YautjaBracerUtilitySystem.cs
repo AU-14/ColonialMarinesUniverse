@@ -1516,12 +1516,12 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
             return message;
 
         return message
-            .Replace("a", "@")
-            .Replace("e", "3")
-            .Replace("i", "1")
-            .Replace("o", "0")
-            .Replace("s", "5")
-            .Replace("l", "1");
+            .Replace("a", "@").Replace("A", "@")
+            .Replace("e", "3").Replace("E", "3")
+            .Replace("i", "1").Replace("I", "1")
+            .Replace("o", "0").Replace("O", "0")
+            .Replace("s", "5").Replace("S", "5")
+            .Replace("l", "1").Replace("L", "1");
     }
 
     private static Color GetTranslatorColor(YautjaTranslatorType translatorType)

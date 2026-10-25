@@ -335,7 +335,7 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         if (blooding)
         {
             if (!TryGetDestination(destinationKind, ent.Comp.DestinationId, out var deployDestination) ||
-                !TryGetSpawnCoordinates(spawnKind, destinationKind, ent.Comp.DestinationId, out coordinates, out _, false))
+                !TryGetSpawnCoordinates(spawnKind, destinationKind, ent.Comp.DestinationId, out coordinates, out _, true))
             {
                 var unavailable = blooding
                     ? "cmu-yautja-hunt-console-blooding-unavailable"

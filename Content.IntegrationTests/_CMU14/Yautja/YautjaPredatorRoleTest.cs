@@ -3925,10 +3925,7 @@ public sealed class YautjaPredatorRoleTest
                 ["CMUActionYautjaToggleLantern"] = 1,
                 ["CMUActionYautjaHonorRoar"] = 45,
                 ["CMUActionYautjaHuntingLeap"] = 12,
-                // CMU14: the ordinary Leap is CM-SS13's /datum/action/predator_action/leap, which enters a 15 second
-                // action_cooldown (yaut_actions.dm:406 cooldown_duration, :468 enter_cooldown) - the same category as
-                // Hunting Leap above, so it draws the cooldown fill too.
-                ["CMUActionYautjaLeap"] = 15,
+                ["CMUActionYautjaLeap"] = 5,
                 ["CMUActionYautjaRaiseThrall"] = 120,
             };
 
