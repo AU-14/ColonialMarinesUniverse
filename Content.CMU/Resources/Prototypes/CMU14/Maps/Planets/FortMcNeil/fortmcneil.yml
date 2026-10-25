@@ -7,7 +7,7 @@
     mapId: cmufortmcneil
     lorePrimer: CMUPrimerPlanetFortMcNeil
     allegiance: UA
-    camouflage: Desert
+    camouflage: Urban
     announcement: "An automated distress signal has been received from the colony site of Fort McNeil, on the border world of White Antre. A response team has been dispatched to investigate."
     platoonsGovfor:
     - USCM

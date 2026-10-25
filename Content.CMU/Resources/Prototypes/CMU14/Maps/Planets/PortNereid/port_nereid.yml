@@ -7,7 +7,7 @@
     mapId: portneroid
     lorePrimer: AU14PrimerPlanetLV327
     allegiance: UA
-    camouflage: Desert
+    camouflage: Jungle
     announcement: "Port Nereid, the waterport and transit hub on LV-109 'Elgin's Folly', has gone silent. A response force has been dispatched to investigate the blackout."
     platoonsGovfor:
     - LACN
