@@ -2,22 +2,19 @@
   parent: ActionXenoBase  
   id: CMU14ActionXenoPathogenGuardianLink
   name: Guardian Link (100)  
-  description: Link to a nearby ally, absorbing 50% of the damage they take for a short duration.  
+  description: Link to a nearby ally, absorbing 50% of the damage they take for a short duration.
   components:  
-  - type: Action  
-    itemIconStyle: NoItem  
+  - type: Action
+    itemIconStyle: NoItem
     icon:  
-      sprite: _RMC14/Actions/xeno_actions.rsi  
-      state: guardian_link  
-    useDelay: 20  
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: guardian_link
+    useDelay: 20
   - type: TargetAction
-    checkCanAccess: true 
+    checkCanAccess: true
     range: 30
-  - type: EntityTargetAction  
-    event: !type:XenoGuardianLinkActionEvent  
-    canTargetSelf: false  
-    whitelist:  
-      components:  
-      - Xeno
-  - type: XenoActionPlasma  
+  - type: EntityTargetAction
+    event: !type:XenoGuardianLinkActionEvent
+    canTargetSelf: false
+  - type: XenoActionPlasma
     cost: 100
