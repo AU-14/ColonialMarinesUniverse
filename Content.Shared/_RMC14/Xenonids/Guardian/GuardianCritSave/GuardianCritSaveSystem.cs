@@ -1,9 +1,8 @@
 using Content.Shared._RMC14.Xenonids;  
 using Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;  
 using Content.Shared._RMC14.Xenonids.Hive;  
-using Content.Shared.Damage;  
 using Content.Shared.Damage.Components;  
-using Content.Shared.Damage.Systems;
+using Content.Shared.Damage.Systems;  
 using Content.Shared.FixedPoint;  
 using Content.Shared.Mobs.Components;  
 using Content.Shared.Mobs.Systems;  
@@ -17,23 +16,28 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
     [Dependency] private readonly GuardianAbsorbSystem _guardianAbsorb = default!;  
     [Dependency] private readonly SharedXenoHiveSystem _hive = default!;  
     [Dependency] private readonly MobStateSystem _mobState = default!;  
-    [Dependency] private readonly MobThresholdSystem _mobThresholds = default!;  
     [Dependency] private readonly IGameTiming _timing = default!;  
-  
-    private readonly HashSet<Entity<MobStateComponent>> _nearby = new();  
   
     public override void Initialize()  
     {  
+        base.Initialize();  
+  
         SubscribeLocalEvent<GuardianCritSaveComponent, DamageChangedEvent>(OnGuardianDamageChanged);  
     }  
   
     private void OnGuardianDamageChanged(Entity<GuardianCritSaveComponent> ent, ref DamageChangedEvent args)  
     {  
-        ent.Comp.CachedDamage = args.Damageable.TotalDamage;  
+        if (args.DamageDelta == null)  
+            return;  
+  
+        ent.Comp.CachedDamage += args.DamageDelta.GetTotal();  
+        Dirty(ent);  
     }  
   
     public override void Update(float frameTime)  
     {  
+        base.Update(frameTime);  
+  
         var time = _timing.CurTime;  
         var query = EntityQueryEnumerator<GuardianCritSaveComponent>();  
         while (query.MoveNext(out var uid, out var save))  
@@ -43,11 +47,8 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
   
             save.NextCheck = time + save.CheckEvery;  
   
-            if (!_mobThresholds.TryGetIncapThreshold(uid, out var incapThreshold))  
-                continue;  
-  
-            var remaining = incapThreshold.Value - save.CachedDamage;  
-            if (remaining <= save.MinimumHealth)  
+            var remaining = save.MinimumHealth - save.CachedDamage;  
+            if (remaining <= FixedPoint2.Zero)  
             {  
                 foreach (var old in save.ActiveTargets)  
                     _guardianAbsorb.RemoveAbsorb(old, GuardianAbsorbType.PassiveCritSave);  
@@ -56,26 +57,23 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
                 continue;  
             }  
   
-            _nearby.Clear();  
-            _lookup.GetEntitiesInRange(Transform(uid).Coordinates, save.Range, _nearby);  
+            var nearby = new HashSet<Entity<MobStateComponent>>();  
+            _lookup.GetEntitiesInRange(uid, save.Range, nearby, LookupFlags.Uncontained);  
   
             var stillActive = new HashSet<EntityUid>();  
-            foreach (var nearby in _nearby)  
+            foreach (var target in nearby)  
             {  
-                if (nearby.Owner == uid)  
+                if (!HasComp<XenoComponent>(target.Owner))  
                     continue;  
   
-                if (!HasComp<XenoComponent>(nearby.Owner))  
+                if (!_hive.FromSameHive(uid, target.Owner))  
                     continue;  
   
-                if (!_hive.FromSameHive(uid, nearby.Owner))  
+                if (!_mobState.IsCritical(target.Owner, target.Comp))  
                     continue;  
   
-                if (!_mobState.IsCritical(nearby.Owner, nearby.Comp))  
-                    continue;  
-  
-                _guardianAbsorb.SetAbsorb(nearby.Owner, uid, GuardianAbsorbType.PassiveCritSave, save.AbsorbPercent);  
-                stillActive.Add(nearby.Owner);  
+                _guardianAbsorb.SetAbsorb(target.Owner, uid, GuardianAbsorbType.PassiveCritSave, save.AbsorbPercent);  
+                stillActive.Add(target.Owner);  
             }  
   
             foreach (var old in save.ActiveTargets)  
