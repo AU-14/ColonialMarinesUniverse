@@ -186,9 +186,12 @@ public sealed class AuRoundMigrationValidationTest
     [Test]
     public async Task GameTickerPresetSelectionMirrorsAuRoundPreset()
     {
+        // CMU14: SetGamePreset is a no-op on a dummy ticker, but a started AU round loads a full
+        // planet + z-network world (~680k entities) and OOMs the shared integration test process.
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
             DummyTicker = false,
+            InLobby = true,
         });
         var server = pair.Server;
 
