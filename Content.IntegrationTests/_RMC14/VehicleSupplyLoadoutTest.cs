@@ -458,7 +458,7 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(itemSlots.TryGetSlot(vehicle, "primary", out var turretSlot), Is.True);
             Assert.That(turretSlot!.Item, Is.Not.Null);
 
-            AssertSlotItem(entMan, itemSlots, turretSlot.Item!.Value, "turret-cannon", "VehicleSPPTankP17702");
+            AssertSlotItem(entMan, itemSlots, turretSlot.Item!.Value, "turret-cannon", "VehicleUPPTankP17702");
             AssertSlotItem(entMan, itemSlots, turretSlot.Item!.Value, "turret-launcher", "VehicleSPPTankHJ35TLauncher");
         });
 
@@ -577,7 +577,7 @@ public sealed class VehicleSupplyLoadoutTest
         "VehicleSPPTankTurret",
         "VehicleTankTreads",
         "VehicleTankReinforcedTreads",
-        "VehicleSPPTankP17702",
+        "VehicleUPPTankP17702",
         "VehicleSPPTankRailgun",
         "VehicleSPPTankHJ35TLauncher",
         "VehicleSPPTankCupola",
