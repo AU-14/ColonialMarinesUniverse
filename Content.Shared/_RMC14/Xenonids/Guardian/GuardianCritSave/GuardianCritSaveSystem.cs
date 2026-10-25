@@ -30,7 +30,7 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
   
             save.NextCheck = time + save.CheckEvery;  
   
-            // Self-gate: only functions while the Guardian has MinimumHealth above its own crit threshold  
+            
             var selfOk = false;  
             if (_mobThreshold.TryGetIncapThreshold(uid, out var critThreshold))  
             {  
