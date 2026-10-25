@@ -233,7 +233,8 @@ rmc-xeno-bloodletter-name = Bloodletter
 rmc-xeno-bloodletter-description = You trade your Abduct and most of your damage for abilities that drain your targets blood.
     You gain:
     - Scissor Cut, Impale, Tailstab and your Melee Attacks cause the target to lose blood.
-    - An Execute ability that kills downed targets, drains large amounts of blood and heals you.
+    - An Exsanguinate ability that kills downed targets, drains large amounts of blood and heals you.
+    - Some health.
     You Lose:
     - Some armor.
     - Some attack speed.
