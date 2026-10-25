@@ -94,7 +94,7 @@
       whitelist:
         components:
         - XenoHeavy
-  - type: XenoGuardianComponent
+  - type: XenoGuardian
     linkDuration: 300 
   - type: RMCSize
     size: Big
