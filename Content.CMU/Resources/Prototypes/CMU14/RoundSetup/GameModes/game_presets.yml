@@ -102,6 +102,7 @@
   - AddGovforAuxiliaryStaff
   - AddOpfor
   - AddOpforAuxiliaryStaff
+  - AddColonist
   - FoFTimeLimitRule
 
 - type: gamePreset

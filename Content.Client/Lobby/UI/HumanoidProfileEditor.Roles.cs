@@ -437,6 +437,16 @@ public sealed partial class HumanoidProfileEditor
                 GamemodeColonyFall,
                 $"colony-civilian-{department.ID}",
                 title);
+            // CMU14: FoF rounds carry a limited colonist roster (AddColonist rule); only those
+            // jobs get a preference surface on the Force on Force tab.
+            if (IsFoFColonyRosterJob(job))
+            {
+                yield return (
+                    FoFJobList,
+                    GamemodeForceOnForce,
+                    "fof-colony",
+                    Loc.GetString("humanoid-profile-editor-civilian-jobs-tab"));
+            }
             yield break;
         }
 
@@ -491,6 +501,23 @@ public sealed partial class HumanoidProfileEditor
             "AU14JobThreatMember" or
             "AU14JobThirdPartyLeader" or
             "AU14JobThirdPartyMember";
+    }
+
+    // CMU14: mirrors the AddColonist rule's fixed roster for Force on Force colony slots.
+    // randomJobs (ambassador allegiances) are excluded: they are dealt at random, not by preference.
+    private static bool IsFoFColonyRosterJob(JobPrototype job)
+    {
+        return job.ID is
+            "AU14JobCivilianColonyAdminAssistant" or
+            "AU14JobCivilianHeadPhysician" or
+            "AU14JobCivilianPhysician" or
+            "AU14JobCivilianNurse" or
+            "AU14JobCivilianEmergencyResponseOfficer" or
+            "AU14JobCivilianColonySynthetic" or
+            "AU14JobCivilianColonist" or
+            "AU14JobCivilianCMBMarshal" or
+            "AU14JobCivilianCMBDeputy" or
+            "AU14JobCivilianPrisoner";
     }
 
     // CMU14: internal, not private, so LateJoinGui reuses this classification instead of re-deriving it.
