@@ -93,6 +93,12 @@
       scale: 0.01
       whenToBeginScaling: 40
       maximum: 1
+    # --- COLONY ---
+    AU14JobCivilianJournalist:
+      scale: 0
+      whenToBeginScaling: 0
+      benchmark: 2
+      maximum: 2
     # --- THREATS ---
     # --- GOVFOR  ---
     AU14JobGOVFORSquadRifleman:

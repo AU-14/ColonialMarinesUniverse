@@ -63,7 +63,7 @@
   description: A scoped M56D heavy machine gun mounted upon a small reinforced post with sandbags to provide a small machine gun nest for all your defensive needs.
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/HMGs/ML66D/mount.rsi
+    sprite: CMU14/Objects/Weapons/Guns/HMGs/M56D/mount.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/HMGs/ML66D/mount.rsi
     state: towergun
   - type: Transform
     anchored: true
@@ -110,7 +110,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/HMGs/m2c.rsi
+    sprite: CMU14/Objects/Weapons/Guns/HMGs/m2c.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/HMGs/m2c.rsi
     layers:
     - state: m2c
       map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
@@ -141,7 +141,7 @@
   - type: Item
     size: Small
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/HMGs/ML66D/mount.rsi
+    sprite: CMU14/Objects/Weapons/Guns/HMGs/M56D/mount.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/HMGs/ML66D/mount.rsi
     state: folded_mount
     layers:
     - state: ml66d_mount
@@ -188,6 +188,15 @@
         containers:
         - weapon
   - type: CollisionWake
+  # cmu edit start: cmss13 PR 12283 camo set
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Objects/Weapons/Guns/HMGs/M56D/mount.rsi
+      Desert: CMU14/Objects/Weapons/Guns/HMGs/M56D/mount_desert.rsi
+      Snow: CMU14/Objects/Weapons/Guns/HMGs/M56D/mount_snow.rsi
+      Classic: CMU14/Objects/Weapons/Guns/HMGs/M56D/mount_classic.rsi
+      Urban: CMU14/Objects/Weapons/Guns/HMGs/M56D/mount_urban.rsi
+  # cmu edit end
   - type: Tag
     tags:
     - ML66DMount
@@ -204,7 +213,7 @@
   suffix: Folded, Assembled
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/HMGs/ML66D/mount.rsi
+    sprite: CMU14/Objects/Weapons/Guns/HMGs/M56D/mount.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/HMGs/ML66D/mount.rsi
     state: folded_mount
     layers:
     - state: ml66d_mount
@@ -247,7 +256,7 @@
   - type: Item
     size: Huge
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/HMGs/m2c.rsi
+    sprite: CMU14/Objects/Weapons/Guns/HMGs/m2c.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/HMGs/m2c.rsi
     state: m2c_gun_mount
     layers:
     - state: m2c

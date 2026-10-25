@@ -63,7 +63,7 @@ cmu-paper-ciph-hint-footer = - [italic]Weyland-Yutani[/italic]
 research-chem-terminal-update = Chemical contracts have been updated!
 
 research-data-ui-clearance = [color=#ffbf00][head=2]Clearance Level {$NUM}[/head][/color]
-research-data-ui-credits = [color=#ffbf00][head=2]Credits available: {$NUM}[/head][/color]
+research-data-ui-credits = [color=#ffbf00][head=2]Credits available: {$NUM}  ·  Sample data: {$DATA}[/head][/color]
 
 research-data-ui-manage = Manage Research
 research-data-ui-view = View Chemicals
@@ -118,7 +118,7 @@ research-sim-ui-header-target = Target
 research-sim-ui-header-reference = Reference
 research-sim-ui-header-pick-recipe = Pick a recipe
 
-research-sim-ui-credits = RESEARCH CREDITS: {$NUM}
+research-sim-ui-credits = SAMPLE DATA: {$NUM}
 research-sim-ui-status-not-ready = NOT READY
 research-sim-ui-cost-null = ESTIMATED SIMULATING COST: NULL
 research-sim-ui-cost = ESTIMATED SIMULATING COST: {$NUM}

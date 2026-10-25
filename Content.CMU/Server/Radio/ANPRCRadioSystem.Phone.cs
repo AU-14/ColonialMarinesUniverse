@@ -414,14 +414,6 @@ public sealed partial class ANPRCRadioSystem
         _chatManager.ChatMessageToOne(ChatChannel.Local, line, line, otherPhone, false,
             actor.PlayerSession.Channel, CallChatColor, true, sound, -12, hidePopup: true);
 
-        // a call is an emission like any other. find the side's net to hang the DF chance on
-        if (TryComp(pack, out ANPRCPhoneComponent? phone) &&
-            phone.CoverageChannels.TryGetValue(_crypto.GetFillFaction(pack), out var channelId) &&
-            _prototype.TryIndex(channelId, out RadioChannelPrototype? channel))
-        {
-            TryDirectionFind(pack, radio, channel, false);
-        }
-
         return true;
     }
 

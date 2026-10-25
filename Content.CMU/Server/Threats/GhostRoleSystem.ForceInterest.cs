@@ -9,6 +9,16 @@ namespace Content.Server.Ghost.Roles;
 
 public sealed partial class GhostRoleSystem
 {
+    // the force only takes people who pass this later, so the threat vote has to hold the same people
+    public bool CanPlayForceJob(ICommonSession player, ProtoId<JobPrototype> job)
+    {
+        List<ProtoId<JobPrototype>> jobs = [job];
+        if (_ban.GetRoleBans(player.UserId) == null || _ban.IsRoleBanned(player, jobs))
+            return false;
+
+        return IsRoleAllowed(player, jobs, null, null);
+    }
+
     /// <summary>Checks the same session, ban and playtime rules before a force body exists.</summary>
     public bool CanJoinForceRole(ICommonSession player, EntProtoId body, ProtoId<JobPrototype>? fallbackJob)
     {

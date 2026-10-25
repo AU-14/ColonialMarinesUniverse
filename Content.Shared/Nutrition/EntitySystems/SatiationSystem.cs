@@ -206,7 +206,11 @@ public abstract partial class SatiationSystem : EntitySystem
         if (satiation.SatiationType == Hunger && changeRate < 0f)
             changeRate /= 1.5f;
 
-        satiation.ActualChangeRate = changeRate;
+        // cmu edit start: traits like hearty appetite and high thirst change how fast it runs down
+        var cmuRate = new Content.Shared.CMU14.Nutrition.CMUSatiationRateEvent(satiation.SatiationType.Id, changeRate);
+        RaiseLocalEvent(entity, ref cmuRate);
+        satiation.ActualChangeRate = cmuRate.Rate;
+        // cmu edit end
         satiation.NextChangeRateModUpdateTime = EvolvesToBoundAt(
             satiation,
             proto,

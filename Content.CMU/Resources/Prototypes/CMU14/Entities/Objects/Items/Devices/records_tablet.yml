@@ -21,4 +21,4 @@
   - type: UserInterface
     interfaces:
       enum.CriminalRecordsConsoleKey.Key:
-        type: CriminalRecordsConsoleBoundUserInterface
+        type: CMUCriminalRecordsConsoleBui

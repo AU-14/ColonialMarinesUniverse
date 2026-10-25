@@ -119,7 +119,7 @@
   id: NicotineAddiction
   name: au14-trait-nicotineaddiction-name
   description: au14-trait-nicotineaddiction-desc
-  category: Disabilities
+  category: CMUAddictions # cmu edit: addictions have their own category, one at most
   # cmu edit start: disabilities are limited to four
   cost: 1
   # cmu edit end

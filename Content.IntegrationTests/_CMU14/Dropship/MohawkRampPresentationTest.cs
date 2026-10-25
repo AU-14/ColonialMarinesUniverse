@@ -36,7 +36,7 @@ public sealed class MohawkRampPresentationTest
             var entities = pair.Server.EntMan;
             entities.System<SharedMapSystem>().CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var maps = entities.System<SharedMapSystem>();
             var cabin = entities.GetComponent<MapGridComponent>(ship);
@@ -61,12 +61,14 @@ public sealed class MohawkRampPresentationTest
                 var entities = pair.Server.EntMan;
                 var maps = entities.System<SharedMapSystem>();
                 var cabin = entities.GetComponent<MapGridComponent>(ship);
+                // The opening is sealed open air rather than space, so the cabin keeps its air with the ramp down.
+                var openAir = new Tile(pair.Server.ResolveDependency<ITileDefinitionManager>()["CMUFloorOpenAirSealed"].TileId);
                 foreach (var (indices, original) in cabinTiles)
                 {
                     var keepThreshold = variant.StartsWith("midway") && indices.Y == -3;
                     Assert.That(maps.GetTileRef(ship, cabin, indices).Tile,
-                        Is.EqualTo(deployed && !keepThreshold ? Tile.Empty : original),
-                        "Midway keeps its three cabin-end ramp tiles while the remaining floor lowers.");
+                        Is.EqualTo(deployed && !keepThreshold ? openAir : original),
+                        "Midway keeps its three cabin-end ramp tiles while the remaining floor lowers, and the open cells stay sealed.");
                 }
                 var stairs = (CMUZLevelHighGroundComponent) pair.Server.ResolveDependency<IPrototypeManager>()
                     .Index<EntityPrototype>(CMUMultiZStairsPrototype).Components["CMUZLevelHighGround"].Component;

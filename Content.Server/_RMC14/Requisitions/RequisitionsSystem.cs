@@ -132,7 +132,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         ApplyPlatoonCatalogToComputer(uid, comp);
         AppendFactionVendorGear(uid, comp); // CMU14: use the ReqVend/ReqEquipment vmarker mapping for ASRS stock.
         AddXRFToCatalog(uid, comp);
-        var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(); RaiseLocalEvent(uid, ref catalogBuilt); // CMU14
+        var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
         ResetStock((uid, comp));
         Dirty(uid, comp);
     }
@@ -474,6 +474,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         account.Balance -= order.Cost;
         elevator.Comp.Orders.Add(order);
+        // cmu edit start: who bought it, for the colony firearm registry
+        var bought = new Content.Server.CMU14.Requisitions.CMURequisitionsOrderBoughtEvent(elevator, elevator.Comp.Orders.Count - 1, actor,
+            computer.Comp.Faction);
+        RaiseLocalEvent(ref bought);
+        // cmu edit end
         SendUIStateAll();
         _adminLogs.Add(LogType.RMCRequisitionsBuy, $"{ToPrettyString(args.Actor):actor} bought requisitions crate {order.Name} with crate {order.Crate} for {order.Cost}");
 
@@ -747,6 +752,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 var crate = delivery.Roots[orderIndex];
                 _transform.SetCoordinates(crate, coordinates.Offset(new Vector2(xOffset, yOffset)));
                 remainingDeliveries--;
+                // cmu edit start: lets the colony firearm registry log the guns in it
+                var delivered = new Content.Server.CMU14.Requisitions.CMURequisitionsCrateDeliveredEvent(elevator, orderIndex, crate,
+                    order.Name ?? (_prototypeManager.TryIndex<EntityPrototype>(order.Crate, out var crateProto) ? crateProto.Name : order.Crate.Id));
+                RaiseLocalEvent(ref delivered);
+                // cmu edit end
 
                 // If this order came from a department console, attach a department note
                 // instead of the generic invoice so it shows on the crate label.
@@ -823,7 +833,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             // Instead of blacklist, we use a whitelist to selectively control generated funds from selling
             // if (HasComp<CargoSellBlacklistComponent>(entity))
             //     continue;
-            if (!HasComp<CargoSellWhitelistComponent>(entity))
+            // cmu edit start: loose invoices and order slips pay out too, not just ones in or on a crate
+            if (!HasComp<CargoSellWhitelistComponent>(entity) && !HasComp<RequisitionsInvoiceComponent>(entity))
+            // cmu edit end
             {
                 QueueDel(entity);
                 continue;
@@ -1403,7 +1415,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             ApplyPlatoonCatalogToComputer(uid, comp);
             AppendFactionVendorGear(uid, comp); // CMU14: keep selected platoon vendor stock after round-start catalog refreshes.
             AddResearchTerminalToCatalog(uid, comp); // CMU14
-            var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(); RaiseLocalEvent(uid, ref catalogBuilt); // CMU14
+            var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
             ResetStock((uid, comp));
             Dirty(uid, comp);
         }

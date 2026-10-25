@@ -23,8 +23,10 @@ public abstract partial class SharedGunSystem
         {
             args.PushMarkup(Loc.GetString("gun-selected-mode-examine", ("color", ModeExamineColor),
                 ("mode", GetLocSelector(component.SelectedMode))));
-            args.PushMarkup(Loc.GetString("gun-fire-rate-examine", ("color", FireRateExamineColor),
-                ("fireRate", $"{component.FireRateModified:0.0}")));
+            // cmu edit start: fire rate is listed under the weapon stats examine verb instead
+            // args.PushMarkup(Loc.GetString("gun-fire-rate-examine", ("color", FireRateExamineColor),
+            //     ("fireRate", $"{component.FireRateModified:0.0}")));
+            // cmu edit end
         }
     }
 

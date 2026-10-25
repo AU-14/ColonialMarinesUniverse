@@ -1,4 +1,6 @@
+using Content.Shared.CMU14.Ship;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.Gravity;
 using Content.Shared.Ghost.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -11,6 +13,7 @@ namespace Content.Server.CMU14.ZLevels.Core;
 public sealed partial class CMUZLevelsSystem
 {
     [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private CMUZeroGSpaceSystem _zeroG = default!;
 
     private readonly HashSet<EntityUid> _zFallWakeBuffer = new();
 
@@ -38,6 +41,7 @@ public sealed partial class CMUZLevelsSystem
         SubscribeLocalEvent<CMUZPhysicsComponent, AnchorStateChangedEvent>(OnAnchorStateChange);
         SubscribeLocalEvent<CMUZPhysicsComponent, PhysicsBodyTypeChangedEvent>(OnPhysicsBodyTypeChange);
         SubscribeLocalEvent<CMUZPhysicsComponent, MoveEvent>(OnZPhysicsMove);
+        SubscribeLocalEvent<CMUZPhysicsComponent, WeightlessnessChangedEvent>(OnWeightlessnessChanged);
     }
 
     private void OnAnchorStateChange(Entity<CMUZPhysicsComponent> ent, ref AnchorStateChangedEvent args)
@@ -46,6 +50,11 @@ public sealed partial class CMUZLevelsSystem
     }
 
     private void OnMapInit(Entity<CMUZPhysicsComponent> ent, ref MapInitEvent args)
+    {
+        CheckActivation(ent);
+    }
+
+    private void OnWeightlessnessChanged(Entity<CMUZPhysicsComponent> ent, ref WeightlessnessChangedEvent args)
     {
         CheckActivation(ent);
     }
@@ -127,6 +136,10 @@ public sealed partial class CMUZLevelsSystem
             if (physics.BodyType == BodyType.Static)
                 return false;
         }
+
+        // Zero-g ships: nothing falls through open space, and nothing weightless aboard falls at all.
+        if (_zeroG.IsOverZeroGSpace(ent) || _zeroG.IsFloating(ent))
+            return false;
 
         return true;
     }

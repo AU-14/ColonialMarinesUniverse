@@ -50,6 +50,7 @@
   - AUPrisonStaff
   access:
   - AU14AccessColonyAmbassador
+  - AU14AccessAmbassadorCCA
   roleWeight: 0.25
 
 - type: startingGear
@@ -149,6 +150,7 @@
   - AUPrisonStaff
   access:
   - AU14AccessColonyAmbassador
+  - AU14AccessAmbassadorICSC
   roleWeight: 0.25
 
 - type: startingGear
@@ -248,6 +250,7 @@
   - AUPrisonStaff
   access:
   - AU14AccessColonyAmbassador
+  - AU14AccessAmbassadorTWE
   roleWeight: 0.25
 
 - type: startingGear
@@ -346,6 +349,7 @@
   - AUPrisonStaff
   access:
   - AU14AccessColonyAmbassador
+  - AU14AccessAmbassadorUA
   roleWeight: 0.25
 
 - type: startingGear
@@ -443,6 +447,7 @@
   - AUPrisonStaff
   access:
   - AU14AccessColonyAmbassador
+  - AU14AccessAmbassadorUPP
   roleWeight: 0.25
 
 - type: startingGear

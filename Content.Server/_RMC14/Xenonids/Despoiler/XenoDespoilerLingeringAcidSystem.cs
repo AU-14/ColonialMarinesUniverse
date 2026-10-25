@@ -28,6 +28,7 @@ public sealed partial class XenoDespoilerLingeringAcidSystem : EntitySystem
 
         SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, StartCollideEvent>(OnCollide);
+        SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, EndCollideEvent>(OnEndCollide);  // CMU14
     }
 
     private void OnMapInit(EntityUid uid, XenoDespoilerLingeringAcidComponent comp, MapInitEvent args)
@@ -47,8 +48,20 @@ public sealed partial class XenoDespoilerLingeringAcidSystem : EntitySystem
         if (_pullableQuery.TryComp(target, out var pull) && pull.BeingPulled)
             return;
 
+        if (!comp.Damaged.Add(target))
+            return; // CMU14
+
+        Dirty(uid, comp);
+
         var dmg = new DamageSpecifier();
         dmg.DamageDict["Heat"] = FixedPoint2.New(comp.CrossBurnDamage);
         _damageable.TryChangeDamage(target, dmg, ignoreResistances: false, origin: comp.Caster);
     }
+
+    private void OnEndCollide(EntityUid uid, XenoDespoilerLingeringAcidComponent comp, ref EndCollideEvent args) // CMU14
+    {
+        if(comp.Damaged.Remove(args.OtherEntity))
+            Dirty(uid, comp);
+    }
+    
 }

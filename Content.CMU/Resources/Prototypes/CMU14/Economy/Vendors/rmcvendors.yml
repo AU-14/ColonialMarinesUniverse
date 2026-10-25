@@ -259,6 +259,8 @@
         amount: 60
       - id: AU14BoxMRETWERMC
         amount: 10
+      - id: CMCanteen
+        amount: 60
     - name: Medical Supplies
       entries:
       - id: AU14PouchIFAKFill
@@ -955,6 +957,11 @@
     - AU14JobGOVFORSquadSergeantUPP
     - AU14JobGOVFORSquadSergeantWYPMC
     sections:
+    - name: cmu-vendor-section-sl-scopes
+      choices: { CMUSquadLeaderScope: 1 }
+      entries:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+      - id: CMUAttachmentNightVisionScope
     - name: Helmets and Hats
       choices: { CMHat: 2 }
       entries:
@@ -1054,8 +1061,9 @@
     Standard issue across the frontier where threats can appear without warning.
     Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
 
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+    For immediate combat readiness: select a primary weapon and a sidearm.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -1065,31 +1073,40 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponL23
-      - id: AU14KitWeaponL90A2
+      - id: RMCWeaponRifleL24
+      - id: AU14WeaponSMGL90A2oldnoattachments
     - name: Rifle Ammunition
       entries:
       - id: RMCMagazineRifleL24
-        amount: 60
+        amount: 120
       - id: AU14MagazineSMGL90A2
-        amount: 60
+        amount: 120
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: AU14KitWeaponL54
-      - id: AU14KitWeaponL165A1
+      - id: RMCWeaponPistolL54Empty
+      - id: AU14L165A1Filled
     - name: Handgun Ammunition
       entries:
       - id: RMCMagazinePistolL54
-        amount: 60
+        amount: 120
       - id: AU14MagazinePistolL165A1
-        amount: 60
-    - name: Attachments
-      choices: { CMUAttachmentsVendor: 1 }
+        amount: 120
+    - name: Unrestricted Attachments
       entries:
+      - id: RMCAttachmentRailFlashlight
+        maxPerUser: 1
       - id: AU14AttachmentTwoPointSling
+        maxPerUser: 1
 
 # TODO: Proper RMC RTOs
+    - name: Special Ammunition
+      choices: { CMUSpecialAmmo: 2 }
+      entries:
+      - id: RMCMagazineRifleL24AP
+      - id: AU14MagazineSMGL90A2AP
+      - id: RMCMagazineRifleL24Extended
+      - id: AU14MagazineSMGL90A2extended
 - type: entity
   parent: ColMarTechBase
   id: AU14RMCRTOVendor
@@ -1124,6 +1141,7 @@
 
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMAutomatedVendor
     sections:
     - name: Weapons Specialist Sets
@@ -1177,6 +1195,7 @@
 
     Aircrew protocol: select a set of fatigues, the essential medical equipment and storage kit.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
   - type: Sprite
@@ -1349,6 +1368,7 @@
   name: royal marines automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]
@@ -1518,6 +1538,8 @@
         amount: 5
     - name: Rail Attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight

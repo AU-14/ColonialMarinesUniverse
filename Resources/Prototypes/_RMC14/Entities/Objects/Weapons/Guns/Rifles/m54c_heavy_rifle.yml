@@ -4,15 +4,18 @@
   id: RMCWeaponRifleM54CE2
   description: A large squad support weapon capable of laying down sustained suppressing fire from a mounted position. While unstable and less accurate, it can be lugged and shot with two hands.
   components:
+  # cmu edit start: M41s have a built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/desert.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Rifles/m41ae2/desert.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/desert.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/desert.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Rifles/m41ae2/desert.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/desert.rsi
   - type: Tag
     tags:
     - RMCWeaponRifleM54CE2
@@ -90,12 +93,13 @@
           - RMCAttachmentS6ReflexSight
       rmc-aslot-stock:
         locked: true
-        startingAttachable: RMCAttachmentM54CStockCollapsible # RMCAttachmentM54CE2Stock
+        startingAttachable: CMUAttachmentM41AE2Stock # cmu edit: was RMCAttachmentM54CStockCollapsible
         whitelist:
           tags:
           - RMCAttachmentM54CStockCollapsible # RMCAttachmentM54CE2Stock
+          - CMUAttachmentM41AE2Stock # cmu edit
       rmc-aslot-underbarrel:
-        startingAttachable: RMCAttachmentBipod
+        startingAttachable: CMUAttachmentBipodM41AE2 # cmu edit: was RMCAttachmentBipod
         whitelist:
           tags:
           - RMCAttachmentAngledGrip
@@ -106,17 +110,21 @@
           - RMCAttachmentVerticalGrip
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-barrel: 0.75, 0.03
-      rmc-aslot-rail: -0.07, 0.18
-      rmc-aslot-stock: -0.843, -0.005 # rmc-aslot-stock: -0.875, 0.0325
-      rmc-aslot-underbarrel: 0.37, -0.3125
+      # cmu edit start: cmss13 PR 10425 resprite; was barrel 0.75, 0.03 / rail -0.07, 0.18 / stock -0.843, -0.005 / underbarrel 0.37, -0.3125
+      rmc-aslot-barrel: 0.53125, 0.09375
+      rmc-aslot-rail: -0.15625, 0.21875
+      rmc-aslot-stock: -0.5, -0.03125
+      rmc-aslot-underbarrel: 0.3125, -0.09375
+      # cmu edit end
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/jungle.rsi
-      Desert: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/desert.rsi
-      Snow: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/snow.rsi
-      Classic: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/classic.rsi
-      Urban: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/urban.rsi
+      # cmu edit start: cmss13 PR 10425 resprite
+      Jungle: CMU14/Objects/Weapons/Guns/Rifles/m41ae2/jungle.rsi
+      Desert: CMU14/Objects/Weapons/Guns/Rifles/m41ae2/desert.rsi
+      Snow: CMU14/Objects/Weapons/Guns/Rifles/m41ae2/snow.rsi
+      Classic: CMU14/Objects/Weapons/Guns/Rifles/m41ae2/classic.rsi
+      Urban: CMU14/Objects/Weapons/Guns/Rifles/m41ae2/urban.rsi
+      # cmu edit end
 
 - type: entity
   parent: CMMagazineRifleM54C
@@ -135,7 +143,7 @@
     proto: CMCartridgeRifle10x24mm
     capacity: 300
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/desert.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -148,11 +156,13 @@
   - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/jungle.rsi
-      Desert: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
-      Snow: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/snow.rsi
-      Classic: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/classic.rsi
-      Urban: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/urban.rsi
+      # cmu edit start: cmss13 PR 10425 resprite
+      Jungle: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/jungle.rsi
+      Desert: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/desert.rsi
+      Snow: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/snow.rsi
+      Classic: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/classic.rsi
+      Urban: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/urban.rsi
+      # cmu edit end
   - type: RefillableByBulletBox
     bulletType: RMCBoxBulletsRifle
 
@@ -169,7 +179,7 @@
     proto: CMCartridgeRifle10x24mmHT
     capacity: 200
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/desert.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -215,7 +225,7 @@
     proto: CMCartridgeRifle10x24mmAP
     capacity: 300
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/desert.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -237,7 +247,7 @@
     proto: RMCCartridgeRifle10x24mmHEAP
     capacity: 300
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/desert.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -259,7 +269,7 @@
     proto: RMCCartridgeRifle10x24mmWP
     capacity: 300
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/desert.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -281,7 +291,7 @@
     proto: RMCCartridgeRifle10x24mmIncendiary
     capacity: 300
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/desert.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]

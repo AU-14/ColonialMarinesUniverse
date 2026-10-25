@@ -14,4 +14,7 @@ public sealed partial class GasMaskFilterDamageComponent : Component
 
     [DataField]
     public bool Neurotoxin = false;
+
+    [DataField]
+    public bool OrbitalGas;
 }

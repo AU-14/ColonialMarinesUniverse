@@ -149,6 +149,15 @@ public sealed partial class SharedForensicScannerSystem : EntitySystem
     [SubscribeLocalEvent]
     private void OnAfterInteract(Entity<ForensicScannerComponent> scanner, ref AfterInteractEvent args)
     {
+        // cmu edit start: used on the floor, it scans the blood stains there
+        if (args.Target == null && args.CanReach)
+        {
+            var floor = new Content.Shared.CMU14.Forensics.CMUForensicScanFloorEvent(scanner, args.User, args.ClickLocation);
+            RaiseLocalEvent(ref floor);
+            return;
+        }
+        // cmu edit end
+
         if (args.Target == null || !args.CanReach)
                 return;
 

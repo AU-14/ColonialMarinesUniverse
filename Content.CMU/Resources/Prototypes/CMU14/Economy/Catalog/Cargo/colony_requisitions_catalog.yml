@@ -173,68 +173,107 @@
         crate: RMCCrateSuppliesCrayons
     - name: Weapons
       entries:
+      - cost: 650
+        crate: CMUWeaponShotgunM37A1Colony
       - cost: 1000
-        crate: RMCWeaponShotgunM37A1
-      - cost: 2000
-        crate: AU14CrateBoxAR10
-      - cost: 1800
-        crate: CMUCrateBoxKramerCivilian
-      - cost: 1300
+        maxStock: 2
+        stockReplenishDelay: 600
+        crate: CMUCrateBoxAR10Colony
+      - cost: 900
+        crate: CMUCrateBoxM16Colony
+      - cost: 950
+        crate: CMUCrateBoxKramerColony
+      - cost: 550
         crate: AU14CrateBoxMod88
-      - cost: 1250
+      - cost: 550
         crate: AU14CrateBoxRevolverM2019
-      - cost: 1400
+      - cost: 600
         crate: AU14CrateBoxRSH9
-      - cost: 1200
+      - cost: 650
         crate: AU14CrateBoxHuntingRifleCrate
-      - cost: 950
-        crate: CMUCrateBoxTPR9Civilian
-      - cost: 950
+      - cost: 450
+        crate: CMUCrateBoxTPR9Colony
+      - cost: 450
         crate: AU14CrateBoxM4A3
-      - cost: 1000
+      - cost: 500
+        crate: CMUCrateBoxGlock75Colony
+      - cost: 650
         crate: AU14CrateBoxSkeetShootingCrate
-      - cost: 1500
+      - cost: 600
         crate: AU14KitWeaponRXFM
-      - cost: 800
+      - cost: 550
         crate: AU14CrateBoxM44
-      - cost: 1300
+      - cost: 750
         crate: AU14CrateBoxHuntingRifleABRCrate
       - cost: 353
         crate: AU14CrateBoxD18
       - cost: 330
         crate: AU14CrateAssortedKnives
-      - cost: 3000
+      - cost: 450
+        crate: CMUCrateBoxNailgun
+      - cost: 2000
         crate: CMUCrateFlamerColony
         maxStock: 1
         stockReplenishDelay: 1800
     - name: Ammunition
       entries:
-      - cost: 533
-        crate: AU14CrateBoxAR10Magazines
-      - cost: 533
-        crate: CMUCrateBoxKramerMagazines
-      - cost: 483
+      - cost: 240
+        crate: CMUCrateBoxM16ColonyMagazines
+      - cost: 300
+        maxStock: 4
+        stockReplenishDelay: 300
+        crate: CMUCrateBoxAR10ColonyMagazines
+      - cost: 260
+        crate: CMUCrateBoxKramerColonyMagazines
+      - cost: 240
         crate: AU14CrateBox357HP
-      - cost: 400
+      - cost: 200
         crate: AU14CrateBox357
-      - cost: 400
+      - cost: 200
         crate: AU14CrateBoxMod88Mags
-      - cost: 400
+      - cost: 200
         crate: AU14CrateBoxRSH9SL
-      - cost: 400
+      - cost: 220
         crate: AU14CrateBoxBasiraMagazines
-      - cost: 433
+      - cost: 250
         crate: AU14CrateBoxShotgunShells
-      - cost: 333
+      - cost: 180
         crate: AU14CrateBoxTPR23BMag
-      - cost: 350
+      - cost: 180
+        crate: CMUCrateBoxGlock75ColonyMagazines
+      - cost: 200
         crate: AU14CrateBoxM44SL
-      - cost: 350
+      - cost: 230
         crate: AU14CrateBoxM44SLM
-      - cost: 350
+      - cost: 180
         crate: AU14CrateBoxD18Magazines
-      - cost: 355
+      - cost: 240
         crate: AU14CrateBoxABR40Magazines
+      - cost: 180
+        crate: CMUCrateBoxNailgunMagazines
+    - name: Furniture
+      entries:
+      - cost: 320
+        crate: AU14CrateBoxReinforcedTableParts
+      - cost: 320
+        crate: AU14CrateBoxGamblingTableParts
+      - cost: 390
+        crate: AU14CrateBoxGrayTableParts
+      - cost: 390
+        crate: AU14CrateBoxtanTableParts
+    - name: "Machines and Vendors (Wrench Required)"
+      entries:
+      - cost: 350
+        crate: RMCTelevision
+
+# Vehicle ammo, armaments and modules. Every ASRS has them except the colony's, which only gets the jeep kits; military
+# platoons bring their own vehicle tabs on top.
+- type: entity
+  abstract: true
+  id: CMUASRSVehicleGoodies
+  components:
+  - type: RequisitionsComputer
+    categories:
     - name: Vehicle Ammo
       entries:
       - cost: 1900
@@ -449,18 +488,3 @@
         crate: CMUCrateVehiclePartSupportFreightStorageAPC
         maxStock: 2
         stockReplenishDelay: 300
-
-    - name: Furniture
-      entries:
-      - cost: 320
-        crate: AU14CrateBoxReinforcedTableParts
-      - cost: 320
-        crate: AU14CrateBoxGamblingTableParts
-      - cost: 390
-        crate: AU14CrateBoxGrayTableParts
-      - cost: 390
-        crate: AU14CrateBoxtanTableParts
-    - name: "Machines and Vendors (Wrench Required)"
-      entries:
-      - cost: 350
-        crate: RMCTelevision

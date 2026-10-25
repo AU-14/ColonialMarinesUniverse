@@ -314,6 +314,9 @@
     playerSprite:
       sprite: _RMC14/Objects/Medals/bronze.rsi
       state: equipped
+  - type: GrantMarineIcons # same rank/role icons as the command headset it replaced
+    factions:
+    - UNMC
   - type: OverwatchCamera
   - type: AccessoryHeadset
     channels:

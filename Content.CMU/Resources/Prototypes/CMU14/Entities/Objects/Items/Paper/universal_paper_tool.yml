@@ -238,7 +238,7 @@
       name: FBI paper
       description: A sheet of paper bearing the Federal Bureau of Investigation letterhead.
     - prototype: CMUPaperCLF # Insurgents have no way to access their own paper type. + This will make the stamp of the cell leader more useful.
-      name: CLF paper
+      name: INSFOR paper
       description: A sheet of paper bearing the Colonial Liberation Front letterhead.
     - prototype: CMUPaperARBITER
       name: Judge paper

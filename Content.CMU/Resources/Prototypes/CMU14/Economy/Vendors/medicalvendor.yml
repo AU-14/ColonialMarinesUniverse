@@ -123,6 +123,10 @@
         amount: 25
     - name: Medical Utilities
       entries:
+      - id: CMWebbingSurgicalGreen
+        amount: 5
+      - id: CMWebbingSurgicalBlue
+        amount: 5
       - id: CMRollerBedSpawnFolded
         amount: 10
       - id: CMPortableSurgicalBedSpawnFolded

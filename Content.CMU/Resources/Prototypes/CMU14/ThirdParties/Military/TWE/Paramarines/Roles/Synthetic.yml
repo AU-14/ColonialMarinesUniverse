@@ -29,13 +29,13 @@
     - TacticalSignLanguage
     currentLanguage: English
     defaultLanguage: English
-  name: cmu-paramarines-name-synthetic
+  name: cmu-paramarines-name-synthetic-title
   description: cmu-paramarines-description-synthetic
   playTimeTracker: CMUJobParamarineSynthetic
   ranks:
     RMCRankCivilian: []
   startingGear: CMUGearParamarineSynthetic
-  spawnMenuRoleName: TWE Royal Paramarine Synthetic (3rd party)
+  spawnMenuRoleName: IASF Parachute Regiment Synthetic (3rd party)
   greeting: cmu-paramarines-greeting
   icon: RMCJobIconParaSupportSynthetic
   joinNotifyCrew: false
@@ -47,7 +47,7 @@
 - type: entity
   parent: CMUBaseMobSpeciesParamarines
   id: CMUJobParamarineSynthetic
-  name: TWE Royal Paramarine Synthetic
+  name: IASF Parachute Regiment Synthetic
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial

@@ -10,6 +10,12 @@ public enum CMUExercise : byte
 {
     Pushups,
     Situps,
+    StackLifter,
+    BenchPress,
+    Curls,
+    Punching,
+    Running,
+    KneePushups,
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
@@ -41,6 +47,46 @@ public sealed partial class CMUPushupsComponent : Component
 
     [DataField]
     public EntityCoordinates Start;
+
+    /// <summary>The machine or dumbbell being used, if the exercise needs one.</summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? Equipment;
+
+    /// <summary>When the current punching bag or treadmill session last saw any effort.</summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan SessionLast;
+
+    [DataField]
+    public CMUExercise? SessionExercise;
+
+    /// <summary>Punches thrown, or seconds run, in the current session.</summary>
+    [DataField]
+    public float SessionAmount;
+
+    [DataField]
+    public int SessionLimit;
+
+    [DataField]
+    public int SessionRestedLimit;
+
+    [DataField]
+    public int SessionAnnounced;
+
+    [DataField]
+    public TimeSpan SessionTimeout = TimeSpan.FromSeconds(8);
+
+    /// <summary>
+    ///     After their arms give out on pushups, they stay down until this time so they can carry on with knee pushups.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan? KneesOfferedUntil;
+
+    [DataField]
+    public TimeSpan KneesOfferTime = TimeSpan.FromSeconds(8);
+
+    /// <summary>Their arms are too tired to punch a punching bag until this time.</summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan? PunchTiredUntil;
 
     [DataField]
     public Dictionary<CMUExercise, float> Fatigue = new();

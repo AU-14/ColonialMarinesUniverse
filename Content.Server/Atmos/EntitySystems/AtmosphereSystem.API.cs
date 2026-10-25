@@ -256,6 +256,11 @@ public partial class AtmosphereSystem
             return tile.Air;
         }
 
+        // cmu edit start: a deck with no air of its own shares the air of the grid it's over
+        if (grid is { } borrowing && CMUTryGetBorrowedMixture(borrowing.Owner, gridTile, excite, out var borrowed))
+            return borrowed;
+        // cmu edit end
+
         if (map is { } mapEnt && _mapAtmosQuery.Resolve(mapEnt, ref mapEnt.Comp, false))
             return mapEnt.Comp.Mixture;
 

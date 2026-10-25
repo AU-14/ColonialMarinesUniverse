@@ -76,13 +76,17 @@ public sealed partial class CMUWoundsSystem
             }
 
             landing = target;
-            _decals.TryAddDecal(
-                _random.Pick(BloodSplatters),
-                _transform.ToCoordinates(target).Offset(new Vector2(-0.5f, -0.5f)),
-                out _,
-                color: color,
-                rotation: _random.NextAngle(),
-                cleanable: true);
+            var splatAt = _transform.ToCoordinates(target).Offset(new Vector2(-0.5f, -0.5f));
+            if (_decals.TryAddDecal(
+                    _random.Pick(BloodSplatters),
+                    splatAt,
+                    out var splatter,
+                    color: color,
+                    rotation: _random.NextAngle(),
+                    cleanable: true))
+            {
+                _bloodEvidence.RecordBloodDecal(splatAt, splatter, ent);
+            }
         }
 
         // Where the spray can't pool (open space, no floor), the blood pools at the patient's feet instead.
