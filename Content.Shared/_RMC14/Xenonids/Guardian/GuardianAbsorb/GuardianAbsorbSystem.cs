@@ -1,8 +1,8 @@
-using Content.Shared.Damage.Systems;
-using Content.Shared.Popups; 
-
-namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;
-
+using Content.Shared.Damage.Systems;  
+using Content.Shared.Popups;  
+  
+namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;  
+  
 public sealed class GuardianAbsorbSystem : EntitySystem  
 {  
     [Dependency] private readonly DamageableSystem _damageable = default!;  
@@ -10,11 +10,11 @@ public sealed class GuardianAbsorbSystem : EntitySystem
   
     public override void Initialize()  
     {  
-        SubscribeLocalEvent<GuardianAbsorbComponent, DamageModifyAfterResistEvent>(OnDamageModify);
-        SubscribeLocalEvent<GuardianAbsorbComponent, EntityTerminatingEvent>(OnGuardianAbsorbRemoved);
+        SubscribeLocalEvent<GuardianAbsorbComponent, DamageModifyAfterResistEvent>(OnDamageModify);  
+        SubscribeLocalEvent<GuardianAbsorbComponent, EntityTerminatingEvent>(OnGuardianAbsorbRemoved);  
     }  
   
-    private void OnBeforeDamageChanged(Entity<GuardianAbsorbComponent> ent, ref DamageModifyAfterResistEvent args)  
+    private void OnDamageModify(Entity<GuardianAbsorbComponent> ent, ref DamageModifyAfterResistEvent args)  
     {  
         if (TerminatingOrDeleted(ent.Comp.Guardian))  
             return;  
@@ -28,26 +28,22 @@ public sealed class GuardianAbsorbSystem : EntitySystem
         args.Damage = remaining;  
   
         if (redirected.AnyPositive())  
-            _damageable.TryChangeDamage(ent.Comp.Guardian, redirected, ent.Comp.IgnoreGuardianResistances, origin: args.Origin, tool: args.Tool);
+        {  
+            _damageable.TryChangeDamage(  
+                ent.Comp.Guardian,  
+                redirected,  
+                ignoreResistances: ent.Comp.IgnoreGuardianResistances,  
+                interruptsDoAfters: false,  
+                origin: args.Origin);  
+  
+            _popup.PopupEntity(Loc.GetString("guardian-absorbing-damage"), ent.Comp.Guardian, ent.Comp.Guardian);  
+        }  
     }  
   
-        var redirected = args.Damage * ent.Comp.AbsorbPercent;  
-        args.Damage -= redirected; // victim only takes the remainder  
-  
-        _damageable.TryChangeDamage(  
-            guardian,  
-            redirected,  
-            ignoreResistances: ent.Comp.IgnoreGuardianResistances,  
-            interruptsDoAfters: false,  
-            origin: args.Origin);  
-  
-        _popup.PopupEntity(Loc.GetString("guardian-absorbing-damage"), guardian, guardian);  
-    } 
-
     private void OnGuardianAbsorbRemoved(Entity<GuardianAbsorbComponent> ent, ref EntityTerminatingEvent args)  
     {  
         RemCompDeferred<GuardianAbsorbComponent>(ent);  
-    }
+    }  
   
     public void SetAbsorb(EntityUid target, EntityUid guardian, GuardianAbsorbType type,  
         float percent = 0.5f, bool ignoreResistances = true)  
