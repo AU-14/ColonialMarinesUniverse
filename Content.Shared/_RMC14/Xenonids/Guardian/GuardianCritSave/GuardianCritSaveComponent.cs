@@ -13,7 +13,19 @@ public sealed partial class GuardianCritSaveComponent : Component
 
   
     [DataField, AutoNetworkedField]  
-    public float AbsorbPercent = 1f;  
+    public float AbsorbPercent = 1f; 
+    
+
+    [DataField, AutoNetworkedField]  
+    public TimeSpan NextCheck; 
+    
+  
+    [DataField, AutoNetworkedField]  
+    public TimeSpan CheckEvery = TimeSpan.FromSeconds(1);  
+    
+  
+    [DataField, AutoNetworkedField]  
+    public HashSet<EntityUid> ActiveTargets = new();
 
   
     [DataField, AutoNetworkedField]  
@@ -25,5 +37,5 @@ public sealed partial class GuardianCritSaveComponent : Component
   
   
     [DataField, AutoNetworkedField]  
-    public TimeSpan NextScanAt;  
+    public TimeSpan NextScanAt; 
 }
