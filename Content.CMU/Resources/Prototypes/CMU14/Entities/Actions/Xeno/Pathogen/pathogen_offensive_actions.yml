@@ -954,7 +954,7 @@
 - type: entity
   parent: CMU14ActionXenoPathogenImpale
   id: CMU14ActionXenoPathogenImpaleBloodletter  
-  name: Open Vein
+  name: Open Vein (80)
   description: Strike directly at a vulnerable vein, causing major blood loss. Penetrates armor.
 
 - type: entity
@@ -1098,5 +1098,5 @@
 - type: entity
   parent: CMU14ActionXenoPathogenScissorCut
   id: CMU14ActionXenoPathogenScissorCutBloodletter
-  name: Savage (25)
+  name: Ravage (25)
   description: Cuts enemies in an area in front of you, causing slight blood loss.
