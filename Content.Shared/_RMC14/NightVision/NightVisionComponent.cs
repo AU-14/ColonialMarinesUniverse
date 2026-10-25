@@ -26,6 +26,9 @@ public sealed partial class NightVisionComponent : Component
     public bool SeeThroughContainers;
 
     [DataField, AutoNetworkedField]
+    public bool DrawVisibleMobs = true;
+
+    [DataField, AutoNetworkedField]
     public bool Green;
 
     [DataField, AutoNetworkedField]

@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Threats.Mobs.Biomorph; // CMU14
 using System.Numerics;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
@@ -176,7 +177,9 @@ public sealed partial class FiremanCarrySystem : EntitySystem
         // if (!_rmcPulling.IsPulling(user, ent.Owner))
         //     return;
         var yautjaInstant = HasComp<YautjaComponent>(user) &&
-                            (HasComp<XenoComponent>(ent.Owner) || HasComp<HumanoidProfileComponent>(ent.Owner));
+                            (HasComp<XenoComponent>(ent.Owner) ||
+                             HasComp<HumanoidProfileComponent>(ent.Owner) ||
+                             HasComp<BiomorphComponent>(ent.Owner));
         if (!yautjaInstant && !_rmcPulling.IsPulling(user, ent.Owner))
             return;
 

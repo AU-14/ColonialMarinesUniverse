@@ -7,9 +7,7 @@
   femaleFirstNames: CMUNamesYautjaFirst
   lastNames: CMUNamesYautjaLast
   naming: FirstLast
-  # CMU14: CM-SS13 defaults a predator to the "tan" skin (preferences.dm:121 / PRED_SKIN_COLOR); white was a
-  # leftover that made an unprofiled hunter render pale.
-  defaultSkinTone: "#a69964"
+  defaultSkinTone: "#ffffff"
   dollPrototype: AppearanceYautja
   skinColoration: Hues
   sexes:
@@ -45,6 +43,7 @@
   - type: NightVision
     state: Half
     innate: true
+    drawVisibleMobs: false
   - type: InitialBody
     organs:
       Torso: CMUPartYautjaTorso

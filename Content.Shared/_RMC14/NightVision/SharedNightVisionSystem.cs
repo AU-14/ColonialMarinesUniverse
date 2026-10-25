@@ -298,6 +298,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
                     item.Comp.PreviousGreen = nightVision.Green;
                     // CMU Related Change
                     item.Comp.PreviousOverlay = nightVision.Overlay;
+                    item.Comp.PreviousDrawVisibleMobs = nightVision.DrawVisibleMobs;
                     item.Comp.PreviousMesons = nightVision.Mesons;
                     item.Comp.PreviousExperimentalMesonFov = nightVision.ExperimentalMesonFov;
                     item.Comp.PreviousBlockScopes = nightVision.BlockScopes;
@@ -321,6 +322,8 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
                 nightVision.Green = item.Comp.Green;
                 // CMU Related Change
                 nightVision.Overlay = item.Comp.Overlay;
+                // CMU14: while the item is active it owns the silhouette pass, which is what the bio-mask visor adds.
+                nightVision.DrawVisibleMobs = true;
                 nightVision.Mesons = item.Comp.Mesons;
                 nightVision.ExperimentalMesonFov = item.Comp.ExperimentalMesonFov;
                 nightVision.BlockScopes = item.Comp.BlockScopes;
@@ -412,6 +415,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
                 nightVision.Green = item.Comp.PreviousGreen;
                 // CMU Related Change
                 nightVision.Overlay = item.Comp.PreviousOverlay;
+                nightVision.DrawVisibleMobs = item.Comp.PreviousDrawVisibleMobs;
                 nightVision.Mesons = item.Comp.PreviousMesons;
                 nightVision.ExperimentalMesonFov = item.Comp.PreviousExperimentalMesonFov;
                 nightVision.BlockScopes = item.Comp.PreviousBlockScopes;

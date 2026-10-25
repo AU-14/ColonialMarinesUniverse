@@ -20,6 +20,7 @@ public sealed partial class YautjaMaskSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedContentEyeSystem _contentEye = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
@@ -60,7 +61,10 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (TryGetVisorToggleFailure(ent, args.Performer, out var failure))
+        // CMU14: those checks are what it takes to turn the overlay *on* - a worn power source, clear eye wear, a Yautja
+        // wearer. Applying them to the off direction trapped the thermals: taking the bracer off (or wearing anything in
+        // the eye slot) refused the toggle and left wall vision and the FOV suppression running with no way out.
+        if (!ent.Comp.VisorEnabled && TryGetVisorToggleFailure(ent, args.Performer, out var failure))
         {
             _popup.PopupEntity(failure, args.Performer, args.Performer);
             return;
@@ -186,6 +190,7 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         mask.Comp.VisorWaitingForPower = false;
         mask.Comp.User = user;
         mask.Comp.NextDrain = _timing.CurTime + mask.Comp.DrainEvery;
+        SetVisorFov(mask, user, true);
         Dirty(mask);
 
         _actions.SetToggled(mask.Comp.ToggleVisorAction, true);
@@ -204,6 +209,9 @@ public sealed partial class YautjaMaskSystem : EntitySystem
 
         mask.Comp.VisorEnabled = false;
         mask.Comp.VisorWaitingForPower = false;
+        if (user is { } wearer)
+            SetVisorFov(mask, wearer, false);
+
         Dirty(mask);
         _actions.SetToggled(mask.Comp.ToggleVisorAction, false);
 
@@ -217,6 +225,29 @@ public sealed partial class YautjaMaskSystem : EntitySystem
 
         _audio.PlayPvs(mask.Comp.ToggleVisorSound, mask.Owner);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-visor-disabled"), user.Value, user.Value);
+    }
+
+    private void SetVisorFov(Entity<YautjaMaskComponent> mask, EntityUid user, bool suppress)
+    {
+        if (!TryComp<EyeComponent>(user, out var eye))
+            return;
+
+        if (suppress)
+        {
+            if (mask.Comp.VisorFovSuppressed)
+                return;
+
+            mask.Comp.VisorDrawFovBefore = eye.DrawFov;
+            mask.Comp.VisorFovSuppressed = true;
+            _eye.SetDrawFov(user, false, eye);
+            return;
+        }
+
+        if (!mask.Comp.VisorFovSuppressed)
+            return;
+
+        mask.Comp.VisorFovSuppressed = false;
+        _eye.SetDrawFov(user, mask.Comp.VisorDrawFovBefore, eye);
     }
 
     private void SetZoom(Entity<YautjaMaskComponent> mask, EntityUid user, bool zoomed, bool feedback = true)

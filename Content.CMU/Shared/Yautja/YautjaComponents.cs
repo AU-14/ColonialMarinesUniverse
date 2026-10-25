@@ -964,6 +964,18 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
     [DataField, AutoNetworkedField]
     public bool VisorEnabled;
 
+    /// <summary>
+    /// CMU14: server-side record of the field of view cone being held off while the bio overlay is up, with the
+    /// wearer's own setting saved so it can be handed back. The client cannot do this - the eye component is
+    /// networked, so the next server state puts the cone straight back.
+    /// </summary>
+    public bool VisorFovSuppressed;
+
+    /// <summary>
+    /// The wearer's field of view setting captured when the overlay suppressed it.
+    /// </summary>
+    public bool VisorDrawFovBefore = true;
+
     [DataField, AutoNetworkedField]
     public bool Zoomed;
 

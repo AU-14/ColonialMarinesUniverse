@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Body;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Humanoid;
@@ -157,6 +158,17 @@ public sealed partial class VisualBodySystem
         {
             return;
         }
+        if (eyes)
+        {
+            // CMU14: Yautja bake their eyes into the head art, so the shared humanoid eyes layer is switched off for
+            // them. This flag is not species-specific - the shared appearance path passes it whenever the organ is the
+            // eyes layer, for any species - so the decision has to be made on the species, and false must be undone for
+            // everyone else or their eye colour stops showing.
+            var yautja = TryComp<HumanoidProfileComponent>(body, out var bodyProfile) &&
+                         bodyProfile.Species.Id == "Yautja";
+            sprite.LayerSetVisible(index, !yautja);
+        }
+
         // Identify a Yautja skin layer from the sheet the organ draws from plus the body's species - not from
         // YautjaComponent (the lobby preview doll has none) and not from the layer colour (each organ is tinted with its
         // own). The part-name and sheet guards below do the rest.
