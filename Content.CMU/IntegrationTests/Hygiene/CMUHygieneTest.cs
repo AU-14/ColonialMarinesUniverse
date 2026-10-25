@@ -4,9 +4,7 @@ using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Power;
 using Content.Shared.Explosion;
-using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
-using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Serialization.Markdown.Mapping;
@@ -34,6 +32,16 @@ namespace Content.IntegrationTests.CMU14.Hygiene;
 [TestFixture]
 public sealed class CMUHygieneTest
 {
+    [TestPrototypes]
+    private const string Prototypes = @"
+- type: entity
+  parent: CMMagazineRifleM54C
+  id: CMUTestLaundryMagazine
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 2000
+";
+
     [Test]
     public async Task AcidContactStainsButCleaningPreservesActiveAcidAndDamage()
     {
@@ -56,7 +64,7 @@ public sealed class CMUHygieneTest
             {
                 Assert.That(em.GetComponent<CMUResidueComponent>(human).Color, Is.Null);
                 Assert.That(em.GetComponent<SprayAcidedComponent>(human), Is.SameAs(activeAcid));
-                Assert.That(em.GetComponent<DamageableComponent>(human).TotalDamage.Float(), Is.EqualTo(10f));
+                Assert.That(em.System<DamageableSystem>().GetTotalDamage(human).Float(), Is.EqualTo(10f));
             });
             em.DeleteEntity(human);
             em.DeleteEntity(projectile);
@@ -376,16 +384,12 @@ public sealed class CMUHygieneTest
             var em = pair.Server.EntMan;
             var machine = em.SpawnEntity("CMWashingMachine", map.GridCoords);
             var clothing = em.SpawnEntity("CMBootsBlack", map.GridCoords);
-            var magazine = em.SpawnEntity("CMMagazineRifleM54C", map.GridCoords);
+            var magazine = em.SpawnEntity("CMUTestLaundryMagazine", map.GridCoords);
             var containers = em.System<SharedContainerSystem>();
             var pocket = containers.EnsureContainer<Container>(clothing, "hygiene-test");
             Assert.That(containers.Insert(magazine, pocket), Is.True);
             Assert.That(em.System<SharedStorageSystem>().Insert(machine, clothing, out _, playSound: false), Is.True);
             SetTestPower(em, machine, true);
-            var ammunition = em.GetComponent<BallisticAmmoProviderComponent>(magazine);
-            ammunition.Capacity = 2000;
-            ammunition.UnspawnedCount = ammunition.Capacity;
-            em.System<SharedGunSystem>().UpdateBallisticAppearance((magazine, ammunition));
             var laundry = em.GetComponent<CMULaundryComponent>(machine);
             laundry.AmmoCookoffSeconds = 0;
             laundry.CookoffSeconds = 100;
