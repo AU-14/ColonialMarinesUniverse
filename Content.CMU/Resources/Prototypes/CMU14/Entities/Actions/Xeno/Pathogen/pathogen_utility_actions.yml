@@ -16,5 +16,6 @@
   - type: EntityTargetAction
     event: !type:XenoGuardianLinkActionEvent
     canTargetSelf: false
+    toggleOutline: false
   - type: XenoActionPlasma
     cost: 100
