@@ -16,10 +16,10 @@ public sealed partial class XenoGuardianSweepComponent : Component
     public float Range = 1.5f;  
   
     [DataField]  
-    public EntProtoId Effect = "RMCEffectExtraSlash";  
+    public EntProtoId Effect = "CMEffectPunch";  
   
     [DataField]  
-    public SoundSpecifier Sound = new SoundCollectionSpecifier("AlienClaw");  
+    public SoundSpecifier Sound = new SoundCollectionSpecifier("/Audio/_RMC14/Xeno/alien_claw_block.ogg");  
   
     [DataField]  
     public ProtoId<EmotePrototype> HissEmote = "Hiss";  
