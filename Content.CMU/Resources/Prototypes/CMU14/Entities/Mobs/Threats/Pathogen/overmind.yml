@@ -147,8 +147,8 @@
     - CMU14PathogenSporecasterConstructionNode
   - type: Tackle
     min: 2
-    max: 5
-    chance: 0.35
+    max: 3
+    chance: 0.50
     stunMin: 3
     stunMax: 4
   - type: TacticalMapIcon
