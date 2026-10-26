@@ -19,7 +19,7 @@
   parent: RMCSecureCaseStrapped
   id: RUMCCrateTradeStart
   name: logistics kit crate
-  description: A sealed crate with a logistics console and cardboard. Open it with a crowbar, then weld the console down where the shuttle is to be called from.
+  description: A sealed crate with a logistics console and cardboard. Open it with a crowbar, then anchor the console with a wrench where the shuttle is to be called from.
   components:
   - type: CrateOpenable
     spawn:
@@ -37,7 +37,7 @@
   parent: RMCSecureCaseStrapped
   id: RUMCCrateAdministrationStart
   name: administration kit box
-  description: A sealed box with an administration console and three consoles of the townsfolk. Open it with a crowbar, then carry the consoles where they are needed and weld them down.
+  description: A sealed box with an administration console and three consoles of the townsfolk. Open it with a crowbar, then anchor the consoles with a wrench where they are needed.
   components:
   - type: CrateOpenable
     spawn:

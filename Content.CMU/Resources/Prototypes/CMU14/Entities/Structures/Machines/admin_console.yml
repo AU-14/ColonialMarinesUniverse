@@ -22,7 +22,7 @@
     key: enum.AdminConsoleUi.Key
   - type: AdminConsole
   - type: ColonyGovernmentConsole # RUMC: the window of the government of the colony
-  - type: PortableStructure # RUMC: the console may be carried and welded down elsewhere
+  - type: Anchorable # RUMC: the console is unanchored and anchored again with a wrench
   - type: UserInterface
     interfaces:
       enum.AdminConsoleUi.Key:

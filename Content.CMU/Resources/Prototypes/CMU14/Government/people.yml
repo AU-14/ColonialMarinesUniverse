@@ -16,7 +16,7 @@
   - type: ActivatableUI
     key: enum.CitizenConsoleUi.Key
   - type: CitizenConsole
-  - type: PortableStructure
+  - type: Anchorable
   - type: UserInterface
     interfaces:
       enum.CitizenConsoleUi.Key:

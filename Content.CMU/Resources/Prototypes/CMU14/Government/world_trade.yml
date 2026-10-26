@@ -16,7 +16,7 @@
   - type: ActivatableUI
     key: enum.ForemanUi.Key
   - type: ForemanConsole
-  - type: PortableStructure
+  - type: Anchorable
   - type: UserInterface
     interfaces:
       enum.ForemanUi.Key:
