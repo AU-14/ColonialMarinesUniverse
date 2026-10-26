@@ -8,3 +8,18 @@
   - type: Clothing
   sprite: CMU14/Clothing/UPP/masks/upppilotoxygenmask.rsi
   - type: BreathMask
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+    - HeadSide
+    - Snout
+    layers:
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
+  - type: IdentityBlocker
+    coverage: MOUTH
+  - type: Item
+    storedRotation: -90
+  - type: MycotoxinProtection
+    fullProtection: false
