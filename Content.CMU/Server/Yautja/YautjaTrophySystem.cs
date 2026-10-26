@@ -121,6 +121,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         SubscribeLocalEvent<YautjaScalpComponent, ExaminedEvent>(OnScalpExamined);
         SubscribeLocalEvent<MobStateComponent, ExaminedEvent>(OnMobStateExamined);
         SubscribeLocalEvent<MobStateChangedEvent>(OnAnyMobStateChanged);
+
+        InitializeRag();
     }
 
     private void OnMobStateExamined(Entity<MobStateComponent> ent, ref ExaminedEvent args)

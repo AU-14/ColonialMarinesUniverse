@@ -90,6 +90,44 @@ public sealed class YautjaBugReportsTest
     }
 
     [Test]
+    public async Task PolishingRagWipesBloodOffWornArmor()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid hunter = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            var rag = entMan.SpawnEntity("CMUYautjaPolishingRag", map.GridCoords);
+            PickUpOnly(entMan, hunter, rag);
+
+            var armor = entMan.SpawnEntity("CMUYautjaClanArmor", map.GridCoords);
+            Assert.That(entMan.System<InventorySystem>().TryEquip(hunter, armor, "outerClothing", silent: true, force: true), Is.True);
+
+            var stains = entMan.System<CMUItemStainSystem>();
+            Assert.That(stains.TryStainOuterBody(hunter, CMUItemStainKind.Blood, Color.Red), Is.True);
+            Assert.That(stains.HasBloodStainedEquipment(hunter), Is.True);
+
+            entMan.System<SharedInteractionSystem>().UserInteraction(
+                hunter,
+                entMan.GetComponent<TransformComponent>(hunter).Coordinates,
+                hunter);
+        });
+
+        await pair.RunTicksSync(pair.SecondsToTicks(6));
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.System<CMUItemStainSystem>().HasBloodStainedEquipment(hunter), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task AbandonedMedicompSlowdownWearsOff()
     {
         await using var pair = await PoolManager.GetServerClient();
