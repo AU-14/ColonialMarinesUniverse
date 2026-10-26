@@ -19,6 +19,9 @@ namespace Content.IntegrationTests.CMU14.Xenomorphs;
 [TestFixture]
 public sealed class CMUReaperRevivalTest : GameTest
 {
+    // Revival cooldowns survive entity cleanup and must be reset with the round.
+    public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
     private EntityUid _caster;
     private EntityUid _corpse;
     private EntityUid _hive;
@@ -51,10 +54,10 @@ public sealed class CMUReaperRevivalTest : GameTest
         await Pair.RunTicksSync(5);
     }
 
-    private CMUReaperReviveActionEvent Cast(EntityUid caster)
+    private CMUReaperReviveActionEvent Cast(EntityUid caster, EntityUid? target = null)
     {
         var action = Server.System<SharedRMCActionsSystem>().GetActionsWithEvent<CMUReaperReviveActionEvent>(caster).Single();
-        var ev = new CMUReaperReviveActionEvent { Target = _corpse };
+        var ev = new CMUReaperReviveActionEvent { Target = target ?? _corpse };
         Server.System<SharedActionsSystem>().PerformAction(caster, action, ev);
         return ev;
     }
@@ -222,6 +225,58 @@ public sealed class CMUReaperRevivalTest : GameTest
             Assert.That(Cast(competitor).Handled, Is.False);
             Assert.That(other.FleshResin, Is.EqualTo(600));
         });
+    }
+
+    [Test]
+    public async Task RevivalCooldownIsGlobalAndSurvivesCasterDeletion()
+    {
+        await Prepare(2);
+        EntityUid existing = default;
+        EntityUid newcomer = default;
+        EntityUid otherCorpse = default;
+        await Server.WaitAssertion(() =>
+        {
+            var coords = SEntMan.GetComponent<TransformComponent>(_caster).Coordinates;
+            var otherHive = SEntMan.SpawnEntity("CMXenoHive", coords);
+            EntityUid SpawnReaper()
+            {
+                var reaper = SEntMan.SpawnEntity("CMXenoReaper", coords);
+                Server.System<SharedXenoHiveSystem>().SetHive(reaper, otherHive);
+                var component = SEntMan.GetComponent<XenoReaperComponent>(reaper);
+                component.FleshResin = 600;
+                component.PassiveGainMaxFleshResin = 0;
+                return reaper;
+            }
+
+            existing = SpawnReaper();
+            otherCorpse = SEntMan.SpawnEntity("CMXenoDrone", coords.Offset(new Vector2(1, 0)));
+            SEntMan.RemoveComponent<RMCGibOnDeathComponent>(otherCorpse);
+            Server.System<SharedXenoHiveSystem>().SetHive(otherCorpse, otherHive);
+            Server.System<DamageableSystem>().TryChangeDamage(otherCorpse,
+                new DamageSpecifier { DamageDict = { ["Blunt"] = 10000 } }, true);
+            var actions = Server.System<SharedRMCActionsSystem>();
+            var originalAction = actions.GetActionsWithEvent<CMUReaperReviveActionEvent>(_caster).Single();
+            Server.System<SharedActionsSystem>().SetUseDelay(originalAction.AsNullable(), TimeSpan.FromSeconds(3));
+            Assert.That(Cast(_caster).Handled, Is.True);
+            newcomer = SpawnReaper();
+            foreach (var reaper in new[] { existing, newcomer })
+            {
+                var action = actions.GetActionsWithEvent<CMUReaperReviveActionEvent>(reaper).Single();
+                Assert.That(action.Comp.Cooldown, Is.EqualTo(originalAction.Comp.Cooldown));
+                Assert.That(Cast(reaper, otherCorpse).Handled, Is.False);
+                Assert.That(SEntMan.GetComponent<XenoReaperComponent>(reaper).FleshResin, Is.EqualTo(600));
+            }
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, newcomer);
+            SEntMan.DeleteEntity(_caster);
+        });
+        await Pair.RunTicksSync(5);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Cast(newcomer, otherCorpse).Handled, Is.False);
+            Assert.That(Server.System<MobStateSystem>().IsDead(otherCorpse), Is.True);
+        });
+        await Pair.RunTicksSync(190);
+        await Server.WaitAssertion(() => Assert.That(Cast(newcomer, otherCorpse).Handled, Is.True));
     }
 
     [TearDown]

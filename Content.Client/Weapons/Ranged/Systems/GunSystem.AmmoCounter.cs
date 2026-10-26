@@ -16,6 +16,11 @@ public sealed partial class GunSystem
 {
     private void OnAmmoCounterCollect(Entity<AmmoCounterComponent> ent, ref ItemStatusCollectMessage args)
     {
+        // cmu edit start: without an ammo counter you can't see the rounds left; energy guns keep their charge display
+        if (!CMUShowsAmmoCount(ent) && !HasComp<Content.Shared.Weapons.Ranged.Components.BatteryAmmoProviderComponent>(ent))
+            return;
+        // cmu edit end
+
         RefreshControl(ent);
 
         if (ent.Comp.Control != null)

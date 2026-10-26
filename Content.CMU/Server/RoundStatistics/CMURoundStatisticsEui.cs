@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Threading;
 using Content.Server.Database;
 using Content.Server.EUI;
 using Content.Shared.CMU14.RoundStatistics;
@@ -11,13 +11,17 @@ namespace Content.Server.CMU14.RoundStatistics;
 
 public sealed partial class CMURoundStatisticsEui : BaseEui
 {
-    private const int RecentRounds = 30;
-
     [Dependency] private IServerDbManager _db = default!;
     [Dependency] private ITaskManager _task = default!;
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.round_statistics");
-    private CMURoundStatisticsDashboard _dashboard = EmptyDashboard();
+    private readonly CancellationTokenSource _cancel = new();
+    private CMURoundStatisticsDashboard _dashboard = new(new(), new());
+    private CMURoundStatisticsQuery _query = new();
+    private int _revision;
+    private bool _loading;
+    private bool _failed;
+    private bool _closed;
 
     public CMURoundStatisticsEui()
     {
@@ -27,118 +31,73 @@ public sealed partial class CMURoundStatisticsEui : BaseEui
     public override void Opened()
     {
         base.Opened();
-
-        LoadFromDb();
+        RequestLoad();
     }
 
-    public override EuiStateBase GetNewState()
+    public override void Closed()
     {
-        return new CMURoundStatisticsEuiState(_dashboard);
+        _closed = true;
+        _cancel.Cancel();
+        _cancel.Dispose();
+        base.Closed();
     }
+
+    public override EuiStateBase GetNewState() => new CMURoundStatisticsEuiState(_dashboard, _loading, _failed);
 
     public override void HandleMessage(EuiMessageBase msg)
     {
         base.HandleMessage(msg);
-
-        if (msg is CMURoundStatisticsRefreshMsg)
-            LoadFromDb();
+        if (msg is CMURoundStatisticsQueryMsg request)
+        {
+            _query = request.Query;
+            RequestLoad();
+        }
+        else if (msg is CMURoundStatisticsRefreshMsg)
+            RequestLoad();
     }
 
-    private async void LoadFromDb()
+    private void RequestLoad()
     {
+        _revision++;
+        if (!_loading && !_closed)
+            Load();
+    }
+
+    private async void Load()
+    {
+        _loading = true;
+        _failed = false;
+        StateDirty();
+        var revision = _revision;
+        CMURoundStatisticsDashboard? dashboard = null;
         try
         {
-            var dashboard = await _db.GetCMURoundStatisticsDashboard(RecentRounds);
-            _task.RunOnMainThread(() =>
-            {
-                _dashboard = dashboard;
-                StateDirty();
-            });
+            dashboard = await _db.GetCMURoundStatisticsDashboard(_query, _cancel.Token);
+        }
+        catch (OperationCanceledException) when (_closed)
+        {
+            return;
         }
         catch (Exception e)
         {
             _sawmill.Error($"Failed to load CMU round statistics dashboard:\n{e}");
         }
-    }
 
-    private static CMURoundStatisticsDashboard EmptyDashboard()
-    {
-        return new CMURoundStatisticsDashboard(
-            new List<CMURoundModeStatistics>
+        _task.RunOnMainThread(() =>
+        {
+            if (_closed)
+                return;
+            _loading = false;
+            // Coalesce requests while a query is in flight and discard stale responses.
+            if (revision != _revision)
             {
-                new(
-                    CMURoundStatisticsPreset.DistressSignal,
-                    "Distress Signal",
-                    "Xeno",
-                    "Govfor",
-                    0,
-                    0,
-                    0,
-                    0,
-                    new List<CMURoundOutcomeBreakdown>(),
-                    new List<CMURoundManualReasonBreakdown>(),
-                    new List<CMURoundThreatBreakdown>(),
-                    EmptyRecentForm(),
-                    EmptyStreak(),
-                    EmptyStreak(),
-                    EmptyDurations(),
-                    new List<CMURoundPlanetBreakdown>(),
-                    new List<CMURoundPlatoonMatchupBreakdown>(),
-                    new List<CMURoundPlayerCountBandBreakdown>()),
-                new(
-                    CMURoundStatisticsPreset.Insurgency,
-                    "Insurgency",
-                    "Govfor",
-                    "CLF",
-                    0,
-                    0,
-                    0,
-                    0,
-                    new List<CMURoundOutcomeBreakdown>(),
-                    new List<CMURoundManualReasonBreakdown>(),
-                    new List<CMURoundThreatBreakdown>(),
-                    EmptyRecentForm(),
-                    EmptyStreak(),
-                    EmptyStreak(),
-                    EmptyDurations(),
-                    new List<CMURoundPlanetBreakdown>(),
-                    new List<CMURoundPlatoonMatchupBreakdown>(),
-                    new List<CMURoundPlayerCountBandBreakdown>()),
-                new(
-                    CMURoundStatisticsPreset.ColonyFall,
-                    "Colony Fall",
-                    "Colonists",
-                    "Threat",
-                    0,
-                    0,
-                    0,
-                    0,
-                    new List<CMURoundOutcomeBreakdown>(),
-                    new List<CMURoundManualReasonBreakdown>(),
-                    new List<CMURoundThreatBreakdown>(),
-                    EmptyRecentForm(),
-                    EmptyStreak(),
-                    EmptyStreak(),
-                    EmptyDurations(),
-                    new List<CMURoundPlanetBreakdown>(),
-                    new List<CMURoundPlatoonMatchupBreakdown>(),
-                    new List<CMURoundPlayerCountBandBreakdown>()),
-            },
-            new List<CMURoundOutcomeRecord>());
-    }
-
-    private static CMURoundRecentForm EmptyRecentForm()
-    {
-        return new CMURoundRecentForm(0, 0, 0, 0, 0, new List<CMURoundStatisticsWinner>());
-    }
-
-    private static CMURoundStreak EmptyStreak()
-    {
-        return new CMURoundStreak(CMURoundStatisticsWinner.Unknown, 0);
-    }
-
-    private static CMURoundDurationBreakdown EmptyDurations()
-    {
-        return new CMURoundDurationBreakdown(0, 0, 0, 0, 0);
+                Load();
+                return;
+            }
+            if (dashboard != null)
+                _dashboard = dashboard;
+            _failed = dashboard == null;
+            StateDirty();
+        });
     }
 }

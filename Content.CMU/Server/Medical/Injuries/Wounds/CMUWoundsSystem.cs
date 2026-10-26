@@ -27,6 +27,7 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
     {
         base.Update(frameTime);
         UpdateServer(frameTime);
+        ExpireInternalBleedSuppression();
     }
 
     protected override void ApplyInternalBleed(EntityUid body, EntityUid part, float amount)
