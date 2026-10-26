@@ -12,6 +12,8 @@
   id: AU14JobWYGuard
   roundSide: Civilian
   roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
   roundRole: WYGuard
   roundComponents:
   - type: Skills
@@ -70,6 +72,11 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   spawnMenuRoleName: au14-spawn-role-name-wy-corporate-goon

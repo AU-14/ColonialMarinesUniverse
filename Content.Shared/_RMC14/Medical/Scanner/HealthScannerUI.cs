@@ -39,7 +39,12 @@ public sealed class HealthScannerBuiState(
     public CMUPainShockRisk? CMUPainShockRisk;
     public bool CMUPainShockSuppressed;
     public string? CMURiderReading;
+    public string? CMUWendigoReading; // CMU14: lab Wendigo procedure progress
     public bool CMUExternalBleeding;
+    // cmu edit start
+    public ExternalBleedTier CMUExternalBleedTier;
+    public List<CMUStumpReadout>? CMUStumps;
+    // cmu edit end
     public bool CMUSyntheticPhysiology;
     public HealthScannerDamageReadout Damage = new();
     public HealthScannerAdviceReadout Advice = new();
@@ -54,6 +59,15 @@ public sealed class HealthScannerBuiState(
     public bool HolocardXeno;
     // cmu edit start
     public TimeSpan? CMUTimeUntilUnrevivable;
+    public string? CMUBloodType;
+    public float CMUSalinePercent;
+    /// <summary>Set during an allergic reaction: the allergen's name, or empty if unknown.</summary>
+    public string? CMUAllergicReaction;
+    /// <summary>Trait episodes going on right now, which the scanner flags at the top of its advice.</summary>
+    public bool CMUSeizure;
+    public bool CMUAsthmaAttack;
+    public bool CMUPanicAttack;
+    public bool CMUHeartEpisode;
     // cmu edit end
 }
 
@@ -101,6 +115,9 @@ public sealed class HealthScannerAdviceReadout
     public bool ShowBicaridine;
     public bool ShowKelotane;
     public bool ShowDylovene;
+    // cmu edit start
+    public bool CMUShowInternals;
+    // cmu edit end
 }
 
 [Serializable, NetSerializable]
@@ -117,7 +134,22 @@ public readonly record struct CMUBodyPartReadout(
     bool Eschar,
     bool Splinted,
     bool Cast,
-    bool Tourniquet);
+    bool Tourniquet,
+    // cmu edit start
+    ExternalBleedTier ExternalBleeding = ExternalBleedTier.None,
+    FixedPoint2 Brute = default,
+    FixedPoint2 Burn = default,
+    bool UntreatedBrute = false,
+    bool UntreatedBurn = false);
+    // cmu edit end
+
+// cmu edit start
+[Serializable, NetSerializable]
+public readonly record struct CMUStumpReadout(
+    BodyPartType Type,
+    BodyPartSymmetry Symmetry,
+    bool Clamped);
+// cmu edit end
 
 [Serializable, NetSerializable]
 public readonly record struct CMUOrganReadout(

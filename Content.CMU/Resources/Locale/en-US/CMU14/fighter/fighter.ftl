@@ -188,6 +188,7 @@ cmu-fighter-officer-route-hint = Select a flare on the map to view it.
     Air cover · assign defended sectors
 cmu-fighter-board-blocked = Both seats are occupied, or the aircraft is not safely grounded.
 cmu-fighter-takeoff-blocked = Takeoff needs a clear footprint and open sky. Move away from people, obstacles, roofs and the moving lift.
+cmu-fighter-landing-diverted = The recovery site is still blocked. Diverting to the nearest clear spot.
 cmu-fighter-air-countdown = Impact in { $seconds }s
 cmu-fighter-flares = DEPLOY FLARES
 cmu-fighter-flares-used = FLARES DEPLOYED
@@ -290,3 +291,9 @@ ent-CMUFighterGroundLoaded = two-seat VTOL fighter
 cmu-fighter-crash-warning = AIRFRAME FAILURE — EJECT! Impact in { $seconds } seconds!
 cmu-fighter-crashed = AIRFRAME LOST — Aircraft cannot be repaired.
 cmu-fighter-exit-blocked = There is no clear footing beside the cockpit to climb out.
+
+cmu-fighter-pad-unfold-hint = Use a wrench to unfold the fighter VTOL pad.
+cmu-fighter-pad-unfolded = The fighter VTOL pad unfolds and its guide lights come on.
+cmu-fighter-pad-anchors-loosened = The VTOL pad anchor bolts are loosened.
+cmu-fighter-pad-panel-opened = The VTOL pad guide light panel is opened.
+cmu-fighter-pad-packed = The fighter VTOL pad is folded and packed.

@@ -47,7 +47,7 @@ public sealed class FillLevelSpriteTest : GameTest
                 {
                     Assert.That(proto.TryComp<SolutionContainerVisualsComponent>(out var visuals, componentFactory));
                     Assert.That(proto.TryComp<SpriteComponent>(out var sprite, componentFactory));
-                    if (!proto.HasComponent<AppearanceComponent>(componentFactory))
+                    if (!proto.HasComp<AppearanceComponent>(componentFactory))
                     {
                         Assert.Fail(@$"{proto.ID} has SolutionContainerVisualsComponent but no AppearanceComponent.");
                     }

@@ -6,10 +6,12 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Construction.Events;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Maturing;
 using Content.Shared.Actions.Components;
 using Content.Shared.Destructible;
+using Content.Shared.Mind;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -104,11 +106,11 @@ public sealed class ReportedHiveRegressionTest
     [Test]
     public async Task HijackingFromShipClearsAllPlanetLevelsAndPreservesPassengers()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true, Connected = true });
         var surface = await pair.CreateTestMap();
         var lower = await pair.CreateTestMap();
         var ship = await pair.CreateTestMap();
-        EntityUid core = default, stranded = default, passenger = default;
+        EntityUid core = default, stranded = default, passenger = default, returned = default;
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
@@ -124,9 +126,21 @@ public sealed class ReportedHiveRegressionTest
             var container = entities.SpawnEntity(null, ship.GridCoords);
             passenger = entities.SpawnEntity("CMXenoDrone", new EntityCoordinates(container, Vector2.Zero));
             var queen = entities.SpawnEntity("CMXenoQueen", ship.GridCoords);
+            var hive = entities.SpawnEntity("CMXenoHive", ship.GridCoords);
+            var hives = entities.System<SharedXenoHiveSystem>();
+            hives.SetHive(stranded, hive);
+            hives.SetHive(queen, hive);
+            var minds = entities.System<SharedMindSystem>();
+            var mind = minds.GetOrCreateMind(pair.Player!.UserId).Owner;
+            minds.TransferTo(mind, stranded);
             var ev = new DropshipHijackStartEvent(ship.Grid);
             entities.EventBus.RaiseEvent(EventSource.Local, ref ev);
             Assert.That(entities.GetComponent<XenoMaturingComponent>(queen).MatureAt, Is.EqualTo(TimeSpan.Zero));
+            returned = pair.Player.AttachedEntity!.Value;
+            Assert.That(returned, Is.Not.EqualTo(stranded));
+            Assert.That(entities.HasComponent<XenoComponent>(returned), Is.True);
+            Assert.That(hives.GetHive(returned)?.Owner, Is.EqualTo(hive));
+            Assert.That(entities.GetComponent<TransformComponent>(returned).GridUid, Is.EqualTo(ship.Grid.Owner));
         });
         await pair.RunTicksSync(2);
         await pair.Server.WaitAssertion(() =>
@@ -134,6 +148,7 @@ public sealed class ReportedHiveRegressionTest
             Assert.That(pair.Server.EntMan.Deleted(core), Is.True);
             Assert.That(pair.Server.EntMan.Deleted(stranded), Is.True);
             Assert.That(pair.Server.EntMan.Deleted(passenger), Is.False);
+            Assert.That(pair.Server.EntMan.Deleted(returned), Is.False, "Newly burrowed larvae must not re-enter stranded-body cleanup.");
         });
         await pair.CleanReturnAsync();
     }

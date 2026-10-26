@@ -10,16 +10,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Weapons;
 
-public sealed class DebugLightningSystem : EntitySystem
+public sealed partial class DebugLightningSystem : EntitySystem
 {
     // Invisible point entity the beam system already uses. TimedDespawn self-cleans it.
     private static readonly EntProtoId AnchorProto = "VirtualBeamEntityController";
 
-    [Dependency] private readonly LightningSystem _lightning = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly RMCCameraShakeSystem _cameraShake = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private LightningSystem _lightning = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
         => SubscribeLocalEvent<DebugLightningComponent, BeforeRangedInteractEvent>(OnBeforeInteract);

@@ -159,8 +159,10 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         if (!deferInstantTreatment)
             delay += ResolveBandageDelay(args.User, patient, targetPart, used, treater, out fumblingDelay);
 
+        delay *= Content.Shared.CMU14.Traits.Conditions.CMUFearOfBloodComponent.GetTreatmentMultiplier(EntityManager, args.User);
+
         if (fumblingDelay > TimeSpan.Zero)
-            _popup.PopupClient(Loc.GetString("cm-wounds-start-fumbling", ("name", used)), patient, args.User);
+            _popup.PopupEntity(Loc.GetString("cm-wounds-start-fumbling", ("name", used)), patient, args.User);
 
         var partHealthCap = ResolveTreaterDamagePartHealthCap(targetPart, treater);
         var doAfterEv = new CMUBandageDoAfterEvent(GetNetEntity(medic), GetNetEntity(patient),
@@ -630,7 +632,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
                 ? ResolveSearchDelay(target)
                 : ResolveBandageDelay(medic, patient, target.Part, treaterUid, treater, out fumbling) + ResolveSearchDelay(target);
             if (fumbling > TimeSpan.Zero)
-                _popup.PopupClient(Loc.GetString("cm-wounds-start-fumbling", ("name", treaterUid)), patient, medic);
+                _popup.PopupEntity(Loc.GetString("cm-wounds-start-fumbling", ("name", treaterUid)), patient, medic);
             args.Repeat = true;
             // A nested failed or synchronous start may have retired the former
             // empty Pending component while the committed wound callback ran.

@@ -1,8 +1,10 @@
 using System.Linq;
+using Content.Server.CMU14.ColonyEconomy; // CMU14: ATM card details in character notes
 using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
 using Content.Server.CMU14.Round;
+using Content.Shared.Access.Components; // CMU14: ATM card details in character notes
 using Content.Shared.Mind;
 using Content.Server.GameTicking;
 using Content.Server.CMU14.Yautja;
@@ -10,7 +12,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Util;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.util;
-using Content.Shared.CMU14.util;
+
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CharacterInfo;
 using Content.Shared.Inventory;
@@ -35,6 +37,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ColonyBankSystem _bank = default!; // CMU14: ATM card details in character notes
     [Dependency] private YautjaRankManager _yautjaRank = default!;
 
     private (int roundId, string? threatId) _knowledgeKey = (-1, null);
@@ -105,6 +108,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         var isThreatRole = mind != null && IsThreatMind(mind);
         PopulateLorePrimerLines(lorePrimerLines, jobId, isThreatRole);
         AddCLFStandingOrders(lorePrimerLines, entity);
+        AddAtmCardLines(lorePrimerLines, entity); // CMU14: ATM card details in character notes
 
         // Check inventory and hands for JobTitleChangerComponent
         if (TryComp(entity, out InventoryComponent? _))
@@ -284,7 +288,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
             _prototypes.TryIndex(planetPrimerId, out LorePrimerPrototype? primer) &&
             primer.PlanetText is { } planetTextKey) // RuMC edit
         {
-            lines.Add(Loc.GetString(planetTextKey)); // RuMC edit
+            lines.Add(LocOrText(planetTextKey)); // RuMC edit // cmu edit
             return;
         }
 
@@ -303,14 +307,22 @@ public sealed partial class CharacterInfoSystem : EntitySystem
             primer.PlatoonInfo is { } platoonInfoKey)
         {
             lines.Add(Loc.GetString("lore-primer-platoon-label",
-                ("info", Loc.GetString(platoonInfoKey))));
+                ("info", LocOrText(platoonInfoKey)))); // cmu edit
             // RuMC edit end
             return;
         }
 
         if (!string.IsNullOrWhiteSpace(platoon.Name))
-            lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", platoon.Name))); // RuMC edit
+            lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", Loc.GetString(platoon.Name)))); // CMU14: Hardcode localization
     }
+
+    // cmu edit start
+    /// <summary>Primer fields hold either a locale key or plain text; plain text is shown as-is.</summary>
+    private string LocOrText(string keyOrText)
+    {
+        return Loc.TryGetString(keyOrText, out var text) ? text : keyOrText;
+    }
+    // cmu edit end
 
     private bool IsThreatMind(MindComponent mind)
     {
@@ -331,6 +343,55 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     {
 
         lines.Add("You are aligned with the active threat. Keep your identity and goals in mind.");
+    }
+
+    // CMU14 method
+    /// <summary>
+    ///     Injects ATM account number and PIN into the character notes for
+    ///     ColonyFall and Insurgency gamemodes, and in any mode for characters whose job pays them or whose
+    ///     account has money in it. Only ever shows this character's own card.
+    ///     Read-only: opening character info never assigns or changes a PIN.
+    /// </summary>
+    private void AddAtmCardLines(List<string> lines, EntityUid entity)
+    {
+        var presetId = (_ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? string.Empty).ToLowerInvariant();
+        // cmu edit start: anyone who gets paid sees their banking details in any game mode
+        var colonyMode = presetId == "colonyfall" || presetId == "insurgency";
+        // cmu edit end
+
+        // The card bound to this character (OriginalOwner), wherever it is now, so losing the card
+        // does not lose the details and holding someone else's card never shows theirs.
+        var owned = _bank.FindOwnedCard(entity);
+
+        // A card nobody has claimed yet: fall back to one we carry that has our name printed on it.
+        if (owned == null)
+        {
+            var invSys = EntityManager.System<InventorySystem>();
+            var ownName = Name(entity);
+            foreach (var item in invSys.GetHandOrInventoryEntities(entity))
+            {
+                if (TryComp<IdCardComponent>(item, out var card) && card.OriginalOwner == null && card.FullName == ownName)
+                {
+                    owned = (item, card);
+                    break;
+                }
+            }
+        }
+
+        // Credentials are assigned when the card is created; this only reads them.
+        if (owned is not { } found || found.card.AccountNumber == 0)
+            return;
+
+        // cmu edit start: anyone who gets paid sees their banking details in any game mode
+        if (!colonyMode &&
+            !HasComp<Content.Server.CMU14.ColonyEconomy.CMUBankAccountHolderComponent>(entity) &&
+            found.card.AccountBalance <= 0)
+        {
+            return;
+        }
+        // cmu edit end
+
+        lines.Add($"ATM Card: Account #{found.card.AccountNumber}  ·  PIN: {found.card.AtmPin}");
     }
 
 }

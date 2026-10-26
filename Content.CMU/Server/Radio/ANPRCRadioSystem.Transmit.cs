@@ -9,7 +9,6 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
-using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Radio;
@@ -26,7 +25,7 @@ public sealed partial class ANPRCRadioSystem
 
         if (!HasComp<ANPRCRadioUserComponent>(ent.Owner))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-not-authorized"), ent.Owner);
+            _anprcChat.Notice(Loc.GetString("anprc-not-authorized"), ent.Owner, ANPRCNotice.Warn);
             args.Channel = null;
 
             return;
@@ -40,7 +39,7 @@ public sealed partial class ANPRCRadioSystem
 
         if (radio.Mode == RadioMode.CipherText && string.IsNullOrEmpty(_crypto.GetFillFaction(ent.Comp.Radio)))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-ct-mode-no-fill"), ent.Owner);
+            _anprcChat.Notice(Loc.GetString("anprc-ct-mode-no-fill"), ent.Owner, ANPRCNotice.Warn);
             args.Channel = null;
 
             return;
@@ -55,9 +54,9 @@ public sealed partial class ANPRCRadioSystem
         if (!radio.Presets.TryGetValue(radio.ActiveSlot, out var channelId) ||
             string.IsNullOrEmpty(channelId.Id))
         {
-            _cmChat.ChatMessageToOne(
+            _anprcChat.Notice(
                 Loc.GetString("anprc-slot-empty", ("slot", radio.ActiveSlot + 1)),
-                ent.Owner);
+                ent.Owner, ANPRCNotice.Warn);
 
             args.Channel = null;
             return;
@@ -123,28 +122,44 @@ public sealed partial class ANPRCRadioSystem
         if (!radio.Enabled || (!radio.IsEquipped && !radio.Planted))
         {
             if (!quiet)
-                _cmChat.ChatMessageToOne(Loc.GetString("anprc-radio-off"), user);
+                _anprcChat.Notice(Loc.GetString("anprc-radio-off"), user);
+            return false;
+        }
+
+        // EMCON: listen-silent is exactly that
+        if (radio.Emcon)
+        {
+            if (!quiet)
+                _anprcChat.Notice(Loc.GetString("anprc-emcon-no-transmit"), user, ANPRCNotice.Warn);
+            return false;
+        }
+
+        // one handset, and it is on a call. the net waits until it hangs up
+        if (_telephone.AU14InCall(ent))
+        {
+            if (!quiet)
+                _anprcChat.Notice(Loc.GetString("anprc-call-net-blocked"), user, ANPRCNotice.Warn);
             return false;
         }
 
         if (radio.MonitorEnabled)
         {
             if (!quiet)
-                _cmChat.ChatMessageToOne(Loc.GetString("anprc-monitor-no-transmit"), user);
+                _anprcChat.Notice(Loc.GetString("anprc-monitor-no-transmit"), user, ANPRCNotice.Warn);
             return false;
         }
 
         if (radio.ActiveSlot < 0)
         {
             if (!quiet)
-                _cmChat.ChatMessageToOne(Loc.GetString("anprc-no-active-slot"), user);
+                _anprcChat.Notice(Loc.GetString("anprc-no-active-slot"), user, ANPRCNotice.Warn);
             return false;
         }
 
         if (!_powerCell.HasCharge(ent.Owner, GetTransmitCost(radio)))
         {
             if (!quiet)
-                _cmChat.ChatMessageToOne(Loc.GetString("anprc-battery-insufficient"), user);
+                _anprcChat.Notice(Loc.GetString("anprc-battery-insufficient"), user, ANPRCNotice.Warn);
             return false;
         }
 
@@ -153,7 +168,9 @@ public sealed partial class ANPRCRadioSystem
 
     private static float GetTransmitCost(ANPRCRadioComponent radio)
     {
-        return radio.TransmitChargeCost * radio.TxPower.ChargeMultiplier() * radio.Mode.ChargeMultiplier();
+        var cost = radio.TransmitChargeCost * radio.TxPower.ChargeMultiplier() * radio.Mode.ChargeMultiplier();
+
+        return radio.Burst ? cost * radio.BurstChargeMultiplier : cost;
     }
 
     private void OnSpeak(Entity<WearingANPRCComponent> ent, ref EntitySpokeEvent args)
@@ -234,7 +251,7 @@ public sealed partial class ANPRCRadioSystem
     }
 
     // sends one spoken message out through the pack (raw frequency or the active preset
-    // net), handles battery cost, COMSEC warning, name masking, DF exposure and logging.
+    // net), handles battery cost, COMSEC warning, name masking and logging.
     // speaker is the wearer or a handset user at the pack
     private void TransmitThroughPack(
         EntityUid speaker,
@@ -250,9 +267,9 @@ public sealed partial class ANPRCRadioSystem
             !spokenLanguage.CanUseRadio)
         {
             args.Channel = null;
-            _cmChat.ChatMessageToOne(
+            _anprcChat.Notice(
                 Loc.GetString("anprc-language-no-radio", ("language", spokenLanguage.Name)),
-                speaker);
+                speaker, ANPRCNotice.Warn);
 
             return;
         }
@@ -261,7 +278,7 @@ public sealed partial class ANPRCRadioSystem
         if (radio.SweepEnabled)
         {
             args.Channel = null;
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-sweep-tx-blocked"), speaker);
+            _anprcChat.Notice(Loc.GetString("anprc-sweep-tx-blocked"), speaker, ANPRCNotice.Warn);
             return;
         }
 
@@ -281,6 +298,8 @@ public sealed partial class ANPRCRadioSystem
                 senderName,
                 $"{TunableFrequencySystem.FormatFreq(frequency)} MHz",
                 outMessage);
+
+            radio.LastTransmit = _timing.CurTime;
 
             UpdateBuiState(pack);
             return;
@@ -309,12 +328,12 @@ public sealed partial class ANPRCRadioSystem
 
         if (unsecured)
         {
-            _cmChat.ChatMessageToOne(
+            _anprcChat.Notice(
                 Loc.GetString(
                     "anprc-comsec-unsecured",
                     ("channel", channel.LocalizedName),
                     ("faction", channel.Faction)),
-                speaker);
+                speaker, ANPRCNotice.Warn);
         }
 
         var sourceWasExempt = HasComp<TelecomExemptComponent>(speaker);
@@ -362,8 +381,6 @@ public sealed partial class ANPRCRadioSystem
         if (!radioWasExempt)
             RemCompDeferred<TelecomExemptComponent>(pack.Owner);
 
-        TryDirectionFind(speaker, radio, channel, unsecured);
-
         AppendNetLog(
             radio,
             _timing.CurTime.TotalSeconds,
@@ -371,73 +388,9 @@ public sealed partial class ANPRCRadioSystem
             FormatLogChannel(radio, channel),
             outMessage);
 
+        radio.LastTransmit = _timing.CurTime;
+
         UpdateBuiState(pack);
-    }
-
-    private void TryDirectionFind(
-        EntityUid source,
-        ANPRCRadioComponent radio,
-        RadioChannelPrototype channel,
-        bool unsecured)
-    {
-        if (!_comms.EnabledOn(channel) || string.IsNullOrEmpty(channel.Faction))
-            return;
-
-        var plainText = radio.Mode == RadioMode.PlainText;
-        float baseChance;
-
-        if (plainText)
-        {
-            baseChance = radio.DFChancePlainText;
-        }
-        else if (unsecured)
-        {
-            baseChance = radio.DFChanceUnsecured;
-        }
-        else if (radio.Mode == RadioMode.FrequencyHopping)
-        {
-            baseChance = radio.DFChanceSecuredFH;
-        }
-        else
-        {
-            return;
-        }
-
-        if (radio.DFReportFactions.Count == 0)
-            return;
-
-        var now = _timing.CurTime;
-        var position = _transform.GetWorldPosition(source);
-
-        if (now - radio.DFLastTransmitTime > radio.DFAccumDecay ||
-            (position - radio.DFLastTransmitPos).Length() > radio.DFAccumResetDistance)
-        {
-            radio.DFAccumulation = 0f;
-        }
-
-        var chance = (baseChance + radio.DFAccumulation) * radio.TxPower.DFMultiplier();
-
-        if (_garble.GetJamIntensity(source) != RadioJamIntensity.None)
-            chance += radio.DFChanceJamBonus;
-
-        radio.DFAccumulation += radio.DFAccumBonus;
-        radio.DFLastTransmitTime = now;
-        radio.DFLastTransmitPos = position;
-
-        if (!_random.Prob(Math.Clamp(chance, 0f, 0.9f)))
-            return;
-
-        foreach (var viewerFaction in radio.DFReportFactions)
-        {
-            if (_tacticalMap.CreateFactionIntelBlip(source, radio.OperatorFaction, viewerFaction) is not { } location)
-                continue;
-
-            var faction = viewerFaction;
-
-            Timer.Spawn(
-                radio.DFPingDuration,
-                () => _tacticalMap.EraseFactionIntelBlip(location.GridId, location.Key, faction));
-        }
     }
 
     private void OnRadioCheck(Entity<ANPRCRadioComponent> ent, ref ANPRCRadioCheckMsg args)
@@ -451,7 +404,7 @@ public sealed partial class ANPRCRadioSystem
             string.IsNullOrEmpty(channelId.Id) ||
             !_prototype.TryIndex(channelId, out var channel))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-no-active-slot"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-no-active-slot"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -551,7 +504,7 @@ public sealed partial class ANPRCRadioSystem
 
         var nothingHeard = Loc.GetString("anprc-radio-check-nothing-heard");
 
-        _cmChat.ChatMessageToOne(
+        _anprcChat.Notice(
             Loc.GetString(
                 "anprc-radio-check-report",
                 ("clear", clear.Count == 0 ? nothingHeard : string.Join(", ", clear)),
@@ -561,24 +514,25 @@ public sealed partial class ANPRCRadioSystem
         if (_garble.GetJamIntensity(ent.Owner) != RadioJamIntensity.None &&
             _garble.TryGetNearestJammerDirection(ent.Owner, out var jammerDirection))
         {
-            _cmChat.ChatMessageToOne(
+            _anprcChat.Notice(
                 Loc.GetString("anprc-radio-check-interference", ("bearing", ShortBearing(jammerDirection))),
-                args.Actor);
+                args.Actor,
+                ANPRCNotice.Warn);
         }
     }
 
-    private static string ShortBearing(Direction direction)
+    private string ShortBearing(Direction direction)
     {
         return direction switch
         {
-            Direction.North => "N",
-            Direction.NorthEast => "NE",
-            Direction.East => "E",
-            Direction.SouthEast => "SE",
-            Direction.South => "S",
-            Direction.SouthWest => "SW",
-            Direction.West => "W",
-            Direction.NorthWest => "NW",
+            Direction.North => Loc.GetString("anprc-bearing-n"),
+            Direction.NorthEast => Loc.GetString("anprc-bearing-ne"),
+            Direction.East => Loc.GetString("anprc-bearing-e"),
+            Direction.SouthEast => Loc.GetString("anprc-bearing-se"),
+            Direction.South => Loc.GetString("anprc-bearing-s"),
+            Direction.SouthWest => Loc.GetString("anprc-bearing-sw"),
+            Direction.West => Loc.GetString("anprc-bearing-w"),
+            Direction.NorthWest => Loc.GetString("anprc-bearing-nw"),
             _ => "?"
         };
     }

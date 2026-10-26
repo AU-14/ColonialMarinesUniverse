@@ -14,6 +14,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Systems; // CMU14
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Events;
@@ -49,6 +50,7 @@ public sealed partial class K9System : EntitySystem
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private MobStateSystem _mobState = default!; // CMU14: grab release + senses skip the dead
 
     public override void Initialize()
     {
@@ -120,6 +122,11 @@ public sealed partial class K9System : EntitySystem
     private void OnDogMapInit(Entity<K9DogComponent> ent, ref MapInitEvent args)
     {
         _actions.AddAction(ent.Owner, ref ent.Comp.ArmGrabAction, ent.Comp.ArmGrabActionId);
+
+        // CMU14: preset-bond beasts wake already bound and track with their own senses
+        if (ent.Comp.PresetBond)
+            return;
+
         _actions.AddAction(ent.Owner, ref ent.Comp.TrackMasterAction, ent.Comp.TrackMasterActionId);
         _actions.AddAction(ent.Owner, ref ent.Comp.RequestMasterAction, ent.Comp.RequestMasterActionId);
     }
@@ -213,18 +220,26 @@ public sealed partial class K9System : EntitySystem
         if (HasComp<XenoComponent>(target))
         {
             args.Handled = true;
-            _popup.PopupClient(Loc.GetString("rmc-k9-arm-grab-xeno"), ent.Owner, ent.Owner);
+            _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-xeno"), ent.Owner, ent.Owner);
             return;
         }
 
-        if (!TryComp<TransformComponent>(target, out var targetXform) ||
-            !TryComp<TransformComponent>(ent, out var dogXform))
+        if (!TryComp(target, out TransformComponent? targetXform) ||
+            !TryComp(ent, out TransformComponent? dogXform))
             return;
 
         if (targetXform.MapID != dogXform.MapID ||
             Vector2.Distance(_transform.GetWorldPosition(targetXform), _transform.GetWorldPosition(dogXform)) > 2.5f)
         {
-            _popup.PopupClient(Loc.GetString("rmc-k9-arm-grab-out-of-range"), ent.Owner, ent.Owner);
+            _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-out-of-range"), ent.Owner, ent.Owner);
+            return;
+        }
+
+        // CMU14: a downed body can't struggle free, so latching onto one just pins the dog to it
+        if (_mobState.IsIncapacitated(target) && !(TryComp<K9GrabbedComponent>(target, out var downGrab) && downGrab.Dog == ent.Owner))
+        {
+            args.Handled = true;
+            _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-target-down"), ent.Owner, ent.Owner);
             return;
         }
 
@@ -284,7 +299,12 @@ public sealed partial class K9System : EntitySystem
         ent.Comp.Escaping = true;
         Dirty(ent);
 
-        _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-escape-attempt"), ent.Owner, ent.Owner, PopupType.Medium);
+        // CMU14: the jaws the victim fights follow the dog that bit them
+        LocId escapeKey = "rmc-k9-arm-grab-escape-attempt";
+        if (TryComp<K9DogComponent>(ent.Comp.Dog, out var grabDog) && grabDog.GrabEscapeMessage is { } escapeMsg)
+            escapeKey = escapeMsg;
+
+        _popup.PopupEntity(Loc.GetString(escapeKey), ent.Owner, ent.Owner, PopupType.Medium);
 
         var doAfter = new DoAfterArgs(EntityManager, ent.Owner, ent.Comp.EscapeDuration, new K9EscapeGrabDoAfterEvent(), ent.Owner)
         {
@@ -312,6 +332,13 @@ public sealed partial class K9System : EntitySystem
 
     private void OnGrabbedAttemptStopPulling(Entity<K9GrabbedComponent> ent, ref AttemptStopPullingEvent args)
     {
+        // CMU14: the dog dropping the pull is it letting go, flag it so the re-pull below doesn't bite straight back on
+        if (args.User != null && args.User == ent.Comp.Dog)
+        {
+            ent.Comp.DogLetGo = true;
+            return;
+        }
+
         // Prevent breaking pull while grabbed unless explicitly released or dog drops it
         if (args.User == ent.Owner || args.User == null)
         {
@@ -321,8 +348,18 @@ public sealed partial class K9System : EntitySystem
 
     private void OnGrabbedPullStopped(Entity<K9GrabbedComponent> ent, ref PullStoppedMessage args)
     {
+        if (!_net.IsServer)
+            return;
+
+        // CMU14: a dog that let go, or a victim who's down, ends the grip for good
+        if (ent.Comp.DogLetGo || _mobState.IsIncapacitated(ent.Owner))
+        {
+            ReleaseGrab(ent.Owner, ent.Comp);
+            return;
+        }
+
         // If the pull was somehow interrupted (e.g. distance or mechanics) and target is still grabbed, re-pull
-        if (_net.IsServer && Exists(ent.Comp.Dog) && !ent.Comp.Escaping)
+        if (Exists(ent.Comp.Dog) && !ent.Comp.Escaping)
         {
             _pulling.TryStartPull(ent.Comp.Dog, ent.Owner);
         }
@@ -370,12 +407,14 @@ public sealed partial class K9System : EntitySystem
             Dirty(grab.Dog, dogComp);
         }
 
+        // CMU14: release the grip before stopping the pull so its handlers cannot block or restart it.
+        RemComp<K9GrabbedComponent>(target);
         if (TryComp<PullableComponent>(target, out var pullable))
         {
             _pulling.TryStopPull(target, pullable);
         }
 
-        RemCompDeferred<K9GrabbedComponent>(target);
+        // RemCompDeferred<K9GrabbedComponent>(target); // CMU14: removed before stopping the pull
         _movementSpeed.RefreshMovementSpeedModifiers(target);
     }
 
@@ -539,11 +578,16 @@ public sealed partial class K9System : EntitySystem
         if (_net.IsServer)
         {
             _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Voice/Vulpkanin/dog_bark2.ogg"), dog);
-            var masterKey = asHandler ? "rmc-k9-bind-success-handler" : "rmc-k9-bind-success-marine";
-            var dogKey = asHandler ? "rmc-k9-bind-success-dog-handler" : "rmc-k9-bind-success-dog-marine";
+            // CMU14: per-dog bind flavor overrides (the hellhound greets its master differently)
+            LocId masterKey = dogComp.BindMessageMaster ?? (asHandler ? (LocId) "rmc-k9-bind-success-handler" : "rmc-k9-bind-success-marine");
+            LocId dogKey = dogComp.BindMessageDog ?? (asHandler ? (LocId) "rmc-k9-bind-success-dog-handler" : "rmc-k9-bind-success-dog-marine");
             _popup.PopupEntity(Loc.GetString(masterKey, ("dog", dog)), master, master, PopupType.Medium);
             _popup.PopupEntity(Loc.GetString(dogKey, ("master", master)), dog, dog, PopupType.Medium);
         }
+
+        // CMU14 event: owner mirrors follow the bond of record
+        var bondEv = new K9BondChangedEvent(dogComp.Master, dogComp.HandlerBonded);
+        RaiseLocalEvent(dog, ref bondEv);
     }
 
     private void UnbindMaster(EntityUid dog, K9DogComponent dogComp)
@@ -558,6 +602,10 @@ public sealed partial class K9System : EntitySystem
         dogComp.Master = null;
         dogComp.HandlerBonded = false;
         Dirty(dog, dogComp);
+
+        // CMU14 event: owner mirrors follow the unbind
+        var bondEv = new K9BondChangedEvent(null, false);
+        RaiseLocalEvent(dog, ref bondEv);
     }
 
     private void SyncMasterAccess(EntityUid dog, EntityUid master)
@@ -580,6 +628,21 @@ public sealed partial class K9System : EntitySystem
 
     private void OnMobStateChanged(MobStateChangedEvent args)
     {
+        // CMU14: nobody stays latched once either side goes down; crit victims can't struggle free
+        // and a crit dog's pull-stop gets vetoed by the grab, so it'd hang on forever
+        if (_net.IsServer && args.NewMobState is MobState.Critical or MobState.Dead)
+        {
+            if (TryComp<K9GrabbedComponent>(args.Target, out var victimGrab))
+                ReleaseGrab(args.Target, victimGrab);
+
+            if (TryComp<K9DogComponent>(args.Target, out var dogComp) &&
+                dogComp.GrabbedTarget is { } held &&
+                TryComp<K9GrabbedComponent>(held, out var heldGrab))
+            {
+                ReleaseGrab(held, heldGrab);
+            }
+        }
+
         if (args.NewMobState != MobState.Critical)
             return;
 
@@ -726,6 +789,10 @@ public sealed partial class K9System : EntitySystem
         if (args.Handled)
             return;
 
+        // CMU14: feeding a power cell is a synthetic trick
+        if (!ent.Comp.BatteryTrick)
+            return;
+
         // If user is feeding a battery / power cell to the synth dog
         if (HasComp<PowerCellComponent>(args.Used))
         {
@@ -740,6 +807,10 @@ public sealed partial class K9System : EntitySystem
 
     private void OnDogMeleeHit(Entity<K9DogComponent> ent, ref MeleeHitEvent args)
     {
+        // CMU14: headbite strikes are synthetic jaws, not a hunting beast's bite
+        if (!ent.Comp.HeadbiteStrikes)
+            return;
+
         if (_net.IsClient || args.HitEntities.Count == 0)
             return;
 
@@ -757,8 +828,12 @@ public sealed partial class K9System : EntitySystem
         if (_net.IsClient)
             return;
 
-        _audio.PlayPvs(new SoundPathSpecifier("/Audio/Machines/twobeep.ogg"), dog);
-        _popup.PopupEntity(Loc.GetString("rmc-k9-good-boy-popup", ("dog", dog), ("user", user)), dog, PopupType.Medium);
+        // CMU14: praise in the dog's own voice; synth K9s beep and boop
+        TryComp<K9DogComponent>(dog, out var k9);
+        _audio.PlayPvs(k9?.PraiseSound ?? new SoundPathSpecifier("/Audio/Machines/twobeep.ogg"), dog);
+
+        LocId praiseMsg = k9?.PraiseMessage is { } msg ? msg : "rmc-k9-good-boy-popup";
+        _popup.PopupEntity(Loc.GetString(praiseMsg, ("dog", dog), ("user", user)), dog, PopupType.Medium);
     }
 
     private void OnMarkedTargetDamageModify(Entity<K9MarkedTargetComponent> ent, ref DamageModifyEvent args)
@@ -820,6 +895,10 @@ public sealed partial class K9System : EntitySystem
         var dogQuery = EntityQueryEnumerator<K9DogComponent, TransformComponent>();
         while (dogQuery.MoveNext(out var uid, out var dog, out var xform))
         {
+            // CMU14: the xeno scan can be switched off per dog
+            if (!dog.AcousticSenses)
+                continue;
+
             if (curTime < dog.NextSensesScan)
                 continue;
 
@@ -835,6 +914,10 @@ public sealed partial class K9System : EntitySystem
             var xenoQuery = EntityQueryEnumerator<XenoComponent, TransformComponent>();
             while (xenoQuery.MoveNext(out var xenoUid, out _, out var xenoXform))
             {
+                // CMU14: corpses aren't a threat to growl at
+                if (_mobState.IsDead(xenoUid))
+                    continue;
+
                 var xenoPos = _transform.GetMapCoordinates(xenoXform);
                 if (xenoPos.MapId != dogPos.MapId)
                     continue;
@@ -851,8 +934,16 @@ public sealed partial class K9System : EntitySystem
                 dog.NextSensesAlert = curTime + dog.SensesAlertCooldown;
                 Dirty(uid, dog);
 
-                _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Voice/Vulpkanin/dog_growl2.ogg"), uid);
-                _popup.PopupEntity(Loc.GetString("rmc-k9-senses-alert-growl", ("dog", uid)), uid, PopupType.MediumCaution);
+                // CMU14: stealth hunting beasts warn in silence; synth K9s growl for everyone to hear
+                if (dog.SilentSensesAlert)
+                {
+                    _popup.PopupEntity(Loc.GetString("rmc-k9-senses-alert-silent-dog"), uid, Filter.Entities(uid), true, PopupType.Medium);
+                }
+                else
+                {
+                    _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Voice/Vulpkanin/dog_growl2.ogg"), uid);
+                    _popup.PopupEntity(Loc.GetString("rmc-k9-senses-alert-growl", ("dog", uid)), uid, PopupType.MediumCaution);
+                }
 
                 if (dog.Master is { } master && Exists(master))
                 {

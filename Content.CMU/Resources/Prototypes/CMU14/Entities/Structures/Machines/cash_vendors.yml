@@ -48,6 +48,25 @@
     - state: "base"
   - type: InteractionOutline
   - type: Appearance
+  - type: Damageable
+    damageModifierSet: GlassReinforcedMod
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 175
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMSheetMetal1:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
 
 # Base for cash vendors that also have shopkeeper stock management
 - type: entity
@@ -135,52 +154,75 @@
     items:
     # BASIC
     - id: CMDrinkCanBobdaClassic
+      section: Basic
       price: 2
     - id: CMDrinkCanBobdaCherry
+      section: Basic
       price: 2
     - id: CMDrinkCanBobdaLime
+      section: Basic
       price: 2
     - id: CMDrinkCanBobdaGrape
+      section: Basic
       price: 2
     - id: CMDrinkCanBobdaBlue
+      section: Basic
       price: 2
     - id: CMDrinkCanBobdaPeach
+      section: Basic
       price: 2
     - id: CMDrinkCanBobdaCranberry
+      section: Basic
       price: 2
     - id: CMDrinkCanBobdaVanilla
+      section: Basic
       price: 2
     - id: CMDrinkCanBobdaPineapple
+      section: Basic
       price: 2
     # DIET
     - id: CMDrinkCanBobdaDiet
+      section: Diet
       price: 2
     - id: CMDrinkCanBobdaClassicDiet
+      section: Diet
       price: 2
     - id: CMDrinkCanBobdaCherryDiet
+      section: Diet
       price: 2
     - id: CMDrinkCanBobdaLimeDiet
+      section: Diet
       price: 2
     - id: CMDrinkCanBobdaGrapeDiet
+      section: Diet
       price: 2
     - id: CMDrinkCanBobdaBlueDiet
+      section: Diet
       price: 2
     - id: CMDrinkCanBobdaPeachDiet
+      section: Diet
       price: 2
     - id: CMDrinkCanBobdaCranberryDiet
+      section: Diet
       price: 2
     - id: CMDrinkCanBobdaVanillaDiet
+      section: Diet
       price: 2
     - id: CMDrinkCanBobdaPineappleDiet
+      section: Diet
       price: 2
     # NON BOBDA
     - id: CMDrinkCanCola
+      section: Non Bobda
       price: 2
     - id: CMDrinkCanSoda
+      section: Non Bobda
       price: 2
     - id: CMDrinkCanTonic
+      section: Non Bobda
       price: 2
     - id: CMDrinkCanFruitBeer
+      section: Non Bobda
       price: 2
 
 # Snack machine — mirrors CMVendorSnack
@@ -230,6 +272,16 @@
     - id: RMCFoodSnackBarcaridine
       name: Barcaridine Bar
       price: 4
+    - id: RMCFoodSnackBoonieBar
+      name: Boonie Bars
+      price: 6
+    - id: RMCFoodSnackHUNK
+      name: HUNK Bar
+      price: 8
+    - id: CMMarineProteinBar
+      section: Prepared Meals
+      name: Protein Bar
+      price: 2
 
 # Prepared meals vendor — mirrors ColMarTechFood
 - type: entity
@@ -247,39 +299,51 @@
     allowDepartmentBudget: true
     items:
     - id: CMMRE
+      section: Prepared Meals
       name: Meal Ready to Eat
       price: 8
     - id: CMMarinePreparedMealChicken
+      section: Prepared Meals
       name: Prepared Meal (Chicken)
       price: 12
     - id: CMMarinePreparedMealCornbread
+      section: Prepared Meals
       name: Prepared Meal (Cornbread)
       price: 12
     - id: CMMarinePreparedMealPasta
+      section: Prepared Meals
       name: Prepared Meal (Pasta)
       price: 12
     - id: CMMarinePreparedMealPizza
+      section: Prepared Meals
       name: Prepared Meal (Pizza)
       price: 12
     - id: CMMarinePreparedMealPork
+      section: Prepared Meals
       name: Prepared Meal (Pork)
       price: 12
     - id: CMMarinePreparedMealTofu
+      section: Prepared Meals
       name: Prepared Meal (Tofu)
       price: 12
     - id: CMMarineProteinBar
+      section: Prepared Meals
       name: Protein Bar
       price: 4
     - id: CMCanteen
+      section: Flasks
       name: Canteen
       price: 10
     - id: CMMetalFlask
+      section: Flasks
       name: Metal Flask (empty)
       price: 8
     - id: CMMarineFlask
+      section: Flasks
       name: Marine Flask
       price: 12
     - id: CMWEYAFlask
+      section: Flasks
       name: We-Ya Flask
       price: 15
 
@@ -301,60 +365,79 @@
     allowDepartmentBudget: true
     items:
     - id: RMCFork
+      section: Products
       name: Fork
       price: 1
     - id: RMCSpoon
+      section: Products
       name: Spoon
       price: 1
     - id: RMCKitchenKnife
+      section: Products
       name: Kitchen Knife
       price: 2
     - id: RMCKitchenKnifeChef
+      section: Products
       name: Chef's Knife
       price: 5
     - id: RMCRollingPin
+      section: Products
       name: Rolling Pin
       price: 3
     - id: PairedChopsticks
+      section: Products
       name: Chopsticks
       price: 1
     - id: DrinkShaker
+      section: Products
       name: Cocktail Shaker
       price: 8
     - id: DrinkGlass
+      section: Containers
       name: Drinking Glass
       price: 2
     - id: DrinkMug
+      section: Products
       name: Mug
       price: 3
     - id: DrinkMugMetal
+      section: Products
       name: Metal Mug
       price: 4
     - id: FoodPlate
+      section: Products
       name: Plate
       price: 2
     - id: FoodPlateSmall
+      section: Products
       name: Small Plate
       price: 2
     - id: FoodBowlBig
+      section: Products
       name: Bowl
       price: 3
     - id: Pitcher
+      section: Products
       name: Pitcher
       price: 5
     - id: CMBeaker
+      section: Miscellaneous
       name: Beaker (60u)
       price: 5
     - id: CMBeakerLarge
+      section: Miscellaneous
       name: Beaker, Large (120u)
       price: 8
     - id: ClothingOuterApronChef
+      section: Products
       name: Chef's Apron
       price: 10
     - id: RMCCondimentSmallSalt
+      section: Products
       name: Salt Shaker
       price: 3
     - id: RMCCondimentSmallPepper
+      section: Products
       name: Pepper Shaker
       price: 3
 
@@ -376,50 +459,284 @@
     percentToColony: 0.6
     items:
     - id: RMCCassettePlayer
+      section: Cassettes
       name: Cassette Player
       price: 25
+    - id: AU14CassettePlayerBlue
+      section: Cassettes
+      name: Cassette Player (Blue)
+      price: 25
+    - id: AU14CassettePlayerGreen
+      section: Cassettes
+      name: Cassette Player (Green)
+      price: 25
+    - id: AU14CassettePlayerPink
+      section: Cassettes
+      name: Cassette Player (Pink)
+      price: 25
+    - id: AU14CassettePlayerOrange
+      section: Cassettes
+      name: Cassette Player (Orange)
+      price: 25
+    - id: AU14CassettePlayerRainbow
+      section: Cassettes
+      name: Cassette Player (Rainbow)
+      price: 25
+    - id: AU14CassettePlayerGray
+      section: Cassettes
+      name: Cassette Player (Gray)
+      price: 25
+    - id: AU14CassettePlayerNeon
+      section: Cassettes
+      name: Cassette Player (Neon)
+      price: 25
     - id: RMCPouchCassette
+      section: Cassettes
       name: Cassette Pouch
       price: 10
-    - id: RMCCassetteTapeWigWoo1
-      name: Cassette (Wig Woo)
+    - id: AU14CassetteTapeUnitedAmericasVol1
+      section: Cassettes
+      name: Cassette (United Americas Vol. 1)
       price: 5
-    - id: RMCCassetteTapeMendax
-      name: Cassette (Mendax)
+    - id: AU14CassetteTapeUnitedAmericasVol2
+      section: Cassettes
+      name: Cassette (United Americas Vol. 2)
       price: 5
-    - id: RMCCassetteTapeNighty
-      name: Cassette (Nighty)
+    - id: AU14CassetteTapeRisingSun
+      section: Cassettes
+      name: Cassette (Rising Sun)
       price: 5
-    - id: RMCCassetteTapeGoodShowOldChap
-      name: Cassette (Good Show Old Chap)
+    - id: AU14CassetteTapeBlueStripe
+      section: Cassettes
+      name: Cassette (Blue Stripe)
       price: 5
-    - id: RMCCassetteTapeRedQwesta
-      name: Cassette (Red Qwesta)
+    - id: AU14CassetteTapeNeon
+      section: Cassettes
+      name: Cassette (Neon)
       price: 5
-    - id: RMCCassetteTapeBolgarich
-      name: Cassette (Bolgarich)
+    - id: AU14CassetteTapePurple
+      section: Cassettes
+      name: Cassette (Purple)
       price: 5
-    - id: RMCCassetteTapeQwertyquerty
-      name: Cassette (Qwertyquerty)
+    - id: AU14CassetteTapePartyApproved
+      section: Cassettes
+      name: Cassette (UPP)
       price: 5
-    - id: RMCCassetteTapePigeonBeans
-      name: Cassette (Pigeon Beans)
+    - id: AU14CassetteTapeTan
+      section: Cassettes
+      name: Cassette (Tan)
+      price: 5
+    - id: AU14CassetteTapeTWE
+      section: Cassettes
+      name: Cassette (TWE)
+      price: 5
+    - id: AU14CassetteTapeWY
+      section: Cassettes
+      name: Cassette (Weyland-Yutani)
+      price: 5
+    - id: AU14CassetteTapeGreen
+      section: Cassettes
+      name: Cassette (Green)
+      price: 5
+    - id: AU14CassetteTapePink
+      section: Cassettes
+      name: Cassette (Pink Striped)
+      price: 5
+    - id: AU14CassetteTapeRainbow
+      section: Cassettes
+      name: Cassette (Rainbow)
+      price: 5
+    - id: AU14CassetteTapeRedStripe
+      section: Cassettes
+      name: Cassette (Red Stripe)
+      price: 5
+    - id: AU14CassetteTapeRedBlack
+      section: Cassettes
+      name: Cassette (Red Black)
+      price: 5
+    - id: AU14CassetteTapeOcean
+      section: Cassettes
+      name: Cassette (Ocean)
+      price: 5
+    - id: AU14CassetteTapeWhite
+      section: Cassettes
+      name: Cassette (White)
+      price: 5
+    - id: AU14CassetteTapeRedDirt
+      section: Cassettes
+      name: Cassette (Red Dirt)
+      price: 5
+    - id: AU14CassetteTapeCLF
+      section: Cassettes
+      name: Cassette (CLF)
       price: 5
     - id: RMCCassetteTapeCustom
+      section: Cassettes
       name: Cassette (Blank)
       price: 4
     - id: RMCPlayingCardDeck
+      section: Cards
       name: Playing Card Deck
       price: 8
     - id: d20Dice
+      section: Other
       name: d20 Dice
       price: 6
     - id: CMPaper
+      section: Stationary
       name: Paper
       price: 1
     - id: CMPen
+      section: Other
       name: Pen
       price: 1
+    - id: RMCMagazineBootsN160
+      section: Magazines
+      name: Boots! Magazine (Issue 160)
+      price: 4
+    - id: RMCMagazineBootsN07
+      section: Magazines
+      name: Boots! Magazine (Issue 07)
+      price: 4
+    - id: RMCMagazineBootsN45
+      section: Magazines
+      name: Boots! Magazine (Issue 45)
+      price: 4
+    - id: RMCMagazineBootsN54
+      section: Magazines
+      name: Boots! Magazine (Issue 54)
+      price: 4
+    - id: RMCMagazineBootsN55
+      section: Magazines
+      name: Boots! Magazine (Issue 55)
+      price: 4
+    - id: RMCMagazineBootsN58
+      section: Magazines
+      name: Boots! Magazine (Issue 58)
+      price: 4
+    - id: RMCMagazineBootsN70
+      section: Magazines
+      name: Boots! Magazine (Issue 70)
+      price: 4
+    - id: RMCMagazineBootsN113
+      section: Magazines
+      name: Boots! Magazine (Issue 113)
+      price: 4
+    - id: RMCMagazineBootsN117
+      section: Magazines
+      name: Boots! Magazine (Issue 117)
+      price: 4
+    - id: RMCMagazineBootsN120
+      section: Magazines
+      name: Boots! Magazine (Issue 120)
+      price: 4
+    - id: RMCMagazineBootsN125
+      section: Magazines
+      name: Boots! Magazine (Issue 125)
+      price: 4
+    - id: RMCMagazineBootsN131
+      section: Magazines
+      name: Boots! Magazine (Issue 131)
+      price: 4
+    - id: RMCMagazineBootsN150
+      section: Magazines
+      name: Boots! Magazine (Issue 150)
+      price: 4
+    - id: RMCMagazineBootsN189
+      section: Magazines
+      name: Boots! Magazine (Issue 189)
+      price: 4
+    - id: RMCMagazineWeYaOrreryN34
+      section: Magazines
+      name: Orrery Magazine (Issue 34)
+      price: 5
+    - id: RMCMagazineWeYaOrrery
+      section: Magazines
+      name: Orrery Magazine
+      price: 5
+    - id: RMCMagazineWeYaOrreryN175
+      section: Magazines
+      name: Orrery Magazine (Issue 175)
+      price: 5
+    - id: RMCMagazineWeYaOrreryN184
+      section: Magazines
+      name: Orrery Magazine (Issue 184)
+      price: 5
+    - id: RMCMagazineWeYaOrreryN202
+      section: Magazines
+      name: Orrery Magazine (Issue 202)
+      price: 5
+    - id: RMCMagazineWeYaOrreryN217
+      section: Magazines
+      name: Orrery Magazine (Issue 217)
+      price: 5
+    - id: RMCMagazineWeYaOrreryN220
+      section: Magazines
+      name: Orrery Magazine (Issue 220)
+      price: 5
+    - id: RMCMagazineWeYaOrreryN258
+      section: Magazines
+      name: Orrery Magazine (Issue 258)
+      price: 5
+    - id: RMCClothingNeckLGBTPin
+      section: Pins
+      name: LGBT Pin
+      price: 3
+    - id: RMCClothingNeckAromanticPin
+      section: Pins
+      name: Aromantic Pin
+      price: 3
+    - id: RMCClothingNeckAsexualPin
+      section: Pins
+      name: Asexual Pin
+      price: 3
+    - id: RMCClothingNeckBisexualPin
+      section: Pins
+      name: Bisexual Pin
+      price: 3
+    - id: RMCClothingNeckGayPin
+      section: Pins
+      name: Gay Pin
+      price: 3
+    - id: RMCClothingNeckIntersexPin
+      section: Pins
+      name: Intersex Pin
+      price: 3
+    - id: RMCClothingNeckLesbianPin
+      section: Pins
+      name: Lesbian Pin
+      price: 3
+    - id: RMCClothingNeckNonBinaryPin
+      section: Pins
+      name: Non-Binary Pin
+      price: 3
+    - id: RMCClothingNeckPansexualPin
+      section: Pins
+      name: Pansexual Pin
+      price: 3
+    - id: RMCClothingNeckOmnisexualPin
+      section: Pins
+      name: Omnisexual Pin
+      price: 3
+    - id: RMCClothingNeckTransPin
+      section: Pins
+      name: Trans Pin
+      price: 3
+    - id: RMCClothingNeckAutismPin
+      section: Pins
+      name: Autism Pin
+      price: 3
+    - id: RMCClothingNeckGoldAutismPin
+      section: Pins
+      name: Gold Autism Pin
+      price: 3
+    - id: RMCSpaceGrunts
+      section: Other
+      name: Space Grunts
+      price: 15
+    - id: CMUUniversalPaperTool
+      name: Universal Paper Tool
+      price: 35
 
 # Cigarette machine
 - type: entity
@@ -445,18 +762,23 @@
       name: Rolling Paper and Filters
       price: 3
     - id: RMCCigarettePackLuckySloths
+      section: Smokables
       name: Lucky Sloths
       price: 5
     - id: AU14CigarettePackBalajj
+      section: Smokables
       name: Balajj
       price: 5
     - id: RMCCigarettePackWeYaGold
+      section: Smokables
       name: We-Ya Gold
       price: 8
     - id: RMCCigarettePackExecutiveSelect
+      section: Smokables
       name: Executive Select
       price: 12
     - id: RMCCigarCase
+      section: Smokables
       name: Cigar Case
       price: 20
     - id: RMCTarbackTube
@@ -469,6 +791,7 @@
       name: Lighter
       price: 5
     - id: RMCZippoGold
+      section: Smokables
       name: Gold Zippo
       price: 30
 
@@ -490,66 +813,86 @@
     allowDepartmentBudget: true
     items:
     - id: RMCFlashlight
+      section: Miscellaneous
       name: Flashlight
       price: 5
     - id: CMWelder
+      section: Tools
       name: Welding Tool
       price: 20
     - id: CMWelderSmall
+      section: Tools
       name: Welding Tool (Small)
       price: 12
     - id: CMCrowbar
+      section: Tools
       name: Crowbar
       price: 8
     - id: CMScrewdriver
+      section: Tools
       name: Screwdriver
       price: 5
     - id: CMWirecutter
+      section: Tools
       name: Wirecutters
       price: 6
     - id: CMWrench
+      section: Tools
       name: Wrench
       price: 5
     - id: RMCLightReplacer
+      section: Engineer Supplies
       name: Light Replacer
       price: 8
     - id: CMBeltUtility
+      section: Equipment
       name: Utility Belt
       price: 10
     - id: CMHandsInsulated
+      section: Standard Gloves
       name: Insulated Gloves
       price: 20
     - id: RMCWeldingGoggles
+      section: Engineering Supplies
       name: Welding Goggles
       price: 20
     - id: RMCHelmetWelding
+      section: Helmet
       name: Welding Helmet
       price: 25
     - id: CMMultitool
+      section: Engineer Supplies
       name: Access Tuner
       price: 15
     - id: CMTRayScanner
+      section: Scanners
       name: PS-9 Survey Unit
       price: 15
     - id: CMFireExtinguisher
+      section: Miscellaneous
       name: Fire Extinguisher
       price: 10
     - id: RemoteSignaller
+      section: Assembly Components
       name: Remote Signaller
       price: 10
     - id: Igniter
+      section: Assembly Components
       name: Igniter
       price: 8
     - id: AU14MaintenanceJackSpecialAdmin
       name: Special Maintenance Jack
       price: 45
     - id: CableApcStack
+      section: Power
       name: LV Cable Coil
       price: 10
     - id: CableMVStack
+      section: Power
       name: MV Cable Coil
       price: 15
     - id: CableHVStack
+      section: Power
       name: HV Cable Coil
       price: 20
     - id: RMCGeigerCounter
@@ -559,8 +902,19 @@
       name: Air Grenade
       price: 20
     - id: CMUFireSuppressantGrenade
+      section: Atmospherics
       name: Fire Suppression Grenade
       price: 20
+    # Custom chemical grenade parts (casing + two-beaker payload + timer)
+    - id: RMCCustomGrenade
+      name: Custom Grenade Casing
+      price: 15
+    - id: ChemicalPayload
+      name: Chemical Payload
+      price: 12
+    - id: RMCTimerTrigger
+      name: Timer Trigger
+      price: 8
 
 # circuitboard - mirrors CMVendorCircuits
 - type: entity
@@ -580,27 +934,35 @@
     allowDepartmentBudget: true
     items:
     - id: DoorElectronics
+      section: Circuitboards
       name: Door Electronics
       price: 20
     - id: CMAPCElectronics
+      section: Engineering Supplies
       name: APC Electronics
       price: 50
     - id: RMCCircuitboardTelevision
+      section: Machineboards
       name: Television Circuit Board
       price: 25
     - id: CMSMESMachineCircuitboard
+      section: Machineboards
       name: SMES Circuit Board
       price: 50
     - id: CMAutolatheMachineCircuitboard
+      section: Machineboards
       name: Autolathe Circuit Board
       price: 30
     - id: CMUCircuitboardRecharger
+      section: Machineboards
       name: Recharger Circuit Board
       price: 75
     - id: AirAlarmElectronics
+      section: Circuitboards
       name: Air Alarm Electronics
       price: 20
     - id: FireAlarmElectronics
+      section: Circuitboards
       name: Fire Alarm Electronics
       price: 20
     - id: CMUThermomachineHeaterMachineCircuitBoard
@@ -613,6 +975,7 @@
       name: Condenser Board
       price: 50
     - id: CMUCrystallizerMachineCircuitboard
+      section: Machineboards
       name: Gas Crystallizer Board
       price: 60
     - id: CMUPipeRiserMachineCircuitboard
@@ -682,66 +1045,87 @@
     allowDepartmentBudget: true
     items:
     - id: CMBurnKit10
+      section: Field Supplies
       name: Burn Kit
       price: 12
     - id: CMTraumaKit10
+      section: Field Supplies
       name: Trauma Kit
       price: 12
     - id: CMOintment10
+      section: Field Supplies
       name: Ointment
       price: 10
     - id: AU14HemostaticGauzePacket
+      section: Medical Supplies
       name: Hemostatic Gauze
       price: 10
     - id: AU14Tourniquet
+      section: Medical Supplies
       name: Tourniquet
       price: 12
     - id: CMUSplintItem
+      section: Medical Supplies
       name: Splint
       price: 8
     - id: CMHealthAnalyzer
+      section: Devices
       name: Health Analyzer
       price: 30
     - id: AU14CMDefibrillator
+      section: Medical Equipment
       name: Defibrillator
       price: 60
     - id: CMUMaskCPR
+      section: Medical Supplies
       name: CPR Mask
       price: 10
     - id: CMSyringe
+      section: Medical Utilities
       name: Syringe
       price: 5
     - id: CMEpinephrineAutoInjector
+      section: Autoinjectors
       name: Epinephrine Autoinjector
       price: 18
     - id: AU14NaloxoneAutoInjector
+      section: Injectors
       name: Naloxone Autoinjector
       price: 18
     - id: CMInaprovalineAutoInjector
+      section: Autoinjectors
       name: Inaprovaline Autoinjector
       price: 15
     - id: CMDexalinPlusAutoInjector
+      section: Autoinjectors
       name: Dexalin Plus Autoinjector
       price: 18
     - id: CMTricordrazineAutoInjector
+      section: Autoinjectors
       name: Tricordrazine Autoinjector
       price: 15
     - id: CMBicaridineAutoInjector
+      section: Autoinjectors
       name: Bicaridine Autoinjector
       price: 18
     - id: CMKelotaneAutoInjector
+      section: Autoinjectors
       name: Kelotane Autoinjector
       price: 18
     - id: AU14ParacetamolAutoInjector
+      section: Injectors
       name: Paracetamol Autoinjector
       price: 15
     - id: AU14TramadolAutoInjector
+      section: Injectors
       name: Tramadol Autoinjector
       price: 20
     - id: AU14OxycodoneAutoInjector
+      section: Injectors
       name: Oxycodone Autoinjector
       price: 22
     - id: RMCIronAutoInjector
+      section: Injectors
       name: Iron Autoinjector
       price: 12
 
@@ -763,84 +1147,109 @@
     allowDepartmentBudget: true
     items:
     - id: CMPillCanisterBicaridine
+      section: Pill Bottles
       name: Bicaridine Pills
       price: 20
     - id: CMPillCanisterDexalin
+      section: Pill Bottles
       name: Dexalin Pills
       price: 18
     - id: CMPillCanisterDylovene
+      section: Pill Bottles
       name: Dylovene Pills
       price: 18
     - id: CMPillCanisterInaprovaline
+      section: Pill Bottles
       name: Inaprovaline Pills
       price: 16
     - id: CMPillCanisterKelotane
+      section: Pill Bottles
       name: Kelotane Pills
       price: 18
     - id: CMPillCanisterTricordrazine
+      section: Pill Bottles
       name: Tricordrazine Pills
       price: 16
     - id: RMCPillCanisterIron
+      section: Pill Bottles
       name: Iron Pills
       price: 12
     - id: AU14PillCanisterParacetamol
+      section: Pill Bottles
       name: Paracetamol Pills
       price: 15
     - id: AU14PillCanisterTramadol
+      section: Pill Bottles
       name: Tramadol Pills
       price: 20
     - id: AU14PillCanisterOxycodone
+      section: Pill Bottles
       name: Oxycodone Pills
       price: 25
     - id: AU14PillCanisterLeporazine
       name: Leporazine Pills
       price: 20
     - id: AU14PillCanisterImidazoline
+      section: Pill Bottles
       name: Imidazoline Pills
       price: 18
     - id: AU14PillCanisterCryoxadone
-      name: Cryoxadone Pills
+      name: Marine Cryoxadone Pills
       price: 30
     - id: AU14PillCanisterHepatocytin
+      section: Pill Bottles
       name: Hepatocytin Pills
       price: 22
     - id: AU14PillCanisterNephronate
+      section: Pill Bottles
       name: Nephronate Pills
       price: 22
     - id: AU14PillCanisterPulmovine
+      section: Pill Bottles
       name: Pulmovine Pills
       price: 22
     - id: CMBottleBicaridine
+      section: Liquid Bottles
       name: Bicaridine Bottle
       price: 22
     - id: CMBottleDylovene
+      section: Liquid Bottles
       name: Dylovene Bottle
       price: 20
     - id: CMBottleDexalin
+      section: Liquid Bottles
       name: Dexalin Bottle
       price: 20
     - id: CMBottleInaprovaline
+      section: Liquid Bottles
       name: Inaprovaline Bottle
       price: 18
     - id: CMBottleKelotane
+      section: Liquid Bottles
       name: Kelotane Bottle
       price: 20
     - id: RMCVial
+      section: Medical Utilities
       name: Vial
       price: 4
     - id: CMSyringe
+      section: Medical Utilities
       name: Syringe
       price: 5
     - id: CMBeaker
+      section: Miscellaneous
       name: Beaker (60u)
       price: 6
     - id: CMBeakerLarge
+      section: Miscellaneous
       name: Beaker, Large (120u)
       price: 10
     - id: RMCDropper
+      section: Miscellaneous
       name: Dropper
       price: 4
     - id: RMCBoxPillCanister
+      section: Miscellaneous
       name: Empty Pill Canister Box
       price: 8
 
@@ -862,48 +1271,63 @@
     allowDepartmentBudget: true
     items:
     - id: CMSurgicalLine
+      section: Medical Utilities
       name: Surgical Line
       price: 25
     - id: CMSynthGraft
+      section: Medical Utilities
       name: Synth-Graft
       price: 25
     - id: CMUCastItem
+      section: General Medical Supplies
       name: Cast
       price: 15
     - id: CMUSplintItem
+      section: Medical Supplies
       name: Splint
       price: 8
     - id: CMStasisBagFolded
+      section: Medical Utilities
       name: Stasis Bag
       price: 40
     - id: CMPortableSurgicalBedSpawnFolded
+      section: Medical Utilities
       name: Portable Surgical Bed
       price: 50
     - id: CMRollerBedSpawnFolded
+      section: Miscellaneous
       name: Roller Bed
       price: 20
     - id: AU14CMDefibrillator
+      section: Medical Equipment
       name: Defibrillator
       price: 60
     - id: CMHealthAnalyzer
+      section: Devices
       name: Health Analyzer
       price: 30
     - id: CMHyposprayFilledTricord
+      section: Medical Utilities
       name: Hypospray (Tricord)
       price: 35
     - id: RMCBoxBodyBag
+      section: Medical Utilities
       name: Body Bag Box
       price: 15
     - id: RMCBoxSterileMask
+      section: Medical Utilities
       name: Sterile Mask Box
       price: 8
     - id: CMUMaskCPR
+      section: Medical Supplies
       name: CPR Mask
       price: 10
     - id: RMCBoxLatexGloves
+      section: Medical Utilities
       name: Latex Glove Box
       price: 8
     - id: CMSyringe
+      section: Medical Utilities
       name: Syringe
       price: 5
 
@@ -925,30 +1349,39 @@
     allowDepartmentBudget: true
     items:
     - id: RMCHandcuffs
+      section: Equipment
       name: Handcuffs
       price: 12
     - id: RMCZipties
+      section: Miscellaneous
       name: Zip Ties
       price: 5
     - id: RMCBoxZiptie
+      section: Standard Equipment
       name: Zip Tie Box
       price: 20
     - id: CMStunbaton
+      section: Equipment
       name: Stun Baton
       price: 40
     - id: CMGlassesSecurity
+      section: Huds
       name: Security HUD
       price: 18
     - id: RMCUniversalRecorder
+      section: Investigation
       name: Universal Recorder
       price: 25
     - id: RMCBoxRegulationTapes
+      section: Refills
       name: Regulation Tapes
       price: 10
     - id: AU14GuidebookLawMarine
+      section: Books
       name: Marine Law Guidebook
       price: 5
     - id: AU14GuidebookSOP
+      section: Books
       name: SOP Guidebook
       price: 5
 
@@ -980,5 +1413,6 @@
       name: CHUNK Bar
       price: 3
     - id: CMMRE
+      section: Prepared Meals
       name: MRE (Mil-Spec)
       price: 8

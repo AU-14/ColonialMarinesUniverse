@@ -63,7 +63,7 @@ public sealed class HunterShipYautjaMachineryTest
                 Assert.That(prototype.Name, Is.EqualTo(row.Name), row.Id);
                 Assert.That(prototype.Description, Is.EqualTo(row.Description), row.Id);
 
-                Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                 Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(row.Sprite), row.Id);
                 Assert.That(sprite.DrawDepth, Is.EqualTo(row.DrawDepth), row.Id);
                 Assert.That(sprite.NoRotation, Is.True, row.Id);
@@ -76,24 +76,28 @@ public sealed class HunterShipYautjaMachineryTest
                 Assert.That(layers.Select(layer => layer.RsiState.Name).ToArray(), Is.EqualTo(row.States), row.Id);
                 Assert.That(layers[0].Color, Is.EqualTo(row.Color), row.Id);
 
-                Assert.That(prototype.TryGetComponent<IconComponent>(out var icon, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<IconComponent>(out var icon, factory), Is.True, row.Id);
                 var rsiIcon = (SpriteSpecifier.Rsi) icon!.Icon;
                 Assert.That(rsiIcon.RsiPath.ToString(), Does.EndWith(row.Sprite.ToString().Replace("/Textures/", string.Empty)),
                     $"{row.Id} icon RSI");
                 Assert.That(rsiIcon.RsiState, Is.EqualTo(row.IconState), row.Id);
-                Assert.That(prototype.TryGetComponent<GenericVisualizerComponent>(out _, factory), Is.EqualTo(row.HasGenericVisualizer),
+                Assert.That(prototype.TryComp<GenericVisualizerComponent>(out _, factory), Is.EqualTo(row.HasGenericVisualizer),
                     $"{row.Id} should only keep inherited visualizers on the prototype when runtime state changes can use the imported layer maps.");
-                Assert.That(prototype.TryGetComponent<RemoveComponentsComponent>(out _, factory), Is.EqualTo(row.RemovesInheritedVisualizer),
+                Assert.That(prototype.TryComp<RemoveComponentsComponent>(out _, factory), Is.EqualTo(row.RemovesInheritedVisualizer),
                     $"{row.Id} should strip inherited visualizers at runtime when the imported Hunter Ship state is fixed.");
             }
 
             var microwave = prototypes.Index<EntityPrototype>(MicrowaveId);
-            Assert.That(microwave.TryGetComponent<SpriteComponent>(out var microwaveSprite, factory), Is.True, MicrowaveId);
+            Assert.That(microwave.TryComp<SpriteComponent>(out var microwaveSprite, factory), Is.True, MicrowaveId);
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
             Assert.That(microwaveSprite!.LayerMapTryGet(MicrowaveVisualizerLayers.Base, out var baseLayer), Is.True, MicrowaveId);
+#pragma warning restore CS0618
             Assert.That(baseLayer, Is.EqualTo(0), MicrowaveId);
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
             Assert.That(microwaveSprite.LayerMapTryGet(MicrowaveVisualizerLayers.BaseUnlit, out var unlitLayer), Is.True, MicrowaveId);
+#pragma warning restore CS0618
             Assert.That(unlitLayer, Is.EqualTo(1), MicrowaveId);
-            Assert.That(microwave.TryGetComponent<GenericVisualizerComponent>(out var microwaveVisualizer, factory), Is.True, MicrowaveId);
+            Assert.That(microwave.TryComp<GenericVisualizerComponent>(out var microwaveVisualizer, factory), Is.True, MicrowaveId);
             // The Hunter Ship RSI uses the CMSS13 DMM unlit state for all microwave modes.
             Assert.That(microwaveVisualizer!.Visuals[PowerDeviceVisuals.VisualState]["enum.MicrowaveVisualizerLayers.BaseUnlit"]["Idle"].State, Is.EqualTo("mwo"), MicrowaveId);
             Assert.That(microwaveVisualizer.Visuals[PowerDeviceVisuals.VisualState]["enum.MicrowaveVisualizerLayers.BaseUnlit"]["Broken"].State, Is.EqualTo("mwo"), MicrowaveId);
@@ -102,21 +106,33 @@ public sealed class HunterShipYautjaMachineryTest
             Assert.That(microwaveVisualizer.Visuals[PowerDeviceVisuals.VisualState]["bloodyunshaded"]["Broken"].Visible, Is.False, MicrowaveId);
 
             var smes = prototypes.Index<EntityPrototype>(SmesBaseId);
-            Assert.That(smes.TryGetComponent<SpriteComponent>(out var smesSprite, factory), Is.True, SmesBaseId);
+            Assert.That(smes.TryComp<SpriteComponent>(out var smesSprite, factory), Is.True, SmesBaseId);
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
             Assert.That(smesSprite!.LayerMapTryGet(SmesVisualLayers.Charge, out var chargeLayer), Is.True, SmesBaseId);
+#pragma warning restore CS0618
             Assert.That(chargeLayer, Is.EqualTo(1), SmesBaseId);
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
             Assert.That(smesSprite.LayerMapTryGet(SmesVisualLayers.Input, out var inputLayer), Is.True, SmesBaseId);
+#pragma warning restore CS0618
             Assert.That(inputLayer, Is.EqualTo(2), SmesBaseId);
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
             Assert.That(smesSprite.LayerMapTryGet(SmesVisualLayers.Output, out var outputLayer), Is.True, SmesBaseId);
+#pragma warning restore CS0618
             Assert.That(outputLayer, Is.EqualTo(3), SmesBaseId);
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
             Assert.That(smesSprite.LayerMapTryGet(WiresVisualLayers.MaintenancePanel, out var panelLayer), Is.True, SmesBaseId);
+#pragma warning restore CS0618
             Assert.That(panelLayer, Is.EqualTo(4), SmesBaseId);
 
             var cryo = prototypes.Index<EntityPrototype>(CryoId);
-            Assert.That(cryo.TryGetComponent<SpriteComponent>(out var cryoSprite, factory), Is.True, CryoId);
+            Assert.That(cryo.TryComp<SpriteComponent>(out var cryoSprite, factory), Is.True, CryoId);
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
             Assert.That(cryoSprite!.LayerMapTryGet(CryoPodVisualLayers.Base, out var cryoBase), Is.True, CryoId);
+#pragma warning restore CS0618
             Assert.That(cryoBase, Is.EqualTo(0), CryoId);
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
             Assert.That(cryoSprite.LayerMapTryGet(CryoPodVisualLayers.Cover, out var cryoCover), Is.True, CryoId);
+#pragma warning restore CS0618
             Assert.That(cryoCover, Is.EqualTo(1), CryoId);
         });
 
@@ -129,14 +145,14 @@ public sealed class HunterShipYautjaMachineryTest
             {
                 var prototype = prototypes.Index<EntityPrototype>(row.Id);
 
-                Assert.That(prototype.TryGetComponent<RMCMesonsNonviewableComponent>(out _, factory), Is.True,
+                Assert.That(prototype.TryComp<RMCMesonsNonviewableComponent>(out _, factory), Is.True,
                     $"{row.Id} inherits the local Yautja structure surface.");
-                Assert.That(prototype.TryGetComponent<PhysicsComponent>(out var physics, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<PhysicsComponent>(out var physics, factory), Is.True, row.Id);
                 Assert.That(physics!.BodyType, Is.EqualTo(BodyType.Static), row.Id);
-                Assert.That(prototype.TryGetComponent<FixturesComponent>(out var fixtures, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<FixturesComponent>(out var fixtures, factory), Is.True, row.Id);
                 if (row.SourcePath == "/obj/structure/machinery/juicer/yautja")
                 {
-                    Assert.That(prototype.TryGetComponent<RemoveComponentsComponent>(out _, factory), Is.True,
+                    Assert.That(prototype.TryComp<RemoveComponentsComponent>(out _, factory), Is.True,
                         $"{row.Id} removes inherited structure collision to preserve CMSS13 density = FALSE.");
                 }
                 else
@@ -153,26 +169,26 @@ public sealed class HunterShipYautjaMachineryTest
             foreach (var row in MachineryRows().Where(row => row.FunctionalParent == "RMCKitchenReagentGrinder"))
             {
                 var grinderPrototype = prototypes.Index<EntityPrototype>(row.Id);
-                Assert.That(grinderPrototype.TryGetComponent<ReagentGrinderComponent>(out var grinder, factory), Is.True, row.Id);
+                Assert.That(grinderPrototype.TryComp<ReagentGrinderComponent>(out var grinder, factory), Is.True, row.Id);
                 Assert.That(grinder!.StorageMaxEntities, Is.EqualTo(10), row.Id);
-                Assert.That(grinderPrototype.TryGetComponent<RMCPowerReceiverComponent>(out var grinderPower, factory), Is.True, row.Id);
+                Assert.That(grinderPrototype.TryComp<RMCPowerReceiverComponent>(out var grinderPower, factory), Is.True, row.Id);
                 Assert.That(grinderPower!.IdleLoad, Is.EqualTo(row.IdleLoad), row.Id);
                 Assert.That(grinderPower.ActiveLoad, Is.EqualTo(row.ActiveLoad), row.Id);
                 Assert.That(grinderPower.Channel, Is.EqualTo(RMCPowerChannel.Equipment), row.Id);
-                Assert.That(grinderPrototype.TryGetComponent<ApcPowerReceiverComponent>(out var grinderApc, factory), Is.True, row.Id);
+                Assert.That(grinderPrototype.TryComp<ApcPowerReceiverComponent>(out var grinderApc, factory), Is.True, row.Id);
                 Assert.That(grinderApc!.NeedsPower, Is.False, row.Id);
                 Assert.That(grinderApc.Load, Is.Zero, row.Id);
             }
 
             var microwave = prototypes.Index<EntityPrototype>(MicrowaveId);
-            Assert.That(microwave.TryGetComponent<MicrowaveComponent>(out var microwaveComp, factory), Is.True, MicrowaveId);
+            Assert.That(microwave.TryComp<MicrowaveComponent>(out var microwaveComp, factory), Is.True, MicrowaveId);
             Assert.That(microwaveComp!.Capacity, Is.EqualTo(10), MicrowaveId);
-            Assert.That(microwave.TryGetComponent<ApcPowerReceiverComponent>(out var microwaveApc, factory), Is.True, MicrowaveId);
+            Assert.That(microwave.TryComp<ApcPowerReceiverComponent>(out var microwaveApc, factory), Is.True, MicrowaveId);
             Assert.That(microwaveApc!.NeedsPower, Is.False, MicrowaveId);
             Assert.That(microwaveApc.Load, Is.Zero, MicrowaveId);
 
             var cryo = prototypes.Index<EntityPrototype>(CryoId);
-            Assert.That(cryo.TryGetComponent<CryoPodComponent>(out var cryoPod, factory), Is.True, CryoId);
+            Assert.That(cryo.TryComp<CryoPodComponent>(out var cryoPod, factory), Is.True, CryoId);
             Assert.That(cryoPod!.OpenState, Is.EqualTo("pred_cell"), CryoId);
             Assert.That(cryoPod.OnState, Is.EqualTo("pred_cell-on-empty"), CryoId);
             Assert.That(cryoPod.OffState, Is.EqualTo("pred_cell-off-empty"), CryoId);
@@ -180,27 +196,27 @@ public sealed class HunterShipYautjaMachineryTest
             Assert.That(cryoPod.CoverOffState, Is.EqualTo("pred_cell-off-occupied"), CryoId);
             Assert.That(cryoPod.EntryDelay, Is.EqualTo(2f), CryoId);
             // CryoPodSystem now builds the patient scan directly in the cryopod UI.
-            Assert.That(cryo.TryGetComponent<UserInterfaceComponent>(out var cryoUi, factory), Is.True, CryoId);
+            Assert.That(cryo.TryComp<UserInterfaceComponent>(out var cryoUi, factory), Is.True, CryoId);
             Assert.That(server.EntMan.System<SharedUserInterfaceSystem>().HasUi(default, CryoPodUiKey.Key, cryoUi), Is.True, CryoId);
-            Assert.That(cryo.TryGetComponent<ItemSlotsComponent>(out var slots, factory), Is.True, CryoId);
+            Assert.That(cryo.TryComp<ItemSlotsComponent>(out var slots, factory), Is.True, CryoId);
             Assert.That(slots!.Slots.Keys, Does.Contain("beakerSlot"), CryoId);
-            Assert.That(cryo.TryGetComponent<ContainerManagerComponent>(out var containers, factory), Is.True, CryoId);
+            Assert.That(cryo.TryComp<ContainerManagerComponent>(out var containers, factory), Is.True, CryoId);
             Assert.That(containers!.Containers.Keys, Does.Contain("scanner-body"), CryoId);
             Assert.That(containers.Containers.Keys, Does.Contain("beakerSlot"), CryoId);
-            Assert.That(cryo.TryGetComponent<ApcPowerReceiverComponent>(out var cryoApc, factory), Is.True, CryoId);
+            Assert.That(cryo.TryComp<ApcPowerReceiverComponent>(out var cryoApc, factory), Is.True, CryoId);
             Assert.That(cryoApc!.NeedsPower, Is.False, CryoId);
             Assert.That(cryoApc.Load, Is.Zero, CryoId);
 
             foreach (var transformerId in TransformerIds)
             {
                 var transformer = prototypes.Index<EntityPrototype>(transformerId);
-                Assert.That(transformer.TryGetComponent<RMCMesonsNonviewableComponent>(out _, factory), Is.True,
+                Assert.That(transformer.TryComp<RMCMesonsNonviewableComponent>(out _, factory), Is.True,
                     $"{transformerId} inherits the local Yautja structure surface.");
-                Assert.That(transformer.TryGetComponent<TransformComponent>(out var transform, factory), Is.True, transformerId);
+                Assert.That(transformer.TryComp<TransformComponent>(out var transform, factory), Is.True, transformerId);
                 Assert.That(transform!.Anchored, Is.True, transformerId);
-                Assert.That(transformer.TryGetComponent<ApcPowerReceiverComponent>(out _, factory), Is.False,
+                Assert.That(transformer.TryComp<ApcPowerReceiverComponent>(out _, factory), Is.False,
                     $"{transformerId} is a passive prop, not a powered machine endpoint.");
-                Assert.That(transformer.TryGetComponent<RMCPowerReceiverComponent>(out _, factory), Is.False, transformerId);
+                Assert.That(transformer.TryComp<RMCPowerReceiverComponent>(out _, factory), Is.False, transformerId);
             }
         });
 
@@ -231,7 +247,7 @@ public sealed class HunterShipYautjaMachineryTest
                 Assert.That(prototype.Name, Is.EqualTo("Terminal"), row.Id);
                 Assert.That(prototype.Description, Is.EqualTo("It's an underfloor wiring terminal for power equipment."), row.Id);
 
-                Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                 Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(spritePath), row.Id);
                 Assert.That(sprite.DrawDepth, Is.EqualTo((int) Content.Shared.DrawDepth.DrawDepth.FloorObjects), row.Id);
                 Assert.That(sprite.NoRotation, Is.True, row.Id);
@@ -244,7 +260,7 @@ public sealed class HunterShipYautjaMachineryTest
                 Assert.That(layers, Has.Length.EqualTo(1), row.Id);
                 Assert.That(layers[0].RsiState.Name, Is.EqualTo("term"), row.Id);
 
-                Assert.That(prototype.TryGetComponent<IconComponent>(out var icon, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<IconComponent>(out var icon, factory), Is.True, row.Id);
                 var rsiIcon = (SpriteSpecifier.Rsi) icon!.Icon;
                 Assert.That(rsiIcon.RsiPath.ToString(), Does.EndWith("CMU14/HunterShip/obj/structures/machinery/power.rsi"), row.Id);
                 Assert.That(rsiIcon.RsiState, Is.EqualTo("term"), row.Id);
@@ -260,27 +276,27 @@ public sealed class HunterShipYautjaMachineryTest
             {
                 var prototype = prototypes.Index<EntityPrototype>(row.Id);
 
-                Assert.That(prototype.TryGetComponent<TransformComponent>(out var transform, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<TransformComponent>(out var transform, factory), Is.True, row.Id);
                 Assert.That(transform!.Anchored, Is.True, row.Id);
 
-                Assert.That(prototype.TryGetComponent<PhysicsComponent>(out _, factory), Is.False,
+                Assert.That(prototype.TryComp<PhysicsComponent>(out _, factory), Is.False,
                     $"{row.Id} is an underfloor terminal and must not have a physics body.");
-                Assert.That(prototype.TryGetComponent<FixturesComponent>(out _, factory), Is.False,
+                Assert.That(prototype.TryComp<FixturesComponent>(out _, factory), Is.False,
                     $"{row.Id} must not declare an empty fixture state without physics.");
 
-                Assert.That(prototype.TryGetComponent<SubFloorHideComponent>(out var subfloor, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<SubFloorHideComponent>(out var subfloor, factory), Is.True, row.Id);
                 Assert.That(subfloor!.BlockInteractions, Is.False, row.Id);
                 Assert.That(subfloor.BlockAmbience, Is.False, row.Id);
 
-                Assert.That(prototype.TryGetComponent<VisibilityComponent>(out var visibility, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<VisibilityComponent>(out var visibility, factory), Is.True, row.Id);
                 Assert.That(visibility!.Layer, Is.EqualTo(1), row.Id);
 
-                Assert.That(prototype.TryGetComponent<RCDDeconstructableComponent>(out var rcd, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<RCDDeconstructableComponent>(out var rcd, factory), Is.True, row.Id);
                 Assert.That(rcd!.Cost, Is.EqualTo(2), row.Id);
                 Assert.That(rcd.Delay, Is.Zero, row.Id);
                 Assert.That(rcd.Effect?.Id, Is.EqualTo("EffectRCDConstruct0"), row.Id);
 
-                Assert.That(prototype.TryGetComponent<NodeContainerComponent>(out var nodes, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<NodeContainerComponent>(out var nodes, factory), Is.True, row.Id);
                 Assert.That(nodes!.Nodes.Keys, Is.EquivalentTo(new[] { "powerHV", "powerMV" }), row.Id);
                 Assert.That(nodes.Nodes["powerHV"].NodeGroupID, Is.EqualTo(NodeGroupID.HVPower), row.Id);
                 Assert.That(nodes.Nodes["powerMV"].NodeGroupID, Is.EqualTo(NodeGroupID.MVPower), row.Id);
@@ -308,12 +324,12 @@ public sealed class HunterShipYautjaMachineryTest
 
     private static void AssertSmes(EntityPrototype prototype, IComponentFactory factory)
     {
-        Assert.That(prototype.TryGetComponent<ServerSmesComponent>(out var smes, factory), Is.True, prototype.ID);
+        Assert.That(prototype.TryComp<ServerSmesComponent>(out var smes, factory), Is.True, prototype.ID);
         Assert.That(smes!.StaticOverlayStates, Is.True, prototype.ID);
-        Assert.That(prototype.TryGetComponent<BatteryComponent>(out var battery, factory), Is.True, prototype.ID);
+        Assert.That(prototype.TryComp<BatteryComponent>(out var battery, factory), Is.True, prototype.ID);
         Assert.That(battery!.MaxCharge, Is.EqualTo(8000000f), prototype.ID);
         Assert.That(battery.StartingCharge, Is.EqualTo(8000000f), prototype.ID);
-        Assert.That(prototype.TryGetComponent<PowerMonitoringDeviceComponent>(out var monitoring, factory), Is.True, prototype.ID);
+        Assert.That(prototype.TryComp<PowerMonitoringDeviceComponent>(out var monitoring, factory), Is.True, prototype.ID);
         Assert.That(monitoring!.SpritePath, Is.EqualTo("CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi"), prototype.ID);
         Assert.That(monitoring.SpriteState, Is.EqualTo("smes"), prototype.ID);
     }

@@ -18,6 +18,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaWhitelistAccessTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaHunterPrototype = "CMUYautjaHunter";
+
     [Test]
     public async Task EveryYautjaWhitelistTypeAllowsHunterJobAndClientSelection()
     {
@@ -29,7 +31,7 @@ public sealed class YautjaWhitelistAccessTest
         var clientNet = pair.Client.ResolveDependency<IClientNetManager>();
         var requirements = pair.Client.ResolveDependency<JobRequirementsManager>();
         var preferences = pair.Client.ResolveDependency<IClientPreferencesManager>();
-        var hunter = prototypes.Index<JobPrototype>("CMUYautjaHunter");
+        var hunter = prototypes.Index<JobPrototype>(CMUYautjaHunterPrototype);
         var playerId = pair.Player!.UserId.UserId;
         var username = pair.Player.Name;
 
@@ -94,7 +96,7 @@ public sealed class YautjaWhitelistAccessTest
         var clientNet = pair.Client.ResolveDependency<IClientNetManager>();
         var requirements = pair.Client.ResolveDependency<JobRequirementsManager>();
         var preferences = pair.Client.ResolveDependency<IClientPreferencesManager>();
-        var hunter = prototypes.Index<JobPrototype>("CMUYautjaHunter");
+        var hunter = prototypes.Index<JobPrototype>(CMUYautjaHunterPrototype);
         var session = serverPlayers.Sessions.Single();
         var playerId = session.UserId.UserId;
         var username = session.Name;

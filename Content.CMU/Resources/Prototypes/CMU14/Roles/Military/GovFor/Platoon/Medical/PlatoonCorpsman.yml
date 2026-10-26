@@ -92,11 +92,20 @@
   requirements:
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 18000 # 5 hours
+    time: 7200 # 2 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMedical
+    time: 3600 # 1 hour
   - !type:TraitsRequirement
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NonResuscitable
     - NoEnglish
     - CMUProstheticLeftArm
@@ -105,6 +114,9 @@
     - CMUProstheticRightLeg
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -120,7 +132,7 @@
   id: AU14GearGOVFORPlatoonCorpsman
   equipment:
     id: AU14JobIDCardGOVFORPlatoonCorpsman
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforMarineAuxiliary
 
 - type: startingGear
   id: AU14GearGOVFORCorpsmanDummy
@@ -128,9 +140,9 @@
     outerClothing: AU14ArmorM3JungleOne
     gloves: CMHandsLatex
     shoes: CMBootsBlack
-    head: AU14JungleM10CorpsmanHelmet
+    head: AU14CamoM10CorpsmanHelmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforMarineAuxiliary
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -182,7 +194,7 @@
   id: AU14GearopforPlatoonCorpsman
   equipment:
     id: AU14JobIDCardOPFORPlatoonCorpsman
-    ears: AU14HeadsetOpforMarine
+    ears: CMUHeadsetOpforMarineAuxiliary
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -200,9 +212,9 @@
     outerClothing: AU14ArmorM3JungleOne
     gloves: CMHandsLatex
     shoes: CMBootsBlack
-    head: AU14JungleM10CorpsmanHelmet
+    head: AU14CamoM10CorpsmanHelmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetOpforMarine
+    ears: CMUHeadsetOpforMarineAuxiliary
 
 - type: job
   parent: AU14JobPlatoonCorpsmanBase

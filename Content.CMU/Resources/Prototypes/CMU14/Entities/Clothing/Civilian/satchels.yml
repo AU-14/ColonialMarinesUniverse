@@ -1,7 +1,7 @@
 - type: entity
   parent: CMPersonalStorageBase
   id: AU14SlingSatchelBlue
-  name: Blue sling satchel
+  name: blue sling satchel
   description: A very sturdy satchel. This one has a sling strap.
   components:
   - type: Sprite
@@ -17,7 +17,7 @@
 - type: entity
   parent: CMPersonalStorageBase
   id: AU14SlingSatchelBlack
-  name: Black sling satchel
+  name: black sling satchel
   description: A very sturdy satchel. This one has a sling strap.
   components:
   - type: Sprite
@@ -29,3 +29,19 @@
     blacklist:
       components:
       - Xeno
+
+# Journalists and the news crew: big enough for press armor, a press helmet and their equipment.
+- type: entity
+  parent: CMBackpack
+  id: CMUPressBackpack
+  name: press backpack
+  description: A roomy civilian backpack with a reporter's kit in mind, wide enough for a set of press armor and a helmet on top of everything else.
+  components:
+  - type: Storage
+    grid:
+    - 0,0,7,3 # 32
+  # Press armor is bigger than a backpack normally takes.
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMUPressArmor

@@ -110,7 +110,8 @@ internal static class CMUPerformanceProfilerReader
         ProfManager profiler,
         IReadOnlySet<string> entitySystemNames,
         int frameLimit,
-        int eventLimit)
+        int eventLimit,
+        long sinceIndexOffset = 0)
     {
         if (!profiler.IsEnabled)
             return new([], [], [], 0, false, new("disabled", 0, 0, 0, 0, 0, 0));
@@ -120,6 +121,7 @@ internal static class CMUPerformanceProfilerReader
         int eventsToRead = Math.Clamp(eventLimit, 128, 100000);
         long validLogStart = buffer.LogWriteOffset - buffer.LogBuffer.LongLength;
         long validIndexStart = Math.Max(0, buffer.IndexWriteOffset - buffer.IndexBuffer.LongLength);
+        validIndexStart = Math.Clamp(sinceIndexOffset, validIndexStart, buffer.IndexWriteOffset);
         var candidates = new List<CMUPerformanceProfileCandidate>((int) Math.Min(int.MaxValue,
             buffer.IndexWriteOffset - validIndexStart));
         int indexed = 0;

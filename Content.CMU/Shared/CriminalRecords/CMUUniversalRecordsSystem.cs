@@ -8,7 +8,7 @@ namespace Content.Shared.CMU14.CriminalRecords;
 /// <summary>
 /// One records database for the whole round, independent of any map, grid or station.
 /// </summary>
-public sealed class CMUUniversalRecordsSystem : EntitySystem
+public sealed partial class CMUUniversalRecordsSystem : EntitySystem
 {
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private INetManager _net = default!;
@@ -26,6 +26,14 @@ public sealed class CMUUniversalRecordsSystem : EntitySystem
             QueueDel(records);
 
         _records = null;
+    }
+
+    /// <summary>
+    /// The holder if something already made it this round, without spawning one. For lookups that only read.
+    /// </summary>
+    public EntityUid? GetExistingRecords()
+    {
+        return _records is { } existing && !TerminatingOrDeleted(existing) ? existing : null;
     }
 
     /// <summary>

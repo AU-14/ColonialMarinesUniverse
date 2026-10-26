@@ -15,6 +15,7 @@ internal sealed class AuRoundSelectionState
     public string? SelectedGovforShip { get; set; }
     public string? SelectedOpforShip { get; set; }
     public List<ThirdPartyPrototype> SelectedThirdParties { get; } = new();
+    public HashSet<ThirdPartyPrototype> SpawnedThirdParties { get; } = new();
     public bool DistressSignalThirdPartiesLocked { get; set; }
     public bool DistressSignalThirdPartyFillCompleted { get; set; }
     public int DistressSignalSurvivorCount { get; set; }
@@ -28,6 +29,7 @@ internal sealed class AuRoundSelectionState
         SelectedGovforShip = null;
         SelectedOpforShip = null;
         SelectedThirdParties.Clear();
+        SpawnedThirdParties.Clear();
         DistressSignalThirdPartiesLocked = false;
         DistressSignalThirdPartyFillCompleted = false;
         DistressSignalSurvivorCount = 0;

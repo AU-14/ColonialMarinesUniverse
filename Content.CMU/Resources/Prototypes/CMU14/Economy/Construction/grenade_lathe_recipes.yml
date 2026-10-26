@@ -1,0 +1,34 @@
+# Custom chemical grenade parts for the CM autolathe (casing + two-beaker payload + timer trigger).
+# Kept in their own pack rather than AU14AutolatheRecipes: that pack id is rebuilt at runtime by the
+# in-game Lathe Editor from admin-added recipes only, which would drop these.
+# Costs follow the RMC convention of CM13 values x1.25 in CM materials.
+
+- type: latheRecipePack
+  id: CMUGrenadePartRecipes
+  recipes:
+  - CMUCustomGrenadeCasing
+  - CMUChemicalPayload
+  - CMUTimerTrigger
+
+- type: latheRecipe
+  id: CMUCustomGrenadeCasing
+  result: RMCCustomGrenade
+  completetime: 4
+  materials:
+    CMSteel: 5312 # composition 4250 x 1.25, as RMCM40GrenadeCasing; must not undercut it (MaterialArbitrageTest)
+
+- type: latheRecipe
+  id: CMUChemicalPayload
+  result: ChemicalPayload
+  completetime: 3
+  materials:
+    CMSteel: 250
+    RMCPlastic: 375
+
+- type: latheRecipe
+  id: CMUTimerTrigger
+  result: RMCTimerTrigger
+  completetime: 2
+  materials:
+    CMSteel: 625 # CM13 timer: 500 metal, 50 glass
+    CMGlass: 62

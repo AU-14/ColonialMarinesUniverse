@@ -76,7 +76,9 @@ public sealed partial class BlockingSystem
 
         // This is how much damage the shield is attempting to block
         var split = args.OriginalDamage * blockFraction;
-        var damage = _damageable.ChangeDamage(item, split);
+        // CMU14: only an actual shield impact should produce a hit sound.
+        // var damage = _damageable.ChangeDamage(item, split);
+        var damage = _damageable.TryChangeDamage(item, split);
 
         // Of the damage that went through, reduce by the appropriate blocking modifiers.
         var modifier = GetBlockingModifier((item, blocking));
@@ -85,7 +87,8 @@ public sealed partial class BlockingSystem
         args.Damage *= 1f - blockFraction;
         args.Damage += blowthrough;
 
-        if (blocking.IsRaised && damage.AnyPositive())
+        // CMU14: unsupported damage (such as blood loss) has no stored shield delta.
+        if (blocking.IsRaised && damage?.AnyPositive() == true)
             _audio.PlayPvs(blocking.BlockSound, entity);
     }
 

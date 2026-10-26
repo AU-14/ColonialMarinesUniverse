@@ -216,6 +216,9 @@
     relationships:
       Head: [ Heart ]
   - type: Xeno
+  # cmu edit start: bob in zero-g like everyone else
+  - type: FloatingVisuals
+  # cmu edit end
   - type: VehicleDamageMultiplier
   - type: XenoRegen
   - type: XenoStateVisuals
@@ -354,6 +357,7 @@
     - enum.VendingMachineUiKey.Key
     - enum.PaperUiKey.Key
     - enum.RMCCameraUiKey.Key
+    - enum.JukeboxUiKey.Key # CMU14
   - type: RMCActiveInputMover
   - type: HiveTracker
     trackerModes:
@@ -419,11 +423,13 @@
     whitelist:
       components:
       - Marine
+      - Synth # CMU14: synth k9s aren't Marine, so they read real xeno names without this
   - type: FixedDescription
     description: rmc-xeno-unknown-description
     whitelist:
       components:
       - Marine
+      - Synth # CMU14: same gap as the name mask above
   - type: EmoteCooldown
   - type: RMCMesonsNonviewable
     xenoVisible: true
@@ -522,6 +528,11 @@
     - DoorBumpOpener
   - type: Hands
     examineShowEmpty: false
+  # CMU14: only purpose-built xeno restraints can bind developed xenos.
+  - type: Cuffable
+    cuffsWhitelist:
+      components:
+      - CMUXenoRestraints
   - type: GiveHands
     hands:
     - name: Right Hand

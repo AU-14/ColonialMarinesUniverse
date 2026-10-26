@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.IntegrationTests.Pair;
+using Content.Server._RMC14.Rules; // CMU14
 using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Server._RMC14.Xenonids.Parasite;
 using Content.Server.GameTicking;
@@ -621,8 +622,11 @@ public sealed class LarvaQueueJoinXenoUiTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task ParasiteClaimedLarvaIsClaimedByInfector() // CMU14: retry claims it, queue must not offer it
+    [TestCase(false)]
+    [TestCase(true)]
+    [TestCase(null)]
+    [TestCase(null, false, TestName = "BurstLarvaGoesToQueueWhenInfectorClosedPrompt")] // CMU14: BUG-1059
+    public async Task BurstLarvaRespectsInfectorPriority(bool? wantsLarva, bool promptOpen = true) // CMU14: queue must not offer a reserved larva
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -635,23 +639,34 @@ public sealed class LarvaQueueJoinXenoUiTest
         var map = await pair.CreateTestMap();
 
         var entMan = server.EntMan;
-        var hiveSystem = entMan.System<SharedXenoHiveSystem>();
         var mind = entMan.System<MindSystem>();
         var player = server.PlayerMan.Sessions.Single();
+        var infectors = await server.AddDummySessions(1);
+        var infector = infectors.Single();
 
         EntityUid ghost = default;
         EntityUid hive = default;
         EntityUid victim = default; // CMU14
         EntityUid larva = default;
+        EntityUid infectorGhost = default; // CMU14
+        NetEntity ghostNet = default;
         await server.WaitAssertion(() =>
         {
             ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
+            ghostNet = entMan.GetNetEntity(ghost);
             BypassRoundstartDelay(entMan, ghost);
             hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
+            // CMU14: real rounds assign this hive during xeno initialization, before SpawnLarva returns.
+            entMan.System<CMDistressSignalRuleSystem>().TheHive = hive;
 
             var mindId = mind.CreateMind(player.UserId, "Observer");
             mind.TransferTo(mindId, ghost);
             mind.SetUserId(mindId, player.UserId);
+
+            infectorGhost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
+            var infectorMind = mind.CreateMind(infector.UserId, "Infector");
+            mind.TransferTo(infectorMind, infectorGhost);
+            mind.SetUserId(infectorMind, infector.UserId);
 
             entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
         });
@@ -669,31 +684,80 @@ public sealed class LarvaQueueJoinXenoUiTest
             victim = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2, 0)));
             var infected = entMan.EnsureComponent<VictimInfectedComponent>(victim);
 #pragma warning disable RA0002
-            infected.InfectorUser = player.UserId;
-            infected.InfectorWantsLarva = true;
-
-            larva = entMan.SpawnEntity("CMXenoLarva", map.GridCoords.Offset(new Vector2(3, 0)));
-            infected.SpawnedLarva = larva;
+            infected.InfectorUser = infector.UserId;
+            infected.InfectorWantsLarva = wantsLarva == true;
+            infected.InfectorLarvaClaimPending = wantsLarva == null;
+            infected.Hive = hive;
 #pragma warning restore RA0002
             entMan.Dirty(victim, infected);
 
-            var burster = entMan.EnsureComponent<BursterComponent>(larva);
-            burster.BurstFrom = victim;
-            entMan.Dirty(larva, burster);
+            // CMU14: an unanswered claim only reserves the larva while the infector still has the prompt up
+            if (wantsLarva == null && promptOpen)
+            {
+                var victimNet = entMan.GetNetEntity(victim);
+                var infectorGhostNet = entMan.GetNetEntity(infectorGhost);
+                entMan.System<DialogSystem>().OpenOptions(infectorGhost, "claim",
+                [
+                    new DialogOption("yes", new XenoParasiteLarvaClaimChoiceEvent(infectorGhostNet, NetEntity.Invalid, victimNet, true)),
+                    new DialogOption("no", new XenoParasiteLarvaClaimChoiceEvent(infectorGhostNet, NetEntity.Invalid, victimNet, false)),
+                ]);
+            }
 
-            hiveSystem.SetHive(larva, hive);
+            entMan.System<SharedXenoParasiteSystem>().SpawnLarva((victim, infected), out larva);
+            if (wantsLarva != false && promptOpen)
+            {
+                Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False,
+                    "Spawning a reserved larva must not offer it to the general queue before linking its infector.");
+            }
         });
+
+        if (wantsLarva == false || !promptOpen)
+        {
+            await pair.RunTicksSync(5);
+            await server.WaitAssertion(() =>
+            {
+                AssertConfirmDialog(entMan, ghost, entMan.GetComponent<MetaDataComponent>(larva).EntityName);
+            });
+            await ConfirmDialog(pair, ghostNet);
+            await pair.RunTicksSync(5);
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(player.AttachedEntity, Is.EqualTo(larva));
+                Assert.That(infector.AttachedEntity, Is.Not.EqualTo(larva));
+            });
+            await server.RemoveDummySession(infector);
+            await pair.CleanReturnAsync();
+            return;
+        }
+
+        if (wantsLarva == null)
+        {
+            await pair.RunTicksSync(5);
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(infector.AttachedEntity, Is.Not.EqualTo(larva));
+                Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
+                var infected = entMan.GetComponent<VictimInfectedComponent>(victim);
+#pragma warning disable RA0002
+                infected.InfectorWantsLarva = true;
+                infected.InfectorLarvaClaimPending = false;
+#pragma warning restore RA0002
+                entMan.Dirty(victim, infected);
+            });
+        }
 
         await pair.RunTicksSync(5);
 
         await server.WaitAssertion(() =>
         {
             // CMU14: claim retry hands the larva to the eligible infector without a queue offer
-            Assert.That(player.AttachedEntity, Is.EqualTo(larva));
+            Assert.That(infector.AttachedEntity, Is.EqualTo(larva));
+            Assert.That(player.AttachedEntity, Is.EqualTo(ghost));
             Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
             Assert.That(entMan.GetComponent<VictimInfectedComponent>(victim).InfectorUser, Is.Null);
         });
 
+        await server.RemoveDummySession(infector);
         await pair.CleanReturnAsync();
     }
 

@@ -1,0 +1,4547 @@
+- type: cmu3DModel
+  id: CMU3DFoldingChair
+  label: Metal folding chair
+  sourcePrototypes:
+  - CMChair
+  status: draft
+  description: Unfolded chair with violet-gray steel sampled from chair.png, a small framed back insert and crossed folding
+    side rails. Four directional frames inspected; diagonal rails are stepped cuboid approximations.
+  folded: false
+  alternateFoldModel: CMU3DCMChairFolded
+  referenceRsi: _RMC14/Structures/Furniture/folding_chair.rsi
+  referenceState: chair
+  parts:
+  - min: -0.32, -0.3, 0.44
+    max: 0.32, 0.29, 0.51
+    color: '#767991'
+    label: seat frame
+  - min: -0.26, -0.25, 0.5
+    max: 0.26, 0.24, 0.535
+    color: '#4A4C5B'
+    label: seat inset
+  - min: -0.31, 0.2, 0.49
+    max: -0.25, 0.28, 1.02
+    color: '#979AB0'
+    label: back left upright
+  - min: 0.25, 0.2, 0.49
+    max: 0.31, 0.28, 1.02
+    color: '#979AB0'
+    label: back right upright
+  - min: -0.26, 0.205, 0.76
+    max: 0.26, 0.285, 0.97
+    color: '#4A4C5B'
+    label: back panel
+  - min: -0.3, 0.2, 0.97
+    max: 0.3, 0.29, 1.02
+    color: '#979AB0'
+    label: back upper trim
+  - min: -0.26, -0.24, 0.18
+    max: 0.26, -0.19, 0.23
+    color: '#767991'
+    label: front crossbar
+  - min: -0.296, -0.277, 0.025
+    max: -0.244, -0.183, 0.135
+    color: '#767991'
+    label: stepped folding side rail
+  - min: -0.296, -0.202, 0.116
+    max: -0.244, -0.108, 0.226
+    color: '#767991'
+    label: stepped folding side rail
+  - min: -0.296, -0.127, 0.207
+    max: -0.244, -0.033, 0.317
+    color: '#767991'
+    label: stepped folding side rail
+  - min: -0.296, -0.052, 0.298
+    max: -0.244, 0.052, 0.408
+    color: '#767991'
+    label: stepped folding side rail
+  - min: -0.296, 0.023, 0.389
+    max: -0.244, 0.117, 0.499
+    color: '#767991'
+    label: stepped folding side rail
+  - min: -0.296, 0.183, 0.025
+    max: -0.244, 0.277, 0.135
+    color: '#767991'
+    label: stepped folding side rail
+  - min: -0.296, 0.108, 0.116
+    max: -0.244, 0.202, 0.226
+    color: '#767991'
+    label: stepped folding side rail
+  - min: -0.296, 0.033, 0.207
+    max: -0.244, 0.127, 0.317
+    color: '#767991'
+    label: stepped folding side rail
+  - min: -0.296, -0.117, 0.389
+    max: -0.244, -0.023, 0.499
+    color: '#767991'
+    label: stepped folding side rail
+  - min: 0.244, -0.277, 0.025
+    max: 0.296, -0.183, 0.135
+    color: '#767991'
+    label: stepped folding side rail
+  - min: 0.244, -0.202, 0.116
+    max: 0.296, -0.108, 0.226
+    color: '#767991'
+    label: stepped folding side rail
+  - min: 0.244, -0.127, 0.207
+    max: 0.296, -0.033, 0.317
+    color: '#767991'
+    label: stepped folding side rail
+  - min: 0.244, -0.052, 0.298
+    max: 0.296, 0.052, 0.408
+    color: '#767991'
+    label: stepped folding side rail
+  - min: 0.244, 0.023, 0.389
+    max: 0.296, 0.117, 0.499
+    color: '#767991'
+    label: stepped folding side rail
+  - min: 0.244, 0.183, 0.025
+    max: 0.296, 0.277, 0.135
+    color: '#767991'
+    label: stepped folding side rail
+  - min: 0.244, 0.108, 0.116
+    max: 0.296, 0.202, 0.226
+    color: '#767991'
+    label: stepped folding side rail
+  - min: 0.244, 0.033, 0.207
+    max: 0.296, 0.127, 0.317
+    color: '#767991'
+    label: stepped folding side rail
+  - min: 0.244, -0.117, 0.389
+    max: 0.296, -0.023, 0.499
+    color: '#767991'
+    label: stepped folding side rail
+  - min: -0.2, 0.188, 0.8
+    max: 0.2, 0.205, 0.925
+    color: '#33383E'
+    label: back inset shadow
+  - min: -0.225, -0.2, 0.535
+    max: 0.225, 0.1, 0.546
+    color: '#5C5F72'
+    label: seat inset sheen
+  sourceDirections: 4
+- type: cmu3DModel
+  id: CMU3DOfficeChairDark
+  label: Dark office chair
+  sourcePrototypes:
+  - CMChairOfficeDark
+  status: draft
+  description: 'Dark office chair with stepped cushion corners and upholstery colors sampled from the source (#4A4C5B,
+    #5C5F72, #979AB0), a short wide back and exposed caster pedestal. Neutral static pose.'
+  parts:
+  - min: -0.34, -0.04, 0.06
+    max: 0.34, 0.04, 0.13
+    color: '#14191C'
+    label: caster cross X
+  - min: -0.04, -0.32, 0.06
+    max: 0.04, 0.32, 0.13
+    color: '#14191C'
+    label: caster cross Y
+  - min: -0.065, -0.065, 0.12
+    max: 0.065, 0.065, 0.49
+    color: '#747A7B'
+    label: lift pedestal
+  - min: -0.06, 0.2, 0.55
+    max: 0.06, 0.27, 0.94
+    color: '#747A7B'
+    label: back stem
+  - min: -0.35, -0.055, 0.01
+    max: -0.27, 0.055, 0.11
+    color: '#14191C'
+    label: caster wheel
+  - min: 0.27, -0.055, 0.01
+    max: 0.35, 0.055, 0.11
+    color: '#14191C'
+    label: caster wheel
+  - min: -0.29, -0.22, 0.46
+    max: 0.29, 0.21, 0.51
+    color: '#1C2525'
+    label: seat frame center
+  - min: -0.25, -0.28, 0.46
+    max: 0.25, 0.26, 0.51
+    color: '#1C2525'
+    label: seat frame middle
+  - min: -0.265, -0.2, 0.51
+    max: 0.265, 0.19, 0.58
+    color: '#4A4C5B'
+    label: seat cushion center
+  - min: -0.23, -0.24, 0.51
+    max: 0.23, 0.23, 0.58
+    color: '#4A4C5B'
+    label: seat cushion inset
+  - min: -0.245, -0.09, 0.58
+    max: 0.245, -0.005, 0.597
+    color: '#5C5F72'
+    label: seat highlight band
+  - min: -0.215, -0.248, 0.525
+    max: 0.215, -0.233, 0.557
+    color: '#979AB0'
+    label: seat front piping
+  - min: -0.29, 0.2, 0.91
+    max: 0.29, 0.31, 1.105
+    color: '#1C2525'
+    label: back shell center
+  - min: -0.245, 0.2, 0.86
+    max: 0.245, 0.31, 1.155
+    color: '#1C2525'
+    label: back shell middle
+  - min: -0.27, 0.175, 0.92
+    max: 0.27, 0.207, 1.095
+    color: '#4A4C5B'
+    label: back cushion center
+  - min: -0.225, 0.175, 0.88
+    max: 0.225, 0.207, 1.14
+    color: '#4A4C5B'
+    label: back cushion middle
+  - min: -0.21, 0.166, 1.08
+    max: 0.21, 0.178, 1.126
+    color: '#5C5F72'
+    label: back cushion upper sheen
+  sourceDirections: 4
+- type: cmu3DModel
+  id: CMU3DComfyChairBlack
+  label: Black padded chair
+  sourcePrototypes:
+  - CMChairComfyBlack
+  status: draft
+  description: 'Black ribbed swivel chair: exposed pedestal and casters, slender metal arm supports, dark cushions and
+    violet-gray piping. Four directional comfychair_black frames inspected; back-face upholstery remains inferred.'
+  parts:
+  - min: -0.38, -0.36, 0.35
+    max: 0.38, 0.34, 0.49
+    color: '#1B2424'
+    label: seat base
+  - min: -0.29, -0.31, 0.49
+    max: 0.29, 0.24, 0.63
+    color: '#2B2B2B'
+    label: seat cushion
+  - min: -0.37, 0.19, 0.49
+    max: 0.37, 0.35, 1.3
+    color: '#111313'
+    label: back shell
+  - min: -0.29, 0.13, 0.64
+    max: 0.29, 0.24, 1.22
+    color: '#2B2B2B'
+    label: back cushion
+  - min: -0.4, -0.33, 0.79
+    max: -0.28, 0.26, 0.86
+    color: '#757890'
+    label: left arm pad
+  - min: 0.28, -0.33, 0.79
+    max: 0.4, 0.26, 0.86
+    color: '#757890'
+    label: right arm pad
+  - min: -0.22, 0.1, 1.2
+    max: 0.22, 0.3, 1.36
+    color: '#2B2B2B'
+    label: headrest
+  - min: -0.28, 0.115, 0.74
+    max: 0.28, 0.14, 0.765
+    color: '#1B2424'
+    label: upholstery rib
+  - min: -0.28, 0.115, 0.85
+    max: 0.28, 0.14, 0.875
+    color: '#1B2424'
+    label: upholstery rib
+  - min: -0.28, 0.115, 0.96
+    max: 0.28, 0.14, 0.985
+    color: '#1B2424'
+    label: upholstery rib
+  - min: -0.28, 0.115, 1.07
+    max: 0.28, 0.14, 1.095
+    color: '#1B2424'
+    label: upholstery rib
+  - min: -0.3, -0.045, 0.06
+    max: 0.3, 0.045, 0.12
+    color: '#494B5A'
+    label: caster cross X
+  - min: -0.045, -0.28, 0.06
+    max: 0.045, 0.28, 0.12
+    color: '#494B5A'
+    label: caster cross Y
+  - min: -0.045, -0.045, 0.11
+    max: 0.045, 0.045, 0.36
+    color: '#757890'
+    label: chrome swivel stem
+  - min: -0.345, -0.05, 0.02
+    max: -0.255, 0.05, 0.105
+    color: '#111313'
+    label: caster wheel
+  - min: 0.255, -0.05, 0.02
+    max: 0.345, 0.05, 0.105
+    color: '#111313'
+    label: caster wheel
+  - min: -0.045, -0.33, 0.02
+    max: 0.045, -0.23, 0.105
+    color: '#111313'
+    label: caster wheel
+  - min: -0.045, 0.23, 0.02
+    max: 0.045, 0.33, 0.105
+    color: '#111313'
+    label: caster wheel
+  - min: -0.357, -0.23, 0.42
+    max: -0.313, -0.185, 0.8
+    color: '#494B5A'
+    label: arm front stanchion
+  - min: -0.356, 0.17, 0.66
+    max: -0.314, 0.203, 1.255
+    color: '#757890'
+    label: back edge piping
+  - min: 0.313, -0.23, 0.42
+    max: 0.357, -0.185, 0.8
+    color: '#494B5A'
+    label: arm front stanchion
+  - min: 0.314, 0.17, 0.66
+    max: 0.356, 0.203, 1.255
+    color: '#757890'
+    label: back edge piping
+  - min: -0.152, -0.28, 0.63
+    max: -0.128, 0.1, 0.638
+    color: '#161616'
+    label: seat upholstery channel
+  - min: -0.012, -0.28, 0.63
+    max: 0.012, 0.1, 0.638
+    color: '#161616'
+    label: seat upholstery channel
+  - min: 0.128, -0.28, 0.63
+    max: 0.152, 0.1, 0.638
+    color: '#161616'
+    label: seat upholstery channel
+  sourceDirections: 4
+- type: cmu3DModel
+  id: CMU3DWoodChair
+  label: Wooden chair
+  sourcePrototypes:
+  - CMChairWood
+  status: draft
+  description: Dark worn wood chair with open horizontal back rails, a plank seat and visible grain strips; silhouette
+    and brown palette follow all four wooden_chair frames.
+  parts:
+  - min: -0.305, -0.275, 0.03
+    max: -0.235, -0.205, 0.49
+    color: '#34170B'
+    label: leg 1
+  - min: 0.235, -0.275, 0.03
+    max: 0.305, -0.205, 0.49
+    color: '#34170B'
+    label: leg 2
+  - min: -0.305, 0.205, 0.03
+    max: -0.235, 0.275, 0.49
+    color: '#34170B'
+    label: leg 3
+  - min: 0.235, 0.205, 0.03
+    max: 0.305, 0.275, 0.49
+    color: '#34170B'
+    label: leg 4
+  - min: -0.32, -0.29, 0.47
+    max: 0.32, 0.29, 0.56
+    color: '#67503B'
+    label: wood seat
+  - min: -0.31, 0.2, 0.55
+    max: -0.24, 0.28, 1.12
+    color: '#34170B'
+    label: left back post
+  - min: 0.24, 0.2, 0.55
+    max: 0.31, 0.28, 1.12
+    color: '#34170B'
+    label: right back post
+  - min: -0.31, 0.2, 1.06
+    max: 0.31, 0.3, 1.14
+    color: '#67503B'
+    label: top rail
+  - min: -0.28, 0.21, 0.73
+    max: 0.28, 0.28, 0.8
+    color: '#34170B'
+    label: back crossrail
+  - min: -0.236, -0.235, 0.56
+    max: -0.204, 0.23, 0.569
+    color: '#7C6146'
+    label: seat worn grain
+  - min: -0.091, -0.235, 0.56
+    max: -0.059, 0.23, 0.569
+    color: '#7C6146'
+    label: seat worn grain
+  - min: 0.059, -0.235, 0.56
+    max: 0.091, 0.23, 0.569
+    color: '#7C6146'
+    label: seat worn grain
+  - min: 0.204, -0.235, 0.56
+    max: 0.236, 0.23, 0.569
+    color: '#7C6146'
+    label: seat worn grain
+  - min: -0.24, 0.188, 1.065
+    max: 0.24, 0.203, 1.09
+    color: '#4C3C2B'
+    label: top rail inner edge
+  - min: -0.28, -0.24, 0.2
+    max: -0.23, 0.24, 0.25
+    color: '#34170B'
+    label: left lower stretcher
+  - min: 0.23, -0.24, 0.2
+    max: 0.28, 0.24, 0.25
+    color: '#34170B'
+    label: right lower stretcher
+  sourceDirections: 4
+- type: cmu3DModel
+  id: CMU3DStool
+  label: Metal stool
+  sourcePrototypes:
+  - RMCStool
+  status: draft
+  description: Backless stool with four metal legs and low footrest.
+  parts:
+  - min: -0.255, -0.255, 0.03
+    max: -0.185, -0.185, 0.61
+    color: '#747A7B'
+    label: leg 1
+  - min: 0.185, -0.255, 0.03
+    max: 0.255, -0.185, 0.61
+    color: '#747A7B'
+    label: leg 2
+  - min: -0.255, 0.185, 0.03
+    max: -0.185, 0.255, 0.61
+    color: '#747A7B'
+    label: leg 3
+  - min: 0.185, 0.185, 0.03
+    max: 0.255, 0.255, 0.61
+    color: '#747A7B'
+    label: leg 4
+  - min: -0.3, -0.3, 0.6
+    max: 0.3, 0.3, 0.67
+    color: '#282D30'
+    label: seat rim
+  - min: -0.27, -0.27, 0.665
+    max: 0.27, 0.27, 0.72
+    color: '#474E50'
+    label: seat pad
+  - min: -0.24, -0.24, 0.24
+    max: 0.24, -0.2, 0.29
+    color: '#747A7B'
+    label: footrest X
+  - min: -0.24, -0.24, 0.24
+    max: -0.2, 0.24, 0.29
+    color: '#747A7B'
+    label: footrest Y
+  sourceDirections: 4
+- type: cmu3DModel
+  id: CMU3DSteelTable
+  label: Steel table
+  sourcePrototypes:
+  - CMTable
+  status: draft
+  description: Single-tile surface with frame and palette sampled from the original SteelTable full/connected table sprite.
+    The tabletop support is exactly Z=0.86; connected edges remain a later topology pass.
+  supportSurface: tabletop inset
+  parts:
+  - min: -0.44, -0.44, 0.025
+    max: -0.37, -0.37, 0.78
+    color: '#414141'
+    label: corner leg
+  - min: -0.44, 0.37, 0.025
+    max: -0.37, 0.44, 0.78
+    color: '#414141'
+    label: corner leg
+  - min: 0.37, -0.44, 0.025
+    max: 0.44, -0.37, 0.78
+    color: '#414141'
+    label: corner leg
+  - min: 0.37, 0.37, 0.025
+    max: 0.44, 0.44, 0.78
+    color: '#414141'
+    label: corner leg
+  - min: -0.47, -0.47, 0.735
+    max: 0.47, 0.47, 0.79
+    color: '#988667'
+    label: underframe
+  - min: -0.5, -0.5, 0.79
+    max: 0.5, 0.5, 0.86
+    color: '#D1BFA1'
+    label: tabletop inset
+  - min: -0.499, -0.5, 0.825
+    max: -0.457, 0.5, 0.86
+    color: '#DED0BA'
+    label: side perimeter edge
+  - min: 0.457, -0.5, 0.825
+    max: 0.499, 0.5, 0.86
+    color: '#DED0BA'
+    label: side perimeter edge
+  - min: -0.455, -0.499, 0.825
+    max: 0.455, -0.457, 0.86
+    color: '#DED0BA'
+    label: end perimeter edge
+  - min: -0.455, 0.457, 0.825
+    max: 0.455, 0.499, 0.86
+    color: '#DED0BA'
+    label: end perimeter edge
+  - min: -0.41, -0.435, 0.22
+    max: 0.41, -0.375, 0.275
+    color: '#988667'
+    label: front stretcher
+  - min: -0.28, -0.25, 0.861
+    max: -0.262, -0.12, 0.865
+    color: '#C9B696'
+    label: worn surface scratch
+  - min: -0.12, 0.06, 0.861
+    max: -0.102, 0.22, 0.865
+    color: '#C9B696'
+    label: worn surface scratch
+  - min: 0.2, -0.2, 0.861
+    max: 0.218, -0.1, 0.865
+    color: '#C9B696'
+    label: worn surface scratch
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DRequisitionDesk
+  label: Requisition desk
+  sourcePrototypes:
+  - CMTableReinforcedRequisition
+  status: draft
+  description: Single-tile surface with frame and palette sampled from the original RequisitionDesk full/connected table
+    sprite. The tabletop support is exactly Z=0.86; connected edges remain a later topology pass.
+  supportSurface: tabletop inset
+  parts:
+  - min: -0.44, -0.44, 0.025
+    max: -0.37, -0.37, 0.78
+    color: '#1B1B1E'
+    label: corner leg
+  - min: -0.44, 0.37, 0.025
+    max: -0.37, 0.44, 0.78
+    color: '#1B1B1E'
+    label: corner leg
+  - min: 0.37, -0.44, 0.025
+    max: 0.44, -0.37, 0.78
+    color: '#1B1B1E'
+    label: corner leg
+  - min: 0.37, 0.37, 0.025
+    max: 0.44, 0.44, 0.78
+    color: '#1B1B1E'
+    label: corner leg
+  - min: -0.47, -0.47, 0.735
+    max: 0.47, 0.47, 0.79
+    color: '#35373B'
+    label: underframe
+  - min: -0.5, -0.5, 0.79
+    max: 0.5, 0.5, 0.86
+    color: '#2D2E30'
+    label: tabletop inset
+  - min: -0.499, -0.5, 0.825
+    max: -0.457, 0.5, 0.86
+    color: '#3D3E41'
+    label: side perimeter edge
+  - min: 0.457, -0.5, 0.825
+    max: 0.499, 0.5, 0.86
+    color: '#3D3E41'
+    label: side perimeter edge
+  - min: -0.455, -0.499, 0.825
+    max: 0.455, -0.457, 0.86
+    color: '#3D3E41'
+    label: end perimeter edge
+  - min: -0.455, 0.457, 0.825
+    max: 0.455, 0.499, 0.86
+    color: '#3D3E41'
+    label: end perimeter edge
+  - min: -0.455, -0.42, 0.38
+    max: -0.405, 0.42, 0.74
+    color: '#35373B'
+    label: left reinforced skirt
+  - min: 0.405, -0.42, 0.38
+    max: 0.455, 0.42, 0.74
+    color: '#35373B'
+    label: right reinforced skirt
+  - min: -0.405, 0.405, 0.38
+    max: 0.405, 0.455, 0.74
+    color: '#35373B'
+    label: rear modesty panel
+  - min: -0.372, -0.49, 0.861
+    max: -0.348, -0.466, 0.869
+    color: '#1B1B1E'
+    label: top border rivet
+  - min: -0.372, 0.466, 0.861
+    max: -0.348, 0.49, 0.869
+    color: '#1B1B1E'
+    label: top border rivet
+  - min: -0.192, -0.49, 0.861
+    max: -0.168, -0.466, 0.869
+    color: '#1B1B1E'
+    label: top border rivet
+  - min: -0.192, 0.466, 0.861
+    max: -0.168, 0.49, 0.869
+    color: '#1B1B1E'
+    label: top border rivet
+  - min: -0.012, -0.49, 0.861
+    max: 0.012, -0.466, 0.869
+    color: '#1B1B1E'
+    label: top border rivet
+  - min: -0.012, 0.466, 0.861
+    max: 0.012, 0.49, 0.869
+    color: '#1B1B1E'
+    label: top border rivet
+  - min: 0.168, -0.49, 0.861
+    max: 0.192, -0.466, 0.869
+    color: '#1B1B1E'
+    label: top border rivet
+  - min: 0.168, 0.466, 0.861
+    max: 0.192, 0.49, 0.869
+    color: '#1B1B1E'
+    label: top border rivet
+  - min: 0.348, -0.49, 0.861
+    max: 0.372, -0.466, 0.869
+    color: '#1B1B1E'
+    label: top border rivet
+  - min: 0.348, 0.466, 0.861
+    max: 0.372, 0.49, 0.869
+    color: '#1B1B1E'
+    label: top border rivet
+  - min: -0.49, -0.312, 0.861
+    max: -0.466, -0.288, 0.869
+    color: '#1B1B1E'
+    label: side border rivet
+  - min: 0.466, -0.312, 0.861
+    max: 0.49, -0.288, 0.869
+    color: '#1B1B1E'
+    label: side border rivet
+  - min: -0.49, -0.012, 0.861
+    max: -0.466, 0.012, 0.869
+    color: '#1B1B1E'
+    label: side border rivet
+  - min: 0.466, -0.012, 0.861
+    max: 0.49, 0.012, 0.869
+    color: '#1B1B1E'
+    label: side border rivet
+  - min: -0.49, 0.288, 0.861
+    max: -0.466, 0.312, 0.869
+    color: '#1B1B1E'
+    label: side border rivet
+  - min: 0.466, 0.288, 0.861
+    max: 0.49, 0.312, 0.869
+    color: '#1B1B1E'
+    label: side border rivet
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DBlackDesk
+  label: Black reinforced desk
+  sourcePrototypes:
+  - CMTableReinforcedBlack
+  status: draft
+  description: Single-tile surface with frame and palette sampled from the original BlackDesk full/connected table sprite.
+    The tabletop support is exactly Z=0.86; connected edges remain a later topology pass.
+  supportSurface: tabletop inset
+  parts:
+  - min: -0.44, -0.44, 0.025
+    max: -0.37, -0.37, 0.78
+    color: '#292A2D'
+    label: corner leg
+  - min: -0.44, 0.37, 0.025
+    max: -0.37, 0.44, 0.78
+    color: '#292A2D'
+    label: corner leg
+  - min: 0.37, -0.44, 0.025
+    max: 0.44, -0.37, 0.78
+    color: '#292A2D'
+    label: corner leg
+  - min: 0.37, 0.37, 0.025
+    max: 0.44, 0.44, 0.78
+    color: '#292A2D'
+    label: corner leg
+  - min: -0.47, -0.47, 0.735
+    max: 0.47, 0.47, 0.79
+    color: '#1C1C1D'
+    label: underframe
+  - min: -0.5, -0.5, 0.79
+    max: 0.5, 0.5, 0.86
+    color: '#2D2E30'
+    label: tabletop inset
+  - min: -0.499, -0.5, 0.825
+    max: -0.457, 0.5, 0.86
+    color: '#3D3E41'
+    label: side perimeter edge
+  - min: 0.457, -0.5, 0.825
+    max: 0.499, 0.5, 0.86
+    color: '#3D3E41'
+    label: side perimeter edge
+  - min: -0.455, -0.499, 0.825
+    max: 0.455, -0.457, 0.86
+    color: '#3D3E41'
+    label: end perimeter edge
+  - min: -0.455, 0.457, 0.825
+    max: 0.455, 0.499, 0.86
+    color: '#3D3E41'
+    label: end perimeter edge
+  - min: -0.455, -0.42, 0.38
+    max: -0.405, 0.42, 0.74
+    color: '#1C1C1D'
+    label: left reinforced skirt
+  - min: 0.405, -0.42, 0.38
+    max: 0.455, 0.42, 0.74
+    color: '#1C1C1D'
+    label: right reinforced skirt
+  - min: -0.405, 0.405, 0.38
+    max: 0.405, 0.455, 0.74
+    color: '#1C1C1D'
+    label: rear modesty panel
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DAlmayerTable
+  label: Almayer steel table
+  sourcePrototypes:
+  - CMTableAlmayer
+  status: draft
+  description: Single-tile surface with frame and palette sampled from the original AlmayerTable full/connected table
+    sprite. The tabletop support is exactly Z=0.86; connected edges remain a later topology pass.
+  supportSurface: tabletop inset
+  parts:
+  - min: -0.44, -0.44, 0.025
+    max: -0.37, -0.37, 0.78
+    color: '#292A2D'
+    label: corner leg
+  - min: -0.44, 0.37, 0.025
+    max: -0.37, 0.44, 0.78
+    color: '#292A2D'
+    label: corner leg
+  - min: 0.37, -0.44, 0.025
+    max: 0.44, -0.37, 0.78
+    color: '#292A2D'
+    label: corner leg
+  - min: 0.37, 0.37, 0.025
+    max: 0.44, 0.44, 0.78
+    color: '#292A2D'
+    label: corner leg
+  - min: -0.47, -0.47, 0.735
+    max: 0.47, 0.47, 0.79
+    color: '#4F5258'
+    label: underframe
+  - min: -0.5, -0.5, 0.79
+    max: 0.5, 0.5, 0.86
+    color: '#595C62'
+    label: tabletop inset
+  - min: -0.499, -0.5, 0.825
+    max: -0.457, 0.5, 0.86
+    color: '#66676A'
+    label: side perimeter edge
+  - min: 0.457, -0.5, 0.825
+    max: 0.499, 0.5, 0.86
+    color: '#66676A'
+    label: side perimeter edge
+  - min: -0.455, -0.499, 0.825
+    max: 0.455, -0.457, 0.86
+    color: '#66676A'
+    label: end perimeter edge
+  - min: -0.455, 0.457, 0.825
+    max: 0.455, 0.499, 0.86
+    color: '#66676A'
+    label: end perimeter edge
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DFancyWoodTable
+  label: Finished wooden table
+  sourcePrototypes:
+  - CMTableWoodenFancy
+  status: draft
+  description: Single-tile surface with frame and palette sampled from the original FancyWoodTable full/connected table
+    sprite. The tabletop support is exactly Z=0.86; connected edges remain a later topology pass.
+  supportSurface: tabletop inset
+  parts:
+  - min: -0.44, -0.44, 0.025
+    max: -0.37, -0.37, 0.78
+    color: '#2A1C1C'
+    label: corner leg
+  - min: -0.44, 0.37, 0.025
+    max: -0.37, 0.44, 0.78
+    color: '#2A1C1C'
+    label: corner leg
+  - min: 0.37, -0.44, 0.025
+    max: 0.44, -0.37, 0.78
+    color: '#2A1C1C'
+    label: corner leg
+  - min: 0.37, 0.37, 0.025
+    max: 0.44, 0.44, 0.78
+    color: '#2A1C1C'
+    label: corner leg
+  - min: -0.47, -0.47, 0.735
+    max: 0.47, 0.47, 0.79
+    color: '#58341A'
+    label: underframe
+  - min: -0.5, -0.5, 0.79
+    max: 0.5, 0.5, 0.86
+    color: '#644126'
+    label: tabletop inset
+  - min: -0.499, -0.5, 0.825
+    max: -0.457, 0.5, 0.86
+    color: '#7D725E'
+    label: side perimeter edge
+  - min: 0.457, -0.5, 0.825
+    max: 0.499, 0.5, 0.86
+    color: '#7D725E'
+    label: side perimeter edge
+  - min: -0.455, -0.499, 0.825
+    max: 0.455, -0.457, 0.86
+    color: '#7D725E'
+    label: end perimeter edge
+  - min: -0.455, 0.457, 0.825
+    max: 0.455, 0.499, 0.86
+    color: '#7D725E'
+    label: end perimeter edge
+  - min: -0.425, -0.455, 0.6
+    max: 0.425, -0.405, 0.74
+    color: '#523116'
+    label: front wood apron
+  - min: -0.425, 0.405, 0.6
+    max: 0.425, 0.455, 0.74
+    color: '#523116'
+    label: rear wood apron
+  - min: -0.348, -0.4, 0.861
+    max: -0.332, 0.4, 0.865
+    color: '#52311B'
+    label: wood grain
+  - min: -0.178, -0.4, 0.861
+    max: -0.162, 0.4, 0.865
+    color: '#52311B'
+    label: wood grain
+  - min: -0.008, -0.4, 0.861
+    max: 0.008, 0.4, 0.865
+    color: '#52311B'
+    label: wood grain
+  - min: 0.162, -0.4, 0.861
+    max: 0.178, 0.4, 0.865
+    color: '#52311B'
+    label: wood grain
+  - min: 0.332, -0.4, 0.861
+    max: 0.348, 0.4, 0.865
+    color: '#52311B'
+    label: wood grain
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DPoorWoodTable
+  label: Rough plank table
+  sourcePrototypes:
+  - CMTableWoodenPoor
+  status: draft
+  description: Single-tile surface with frame and palette sampled from the original PoorWoodTable full/connected table
+    sprite. The tabletop support is exactly Z=0.86; connected edges remain a later topology pass.
+  supportSurface: tabletop inset
+  parts:
+  - min: -0.44, -0.44, 0.025
+    max: -0.37, -0.37, 0.78
+    color: '#362522'
+    label: corner leg
+  - min: -0.44, 0.37, 0.025
+    max: -0.37, 0.44, 0.78
+    color: '#362522'
+    label: corner leg
+  - min: 0.37, -0.44, 0.025
+    max: 0.44, -0.37, 0.78
+    color: '#362522'
+    label: corner leg
+  - min: 0.37, 0.37, 0.025
+    max: 0.44, 0.44, 0.78
+    color: '#362522'
+    label: corner leg
+  - min: -0.47, -0.47, 0.735
+    max: 0.47, 0.47, 0.79
+    color: '#49312C'
+    label: underframe
+  - min: -0.5, -0.5, 0.79
+    max: 0.5, 0.5, 0.86
+    color: '#49312C'
+    label: tabletop inset
+  - min: -0.499, -0.5, 0.825
+    max: -0.457, 0.5, 0.86
+    color: '#5E4232'
+    label: side perimeter edge
+  - min: 0.457, -0.5, 0.825
+    max: 0.499, 0.5, 0.86
+    color: '#5E4232'
+    label: side perimeter edge
+  - min: -0.455, -0.499, 0.825
+    max: 0.455, -0.457, 0.86
+    color: '#5E4232'
+    label: end perimeter edge
+  - min: -0.455, 0.457, 0.825
+    max: 0.455, 0.499, 0.86
+    color: '#5E4232'
+    label: end perimeter edge
+  - min: -0.45, -0.308, 0.861
+    max: 0.45, -0.292, 0.865
+    color: '#271A17'
+    label: dark plank seam
+  - min: -0.45, -0.108, 0.861
+    max: 0.45, -0.092, 0.865
+    color: '#271A17'
+    label: dark plank seam
+  - min: -0.45, 0.092, 0.861
+    max: 0.45, 0.108, 0.865
+    color: '#271A17'
+    label: dark plank seam
+  - min: -0.45, 0.292, 0.861
+    max: 0.45, 0.308, 0.865
+    color: '#271A17'
+    label: dark plank seam
+  - min: -0.4, -0.36, 0.861
+    max: -0.38, -0.34, 0.867
+    color: '#0C0C0C'
+    label: old iron nail
+  - min: -0.4, -0.13, 0.861
+    max: -0.38, -0.11, 0.867
+    color: '#0C0C0C'
+    label: old iron nail
+  - min: -0.4, 0.11, 0.861
+    max: -0.38, 0.13, 0.867
+    color: '#0C0C0C'
+    label: old iron nail
+  - min: -0.4, 0.34, 0.861
+    max: -0.38, 0.36, 0.867
+    color: '#0C0C0C'
+    label: old iron nail
+  - min: 0.38, -0.36, 0.861
+    max: 0.4, -0.34, 0.867
+    color: '#0C0C0C'
+    label: old iron nail
+  - min: 0.38, -0.13, 0.861
+    max: 0.4, -0.11, 0.867
+    color: '#0C0C0C'
+    label: old iron nail
+  - min: 0.38, 0.11, 0.861
+    max: 0.4, 0.13, 0.867
+    color: '#0C0C0C'
+    label: old iron nail
+  - min: 0.38, 0.34, 0.861
+    max: 0.4, 0.36, 0.867
+    color: '#0C0C0C'
+    label: old iron nail
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DStorageRack
+  label: Open metal rack
+  sourcePrototypes:
+  - CMRack
+  status: draft
+  description: Open three-level gray storage rack with distinct upper shelf support at .948 tiles. Source rack.png
+    and CMRack PlaceableSurface/fixture were inspected. Saved loose items rest on its upper deck where their pivot
+    falls within the deck. Shelf spacing, hidden sides and runtime contents remain inferred.
+  parts:
+  - min: -0.423, -0.298, 0.0
+    max: -0.377, -0.252, 1.02
+    color: '#828282'
+    label: rack upright
+  - min: -0.423, 0.252, 0.0
+    max: -0.377, 0.298, 1.02
+    color: '#828282'
+    label: rack upright
+  - min: 0.377, -0.298, 0.0
+    max: 0.423, -0.252, 1.02
+    color: '#828282'
+    label: rack upright
+  - min: 0.377, 0.252, 0.0
+    max: 0.423, 0.298, 1.02
+    color: '#828282'
+    label: rack upright
+  - min: -0.4, -0.275, 0.18
+    max: 0.4, 0.275, 0.208
+    color: '#828282'
+    label: open shelf
+  - min: -0.4, -0.305, 0.16
+    max: 0.4, -0.275, 0.215
+    color: '#474747'
+    label: shelf front beam
+  - min: -0.4, -0.275, 0.55
+    max: 0.4, 0.275, 0.578
+    color: '#828282'
+    label: open shelf
+  - min: -0.4, -0.305, 0.53
+    max: 0.4, -0.275, 0.585
+    color: '#474747'
+    label: shelf front beam
+  - min: -0.4, -0.275, 0.92
+    max: 0.4, 0.275, 0.948
+    color: '#828282'
+    label: upper shelf support
+  - min: -0.4, -0.305, 0.9
+    max: 0.4, -0.275, 0.955
+    color: '#474747'
+    label: shelf front beam
+  - min: -0.41, -0.3, 0.97
+    max: -0.31, -0.255, 1.025
+    color: '#BDBDBD'
+    label: upper post cap
+  - min: 0.31, -0.3, 0.97
+    max: 0.41, -0.255, 1.025
+    color: '#BDBDBD'
+    label: upper post cap
+  - min: -0.39, -0.298, 0.967
+    max: 0.39, -0.277, 0.985
+    color: '#BDBDBD'
+    label: top shelf front trim
+  - min: -0.19, -0.308, 0.938
+    max: 0.19, -0.299, 0.96
+    color: '#232323'
+    label: top shelf recessed slot
+  sourceDirections: 1
+  supportSurface: upper shelf support
+  referencePrototype: CMRack
+  referenceRsi: /Textures/_RMC14/Structures/Storage/rack.rsi
+  referenceState: rack
+- type: cmu3DModel
+  id: CMU3DBed
+  supportSurface: Blanket source pixels
+  label: White-sheet bed
+  sourcePrototypes:
+  - CMBed
+  status: draft
+  description: White-sheet bed. Source frame fixes the long axis along local X with the pillow at +X. Dimensions
+    match sibling single-tile furniture, removing the previous oversized footprint. Unbuckled/unfolded where applicable;
+    live states and hidden construction remain unfinished. See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/bed.rsi
+  referenceState: bed
+  sourceDirections: 1
+  parts:
+  - min: -0.48300, -0.27800, 0.01500
+    max: -0.42700, -0.22200, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48300, 0.22200, 0.01500
+    max: -0.42700, 0.27800, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, -0.27800, 0.01500
+    max: 0.48300, -0.22200, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, 0.22200, 0.01500
+    max: 0.48300, 0.27800, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48500, -0.29000, 0.34000
+    max: 0.48500, 0.29000, 0.39500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 0.39500
+    max: -0.45100, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 0.39500
+    max: 0.48900, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.43000, -0.26500, 0.39500
+    max: 0.43000, 0.26500, 0.47300
+    color: '#E1E1E1'
+    label: mattress
+  - min: 0.27000, -0.22300, 0.47200
+    max: 0.45500, 0.22300, 0.53000
+    color: '#C2C1BE'
+    label: pillow
+  - min: 0.27800, -0.21500, 0.52900
+    max: 0.44700, 0.21500, 0.54400
+    color: '#D4D4D2'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 0.54300
+    max: 0.43600, 0.20400, 0.55200
+    color: '#ECECEC'
+    label: pillow face
+  - min: -0.40700, -0.24200, 0.47400
+    max: 0.26500, 0.24200, 0.47700
+    color: '#FFFFFF'
+    label: Blanket source pixels
+    surface: CMU3DFurnitureArtCMBedBlanket
+    surfaceAxis: XY
+  - min: -0.41000, -0.26700, 0.42000
+    max: 0.26000, -0.25100, 0.46500
+    color: '#E1E1E1'
+    label: blanket front fold
+- type: cmu3DModel
+  id: CMU3DBunkBed
+  label: Black two-tier bunk bed
+  sourcePrototypes:
+  - RMCBedBunk
+  status: draft
+  description: Black two-tier bunk bed. Source frame fixes the long axis along local X with the pillow at +X. Dimensions
+    match sibling single-tile furniture, removing the previous oversized footprint. Unbuckled/unfolded where applicable;
+    live states and hidden construction remain unfinished. See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/bed.rsi
+  referenceState: bunk_black
+  sourceDirections: 1
+  parts:
+  - min: -0.48300, -0.27800, 0.01500
+    max: -0.42700, -0.22200, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48300, 0.22200, 0.01500
+    max: -0.42700, 0.27800, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, -0.27800, 0.01500
+    max: 0.48300, -0.22200, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, 0.22200, 0.01500
+    max: 0.48300, 0.27800, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48500, -0.29000, 0.34000
+    max: 0.48500, 0.29000, 0.39500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 0.39500
+    max: -0.45100, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 0.39500
+    max: 0.48900, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.48500, -0.29000, 1.05000
+    max: 0.48500, 0.29000, 1.10500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 1.10500
+    max: -0.45100, 0.29000, 1.15500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 1.10500
+    max: 0.48900, 0.29000, 1.15500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.44500, -0.31100, 0.47000
+    max: 0.44500, -0.27500, 0.50200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, -0.31100, 1.18000
+    max: 0.44500, -0.27500, 1.21200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, 0.27500, 0.47000
+    max: 0.44500, 0.31100, 0.50200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, 0.27500, 1.18000
+    max: 0.44500, 0.31100, 1.21200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: 0.44000, -0.32000, 0.17000
+    max: 0.50000, -0.17000, 0.19800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.40000
+    max: 0.50000, -0.17000, 0.42800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.63000
+    max: 0.50000, -0.17000, 0.65800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.86000
+    max: 0.50000, -0.17000, 0.88800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: -0.43000, -0.26500, 0.39500
+    max: 0.43000, 0.26500, 0.47300
+    color: '#2F2F2F'
+    label: mattress
+  - min: 0.27000, -0.22300, 0.47200
+    max: 0.45500, 0.22300, 0.53000
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 0.52900
+    max: 0.44700, 0.21500, 0.54400
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 0.54300
+    max: 0.43600, 0.20400, 0.55200
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40700, -0.24000, 0.47400
+    max: 0.26500, 0.24000, 0.47700
+    color: '#FFFFFF'
+    label: LowerBlanket source pixels
+    surface: CMU3DFurnitureArtRMCBedBunkLowerBlanket
+    surfaceAxis: XY
+  - min: -0.41000, -0.26700, 0.41500
+    max: 0.27500, -0.25000, 0.47000
+    color: '#2F2F2F'
+    label: blanket front fold
+  - min: -0.43000, -0.26500, 1.10500
+    max: 0.43000, 0.26500, 1.18300
+    color: '#414141'
+    label: mattress
+  - min: 0.27000, -0.22300, 1.18200
+    max: 0.45500, 0.22300, 1.24000
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 1.23900
+    max: 0.44700, 0.21500, 1.25400
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 1.25300
+    max: 0.43600, 0.20400, 1.26200
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40700, -0.24000, 1.18400
+    max: 0.26500, 0.24000, 1.18700
+    color: '#FFFFFF'
+    label: UpperBlanket source pixels
+    surface: CMU3DFurnitureArtRMCBedBunkUpperBlanket
+    surfaceAxis: XY
+  - min: -0.41000, -0.26700, 1.12500
+    max: 0.27500, -0.25000, 1.18000
+    color: '#414141'
+    label: blanket front fold
+- type: cmu3DModel
+  id: CMU3DLocker
+  label: Metal locker
+  sourcePrototypes:
+  - CMLockerBase
+  status: draft
+  description: Narrow closed blue-gray locker, sampled from both base.png and closed.png; slim cap, low ventilation slots
+    and small handle/status light. Open shelves in the base-only preview are not the closed-door appearance.
+  parts:
+  - min: -0.285, -0.25, 0.055
+    max: 0.285, 0.29, 1.69
+    color: '#3B3B3B'
+    label: locker body
+  - min: -0.27, -0.265, 0
+    max: 0.27, 0.275, 0.07
+    color: '#2A2926'
+    label: dark plinth
+  - min: -0.24, -0.288, 0.1
+    max: 0.24, -0.25, 1.61
+    color: '#4A4D52'
+    label: closed door
+  - min: -0.29, -0.265, 1.62
+    max: 0.29, 0.3, 1.7
+    color: '#4F5867'
+    label: blue gray top cap
+  - min: -0.258, -0.3, 0.08
+    max: -0.238, -0.284, 1.62
+    color: '#2F3034'
+    label: left door border
+  - min: 0.238, -0.3, 0.08
+    max: 0.258, -0.284, 1.62
+    color: '#2F3034'
+    label: right door border
+  - min: 0.155, -0.31, 0.67
+    max: 0.205, -0.288, 0.8
+    color: '#191919'
+    label: recessed handle
+  - min: 0.172, -0.32, 0.805
+    max: 0.199, -0.308, 0.845
+    color: '#99CC33'
+    label: lock status
+  - min: -0.16, -0.304, 0.19
+    max: 0.11, -0.288, 0.215
+    color: '#232325'
+    label: lower ventilation slit
+  - min: -0.16, -0.304, 0.255
+    max: 0.11, -0.288, 0.28
+    color: '#232325'
+    label: lower ventilation slit
+  - min: -0.16, -0.304, 0.32
+    max: 0.11, -0.288, 0.345
+    color: '#232325'
+    label: lower ventilation slit
+  - min: -0.16, -0.304, 0.385
+    max: 0.11, -0.288, 0.41
+    color: '#232325'
+    label: lower ventilation slit
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DArmoryLocker
+  label: Red armory locker
+  sourcePrototypes:
+  - RMCLockerGunRed
+  - RMCArmoryLockerRedM890FilledSingle
+  status: draft
+  description: Closed armory locker with the source red outer frame and darker metal mesh door. Base plus closed RSI
+    layers inspected; gray top-cap material was removed.
+  parts:
+  - min: -0.38, -0.24, 0.05
+    max: 0.38, 0.32, 1.78
+    color: '#543636'
+    label: cabinet body
+  - min: -0.34, -0.26, 0
+    max: 0.34, 0.3, 0.1
+    color: '#4B2727'
+    label: foot plinth
+  - min: -0.335, -0.29, 0.13
+    max: 0.335, -0.24, 1.72
+    color: '#B34444'
+    label: door
+  - min: -0.4, -0.28, 1.74
+    max: 0.4, 0.34, 1.82
+    color: '#B34444'
+    label: top cap
+  - min: 0.22, -0.33, 0.77
+    max: 0.255, -0.285, 1.02
+    color: '#14191C'
+    label: handle
+  - min: 0.205, -0.325, 0.7
+    max: 0.27, -0.29, 0.76
+    color: '#BAA348'
+    label: lock plate
+  - min: -0.275, -0.305, 0.35
+    max: 0.17, -0.291, 1.61
+    color: '#2F2F32'
+    label: mesh backing
+  - min: -0.238, -0.32, 0.35
+    max: -0.222, -0.302, 1.61
+    color: '#828282'
+    label: mesh upright
+  - min: -0.148, -0.32, 0.35
+    max: -0.132, -0.302, 1.61
+    color: '#828282'
+    label: mesh upright
+  - min: -0.058, -0.32, 0.35
+    max: -0.042, -0.302, 1.61
+    color: '#828282'
+    label: mesh upright
+  - min: 0.032, -0.32, 0.35
+    max: 0.048, -0.302, 1.61
+    color: '#828282'
+    label: mesh upright
+  - min: 0.122, -0.32, 0.35
+    max: 0.138, -0.302, 1.61
+    color: '#828282'
+    label: mesh upright
+  - min: -0.275, -0.323, 0.46
+    max: 0.17, -0.304, 0.473
+    color: '#828282'
+    label: mesh crossbar
+  - min: -0.275, -0.323, 0.66
+    max: 0.17, -0.304, 0.673
+    color: '#828282'
+    label: mesh crossbar
+  - min: -0.275, -0.323, 0.86
+    max: 0.17, -0.304, 0.873
+    color: '#828282'
+    label: mesh crossbar
+  - min: -0.275, -0.323, 1.06
+    max: 0.17, -0.304, 1.073
+    color: '#828282'
+    label: mesh crossbar
+  - min: -0.275, -0.323, 1.26
+    max: 0.17, -0.304, 1.273
+    color: '#828282'
+    label: mesh crossbar
+  - min: -0.275, -0.323, 1.46
+    max: 0.17, -0.304, 1.473
+    color: '#828282'
+    label: mesh crossbar
+  - min: -0.38, -0.325, 0.1
+    max: -0.29, -0.29, 1.74
+    color: '#A64040'
+    label: red left frame
+  - min: 0.29, -0.325, 0.1
+    max: 0.38, -0.29, 1.74
+    color: '#A64040'
+    label: red right frame
+  - min: -0.38, -0.325, 0.1
+    max: 0.38, -0.29, 0.19
+    color: '#B34444'
+    label: red lower frame
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DFridge
+  label: Cream refrigerator
+  sourcePrototypes:
+  - CMLockerFridge
+  - RMCLockerFridgeDry
+  - RMCLockerFridgeGroceries
+  - RMCLockerFridgeOrganic
+  status: draft
+  description: Olive-gray single-door refrigerator over a lower compressor panel, using the composed base/closed layer
+    palette and small upper-left handle. The previous cream freezer split was not present in the sprite.
+  parts:
+  - min: -0.375, -0.29, 0.04
+    max: 0.375, 0.34, 1.51
+    color: '#76725A'
+    label: fridge body
+  - min: -0.34, -0.29, 1.51
+    max: 0.34, 0.32, 1.56
+    color: '#8B836B'
+    label: top rounded shoulder
+  - min: -0.33, -0.337, 0.35
+    max: 0.33, -0.291, 1.44
+    color: '#76725A'
+    label: single closed door
+  - min: -0.3, -0.35, 1.395
+    max: 0.3, -0.336, 1.43
+    color: '#888069'
+    label: door top highlight
+  - min: -0.33, -0.335, 0.095
+    max: 0.33, -0.292, 0.29
+    color: '#76725A'
+    label: lower compressor panel
+  - min: -0.36, -0.35, 0.3
+    max: 0.36, -0.29, 0.345
+    color: '#424431'
+    label: compressor divider
+  - min: -0.25, -0.363, 1.14
+    max: -0.1, -0.334, 1.18
+    color: '#434241'
+    label: small horizontal handle
+  - min: -0.24, -0.368, 1.18
+    max: -0.11, -0.353, 1.2
+    color: '#BEBEBA'
+    label: handle highlight
+  - min: -0.335, -0.24, 0
+    max: -0.245, 0.23, 0.06
+    color: '#A5A29A'
+    label: refrigerator foot
+  - min: 0.245, -0.24, 0
+    max: 0.335, 0.23, 0.06
+    color: '#A5A29A'
+    label: refrigerator foot
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DSteelCrate
+  label: Gray storage crate
+  sourcePrototypes:
+  - RMCCrateBase
+  - AU14CrateBoxABR40Magazines
+  - AU14CrateBoxGamblingTableParts
+  - AU14CrateBoxM4A3
+  - AU14CrateBoxToolbelt
+  - AU14CrateCivilianClothingRandom
+  - AU14CrateWorkTools
+  - RMCCrateAttachmentRailFlashlight
+  - RMCCrateMetalBuildable
+  status: draft
+  description: Closed gray cargo crate with metal straps, two latches and front carry handle.
+  parts:
+  - min: -0.45, -0.36, 0.07
+    max: 0.45, 0.36, 0.65
+    color: '#81828B'
+    label: crate body
+  - min: -0.47, -0.38, 0.65
+    max: 0.47, 0.38, 0.725
+    color: '#A6A8AD'
+    label: lid
+  - min: -0.47, -0.38, 0.02
+    max: 0.47, 0.38, 0.11
+    color: '#A6A8AD'
+    label: lower rail
+  - min: -0.415, -0.395, 0.09
+    max: -0.325, 0.395, 0.74
+    color: '#A6A8AD'
+    label: reinforcing strap
+  - min: 0.325, -0.395, 0.09
+    max: 0.415, 0.395, 0.74
+    color: '#A6A8AD'
+    label: reinforcing strap
+  - min: -0.235, -0.411, 0.57
+    max: -0.165, -0.389, 0.665
+    color: '#282D30'
+    label: front latch
+  - min: 0.165, -0.411, 0.57
+    max: 0.235, -0.389, 0.665
+    color: '#282D30'
+    label: front latch
+  - min: -0.1, -0.421, 0.32
+    max: 0.1, -0.389, 0.36
+    color: '#282D30'
+    label: front handle
+  - min: -0.26, -0.27, 0.724
+    max: 0.26, 0.27, 0.743
+    color: '#81828B'
+    label: lid inset
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DAmmoCrate
+  label: Olive ammunition crate
+  sourcePrototypes:
+  - RMCCrateAmmo
+  status: draft
+  description: Olive ammunition case with yellow reinforcement bands and ammunition label panel.
+  parts:
+  - min: -0.45, -0.36, 0.07
+    max: 0.45, 0.36, 0.65
+    color: '#69783C'
+    label: crate body
+  - min: -0.47, -0.38, 0.65
+    max: 0.47, 0.38, 0.725
+    color: '#9F9F59'
+    label: lid
+  - min: -0.47, -0.38, 0.02
+    max: 0.47, 0.38, 0.11
+    color: '#9F9F59'
+    label: lower rail
+  - min: -0.415, -0.395, 0.09
+    max: -0.325, 0.395, 0.74
+    color: '#9F9F59'
+    label: reinforcing strap
+  - min: 0.325, -0.395, 0.09
+    max: 0.415, 0.395, 0.74
+    color: '#9F9F59'
+    label: reinforcing strap
+  - min: -0.235, -0.411, 0.57
+    max: -0.165, -0.389, 0.665
+    color: '#282D30'
+    label: front latch
+  - min: 0.165, -0.411, 0.57
+    max: 0.235, -0.389, 0.665
+    color: '#282D30'
+    label: front latch
+  - min: -0.1, -0.421, 0.32
+    max: 0.1, -0.389, 0.36
+    color: '#282D30'
+    label: front handle
+  - min: -0.26, -0.27, 0.724
+    max: 0.26, 0.27, 0.743
+    color: '#69783C'
+    label: lid inset
+  - min: -0.16, -0.38, 0.41
+    max: 0.16, -0.365, 0.49
+    color: '#BAA348'
+    label: ammo stencil
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DWoodCrate
+  label: Wooden supply crate
+  sourcePrototypes:
+  - RMCCrateWoodenBuildable
+  status: draft
+  description: Wood plank crate with dark edge braces and clear horizontal slats.
+  parts:
+  - min: -0.45, -0.36, 0.07
+    max: 0.45, 0.36, 0.65
+    color: '#976B47'
+    label: crate body
+  - min: -0.47, -0.38, 0.65
+    max: 0.47, 0.38, 0.725
+    color: '#684A34'
+    label: lid
+  - min: -0.47, -0.38, 0.02
+    max: 0.47, 0.38, 0.11
+    color: '#684A34'
+    label: lower rail
+  - min: -0.415, -0.395, 0.09
+    max: -0.325, 0.395, 0.74
+    color: '#684A34'
+    label: reinforcing strap
+  - min: 0.325, -0.395, 0.09
+    max: 0.415, 0.395, 0.74
+    color: '#684A34'
+    label: reinforcing strap
+  - min: -0.235, -0.411, 0.57
+    max: -0.165, -0.389, 0.665
+    color: '#282D30'
+    label: front latch
+  - min: 0.165, -0.411, 0.57
+    max: 0.235, -0.389, 0.665
+    color: '#282D30'
+    label: front latch
+  - min: -0.1, -0.421, 0.32
+    max: 0.1, -0.389, 0.36
+    color: '#282D30'
+    label: front handle
+  - min: -0.26, -0.27, 0.724
+    max: 0.26, 0.27, 0.743
+    color: '#976B47'
+    label: lid inset
+  - min: -0.32, -0.375, 0.23
+    max: 0.32, -0.361, 0.248
+    color: '#4A3629'
+    label: plank seam
+  - min: -0.32, -0.375, 0.4
+    max: 0.32, -0.361, 0.418
+    color: '#4A3629'
+    label: plank seam
+  - min: -0.32, -0.375, 0.57
+    max: 0.32, -0.361, 0.588
+    color: '#4A3629'
+    label: plank seam
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DSecureCrate
+  label: Secure gray crate
+  sourcePrototypes:
+  - RMCCrateSecure
+  - CMUCratePreciousMetals
+  status: draft
+  description: Secure variant with front locking module; status lamp is static draft geometry.
+  parts:
+  - min: -0.45, -0.36, 0.07
+    max: 0.45, 0.36, 0.65
+    color: '#81828B'
+    label: crate body
+  - min: -0.47, -0.38, 0.65
+    max: 0.47, 0.38, 0.725
+    color: '#A6A8AD'
+    label: lid
+  - min: -0.47, -0.38, 0.02
+    max: 0.47, 0.38, 0.11
+    color: '#A6A8AD'
+    label: lower rail
+  - min: -0.415, -0.395, 0.09
+    max: -0.325, 0.395, 0.74
+    color: '#A6A8AD'
+    label: reinforcing strap
+  - min: 0.325, -0.395, 0.09
+    max: 0.415, 0.395, 0.74
+    color: '#A6A8AD'
+    label: reinforcing strap
+  - min: -0.235, -0.411, 0.57
+    max: -0.165, -0.389, 0.665
+    color: '#282D30'
+    label: front latch
+  - min: 0.165, -0.411, 0.57
+    max: 0.235, -0.389, 0.665
+    color: '#282D30'
+    label: front latch
+  - min: -0.1, -0.421, 0.32
+    max: 0.1, -0.389, 0.36
+    color: '#282D30'
+    label: front handle
+  - min: -0.26, -0.27, 0.724
+    max: 0.26, 0.27, 0.743
+    color: '#81828B'
+    label: lid inset
+  - min: -0.08, -0.435, 0.42
+    max: 0.08, -0.396, 0.61
+    color: '#474E50'
+    label: lock housing
+  - min: -0.035, -0.446, 0.53
+    max: 0.035, -0.434, 0.565
+    color: '#5E6951'
+    label: lock status lamp
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DLargeWoodCrate
+  label: Large wooden cargo crate
+  sourcePrototypes:
+  - RMCCrateLarge
+  - RMCCrateBlackmarketFireArms
+  status: draft
+  description: Closed wooden crate composed from base+closed source layers. Vertical front planks, corner battens,
+    bottom rail and recessed lid follow the source. The .63-tile closed lid supports saved supplies; open/lid animation
+    and hidden interiors remain unfinished. See SOURCES_FURNITURE.md.
+  parts:
+  - min: -0.36700, -0.30200, 0.04125
+    max: 0.36700, 0.30200, 0.59550
+    color: '#604836'
+    label: wooden body
+  - min: -0.39000, -0.33000, 0.58500
+    max: 0.39000, 0.33000, 0.63000
+    color: '#785A44'
+    label: closed lid
+  - min: -0.31800, -0.26000, 0.62925
+    max: 0.31800, 0.26000, 0.63075
+    color: '#896548'
+    label: recessed lid panel
+  - min: -0.39100, -0.34100, 0.03750
+    max: -0.35500, 0.34100, 0.63150
+    color: '#B7845F'
+    label: corner batten
+  - min: 0.35500, -0.34100, 0.03750
+    max: 0.39100, 0.34100, 0.63150
+    color: '#B7845F'
+    label: corner batten
+  - min: -0.35700, -0.34000, 0.04875
+    max: 0.35700, -0.30400, 0.10500
+    color: '#604836'
+    label: bottom frame rail
+  - min: -0.35700, -0.34100, 0.52800
+    max: 0.35700, -0.30300, 0.58650
+    color: '#604836'
+    label: upper frame rail
+  - min: -0.35700, 0.30400, 0.04875
+    max: 0.35700, 0.34000, 0.10500
+    color: '#604836'
+    label: bottom frame rail
+  - min: -0.35700, 0.30300, 0.52800
+    max: 0.35700, 0.34100, 0.58650
+    color: '#604836'
+    label: upper frame rail
+  - min: -0.33000, -0.32200, 0.10500
+    max: -0.17600, -0.30300, 0.52800
+    color: '#785A44'
+    label: vertical front plank
+  - min: -0.33000, -0.32700, 0.10500
+    max: -0.31500, -0.32200, 0.52800
+    color: '#46372C'
+    label: plank groove
+  - min: -0.16000, -0.32200, 0.10500
+    max: -0.00600, -0.30300, 0.52800
+    color: '#86634A'
+    label: vertical front plank
+  - min: -0.16000, -0.32700, 0.10500
+    max: -0.14500, -0.32200, 0.52800
+    color: '#46372C'
+    label: plank groove
+  - min: 0.01000, -0.32200, 0.10500
+    max: 0.16400, -0.30300, 0.52800
+    color: '#785A44'
+    label: vertical front plank
+  - min: 0.01000, -0.32700, 0.10500
+    max: 0.02500, -0.32200, 0.52800
+    color: '#46372C'
+    label: plank groove
+  - min: 0.18000, -0.32200, 0.10500
+    max: 0.33400, -0.30300, 0.52800
+    color: '#6B503C'
+    label: vertical front plank
+  - min: 0.18000, -0.32700, 0.10500
+    max: 0.19500, -0.32200, 0.52800
+    color: '#46372C'
+    label: plank groove
+  - min: -0.33000, -0.28000, 0.01125
+    max: -0.25000, 0.28000, 0.06750
+    color: '#3F3127'
+    label: wooden foot
+  - min: 0.25000, -0.28000, 0.01125
+    max: 0.33000, 0.28000, 0.06750
+    color: '#3F3127'
+    label: wooden foot
+  sourceDirections: 1
+  supportSurface: closed lid
+  referenceRsi: CMU14/ThreeD/FurnitureReferences.rsi
+  referenceState: large_crate_closed
+- type: cmu3DModel
+  id: CMU3DSink
+  label: Wall wash basin
+  backWallMountTargets:
+  - RMCWallHybrisa
+  - RMCWallHybrisaMedical
+  - RMCWallPrisonHull
+  - RMCWallPrisonReinforced
+  - RMCWallStrata
+  - RMCWallSPPGreyReinforced
+  sourcePrototypes:
+  - CMSink
+  - CMSinkEmpty
+  status: draft
+  description: Source-colored recessed steel basin with rolled rim, rear bowl slope and one short tap. The rear edge follows the saved mounting line; physical depth, height, hidden plumbing
+    and irregular wall/counter fits remain draft. Liquid appearance and animation are not implemented.
+  parts:
+  - min: -0.335750, -0.398250, 0.646000
+    max: 0.304500, -0.008000, 0.674000
+    color: '#2A2926'
+    label: basin bottom shell
+  - min: -0.312500, -0.375000, 0.674000
+    max: 0.281250, -0.031250, 0.704000
+    color: '#2A2B2E'
+    label: recessed basin floor
+  - min: -0.343750, -0.406250, 0.674000
+    max: 0.312500, -0.375000, 0.798000
+    color: '#484D46'
+    label: front basin apron
+  - min: -0.343750, -0.031250, 0.674000
+    max: 0.312500, 0.000000, 0.810000
+    color: '#484D46'
+    label: rear basin shell
+  - min: -0.343750, -0.375000, 0.674000
+    max: -0.312500, -0.031250, 0.810000
+    color: '#484D46'
+    label: left basin shell
+  - min: 0.281250, -0.375000, 0.674000
+    max: 0.312500, -0.031250, 0.810000
+    color: '#484D46'
+    label: right basin shell
+  - min: -0.343750, -0.406250, 0.798000
+    max: 0.312500, -0.375000, 0.812000
+    color: '#2A2926'
+    label: front rim shadow
+  - min: -0.328125, -0.406250, 0.812000
+    max: 0.296875, -0.375000, 0.837000
+    color: '#868A84'
+    label: front rolled rim
+  - min: -0.328125, -0.031250, 0.812000
+    max: 0.296875, 0.000000, 0.837000
+    color: '#868A84'
+    label: rear rolled rim
+  - min: -0.343750, -0.375000, 0.812000
+    max: -0.312500, -0.031250, 0.837000
+    color: '#868A84'
+    label: left rolled rim
+  - min: 0.281250, -0.375000, 0.812000
+    max: 0.312500, -0.031250, 0.837000
+    color: '#868A84'
+    label: right rolled rim
+  - min: -0.343750, -0.406250, 0.812000
+    max: -0.328125, -0.375000, 0.832000
+    color: '#757873'
+    label: left front rim corner
+  - min: -0.343750, -0.031250, 0.812000
+    max: -0.328125, 0.000000, 0.832000
+    color: '#757873'
+    label: left rear rim corner
+  - min: 0.296875, -0.406250, 0.812000
+    max: 0.312500, -0.375000, 0.832000
+    color: '#757873'
+    label: right front rim corner
+  - min: 0.296875, -0.031250, 0.812000
+    max: 0.312500, 0.000000, 0.832000
+    color: '#757873'
+    label: right rear rim corner
+  - min: -0.312500, -0.093750, 0.704000
+    max: 0.281250, -0.031250, 0.727000
+    color: '#353D32'
+    label: rear inner slope lower
+  - min: -0.312500, -0.062500, 0.727000
+    max: 0.281250, -0.031250, 0.760000
+    color: '#484D46'
+    label: rear inner slope middle
+  - min: -0.312500, -0.046875, 0.760000
+    max: 0.281250, -0.031250, 0.812000
+    color: '#353D32'
+    label: rear inner slope upper
+  - min: -0.312500, -0.375000, 0.704000
+    max: -0.304688, -0.031250, 0.792000
+    color: '#353D32'
+    label: left bowl inner edge
+  - min: 0.273438, -0.375000, 0.704000
+    max: 0.281250, -0.031250, 0.792000
+    color: '#353D32'
+    label: right bowl inner edge
+  - min: -0.010000, -0.042000, 0.816000
+    max: 0.055000, -0.003000, 0.851000
+    color: '#484D46'
+    label: tap mounting block
+  - min: 0.007000, -0.038000, 0.846000
+    max: 0.039000, -0.007000, 0.923000
+    color: '#757873'
+    label: tap stem
+  - min: -0.052000, -0.050000, 0.916000
+    max: 0.039000, -0.007000, 0.948000
+    color: '#868A84'
+    label: tap upper elbow
+  - min: -0.052000, -0.090000, 0.880000
+    max: -0.021000, -0.035000, 0.937000
+    color: '#757873'
+    label: tap outlet
+  - min: -0.041000, -0.044000, 0.948000
+    max: -0.022000, -0.017000, 0.955000
+    color: '#A2A3A2'
+    label: tap top highlight
+  sourceDirections: 4
+  referenceRsi: _RMC14/Structures/Furniture/sink.rsi
+  referenceState: sink_emptied
+- type: cmu3DModel
+  id: CMU3DToilet
+  label: Toilet
+  sourcePrototypes:
+  - CMToiletEmpty
+  status: draft
+  description: Ceramic pedestal toilet with visible seat opening, cistern and flush handle; static seat down.
+  parts:
+  - min: -0.2, -0.28, 0
+    max: 0.2, 0.27, 0.11
+    color: '#D6D9CF'
+    label: pedestal foot
+  - min: -0.14, -0.2, 0.1
+    max: 0.14, 0.19, 0.42
+    color: '#CCCBB6'
+    label: bowl pedestal
+  - min: -0.27, -0.37, 0.32
+    max: 0.27, -0.27, 0.5
+    color: '#D6D9CF'
+    label: bowl front
+  - min: -0.27, 0.1, 0.32
+    max: 0.27, 0.2, 0.5
+    color: '#D6D9CF'
+    label: bowl back
+  - min: -0.27, -0.27, 0.32
+    max: -0.17, 0.1, 0.5
+    color: '#D6D9CF'
+    label: bowl left
+  - min: 0.17, -0.27, 0.32
+    max: 0.27, 0.1, 0.5
+    color: '#D6D9CF'
+    label: bowl right
+  - min: -0.17, -0.27, 0.32
+    max: 0.17, 0.1, 0.36
+    color: '#474E50'
+    label: bowl inner floor
+  - min: -0.25, -0.37, 0.5
+    max: 0.25, -0.26, 0.55
+    color: '#474E50'
+    label: seat front
+  - min: -0.27, -0.27, 0.5
+    max: -0.17, 0.17, 0.55
+    color: '#474E50'
+    label: seat left
+  - min: 0.17, -0.27, 0.5
+    max: 0.27, 0.17, 0.55
+    color: '#474E50'
+    label: seat right
+  - min: -0.25, 0.08, 0.5
+    max: 0.25, 0.2, 0.55
+    color: '#474E50'
+    label: seat back
+  - min: -0.16, -0.25, 0.455
+    max: 0.16, 0.07, 0.48
+    color: '#74918F'
+    label: bowl water
+  - min: -0.29, 0.19, 0.25
+    max: 0.29, 0.38, 0.93
+    color: '#CCCBB6'
+    label: cistern
+  - min: -0.3, 0.18, 0.925
+    max: 0.3, 0.4, 0.97
+    color: '#D6D9CF'
+    label: cistern lid
+  - min: 0.16, 0.16, 0.79
+    max: 0.25, 0.19, 0.83
+    color: '#747A7B'
+    label: flush handle
+  sourceDirections: 4
+- type: cmu3DModel
+  id: CMU3DWashingMachine
+  label: Front-loading washing machine
+  sourcePrototypes:
+  - CMWashingMachine
+  status: draft
+  description: Squat pale-gray washer with a stepped circular front drum, three small controls and a raised rear lid
+    section, sampled from washing_machine_closed.png. Circular features remain cuboid approximations.
+  parts:
+  - min: -0.4, -0.32, 0.05
+    max: 0.4, 0.34, 0.83
+    color: '#8B9294'
+    label: washer body
+  - min: -0.375, -0.32, 0
+    max: 0.375, 0.32, 0.065
+    color: '#475357'
+    label: washer plinth
+  - min: -0.415, -0.335, 0.83
+    max: 0.415, 0.35, 0.895
+    color: '#CCCCCC'
+    label: top lid
+  - min: -0.35, 0.16, 0.895
+    max: 0.35, 0.325, 0.96
+    color: '#96A3A7'
+    label: raised rear controls
+  - min: -0.375, -0.35, 0.69
+    max: 0.375, -0.32, 0.82
+    color: '#E4E4E4'
+    label: front control band
+  - min: -0.29, -0.364, 0.742
+    max: -0.233, -0.349, 0.776
+    color: '#8B9294'
+    label: washer button
+  - min: -0.17, -0.364, 0.742
+    max: -0.113, -0.349, 0.776
+    color: '#8B9294'
+    label: washer button
+  - min: -0.05, -0.364, 0.742
+    max: 0.007, -0.349, 0.776
+    color: '#8B9294'
+    label: washer button
+  - min: -0.255, -0.381, 0.226
+    max: 0.255, -0.355, 0.544
+    color: '#475357'
+    label: door outer ring center
+  - min: -0.1658, -0.381, 0.544
+    max: 0.1658, -0.355, 0.65
+    color: '#475357'
+    label: door outer ring top
+  - min: -0.1658, -0.381, 0.12
+    max: 0.1658, -0.355, 0.226
+    color: '#475357'
+    label: door outer ring bottom
+  - min: -0.187, -0.401, 0.268
+    max: 0.187, -0.375, 0.502
+    color: '#384448'
+    label: drum glass center
+  - min: -0.1216, -0.401, 0.502
+    max: 0.1216, -0.375, 0.58
+    color: '#384448'
+    label: drum glass top
+  - min: -0.1216, -0.401, 0.19
+    max: 0.1216, -0.375, 0.268
+    color: '#384448'
+    label: drum glass bottom
+  - min: -0.112, -0.411, 0.34
+    max: -0.075, -0.4, 0.52
+    color: '#616E71'
+    label: drum reflection
+  - min: 0.19, -0.417, 0.35
+    max: 0.247, -0.383, 0.46
+    color: '#282F31'
+    label: drum handle
+  - min: -0.33, -0.374, 0.19
+    max: -0.303, -0.35, 0.58
+    color: '#616E71'
+    label: door hinge or fixing
+  - min: 0.31, -0.374, 0.19
+    max: 0.337, -0.35, 0.58
+    color: '#616E71'
+    label: door hinge or fixing
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DCoffeeVendor
+  label: Coffee vendor (off reference)
+  status: draft
+  sourcePrototypes:
+  - CMVendorCoffee
+  - RMCVendorCoffeeSimple
+  referencePrototype: CMVendorCoffee
+  referenceRsi: /Textures/CMU14/ThreeD/VendorFamilyReferences.rsi
+  referenceState: coffee_off
+  sourceDirections: 1
+  faceAwayFromWall: true
+  faceAwayFromWindows: true
+  description: Source red panel retains cup, steam, header marks, left status indicator, four right controls and
+    a hollow dispensing bay. Off frame; the Simple variant inherits identical sprite art. Inferred depth/back construction
+    and physical dimensions remain draft. Static reference only; power, damage, emission and dispensing animation
+    are unsupported. Side walls sit .012 tiles inside the front rail ends, clearing the adjacent filing cabinet
+    without changing the source face or saved pivot. Horizontal sprite footprint uses the engine 32 pixels per tile;
+    vertical scale remains an inferred .038 tiles per source pixel. Source panel layout, depth, saved pivot and
+    facing are preserved. See SOURCES_RAIL_VENDOR_FOOTPRINTS.md.
+  parts:
+  - min: -0.34950658, -0.30000000, 0.00000000
+    max: -0.32812500, 0.30000000, 1.17800000
+    color: '#44494A'
+    label: left cabinet side
+  - min: 0.32812500, -0.30000000, 0.00000000
+    max: 0.34950658, 0.30000000, 1.17800000
+    color: '#44494A'
+    label: right cabinet side
+  - min: -0.32812500, 0.26500000, 0.00000000
+    max: 0.32812500, 0.30000000, 1.17800000
+    color: '#7E8386'
+    label: rear cabinet
+  - min: -0.32812500, -0.30000000, 1.14000000
+    max: 0.32812500, 0.26500000, 1.17800000
+    color: '#7E8386'
+    label: cabinet roof
+  - min: -0.32812500, -0.30000000, 0.00000000
+    max: 0.32812500, 0.26500000, 0.07600000
+    color: '#7E8386'
+    label: bottom chassis
+  - min: -0.35937500, -0.32200000, 0.00000000
+    max: -0.29687500, -0.30000000, 1.14000000
+    color: '#FFFFFF'
+    label: left silver face rail
+    surface: CMU3DVendorFamilySurface01
+    surfaceAxis: XZ
+  - min: 0.29687500, -0.32200000, 0.00000000
+    max: 0.35937500, -0.30000000, 1.14000000
+    color: '#FFFFFF'
+    label: right silver face rail
+    surface: CMU3DVendorFamilySurface02
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.32200000, 0.87400000
+    max: 0.29687500, -0.25000000, 1.14000000
+    color: '#FFFFFF'
+    label: silver header
+    surface: CMU3DVendorFamilySurface03
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.32400000, 0.00000000
+    max: 0.29687500, -0.25000000, 0.11400000
+    color: '#FFFFFF'
+    label: bottom plinth
+    surface: CMU3DVendorFamilySurface04
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.28600000, 0.34200000
+    max: 0.29687500, -0.25000000, 0.87400000
+    color: '#2B2B2B'
+    label: outer dark door reveal upper
+  - min: -0.29687500, -0.28600000, 0.15200000
+    max: -0.14062500, -0.25000000, 0.34200000
+    color: '#2B2B2B'
+    label: outer dark door reveal left
+  - min: 0.07812500, -0.28600000, 0.15200000
+    max: 0.29687500, -0.25000000, 0.34200000
+    color: '#2B2B2B'
+    label: outer dark door reveal right
+  - min: -0.29687500, -0.28600000, 0.11400000
+    max: 0.29687500, -0.25000000, 0.15200000
+    color: '#2B2B2B'
+    label: outer dark door reveal lower
+  - min: -0.26562500, -0.32600000, 0.11400000
+    max: -0.20312500, -0.28000000, 0.87400000
+    color: '#FFFFFF'
+    label: left inset frame
+    surface: CMU3DVendorFamilySurface05
+    surfaceAxis: XZ
+  - min: 0.17187500, -0.32600000, 0.11400000
+    max: 0.23437500, -0.28000000, 0.87400000
+    color: '#FFFFFF'
+    label: right inset frame
+    surface: CMU3DVendorFamilySurface06
+    surfaceAxis: XZ
+  - min: -0.20312500, -0.32600000, 0.83600000
+    max: 0.17187500, -0.28000000, 0.87400000
+    color: '#FFFFFF'
+    label: top inset frame
+    surface: CMU3DVendorFamilySurface07
+    surfaceAxis: XZ
+  - min: -0.20312500, -0.32900000, 0.34200000
+    max: 0.17187500, -0.28000000, 0.83600000
+    color: '#FFFFFF'
+    label: red cup artwork and steam
+    surface: CMU3DVendorFamilySurface08
+    surfaceAxis: XZ
+  - min: -0.20312500, -0.32900000, 0.15200000
+    max: -0.14062500, -0.28000000, 0.34200000
+    color: '#FFFFFF'
+    label: left pickup red panel
+    surface: CMU3DVendorFamilySurface09
+    surfaceAxis: XZ
+  - min: 0.07812500, -0.32900000, 0.15200000
+    max: 0.17187500, -0.28000000, 0.34200000
+    color: '#FFFFFF'
+    label: right pickup red panel
+    surface: CMU3DVendorFamilySurface10
+    surfaceAxis: XZ
+  - min: -0.14062500, -0.19000000, 0.15200000
+    max: 0.07812500, -0.16000000, 0.34200000
+    color: '#44494A'
+    label: recessed pickup back
+  - min: -0.14062500, -0.33100000, 0.15200000
+    max: -0.10937500, -0.19000000, 0.34200000
+    color: '#FFFFFF'
+    label: pickup left jamb
+    surface: CMU3DVendorFamilySurface11
+    surfaceAxis: XZ
+  - min: 0.04687500, -0.33100000, 0.15200000
+    max: 0.07812500, -0.19000000, 0.34200000
+    color: '#FFFFFF'
+    label: pickup right jamb
+    surface: CMU3DVendorFamilySurface12
+    surfaceAxis: XZ
+  - min: -0.10937500, -0.33100000, 0.30400000
+    max: 0.04687500, -0.19000000, 0.34200000
+    color: '#FFFFFF'
+    label: pickup top rim
+    surface: CMU3DVendorFamilySurface13
+    surfaceAxis: XZ
+  - min: -0.10937500, -0.34700000, 0.15200000
+    max: 0.04687500, -0.16000000, 0.19000000
+    color: '#FFFFFF'
+    label: pickup bottom tray
+    surface: CMU3DVendorFamilySurface14
+    surfaceAxis: XZ
+  - min: -0.20312500, -0.32600000, 0.11400000
+    max: 0.17187500, -0.28000000, 0.15200000
+    color: '#FFFFFF'
+    label: bottom inset frame
+    surface: CMU3DVendorFamilySurface15
+    surfaceAxis: XZ
+  - min: 0.26562500, -0.29500000, 0.11400000
+    max: 0.32812500, -0.27000000, 0.87400000
+    color: '#4E4E4E'
+    label: right button strip
+  - min: 0.26562500, -0.33300000, 0.64600000
+    max: 0.32812500, -0.29500000, 0.72200000
+    color: '#FFFFFF'
+    label: right selection button 1
+    surface: CMU3DVendorFamilySurface16
+    surfaceAxis: XZ
+  - min: 0.26562500, -0.33300000, 0.49400000
+    max: 0.32812500, -0.29500000, 0.57000000
+    color: '#FFFFFF'
+    label: right selection button 2
+    surface: CMU3DVendorFamilySurface17
+    surfaceAxis: XZ
+  - min: 0.26562500, -0.33300000, 0.34200000
+    max: 0.32812500, -0.29500000, 0.41800000
+    color: '#FFFFFF'
+    label: right selection button 3
+    surface: CMU3DVendorFamilySurface18
+    surfaceAxis: XZ
+  - min: 0.26562500, -0.33300000, 0.19000000
+    max: 0.32812500, -0.29500000, 0.26600000
+    color: '#FFFFFF'
+    label: right selection button 4
+    surface: CMU3DVendorFamilySurface19
+    surfaceAxis: XZ
+  - min: -0.32812500, -0.33300000, 0.64600000
+    max: -0.26562500, -0.32100000, 0.72200000
+    color: '#FFFFFF'
+    label: left status indicator
+    surface: CMU3DVendorFamilySurface20
+    surfaceAxis: XZ
+  - min: -0.26562500, 0.30000000, 0.11400000
+    max: 0.26562500, 0.30600000, 0.91200000
+    color: '#7E8386'
+    label: inferred rear service hatch
+  - min: -0.20312500, 0.30600000, 0.33060000
+    max: 0.20312500, 0.30800000, 0.34200000
+    color: '#7E8386'
+    label: rear cooling slot 1
+  - min: -0.20312500, 0.30600000, 0.29260000
+    max: 0.20312500, 0.30800000, 0.30400000
+    color: '#7E8386'
+    label: rear cooling slot 2
+  - min: -0.20312500, 0.30600000, 0.25460000
+    max: 0.20312500, 0.30800000, 0.26600000
+    color: '#7E8386'
+    label: rear cooling slot 3
+  - min: -0.20312500, 0.30600000, 0.21660000
+    max: 0.20312500, 0.30800000, 0.22800000
+    color: '#7E8386'
+    label: rear cooling slot 4
+  - min: -0.35937500, -0.32200000, 1.14000000
+    max: 0.35937500, -0.25000000, 1.17800000
+    color: '#FFFFFF'
+    label: source top border
+    surface: CMU3DVendorFamilySurface68
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSnackVendor
+  label: Hot-food snack vendor (off reference)
+  status: draft
+  sourcePrototypes:
+  - CMVendorSnack
+  - RMCVendorSnackSimple
+  referencePrototype: CMVendorSnack
+  referenceRsi: /Textures/CMU14/ThreeD/VendorFamilyReferences.rsi
+  referenceState: snack_off
+  sourceDirections: 1
+  faceAwayFromWall: true
+  faceAwayFromWindows: true
+  description: Sealed teal hot-food cabinet with a bowl emblem, three upper indicators, pale controls and recessed
+    lower pickup. Removes invented exposed stock shelves. Inferred depth/back construction and physical dimensions
+    remain draft. Static reference only; power, damage, emission and dispensing animation are unsupported. Horizontal
+    sprite footprint uses the engine 32 pixels per tile; vertical scale remains an inferred .038 tiles per source
+    pixel. Source panel layout, depth, saved pivot and facing are preserved. See SOURCES_RAIL_VENDOR_FOOTPRINTS.md.
+  parts:
+  - min: -0.32812500, -0.30000000, 0.00000000
+    max: -0.29687500, 0.30000000, 1.14000000
+    color: '#44494A'
+    label: left cabinet side
+  - min: 0.29687500, -0.30000000, 0.00000000
+    max: 0.32812500, 0.30000000, 1.14000000
+    color: '#44494A'
+    label: right cabinet side
+  - min: -0.29687500, 0.26500000, 0.00000000
+    max: 0.29687500, 0.30000000, 1.14000000
+    color: '#7E8386'
+    label: rear cabinet
+  - min: -0.29687500, -0.30000000, 1.10200000
+    max: 0.29687500, 0.26500000, 1.14000000
+    color: '#7E8386'
+    label: cabinet roof
+  - min: -0.29687500, -0.30000000, 0.00000000
+    max: 0.29687500, 0.26500000, 0.07600000
+    color: '#3A322C'
+    label: bottom chassis
+  - min: -0.32812500, -0.32200000, 0.00000000
+    max: -0.26562500, -0.30000000, 1.14000000
+    color: '#FFFFFF'
+    label: left silver face rail
+    surface: CMU3DVendorFamilySurface43
+    surfaceAxis: XZ
+  - min: 0.26562500, -0.32200000, 0.00000000
+    max: 0.32812500, -0.30000000, 1.14000000
+    color: '#FFFFFF'
+    label: right silver face rail
+    surface: CMU3DVendorFamilySurface44
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.32200000, 0.87400000
+    max: 0.26562500, -0.25000000, 1.14000000
+    color: '#FFFFFF'
+    label: silver header
+    surface: CMU3DVendorFamilySurface45
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.32400000, 0.00000000
+    max: 0.26562500, -0.25000000, 0.11400000
+    color: '#FFFFFF'
+    label: bottom plinth
+    surface: CMU3DVendorFamilySurface46
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.32400000, 0.30400000
+    max: 0.26562500, -0.25000000, 0.87400000
+    color: '#FFFFFF'
+    label: teal door rim upper
+    surface: CMU3DVendorFamilySurface69
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.32400000, 0.15200000
+    max: -0.17187500, -0.25000000, 0.30400000
+    color: '#FFFFFF'
+    label: teal door rim left
+    surface: CMU3DVendorFamilySurface70
+    surfaceAxis: XZ
+  - min: 0.17187500, -0.32400000, 0.15200000
+    max: 0.26562500, -0.25000000, 0.30400000
+    color: '#FFFFFF'
+    label: teal door rim right
+    surface: CMU3DVendorFamilySurface71
+    surfaceAxis: XZ
+  - min: -0.23437500, -0.33700000, 0.60800000
+    max: 0.23437500, -0.32400000, 0.79800000
+    color: '#FFFFFF'
+    label: upper control bank
+    surface: CMU3DVendorFamilySurface48
+    surfaceAxis: XZ
+  - min: -0.23437500, -0.33100000, 0.30400000
+    max: 0.23437500, -0.32400000, 0.60800000
+    color: '#FFFFFF'
+    label: food emblem panel
+    surface: CMU3DVendorFamilySurface49
+    surfaceAxis: XZ
+  - min: -0.23437500, -0.33100000, 0.15200000
+    max: -0.17187500, -0.32400000, 0.30400000
+    color: '#FFFFFF'
+    label: left lower door
+    surface: CMU3DVendorFamilySurface50
+    surfaceAxis: XZ
+  - min: 0.17187500, -0.33100000, 0.15200000
+    max: 0.23437500, -0.32400000, 0.30400000
+    color: '#FFFFFF'
+    label: right lower door
+    surface: CMU3DVendorFamilySurface51
+    surfaceAxis: XZ
+  - min: -0.17187500, -0.19000000, 0.15200000
+    max: 0.17187500, -0.16000000, 0.30400000
+    color: '#1A2022'
+    label: recessed pickup back
+  - min: -0.17187500, -0.33100000, 0.15200000
+    max: -0.14062500, -0.19000000, 0.30400000
+    color: '#FFFFFF'
+    label: pickup left jamb
+    surface: CMU3DVendorFamilySurface52
+    surfaceAxis: XZ
+  - min: 0.14062500, -0.33100000, 0.15200000
+    max: 0.17187500, -0.19000000, 0.30400000
+    color: '#FFFFFF'
+    label: pickup right jamb
+    surface: CMU3DVendorFamilySurface52
+    surfaceAxis: XZ
+  - min: -0.14062500, -0.33100000, 0.26600000
+    max: 0.14062500, -0.19000000, 0.30400000
+    color: '#FFFFFF'
+    label: pickup top rim
+    surface: CMU3DVendorFamilySurface53
+    surfaceAxis: XZ
+  - min: -0.14062500, -0.34700000, 0.15200000
+    max: 0.14062500, -0.16000000, 0.19000000
+    color: '#FFFFFF'
+    label: pickup bottom tray
+    surface: CMU3DVendorFamilySurface54
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.33100000, 0.11400000
+    max: 0.26562500, -0.25000000, 0.15200000
+    color: '#FFFFFF'
+    label: dark lower band
+    surface: CMU3DVendorFamilySurface55
+    surfaceAxis: XZ
+  - min: -0.23437500, 0.30000000, 0.11400000
+    max: 0.23437500, 0.30600000, 0.91200000
+    color: '#7E8386'
+    label: inferred rear service hatch
+  - min: -0.17187500, 0.30600000, 0.33060000
+    max: 0.17187500, 0.30800000, 0.34200000
+    color: '#3A322C'
+    label: rear cooling slot 1
+  - min: -0.17187500, 0.30600000, 0.29260000
+    max: 0.17187500, 0.30800000, 0.30400000
+    color: '#3A322C'
+    label: rear cooling slot 2
+  - min: -0.17187500, 0.30600000, 0.25460000
+    max: 0.17187500, 0.30800000, 0.26600000
+    color: '#3A322C'
+    label: rear cooling slot 3
+  - min: -0.17187500, 0.30600000, 0.21660000
+    max: 0.17187500, 0.30800000, 0.22800000
+    color: '#3A322C'
+    label: rear cooling slot 4
+- type: cmu3DModel
+  id: CMU3DColaVendor
+  label: Cola vendor — unpowered reference
+  status: draft
+  sourcePrototypes:
+  - CMVendorCola
+  referencePrototype: CMVendorCola
+  referenceRsi: /Textures/CMU14/ThreeD/VendorReferences.rsi
+  referenceState: cola_off
+  sourceDirections: 1
+  faceAwayFromWall: true
+  faceAwayFromWindows: true
+  description: Source-separated silver frame, three upper controls, orange branded door and recessed pickup tray.
+    Off reference only; live power, broken and dispense states remain unsupported. Cabinet depth, back construction
+    and physical height are inferred. Existing wall-context facing rule keeps the front toward an open aisle; saved
+    transforms are unchanged. Horizontal sprite footprint uses the engine 32 pixels per tile; vertical scale remains
+    an inferred .038 tiles per source pixel. Source panel layout, depth, saved pivot and facing are preserved. See
+    SOURCES_RAIL_VENDOR_FOOTPRINTS.md.
+  parts:
+  - min: -0.32812500, -0.30000000, 0.00000000
+    max: -0.29687500, 0.30000000, 1.14000000
+    color: '#7E8386'
+    label: left cabinet side
+  - min: 0.29687500, -0.30000000, 0.00000000
+    max: 0.32812500, 0.30000000, 1.14000000
+    color: '#7E8386'
+    label: right cabinet side
+  - min: -0.29687500, 0.26500000, 0.00000000
+    max: 0.29687500, 0.30000000, 1.14000000
+    color: '#44494A'
+    label: rear cabinet wall
+  - min: -0.29687500, -0.30000000, 1.10200000
+    max: 0.29687500, 0.26500000, 1.14000000
+    color: '#44494A'
+    label: cabinet roof
+  - min: -0.29687500, -0.30000000, 0.00000000
+    max: 0.29687500, 0.26500000, 0.07600000
+    color: '#2D2E30'
+    label: bottom chassis
+  - min: -0.32812500, -0.32200000, 0.00000000
+    max: -0.26562500, -0.30000000, 1.14000000
+    color: '#FFFFFF'
+    label: left silver face rail
+    surface: CMU3DVendorSurface01
+    surfaceAxis: XZ
+  - min: 0.26562500, -0.32200000, 0.00000000
+    max: 0.32812500, -0.30000000, 1.14000000
+    color: '#FFFFFF'
+    label: right silver face rail
+    surface: CMU3DVendorSurface02
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.32200000, 0.87400000
+    max: 0.26562500, -0.25500000, 1.14000000
+    color: '#FFFFFF'
+    label: header metal sign
+    surface: CMU3DVendorSurface03
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.27900000, 0.76000000
+    max: 0.26562500, -0.25500000, 0.87400000
+    color: '#2D2E30'
+    label: selection bank recess
+  - min: -0.26562500, -0.32200000, 0.76000000
+    max: -0.23437500, -0.27800000, 0.87400000
+    color: '#FFFFFF'
+    label: control bank separator 1
+    surface: CMU3DVendorSurface04
+    surfaceAxis: XZ
+  - min: -0.14062500, -0.32200000, 0.76000000
+    max: -0.07812500, -0.27800000, 0.87400000
+    color: '#FFFFFF'
+    label: control bank separator 2
+    surface: CMU3DVendorSurface05
+    surfaceAxis: XZ
+  - min: 0.01562500, -0.32200000, 0.76000000
+    max: 0.07812500, -0.27800000, 0.87400000
+    color: '#FFFFFF'
+    label: control bank separator 3
+    surface: CMU3DVendorSurface05
+    surfaceAxis: XZ
+  - min: 0.17187500, -0.32200000, 0.76000000
+    max: 0.26562500, -0.27800000, 0.87400000
+    color: '#FFFFFF'
+    label: control bank separator 4
+    surface: CMU3DVendorSurface06
+    surfaceAxis: XZ
+  - min: -0.23437500, -0.30300000, 0.79800000
+    max: -0.14062500, -0.27900000, 0.87400000
+    color: '#FFFFFF'
+    label: selection indicator 1
+    surface: CMU3DVendorSurface07
+    surfaceAxis: XZ
+  - min: -0.07812500, -0.30300000, 0.79800000
+    max: 0.01562500, -0.27900000, 0.87400000
+    color: '#FFFFFF'
+    label: selection indicator 2
+    surface: CMU3DVendorSurface07
+    surfaceAxis: XZ
+  - min: 0.07812500, -0.30300000, 0.79800000
+    max: 0.17187500, -0.27900000, 0.87400000
+    color: '#FFFFFF'
+    label: selection indicator 3
+    surface: CMU3DVendorSurface07
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.32500000, 0.72200000
+    max: 0.26562500, -0.27800000, 0.79800000
+    color: '#FFFFFF'
+    label: selection lower lip
+    surface: CMU3DVendorSurface08
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.33500000, 0.64600000
+    max: 0.26562500, -0.28000000, 0.72200000
+    color: '#FFFFFF'
+    label: upper orange door rail
+    surface: CMU3DVendorSurface09
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.32900000, 0.30400000
+    max: 0.26562500, -0.28000000, 0.64600000
+    color: '#FFFFFF'
+    label: original orange brand artwork
+    surface: CMU3DVendorSurface10
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.32900000, 0.15200000
+    max: -0.14062500, -0.28000000, 0.30400000
+    color: '#FFFFFF'
+    label: pickup left door panel
+    surface: CMU3DVendorSurface11
+    surfaceAxis: XZ
+  - min: 0.14062500, -0.32900000, 0.15200000
+    max: 0.26562500, -0.28000000, 0.30400000
+    color: '#FFFFFF'
+    label: pickup right door panel
+    surface: CMU3DVendorSurface12
+    surfaceAxis: XZ
+  - min: -0.14062500, -0.33500000, 0.26600000
+    max: 0.14062500, -0.28000000, 0.30400000
+    color: '#FFFFFF'
+    label: pickup upper rim
+    surface: CMU3DVendorSurface13
+    surfaceAxis: XZ
+  - min: -0.14062500, -0.18000000, 0.19000000
+    max: 0.14062500, -0.16000000, 0.26600000
+    color: '#2D2E30'
+    label: pickup cavity back
+  - min: -0.14062500, -0.32900000, 0.19000000
+    max: -0.13125000, -0.18000000, 0.26600000
+    color: '#2D2E30'
+    label: pickup cavity left wall
+  - min: 0.13125000, -0.32900000, 0.19000000
+    max: 0.14062500, -0.18000000, 0.26600000
+    color: '#2D2E30'
+    label: pickup cavity right wall
+  - min: -0.14062500, -0.34800000, 0.15200000
+    max: 0.14062500, -0.16000000, 0.19000000
+    color: '#FFFFFF'
+    label: pickup tray lip
+    surface: CMU3DVendorSurface14
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.32200000, 0.07600000
+    max: 0.26562500, -0.27000000, 0.15200000
+    color: '#FFFFFF'
+    label: bottom black band
+    surface: CMU3DVendorSurface15
+    surfaceAxis: XZ
+  - min: -0.26562500, -0.32300000, 0.00000000
+    max: 0.26562500, -0.26500000, 0.07600000
+    color: '#FFFFFF'
+    label: plinth face
+    surface: CMU3DVendorSurface16
+    surfaceAxis: XZ
+  - min: -0.23437500, 0.30000000, 0.15200000
+    max: 0.23437500, 0.30500000, 0.91200000
+    color: '#7E8386'
+    label: rear service panel
+  - min: -0.17187500, 0.30500000, 0.36670000
+    max: 0.17187500, 0.30700000, 0.38000000
+    color: '#2D2E30'
+    label: rear cooling slot 1
+  - min: -0.17187500, 0.30500000, 0.32870000
+    max: 0.17187500, 0.30700000, 0.34200000
+    color: '#2D2E30'
+    label: rear cooling slot 2
+  - min: -0.17187500, 0.30500000, 0.29070000
+    max: 0.17187500, 0.30700000, 0.30400000
+    color: '#2D2E30'
+    label: rear cooling slot 3
+  - min: -0.17187500, 0.30500000, 0.25270000
+    max: 0.17187500, 0.30700000, 0.26600000
+    color: '#2D2E30'
+    label: rear cooling slot 4
+- type: cmu3DModel
+  id: CMU3DFusionGenerator
+  label: Fusion generator
+  sourcePrototypes:
+  - RMCGeneratorFusion
+  status: draft
+  description: Broad fusion-generator cabinet with two dark inset panels, upper blue-gray vent bank, central switches
+    and lower toggle/slot arrays matched to the off-state sprite. Full depth and rear casing are inferred.
+  parts:
+  - min: -0.7, -0.37, 0.05
+    max: 0.7, 0.37, 1.24
+    color: '#5E5754'
+    label: broad generator casing
+  - min: -0.69, -0.39, 0
+    max: -0.43, 0.39, 0.07
+    color: '#312E2B'
+    label: left foot skid
+  - min: 0.43, -0.39, 0
+    max: 0.69, 0.39, 0.07
+    color: '#312E2B'
+    label: right foot skid
+  - min: -0.66, -0.39, 0.08
+    max: 0.66, -0.37, 1.2
+    color: '#867872'
+    label: front face plate
+  - min: -0.57, -0.406, 0.95
+    max: 0.57, -0.39, 1.2
+    color: '#2E3440'
+    label: upper vent inset
+  - min: -0.6, -0.418, 1.18
+    max: 0.6, -0.398, 1.23
+    color: '#AC978E'
+    label: upper vent header
+  - min: -0.55, -0.418, 0.48
+    max: -0.1, -0.389, 0.86
+    color: '#312E2B'
+    label: left screen bezel
+  - min: -0.49, -0.43, 0.535
+    max: -0.15, -0.417, 0.81
+    color: '#313131'
+    label: left dark screen
+  - min: 0.25, -0.419, 0.32
+    max: 0.57, -0.39, 0.86
+    color: '#AC978E'
+    label: right vertical panel rim
+  - min: 0.3, -0.431, 0.37
+    max: 0.51, -0.418, 0.82
+    color: '#312E2B'
+    label: right vertical dark panel
+  - min: -0.045, -0.411, 0.55
+    max: 0.15, -0.39, 0.85
+    color: '#5E5754'
+    label: center control panel
+  - min: -0.16, -0.421, 0.33
+    max: 0.16, -0.39, 0.44
+    color: '#312E2B'
+    label: lower readout frame
+  - min: -0.12, -0.433, 0.355
+    max: 0.1, -0.42, 0.382
+    color: '#AC978E'
+    label: lower readout stripe
+  - min: -0.51, -0.428, 0.97
+    max: -0.463, -0.405, 1.18
+    color: '#454E60'
+    label: vent grille bar 1
+  - min: -0.39, -0.428, 0.97
+    max: -0.343, -0.405, 1.18
+    color: '#454E60'
+    label: vent grille bar 2
+  - min: -0.27, -0.428, 0.97
+    max: -0.223, -0.405, 1.18
+    color: '#454E60'
+    label: vent grille bar 3
+  - min: -0.15, -0.428, 0.97
+    max: -0.103, -0.405, 1.18
+    color: '#454E60'
+    label: vent grille bar 4
+  - min: -0.03, -0.428, 0.97
+    max: 0.017, -0.405, 1.18
+    color: '#454E60'
+    label: vent grille bar 5
+  - min: 0.09, -0.428, 0.97
+    max: 0.137, -0.405, 1.18
+    color: '#454E60'
+    label: vent grille bar 6
+  - min: 0.21, -0.428, 0.97
+    max: 0.257, -0.405, 1.18
+    color: '#454E60'
+    label: vent grille bar 7
+  - min: 0.33, -0.428, 0.97
+    max: 0.377, -0.405, 1.18
+    color: '#454E60'
+    label: vent grille bar 8
+  - min: 0.45, -0.428, 0.97
+    max: 0.497, -0.405, 1.18
+    color: '#454E60'
+    label: vent grille bar 9
+  - min: 0.005, -0.432, 0.62
+    max: 0.095, -0.41, 0.658
+    color: '#AC978E'
+    label: center switch
+  - min: 0.005, -0.432, 0.71
+    max: 0.095, -0.41, 0.748
+    color: '#AC978E'
+    label: center switch
+  - min: 0.005, -0.432, 0.8
+    max: 0.095, -0.41, 0.838
+    color: '#AC978E'
+    label: center switch
+  - min: -0.5, -0.425, 0.15
+    max: -0.42, -0.39, 0.205
+    color: '#4A4541'
+    label: lower toggle
+  - min: -0.34, -0.425, 0.15
+    max: -0.26, -0.39, 0.205
+    color: '#4A4541'
+    label: lower toggle
+  - min: -0.18, -0.425, 0.15
+    max: -0.1, -0.39, 0.205
+    color: '#4A4541'
+    label: lower toggle
+  - min: -0.02, -0.425, 0.15
+    max: 0.06, -0.39, 0.205
+    color: '#4A4541'
+    label: lower toggle
+  - min: -0.5, -0.425, 0.24
+    max: -0.42, -0.39, 0.295
+    color: '#4A4541'
+    label: lower toggle
+  - min: -0.34, -0.425, 0.24
+    max: -0.26, -0.39, 0.295
+    color: '#4A4541'
+    label: lower toggle
+  - min: -0.18, -0.425, 0.24
+    max: -0.1, -0.39, 0.295
+    color: '#4A4541'
+    label: lower toggle
+  - min: -0.02, -0.425, 0.24
+    max: 0.06, -0.39, 0.295
+    color: '#4A4541'
+    label: lower toggle
+  - min: 0.24, -0.435, 0.15
+    max: 0.58, -0.39, 0.176
+    color: '#312E2B'
+    label: lower right vent slot
+  - min: 0.24, -0.435, 0.23
+    max: 0.58, -0.39, 0.256
+    color: '#312E2B'
+    label: lower right vent slot
+  - min: 0.24, -0.435, 0.31
+    max: 0.58, -0.39, 0.336
+    color: '#312E2B'
+    label: lower right vent slot
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DColonyGenerator
+  label: Colony geothermal generator
+  sourcePrototypes:
+  - RMCGeneratorFusionColony
+  status: draft
+  description: 'Broad off-state G-11 cabinet reconstructed from the front instrument layout: blue-gray top grille, wide
+    left display, tall right hatch, lower switch banks and right ventilation. Source colors sampled from geothermal_generator/off.png;
+    rear construction and physical height remain inferred.'
+  parts:
+  - min: -0.48, -0.38, 0.07
+    max: 0.48, 0.4, 1.15
+    color: '#9D9A93'
+    label: generator cabinet
+  - min: -0.49, -0.41, 0.07
+    max: -0.43, 0.39, 1.24
+    color: '#BFBBB2'
+    label: left casing edge
+  - min: 0.43, -0.41, 0.07
+    max: 0.49, 0.39, 1.24
+    color: '#BFBBB2'
+    label: right casing edge
+  - min: -0.42, -0.41, 1.085
+    max: 0.42, 0.39, 1.27
+    color: '#2E3440'
+    label: top grille housing
+  - min: -0.42, -0.408, 0.42
+    max: 0.42, -0.38, 1.04
+    color: '#BFBBB2'
+    label: front instrument fascia
+  - min: -0.37, -0.431, 0.59
+    max: -0.02, -0.405, 0.96
+    color: '#312E2B'
+    label: wide left display border
+  - min: -0.327, -0.444, 0.625
+    max: -0.058, -0.43, 0.925
+    color: '#2F2F2F'
+    label: wide left dark display
+  - min: 0.2, -0.432, 0.43
+    max: 0.38, -0.408, 0.96
+    color: '#2A2926'
+    label: tall right access hatch
+  - min: -0.1, -0.439, 0.385
+    max: 0.125, -0.408, 0.51
+    color: '#2A2926'
+    label: lower readout surround
+  - min: -0.064, -0.447, 0.423
+    max: 0.092, -0.438, 0.46
+    color: '#5E5D58'
+    label: lower readout
+  - min: -0.255, -0.438, 0.43
+    max: -0.155, -0.408, 0.535
+    color: '#303030'
+    label: small square control
+  - min: -0.378, -0.433, 1.11
+    max: -0.342, 0.38, 1.265
+    color: '#454E60'
+    label: top grille bar
+  - min: -0.288, -0.433, 1.11
+    max: -0.252, 0.38, 1.265
+    color: '#454E60'
+    label: top grille bar
+  - min: -0.198, -0.433, 1.11
+    max: -0.162, 0.38, 1.265
+    color: '#454E60'
+    label: top grille bar
+  - min: -0.108, -0.433, 1.11
+    max: -0.072, 0.38, 1.265
+    color: '#454E60'
+    label: top grille bar
+  - min: -0.018, -0.433, 1.11
+    max: 0.018, 0.38, 1.265
+    color: '#454E60'
+    label: top grille bar
+  - min: 0.072, -0.433, 1.11
+    max: 0.108, 0.38, 1.265
+    color: '#454E60'
+    label: top grille bar
+  - min: 0.162, -0.433, 1.11
+    max: 0.198, 0.38, 1.265
+    color: '#454E60'
+    label: top grille bar
+  - min: 0.252, -0.433, 1.11
+    max: 0.288, 0.38, 1.265
+    color: '#454E60'
+    label: top grille bar
+  - min: 0.342, -0.433, 1.11
+    max: 0.378, 0.38, 1.265
+    color: '#454E60'
+    label: top grille bar
+  - min: -0.392, -0.432, 0.139
+    max: -0.328, -0.407, 0.197
+    color: '#5E5D58'
+    label: lower switch socket
+  - min: -0.382, -0.447, 0.167
+    max: -0.327, -0.43, 0.185
+    color: '#BFBBB2'
+    label: lower switch lever
+  - min: -0.392, -0.432, 0.244
+    max: -0.328, -0.407, 0.302
+    color: '#5E5D58'
+    label: lower switch socket
+  - min: -0.382, -0.447, 0.272
+    max: -0.327, -0.43, 0.29
+    color: '#BFBBB2'
+    label: lower switch lever
+  - min: -0.252, -0.432, 0.139
+    max: -0.188, -0.407, 0.197
+    color: '#5E5D58'
+    label: lower switch socket
+  - min: -0.242, -0.447, 0.167
+    max: -0.187, -0.43, 0.185
+    color: '#BFBBB2'
+    label: lower switch lever
+  - min: -0.252, -0.432, 0.244
+    max: -0.188, -0.407, 0.302
+    color: '#5E5D58'
+    label: lower switch socket
+  - min: -0.242, -0.447, 0.272
+    max: -0.187, -0.43, 0.29
+    color: '#BFBBB2'
+    label: lower switch lever
+  - min: -0.112, -0.432, 0.139
+    max: -0.048, -0.407, 0.197
+    color: '#5E5D58'
+    label: lower switch socket
+  - min: -0.102, -0.447, 0.167
+    max: -0.047, -0.43, 0.185
+    color: '#BFBBB2'
+    label: lower switch lever
+  - min: -0.112, -0.432, 0.244
+    max: -0.048, -0.407, 0.302
+    color: '#5E5D58'
+    label: lower switch socket
+  - min: -0.102, -0.447, 0.272
+    max: -0.047, -0.43, 0.29
+    color: '#BFBBB2'
+    label: lower switch lever
+  - min: 0.12, -0.434, 0.12
+    max: 0.4, -0.407, 0.154
+    color: '#2A2926'
+    label: lower right ventilation
+  - min: 0.12, -0.434, 0.215
+    max: 0.4, -0.407, 0.249
+    color: '#2A2926'
+    label: lower right ventilation
+  - min: 0.12, -0.434, 0.31
+    max: 0.4, -0.407, 0.344
+    color: '#2A2926'
+    label: lower right ventilation
+  - min: 0.07, -0.44, 0.68
+    max: 0.13, -0.409, 0.727
+    color: '#5E5D58'
+    label: central status indicator
+  - min: 0.07, -0.44, 0.78
+    max: 0.13, -0.409, 0.827
+    color: '#5E5D58'
+    label: central status indicator
+  - min: 0.07, -0.44, 0.88
+    max: 0.13, -0.409, 0.927
+    color: '#5E5D58'
+    label: central status indicator
+  - min: -0.289, -0.443, 0.36
+    max: -0.271, -0.428, 0.382
+    color: '#2A2926'
+    label: small dark control dot
+  - min: -0.219, -0.443, 0.36
+    max: -0.201, -0.428, 0.382
+    color: '#2A2926'
+    label: small dark control dot
+  - min: -0.149, -0.443, 0.36
+    max: -0.131, -0.428, 0.382
+    color: '#2A2926'
+    label: small dark control dot
+  - min: -0.079, -0.443, 0.36
+    max: -0.061, -0.428, 0.382
+    color: '#2A2926'
+    label: small dark control dot
+  - min: 0.49, -0.17, 0.17
+    max: 0.535, 0.3, 1
+    color: '#454E60'
+    label: right conduit
+  - min: -0.48, -0.39, 0
+    max: 0.48, 0.39, 0.07
+    color: '#2A2926'
+    label: base skid
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DSensorComputer
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DSensorComputer
+  label: Black sensor computer
+  sourcePrototypes:
+  - RMCBlackSensorComputer
+  status: draft
+  description: 'Source-matched sensor console: distinct cabinet silhouette, controls and powered screen markings
+    from the original CMU-used RSI. Closed sides, rear service cover and underside. Screen is a static draft of
+    the animated source; hidden construction is inferred.'
+  parts:
+  - label: closed cabinet body
+    min: -0.65, -0.3, 0
+    max: 0.65, 0.32, 1.15
+    color: '#2B2B2B'
+  - label: top casing
+    min: -0.665, -0.32, 1.11
+    max: 0.665, 0.335, 1.15
+    color: '#686868'
+  - label: lower service hatch
+    min: -0.61, -0.33, 0.06
+    max: 0.61, -0.315, 0.3
+    color: '#222222'
+  - label: service latch
+    min: 0.56, -0.35, 0.14
+    max: 0.595, -0.335, 0.165
+    color: '#090909'
+  - label: service latch
+    min: 0.56, -0.35, 0.23
+    max: 0.595, -0.335, 0.255
+    color: '#090909'
+  - label: rear service cover
+    min: -0.6, 0.319, 0.14
+    max: 0.6, 0.335, 1.05
+    color: '#434343'
+  - label: rear ventilation slot
+    min: -0.55, 0.335, 0.91
+    max: 0.55, 0.345, 0.932
+    color: '#181818'
+  - label: rear ventilation slot
+    min: -0.55, 0.335, 0.85
+    max: 0.55, 0.345, 0.872
+    color: '#181818'
+  - label: rear ventilation slot
+    min: -0.55, 0.335, 0.79
+    max: 0.55, 0.345, 0.812
+    color: '#181818'
+  - label: CRT raised bezel
+    min: 0, -0.337, 0.61
+    max: 0.47, -0.322, 0.95
+    color: '#434343'
+  - label: dark display glass
+    min: 0.03, -0.355, 0.645
+    max: 0.44, -0.34, 0.915
+    color: '#05090B'
+  - label: cyan display data
+    min: 0.0564, -0.364, 0.8412
+    max: 0.282, -0.36, 0.8718
+    color: '#00424C'
+  - label: cyan display data
+    min: 0.0705, -0.364, 0.7392
+    max: 0.1598, -0.36, 0.7732
+    color: '#00424C'
+  - label: cyan display data
+    min: 0.2538, -0.364, 0.729
+    max: 0.3008, -0.36, 0.7562
+    color: '#00424C'
+  - label: sensor keypad bezel
+    min: -0.3, -0.348, 0.64
+    max: -0.1, -0.333, 0.88
+    color: '#434343'
+  - label: left control button
+    min: -0.52, -0.362, 0.66
+    max: -0.49, -0.347, 0.69
+    color: '#969696'
+  - label: left control button
+    min: -0.52, -0.362, 0.731
+    max: -0.49, -0.347, 0.761
+    color: '#969696'
+  - label: left control button
+    min: -0.52, -0.362, 0.802
+    max: -0.49, -0.347, 0.832
+    color: '#969696'
+  - label: left control button
+    min: -0.52, -0.362, 0.873
+    max: -0.49, -0.347, 0.903
+    color: '#969696'
+  - label: left control button
+    min: -0.44, -0.362, 0.66
+    max: -0.41, -0.347, 0.69
+    color: '#969696'
+  - label: left control button
+    min: -0.44, -0.362, 0.731
+    max: -0.41, -0.347, 0.761
+    color: '#969696'
+  - label: left control button
+    min: -0.44, -0.362, 0.802
+    max: -0.41, -0.347, 0.832
+    color: '#969696'
+  - label: left control button
+    min: -0.44, -0.362, 0.873
+    max: -0.41, -0.347, 0.903
+    color: '#969696'
+  - label: keypad button
+    min: -0.26, -0.365, 0.67
+    max: -0.215, -0.35, 0.705
+    color: '#AAAAAA'
+  - label: keypad button
+    min: -0.26, -0.365, 0.73
+    max: -0.215, -0.35, 0.765
+    color: '#AAAAAA'
+  - label: keypad button
+    min: -0.26, -0.365, 0.79
+    max: -0.215, -0.35, 0.825
+    color: '#AAAAAA'
+  - label: keypad button
+    min: -0.185, -0.365, 0.67
+    max: -0.14, -0.35, 0.705
+    color: '#AAAAAA'
+  - label: keypad button
+    min: -0.185, -0.365, 0.73
+    max: -0.14, -0.35, 0.765
+    color: '#AAAAAA'
+  - label: keypad button
+    min: -0.185, -0.365, 0.79
+    max: -0.14, -0.35, 0.825
+    color: '#AAAAAA'
+  - label: keyboard recess
+    min: -0.57, -0.352, 0.39
+    max: 0.56, -0.337, 0.55
+    color: '#181818'
+  - label: keyboard key
+    min: -0.53, -0.367, 0.405
+    max: -0.477, -0.352, 0.455
+    color: '#686868'
+  - label: keyboard key
+    min: -0.53, -0.367, 0.47
+    max: -0.477, -0.352, 0.52
+    color: '#969696'
+  - label: keyboard key
+    min: -0.441, -0.367, 0.405
+    max: -0.388, -0.352, 0.455
+    color: '#969696'
+  - label: keyboard key
+    min: -0.441, -0.367, 0.47
+    max: -0.388, -0.352, 0.52
+    color: '#686868'
+  - label: keyboard key
+    min: -0.352, -0.367, 0.405
+    max: -0.299, -0.352, 0.455
+    color: '#686868'
+  - label: keyboard key
+    min: -0.352, -0.367, 0.47
+    max: -0.299, -0.352, 0.52
+    color: '#969696'
+  - label: keyboard key
+    min: -0.263, -0.367, 0.405
+    max: -0.21, -0.352, 0.455
+    color: '#969696'
+  - label: keyboard key
+    min: -0.263, -0.367, 0.47
+    max: -0.21, -0.352, 0.52
+    color: '#686868'
+  - label: keyboard key
+    min: -0.174, -0.367, 0.405
+    max: -0.121, -0.352, 0.455
+    color: '#686868'
+  - label: keyboard key
+    min: -0.174, -0.367, 0.47
+    max: -0.121, -0.352, 0.52
+    color: '#969696'
+  - label: keyboard key
+    min: -0.085, -0.367, 0.405
+    max: -0.032, -0.352, 0.455
+    color: '#969696'
+  - label: keyboard key
+    min: -0.085, -0.367, 0.47
+    max: -0.032, -0.352, 0.52
+    color: '#686868'
+  - label: keyboard key
+    min: 0.004, -0.367, 0.405
+    max: 0.057, -0.352, 0.455
+    color: '#686868'
+  - label: keyboard key
+    min: 0.004, -0.367, 0.47
+    max: 0.057, -0.352, 0.52
+    color: '#969696'
+  - label: keyboard key
+    min: 0.093, -0.367, 0.405
+    max: 0.146, -0.352, 0.455
+    color: '#969696'
+  - label: keyboard key
+    min: 0.093, -0.367, 0.47
+    max: 0.146, -0.352, 0.52
+    color: '#686868'
+  - label: keyboard key
+    min: 0.182, -0.367, 0.405
+    max: 0.235, -0.352, 0.455
+    color: '#686868'
+  - label: keyboard key
+    min: 0.182, -0.367, 0.47
+    max: 0.235, -0.352, 0.52
+    color: '#969696'
+  - label: keyboard key
+    min: 0.271, -0.367, 0.405
+    max: 0.324, -0.352, 0.455
+    color: '#969696'
+  - label: keyboard key
+    min: 0.271, -0.367, 0.47
+    max: 0.324, -0.352, 0.52
+    color: '#686868'
+  - label: keyboard key
+    min: 0.36, -0.367, 0.405
+    max: 0.413, -0.352, 0.455
+    color: '#686868'
+  - label: keyboard key
+    min: 0.36, -0.367, 0.47
+    max: 0.413, -0.352, 0.52
+    color: '#969696'
+  - label: keyboard key
+    min: 0.449, -0.367, 0.405
+    max: 0.502, -0.352, 0.455
+    color: '#969696'
+  - label: keyboard key
+    min: 0.449, -0.367, 0.47
+    max: 0.502, -0.352, 0.52
+    color: '#686868'
+  sourceDirections: 1
+
+- type: cmu3DModel
+  id: CMU3DHybrisaWall
+  label: Hybrisa wall panel
+  sourcePrototypes:
+  - RMCWallHybrisa
+  status: draft
+  description: One full 1x1-tile modular wall section, 2.8 units high, with horizontal panel courses and edge reinforcement.
+    Source is a top-down connected-wall icon, not a frontal elevation; inferred faces require review in adjacent wall
+    runs.
+  parts:
+  - min: -0.5, -0.5, 0
+    max: 0.5, 0.5, 2.8
+    color: '#686D65'
+    label: full tile wall core
+  - min: -0.5, -0.52, 0.03
+    max: 0.5, 0.52, 0.2
+    color: '#92998B'
+    label: foot course
+  - min: -0.5, -0.52, 2.56
+    max: 0.5, 0.52, 2.77
+    color: '#92998B'
+    label: upper course
+  - min: -0.44, -0.54, 0.21
+    max: -0.36, -0.505, 2.56
+    color: '#92998B'
+    label: vertical edge rib
+  - min: 0.36, -0.54, 0.21
+    max: 0.44, -0.505, 2.56
+    color: '#92998B'
+    label: vertical edge rib
+  - min: -0.31, -0.531, 0.36
+    max: 0.31, -0.514, 1.19
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.31, -0.531, 1.56
+    max: 0.31, -0.514, 2.39
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.5, -0.54, 1.34
+    max: 0.5, -0.505, 1.46
+    color: '#92998B'
+    label: horizontal panel seam
+  - min: -0.44, 0.505, 0.21
+    max: -0.36, 0.54, 2.56
+    color: '#92998B'
+    label: vertical edge rib
+  - min: 0.36, 0.505, 0.21
+    max: 0.44, 0.54, 2.56
+    color: '#92998B'
+    label: vertical edge rib
+  - min: -0.31, 0.514, 0.36
+    max: 0.31, 0.531, 1.19
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.31, 0.514, 1.56
+    max: 0.31, 0.531, 2.39
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.5, 0.505, 1.34
+    max: 0.5, 0.54, 1.46
+    color: '#92998B'
+    label: horizontal panel seam
+  - min: -0.518, -0.49, 1.34
+    max: -0.5, 0.49, 1.46
+    color: '#92998B'
+    label: left side seam
+  - min: 0.5, -0.49, 1.34
+    max: 0.518, 0.49, 1.46
+    color: '#92998B'
+    label: right side seam
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DStrataWall
+  label: Strata wall panel
+  sourcePrototypes:
+  - RMCWallStrata
+  status: draft
+  description: One full 1x1-tile modular wall section, 2.8 units high, with horizontal panel courses and edge reinforcement.
+    Source is a top-down connected-wall icon, not a frontal elevation; inferred faces require review in adjacent wall
+    runs.
+  parts:
+  - min: -0.5, -0.5, 0
+    max: 0.5, 0.5, 2.8
+    color: '#555C5A'
+    label: full tile wall core
+  - min: -0.5, -0.52, 0.03
+    max: 0.5, 0.52, 0.2
+    color: '#818A87'
+    label: foot course
+  - min: -0.5, -0.52, 2.56
+    max: 0.5, 0.52, 2.77
+    color: '#818A87'
+    label: upper course
+  - min: -0.44, -0.54, 0.21
+    max: -0.36, -0.505, 2.56
+    color: '#818A87'
+    label: vertical edge rib
+  - min: 0.36, -0.54, 0.21
+    max: 0.44, -0.505, 2.56
+    color: '#818A87'
+    label: vertical edge rib
+  - min: -0.31, -0.531, 0.36
+    max: 0.31, -0.514, 1.19
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.31, -0.531, 1.56
+    max: 0.31, -0.514, 2.39
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.5, -0.54, 1.34
+    max: 0.5, -0.505, 1.46
+    color: '#818A87'
+    label: horizontal panel seam
+  - min: -0.44, 0.505, 0.21
+    max: -0.36, 0.54, 2.56
+    color: '#818A87'
+    label: vertical edge rib
+  - min: 0.36, 0.505, 0.21
+    max: 0.44, 0.54, 2.56
+    color: '#818A87'
+    label: vertical edge rib
+  - min: -0.31, 0.514, 0.36
+    max: 0.31, 0.531, 1.19
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.31, 0.514, 1.56
+    max: 0.31, 0.531, 2.39
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.5, 0.505, 1.34
+    max: 0.5, 0.54, 1.46
+    color: '#818A87'
+    label: horizontal panel seam
+  - min: -0.518, -0.49, 1.34
+    max: -0.5, 0.49, 1.46
+    color: '#818A87'
+    label: left side seam
+  - min: 0.5, -0.49, 1.34
+    max: 0.518, 0.49, 1.46
+    color: '#818A87'
+    label: right side seam
+  - min: -0.13, -0.56, 2.37
+    max: 0.13, -0.525, 2.53
+    color: '#282D30'
+    label: service plate
+  - min: -0.035, -0.57, 2.41
+    max: 0.035, -0.558, 2.48
+    color: '#924443'
+    label: red service indicator
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DReinforcedPrisonWall
+  label: Reinforced prison wall
+  sourcePrototypes:
+  - RMCWallPrisonReinforced
+  status: draft
+  description: One full 1x1-tile modular wall section, 2.8 units high, with horizontal panel courses and edge reinforcement.
+    Source is a top-down connected-wall icon, not a frontal elevation; inferred faces require review in adjacent wall
+    runs.
+  parts:
+  - min: -0.5, -0.5, 0
+    max: 0.5, 0.5, 2.8
+    color: '#616B6C'
+    label: full tile wall core
+  - min: -0.5, -0.52, 0.03
+    max: 0.5, 0.52, 0.2
+    color: '#9B9E95'
+    label: foot course
+  - min: -0.5, -0.52, 2.56
+    max: 0.5, 0.52, 2.77
+    color: '#9B9E95'
+    label: upper course
+  - min: -0.44, -0.54, 0.21
+    max: -0.36, -0.505, 2.56
+    color: '#9B9E95'
+    label: vertical edge rib
+  - min: 0.36, -0.54, 0.21
+    max: 0.44, -0.505, 2.56
+    color: '#9B9E95'
+    label: vertical edge rib
+  - min: -0.31, -0.531, 0.36
+    max: 0.31, -0.514, 1.19
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.31, -0.531, 1.56
+    max: 0.31, -0.514, 2.39
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.5, -0.54, 1.34
+    max: 0.5, -0.505, 1.46
+    color: '#9B9E95'
+    label: horizontal panel seam
+  - min: -0.44, 0.505, 0.21
+    max: -0.36, 0.54, 2.56
+    color: '#9B9E95'
+    label: vertical edge rib
+  - min: 0.36, 0.505, 0.21
+    max: 0.44, 0.54, 2.56
+    color: '#9B9E95'
+    label: vertical edge rib
+  - min: -0.31, 0.514, 0.36
+    max: 0.31, 0.531, 1.19
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.31, 0.514, 1.56
+    max: 0.31, 0.531, 2.39
+    color: '#474E50'
+    label: recessed modular panel
+  - min: -0.5, 0.505, 1.34
+    max: 0.5, 0.54, 1.46
+    color: '#9B9E95'
+    label: horizontal panel seam
+  - min: -0.518, -0.49, 1.34
+    max: -0.5, 0.49, 1.46
+    color: '#9B9E95'
+    label: left side seam
+  - min: 0.5, -0.49, 1.34
+    max: 0.518, 0.49, 1.46
+    color: '#9B9E95'
+    label: right side seam
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DHybrisaAirlock
+  label: Hybrisa airlock
+  sourcePrototypes:
+  - RMCAirlockHybrisa
+  status: draft
+  description: Closed split industrial door with hazard-marked jambs; animation and access state are not represented.
+  parts:
+  - min: -0.48, -0.19, 0
+    max: -0.395, 0.19, 2.63
+    color: '#747A7B'
+    label: left door jamb
+  - min: 0.395, -0.19, 0
+    max: 0.48, 0.19, 2.63
+    color: '#747A7B'
+    label: right door jamb
+  - min: -0.48, -0.19, 2.58
+    max: 0.48, 0.19, 2.74
+    color: '#474E50'
+    label: door lintel
+  - min: -0.48, -0.21, 0
+    max: 0.48, 0.21, 0.07
+    color: '#747A7B'
+    label: threshold
+  - min: -0.395, -0.08, 0.07
+    max: -0.016, 0.08, 2.58
+    color: '#51554C'
+    label: left leaf
+  - min: 0.016, -0.08, 0.07
+    max: 0.395, 0.08, 2.58
+    color: '#51554C'
+    label: right leaf
+  - min: -0.34, -0.099, 0.43
+    max: -0.07, -0.078, 2.37
+    color: '#474E50'
+    label: leaf inset left
+  - min: 0.07, -0.099, 0.43
+    max: 0.34, -0.078, 2.37
+    color: '#474E50'
+    label: leaf inset right
+  - min: -0.46, -0.205, 0.19
+    max: -0.41, -0.19, 0.49
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: -0.46, -0.205, 2.15
+    max: -0.41, -0.19, 2.45
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: 0.41, -0.205, 0.19
+    max: 0.46, -0.19, 0.49
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: 0.41, -0.205, 2.15
+    max: 0.46, -0.19, 2.45
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: 0.401, -0.214, 1.37
+    max: 0.465, -0.195, 1.51
+    color: '#5E6951'
+    label: lock indicator
+  - min: -0.012, -0.087, 0.08
+    max: 0.012, 0.087, 2.57
+    color: '#14191C'
+    label: center seam
+  sourceDirections: 4
+  doorState: Closed
+  referencePrototype: RMCAirlockHybrisa
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/hybrisa_door.rsi
+  referenceState: closed
+  alternateDoorModel: CMU3DHybrisaAirlockOpen
+- type: cmu3DModel
+  id: CMU3DHybrisaPersonalAirlock
+  label: Hybrisa personal airlock
+  sourcePrototypes:
+  - RMCAirlockHybrisaPersonal
+  status: draft
+  description: Closed personal-room airlock with broad lower kickplate and dark leaf inset.
+  parts:
+  - min: -0.48, -0.19, 0
+    max: -0.395, 0.19, 2.63
+    color: '#747A7B'
+    label: left door jamb
+  - min: 0.395, -0.19, 0
+    max: 0.48, 0.19, 2.63
+    color: '#747A7B'
+    label: right door jamb
+  - min: -0.48, -0.19, 2.58
+    max: 0.48, 0.19, 2.74
+    color: '#474E50'
+    label: door lintel
+  - min: -0.48, -0.21, 0
+    max: 0.48, 0.21, 0.07
+    color: '#747A7B'
+    label: threshold
+  - min: -0.395, -0.08, 0.07
+    max: -0.016, 0.08, 2.58
+    color: '#51554C'
+    label: left leaf
+  - min: 0.016, -0.08, 0.07
+    max: 0.395, 0.08, 2.58
+    color: '#51554C'
+    label: right leaf
+  - min: -0.34, -0.099, 0.43
+    max: -0.07, -0.078, 2.37
+    color: '#474E50'
+    label: leaf inset left
+  - min: 0.07, -0.099, 0.43
+    max: 0.34, -0.078, 2.37
+    color: '#474E50'
+    label: leaf inset right
+  - min: -0.39, -0.11, 0.15
+    max: 0.39, -0.081, 0.49
+    color: '#747A7B'
+    label: personal door kickplate
+  - min: -0.46, -0.205, 0.19
+    max: -0.41, -0.19, 0.49
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: -0.46, -0.205, 2.15
+    max: -0.41, -0.19, 2.45
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: 0.41, -0.205, 0.19
+    max: 0.46, -0.19, 0.49
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: 0.41, -0.205, 2.15
+    max: 0.46, -0.19, 2.45
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: 0.401, -0.214, 1.37
+    max: 0.465, -0.195, 1.51
+    color: '#5E6951'
+    label: lock indicator
+  - min: -0.012, -0.087, 0.08
+    max: 0.012, 0.087, 2.57
+    color: '#14191C'
+    label: center seam
+  sourceDirections: 4
+  doorState: Closed
+  referencePrototype: RMCAirlockHybrisaPersonal
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/hybrisa_personal_door.rsi
+  referenceState: closed
+  alternateDoorModel: CMU3DHybrisaPersonalAirlockOpen
+- type: cmu3DModel
+  id: CMU3DHybrisaDoubleGlassDoor
+  label: Hybrisa double glass door
+  sourcePrototypes:
+  - RMCDoubleDoorGlassHybrisa
+  status: draft
+  description: One-tile Hybrisa paired door leaf with broad glazing and an outer +X jamb; East/West frames establish
+    the assembly. Partner is at local -X. Hidden surfaces remain inferred.
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#575C50'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#818479'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#818479'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#343B32'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#818479'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#343B32'
+    label: threshold
+  - min: -0.49, -0.1, 0.06
+    max: 0.405, 0.1, 2.51
+    color: '#575C50'
+    label: single closed door leaf
+  - min: -0.45, -0.115, 0.37
+    max: 0.365, -0.101, 2.38
+    color: '#343B32'
+    label: leaf recessed face
+  - min: -0.45, 0.101, 0.37
+    max: 0.365, 0.115, 2.38
+    color: '#343B32'
+    label: leaf recessed face back
+  - min: -0.413, -0.131, 0.43
+    max: 0.332, -0.117, 2.29
+    color: '#575C50'
+    label: inner face panel
+  - min: -0.413, 0.117, 0.43
+    max: 0.332, 0.131, 2.29
+    color: '#575C50'
+    label: inner face panel back
+  - min: -0.495, -0.15, 0.06
+    max: -0.477, -0.131, 2.51
+    color: '#343B32'
+    label: meeting edge seal
+  - min: -0.495, 0.131, 0.06
+    max: -0.477, 0.15, 2.51
+    color: '#343B32'
+    label: meeting edge seal
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  - min: -0.46, -0.115, 0.085
+    max: 0.375, -0.101, 0.3
+    color: '#343B32'
+    label: lower hazard band
+  - min: -0.46, 0.101, 0.085
+    max: 0.375, 0.115, 0.3
+    color: '#343B32'
+    label: lower hazard band back
+  - min: -0.45, -0.134, 0.11
+    max: -0.39, -0.12, 0.17
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: -0.45, 0.12, 0.11
+    max: -0.39, 0.134, 0.17
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: -0.425, -0.134, 0.169
+    max: -0.365, -0.12, 0.229
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: -0.425, 0.12, 0.169
+    max: -0.365, 0.134, 0.229
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: -0.313, -0.134, 0.11
+    max: -0.253, -0.12, 0.17
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: -0.313, 0.12, 0.11
+    max: -0.253, 0.134, 0.17
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: -0.288, -0.134, 0.169
+    max: -0.228, -0.12, 0.229
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: -0.288, 0.12, 0.169
+    max: -0.228, 0.134, 0.229
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: -0.176, -0.134, 0.11
+    max: -0.116, -0.12, 0.17
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: -0.176, 0.12, 0.11
+    max: -0.116, 0.134, 0.17
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: -0.151, -0.134, 0.169
+    max: -0.091, -0.12, 0.229
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: -0.151, 0.12, 0.169
+    max: -0.091, 0.134, 0.229
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: -0.039, -0.134, 0.11
+    max: 0.021, -0.12, 0.17
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: -0.039, 0.12, 0.11
+    max: 0.021, 0.134, 0.17
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: -0.014, -0.134, 0.169
+    max: 0.046, -0.12, 0.229
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: -0.014, 0.12, 0.169
+    max: 0.046, 0.134, 0.229
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: 0.098, -0.134, 0.11
+    max: 0.158, -0.12, 0.17
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: 0.098, 0.12, 0.11
+    max: 0.158, 0.134, 0.17
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: 0.123, -0.134, 0.169
+    max: 0.183, -0.12, 0.229
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: 0.123, 0.12, 0.169
+    max: 0.183, 0.134, 0.229
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: 0.235, -0.134, 0.11
+    max: 0.295, -0.12, 0.17
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: 0.235, 0.12, 0.11
+    max: 0.295, 0.134, 0.17
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: 0.26, -0.134, 0.169
+    max: 0.32, -0.12, 0.229
+    color: '#A97C25'
+    label: slanted lower warning
+  - min: 0.26, 0.12, 0.169
+    max: 0.32, 0.134, 0.229
+    color: '#A97C25'
+    label: slanted lower warning back
+  - min: -0.347, -0.148, 0.76
+    max: 0.282, -0.134, 1.91
+    color: '#818479'
+    label: broad glass surround
+  - min: -0.347, 0.134, 0.76
+    max: 0.282, 0.148, 1.91
+    color: '#818479'
+    label: broad glass surround back
+  - min: -0.354, -0.164, 0.855
+    max: 0.289, -0.15, 1.815
+    color: '#809C9D'
+    label: chamfered window center
+  - min: -0.354, 0.15, 0.855
+    max: 0.289, 0.164, 1.815
+    color: '#809C9D'
+    label: chamfered window center back
+  - min: -0.307, -0.164, 1.815
+    max: 0.242, -0.15, 1.89
+    color: '#809C9D'
+    label: chamfered window upper shoulder
+  - min: -0.307, 0.15, 1.815
+    max: 0.242, 0.164, 1.89
+    color: '#809C9D'
+    label: chamfered window upper shoulder back
+  - min: -0.307, -0.164, 0.785
+    max: 0.242, -0.15, 0.855
+    color: '#809C9D'
+    label: chamfered window lower shoulder
+  - min: -0.307, 0.15, 0.785
+    max: 0.242, 0.164, 0.855
+    color: '#809C9D'
+    label: chamfered window lower shoulder back
+  - min: -0.32, -0.18, 1.22
+    max: 0.255, -0.166, 1.78
+    color: '#A5BDBB'
+    label: pale upper reflection
+  - min: -0.32, 0.166, 1.22
+    max: 0.255, 0.18, 1.78
+    color: '#A5BDBB'
+    label: pale upper reflection back
+  - min: -0.33, -0.181, 1.135
+    max: 0.266, -0.167, 1.185
+    color: '#B6C8C0'
+    label: lower glass divider
+  - min: -0.33, 0.167, 1.135
+    max: 0.266, 0.181, 1.185
+    color: '#B6C8C0'
+    label: lower glass divider back
+  sourceDirections: 4
+  yawOffset: 90
+  doorState: Closed
+  referencePrototype: RMCDoubleDoorGlassHybrisa
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/hybrisa_glass.rsi
+  referenceState: door_closed
+  alternateDoorModel: CMU3DHybrisaDoubleGlassDoorOpen
+- type: cmu3DModel
+  id: CMU3DBarrelGreen
+  label: Green storage barrel
+  sourcePrototypes:
+  - RMCBarrelGreen
+  status: draft
+  description: Stepped barrel with four raised steel hoop bands and visible lid bung. Curvature is approximated with
+    box geometry.
+  parts:
+  - min: -0.205, -0.3, 0.06
+    max: 0.205, -0.19, 0.94
+    color: '#476344'
+    label: curved body segment 1
+  - min: -0.275, -0.19, 0.06
+    max: 0.275, -0.1, 0.94
+    color: '#476344'
+    label: curved body segment 2
+  - min: -0.31, -0.1, 0.06
+    max: 0.31, 0.1, 0.94
+    color: '#476344'
+    label: curved body segment 3
+  - min: -0.275, 0.1, 0.06
+    max: 0.275, 0.19, 0.94
+    color: '#476344'
+    label: curved body segment 4
+  - min: -0.205, 0.19, 0.06
+    max: 0.205, 0.3, 0.94
+    color: '#476344'
+    label: curved body segment 5
+  - min: -0.22, -0.306, 0.09
+    max: 0.22, -0.184, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.09
+    max: 0.29, -0.094, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.09
+    max: 0.325, 0.106, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.09
+    max: 0.29, 0.196, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.09
+    max: 0.22, 0.306, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.22, -0.306, 0.34
+    max: 0.22, -0.184, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.34
+    max: 0.29, -0.094, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.34
+    max: 0.325, 0.106, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.34
+    max: 0.29, 0.196, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.34
+    max: 0.22, 0.306, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.22, -0.306, 0.67
+    max: 0.22, -0.184, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.67
+    max: 0.29, -0.094, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.67
+    max: 0.325, 0.106, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.67
+    max: 0.29, 0.196, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.67
+    max: 0.22, 0.306, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.22, -0.306, 0.91
+    max: 0.22, -0.184, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.91
+    max: 0.29, -0.094, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.91
+    max: 0.325, 0.106, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.91
+    max: 0.29, 0.196, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.91
+    max: 0.22, 0.306, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.205, -0.3, 0.94
+    max: 0.205, -0.19, 0.98
+    color: '#474E50'
+    label: lid segment 1
+  - min: -0.275, -0.19, 0.94
+    max: 0.275, -0.1, 0.98
+    color: '#474E50'
+    label: lid segment 2
+  - min: -0.31, -0.1, 0.94
+    max: 0.31, 0.1, 0.98
+    color: '#474E50'
+    label: lid segment 3
+  - min: -0.275, 0.1, 0.94
+    max: 0.275, 0.19, 0.98
+    color: '#474E50'
+    label: lid segment 4
+  - min: -0.205, 0.19, 0.94
+    max: 0.205, 0.3, 0.98
+    color: '#474E50'
+    label: lid segment 5
+  - min: 0.09, 0.1, 0.98
+    max: 0.16, 0.17, 1.01
+    color: '#747A7B'
+    label: lid bung
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DBarrelRed
+  label: Red storage barrel
+  sourcePrototypes:
+  - RMCBarrelRed
+  status: draft
+  description: Stepped barrel with four raised steel hoop bands and visible lid bung. Curvature is approximated with
+    box geometry.
+  parts:
+  - min: -0.205, -0.3, 0.06
+    max: 0.205, -0.19, 0.94
+    color: '#854D44'
+    label: curved body segment 1
+  - min: -0.275, -0.19, 0.06
+    max: 0.275, -0.1, 0.94
+    color: '#854D44'
+    label: curved body segment 2
+  - min: -0.31, -0.1, 0.06
+    max: 0.31, 0.1, 0.94
+    color: '#854D44'
+    label: curved body segment 3
+  - min: -0.275, 0.1, 0.06
+    max: 0.275, 0.19, 0.94
+    color: '#854D44'
+    label: curved body segment 4
+  - min: -0.205, 0.19, 0.06
+    max: 0.205, 0.3, 0.94
+    color: '#854D44'
+    label: curved body segment 5
+  - min: -0.22, -0.306, 0.09
+    max: 0.22, -0.184, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.09
+    max: 0.29, -0.094, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.09
+    max: 0.325, 0.106, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.09
+    max: 0.29, 0.196, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.09
+    max: 0.22, 0.306, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.22, -0.306, 0.34
+    max: 0.22, -0.184, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.34
+    max: 0.29, -0.094, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.34
+    max: 0.325, 0.106, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.34
+    max: 0.29, 0.196, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.34
+    max: 0.22, 0.306, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.22, -0.306, 0.67
+    max: 0.22, -0.184, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.67
+    max: 0.29, -0.094, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.67
+    max: 0.325, 0.106, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.67
+    max: 0.29, 0.196, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.67
+    max: 0.22, 0.306, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.22, -0.306, 0.91
+    max: 0.22, -0.184, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.91
+    max: 0.29, -0.094, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.91
+    max: 0.325, 0.106, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.91
+    max: 0.29, 0.196, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.91
+    max: 0.22, 0.306, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.205, -0.3, 0.94
+    max: 0.205, -0.19, 0.98
+    color: '#474E50'
+    label: lid segment 1
+  - min: -0.275, -0.19, 0.94
+    max: 0.275, -0.1, 0.98
+    color: '#474E50'
+    label: lid segment 2
+  - min: -0.31, -0.1, 0.94
+    max: 0.31, 0.1, 0.98
+    color: '#474E50'
+    label: lid segment 3
+  - min: -0.275, 0.1, 0.94
+    max: 0.275, 0.19, 0.98
+    color: '#474E50'
+    label: lid segment 4
+  - min: -0.205, 0.19, 0.94
+    max: 0.205, 0.3, 0.98
+    color: '#474E50'
+    label: lid segment 5
+  - min: 0.09, 0.1, 0.98
+    max: 0.16, 0.17, 1.01
+    color: '#747A7B'
+    label: lid bung
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DBarrelBlue
+  label: Blue storage barrel
+  sourcePrototypes:
+  - RMCBarrelBlue
+  status: draft
+  description: Stepped barrel with four raised steel hoop bands and visible lid bung. Curvature is approximated with
+    box geometry.
+  parts:
+  - min: -0.205, -0.3, 0.06
+    max: 0.205, -0.19, 0.94
+    color: '#4F647D'
+    label: curved body segment 1
+  - min: -0.275, -0.19, 0.06
+    max: 0.275, -0.1, 0.94
+    color: '#4F647D'
+    label: curved body segment 2
+  - min: -0.31, -0.1, 0.06
+    max: 0.31, 0.1, 0.94
+    color: '#4F647D'
+    label: curved body segment 3
+  - min: -0.275, 0.1, 0.06
+    max: 0.275, 0.19, 0.94
+    color: '#4F647D'
+    label: curved body segment 4
+  - min: -0.205, 0.19, 0.06
+    max: 0.205, 0.3, 0.94
+    color: '#4F647D'
+    label: curved body segment 5
+  - min: -0.22, -0.306, 0.09
+    max: 0.22, -0.184, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.09
+    max: 0.29, -0.094, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.09
+    max: 0.325, 0.106, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.09
+    max: 0.29, 0.196, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.09
+    max: 0.22, 0.306, 0.13
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.22, -0.306, 0.34
+    max: 0.22, -0.184, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.34
+    max: 0.29, -0.094, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.34
+    max: 0.325, 0.106, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.34
+    max: 0.29, 0.196, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.34
+    max: 0.22, 0.306, 0.38
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.22, -0.306, 0.67
+    max: 0.22, -0.184, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.67
+    max: 0.29, -0.094, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.67
+    max: 0.325, 0.106, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.67
+    max: 0.29, 0.196, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.67
+    max: 0.22, 0.306, 0.71
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.22, -0.306, 0.91
+    max: 0.22, -0.184, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 1
+  - min: -0.29, -0.196, 0.91
+    max: 0.29, -0.094, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 2
+  - min: -0.325, -0.106, 0.91
+    max: 0.325, 0.106, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 3
+  - min: -0.29, 0.094, 0.91
+    max: 0.29, 0.196, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 4
+  - min: -0.22, 0.184, 0.91
+    max: 0.22, 0.306, 0.95
+    color: '#A5AAAA'
+    label: stepped hoop segment 5
+  - min: -0.205, -0.3, 0.94
+    max: 0.205, -0.19, 0.98
+    color: '#474E50'
+    label: lid segment 1
+  - min: -0.275, -0.19, 0.94
+    max: 0.275, -0.1, 0.98
+    color: '#474E50'
+    label: lid segment 2
+  - min: -0.31, -0.1, 0.94
+    max: 0.31, 0.1, 0.98
+    color: '#474E50'
+    label: lid segment 3
+  - min: -0.275, 0.1, 0.94
+    max: 0.275, 0.19, 0.98
+    color: '#474E50'
+    label: lid segment 4
+  - min: -0.205, 0.19, 0.94
+    max: 0.205, 0.3, 0.98
+    color: '#474E50'
+    label: lid segment 5
+  - min: 0.09, 0.1, 0.98
+    max: 0.16, 0.17, 1.01
+    color: '#747A7B'
+    label: lid bung
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DTrashBinGreen
+  label: Green trash bin
+  sourcePrototypes:
+  - RMCTrashBinGreen
+  status: draft
+  description: Green bin with a dark open top and ribbed front face.
+  parts:
+  - min: -0.31, -0.25, 0.05
+    max: 0.31, 0.25, 0.86
+    color: '#5D6954'
+    label: bin body
+  - min: -0.33, -0.27, 0
+    max: 0.33, 0.27, 0.08
+    color: '#282D30'
+    label: base
+  - min: -0.34, -0.28, 0.85
+    max: 0.34, -0.22, 0.93
+    color: '#747A7B'
+    label: rim front
+  - min: -0.34, 0.22, 0.85
+    max: 0.34, 0.28, 0.93
+    color: '#747A7B'
+    label: rim back
+  - min: -0.34, -0.22, 0.85
+    max: -0.28, 0.22, 0.93
+    color: '#747A7B'
+    label: rim left
+  - min: 0.28, -0.22, 0.85
+    max: 0.34, 0.22, 0.93
+    color: '#747A7B'
+    label: rim right
+  - min: -0.28, -0.22, 0.855
+    max: 0.28, 0.22, 0.865
+    color: '#14191C'
+    label: opening
+  - min: -0.23, -0.265, 0.23
+    max: 0.23, -0.251, 0.7
+    color: '#474E50'
+    label: front panel
+  - min: -0.176, -0.274, 0.25
+    max: -0.144, -0.263, 0.67
+    color: '#747A7B'
+    label: front grille
+  - min: -0.071, -0.274, 0.25
+    max: -0.039, -0.263, 0.67
+    color: '#747A7B'
+    label: front grille
+  - min: 0.039, -0.274, 0.25
+    max: 0.071, -0.263, 0.67
+    color: '#747A7B'
+    label: front grille
+  - min: 0.144, -0.274, 0.25
+    max: 0.176, -0.263, 0.67
+    color: '#747A7B'
+    label: front grille
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DPottedPlant6
+  label: Potted tall topiary
+  sourcePrototypes:
+  - CMPottedPlant6
+  status: draft
+  sourceDirections: 1
+  placement: surface
+  description: Narrow tan round pot and a tall irregular column of olive topiary foliage, matching pottedplant_6. Fixed
+    source facing. Rests on an exact modeled tabletop when present, otherwise on the floor. Hidden foliage depth and
+    height remain inferred; no sway or growth animation.
+  parts:
+  - min: -0.0731, -0.126, 0.01
+    max: 0.0731, 0.126, 0.0775
+    color: '#736858'
+    label: tapered pot foot
+  - min: -0.126, -0.0731, 0.01
+    max: -0.0731, 0.0731, 0.0775
+    color: '#736858'
+    label: tapered pot foot
+  - min: 0.0731, -0.0731, 0.01
+    max: 0.126, 0.0731, 0.0775
+    color: '#736858'
+    label: tapered pot foot
+  - min: -0.0908, -0.1566, 0.0702
+    max: 0.0908, 0.1566, 0.2376
+    color: '#736858'
+    label: pot body
+  - min: -0.1566, -0.0908, 0.0702
+    max: -0.0908, 0.0908, 0.2376
+    color: '#736858'
+    label: pot body
+  - min: 0.0908, -0.0908, 0.0702
+    max: 0.1566, 0.0908, 0.2376
+    color: '#736858'
+    label: pot body
+  - min: -0.1044, -0.18, 0.2268
+    max: 0.1044, 0.18, 0.2673
+    color: '#A1967E'
+    label: pot rim
+  - min: -0.18, -0.1044, 0.2268
+    max: -0.1044, 0.1044, 0.2673
+    color: '#A1967E'
+    label: pot rim
+  - min: 0.1044, -0.1044, 0.2268
+    max: 0.18, 0.1044, 0.2673
+    color: '#A1967E'
+    label: pot rim
+  - min: -0.0825, -0.1422, 0.27
+    max: 0.0825, 0.1422, 0.2767
+    color: '#483B2F'
+    label: exposed soil
+  - min: -0.1422, -0.0825, 0.27
+    max: -0.0825, 0.0825, 0.2767
+    color: '#483B2F'
+    label: exposed soil
+  - min: 0.0825, -0.0825, 0.27
+    max: 0.1422, 0.0825, 0.2767
+    color: '#483B2F'
+    label: exposed soil
+  - min: -0.0275, -0.0275, 0.2416
+    max: 0.0275, 0.0275, 1.1984
+    color: '#695332'
+    label: stem
+  - min: -0.0812, -0.14, 0.36
+    max: 0.0812, 0.14, 0.52
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.14, -0.0812, 0.36
+    max: -0.0812, 0.0812, 0.52
+    color: '#47602E'
+    label: topiary foliage
+  - min: 0.0812, -0.0812, 0.36
+    max: 0.14, 0.0812, 0.52
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.101, -0.1246, 0.3984
+    max: 0.003, 0.0042, 0.4584
+    color: '#657D42'
+    label: leaf center
+  - min: -0.1302, -0.0911, 0.408
+    max: 0.0322, -0.0293, 0.4476
+    color: '#657D42'
+    label: leaf tip
+  - min: -0.0986, -0.17, 0.51
+    max: 0.0986, 0.17, 0.71
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.17, -0.0986, 0.51
+    max: -0.0986, 0.0986, 0.71
+    color: '#47602E'
+    label: topiary foliage
+  - min: 0.0986, -0.0986, 0.51
+    max: 0.17, 0.0986, 0.71
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.1226, -0.1513, 0.558
+    max: 0.0036, 0.0051, 0.618
+    color: '#657D42'
+    label: leaf center
+  - min: -0.1581, -0.1106, 0.5676
+    max: 0.0391, -0.0356, 0.6072
+    color: '#657D42'
+    label: leaf tip
+  - min: -0.0928, -0.16, 0.68
+    max: 0.0928, 0.16, 0.87
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.16, -0.0928, 0.68
+    max: -0.0928, 0.0928, 0.87
+    color: '#47602E'
+    label: topiary foliage
+  - min: 0.0928, -0.0928, 0.68
+    max: 0.16, 0.0928, 0.87
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.1154, -0.1424, 0.7256
+    max: 0.0034, 0.0048, 0.7856
+    color: '#657D42'
+    label: leaf center
+  - min: -0.1488, -0.1041, 0.7352
+    max: 0.0368, -0.0335, 0.7748
+    color: '#657D42'
+    label: leaf tip
+  - min: -0.1044, -0.18, 0.86
+    max: 0.1044, 0.18, 1.03
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.18, -0.1044, 0.86
+    max: -0.1044, 0.1044, 1.03
+    color: '#47602E'
+    label: topiary foliage
+  - min: 0.1044, -0.1044, 0.86
+    max: 0.18, 0.1044, 1.03
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.1298, -0.1602, 0.9008
+    max: 0.0038, 0.0054, 0.9608
+    color: '#657D42'
+    label: leaf center
+  - min: -0.1674, -0.1171, 0.9104
+    max: 0.0414, -0.0377, 0.95
+    color: '#657D42'
+    label: leaf tip
+  - min: -0.0638, -0.11, 1.02
+    max: 0.0638, 0.11, 1.16
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.11, -0.0638, 1.02
+    max: -0.0638, 0.0638, 1.16
+    color: '#47602E'
+    label: topiary foliage
+  - min: 0.0638, -0.0638, 1.02
+    max: 0.11, 0.0638, 1.16
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.0793, -0.0979, 1.0536
+    max: 0.0023, 0.0033, 1.1136
+    color: '#657D42'
+    label: leaf center
+  - min: -0.1023, -0.0716, 1.0632
+    max: 0.0253, -0.023, 1.1028
+    color: '#657D42'
+    label: leaf tip
+  - min: -0.0319, -0.055, 1.15
+    max: 0.0319, 0.055, 1.25
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.055, -0.0319, 1.15
+    max: -0.0319, 0.0319, 1.25
+    color: '#47602E'
+    label: topiary foliage
+  - min: 0.0319, -0.0319, 1.15
+    max: 0.055, 0.0319, 1.25
+    color: '#47602E'
+    label: topiary foliage
+  - min: -0.0397, -0.049, 1.174
+    max: 0.0012, 0.0016, 1.234
+    color: '#657D42'
+    label: leaf center
+  - min: -0.0512, -0.0358, 1.1836
+    max: 0.0126, -0.0115, 1.2232
+    color: '#657D42'
+    label: leaf tip
+- type: cmu3DModel
+  id: CMU3DMarineDraft
+  label: Marine scale mannequin (draft)
+  sourcePrototypes: []
+  status: draft
+  description: 'Unrigged 1.72-unit scale mannequin inspired by M3 armor and M10 helmet. No entity mapping: must not replace
+    arbitrary humans or their actual equipment. Skin tone is a preview choice only.'
+  parts:
+  - min: -0.21, -0.19, 0
+    max: -0.035, 0.15, 0.13
+    color: '#14191C'
+    label: left boot
+  - min: 0.035, -0.19, 0
+    max: 0.21, 0.15, 0.13
+    color: '#14191C'
+    label: right boot
+  - min: -0.2, -0.11, 0.12
+    max: -0.025, 0.13, 0.7
+    color: '#5E6951'
+    label: left trouser leg
+  - min: 0.025, -0.11, 0.12
+    max: 0.2, 0.13, 0.7
+    color: '#5E6951'
+    label: right trouser leg
+  - min: -0.22, -0.13, 0.67
+    max: 0.22, 0.15, 0.86
+    color: '#5E6951'
+    label: pelvis
+  - min: -0.235, -0.15, 0.79
+    max: 0.235, 0.17, 0.85
+    color: '#282D30'
+    label: belt
+  - min: -0.235, -0.12, 0.86
+    max: 0.235, 0.16, 1.3
+    color: '#5E6951'
+    label: torso
+  - min: -0.25, -0.18, 0.91
+    max: 0.25, -0.11, 1.29
+    color: '#687051'
+    label: chest armor
+  - min: -0.14, -0.192, 1.03
+    max: 0.14, -0.178, 1.23
+    color: '#82876B'
+    label: armor center inset
+  - min: -0.22, 0.15, 0.93
+    max: 0.22, 0.22, 1.28
+    color: '#535E45'
+    label: back plate
+  - min: -0.06, -0.065, 1.29
+    max: 0.06, 0.065, 1.4
+    color: '#B49478'
+    label: neck
+  - min: -0.135, -0.13, 1.36
+    max: 0.135, 0.115, 1.62
+    color: '#B49478'
+    label: head
+  - min: -0.15, -0.13, 1.55
+    max: 0.15, 0.14, 1.72
+    color: '#5B6849'
+    label: helmet crown
+  - min: -0.175, -0.18, 1.535
+    max: 0.175, 0.155, 1.575
+    color: '#3F4C36'
+    label: helmet brim
+  - min: 0.147, -0.14, 1.59
+    max: 0.195, -0.04, 1.65
+    color: '#282D30'
+    label: helmet camera
+  - min: -0.36, -0.1, 1
+    max: -0.235, 0.13, 1.28
+    color: '#5E6951'
+    label: left upper arm
+  - min: 0.235, -0.1, 1
+    max: 0.36, 0.13, 1.28
+    color: '#5E6951'
+    label: right upper arm
+  - min: -0.365, -0.115, 0.82
+    max: -0.24, 0.095, 1.04
+    color: '#5E6951'
+    label: left forearm
+  - min: 0.24, -0.115, 0.82
+    max: 0.365, 0.095, 1.04
+    color: '#5E6951'
+    label: right forearm
+  - min: -0.355, -0.13, 0.73
+    max: -0.25, 0.08, 0.85
+    color: '#B49478'
+    label: left hand
+  - min: 0.25, -0.13, 0.73
+    max: 0.355, 0.08, 0.85
+    color: '#B49478'
+    label: right hand
+  - min: -0.37, -0.13, 1.2
+    max: -0.23, 0.17, 1.31
+    color: '#747B59'
+    label: left shoulder armor
+  - min: 0.23, -0.13, 1.2
+    max: 0.37, 0.17, 1.31
+    color: '#747B59'
+    label: right shoulder armor
+  - min: -0.18, -0.145, 0.4
+    max: -0.05, -0.107, 0.52
+    color: '#282D30'
+    label: left knee pad
+  - min: 0.05, -0.145, 0.4
+    max: 0.18, -0.107, 0.52
+    color: '#282D30'
+    label: right knee pad
+  - min: 0.1, -0.23, 0.71
+    max: 0.23, -0.148, 0.84
+    color: '#705139'
+    label: belt pouch
+  sourceDirections: 1
+- type: cmu3DModel
+  id: CMU3DPulseRifleDraft
+  label: M41A MK2 pulse rifle (draft)
+  sourcePrototypes:
+  - RMCWeaponRifleM54C
+  status: draft
+  description: CMU M41A MK2 exterior with source tan carry arch, dark grip, separate magazine, stock and underbarrel
+    housing. Barrel points +X. Held poses guard the exact default source composition; unmodeled attachment and magazine
+    states keep sprite fallback. Hidden construction remains a draft inference.
+  parts:
+  - min: -0.18, -0.085, 0.19
+    max: 0.23, 0.085, 0.35
+    color: '#795D49'
+    label: receiver
+  - min: -0.48, -0.065, 0.19
+    max: -0.16, 0.065, 0.3
+    color: '#484848'
+    label: stock
+  - min: -0.51, -0.07, 0.15
+    max: -0.46, 0.07, 0.32
+    color: '#292929'
+    label: stock butt
+  - min: 0.21, -0.037, 0.25
+    max: 0.52, 0.037, 0.3
+    color: '#423A2F'
+    label: barrel
+  - min: 0.49, -0.05, 0.24
+    max: 0.57, 0.05, 0.31
+    color: '#484848'
+    label: muzzle
+  - min: 0.13, -0.082, 0.18
+    max: 0.38, 0.082, 0.255
+    color: '#7C7C7C'
+    label: front shroud
+  - min: 0.12, -0.05, 0.12
+    max: 0.41, 0.05, 0.18
+    color: '#292929'
+    label: grenade launcher
+  - min: -0.11, -0.054, 0.05
+    max: -0.035, 0.054, 0.21
+    color: '#2C2C2C'
+    label: grip
+  - min: 0.015, -0.065, 0
+    max: 0.095, 0.065, 0.2
+    color: '#795D49'
+    label: magazine
+  - min: -0.05, -0.095, 0.26
+    max: 0.07, -0.084, 0.31
+    color: '#221D19'
+    label: ammo counter
+  - min: 0.06, 0.084, 0.27
+    max: 0.15, 0.098, 0.32
+    color: '#1B1B1B'
+    label: ejection port
+  - label: tan carry arch rear
+    min: -0.263, -0.041, 0.32
+    max: -0.177, 0.041, 0.455
+    color: '#B59576'
+    pitch: -30
+  - label: tan carry arch front
+    min: 0.063, -0.041, 0.32
+    max: 0.149, 0.041, 0.455
+    color: '#B59576'
+    pitch: 30
+  - label: tan carry arch bridge
+    min: -0.215, -0.041, 0.407
+    max: 0.105, 0.041, 0.472
+    color: '#B59576'
+  - label: receiver rear face seam
+    min: -0.175, 0.085, 0.206
+    max: -0.16, 0.088, 0.332
+    color: '#423A2F'
+  - label: receiver front face seam
+    min: -0.175, -0.088, 0.206
+    max: -0.16, -0.085, 0.332
+    color: '#423A2F'
+  - label: underbarrel muzzle recess
+    min: 0.410, -0.033, 0.132
+    max: 0.413, 0.033, 0.168
+    color: '#0F1013'
+  - label: barrel muzzle recess
+    min: 0.570, -0.033, 0.253
+    max: 0.573, 0.033, 0.298
+    color: '#0F1013'
+  - label: trigger guard base
+    min: -0.06, -0.038, 0.086
+    max: 0.023, 0.038, 0.11
+    color: '#1B1B1B'
+  - label: trigger guard front
+    min: 0.003, -0.038, 0.09
+    max: 0.023, 0.038, 0.198
+    color: '#1B1B1B'
+  - label: trigger
+    min: -0.035, -0.015, 0.13
+    max: -0.02, 0.015, 0.195
+    color: '#292929'
+  sourceDirections: 1
+  referencePrototype: RMCWeaponRifleM54C
+  referenceRsi: /Textures/CMU14/Weapons/Guns/USCM/m41mk2.rsi
+  referenceState: base

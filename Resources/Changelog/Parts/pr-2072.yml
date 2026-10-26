@@ -1,0 +1,13 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed incorrect and repeated combat hits, including lunges affecting targets
+    they missed.
+  type: Fix
+- message: Fixed inconsistent action cooldowns and projectile behavior during prediction.
+  type: Fix
+- message: Fixed delayed turret aiming and riders losing predicted vehicle movement
+    after synchronization.
+  type: Fix
+time: '2026-10-03T15:13:54.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2072

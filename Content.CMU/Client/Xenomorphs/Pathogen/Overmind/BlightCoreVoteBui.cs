@@ -37,6 +37,6 @@ public sealed class BlightCoreVoteBui : BoundUserInterface
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        _window?.Dispose();
+        _window?.Release();
     }
 }

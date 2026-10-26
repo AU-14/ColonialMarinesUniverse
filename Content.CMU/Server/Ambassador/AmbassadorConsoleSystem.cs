@@ -19,6 +19,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 using ThirdPartySystem = Content.Server.CMU14.Ops.ThirdParty.ThirdPartySystem;
 
 namespace Content.Server.CMU14.Ambassador;
@@ -38,6 +39,12 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     [Dependency] private ColonyEconomy.AdminConsoleSystem _adminConsole = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+
+    private static readonly TimeSpan UiRefreshInterval = TimeSpan.FromSeconds(1);
+
+    private readonly HashSet<string> _tickedFactions = new();
+    private TimeSpan _nextUiRefresh;
 
     private static readonly SoundSpecifier MarineAnnouncementSound =
         new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
@@ -76,30 +83,15 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     // ---- Faction syncing helpers ----
 
     /// <summary>
-    /// Gets all ambassador consoles that share the same faction name.
-    /// </summary>
-    private List<(EntityUid Uid, AmbassadorConsoleComponent Comp)> GetFactionConsoles(string factionName)
-    {
-        var result = new List<(EntityUid, AmbassadorConsoleComponent)>();
-        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (comp.FactionName == factionName)
-                result.Add((uid, comp));
-        }
-        return result;
-    }
-
-    /// <summary>
     /// Syncs shared state from source to all other consoles with the same faction.
     /// Budget, active statuses, and timers are synced.
     /// </summary>
     private void SyncFaction(AmbassadorConsoleComponent source)
     {
-        var consoles = GetFactionConsoles(source.FactionName);
-        foreach (var (uid, comp) in consoles)
+        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
+        while (query.MoveNext(out _, out var comp))
         {
-            if (comp == source)
+            if (comp == source || comp.FactionName != source.FactionName)
                 continue;
 
             comp.Budget = source.Budget;
@@ -113,7 +105,10 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
             comp.SignalBoostTimer = source.SignalBoostTimer;
             comp.SignalJamActive = source.SignalJamActive;
             comp.SignalJamTimer = source.SignalJamTimer;
-            comp.CalledParties = new HashSet<string>(source.CalledParties);
+            // this runs every tick, don't reallocate the set unless it actually changed
+            if (!comp.CalledParties.SetEquals(source.CalledParties))
+                comp.CalledParties = new HashSet<string>(source.CalledParties);
+            comp.NextCallInAt = source.NextCallInAt;
         }
     }
 
@@ -123,10 +118,16 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     private void UpdateAllFactionUi(AmbassadorConsoleComponent source)
     {
         SyncFaction(source);
-        var consoles = GetFactionConsoles(source.FactionName);
-        foreach (var (uid, comp) in consoles)
+        RefreshFactionUi(source);
+    }
+
+    private void RefreshFactionUi(AmbassadorConsoleComponent source)
+    {
+        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
+        while (query.MoveNext(out var uid, out var comp))
         {
-            UpdateUiState(uid, comp);
+            if (comp.FactionName == source.FactionName)
+                UpdateUiState(uid, comp);
         }
     }
 
@@ -136,18 +137,24 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        // the economy panel reads other consoles (taxes, tariffs), so open UIs still get a slow refresh
+        var refreshUi = _timing.CurTime >= _nextUiRefresh;
+        if (refreshUi)
+            _nextUiRefresh = _timing.CurTime + UiRefreshInterval;
+
         // Only tick one console per faction to avoid double-charging.
-        var tickedFactions = new HashSet<string>();
+        _tickedFactions.Clear();
 
         var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (!tickedFactions.Add(comp.FactionName))
-            {
-                // Already ticked this faction — just update UI from synced state
-                UpdateUiState(uid, comp);
+            // the faction's first console refreshes every console in the faction below
+            if (!_tickedFactions.Add(comp.FactionName))
                 continue;
-            }
+
+            var oldBudget = comp.Budget;
+            var oldEffects = (comp.EmbargoActive, comp.TradePactActive, comp.CommsJamActive,
+                comp.SignalBoostActive, comp.SignalJamActive);
 
             comp.ReplenishTimer += frameTime;
             if (comp.ReplenishTimer >= comp.ReplenishInterval)
@@ -237,7 +244,14 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
 
             UpdateSignalModifier();
             SyncFaction(comp);
-            UpdateAllFactionUi(comp);
+
+            // used to rebuild and resend the BUI state every tick, which dirtied the UI
+            // component and shipped it to everyone near the console 30 times a second
+            var changed = comp.Budget != oldBudget ||
+                          oldEffects != (comp.EmbargoActive, comp.TradePactActive, comp.CommsJamActive,
+                              comp.SignalBoostActive, comp.SignalJamActive);
+            if (changed || refreshUi)
+                RefreshFactionUi(comp);
         }
     }
 
@@ -329,6 +343,16 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
 
     private void UpdateUiState(EntityUid uid, AmbassadorConsoleComponent comp)
     {
+        // nobody's looking, OnUiOpened rebuilds it on open anyway
+        if (_ui.IsUiOpen(uid, AmbassadorConsoleUi.Key))
+            SetConsoleState(uid, comp);
+
+        if (_ui.IsUiOpen(uid, AmbassadorThirdPartyUi.Key))
+            SetThirdPartyState(uid, comp);
+    }
+
+    private void SetConsoleState(EntityUid uid, AmbassadorConsoleComponent comp)
+    {
         var econ = _adminConsole.BuildEconomyStatus();
         // Use cached radar results (blank until scanned)
         var state = new AmbassadorConsoleBuiState(
@@ -344,7 +368,10 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
             comp.BroadcastCost,
             comp.RadarScanCost);
         _ui.SetUiState(uid, AmbassadorConsoleUi.Key, state);
+    }
 
+    private void SetThirdPartyState(EntityUid uid, AmbassadorConsoleComponent comp)
+    {
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)
         {
@@ -354,7 +381,11 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
                 thirdParties[id] = (displayName, cost);
             }
         }
-        var thirdPartyState = new AmbassadorThirdPartyBuiState(comp.Budget, thirdParties, comp.CalledParties);
+        var thirdPartyState = new AmbassadorThirdPartyBuiState(comp.Budget, thirdParties, comp.CalledParties)
+        {
+            CallsLeft = Math.Max(0, comp.MaxCallIns - comp.CalledParties.Count),
+            NextCallInAt = comp.NextCallInAt,
+        };
         _ui.SetUiState(uid, AmbassadorThirdPartyUi.Key, thirdPartyState);
     }
 
@@ -389,17 +420,16 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     {
         if (!comp.CallableParties.TryGetValue(msg.ThirdPartyId, out var cost)) return;
         if (comp.CalledParties.Contains(msg.ThirdPartyId)) return;
+        if (comp.CalledParties.Count >= comp.MaxCallIns) return;
+        if (_timing.CurTime < comp.NextCallInAt) return;
         if (comp.Budget < cost) return;
         if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
-        if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
-        {
-            _popup.PopupEntity(Loc.GetString("ambassador-console-support-unavailable"), uid, msg.Actor);
-            return;
-        }
+        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
 
         comp.Budget -= cost;
         comp.CalledParties.Add(msg.ThirdPartyId);
+        comp.NextCallInAt = _timing.CurTime + comp.CallInCooldown;
         UpdateAllFactionUi(comp);
     }
 

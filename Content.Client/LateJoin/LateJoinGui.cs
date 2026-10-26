@@ -426,6 +426,7 @@ namespace Content.Client.LateJoin
             }
         }
 
+        [Obsolete("Retained for CMUControlLifetime.Release cleanup.")]
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);

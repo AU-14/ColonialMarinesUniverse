@@ -4,6 +4,7 @@
   id: AU14WeaponRifleKramerAR
   description: Alternately referred to as the Kramer or KAR, it is an automatic assault rifle manufactured by Kramer Metallarbeiten GmbH and is used by many military forces across the United Americas.
   components:
+  - type: CMUAmmoCounter
   - type: Sprite
     sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramerrifle/kramericon.rsi
     layers:
@@ -87,11 +88,12 @@
           - RMCAttachmentS42xTelescopicMiniscope
           - RMCAttachmentB8SmartScope
       rmc-aslot-stock:
-        startingAttachable: CMULACNAttachmentKramerStock
         whitelist:
           tags:
           - CMULACNAttachmentKramerStock
+          - CMULACNAttachmentKarbineStock
       rmc-aslot-underbarrel:
+        startingAttachable: CMULACNAttachmentUnderbarrelGrenadeLauncher
         whitelist:
           tags:
           - RMCAttachmentAngledGrip
@@ -103,10 +105,11 @@
           - RMCAttachmentU7UnderbarrelShotgun
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-rail: -0.0625, -0.0625
+      cmu-aslot-sling: 0, 0.1875
       rmc-aslot-barrel: 0.755, 0.031
-      rmc-aslot-stock: -0.44, 0
-      rmc-aslot-underbarrel: -1.40625, -0.84375
+      rmc-aslot-rail: 0, 0.1875
+      rmc-aslot-stock: -0.6275, 0
+      rmc-aslot-underbarrel: 0.15625, -0.40625
 
 - type: entity
   parent: AU14WeaponRifleKramerAR
@@ -247,9 +250,9 @@
           - RMCAttachmentS42xTelescopicMiniscope
           - RMCAttachmentB8SmartScope
       rmc-aslot-stock:
-        startingAttachable: CMULACNAttachmentKarbineStock
         whitelist:
           tags:
+          - CMULACNAttachmentKramerStock
           - CMULACNAttachmentKarbineStock
       rmc-aslot-underbarrel:
         whitelist:
@@ -257,14 +260,14 @@
           - RMCAttachmentAngledGrip
           - RMCAttachmentVerticalGrip
           - RMCAttachmentLaserSight
-          - RMCAttachmentU1GrenadeLauncher
           - RMCAttachmentU7UnderbarrelShotgun
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-rail: -0.0625, -0.0625
+      cmu-aslot-sling: 0, 0.1875
       rmc-aslot-barrel: 0.755, 0.031
-      rmc-aslot-stock: -0.44, 0
-      rmc-aslot-underbarrel: -1.40625, -0.84375
+      rmc-aslot-rail: 0, 0.1875
+      rmc-aslot-stock: -0.6275, 0
+      rmc-aslot-underbarrel: 0.15625, -0.40625
 
 - type: entity
   parent: AU14WeaponRifleKramerAR
@@ -314,7 +317,7 @@
   parent: AU14WeaponRifleKramerAR
   id: CMUWeaponRifleKramerEnforcer
   name: Kramer enforcer rifle
-  description: A law enforcement model of the Kramer assault rifle limited to semi-automatic and burst fire, issued to colonial police and security forces. Takes standard Kramer magazines and has a built in 2x sight.
+  description: A law enforcement model of the Kramer assault rifle reworked into a semi-automatic designated marksman rifle, issued to colonial police and security forces. Takes standard Kramer magazines and has a built in 2x sight.
   components:
   - type: Sprite
     sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramericon.rsi
@@ -328,29 +331,26 @@
   - type: Clothing
     sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramer32x32.rsi
   - type: Gun
-    selectedMode: Burst
+    shotsPerBurst: 0
+    selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    - Burst
     soundGunshot:
       collection: CMM54CShoot
-    shotsPerBurst: 3
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
-    - Burst
-    recoilUnwielded: 4
-    scatterWielded: 5
-    scatterUnwielded: 20
-    baseFireRate: 4
-    burstScatterMult: 1
-    modifiers:
-      Burst:
-        fireDelay: 0.1665
-        maxScatterModifier: 10
-        useBurstScatterMult: true
-        unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 6
+    recoilUnwielded: 2
+    scatterWielded: 3
+    scatterUnwielded: 16
+    baseFireRate: 2.86
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.3
+    accuracyMultiplierUnwielded: 0.6
+  - type: RMCWeaponDamageFalloff
+    falloffMultiplier: 0
+  - type: GunDamageModifier
+    multiplier: 1.4
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:
@@ -363,6 +363,70 @@
         startingAttachable: CMULACNAttachmentKramer2xScope
         whitelist:
           tags:
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentLaserSight
+  # The built-in 2x sight is part of the rifle's sprite, so the rail has no offset and its scope isn't drawn.
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.97, 0.031
+      rmc-aslot-underbarrel: 0.56, -0.31
+
+- type: entity
+  parent: AU14WeaponRifleKramerAR
+  id: CMUWeaponRifleKramerEnforcerNoScope
+  name: Kramer enforcer rifle
+  description: A law enforcement model of the Kramer assault rifle reworked into a semi-automatic designated marksman rifle, issued to colonial police and security forces. Takes standard Kramer magazines.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramericon.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramer32x32.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramer32x32.rsi
+  - type: Gun
+    shotsPerBurst: 0
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      collection: CMM54CShoot
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilUnwielded: 2
+    scatterWielded: 3
+    scatterUnwielded: 16
+    baseFireRate: 2.86
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.3
+    accuracyMultiplierUnwielded: 0.6
+  - type: RMCWeaponDamageFalloff
+    falloffMultiplier: 0
+  - type: GunDamageModifier
+    multiplier: 1.4
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
           - RMCAttachmentS42xTelescopicMiniscope
       rmc-aslot-underbarrel:
         whitelist:
@@ -384,3 +448,64 @@
 
 - type: Tag
   id: AU14WeaponRifleKramerMagazineAP
+
+# Hollow point 10x24mm for the Kramer family: hits hard, but does nothing against armor.
+- type: entity
+  parent: AU14WeaponRifleKramerMagazineStandard
+  id: CMUWeaponRifleKramerMagazineHP
+  name: "Kramer HP magazine (10x24mm)"
+  suffix: HP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14WeaponRifleKramerMagazineStandard # fits every Kramer that takes standard magazines
+    - CMUWeaponRifleKramerMagazineHP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUCartridgeRifle10x24mmHP
+    proto: CMUCartridgeRifle10x24mmHP
+    capacity: 40
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Ammo/Magazines/kramermag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#B5651D"
+  - type: RefillableByBulletBox
+    bulletType: null
+
+- type: entity
+  parent: CMCartridgeRifle10x24mm
+  id: CMUCartridgeRifle10x24mmHP
+  name: HP cartridge (10x24mm)
+  description: A hollow point 10x24mm cartridge. Fits in 10x24mm HP magazines.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgeRifle10x24mmHP
+  - type: CartridgeAmmo
+    proto: CMUBulletRifle10x24mmHP
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: CMUBulletRifle10x24mmHP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 55
+  - type: CMArmorPiercing
+    amount: 0
+
+- type: Tag
+  id: CMUWeaponRifleKramerMagazineHP
+
+- type: Tag
+  id: CMUCartridgeRifle10x24mmHP

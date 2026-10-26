@@ -1,0 +1,11 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Free Company Raiders are now neutral ex-MARSOC pirates with worn-out gear,
+    out to loot the colony.
+  type: Tweak
+- message: Raiders no longer use the UA SOF radio channel; they have their own private
+    net.
+  type: Fix
+time: '2026-10-07T22:30:24.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2095

@@ -1,0 +1,21 @@
+# Inferred presentation heights; regenerate with Tools/three_d/author_elevation.py.
+- type: cmu3DElevation
+  id: CMU3DStableGarrisonRedux2
+  regions:
+  - bounds: 178, -153, 191, -143
+    height: 0.39
+  - bounds: 275, -103, 277, -102
+    height: -0.39
+  - bounds: 274, -102, 277, -100
+    height: -0.39
+  - bounds: 278, -103, 281, -100
+    height: -0.39
+  - bounds: 199, -101, 214, -96
+    height: 0.39
+  - bounds: 218, -101, 226, -96
+    height: 0.39
+  - bounds: 173, -70, 190, -64
+    height: 0.39
+  - bounds: 234, -56, 239, -49
+    height: 0.39
+  ramps: []

@@ -4,7 +4,7 @@
   id: AU14JobLEOLeaderBase
   name: au14-job-name-leoleader
   description: au14-job-description-leoleader
-  setPreference: true
+  setPreference: false # picked as the CMB Marshal; maps without the CMB turn that into their own leader
   playTimeTracker: AU14JobCivilianCMBMarshal
   icon: "RMCJobIconBureauMarshal"
   basePlaytimeTracker: true
@@ -27,7 +27,15 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   roundComponents:
   - type: MarineOrders
 

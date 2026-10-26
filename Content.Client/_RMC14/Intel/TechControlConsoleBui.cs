@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Client._RMC14.UserInterface;
+using Content.Client.CMU14.Intel; // cmu edit
 using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
@@ -18,6 +19,7 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
     [Dependency] private IEntityManager _entities = default!;
 
     private TechControlConsoleWindow? _window;
+    private CMUTechConsoleWindow? _cmuWindow; // cmu edit
     private TechControlConsoleOptionWindow? _optionWindow;
 
     private readonly SharedGameTicker _ticker;
@@ -31,19 +33,43 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
     protected override void Open()
     {
         base.Open();
-        _window = this.CreateWindow<TechControlConsoleWindow>();
+        // cmu edit start: the CRT console replaces the icon grid and the option popup
+        // _window = this.CreateWindow<TechControlConsoleWindow>();
+        _cmuWindow = this.CreateWindow<CMUTechConsoleWindow>();
+        _cmuWindow.OnPurchase += (tier, optionIndex) =>
+        {
+            var msg = new TechPurchaseOptionBuiMsg(tier, optionIndex);
+            if (EntMan.TryGetComponent(Owner, out TechControlConsoleComponent? console))
+                msg.Team = console.Team;
+
+            SendPredictedMessage(msg);
+        };
+        // cmu edit end
         Refresh();
     }
 
     public void Refresh()
     {
+        // cmu edit start
+        if (_cmuWindow is { IsOpen: true })
+        {
+            if (EntMan.TryGetComponent(Owner, out TechControlConsoleComponent? cmuConsole))
+            {
+                _cmuWindow.UpdateState(cmuConsole.Tree.Options, cmuConsole.Tree.Tier, cmuConsole.Tree.Points,
+                    _ticker.RoundDuration());
+            }
+
+            return;
+        }
+        // cmu edit end
+
         if (_window is not { IsOpen: true })
             return;
 
         if (!EntMan.TryGetComponent(Owner, out TechControlConsoleComponent? console))
             return;
 
-        _window.Options.DisposeAllChildren();
+        _window.Options.ReleaseChildren();
         for (var i = console.Tree.Options.Count - 1; i >= 0; i--)
         {
             var header = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
@@ -90,7 +116,7 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
                 {
                     OpenOptionWindow(option, tier, optionIndex, console.Tree.Points, console.Tree.Tier);
                 };
-                optionButton.ToolTip = option.Name;
+                optionButton.ToolTip = LocOrRaw(option.Name); // CMU14
                 optionButton.TooltipDelay = 0.1f;
 
                 optionContainer.AddChild(new Control { HorizontalExpand = true });
@@ -101,6 +127,13 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
             }
         }
     }
+
+    // CMU14-start
+    private string LocOrRaw(string value)
+    {
+        return Loc.TryGetString(value, out var localized) ? localized : value;
+    }
+    // CMU14-end
 
     private void OpenOptionWindow(TechOption option, int tier, int optionIndex, FixedPoint2 points, int currentTier)
     {
@@ -113,13 +146,13 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
         _optionWindow = new TechControlConsoleOptionWindow();
         _optionWindow.OpenCentered();
         _optionWindow.OnClose += () => _optionWindow = null;
-        _optionWindow.Title = option.Name;
+        _optionWindow.Title = LocOrRaw(option.Name); // CMU14
         _optionWindow.CurrentPointsLabel.Text = Loc.GetString("rmc-ui-tech-points-value", ("value", points.Double().ToString("F1")));
-        _optionWindow.NameLabel.Text = option.Name;
-        _optionWindow.DescriptionLabel.Text = option.Description;
+        _optionWindow.NameLabel.Text = LocOrRaw(option.Name); // CMU14
+        _optionWindow.DescriptionLabel.Text = LocOrRaw(option.Description); // CMU14
         _optionWindow.CostLabel.Text = $"{option.CurrentCost}";
 
-        _optionWindow.Statistics.DisposeAllChildren();
+        _optionWindow.Statistics.ReleaseChildren();
         var hasStats = false;
 
         if (option.Repurchasable)
@@ -130,6 +163,19 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
                 Text = Loc.GetString("rmc-ui-tech-repurchasable")
             });
         }
+
+        // cmu edit start: capped repurchases
+        if (option.MaxPurchases > 0)
+        {
+            hasStats = true;
+            _optionWindow.Statistics.AddChild(new Label
+            {
+                Text = Loc.GetString("cmu-ui-tech-purchases-left",
+                    ("left", Math.Max(0, option.MaxPurchases - option.TimesPurchased)),
+                    ("max", option.MaxPurchases)),
+            });
+        }
+        // cmu edit end
 
         if (option.Increase != 0)
         {
@@ -145,6 +191,7 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
         var canPurchase = points >= option.CurrentCost &&
                           currentTier >= tier &&
                           (!option.Purchased || option.Repurchasable) &&
+                          (option.MaxPurchases <= 0 || option.TimesPurchased < option.MaxPurchases) && // cmu edit
                           option.TimeLock  < _ticker.RoundDuration();
 
         _optionWindow.PurchaseButton.Text = Loc.GetString("rmc-ui-tech-purchase-button");

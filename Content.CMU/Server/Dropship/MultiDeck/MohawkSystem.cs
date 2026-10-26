@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared.Access.Systems;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -51,6 +52,12 @@ public sealed partial class MohawkSystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinitions = default!;
+
+    private const string OpenRampTileId = "CMUFloorOpenAirSealed";
+
+    private Tile OpenRampTile => new(_tileDefinitions[OpenRampTileId].TileId);
 
     private static readonly SoundSpecifier RampSound = new SoundPathSpecifier("/Audio/CMU14/Dropships/Mohawk/omaha_ramp.ogg");
     private static readonly SoundSpecifier HatchSound = new SoundPathSpecifier("/Audio/CMU14/Dropships/Mohawk/nightcustard_motor_whirring.ogg");
@@ -147,6 +154,13 @@ public sealed partial class MohawkSystem : EntitySystem
         if (HasComp<XenoComponent>(args.User))
         {
             TrySabotage(control, args.User);
+            return;
+        }
+        // The side doors stay open to everyone; only the boarding ramp and ladder are crew-restricted.
+        if (control.Comp.Group is MohawkControlGroup.Ramp or MohawkControlGroup.Hatch &&
+            !_accessReader.IsAllowed(args.User, control))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-mohawk-controls-no-access"), control, args.User);
             return;
         }
         if (mechanisms.BrokenControls.Contains(control.Comp.Group))
@@ -262,6 +276,9 @@ public sealed partial class MohawkSystem : EntitySystem
             {
                 var ladder = EnsureComp<CMUZLevelLadderComponent>(uid);
                 ladder.Offset = upper ? -1 : 1;
+                // Ladder activation chooses direction from these flags, not the offset's sign.
+                ladder.CanMoveUp = !upper;
+                ladder.CanMoveDown = upper;
                 ladder.StartSound = new SoundPathSpecifier("/Audio/CMU14/Dropships/Mohawk/mountain852_climbing_ladder_initial.ogg");
                 ladder.FinishSound = new SoundPathSpecifier("/Audio/CMU14/Dropships/Mohawk/mountain852_climbing_ladder_human_after.ogg");
                 Dirty(uid, ladder);
@@ -401,7 +418,9 @@ public sealed partial class MohawkSystem : EntitySystem
             }
             var indices = _map.TileIndicesFor(ship, cabin, coordinates);
             segment.ClosedTile ??= _map.GetTileRef(ship, cabin, indices).Tile;
-            _map.SetTile(ship, cabin, indices, deployed ? Tile.Empty : segment.ClosedTile.Value);
+            // The open ramp is sealed open air, not space: you still walk down through it, but the cabin keeps
+            // its air instead of venting through the hole.
+            _map.SetTile(ship, cabin, indices, deployed ? OpenRampTile : segment.ClosedTile.Value);
             _transform.SetCoordinates((marker, Transform(marker), MetaData(marker)), coordinates);
             segment.Deployed = deployed;
         }

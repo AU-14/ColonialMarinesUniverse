@@ -14,7 +14,10 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
     private const string DistressSignalPreset = "DistressSignal";
     private const string InsurgencyPreset = "Insurgency";
     private const string ColonyFallPreset = "ColonyFall";
+    private const string ForceOnForcePreset = "ForceOnForce";
     private const string NoPendingOutcomeSource = "NoPendingOutcome";
+    private const string AddGovforRule = "AddGovfor";
+    private const string AddOpforRule = "AddOpfor";
 
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private GameTicker _gameTicker = default!;
@@ -38,6 +41,12 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
     {
         switch (GetCurrentPreset())
         {
+            case CMURoundStatisticsPreset.ForceOnForce:
+                TrySetPendingOutcome(
+                    CMURoundStatisticsWinner.Opfor,
+                    CMURoundStatisticsOutcome.ForceOnForceOpforVictory,
+                    "KillAllGovforRule");
+                break;
             case CMURoundStatisticsPreset.Insurgency:
                 TrySetPendingOutcome(
                     CMURoundStatisticsWinner.Clf,
@@ -55,12 +64,15 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
 
     public void RecordKillAllClfRule()
     {
-        if (GetCurrentPreset() != CMURoundStatisticsPreset.Insurgency)
+        var preset = GetCurrentPreset();
+        if (preset is not (CMURoundStatisticsPreset.Insurgency or CMURoundStatisticsPreset.ForceOnForce))
             return;
 
         TrySetPendingOutcome(
             CMURoundStatisticsWinner.Govfor,
-            CMURoundStatisticsOutcome.InsurgencyGovforVictory,
+            preset == CMURoundStatisticsPreset.ForceOnForce
+                ? CMURoundStatisticsOutcome.ForceOnForceGovforVictory
+                : CMURoundStatisticsOutcome.InsurgencyGovforVictory,
             "KillAllClfRule");
     }
 
@@ -121,6 +133,22 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
         }
     }
 
+    public void RecordHiveCollapseRule()
+    {
+        switch (GetCurrentPreset())
+        {
+            case CMURoundStatisticsPreset.ColonyFall:
+                TrySetPendingOutcome(
+                    CMURoundStatisticsWinner.Colonists,
+                    CMURoundStatisticsOutcome.ColonyFallSurvivorVictory,
+                    "HiveCollapseRule");
+                break;
+            case CMURoundStatisticsPreset.DistressSignal:
+                TrySetPendingOutcome(GetDistressHiveCollapseOutcome());
+                break;
+        }
+    }
+
     public void RecordWithdrawal(string? faction, bool isStalemate)
     {
         switch (GetCurrentPreset())
@@ -133,6 +161,9 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
                 break;
             case CMURoundStatisticsPreset.ColonyFall:
                 TrySetPendingOutcome(GetColonyFallWithdrawalOutcome(faction, isStalemate));
+                break;
+            case CMURoundStatisticsPreset.ForceOnForce:
+                TrySetPendingOutcome(GetForceOnForceWithdrawalOutcome(faction, isStalemate));
                 break;
         }
     }
@@ -149,6 +180,9 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
                 break;
             case CMURoundStatisticsPreset.ColonyFall:
                 TrySetPendingOutcome(GetColonyFallObjectiveOutcome(faction));
+                break;
+            case CMURoundStatisticsPreset.ForceOnForce:
+                TrySetPendingOutcome(GetForceOnForceObjectiveOutcome(faction));
                 break;
         }
     }
@@ -190,6 +224,14 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             CMURoundStatisticsOutcome.Unknown,
             NoPendingOutcomeSource);
 
+        // Platoon IDs are only real when the preset added that side by gamerule, not planet fallbacks.
+        var govforPlatoon = _gameTicker.IsGameRuleActive(AddGovforRule)
+            ? _platoons.SelectedGovforPlatoon?.ID
+            : null;
+        var opforPlatoon = _gameTicker.IsGameRuleActive(AddOpforRule)
+            ? _platoons.SelectedOpforPlatoon?.ID
+            : null;
+
         var record = new CMURoundOutcomeRecord(
             ev.RoundId,
             preset.Value,
@@ -198,8 +240,8 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             outcome.Value.Source,
             _auRound.SelectedThreat?.ID,
             _auRound.GetSelectedPlanetId(),
-            _platoons.SelectedGovforPlatoon?.ID,
-            _platoons.SelectedOpforPlatoon?.ID,
+            govforPlatoon,
+            opforPlatoon,
             ev.PlayerCount,
             (int) ev.RoundDuration.TotalSeconds,
             DateTime.UtcNow);
@@ -274,6 +316,27 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             CMURoundStatisticsWinner.Govfor,
             CMURoundStatisticsOutcome.MarineMajorXenoWipe,
             source);
+    }
+
+    private PendingRoundOutcome GetDistressHiveCollapseOutcome()
+    {
+        var query = EntityQueryEnumerator<CMDistressSignalRuleComponent>();
+        while (query.MoveNext(out var distress))
+        {
+            if (!distress.Hijack)
+                continue;
+
+            // Post-hijack collapse: the xenos still made it off, so the hijack loss stands.
+            return new PendingRoundOutcome(
+                CMURoundStatisticsWinner.Xeno,
+                CMURoundStatisticsOutcome.XenoMinorHijackLoss,
+                "HiveCollapseRule");
+        }
+
+        return new PendingRoundOutcome(
+            CMURoundStatisticsWinner.Govfor,
+            CMURoundStatisticsOutcome.MarineMinorHiveCollapse,
+            "HiveCollapseRule");
     }
 
     private PendingRoundOutcome GetDistressWithdrawalOutcome(string? faction, bool isStalemate)
@@ -431,6 +494,26 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
         return $"AuObjective:{faction ?? "unknown"}";
     }
 
+    private static PendingRoundOutcome GetForceOnForceWithdrawalOutcome(string? faction, bool isStalemate)
+    {
+        var source = GetWithdrawalSource(faction, isStalemate);
+        if (isStalemate)
+            return new PendingRoundOutcome(CMURoundStatisticsWinner.Draw, CMURoundStatisticsOutcome.Stalemate, source);
+        if (IsGovforFaction(faction))
+            return new PendingRoundOutcome(CMURoundStatisticsWinner.Opfor, CMURoundStatisticsOutcome.ForceOnForceOpforVictory, source);
+        if (IsOpforFaction(faction))
+            return new PendingRoundOutcome(CMURoundStatisticsWinner.Govfor, CMURoundStatisticsOutcome.ForceOnForceGovforVictory, source);
+        return new PendingRoundOutcome(CMURoundStatisticsWinner.Unknown, CMURoundStatisticsOutcome.Unknown, source);
+    }
+
+    private static PendingRoundOutcome GetForceOnForceObjectiveOutcome(string? faction)
+    {
+        var winner = IsGovforFaction(faction) ? CMURoundStatisticsWinner.Govfor
+            : IsOpforFaction(faction) ? CMURoundStatisticsWinner.Opfor
+            : CMURoundStatisticsWinner.Unknown;
+        return new PendingRoundOutcome(winner, CMURoundStatisticsOutcome.ObjectiveVictory, GetObjectiveSource(faction));
+    }
+
     private static string GetWithdrawalSource(string? faction, bool isStalemate)
     {
         if (isStalemate)
@@ -473,6 +556,7 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             DistressSignalPreset => CMURoundStatisticsPreset.DistressSignal,
             InsurgencyPreset => CMURoundStatisticsPreset.Insurgency,
             ColonyFallPreset => CMURoundStatisticsPreset.ColonyFall,
+            ForceOnForcePreset => CMURoundStatisticsPreset.ForceOnForce,
             _ => null,
         };
     }

@@ -1,0 +1,574 @@
+[
+  {
+    "model": "CMU3DAU14TentBigFoldedSurgicalWorldCloud",
+    "prototype": "AU14TentBigFoldedSurgical",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Objects/Tents/folded_tents.rsi",
+        "state": "base_tent",
+        "color": "#FFFFFFFF",
+        "sha256": "e78911a032ee15b4a18b7effad0a2d41018c146202648968e39710db37b2cb58",
+        "license": "CC-BY-SA-4.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/commit/d5b119380250ea512db2a5319e36592c7f604250"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Objects/Tents/folded_tents.rsi",
+        "state": "med_base",
+        "color": "#FFFFFFFF",
+        "sha256": "c4c1b2562344379901a1eb96b3122460af0426c6e9952f303165a3e0cc54459b",
+        "license": "CC-BY-SA-4.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/commit/d5b119380250ea512db2a5319e36592c7f604250"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DCMBootsBlackFilledWorldCloud",
+    "prototype": "CMBootsBlackFilled",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Objects/Clothing/Shoes/Boots/black.rsi",
+        "state": "icon",
+        "color": "#FFFFFFFF",
+        "sha256": "ee14b4d27e655332ff111be462081890f19d4d4945a3c664d901b8b33bd49f35",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/mob/humans/onmob/feet.dmi, https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/obj/items/clothing/shoes.dmi, https://github.com/cmss13-devs/cmss13/blob/a15efa985114bf92a98cda275aa8319636ae5abe/icons/obj/items/clothing/shoes.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Objects/Clothing/Shoes/Boots/black.rsi",
+        "state": "filled",
+        "color": "#FFFFFFFF",
+        "sha256": "fea9a09c175fa5d27123414902e8b3222155e9debba4f03c6be549ad077d6ecc",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/mob/humans/onmob/feet.dmi, https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/obj/items/clothing/shoes.dmi, https://github.com/cmss13-devs/cmss13/blob/a15efa985114bf92a98cda275aa8319636ae5abe/icons/obj/items/clothing/shoes.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DCMBootsBrownFilledWorldCloud",
+    "prototype": "CMBootsBrownFilled",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Objects/Clothing/Shoes/Boots/brown.rsi",
+        "state": "icon",
+        "color": "#FFFFFFFF",
+        "sha256": "bb9395b2c4fa984a9a7e5ff358d2f1fccc7bfbdda696d2aedeb584cfe44def78",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/mob/humans/onmob/feet.dmi, https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/obj/items/clothing/shoes.dmi, https://github.com/cmss13-devs/cmss13/blob/a15efa985114bf92a98cda275aa8319636ae5abe/icons/obj/items/clothing/shoes.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Objects/Clothing/Shoes/Boots/brown.rsi",
+        "state": "filled",
+        "color": "#FFFFFFFF",
+        "sha256": "bfc4170e6bce7738c6dee870acae353232b795c7e84da09d370c952d0da08e31",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/mob/humans/onmob/feet.dmi, https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/obj/items/clothing/shoes.dmi, https://github.com/cmss13-devs/cmss13/blob/a15efa985114bf92a98cda275aa8319636ae5abe/icons/obj/items/clothing/shoes.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DRMCBootsVanBandolierWorldCloud",
+    "prototype": "RMCBootsVanBandolier",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Objects/Clothing/Shoes/Boots/jackboots.rsi",
+        "state": "icon",
+        "color": "#FFFFFFFF",
+        "sha256": "cf8c9fb9997e70f2899dac06526c046f1fd931b5d9cabbac24f3f98e1ab84075",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/36ab9674a311463bb056f7fab5fe3f3079305569/icons/obj/items/clothing/shoes.dmi, https://github.com/cmss13-devs/cmss13/blob/a15efa985114bf92a98cda275aa8319636ae5abe/icons/mob/humans/onmob/feet.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Objects/Clothing/Shoes/Boots/jackboots.rsi",
+        "state": "filled",
+        "color": "#FFFFFFFF",
+        "sha256": "f032188d80b33f163d15b337ee1ecd2032d1ee1552a8f11f7148542cfe0e96f0",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/36ab9674a311463bb056f7fab5fe3f3079305569/icons/obj/items/clothing/shoes.dmi, https://github.com/cmss13-devs/cmss13/blob/a15efa985114bf92a98cda275aa8319636ae5abe/icons/mob/humans/onmob/feet.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DStandingASRSTerminal",
+    "prototype": "CMASRSConsole",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/asrs_console.rsi",
+        "state": "off",
+        "color": "#FFFFFFFF",
+        "sha256": "bd772815de24919385a4768963e9735b5a6d6d52e0a05486bf2d0834037ece1a",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/d5b119380250ea512db2a5319e36592c7f604250/icons/obj/structures/machinery/computer.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/asrs_console.rsi",
+        "state": "on",
+        "color": "#FFFFFFFF",
+        "sha256": "d83f528bc9f9657a0dc004fe233d3880a0c1d4eecf27c55f83747d0c560eb6c0",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/d5b119380250ea512db2a5319e36592c7f604250/icons/obj/structures/machinery/computer.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DCombatBootsCloud",
+    "prototype": "RMCShoesCombat",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Objects/Clothing/Shoes/Boots/swat.rsi",
+        "state": "icon",
+        "color": "#FFFFFFFF",
+        "sha256": "890aa9cc967dff7c9520aa8621a9a5a10002d48da1083eeabf07a6506f0755ce",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/mob/humans/onmob/feet.dmi, https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/obj/items/clothing/shoes.dmi, https://github.com/cmss13-devs/cmss13/blob/a15efa985114bf92a98cda275aa8319636ae5abe/icons/obj/items/clothing/shoes.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Objects/Clothing/Shoes/Boots/swat.rsi",
+        "state": "filled",
+        "color": "#FFFFFFFF",
+        "sha256": "7f55ac1aa926d61c88f56427bb5e7b051e52d9545fec3a8e2b1a52f001e1f1ba",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/mob/humans/onmob/feet.dmi, https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/obj/items/clothing/shoes.dmi, https://github.com/cmss13-devs/cmss13/blob/a15efa985114bf92a98cda275aa8319636ae5abe/icons/obj/items/clothing/shoes.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DBlackShoesCloud",
+    "prototype": "ClothingShoesColorBlack",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/Clothing/Shoes/color.rsi",
+        "state": "icon",
+        "color": "#3f3f3f",
+        "sha256": "ee693a2d492769e1030f62792e789b54f70f05eb43e809f3871417ce9bfabc04",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/c838ba21dae97db345e0113f99596decd1d66039 and modified by Flareguy for Space Station 14"
+      },
+      {
+        "rsi": "/Textures/Clothing/Shoes/color.rsi",
+        "state": "soles-icon",
+        "color": "#FFFFFFFF",
+        "sha256": "45ceffb0ffe9e1dc4312a44a1b5685d50364ab017efbc69a14876d4fb634a7ab",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/c838ba21dae97db345e0113f99596decd1d66039 and modified by Flareguy for Space Station 14"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DFieldCMEntrenchingToolCloud",
+    "prototype": "CMEntrenchingTool",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Objects/Tools/etool.rsi",
+        "state": "etool",
+        "color": "#FFFFFFFF",
+        "sha256": "64ecdbc96cb87890efbeca709261454267cc61fe9235ad5cfe2ffdb2ba877bae",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/32cb5892413243cc74bb2d11df8e3085f8ef1164/icons/obj/items/marine-items.dmi, https://github.com/cmss13-devs/cmss13/blob/8d3eabd2575fcb859ab4320a298cdbc185910f6f/icons/mob/humans/onmob/inhands/equipment/tools_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/8d3eabd2575fcb859ab4320a298cdbc185910f6f/icons/mob/humans/onmob/inhands/equipment/tools_righthand.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Objects/Tools/etool.rsi",
+        "state": "etool_c",
+        "color": "#FFFFFFFF",
+        "sha256": "d813f1b33a08cd910317a992d91b84f70ba78a1e10c1afa4232bcad1187b715d",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/32cb5892413243cc74bb2d11df8e3085f8ef1164/icons/obj/items/marine-items.dmi, https://github.com/cmss13-devs/cmss13/blob/8d3eabd2575fcb859ab4320a298cdbc185910f6f/icons/mob/humans/onmob/inhands/equipment/tools_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/8d3eabd2575fcb859ab4320a298cdbc185910f6f/icons/mob/humans/onmob/inhands/equipment/tools_righthand.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DFoodRiceEggCloud",
+    "prototype": "FoodRiceEgg",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/Objects/Consumable/Food/bowl.rsi",
+        "state": "bowl",
+        "color": "#FFFFFFFF",
+        "sha256": "44a806ceaeda8e5b27bfc6bdd71e7dc6f1341a07b9db0754c3ca7ed857ebd23f",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Mango Rice sprite by SurfinNinja1, Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa. escargot from tgstation at https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955. Fills created by potato1234_x"
+      },
+      {
+        "rsi": "/Textures/Objects/Consumable/Food/bowl.rsi",
+        "state": "rice-egg",
+        "color": "#FFFFFFFF",
+        "sha256": "8f3cda33dce9b2f2db66a62a5564fa0d1165e3de686cbc587ccbc1477fbef3d4",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Mango Rice sprite by SurfinNinja1, Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa. escargot from tgstation at https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955. Fills created by potato1234_x"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DFoodRicePuddingCloud",
+    "prototype": "FoodRicePudding",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/Objects/Consumable/Food/bowl.rsi",
+        "state": "bowl",
+        "color": "#FFFFFFFF",
+        "sha256": "44a806ceaeda8e5b27bfc6bdd71e7dc6f1341a07b9db0754c3ca7ed857ebd23f",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Mango Rice sprite by SurfinNinja1, Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa. escargot from tgstation at https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955. Fills created by potato1234_x"
+      },
+      {
+        "rsi": "/Textures/Objects/Consumable/Food/bowl.rsi",
+        "state": "rice-pudding",
+        "color": "#FFFFFFFF",
+        "sha256": "d2b6043ad0e4a2fa4982a399d5c9db066c68f7cb6875b621c936f560a6eb318d",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Mango Rice sprite by SurfinNinja1, Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa. escargot from tgstation at https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955. Fills created by potato1234_x"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DFoodSaladKimchiCloud",
+    "prototype": "FoodSaladKimchi",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/Objects/Consumable/Food/bowl.rsi",
+        "state": "bowl",
+        "color": "#FFFFFFFF",
+        "sha256": "44a806ceaeda8e5b27bfc6bdd71e7dc6f1341a07b9db0754c3ca7ed857ebd23f",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Mango Rice sprite by SurfinNinja1, Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa. escargot from tgstation at https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955. Fills created by potato1234_x"
+      },
+      {
+        "rsi": "/Textures/Objects/Consumable/Food/bowl.rsi",
+        "state": "kimchi",
+        "color": "#FFFFFFFF",
+        "sha256": "2213a586c9a69a2d7433d9f3cb6774db0157862281a3bd38ac845badd05fc39f",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Mango Rice sprite by SurfinNinja1, Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa. escargot from tgstation at https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955. Fills created by potato1234_x"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DFoodSoupBisqueCloud",
+    "prototype": "FoodSoupBisque",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/Objects/Consumable/Food/bowl.rsi",
+        "state": "bowl",
+        "color": "#FFFFFFFF",
+        "sha256": "44a806ceaeda8e5b27bfc6bdd71e7dc6f1341a07b9db0754c3ca7ed857ebd23f",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Mango Rice sprite by SurfinNinja1, Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa. escargot from tgstation at https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955. Fills created by potato1234_x"
+      },
+      {
+        "rsi": "/Textures/Objects/Consumable/Food/bowl.rsi",
+        "state": "bisque",
+        "color": "#FFFFFFFF",
+        "sha256": "4bc6c35579f83784af4b873790a481224fc3093eea119a178f598e23fde04778",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Mango Rice sprite by SurfinNinja1, Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa. escargot from tgstation at https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955. Fills created by potato1234_x"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DFoodSoupChiliHotCloud",
+    "prototype": "FoodSoupChiliHot",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/Objects/Consumable/Food/bowl.rsi",
+        "state": "bowl",
+        "color": "#FFFFFFFF",
+        "sha256": "44a806ceaeda8e5b27bfc6bdd71e7dc6f1341a07b9db0754c3ca7ed857ebd23f",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Mango Rice sprite by SurfinNinja1, Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa. escargot from tgstation at https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955. Fills created by potato1234_x"
+      },
+      {
+        "rsi": "/Textures/Objects/Consumable/Food/bowl.rsi",
+        "state": "chili-hot",
+        "color": "#FFFFFFFF",
+        "sha256": "f84b3f362076f0b92631b78bf6fb53dabf78ba47f978da654c0ecc0034c3e6b5",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Mango Rice sprite by SurfinNinja1, Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa. escargot from tgstation at https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955. Fills created by potato1234_x"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DVehicleSupplyConsoleCloud",
+    "prototype": "VehicleSupplyConsole",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/asrs_console.rsi",
+        "state": "off",
+        "color": "#FFFFFFFF",
+        "sha256": "bd772815de24919385a4768963e9735b5a6d6d52e0a05486bf2d0834037ece1a",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/d5b119380250ea512db2a5319e36592c7f604250/icons/obj/structures/machinery/computer.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/asrs_console.rsi",
+        "state": "on",
+        "color": "#FFFFFFFF",
+        "sha256": "d83f528bc9f9657a0dc004fe233d3880a0c1d4eecf27c55f83747d0c560eb6c0",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/d5b119380250ea512db2a5319e36592c7f604250/icons/obj/structures/machinery/computer.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DSensorComputer",
+    "prototype": "RMCBlackSensorComputer",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Structures/hybrisa_computer_props.rsi",
+        "state": "blacksensor_comp1_off",
+        "color": "#FFFFFFFF",
+        "sha256": "409648e1f548d55bd45ca9136f4bbb2c72096df3546e993cd24eb36cb79a1d16",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/structures/props/hybrisa/computers.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Structures/hybrisa_computer_props.rsi",
+        "state": "blacksensor_comp1",
+        "color": "#FFFFFFFF",
+        "sha256": "7aa3f0e7ac1253dd8eb2e624f45d4d5b48057afe6ca23f91774c992ba7dadd81",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/structures/props/hybrisa/computers.dmi"
+      }
+    ],
+    "comparisonPose": "powered, first source frame; comparison only, not an animation replacement"
+  },
+  {
+    "model": "CMU3DBookHowToCookForFortySpacemanPrintedSmallCloud",
+    "prototype": "BookHowToCookForFortySpaceman",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/Objects/Misc/books.rsi",
+        "state": "paper",
+        "color": "#FFFFFFFF",
+        "sha256": "e2ca7996fa70dce384e5762c9775bfd8236bed2b030cc8247483279dccc19be3",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Base sprite taken at: https://github.com/tgstation/tgstation/commit/37fb6bc6dd20005775dde8d886f48f7722606b77 , splitted on layers by TheShuEd (github)"
+      },
+      {
+        "rsi": "/Textures/Objects/Misc/books.rsi",
+        "state": "cover_base",
+        "color": "#e22541",
+        "sha256": "46ef3d15c430fb943e8062ef5e04cb9ac25848daec6d26f5f2aba68444044bda",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Base sprite taken at: https://github.com/tgstation/tgstation/commit/37fb6bc6dd20005775dde8d886f48f7722606b77 , splitted on layers by TheShuEd (github)"
+      },
+      {
+        "rsi": "/Textures/Objects/Misc/books.rsi",
+        "state": "decor_wingette",
+        "color": "#FFFFFFFF",
+        "sha256": "39822824be65d7bc608eea7978cd5981ccb73f1e4848064994f62a2ae77472d4",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Base sprite taken at: https://github.com/tgstation/tgstation/commit/37fb6bc6dd20005775dde8d886f48f7722606b77 , splitted on layers by TheShuEd (github)"
+      },
+      {
+        "rsi": "/Textures/Objects/Misc/books.rsi",
+        "state": "icon_apple",
+        "color": "#FFFFFFFF",
+        "sha256": "d09d0fc8934ccec8e2071b87cb08c8d0d7b242a77a1f55bf000d269323f9372b",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Base sprite taken at: https://github.com/tgstation/tgstation/commit/37fb6bc6dd20005775dde8d886f48f7722606b77 , splitted on layers by TheShuEd (github)"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DFullBloodPack",
+    "prototype": "CMBloodPackFull",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Objects/Medical/blood_pack.rsi",
+        "state": "bloodpack",
+        "color": "#FFFFFFFF",
+        "sha256": "16d02d94d32b7f1ff30e33f4e95d5ba2ad9ab6bdfc449b3b8b47fddfd04511f5",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/1d28964d37f9b95773580cca3471a2a4f5c03eb0/icons/obj/items/bloodpack.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Objects/Medical/blood_pack.rsi",
+        "state": "blank",
+        "color": "#FFFFFFFF",
+        "sha256": "3f2acd1419eb3e8df546fc0cd9d3f1788604a936aeba1abdb18940dd0c2ba483",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/1d28964d37f9b95773580cca3471a2a4f5c03eb0/icons/obj/items/bloodpack.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DIVStand",
+    "prototype": "CMIV",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/Medical/iv_drip.rsi",
+        "state": "unhooked",
+        "color": "#FFFFFFFF",
+        "sha256": "c5d7590272a063d03f6af23ff9b16ee39d1f4e34c2b54afb94079cfacda24060",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/f7b9367cb5c083a8c052a40dece9417031e28ffe/icons/obj/structures/machinery/iv_drip.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/Medical/iv_drip.rsi",
+        "state": "reagent0",
+        "color": "#FFFFFFFF",
+        "sha256": "39b2abcfe5ea2c94881f9a51daa67c5a809e65fdb8b899e9425742d928cc8021",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/f7b9367cb5c083a8c052a40dece9417031e28ffe/icons/obj/structures/machinery/iv_drip.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DMappingComputer",
+    "prototype": "RMCBlackMappingComputer",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Structures/hybrisa_computer_props.rsi",
+        "state": "blackmapping_comp_off",
+        "color": "#FFFFFFFF",
+        "sha256": "42c72f35a948a8a5a63480391ea0c58296415597f9e3f9f520928eaa10b6bc59",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/structures/props/hybrisa/computers.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Structures/hybrisa_computer_props.rsi",
+        "state": "blackmapping_comp",
+        "color": "#FFFFFFFF",
+        "sha256": "b6483223358c400e8a7dce916e1fb4e4c9584133ca628f1b87d9db22a69d339a",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/structures/props/hybrisa/computers.dmi"
+      }
+    ],
+    "comparisonPose": "powered, first source frame; comparison only, not an animation replacement"
+  },
+  {
+    "model": "CMU3DMPSComputer",
+    "prototype": "RMCBlackMPSComputer",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Structures/hybrisa_computer_props.rsi",
+        "state": "blackmps_off",
+        "color": "#FFFFFFFF",
+        "sha256": "bb01408b0ebf865ed4783dbf6dbed65cdccb2bc34959506f27279a41b6988812",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/structures/props/hybrisa/computers.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Structures/hybrisa_computer_props.rsi",
+        "state": "blackmps",
+        "color": "#FFFFFFFF",
+        "sha256": "ca22e3651029799ae768eb93e39cb9640507cce6dc56df8a3cc9d03339a19ec3",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/structures/props/hybrisa/computers.dmi"
+      }
+    ],
+    "comparisonPose": "powered, first source frame; comparison only, not an animation replacement"
+  },
+  {
+    "model": "CMU3DSensorComputerWide",
+    "prototype": "RMCBlackSensorComputer2",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Structures/hybrisa_computer_props.rsi",
+        "state": "blacksensor_comp2_off",
+        "color": "#FFFFFFFF",
+        "sha256": "ea3b34c31bcdf1565daa63736caf85bb391d89fb0b42121625cc549204e72f7f",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/structures/props/hybrisa/computers.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Structures/hybrisa_computer_props.rsi",
+        "state": "blacksensor_comp2",
+        "color": "#FFFFFFFF",
+        "sha256": "ea4b4a83c063c1955461dd274b4c3c66b1e8ac925654afa9405ba02aa81f2cfa",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/structures/props/hybrisa/computers.dmi"
+      }
+    ],
+    "comparisonPose": "powered, first source frame; comparison only, not an animation replacement"
+  },
+  {
+    "model": "CMU3DVendorWYGuardCloud",
+    "prototype": "CMUWYGuardequipmentvendor",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi",
+        "state": "off",
+        "color": "#FFFFFFFF",
+        "sha256": "2436a65015aebeea422b0ef64b9b01bcd48b7417ba6ddf8e65a2e1385c1cf2e8",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/obj/structures/machinery/vending.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi",
+        "state": "base",
+        "color": "#FFFFFFFF",
+        "sha256": "b7ba6908a4a13aa6c9b6d9e6240bfac2d1607ae487f390c29b6379c46944bcd3",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/obj/structures/machinery/vending.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DVendorBoozeCloud",
+    "prototype": "CMVendorBooze",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/VendingMachines/boozeomat.rsi",
+        "state": "off",
+        "color": "#FFFFFFFF",
+        "sha256": "b3cb73fa3bbb6b3009df295594657f50e4594f6fe53f94aa2cef89b950565a77",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/obj/structures/machinery/vending.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/VendingMachines/boozeomat.rsi",
+        "state": "normal-unshaded",
+        "color": "#FFFFFFFF",
+        "sha256": "13d889d0f4953ffc728253301996d45a2306c12558680bc679e8e9c37bcb1736",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/obj/structures/machinery/vending.dmi"
+      }
+    ]
+  },
+  {
+    "model": "CMU3DVendorCassettesCloud",
+    "prototype": "CMVendorCassettes",
+    "spriteTint": "#FFFFFFFF",
+    "layers": [
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/VendingMachines/cassette_player.rsi",
+        "state": "off",
+        "color": "#FFFFFFFF",
+        "sha256": "1038209f6b2c7183448582cd3569a4ae976cbf22fafc670af361518cc5722535",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/obj/structures/machinery/vending.dmi"
+      },
+      {
+        "rsi": "/Textures/_RMC14/Structures/Machines/VendingMachines/cassette_player.rsi",
+        "state": "normal-unshaded",
+        "color": "#FFFFFFFF",
+        "sha256": "5766fb711b2139ee37c17b699d328f5efca5567c68590d39ccc374fbd539c55f",
+        "license": "CC-BY-SA-3.0",
+        "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/obj/structures/machinery/vending.dmi"
+      }
+    ]
+  }
+]

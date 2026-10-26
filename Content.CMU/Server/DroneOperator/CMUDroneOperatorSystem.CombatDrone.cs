@@ -215,10 +215,17 @@ public sealed partial class CMUDroneOperatorSystem
 
     private DamageSpecifier GetCombatRepair(Entity<CMUCombatDroneComponent> ent, bool wiring)
     {
+        var efficiency = 1f;
+        if (TryComp<CMUFlamerDroneFuelComponent>(ent, out var fuel))
+        {
+            if (fuel.Ruined)
+                return new DamageSpecifier();
+            efficiency = fuel.RepairEfficiency;
+        }
         var damage = _combatDamage.GetAllDamage((ent, null));
         return CMUCombatDroneSystem.GetRepair(damage,
             wiring ? ent.Comp.WiringDamageTypes : ent.Comp.FrameDamageTypes,
-            ent.Comp.RepairAmount);
+            ent.Comp.RepairAmount * efficiency);
     }
 
     private void OnCombatRepairInteract(Entity<CMUCombatDroneComponent> ent, ref InteractUsingEvent args)
@@ -231,6 +238,11 @@ public sealed partial class CMUDroneOperatorSystem
             return;
 
         args.Handled = true;
+        if (TryComp<CMUFlamerDroneFuelComponent>(ent, out var fuel) && fuel.Ruined)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-flamer-fuel-ruined"), ent, args.User);
+            return;
+        }
         if (args.User == ent.Owner)
         {
             _popup.PopupEntity(Loc.GetString("cmu-drone-self-repair-blocked"), ent, args.User);
@@ -353,7 +365,11 @@ public sealed partial class CMUDroneOperatorSystem
     {
         if (_containers.TryGetContainingContainer((ent, null), out var container) &&
             TryComp<CMUFlamerDroneComponent>(container.Owner, out var flamer))
+        {
             UpdateFlamerPilot((container.Owner, flamer));
+            var changed = new CMUFlamerFuelChangedEvent();
+            RaiseLocalEvent(container.Owner, ref changed);
+        }
     }
 
     private void UpdateFlamerPilot(Entity<CMUFlamerDroneComponent> ent)
@@ -371,6 +387,8 @@ public sealed partial class CMUDroneOperatorSystem
 
     private void SetCombatDroneWrecked(Entity<CMUCombatDroneComponent> ent, bool wrecked)
     {
+        if (!wrecked && TryComp<CMUFlamerDroneFuelComponent>(ent, out var fuel) && fuel.Ruined)
+            return;
         ent.Comp.Wrecked = wrecked;
         Dirty(ent);
         if (TryComp<CMUFlamerDroneComponent>(ent, out var pilot))
@@ -390,6 +408,8 @@ public sealed partial class CMUDroneOperatorSystem
             _metaData.SetEntityName(ent, Loc.GetString("cmu-combat-drone-wreck-name", ("name", ent.Comp.PreWreckName)));
             StopEntityMotion(ent);
             EndControlForDrone(ent, Loc.GetString("cmu-drone-control-ended-drone-disabled"));
+            var ev = new CMUCombatDroneWreckedEvent();
+            RaiseLocalEvent(ent, ref ev);
         }
         else
         {

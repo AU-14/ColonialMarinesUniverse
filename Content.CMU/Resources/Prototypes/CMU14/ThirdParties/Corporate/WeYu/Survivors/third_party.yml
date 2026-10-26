@@ -16,7 +16,7 @@
   announceAsSurvivors: true
   displayName: Weyland-Yutani Survivors
   partyspawn: WEYUSurvSpawnLarge
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -24,7 +24,7 @@
   weight: 25
   minplayers: 100
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 - type: partySpawn
@@ -44,7 +44,7 @@
   announceAsSurvivors: true
   displayName: Weyland-Yutani Survivors
   partyspawn: WEYUSurvSpawnMedium
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -52,7 +52,7 @@
   weight: 25
   minplayers: 51
   maxplayers: 99
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 - type: partySpawn
@@ -71,7 +71,7 @@
   announceAsSurvivors: true
   displayName: Weyland-Yutani Survivors
   partyspawn: WEYUSurvSpawnSmall
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -79,5 +79,5 @@
   weight: 25
   minplayers: 25
   maxplayers: 50
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true

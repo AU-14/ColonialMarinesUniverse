@@ -9,14 +9,14 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Maths;
+using Robust.Shared.Localization;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client.CMU14.RoundStatistics;
 
-public sealed class CMURoundStatisticsWindow : DefaultWindow
+public sealed partial class CMURoundStatisticsWindow : DefaultWindow
 {
     private const float BorderAlpha = 0.85f;
-    private const int BarWidth = 650;
 
     private static readonly Color Background = Color.FromHex("#071311");
     private static readonly Color Card = Color.FromHex("#0d1f1c");
@@ -31,149 +31,6 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
     private static readonly Color ThreatPurple = Color.FromHex("#c98fda");
     private static readonly Color DrawGray = Color.FromHex("#b7b7b7");
     private static readonly Color UnknownGray = Color.FromHex("#666f6b");
-
-    private readonly BoxContainer _modes;
-    private readonly BoxContainer _recent;
-    private readonly Label _summary;
-    private readonly Button _refresh;
-
-    public event Action? OnRefresh;
-
-    public CMURoundStatisticsWindow()
-    {
-        MinSize = new Vector2(900, 680);
-        SetSize = new Vector2(980, 760);
-        Title = "CMU Round Outcomes";
-
-        var root = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            SeparationOverride = 12,
-            Margin = new Thickness(12),
-            HorizontalExpand = true,
-            VerticalExpand = true,
-        };
-
-        var header = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Horizontal,
-            SeparationOverride = 12,
-            HorizontalExpand = true,
-        };
-
-        var headerText = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            SeparationOverride = 2,
-            HorizontalExpand = true,
-        };
-
-        headerText.AddChild(new Label
-        {
-            Text = "Operational Outcomes",
-            FontColorOverride = Text,
-            StyleClasses = { StyleClass.LabelHeading },
-            ClipText = true,
-            HorizontalExpand = true,
-        });
-
-        _summary = new Label
-        {
-            Text = "Waiting for data",
-            FontColorOverride = Muted,
-            ClipText = true,
-            HorizontalExpand = true,
-        };
-        headerText.AddChild(_summary);
-        header.AddChild(headerText);
-
-        _refresh = new Button
-        {
-            Text = "Refresh",
-            MinSize = new Vector2(110, 34),
-            VerticalAlignment = VAlignment.Center,
-        };
-        _refresh.OnPressed += _ => OnRefresh?.Invoke();
-        header.AddChild(_refresh);
-
-        root.AddChild(header);
-
-        var tabs = new TabContainer
-        {
-            HorizontalExpand = true,
-            VerticalExpand = true,
-        };
-
-        var overviewTab = new BoxContainer
-        {
-            Name = "Overview",
-            Orientation = LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalExpand = true,
-        };
-        var overviewScroll = new ScrollContainer
-        {
-            HScrollEnabled = false,
-            VerticalExpand = true,
-        };
-        _modes = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            SeparationOverride = 12,
-            HorizontalExpand = true,
-        };
-        overviewScroll.AddChild(_modes);
-        overviewTab.AddChild(overviewScroll);
-
-        var recentTab = new BoxContainer
-        {
-            Name = "Recent Rounds",
-            Orientation = LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalExpand = true,
-        };
-        var recentScroll = new ScrollContainer
-        {
-            HScrollEnabled = false,
-            VerticalExpand = true,
-        };
-        _recent = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            SeparationOverride = 8,
-            HorizontalExpand = true,
-        };
-        recentScroll.AddChild(_recent);
-        recentTab.AddChild(recentScroll);
-
-        tabs.AddChild(overviewTab);
-        tabs.AddChild(recentTab);
-        root.AddChild(tabs);
-
-        Contents.AddChild(root);
-        CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true);
-    }
-
-    public void UpdateDashboard(CMURoundStatisticsDashboard dashboard)
-    {
-        var totalRounds = dashboard.Modes.Sum(mode => mode.Total);
-        var decidedRounds = dashboard.Modes.Sum(mode => mode.DecidedTotal);
-        _summary.Text = $"{totalRounds} tracked endings, {decidedRounds} decided wins";
-
-        _modes.DisposeAllChildren();
-        foreach (var mode in dashboard.Modes)
-            _modes.AddChild(MakeModePanel(mode));
-
-        _recent.DisposeAllChildren();
-        if (dashboard.RecentRounds.Count == 0)
-        {
-            _recent.AddChild(MakeEmptyPanel("No tracked rounds yet."));
-            return;
-        }
-
-        foreach (var record in dashboard.RecentRounds)
-            _recent.AddChild(MakeRecentRoundPanel(record));
-    }
 
     private Control MakeModePanel(CMURoundModeStatistics mode)
     {
@@ -208,22 +65,11 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         container.AddChild(MakeRecentFormPanel(mode));
         container.AddChild(MakeOutcomeBar(mode));
 
-        if (mode.Preset == CMURoundStatisticsPreset.DistressSignal)
-            container.AddChild(MakeDistressSplit(mode));
-
         container.AddChild(MakeOutcomeBreakdown(mode));
 
         if (mode.ManualReasons.Count > 0)
             container.AddChild(MakeManualReasonBreakdown(mode));
 
-        if (mode.Threats.Count > 0)
-            container.AddChild(MakeThreatBreakdown(mode));
-        if (mode.Planets.Count > 0)
-            container.AddChild(MakePlanetBreakdown(mode));
-        if (mode.PlatoonMatchups.Count > 0)
-            container.AddChild(MakePlatoonMatchupBreakdown(mode));
-        if (mode.PlayerCountBands.Count > 0)
-            container.AddChild(MakePlayerCountBreakdown(mode));
 
         panel.AddChild(container);
         return panel;
@@ -281,10 +127,10 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             "decided endings",
             StreakColor(mode.LongestStreak)));
         grid.AddChild(MakeMetric(
-            "Avg Duration",
+            "Average Duration",
             FormatDurationOrNone(mode.Durations.AverageSeconds),
-            $"{mode.SideA} {FormatDurationOrNone(mode.Durations.SideAAverageSeconds)} / " +
-            $"{mode.SideB} {FormatDurationOrNone(mode.Durations.SideBAverageSeconds)}",
+            $"{SideMinutes(mode.SideA, mode.Durations.SideAAverageSeconds)} / " +
+            $"{SideMinutes(mode.SideB, mode.Durations.SideBAverageSeconds)}",
             Border));
 
         return grid;
@@ -406,56 +252,31 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
     }
 
     private Control MakeOutcomeBar(CMURoundModeStatistics mode)
+        => MakeCountBar(mode.Preset, mode.SideAWins, mode.SideBWins, mode.Draws, mode.Unknown);
+
+    private static Control MakeCountBar(CMURoundStatisticsPreset preset, int sideA, int sideB, int draws, int unknown)
     {
-        var panel = MakePanel(CardQuiet, UnknownGray.WithAlpha(BorderAlpha));
-        panel.HorizontalExpand = false;
-        panel.MinSize = new Vector2(BarWidth, 18);
-
-        var bar = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Horizontal,
-            HorizontalExpand = false,
-            MinSize = new Vector2(BarWidth, 18),
-        };
-
-        if (mode.Total <= 0)
-        {
-            bar.AddChild(MakeBarSegment(BarWidth, UnknownGray));
-        }
-        else
-        {
-            AddBarSegment(bar, mode.SideAWins, mode.Total, GetSideAColor(mode.Preset));
-            AddBarSegment(bar, mode.Draws, mode.Total, DrawGray);
-            AddBarSegment(bar, mode.Unknown, mode.Total, UnknownGray);
-            AddBarSegment(bar, mode.SideBWins, mode.Total, GetSideBColor(mode.Preset));
-        }
-
-        panel.AddChild(bar);
-        return panel;
+        var bar = new BoxContainer { HorizontalExpand = true, SeparationOverride = 0, MinHeight = 18 };
+        AddBarSegment(bar, sideA, GetSideAColor(preset));
+        AddBarSegment(bar, draws, DrawGray);
+        AddBarSegment(bar, unknown, UnknownGray);
+        AddBarSegment(bar, sideB, GetSideBColor(preset));
+        if (sideA + sideB + draws + unknown == 0)
+            AddBarSegment(bar, 1, UnknownGray);
+        return bar;
     }
 
-    private static void AddBarSegment(BoxContainer bar, int count, int total, Color color)
+    private static void AddBarSegment(BoxContainer bar, int count, Color color)
     {
         if (count <= 0)
             return;
-
-        var width = Math.Max(5, (int) MathF.Round(BarWidth * count / (float) total));
-        bar.AddChild(MakeBarSegment(width, color));
-    }
-
-    private static Control MakeBarSegment(int width, Color color)
-    {
-        return new PanelContainer
+        bar.AddChild(new PanelContainer
         {
-            MinSize = new Vector2(width, 18),
-            HorizontalExpand = false,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = color,
-                BorderColor = color,
-                BorderThickness = new Thickness(0),
-            },
-        };
+            HorizontalExpand = true,
+            SizeFlagsStretchRatio = count,
+            MinHeight = 18,
+            PanelOverride = new StyleBoxFlat { BackgroundColor = color },
+        });
     }
 
     private Control MakeOutcomeBreakdown(CMURoundModeStatistics mode)
@@ -509,50 +330,6 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         return box;
     }
 
-    private Control MakeDistressSplit(CMURoundModeStatistics mode)
-    {
-        var box = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            HorizontalExpand = true,
-        };
-
-        box.AddChild(MakeSectionLabel("Distress Signal Major / Minor Split"));
-        box.AddChild(MakeOutcomeSplitRow(
-            mode,
-            CMURoundStatisticsOutcome.XenoMajorHijackWin,
-            "Xeno major",
-            "Hijack win",
-            XenoRed));
-        box.AddChild(MakeOutcomeSplitRow(
-            mode,
-            CMURoundStatisticsOutcome.XenoMinorHijackLoss,
-            "Xeno minor",
-            "Hijack loss",
-            XenoRed));
-        box.AddChild(MakeOutcomeSplitRow(
-            mode,
-            CMURoundStatisticsOutcome.MarineMinorHiveCollapse,
-            "Marine minor",
-            "Hive collapse",
-            GovforBlue));
-        box.AddChild(MakeOutcomeSplitRow(
-            mode,
-            CMURoundStatisticsOutcome.MarineMajorXenoWipe,
-            "Marine major",
-            "Pre-hijack xeno wipe",
-            GovforBlue));
-        box.AddChild(MakeOutcomeSplitRow(
-            mode,
-            CMURoundStatisticsOutcome.DrawAlmayerAutodestruct,
-            "Draw",
-            "Almayer autodestruct",
-            DrawGray));
-
-        return box;
-    }
-
     private Control MakeOutcomeSplitRow(
         CMURoundModeStatistics mode,
         CMURoundStatisticsOutcome outcome,
@@ -565,119 +342,6 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             .Sum(entry => entry.Count);
 
         return MakeBreakdownRow(label, $"{detail} / {FormatRate(count, mode.Total)}", count, color);
-    }
-
-    private Control MakeThreatBreakdown(CMURoundModeStatistics mode)
-    {
-        var box = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            HorizontalExpand = true,
-        };
-
-        box.AddChild(MakeSectionLabel("Threat Breakdown"));
-
-        foreach (var threat in mode.Threats)
-        {
-            var decided = threat.SideAWins + threat.SideBWins;
-            var text = $"{mode.SideA} {FormatRate(threat.SideAWins, decided)} ({threat.SideAWins}) / " +
-                       $"{mode.SideB} {FormatRate(threat.SideBWins, decided)} ({threat.SideBWins})";
-            if (threat.Draws > 0)
-                text += $" / draws {threat.Draws}";
-            if (threat.Unknown > 0)
-                text += $" / unknown {threat.Unknown}";
-
-            box.AddChild(MakeBreakdownRow(threat.ThreatId, text, threat.Total, Border));
-        }
-
-        return box;
-    }
-
-    private Control MakePlanetBreakdown(CMURoundModeStatistics mode)
-    {
-        var box = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            HorizontalExpand = true,
-        };
-
-        box.AddChild(MakeSectionLabel("Planet Breakdown"));
-
-        foreach (var planet in mode.Planets)
-        {
-            var decided = planet.SideAWins + planet.SideBWins;
-            var text = $"{mode.SideA} {FormatRate(planet.SideAWins, decided)} ({planet.SideAWins}) / " +
-                       $"{mode.SideB} {FormatRate(planet.SideBWins, decided)} ({planet.SideBWins}) / " +
-                       $"avg {FormatDurationOrNone(planet.AverageDurationSeconds)}";
-            if (planet.Draws > 0)
-                text += $" / draws {planet.Draws}";
-            if (planet.Unknown > 0)
-                text += $" / unknown {planet.Unknown}";
-
-            box.AddChild(MakeBreakdownRow(planet.PlanetId, text, planet.Total, Border));
-        }
-
-        return box;
-    }
-
-    private Control MakePlatoonMatchupBreakdown(CMURoundModeStatistics mode)
-    {
-        var box = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            HorizontalExpand = true,
-        };
-
-        box.AddChild(MakeSectionLabel("Platoon Matchups"));
-
-        foreach (var matchup in mode.PlatoonMatchups)
-        {
-            var decided = matchup.SideAWins + matchup.SideBWins;
-            var text = $"{mode.SideA} {FormatRate(matchup.SideAWins, decided)} ({matchup.SideAWins}) / " +
-                       $"{mode.SideB} {FormatRate(matchup.SideBWins, decided)} ({matchup.SideBWins})";
-            if (matchup.Draws > 0)
-                text += $" / draws {matchup.Draws}";
-            if (matchup.Unknown > 0)
-                text += $" / unknown {matchup.Unknown}";
-
-            box.AddChild(MakeBreakdownRow(
-                $"{matchup.GovforPlatoonId} vs {matchup.OpforPlatoonId}",
-                text,
-                matchup.Total,
-                Border));
-        }
-
-        return box;
-    }
-
-    private Control MakePlayerCountBreakdown(CMURoundModeStatistics mode)
-    {
-        var box = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            HorizontalExpand = true,
-        };
-
-        box.AddChild(MakeSectionLabel("Player Count Bands"));
-
-        foreach (var band in mode.PlayerCountBands)
-        {
-            var decided = band.SideAWins + band.SideBWins;
-            var text = $"{mode.SideA} {FormatRate(band.SideAWins, decided)} ({band.SideAWins}) / " +
-                       $"{mode.SideB} {FormatRate(band.SideBWins, decided)} ({band.SideBWins})";
-            if (band.Draws > 0)
-                text += $" / draws {band.Draws}";
-            if (band.Unknown > 0)
-                text += $" / unknown {band.Unknown}";
-
-            box.AddChild(MakeBreakdownRow(band.Band, text, band.Total, Border));
-        }
-
-        return box;
     }
 
     private Control MakeBreakdownRow(string left, string right, int count, Color color)
@@ -711,59 +375,6 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         return panel;
     }
 
-    private Control MakeRecentRoundPanel(CMURoundOutcomeRecord record)
-    {
-        var color = WinnerColor(record.Winner);
-        var panel = MakePanel(CardQuiet, color.WithAlpha(BorderAlpha));
-        var box = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            Margin = new Thickness(10, 8),
-            SeparationOverride = 4,
-            HorizontalExpand = true,
-        };
-
-        box.AddChild(new Label
-        {
-            Text = $"Round {record.RoundId} - {PresetName(record.Preset)} - {WinnerName(record.Winner)}",
-            FontColorOverride = color,
-            ClipText = true,
-            HorizontalExpand = true,
-        });
-        box.AddChild(new Label
-        {
-            Text = OutcomeName(record.Outcome),
-            FontColorOverride = Text,
-            ClipText = true,
-            HorizontalExpand = true,
-        });
-        box.AddChild(new Label
-        {
-            Text = $"{(record.Outcome == CMURoundStatisticsOutcome.Unknown ? "Manual reason" : "Recorded source")}: {FormatOutcomeSource(record.Source)}",
-            FontColorOverride = Muted,
-            ClipText = true,
-            HorizontalExpand = true,
-        });
-
-        var threat = string.IsNullOrWhiteSpace(record.SelectedThreatId)
-            ? "no threat"
-            : $"threat {record.SelectedThreatId}";
-        var planet = string.IsNullOrWhiteSpace(record.PlanetId)
-            ? "no planet"
-            : $"planet {record.PlanetId}";
-
-        box.AddChild(new Label
-        {
-            Text = $"{record.PlayerCount} players / {FormatDuration(record.DurationSeconds)} / {threat} / {planet} / {record.RecordedAt:yyyy-MM-dd HH:mm} UTC",
-            FontColorOverride = Muted,
-            ClipText = true,
-            HorizontalExpand = true,
-        });
-
-        panel.AddChild(box);
-        return panel;
-    }
-
     private Control MakeEmptyPanel(string text)
     {
         var panel = MakePanel(CardQuiet, UnknownGray.WithAlpha(BorderAlpha));
@@ -794,13 +405,13 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
     {
         var panel = MakePanel(Background, color.WithAlpha(BorderAlpha));
         panel.HorizontalExpand = false;
-        panel.MinSize = new Vector2(Math.Max(28, label.Length * 8 + 14), 20);
+        panel.MinHeight = 20;
         panel.AddChild(new Label
         {
             Text = label,
             FontColorOverride = color,
             Margin = new Thickness(7, 2),
-            ClipText = true,
+            ClipText = false,
         });
         return panel;
     }
@@ -822,9 +433,28 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
     private static string FormatRate(int wins, int decided)
     {
         return decided <= 0
-            ? "0.0%"
-            : $"{wins * 100f / decided:0.0}%";
+            ? "—"
+            : $"{wins * 100f / decided:0}%";
     }
+
+    private static string SideShorthand(string side)
+    {
+        return side.Trim().ToLowerInvariant() switch
+        {
+            "xeno" or "threat" => "X",
+            "govfor" => "G",
+            "opfor" => "O",
+            "indfor" => "I",
+            "colonist" or "colonists" => "C",
+            "clf" => "CLF",
+            var other => other,
+        };
+    }
+
+    private static string SideMinutes(string side, int seconds)
+        => seconds <= 0
+            ? "No data"
+            : $"{SideShorthand(side)}-{seconds / 60f:0}min";
 
     private static string FormatRecentForm(CMURoundModeStatistics mode)
     {
@@ -915,6 +545,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             CMURoundStatisticsPreset.DistressSignal => "Distress Signal",
             CMURoundStatisticsPreset.Insurgency => "Insurgency",
             CMURoundStatisticsPreset.ColonyFall => "Colony Fall",
+            CMURoundStatisticsPreset.ForceOnForce => Loc.GetString("cmu-round-stats-force-on-force"),
             _ => preset.ToString(),
         };
     }
@@ -926,6 +557,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             CMURoundStatisticsWinner.Xeno => "Xeno",
             CMURoundStatisticsWinner.Govfor => "Govfor",
             CMURoundStatisticsWinner.Clf => "CLF",
+            CMURoundStatisticsWinner.Opfor => Loc.GetString("cmu-round-stats-opfor"),
             CMURoundStatisticsWinner.Colonists => "Colonists",
             CMURoundStatisticsWinner.Threat => "Threat",
             CMURoundStatisticsWinner.Draw => "Draw",
@@ -945,6 +577,8 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             CMURoundStatisticsOutcome.DrawAlmayerAutodestruct => "Draw - Warship selfdestruct",
             CMURoundStatisticsOutcome.InsurgencyClfVictory => "CLF victory",
             CMURoundStatisticsOutcome.InsurgencyGovforVictory => "Govfor victory",
+            CMURoundStatisticsOutcome.ForceOnForceGovforVictory => Loc.GetString("cmu-round-stats-fof-govfor-victory"),
+            CMURoundStatisticsOutcome.ForceOnForceOpforVictory => Loc.GetString("cmu-round-stats-fof-opfor-victory"),
             CMURoundStatisticsOutcome.ColonyFallThreatVictory => "Threat victory",
             CMURoundStatisticsOutcome.ColonyFallSurvivorVictory => "Colonist victory",
             CMURoundStatisticsOutcome.Stalemate => "Stalemate",
@@ -961,6 +595,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             CMURoundStatisticsWinner.Xeno => XenoRed,
             CMURoundStatisticsWinner.Govfor => GovforBlue,
             CMURoundStatisticsWinner.Clf => ClfGold,
+            CMURoundStatisticsWinner.Opfor => ClfGold,
             CMURoundStatisticsWinner.Colonists => ColonistGreen,
             CMURoundStatisticsWinner.Threat => ThreatPurple,
             CMURoundStatisticsWinner.Draw => DrawGray,
@@ -975,6 +610,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         {
             CMURoundStatisticsPreset.DistressSignal => XenoRed,
             CMURoundStatisticsPreset.Insurgency => GovforBlue,
+            CMURoundStatisticsPreset.ForceOnForce => GovforBlue,
             CMURoundStatisticsPreset.ColonyFall => ColonistGreen,
             _ => Text,
         };
@@ -986,6 +622,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         {
             CMURoundStatisticsPreset.DistressSignal => GovforBlue,
             CMURoundStatisticsPreset.Insurgency => ClfGold,
+            CMURoundStatisticsPreset.ForceOnForce => ClfGold,
             CMURoundStatisticsPreset.ColonyFall => ThreatPurple,
             _ => Text,
         };

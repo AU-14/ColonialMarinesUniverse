@@ -36,15 +36,19 @@ public sealed class HunterShipYautjaVendingTest
             {
                 var prototype = prototypes.Index<EntityPrototype>(row.Id);
 
-                Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
                 Assert.That(sprite!.LayerMapTryGet(VendingMachineVisualLayers.Base, out var baseLayer), Is.True,
+#pragma warning restore CS0618
                     $"{row.Id} must expose the Base layer required by VendingMachineSystem.");
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
                 Assert.That(sprite.LayerMapTryGet(VendingMachineVisualLayers.BaseUnshaded, out var activeLayer), Is.True,
+#pragma warning restore CS0618
                     $"{row.Id} must expose the BaseUnshaded layer required by VendingMachineSystem.");
                 Assert.That(sprite.AllLayers.ElementAt(baseLayer).RsiState.Name, Is.EqualTo(row.BaseState), row.Id);
                 Assert.That(sprite.AllLayers.ElementAt(activeLayer).RsiState.Name, Is.EqualTo(row.NormalState), row.Id);
 
-                Assert.That(prototype.TryGetComponent<Content.Client.VendingMachines.Components.VendingMachineVisualsComponent>(out var vending, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<Content.Client.VendingMachines.Components.VendingMachineVisualsComponent>(out var vending, factory), Is.True, row.Id);
                 Assert.Multiple(() =>
                 {
                     Assert.That(vending!.OffState, Is.EqualTo(row.BaseState), row.Id);
@@ -81,7 +85,7 @@ public sealed class HunterShipYautjaVendingTest
                 Assert.That(prototype.Name, Is.EqualTo(row.Name), row.Id);
                 Assert.That(prototype.Description, Is.EqualTo(row.Description), row.Id);
 
-                Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                 Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(yautjaMachines), row.Id);
                 Assert.That(sprite.DrawDepth, Is.EqualTo((int) Content.Shared.DrawDepth.DrawDepth.SmallObjects), row.Id);
                 Assert.That(sprite.NoRotation, Is.True, row.Id);
@@ -92,17 +96,17 @@ public sealed class HunterShipYautjaVendingTest
                 var states = sprite.AllLayers.Select(layer => layer.RsiState.Name).ToArray();
                 Assert.That(states, Is.EqualTo(row.SpriteStates), row.Id);
 
-                Assert.That(prototype.TryGetComponent<IconComponent>(out var icon, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<IconComponent>(out var icon, factory), Is.True, row.Id);
                 var rsiIcon = (SpriteSpecifier.Rsi) icon!.Icon;
                 Assert.That(rsiIcon.RsiPath.ToString(), Does.EndWith(yautjaMachines.ToString().Replace("/Textures/", string.Empty)), row.Id);
                 Assert.That(rsiIcon.RsiState, Is.EqualTo(row.IconState), row.Id);
 
-                Assert.That(prototype.TryGetComponent<VendingMachineComponent>(out var vending, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<VendingMachineComponent>(out var vending, factory), Is.True, row.Id);
                 Assert.That(vending!.PackPrototypeId, Is.EqualTo(row.Pack), row.Id);
 
-                Assert.That(prototype.TryGetComponent<CMAutomatedVendorComponent>(out _, factory), Is.False,
+                Assert.That(prototype.TryComp<CMAutomatedVendorComponent>(out _, factory), Is.False,
                     $"{row.Id} must not inherit the broader local RMC automated vendor stock.");
-                Assert.That(prototype.TryGetComponent<AccessReaderComponent>(out _, factory), Is.False,
+                Assert.That(prototype.TryComp<AccessReaderComponent>(out _, factory), Is.False,
                     $"{row.Id} maps CMSS13 checking_id() return FALSE.");
             }
         });
@@ -116,13 +120,13 @@ public sealed class HunterShipYautjaVendingTest
             {
                 var prototype = prototypes.Index<EntityPrototype>(row.Id);
 
-                Assert.That(prototype.TryGetComponent<PhysicsComponent>(out var physics, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<PhysicsComponent>(out var physics, factory), Is.True, row.Id);
                 Assert.That(physics!.BodyType, Is.EqualTo(BodyType.Static), row.Id);
 
-                Assert.That(prototype.TryGetComponent<FixturesComponent>(out var fixtures, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<FixturesComponent>(out var fixtures, factory), Is.True, row.Id);
                 Assert.That(fixtures!.Fixtures.Values.Any(fixture => fixture.Hard), Is.True, row.Id);
 
-                Assert.That(prototype.TryGetComponent<VendingMachineComponent>(out var vending, factory), Is.True, row.Id);
+                Assert.That(prototype.TryComp<VendingMachineComponent>(out var vending, factory), Is.True, row.Id);
                 Assert.That(vending!.PackPrototypeId, Is.EqualTo(row.Pack), row.Id);
 
                 var inventory = prototypes.Index<VendingMachineInventoryPrototype>(row.Pack);
@@ -132,11 +136,11 @@ public sealed class HunterShipYautjaVendingTest
             }
 
             var dinnerware = prototypes.Index<EntityPrototype>(DinnerwareId);
-            Assert.That(dinnerware.TryGetComponent<ApcPowerReceiverComponent>(out var power, factory), Is.True, DinnerwareId);
+            Assert.That(dinnerware.TryComp<ApcPowerReceiverComponent>(out var power, factory), Is.True, DinnerwareId);
             Assert.That(power!.NeedsPower, Is.False, DinnerwareId);
-            Assert.That(dinnerware.TryGetComponent<TransformComponent>(out var transform, factory), Is.True, DinnerwareId);
+            Assert.That(dinnerware.TryComp<TransformComponent>(out var transform, factory), Is.True, DinnerwareId);
             Assert.That(transform!.Anchored, Is.True, DinnerwareId);
-            Assert.That(dinnerware.TryGetComponent<AnchorableComponent>(out var anchorable, factory), Is.True, DinnerwareId);
+            Assert.That(dinnerware.TryComp<AnchorableComponent>(out var anchorable, factory), Is.True, DinnerwareId);
             Assert.That(anchorable!.Flags, Is.EqualTo(AnchorableFlags.None), DinnerwareId);
         });
 

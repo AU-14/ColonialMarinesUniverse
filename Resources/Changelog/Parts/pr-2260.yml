@@ -1,0 +1,8 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Nightly test workflow only runs the tests PR CI skips and no longer runs
+    out of memory.
+  type: Code
+time: '2026-10-22T21:10:05.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2260

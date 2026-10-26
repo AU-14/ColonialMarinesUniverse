@@ -1,0 +1,13 @@
+- type: entity
+  id: RMCDropshipZLevelBreach
+  name: Open blast shaft — fall through
+  description: A floor breach blown open by dropship ordnance. The shaft drops to the level below; stepping onto it will send you through.
+  components:
+  - type: Transform
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_tunnel.rsi
+    state: hole
+    noRot: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: DropshipZLevelBreach

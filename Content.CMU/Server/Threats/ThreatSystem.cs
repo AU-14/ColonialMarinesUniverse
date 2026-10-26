@@ -1,5 +1,7 @@
 using System.Linq;
+using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.Round.Objectives;
 using Content.Server.GameTicking;
 using Content.Server.Chat.Managers;
@@ -7,12 +9,12 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
-using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.CMU14.Threats.Mobs.Biomorph;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared.CMU14.util;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
@@ -41,6 +43,7 @@ namespace Content.Server.CMU14.Threats;
 
 public sealed partial class ThreatSystem : EntitySystem
 {
+    [Dependency] private CMUAdriftSystem _adrift = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -48,6 +51,7 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -604,6 +608,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
                     try
                     {
+                        using var cost = _performance.MeasureOperation("threat-body-spawn", protoId);
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
                         spawnedList?.Add(ent);
                         _forceInterest.TrackRole(ent);
@@ -662,6 +667,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
                     try
                     {
+                        using var cost = _performance.MeasureOperation("threat-extra-body-spawn", protoId);
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
                         spawnedMembers.Add(ent);
                         AddThreatFaction(ent, ThreatMemberJobId);
@@ -675,6 +681,15 @@ public sealed partial class ThreatSystem : EntitySystem
 
                 return spawned;
             }
+
+            // short on markers? share them out per body type, otherwise the first type listed eats
+            // all of them and you get a tribe of spearmen with no bows or shaman
+            int leaderMarkerBudget = leaderMarkers.Count;
+            if (leaderReq > leaderMarkerBudget)
+                ThreatVoteSelection.DistributeBodies(leaderBodies, ref leaderMarkerBudget);
+            int memberMarkerBudget = memberMarkers.Count;
+            if (memberReq > memberMarkerBudget)
+                ThreatVoteSelection.DistributeBodies(memberBodies, ref memberMarkerBudget);
 
             // Spawn leaders — each entity proto gets its own scaled count
             foreach ((string protoId, int count) in leaderBodies)
@@ -1005,17 +1020,6 @@ public sealed partial class ThreatSystem : EntitySystem
         RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(entity));
     }
 
-    internal bool HasCrashedDropship()
-    {
-        EntityQueryEnumerator<DropshipComponent> dropships = EntityQueryEnumerator<DropshipComponent>();
-        while (dropships.MoveNext(out _, out DropshipComponent? dropship))
-        {
-            return dropship.Crashed;
-        }
-
-        return false;
-    }
-
     internal bool IsExcludedFromVictory(EntityUid uid, MobStateComponent mobState)
     {
         // Exclude all threats, which use their own Victory Condition logic
@@ -1024,7 +1028,8 @@ public sealed partial class ThreatSystem : EntitySystem
             || HasComp<ApeComponent>(uid)
             || HasComp<TribalComponent>(uid)
             || HasComp<BiomorphComponent>(uid)
-            || HasComp<BiomorphMimicComponent>(uid))
+            || HasComp<BiomorphMimicComponent>(uid)
+            || HasComp<CMUWendigoPackComponent>(uid))
             return true;
 
         if (HasComp<SynthComponent>(uid))
@@ -1034,9 +1039,10 @@ public sealed partial class ThreatSystem : EntitySystem
         if (mobState.CurrentState == MobState.Dead)
             return false;
 
-        // Alive and nested or SSD
+        // Alive and nested or SSD, or adrift in space outside the ship
         return HasComp<XenoNestedComponent>(uid)
-            || (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD);
+            || (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD)
+            || _adrift.IsAdrift(uid);
     }
 
     internal sealed record PendingThreatSpawnDebugView(

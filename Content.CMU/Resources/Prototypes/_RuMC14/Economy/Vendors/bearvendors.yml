@@ -224,9 +224,15 @@
     sections:
     - name: au14-vendor-section-food
       entries:
-      - id: RuMCirpUPP
+      - id: AU14MREUPP
         amount: 60
-      - id: RuMCBoxIRPUPP
+      - id: AU14BoxMREUPP
+        amount: 10
+      - id: CMCanteen
+        amount: 60
+      - id: CMUCanOpenerCompact
+        amount: 30
+      - id: CMUCanOpener
         amount: 10
     - name: au14-vendor-section-medical-supplies
       entries:
@@ -251,6 +257,8 @@
         amount: 40
     - name: au14-vendor-section-tools
       entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
       - id: CMEntrenchingTool
         recommended: true
         amount: 30
@@ -333,6 +341,8 @@
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
+      - id: CMUFieldOxygenTankFilled
+        amount: 40
     - name: au14-vendor-section-optics
       entries:
       - id: RMCLaserDesignatorPVE
@@ -727,10 +737,6 @@
         amount: 15
       - id: CMHeadCapSPPUshankaCivilian
         amount: 2
-    - name: au14-vendor-section-backpack
-      entries:
-      - id: RMCBackpackRTOSPP
-        amount: 5
     - name: au14-vendor-section-pouches
       entries:
       - id: AU14PouchCommandFill
@@ -743,8 +749,10 @@
       - id: RuMCPackFlareRed
     - name: au14-vendor-section-spare-equipment
       entries:
-      - id: ANPRC117GRadioOPFORFilled
+      - id: ANPRC117GRadioIssued
         amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
       - id: ANPRCMastAntenna
         amount: 1
       - id: RMCExplosiveBreachingCharge
@@ -784,6 +792,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadAutomaticRiflemanRMC
+    - AU14JobGOVFORSquadAutomaticRiflemanUPP
+    - AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - AU14JobOPFORSquadAutomaticRifleman
     sections:
     - name: au14-vendor-section-essential-equipment
       takeAll: CMUAREssentialEquipment
@@ -822,6 +837,14 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSectionSergeant
+    - AU14JobGOVFORSectionSergeantCMBCIU
+    - AU14JobGOVFORSectionSergeantRMC
+    - AU14JobGOVFORSectionSergeantUPP
+    - AU14JobGOVFORSectionSergeantWYPMC
+    - AU14JobOPFORSectionSergeant
     sections:
     - name: au14-vendor-section-apparel
       choices: { CMHat: 1 }
@@ -852,6 +875,7 @@
 
     For immediate combat readiness: select a primary weapon kit and a sidearm.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -901,7 +925,6 @@
     - name: au14-vendor-section-attachments
       choices: { CMUAttachmentsVendor: 3 }
       entries:
-      - id: RMCAttachmentRailFlashlight
       - id: AU14AttachmentTwoPointSling
       - id: RMCAttachmentExtendedBarrel
       - id: RMCAttachmentSuppressor
@@ -927,6 +950,7 @@
 
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMAutomatedVendor
     sections:
     - name: au14-vendor-section-weapons-specialist-sets
@@ -971,6 +995,7 @@
   name: BEAR aircrew weapons rack
   description: An automated rack hooked up to a small storage of aircrew weapons.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
   - type: Sprite
@@ -1031,8 +1056,10 @@
       entries:
       - id: AU14BeltUtilityCombatFilled
         recommended: true
-      - id: AU14PouchToolsFilledComtech
+      - id: RMCBeltConstruction
+        name: BEAR construction rig
       - id: AU14BeltUtilityFilled
+      - id: AU14PouchToolsFilledComtech
     - name: au14-vendor-section-engineering-storage-bag
       choices: { CMUPouchesCTBag: 1 }
       entries:
@@ -1130,7 +1157,9 @@
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
-      - id: AU14Scissors
+      - id: CMUScissorsRegulation
+      - id: CMUPepperSpray
+      - id: CMUPepperSprayAntidote
     - name: au14-vendor-section-fatigues
       choices: { AU14Uniform: 1 }
       entries:
@@ -1182,6 +1211,8 @@
   name: BEAR automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMUVendGunsOnSafety
+  - type: CMURequisitionsVendor
   - type: AccessReader
     access: [["AU14AccessGovforReq"], ["AU14AccessOpforReq"]]
   - type: Sprite
@@ -1370,12 +1401,16 @@
         amount: 1
       - id: RMCRocketM5510Brute
         amount: 12
+      - id: AU14Bangalore
+        amount: 2
     - name: au14-vendor-section-barrel-attachments
       entries:
       - id: RMCAttachmentExtendedBarrel
         amount: 5
     - name: au14-vendor-section-rail-attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight
@@ -1404,6 +1439,12 @@
         amount: 10
       - id: RuMCUPPPouchMagazinePistolLarge
         amount: 10
+      - id: RMCPouchGeneralLarge
+        amount: 5
+      - id: RMCPouchDocument
+        amount: 5
+      - id: RMCPouchShotgunLarge
+        amount: 5
     - name: au14-vendor-section-devices
       entries:
       - id: RMCIntelDetector
@@ -1414,20 +1455,30 @@
         amount: 4
       - id: RMCSentryLaptop
         amount: 4
+      - id: CMUDeployableZLevelLadder
+        amount: 2
+    - name: Protective Equipment
+      entries:
+      - id: RMCMaskGasSPP
+        amount: 30
+      - id: CMUGasMaskFilterUPP
+        amount: 30
+      - id: CMUFieldGasTankOxygenFilled
+        amount: 15
     - name: au14-vendor-section-headgear
       entries:
       - id: RuMCUPPNavalInfantryHeavyHelmet
         amount: 2
       - id: RuMCUPPNavalInfantryHeavyHelmet2
         amount: 4
-    - name: au14-vendor-section-rto-packs
+    - name: Radio Equipment
       entries:
-      - id: AU14BackpackRTOPackJungle
-        amount: 1
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
-      - id: AU14BackpackRTOPackGray
-        amount: 1
+      - id: ANPRC117GRadio
+        amount: 3
+      - id: ANPRCWhipAntenna
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 2
     - name: au14-vendor-section-materials
       entries:
       - id: CMSheetMetal
@@ -1438,6 +1489,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

@@ -75,6 +75,60 @@ public sealed class FighterGroundTest : GameTest
         if (!SEntMan.Deleted(_officer)) SEntMan.DeleteEntity(_officer);
     }
 
+    [Test]
+    public async Task DeletedFighterPartsDoNotLeaveStaleNetworkReferences()
+    {
+        await CreateWorld();
+        await Server.WaitAssertion(() =>
+        {
+            var weapons = SEntMan.GetComponent<FighterWeaponsComponent>(_aircraft);
+            var nextPoint = weapons.Hardpoints[1];
+            SEntMan.DeleteEntity(weapons.Hardpoints[0]);
+            SEntMan.DeleteEntity(_aircraft.Comp.Canopy!.Value);
+            SEntMan.DeleteEntity(_aircraft.Comp.FrontSeat!.Value);
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, weapons, null, GameTick.Zero));
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, _aircraft.Comp, null, GameTick.Zero));
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, _ground, null, GameTick.Zero));
+            Assert.That(weapons.Hardpoints[1], Is.EqualTo(nextPoint), "Deleting a pylon must not renumber weapon slots.");
+            CleanWorld();
+            // The cockpit's deletion is queued, so it can still be replicated after its airframe is gone.
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, weapons, null, GameTick.Zero));
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, _aircraft.Comp, null, GameTick.Zero));
+        });
+        await Pair.RunTicksSync(2);
+    }
+
+    [Test]
+    public async Task DeletedCrewCamerasAreClearedBeforeReplicationAndRecreatedForTheSeatedOperator()
+    {
+        await CreateWorld();
+        await Server.WaitAssertion(() =>
+        {
+            var seat = SEntMan.GetComponent<FighterSeatComponent>(_aircraft.Comp.FrontSeat!.Value);
+            var other = SEntMan.GetComponent<FighterSeatComponent>(_aircraft.Comp.RearSeat!.Value);
+            var otherCamera = other.Camera;
+            var camera = seat.Camera!.Value;
+            var exterior = seat.ExteriorCamera!.Value;
+            SEntMan.DeleteEntity(camera);
+            SEntMan.DeleteEntity(exterior);
+            Assert.Multiple(() =>
+            {
+                Assert.That(seat.Camera, Is.Null);
+                Assert.That(seat.ExteriorCamera, Is.Null);
+                Assert.That(other.Camera, Is.EqualTo(otherCamera), "The other operator owns independent cameras.");
+            });
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, seat, null, GameTick.Zero));
+            System.Update(0);
+            Assert.That(SEntMan.EntityExists(seat.Camera), Is.True);
+            Assert.That(SEntMan.EntityExists(seat.ExteriorCamera), Is.True);
+            Assert.That(seat.Camera, Is.Not.EqualTo(camera));
+            Assert.That(seat.ExteriorCamera, Is.Not.EqualTo(exterior));
+            Assert.That(seat.Occupant, Is.EqualTo(_pilot));
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, seat, null, GameTick.Zero));
+            CleanWorld();
+        });
+    }
+
     [TestCase(MobState.Critical)]
     [TestCase(MobState.Dead)]
     public async Task IncapacitatedPilotCannotTakeOffOrControlCountermeasures(MobState state)
@@ -299,6 +353,36 @@ public sealed class FighterGroundTest : GameTest
             Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Grounded));
             Assert.That(SEntMan.GetComponent<FighterAirCombatComponent>(_aircraft).RecoveryUntil, Is.EqualTo(TimeSpan.Zero));
             Assert.That(System.TryTakeoff(_pilot), Is.True, "An undamaged return must not impose damage repairs.");
+            CleanWorld();
+        });
+    }
+
+    // a hijacked dropship crashed onto the recovery site never moves off it, and the jet
+    // circled "waiting for a clear landing site" for the rest of the round
+    [Test]
+    public async Task PermanentlyBlockedRecoveryDivertsToTheNearestClearSpot()
+    {
+        await CreateWorld();
+        EntityUid blocker = default;
+        await Server.WaitAssertion(() => Assert.That(System.TryTakeoff(_pilot), Is.True));
+        await Advance(.9);
+        await Server.WaitAssertion(() =>
+        {
+            _ground.LandingDivertDelay = TimeSpan.FromSeconds(3);
+            blocker = SEntMan.SpawnEntity("MobHuman", _site);
+            Assert.That(System.TryReturnToGround(_pilot), Is.True);
+        });
+        await Advance(1);
+        await Server.WaitAssertion(() => Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Returning)));
+        await Advance(10);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Grounded));
+            var landed = Transform.GetMapCoordinates(_hull).Position;
+            var site = Transform.ToMapCoordinates(_site).Position;
+            Assert.That((landed - site).Length(), Is.GreaterThan(.5f).And.LessThanOrEqualTo(_ground.LandingDivertRange * 1.5f));
+            Assert.That((Transform.GetMapCoordinates(blocker).Position - site).Length(), Is.LessThan(.05f), "The blocker was pushed off instead of the jet diverting.");
+            SEntMan.DeleteEntity(blocker);
             CleanWorld();
         });
     }

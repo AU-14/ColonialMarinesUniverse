@@ -137,7 +137,10 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (!TryComp(user, out TransformComponent? transform))
             return false;
 
-        if (proto.Skill is { } skill && !_skills.HasSkill(user, skill, proto.RequiredSkillLevel))
+        // CMU14: selected construction recipes also accept specialist training.
+        // if (proto.Skill is { } skill && !_skills.HasSkill(user, skill, proto.RequiredSkillLevel))
+        if (proto.Skill is { } skill && !_skills.HasSkill(user, skill, proto.RequiredSkillLevel) &&
+            !(proto.AlternativeSkill is { } alternative && _skills.HasSkill(user, alternative, proto.AlternativeSkillLevel)))
         {
             var message = Loc.GetString("rmc-construction-untrained-build");
             _popup.PopupEntity(message, ent, user, PopupType.SmallCaution);
@@ -344,7 +347,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         {
             var entity = SpawnAtPosition(entityPrototype, spawnPosition);
             spawnedEnts.Add(entity);
-            _stack.SetCount(entity, count);
+            _stack.SetCount((entity, null), count);
         }
 
         return spawnedEnts;
@@ -440,7 +443,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
 
         if (!CanBuildAt(ent.Owner.ToCoordinates(), Name(ent), out var popup, true))
         {
-            _popup.PopupClient(popup, ent, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, ent, args.User, PopupType.SmallCaution);
             args.Cancel();
         }
     }

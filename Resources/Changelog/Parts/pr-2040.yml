@@ -1,0 +1,39 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Pushups and situps emotes inspired from CM13. Your character drops down
+    and reps until they fail. How many you can do depends on your character's build,
+    height, weight and age.
+  type: Add
+- message: Wall leaning, inspired by CM13 PvE. Click drag yourself onto a wall to
+    lean against it. Other people can walk through you while you lean, meaning you
+    can make way for people to get through areas. Moving ends the lean and slows you
+    briefly.
+  type: Add
+- message: CPR masks. It can only be put on unconscious patients. When put on a patient,
+    CPR delays rot by a third longer. One is provided in all IFAKs.
+  type: Add
+- message: Recovery position. Right click a downed patient (or someone laying down)
+    to roll them onto their side. Alive patients slowly recover oxygen damage and
+    dead patients gain 6 seconds on their revive timer for every minute they stay
+    in position. If your friend is waiting for medical care, roll them into the recovery
+    position and give them CPR to give them the best chance at survival.
+  type: Add
+- message: The health analyzer now shows roughly how many minutes a dead patient has
+    left before they can't be revived/rot.
+  type: Add
+- message: The Chemicals guides are now in the CMU Guidebook section.
+  type: Add
+- message: CPR can no longer be done through gas masks or other solid face coverings
+    unless they are pulled down off the face. Cloth masks, scarves and cigarettes
+    don't block CPR.
+  type: Tweak
+- message: AEDs no longer require medical skill to be used.
+  type: Tweak
+- message: Bangalore demolition charges and retractable ladders are now Normal size
+    instead of Large and can be stored in backpacks.
+  type: Tweak
+- message: Various LACN sprite fixes by Pato.
+  type: Fix
+time: '2026-09-27T19:56:52.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2040

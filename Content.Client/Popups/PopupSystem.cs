@@ -1,4 +1,7 @@
 using System.Linq;
+using Content.Client.UserInterface.Systems.Chat; // CMU14
+using Content.Shared.CCVar; // CMU14
+using Content.Shared.Chat; // CMU14
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Popups;
@@ -12,6 +15,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Replays;
+using Robust.Shared.Utility; // CMU14
 
 namespace Content.Client.Popups;
 
@@ -25,6 +29,7 @@ public sealed partial class PopupSystem : SharedPopupSystem
     [Dependency] private IReplayRecordingManager _replayRecording = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IEyeManager _eyeManager = default!; // CMU14
 
     public IReadOnlyCollection<WorldPopupLabel> WorldLabels => _aliveWorldLabels.Values;
     public IReadOnlyCollection<CursorPopupLabel> CursorLabels => _aliveCursorLabels.Values;
@@ -100,6 +105,12 @@ public sealed partial class PopupSystem : SharedPopupSystem
             return;
         }
 
+        // CMU14: popup chat/screen options
+        if (CMUCanSeePopup(coordinates, entity))
+            CMUEchoPopupToChat(message, type);
+        if (_configManager.GetCVar(CCVars.HidePopupsOnScreen))
+            return;
+
         var label = new WorldPopupLabel(coordinates)
         {
             Text = message,
@@ -127,6 +138,11 @@ public sealed partial class PopupSystem : SharedPopupSystem
             return;
         }
 
+        // CMU14: popup chat/screen options
+        CMUEchoPopupToChat(message, type);
+        if (_configManager.GetCVar(CCVars.HidePopupsOnScreen))
+            return;
+
         var label = new CursorPopupLabel(_inputManager.MouseScreenPosition)
         {
             Text = message,
@@ -135,6 +151,59 @@ public sealed partial class PopupSystem : SharedPopupSystem
 
         _aliveCursorLabels.Add(popupData, label);
     }
+
+    // CMU14 start: copy popups into the local chat log when the player opts in.
+    /// <summary>
+    ///     Only popups you could actually see on screen get copied to chat: inside your view and not behind a wall,
+    ///     the same check the popup overlay draws with.
+    /// </summary>
+    private bool CMUCanSeePopup(EntityCoordinates coordinates, EntityUid? entity)
+    {
+        if (_playerManager.LocalEntity is not { } local)
+            return true;
+
+        if (entity == local)
+            return true;
+
+        var popupPos = _transform.ToMapCoordinates(coordinates);
+        var ourPos = _eyeManager.CurrentEye.Position;
+        if (popupPos.MapId != ourPos.MapId || !_eyeManager.GetWorldViewbounds().Contains(popupPos.Position))
+            return false;
+
+        var distance = (popupPos.Position - ourPos.Position).Length();
+        return _examine.InRangeUnOccluded(ourPos, popupPos, distance,
+            e => e == coordinates.EntityId || e == entity || e == local);
+    }
+
+    /// <summary>
+    ///     Eating, drinking and snoring noises ("Nom.", "Slurp.", "Gulp.", "Zzz...") aren't worth a line in chat.
+    /// </summary>
+    private bool CMUIsIngestionNoise(string message)
+    {
+        foreach (var key in CMUIngestionNoiseKeys)
+        {
+            if (message.StartsWith(Loc.GetString(key), StringComparison.Ordinal))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static readonly string[] CMUIngestionNoiseKeys = ["edible-nom-other", "edible-slurp-other", "edible-gulp-other", "sleep-onomatopoeia"];
+
+    private void CMUEchoPopupToChat(string message, PopupType type)
+    {
+        if (!_configManager.GetCVar(CCVars.PopupsInChat) || CMUIsIngestionNoise(message))
+            return;
+
+        // Keep the colour the popup is drawn in on screen.
+        var escaped = FormattedMessage.EscapeText(message);
+        var wrapped = $"[italic][color={PopupUIController.GetPopupColor(type).ToHex()}]{escaped}[/color][/italic]";
+        _uiManager.GetUIController<ChatUIController>().ProcessChatMessage(
+            new ChatMessage(ChatChannel.Visual, escaped, wrapped, NetEntity.Invalid, null),
+            speechBubble: false);
+    }
+    // CMU14 end
 
     #region Abstract Method Implementations
 

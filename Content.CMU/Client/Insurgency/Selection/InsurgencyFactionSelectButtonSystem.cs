@@ -37,12 +37,23 @@ public sealed partial class InsurgencyFactionSelectButtonSystem : EntitySystem
         SubscribeLocalEvent<InsurgencyPendingFactionSelectionComponent, ComponentRemove>(OnRemove);
         SubscribeLocalEvent<InsurgencyPendingFactionSelectionComponent, LocalPlayerAttachedEvent>(OnAttached);
         SubscribeLocalEvent<InsurgencyPendingFactionSelectionComponent, LocalPlayerDetachedEvent>(OnDetached);
+        _ui.OnScreenChanged += OnScreenChanged;
     }
 
     public override void Shutdown()
     {
         base.Shutdown();
+        _ui.OnScreenChanged -= OnScreenChanged;
         HideButton();
+    }
+
+    private void OnScreenChanged((UIScreen? Old, UIScreen? New) args)
+    {
+        // Player attachment can precede the lobby-to-game screen transition.
+        // Recreate the button on the new screen instead of leaving it on the old one.
+        HideButton();
+        if (_player.LocalEntity is { } player && HasComp<InsurgencyPendingFactionSelectionComponent>(player))
+            ShowButton();
     }
 
     private void OnStartup(Entity<InsurgencyPendingFactionSelectionComponent> ent, ref ComponentStartup args)

@@ -1,5 +1,5 @@
 detailed-examine-verb-text = Detailed Examine
-detailed-examine-verb-disabled = You need to get closer to examine them in detail.
+detailed-examine-verb-message = View their detailed character description.
 detailed-examine-window-title = Detailed Examine
 
 detailed-examine-age = Age
@@ -46,10 +46,59 @@ build-type-heavyset = Heavyset
 faction-roster-console-window-title = Personnel Roster
 faction-roster-console-refresh-button = Refresh
 faction-roster-console-count = { $count } { $count ->
-    [one] entry
-   *[other] entries
-}
+    [one] RECORD
+   *[other] RECORDS
+} ON FILE
 faction-roster-console-colonist-job = Colonist
 faction-roster-console-count-tooltip = Number of personnel currently on file.
 faction-roster-console-refresh-tooltip = Re-query the roster for new or departed personnel.
 faction-roster-console-entry-tooltip = Click to open { $name }'s full dossier.
+faction-roster-console-heading = PERSONNEL ROSTER
+faction-roster-console-count-filtered = { $shown } OF { $count } ON FILE
+faction-roster-console-search = Search by name or job...
+faction-roster-console-empty = NO PERSONNEL ON FILE
+faction-roster-console-no-match = NO MATCHING PERSONNEL
+faction-roster-console-open = OPEN >
+faction-roster-console-footer = Select a record to open the full dossier.
+faction-roster-dossier-subheading = { $job } // PERSONNEL DOSSIER
+faction-roster-dossier-short-examine = At a Glance
+faction-roster-dossier-statistics = Vital Statistics
+faction-roster-dossier-not-recorded = Not recorded
+faction-roster-dossier-none = Nothing on file.
+faction-roster-dossier-footer = Records are self-reported and may be incomplete.
+
+cmu-edit-description-verb = Edit Description
+cmu-edit-description-title = Edit Description
+cmu-edit-description-hint = Changes only last for this round. Your saved character isn't affected.
+cmu-edit-description-short = Short Examine Text
+cmu-edit-description-full = Full Character Description
+cmu-edit-description-limit = { $count }/{ $max }
+cmu-edit-description-save = Save
+cmu-edit-description-cancel = Cancel
+faction-roster-dossier-print = PRINT FILE
+faction-roster-print-name = personnel file ({$name})
+faction-roster-print-content = [head=2]PERSONNEL FILE[/head]
+    {"["}bold]{$name}[/bold], {$job}
+
+    Age: {$age}
+    Height: {$height}
+    Weight: {$weight}
+    Build: {$build}
+    Skin tone: {$skin}
+    Hair: {$hair}
+    Eyes: {$eyes}
+    Allegiance: {$allegiance}
+    Origin: {$origin}
+    Religion: {$religion}
+
+    {"["}bold]Description[/bold]
+    {$description}
+
+    {"["}bold]Medical record[/bold]
+    {$medical}
+
+    {"["}bold]Criminal record[/bold]
+    {$criminal}
+
+    {"["}bold]General record[/bold]
+    {$general}

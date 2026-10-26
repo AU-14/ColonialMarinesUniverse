@@ -3,7 +3,28 @@
   name: trait-category-language
   maxTraitPoints: 2
 
+# Fears and phobias, two at most.
+- type: traitCategory
+  id: CMUPhobias
+  name: cmu-trait-category-phobias
+  maxTraitPoints: 2
+
+# Addictions, one at most.
+- type: traitCategory
+  id: CMUAddictions
+  name: cmu-trait-category-addictions
+  maxTraitPoints: 1
+
 - type: traitCategory
   id: CMUDrinkingTraits
   name: cmu-trait-category-drinking
   maxTraitPoints: 1
+
+- type: traitCategory
+  id: CMUDrugAllergies
+  name: cmu-trait-category-drug-allergy
+  maxTraitPoints: 2
+
+- type: traitCategory
+  id: CMUQuirks
+  name: trait-category-quirks

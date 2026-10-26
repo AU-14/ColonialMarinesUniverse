@@ -8,13 +8,13 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.CMU14.Atmos;
 
-public sealed class CMUFireSuppressantOnTriggerSystem : EntitySystem
+public sealed partial class CMUFireSuppressantOnTriggerSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly SharedRMCFlammableSystem _rmcFlammable = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     public override void Initialize()
     {

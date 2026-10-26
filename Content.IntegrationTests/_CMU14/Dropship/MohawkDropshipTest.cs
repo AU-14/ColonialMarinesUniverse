@@ -44,7 +44,7 @@ public sealed class MohawkDropshipTest
             var entities = pair.Server.EntMan;
             var map = entities.System<SharedMapSystem>().CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             var air = entities.System<AtmosphereSystem>().GetTileMixture(loaded!.Value.Owner, map, Vector2i.Zero);
             Assert.That(air, Is.Not.Null);
             Assert.That(air!.Pressure, Is.InRange(90f, 110f), "Cabin air must not depend on the landing map's atmosphere.");
@@ -66,7 +66,7 @@ public sealed class MohawkDropshipTest
             var maps = entities.System<SharedMapSystem>();
             var map = maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             var ship = loaded!.Value;
             var transform = entities.System<SharedTransformSystem>();
             transform.SetWorldRotation(ship, Angle.FromDegrees(degrees));
@@ -93,8 +93,8 @@ public sealed class MohawkDropshipTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             var loader = entities.System<MapLoaderSystem>();
-            Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/omaha.yml"), out var omaha), Is.True);
-            Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/midway.yml"), out var midway), Is.True);
+            Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/Dropships/Mohawk/omaha.yml"), out var omaha), Is.True);
+            Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/Dropships/Mohawk/midway.yml"), out var midway), Is.True);
             var ground = maps.CreateMap();
             var markerCoordinates = new EntityCoordinates(ground, -9.5f, 15.5f);
             var reserved = entities.SpawnEntity("CMUMohawkTestOffsetDestination", markerCoordinates);
@@ -160,7 +160,7 @@ public sealed class MohawkDropshipTest
             var maps = entities.System<SharedMapSystem>();
             cabinMap = maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
             lower = assembly.Decks[-1];
@@ -287,7 +287,7 @@ public sealed class MohawkDropshipTest
             var maps = entities.System<SharedMapSystem>();
             cabinMap = maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
             lower = assembly.Decks[-1];
@@ -360,7 +360,7 @@ public sealed class MohawkDropshipTest
             var zLevels = entities.System<CMUZLevelsSystem>();
             var dropships = entities.System<SharedDropshipSystem>();
             var mechanisms = entities.System<MohawkSystem>();
-            Assert.That(loader.TryLoadMap(new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}_deployment.yml"),
+            Assert.That(loader.TryLoadMap(new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}_deployment.yml"),
                 out var deploymentMap, out var grids, DeserializationOptions.Default with { InitializeMaps = true }), Is.True);
             var map = deploymentMap!.Value.Owner;
             var loaded = grids!.Single();
@@ -372,15 +372,15 @@ public sealed class MohawkDropshipTest
 
             var lower = assembly.Decks[-1];
             var upper = assembly.Decks[1];
-            foreach (var body in entities.EntityQuery<PhysicsComponent>())
+            foreach (var body in entities.QueryEntities<PhysicsComponent>())
             {
                 var xform = entities.GetComponent<TransformComponent>(body.Owner);
-                if (body.BodyType != BodyType.Static || !body.CanCollide || (xform.ParentUid != ship && xform.ParentUid != lower))
+                if (body.Comp.BodyType != BodyType.Static || !body.Comp.CanCollide || (xform.ParentUid != ship && xform.ParentUid != lower))
                     continue;
                 Assert.That(xform.Anchored, Is.True, $"Ship fixture {entities.GetComponent<MetaDataComponent>(body.Owner).EntityPrototype?.ID} at {xform.LocalPosition} needs an anchoring tile.");
                 hull.Add(body.Owner, (xform.ParentUid, xform.LocalPosition));
             }
-            foreach (var control in entities.EntityQuery<MohawkControlComponent>())
+            foreach (var control in entities.QueryEntities<MohawkControlComponent>())
             {
                 var xform = entities.GetComponent<TransformComponent>(control.Owner);
                 controls.Add(control.Owner, (xform.GridUid!.Value, xform.LocalPosition));
@@ -402,9 +402,9 @@ public sealed class MohawkDropshipTest
             Assert.That(entities.HasComponent<MohawkRampMovingComponent>(ship), Is.True);
             mechanisms.SetHatchDeployed(ship, true, true);
             mechanisms.SetRampDeployed(ship, true, true);
-            var hatch = entities.EntityQuery<MohawkHatchComponent>().Single();
+            var hatch = entities.QueryEntities<MohawkHatchComponent>().Single();
             Assert.That(entities.HasComponent<CMUZLevelLadderComponent>(hatch.Owner), Is.True);
-            var lowerLadder = entities.EntityQuery<MohawkLowerLadderComponent>().Single();
+            var lowerLadder = entities.QueryEntities<MohawkLowerLadderComponent>().Single();
             Assert.That(entities.HasComponent<CMUZLevelLadderComponent>(lowerLadder.Owner), Is.True);
 
             var destination = maps.CreateMap();
@@ -484,7 +484,7 @@ public sealed class MohawkDropshipTest
                 new EntityCoordinates(finalGround, new Vector2(-31, 17)), out finalCabin), Is.True);
             var shuttles = entities.System<ShuttleSystem>();
             shuttles.DefaultArrivalTime = 0.5f;
-            var nav = entities.EntityQuery<DropshipNavigationComputerComponent>()
+            var nav = entities.QueryEntities<DropshipNavigationComputerComponent>()
                 .First(c => entities.GetComponent<TransformComponent>(c.Owner).GridUid == ship);
             // Authored pad markers sit at tile centers. The ship must still land
             // at the tile corner, including when it has been turned around.
@@ -497,11 +497,11 @@ public sealed class MohawkDropshipTest
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
-            foreach (var door in entities.EntityQuery<DoorComponent>()
+            foreach (var door in entities.QueryEntities<DoorComponent>()
                          .Where(d => entities.GetComponent<TransformComponent>(d.Owner).GridUid == travellingShip))
             {
                 Assert.That(entities.GetComponent<DoorBoltComponent>(door.Owner).BoltsDown,
-                    Is.EqualTo(door.Location != DoorLocation.Cockpit),
+                    Is.EqualTo(door.Comp.Location != DoorLocation.Cockpit),
                     "Takeoff must secure exterior hatches while leaving cockpit access usable.");
             }
         });
@@ -547,7 +547,7 @@ public sealed class MohawkDropshipTest
         await pair.RunTicksSync(2);
         await server.WaitAssertion(() =>
         {
-            Assert.That(server.EntMan.EntityQuery<DropshipDeckComponent>().Any(), Is.False);
+            Assert.That(server.EntMan.QueryEntities<DropshipDeckComponent>().Any(), Is.False);
         });
         await pair.CleanReturnAsync();
     }

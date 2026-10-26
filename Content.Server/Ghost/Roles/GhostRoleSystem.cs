@@ -305,7 +305,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         return player.AttachedEntity is not { } entity || HasComp<GhostComponent>(entity);
     }
 
-    private bool CanRequestGhostRole(ICommonSession player, Entity<GhostRoleComponent> role)
+    private bool CanRequestGhostRole(ICommonSession player, Entity<GhostRoleComponent> role, bool explicitRequest = false) // CMU14
     {
         if (!CanRequestGhostRole(player))
             return false;
@@ -329,7 +329,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!IsRoleAllowed(player, jobs, antags, role.Comp.Requirements))
             return false;
 
-        var attempt = new GhostRoleRequestAttemptEvent(player, role.Owner, role.Comp);
+        var attempt = new GhostRoleRequestAttemptEvent(player, role.Owner, role.Comp, ExplicitRequest: explicitRequest); // CMU14
         RaiseLocalEvent(role.Owner, ref attempt);
         return !attempt.Cancelled;
     }
@@ -561,7 +561,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!_ghostRoles.TryGetValue(identifier, out var roleEnt))
             return;
 
-        if (!CanRequestGhostRole(player, roleEnt))
+        if (!CanRequestGhostRole(player, roleEnt, explicitRequest: true)) // CMU14: report custom eligibility denials only on a request.
             return;
         if (roleEnt.Comp.RaffleConfig is not null)
         {

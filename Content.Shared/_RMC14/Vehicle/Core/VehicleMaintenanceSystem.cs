@@ -13,7 +13,7 @@ using Robust.Shared.Network;
 namespace Content.Shared._RMC14.Vehicle;
 
 /// <summary>Locks tank controls and exposes its service panels while field repairs are performed.</summary>
-public sealed class VehicleMaintenanceSystem : EntitySystem
+public sealed partial class VehicleMaintenanceSystem : EntitySystem
 {
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private SharedActionsSystem _actions = default!;

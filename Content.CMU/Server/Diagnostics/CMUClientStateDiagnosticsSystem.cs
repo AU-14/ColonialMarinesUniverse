@@ -18,7 +18,7 @@ namespace Content.Server.CMU14.Diagnostics;
 /// Correlates the state-request/ACK stream with bounded client-reported application progress.
 /// Diagnostic evidence never changes PVS, and receipt ACKs do not prove successful application/rendering.
 /// </summary>
-public sealed class CMUClientStateDiagnosticsSystem : EntitySystem
+public sealed partial class CMUClientStateDiagnosticsSystem : EntitySystem
 {
     internal const string SawmillId = "cmu.client_state";
     protected override string SawmillName => SawmillId;

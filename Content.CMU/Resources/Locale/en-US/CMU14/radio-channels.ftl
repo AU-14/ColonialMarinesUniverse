@@ -4,6 +4,7 @@ chat-radio-govforalpha = ALFA
 chat-radio-govforbravo =  BRAV
 chat-radio-govforcharlie =  CHAR
 chat-radio-govforintel =  AUXY
+chat-radio-govforfoxtrot = FOXT
 chat-radio-govforjtac = ATC
 chat-radio-govformp = MILP
 
@@ -13,6 +14,7 @@ chat-radio-opforalpha = SIER
 chat-radio-opforbravo =  TANG
 chat-radio-opforcharlie =  UNIF
 chat-radio-opforintel =  INTL
+chat-radio-opforvictor = VICT
 chat-radio-opforjtac = ORBT
 chat-radio-opformp = CSTD
 
@@ -20,9 +22,8 @@ chat-radio-colony = CLNY
 chat-radio-alert = ALRT
 chat-radio-WEYU = WEYU
 chat-radio-CMB = CMB
-chat-radio-CLF = CLF
-chat-radio-CLFCommand = CLF Command
-chat-radio-mob = FAMLY
+chat-radio-CLF = INSFOR
+chat-radio-CLFCommand = INSFOR Command
 
 chat-radio-hivemind = HIVE
 chat-radio-mycelium-link = MYCEL
@@ -35,4 +36,5 @@ chat-radio-twe = TWE
 chat-radio-icsc = ICSC
 chat-radio-cca = CCA
 chat-radio-vai = VAI
+chat-radio-raiders = RAID
 chat-radio-part = Prodigy

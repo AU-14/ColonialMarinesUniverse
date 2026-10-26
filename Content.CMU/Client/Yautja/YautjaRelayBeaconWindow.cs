@@ -57,7 +57,7 @@ public sealed class YautjaRelayBeaconWindow : DefaultWindow
 
     public void UpdateState(YautjaRelayBeaconState state)
     {
-        _entries.DisposeAllChildren();
+        _entries.ReleaseChildren();
 
         foreach (var entry in state.Destinations)
         {

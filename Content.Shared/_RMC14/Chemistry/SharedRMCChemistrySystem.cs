@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared._RMC14.Weapons.Ranged.Flamer; // CMU14
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
@@ -128,7 +129,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
                     refillable.Solution = ent.Comp.Solution;
                     ent.Comp.Direction = SolutionTransferDirection.Input;
                     Dirty(ent, refillable);
-                    _popup.PopupClient("Now drawing", ent, user, PopupType.Medium);
+                    _popup.PopupEntity("Now drawing", ent, user, PopupType.Medium);
                 }
                 else
                 {
@@ -137,7 +138,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
                     drainable.Solution = ent.Comp.Solution;
                     ent.Comp.Direction = SolutionTransferDirection.Output;
                     Dirty(ent, drainable);
-                    _popup.PopupClient("Now dispensing", ent, user, PopupType.Medium);
+                    _popup.PopupEntity("Now dispensing", ent, user, PopupType.Medium);
                 }
             },
         });
@@ -152,6 +153,18 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
         }
         else
         {
+            // CMU14 start - flamer tanks also accept lab glassware. Both pour directions raise this event, so the
+            // tank's reagent whitelist and the mixed fuel profile are enforced here for beaker pours.
+            if (TryComp<RMCFlamerTankComponent>(ent, out var flamerTank) && HasComp<FitsInDispenserComponent>(args.From))
+            {
+                if (!EntityManager.System<SharedRMCFlamerSystem>().CanAcceptPour(
+                        (ent.Owner, flamerTank), args.ToSolution.Comp.Solution, args.FromSolution.Comp.Solution, out var reason))
+                {
+                    args.Cancel(reason);
+                }
+                return;
+            }
+            // CMU14 end
             if (_entityWhitelist.IsWhitelistFail(ent.Comp.TargetWhitelist, args.From))
                 args.Cancel(Loc.GetString(ent.Comp.Popup));
         }

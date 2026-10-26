@@ -10,5 +10,7 @@ public record struct CMSurgeryCanPerformStepEvent(
     SlotFlags TargetSlots,
     string? Popup = null,
     StepInvalidReason Invalid = StepInvalidReason.None,
-    HashSet<EntityUid>? ValidTools = null
+    HashSet<EntityUid>? ValidTools = null,
+    // CMU14: yautja medicomp steps are surface-depth self-surgery and ignore hard armor
+    bool IgnoreArmor = false
 ) : IInventoryRelayEvent;

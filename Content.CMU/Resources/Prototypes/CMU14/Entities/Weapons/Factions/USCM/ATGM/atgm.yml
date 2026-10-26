@@ -1,0 +1,388 @@
+# FOGO-ATGM - two-man, wire-guided anti-tank missile emplacement.
+# The gunner straps into the deployed tripod and fires; a second crewman holding the linked
+# finder lases a target for the missile to home on and bends its path with their cursor
+# (see Content.CMU/*/Weapons/ATGM).
+
+- type: entity
+  parent: RMCSkillBase
+  id: CMUSkillATGM
+  name: FOGO-ATGM Crew
+  categories: [ HideSpawnMenu ]
+
+# Folded tripod item; deploys like the M2C/Mk86.
+- type: entity
+  parent: [RMCBaseWeaponMount, BaseItem]
+  id: CMUATGMMount
+  name: MGM-120B FOGO-ATGM
+  description: Forward Observer Guided Operation Antitank Guided Missile. Built by the ISCS and distributed amongst the sector to fight against the growing number of long range vehicle heavy insurgencies. This Wire Guided ATGM has served as a staple for the local Neroid military forces ever since.
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_mount.rsi
+    state: folded
+    layers:
+    - state: empty
+      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
+      visible: false
+    - state: loaded
+      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
+      visible: false
+    - state: folded
+      map: [ "enum.WeaponMountComponentVisualLayers.Folded" ]
+      visible: false
+    # The client mount visualizer toggles this key unconditionally; a folded tube looks the same loaded or not.
+    - state: folded
+      map: [ "enum.WeaponMountComponentVisualLayers.FoldedAmmo" ]
+      visible: false
+    - state: folded
+      map: [ "enum.WeaponMountComponentVisualLayers.Broken" ]
+      color: "#7f7f7f"
+      visible: false
+  - type: Icon
+    sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_mount.rsi
+    state: folded
+  - type: Strap
+    enabled: false
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 230
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Breakage" ]
+  - type: CollisionWake
+  - type: WeaponMount
+    fixedWeaponPrototype: CMUATGMLauncher
+    isWeaponSecured: true
+    isWeaponLocked: true
+    canRotateWithoutTool: true
+    mountOnDeploy: false
+    mountExclusionAreaSize: 0
+    barricadeExclusionAreaSize: 2
+    assembleDelay: 9
+    disassembleDelay: 5
+    undeploySound: null
+    acidableWhileUndeployed: true
+  - type: Foldable
+    folded: true
+    isLocked: true
+  - type: Corrodible
+    isCorrodible: true
+  - type: Tag
+    tags:
+    - CMUATGMMount
+  - type: CMUATGMMount
+
+# Fixed weapon spawned inside the mount; never handled directly.
+- type: entity
+  parent: [ CMBaseWeaponGun, BaseItem ]
+  id: CMUATGMLauncher
+  categories: [ HideSpawnMenu ]
+  name: MGM-120B FOGO-ATGM launcher
+  description: The launch tube and guidance unit of a FOGO-ATGM. It ain't much use without a tripod.
+  components:
+  # The ballistic ammo provider creates this container on spawn; declare it so the prototype matches.
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+  - type: Item
+    size: Huge
+  - type: Clothing
+    slots: NONE
+  - type: StaticPrice
+    price: 500
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_mount.rsi
+    state: folded
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 20
+  - type: Gun
+    fireRate: 0.5
+    projectileSpeed: 9
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/m5_shoot.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUATGMMissile
+    capacity: 1
+    cycleable: false
+    mayTransfer: false
+    soundInsert:
+      path: /Audio/_RMC14/Weapons/Guns/Cock/m5_ammo.ogg
+  # The missile is server-authoritative from launch to impact (FLOW-02: no ShootAtFixedPoint here).
+  - type: GunIgnorePrediction
+  - type: IgnorePredictionHide
+  # Launch from the tripod rather than from the strapped gunner (ARCH-03).
+  - type: GunUseGunOrigin
+  - type: GunRequiresSkills
+    skills:
+      CMUSkillATGM: 1
+  - type: GunSkilledRecoil
+    setRecoil: 0
+    skills:
+      RMCSkillFirearms: 0
+    mustBeWielded: false
+  - type: GunUnskilledPenalty
+    firearms: 0
+    angleIncrease: 0
+    accuracyAddMult: 0
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/explosive_mouse.rsi
+      state: all
+  - type: MountableWeapon
+    shootArc: 120
+  # Deliberately empty: missiles load through CMUATGMMount, not a gun_magazine slot. RMC's mount examine and
+  # reload paths look the slot up and log an error every time when the component is missing (ECS-05).
+  - type: ItemSlots
+  - type: Scope
+    scopePopup: null
+    unScopePopup: null
+    canUseInsideContainer: true
+    canUseNightVision: true
+    zoomLevels:
+    - zoom: 1
+      offset: 7
+      doAfter: 0
+      allowMovement: true
+  - type: CMUATGMLauncher
+
+- type: entity
+  parent: BaseItem
+  id: CMUATGMMissile
+  name: FOGO-ATGM missile
+  description: A sealed launch tube holding a wire-guided anti-tank missile. Its tandem warhead punches through armor, brings down walls and throws fragments across a wide area. Don't stand near the target.
+  components:
+  - type: Tag
+    tags:
+    - CMUATGMMissile
+  - type: CartridgeAmmo
+    proto: CMUProjectileATGM
+    deleteOnSpawn: true
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_missile.rsi
+    state: icon
+  - type: Item
+    size: Large
+  - type: Appearance
+  - type: IgnorePredictionHide
+
+# Direct-hit values copied from RMCProjectileRocket84mmAntiArmor, minus maxFixedRange and the accuracy
+# falloff: the missile is steered onto its target instead of flying a fixed distance. The warhead is far
+# heavier than the M5's (ARCH-07): it gibs humanoids it hits directly, doubles direct-hit damage on xenos and
+# usually drops a surviving T3 to crit, breaches walls at the impact and fragments out to about 5.5 tiles.
+- type: entity
+  id: CMUProjectileATGM
+  name: FOGO-ATGM missile
+  categories: [ HideSpawnMenu ]
+  description: Uh oh.
+  components:
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: false
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.15,-0.15,0.15,0.15"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+        restitution: 0.0
+        density: 20
+  - type: Projectile
+    angle: 180 # The art is drawn nose-up; projectile rotation 0 faces south.
+    deleteOnCollide: false
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Blunt: 160
+        Heat: 150
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_missile.rsi
+    layers:
+    - state: projectile
+  - type: IgnorePredictionHide
+  - type: DeleteOnTrigger
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: ExplodeOnTrigger
+  # Radius = cbrt(3 * 350 / (2 * pi)) = ~5.5 tiles (ExplosionSystem.IntensityToRadius); about 11/9/7/5/3/1 by tile.
+  - type: Explosive
+    explosionType: CMUATGM
+    maxIntensity: 12
+    intensitySlope: 2
+    totalIntensity: 350
+    maxTileBreak: 0
+    canCreateVacuum: false
+  # Explosion damage cannot breach walls; delete the ones the warhead strikes, like C4.
+  - type: RMCExplosiveDelete
+    range: 1
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+  - type: PointLight
+    radius: 3.5
+    color: orange
+    energy: 0.5
+  # FLOW-08: a direct hit cooks a tank off about one time in five; the hit itself leaves a healthy tank alive.
+  # FLOW-09: the hit takes 40% of a tank's hull; the warhead's blast adds a little on top.
+  - type: TankCookOffProjectile
+    criticalChance: 0.2
+    hullFraction: 0.4
+  - type: CMUDirectHitWarhead
+    xenoDamageMultiplier: 2
+    xenoCritChance: 0.75
+    gibWhitelist:
+      components:
+      - CMUHumanMedical
+    gibBlacklist:
+      components:
+      - Xeno
+  - type: CMArmorPiercing
+    amount: 100
+  - type: RMCKnockOutOnCollide
+    paralyzeTime: 6
+  # FLOW-08: a direct hit is a catastrophic single hit on a tank, which takes a heavy hull chunk
+  # (TankCookOff catastrophicHitFraction / catastrophicHullFraction) instead of being wrecked; the cook-off roll above
+  # decides whether it burns.
+  - type: VehicleDamageMultiplier
+    multiplier: 10
+
+- type: entity
+  parent: RMCBinoculars
+  id: CMUATGMFinder
+  name: FOGO-ATGM finder
+  description: Ruggedized binoculars wired to a FOGO-ATGM launcher. Link it to a deployed launcher, click a target to lase it so the missile homes on it, and use the crosshair to steer the missile around cover.
+  suffix: ATGM
+  components:
+  - type: Item
+    size: Small
+    heldPrefix: null
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_finder.rsi
+    state: icon
+  - type: Scope
+    scopedHeldSuffix: eyes # null + "eyes" -> eyes-inhand-left/right while looking through the finder
+  - type: ItemCamouflage
+    states: {}
+  - type: Tag
+    tags:
+    - Binoculars
+    - CMUATGMFinder
+  - type: CMUATGMFinder
+  # Laser and lock reticle while the spotter holds a lock (SharedRMCTargetingSystem).
+  - type: TargetingLaser
+    laserState: laser_beam_spotter
+    laserAlpha: 1
+    gradualAlpha: false
+
+- type: entity
+  parent: CMBackpack
+  id: CMUATGMMissileBag
+  name: FOGO-ATGM missile bag
+  description: A padded backpack frame that carries FOGO-ATGM missile tubes.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_bag.rsi
+    layers:
+    - state: icon
+      map: [ "base" ]
+  - type: CMStorageVisualizer
+    storageClosed: null
+    storageOpen: null
+  # FixedItemSizeStorage gives every missile a 2x2 slot: 14x2 holds seven, the resupply load (FLOW-12).
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,13,1
+    whitelist:
+      tags:
+      - CMUATGMMissile
+  - type: FixedItemSizeStorage
+  - type: Tag
+    tags:
+    - WhitelistChameleon
+    - Backpack
+    - CMUATGMMissileBag
+
+# ASRS missile resupply: the bag delivered full (CMUCrateATGMMissiles).
+- type: entity
+  parent: CMUATGMMissileBag
+  id: CMUATGMMissileBagFilled
+  suffix: Filled
+  description: A padded backpack frame that carries FOGO-ATGM missile tubes. This one comes loaded with seven missiles.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUATGMMissile
+      amount: 7
+
+- type: entity
+  parent: RMCCaseBase
+  id: CMUATGMCase
+  name: MGM-120B FOGO-ATGM kit
+  description: Forward Observer Guided Operation Antitank Guided Missile. Built by the ISCS and distributed amongst the sector to fight against the growing number of long range vehicle heavy insurgencies. This Wire Guided ATGM has served as a staple for the local Neroid military forces ever since. This hardened case holds a complete team kit - the launcher, its finder, a missile bag, three missiles and two crew pamphlets.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_case.rsi
+    layers:
+    - state: icon
+      map: [ base ]
+  - type: Icon
+    sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_case.rsi
+    state: icon
+  - type: GenericVisualizer
+    visuals:
+      enum.StorageVisuals.Open:
+        base:
+          True: { state: icon-open }
+          False: { state: icon }
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,17,1
+    whitelist:
+      components:
+      - SkillPamphlet
+      tags:
+      - CMUATGMMount
+      - CMUATGMFinder
+      - CMUATGMMissile
+      - CMUATGMMissileBag
+  - type: StorageFill
+    contents:
+    - id: CMUATGMMount
+    - id: CMUATGMFinder
+    - id: CMUATGMMissileBag
+    - id: CMUATGMMissile
+      amount: 3
+    - id: CMUPamphletATGM
+      amount: 2
+
+- type: Tag
+  id: CMUATGMMount
+
+- type: Tag
+  id: CMUATGMMissile
+
+- type: Tag
+  id: CMUATGMFinder
+
+- type: Tag
+  id: CMUATGMMissileBag

@@ -338,6 +338,9 @@
   name: landing gear hatch
   suffix: Mohawk, Omaha
   components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CMUXenoGearHatch
   - type: Transform
     rot: 3.141592653589793 rad
     anchored: false
@@ -847,6 +850,9 @@
   name: landing gear hatch
   suffix: Mohawk, Omaha
   components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CMUXenoGearHatch
   - type: Transform
     rot: 0 rad
     anchored: false
@@ -954,7 +960,7 @@
     offset: 0,0.5
     noRot: false
 - type: entity
-  parent: ColMarTechGuns
+  parent: CMUMohawkWeaponsRack
   id: CMUMohawkOmahaDropshipd87acb8c7a
   name: dropship weapons rack
   suffix: Mohawk, Omaha
@@ -1344,6 +1350,7 @@
   name: walkway panel
   suffix: Mohawk, Omaha
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/misc.rsi
     offset: 0,0
@@ -1471,6 +1478,7 @@
   name: walkway panel
   suffix: Mohawk, Omaha
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/misc.rsi
     offset: 0,0
@@ -3987,6 +3995,9 @@
   name: landing gear hatch
   suffix: Mohawk, Omaha, Navy
   components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CMUXenoGearHatch
   - type: Transform
     rot: 3.141592653589793 rad
     anchored: false
@@ -4496,6 +4507,9 @@
   name: landing gear hatch
   suffix: Mohawk, Omaha, Navy
   components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CMUXenoGearHatch
   - type: Transform
     rot: 0 rad
     anchored: false
@@ -4603,7 +4617,7 @@
     offset: 0,0.5
     noRot: false
 - type: entity
-  parent: ColMarTechGuns
+  parent: CMUMohawkWeaponsRack
   id: CMUMohawkOmahaNavyDropshipd87acb8c7a
   name: dropship weapons rack
   suffix: Mohawk, Omaha, Navy
@@ -4993,6 +5007,7 @@
   name: walkway panel
   suffix: Mohawk, Omaha, Navy
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/misc.rsi
     offset: 0,0
@@ -5120,6 +5135,7 @@
   name: walkway panel
   suffix: Mohawk, Omaha, Navy
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/misc.rsi
     offset: 0,0
@@ -7656,6 +7672,9 @@
   name: landing gear hatch
   suffix: Mohawk, Midway
   components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CMUXenoGearHatch
   - type: Transform
     rot: 3.141592653589793 rad
     anchored: false
@@ -8059,6 +8078,9 @@
   name: landing gear hatch
   suffix: Mohawk, Midway
   components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CMUXenoGearHatch
   - type: Transform
     rot: 0 rad
     anchored: false
@@ -8442,6 +8464,7 @@
   name: walkway panel
   suffix: Mohawk, Midway
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc.rsi
     offset: 0,0
@@ -8453,6 +8476,7 @@
   name: walkway panel
   suffix: Mohawk, Midway
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc.rsi
     offset: 0,0
@@ -8637,6 +8661,7 @@
   name: walkway panel
   suffix: Mohawk, Midway
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc.rsi
     offset: 0,0
@@ -8704,6 +8729,7 @@
   name: walkway panel
   suffix: Mohawk, Midway
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc.rsi
     offset: 0,0
@@ -11283,6 +11309,9 @@
   name: landing gear hatch
   suffix: Mohawk, Midway, Navy
   components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CMUXenoGearHatch
   - type: Transform
     rot: 3.141592653589793 rad
     anchored: false
@@ -11686,6 +11715,9 @@
   name: landing gear hatch
   suffix: Mohawk, Midway, Navy
   components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CMUXenoGearHatch
   - type: Transform
     rot: 0 rad
     anchored: false
@@ -12069,6 +12101,7 @@
   name: walkway panel
   suffix: Mohawk, Midway, Navy
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/misc.rsi
     offset: 0,0
@@ -12080,6 +12113,7 @@
   name: walkway panel
   suffix: Mohawk, Midway, Navy
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/misc.rsi
     offset: 0,0
@@ -12264,6 +12298,7 @@
   name: walkway panel
   suffix: Mohawk, Midway, Navy
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/misc.rsi
     offset: 0,0
@@ -12331,6 +12366,7 @@
   name: walkway panel
   suffix: Mohawk, Midway, Navy
   components:
+  - type: CMUXenoGearHatchExit
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/misc.rsi
     offset: 0,0

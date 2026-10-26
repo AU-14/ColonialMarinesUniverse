@@ -60,7 +60,7 @@
   - type: Sprite
     sprite: _RuMC14/Clothing/UPP/backpack/standard_big.rsi
   - type: Storage
-    maxItemSize: Large
+    maxItemSize: Normal
     grid:
     - 0,0,24,1
 

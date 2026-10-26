@@ -33,11 +33,11 @@ au14-department-threat-description = Select this job to play as the threat
 
 au14-cmbinvestigate-rules = You are an officer of the law. Investigate the area. You are neutral unless attacked.
 
-au14-lacncommandosniper-rules = You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local GOVFOR command. You are friendly to GOVFOR and neutral to civilians.
+au14-lacncommandosniper-rules = You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local UA command. You are friendly to the UA and neutral to civilians.
 
 au14-uacglostthreat-rules = You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This threat asks for a slightly higher level of roleplay than others! Please keep this in mind.
 
-au14-rmcert-rules = You have been dispatched as a Royal Marines Commando Rapid Reaction Troop member. The details of the mission have not been disclosed to you, however your main objective is to assist GOVFOR forces in the area of operation. You are friendly to GOVFOR command and neutral to civilians.
+au14-rmcert-rules = You have been dispatched as a Royal Marines Commando Rapid Reaction Troop member. The details of the mission have not been disclosed to you, however your main objective is to assist the TWE and its allies in the area of operation. You are friendly to TWE command and its allies, and neutral to civilians.
 
 au14-uppgrom-rules = You are a member of UPP's elite GROM special unit! You do not remember what happened or what is happening in round.
 
@@ -139,9 +139,9 @@ au14-forecon-detachment-greeting = You are a member of USCMC elite FORECON speci
 
     You are part of GOVFOR!
 
-au14-forecon-detachment-rules = You were dispatched to GOVFOR. Report to command for further orders.
+au14-forecon-detachment-rules = You were dispatched to support the UA forces in the area. Report to their command for further orders.
 
-rmc-job-description-forecon-detachment = You are a member or USCMC FORECON. You were dispatched to GOVFOR. Report to command for further orders.
+rmc-job-description-forecon-detachment = You are a member or USCMC FORECON. You were dispatched to support the UA forces in the area. Report to their command for further orders.
 
 au14-job-name-forecon-spotter = Spotter
 au14-job-prefix-forecon-spotter = SPOT
@@ -155,8 +155,8 @@ au-14-job-prefix-uacg-rifleman = CG RFN
 au-14-job-name-uacg-ammobearer = Lost Ammo Bearer
 au-14-job-prefix-uacg-ammobearer = CG AB
 
-au14-uacg-rules = You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
-au14-uacg-description = Your squad was separated from your platoon whilst on a short range patrol from your FOB, when extreme weather had veered you off course. Relink with Government Forces with those who remain.
+au14-uacg-rules = You are a UA third party! You are friendly to UA forces and neutral to civilians. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
+au14-uacg-description = Your squad was separated from your platoon whilst on a short range patrol from your FOB, when extreme weather had veered you off course. Relink with the UA forces in the area with those who remain.
 
 au14-uacg-greeting = You are a member of UACG patrol!
 
@@ -212,7 +212,7 @@ au14-usarmy-armored-greeting = You are a member of US Army 32nd Armored Division
 
     You were dispatched to aid GOVFOR forces in the AO!
 
-    Get ready for action and report to the GVOFR Commander!
+    Get ready for action and report to the GOVFOR Commanding Officer!
 
     You are friendly to GOVFOR, neutral to civilians and hostile to CLF!
 
@@ -225,7 +225,7 @@ au14-job-description-forecon-killteam-greeting = You are a member of USCMC elite
 
     You are NOT a part of GOVFOR, but do not be overly agressive to them. Do whatever is needed to succeed in your mission.
 
-au14-forecon-killteam-rules = You do not know what is going on in round. Your main goal is to assasinate the target. You are not a part of GOVFOR but do not be overly agressive to them.
+au14-forecon-killteam-rules = You do not know what is going on in round. Your main goal is to assasinate the target. You are not attached to the UA forces in the area, but do not be overly agressive to them.
 
 au14-job-description-forecon-firstrecon = You are a member USCMC FORECON 1st Battalion. You are here to investigate WMD.
 
@@ -293,7 +293,7 @@ au14-ipie-greeting = You are Weyland-Yutani's Personal Protection Officer. Prote
 
     Weyland-Yutani - building better worlds.
 
-au14-lacncommando-description = You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local GOVFOR command.
+au14-lacncommando-description = You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local UA command.
 
 au14-job-name-vai-mercenary = Contractor
 au14-vai-mercenary-description = You are Vanguard's Arrow Incorporated Mercenary. Follow your contract. For details, consult your primer.
@@ -423,6 +423,7 @@ au14-job-prefix-tweiasf-pl = 24/PARA PL
 au14-job-description-twepara = You are a member of the Imperial Armed Space Forces 24th Parachute Regiment. Follow your orders.
 
 au14-job-description-IASFsurv = You are a stranded member of the IASF 24th Parachute Regiment. Fight for Empress, country and also your life.
+au14-job-description-IASFsurv-bosenmori = You are a stranded member of the IASF 24th Parachute Regiment who was training in the areas around the colony of Bosenmori Basho. Fight for your Empress, country and also your life.
 
 au14-job-greeting-IASFsurv = You have been stranded in this colony, dropship out of fuel and almost out of ammunition
     Most of your squad is dead, you are all thats left... For now
@@ -431,3 +432,9 @@ au14-job-greeting-IASFsurv = You have been stranded in this colony, dropship out
 
 au14-job-rules-IASFsurv = You are a member of the TWEs IASF, you are NEUTRAL to civilians and other countries and HOSTILE to the CLF.
     You are fully aware of the threat after having witnessed it for several days.
+cmu-job-name-iasf-mortar-gunner = Mortar Gunner
+cmu-job-name-iasf-mortar-loader = Mortar Loader
+cmu-ghost-name-iasf-mortar-gunner = IASF Mortar Gunner
+cmu-ghost-name-iasf-mortar-loader = IASF Mortar Loader
+cmu-job-description-iasf-mortar = You are part of an IASF mortar team from the 24th Parachute Regiment, sent in to give the forces on the ground indirect fire support.
+cmu-job-greeting-iasf-mortar = Your mortar team has been sent in to support the operation. Find a safe firing position, get the L53A1 set up and take fire missions from the forces on the ground.

@@ -34,6 +34,7 @@ using System.Linq;
 namespace Content.IntegrationTests.CMU14.Medical.Injuries.Wounds;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 public sealed class MechanismWoundsFoundationTest
 {
     [Test]

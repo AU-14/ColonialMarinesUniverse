@@ -60,6 +60,10 @@ namespace Content.IntegrationTests.CMU14.Chemistry;
 [TestFixture]
 public sealed class BeneficialChemicalPropertyPrototypeTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ReagentPrototype> NutrimentPrototype = "Nutriment";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> WaterPrototype = "Water";
+    private static readonly Robust.Shared.Prototypes.ProtoId<RandomPlantMutationListPrototype> RandomPlantMutationsPrototype = "RandomPlantMutations";
+
     private const string TestReagent = "CMUTestAllBeneficialChemicalProperties";
     private const string DefibrillatingTestReagent = "CMUTestLevelSixDefibrillating";
     private const string InorganicTarget = "CMUTestRepairingInorganicTarget";
@@ -95,11 +99,12 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         "Antiaddictive",
     ];
 
+    [TestPrototypes]
     private static readonly string ReagentPrototype = $$"""
         - type: reagent
           id: {{TestReagent}}
-          name: all beneficial property test reagent
-          desc: all beneficial property test reagent
+          name: reagent-name-nothing
+          desc: reagent-desc-nothing
           physicalDesc: reagent-physical-desc-translucent
           color: "#ffffff"
           worksOnTheDead: true
@@ -113,8 +118,8 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
 
         - type: reagent
           id: {{DefibrillatingTestReagent}}
-          name: level six defibrillating test reagent
-          desc: level six defibrillating test reagent
+          name: reagent-name-nothing
+          desc: reagent-desc-nothing
           physicalDesc: reagent-physical-desc-translucent
           color: "#ffffff"
           worksOnTheDead: true
@@ -187,6 +192,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task AdminContractRegistersAndMaterializesItsGeneratedChemical()
     {
+        // the generated reagent stays in the proto manager, so this pair can't go back in the pool
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         await pair.CreateTestMap();
 
@@ -267,8 +273,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task AllPropertiesDeserializeAndHaveRealGuidebookDescriptions()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -323,7 +328,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                 .Where(property => !property.Abstract && !string.IsNullOrWhiteSpace(property.EffectName))
                 .ToArray();
 
-            Assert.That(properties, Has.Length.EqualTo(102));
+            Assert.That(properties, Has.Length.EqualTo(103)); // +Irritating (procgen repair)
             Assert.That(properties.Select(property => property.ID), Is.Unique);
             Assert.That(properties.Select(property => property.EffectName), Is.Unique);
             Assert.Multiple(() =>
@@ -374,7 +379,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                     }
                 }
 
-                var nutriment = prototypes.Index<ReagentPrototype>("Nutriment");
+                var nutriment = prototypes.Index<ReagentPrototype>(NutrimentPrototype);
                 Assert.That(nutriment.Metabolisms!.Metabolisms.Keys.Select(stage => stage.Id),
                     Does.Contain("Metabolites"),
                     "Base Nutriment's intentional Metabolites-stage effects were moved to Digestion.");
@@ -387,6 +392,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task AdminContractDynamicallyLoadsEveryGeneratedPropertyExactlyOnce()
     {
+        // same as above, the generated reagent outlives the test
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         await pair.CreateTestMap();
 
@@ -408,7 +414,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
 
             try
             {
-                Assert.That(properties, Has.Length.EqualTo(102));
+                Assert.That(properties, Has.Length.EqualTo(103)); // +Irritating (procgen repair)
                 var data = new GeneratedReagentData
                 {
                     ID = generatedId,
@@ -454,8 +460,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task EveryPropertyExecutesAtNormalOverdoseAndCriticalThresholds()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -496,8 +501,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task TypedReagentConditionUsesLiveSourceAndCurrentContextReagent()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -533,7 +537,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                 var sufficient = new Solution(TestReagent, 2);
                 var excessive = new Solution(TestReagent, 4);
                 var explicitSource = new Solution(TestReagent, 1);
-                explicitSource.AddReagent("Water", 2);
+                explicitSource.AddReagent(WaterPrototype, 2);
 
                 Assert.Multiple(() =>
                 {
@@ -568,7 +572,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task TemporaryPropertiesFallBackToTheStrongestStillActiveSource()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        await using var pair = await PoolManager.GetServerClient();
         EntityUid human = default;
 
         await pair.Server.WaitAssertion(() =>
@@ -616,8 +620,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task ElectrogeneticDefibrillationHealsAndConsumesOneUnit()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -678,8 +681,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task ChemicalDefibrillatingRevivesARevivableCorpseAndTriggersElectrogenetic()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
 
         EntityUid human = default;
 
@@ -726,8 +728,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task SupportingSystemsRespectTargetsThresholdsAndExpiration()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
         var spawned = new List<EntityUid>();
 
         await pair.Server.WaitAssertion(() =>
@@ -1093,7 +1094,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         EntityUid plant,
         string mutationName)
     {
-        var prototype = prototypes.Index<RandomPlantMutationListPrototype>("RandomPlantMutations");
+        var prototype = prototypes.Index<RandomPlantMutationListPrototype>(RandomPlantMutationsPrototype);
         var mutation = prototype.Mutations.Single(candidate => candidate.Name == mutationName);
         var ev = new BeforeRandomPlantMutationEvent(plant, mutation);
         entities.EventBus.RaiseLocalEvent(plant, ref ev);

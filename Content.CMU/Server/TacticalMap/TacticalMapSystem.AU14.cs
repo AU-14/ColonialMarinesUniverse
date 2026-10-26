@@ -7,6 +7,17 @@ public sealed partial class TacticalMapSystem
 {
     private int _nextIntelBlipKey = -1;
 
+    // intel blips are keyed below zero so they never collide with an entity's own blip, which also
+    // means nothing can look an entity up from the key. anything that needs to know where one sits
+    // (the reconstruction view places contacts by the entity's map) asks here instead
+    private readonly Dictionary<int, EntityUid> _intelBlipGrids = new();
+
+    /// <summary>The grid an intel blip (a DF ping, a jammer fix) was placed on.</summary>
+    public bool TryGetIntelBlipGrid(int key, out EntityUid grid)
+    {
+        return _intelBlipGrids.TryGetValue(key, out grid);
+    }
+
     private static readonly Dictionary<string, SpriteSpecifier.Rsi> FactionSignalIcon = new()
     {
         ["govfor"] = new SpriteSpecifier.Rsi(
@@ -114,6 +125,7 @@ public sealed partial class TacticalMapSystem
         // updates handed to every rifleman. a manual update pulled while the fix is
         // up still captures it, which is fine - that update reflects current intel
         live[key] = blip;
+        _intelBlipGrids[key] = gridId;
 
         tacticalMap.MapDirty = true;
         return (gridId, key);
@@ -126,6 +138,8 @@ public sealed partial class TacticalMapSystem
 
         if (!TryGetBlipDicts(tacticalMap, viewerFactionUpper, out var live, out var snapshot))
             return;
+
+        _intelBlipGrids.Remove(key);
 
         var removed = live.Remove(key);
         removed |= snapshot.Remove(key);

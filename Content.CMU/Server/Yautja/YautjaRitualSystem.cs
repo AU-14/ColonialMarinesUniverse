@@ -54,9 +54,11 @@ public sealed partial class YautjaRitualSystem : EntitySystem
         if (args.NewMobState != MobState.Dead)
             return;
 
+        // someone else finishing them isn't a duel win. null origin means they bled out, still counts
         if (ent.Comp.State == YautjaRitualState.DuelActive &&
             !Deleted(ent.Comp.Hunter) &&
-            HasComp<YautjaComponent>(ent.Comp.Hunter))
+            HasComp<YautjaComponent>(ent.Comp.Hunter) &&
+            (args.Origin == null || args.Origin == ent.Comp.Hunter))
         {
             _trophy.RecordRitualDuelWin(ent.Comp.Hunter, ent.Owner);
             _popup.PopupEntity(Loc.GetString("cmu-yautja-ritual-duel-complete", ("target", ent.Owner)), ent.Comp.Hunter, ent.Comp.Hunter);
@@ -193,7 +195,7 @@ public sealed partial class YautjaRitualSystem : EntitySystem
             HasComp<YautjaComponent>(target) ||
             !TryComp<MobStateComponent>(target, out var mob) ||
             !_mob.IsAlive(target, mob) ||
-            (!HasComp<HumanoidProfileComponent>(target) && !HasComp<XenoComponent>(target)))
+            (!HasComp<HumanoidProfileComponent>(target) && !_trophy.IsXenoTrophyTarget(target)))
         {
             return false;
         }

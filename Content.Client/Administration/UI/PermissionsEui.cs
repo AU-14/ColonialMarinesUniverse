@@ -352,6 +352,15 @@ namespace Content.Client.Administration.UI
             }
         }
 
+        // cmu edit start: hover text for each permission, so senior staff know what they're handing out
+        private static string? FlagDescription(AdminFlags flag)
+        {
+            return Loc.TryGetString($"cmu-admin-flag-desc-{flag.ToString().ToLowerInvariant()}", out var description)
+                ? description
+                : null;
+        }
+        // cmu edit end
+
         private sealed partial class EditAdminWindow : DefaultWindow
         {
             public readonly PermissionsEuiState.AdminData? SourceData;
@@ -419,6 +428,7 @@ namespace Content.Client.Administration.UI
                     // Primarily intended to prevent people giving themselves +HOST with +PERMISSIONS but generalized.
                     var disable = !ui.CanGrantFlag(flag);
                     var flagName = flag.ToString().ToUpper();
+                    var flagTooltip = FlagDescription(flag); // cmu edit
 
                     var group = new ButtonGroup();
 
@@ -464,7 +474,10 @@ namespace Content.Client.Administration.UI
                         inherit.Pressed = true;
                     }
 
-                    permGrid.AddChild(new Label { Text = flagName });
+                    // cmu edit start: hover a permission to see what it does
+                    permGrid.AddChild(new Label { Text = flagName, ToolTip = flagTooltip, MouseFilter = MouseFilterMode.Stop });
+                    inherit.ToolTip = sub.ToolTip = plus.ToolTip = flagTooltip;
+                    // cmu edit end
                     permGrid.AddChild(inherit);
                     permGrid.AddChild(sub);
                     permGrid.AddChild(plus);
@@ -586,7 +599,8 @@ namespace Content.Client.Administration.UI
                     var checkBox = new CheckBox
                     {
                         Disabled = disable,
-                        Text = flagName
+                        Text = flagName,
+                        ToolTip = FlagDescription(flag), // cmu edit: hover a permission to see what it does
                     };
 
                     if (data != null && (data.Value.Value.Flags & flag) != 0)

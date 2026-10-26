@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using System.Numerics;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
@@ -109,7 +110,7 @@ public sealed class StylesFancyMergeRegressionTest : GameTest
             }
             finally
             {
-                window.Dispose();
+                window.Release();
             }
         });
     }

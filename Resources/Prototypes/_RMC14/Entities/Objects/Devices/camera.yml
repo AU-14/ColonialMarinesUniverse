@@ -8,7 +8,14 @@
     sprite: _RMC14/Objects/Devices/broadcasting_camera.rsi
     state: icon
   - type: Item
-    size: Huge
+    size: Normal # CMU14: fits in backpacks, was Huge
+  # CMU14 start: fits in any suit storage slot
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - suitstorage
+  - type: CMUAllowAnySuitStorage
+  # CMU14 end
   - type: Wieldable
     freeHandsRequired: 0
   - type: Eye
@@ -38,3 +45,10 @@
     sourceKinds: Rmc
   - type: Corrodible
     isCorrodible: false
+  # cmu edit start: photo mode, switched from the right click menu without stopping the broadcast
+  - type: CMUPhotoCamera
+    requiresPhotoMode: true
+    requiresWielded: true
+  # built-in microphone, 5 tiles; boom mics synced to it hear further
+  - type: CMUCameraMicrophone
+  # cmu edit end

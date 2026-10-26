@@ -6,6 +6,7 @@
   roundForce: COLONY
   roundRole: CivilianColonySynthetic
   roundComponents:
+  - type: RegulationAppearance
   - type: Language
     preset: AU14LanguagePresetSynth
   - type: LanguageLearning
@@ -17,7 +18,7 @@
     skills:
       RMCSkillCqc: 4
       RMCSkillEngineer: 4
-      RMCSkillConstruction: 3
+      RMCSkillConstruction: 4
       RMCSkillOverwatch: 1
       RMCSkillMedical: 4
       RMCSkillSurgery: 4
@@ -60,8 +61,6 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianColonySynthetic
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -69,6 +68,11 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
     - CMUProstheticLeftArm
     - CMUProstheticRightArm
     - CMUProstheticLeftLeg
@@ -111,7 +115,7 @@
 
 - type: roleLoadout
   id: JobAU14JobCivilianColonySynthetic
-  points: 30 # while normally they would get 45, other things in the loadout arn't properly balanced with points right now, so we'll just steal 15 from them.
+  points: 45
   groups:
   - ColonySynthSpecializationAU14
   - SynthBackpackAU14
@@ -124,6 +128,7 @@
   - ColonySynthBeltAU14
   - SynthGlovesAU14
   - SynthEquipmentAU14
+  - SynthAccesoriesSpecialAU14
   - SynthGlassesAU14
   - SynthMasksAU14
   - ForceSynthResetKeyAU14

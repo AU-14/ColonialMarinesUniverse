@@ -28,6 +28,7 @@ public sealed class FactionRosterEntry
     public string EyeColorName = string.Empty;
     public string? Allegiance;
     public string? Origin;
+    public string? Religion;
 }
 
 [Serializable, NetSerializable]
@@ -44,4 +45,11 @@ public sealed class FactionRosterConsoleBuiState : BoundUserInterfaceState
 [Serializable, NetSerializable]
 public sealed class FactionRosterConsoleRefreshBuiMsg : BoundUserInterfaceMessage
 {
+}
+
+/// <summary>Prints the named person's personnel file at the console.</summary>
+[Serializable, NetSerializable]
+public sealed class FactionRosterConsolePrintBuiMsg(string name) : BoundUserInterfaceMessage
+{
+    public readonly string Name = name;
 }

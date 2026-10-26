@@ -1,3 +1,4 @@
+using Content.Server.GameTicking;
 using Content.Server.Ghost;
 using Content.Server.Mind;
 using Content.Server.Popups;
@@ -37,6 +38,7 @@ using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -48,10 +50,11 @@ namespace Content.Server.CMU14.Dropship;
 ///     presets that don't run the classic <see cref="CMDistressSignalRuleComponent"/> rule.
 ///     That rule provides these itself, so this system must stay off while it is active.
 /// </summary>
-public sealed class CMUHijackExtrasSystem : EntitySystem
+public sealed partial class CMUHijackExtrasSystem : EntitySystem
 {
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private GhostSystem _ghost = default!;
     [Dependency] private DestructibleSystem _destruction = default!;
     [Dependency] private LarvaQueueSystem _larvaQueue = default!;
@@ -82,6 +85,7 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
     {
         SubscribeLocalEvent<DropshipHijackStartEvent>(OnDropshipHijackStart);
         SubscribeLocalEvent<DropshipHijackLandedEvent>(OnDropshipHijackLanded);
+        SubscribeLocalEvent<DropshipHijackDeclinedEvent>(OnDropshipHijackDeclined);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 
         Subs.CVar(_config, RMCCVars.RMCHijackShipWeight, v => _hijackShipWeight = v, true);
@@ -115,12 +119,23 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
             _destruction.DestroyEntity(structure);
         }
 
+        DestroyUnlimitedPlanetHiveCores(ev.Dropship);
+
         // Return stranded xenos to the burrowed queue before removing their bodies.
         var xenoAmount = 0;
+        var originalXenos = new List<(EntityUid Uid, XenoComponent Xeno, TransformComponent Transform)>();
         var xenos = EntityQueryEnumerator<XenoComponent, MobStateComponent, TransformComponent>();
         while (xenos.MoveNext(out var xeno, out var comp, out _, out var xform))
+            originalXenos.Add((xeno, comp, xform));
+
+        // Rejoining can spawn a burrowed larva immediately. Only process the original bodies.
+        foreach (var (xeno, comp, xform) in originalXenos)
         {
-            if (_mobState.IsDead(xeno))
+            if (TerminatingOrDeleted(xeno) || _mobState.IsDead(xeno))
+                continue;
+
+            // Lab-made Wendigos are not hive xenos and never feed the burrowed larva queue.
+            if (HasComp<CMUWendigoLabMadeComponent>(xeno))
                 continue;
 
             if ((ev.Dropship == null || xform.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(xform))
@@ -274,10 +289,42 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
         }
     }
 
+    // only the classic distress rule listened for this, so on our presets the queen's
+    // "do not hijack" button always bounced with the unavailable popup
+    private void OnDropshipHijackDeclined(ref DropshipHijackDeclinedEvent ev)
+    {
+        if (ev.Handled || HasActiveDistressRule() || _gameTicker.RunLevel != GameRunLevel.InRound)
+            return;
+
+        _gameTicker.EndRound(Loc.GetString("cmu-distress-signal-minorxenovictory-no-hijack"));
+        ev.Handled = true;
+    }
+
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _hijackSongPlayed = false;
         _surgeFired = false;
+    }
+
+    /// <summary>
+    ///     Hive cores that aren't build-limited (pathogen blight cores can be raised again and again)
+    ///     never matched the limited-structure sweep, so they outlived every hijack.
+    /// </summary>
+    public void DestroyUnlimitedPlanetHiveCores(EntityUid? dropship)
+    {
+        var cores = EntityQueryEnumerator<HiveCoreComponent, TransformComponent>();
+        while (cores.MoveNext(out var core, out _, out var xform))
+        {
+            if (HasComp<HiveConstructionLimitedComponent>(core) ||
+                (dropship != null && xform.GridUid == dropship) ||
+                !_rmcPlanet.IsOnPlanetLevel(xform))
+            {
+                continue;
+            }
+
+            EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(core);
+            _destruction.DestroyEntity(core);
+        }
     }
 
     private bool HasActiveDistressRule()

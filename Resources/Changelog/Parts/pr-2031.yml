@@ -1,0 +1,16 @@
+author: k44908942-gif
+category: CMU
+changes:
+- message: 'Added a full synthetic K9 system: player dogs can restrain targets, track
+    and bond with a marine for access, and take handler orders (Sic ''Em, Evacuate)
+    from a trained K9 handler.'
+  type: Add
+- message: Added a K9 handler instructional pamphlet (synth vendor handler kits).
+  type: Add
+- message: GOVFOR intel S&R K9 Team is now a tier 1 call costing 6 intel.
+  type: Tweak
+- message: K9 handler loadout now uses ASO cap, aviators, skull balaclava, and a Glock
+    75 holster.
+  type: Tweak
+time: '2026-09-27T09:18:18.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2031

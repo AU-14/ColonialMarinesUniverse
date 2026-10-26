@@ -1,0 +1,53 @@
+author: Vencallium
+category: CMU
+changes:
+- message: Added ship research terminal markers that select the owning faction’s research
+    network.
+  type: Add
+- message: Identical ships used by opposing factions now receive the correct research
+    and hospital terminals.
+  type: Fix
+- message: Matched the research cooldown purchase button to the terminal’s amber styling
+    and changed its label to “-60s 1CR”.
+  type: Tweak
+- message: All gas miners can now be unwrenched, moved, and reanchored.
+  type: Tweak
+- message: Removed misleading “Permanent” labels from portable and administrator gas
+    miners.
+  type: Tweak
+- message: Added Colony, GOVFOR, and OPFOR hospital emergency computer variants.
+  type: Add
+- message: Restricted hospital computer variants to their faction’s medical and command
+    access.
+  type: Fix
+- message: Added ship and fixed-faction hospital computer markers, including colony
+    markers.
+  type: Add
+- message: Prevented ship markers with fixed faction flags from spawning an additional
+    ground-faction terminal.
+  type: Fix
+- message: Replaced USS Bush research terminals and its hospital computer with ship
+    faction markers.
+  type: Map
+- message: Replaced Stable Garrison’s hospital computer with a colony marker.
+  type: Map
+- message: Hospital computers can now locate landing zones on other decks of their
+    own ship.
+  type: Fix
+- message: Hospital shuttle delivery, pickup, and recovery now use the landing zone’s
+    deck as the hospital destination.
+  type: Fix
+- message: Granted room attention to advisors, engineering/intelligence/logistics/medical
+    officers, vehicle commanders, section and squad sergeants, fireteam leaders, and
+    high-command staff.
+  type: Add
+- message: Removed the room-attention action from CO/XO and ordinary military police.
+  type: Remove
+- message: Personnel now face visible CO/XO when another leader calls attention, prioritizing
+    CO over XO and staff officers.
+  type: Fix
+- message: Added regression coverage for faction terminals, hospital access, movable
+    miners, attention permissions, officer focus, and cross-deck hospital transport.
+  type: Code
+time: '2026-09-28T22:05:38.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2043

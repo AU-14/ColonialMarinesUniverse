@@ -10,6 +10,8 @@ using Content.Shared.Body.Part;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
+// alias for static methods below: EntitySystem.Loc (instance) shadows the static Loc facade here
+using StaticLoc = Robust.Shared.Localization.Loc;
 
 namespace Content.Shared.CMU14.Medical.Diagnostics.Examine;
 
@@ -18,6 +20,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private CMUMedicalExamineProjectionSystem _woundProjection = default!;
+    [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
 
     private const string UntreatedWoundColor = "#ff4d4d";
     private const string TreatedWoundColor = "#7bd88f";
@@ -46,18 +49,28 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
 
         using (args.PushGroup(nameof(CMUMedicalExamineSystem), -1))
         {
-            AddBodyPartLines(
-                ent,
-                args,
-                _cfg.GetCVar(CMUMedicalCCVars.WoundsEnabled),
-                _cfg.GetCVar(CMUMedicalCCVars.BoneEnabled),
-                _cfg.GetCVar(CMUMedicalCCVars.BodyPartEnabled));
+            foreach (var line in GetBodyPartLines(ent))
+                args.PushMarkup(line);
         }
     }
 
-    private void AddBodyPartLines(
+    /// <summary>
+    /// The per-body-part wound, fracture and missing-limb lines shown when examining someone, as markup.
+    /// </summary>
+    public List<string> GetBodyPartLines(EntityUid body)
+    {
+        if (!_cfg.GetCVar(CMUMedicalCCVars.Enabled))
+            return new List<string>();
+
+        return BuildBodyPartLines(
+            body,
+            _cfg.GetCVar(CMUMedicalCCVars.WoundsEnabled),
+            _cfg.GetCVar(CMUMedicalCCVars.BoneEnabled),
+            _cfg.GetCVar(CMUMedicalCCVars.BodyPartEnabled));
+    }
+
+    private List<string> BuildBodyPartLines(
         EntityUid body,
-        ExaminedEvent args,
         bool includeWounds,
         bool includeFractures,
         bool includeMissingParts)
@@ -90,17 +103,17 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                     }
 
                     if (projectedPart.ExternalBleeding != ExternalBleedTier.None)
-                        untreated.Add("active bleeding");
+                        untreated.Add(Loc.GetString("cmu-medical-examine-active-bleeding"));
                 }
 
                 if (HasComp<CMUEscharComponent>(partUid))
-                    untreated.Add("charred burn tissue");
+                    untreated.Add(Loc.GetString("cmu-medical-examine-charred-burn-tissue"));
 
                 if (untreated.Count > 0)
                     sections.Add($"[color={UntreatedWoundColor}]{ToSentence(untreated)}[/color]");
 
                 if (treatedWounds > 0)
-                    sections.Add($"[color={TreatedWoundColor}]{DescribeVisibleTreatedWounds(treatedWounds, "treated")}[/color]");
+                    sections.Add($"[color={TreatedWoundColor}]{DescribeVisibleTreatedWounds(treatedWounds)}[/color]");
             }
 
             if (includeFractures
@@ -127,19 +140,32 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                 partSummaries.Add(new BodyPartExamineSummary(
                     BodyPartSortOrder(type, symmetry),
                     FormatPartName(type, symmetry),
-                    $"[color={SeveredColor}]SEVERED[/color]"));
+                    $"[color={SeveredColor}]{Loc.GetString("cmu-medical-examine-severed")}[/color]{StumpSuffix(body, type, symmetry)}"));
             }
         }
 
         partSummaries.Sort((a, b) => a.Order.CompareTo(b.Order));
 
+        var lines = new List<string>(partSummaries.Count);
         foreach (var summary in partSummaries)
         {
-            args.PushMarkup(Loc.GetString(
+            lines.Add(Loc.GetString(
                 "cmu-medical-examine-body-part-line",
                 ("part", summary.Part),
                 ("conditions", summary.Conditions)));
         }
+
+        return lines;
+    }
+
+    private string StumpSuffix(EntityUid body, BodyPartType type, BodyPartSymmetry symmetry)
+    {
+        if (!_stumps.TryFindStump(body, type, symmetry, out _, out var stump))
+            return string.Empty;
+
+        return stump.Clamped
+            ? $"; [color={TreatedWoundColor}]{Loc.GetString("cmu-medical-examine-stump-tourniquet")}[/color]"
+            : $"; [color={UntreatedWoundColor}]{Loc.GetString("cmu-medical-examine-stump-bleeding")}[/color]";
     }
 
     public string GetDetailedExamineText(EntityUid body)
@@ -160,11 +186,11 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                     sections.Add(DescribeDetailedWound(wound));
 
                 if (projectedPart.ExternalBleeding != ExternalBleedTier.None)
-                    sections.Add(Color($"external bleeding: {DescribeBleedTier(projectedPart.ExternalBleeding)}", DetailedBleedColor));
+                    sections.Add(Color(Loc.GetString("cmu-medical-examine-external-bleeding-detailed", ("tier", DescribeBleedTier(projectedPart.ExternalBleeding))), DetailedBleedColor));
             }
 
             if (HasComp<CMUEscharComponent>(partUid))
-                sections.Add(Color("burn eschar: charred tissue", DetailedBurnColor));
+                sections.Add(Color(Loc.GetString("cmu-medical-examine-burn-eschar-detailed"), DetailedBurnColor));
 
             if (sections.Count == 0)
                 continue;
@@ -180,7 +206,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             partSummaries.Add(new BodyPartExamineSummary(
                 BodyPartSortOrder(type, symmetry),
                 PartHeader(type, symmetry),
-                Color("severed", SeveredColor)));
+                Color(Loc.GetString("cmu-medical-detailed-examine-severed"), SeveredColor)));
         }
 
         if (partSummaries.Count == 0)
@@ -239,8 +265,8 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
 
             if (HasComp<CMUEscharComponent>(partUid))
             {
-                const string header = "[color=#ff704d]Burn Eschar[/color]";
-                const string key = header;
+                var header = Color(Loc.GetString("cmu-medical-examine-burn-eschar-header"), DetailedBurnColor);
+                var key = header;
 
                 if (!groups.TryGetValue(key, out var group))
                 {
@@ -252,7 +278,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                     group.Order = partOrder;
                 }
 
-                group.AddSite("charred tissue");
+                group.AddSite(Loc.GetString("cmu-medical-examine-charred-tissue"));
             }
         }
 
@@ -260,7 +286,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         {
             var partName = FormatPartName(type, symmetry);
             var partOrder = BodyPartSortOrder(type, symmetry);
-            var header = Color("severed", SeveredColor);
+            var header = Color(Loc.GetString("cmu-medical-detailed-examine-severed"), SeveredColor);
             var key = header;
 
             if (!groups.TryGetValue(key, out var group))
@@ -307,7 +333,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
     private static void AddArterialBleedingSite(Dictionary<string, InspectInjuryGroup> groups, string partName, int partOrder)
     {
         const string key = "arterial bleeding";
-        var header = Color("Arterial Bleeding", DetailedBleedColor);
+        var header = Color(StaticLoc.GetString("cmu-medical-examine-arterial-bleeding-header"), DetailedBleedColor);
 
         if (!groups.TryGetValue(key, out var group))
         {
@@ -436,24 +462,22 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
 
     private static string DescribeVisibleWound(CMUMedicalVisibleWound wound)
     {
-        return $"a {WoundSizeProfile.StageName(wound.Size, wound.Damage.Float())}";
+        return StaticLoc.GetString("cmu-medical-examine-wound-indef", ("stage", WoundSizeProfile.StageName(wound.Size, wound.Damage.Float())));
     }
 
-    private static string DescribeVisibleTreatedWounds(int count, string treatment)
+    private static string DescribeVisibleTreatedWounds(int count)
     {
-        var noun = count == 1 ? "wound" : "wounds";
-        return $"{noun} {treatment}";
+        return StaticLoc.GetString("cmu-medical-examine-treated-wounds", ("count", count));
     }
 
     private static string DescribeVisibleFracture(FractureSeverity severity, bool stabilized)
     {
-        var prefix = stabilized ? "stabilized " : string.Empty;
         return severity switch
         {
-            FractureSeverity.Simple => $"a {prefix}simple fracture",
-            FractureSeverity.Compound => $"a {prefix}compound fracture",
-            FractureSeverity.Shattered => $"a {prefix}shattered bone",
-            _ => "a broken bone",
+            FractureSeverity.Simple => StaticLoc.GetString(stabilized ? "cmu-medical-examine-fracture-simple-stabilized" : "cmu-medical-examine-fracture-simple"),
+            FractureSeverity.Compound => StaticLoc.GetString(stabilized ? "cmu-medical-examine-fracture-compound-stabilized" : "cmu-medical-examine-fracture-compound"),
+            FractureSeverity.Shattered => StaticLoc.GetString(stabilized ? "cmu-medical-examine-fracture-shattered-stabilized" : "cmu-medical-examine-fracture-shattered"),
+            _ => StaticLoc.GetString("cmu-medical-examine-fracture-default"),
         };
     }
 
@@ -468,27 +492,27 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         return Color(DescribeInspectWoundTitle(mechanism, type), WoundColorFor(mechanism, type));
     }
 
-    private static string DescribeInspectWoundTitle(WoundMechanism mechanism, WoundType type) => mechanism switch
+    private static string DescribeInspectWoundTitle(WoundMechanism mechanism, WoundType type) => StaticLoc.GetString(mechanism switch
     {
-        WoundMechanism.Bullet => "Bullet Wounds",
-        WoundMechanism.Stab => "Stab Wounds",
-        WoundMechanism.Slash => "Slash Wounds",
-        WoundMechanism.Crush => "Crush Wounds",
-        WoundMechanism.Burn => "Burns",
-        WoundMechanism.Blast => "Blast Wounds",
-        WoundMechanism.Fragment => "Fragment Wounds",
-        WoundMechanism.Surgical => "Surgical Wounds",
-        _ => type == WoundType.Burn ? "Burns" : "Wounds",
-    };
+        WoundMechanism.Bullet => "cmu-medical-examine-wound-title-bullet",
+        WoundMechanism.Stab => "cmu-medical-examine-wound-title-stab",
+        WoundMechanism.Slash => "cmu-medical-examine-wound-title-slash",
+        WoundMechanism.Crush => "cmu-medical-examine-wound-title-crush",
+        WoundMechanism.Burn => "cmu-medical-examine-wound-title-burn",
+        WoundMechanism.Blast => "cmu-medical-examine-wound-title-blast",
+        WoundMechanism.Fragment => "cmu-medical-examine-wound-title-fragment",
+        WoundMechanism.Surgical => "cmu-medical-examine-wound-title-surgical",
+        _ => type == WoundType.Burn ? "cmu-medical-examine-wound-title-burn" : "cmu-medical-examine-wound-title-default",
+    });
 
-    private static string InspectSeverity(WoundSize size, float damage) => WoundSizeProfile.SeverityRank(size, damage) switch
+    private static string InspectSeverity(WoundSize size, float damage) => StaticLoc.GetString(WoundSizeProfile.SeverityRank(size, damage) switch
     {
-        0 => "Minor",
-        1 => "Moderate",
-        2 => "Severe",
-        3 => "Massive",
-        _ => "Moderate",
-    };
+        0 => "cmu-medical-examine-severity-minor",
+        1 => "cmu-medical-examine-severity-moderate",
+        2 => "cmu-medical-examine-severity-severe",
+        3 => "cmu-medical-examine-severity-massive",
+        _ => "cmu-medical-examine-severity-moderate",
+    });
 
     private static DetailedWoundDetails GetDetailedWoundDetails(CMUMedicalVisibleWound wound)
     {
@@ -535,46 +559,54 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         return treated ? TreatedWoundColor : DetailedUntreatedColor;
     }
 
-    private static string DescribeDetailedFracture(FractureSeverity severity, bool stabilized)
+    private static string DescribeDetailedFracture(FractureSeverity severity, bool stabilized) => severity switch
     {
-        var prefix = stabilized ? "stabilized " : string.Empty;
-        return severity switch
-        {
-            FractureSeverity.Hairline => $"{prefix}hairline fracture",
-            FractureSeverity.Simple => $"{prefix}simple fracture",
-            FractureSeverity.Compound => $"{prefix}compound fracture",
-            FractureSeverity.Shattered => $"{prefix}shattered fracture",
-            _ => "fracture",
-        };
-    }
-
-    private static string DescribeTreatment(bool treated) => treated ? "treated" : "untreated";
-
-    private static string DescribeBleedTier(ExternalBleedTier tier) => tier switch
-    {
-        ExternalBleedTier.Minor => "minor",
-        ExternalBleedTier.Moderate => "moderate",
-        ExternalBleedTier.Severe => "severe",
-        ExternalBleedTier.Arterial => "arterial",
-        _ => "none",
+        FractureSeverity.Hairline => StaticLoc.GetString(stabilized ? "cmu-medical-examine-fracture-hairline-stabilized" : "cmu-medical-examine-fracture-hairline"),
+        FractureSeverity.Simple => StaticLoc.GetString(stabilized ? "cmu-medical-examine-fracture-simple-stabilized" : "cmu-medical-examine-fracture-simple"),
+        FractureSeverity.Compound => StaticLoc.GetString(stabilized ? "cmu-medical-examine-fracture-compound-stabilized" : "cmu-medical-examine-fracture-compound"),
+        FractureSeverity.Shattered => StaticLoc.GetString(stabilized ? "cmu-medical-examine-fracture-shattered-stabilized" : "cmu-medical-examine-fracture-shattered"),
+        _ => StaticLoc.GetString("cmu-medical-examine-fracture-default"),
     };
+
+    private static string DescribeTreatment(bool treated) => StaticLoc.GetString(treated ? "cmu-medical-examine-treated" : "cmu-medical-examine-untreated");
+
+    private static string DescribeBleedTier(ExternalBleedTier tier) => StaticLoc.GetString(tier switch
+    {
+        ExternalBleedTier.Minor => "cmu-medical-examine-bleed-tier-minor",
+        ExternalBleedTier.Moderate => "cmu-medical-examine-bleed-tier-moderate",
+        ExternalBleedTier.Severe => "cmu-medical-examine-bleed-tier-severe",
+        ExternalBleedTier.Arterial => "cmu-medical-examine-bleed-tier-arterial",
+        _ => "cmu-medical-examine-bleed-tier-none",
+    });
 
     private static string FormatPartName(BodyPartType type, BodyPartSymmetry symmetry)
     {
-        var part = type.ToString().ToLowerInvariant();
         if (symmetry == BodyPartSymmetry.Left)
-            return "Left " + part;
+            return StaticLoc.GetString(PartLocId(type, "left"));
 
         if (symmetry == BodyPartSymmetry.Right)
-            return "Right " + part;
+            return StaticLoc.GetString(PartLocId(type, "right"));
 
-        if (type == BodyPartType.Head)
-            return "Head";
+        return StaticLoc.GetString(PartLocId(type, null));
+    }
 
-        if (type == BodyPartType.Torso)
-            return "Torso";
+    private static string PartLocId(BodyPartType type, string? side)
+    {
+        var typeKey = type switch
+        {
+            BodyPartType.Head => "head",
+            BodyPartType.Torso => "torso",
+            BodyPartType.Arm => "arm",
+            BodyPartType.Hand => "hand",
+            BodyPartType.Leg => "leg",
+            BodyPartType.Foot => "foot",
+            BodyPartType.Tail => "tail",
+            _ => "other",
+        };
 
-        return type.ToString();
+        return side is null
+            ? $"cmu-medical-examine-part-{typeKey}"
+            : $"cmu-medical-examine-part-{typeKey}-{side}";
     }
 
     private static int BodyPartSortOrder(BodyPartType type, BodyPartSymmetry symmetry)
@@ -608,12 +640,13 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
 
     private static string ToSentence(List<string> parts)
     {
+        var and = StaticLoc.GetString("cmu-medical-examine-and");
         return parts.Count switch
         {
             0 => string.Empty,
             1 => parts[0],
-            2 => $"{parts[0]} and {parts[1]}",
-            _ => $"{string.Join(", ", parts.GetRange(0, parts.Count - 1))}, and {parts[parts.Count - 1]}",
+            2 => $"{parts[0]} {and} {parts[1]}",
+            _ => $"{string.Join(", ", parts.GetRange(0, parts.Count - 1))}, {and} {parts[parts.Count - 1]}",
         };
     }
 

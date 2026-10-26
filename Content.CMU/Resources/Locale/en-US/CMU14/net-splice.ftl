@@ -16,6 +16,7 @@ au14-splice-verb-remove = Pull off the feeder tap
 au14-splice-removing = You start working the tap off the feeder.
 au14-splice-removed = The tap comes off and the junction is clean.
 au14-splice-salvaged = The tap comes off. Its keying module is still intact.
+au14-splice-feed-opened = A tap spliced into the feed drops loose as it opens, and its keying module falls out.
 
 au14-splice-examine-tapped = [color=#c46f3c]Something has been spliced into the feeder junction.[/color]
 au14-splice-examine-alarmed = [color=#c4453c]The junction cover hangs open and the fault light is flashing.[/color]

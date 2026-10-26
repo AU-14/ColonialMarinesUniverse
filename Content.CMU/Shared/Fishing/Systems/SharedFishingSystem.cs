@@ -144,7 +144,7 @@ public abstract partial class SharedFishingSystem : EntitySystem
             activeFisher.NextStruggle = Timing.CurTime + TimeSpan.FromSeconds(fishRod.Comp.StartingStruggleTime); // Compensate ping for 0.3 seconds
 
             // Predicted because it works like 99.9% of the time anyway.
-            _popup.PopupPredicted(Loc.GetString("fishing-progress-start"), fisher, fisher);
+            _popup.PopupBroadcast(Loc.GetString("fishing-progress-start"), fisher, fisher);
             activeSpotComp.IsActive = true;
         }
 
@@ -399,7 +399,7 @@ public abstract partial class SharedFishingSystem : EntitySystem
             return;
         }
 
-        _popup.PopupPredicted(Loc.GetString("fishing-rod-remove-lure", ("ent", Name(uid))), uid, uid);
+        _popup.PopupBroadcast(Loc.GetString("fishing-rod-remove-lure", ("ent", Name(uid))), uid, uid);
 
         if (!TryGetFishingLure(component.FishingLure, out var lure))
         {

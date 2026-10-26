@@ -1,3 +1,5 @@
+using Content.Shared.Clothing;
+using Content.Server.CMU14.Round;
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._RMC14.Rules;
@@ -17,8 +19,19 @@ namespace Content.Server._RMC14.Rules
     /// </summary>
     public sealed partial class ColonyJobOverrideSystem : EntitySystem
     {
-        [Dependency] private RMCPlanetSystem _planetSystem = default!;
+        [Dependency] private AuRoundSystem _round = default!; // CMU14
         [Dependency] private GameTicker _gameTicker = default!;
+
+        // cmu edit start: the CMB roles players pick, standing in for the generic law enforcement ones
+        private static readonly HashSet<string> CMBJobs =
+            ["AU14JobCivilianCMBMarshal", "AU14JobCivilianCMBDeputy", "AU14JobCivilianCMBDetective"];
+
+        private static readonly Dictionary<string, string[]> CMBAliases = new()
+        {
+            ["AU14JobLEOLeaderBase"] = ["AU14JobCivilianCMBMarshal"],
+            ["AU14JobLEOBase"] = ["AU14JobCivilianCMBDeputy", "AU14JobCivilianCMBDetective"],
+        };
+        // cmu edit end
 
         public override void Initialize()
         {
@@ -34,19 +47,29 @@ namespace Content.Server._RMC14.Rules
             if (ev.Profiles is not Dictionary<NetUserId, HumanoidCharacterProfile> profiles)
                 return;
 
-            // Read the planet prototype data directly. Prefer any planet in rotation.
-            var all = _planetSystem.GetAllPlanetsInRotation();
-            if (all.Count == 0)
-                return;
-
-            var planetComp = all[0].Comp;
-            if (planetComp.ColonyJobOverrides == null)
+            // CMU14: only the selected planet determines which law-enforcement roles exist.
+            var planetComp = _round.ActivePlanet ?? _round.GetSelectedPlanet();
+            if (planetComp?.ColonyJobOverrides == null)
                 return;
 
             var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
 
-            // The mapping is override -> overriden (key -> value).
+            // cmu edit start: players pick the CMB roles rather than the generic ones. On a planet whose law
+            // enforcement isn't the CMB, those picks become that planet's force, the way the generic picks do.
+            var overrides = new List<(string Override, string Overriden)>();
             foreach (var (overrideJob, overridenJob) in planetComp.ColonyJobOverrides)
+            {
+                overrides.Add((overrideJob, overridenJob));
+                if (CMBJobs.Contains(overridenJob) || !CMBAliases.TryGetValue(overrideJob, out var aliases))
+                    continue;
+
+                foreach (var alias in aliases)
+                    overrides.Add((alias, overridenJob));
+            }
+            // cmu edit end
+
+            // The mapping is override -> overriden (key -> value).
+            foreach (var (overrideJob, overridenJob) in overrides) // cmu edit: includes the CMB picks
             {
                 // Iterate a stable list of users to avoid modifying the collection while iterating.
                 var users = profiles.Keys.ToList();
@@ -61,10 +84,16 @@ namespace Content.Server._RMC14.Rules
                     var existing = profile.GetJobPriorityForGamemode(presetId, overridenJob);
                     var overridenPriority = (JobPriority)Math.Max((int)existing, (int)priority);
 
-                    // Replace the profile with a copy that has updated priorities.
-                    profiles[user] = profile
+                    // CMU14: the generic job's saved accessories must follow the assigned role.
+                    var assignedProfile = profile
                         .WithGamemodeJobPriority(presetId, overridenJob, overridenPriority)
                         .WithGamemodeJobPriority(presetId, overrideJob, JobPriority.Never);
+                    if (priority >= existing &&
+                        profile.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(overrideJob), out var loadout))
+                    {
+                        assignedProfile = assignedProfile.WithLoadout(LoadoutSystem.GetJobPrototype(overridenJob), loadout);
+                    }
+                    profiles[user] = assignedProfile;
                 }
             }
         }

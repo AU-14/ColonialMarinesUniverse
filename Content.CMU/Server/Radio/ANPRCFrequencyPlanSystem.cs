@@ -151,8 +151,10 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
             return false;
         }
 
+        // a set with no faction of its own holds only the open nets. treating it as knowing
+        // everything would let a factionless set read the whole plan off the search receiver
         return string.IsNullOrEmpty(proto.Faction) ||
-               string.IsNullOrEmpty(operatorFaction) ||
+               !string.IsNullOrEmpty(operatorFaction) &&
                string.Equals(proto.Faction, operatorFaction, StringComparison.OrdinalIgnoreCase);
     }
 

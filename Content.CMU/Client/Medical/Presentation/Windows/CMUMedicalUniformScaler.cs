@@ -28,11 +28,31 @@ public sealed class CMUScaledRichTextLabel : RichTextLabel
     }
 
     public override float UIScale => base.UIScale * _uniformScale;
+
+    private static readonly Dictionary<int, Stylesheet> BaseFontSheets = new();
+
+    public void SetBaseFontSize(int size)
+    {
+        if (!BaseFontSheets.TryGetValue(size, out var sheet))
+        {
+            var font = IoCManager.Resolve<IResourceCache>().NotoStack(size: size);
+            sheet = new Stylesheet(new[]
+            {
+                new StyleRule(new SelectorElement(typeof(RichTextLabel), null, null, null),
+                    new[] { new StyleProperty("font", font) }),
+            });
+            BaseFontSheets[size] = sheet;
+        }
+
+        Stylesheet = sheet;
+    }
 }
 
 internal sealed class CMUMedicalUniformScaler
 {
     public const float MinimumScale = 0.35f;
+    public const string BoldStyleClass = "CMULabelBold";
+    public float FontSizeOffset { get; init; }
 
     private const float NormalFontSize = 10f;
     private const float HeadingFontSize = 16f;
@@ -77,7 +97,7 @@ internal sealed class CMUMedicalUniformScaler
 
         if (control is Label label)
         {
-            var font = GetFont(label, scale, resourceCache, fonts);
+            var font = GetFont(label, scale, FontSizeOffset, resourceCache, fonts);
             if (!ReferenceEquals(label.FontOverride, font))
                 label.FontOverride = font;
         }
@@ -136,11 +156,11 @@ internal sealed class CMUMedicalUniformScaler
             _baselines.Remove(hash);
     }
 
-    private static Font GetFont(Label label, float scale, IResourceCache resourceCache,
+    private static Font GetFont(Label label, float scale, float offset, IResourceCache resourceCache,
         Dictionary<(string Variation, int Size, bool Display), Font> fonts)
     {
         var (variation, size, display) = GetFontStyle(label);
-        var key = (Variation: variation, Size: Math.Max(6, (int) Math.Round(size * scale)), Display: display);
+        var key = (Variation: variation, Size: Math.Max(6, (int) Math.Round((size + offset) * scale)), Display: display);
         if (fonts.TryGetValue(key, out var font))
             return font;
 
@@ -160,6 +180,9 @@ internal sealed class CMUMedicalUniformScaler
 
         if (label.StyleClasses.Contains("LabelKeyText"))
             return ("Bold", KeyFontSize, false);
+
+        if (label.StyleClasses.Contains(BoldStyleClass))
+            return ("Bold", NormalFontSize, false);
 
         if (label.StyleClasses.Contains("LabelSmall") ||
             label.StyleClasses.Contains("LabelSubText") ||

@@ -8,6 +8,7 @@ using Content.Shared.CMU14.Marines.Roles.Chevrons;
 using Content.Shared.CMU14.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Prototypes;
+using Content.Shared._RMC14.Rules; // CMU14
 using Content.Shared.CMU14.util;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
@@ -60,12 +61,12 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshLoadouts()
     {
-        _loadoutWindow?.Dispose();
+        _loadoutWindow?.Release();
     }
 
     private void OpenLoadout(JobPrototype jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
     {
-        _loadoutWindow?.Dispose();
+        _loadoutWindow?.Release();
         _loadoutWindow = null;
         var collection = IoCManager.Instance;
 
@@ -120,7 +121,7 @@ public sealed partial class HumanoidProfileEditor
     public void RefreshJobs()
     {
         foreach (var list in GetGamemodeJobLists())
-            list.DisposeAllChildren();
+            list.ReleaseChildren();
 
         _jobCategories.Clear();
         _jobPriorities.Clear();
@@ -572,9 +573,9 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshAntags()
     {
-        InsurgencyAntagList.DisposeAllChildren();
-        ColonyAntagList.DisposeAllChildren();
-        DistressAntagList.DisposeAllChildren();
+        InsurgencyAntagList.ReleaseChildren();
+        ColonyAntagList.ReleaseChildren();
+        DistressAntagList.ReleaseChildren();
         _antagPreferences.Clear();
 
         PopulateAntagPreferences(InsurgencyAntagList, GamemodeInsurgency);
@@ -698,8 +699,20 @@ public sealed partial class HumanoidProfileEditor
     private PlatoonRankPreferenceJobEntry? BuildRankPreferenceJobEntry(JobPrototype job)
     {
         var platoonOptions = new List<PlatoonRankOptions>();
+
+        // CMU14: only platoons a planet can actually vote in, shelved ones like BEAR stay hidden
+        var playable = new HashSet<ProtoId<PlatoonPrototype>>();
+        foreach (var planet in _entManager.System<RMCPlanetSystem>().GetAllPlanets())
+        {
+            playable.UnionWith(planet.Comp.PlatoonsGovfor);
+            playable.UnionWith(planet.Comp.PlatoonsOpfor);
+        }
+
         foreach (var platoon in _prototypeManager.EnumeratePrototypes<PlatoonPrototype>())
         {
+            if (!playable.Contains(platoon.ID))
+                continue;
+
             var chevronMap = ResolveChevronMapForPlatoon(job, platoon);
             if (chevronMap == null || chevronMap.Count == 0)
                 continue;
@@ -725,7 +738,7 @@ public sealed partial class HumanoidProfileEditor
 
             platoonOptions.Add(new PlatoonRankOptions(
                 platoon.ID,
-                platoon.Name,
+                Loc.GetString(platoon.Name), // CMU14: Hardcode localization
                 platoon.PlatoonPatch,
                 ranks));
         }

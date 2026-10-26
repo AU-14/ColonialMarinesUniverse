@@ -10,6 +10,12 @@
 - type: job
   parent: CMU14JobCivilianProdigyLiaisonBase
   id: CMU14JobCivilianProdigyLiaison
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: PSC
   roundRole: CivilianProdigyLiaison

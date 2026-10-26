@@ -18,14 +18,13 @@ public sealed partial class RMCAlertLevelDisplayVisualizerSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        var current = _alertLevel.Get();
-
-        if (current > RMCAlertLevels.Green)
-            return;
-
         var query = EntityQueryEnumerator<RMCAlertLevelDisplayComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var comp, out var sprite))
         {
+            // CMU14: each display reads its own warship's alert level
+            if (_alertLevel.Get(uid) > RMCAlertLevels.Green)
+                continue;
+
             if (!_sprite.LayerMapTryGet((uid, sprite), RMCAlertLevelDisplayVisualLayers.HourTens, out var hourTensLayer, false) ||
                 !_sprite.LayerMapTryGet((uid, sprite), RMCAlertLevelDisplayVisualLayers.HourOnes, out var hourOnesLayer, false) ||
                 !_sprite.LayerMapTryGet((uid, sprite), RMCAlertLevelDisplayVisualLayers.Separator, out var separatorLayer, false) ||

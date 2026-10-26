@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.Access.Systems;
+using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Threats;
 using Content.Server.CMU14.VendorMarker;
@@ -43,6 +44,7 @@ namespace Content.Server.CMU14.Ops.ThirdParty;
 public sealed partial class ThirdPartySystem : EntitySystem
 {
     [Dependency] private ForceInterestSystem _forceInterest = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -193,16 +195,26 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
     public float GetSignalIntervalMultiplier() => _signalIntervalMultiplier;
 
-    public bool SpawnThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
-        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null, bool? overrideDropship = null)
-    {
-        QueueThirdParty(party, spawnProto, roundStart, overrideDropship, true, assignedJobs);
-        return true;
-    }
+    // Queues the party for interest collection; spawn happens later on its own timer, so
+    // there is no meaningful failure at this point and nothing is returned
+    // summoningFaction is the faction (govfor/opfor) that called the party in, if any; their shuttle is held to that
+    // faction's ship pad while the faction is shipside.
+    public void SpawnThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null, bool? overrideDropship = null,
+        string? summoningFaction = null)
+        => QueueThirdParty(party, spawnProto, roundStart, overrideDropship, true, assignedJobs, summoningFaction);
+
+    /// <summary>
+    ///     Spawns a third party right away, skipping the wait for interested players. Its members spawn as open ghost
+    ///     roles. For admin testing; ordinary call-ins should go through <see cref="SpawnThirdParty"/>.
+    /// </summary>
+    public bool SpawnThirdPartyImmediately(ThirdPartyPrototype party, PartySpawnPrototype spawnProto,
+        bool? overrideDropship = null, string? summoningFaction = null)
+        => SpawnThirdPartyNow(party, spawnProto, false, null, overrideDropship, summoningFaction);
 
     private uint QueueThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
         bool? overrideDropship, bool ready,
-        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null)
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null, string? summoningFaction = null)
     {
         var bodies = spawnProto.LeadersToSpawn.Concat(spawnProto.GruntsToSpawn).Concat(spawnProto.EntitiesToSpawn)
             .GroupBy(pair => pair.Key).ToDictionary(group => group.Key, group => group.Sum(pair => Math.Max(0, pair.Value)));
@@ -212,13 +224,26 @@ public sealed partial class ThirdPartySystem : EntitySystem
         var id = _forceInterest.QueueForce(party.DisplayName ?? party.ID,
             _forceInterest.GetPlayableBodies(bodies),
             interested => SpawnThirdPartyNow(party, spawnProto, roundStart,
-                assignments.Where(pair => interested.Contains(pair.Key)).ToDictionary(), overrideDropship), ready, assignments.Keys);
+                assignments.Where(pair => interested.Contains(pair.Key)).ToDictionary(), overrideDropship, summoningFaction),
+            ready, assignments.Keys);
         _queuedParties.Add(id, party);
         return id;
     }
 
     private bool SpawnThirdPartyNow(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
-        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs, bool? overrideDropship)
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs, bool? overrideDropship,
+        string? summoningFaction = null)
+    {
+        var spawned = SpawnThirdPartyNowInner(party, spawnProto, roundStart, assignedJobs, overrideDropship, summoningFaction);
+        if (spawned)
+            _auRoundSystem.MarkThirdPartySpawned(party);
+
+        return spawned;
+    }
+
+    private bool SpawnThirdPartyNowInner(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs, bool? overrideDropship,
+        string? summoningFaction = null)
     {
         const float SpawnTogetherRadius = 8f;
         _sawmill.Debug($"[ThirdPartySystem] Spawning third party: ({party.ID})");
@@ -289,6 +314,9 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             EnsureComp<DropshipComponent>(mainGridUid);
             _sharedDropshipSystem.SetDropshipDestination(mainGridUid, returnDestination);
+
+            if (!string.IsNullOrWhiteSpace(summoningFaction))
+                EnsureComp<CMUSummonedThirdPartyShuttleComponent>(mainGridUid).Faction = summoningFaction.ToLowerInvariant();
 
             _sawmill.Debug($"[ThirdPartySystem] Third-party dropship {mainGridUid} loaded and waiting for manual launch.");
 
@@ -1008,6 +1036,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         EntityCoordinates coords = _entityManager.GetComponent<TransformComponent>(marker).Coordinates;
         try
         {
+            using var cost = _performance.MeasureOperation("third-party-body-spawn", protoId);
             EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
 
             // If parachute mode, hand off to the shared paradrop system so the entity falls from the sky.

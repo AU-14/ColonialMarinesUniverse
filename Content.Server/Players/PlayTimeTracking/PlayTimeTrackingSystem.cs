@@ -73,7 +73,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
         if (_afk.IsAfk(player))
             return;
 
-        if (_adminManager.IsAdmin(player))
+        if (_adminManager.HasAdminFlag(player, Content.Shared.Administration.AdminFlags.Staff)) // cmu edit
         {
             trackers.Add(PlayTimeTrackingShared.TrackerAdmin);
             trackers.Add(PlayTimeTrackingShared.TrackerOverall);
@@ -245,6 +245,15 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
     /// <returns>Returns true if all requirements were met or there were no requirements.</returns>
     public bool IsAllowed(ICommonSession player, ProtoId<JobPrototype> job)
     {
+        // cmu edit start: military physical standards apply even without role timers
+        if (ProtoMan.TryIndex(job, out var jobProto) &&
+            !Content.Shared.CMU14.Roles.CMUMilitaryHeightRequirement.Check(jobProto, EntityManager.ComponentFactory,
+                (HumanoidCharacterProfile?) _preferencesManager.GetPreferences(player.UserId).SelectedCharacter, out _))
+        {
+            return false;
+        }
+        // cmu edit end
+
         if (!_cfg.GetCVar(CCVars.GameRoleTimers))
             return true;
 

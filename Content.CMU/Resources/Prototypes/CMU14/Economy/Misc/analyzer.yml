@@ -48,7 +48,17 @@
   - type: Appearance
   - type: Sprite
     sprite: CMU14/Structures/analyzermachine.rsi
-    state: analyzer_idle
+    layers:
+    - state: analyzer_idle
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.FetchAnalyzerVisuals.State:
+        base:
+          Idle: { state: analyzer_idle }
+          Working: { state: analyzer_working }
+          Off: { state: analyzer_off }
+          Broken: { state: analyzer_broken }
   - type: FetchAnalyzer
     faction: govfor
 

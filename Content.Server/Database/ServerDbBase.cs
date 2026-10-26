@@ -18,7 +18,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.RoundStatistics;
-using Content.Shared.Administration.Logs;
+
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
@@ -423,6 +423,13 @@ namespace Content.Server.Database
             profile.Height = humanoid.Height;
             profile.Weight = humanoid.Weight;
             profile.Build = humanoid.Build.ToString();
+            profile.BloodType = humanoid.BloodType.ToString(); // CMU14
+            // cmu edit start
+            profile.FoxtrotSquadOptIn = humanoid.FoxtrotSquadOptIn;
+            profile.Religion = humanoid.Religion.Id;
+            profile.ArmorFlavorText = humanoid.ArmorFlavorText;
+            profile.HelmetFlavorText = humanoid.HelmetFlavorText;
+            // cmu edit end
             profile.HideMetaInformation = humanoid.HideMetaInformation;
             profile.ThreatPreference = humanoid.ThreatPreferences.Count == 0
                 ? null
@@ -1180,8 +1187,9 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             await db.DbContext.SaveChangesAsync();
         }
 
+        // CMU14 method: scoped statistics and a paginated archive.
         public async Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
-            int recentRounds,
+            CMURoundStatisticsQuery query,
             CancellationToken cancel = default)
         {
             await using var db = await GetDb();
@@ -1193,31 +1201,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 .Select(MakeCMURoundOutcomeRecord)
                 .ToList();
 
-            var modes = new List<CMURoundModeStatistics>
-            {
-                BuildModeStatistics(
-                    records,
-                    CMURoundStatisticsPreset.DistressSignal,
-                    "Distress Signal",
-                    "Xeno",
-                    "Govfor"),
-                BuildModeStatistics(
-                    records,
-                    CMURoundStatisticsPreset.Insurgency,
-                    "Insurgency",
-                    "Govfor",
-                    "CLF"),
-                BuildModeStatistics(
-                    records,
-                    CMURoundStatisticsPreset.ColonyFall,
-                    "Colony Fall",
-                    "Colonists",
-                    "Threat"),
-            };
-
-            return new CMURoundStatisticsDashboard(
-                modes,
-                records.Take(Math.Max(0, recentRounds)).ToList());
+            return BuildCMURoundStatisticsDashboard(records, query);
         }
 
         // CMU14 method: flat playtime rows for the cmuleaderboard panel
@@ -1252,6 +1236,11 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             var result = Enum.TryParse(outcome.Outcome, out CMURoundStatisticsOutcome parsedOutcome)
                 ? parsedOutcome
                 : CMURoundStatisticsOutcome.Unknown;
+
+            // CMU14: rounds ended by the hive collapse rule used to record as marine major, reclassify by source
+            if (result == CMURoundStatisticsOutcome.MarineMajorXenoWipe
+                && outcome.Source == "HiveCollapseRule")
+                result = CMURoundStatisticsOutcome.MarineMinorHiveCollapse;
 
             return new CMURoundOutcomeRecord(
                 outcome.RoundId,
@@ -1490,13 +1479,18 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 : source.Trim();
         }
 
+        // CMU14 method: retain useful population detail on busy servers.
         private static List<CMURoundPlayerCountBandBreakdown> BuildPlayerCountBands(List<CMURoundOutcomeRecord> records)
         {
             return new List<CMURoundPlayerCountBandBreakdown>
             {
                 BuildPlayerCountBand(records, "0-59", 0, 59),
                 BuildPlayerCountBand(records, "60-99", 60, 99),
-                BuildPlayerCountBand(records, "100+", 100, int.MaxValue),
+                BuildPlayerCountBand(records, "100-149", 100, 149),
+                BuildPlayerCountBand(records, "150-199", 150, 199),
+                BuildPlayerCountBand(records, "200-249", 200, 249),
+                BuildPlayerCountBand(records, "250-299", 250, 299),
+                BuildPlayerCountBand(records, "300+", 300, int.MaxValue),
             }
                 .Where(band => band.Total > 0)
                 .ToList();
@@ -1530,6 +1524,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 CMURoundStatisticsPreset.DistressSignal => record.Winner == CMURoundStatisticsWinner.Xeno,
                 CMURoundStatisticsPreset.Insurgency => record.Winner == CMURoundStatisticsWinner.Govfor,
                 CMURoundStatisticsPreset.ColonyFall => record.Winner == CMURoundStatisticsWinner.Colonists,
+                CMURoundStatisticsPreset.ForceOnForce => record.Winner == CMURoundStatisticsWinner.Govfor, // CMU14
                 _ => false,
             };
         }
@@ -1541,6 +1536,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 CMURoundStatisticsPreset.DistressSignal => record.Winner == CMURoundStatisticsWinner.Govfor,
                 CMURoundStatisticsPreset.Insurgency => record.Winner == CMURoundStatisticsWinner.Clf,
                 CMURoundStatisticsPreset.ColonyFall => record.Winner == CMURoundStatisticsWinner.Threat,
+                CMURoundStatisticsPreset.ForceOnForce => record.Winner == CMURoundStatisticsWinner.Opfor, // CMU14
                 _ => false,
             };
         }
@@ -1605,44 +1601,8 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             return new ServerRecord(server.Id, server.Name);
         }
 
-        public async Task AddAdminLogs(List<AdminLog> logs)
-        {
-            const int maxRetryAttempts = 5;
-            var initialRetryDelay = TimeSpan.FromSeconds(5);
-
-            DebugTools.Assert(logs.All(x => x.RoundId > 0), "Adding logs with invalid round ids.");
-
-            var attempt = 0;
-            var retryDelay = initialRetryDelay;
-
-            while (attempt < maxRetryAttempts)
-            {
-                try
-                {
-                    await using var db = await GetDb();
-                    db.DbContext.AdminLog.AddRange(logs);
-                    await db.DbContext.SaveChangesAsync();
-                    _opsLog.Debug($"Successfully saved {logs.Count} admin logs.");
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    attempt += 1;
-                    _opsLog.Error($"Attempt {attempt} failed to save logs: {ex}");
-
-                    if (attempt >= maxRetryAttempts)
-                    {
-                        _opsLog.Error($"Max retry attempts reached. Failed to save {logs.Count} admin logs.");
-                        throw;
-                    }
-
-                    _opsLog.Warning($"Retrying in {retryDelay.TotalSeconds} seconds...");
-                    await Task.Delay(retryDelay);
-
-                    retryDelay *= 2;
-                }
-            }
-        }
+        // CMU14 method: reconcile an ambiguously committed batch before replaying it.
+        public Task AddAdminLogs(List<AdminLog> logs) => SaveAdminLogsIdempotently(logs);
 
         protected abstract IQueryable<AdminLog> StartAdminLogsQuery(ServerDbContext db, LogFilter? filter = null);
 

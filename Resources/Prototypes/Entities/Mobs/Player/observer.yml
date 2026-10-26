@@ -117,6 +117,9 @@
     noiseMultiplier: 0 # In case default values change
   - type: RMCActiveInputMover
   - type: GhostColor
+  # cmu edit start: toggle your own ghost (funky-station PR 906)
+  - type: CMUSelfGhostToggle
+  # cmu edit end
   # RMC - FindParasite Event
   - type: FindParasite
   - type: JoinXeno
@@ -221,9 +224,11 @@
   - type: Action
     clientExclusive: true
   - type: Sprite
-    sprite: Mobs/Ghosts/ghost_human.rsi
+    # cmu edit start: own icon, the ghost icon goes to the self toggle
+    sprite: CMU14/Interface/Actions/ghost_toggles.rsi
     layers:
-    - state: icon
+    - state: other-ghosts
+    # cmu edit end
   - type: InstantAction
     event: !type:ToggleGhostsActionEvent
 

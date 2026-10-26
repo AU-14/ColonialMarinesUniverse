@@ -5,6 +5,9 @@
   description: Developed by Weyland-Yutani as a modern successor to the aging M5 platform, the SpezialSturmGewehr is engineered for precision mid-to-long range combat. The primary rifle of the Weyland-Yutani PMCs.
   suffix: No ID Lock
   components:
+  # cmu edit start: built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/ssg45/ssg45_inhands.rsi
     layers:
@@ -75,6 +78,8 @@
         startingItem: RMCMagazineRifleSSG45
   - type: GunDamageModifier
     multiplier: 1.25
+  - type: RMCWeaponDamageFalloff # CMU14: cm13 nsg23 has damage_falloff_mult = 0, same as the l42a/l24
+    falloffMultiplier: 0 # CMU14
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:
@@ -247,6 +252,8 @@
       map: ["enum.GunVisualLayers.Mag"]
     - state: ammo_band
       color: "#1F951F"
+  - type: RefillableByBulletBox # CMU14: was inheriting the plain 10x24 box, so AP boxes refused it
+    bulletType: RMCBoxBulletsRifleAP # CMU14
 
 - type: entity
   parent: RMCMagazineRifleSSG45
@@ -273,6 +280,8 @@
       map: ["enum.GunVisualLayers.Mag"]
     - state: ammo_band
       color: "#9C9A19"
+  - type: RefillableByBulletBox # CMU14: no heap box exists, and the inherited plain box turned regular rounds into heap
+    bulletType: null # CMU14
 
 - type: entity
   parent: RMCMagazineRifleSSG45HEAP
@@ -307,6 +316,8 @@
       map: ["enum.GunVisualLayers.Mag"]
     - state: ammo_band
       color: "#771A10"
+  - type: RefillableByBulletBox # CMU14: same inheritance bug as the ap mag, point it at the incendiary box
+    bulletType: RMCBoxBulletsRifleIncendiary # CMU14
 
 - type: Tag
   id: RMCWeaponRifleSSG45

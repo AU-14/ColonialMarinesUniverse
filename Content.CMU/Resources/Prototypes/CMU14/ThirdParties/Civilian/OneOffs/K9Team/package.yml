@@ -37,11 +37,11 @@
   id: AU14IntelThirdPartyK9
   partyspawn: AU14IntelThirdPartyK9HandlerSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
   weight: 1
   minplayers: 500
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false
 
 - type: partySpawn
@@ -55,11 +55,11 @@
   id: AU14IntelThirdPartyK9Solo
   partyspawn: AU14IntelThirdPartyK9SoloSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
   weight: 1
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 1
+  ghostsNeeded: 1
   roundstart: false
 
 - type: entity

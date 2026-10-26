@@ -64,24 +64,33 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: pulato
-- type: marking
-  id: HumanHairLongBedhead
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: long_bedhead
-- type: marking
-  id: HumanHairLongBedhead2
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: long_bedhead2
-- type: marking
-  id: HumanHairFloorlengthBedhead
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: floorlength_bedhead
+# cmu edit start
+# - type: marking
+#   id: HumanHairLongBedhead
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: long_bedhead
+# cmu edit end
+
+# cmu edit start
+# - type: marking
+#   id: HumanHairLongBedhead2
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: long_bedhead2
+# # cmu edit start
+# # - type: marking
+# #   id: HumanHairFloorlengthBedhead
+# #   bodyPart: Hair
+# #   sprites:
+# #     - sprite: Mobs/Customization/human_hair.rsi
+# #       state: floorlength_bedhead
+# # cmu edit end
+# cmu edit end
+
+
 - type: marking
   id: HumanHairBeehive
   bodyPart: Hair
@@ -292,12 +301,15 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: classiccornrows2
-- type: marking
-  id: HumanHairClassicFloorlengthBedhead
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: classicfloorlength_bedhead
+# cmu edit start
+# - type: marking
+#   id: HumanHairClassicFloorlengthBedhead
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: classicfloorlength_bedhead
+# cmu edit end
+
 - type: marking
   id: HumanHairClassicModern
   bodyPart: Hair
@@ -580,12 +592,15 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: jensen
-- type: marking
-  id: HumanHairJoestar
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: joestar
+# cmu edit start
+# - type: marking
+#   id: HumanHairJoestar
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: joestar
+# cmu edit end
+
 - type: marking
   id: HumanHairKeanu
   bodyPart: Hair
@@ -598,24 +613,33 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: kusanagi
-- type: marking
-  id: HumanHairLong
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: long
-- type: marking
-  id: HumanHairLong2
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: long2
-- type: marking
-  id: HumanHairLong3
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: long3
+# cmu edit start
+# - type: marking
+#   id: HumanHairLong
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: long
+# cmu edit end
+
+# cmu edit start
+# - type: marking
+#   id: HumanHairLong2
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: long2
+# cmu edit end
+
+# cmu edit start
+# - type: marking
+#   id: HumanHairLong3
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: long3
+# cmu edit end
+
 - type: marking
   id: HumanHairLongWithBundles
   bodyPart: Hair
@@ -678,12 +702,15 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: d
-- type: marking
-  id: HumanHairNitori
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: nitori
+# cmu edit start
+# - type: marking
+#   id: HumanHairNitori
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: nitori
+# cmu edit end
+
 - type: marking
   id: HumanHairReversemohawk
   bodyPart: Hair
@@ -816,12 +843,15 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: ponytail6
-- type: marking
-  id: HumanHairPonytail7
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: ponytail7
+# cmu edit start
+# - type: marking
+#   id: HumanHairPonytail7
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: ponytail7
+# cmu edit end
+
 - type: marking
   id: HumanHairHighponytail
   bodyPart: Hair
@@ -1014,12 +1044,15 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: spiky2
-- type: marking
-  id: HumanHairSpookyLong
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: spookylong
+# cmu edit start
+# - type: marking
+#   id: HumanHairSpookyLong
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: spookylong
+# cmu edit end
+
 - type: marking
   id: HumanHairSwept
   bodyPart: Hair
@@ -1086,12 +1119,15 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: twintail
-- type: marking
-  id: HumanHairTwoStrands
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: twostrands
+# cmu edit start
+# - type: marking
+#   id: HumanHairTwoStrands
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: twostrands
+# cmu edit end
+
 - type: marking
   id: HumanHairUndercut
   bodyPart: Hair
@@ -1110,12 +1146,15 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: undercutright
-- type: marking
-  id: HumanHairUnkept
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: unkept
+# cmu edit start
+# - type: marking
+#   id: HumanHairUnkept
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: unkept
+# cmu edit end
+
 - type: marking
   id: HumanHairUpdo
   bodyPart: Hair
@@ -1128,20 +1167,26 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: vlong
-- type: marking
-  id: HumanHairLongest
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: longest
-- type: marking
-  id: HumanHairLongest2
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: longest2
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: longovereye_highlight
+# cmu edit start
+# - type: marking
+#   id: HumanHairLongest
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: longest
+# cmu edit end
+
+# cmu edit start
+# - type: marking
+#   id: HumanHairLongest2
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: longest2
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: longovereye_highlight
+# cmu edit end
+
 - type: marking
   id: HumanHairVeryshortovereyealternate
   bodyPart: Hair
@@ -1178,18 +1223,24 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: tailed
-- type: marking
-  id: HumanHairClassicLong2
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: classiclong2
-- type: marking
-  id: HumanHairClassicLong3
-  bodyPart: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: classiclong3
+# cmu edit start
+# - type: marking
+#   id: HumanHairClassicLong2
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: classiclong2
+# cmu edit end
+
+# cmu edit start
+# - type: marking
+#   id: HumanHairClassicLong3
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: Mobs/Customization/human_hair.rsi
+#       state: classiclong3
+# cmu edit end
+
 - type: marking
   id: HumanHairShaped
   bodyPart: Hair
@@ -1214,19 +1265,22 @@
   sprites:
   - sprite: Mobs/Customization/human_hair.rsi
     state: overeyepigtail
-- type: marking
-  id: HumanHairTerminal
-  bodyPart: Hair
-  coloring:
-    layers:
-      terminal_headband:
-        type:
-          !type:SimpleColoring
-            color: "#C3C3C3"
-  sprites:
-  - sprite: Mobs/Customization/human_hair.rsi
-    state: terminal
-  - sprite: Mobs/Customization/human_hair.rsi
-    state: terminal_highlight
-  - sprite: Mobs/Customization/human_hair.rsi
-    state: terminal_headband
+# cmu edit start
+# - type: marking
+#   id: HumanHairTerminal
+#   bodyPart: Hair
+#   coloring:
+#     layers:
+#       terminal_headband:
+#         type:
+#           !type:SimpleColoring
+#             color: "#C3C3C3"
+#   sprites:
+#   - sprite: Mobs/Customization/human_hair.rsi
+#     state: terminal
+#   - sprite: Mobs/Customization/human_hair.rsi
+#     state: terminal_highlight
+#   - sprite: Mobs/Customization/human_hair.rsi
+#     state: terminal_headband
+# cmu edit end
+

@@ -151,7 +151,7 @@ public abstract partial class SharedAbsorbentSystem : EntitySystem
 
             if (available == FixedPoint2.Zero)
             {
-                _popups.PopupClient(Loc.GetString("mopping-system-no-water", ("used", absorbEnt)), absorbEnt, user);
+                _popups.PopupEntity(Loc.GetString("mopping-system-no-water", ("used", absorbEnt)), absorbEnt, user);
                 return true;
             }
 

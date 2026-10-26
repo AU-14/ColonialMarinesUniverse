@@ -62,7 +62,8 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
         _logs.Debug($"[OBJ-CON] SendObjectives called for console='{ToPrettyString(uid)}', where faction='{comp.Faction}'");
         var objectives = new List<ObjectiveEntry>();
         var query = EntityQueryEnumerator<CMUObjectiveComponent>();
-        (int currentWinPoints, int requiredWinPoints) = _objCtrl.GetWinPoints(comp.Faction);
+        var (currentWinPointsExact, requiredWinPoints) = _objCtrl.GetWinPointsExact(comp.Faction);
+        var currentWinPoints = currentWinPointsExact.Float();
 
         var planetMap = _objCtrl.GetPlanetMapId();
         if (planetMap == null) return;
@@ -162,7 +163,7 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
                     objComp.Repeating,
                     objComp.Repeating ? objComp.TimesCompleted : null,
                     objComp.MaxRepeatable,
-                    objComp.CustomPoints != 0 ? objComp.CustomPoints : (objComp.ObjectiveLevel == 1 ? 5 : 20)));
+                    ObjectiveControlSystem.GetDisplayPoints(objComp)));
                 _logs.Debug($"[OBJ-CON] Added objective to list: id={objComp.Id} displayDesc={displayDesc} status={statusDisplay}");
                 continue;
             }
@@ -238,7 +239,7 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
 
             int? repeatsCompleted2 = objComp.Repeating ? objComp.TimesCompleted : null;
             int? maxRepeatable2 = objComp.MaxRepeatable;
-            int points2 = objComp.CustomPoints != 0 ? objComp.CustomPoints : (objComp.ObjectiveLevel == 1 ? 5 : 20);
+            var points2 = ObjectiveControlSystem.GetDisplayPoints(objComp);
             objectives.Add(new ObjectiveEntry(objComp.Id, displayDesc2, statusDisplay, typeDisplay, fetchProgress, objComp.Repeating, repeatsCompleted2, maxRepeatable2, points2));
             _logs.Debug($"[OBJ-CON] Added objective to list: id={objComp.Id} displayDesc={displayDesc2} status={statusDisplay}");
         }
@@ -280,7 +281,7 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
                 tiers.Add(new ObjectiveIntelTierEntry(0, objComp.Id, objComp.ObjectiveDescription, 0));
 
                 var teamKeyDefault = string.IsNullOrEmpty(comp.Faction) ? Team.None : comp.Faction.ToLowerInvariant();
-                var stateFull = new ObjectiveIntelBoundUserInterfaceMessage(objComp.Id, objComp.ObjectiveDescription, tiers, 1, _intel.GetIntelPoints(teamKeyDefault));
+                var stateFull = new ObjectiveIntelBoundUserInterfaceMessage(objComp.Id, objComp.ObjectiveDescription, tiers, 1, _intel.GetIntelPointsExact(teamKeyDefault));
 
                 _logs.Debug($"[OBJ-CON] Sending intel UI state: objective={objComp.Id} team={teamKeyDefault} tiers={tiers.Count} unlocked=1 points={_intel.GetIntelPoints(teamKeyDefault)}");
                 _ui.ServerSendUiMessage(uid, ObjectivesConsoleKey.Key, stateFull, msg.Actor);
@@ -316,7 +317,7 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
 
             _logs.Debug($"[OBJ-CON] Sending intel UI state: objective={objComp.Id} team={team} tiers={tiers.Count} unlocked={unlocked} points={_intel.GetIntelPoints(team)}");
 
-            var state2 = new ObjectiveIntelBoundUserInterfaceMessage(objComp.Id, objComp.ObjectiveDescription, tiers, unlocked, _intel.GetIntelPoints(team));
+            var state2 = new ObjectiveIntelBoundUserInterfaceMessage(objComp.Id, objComp.ObjectiveDescription, tiers, unlocked, _intel.GetIntelPointsExact(team));
             _ui.ServerSendUiMessage(uid, ObjectivesConsoleKey.Key, state2, msg.Actor);
             return;
         }

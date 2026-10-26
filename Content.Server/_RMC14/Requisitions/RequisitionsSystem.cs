@@ -128,6 +128,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         // Also apply platoon catalog in case the console needs a custom catalog based on current round
         ApplyPlatoonCatalogToComputer(uid, comp);
         AddXRFToCatalog(uid, comp);
+        var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
         ResetStock((uid, comp));
         Dirty(uid, comp);
     }
@@ -278,6 +279,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         account.Balance -= order.Cost;
         elevator.Comp.Orders.Add(order);
+        // cmu edit start: who bought it, for the colony firearm registry
+        var bought = new Content.Server.CMU14.Requisitions.CMURequisitionsOrderBoughtEvent(elevator, elevator.Comp.Orders.Count - 1, actor,
+            computer.Comp.Faction);
+        RaiseLocalEvent(ref bought);
+        // cmu edit end
         SendUIStateAll();
         _adminLogs.Add(LogType.RMCRequisitionsBuy, $"{ToPrettyString(args.Actor):actor} bought requisitions crate {order.Name} with crate {order.Crate} for {order.Cost}");
 
@@ -366,7 +372,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             case "govfor":
             case "opfor":
-                comp.Balance = 20000;
+                comp.Balance = 30000;
                 break;
             case "colony":
                 comp.Balance = 450;
@@ -551,6 +557,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 var crate = delivery.Roots[orderIndex];
                 _transform.SetCoordinates(crate, coordinates.Offset(new Vector2(xOffset, yOffset)));
                 remainingDeliveries--;
+                // cmu edit start: lets the colony firearm registry log the guns in it
+                var delivered = new Content.Server.CMU14.Requisitions.CMURequisitionsCrateDeliveredEvent(elevator, orderIndex, crate,
+                    order.Name ?? (_prototypeManager.TryIndex<EntityPrototype>(order.Crate, out var crateProto) ? crateProto.Name : order.Crate.Id));
+                RaiseLocalEvent(ref delivered);
+                // cmu edit end
 
                 // If this order came from a department console, attach a department note
                 // instead of the generic invoice so it shows on the crate label.
@@ -627,7 +638,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             // Instead of blacklist, we use a whitelist to selectively control generated funds from selling
             // if (HasComp<CargoSellBlacklistComponent>(entity))
             //     continue;
-            if (!HasComp<CargoSellWhitelistComponent>(entity))
+            // cmu edit start: loose invoices and order slips pay out too, not just ones in or on a crate
+            if (!HasComp<CargoSellWhitelistComponent>(entity) && !HasComp<RequisitionsInvoiceComponent>(entity))
+            // cmu edit end
             {
                 QueueDel(entity);
                 continue;
@@ -773,31 +786,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             if (ProcessElevator((uid, elevator)))
                 updateUI = true;
 
-            if (!_chasmQuery.TryComp(uid, out var chasm))
-                continue;
-
-            if (time < elevator.NextChasmCheck)
-                continue;
-
-            elevator.NextChasmCheck = time + elevator.ChasmCheckEvery;
-
             if (_net.IsClient)
                 continue;
 
-            if (elevator.Mode != Raised && elevator.Mode != Preparing)
-            {
-                _toPit.Clear();
-                _lookup.GetEntitiesInRange(uid.ToCoordinates(), elevator.Radius + 0.25f, _toPit);
-
-                foreach (var toPit in _toPit)
-                {
-                    if (_chasmFallingQuery.HasComp(toPit))
-                        continue;
-
-                    _chasm.StartFalling((uid, chasm), toPit, playEmote: false);
-                    _audio.PlayEntity(chasm.FallingSound, toPit, uid);
-                }
-            }
         }
 
         if (updateUI)
@@ -1140,6 +1131,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private void OnMoneyInserted(EntityUid uid, ColonyAtmComponent comp, EntInsertedIntoContainerMessage args)
     {
+        // CMU14: the colony ATM holds the customer's ID card, and the cash it pays out until it is taken,
+        // in containers of their own; neither is a payment.
+        if (args.Container.ID is ColonyAtmComponent.CardSlotId or ColonyAtmComponent.CashTrayId)
+            return;
+
         int stackCount = 1;
         if (TryComp(args.Entity, out StackComponent? stack))
             stackCount = stack.Count;
@@ -1223,6 +1219,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             ApplyPlatoonCatalogToComputer(uid, comp);
             AddResearchTerminalToCatalog(uid, comp); // CMU14
+            var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
             ResetStock((uid, comp));
             Dirty(uid, comp);
         }

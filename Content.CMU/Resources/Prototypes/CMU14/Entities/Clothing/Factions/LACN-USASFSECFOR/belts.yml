@@ -33,10 +33,23 @@
     camouflageVariations: { }
 
 - type: entity
-  parent: CMBeltUtility
+  parent: RMCBeltUtilityGeneral
   id: CMULACNBeltUtility
   name: LACN utility rig
-  description: An LACN load-bearing belt made to carry tools rather than ammunition.
+  description: An LACN load-bearing belt with pouches for general supplies.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltUtility
+  id: CMULACNBeltToolbelt
+  name: LACN toolbelt rig
+  description: An LACN load-bearing belt fitted with clips and pouches for engineering tools.
   components:
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
@@ -47,9 +60,23 @@
 
 - type: entity
   parent: CMBeltMedicBag
-  id: CMULACNBeltMedical
+  id: CMUBeltMedicBagLACN
   name: LACN lifesaver bag
-  description: An LACN load-bearing belt mounting a duffel bag filled with a range of injectors and light medical supplies. Common among corpsmen.
+  description: An LACN load-bearing belt mounting a duffel bag filled with a range of injectors and light medical supplies. Common among corpsmen. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNmedbelt.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNmedbelt.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltMedical
+  id: CMUBeltMedicalLACN
+  name: LACN medical storage rig
+  suffix: CMU
+  description: The LACN medical storage rig is the standard load-bearing equipment for many LACN corpsmen. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport medical supplies. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.
   components:
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNmedbelt.rsi
@@ -195,9 +222,8 @@
     camouflageVariations: { }
 
 - type: entity
-  parent: CMULACNBeltUtility
-  id: CMULACNBeltUtilityFilled
-  name: LACN utility tools rig
+  parent: CMULACNBeltToolbelt
+  id: CMULACNBeltToolbeltFilled
   suffix: Filled
   components:
   - type: StorageFill
@@ -210,3 +236,41 @@
     - id: RMCCableCoil30
     - id: CMMultitool
     - id: CMEntrenchingTool
+
+# LACN versions of the combat toolbelt and construction rig, drawn like the LACN toolbelt rig.
+- type: entity
+  parent: AU14BeltUtilityCombatFilled
+  id: CMULACNBeltUtilityCombatFilled
+  name: LACN utility tools rig
+  description: An LACN load-bearing belt fitted with clips and pouches for engineering tools, along with a holster for a sidearm. Due to the bulk of the sidearm, it is unable to hold as many tools as the toolbelt rig.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
+    layers:
+    - state: icon
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m1984
+      offset: -0.3125, -0.09375
+      map: [ "enum.CMHolsterLayers.Fill" ]
+      visible: false
+    - state: half
+      map: [ "openLayer" ]
+    - state: full
+      map: [ "closedLayer" ]
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: RMCBeltConstruction
+  id: CMULACNBeltConstruction
+  name: LACN construction rig
+  description: An LACN load-bearing belt used to carry materials and other supplies. This version sacrifices storage space for specialized material loading clips.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }

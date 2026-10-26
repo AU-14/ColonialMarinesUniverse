@@ -31,14 +31,22 @@
   canBeAntag: false
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
+    time: 14400 # 4 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -83,8 +91,6 @@
     suitstorage: RMCBeltHolsterRevolver
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
-  inhand:
-  - AU14GunCasePistolM44Civ
   storage:
     back:
     - AU14GuidebookLawColonial

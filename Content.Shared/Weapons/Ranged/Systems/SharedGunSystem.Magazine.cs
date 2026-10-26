@@ -33,6 +33,11 @@ public abstract partial class SharedGunSystem
         if (!args.IsInDetailsRange)
             return;
 
+        // cmu edit start: only guns with an ammo counter show their rounds
+        if (!CMUShowsAmmoCount(uid))
+            return;
+        // cmu edit end
+
         var (count, _) = GetMagazineCountCapacity(uid, component);
         args.PushMarkup(Loc.GetString("gun-magazine-examine", ("color", AmmoExamineColor), ("count", count)));
     }
@@ -87,7 +92,7 @@ public abstract partial class SharedGunSystem
         ent.Comp.EjectToHand = ejectToHand;
         Dirty(ent);
 
-        PopupSystem.PopupClient(Loc.GetString(ejectToHand
+        PopupSystem.PopupEntity(Loc.GetString(ejectToHand
             ? "cmu-gun-magazine-auto-eject-set-to-hand"
             : "cmu-gun-magazine-auto-eject-set-to-ground"), ent, user);
     }

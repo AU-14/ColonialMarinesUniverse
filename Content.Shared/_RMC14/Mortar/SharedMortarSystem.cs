@@ -151,7 +151,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         _transform.AnchorEntity((mortar, xform));
 
         if (!IsOnPlanetZLevel(_transform.ToMapCoordinates(coordinates)))
-            _popup.PopupClient(Loc.GetString("rmc-mortar-deploy-end-not-planet"), user, user, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-mortar-deploy-end-not-planet"), user, user, PopupType.MediumCaution);
 
         _audio.PlayPredicted(mortar.Comp.DeploySound, mortar, user);
     }
@@ -166,7 +166,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         var user = args.User;
         var selfMsg = Loc.GetString("rmc-mortar-target-finish-self", ("mortar", mortar));
         var othersMsg = Loc.GetString("rmc-mortar-target-finish-others", ("user", user), ("mortar", mortar));
-        _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+        _popup.PopupEntity(selfMsg, othersMsg, user, user);
         if (_net.IsClient)
             return;
 
@@ -199,7 +199,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         var user = args.User;
         var selfMsg = Loc.GetString("rmc-mortar-dial-finish-self", ("mortar", mortar));
         var othersMsg = Loc.GetString("rmc-mortar-dial-finish-others", ("user", user), ("mortar", mortar));
-        _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+        _popup.PopupEntity(selfMsg, othersMsg, user, user);
     }
 
     private void OnMortarInteractUsing(Entity<MortarComponent> mortar, ref InteractUsingEvent args)
@@ -245,7 +245,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
                     ("user", user),
                     ("mortar", mortar),
                     ("shell", used));
-                _popup.PopupPredicted(selfMsg, othersMsg, mortar, user);
+                _popup.PopupEntity(selfMsg, othersMsg, mortar, user);
 
                 if (_net.IsServer)
                     _audio.PlayPvs(mortar.Comp.ReloadSound, mortar);
@@ -303,7 +303,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
 
         var selfMsg = Loc.GetString("rmc-mortar-shell-load-finish-self", ("mortar", mortar), ("shell", shellId));
         var othersMsg = Loc.GetString("rmc-mortar-shell-load-finish-others", ("user", user), ("mortar", mortar), ("shell", shellId));
-        _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+        _popup.PopupEntity(selfMsg, othersMsg, user, user);
 
         othersMsg = Loc.GetString("rmc-mortar-shell-fire", ("mortar", mortar));
         _popup.PopupEntity(othersMsg, mortar, PopupType.MediumCaution);
@@ -405,7 +405,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
     {
         if (mortar.Comp.LaserTargetingMode)
         {
-            _popup.PopupPredictedCursor(Loc.GetString("rmc-mortar-dial-coordinates", ("mortar", mortar)), args.Actor, PopupType.SmallCaution);
+            _popup.PopupCursor(Loc.GetString("rmc-mortar-dial-coordinates", ("mortar", mortar)), args.Actor, PopupType.SmallCaution);
             return;
         }
 
@@ -423,7 +423,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-mortar-target-start-self", ("mortar", mortar));
             var othersMsg = Loc.GetString("rmc-mortar-target-start-others", ("user", user), ("mortar", mortar));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
         }
     }
 
@@ -431,7 +431,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
     {
         if (mortar.Comp.LaserTargetingMode)
         {
-            _popup.PopupPredictedCursor(Loc.GetString("rmc-mortar-dial-coordinates", ("mortar", mortar)), args.Actor, PopupType.SmallCaution);
+            _popup.PopupCursor(Loc.GetString("rmc-mortar-dial-coordinates", ("mortar", mortar)), args.Actor, PopupType.SmallCaution);
             return;
         }
 
@@ -449,7 +449,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-mortar-dial-start-self", ("mortar", mortar));
             var othersMsg = Loc.GetString("rmc-mortar-dial-start-others", ("user", user), ("mortar", mortar));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
         }
     }
 
@@ -474,7 +474,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         };
 
         if (_doAfter.TryStartDoAfter(args))
-            _popup.PopupClient(Loc.GetString("rmc-mortar-deploy-start", ("mortar", mortar)), user, user);
+            _popup.PopupEntity(Loc.GetString("rmc-mortar-deploy-start", ("mortar", mortar)), user, user);
     }
 
     protected bool HasSkillPopup(Entity<MortarComponent> mortar, EntityUid user, bool predicted)
@@ -484,7 +484,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
 
         var msg = Loc.GetString("rmc-skills-no-training", ("target", mortar));
         if (predicted)
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
         else
             _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
 
@@ -525,7 +525,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
 
         if (!CanOperateMortarAt(user.ToCoordinates()))
         {
-            _popup.PopupClient(Loc.GetString("rmc-mortar-covered", ("mortar", mortar)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-mortar-covered", ("mortar", mortar)), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -769,7 +769,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
 
         var selfMsg = Loc.GetString("rmc-mortar-laser-linked-self", ("mortar", mortar), ("laserDesignator", laserDesignator));
         var othersMsg = Loc.GetString("rmc-mortar-laser-linked-others", ("user", user), ("mortar", mortar), ("laserDesignator", laserDesignator));
-        _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+        _popup.PopupEntity(selfMsg, othersMsg, user, user);
     }
 
     public bool TryToggleLaserTargetingMode(Entity<MortarComponent> mortar, EntityUid user, bool laserMode, bool playSound = true)
@@ -781,7 +781,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         // Mortar must be deployed to toggle targeting mode
         if (!mortar.Comp.Deployed)
         {
-            _popup.PopupClient(Loc.GetString("rmc-mortar-not-deployed", ("mortar", mortar)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-mortar-not-deployed", ("mortar", mortar)), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -791,7 +791,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
 
         var selfMsg = Loc.GetString(laserMode ? "rmc-mortar-laser-mode-switched-self" : "rmc-mortar-coordinates-mode-switched-self", ("mortar", mortar));
         var othersMsg = Loc.GetString(laserMode ? "rmc-mortar-laser-mode-switched-others" : "rmc-mortar-coordinates-mode-switched-others", ("user", user), ("mortar", mortar));
-        _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+        _popup.PopupEntity(selfMsg, othersMsg, user, user);
 
         if (playSound)
             _audio.PlayPredicted(mortar.Comp.ToggleSound, mortar, user);
@@ -802,7 +802,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
     {
         if (mortar.Comp.IsLinking)
         {
-            _popup.PopupClient(Loc.GetString("rmc-mortar-already-linking"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-mortar-already-linking"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -820,7 +820,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         if (_doAfter.TryStartDoAfter(doAfter))
         {
             var msg = Loc.GetString("rmc-mortar-linking-start", ("mortar", mortar), ("laserDesignator", laserDesignator));
-            _popup.PopupClient(msg, mortar, user);
+            _popup.PopupEntity(msg, mortar, user);
             return true;
         }
         else

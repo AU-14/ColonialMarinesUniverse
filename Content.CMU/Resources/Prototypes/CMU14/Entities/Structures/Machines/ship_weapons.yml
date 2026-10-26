@@ -1,0 +1,504 @@
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUShipWeaponsTerminal
+  name: ship weapons arming terminal
+  description: Selects orbital support weapons for this ship. The terminal displays the selection limit and shared fire missions. Confirmed selections cannot be changed during the operation.
+  components:
+  # The black sensor computer (RMCBlackSensorComputer2).
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/hybrisa_computer_props.rsi
+    state: blacksensor_comp2
+  - type: EmitSoundOnUIOpen
+    sound:
+      collection: RMCKeyboardTyping
+      params:
+        volume: -1
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: CMUShipWeaponsTerminal
+    maxSelections: 2
+    uses: 2
+  - type: GuideHelp
+    guides:
+    - CMUGuideShipWeapons
+  - type: ActivatableUI
+    key: enum.CMUShipWeaponsUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUShipWeaponsUiKey.Key:
+        type: CMUShipWeaponsBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["RMCAccessCommand"], ["AU14AccessGovforCommand"], ["AU14AccessOpforCommand"]]
+
+- type: entity
+  parent: CMUShipWeaponsTerminal
+  id: CMUShipWeaponsTerminalGovfor
+  suffix: GOVFOR
+  components:
+  - type: CMUShipWeaponsTerminal
+    maxSelections: 2
+    faction: govfor
+  - type: AccessReader
+    access: [["AU14AccessGovforCommand"]]
+
+- type: entity
+  parent: CMUShipWeaponsTerminal
+  id: CMUShipWeaponsTerminalOpfor
+  suffix: OPFOR
+  components:
+  - type: CMUShipWeaponsTerminal
+    maxSelections: 2
+    faction: opfor
+  - type: AccessReader
+    access: [["AU14AccessOpforCommand"]]
+
+- type: entity
+  id: CMUShipWeaponStrike
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+
+- type: entity
+  id: CMUShipWeaponSmoke
+  name: orbital smoke
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      cloud:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        mask:
+        - MobMask
+        layer:
+        - MidImpassable
+  - type: Occluder
+  - type: Sprite
+    sprite: _RMC14/Effects/smoke.rsi
+    state: smoke2
+    color: "#adadad"
+  - type: TimedDespawn
+    lifetime: 30
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: CMUShipWeaponSmoke
+  id: CMUShipWeaponGas
+  name: orbital toxic gas
+  components:
+  - type: Sprite
+    color: "#75963c"
+  - type: DamageOverTime
+    acidic: false
+    affectsDead: true
+    damage:
+      types:
+        Poison: 15
+    whitelist:
+      components:
+      - MobState
+    multipliers:
+    - multiplier: 0
+      whitelist:
+        components:
+        - Xeno
+  - type: GasMaskFilterDamage
+    damage: 5
+    neurotoxin: false
+    orbitalGas: true
+  - type: CMUOrbitalGas
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: CMUShipWeaponGasHaze
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RMCDazed
+    visionReduction: 0 # 0.15
+    alpha: 0 #0.3
+    color: "#75963c"
+
+- type: entity
+  parent: CMUShipWeaponSmoke
+  id: CMUShipWeaponEmsCloud
+  name: electromagnetic interference
+  components:
+  - type: Sprite
+    color: "#88cce8"
+  - type: TimedDespawn
+    lifetime: 30
+
+- type: entity
+  parent: StatusEffectStunned
+  id: CMUShipWeaponEmsStun
+  name: EMS paralysis
+  components:
+  - type: StatusEffect
+    blacklist: null
+
+- type: entity
+  id: CMUShipWeaponEmsField
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUShipWeaponEmsField
+    burnDamagePerSecond: 5
+    humanDamageCap: 50
+
+- type: cmuShipWeapon
+  id: CMUGatlingBarrage
+  name: cmu-ship-weapons-gatling
+  shots: 120
+  interval: 0.15
+  spread: 16
+  blastRadius: 1.5
+  slope: 8
+  maxIntensity: 25
+
+- type: cmuShipWeapon
+  id: CMUWalkingBarrage
+  name: cmu-ship-weapons-walking
+  shots: 9
+  interval: 1
+  walkingDistance: 16
+  blastRadius: 6
+
+- type: cmuShipWeapon
+  id: CMU120mmHEBarrage
+  name: cmu-ship-weapons-120mm
+  shots: 12
+  interval: 0.75
+  spread: 16
+  blastRadius: 12
+  maxIntensity: 70
+
+- type: cmuShipWeapon
+  id: CMU380mmHEBarrage
+  name: cmu-ship-weapons-380mm
+  shots: 6
+  interval: 1.8
+  spread: 6
+  blastRadius: 16
+
+- type: cmuShipWeapon
+  id: CMUGasStrike
+  name: cmu-ship-weapons-gas
+  cloud: CMUShipWeaponGas
+  cloudRadius: 30
+
+- type: cmuShipWeapon
+  id: CMUEMSStrike
+  name: cmu-ship-weapons-ems
+  cloud: CMUShipWeaponEmsCloud
+  cloudRadius: 30
+  ems: true
+  fieldDuration: 30
+  stunAfterField: 35
+
+- type: cmuShipWeapon
+  id: CMUSmokeStrike
+  name: cmu-ship-weapons-smoke
+  cloud: CMUShipWeaponSmoke
+  cloudRadius: 30
+
+- type: cmuShipWeapon
+  id: CMUAirburstStrike
+  name: cmu-ship-weapons-airburst
+  shots: 6
+  interval: 0.8
+  spread: 8
+  blastRadius: 12
+  maxIntensity: 50
+  airburst: true
+
+- type: cmuShipWeapon
+  id: CMUPrecisionStrike
+  name: cmu-ship-weapons-precision
+  blastRadius: 12
+  maxIntensity: 70
+
+- type: cmuShipWeapon
+  id: CMURailcannonStrike
+  name: cmu-ship-weapons-railcannon
+  railDamage:
+    types:
+      Piercing: 2000
+      Structural: 2000
+
+# The ship's two orbital batteries. Either one fires any mission. Every shot burns out the battery, and the crew have to
+# work through its eight repair steps, each with its own tool, before it can fire again.
+- type: entity
+  abstract: true
+  parent: RMCRailgunProp
+  id: CMUShipWeaponGunBase
+  description: A ship-mounted orbital support battery. Each fire mission burns it out, and it has to be repaired step by step before it can fire again. Examine it to see the next step.
+  components:
+  - type: InteractionOutline
+  - type: GuideHelp
+    guides:
+    - CMUGuideShipWeapons
+  - type: CMUShipWeaponGun
+    weapons:
+    - CMUGatlingBarrage
+    - CMUWalkingBarrage
+    - CMU120mmHEBarrage
+    - CMU380mmHEBarrage
+    - CMUGasStrike
+    - CMUEMSStrike
+    - CMUSmokeStrike
+    - CMUAirburstStrike
+    - CMUPrecisionStrike
+    - CMURailcannonStrike
+    repairSteps:
+    - quality: Prying
+      delay: 3
+      hint: cmu-ship-weapons-repair-hatch-hint
+      done: cmu-ship-weapons-repair-hatch-done
+    - quality: Screwing
+      delay: 3
+      hint: cmu-ship-weapons-repair-housing-hint
+      done: cmu-ship-weapons-repair-housing-done
+    - quality: Anchoring
+      delay: 4
+      hint: cmu-ship-weapons-repair-unbolt-hint
+      done: cmu-ship-weapons-repair-unbolt-done
+    - quality: Cutting
+      delay: 3
+      hint: cmu-ship-weapons-repair-wiring-hint
+      done: cmu-ship-weapons-repair-wiring-done
+    - quality: Welding
+      delay: 5
+      fuel: 5
+      hint: cmu-ship-weapons-repair-weld-hint
+      done: cmu-ship-weapons-repair-weld-done
+    - quality: Anchoring
+      delay: 4
+      hint: cmu-ship-weapons-repair-bolt-hint
+      done: cmu-ship-weapons-repair-bolt-done
+    - quality: Pulsing
+      delay: 4
+      hint: cmu-ship-weapons-repair-calibrate-hint
+      done: cmu-ship-weapons-repair-calibrate-done
+    - quality: Screwing
+      delay: 3
+      hint: cmu-ship-weapons-repair-secure-hint
+      done: cmu-ship-weapons-repair-secure-done
+
+- type: entity
+  parent: CMUShipWeaponGunBase
+  id: CMUShipWeaponGun
+  name: orbital battery
+  suffix: CMU
+
+- type: entity
+  parent: CMUShipWeaponGunBase
+  id: CMUShipWeaponGunFlipped
+  name: orbital battery
+  suffix: CMU, Flipped
+  components:
+  - type: Sprite
+    state: anti_air_cannon_f
+
+# Admin test spawners: each fires its strike where it's spawned, then disappears. The plain ones run the full 24-second
+# flight with every warning and sound; the instant ones go straight to impact.
+- type: entity
+  abstract: true
+  parent: MarkerBase
+  id: CMUShipWeaponStrikeSpawnerBase
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _RMC14/Markers/landmarks.rsi
+    state: invisible_wall
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerBase
+  id: CMUShipWeaponStrikeSpawnerGatlingBarrage
+  name: gatling barrage ship strike
+  suffix: CMU, FIRES A SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUGatlingBarrage
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerGatlingBarrage
+  id: CMUShipWeaponStrikeSpawnerGatlingBarrageInstant
+  suffix: CMU, INSTANT SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUGatlingBarrage
+    instant: true
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerBase
+  id: CMUShipWeaponStrikeSpawnerWalkingBarrage
+  name: walking barrage ship strike
+  suffix: CMU, FIRES A SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUWalkingBarrage
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerWalkingBarrage
+  id: CMUShipWeaponStrikeSpawnerWalkingBarrageInstant
+  suffix: CMU, INSTANT SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUWalkingBarrage
+    instant: true
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerBase
+  id: CMUShipWeaponStrikeSpawner120mmHEBarrage
+  name: 120mm HE barrage ship strike
+  suffix: CMU, FIRES A SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMU120mmHEBarrage
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawner120mmHEBarrage
+  id: CMUShipWeaponStrikeSpawner120mmHEBarrageInstant
+  suffix: CMU, INSTANT SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMU120mmHEBarrage
+    instant: true
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerBase
+  id: CMUShipWeaponStrikeSpawner380mmHEBarrage
+  name: 380mm HE barrage ship strike
+  suffix: CMU, FIRES A SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMU380mmHEBarrage
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawner380mmHEBarrage
+  id: CMUShipWeaponStrikeSpawner380mmHEBarrageInstant
+  suffix: CMU, INSTANT SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMU380mmHEBarrage
+    instant: true
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerBase
+  id: CMUShipWeaponStrikeSpawnerGasStrike
+  name: gas strike ship strike
+  suffix: CMU, FIRES A SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUGasStrike
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerGasStrike
+  id: CMUShipWeaponStrikeSpawnerGasStrikeInstant
+  suffix: CMU, INSTANT SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUGasStrike
+    instant: true
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerBase
+  id: CMUShipWeaponStrikeSpawnerEMSStrike
+  name: EMS strike ship strike
+  suffix: CMU, FIRES A SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUEMSStrike
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerEMSStrike
+  id: CMUShipWeaponStrikeSpawnerEMSStrikeInstant
+  suffix: CMU, INSTANT SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUEMSStrike
+    instant: true
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerBase
+  id: CMUShipWeaponStrikeSpawnerSmokeStrike
+  name: smoke strike ship strike
+  suffix: CMU, FIRES A SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUSmokeStrike
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerSmokeStrike
+  id: CMUShipWeaponStrikeSpawnerSmokeStrikeInstant
+  suffix: CMU, INSTANT SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUSmokeStrike
+    instant: true
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerBase
+  id: CMUShipWeaponStrikeSpawnerAirburstStrike
+  name: airburst strike ship strike
+  suffix: CMU, FIRES A SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUAirburstStrike
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerAirburstStrike
+  id: CMUShipWeaponStrikeSpawnerAirburstStrikeInstant
+  suffix: CMU, INSTANT SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUAirburstStrike
+    instant: true
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerBase
+  id: CMUShipWeaponStrikeSpawnerPrecisionStrike
+  name: precision strike ship strike
+  suffix: CMU, FIRES A SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUPrecisionStrike
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerPrecisionStrike
+  id: CMUShipWeaponStrikeSpawnerPrecisionStrikeInstant
+  suffix: CMU, INSTANT SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMUPrecisionStrike
+    instant: true
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerBase
+  id: CMUShipWeaponStrikeSpawnerRailcannonStrike
+  name: railcannon strike ship strike
+  suffix: CMU, FIRES A SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMURailcannonStrike
+
+- type: entity
+  parent: CMUShipWeaponStrikeSpawnerRailcannonStrike
+  id: CMUShipWeaponStrikeSpawnerRailcannonStrikeInstant
+  suffix: CMU, INSTANT SHIP STRIKE!!!
+  components:
+  - type: CMUShipWeaponStrikeSpawner
+    weapon: CMURailcannonStrike
+    instant: true

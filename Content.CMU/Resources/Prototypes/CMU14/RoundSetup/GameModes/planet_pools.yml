@@ -4,7 +4,6 @@
   id: SharedPlanetPool
   planets:
   - AUPlanetShepherdsPride
-  - CMUPlanetLament # Barkers
   - CMUPlanetHopesRetreat
   - CMUPlanetStableGarrisonRedux
 
@@ -12,14 +11,12 @@
 - type: GamePlanetPool
   id: ForceOnForcePlanetPool
   planets:
-  - CMUPlanetHopesRetreat
-  - AUPlanetLV759
+# - CMUPlanetHopesRetreat # govfor spawns planetside
+# - AUPlanetLV759 # govfor spawns planetside
   - AUPlanetTrijent
   - AUPlanetBosenmoriBasho
   - AuPlanetChances
   - AUPlanetCorsatStation
-  - AUPlanetLV624
   - AUPlanetShepherdsPride
-  - AUPlanetLV747
-  - CMUPlanetStableGarrisonRedux
+# - CMUPlanetStableGarrisonRedux # govfor spawns planetside
   - AUPlanetSorokyne

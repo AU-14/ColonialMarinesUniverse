@@ -1,0 +1,8 @@
+# Private band for Wendigos, natural and lab-made. Granted by CMUWendigoPack and used as their default channel.
+- type: radioChannel
+  id: CMUWendigoPack
+  name: chat-radio-cmu-wendigo-pack
+  keycode: "ŵ"
+  frequency: 42.9
+  color: "#b07a45"
+  longRange: true

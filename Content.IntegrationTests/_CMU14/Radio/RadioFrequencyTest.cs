@@ -35,6 +35,10 @@ public sealed class RadioFrequencyTest : GameTest
         ["radioOpforIntel"] = 160_200,
         ["radioOpforJTAC"] = 147_400,
         ["radioOpforMILP"] = 147_700,
+        // cmu edit start
+        ["radioGovforFoxtrot"] = 160_800,
+        ["radioOpforVictor"] = 160_900,
+        // cmu edit end
         ["radioProvost"] = 186_300,
         ["Colony"] = 146_900,
         ["colonyAlert"] = 143_100,
@@ -42,7 +46,9 @@ public sealed class RadioFrequencyTest : GameTest
         ["radioCMB"] = 122_000,
         ["radioCLF"] = 188_600,
         ["radioCLFCommand"] = 188_700,
-        ["radioMobFamily"] = 146_700,
+        // cmu edit start: the mob family channel was removed
+        // ["radioMobFamily"] = 146_700,
+        // cmu edit end
         ["radioAI"] = 767_600,
         ["ColonyHandheld"] = 146_100,
         ["Hivemind"] = 42_600,
@@ -59,6 +65,7 @@ public sealed class RadioFrequencyTest : GameTest
         ["UNISOF"] = 176_500,
         ["Biomorph"] = 42_800, // CMU14
         ["BiomorphMimic"] = 42_700, // CMU14
+        ["CMUWendigoPack"] = 42_900, // CMU14
         ["CMUYautja"] = 154_100,
         ["CMUYautjaOverseer"] = 154_200,
         ["CMUYautjaBadBlood"] = 154_300,
@@ -139,7 +146,9 @@ public sealed class RadioFrequencyTest : GameTest
     {
         await Server.WaitAssertion(() =>
         {
-            Assert.That(CustomChannels, Has.Count.EqualTo(57));
+            // cmu edit start
+            Assert.That(CustomChannels, Has.Count.EqualTo(59)); // CMU14: includes CMUWendigoPack
+            // cmu edit end
 
             foreach (var (id, expectedKilohertz) in CustomChannels)
             {
@@ -154,9 +163,13 @@ public sealed class RadioFrequencyTest : GameTest
             var positive = CustomChannels.Values.Where(value => value > 0).ToArray();
             Assert.Multiple(() =>
             {
-                Assert.That(positive, Has.Length.EqualTo(55));
+                // cmu edit start
+                Assert.That(positive, Has.Length.EqualTo(57));
+                // cmu edit end
                 Assert.That(CustomChannels.Values.Count(value => value == 0), Is.EqualTo(2));
-                Assert.That(positive.Distinct().Count(), Is.EqualTo(55),
+                // cmu edit start
+                Assert.That(positive.Distinct().Count(), Is.EqualTo(57),
+                // cmu edit end
                     "Every positive custom carrier must have one unambiguous reverse lookup.");
             });
         });
@@ -193,6 +206,7 @@ public sealed class RadioFrequencyTest : GameTest
             AssertReverseLookup(plan, 42_500, "MyceliumLink");
             AssertReverseLookup(plan, 42_700, "BiomorphMimic"); // CMU14
             AssertReverseLookup(plan, 42_800, "Biomorph"); // CMU14
+            AssertReverseLookup(plan, 42_900, "CMUWendigoPack"); // CMU14
             Assert.That(
                 plan.TryGetChannelByFrequency(RadioFrequency.FromKilohertz(42_600), out _),
                 Is.False,

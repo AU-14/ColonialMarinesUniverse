@@ -19,7 +19,7 @@
 <DefaultWindow
     xmlns="https://spacestation14.io"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
-    xmlns:cmu="clr-namespace:Content.Client._CMU14.Interface"
+    xmlns:cmu="clr-namespace:Content.Client.CMU14.Interface"
     SetSize="504 248">
     <Control>
         <Control Name="CrtContent" HorizontalExpand="True" VerticalExpand="True">

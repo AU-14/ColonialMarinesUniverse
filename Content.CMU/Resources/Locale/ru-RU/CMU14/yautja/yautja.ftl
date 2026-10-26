@@ -119,9 +119,6 @@ cmu-yautja-bracer-id-retracted = Встроенный ID-чип убираетс
 cmu-yautja-bracer-id-slot-blocked = Ваш слот ID заблокирован.
 cmu-yautja-bracer-id-failed = Встроенный ID-чип не смог развернуться.
 cmu-yautja-bracer-fabricator-cooldown = Фабрикатор наруча всё ещё перезаряжается.
-cmu-yautja-bracer-crystal-created = Наруч выращивает {$item}.
-cmu-yautja-bracer-human-crystal-created = Наруч выращивает {$item}.
-cmu-yautja-bracer-healing-capsule-created = Наруч печатает {$item}.
 cmu-yautja-bracer-healing-disabled = Синтез лечебных капсул наручем отключён.
 cmu-yautja-tech-random-works = Вы случайно запускаете функцию наруча.
 cmu-yautja-tech-random-function = Чужие элементы управления неверно считывают ваше касание.
@@ -344,7 +341,6 @@ cmu-yautja-disc-owner-denied = Умный диск настроен на дру�
 cmu-yautja-disc-stolen-activated = Украденный умный диск отвергает ваше касание и нападает на вас!
 cmu-yautja-disc-stolen-active = Активный умный диск вырывается из вашей руки.
 cmu-yautja-caster-mode-set = Режим плазменного кастера установлен: {$mode}.
-cmu-yautja-caster-mode-next = Плазменный кастер переключается в режим: {$mode}.
 cmu-yautja-caster-examine-mode = Текущий режим плазменного кастера: {$mode}. Цена энергии: {$power}.
 cmu-yautja-caster-mode-stun = оглушающие заряды
 cmu-yautja-caster-mode-immobilizer = плазменные иммобилизаторы
@@ -384,6 +380,7 @@ cmu-yautja-butcher-stage-complete = Вы завершаете этап разд�
 cmu-yautja-butcher-finished = Вы заканчиваете разделывать {$target}.
 cmu-yautja-butcher-part-finished = Вы заканчиваете отделять часть от {$target}.
 cmu-yautja-butcher-part-missing = У жертвы нет этой части тела.
+cmu-yautja-butcher-part-failed = Эта часть не поддаётся.
 cmu-yautja-butcher-already-finished = Этот труп уже разделан.
 cmu-yautja-prey-claim-complete = {$hunter} завершает охоту на {$target} и забирает {$kind}.
 cmu-yautja-trophy-target-alive = Добыча ещё жива.
@@ -505,8 +502,6 @@ cmu-yautja-abomination-action-toggle-frenzy = Переключить режим 
 cmu-yautja-abomination-action-toggle-frenzy-desc = Переключить дикое неистовство между ударами по одной цели и по области.
 
 # Missing entries synced from en-US
-
-cmu-yautja-bracer-hunting-trap-created = Наруч печатает {$item}.
 
 cmu-yautja-bracer-menu-hunting-trap = Охотничья ловушка
 

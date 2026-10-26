@@ -106,8 +106,6 @@
         RMCSkillNavigations: 1
 
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -115,6 +113,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NoEnglish
     - CMUProstheticLeftArm
     - CMUProstheticRightArm
@@ -122,6 +126,7 @@
     - SlowRunner
     - Anemic
     - CMUProstheticRightLeg
+    - CMUBadLeg
   ranks:
     RMCRankSyntheticColonist: []
   chevrons:
@@ -163,7 +168,7 @@
 
 - type: roleLoadout
   id: JobAU14JobGOVFORAuxSupportSynth
-  points: 30
+  points: 45
   groups:
   - GOVFORSynthSpecializationAU14
   - SynthBackpackAU14
@@ -243,8 +248,6 @@
   name: au14-job-name-govforauxsupportsynthRMC
   spawnMenuRoleName: Support Synth (TWE RMC)
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 7200 # 2 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -252,6 +255,13 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
+    - CMUBadLeg
   ranks:
     RMC_WarrantOfficer1:
     - !type:RoleTimeRequirement
@@ -275,8 +285,6 @@
   roundForce: UPP
   spawnMenuRoleName: Support Synth (UPP)
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 7200 # 2 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -284,6 +292,13 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
+    - CMUBadLeg
   ranks:
     UPP_SeniorWarrantOfficer:
     - !type:RoleTimeRequirement

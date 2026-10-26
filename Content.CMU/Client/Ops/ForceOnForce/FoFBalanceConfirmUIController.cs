@@ -1,7 +1,7 @@
 using Content.Client.Lobby;
 using Content.Client.Lobby.UI;
-using Content.Client._CMU14.Interface;
-using Content.Client._CMU14.Lobby;
+using Content.Client.CMU14.Interface;
+using Content.Client.CMU14.Lobby;
 using Content.Client.Stylesheets;
 using Content.Shared.CMU14.Ops.ForceOnForce;
 using Robust.Client.UserInterface;
@@ -59,9 +59,9 @@ public sealed partial class FoFBalanceConfirmUIController : UIController,
     }
 }
 
-public sealed class FoFBalanceConfirmWindow : DefaultWindow
+public sealed partial class FoFBalanceConfirmWindow : DefaultWindow
 {
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     public event Action? Confirmed;
 
@@ -76,10 +76,13 @@ public sealed class FoFBalanceConfirmWindow : DefaultWindow
         MinWidth = CmuPanelMetrics.ChoiceWindowWidth;
 
         var target = ev.Govfor < ev.Opfor ? "GOVFOR" : "OPFOR";
+        var targetDisplay = target == "GOVFOR"
+            ? Loc.GetString("cmu-fof-target-govfor")
+            : Loc.GetString("cmu-fof-target-opfor");
 
         _join = new CmuChoiceCard(
-            Loc.GetString("cmu-fof-balance-confirm-join", ("target", target)),
-            Loc.GetString("cmu-fof-balance-confirm-join-desc", ("target", target), ("max", ev.MaxGap)),
+            Loc.GetString("cmu-fof-balance-confirm-join", ("target", targetDisplay)),
+            Loc.GetString("cmu-fof-balance-confirm-join-desc", ("target", targetDisplay), ("max", ev.MaxGap)),
             target == "GOVFOR" ? JoinRoundWindow.GovforPalette : JoinRoundWindow.OpforPalette,
             buttonOnLeft: true);
 

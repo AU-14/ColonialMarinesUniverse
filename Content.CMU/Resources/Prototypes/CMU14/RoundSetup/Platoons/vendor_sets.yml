@@ -8,9 +8,11 @@
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
-    VehicleCrew: AU14USCMVehicleCrewmanVendor
+    VehicleCrew: AU14VehicleCrewmanVendorUSCM
     SentryDeployer: RMCDeployerSentry
     EngiEquipment: AU14EngineeringStaffVendor
+    MessFood: RMCNutriCoVendor
+    MessDrink: RMCVendorNutriCoDrink
 
 - type: platoonVendorSet
   id: USCM
@@ -29,11 +31,13 @@
     MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
     ReqVend: AU14USCMRequisitionVendor
     EngiEquipment: AU14EngineeringStaffVendor
+    VehicleCrew: AU14VehicleCrewmanVendorUSCM
 
 - type: platoonVendorSet
   id: LACN
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessDrink: CMUNutriCoDrinkLACN
     Rifleman: AU14LACNequipmentvendor
     Clothing: AU14LACNclothingequipmentvendor
     ShipsideUniform: AU14LACNShipsideUniformVendor
@@ -52,11 +56,14 @@
     EngiEquipment: CMULACNEngineeringEquipmentVendor
     combattech: CMULACNComtechGearVendor
     Rto: CMULACNRTOVendor
+    VehicleCrew: AU14VehicleCrewmanVendorLACN
 
 - type: platoonVendorSet
   id: UPP
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessDrink: CMUNutriCoDrinkSPP
+    MessFood: CMUNutriCoVendorSPP
     Rifleman: AU14UPPequipmentvendor
     Clothing: AU14UPPclothingapparelvendor
     ShipsideUniform: AU14UPPShipsideUniformVendor
@@ -72,11 +79,35 @@
     MilitaryPolice: AU14MilitaryPolicemanVendorUPP
     ReqVend: AU14UPPRequisitionVendor
     EngiEquipment: AU14EngineeringStaffVendor
+    VehicleCrew: AU14VehicleCrewmanVendorUPP
+
+- type: platoonVendorSet
+  id: BEAR
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    MessDrink: CMUNutriCoDrinkSPP
+    MessFood: CMUNutriCoVendorSPP
+    Rifleman: RuMCBEARequipmentvendor
+    Clothing: RuMCBEARclothingapparelvendor
+    ShipsideUniform: RuMCBEARShipsideUniformVendor
+    Weapons: RuMCBEARWeaponsVendor
+    SWeapons: RuMCBEARSpecialWeaponsVendor
+    Corpsman: RuMCBEARMedicalVendor
+    Arifleman: RuMCBEARgunnerequipment
+    Dcc: RuMCBEARaircrewvendor
+    OperationsOfficer: RuMCBEARcommandvendor
+    SectionSergeant: RuMCBEARSectionLeaderVendor
+    SquadSergeant: AU14UPPSquadLeaderVendor
+    Pilot: RuMCBEARAirCrewWeaponsVendor
+    MilitaryPolice: RuMCBEARMilitaryPolicemanVendor
+    ReqVend: RuMCBEARRequisitionVendor
+    VehicleCrew: AU14VehicleCrewmanVendorUPP
 
 - type: platoonVendorSet
   id: WYPMC
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessFood: CMUNutriCoVendorPMC
     Clothing: AU14WYclothingequipmentvendor
     ShipsideUniform: AU14WYShipsideUniformVendor
     Weapons: AU14WYWeaponsVendor
@@ -91,6 +122,7 @@
     ReqVend: AU14WYPMCRequisitionVendor
     SentryDeployer: AU14DeployerSentryWeYu
     EngiEquipment: AU14EngineeringStaffVendor
+    VehicleCrew: AU14VehicleCrewmanVendorWYPMC
 
 - type: platoonVendorSet
   id: CMBCIU
@@ -110,11 +142,13 @@
     MilitaryPolice: AU14MilitaryPolicemanGenericVendorCIU
     ReqVend: AU14CMBCIURequisitionVendor
     EngiEquipment: AU14EngineeringStaffVendor
+    VehicleCrew: AU14VehicleCrewmanVendorCMBCIU
 
 - type: platoonVendorSet
   id: HAZOPS
   parent: AU14BasePlatoonVendorSet
   vendors:
+    Rifleman: AU14HAZOPSequipmentvendor
     Clothing: AU14HAZOPSclothingequipmentvendor
     ShipsideUniform: AU14HAZOPSShipsideUniformVendor
     Weapons: AU14HAZOPSWeaponsVendor
@@ -128,11 +162,13 @@
     MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
     ReqVend: AU14HAZOPSRequisitionVendor
     EngiEquipment: AU14EngineeringStaffVendor
+    VehicleCrew: AU14VehicleCrewmanVendorHAZOPS
 
 - type: platoonVendorSet
   id: ProdigySF
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessFood: CMUNutriCoVendorPMC
     Clothing: AU14prodigyclothingequipmentvendor
     ShipsideUniform: AU14ProdigyShipsideUniformVendor
     Weapons: AU14prodigyWeaponsVendor
@@ -146,11 +182,13 @@
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14ProdigyRequisitionVendor
     EngiEquipment: AU14EngineeringStaffVendor
+    VehicleCrew: AU14VehicleCrewmanVendorProdigy
 
 - type: platoonVendorSet
   id: VAIPO
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessFood: CMUNutriCoVendorPMC
     Clothing: AU14VAIPOclothingequipmentvendor
     ShipsideUniform: AU14VAIPOShipsideUniformVendor
     Weapons: AU14VAIPOWeaponsVendor
@@ -164,11 +202,14 @@
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14VAIPORequisitionVendor
     EngiEquipment: AU14EngineeringStaffVendor
+    VehicleCrew: AU14VehicleCrewmanVendorVAIPO
 
 - type: platoonVendorSet
   id: RMC
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessDrink: CMUNutriCoDrinkRMC
+    MessFood: CMUNutriCoVendorRCM
     Rifleman: AU14RMCequipmentvendor
     Clothing: AU14RMCclothingequipmentvendor
     ShipsideUniform: AU14RMCShipsideUniformVendor
@@ -186,3 +227,4 @@
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14RMCRequisitionVendor
     EngiEquipment: AU14EngineeringStaffVendor
+    VehicleCrew: AU14VehicleCrewmanVendorRMC

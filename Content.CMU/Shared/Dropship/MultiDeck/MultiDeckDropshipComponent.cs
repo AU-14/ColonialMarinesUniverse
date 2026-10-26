@@ -22,7 +22,7 @@ public sealed partial class MultiDeckDropshipComponent : Component
     public HashSet<int> ExteriorDecks = new();
 
     public readonly Dictionary<int, EntityUid> Decks = new();
-    public bool Initialized;
+    public bool DecksInitialized;
     public bool Synchronizing;
 }
 

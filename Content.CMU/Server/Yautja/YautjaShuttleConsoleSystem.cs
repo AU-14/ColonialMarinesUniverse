@@ -18,7 +18,13 @@ public sealed partial class YautjaShuttleConsoleSystem : EntitySystem
 
     private void OnOpenAttempt(Entity<YautjaShuttleConsoleComponent> ent, ref ActivatableUIOpenAttemptEvent args)
     {
-        if (HasComp<YautjaComponent>(args.User) || HasComp<YautjaTechAuthorizedComponent>(args.User))
+        if (HasComp<YautjaTechAuthorizedComponent>(args.User))
+            return;
+
+        // A youngblood stays YoungBlood until blooded, even when ClanRank reads higher.
+        if (TryComp<YautjaComponent>(args.User, out var yautja)
+            && yautja.ClanRank >= YautjaRank.Blooded
+            && (!TryComp<YautjaYoungbloodComponent>(args.User, out var youngblood) || youngblood.Blooded))
             return;
 
         args.Cancel();

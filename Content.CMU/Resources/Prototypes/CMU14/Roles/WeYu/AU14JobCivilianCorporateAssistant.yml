@@ -3,6 +3,8 @@
   id: AU14JobCivilianCorporateAssistant
   roundSide: Civilian
   roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
   roundRole: CivilianCorporateAssistant
   roundComponents:
   - type: Skills
@@ -24,7 +26,7 @@
       tags:
       - SquadPMC
 
-  name: au14-job-name-civiliancorporateassistant
+  name: cmu-job-title-corporate-assistant
   playTimeTracker: AU14JobCivilianCorporateAssistant
   requirements:
   - !type:OverallPlaytimeRequirement
@@ -87,6 +89,7 @@
   points: 7
   groups:
   - CivSatchelAU14
+  - CMUCorporateSkirts
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14

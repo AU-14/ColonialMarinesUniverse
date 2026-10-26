@@ -1,0 +1,111 @@
+- type: entity
+  parent: CMBeakerLarge
+  id: CMULargeBeakerCryoxadone
+  name: large beaker of cryoxadone
+  suffix: CMU, Filled
+  components:
+  - type: Label
+    currentLabel: reagent-name-cryoxadone
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120
+      reagents:
+      - ReagentId: Cryoxadone
+        Quantity: 120
+
+- type: entity
+  parent: CMBeakerLarge
+  id: CMULargeBeakerAloxadone
+  name: large beaker of aloxadone
+  suffix: CMU, Filled
+  components:
+  - type: Label
+    currentLabel: reagent-name-aloxadone
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120
+      reagents:
+      - ReagentId: Aloxadone
+        Quantity: 120
+
+- type: entity
+  parent: CMBeakerLarge
+  id: CMULargeBeakerTraumoxadone
+  name: large beaker of traumoxadone
+  suffix: CMU, Filled
+  components:
+  - type: Label
+    currentLabel: reagent-name-traumoxadone
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120
+      reagents:
+      - ReagentId: Traumoxadone
+        Quantity: 120
+
+- type: entity
+  parent: CMBeakerLarge
+  id: CMULargeBeakerUrishoxadone
+  name: large beaker of urishoxadone
+  suffix: CMU, Filled
+  components:
+  - type: Label
+    currentLabel: reagent-name-urishoxadone
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120
+      reagents:
+      - ReagentId: Urishoxadone
+        Quantity: 120
+
+- type: entity
+  parent: CMBeakerLarge
+  id: CMULargeBeakerDoxarubixadone
+  name: large beaker of doxarubixadone
+  suffix: CMU, Filled
+  components:
+  - type: Label
+    currentLabel: reagent-name-doxarubixadone
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120
+      reagents:
+      - ReagentId: Doxarubixadone
+        Quantity: 120
+
+- type: entity
+  parent: CMBeakerLarge
+  id: CMULargeBeakerNecrosol
+  name: large beaker of necrosol
+  suffix: CMU, Filled
+  components:
+  - type: Label
+    currentLabel: reagent-name-necrosol
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120
+      reagents:
+      - ReagentId: Necrosol
+        Quantity: 120
+
+- type: entity
+  parent: CMBeakerLarge
+  id: CMULargeBeakerOpporozidone
+  name: large beaker of opporozidone
+  suffix: CMU, Filled
+  components:
+  - type: Label
+    currentLabel: reagent-name-opporozidone
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120
+      reagents:
+      - ReagentId: Opporozidone
+        Quantity: 120

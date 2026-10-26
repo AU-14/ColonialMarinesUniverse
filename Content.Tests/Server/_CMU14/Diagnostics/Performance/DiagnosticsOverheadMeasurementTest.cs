@@ -9,6 +9,7 @@ using Robust.Shared.Profiling;
 namespace Content.Tests.Server.CMU14.Diagnostics.Performance;
 
 [TestFixture, NonParallelizable]
+[Explicit("Diagnostic instrumentation benchmark; run explicitly in Release.")]
 public sealed class DiagnosticsOverheadMeasurementTest
 {
     [Test]

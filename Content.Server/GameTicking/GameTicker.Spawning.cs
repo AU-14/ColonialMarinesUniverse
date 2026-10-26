@@ -758,6 +758,13 @@ namespace Content.Server.GameTicking
                 }
             }
 
+            // cmu edit start: ask before taking a slot only the Foxtrot squad has left
+            if (lateJoin
+                && EntityManager.System<Content.Server.CMU14.Squads.Foxtrot.CMUFoxtrotSquadSystem>()
+                    .TryOpenReservedConfirm(player, character, station, jobId))
+                return;
+            // cmu edit end
+
             // CMU14: DoSpawn can fail when no spawn point exists; skip this player, not the round.
             if (!DoSpawn(player, character, station, jobId, silent, out var mob, out var jobPrototype, out var jobName))
                 return;
@@ -966,6 +973,11 @@ namespace Content.Server.GameTicking
             EntityUid? ghost = _ghost.SpawnGhost(mind.Value);
             if (makeObserver)
                 _roles.MindAddRole(mind.Value, "MindRoleObserver");
+
+            // cmu edit start: a lobby observer's ghost looks like their selected character
+            if (ghost != null)
+                EntityManager.System<Content.Server.CMU14.Ghost.CMUGhostProfileAppearanceSystem>().DressAsSelectedCharacter(ghost.Value, player);
+            // cmu edit end
 
             _adminLogger.Add(LogType.LateJoin,
                 LogImpact.Low,

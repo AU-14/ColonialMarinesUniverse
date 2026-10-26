@@ -284,3 +284,19 @@
   - stepId: CMUSurgeryStepDebrideEschar
     label: Debride Eschar
     toolCategory: scalpel_or_burn_kit
+
+# ---- Stump closure -------------------------------------------------
+
+- type: cmuSurgeryStepMetadata
+  id: CMUSurgeryStepMetaCloseStump
+  surgery: CMUSurgeryCloseStump
+  displayName: Close Stump
+  validParts: [Torso, Arm, Leg]
+  category: stump
+  steps:
+  - stepId: CMUSurgeryStepClampStumpArtery
+    label: Clamp Stump Artery
+    toolCategory: hemostat
+  - stepId: CMUSurgeryStepCauterizeStump
+    label: Cauterize Stump
+    toolCategory: cautery

@@ -139,12 +139,8 @@
                                                    ToolTip="{Loc 'humanoid-profile-editor-guidebook-button-tooltip'}"/>
                                     <OptionButton Name="SpeciesButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
-                                <!-- Sex -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-sex-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="SexButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
+                                <!-- cmu edit start: sex moved to the Character Records tab -->
+                                <!-- cmu edit end -->
                                 <!-- Voice -->
                                 <!-- cmu edit start -->
                                 <BoxContainer HorizontalExpand="True" Visible="False">
@@ -153,12 +149,8 @@
                                     <Control HorizontalExpand="True" />
                                     <OptionButton Name="VoiceButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
-                                <!-- Pronouns -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
+                                <!-- cmu edit start: pronouns moved to the Character Records tab -->
+                                <!-- cmu edit end -->
                                 <!-- Show clothing -->
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-clothing'}" />
@@ -173,6 +165,40 @@
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SpawnPriorityButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <!-- cmu edit start -->
+                                <!-- FOB security squad opt-in. Its own card so it reads as a choice with
+                                     consequences rather than another one-line setting. Short lines only:
+                                     this tab scrolls sideways, so long text never wraps. -->
+                                <PanelContainer StyleClasses="CrtInsetPanel" Margin="0 8 0 2">
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-title'}"
+                                                   StyleClasses="CrtSectionTitle"
+                                                   VerticalAlignment="Center" />
+                                            <PanelContainer StyleClasses="CrtSectionRule"
+                                                            HorizontalExpand="True"
+                                                            VerticalAlignment="Center"
+                                                            MinHeight="1" />
+                                        </BoxContainer>
+                                        <BoxContainer Orientation="Horizontal" SeparationOverride="12">
+                                            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
+                                                <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-role'}"
+                                                       StyleClasses="CrtDimText" />
+                                            </BoxContainer>
+                                            <Button Name="FoxtrotSquadOptInButton"
+                                                    ToggleMode="True"
+                                                    StyleClasses="CrtReadyToggle"
+                                                    MinWidth="140"
+                                                    VerticalAlignment="Center"
+                                                    ToolTip="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-tooltip'}" />
+                                        </BoxContainer>
+                                        <BoxContainer Orientation="Vertical" SeparationOverride="1">
+                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-point-roles'}" StyleClasses="CrtDimText" />
+                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-point-full'}" StyleClasses="CrtDimText" />
+                                        </BoxContainer>
+                                    </BoxContainer>
+                                </PanelContainer>
+                                <!-- cmu edit end -->
                                 <!-- Synthetic -->
                                 <BoxContainer Name="SyntheticContainer" Orientation="Vertical" />
                             </BoxContainer>
@@ -239,6 +265,25 @@
                                 <Control HorizontalExpand="True"/>
                                 <OptionButton Name="OriginButton" HorizontalAlignment="Right" />
                             </BoxContainer>
+                            <!-- cmu edit start -->
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-religion-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-religion-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="ReligionButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
+                            <!-- cmu edit start: sex and pronouns, moved from the main tab -->
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-sex-label'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="SexButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-height-label'}" ToolTip="{Loc 'humanoid-profile-editor-height-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
@@ -256,6 +301,13 @@
                                 <Control HorizontalExpand="True"/>
                                 <OptionButton Name="BuildButton" HorizontalAlignment="Right" />
                             </BoxContainer>
+                            <!-- cmu edit start -->
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-blood-type-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-blood-type-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="BloodTypeButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
                             <!-- cmu edit start -->
                             <!-- skin tone, hair color and eye color moved to the Appearance tab -->
                             <!-- cmu edit end -->
@@ -282,6 +334,19 @@
                             <!-- cmu edit end -->
                             <Label Text="{Loc 'humanoid-profile-editor-general-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
                             <TextEdit Name="GeneralRecordEdit" MinSize="220 70" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
+                            <!-- cmu edit start: text on GOVFOR/OPFOR vendor armor and helmets -->
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <Label Text="{Loc 'cmu-humanoid-profile-editor-armor-flavor-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-armor-flavor-prefix'}" Margin="0 0 6 0" FontColorOverride="#A0A0A0" />
+                                <LineEdit Name="ArmorFlavorTextEdit" HorizontalExpand="True" PlaceHolder="{Loc 'cmu-humanoid-profile-editor-gear-flavor-placeholder'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            </BoxContainer>
+                            <Label Text="{Loc 'cmu-humanoid-profile-editor-helmet-flavor-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            <BoxContainer HorizontalExpand="True" Margin="0 0 0 8">
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-helmet-flavor-prefix'}" Margin="0 0 6 0" FontColorOverride="#A0A0A0" />
+                                <LineEdit Name="HelmetFlavorTextEdit" HorizontalExpand="True" PlaceHolder="{Loc 'cmu-humanoid-profile-editor-gear-flavor-placeholder'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>

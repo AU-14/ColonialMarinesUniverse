@@ -66,7 +66,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
         };
 
         var selfMsg = Loc.GetString("rmc-xeno-headbite-self", ("xeno", xeno.Owner), ("target", target));
-        _popup.PopupClient(selfMsg, xeno, xeno, PopupType.Medium);
+        _popup.PopupEntity(selfMsg, xeno, xeno, PopupType.Medium);
 
         var othersMsg = Loc.GetString("rmc-xeno-headbite-others", ("xeno", xeno.Owner), ("target", target));
         _popup.PopupEntity(othersMsg, xeno, Filter.PvsExcept(xeno), true, PopupType.MediumCaution);
@@ -112,7 +112,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
         }
 
         var selfMsg = Loc.GetString("rmc-xeno-headbite-hit-self", ("xeno", xeno.Owner), ("target", target));
-        _popup.PopupClient(selfMsg, xeno, xeno, PopupType.Medium);
+        _popup.PopupEntity(selfMsg, xeno, xeno, PopupType.Medium);
 
         var othersMsg = Loc.GetString("rmc-xeno-headbite-hit-others", ("xeno", xeno.Owner), ("target", target));
         _popup.PopupEntity(othersMsg, xeno, Filter.PvsExcept(xeno), true, PopupType.MediumCaution);
@@ -123,7 +123,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
         if (!_mobState.IsCritical(target) && !_status.HasStatusEffect(target, "Unconscious"))
         {
             var failMsg = Loc.GetString("rmc-xeno-headbite-warning");
-            _popup.PopupClient(failMsg, xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(failMsg, xeno, xeno, PopupType.SmallCaution);
             return false;
         }
 
@@ -132,7 +132,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
             if (TryComp<VictimInfectedComponent>(target, out var victim) && _hive.IsMember(xeno, victim.Hive))
             {
                 var failMsg = Loc.GetString("rmc-xeno-headbite-warning-larva");
-                _popup.PopupClient(failMsg, xeno, xeno, PopupType.SmallCaution);
+                _popup.PopupEntity(failMsg, xeno, xeno, PopupType.SmallCaution);
                 return false;
             }
         }

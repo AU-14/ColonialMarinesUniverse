@@ -19,7 +19,7 @@
     sprite: CMU14/Objects/Radio/anprc117g.rsi
     state: antenna_w
   - type: ANPRCAntenna
-    label: WHIP
+    label: anprc-antenna-whip
     fullRange: 30
     partialRange: 45
     requiresStationary: false
@@ -37,7 +37,7 @@
     sprite: CMU14/Objects/Radio/anprc117g.rsi
     state: antenna_w
   - type: ANPRCAntenna
-    label: WIRE
+    label: anprc-antenna-wire
     fullRange: 35
     partialRange: 50
     requiresStationary: true
@@ -55,7 +55,7 @@
     sprite: CMU14/Objects/Radio/anprc117g.rsi
     state: antenna_m
   - type: ANPRCAntenna
-    label: MAST
+    label: anprc-antenna-mast
     fullRange: 55
     partialRange: 80
     requiresStationary: true

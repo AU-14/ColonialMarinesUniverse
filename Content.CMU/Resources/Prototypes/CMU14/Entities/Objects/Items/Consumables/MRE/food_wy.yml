@@ -1,0 +1,243 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodWYBakedSalmon
+  name: "baked salmon"
+  description: "A creamy baked wild salmon, contains just the right amount of vitamin D3 you might need for the next four days."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: baked_fish
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 23
+      reagents:
+      - ReagentId: CMUFishMeat
+        Quantity: 14
+      - ReagentId: Cream
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodWYSmokyRibs
+  name: "smoky ribs"
+  description: "A well smoked beef ribs, in a black pepper and apple sauce, very juicy and chewy."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: smoky_ribs
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 22
+      reagents:
+      - ReagentId: CMUMeatProtein
+        Quantity: 13
+      - ReagentId: Blackpepper
+        Quantity: 2
+      - ReagentId: CMUFruit
+        Quantity: 1
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodWYBakedHam
+  name: "baked ham"
+  description: "Medium-rare baked ham, with a peppery outer layer, moist and rich in flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: ham
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 23
+      reagents:
+      - ReagentId: CMUMeatProtein
+        Quantity: 14
+      - ReagentId: Blackpepper
+        Quantity: 2
+      - ReagentId: Blood
+        Quantity: 1
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodWYBeefsteak
+  name: "beefsteak"
+  description: "Medium-well steak, finished with an orange juice sauce and thyme."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: beefstake
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 23
+      reagents:
+      - ReagentId: CMUMeatProtein
+        Quantity: 14
+      - ReagentId: JuiceOrange
+        Quantity: 3
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodWYEclair
+  name: "eclair"
+  description: "A gentle pastry, filled with an airy vanilla flavored cream, iced with a layer of chocolate on the top."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: eclair
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 12
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: Cream
+        Quantity: 2
+      - ReagentId: CocoaPowder
+        Quantity: 1
+      - ReagentId: Sugar
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodWYStrawberryCake
+  name: "strawberry cake"
+  description: "Light vanilla cake, with a thick layer of strawberry icing and a strawberry filling inside."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: strawberry_cake
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 16
+      reagents:
+      - ReagentId: JuiceBerry
+        Quantity: 5
+      - ReagentId: Cream
+        Quantity: 2
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: RMCSprinkles
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodWYCherryPie
+  name: "cherry pie"
+  description: "A pie with a crisp outer crust and a soft cherry jelly filling."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: cherry_pie
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: RMCCherryJelly
+        Quantity: 2
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodWYChocolateCroissant
+  name: "chocolate croissant"
+  description: "A crisp croissant with dark chocolate filling."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: croissant
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 11
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: CocoaPowder
+        Quantity: 3
+      - ReagentId: Sugar
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodWYWhiteChocolateBar
+  name: "white chocolate bar"
+  description: "A white chocolate bar, with bits of almonds and coconut. Don't let the heretics call it a false chocolate, you are the one enjoying it here."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: white_chocolate_bar
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CocoaPowder
+        Quantity: 3
+      - ReagentId: Milk
+        Quantity: 2
+      - ReagentId: CMUNuts
+        Quantity: 2
+      - ReagentId: CreamOfCoconut
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodWYWYBrandEmergencyNutritionBriquette
+  name: "W-Y brand emergency nutrition briquette"
+  description: "A brick of a cookie, designed to be stored for prolonged periods of time, in extreme conditions, but still tastes like a compressed buttery cookie."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: cookie_brick_open
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 33
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 12
+      - ReagentId: CMUBread
+        Quantity: 12
+      - ReagentId: Sugar
+        Quantity: 4

@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+using System.Numerics;
+using Content.Shared._RMC14.AntiAir;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared.Mobs;
@@ -29,12 +30,14 @@ public sealed class OverwatchConsoleBuiState(
     List<OverwatchSquad> squads,
     Dictionary<NetEntity, List<OverwatchMarine>> marines,
     Dictionary<NetEntity, Content.Shared._RMC14.Tracker.SquadLeader.FireteamData> fireteams,
-    Dictionary<NetEntity, List<OverwatchTripodCamera>> cameras) : BoundUserInterfaceState
+    Dictionary<NetEntity, List<OverwatchTripodCamera>> cameras,
+    RMCShipAntiAirStatus antiAir) : BoundUserInterfaceState
 {
     public readonly List<OverwatchSquad> Squads = squads;
     public readonly Dictionary<NetEntity, List<OverwatchMarine>> Marines = marines;
     public readonly Dictionary<NetEntity, Content.Shared._RMC14.Tracker.SquadLeader.FireteamData> Fireteams = fireteams;
     public readonly Dictionary<NetEntity, List<OverwatchTripodCamera>> Cameras = cameras;
+    public readonly RMCShipAntiAirStatus AntiAir = antiAir;
 }
 
 [Serializable, NetSerializable]
@@ -188,7 +191,9 @@ public sealed class OverwatchConsoleClearSquadObjectiveBuiMsg(SquadObjectiveType
 }
 
 [Serializable, NetSerializable]
-public record struct OverwatchSquad(NetEntity Id, string Name, Color Color, NetEntity? Leader, bool CanSupplyDrop, SpriteSpecifier.Rsi LeaderIcon, Dictionary<SquadObjectiveType, string> Objectives);
+// cmu edit start: ManualLeadership (CMUManualLeadershipComponent) for the fireteams tab
+public record struct OverwatchSquad(NetEntity Id, string Name, Color Color, NetEntity? Leader, bool CanSupplyDrop, SpriteSpecifier.Rsi LeaderIcon, Dictionary<SquadObjectiveType, string> Objectives, bool ManualLeadership = false);
+// cmu edit end
 
 [Serializable, NetSerializable]
 public readonly record struct OverwatchMarine(
@@ -203,7 +208,13 @@ public readonly record struct OverwatchMarine(
     string AreaName,
     Vector2? LeaderDistance,
     ProtoId<RankPrototype>? Rank,
-    LocId? RoleOverride
+    // cmu edit start: callsign, fireteam and health (SharedOverwatchConsoleSystem.CMU)
+    LocId? RoleOverride,
+    string Callsign = "",
+    int? Fireteam = null,
+    bool FireteamLeader = false,
+    float? Health = null
+    // cmu edit end
 );
 
 [Serializable, NetSerializable]

@@ -23,6 +23,19 @@
   - When its drum runs dry, load a new one. It takes 7 seconds, and you can only swap the drum once it's empty.
   - Use a [bold]wrench[/bold] to disassemble it back into an item so you can move it.
 
+  ### Wrecked Sentries
+  A sentry that takes enough damage isn't destroyed. It breaks down: it shuts off, turns black, and loses a quarter of the ammo left in its drum. A wrecked sentry won't switch on and takes no more damage until it's fixed. You can still pack it up and move it with a wrench, but you can only repair it while it's deployed.
+
+  Repair it with these tools, in order:
+  - [bold]Wirecutters[/bold]: cut away the burnt wiring (4 seconds).
+  - [bold]Welder[/bold]: weld the cracked frame (6 seconds).
+  - [bold]10 cable coil[/bold]: rewire it (7 seconds). The cable is used up.
+  - [bold]Screwdriver[/bold]: screw the internal panels back down (4 seconds).
+  - [bold]Access tuner[/bold]: recalibrate its targeting (8 seconds).
+  - [bold]Welder[/bold]: weld the casing shut (5 seconds).
+
+  Each welder step uses some fuel, and construction training makes every step quicker. Examine the sentry to see the steps and which one is next. Once the casing is sealed, the sentry is good as new.
+
   ### Upgrading
   <Box>
     <GuideEntityEmbed Entity="RMCEngineeringUpgrade" Caption="Engineering upgrade kit"/>

@@ -1,0 +1,26 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed queen dispatch and hijack evolution, threat speech and victory accounting,
+    Despoiler rewards, and K9 interactions.
+  type: Fix
+- message: Fixed hunter injectors, captive tools, Forsaken eggs, medicomp treatment,
+    and preserve controls.
+  type: Fix
+- message: Restored CIU radio equipment, RTO antenna-mast access, tower map markers,
+    sensor faction vision, and remote peeking.
+  type: Fix
+- message: Clear expired VTOL camera targets without disturbing a separate weapon
+    target.
+  type: Fix
+- message: Allow field-camera tripod deployment on Stable Garrison Redux.
+  type: Map
+- message: Civilian nurses now have Surgery 2.
+  type: Tweak
+- message: Tanks allow two faults per hardpoint, snowplows cannot develop faults,
+    and repairs cause triple wear down to 20% capacity.
+  type: Tweak
+- message: Vehicle health displays retain factory maximums and use clearer fault formatting.
+  type: Tweak
+time: '2026-10-03T13:38:44.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2071

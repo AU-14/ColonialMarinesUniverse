@@ -40,6 +40,7 @@
     - radioOpforBravo
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
     defaultChannel: radioOpforCommand
@@ -65,6 +66,17 @@
     channels:
     - radioOpforIntel
     defaultChannel: radioOpforIntel
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforVictor
+  name: OPFOR Victor encryption key
+  description: An encryption key used to communicate on the OPFOR Victor channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforVictor
+    defaultChannel: radioOpforVictor
 
 - type: entity
   parent: AU14EncryptionKeyOpfor
@@ -152,6 +164,7 @@
       key_slots:
       - AU14EncryptionKeyOpfor
       - AU14EncryptionKeyOpforJTAC
+      - AU14EncryptionKeyOpforIntel
 
 - type: entity
   parent: AU14HeadsetOpforMarine
@@ -164,6 +177,31 @@
       key_slots:
       - AU14EncryptionKeyOpfor
       - AU14EncryptionKeyOpforJTAC
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: CMUHeadsetOpforMarineAuxiliary
+  name: OPFOR squad auxiliary radio headset
+  description: This is used by OPFOR squad corpsmen and engineers to communicate on the radio, including the auxiliary channel.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforIntel
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: CMUHeadsetOpforDroneOperator
+  name: OPFOR drone operator radio headset
+  description: This is used by OPFOR drone operators to communicate on the radio, including the JTAC and auxiliary channels.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforJTAC
+      - AU14EncryptionKeyOpforIntel
 
 - type: entity
   parent: AU14HeadsetOpforMarine
@@ -218,6 +256,9 @@
     playerSprite:
       sprite: _RMC14/Objects/Medals/bronze.rsi
       state: equipped
+  - type: GrantMarineIcons # same rank/role icons as the command headset it replaced
+    factions:
+    - UNMC
   - type: OverwatchCamera
   - type: AccessoryHeadset
     channels:
@@ -227,6 +268,7 @@
     - radioOpforBravo
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
     defaultChannel: radioOpforIntel

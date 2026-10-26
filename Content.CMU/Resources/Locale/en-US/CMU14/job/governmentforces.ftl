@@ -2,9 +2,9 @@ au14-department-govforces-description = Government Forces
 au14-department-govforces = Government Forces
 
 au14-job-supervisors-govforplatco = High Command
-au14-job-supervisors-govfor = Platoon Commander
+au14-job-supervisors-govfor = Commanding Officer
 
-au14-job-name-govforplatco = Commander
+au14-job-name-govforplatco = Commanding Officer
 au14-job-description-govforplatco = Command the unit. Manage strategy, unit coordination and liaise with command from the CIC.
 au14-job-prefix-govforplatco = CMNDR
 
@@ -13,7 +13,7 @@ au14-job-description-govforadjutant = Stand ready to assume command. Handle unit
 au14-job-prefix-govforadjutant = XO
 
 au14-job-name-govforplatop = Staff Officer
-au14-job-description-govforplatop = Plan operations and track the battlefield. Turn the Commander's intent into orders, assist with coordination, and operational oversight.
+au14-job-description-govforplatop = Plan operations and track the battlefield. Turn the Commanding Officer's intent into orders, assist with coordination, and operational oversight.
 au14-job-prefix-govforplatop = SO
 
 au14-job-name-govforengineering = Engineering Officer
@@ -21,7 +21,7 @@ au14-job-description-govforengineering = Keep the unit's structures, assets and 
 au14-job-prefix-govforengineering = EO
 
 au14-job-name-govforintel = Intelligence Officer
-au14-job-description-govforintel = Assist the Commander with intelligence.
+au14-job-description-govforintel = Assist the Commanding Officer with intelligence.
 au14-job-prefix-govforintel = IO
 
 au14-job-name-govforlogistics = Logistics Officer
@@ -72,9 +72,16 @@ au14-job-name-govforsquadrifleman = Rifleman
 au14-job-description-govforsquadrifleman = The backbone of the unit. Follow orders, pull security, and shoot straight.
 au14-job-prefix-govforsquadrifleman = RFN
 
-au14-job-name-govforcombatcorrespondent = Combat Correspondent
-au14-job-description-govforcombatcorrespondent = Embed with the unit to report on the operation. Follow orders, pull security, and get the story.
+au14-job-name-govforcombatcorrespondent = Auxiliary Staff
+au14-job-description-govforcombatcorrespondent = Support the unit as its chaplain, mess technician or combat correspondent. Pick which in your loadout.
 au14-job-prefix-govforcombatcorrespondent = CC
+cmu-auxiliary-staff-prefix-chaplain = Chap
+cmu-auxiliary-staff-prefix-mess-technician = MT
+cmu-auxiliary-staff-combat-correspondent = Combat Correspondent
+cmu-auxiliary-staff-chaplain = Chaplain
+cmu-auxiliary-staff-mess-technician = Mess Technician
+cmu-loadout-group-auxiliary-staff = Auxiliary staff role
+cmu-auxiliary-staff-needs-religion = Chaplains need a religion other than atheism.
 
 au14-job-name-govforsquadautomaticrifleman = Automatic Rifleman
 au14-job-name-govforsquadautomaticrifleman-plural = Automatic Riflemen
@@ -172,7 +179,7 @@ au14-job-prefix-govforsquadsergeantRMC = SC
 au14-job-name-govforsquadautomaticriflemanRMC = Machinegunner
 au14-job-prefix-govforsquadautomaticriflemanRMC = MG
 au14-job-name-govforauxsupportsynthRMC = Support Synthetic
-au14-job-name-govforplatcoRMC = Commander
+au14-job-name-govforplatcoRMC = Commanding Officer
 au14-job-name-govforplatooncorpsmanRMC = Hospital Corpsman
 au14-job-name-govfordccRMC = Dropship Chief Crew
 au14-job-name-govforplatopRMC = Staff Officer

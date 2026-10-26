@@ -1,3 +1,4 @@
+using Content.Client.CMU14.ZLevels.Core; // cmu edit
 using Content.Shared._RMC14.Welding;
 using Content.Shared.Inventory;
 using Content.Shared.Item.ItemToggle.Components;
@@ -10,9 +11,11 @@ namespace Content.Client._RMC14.Welding;
 
 public sealed partial class WeldingVisionOverlay : Overlay
 {
-    [Dependency] private  IPrototypeManager _prototypeManager = default!;
-    [Dependency] private  IPlayerManager _playerManager = default!;
-    [Dependency] private  IEntityManager _entityManager = default!;
+    private static readonly Robust.Shared.Prototypes.ProtoId<ShaderPrototype> WeldingVisionPrototype = "WeldingVision";
+
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
@@ -24,7 +27,7 @@ public sealed partial class WeldingVisionOverlay : Overlay
     public WeldingVisionOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _shader = _prototypeManager.Index<ShaderPrototype>("WeldingVision").InstanceUnique();
+        _shader = _prototypeManager.Index<ShaderPrototype>(WeldingVisionPrototype).InstanceUnique();
         _inventory = _entityManager.System<InventorySystem>();
     }
 
@@ -57,7 +60,7 @@ public sealed partial class WeldingVisionOverlay : Overlay
         if (!_entityManager.TryGetComponent(local.Value, out EyeComponent? eyeComp))
             return false;
 
-        if (args.Viewport.Eye != eyeComp.Eye)
+        if (!args.Viewport.Eye.IsPlayerView(eyeComp.Eye)) // cmu edit
             return false;
 
         _isSuperior = false;

@@ -23,6 +23,7 @@ using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Rejuvenate;
+using Content.Shared.StatusEffectNew; // CMU14: use the actual roll paralysis deadline.
 using Content.Shared.Temperature;
 using Content.Shared.Throwing;
 using Content.Shared.Timing;
@@ -43,6 +44,7 @@ namespace Content.Server.Atmos.EntitySystems
         [Dependency] private ActionBlockerSystem _actionBlockerSystem = default!;
         [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
         [Dependency] private StunSystem _stunSystem = default!;
+        [Dependency] private StatusEffectsSystem _statusEffects = default!; // CMU14
         [Dependency] private TemperatureSystem _temperatureSystem = default!;
         [Dependency] private SharedIgnitionSourceSystem _ignitionSourceSystem = default!;
         [Dependency] private DamageableSystem _damageableSystem = default!;
@@ -93,7 +95,8 @@ namespace Content.Server.Atmos.EntitySystems
             SubscribeLocalEvent<FlammableComponent, MapInitEvent>(OnMapInit);
             // CMU14: components gained mid-cycle join the live snapshot without waiting for a rebuild.
             SubscribeLocalEvent<FlammableComponent, ComponentInit>(OnFlammableInit);
-            SubscribeLocalEvent<FlammableComponent, InteractUsingEvent>(OnInteractUsing);
+            // CMU14: a lit welder on a damaged cade is a repair, not a lighter. without the order the cade just caught fire
+            SubscribeLocalEvent<FlammableComponent, InteractUsingEvent>(OnInteractUsing, after: [typeof(Content.Shared._RMC14.Repairable.RMCRepairableSystem)]);
             SubscribeLocalEvent<FlammableComponent, StartCollideEvent>(OnCollide);
             SubscribeLocalEvent<FlammableComponent, IsHotEvent>(OnIsHot);
             SubscribeLocalEvent<FlammableComponent, TileFireEvent>(OnTileFire);
@@ -312,7 +315,7 @@ namespace Content.Server.Atmos.EntitySystems
             if (!CanWaterExtinguish(uid, flammable) || !_rmcWater.IsInWater(uid))
                 return false;
 
-            Extinguish(uid, flammable);
+            TryExtinguish((uid, flammable));
             return true;
         }
 
@@ -511,13 +514,24 @@ namespace Content.Server.Atmos.EntitySystems
             if (!Resolve(uid, ref flammable))
                 return false;
 
+            // CMU14: allow another roll as soon as its deadline passes, without waiting for the fire tick.
+            if (flammable.ResistCompleteTime <= _timing.CurTime)
+                flammable.ResistCompleteTime = null;
+
             if (!flammable.OnFire || flammable.Resisting || !_actionBlockerSystem.CanInteract(uid, null))
                 return false;
 
             flammable.ResistCompleteTime = _timing.CurTime + flammable.ResistTime;
 
             _popup.PopupEntity(Loc.GetString("flammable-component-resist-message"), uid, uid);
-            _stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime);
+            // CMU14: stun resistance shortens the roll, so its lockout must use the resulting duration too.
+            // _stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime);
+            if (_stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime) &&
+                _statusEffects.TryGetTime(uid, StunSystem.ParalyzeId, out var paralysis) &&
+                paralysis.EndEffectTime is { } endTime)
+            {
+                flammable.ResistCompleteTime = endTime;
+            }
             // CMU14: RMC rolls take their stacks off on the press itself; the window only
             // suppresses the fade so a long pin cannot regrow what the roll removed.
             if (TryComp<OnFireComponent>(uid, out var rmcFire))
@@ -629,6 +643,13 @@ namespace Content.Server.Atmos.EntitySystems
 
                 if (!flammable.OnFire)
                     continue;
+
+                // CMU14: anything burning on uncovered water is put out without needing to resist.
+                if (CanWaterExtinguish(uid, flammable) && _rmcWater.IsOnWater(uid))
+                {
+                    TryExtinguish((uid, flammable));
+                    continue;
+                }
 
                 if (flammable.FireStacks <= 0)
                 {

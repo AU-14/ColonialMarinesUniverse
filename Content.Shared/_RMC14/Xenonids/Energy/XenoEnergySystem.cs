@@ -133,7 +133,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
             return;
 
         if (popup && xeno.Comp.Current < xeno.Comp.Max && energy > 0)
-            _popup.PopupClient(Loc.GetString(xeno.Comp.PopupGain), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString(xeno.Comp.PopupGain), xeno, xeno);
 
         xeno.Comp.Current = Math.Min(xeno.Comp.Max, xeno.Comp.Current + energy);
         Dirty(xeno);
@@ -153,7 +153,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
         {
             var popup = Loc.GetString(xeno.Comp != null ? xeno.Comp.PopupNotEnough : "rmc-xeno-not-enough-energy");
             if (predicted)
-                _popup.PopupClient(popup, xeno, xeno, PopupType.SmallCaution);
+                _popup.PopupEntity(popup, xeno, xeno, PopupType.SmallCaution);
             else
                 _popup.PopupEntity(popup, xeno, xeno, PopupType.SmallCaution);
         }
@@ -205,7 +205,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
         if (TryRemoveEnergy((xeno, xeno.Comp), energy))
             return true;
 
-        _popup.PopupClient(Loc.GetString(xeno.Comp.PopupNotEnough), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString(xeno.Comp.PopupNotEnough), xeno, xeno);
         return false;
     }
 

@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -72,4 +73,66 @@ public sealed partial class K9DogComponent : Component
 
     [DataField]
     public float SensesRange = 9.0f;
+
+    // CMU14 Begin: per-prototype dog kit. Defaults keep the synth K9 behavior;
+    // the yautja hellhound takes a beast's subset with its own voice.
+
+    /// <summary>
+    /// The dog's bond is assigned on spawn with its own senses: no Request Bond or Track Owner actions.
+    /// </summary>
+    [DataField]
+    public bool PresetBond;
+
+    /// <summary>
+    /// Periodic scan for nearby xenos that warns the master.
+    /// </summary>
+    [DataField]
+    public bool AcousticSenses = true;
+
+    /// <summary>
+    /// The senses warning reaches only the dog and its master, with no world sound.
+    /// For hunting beasts whose masters hunt unseen.
+    /// </summary>
+    [DataField]
+    public bool SilentSensesAlert;
+
+    /// <summary>
+    /// Landing melee hits spawns a headbite effect on the victim. Synthetic jaws only.
+    /// </summary>
+    [DataField]
+    public bool HeadbiteStrikes = true;
+
+    /// <summary>
+    /// Feeding the dog a power cell triggers praise. Synthetic dogs only.
+    /// </summary>
+    [DataField]
+    public bool BatteryTrick = true;
+
+    /// <summary>
+    /// Praise popup override for this dog's voice.
+    /// </summary>
+    [DataField]
+    public LocId? PraiseMessage;
+    [DataField]
+    public SoundSpecifier? PraiseSound;
+
+    /// <summary>
+    /// Popup the master receives when the bond is set.
+    /// </summary>
+    [DataField]
+    public LocId? BindMessageMaster;
+
+    /// <summary>
+    /// Popup the dog receives when the bond is set.
+    /// </summary>
+    [DataField]
+    public LocId? BindMessageDog;
+
+    /// <summary>
+    /// Popup a grabbed victim sees while struggling free.
+    /// </summary>
+    [DataField]
+    public LocId? GrabEscapeMessage;
+
+    // CMU14 End
 }

@@ -1,0 +1,10 @@
+author: murdocstarsim
+category: CMU
+changes:
+- message: Provosts finally decided to quit being lazy and finish up their paperwork.
+    We've rewritten the GOVFOR SOP to be more suitable. This includes a long list
+    of changes such as deployments, departments, reduced clutter, vehicle clarification
+    and much more. You can view the full changes here ->
+  type: Add
+time: '2026-09-29T22:23:54.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2041
