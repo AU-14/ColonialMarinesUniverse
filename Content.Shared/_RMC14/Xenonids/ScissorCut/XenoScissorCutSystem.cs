@@ -57,7 +57,7 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
         if (!_rmcActions.TryUseAction(args))
             return;
 
-        var slows = HasComp<XenoSuperEmpoweredComponent>(xeno);
+        var slows = xeno.Comp.AlwaysSlows || HasComp<XenoSuperEmpoweredComponent>(xeno);
         args.Handled = true;
 
         if (_transform.GetGrid(args.Target) is not { } gridId ||
