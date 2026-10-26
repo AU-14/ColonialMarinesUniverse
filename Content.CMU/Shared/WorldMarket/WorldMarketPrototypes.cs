@@ -39,32 +39,6 @@ public sealed partial class WorldMarketCategoryPrototype : IPrototype
     public float Max = 210f;
 }
 
-// Something that happens in the world: it shakes the indices, can close a company to the colony for a while, and is told to the colony as news.
-[Prototype("worldMarketEvent")]
-public sealed partial class WorldMarketEventPrototype : IPrototype
-{
-    [IdDataField]
-    public string ID { get; private set; } = default!;
-
-    [DataField(required: true)]
-    public LocId Headline;
-
-    [DataField]
-    public float Weight = 1f;
-
-    // How long it is told as going on (for the embargo it is how long the company refuses to trade).
-    [DataField]
-    public int DurationSeconds = 240;
-
-    // The change of the indices at once, in percent (12 is a rise of an eighth, -10 is a fall of a tenth).
-    [DataField]
-    public Dictionary<string, float> Shifts = new();
-
-    // The companies (the name of the company of a contract) that refuse to trade with the colony for the duration.
-    [DataField]
-    public List<string> Embargo = new();
-}
-
 // A city of the world map: the globe of the console shows it where it lies. What it can do is its capabilities, and its favour is won with gifts (see WorldMarketSystem.Cities).
 [Prototype("worldCity")]
 public sealed partial class WorldCityPrototype : IPrototype

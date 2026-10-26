@@ -19,7 +19,6 @@ namespace Content.Server.CMU14.WorldMarket;
 public sealed partial class WorldMarketSystem : EntitySystem
 {
     [Dependency] private readonly ColonyBudgetSystem _budget = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -29,7 +28,6 @@ public sealed partial class WorldMarketSystem : EntitySystem
 
     public static readonly TimeSpan TickEvery = TimeSpan.FromSeconds(20);
     public const int HistoryLength = 36;
-    public const int NewsLength = 14;
 
     private readonly Dictionary<string, string> _categoryOfContract = new();
     private TimeSpan _nextSecond;
@@ -87,7 +85,6 @@ public sealed partial class WorldMarketSystem : EntitySystem
             market.LastChange[category.ID] = 0f;
         }
 
-        market.NextEvent = now + TimeSpan.FromSeconds(_random.Next(120, 180));
         market.NextTick = now + TickEvery;
         market.Started = true;
     }
@@ -118,14 +115,11 @@ public sealed partial class WorldMarketSystem : EntitySystem
 
     #region The prices
 
-    // What a company pays for what the colony sells to it, as a share of its usual price: the index of its goods. An embargoed company pays nothing.
+    // What a company pays for what the colony sells to it, as a share of its usual price: the index of its goods.
     public float SellFactor(TradeContractPrototype contract)
     {
         if (!TryMarket(out var market))
             return 1f;
-
-        if (Embargoed(market, contract.Company.Id))
-            return 0f;
 
         return IndexFor(market, contract.ID) / 100f;
     }
@@ -137,16 +131,6 @@ public sealed partial class WorldMarketSystem : EntitySystem
             return 1f;
 
         return IndexFor(market, contract.ID) / 100f * (1f + DutyPercent(market, contract.Company.Id) / 100f);
-    }
-
-    public bool Embargoed(TradeContractPrototype contract)
-    {
-        return TryMarket(out var market) && Embargoed(market, contract.Company.Id);
-    }
-
-    private bool Embargoed(Entity<WorldMarketComponent> market, string company)
-    {
-        return market.Comp.Embargo.TryGetValue(company, out var until) && until > _timing.CurTime;
     }
 
     private float IndexFor(Entity<WorldMarketComponent> market, string contract)
@@ -175,33 +159,6 @@ public sealed partial class WorldMarketSystem : EntitySystem
 
     #endregion
 
-    #region The news
-
-    public void AddNews(Entity<WorldMarketComponent> market, string text)
-    {
-        market.Comp.News.Insert(0, new NewsItem(text, _timing.CurTime));
-        if (market.Comp.News.Count > NewsLength)
-            market.Comp.News.RemoveRange(NewsLength, market.Comp.News.Count - NewsLength);
-    }
-
-    // The news told to the colony as a message of the radio: it has no sound, so that it is read and not heard.
-    public void Announce(string text)
-    {
-        _chat.DispatchFilteredAnnouncement(
-            ColonyAnnouncements.Recipients(EntityManager),
-            text,
-            sender: Loc.GetString("rumc-world-news-sender"),
-            playSound: false);
-    }
-
-    private void Tell(Entity<WorldMarketComponent> market, string text, bool announce = true)
-    {
-        AddNews(market, text);
-        if (announce)
-            Announce(text);
-    }
-
-    #endregion
 
     public override void Update(float frameTime)
     {
@@ -218,19 +175,6 @@ public sealed partial class WorldMarketSystem : EntitySystem
         {
             comp.NextTick = now + TickEvery;
             Tick(market);
-        }
-
-        if (now >= comp.NextEvent)
-        {
-            comp.NextEvent = now + TimeSpan.FromSeconds(_random.Next(210, 420));
-            PickEvent(market);
-        }
-
-        comp.Active.RemoveAll(active => active.Until <= now);
-        foreach (var company in comp.Embargo.Where(pair => pair.Value <= now).Select(pair => pair.Key).ToList())
-        {
-            comp.Embargo.Remove(company);
-            Tell(market, Loc.GetString("rumc-world-embargo-ended", ("company", Loc.GetString(company))));
         }
 
         UpdateCities(market, now);
@@ -264,54 +208,4 @@ public sealed partial class WorldMarketSystem : EntitySystem
             history.RemoveAt(0);
     }
 
-    #region The events
-
-    private void PickEvent(Entity<WorldMarketComponent> market)
-    {
-        var events = _proto.EnumeratePrototypes<WorldMarketEventPrototype>().ToList();
-        if (events.Count == 0)
-            return;
-
-        var total = events.Sum(e => e.Weight);
-        var roll = _random.NextFloat() * total;
-        foreach (var proto in events)
-        {
-            roll -= proto.Weight;
-            if (roll <= 0f)
-            {
-                Trigger(market, proto);
-                return;
-            }
-        }
-
-        Trigger(market, events[^1]);
-    }
-
-    // Lets an event happen at once. The tests and the console of an admin of the server can call it.
-    public void Trigger(Entity<WorldMarketComponent> market, WorldMarketEventPrototype proto)
-    {
-        var now = _timing.CurTime;
-
-        foreach (var (id, percent) in proto.Shifts)
-        {
-            if (!_proto.TryIndex<WorldMarketCategoryPrototype>(id, out var category) || !market.Comp.Index.TryGetValue(id, out var old))
-                continue;
-
-            SetIndex(market, category, Math.Clamp(old * (1f + percent / 100f), category.Min, category.Max), old);
-        }
-
-        foreach (var company in proto.Embargo)
-        {
-            var until = now + TimeSpan.FromSeconds(proto.DurationSeconds);
-            if (!market.Comp.Embargo.TryGetValue(company, out var known) || known < until)
-                market.Comp.Embargo[company] = until;
-        }
-
-        market.Comp.Active.Add(new ActiveEvent(proto.ID, now + TimeSpan.FromSeconds(proto.DurationSeconds)));
-
-        var text = Loc.GetString(proto.Headline);
-        Tell(market, text);
-    }
-
-    #endregion
 }

@@ -12,15 +12,6 @@ public sealed partial class WorldMarketComponent : Component
     public readonly Dictionary<string, List<float>> History = new();
     public readonly Dictionary<string, float> LastChange = new();
 
-    public readonly List<NewsItem> News = new();
-
-    // The companies that refuse to trade with the colony, by the name of the company, until when.
-    public readonly Dictionary<string, TimeSpan> Embargo = new();
-
-    // What is going on that was told in the news: for the list of the console.
-    public readonly List<ActiveEvent> Active = new();
-
-    public TimeSpan NextEvent;
     public TimeSpan NextTick;
 
     // The number that the map of the round is made from (the same for the server and the clients, new every round). Nothing else is kept of the map: the land and the places of the cities
@@ -90,14 +81,3 @@ public sealed partial class WorldMarketComponent : Component
     public bool Started;
 }
 
-public sealed class NewsItem(string text, TimeSpan at)
-{
-    public readonly string Text = text;
-    public readonly TimeSpan At = at;
-}
-
-public sealed class ActiveEvent(string id, TimeSpan until)
-{
-    public readonly string Id = id;
-    public TimeSpan Until = until;
-}
