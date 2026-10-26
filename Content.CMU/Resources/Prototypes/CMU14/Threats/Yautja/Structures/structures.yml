@@ -4013,7 +4013,7 @@
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesDispenser
   name: Chemical dispenser
-  description: A complex machine for mixing elements into chemicals. A Wey-Yu product.
+  description: A hunter-built machine that draws elements from its reserves and blends them into chemicals.
   components:
     - type: Sprite
       sprite: CMU14/Yautja/Structures/yautja_machines.rsi

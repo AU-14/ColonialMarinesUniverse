@@ -828,7 +828,7 @@ public sealed class YautjaMachineSourceParityTest
             "CMUYautjaStructureYautjaMachinesDispenser",
             "/obj/structure/machinery/chem_dispenser/yauja",
             "Chemical dispenser",
-            "A complex machine for mixing elements into chemicals. A Wey-Yu product.",
+            "A hunter-built machine that draws elements from its reserves and blends them into chemicals.",
             "dispenser");
 
         yield return new DmmBackedYautjaMachineHelperRow(
