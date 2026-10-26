@@ -59,7 +59,7 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
         var autoRow = new RMCTuringDispenserBeakerRow { Id = null };
         autoRow.Icon.Texture = _resourceCache.GetTexture(CMUIcons.ArrowsRotate);
         autoRow.Icon.ModulateSelfOverride = CMUIcons.Idle;
-        autoRow.NameLabel.Text = "Auto (best fit)";
+        autoRow.NameLabel.Text = Loc.GetString("cmu-turing-dispenser-beaker-auto"); // CMU14: fluent
         autoRow.OnPressed += _ => SendPredictedMessage(new RMCTuringDispenserSetPreferredBeakerBuiMsg(null));
         _window.BeakerSelectorContainer.AddChild(autoRow);
         _beakerRows.Add(autoRow);
@@ -122,15 +122,18 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
         var energy = comp.Energy;
         _window.EnergyBar.MaxValue = maxEnergy.Float();
         _window.EnergyBar.Value = energy.Float();
-        _window.EnergyLabel.Text = $"Energy: {(maxEnergy.Float() > 0 ? energy.Float() / maxEnergy.Float() * 100 : 0):0}%";
+        // CMU14: fluent energy label
+        var percent = maxEnergy.Float() > 0 ? energy.Float() / maxEnergy.Float() * 100 : 0;
+        _window.EnergyLabel.Text = Loc.GetString("cmu-turing-dispenser-energy", ("percent", percent.ToString("0")));
 
+        // CMU14: fluent status text
         var (statusText, statusColor) = comp.Status switch
         {
-            TuringDispenserStatus.Idle => ("Status: IDLE", TanColor),
-            TuringDispenserStatus.Running => ("Status: RUNNING", OrangeColor),
-            TuringDispenserStatus.Finished => ("Status: FINISHED", GreenColor),
-            TuringDispenserStatus.Stuck => ($"Status: STUCK - {comp.Error}", RedColor),
-            _ => ("Status: IDLE", TanColor),
+            TuringDispenserStatus.Idle => (Loc.GetString("cmu-turing-dispenser-status-idle"), TanColor),
+            TuringDispenserStatus.Running => (Loc.GetString("cmu-turing-dispenser-status-running"), OrangeColor),
+            TuringDispenserStatus.Finished => (Loc.GetString("cmu-turing-dispenser-status-finished"), GreenColor),
+            TuringDispenserStatus.Stuck => (Loc.GetString("cmu-turing-dispenser-status-stuck", ("error", comp.Error ?? string.Empty)), RedColor),
+            _ => (Loc.GetString("cmu-turing-dispenser-status-idle"), TanColor),
         };
         _window.SetStatusRow(_window.StatusPanel, _window.StatusLabel, statusText, statusColor);
 
@@ -140,27 +143,28 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
         UpdateProgramRows(comp, _window.BoxProgramContainer, _window.BoxEmptyPanel, _window.BoxEmptyLabel, comp.BoxProgram);
 
         if (_itemSlots.GetItemOrNull(Owner, comp.InputBoxSlotId) != null)
-            _window.SetStatusRow(_window.BoxAlertPanel, _window.BoxStatusLabel, "Box loaded", TanColor);
+            _window.SetStatusRow(_window.BoxAlertPanel, _window.BoxStatusLabel, Loc.GetString("cmu-turing-dispenser-box-loaded"), TanColor);
         else
-            _window.SetStatusRow(_window.BoxAlertPanel, _window.BoxStatusLabel, "No input box loaded!", RedColor);
+            _window.SetStatusRow(_window.BoxAlertPanel, _window.BoxStatusLabel, Loc.GetString("cmu-turing-dispenser-box-missing"), RedColor);
 
         if (_itemSlots.GetItemOrNull(Owner, comp.OutputBeakerSlotId) is { } beaker &&
             _solution.TryGetMixableSolution(beaker, out _, out var solution))
         {
-            _window.SetStatusRow(_window.BeakerAlertPanel, _window.BeakerStatusLabel, $"{solution.Volume}/{solution.MaxVolume} units", TanColor);
+            _window.SetStatusRow(_window.BeakerAlertPanel, _window.BeakerStatusLabel, Loc.GetString("cmu-turing-dispenser-beaker-volume", ("volume", solution.Volume), ("max", solution.MaxVolume)), TanColor);
         }
         else
         {
-            _window.SetStatusRow(_window.BeakerAlertPanel, _window.BeakerStatusLabel, "No output beaker loaded!", RedColor);
+            _window.SetStatusRow(_window.BeakerAlertPanel, _window.BeakerStatusLabel, Loc.GetString("cmu-turing-dispenser-beaker-missing"), RedColor);
         }
 
         _window.SetAutoRun(comp.AutoRun);
         _window.SetSmartLink(comp.SmartLink);
+        // CMU14: fluent output mode
         _window.SetOutputMode(comp.OutputMode switch
         {
-            TuringDispenserOutputMode.SmartFridge => "Outputting to: SMARTFRIDGE",
-            TuringDispenserOutputMode.Centrifuge => "Outputting to: CENTRIFUGE",
-            _ => "Outputting to: CONTAINER",
+            TuringDispenserOutputMode.SmartFridge => Loc.GetString("cmu-turing-dispenser-output-smartfridge"),
+            TuringDispenserOutputMode.Centrifuge => Loc.GetString("cmu-turing-dispenser-output-centrifuge"),
+            _ => Loc.GetString("cmu-turing-dispenser-output-container"),
         });
 
         _window.SetSpinBoxValues(comp.Multiplier.Float(), comp.CycleLimit);
@@ -186,7 +190,7 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
                 {
                     var stock = (hasFridge ? _smartFridge.GetEmptyContainerCount(fridge, id) : 0) +
                                 _cmVendor.GetStockedAmount(coords, comp.SmartFridgeRange, id);
-                    row.StockLabel.Text = $"x{stock}";
+                    row.StockLabel.Text = Loc.GetString("cmu-turing-dispenser-stock", ("count", stock)); // CMU14: fluent
                 }
             }
             else

@@ -29,18 +29,18 @@ public sealed partial class RMCCentrifugeWindow : DefaultWindow
         Header(SettingsHeader);
 
         FilledButton(ModeButton, TanColor);
-        _modeLabel = ModeButton.AddIconLabel(CMUIcons.ArrowsRotate, "Mode: split", 16).Label;
+        _modeLabel = ModeButton.AddIconLabel(CMUIcons.ArrowsRotate, Loc.GetString("cmu-centrifuge-mode-split"), 16).Label; // CMU14: fluent
 
         FilledButton(SourceButton, BlueColor);
-        _sourceLabel = SourceButton.AddIconLabel(CMUIcons.Flask, "Input: Container", 16).Label;
+        _sourceLabel = SourceButton.AddIconLabel(CMUIcons.Flask, Loc.GetString("cmu-centrifuge-input-container"), 16).Label; // CMU14: fluent
 
         FilledButton(ConnectButton, BlueColor);
-        ConnectButton.AddIconLabel(CMUIcons.Link, "Connect a Turing Dispenser", 16);
+        ConnectButton.AddIconLabel(CMUIcons.Link, Loc.GetString("cmu-centrifuge-connect"), 16); // CMU14: fluent
 
         GreyButton(EjectInputButton);
-        EjectInputButton.AddIconLabel(CMUIcons.Eject, "Eject", 16);
+        EjectInputButton.AddIconLabel(CMUIcons.Eject, Loc.GetString("cmu-centrifuge-eject"), 16); // CMU14: fluent
         GreyButton(EjectOutputButton);
-        EjectOutputButton.AddIconLabel(CMUIcons.Eject, "Eject", 16);
+        EjectOutputButton.AddIconLabel(CMUIcons.Eject, Loc.GetString("cmu-centrifuge-eject"), 16); // CMU14: fluent
     }
 
     public void SetMode(string text)
@@ -55,7 +55,8 @@ public sealed partial class RMCCentrifugeWindow : DefaultWindow
 
     public void SetConnection(bool connected)
     {
-        ConnectionLabel.Text = connected ? "Turing Dispenser connected!" : "No Turing Dispenser connected!";
+        // CMU14: fluent
+        ConnectionLabel.Text = Loc.GetString(connected ? "cmu-centrifuge-connected" : "cmu-centrifuge-disconnected");
         ConnectionLabel.FontColorOverride = Color.White;
         ConnectionLabel.FontOverride = _boldItalicFont;
         ConnectionPanel.PanelOverride = Flat(connected ? BlueColor : RedColor);

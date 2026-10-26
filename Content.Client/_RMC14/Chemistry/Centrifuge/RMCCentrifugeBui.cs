@@ -41,10 +41,11 @@ public sealed partial class RMCCentrifugeBui : BoundUserInterface, IRefreshableB
         if (!EntMan.TryGetComponent(Owner, out RMCCentrifugeComponent? comp))
             return;
 
-        _window.SetMode(comp.Mode == CentrifugeMode.Split ? "Mode: split" : "Mode: distribute");
+        // CMU14: fluent
+        _window.SetMode(comp.Mode == CentrifugeMode.Split ? Loc.GetString("cmu-centrifuge-mode-split") : Loc.GetString("cmu-centrifuge-mode-distribute"));
         _window.SetSource(comp.InputSource == CentrifugeInputSource.Turing
-            ? "Input: Turing Dispenser"
-            : "Input: Container");
+            ? Loc.GetString("cmu-centrifuge-input-turing")
+            : Loc.GetString("cmu-centrifuge-input-container"));
 
         var connected = comp.TuringDispenser != null;
         _window.SourceButton.Disabled = !connected;
@@ -53,11 +54,11 @@ public sealed partial class RMCCentrifugeBui : BoundUserInterface, IRefreshableB
         _window.SetLabel(comp.Label);
 
         var hasInput = _itemSlots.GetItemOrNull(Owner, comp.InputSlotId) != null;
-        _window.InputStatusLabel.Text = hasInput ? "Loaded" : "Empty";
+        _window.InputStatusLabel.Text = Loc.GetString(hasInput ? "cmu-centrifuge-slot-loaded" : "cmu-centrifuge-slot-empty"); // CMU14: fluent
         _window.EjectInputButton.Disabled = !hasInput || comp.Spinning;
 
         var hasOutput = _itemSlots.GetItemOrNull(Owner, comp.OutputBoxSlotId) != null;
-        _window.OutputStatusLabel.Text = hasOutput ? "Loaded" : "Empty";
+        _window.OutputStatusLabel.Text = Loc.GetString(hasOutput ? "cmu-centrifuge-slot-loaded" : "cmu-centrifuge-slot-empty"); // CMU14: fluent
         _window.EjectOutputButton.Disabled = !hasOutput || comp.Spinning;
     }
 }

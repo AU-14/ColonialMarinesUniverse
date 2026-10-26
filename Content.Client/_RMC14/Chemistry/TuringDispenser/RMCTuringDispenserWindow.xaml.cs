@@ -39,24 +39,24 @@ public sealed partial class RMCTuringDispenserWindow : DefaultWindow
         EnergyBar.ForegroundStyleBoxOverride = Flat(GreenColor);
 
         GreyButton(ClearMemoryButton);
-        ClearMemoryButton.AddIconLabel(CMUIcons.Trash, "Clear memory");
+        ClearMemoryButton.AddIconLabel(CMUIcons.Trash, Loc.GetString("cmu-turing-dispenser-clear-memory")); // CMU14: fluent
         GreyButton(RunProgramButton);
-        RunProgramButton.AddIconLabel(CMUIcons.Play, "Run program");
+        RunProgramButton.AddIconLabel(CMUIcons.Play, Loc.GetString("cmu-turing-dispenser-run-program")); // CMU14: fluent
         GreyButton(SaveToMemoryButton);
-        SaveToMemoryButton.AddIconLabel(CMUIcons.FloppyDisk, "Save box to memory");
+        SaveToMemoryButton.AddIconLabel(CMUIcons.FloppyDisk, Loc.GetString("cmu-turing-dispenser-save-memory")); // CMU14: fluent
         GreyButton(EjectBoxButton);
-        EjectBoxButton.AddIconLabel(CMUIcons.Eject, "Eject box");
+        EjectBoxButton.AddIconLabel(CMUIcons.Eject, Loc.GetString("cmu-turing-dispenser-eject-box")); // CMU14: fluent
         GreyButton(DisposeBeakerButton);
-        DisposeBeakerButton.AddIconLabel(CMUIcons.Flask, "Flush beaker");
+        DisposeBeakerButton.AddIconLabel(CMUIcons.Flask, Loc.GetString("cmu-turing-dispenser-flush-beaker")); // CMU14: fluent
         GreyButton(EjectBeakerButton);
-        EjectBeakerButton.AddIconLabel(CMUIcons.Eject, "Eject beaker");
+        EjectBeakerButton.AddIconLabel(CMUIcons.Eject, Loc.GetString("cmu-turing-dispenser-eject-beaker")); // CMU14: fluent
 
         FilledButton(AutoRunButton, TanColor);
-        _autoRunIcon = AutoRunButton.AddIconLabel(CMUIcons.Stop, "Autorun: disabled");
+        _autoRunIcon = AutoRunButton.AddIconLabel(CMUIcons.Stop, Loc.GetString("cmu-turing-dispenser-autorun-disabled")); // CMU14: fluent
         FilledButton(SmartLinkButton, TanColor);
-        _smartLinkLabel = SmartLinkButton.AddIconLabel(CMUIcons.Link, "Smartlink: enabled").Label;
+        _smartLinkLabel = SmartLinkButton.AddIconLabel(CMUIcons.Link, Loc.GetString("cmu-turing-dispenser-smartlink-enabled")).Label; // CMU14: fluent
         FilledButton(OutputModeButton, TanColor);
-        _outputModeLabel = OutputModeButton.AddIconLabel(CMUIcons.Flask, "Outputting to: CONTAINER").Label;
+        _outputModeLabel = OutputModeButton.AddIconLabel(CMUIcons.Flask, Loc.GetString("cmu-turing-dispenser-output-container")).Label; // CMU14: fluent
 
         MultiplierSpinBox = UIExtensions.CreateDialSpinBox(1);
         MultiplierContainer.AddChild(MultiplierSpinBox);
@@ -72,13 +72,15 @@ public sealed partial class RMCTuringDispenserWindow : DefaultWindow
 
     public void SetAutoRun(bool enabled)
     {
-        _autoRunIcon.Label.Text = enabled ? "Autorun: enabled" : "Autorun: disabled";
+        // CMU14: fluent toggles
+        _autoRunIcon.Label.Text = Loc.GetString(enabled ? "cmu-turing-dispenser-autorun-enabled" : "cmu-turing-dispenser-autorun-disabled");
         _autoRunIcon.SetIcon(enabled ? CMUIcons.ArrowsRotate : CMUIcons.Stop);
     }
 
     public void SetSmartLink(bool enabled)
     {
-        _smartLinkLabel.Text = enabled ? "Smartlink: enabled" : "Smartlink: disabled";
+        // CMU14: fluent toggle
+        _smartLinkLabel.Text = Loc.GetString(enabled ? "cmu-turing-dispenser-smartlink-enabled" : "cmu-turing-dispenser-smartlink-disabled");
     }
 
     public void SetOutputMode(string text)

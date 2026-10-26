@@ -38,10 +38,12 @@ public sealed partial class RMCCentrifugeComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan ProcessEvery = TimeSpan.FromSeconds(3.5);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    // CMU14: server-only tick deadline, no client reader
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextProcess;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    // CMU14: server-only tick deadline, no client reader
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan FinishAt;
 
     [DataField, AutoNetworkedField]
