@@ -58,7 +58,7 @@
   - /Maps/CMU14/Planets/BosenmoriBasho/BosenmoriBashoMultiZ4.yml
   - /Maps/CMU14/Planets/BosenmoriBasho/BosenmoriBashoMultiZ5.yml
   minPlayers: 0
-  maxPlayers: 75
+  maxPlayers: 500
   maxRandomOffset: 0
   randomRotation: false
   stations:

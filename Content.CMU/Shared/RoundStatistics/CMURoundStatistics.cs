@@ -11,6 +11,7 @@ public enum CMURoundStatisticsPreset : byte
     DistressSignal,
     Insurgency,
     ColonyFall,
+    ForceOnForce,
 }
 
 [Serializable, NetSerializable]
@@ -23,6 +24,7 @@ public enum CMURoundStatisticsWinner : byte
     Threat,
     Draw,
     Unknown,
+    Opfor,
 }
 
 [Serializable, NetSerializable]
@@ -40,6 +42,8 @@ public enum CMURoundStatisticsOutcome : byte
     ColonyFallSurvivorVictory,
     Stalemate,
     ObjectiveVictory,
+    ForceOnForceGovforVictory,
+    ForceOnForceOpforVictory,
 }
 
 [Serializable, NetSerializable]
@@ -181,13 +185,61 @@ public sealed class CMURoundStatisticsDashboard(
 {
     public readonly List<CMURoundModeStatistics> Modes = modes;
     public readonly List<CMURoundOutcomeRecord> RecentRounds = recentRounds;
+    public CMURoundStatisticsQuery Query = new();
+    public CMURoundModeStatistics? SelectedMode;
+    public List<CMURoundPlanetBreakdown> AvailablePlanets = new();
+    public List<CMURoundMatchupStatistics> Matchups = new();
+    public int ArchiveTotal;
+    public int TotalRecords;
+    public int LatestRoundId;
+    public DateTime? FirstRecordedAt;
 }
 
 [Serializable, NetSerializable]
-public sealed class CMURoundStatisticsEuiState(CMURoundStatisticsDashboard dashboard) : EuiStateBase
+public sealed class CMURoundStatisticsEuiState(CMURoundStatisticsDashboard dashboard, bool loading = false, bool failed = false) : EuiStateBase
 {
     public readonly CMURoundStatisticsDashboard Dashboard = dashboard;
+    public readonly bool Loading = loading;
+    public readonly bool Failed = failed;
 }
 
 [Serializable, NetSerializable]
 public sealed class CMURoundStatisticsRefreshMsg : EuiMessageBase;
+
+[Serializable, NetSerializable]
+public sealed class CMURoundStatisticsQuery(
+    CMURoundStatisticsPreset preset = CMURoundStatisticsPreset.DistressSignal,
+    string? planetId = null,
+    string search = "",
+    int page = 0,
+    string? threatId = null,
+    string? populationBand = null)
+{
+    public const int PageSize = 12;
+    public const int MaxSearchLength = 96;
+    public readonly CMURoundStatisticsPreset Preset = preset;
+    public readonly string? PlanetId = planetId;
+    public readonly string Search = search;
+    public readonly int Page = page;
+    public readonly string? ThreatId = threatId;
+    public readonly string? PopulationBand = populationBand;
+}
+
+[Serializable, NetSerializable]
+public sealed class CMURoundStatisticsQueryMsg(CMURoundStatisticsQuery query) : EuiMessageBase
+{
+    public readonly CMURoundStatisticsQuery Query = query;
+}
+
+[Serializable, NetSerializable]
+public sealed class CMURoundMatchupStatistics(
+    bool againstThreat,
+    string platoonId,
+    string opponentId,
+    CMURoundModeStatistics statistics)
+{
+    public readonly bool AgainstThreat = againstThreat;
+    public readonly string PlatoonId = platoonId;
+    public readonly string OpponentId = opponentId;
+    public readonly CMURoundModeStatistics Statistics = statistics;
+}
