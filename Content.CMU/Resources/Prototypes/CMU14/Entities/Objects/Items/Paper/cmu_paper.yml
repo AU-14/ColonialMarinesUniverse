@@ -1612,3 +1612,41 @@
       visible: false
   - type: PaperVisuals
     backgroundModulate: "#c35e51"
+
+# Printed by a requisitions stock console. Stamped APPROVED, it's used on a requisitions vendor to fill the order, and
+# once filled it can be sent down the ASRS lift for a small payout.
+- type: entity
+  parent: CMBasePaper
+  id: CMUPaperRequisitionSlip
+  name: requisition order slip
+  description: A slip listing what someone wants from requisitions. Needs an APPROVED stamp before the vendor will fill it; once filled, send it down the ASRS lift.
+  components:
+  - type: Sprite
+    layers:
+    - state: paper
+      color: "#9ef5ff"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#9ef5ff"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
+    backgroundModulate: "#9ef5ff"
+    contentImageModulate: "#9ef5ff"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    contentMargin: 16.0, 16.0, 16.0, 16.0
+    headerImagePath: "/Textures/_RMC14/Interface/Paper/paper_heading_requisition_invoice.svg.96dpi.png"
+    headerMargin: 0.0, 0.0, 0.0, 12.0
+  - type: CMURequisitionSlip
+
+# Added to an order slip once its whole order has been handed out: stamped APPROVED and sent down the ASRS lift, the
+# slip then pays out like a crate's invoice, once per person a round.
+- type: entity
+  id: CMURequisitionSlipPayoutTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RequisitionsInvoice
+    reward: 30

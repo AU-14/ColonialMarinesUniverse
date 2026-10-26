@@ -10,6 +10,7 @@
   description: A high-value weapons cache accessible only with INSFOR operational funds.
   suffix: INSFOR, Objective Points
   components:
+  - type: CMUVendGunsOnSafety
   - type: Pullable
   - type: Sprite
     sprite: CMU14/Structures/Vendors/genericweaponrack.rsi

@@ -35,13 +35,14 @@
 # - AUPlanetLV759 # Hybrisa Metro # missing threat spawns, scenario fails
   - AUPlanetLV327 # Port Nereid
   - AUPlanetSorokyne
-  - AUPlanetCorsatStation
+# - AUPlanetCorsatStation # temporarily removed
   - CMUPlanetSolarisRidge
   - CMUPlanetFortMcNeil
   - AUPlanetTrijent
-  - AuPlanetKutjevo
+# - AuPlanetKutjevo # temporarily removed
   - AuPlanetShivasSnowball
-  - AuPlanetChances
+# - AuPlanetChances # temporarily removed
+  - CMUPlanetLV624
   rules:
   - AuVoteRule
   - PlatoonSpawn

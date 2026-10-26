@@ -441,6 +441,7 @@
   name: jeep machine gun
   description: A belt-fed machine gun for the gun jeep's pedestal, fed from cupola ammo crates.
   components:
+  - type: CMUCaselessGun
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container

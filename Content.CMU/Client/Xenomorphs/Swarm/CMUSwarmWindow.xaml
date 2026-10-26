@@ -1,0 +1,45 @@
+<controls:CMUSwarmWindow xmlns="https://spacestation14.io" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.Xenomorphs.Swarm" Title="{Loc cmu-swarm-menu-title}" MinSize="470 610">
+    <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
+        <Label Text="{Loc cmu-swarm-ovi-note}" />
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Button Access="Public" Name="Summon" Text="{Loc cmu-swarm-menu-summon}" HorizontalExpand="True" />
+            <Button Access="Public" Name="Allies" Text="{Loc cmu-swarm-menu-rules}" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <OptionButton Access="Public" Name="Squad" HorizontalExpand="True" />
+            <Button Access="Public" Name="SelectSquad" Text="{Loc cmu-swarm-select-squad}" />
+            <Button Access="Public" Name="AssignSquad" Text="{Loc cmu-swarm-assign-squad}" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Button Access="Public" Name="SelectAll" Text="{Loc cmu-swarm-select-all}" />
+            <Button Access="Public" Name="SelectNone" Text="{Loc cmu-swarm-select-none}" />
+            <Label Access="Public" Name="SelectionCount" />
+        </BoxContainer>
+        <ScrollContainer MinHeight="180" MaxHeight="300" VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Access="Public" Name="Roster" Orientation="Vertical" HorizontalExpand="True" />
+        </ScrollContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <OptionButton Access="Public" Name="Order" HorizontalExpand="True" />
+            <Button Access="Public" Name="PlaceOrder" Text="{Loc cmu-swarm-place-order}" />
+            <Button Access="Public" Name="Release" Text="{Loc cmu-swarm-release}" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <CheckBox Access="Public" Name="Append" Text="{Loc cmu-swarm-append}" />
+            <OptionButton Access="Public" Name="Structure" HorizontalExpand="True" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <OptionButton Access="Public" Name="Aggression" HorizontalExpand="True" />
+            <Button Access="Public" Name="ApplyAggression" Text="{Loc cmu-swarm-apply-aggression}" />
+        </BoxContainer>
+        <Label Text="{Loc cmu-swarm-roam-note}" />
+        <Label Text="{Loc cmu-swarm-work-note}" />
+        <Label Text="{Loc cmu-swarm-markers-heading}" Margin="0 6 0 0" />
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <OptionButton Access="Public" Name="Marker" HorizontalExpand="True" />
+            <Button Access="Public" Name="PlaceMarker" Text="{Loc cmu-swarm-place-marker}" />
+            <Button Access="Public" Name="ClearMarkers" Text="{Loc cmu-swarm-clear-markers}" />
+        </BoxContainer>
+        <Label Access="Public" Name="Hint" Text="{Loc cmu-swarm-selection-hint}" />
+    </BoxContainer>
+</controls:CMUSwarmWindow>

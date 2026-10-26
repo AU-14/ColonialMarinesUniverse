@@ -4,6 +4,9 @@
   id: WeaponSMGM63
   description: The ARMAT Battlefield Armaments M39 submachinegun. Occasionally carried by light-infantry, scouts, engineers and medics.
   components:
+  # cmu edit start: built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   # cmu edit start: 10x20mm caseless
   - type: CMUCaselessGun
   # cmu edit end
