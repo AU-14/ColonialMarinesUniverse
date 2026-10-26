@@ -13,6 +13,7 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: spp_pvt
+  - type: ScoutWhitelist # V86 cloak checks this, without it the cloak says unskilled
   - type: Skills
     skills:
       RMCSkillEndurance: 2

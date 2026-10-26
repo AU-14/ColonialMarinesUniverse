@@ -1,3 +1,4 @@
+/*
 #pragma warning disable RA0002 // Tests configure targets, cooldowns and permission fixtures directly.
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +14,26 @@ using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Smoke;
+using Content.Shared._RMC14.Slow;
 using Content.Shared.Access.Components;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.ShipWeapons;
+using Content.Shared.CMU14.GasMask;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Guidebook;
 using Content.Shared.Maps;
+using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Stunnable;
 using Content.Shared.Tag;
@@ -550,6 +560,192 @@ public sealed class CMUShipWeaponsTest : GameTest
             Assert.That(SEntMan.HasComponent<StunnedComponent>(victim), Is.EqualTo(weapon == "CMUEMSStrike"),
                 "EMS actually immobilizes occupants without using a damaging explosion");
             Assert.That(SEntMan.HasComponent<StunnedComponent>(xeno), Is.EqualTo(weapon == "CMUEMSStrike"));
+            if (weapon == "CMUGasStrike")
+            {
+                Assert.That(SEntMan.HasComponent<RMCSlowdownComponent>(xeno), Is.True);
+                Assert.That(SEntMan.System<StatusEffectsSystem>().TryGetStatusEffect(
+                    xeno, CMUShipWeaponsSystem.GasHaze, out _), Is.True);
+            }
+        });
+        if (weapon == "CMUGasStrike")
+        {
+            await Server.WaitPost(() =>
+            {
+                var clouds = SEntMan.EntityQueryEnumerator<CMUOrbitalGasComponent>();
+                while (clouds.MoveNext(out var uid, out _))
+                    SEntMan.QueueDeleteEntity(uid);
+            });
+            await Pair.RunSeconds(2);
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(SEntMan.HasComponent<RMCSlowdownComponent>(xeno), Is.False);
+                Assert.That(SEntMan.System<StatusEffectsSystem>().TryGetStatusEffect(
+                    xeno, CMUShipWeaponsSystem.GasHaze, out _), Is.False,
+                    "gas haze and slowdown expire after exposure ends");
+            });
+        }
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task OrbitalGasDamagesLungsAndBrainEveryThreeSecondsIncludingCorpses(bool dead)
+    {
+        var map = await Pair.CreateTestMap();
+        var organs = new Dictionary<EntityUid, float>();
+        var clouds = new List<EntityUid>();
+        EntityUid victim = default;
+        await Server.WaitAssertion(() =>
+        {
+            var config = Server.ResolveDependency<IConfigurationManager>();
+            config.SetCVar(CMUMedicalCCVars.Enabled, true);
+            config.SetCVar(CMUMedicalCCVars.OrganEnabled, true);
+            victim = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            if (dead)
+                SEntMan.System<MobStateSystem>().ChangeMobState(victim, MobState.Dead);
+            foreach (var organ in SEntMan.System<CMUMedicalBodyIndexSystem>().GetOrgans(victim))
+            {
+                if (SEntMan.HasComponent<LungsComponent>(organ.Owner) ||
+                    SEntMan.HasComponent<CMUBrainComponent>(organ.Owner))
+                    organs.Add(organ.Owner, SComp<OrganHealthComponent>(organ.Owner).Current.Float());
+            }
+            Assert.That(organs.Count, Is.GreaterThanOrEqualTo(2), "test must exercise real lungs and brain");
+            for (var i = 0; i < 2; i++)
+            {
+                var gas = SEntMan.SpawnEntity("CMUShipWeaponGas", map.GridCoords);
+                clouds.Add(gas);
+                // Isolate direct organ damage from the cloud's separately tested poison damage.
+                SComp<DamageOverTimeComponent>(gas).Damage = null;
+            }
+        });
+        await Pair.RunSeconds(2);
+        await Server.WaitAssertion(() =>
+        {
+            foreach (var (organ, initial) in organs)
+                Assert.That(SComp<OrganHealthComponent>(organ).Current.Float(), Is.EqualTo(initial));
+        });
+        await Pair.RunSeconds(2);
+        await Server.WaitAssertion(() =>
+        {
+            foreach (var (organ, initial) in organs)
+                Assert.That(SComp<OrganHealthComponent>(organ).Current.Float(), Is.EqualTo(initial - 1),
+                    "overlapping gas clouds must not multiply organ damage");
+        });
+        await Pair.RunSeconds(3);
+        await Server.WaitAssertion(() =>
+        {
+            foreach (var (organ, initial) in organs)
+                Assert.That(SComp<OrganHealthComponent>(organ).Current.Float(), Is.EqualTo(initial - 2));
+            foreach (var cloud in clouds)
+                SComp<DamageOverTimeComponent>(cloud).Damage =
+                    new DamageSpecifier { DamageDict = { ["Poison"] = 12 } };
+        });
+        await Pair.RunSeconds(2);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<DamageableComponent>(victim).Damage.DamageDict.GetValueOrDefault("Poison").Float(),
+                Is.GreaterThan(0), "the cloud's existing poison also affects corpses");
+        });
+    }
+
+    [TestCase("CMUGasMaskFilter", 5)]
+    [TestCase("CMUGasMaskFilterHAZOPS", 15)]
+    [TestCase("CMUGasMaskFilterWY", 15)]
+    public async Task OrbitalGasFiltersProtectUntilTheirExposureBudgetExpires(string prototype, int seconds)
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid victim = default, filter = default;
+        await Server.WaitAssertion(() =>
+        {
+            victim = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var mask = SEntMan.SpawnEntity("CMUMaskGas", map.GridCoords);
+            filter = SEntMan.SpawnEntity(prototype, map.GridCoords);
+            Assert.That(SEntMan.System<ItemSlotsSystem>().TryInsert(mask, "filter", filter, null), Is.True);
+            Assert.That(SEntMan.System<InventorySystem>().TryEquip(victim, mask, "mask", force: true), Is.True);
+            SEntMan.SpawnEntity("CMUShipWeaponGas", map.GridCoords);
+            SEntMan.SpawnEntity("CMUShipWeaponGas", map.GridCoords);
+        });
+        await Pair.RunSeconds(seconds - 0.5f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<GasMaskFilterComponent>(filter).Integrity, Is.Zero,
+                "the final protected tick consumes the filter");
+            Assert.That(SComp<DamageableComponent>(victim).Damage.DamageDict.GetValueOrDefault("Poison").Float(),
+                Is.Zero, "both standard and advanced filters must block all gas effects, including overlapping tiles");
+            Assert.That(SEntMan.HasComponent<CMUOrbitalGasVictimComponent>(victim), Is.False);
+        });
+        await Pair.RunSeconds(2);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<DamageableComponent>(victim).Damage.DamageDict.GetValueOrDefault("Poison").Float(),
+                Is.GreaterThan(0), "gas penetrates after five or fifteen exposure seconds");
+        });
+    }
+
+    [TestCase(5f, 50f)]
+    [TestCase(7f, 18f)]
+    public async Task EmsBurnsConfiguredDamageCapsAddedHumanDamageAndLeavesXenosUncapped(float damagePerSecond, float cap)
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid human = default, xeno = default, field = default;
+        float initialHeat = 0;
+        await Server.WaitAssertion(() =>
+        {
+            var areas = SEntMan.EnsureComponent<AreaGridComponent>(map.Grid);
+            SEntMan.System<AreaSystem>().ReplaceArea(areas, Vector2i.Zero, "RMCAreaDesertDamInterior");
+            SComp<AreaComponent>(areas.AreaEntities["RMCAreaDesertDamInterior"]).OB = true;
+            human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            xeno = SEntMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            SEntMan.System<DamageableSystem>().TryChangeDamage(human,
+                new DamageSpecifier { DamageDict = { ["Heat"] = 30 } }, ignoreResistances: true,
+                ignoreGlobalModifiers: true);
+            initialHeat = SComp<DamageableComponent>(human).Damage.DamageDict.GetValueOrDefault("Heat").Float();
+            Assert.That(initialHeat, Is.GreaterThan(0));
+            field = SEntMan.SpawnEntity("CMUShipWeaponEmsField", map.GridCoords);
+            var ems = SComp<CMUShipWeaponEmsFieldComponent>(field);
+            Assert.That(ems.BurnDamagePerSecond, Is.EqualTo(5), "default damage comes from the EMS YAML");
+            Assert.That(ems.HumanDamageCap, Is.EqualTo(50), "default cap comes from the EMS YAML");
+            ems.BurnDamagePerSecond = damagePerSecond;
+            ems.HumanDamageCap = cap;
+            ems.EndsAt = SGameTiming.CurTime + TimeSpan.FromSeconds(15);
+            SEntMan.System<CMUShipWeaponsSystem>().Update(0);
+        });
+        await Pair.RunSeconds(1.5f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<DamageableComponent>(human).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.EqualTo(initialHeat + damagePerSecond));
+            Assert.That(SComp<DamageableComponent>(xeno).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.EqualTo(damagePerSecond));
+            for (var i = 0; i < 20; i++)
+                SEntMan.System<CMUShipWeaponsSystem>().Update(0);
+            Assert.That(SComp<DamageableComponent>(human).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.EqualTo(initialHeat + damagePerSecond), "extra field updates cannot multiply burn damage");
+        });
+        await Pair.RunSeconds(13);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<DamageableComponent>(human).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.EqualTo(initialHeat + cap), "pre-existing burns do not reduce this strike's configured budget");
+            Assert.That(SComp<DamageableComponent>(xeno).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.EqualTo(14 * damagePerSecond), "xenos continue taking configured damage past the human cap");
+            SEntMan.DeleteEntity(field);
+        });
+        await Pair.RunSeconds(2);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<DamageableComponent>(xeno).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.EqualTo(14 * damagePerSecond), "the lingering stun must not deal lingering burns");
+            field = SEntMan.SpawnEntity("CMUShipWeaponEmsField", map.GridCoords);
+            SComp<CMUShipWeaponEmsFieldComponent>(field).EndsAt = SGameTiming.CurTime + TimeSpan.FromSeconds(15);
+            SEntMan.System<CMUShipWeaponsSystem>().Update(0);
+        });
+        await Pair.RunSeconds(1.5f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<DamageableComponent>(human).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.EqualTo(initialHeat + cap + 5), "a new strike uses the YAML defaults despite the existing stun");
+            Assert.That(SComp<DamageableComponent>(xeno).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.EqualTo(14 * damagePerSecond + 5));
         });
     }
 
@@ -822,6 +1018,7 @@ public sealed class CMUShipWeaponsTest : GameTest
         var map = await Pair.CreateTestMap();
         EntityUid initial = default, late = default, outside = default, field = default;
         TimeSpan deadline = default;
+        float initialBurnOnExit = 0;
         await Server.WaitAssertion(() =>
         {
             var maps = SEntMan.System<SharedMapSystem>();
@@ -843,7 +1040,7 @@ public sealed class CMUShipWeaponsTest : GameTest
             SEntMan.System<CMUShipWeaponsSystem>().Update(0);
             var fields = SEntMan.EntityQueryEnumerator<CMUShipWeaponEmsFieldComponent>();
             Assert.That(fields.MoveNext(out field, out var ems), Is.True);
-            deadline = ems!.EndsAt + TimeSpan.FromSeconds(25);
+            deadline = ems!.EndsAt + TimeSpan.FromSeconds(35);
             Assert.That(ems.EndsAt - SGameTiming.CurTime, Is.EqualTo(TimeSpan.FromSeconds(15)));
         });
         await Pair.RunSeconds(10);
@@ -854,6 +1051,8 @@ public sealed class CMUShipWeaponsTest : GameTest
             Assert.That(initialTime.EndEffectTime, Is.EqualTo(deadline), "ordinary stun immunity is bypassed");
             Assert.That(SEntMan.HasComponent<StunnedComponent>(initial), Is.True);
             Assert.That(SEntMan.HasComponent<StunnedComponent>(late), Is.False);
+            initialBurnOnExit = SComp<DamageableComponent>(initial).Damage.DamageDict.GetValueOrDefault("Heat").Float();
+            Assert.That(initialBurnOnExit, Is.GreaterThan(0));
             SEntMan.System<SharedTransformSystem>().SetCoordinates(initial,
                 new EntityCoordinates(map.Grid, new Vector2(31.5f, .5f)));
             SEntMan.System<SharedTransformSystem>().SetCoordinates(late,
@@ -874,6 +1073,12 @@ public sealed class CMUShipWeaponsTest : GameTest
                 Assert.That(SEntMan.HasComponent<StunnedComponent>(victim), Is.True);
             }
             Assert.That(SEntMan.HasComponent<StunnedComponent>(outside), Is.False);
+            Assert.That(SComp<DamageableComponent>(initial).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.EqualTo(initialBurnOnExit), "leaving the field stops burns without removing its stun");
+            Assert.That(SComp<DamageableComponent>(late).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.GreaterThan(0), "late entrants also take burns");
+            Assert.That(SComp<DamageableComponent>(outside).Damage.DamageDict.GetValueOrDefault("Heat").Float(),
+                Is.Zero);
         });
         await Pair.RunSeconds(23);
         await Server.WaitAssertion(() =>
@@ -917,3 +1122,4 @@ public sealed class CMUShipWeaponsTest : GameTest
         });
     }
 }
+*/

@@ -44,6 +44,7 @@
     - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict
+    - CMUFearOfBlood
   ranks:
     RMCRankCivilianDoctor: []
   startingGear: AU14GearCivilianHeadPhysician
@@ -95,8 +96,11 @@
   - CivilianHeadPhysicianSpecializationAU14
   - MedBackpackAU14
   - MedJumpsuitAU14
+  - CivJumpsuitAU14
   - MedHatsAU14
+  - CivHatsAU14
   - MedJacketAU14
+  - CivJacketAU14
   - MedGlovesAU14
   - CivFootwearAU14
   - MedMaskAU14

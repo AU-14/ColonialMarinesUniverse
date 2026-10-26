@@ -9,7 +9,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
+    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
     sections:
     - name: Rail Attachments
       entries:
@@ -107,7 +107,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
+    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
     sections:
     - name: Rail Attachments
       entries:
@@ -190,7 +190,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
+    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
     sections:
     - name: Rail Attachments
       entries:
@@ -299,7 +299,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector, AU14JobCivilianPaPOfficer ]
+    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector, AU14JobCivilianPaPOfficer ]
     sections:
     - name: Rail Attachments
       entries:

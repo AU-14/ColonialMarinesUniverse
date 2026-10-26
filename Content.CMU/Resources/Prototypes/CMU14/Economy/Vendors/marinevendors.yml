@@ -854,8 +854,9 @@
     Standard issue across the frontier where threats can appear without warning.
     Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
 
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+    For immediate combat readiness: select a primary weapon and a sidearm.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -865,29 +866,38 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponM41AMK1
-      - id: AU14KitWeaponM39
+      - id: RMCWeaponRifleM54CMK1Unloaded
+      - id: WeaponSMGM63
     - name: Rifle Ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
-        amount: 60
+        amount: 120
       - id: CMMagazineSMGM63
-        amount: 60
+        amount: 120
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: AU14KitWeaponM4A3
-      - id: AU14KitWeaponMod88
+      - id: CMWeaponPistolM1984Empty
+      - id: RMCWeaponPistolM77Empty
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
-        amount: 60
+        amount: 120
       - id: CMMagazinePistolM77AP
-        amount: 60
-    - name: Attachments
-      choices: { CMUAttachmentsVendor: 1 }
+        amount: 120
+    - name: Unrestricted Attachments
       entries:
+      - id: RMCAttachmentRailFlashlight
+        maxPerUser: 1
       - id: AU14AttachmentTwoPointSling
+        maxPerUser: 1
+    - name: Special Ammunition
+      choices: { CMUSpecialAmmo: 2 }
+      entries:
+      - id: CMMagazineRifleM54CMK1AP
+      - id: CMMagazineSMGM63AP
+      - id: RMCMagazinePistolM1984AP
+      - id: CMMagazineSMGM63Ext
 
 - type: entity
   parent: AU14SpecVend
@@ -900,6 +910,7 @@
 
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMAutomatedVendor
     sections:
     - name: Weapons Specialist Sets
@@ -1159,6 +1170,7 @@
   name: aircrew weapons rack
   description: An automated rack hooked up to a small storage of weapons.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
   - type: Sprite
@@ -1559,6 +1571,7 @@
   name: USCM automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]

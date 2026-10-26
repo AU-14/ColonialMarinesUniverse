@@ -68,14 +68,29 @@
   id: RMCWeaponLauncherM5ATL
   description: "The M7 Shoulder Launched Multipurpose Assault Weapon is a powerful anti-armor infantry weapon. Used to take out light-tanks and enemy structures, it is a dangerous weapon with a variety of combat uses, depending on the loaded ammunition, and is capable of firing both shells and rocket-propelled grenades."
   components:
+  # cmu edit start: cmss13 PR 10425 resprite, with an empty sprite and a full camo set; was the m5atl icon and inhands RSIs
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/RocketLaunchers/m5atl/m5atl_inhands.rsi
+    sprite: CMU14/Objects/Weapons/Guns/RocketLaunchers/m5/jungle.rsi
     layers:
       - state: base
-        sprite: _RMC14/Objects/Weapons/Guns/RocketLaunchers/m5atl/m5atl_icon.rsi
         map: ["enum.GunVisualLayers.Base"]
+      - state: mag-1
+        map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/RocketLaunchers/m5atl/m5atl_inhands.rsi
+    sprite: CMU14/Objects/Weapons/Guns/RocketLaunchers/m5/jungle.rsi
+  - type: Appearance
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Objects/Weapons/Guns/RocketLaunchers/m5/jungle.rsi
+      Desert: CMU14/Objects/Weapons/Guns/RocketLaunchers/m5/desert.rsi
+      Snow: CMU14/Objects/Weapons/Guns/RocketLaunchers/m5/snow.rsi
+      Classic: CMU14/Objects/Weapons/Guns/RocketLaunchers/m5/classic.rsi
+      Urban: CMU14/Objects/Weapons/Guns/RocketLaunchers/m5/urban.rsi
+  # cmu edit end
   - type: Gun
     fireRate: 0.83
     soundGunshot:
@@ -158,7 +173,7 @@
     proto: RMCProjectileRocket84mm
     deleteOnSpawn: false
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/m5spec.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Explosives/m5_rockets.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/m5spec.rsi
     layers:
     - state: m5_84mm_he
       map: ["enum.AmmoVisualLayers.Base"]
@@ -355,7 +370,7 @@
     proto: RMCProjectileRocket84mmAntiArmor
     deleteOnSpawn: false
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/m5spec.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Explosives/m5_rockets.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/m5spec.rsi
     layers:
     - state: m5_84mm_ap
       map: ["enum.AmmoVisualLayers.Base"]
@@ -479,7 +494,7 @@
     proto: RMCProjectileRocket84mmWhitePhosphorus
     deleteOnSpawn: false
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/m5spec.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Explosives/m5_rockets.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/m5spec.rsi
     layers:
     - state: m5_84mm_wp
       map: ["enum.AmmoVisualLayers.Base"]

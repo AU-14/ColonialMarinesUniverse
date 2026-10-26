@@ -23,6 +23,20 @@ public sealed partial class CMUPhotoCameraComponent : Component
     [DataField, AutoNetworkedField]
     public int Size = 3;
 
+    /// <summary>
+    /// For devices that do something else when clicked, like a broadcasting camera: photos are only taken once it's
+    /// switched to <see cref="PhotoMode"/> from the right click menu.
+    /// </summary>
+    [DataField]
+    public bool RequiresPhotoMode;
+
+    [DataField, AutoNetworkedField]
+    public bool PhotoMode;
+
+    /// <summary>Photos can only be taken while the camera is wielded in both hands.</summary>
+    [DataField]
+    public bool RequiresWielded;
+
     /// <summary>How far from the photographer, in tiles, the clicked tile may be.</summary>
     [DataField]
     public float Range = 10;

@@ -1,10 +1,16 @@
+using System.Collections.Generic;
 using System.Linq;
 using Content.Server.GameTicking;
+using Content.Server.Preferences.Managers;
 using Content.Shared.CMU14.Ghost;
+using Content.Shared.GameTicking;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Mind;
+using Content.Shared.Preferences;
+using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Ghost;
 
@@ -15,8 +21,9 @@ namespace Content.IntegrationTests.CMU14.Ghost;
 [TestFixture]
 public sealed class CMUObserverProfileAppearanceTest
 {
-    [Test]
-    public async Task ObserverLooksLikeSelectedCharacter()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ObserverLooksLikeSelectedCharacter(bool hasPreferredJob)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -31,6 +38,15 @@ public sealed class CMUObserverProfileAppearanceTest
 
         await server.WaitAssertion(() =>
         {
+            var preferences = server.ResolveDependency<IServerPreferencesManager>();
+            var current = preferences.GetPreferences(player.UserId);
+            var jobs = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
+            if (hasPreferredJob)
+                jobs.Add(SharedGameTicker.FallbackOverflowJob, JobPriority.High);
+
+            preferences.SetProfile(player.UserId, current.SelectedCharacterIndex,
+                current.SelectedCharacter.WithJobPriorities(jobs)).Wait();
+
             // Straight from the lobby: no mind and no body to copy yet.
             server.EntMan.System<SharedMindSystem>().WipeMind(player);
             server.EntMan.System<GameTicker>().JoinAsObserver(player);
@@ -54,8 +70,8 @@ public sealed class CMUObserverProfileAppearanceTest
             Assert.That(entities.GetComponent<VisibilityComponent>(standIn.Value).Layer,
                 Is.EqualTo(entities.GetComponent<VisibilityComponent>(ghost!.Value).Layer),
                 "Whoever can't see the ghost mustn't be sent its stand-in either.");
-            Assert.That(entities.System<InventorySystem>().TryGetSlotEntity(standIn.Value, "jumpsuit", out _), Is.True,
-                "The stand-in wears the preferred job's clothes, like the lobby preview.");
+            Assert.That(entities.System<InventorySystem>().TryGetSlotEntity(standIn.Value, "ears", out _), Is.True,
+                "The stand-in wears the preferred or fallback job's equipment.");
         });
 
         await pair.CleanReturnAsync();
