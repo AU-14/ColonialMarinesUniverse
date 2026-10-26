@@ -12,8 +12,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      650: Critical
-      750: Dead
+      750: Critical
+      850: Dead
     stateAlertDict:
       Alive: XenoHealth
       Critical: XenoCrit
@@ -87,7 +87,7 @@
     baseWalkSpeed: 2.5
     baseSprintSpeed: 4
   - type: MeleeWeapon
-    attackRate: 0.5 # slow attacks
+    attackRate: 0.75
     damage:
       types:
         Blunt: 75
@@ -96,15 +96,15 @@
     animation: WeaponArcSmash
   - type: CMArmor
     explosionArmor: 50
-    xenoArmor: 20
+    xenoArmor: 30
   - type: XenoClaws
     clawType: VerySharp
   - type: Tackle
     min: 2
-    max: 6
+    max: 3
     chance: 0.35
-    stunMin: 3
-    stunMax: 4
+    stunMin: 5
+    stunMax: 5
   - type: RMCSize
     size: Big
   - type: XenoDevour
