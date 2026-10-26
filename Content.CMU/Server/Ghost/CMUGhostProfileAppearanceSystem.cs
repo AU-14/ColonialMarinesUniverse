@@ -64,8 +64,7 @@ public sealed partial class CMUGhostProfileAppearanceSystem : EntitySystem
     /// </summary>
     private void DressInPreferredJob(EntityUid standIn, HumanoidCharacterProfile profile, ICommonSession player)
     {
-        var jobId = profile.JobPriorities.FirstOrDefault(p => p.Value == JobPriority.High).Key;
-        if (!_prototypes.TryIndex(jobId, out JobPrototype? job) &&
+        if (!_prototypes.TryIndex(PickPreferredJob(profile), out JobPrototype? job) &&
             !_prototypes.TryIndex(SharedGameTicker.FallbackOverflowJob, out job))
         {
             return;
@@ -92,6 +91,42 @@ public sealed partial class CMUGhostProfileAppearanceSystem : EntitySystem
                 Wear(standIn, loadoutProto);
             }
         }
+    }
+
+    /// <summary>
+    ///     The highest priority job set for the current gamemode, the same priorities spawning reads. Without one,
+    ///     the highest priority job set for any gamemode, so the ghost still wears a uniform.
+    /// </summary>
+    private ProtoId<JobPrototype> PickPreferredJob(HumanoidCharacterProfile profile)
+    {
+        var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
+        if (TryPickHighest(profile.GetJobPrioritiesForGamemode(presetId), out var job))
+            return job;
+
+        var anyMode = profile.GamemodeJobPriorities.Values
+            .SelectMany(priorities => priorities)
+            .Concat(profile.JobPriorities);
+        if (TryPickHighest(anyMode, out job))
+            return job;
+
+        return SharedGameTicker.FallbackOverflowJob;
+    }
+
+    private bool TryPickHighest(IEnumerable<KeyValuePair<ProtoId<JobPrototype>, JobPriority>> priorities,
+        out ProtoId<JobPrototype> job)
+    {
+        job = default;
+        var best = JobPriority.Never;
+        foreach (var (id, priority) in priorities)
+        {
+            if (priority <= best || string.IsNullOrEmpty(id.Id) || !_prototypes.HasIndex(id))
+                continue;
+
+            best = priority;
+            job = id;
+        }
+
+        return best != JobPriority.Never;
     }
 
     private void Wear(EntityUid standIn, IEquipmentLoadout loadout)

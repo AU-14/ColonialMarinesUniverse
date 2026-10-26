@@ -173,6 +173,7 @@ namespace Content.Server.CMU14.Round
         {
 
             base.Initialize();
+            SubscribeLocalEvent<LoadingMapsEvent>(OnLoadingMaps);
             _voteSequence.Reset();
             _state.Reset();
             SelectedPlanetMap = null;
@@ -300,15 +301,12 @@ namespace Content.Server.CMU14.Round
                     }
                 }
 
-                // Filter planets by their MinPlayers/MaxPlayers so planets intended for
-                // specific player counts cannot be voted for when out of range.
+                // Planets intended for specific player counts cannot be voted for when out of range.
                 var playerCount = _playerManager.PlayerCount;
-                planetProtos.RemoveAll(p =>
-                    // If MinPlayers is set (>0) and current players are fewer, exclude.
-                    (p.Planet.MinPlayers > 0 && playerCount < p.Planet.MinPlayers) ||
-                    // If MaxPlayers is set (>0) and current players exceed it, exclude.
-                    (p.Planet.MaxPlayers > 0 && playerCount > p.Planet.MaxPlayers)
-                );
+                planetProtos.RemoveAll(p => !AuRoundSelectionRules.IsPlanetInPopulationRange(
+                    p.Planet,
+                    _prototypeManager.TryIndex<GameMapPrototype>(p.Planet.MapId, out var map) ? map : null,
+                    playerCount));
 
                 if (planetProtos.Count == 0)
                 {
@@ -582,7 +580,7 @@ namespace Content.Server.CMU14.Round
             if (!_prototypeManager.TryIndex(threat.RoundStartSpawn, out PartySpawnPrototype? spawn))
                 return false;
 
-            bodyCount = ThreatVoteSelection.CalculateBodyCount(spawn, playerCount);
+            bodyCount = ThreatVoteSelection.CalculateBodyCount(spawn, playerCount, threat.ThreatRatio);
             return true;
         }
 
@@ -737,12 +735,12 @@ namespace Content.Server.CMU14.Round
 
         /// <summary>
         ///     Locks a safe Distress Signal third-party roster before the post-roundstart threat vote.
-        ///     The winning threat can fill any remaining capacity without changing the announced survivor count.
+        ///     Revalidation at round start replaces a roster that no longer fits the ready population.
         /// </summary>
-        public bool TryLockDistressSignalThirdParties(out int survivorCount)
+        public bool TryLockDistressSignalThirdParties(out int survivorCount, bool revalidate = false)
         {
             survivorCount = _state.DistressSignalSurvivorCount;
-            if (_state.DistressSignalThirdPartiesLocked)
+            if (_state.DistressSignalThirdPartiesLocked && !revalidate)
                 return true;
 
             if (_selectedPreset?.ID.Equals(DistressSignalPresetId, StringComparison.OrdinalIgnoreCase) != true ||
@@ -751,7 +749,8 @@ namespace Content.Server.CMU14.Round
                 return false;
             }
 
-            var playerCount = _playerManager.PlayerCount;
+            // Threat voting and spawning use ready profiles, not everyone connected to the server.
+            var playerCount = _gameTicker.ReadyPlayerCount();
             var platoonSpawnRule = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
             var govforId = platoonSpawnRule.SelectedGovforPlatoon?.ID;
             var opforId = platoonSpawnRule.SelectedOpforPlatoon?.ID;
@@ -809,12 +808,22 @@ namespace Content.Server.CMU14.Round
                     : 0;
             }
 
-            // Distress Signal promises survivors: spend the budget on them first so a group is
-            // scheduled whenever the population supports one, then let the weighted lottery fill
-            // whatever capacity is left with the planet's other third parties.
+            var survivorCandidates = candidates.Where(party => party.RoundStart && party.AnnounceAsSurvivors).ToList();
+            var survivorGroupLimit = GetDistressSignalSurvivorGroupLimit(playerCount, maxThirdParties);
+            // Preserve the announced roster when it still fits. An empty roster may now be able
+            // to spawn a group if more players readied up during the final minute.
+            if (_state.DistressSignalThirdPartiesLocked &&
+                _selectedThirdParties.Count > 0 &&
+                _selectedThirdParties.Count <= survivorGroupLimit &&
+                _selectedThirdParties.All(survivorCandidates.Contains) &&
+                _selectedThirdParties.Sum(party => bodyCounts[party]) <= bodyBudget)
+            {
+                return true;
+            }
+
             List<ThirdPartyPrototype> selected = SelectThirdPartiesWithinBodyBudget(
-                candidates.Where(party => party.RoundStart && party.AnnounceAsSurvivors).ToList(),
-                GetDistressSignalSurvivorGroupLimit(playerCount, maxThirdParties),
+                survivorCandidates,
+                survivorGroupLimit,
                 bodyBudget,
                 PickWeightedThirdParty,
                 party => bodyCounts[party],
@@ -839,7 +848,7 @@ namespace Content.Server.CMU14.Round
 
             _sawmill.Info(
                 $"[AuRoundSystem] Locked Distress Signal third parties before round start: selected={
-                    selected.Count}, bodies={selectedBodyCount + additionalBodyCount}/{bodyBudget}, survivors={survivorCount}, eligibleThreats=[{
+                    selected.Count}, readyPlayers={playerCount}, bodies={selectedBodyCount + additionalBodyCount}/{bodyBudget}, survivors={survivorCount}, eligibleThreats=[{
                         string.Join(", ", eligibleThreatIds)}].");
 
             return true;
@@ -1234,6 +1243,15 @@ namespace Content.Server.CMU14.Round
             }
 
             return false;
+        }
+
+        // Camo follows the planet actually being loaded; the lobby vote timer can miss it and leave the last round's camo
+        private void OnLoadingMaps(LoadingMapsEvent ev)
+        {
+            if (_selectedPlanet is { } planet && ev.Maps.Any(map => map.ID == planet.MapId))
+                SetCamoType(planet.Camouflage);
+            else
+                SetCamoType(CamouflageType.Jungle);
         }
 
         public void SetCamoType(CamouflageType? ct = null)

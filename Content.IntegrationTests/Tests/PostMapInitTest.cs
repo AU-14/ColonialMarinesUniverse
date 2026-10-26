@@ -450,6 +450,15 @@ namespace Content.IntegrationTests.Tests
 
                     jobs.ExceptWith(spawnPoints);
 
+                    // cmu edit start: job spawn points that take extra jobs, like detectives at the deputy spawns
+                    var extraJobs = entManager.AllEntityQueryEnumerator<SpawnPointComponent, Content.Shared.CMU14.Spawners.CMUSpawnPointExtraJobsComponent>();
+                    while (extraJobs.MoveNext(out var extraPoint, out var extra))
+                    {
+                        if (extraPoint.SpawnType == SpawnPointType.Job)
+                            jobs.ExceptWith(extra.Jobs);
+                    }
+                    // cmu edit end
+
                     Assert.That(jobs, Is.Empty, $"There is no spawnpoints for {string.Join(", ", jobs)} on {mapProto}.");
                 }
 

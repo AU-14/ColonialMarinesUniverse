@@ -788,6 +788,9 @@
   priority: 8
   text: "/ServerInfo/Guidebook/CMU14/Guides/CMUCooking.xml"
   filterEnabled: True
+  # RMC's recipe pages, food and (under it) drinks, so they're with the rest of the cooking guide.
+  children:
+  - RMCGuideFood
 
 - type: guideEntry
   parent: RMC

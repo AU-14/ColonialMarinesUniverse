@@ -1,0 +1,12 @@
+author: RomiGur
+category: CMU
+changes:
+- message: Vision effects (welding blindness, flash, drunkenness, drowsiness, drugs,
+    hunger, blur) now show on Z-level maps.|
+  type: Fix
+- message: Blind players no longer see the level above via faint glance or stair preview.
+  type: Fix
+- message: Added IsPlayerView helper for player-only overlays on Z-level maps.
+  type: Code
+time: '2026-10-23T20:18:21.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2268

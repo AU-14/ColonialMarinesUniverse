@@ -14796,5 +14796,361 @@
   id: 861
   time: '2026-10-22T22:25:33.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2258
+- author: rokudara-sen
+  changes:
+  - message: The radio jammer can be switched on and off and actually jams
+    type: Fix
+  - message: Expedition faction squads wear their own boots and packs, UACG no longer
+      carry USCM rifles and vests
+    type: Fix
+  - message: Auxiliary Staff can take disability traits
+    type: Fix
+  - message: Clusters already on a comms tower turn into a pylon once the takeover
+      time passes
+    type: Fix
+  - message: Larvae no longer get stuck catatonic when the infecting hugger skips
+      the claim prompt
+    type: Fix
+  - message: UPP commandos and snipers can use their thermal cloaks
+    type: Fix
+  - message: Welders repair barricades again
+    type: Fix
+  - message: Distress Signal threats spawn again when the queen volunteer doesn't
+      have the playtime for her
+    type: Fix
+  - message: IASF enlisted speak the same languages as their leaders
+    type: Fix
+  - message: The Reaper can no longer revive a dead Queen
+    type: Fix
+  - message: Shots fired through a floor lose damage over the height they cover, buckshot
+      no longer point blanks through holes
+    type: Fix
+  - message: Distress Signal ends when the last xeno is gibbed or deleted instead
+      of hanging
+    type: Fix
+  - message: Youngbloods always arrive on the hunter ship
+    type: Fix
+  - message: Blooding console party sizes match what spawns, and dialog windows can
+      be resized
+    type: Fix
+  - message: The fighter VTOL pad can be packed back up
+    type: Fix
+  id: 862
+  time: '2026-10-23T20:15:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2266
+- author: johnnny34y
+  changes:
+  - message: HAZOPS armor has been buffed with a speed increase and a bullet resistance
+      of 15.
+    type: Tweak
+  id: 863
+  time: '2026-10-23T20:16:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2263
+- author: rokudara-sen
+  changes:
+  - message: Radio direction finding no longer marks anyone on the tactical map. Talking
+      on the radio doesn't reveal you on its own anymore
+    type: Tweak
+  - message: A fixed enemy net only gives a rough compass bearing in chat, from manpacks
+      only, at most every 30 seconds. BURST traffic gives no bearing
+    type: Tweak
+  id: 864
+  time: '2026-10-23T20:16:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2267
+- author: Vixting
+  changes:
+  - message: APC & rotary using incorrect ammo type & 1 shotting reisn
+    type: Fix
+  id: 865
+  time: '2026-10-23T20:18:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2264
+- author: RomiGur
+  changes:
+  - message: Vision effects (welding blindness, flash, drunkenness, drowsiness, drugs,
+      hunger, blur) now show on Z-level maps.|
+    type: Fix
+  - message: Blind players no longer see the level above via faint glance or stair
+      preview.
+    type: Fix
+  - message: Added IsPlayerView helper for player-only overlays on Z-level maps.
+    type: Code
+  id: 866
+  time: '2026-10-23T20:18:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2268
+- author: TheHellFireo
+  changes:
+  - message: Reanimation now has one ten-minute cooldown shared by all Reapers, including
+      newly spawned Reapers.
+    type: Tweak
+  id: 867
+  time: '2026-10-23T20:18:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2270
+- author: Vixting
+  changes:
+  - message: Added generatereagent command for spawning in custom reagents
+    type: Add
+  id: 868
+  time: '2026-10-23T20:18:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2269
+- author: ILoveDespoiler
+  changes:
+  - message: Saved Despoiler Society
+    type: Fix
+  id: 869
+  time: '2026-10-23T21:34:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2272
+- author: TheHellFireo
+  changes:
+  - message: Fixed threats failing to spawn when a waiting player has no preferred
+      job, and the same error when joining as an observer.
+    type: Fix
+  id: 870
+  time: '2026-10-23T21:55:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2273
+- author: troytroy400
+  changes:
+  - message: Order slips can be printed from the requisitions stock consoles on the
+      Bush, stamped APPROVED and filled at the requisitions vendor in a single click,
+      which then automatically dispenses everything you asked for. Filled slips pay
+      out a small amount when sent down the ASRS as well, the req line should go much
+      quicker now.
+    type: Add
+  - message: Guns now have a safety, switched from the right-click menu. Guns from
+      weapon racks and requisitions vendors come unloaded and on safe.
+    type: Add
+  - message: Every gun now spawns with a serial number, shown in its own examine tab.
+      A blade or a lit blowtorch can scratch it off.
+    type: Add
+  - message: Guns leave a firing-pin signature on every casing they eject. Forensic
+      scanners read it off the gun and its casings. Pick up your casings or use a
+      casing-less gun if you're gonna commit crime.
+    type: Add
+  - message: The criminal records console has a Firearms tab listing every gun the
+      colony ASRS has sold or bought this round, with serial, signature and buyer.
+      Use a casing, gun or forensic scanner on the console to look up a ballistics
+      match.
+    type: Add
+  - message: Criminal records now show a mugshot, plus their age, gender and height,
+      warrants and arrest history, and a button to open their personnel file.
+    type: Add
+  - message: Criminal records and personnel files can be printed from their consoles,
+      and the records console can print a suspect photo.
+    type: Add
+  - message: Added the CMB Detective role, which replaces one deputy slot on each
+      map, needs 1 hour of law enforcement playtime.
+    type: Add
+  - message: Stable Garrison now has 5 deputies instead of 8.
+    type: Map
+  - message: The colony ASRS now gets mail. Deliver each letter or package to the
+      colonist it's addressed to, get their receipt signed via the verb menu and send
+      the receipt back down the ASRS to earn money for the colony budget.
+    type: Add
+  - message: Added Mail Theft and Mail Tampering to the colonial civil code.
+    type: Add
+  - message: Forensic scanners can now be used on the floor to read blood stains,
+      including blood drawn as decals.
+    type: Add
+  - message: Prying and welding leave tool marks that a forensic scanner can match
+      to the tool that made them.
+    type: Add
+  - message: Added phenytoin, an anticonvulsant that chemistry can make for people
+      with the epileptic trait. It ends on going seizures and prevents new ones for
+      25 minutes.
+    type: Add
+  - message: the health analyzer can now diagnose seizures and asthma attacks.
+    type: Add
+  - message: Added a jukebox volume slider to the audio settings.
+    type: Add
+  - message: Only guns with a built-in ammo counter, such as the M41 show how many
+      rounds are left in them now. For other guns, take the magazine out and check
+      it.
+    type: Tweak
+  - message: Gun examine now shows whether a round is chambered. Examining someone
+      shows whether the guns they're carrying are loaded and on safe or not.
+    type: Tweak
+  - message: Fire rate, accuracy and scatter moved from the gun's description into
+      a Weapon Stats examine tab.
+    type: Tweak
+  - message: Faction weapon racks now sell guns instead of kits, with limited special
+      ammunition and separate unrestricted and restricted attachment sections.
+    type: Tweak
+  - message: The colony ASRS no longer sells vehicle ammo, armaments or modules. Jeep
+      kits are still available.
+    type: Tweak
+  - message: Guns and ammo on the colony ASRS are cheaper.
+    type: Tweak
+  - message: Jetpacks can no longer be bought.
+    type: Remove
+  - message: The Mod 88, vehicle machine guns and the tank miniguns are now caseless.
+    type: Tweak
+  - message: Ghosts when observing now look like your character in your highest priority
+      job for the gamemode.
+    type: Tweak
+  - message: MREs can't be opened aboard the warship before the hijack anymore, go
+      to the mess hall.
+    type: Tweak
+  - message: The caffeine addiction trait is now satisfied by every coffee and tea
+      drink.
+    type: Tweak
+  - message: Added the ship gravity generator, firelocks, airlock bolting and the
+      atmospherics alert computer to the Atmospherics guide. Upstreams's cooking guides
+      are now in the CMU guidebook.
+    type: Tweak
+  - message: Added the Fear of Blood trait. Being near blood or a body makes you dizzy
+      and sometimes sick. Treating wounds takes you three times as long.
+    type: Add
+  - message: Added the Claustrophobic trait. Being shut in a locker or crate, or boxed
+      in by walls, makes you dizzy and builds panic if you're also panic-prone.
+    type: Add
+  - message: Added the Hemophilia trait. Every wound, inside and out, bleeds much
+      faster.
+    type: Add
+  - message: Added the Heart Condition trait. Sprinting too long brings on a cardiac
+      episode that slows and dizzies you and it can stop your heart unless you've
+      got cardiocaine or epinephrine in you.
+    type: Add
+  - message: Added the Hard of Hearing trait. You hear people clearly up close, but
+      miss more and more of what's said the further away they are.
+    type: Add
+  - message: Added the Wheelchair Bound trait for colonists. You start in a wheelchair
+      and out of it you can only crawl. Costs 2 points.
+    type: Add
+  - message: Added the Weak Throw trait. You throw things three quarters as far as
+      most people.
+    type: Add
+  - message: Added the Hearty Appetite and High Thirst traits. You get hungry or thirsty
+      much faster.
+    type: Add
+  - message: Added propranolol, a beta blocker. It ends a cardiac episode, keeps a
+      heart condition from flaring up for 15 minutes and removes the effects of panic
+      traits temporarily.
+    type: Add
+  - message: Added light versions of the lisp and stutter trait.
+    type: Add
+  - message: Added disulfiram, an alcohol deterrent. For 30 minutes any alcohol makes
+      you violently sick and it eases the alcoholic traits frequency.
+    type: Add
+  - message: Added meclizine, an anti-vertigo drug. It clears dizziness and keeps
+      it away for 20 minutes.
+    type: Add
+  - message: The colony ASRS nailgun and its magazines now come loaded with the correct
+      nails.
+    type: Fix
+  id: 871
+  time: '2026-10-24T12:39:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2277
+- author: TheHellFireo
+  changes:
+  - message: Expedition guards recognize distant contacts gradually while prioritizing
+      nearby threats.
+    type: Tweak
+  - message: Expedition guards inspect remembered contact and sound locations before
+      returning to orders, without inspecting through walls or pursuing stale evidence
+      indefinitely.
+    type: Fix
+  id: 872
+  time: '2026-10-24T16:47:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2282
+- author: TheHellFireo
+  changes:
+  - message: Queens can command individual lessers and squads, set aggression, and
+      place order flags and hive tactical markers while on their ovipositor.
+    type: Add
+  - message: Unassigned lessers roam wider areas, pause, rest, and wake. Assigned
+      orders continue after the Queen detaches.
+    type: Tweak
+  - message: Each hive can have up to twenty living swarm lessers, with summons filling
+      available slots.
+    type: Tweak
+  id: 873
+  time: '2026-10-24T16:47:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2280
+- author: TheHellFireo
+  changes:
+  - message: Fixed oversized survivor groups caused by unready players and incorrect
+      threat counts. Survivor announcements now adjust if the roster changes at round
+      start.
+    type: Fix
+  id: 874
+  time: '2026-10-24T18:13:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2284
+- author: Kadeo64
+  changes:
+  - message: two eggs in clearance X crate
+    type: Tweak
+  id: 875
+  time: '2026-10-24T21:43:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2279
+- author: ArturUr1
+  changes:
+  - message: Replacing the hardcoded newmed localization with localization keys.
+    type: Code
+  id: 876
+  time: '2026-10-25T11:59:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2290
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: A second floor to the west wing of the Octanis Complex
+      Research Lab, bolted on by three Philips screws.'
+    type: Add
+  - message: 'Hope''s Retreat: Preliminary areas for an upcoming LZ2 expansion to
+      make use of the area left by the removal of Fort Beauregard.'
+    type: Add
+  - message: 'Hope''s Retreat: Small aesthetic tweaks to some names and some light
+      changes to make areas feel more lived-in.'
+    type: Tweak
+  id: 877
+  time: '2026-10-25T14:36:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2288
+- author: TheHellFireo
+  changes:
+  - message: Added Force on Force round outcomes and platoon matchup comparisons.
+    type: Add
+  - message: Reorganized round statistics into a compact breakdowns and clearer Back
+      navigation.
+    type: Tweak
+  - message: Added a searchable, paginated round archive.
+    type: Add
+  - message: Fixed clipped matchup names and outcome count badges.
+    type: Fix
+  id: 878
+  time: '2026-10-25T16:38:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2294
+- author: troytroy400
+  changes:
+  - message: Added LV624 Lazarus Landing. A (mostly) faithful recreation of classic
+      LV-624, just with MultiZ features.
+    type: Add
+  - message: Planet camouflage now always matches the planet being played.
+    type: Fix
+  - message: Every level of a multi-z map now adopts the ground level's weather.
+    type: Tweak
+  - message: Fort McNeil now uses urban camo and Port Nereid, Stable Garrison, Shepherds
+      Pride and Sorokyne Strata now use Jungle Camo.
+    type: Tweak
+  - message: Thunder can now be heard from every z-level.
+    type: Fix
+  - message: Maps that had a weather cycle on several levels no longer roll competing
+      weather on top of each other.
+    type: Fix
+  - message: Map population limits now work in the planet vote. Maps outside their
+      player count requirements no longer show up as options.
+    type: Fix
+  - message: Fort McNeil can now be voted with up to 90 players instead of 80.
+    type: Tweak
+  - message: Corsat Station, Kutjevo Biolab and Chances Claim are temporarily out
+      of the Distress Signal map vote while they become MultiZ.
+    type: Remove
+  id: 879
+  time: '2026-10-25T17:42:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2292
+- author: rokudara-sen
+  changes:
+  - message: The Yautja Honor Code is now in the guidebook under Rules, and examining
+      a hunting bracer links to it.
+    type: Add
+  id: 880
+  time: '2026-10-25T17:45:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2283
 Name: CMU
 Order: -1
