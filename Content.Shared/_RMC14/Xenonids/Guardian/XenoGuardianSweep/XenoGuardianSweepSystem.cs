@@ -16,7 +16,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;  
 using Robust.Shared.Timing;  
 
-namespace Content.Shared._RMC14.Xenonids.GuardianSweep;  
+namespace Content.Shared._RMC14.Xenonids.Guardian.XenoGuardianSweep;  
   
 public sealed partial class XenoGuardianSweepSystem : EntitySystem  
 {  
