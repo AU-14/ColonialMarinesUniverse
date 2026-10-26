@@ -28,6 +28,7 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenGuardianSweep
     - CMU14ActionXenoPathogenPheromones
     - CMU14ActionXenoPathogenGuardianLink
     - CMU14ActionXenoPathogenDevolve
@@ -95,6 +96,10 @@
       whitelist:
         components:
         - XenoHeavy
+  - type: XenoGuardianSweep
+    damage:
+      types:
+        blunt: 30
   - type: XenoGuardian
     linkDuration: 300
   - type: GuardianCritSave
