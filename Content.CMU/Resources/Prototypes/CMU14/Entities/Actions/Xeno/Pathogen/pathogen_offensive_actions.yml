@@ -1099,4 +1099,4 @@
   parent: CMU14ActionXenoPathogenScissorCut
   id: CMU14ActionXenoPathogenScissorCutBloodletter
   name: Ravage (25)
-  description: Cuts enemies in an area in front of you, causing slight blood loss.
+  description: Cuts enemies in an area in front of you, causing slight blood loss. Also slows targets.
