@@ -22,7 +22,7 @@
     marineAnnounceSound:
       collection: PathogenRoar
     hiveStructureSlots:
-      CMU14PathogenBlightCore: 4
+      CMU14PathogenBlightCore: 3
       CMU14PathogenCluster: 8
       CMU14PathogenPlasmaTree: 3
       CMU14PathogenRecoveryNode: 6
