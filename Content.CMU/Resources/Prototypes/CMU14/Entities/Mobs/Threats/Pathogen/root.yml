@@ -105,7 +105,7 @@
       types:
         blunt: 30
   - type: XenoGuardian
-    linkDuration: 300
+    linkDuration: 10
   - type: GuardianCritSave
   - type: RMCSize
     size: Big
