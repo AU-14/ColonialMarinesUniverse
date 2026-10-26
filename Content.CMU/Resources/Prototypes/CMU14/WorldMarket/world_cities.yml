@@ -10,6 +10,7 @@
   color: "#6aa8ff"
   capabilities:
   - TradeHub
+  - Wealthy
   giftCost: 400
 
 # An arms market, and a hub as well.
@@ -31,6 +32,7 @@
   color: "#7ee08a"
   capabilities:
   - Intelligence
+  - Agrarian
   giftCost: 500
 
 # A harbour of the black market.
@@ -42,6 +44,7 @@
   color: "#c58bff"
   capabilities:
   - BlackMarket
+  - Wealthy
   giftCost: 600
 
 # A city of the mountain passes in the far north: a hub of the northern trade.
@@ -64,6 +67,7 @@
   capabilities:
   - TradeHub
   - BlackMarket
+  - Agrarian
   giftCost: 550
 
 # A mining town of the southern continent.
@@ -85,6 +89,7 @@
   color: "#5ee0c8"
   capabilities:
   - TradeHub
+  - Agrarian
   giftCost: 400
 
 # A fishing city on the isthmus between the two western continents.
@@ -96,6 +101,7 @@
   color: "#b0b8c8"
   capabilities:
   - Intelligence
+  - Agrarian
   giftCost: 350
 
 - type: worldCity
@@ -125,6 +131,7 @@
   capabilities:
   - Intelligence
   - TradeHub
+  - Wealthy
   giftCost: 650
 
 - type: worldCity
@@ -144,6 +151,7 @@
   color: "#f0c040"
   capabilities:
   - TradeHub
+  - Wealthy
   giftCost: 500
 
 - type: worldCity
@@ -164,6 +172,7 @@
   color: "#9acd8a"
   capabilities:
   - Intelligence
+  - Agrarian
   giftCost: 400
 
 - type: worldCity

@@ -52,6 +52,12 @@
             <Label Text="{Loc colony-economy-third-party-support}" Margin="0 6" />
             <Button Name="OpenThirdPartyBtn" Access="Public" Text="{Loc colony-economy-open-third-party-menu}"
                     HorizontalExpand="True" Margin="0 4" />
+
+            <!-- RUMC Begin: the window of the government of the colony -->
+            <Label Text="{Loc rumc-government-open-hint}" Margin="0 6" />
+            <Button Name="OpenGovernmentBtn" Access="Public" Text="{Loc rumc-government-open}"
+                    HorizontalExpand="True" Margin="0 4" />
+            <!-- RUMC End -->
         </BoxContainer>
     </ScrollContainer>
 </controls:AdminConsoleWindow>

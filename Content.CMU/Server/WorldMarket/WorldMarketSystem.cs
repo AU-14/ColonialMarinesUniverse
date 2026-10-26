@@ -3,8 +3,8 @@ using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Server.CMU14.Chat;
 using Content.Server.CMU14.ColonyEconomy;
+using Content.Server.CMU14.Government;
 using Content.Shared.CMU14.ColonyEconomy;
-using Content.Shared.CMU14.Trade;
 using Content.Shared.CMU14.WorldMarket;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -19,6 +19,7 @@ namespace Content.Server.CMU14.WorldMarket;
 public sealed partial class WorldMarketSystem : EntitySystem
 {
     [Dependency] private readonly ColonyBudgetSystem _budget = default!;
+    [Dependency] private readonly ColonyGovernmentSystem _government = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -29,7 +30,6 @@ public sealed partial class WorldMarketSystem : EntitySystem
     public static readonly TimeSpan TickEvery = TimeSpan.FromSeconds(20);
     public const int HistoryLength = 36;
 
-    private readonly Dictionary<string, string> _categoryOfContract = new();
     private TimeSpan _nextSecond;
 
     public override void Initialize()
@@ -38,7 +38,6 @@ public sealed partial class WorldMarketSystem : EntitySystem
 
         // The system of the console already listens for its map init, and a component has one listener of an event per system; the table is made when the component starts.
         SubscribeLocalEvent<AdminConsoleComponent, ComponentStartup>(OnConsoleStartup);
-        SubscribeLocalEvent<PrototypesReloadedEventArgs>(_ => _categoryOfContract.Clear());
     }
 
     private void OnConsoleStartup(Entity<AdminConsoleComponent> console, ref ComponentStartup args)
@@ -89,23 +88,6 @@ public sealed partial class WorldMarketSystem : EntitySystem
         market.Started = true;
     }
 
-    private string? CategoryOfContract(string contract)
-    {
-        if (_categoryOfContract.Count == 0)
-        {
-            foreach (var category in _proto.EnumeratePrototypes<WorldMarketCategoryPrototype>())
-            {
-                foreach (var id in category.Contracts)
-                    _categoryOfContract[id] = category.ID;
-            }
-
-            // A marker so that the map is not filled again for nothing when no contract is listed.
-            _categoryOfContract.TryAdd(string.Empty, string.Empty);
-        }
-
-        return _categoryOfContract.GetValueOrDefault(contract);
-    }
-
     public float IndexOf(string category)
     {
         return TryMarket(out var market) && market.Comp.Index.TryGetValue(category, out var value) ? value : 100f;
@@ -114,29 +96,6 @@ public sealed partial class WorldMarketSystem : EntitySystem
     #endregion
 
     #region The prices
-
-    // What a company pays for what the colony sells to it, as a share of its usual price: the index of its goods.
-    public float SellFactor(TradeContractPrototype contract)
-    {
-        if (!TryMarket(out var market))
-            return 1f;
-
-        return IndexFor(market, contract.ID) / 100f;
-    }
-
-    // What a company asks of the colony for what it sells, as a share of its usual price: the index of its goods and the import duty on top.
-    public float BuyFactor(TradeContractPrototype contract)
-    {
-        if (!TryMarket(out var market))
-            return 1f;
-
-        return IndexFor(market, contract.ID) / 100f * (1f + DutyPercent(market, contract.Company.Id) / 100f);
-    }
-
-    private float IndexFor(Entity<WorldMarketComponent> market, string contract)
-    {
-        return CategoryOfContract(contract) is { } category && market.Comp.Index.TryGetValue(category, out var value) ? value : 100f;
-    }
 
     // The duty that the colony pays on the goods of a company, in percent.
     public int DutyPercent(string company)
@@ -154,11 +113,13 @@ public sealed partial class WorldMarketSystem : EntitySystem
         // A holiday from the duty that an ambassador has ordered of the mother faction.
         duty -= (int) MathF.Round(TaxBreakPoints(WorldTaxKind.Duty));
 
+        // The reforms and the treaties of the government of the colony.
+        duty -= _government.DutyCut();
+
         return Math.Max(0, duty);
     }
 
     #endregion
-
 
     public override void Update(float frameTime)
     {

@@ -1,0 +1,17 @@
+# The selling of finished goods between the players (see ColonyTrade.cs). Three ways: from hand to hand and the auction of a thing (both at the console of the people), and the market stall below.
+
+- type: entity
+  parent: TableWood
+  id: RUMCMarketStall
+  name: market stall
+  description: "A table for the goods of a trader. The owner needs a trade licence: click the stall with a thing in your hand to put it on, then set the price in the window of the stall. A buyer sees the prices and buys at once."
+  components:
+  - type: PlaceableSurface
+    isPlaceable: false
+  - type: MarketStall
+  - type: ActivatableUI
+    key: enum.MarketStallUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.MarketStallUi.Key:
+        type: MarketStallBui

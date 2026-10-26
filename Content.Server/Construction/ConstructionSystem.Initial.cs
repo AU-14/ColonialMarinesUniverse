@@ -528,7 +528,8 @@ namespace Content.Server.Construction
             }
 
             var coordinates = GetCoordinates(ev.Location);
-            var attempt = new RMCConstructionAttemptEvent(coordinates, constructionPrototype);
+            // RUMC: the builder is told to the event (the zoning of the city asks who builds).
+            var attempt = new RMCConstructionAttemptEvent(coordinates, constructionPrototype, User: args.SenderSession.AttachedEntity);
             RaiseLocalEvent(ref attempt);
 
             if (attempt.Cancelled)

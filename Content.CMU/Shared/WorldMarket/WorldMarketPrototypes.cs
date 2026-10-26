@@ -18,10 +18,6 @@ public sealed partial class WorldMarketCategoryPrototype : IPrototype
     [DataField]
     public Color Color = Color.White;
 
-    // The contracts of the companies whose goods follow this index. An index with none (the weapons) is the price of what the black market sells.
-    [DataField]
-    public List<string> Contracts = new();
-
     [DataField]
     public float Start = 100f;
 
@@ -67,7 +63,7 @@ public sealed partial class WorldCityPrototype : IPrototype
     public int GiftCost = 400;
 }
 
-// What a city can do for the colony. Each has a text of its own (rumc-city-capability-<name>); for now only the trade hub does something (it takes a part off the duty).
+// What a city can do for the colony. Each has a text of its own (rumc-city-capability-<name>); for now only the trade hub does something (it takes a part off the duty). The farm cities sell food and seeds, the rich cities sell and dearly buy luxuries (see colonyWorldGood).
 [Serializable]
 public enum CityCapability : byte
 {
@@ -75,6 +71,8 @@ public enum CityCapability : byte
     ArmsMarket,
     Intelligence,
     BlackMarket,
+    Agrarian,
+    Wealthy,
 }
 
 // A biome of the world map: what a cell of the globe is (the sea, the ice, the forest...), with its colour and its description, which the console shows when a cell is picked.

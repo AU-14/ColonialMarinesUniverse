@@ -24,6 +24,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private Robust.Shared.Timing.IGameTiming _timing = default!;
+    [Dependency] private Content.Server.CMU14.Government.ColonyGovernmentSystem _government = default!; // RUMC: the reforms and the treaties make the calls cheaper
     [Dependency] private Content.Server.CMU14.WorldMarket.WorldMarketSystem _worldMarket = default!; // RUMC: the holidays from taxes that the ambassadors order
 
     public override void Initialize()
@@ -36,6 +37,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleSetTradeTaxBuiMsg>(OnSetTradeTax); // RUMC: the tax on the parcels sold through the trade platforms
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleCallThirdPartyBuiMsg>(OnCallThirdParty);
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleOpenThirdPartyBuiMsg>(OnOpenThirdParty);
+        SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleOpenGovernmentBuiMsg>(OnOpenGovernment); // RUMC: the window of the government of the colony
     }
 
     /// <summary>
@@ -122,6 +124,12 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         _ui.TryToggleUi(uid, AdminConsoleThirdPartyUi.Key, msg.Actor);
     }
 
+    // RUMC: the window of the government of the colony (the reforms and the foreign policy)
+    private void OnOpenGovernment(EntityUid uid, AdminConsoleComponent comp, AdminConsoleOpenGovernmentBuiMsg msg)
+    {
+        _ui.TryToggleUi(uid, Content.Shared.CMU14.Government.ColonyGovernmentUi.Key, msg.Actor);
+    }
+
     private void OnSetTax(EntityUid uid, AdminConsoleComponent comp, AdminConsoleSetTaxBuiMsg msg)
     {
         var clamped = Math.Clamp(msg.TaxPercent, 0f, 50f);
@@ -199,6 +207,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
     {
         if (!comp.CallableParties.TryGetValue(msg.ThirdPartyId, out var cost))
             return;
+        cost = cost * (100 - _government.CallDiscountPercent()) / 100f; // RUMC: the reforms and the treaties of the government of the colony make a call cheaper
         if (comp.CalledParties.Contains(msg.ThirdPartyId))
             return;
         if (comp.CalledParties.Count >= comp.MaxCallIns || _timing.CurTime < comp.NextCallInAt)
@@ -242,7 +251,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         {
             if (_proto.TryIndex<ThirdPartyPrototype>(id, out var proto) &&
                 _auRound.IsThirdPartyAllowedForCurrentContext(proto))
-                thirdParties[id] = (proto.DisplayName ?? proto.ID, cost);
+                thirdParties[id] = (proto.DisplayName ?? proto.ID, cost * (100 - _government.CallDiscountPercent()) / 100f); // RUMC: the same cheaper cost as the call itself
         }
         _ui.SetUiState(uid, AdminConsoleThirdPartyUi.Key,
             new AdminConsoleThirdPartyBuiState(_colonyBudget.GetBudget(), thirdParties, comp.CalledParties)

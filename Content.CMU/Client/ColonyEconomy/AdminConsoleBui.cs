@@ -35,6 +35,12 @@ public sealed class AdminConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInte
         {
             SendPredictedMessage(new AdminConsoleOpenThirdPartyBuiMsg());
         };
+
+        // RUMC: the window of the government of the colony (the reforms and the foreign policy)
+        _window.OpenGovernmentBtn.OnPressed += _ =>
+        {
+            SendPredictedMessage(new AdminConsoleOpenGovernmentBuiMsg());
+        };
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

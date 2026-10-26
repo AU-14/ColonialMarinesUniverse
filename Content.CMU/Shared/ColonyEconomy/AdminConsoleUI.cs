@@ -98,3 +98,9 @@ public sealed class AdminConsoleSetTradeTaxBuiMsg : BoundUserInterfaceMessage
     public float TaxPercent { get; }
     public AdminConsoleSetTradeTaxBuiMsg(float taxPercent) { TaxPercent = taxPercent; }
 }
+
+// RUMC message: the console opens the window of the government of the colony (the reforms and the foreign policy)
+[Serializable, NetSerializable]
+public sealed class AdminConsoleOpenGovernmentBuiMsg : BoundUserInterfaceMessage
+{
+}

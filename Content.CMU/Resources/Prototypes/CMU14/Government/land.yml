@@ -1,0 +1,48 @@
+# The land of the city (see ColonyZoneKindPrototype). The administrator marks out the zones with the surveyor's tablet and gives plots to those who ask.
+
+
+# ---------------------------------------------------------------- The kinds of zones: what a plot costs to hold for a cycle (before the land tax)
+
+- type: colonyZoneKind
+  id: RUMCZoneHousing
+  kind: Housing
+  name: rumc-zone-housing-name
+  description: rumc-zone-housing-desc
+  rentPerCycle: 40
+
+- type: colonyZoneKind
+  id: RUMCZoneTrade
+  kind: Trade
+  name: rumc-zone-trade-name
+  description: rumc-zone-trade-desc
+  rentPerCycle: 90
+
+- type: colonyZoneKind
+  id: RUMCZoneProduction
+  kind: Production
+  name: rumc-zone-production-name
+  description: rumc-zone-production-desc
+  rentPerCycle: 70
+
+# The permit that lets a person build where it is not allowed otherwise (outside the zones, when the mayor has the enforcement on): a licence like the others, given on the tab of the licences.
+- type: colonyLicense
+  id: RUMCLicenseBuild
+  name: rumc-license-build-name
+  description: rumc-license-build-desc
+  fee: 300
+  durationSeconds: 1200
+  card: RUMCCityLicenseCardBuild
+
+# The tablet with which the zones are marked: the sprite of the command tablet. The verbs of it do the work; with it in the hand the zones are drawn over the ground.
+- type: entity
+  parent: BaseItem
+  id: RUMCSurveyorTablet
+  name: surveyor's tablet
+  description: A command tablet with the plans of the city. The verbs of it mark the zones; with it in the hand the marked zones are shown over the ground.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/command_tablet.rsi
+    state: cotablet
+  - type: Item
+    size: Small
+  - type: SurveyorTablet
