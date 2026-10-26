@@ -1,3 +1,9 @@
+using Content.Shared.Chat.Prototypes;  
+using Content.Shared.Damage;  
+using Robust.Shared.Audio;  
+using Robust.Shared.GameStates;  
+using Robust.Shared.Prototypes; 
+
 namespace Content.Shared._RMC14.Xenonids.GuardianSweep;  
   
 [RegisterComponent, NetworkedComponent]  
@@ -19,8 +25,8 @@ public sealed partial class XenoGuardianSweepComponent : Component
     public ProtoId<EmotePrototype> HissEmote = "Hiss";  
   
     [DataField]  
-    public TimeSpan SlowDuration = TimeSpan.FromSeconds(2);  
+    public TimeSpan SlowDuration = TimeSpan.FromSeconds(5);  
   
     [DataField]  
-    public float KnockBackDistance = 1f;  
+    public float KnockBackDistance = 2f;  
 }
