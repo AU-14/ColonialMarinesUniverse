@@ -56,6 +56,39 @@ public sealed class YautjaBugReportsTest
         await pair.CleanReturnAsync();
     }
 
+    [Test]
+    public async Task AbandonedMedicompSlowdownWearsOff()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid patient = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            patient = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            var part = entMan.System<SharedBodySystem>().GetBodyChildren(patient)
+                .Select(entry => entry.Id)
+                .First(uid => entMan.HasComponent<BodyPartComponent>(uid));
+
+            RaiseStep(entMan, "CMUSurgeryStepMcompStabilizeWounds", patient, part);
+            Assert.That(entMan.HasComponent<RMCSlowdownComponent>(patient), Is.True);
+            Assert.That(entMan.HasComponent<RMCSuperSlowdownComponent>(patient), Is.True);
+        });
+
+        // walked away after stabilizing, never clamped
+        await pair.RunTicksSync(pair.SecondsToTicks(32));
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.HasComponent<RMCSlowdownComponent>(patient), Is.False);
+            Assert.That(server.EntMan.HasComponent<RMCSuperSlowdownComponent>(patient), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     private static void RaiseStep(IEntityManager entMan, string stepId, EntityUid patient, EntityUid part)
     {
         var step = entMan.System<SharedCMSurgerySystem>().GetSingleton(stepId);

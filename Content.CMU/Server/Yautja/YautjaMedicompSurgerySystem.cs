@@ -34,7 +34,6 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
-    [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -42,7 +41,10 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
-    private static readonly TimeSpan MedicompSlowdownDuration = TimeSpan.FromMinutes(10);
+    // each step refreshes these, so a pred mid-surgery stays slowed but walking away wears off.
+    // the old 10 minute timer only cleared on clamp, so abandoning the surgery felt permanent
+    private static readonly TimeSpan MedicompSlowdownDuration = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan MedicompSuperSlowdownDuration = TimeSpan.FromSeconds(15);
 
     public override void Initialize()
     {
@@ -165,8 +167,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
             _organHealth.HealOrgan((organ.Owner, health), args.Body, health.Max);
         }
 
-        _slow.TrySlowdown(args.Body, MedicompSlowdownDuration);
-        _slow.TrySuperSlowdown(args.Body, MedicompSlowdownDuration);
+        ApplyMedicompSlowdown(args.Body);
 
         // Keep master's deep repairs in the authoritative surgery completion,
         // so the healing capsule and session checks also apply to these wounds.
@@ -188,7 +189,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     {
         // CMSS13's clamp completes the treatment: finishing the surgery restores
         // full health no matter how much damage is left. The speed debuffs from
-        // stabilize and tend only clear here, so an incomplete treatment stays slow.
+        // stabilize and tend clear here, an abandoned treatment just wears off.
         HealToFull(args.Body);
         RemComp<RMCSlowdownComponent>(args.Body);
         RemComp<RMCSuperSlowdownComponent>(args.Body);
@@ -249,25 +250,25 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     }
 
     /// <summary>
-    ///     CMU14: the patient is heavily slowed from the stabilize step until the wound is clamped shut.
+    ///     CMU14: the patient is heavily slowed while the procedure is underway, the clamp step clears it early.
     /// </summary>
     private void ApplyMedicompSlowdown(EntityUid body)
     {
         // CMU14: RMCSlowSystem refuses to slow a regular Yautja, and the medicomp patient is normally a
         // Yautja hunter, so the procedure has to drive the slow components itself. The clamp step clears them.
-        var expire = _timing.CurTime + MedicompSlowdownDuration;
+        var now = _timing.CurTime;
 
         var slow = EnsureComp<RMCSlowdownComponent>(body);
-        if (expire > slow.ExpiresAt)
+        if (now + MedicompSlowdownDuration > slow.ExpiresAt)
         {
-            slow.ExpiresAt = expire;
+            slow.ExpiresAt = now + MedicompSlowdownDuration;
             Dirty(body, slow);
         }
 
         var super = EnsureComp<RMCSuperSlowdownComponent>(body);
-        if (expire > super.ExpiresAt)
+        if (now + MedicompSuperSlowdownDuration > super.ExpiresAt)
         {
-            super.ExpiresAt = expire;
+            super.ExpiresAt = now + MedicompSuperSlowdownDuration;
             Dirty(body, super);
         }
     }
