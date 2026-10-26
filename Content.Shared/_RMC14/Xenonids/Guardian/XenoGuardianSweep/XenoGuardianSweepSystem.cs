@@ -6,7 +6,7 @@ using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Sweep;  
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Coordinates;  
-using Content.Shared.Damage.DamageableSystems;  
+using Content.Shared.Damage.Systems.DamageableSystem;  
 using Content.Shared.Effects;  
 using Content.Shared.FixedPoint;  
 using Content.Shared.Interaction;  
