@@ -216,6 +216,10 @@ public sealed partial class ChatSystem
             range,
             author,
             speechStyleClass);
+        // cmu edit start: let boom mics hear emotes
+        var cmuEmoted = new Content.Server.CMU14.Chat.CMUEntityEmotedEvent(source, action);
+        RaiseLocalEvent(ref cmuEmoted);
+        // cmu edit end
         if (!hideLog)
             if (name != Name(source))
                 _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user} as {name}: {action}");

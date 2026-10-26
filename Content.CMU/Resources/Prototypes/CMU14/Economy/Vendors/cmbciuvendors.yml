@@ -915,8 +915,9 @@
     Standard issue across the frontier where threats can appear without warning.
     Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
 
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+    For immediate combat readiness: select a primary weapon and a sidearm.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -926,35 +927,43 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: CMUKitWeaponM20A2
-      - id: AU14KitWeaponMar40
-      - id: AU14KitWeaponMP5
-      - id: AU14KitWeaponP90
+      - id: CMUWeaponRifleM20A2
+      - id: WeaponRifleMAR40
+      - id: WeaponSMGMP5
+      - id: RMCWeaponSMGPDW90
     - name: Weapon Ammunition
       entries:
       - id: AU14MagazineRifleM20A
-        amount: 60
+        amount: 120
       - id: CMMagazineSMGMP5
-        amount: 60
+        amount: 120
       - id: RMCMagazineSMGPDW90
-        amount: 60
+        amount: 120
       - id: RMCMagazineRifleMAR40
-        amount: 60
+        amount: 120
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: AU14KitWeaponM4A3
-      - id: AU14KitWeaponHG45
+      - id: CMWeaponPistolM1984Empty
+      - id: RMCWeaponPistolHG45Marina
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
-        amount: 60
+        amount: 120
       - id: RMCMagazinePistolMK45
-        amount: 60
-    - name: Attachments
-      choices: { CMUAttachmentsVendor: 1 }
+        amount: 120
+    - name: Unrestricted Attachments
       entries:
+      - id: RMCAttachmentRailFlashlight
+        maxPerUser: 1
       - id: RMCAttachmentTwoPointSling
+        maxPerUser: 1
+    - name: Special Ammunition
+      choices: { CMUSpecialAmmo: 2 }
+      entries:
+      - id: CMUMagazineRifleM20AAP
+      - id: RMCMagazineRifleMAR40Ext
+      - id: RMCMagazinePistolM1984AP
 
 - type: entity
   parent: ColMarTechBase
@@ -967,6 +976,7 @@
 
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -1100,6 +1110,7 @@
   name: CMB CIU automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]

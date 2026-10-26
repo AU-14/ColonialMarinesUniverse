@@ -382,6 +382,11 @@ public abstract partial class SharedGunSystem
         if (!args.IsInDetailsRange)
             return;
 
+        // cmu edit start: a magazine shows its rounds, a gun loaded straight up only with an ammo counter
+        if (!CMUShowsAmmoCount(ent))
+            return;
+        // cmu edit end
+
         args.PushMarkup(Loc.GetString("gun-magazine-examine", ("color", AmmoExamineColor), ("count", GetBallisticShots(ent.Comp))));
     }
 

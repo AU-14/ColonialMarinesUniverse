@@ -62,3 +62,9 @@
   id: AU14AccessGovforVehicleCrew
   name: cmu-access-govfor-vehicle-crew
   accessGroup: GOVFOR Access
+
+# The DEFAC kitchen's open-for-business button. Mess technicians get it.
+- type: accessLevel
+  id: CMUAccessKitchen
+  name: cmu-access-kitchen
+  accessGroup: GOVFOR Access

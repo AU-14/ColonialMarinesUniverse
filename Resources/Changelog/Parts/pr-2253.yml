@@ -1,0 +1,13 @@
+author: HotdogMan52
+category: CMU
+changes:
+- message: added an M16A1 M203 variant
+  type: Add
+- message: added the M433 40mm HEDP grenade that sends fragments in a circle and a
+    shaped charge jet that deals 80 piercing and 40 burn with very severe falloff
+  type: Add
+- message: CLF Commando Leader now spawns with the M16A1 M203 and gets 10 M433 40mm
+    HEDP grenades in exchange for two IED grenades and four 20-round magazines
+  type: Tweak
+time: '2026-10-21T23:37:50.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2253

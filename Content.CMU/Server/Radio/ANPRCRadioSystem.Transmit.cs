@@ -9,7 +9,6 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
-using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Radio;
@@ -252,7 +251,7 @@ public sealed partial class ANPRCRadioSystem
     }
 
     // sends one spoken message out through the pack (raw frequency or the active preset
-    // net), handles battery cost, COMSEC warning, name masking, DF exposure and logging.
+    // net), handles battery cost, COMSEC warning, name masking and logging.
     // speaker is the wearer or a handset user at the pack
     private void TransmitThroughPack(
         EntityUid speaker,
@@ -382,8 +381,6 @@ public sealed partial class ANPRCRadioSystem
         if (!radioWasExempt)
             RemCompDeferred<TelecomExemptComponent>(pack.Owner);
 
-        TryDirectionFind(speaker, radio, channel, unsecured);
-
         AppendNetLog(
             radio,
             _timing.CurTime.TotalSeconds,
@@ -394,76 +391,6 @@ public sealed partial class ANPRCRadioSystem
         radio.LastTransmit = _timing.CurTime;
 
         UpdateBuiState(pack);
-    }
-
-    private void TryDirectionFind(
-        EntityUid source,
-        ANPRCRadioComponent radio,
-        RadioChannelPrototype channel,
-        bool unsecured)
-    {
-        if (!_comms.EnabledOn(channel) || string.IsNullOrEmpty(channel.Faction))
-            return;
-
-        var plainText = radio.Mode == RadioMode.PlainText;
-        float baseChance;
-
-        if (plainText)
-        {
-            baseChance = radio.DFChancePlainText;
-        }
-        else if (unsecured)
-        {
-            baseChance = radio.DFChanceUnsecured;
-        }
-        else if (radio.Mode == RadioMode.FrequencyHopping)
-        {
-            baseChance = radio.DFChanceSecuredFH;
-        }
-        else
-        {
-            return;
-        }
-
-        if (radio.DFReportFactions.Count == 0)
-            return;
-
-        var now = _timing.CurTime;
-        var position = _transform.GetWorldPosition(source);
-
-        if (now - radio.DFLastTransmitTime > radio.DFAccumDecay ||
-            (position - radio.DFLastTransmitPos).Length() > radio.DFAccumResetDistance)
-        {
-            radio.DFAccumulation = 0f;
-        }
-
-        var chance = (baseChance + radio.DFAccumulation) * radio.TxPower.DFMultiplier();
-
-        // BURST: the sentence is on the air for a fraction of the time
-        if (radio.Burst)
-            chance *= radio.BurstDFMultiplier;
-
-        if (_garble.GetJamIntensity(source) != RadioJamIntensity.None)
-            chance += radio.DFChanceJamBonus;
-
-        radio.DFAccumulation += radio.DFAccumBonus;
-        radio.DFLastTransmitTime = now;
-        radio.DFLastTransmitPos = position;
-
-        if (!_random.Prob(Math.Clamp(chance, 0f, 0.9f)))
-            return;
-
-        foreach (var viewerFaction in radio.DFReportFactions)
-        {
-            if (_tacticalMap.CreateFactionIntelBlip(source, radio.OperatorFaction, viewerFaction) is not { } location)
-                continue;
-
-            var faction = viewerFaction;
-
-            Timer.Spawn(
-                radio.DFPingDuration,
-                () => _tacticalMap.EraseFactionIntelBlip(location.GridId, location.Key, faction));
-        }
     }
 
     private void OnRadioCheck(Entity<ANPRCRadioComponent> ent, ref ANPRCRadioCheckMsg args)

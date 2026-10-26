@@ -56,6 +56,8 @@ public sealed partial class FighterSystem
 
     private void OnGroundInit(Entity<FighterGroundComponent> ground, ref MapInitEvent args)
     {
+        // a bare hull (component sweep tests) has no body to taxi or fold wings on
+        if (!HasComp<PhysicsComponent>(ground) || !HasComp<FixturesComponent>(ground)) return;
         if (ground.Comp.Aircraft != null || Transform(ground).MapUid is not { } terrain) return;
         // Ship-side delivery still flies over the active battlefield, not the carrier map.
         if (_objectives.GetPlanetMapId() is { } planet && planet != MapId.Nullspace && _map.MapExists(planet))

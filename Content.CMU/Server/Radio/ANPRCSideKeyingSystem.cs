@@ -83,7 +83,6 @@ public sealed partial class ANPRCSideKeyingSystem : EntitySystem
         {
             radio.OperatorFaction = radioSource.OperatorFaction;
             radio.CallsignPresets = new List<string>(radioSource.CallsignPresets);
-            radio.DFReportFactions = new List<string>(radioSource.DFReportFactions);
             radio.StandardNets = new List<ANPRCDefaultSlot>(radioSource.StandardNets);
             Dirty(ent, radio);
         }

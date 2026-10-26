@@ -26,8 +26,12 @@
   id: JournalistEssentialAU14
   storage:
     back:
+    - CMArmorPress
+    - CMArmorHelmetPress
     - RMCCorrespondentMicrophone
+    - CMUBoomMic
     - CMUPhotoCamera
+    - CMUCameraFilm
     - CMUCameraFilm
   inhand:
   - RMCCameraBroadcasting
