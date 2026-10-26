@@ -389,10 +389,7 @@ public abstract partial class SharedRMCTuringDispenserSystem : EntitySystem
         }
 
         if (!TryLinkSmartFridge(ent, out var fridge))
-        {
-            _solution.RemoveAllSolution(bufferEnt.Value);
             return;
-        }
 
         if (_net.IsClient)
             return;
