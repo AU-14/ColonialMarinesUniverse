@@ -5,6 +5,7 @@ using Content.Server.GameTicking.Rules;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Roles;
 using JetBrains.Annotations;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Log;
@@ -42,9 +43,12 @@ public sealed partial class AddColonistRuleSystem : GameRuleSystem<AddColonistRu
 
         // Slots only ever go to jobs the planet map declares, so undeclared
         // roster entries cannot create spawnless slots.
+        // RA0002: method calls must go through a local; chained access on the
+        // other type's field itself counts as Execute.
+        var setupJobs = stationJobs.SetupAvailableJobs;
         var counts = new Dictionary<ProtoId<JobPrototype>, int>(component.Jobs);
         var candidates = component.RandomJobs
-            .Where(job => stationJobs.SetupAvailableJobs.ContainsKey(job))
+            .Where(job => setupJobs.ContainsKey(job))
             .ToList();
         if (component.RandomJobs.Count > 0)
         {
@@ -56,7 +60,7 @@ public sealed partial class AddColonistRuleSystem : GameRuleSystem<AddColonistRu
 
         foreach (var (jobId, count) in counts)
         {
-            if (!stationJobs.SetupAvailableJobs.ContainsKey(jobId))
+            if (!setupJobs.ContainsKey(jobId))
             {
                 _logs.Warning($"{jobId} is not declared by this planet's map, skipping");
                 continue;
