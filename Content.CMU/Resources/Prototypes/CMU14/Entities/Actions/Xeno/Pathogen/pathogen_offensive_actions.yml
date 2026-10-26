@@ -1082,3 +1082,21 @@
   - type: ActionBlockIfResting
   - type: XenoActionPlasma
     cost: 25
+
+- type: entity  
+  parent: ActionXenoBase  
+  id: CMU14ActionXenoPathogenGuardianSweep  
+  name: Tentacle Sweep  
+  description: Swing your tentacles in a wide arc, knocking enemies away and slowing them down. 
+  components:  
+  - type: Action  
+    itemIconStyle: NoItem  
+    icon:  
+      sprite: _RMC14/Actions/xeno_actions.rsi  
+      state: rav_eviscerate  
+    useDelay: 10
+  - type: InstantAction  
+    event: !type:XenoGuardianSweepActionEvent  
+  - type: ActionBlockIfResting  
+  - type: XenoActionPlasma  
+    cost: 50
