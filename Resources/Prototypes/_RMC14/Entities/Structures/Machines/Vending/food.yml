@@ -101,6 +101,7 @@
       enum.CMAutomatedVendorUI.Key:
         type: CMUNutriCoFoodBui
         interactionRange: 2.5
+  - type: CMUFoodlineVendor
   # cmu edit end
 
 - type: entity

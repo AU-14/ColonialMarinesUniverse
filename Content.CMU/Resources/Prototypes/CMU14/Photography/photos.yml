@@ -73,3 +73,23 @@
 - type: font
   id: CMUPhotoCaption
   path: /Fonts/ComicNeue/ComicNeue-Bold.ttf
+
+# A photo of someone printed from a criminal records console, from their mugshot on file.
+- type: entity
+  parent: BaseItem
+  id: CMUSuspectPhoto
+  name: suspect photo
+  description: A photo printed from the criminal records database.
+  components:
+  - type: Sprite
+    sprite: CMU14/Photography/photo.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: CMUSuspectPhoto
+  - type: ActivatableUI
+    key: enum.CMUSuspectPhotoUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUSuspectPhotoUiKey.Key:
+        type: CMUSuspectPhotoBui

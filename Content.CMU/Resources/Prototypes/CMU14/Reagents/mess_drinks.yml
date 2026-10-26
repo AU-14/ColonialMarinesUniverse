@@ -13,6 +13,8 @@
 - type: reagent
   id: CMUCafeDeOlla
   parent: RMCCoffee
+  # Platoon-menu only, and the inherited class would put it in research contract pools.
+  flags: NoGeneration
   name: cmu-reagent-cafe-de-olla-name
   desc: cmu-reagent-cafe-de-olla-desc
   flavor: coffee
@@ -31,6 +33,8 @@
 - type: reagent
   id: CMUChaiTea
   parent: RMCTea
+  # Platoon-menu only, and the inherited class would put it in research contract pools.
+  flags: NoGeneration
   name: cmu-reagent-chai-tea-name
   desc: cmu-reagent-chai-tea-desc
   flavor: spicy

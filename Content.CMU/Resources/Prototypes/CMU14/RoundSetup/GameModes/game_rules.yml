@@ -89,16 +89,39 @@
       AU14JobOPFORAuxSupportSynth: 2
       AU14JobOPFORWorkingJoe: 1
 
+# Auxiliary staff: chaplains, mess technicians and combat correspondents, picked in their loadout.
 - type: entity
-  id: AddGovforCorrespondent
+  id: AddGovforAuxiliaryStaff
   parent: BaseGameRule
-  name: Add Combat Reporter
+  name: Add Auxiliary Staff
   components:
   - type: AddJobsRule
     addToShip: true
     shipFaction: govfor
     jobs:
       AU14JobGOVFORCombatCorrespondent: 1
+
+- type: entity
+  id: AddGovforAuxiliaryStaffDistress
+  parent: BaseGameRule
+  name: Add Auxiliary Staff (Distress Signal)
+  components:
+  - type: AddJobsRule
+    addToShip: true
+    shipFaction: govfor
+    jobs:
+      AU14JobGOVFORCombatCorrespondent: 3
+
+- type: entity
+  id: AddOpforAuxiliaryStaff
+  parent: BaseGameRule
+  name: Add OPFOR Auxiliary Staff
+  components:
+  - type: AddJobsRule
+    addToShip: true
+    shipFaction: opfor
+    jobs:
+      AU14JobOPFORCombatCorrespondent: 1
 
 - type: entity
   id: AddClf

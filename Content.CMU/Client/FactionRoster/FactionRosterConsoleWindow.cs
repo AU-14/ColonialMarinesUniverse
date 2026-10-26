@@ -28,6 +28,7 @@ public sealed class FactionRosterConsoleWindow : DefaultWindow
     private List<FactionRosterEntry> _entries = new();
 
     public event Action? OnRefresh;
+    public event Action<string>? OnPrint;
 
     public FactionRosterConsoleWindow()
     {
@@ -186,7 +187,7 @@ public sealed class FactionRosterConsoleWindow : DefaultWindow
 
     private void OpenEntry(FactionRosterEntry entry)
     {
-        var window = new FactionRosterEntryWindow(entry);
+        var window = new FactionRosterEntryWindow(entry, () => OnPrint?.Invoke(entry.Name));
         _openEntryWindows.Add(window);
         window.OnClose += () => _openEntryWindows.Remove(window);
         window.OpenCentered();

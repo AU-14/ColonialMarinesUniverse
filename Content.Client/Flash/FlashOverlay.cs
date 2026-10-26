@@ -1,3 +1,4 @@
+using Content.Client.CMU14.ZLevels.Core; // cmu edit
 using Content.Shared.CCVar;
 using Content.Shared.Flash;
 using Content.Shared.Flash.Components;
@@ -65,7 +66,7 @@ public sealed partial class FlashOverlay : Overlay
     {
         if (!_entityManager.TryGetComponent(_playerManager.LocalEntity, out EyeComponent? eyeComp))
             return false;
-        if (args.Viewport.Eye != eyeComp.Eye)
+        if (!args.Viewport.Eye.IsPlayerView(eyeComp.Eye)) // cmu edit
             return false;
 
         return PercentComplete < 1.0f;

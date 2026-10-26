@@ -1,0 +1,67 @@
+# Colony mail: every so often the colony ASRS is sent a crate of letters and parcels addressed to colonists. Logistics
+# hands each one to its colonist, who signs the receipt that came with it; signed receipts sent back down the ASRS pay
+# the colony budget.
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUColonyMailCrate
+  name: colony mail crate
+  description: Letters and parcels for the colony, each with a delivery receipt. Hand them to whoever they're addressed to, get the receipts signed and send them back down the ASRS.
+  components:
+  - type: CMUColonyMailCrate
+    contents:
+    - CMCigPackBlack
+    - RMCLighter
+    - CMMatchBook
+    - CMSoap
+    - CMSoapDeluxe
+    - RMCPlushieMoth
+    - CMMREFoodChocolateBrownie
+    - CMPenClicky
+    - CMFolderWhite
+    - RMCPlayingCardDeck
+    - BookSpaceEncyclopedia
+
+# The first colony mail of the round, sent once the colonists have arrived: just one or two pieces.
+- type: entity
+  parent: CMUColonyMailCrate
+  id: CMUColonyMailCrateRoundStart
+  components:
+  - type: CMUColonyMailCrate
+    minParcels: 1
+    maxParcels: 2
+
+- type: entity
+  parent: CMBasePaper
+  id: CMUColonyMailReceipt
+  name: delivery receipt
+  description: A receipt for a piece of colony mail. The colonist it's addressed to signs it when they get their mail; send the signed receipt down the ASRS for the delivery fee.
+  components:
+  - type: Sprite
+    layers:
+    - state: paper
+      color: "#f5e6b3"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#f5e6b3"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
+    backgroundModulate: "#f5e6b3"
+    contentImageModulate: "#f5e6b3"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    contentMargin: 16.0, 16.0, 16.0, 16.0
+    headerImagePath: "/Textures/_RMC14/Interface/Paper/paper_heading_requisition_invoice.svg.96dpi.png"
+    headerMargin: 0.0, 0.0, 0.0, 12.0
+  - type: CMUColonyMailReceipt
+
+# Added to a delivery receipt once its colonist signs it: sent down the ASRS lift, it pays the colony budget.
+- type: entity
+  id: CMUColonyMailReceiptPayoutTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RequisitionsInvoice
+    reward: 40

@@ -14,6 +14,7 @@
       3: 0.4
     freeSlots:
       CMU14XenoConditor: 2
+      CMU14XenoHarbingerBase: 1
     announceSound:
       path: /Audio/CMU14/Xeno/Pathogen/pathogen_distant_roar.ogg
       params:
@@ -21,7 +22,7 @@
     marineAnnounceSound:
       collection: PathogenRoar
     hiveStructureSlots:
-      CMU14PathogenBlightCore: 1
+      CMU14PathogenBlightCore: 3
       CMU14PathogenCluster: 8
       CMU14PathogenPlasmaTree: 3
       CMU14PathogenRecoveryNode: 6

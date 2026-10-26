@@ -149,6 +149,39 @@ public sealed class AuJobSelectionTest : ContentUnitTest
         }));
     }
 
+    // BUG-1061: a volunteer without the queen's playtime took her slot, then the force wouldn't let them in
+    [Test]
+    public void ThreatVoteHeldAssignmentsSkipPlayersWhoCannotPlayTheJob()
+    {
+        var unqualified = new NetUserId(new Guid("00000000-0000-0000-0000-000000000001"));
+        var qualified = new NetUserId(new Guid("00000000-0000-0000-0000-000000000002"));
+        var candidateThreats = new List<ProtoId<ThreatPrototype>> { new("XenoThreat") };
+        var leaderAndMember = HumanoidCharacterProfile.DefaultWithSpecies()
+            .WithGamemodeJobPriority("DistressSignal", ThreatVoteSelection.ThreatLeaderJobId, JobPriority.High)
+            .WithGamemodeJobPriority("DistressSignal", ThreatVoteSelection.ThreatMemberJobId, JobPriority.Medium);
+        var profiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+        {
+            [unqualified] = leaderAndMember,
+            [qualified] = leaderAndMember,
+        };
+
+        var assignments = ThreatVoteSelection.BuildHeldAssignments(
+            new List<NetUserId> { unqualified, qualified },
+            profiles,
+            candidateThreats,
+            leaderSlots: 1,
+            memberSlots: 1,
+            presetId: "DistressSignal",
+            canPlayJob: (player, job) => player != unqualified || job != ThreatVoteSelection.ThreatLeaderJobId);
+
+        // the unqualified one still gets a larva slot, the queen goes to someone who can take her
+        Assert.That(assignments, Is.EqualTo(new List<ThreatVoteAssignment>
+        {
+            new(qualified, ThreatVoteSelection.ThreatLeaderJobId),
+            new(unqualified, ThreatVoteSelection.ThreatMemberJobId),
+        }));
+    }
+
     [TestCase(0, 0)]
     [TestCase(1, 1)]
     [TestCase(10, 3)]
@@ -519,7 +552,7 @@ public sealed class AuJobSelectionTest : ContentUnitTest
     }
 
     [Test]
-    public void DistressSignalRandomFillOnlyUsesItsShareOfTheLeftoverCapacity()
+    public void DistressSignalLeavesItsLeftoverCapacityToCallIns()
     {
         var locked = CreateThirdPartyPrototype("Locked");
         var candidates = Enumerable.Range(0, 6).Select(i => CreateThirdPartyPrototype($"Random{i}")).ToList();
@@ -535,9 +568,9 @@ public sealed class AuJobSelectionTest : ContentUnitTest
             out var additionalBodies,
             AuRoundSystem.DistressSignalRandomThirdPartyShare);
 
-        // Four slots are left after the locked party; Distress Signal only fills half of them.
-        Assert.That(additional, Has.Count.EqualTo(2));
-        Assert.That(additionalBodies, Is.EqualTo(2));
+        // Four slots are left after the locked party; Distress Signal leaves them for call-ins.
+        Assert.That(additional, Is.Empty);
+        Assert.That(additionalBodies, Is.EqualTo(0));
         return;
 
         static ThirdPartyPrototype PickFirst(IReadOnlyList<ThirdPartyPrototype> candidates)

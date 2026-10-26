@@ -1,0 +1,31 @@
+<Document>
+  # Thralls
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUYautjaThrallBracer"/>
+  </Box>
+
+  Yautja can abduct humans as thralls: prey who have proven themselves worthy, or interested enough, to be taught to hunt like the Yautja.
+
+  ## Thrall expectations
+  - Thralls are expected to uphold the Honor Code.
+  - Begging to be thralled is a dishonorable act.
+  - Thralls must be given a thrall bracer box to get their gear.
+  - Thralls are not allowed to use any human ranged weapons.
+  - Roles with a major impact on the round should never be thralled, such as colony physicians, ambassadors, higher-ranking GOVFOR, OPFOR or INSFOR, and specialists.
+
+  ## Thrall and mentor
+  Thralls are seen as extensions of their mentor, so the mentor is also held responsible should the thrall break the Honor Code.
+  - Yautja are to police their thralls and pick the opponents they hunt.
+  - An unruly or misbehaving thrall can be reprimanded, or executed as a dishonorable foe, at any time by their master.
+  - Thralls should not be force-infected, and if infected should be exterminated.
+
+  ## Thrall welfare and death
+  - Thralls can be healed by their master, but should not be brought back from the dead.
+  - Each Yautja may only have one thrall per round.
+  - A thrall cannot be saved from death unless it has defeated its opponent.
+  - If a thrall dies, the gear given to it must be recovered.
+
+  ## Mentor death
+  Should a thrall's master die, the remaining Yautja should retrieve the master's gear and escort the thrall to the starting area of their role: colonists and CLF to the colony, GOVFOR and OPFOR to their ship or FOB. Should there be no Yautja left, the thrall is free to follow their own desires.
+</Document>
