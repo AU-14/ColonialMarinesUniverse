@@ -366,7 +366,7 @@ public sealed class MohawkDropshipTest
             var loaded = grids!.Single();
             var ship = loaded.Owner;
             var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
-            Assert.That(assembly.Initialized, Is.True, "Every declared deck must load successfully.");
+            Assert.That(assembly.DecksInitialized, Is.True, "Every declared deck must load successfully.");
             Assert.That(assembly.Decks.Keys, Is.EquivalentTo(new[] { -1, 1 }));
             Assert.That(zLevels.GetAllNetworkMaps(map), Has.Count.EqualTo(3));
 

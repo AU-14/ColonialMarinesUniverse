@@ -9,6 +9,7 @@
   - type: Tag
     tags:
     - MRE
+    # CMU14
     - Trash
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/mre.rsi

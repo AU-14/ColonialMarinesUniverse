@@ -46,6 +46,14 @@ public sealed partial class GameplayTab : Control
         Control.AddOptionCheckBox(CCVars.CMUScreamOnHotbarEnabled, ScreamOnHotbarCheckBox);
         Control.AddOptionCheckBox(RMCCVars.RMCAutoPunctuate, RMCAutoPunctuate);
 
+        Control.AddOptionCheckBox(CCVars.CMUTileMovementPreferred, TileMovementCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUTileMovementWalkOnly, TileMovementWalkOnlyCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUAutoIngestEnabled, AutoIngestCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUVaultOnBump, VaultOnBumpCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUNoShakeWhenResting, NoShakeWhenRestingCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUTacMapClassic, ClassicTacMapCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUTacMapCenterOnOpen, CenterTacMapCheckBox);
+
         Control.AddOptionDropDown(CCVars.ConstructionMenuImproved, DropDownConstructionMode, constructionModeEntries);
 
         Control.Initialize();

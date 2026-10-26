@@ -63,6 +63,8 @@
   id: SerialKillerRole
   name: roles-antag-serialkiller-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-serialkiller-objective
 
 - type: startingGear

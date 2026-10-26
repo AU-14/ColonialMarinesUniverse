@@ -42,6 +42,7 @@ public sealed partial class MenuButton : ContainerButton
 
     public BoxContainer ButtonRoot => _root;
 
+    // CMU14
     /// <summary>
     /// CMU: supplies the colour for everything in <see cref="ButtonRoot"/> in place of the constants above.
     /// </summary>
@@ -117,6 +118,7 @@ public sealed partial class MenuButton : ContainerButton
     private void UpdateChildColors()
     {
         if (_buttonIcon == null || _buttonLabel == null) return;
+        // CMU14
         if (ColorOverride?.Invoke(this) is { } themed)
         {
             foreach (var child in _root.Children)

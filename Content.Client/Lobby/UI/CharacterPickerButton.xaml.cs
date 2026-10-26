@@ -64,6 +64,7 @@ public sealed partial class CharacterPickerButton : ContainerButton
 
         CrtLobbyTheme.Apply(this);
 
+        // CMU14
         // After the theme walk, which would otherwise hand this row the shared button class.
         RemoveStyleClass(StyleNano.StyleClassCrtButton);
         AddStyleClass(StyleNano.StyleClassCmuCharacterSlot);

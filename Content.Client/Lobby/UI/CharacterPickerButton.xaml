@@ -11,17 +11,21 @@
                                           OverrideDirection="South"
                                           Name="View"
                                           SetSize="64 64"/>
+        <!-- CMU14: widened name column for the CRT picker -->
         <BoxContainer Orientation="Vertical"
                       HorizontalExpand="True"
                       VerticalAlignment="Center"
                       MinWidth="158"
                       MaxWidth="158">
+                                  <!-- CMU14: widened name column -->
+            <!-- CMU14: matched to the column width -->
             <Label Name="NameLabel"
                    StyleClasses="CharacterName"
                    ClipText="True"
                    MinWidth="158"
                    MaxWidth="158"
                    HorizontalExpand="True"/>
+            <!-- CMU14: matched to the column width -->
             <Label Name="JobLabel"
                    ClipText="True"
                    MinWidth="158"
@@ -29,11 +33,13 @@
                    HorizontalExpand="True"
                    StyleClasses="CrtDimText"/>
         </BoxContainer>
+        <!-- CMU14: narrowed action buttons -->
         <Button Name="DeleteButton"
                 MinWidth="78"
                 MaxWidth="78"
                 VerticalAlignment="Center"
                 Text="{Loc 'character-setup-gui-character-picker-button-delete-button'}"/>
+        <!-- CMU14: narrowed action buttons -->
         <Button Name="ConfirmDeleteButton"
                 MinWidth="78"
                 MaxWidth="78"

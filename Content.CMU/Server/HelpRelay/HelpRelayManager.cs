@@ -176,9 +176,16 @@ public sealed class HelpRelayManager : IPostInjectInit
         ProcessConversation(conversation);
     }
 
-    /// <summary>Round restart ends conversations; the next line starts a fresh message.</summary>
-    public void ClearConversations()
-        => _conversations.Clear();
+    /// <summary>
+    /// Round restart clears per-round relay state: conversations end (the next line starts a fresh
+    /// message) and linked-Discord lookups re-resolve next round, so a link added mid-session is
+    /// picked up instead of the cached "unlinked" result surviving the process.
+    /// </summary>
+    public void ClearRoundState()
+    {
+        _conversations.Clear();
+        _discordIds.Clear();
+    }
 
     private GameRunLevel CurrentRunLevel() => _entMan.System<GameTicker>().RunLevel;
 

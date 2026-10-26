@@ -247,7 +247,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         var dummy = LoadProfileEntity(humanoid, entry?.Job, true);
         PreviewPanel.SetSprite(dummy);
         PreviewPanel.SetSummaryText(
-            humanoid.Name,
+            humanoid.Name, // CMU14: name passed plain, no locale key (see lobby-character-preview-panel.ftl)
             Loc.GetString(
                 "lobby-character-summary-age",
                 ("gender", humanoid.Gender.ToString().ToLowerInvariant()),

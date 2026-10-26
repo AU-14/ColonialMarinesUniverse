@@ -119,6 +119,16 @@ cmu-gunship-lag14-requires-stable-hover = The LAG-14 can only deploy while the g
 cmu-gunship-lag14-no-ground-below = There is no ground directly below the LAG-14.
 cmu-gunship-lag14-area-obstructed = The LAG-14 deployment area below is obstructed.
 
+# CMU14: dropship nav console alarm toggles
+cmu-gunship-firearm-header = Firearm
+cmu-gunship-firearm-enabled = Enabled
+cmu-gunship-firearm-disabled = Disabled
+
+cmu-dropship-master-alarm-header = Master Alarm
+cmu-dropship-master-alarm-mute = Mute Alarm
+cmu-dropship-master-alarm-unmute = Unmute Alarm
+
+
 cmu-tactical-land-session-active = This navigation console is already designating a tactical hover.
 cmu-tactical-land-console-unavailable = This navigation console cannot designate tactical landings.
 cmu-tactical-land-dropship-in-flight = Cannot designate a tactical landing while the dropship is in flight.

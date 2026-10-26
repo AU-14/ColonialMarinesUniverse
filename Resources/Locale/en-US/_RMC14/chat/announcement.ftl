@@ -2,10 +2,12 @@ rmc-announcement-author = Command
 rmc-announcement-author-shipside = Command Ship
 rmc-announcement-author-highcommand = High Command
 rmc-announcement-author-queen-mother = The Queen Mother
+# CMU14: amber replaces upstream red
 rmc-announcement-message = [font size=16][bold][color=#CECECE]{$author} Priority Announcement[/color][/bold][/font][font size=16][color=#FFB454]
 
     {$message}
 
+# CMU14
 rmc-announcement-message-signed = [font size=16][bold][color=#CECECE]{$author} Priority Announcement[/color][/bold][/font][font size=16][color=#FFB454]
 
     {$message}[italic]
@@ -13,10 +15,12 @@ rmc-announcement-message-signed = [font size=16][bold][color=#CECECE]{$author} P
     Signed by,
     {$name}[/italic][/color][/font]
 
+# CMU14
 rmc-announcement-message-raw = [font size=16][bold][color=#CECECE]{$author}[/color][/bold][/font][font size=16][color=#FFB454]
 
     {$message}
 
+# CMU14
 rmc-announcement-ares-message = [color=#CECECE][font size=16][bold]APOLLO MK.II - Priority Operational Broadcast[/bold][/font][/color][color=#FFB454][font size=16][bold]
 
     {$message}[/bold][/font][/color]
@@ -25,16 +29,19 @@ rmc-announcement-ares-lz-designated = Command Order Issued:
 
     {$name} has been designated as the primary landing zone.
 
+# CMU14
 rmc-announcement-ares-online = [color=#CECECE][font size=16][bold]APOLLO Central A.I. - System Online[/bold][/font][/color][color=#FFB454][font size=16][bold]
 
     {$message}[/bold][/font][/color]
 
+# CMU14
 rmc-announcement-ares-map = [color=#CECECE][font size=16][bold]{$ship}[/bold][/font][/color][color=#FFB454][font size=16][bold]
 
     {$message}[/bold][/font][/color]
 
 rmc-announcement-cooldown = Please allow at least {$seconds} seconds to pass between announcements
 
+# CMU14: amber replaces upstream red
 rmc-announcement-dropship-message = [color=#CECECE][font size=16][bold]Dropship Alert[/bold][/font][/color][color=#FFB454][font size=16][bold]
 
     {$message}[/bold][/font][/color]
@@ -43,9 +50,11 @@ rmc-announcement-anti-air = [color=#CECECE][font size=16][bold]IX-50 MGAD System
 
     {$message}[/bold][/font][/color]
 
+# CMU14
 rmc-announcement-emergency-dropship-crash = [font size=14][bold][color=#CECECE]EMERGENCY[/color][/bold][/font][font size=16][color=#FFB454]
   DROPSHIP ON COLLISION COURSE. CRASH IMMINENT.[/color][/font]
 
+# CMU14
 rmc-announcement-delta = [color=#CECECE][font size=16][bold]SELF-DESTRUCT SYSTEMS ACTIVE[/bold][/font][/color]\n[color=#FFB454][font size=16][bold]DANGER, THE EMERGENCY DESTRUCT SYSTEM IS NOW ACTIVATED.[/bold][/font][/color]\n[color=#FFB454][font size=16][bold]PROCEED TO THE SELF-DESTRUCT CHAMBER FOR CONTROL ROD INSERTION.[/bold][/font][/color]
 
 rmc-announcement-general-quarters = ATTENTION! GENERAL QUARTERS. ALL HANDS, MAN YOUR BATTLESTATIONS.
@@ -56,16 +65,19 @@ rmc-announcement-dropship-hijack-human = Hostile personnel have hijacked a drops
 
 rmc-announcement-dropship-hijack-hive = The Queen has commanded the metal bird to depart for the metal hive in the sky! Rejoice!
 
+# CMU14: amber replaces upstream red
 rmc-announcement-ares-command = [color=#CECECE][font size=16][bold]APOLLO MK.II[/bold][/font][/color][color=#FFB454][font size=16]
 
     {$message}[/font][/color]
 
+# CMU14
 rmc-announcement-unidentified-lifesigns = [color=#CECECE][font size=16][bold]Unidentifled lifesigns[/bold][/font][/color][color=#FFB454][font size=16][bold]
 
     Unidentified lifesigns ({$count}) detected onboard the dropship {$name}. Recommendation: lockdown of exterior access ports, including ducting and ventilation.[/bold][/font][/color]
 
 rmc-announcement-shipside-header = Please write a message to announce to the crew
 
+# CMU14: Queen Mother psychic directive
 cmu-announcement-queen-mother = [font size=16][bold][color=#C9A7EA]Queen Mother Psychic Directive[/color][/bold][/font][font size=16][color=#D6DCE0]
 
     {$message}[/font][/color]

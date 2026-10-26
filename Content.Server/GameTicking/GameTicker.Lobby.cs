@@ -159,11 +159,14 @@ namespace Content.Server.GameTicking
 
             string Display(string? value) => !string.IsNullOrWhiteSpace(value) ? value : Loc.GetString("lobby-info-none"); // CMU14: Hardcode localization
 
+            // CMU14: side group headings - the labels below are side-less (SHIP/PLATOON) and the
+            // client renderer opens a heading row whenever the group changes.
             var govfor = Loc.GetString("lobby-info-govfor");
             var opfor = Loc.GetString("lobby-info-opfor");
 
             // Order is the display order - the lobby renders these in sequence, so this list is
             // where the panel's reading order is decided. Planet and gamemode lead because they are
+            // CMU14
             // what a player checks first to decide whether to ready up. Each side's fields are then
             // kept together under its own group heading rather than the two sides being interleaved
             // row by row: that is what lets SHIP and PLATOON be named once per side instead of every
@@ -173,10 +176,10 @@ namespace Content.Server.GameTicking
             {
                 new(Loc.GetString("lobby-info-planet"), Display(GetPlanetMapName())),
                 new(Loc.GetString("lobby-info-gamemode"), Display(LocalizeOrRaw(preset.ModeTitle))),
-                new(Loc.GetString("lobby-info-govfor-ship"), Display(_auRoundSystem.GetSelectedGovforShip()), govforColor),
-                new(Loc.GetString("lobby-info-opfor-ship"), Display(_auRoundSystem.GetSelectedOpforShip()), opforColor),
-                new(Loc.GetString("lobby-info-govfor-platoon"), Display(_platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoonInfo ? Loc.GetString(govforPlatoonInfo.Name) : null), govforColor), // CMU14: Hardcode localization
-                new(Loc.GetString("lobby-info-opfor-platoon"), Display(_platoonSpawnRuleSystem.SelectedOpforPlatoon is { } opforPlatoonInfo ? Loc.GetString(opforPlatoonInfo.Name) : null), opforColor), // CMU14: Hardcode localization
+                new(Loc.GetString("lobby-info-ship"), Display(_auRoundSystem.GetSelectedGovforShip()), govforColor, govfor), // CMU14: Hardcode localization
+                new(Loc.GetString("lobby-info-platoon"), Display(_platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoonInfo ? Loc.GetString(govforPlatoonInfo.Name) : null), govforColor, govfor), // CMU14: Hardcode localization
+                new(Loc.GetString("lobby-info-ship"), Display(_auRoundSystem.GetSelectedOpforShip()), opforColor, opfor), // CMU14: Hardcode localization
+                new(Loc.GetString("lobby-info-platoon"), Display(_platoonSpawnRuleSystem.SelectedOpforPlatoon is { } opforPlatoonInfo ? Loc.GetString(opforPlatoonInfo.Name) : null), opforColor, opfor), // CMU14: Hardcode localization
                 new(Loc.GetString("lobby-info-players"), Loc.GetString(
                     "lobby-info-players-value",
                     ("count", _playerManager.PlayerCount),

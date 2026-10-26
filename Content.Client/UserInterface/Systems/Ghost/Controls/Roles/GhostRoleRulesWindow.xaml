@@ -2,12 +2,14 @@
                Title="{Loc 'ghost-roles-window-title'}"
                MinSize="560 340"
                SetSize="600 380">
+                             <!-- CMU14: larger window, plain ground panel -->
     <PanelContainer Name="Ground" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical"
                       HorizontalExpand="True"
                       VerticalExpand="True"
                       Margin="1"
                       SeparationOverride="0">
+                                      <!-- CMU14: rebuilt rules pane with inline action bar -->
             <ScrollContainer Name="RulesScroll"
                              HorizontalExpand="True"
                              VerticalExpand="True"

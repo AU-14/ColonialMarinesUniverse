@@ -19,6 +19,7 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
+// CMU14
 using Robust.Shared.Utility;
 
 namespace Content.Client.Guidebook.Controls;
@@ -38,10 +39,10 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
     private bool _subscribedToCvars;
 
     public ProtoId<GuideEntryPrototype>? Selected { get; private set; }
-
+    // CMU14
     public ProtoId<GuideEntryPrototype> LastEntry;
 
-
+    // CMU14
     // CMU: search, history and the section list.
     private readonly CmuGuideIndex _index;
     private readonly Dictionary<ProtoId<GuideEntryPrototype>, ProtoId<GuideEntryPrototype>> _parents = new();
@@ -57,6 +58,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
         _sawmill = Logger.GetSawmill("guidebook");
+        // CMU14
         _index = new CmuGuideIndex(_resourceManager);
         ApplyCrtPalette();
 
@@ -66,9 +68,11 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         SearchBar.OnTextChanged += _ =>
         {
             HandleFilter();
+            // CMU14
             UpdateResults();
         };
 
+        // CMU14
         BackButton.OnPressed += _ => GoBack();
         ForwardButton.OnPressed += _ => GoForward();
         HomeButton.OnPressed += _ => GoHome();
@@ -114,6 +118,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
     {
         ((Control) this).Stylesheet = _stylesheetManager.SheetNano;
         CrtLobbyTheme.Apply(this, useCrtTypography: false);
+        // CMU14
         CmuGuidebookLook.Apply(this);
     }
 
@@ -122,6 +127,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         if (!_entries.TryGetValue(link, out var entry))
             return;
 
+        // CMU14
         NavigateTo(entry.Id);
     }
 
@@ -144,6 +150,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             if (!control.Visible)
                 control.Visible = true;
 
+            // CMU14
             UserInterfaceManager.DeferAction(() => ScrollTo(control));
 
             break;
@@ -159,6 +166,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
                 return;
 
 
+            // CMU14
             ShowGuide(entry);
         }
         else
@@ -187,6 +195,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         EntryContainer.RemoveAllChildren();
 
         Selected = null;
+        // CMU14
         Breadcrumb.Text = string.Empty;
         _sections.Clear();
 
@@ -194,6 +203,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
     private void ShowGuide(GuideEntry entry)
     {
+        // CMU14
         if (_recordHistory && LastEntry != default && LastEntry != entry.Id && _showingGuide)
         {
             _back.Push(LastEntry);
@@ -217,6 +227,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         CrtLobbyTheme.Apply(EntryContainer, useCrtTypography: false);
 
         Selected = entry.Id;
+        // CMU14
         LastEntry = entry.Id;
         ReturnContainer.Visible = entry.RuleEntry;
 
@@ -243,6 +254,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         }
 
 
+        // CMU14
         if (_pendingSection >= 0)
         {
             var section = _pendingSection;
@@ -254,6 +266,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         RepopulateTableOfContents();
     }
 
+    // CMU14
     /// <summary>
     ///     CMU: moves to another entry, optionally to one of its headings, keeping the tree and history in step.
     /// </summary>
@@ -434,6 +447,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         if (sameAsLastUpdate)
         {
             _entries = entries;
+            // CMU14
             _index.SetEntries(entries);
 
             _parents.Clear();
@@ -452,6 +466,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             UpdateResults();
 
             RepopulateTree(rootEntries, forceRoot);
+            // CMU14
             ClearSelectedGuide();
 
             Split.State = SplitContainer.SplitState.Auto;
@@ -468,6 +483,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             }
         }
 
+        // CMU14
         var item = selected == null
             ? null
             : Tree.Items.FirstOrDefault(x => x.Metadata is GuideEntry entry && entry.Id == selected);
@@ -477,10 +493,12 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
         if (item != null)
         {
+            // CMU14
             Tree.ExpandParentEntries(item.Index);
             Tree.SetSelectedIndex(item.Index);
         }
 
+        // CMU14
         UpdateHistoryButtons();
 
         return sameAsLastUpdate;
@@ -528,10 +546,12 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             AddEntry(entry.Id, parent, addedEntries);
         }
 
+        // CMU14
         // CMU: the book is over a hundred entries, so it opens folded up; the open page's branch is expanded for it.
         Tree.SetAllExpanded(false);
         CrtLobbyTheme.Apply(Tree, useCrtTypography: false);
 
+        // CMU14
         foreach (var item in Tree.Items)
         {
             item.Button.RemoveStyleClass(StyleNano.StyleClassCrtButton);
@@ -571,6 +591,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         return item;
     }
 
+    // CMU14
     /// <summary>CMU: runs a search as though it had been typed into the box.</summary>
     public void Search(string query)
     {
@@ -592,6 +613,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         }
     }
 
+    // CMU14
     private void UpdateResults()
     {
         var query = SearchBar.Text.Trim();

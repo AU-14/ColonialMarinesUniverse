@@ -2,6 +2,7 @@
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls">
+    <!-- CMU14 -->
     <!-- The same three bands the round-info page has: one big fact with a tag, a rule, the body, a rule,
          a foot. -->
     <BoxContainer Name="VBox" Orientation="Vertical" VerticalExpand="True">
@@ -15,9 +16,11 @@
             <RichTextLabel Name="SummaryAge" StyleClasses="CrtCharacterSummary"
                            VerticalAlignment="Center" />
         </BoxContainer>
+        <!-- CMU14 -->
         <PanelContainer Name="HeadRule" StyleClasses="CrtSectionRule" HorizontalExpand="True"
                         MinHeight="1" Margin="0 7 0 0" Visible="False" />
 
+        <!-- CMU14: collapsible body section -->
         <!-- Body. -->
         <BoxContainer Name="Loaded" Orientation="Vertical" VerticalExpand="True" Visible="False">
             <Control VerticalExpand="True" />
@@ -39,6 +42,7 @@
                    Align="Center" HorizontalExpand="True" Margin="0 8 0 0" />
             <Control VerticalExpand="True" />
 
+            <!-- CMU14: foot actions row -->
             <!-- Foot: the two things you can do to this character. -->
             <PanelContainer Name="ActionBand" StyleClasses="CrtCommandBand" Margin="0 4 0 0">
                 <BoxContainer Orientation="Horizontal" SeparationOverride="1" HorizontalExpand="True">

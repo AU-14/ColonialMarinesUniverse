@@ -87,6 +87,7 @@ namespace Content.Client.Lobby
             _voteManager.SetPopupContainer(Lobby.VoteContainer);
             LayoutContainer.SetAnchorPreset(Lobby, LayoutContainer.LayoutPreset.Wide);
 
+            // CMU14
             // The plate is stamped into the case, so it names the game rather than the server. Kept
             // rather than deleted: the server name goes back on the moment the plate stops being fixed.
             // var lobbyNameCvar = _cfg.GetCVar(CCVars.ServerLobbyName);

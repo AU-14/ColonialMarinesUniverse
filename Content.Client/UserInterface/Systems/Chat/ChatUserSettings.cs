@@ -168,10 +168,12 @@ public static class ChatUserSettings
 
             keys.Add(key);
 
+            // CMU14
             // The swatch has to be the colour the log actually draws, which under CRT is the toned one.
             targets.Add(new ChatStyleTarget(
                 key,
                 $"Radio: {label}",
+                // CMU14
                 CrtTerminalPalette.ChannelTone(channel.Color).ToHex()));
         }
 
@@ -439,11 +441,13 @@ public static class ChatUserSettings
     public static string ApplyStyleMarkup(string markup, ChatStyleSettings? style, int? fallbackFontSize = null)
     {
         if (ResolveColor(style) is { } color)
+            // CMU14
             markup = ApplyColorMarkup(markup, color);
 
         return ApplyFontMarkup(markup, style, fallbackFontSize);
     }
 
+    // CMU14
     /// <summary>
     ///     Repaint <paramref name="markup"/> by rewriting the colour tag it already carries, or
     ///     wrapping it in one if it carries none.

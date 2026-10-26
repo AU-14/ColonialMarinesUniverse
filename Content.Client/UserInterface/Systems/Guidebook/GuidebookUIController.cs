@@ -126,6 +126,7 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         ToggleGuidebook();
     }
 
+    // CMU14
     /// <summary>CMU: for <c>cmuguidesearch</c>, which drives the window's search box from the console.</summary>
     public GuidebookWindow? Window => _guideWindow;
 
@@ -234,6 +235,7 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         }
         var changed = _guideWindow.UpdateGuides(guides, rootEntries, forceRoot, selected);
 
+        // CMU14
         // CMU: the book stays folded up; UpdateGuides opens only the branch holding the selected entry.
 
         _guideWindow.OpenCenteredRight();

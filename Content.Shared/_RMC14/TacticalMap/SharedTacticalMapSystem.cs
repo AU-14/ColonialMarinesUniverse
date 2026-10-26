@@ -177,9 +177,11 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         {
             var a = corners[i];
             var b = corners[(i + 1) % 4];
+            // CMU14
             rect.Add(new TacticalMapLine(new Vector2i((int) a.X, (int) a.Y), new Vector2i((int) b.X, (int) b.Y), color, thickness, null, depth));
         }
 
+        // CMU14
         var shared = map.Comp.SharedLines.Where(l => l.Color != color).ToList();
         shared.AddRange(rect);
         map.Comp.SharedLines = shared;

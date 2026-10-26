@@ -1,5 +1,6 @@
 using Content.Client.Administration.Managers;
 using Content.Client.Audio;
+// CMU14
 using Content.Shared._Mono.CCVar;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.CCVar;
@@ -19,22 +20,25 @@ public sealed partial class AudioTab : Control
     [Dependency] private IClientAdminManager _admin = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
 
-    private static readonly (string Loc, CVarDef<bool> Voiceline, CVarDef<bool> Emote)[] Species =
-    {
-        ("arachnid", RMCCVars.RMCPlayVoicelinesArachnid, RMCCVars.RMCPlayEmotesArachnid),
-        ("avali", RMCCVars.RMCPlayVoicelinesAvali, RMCCVars.RMCPlayEmotesAvali),
-        ("diona", RMCCVars.RMCPlayVoicelinesDiona, RMCCVars.RMCPlayEmotesDiona),
-        ("dwarf", RMCCVars.RMCPlayVoicelinesDwarf, RMCCVars.RMCPlayEmotesDwarf),
-        ("felinid", RMCCVars.RMCPlayVoicelinesFelinid, RMCCVars.RMCPlayEmotesFelinid),
-        ("feroxi", RMCCVars.RMCPlayVoicelinesFeroxi, RMCCVars.RMCPlayEmotesFeroxi),
-        ("human", RMCCVars.RMCPlayVoicelinesHuman, RMCCVars.RMCPlayEmotesHuman),
-        ("moth", RMCCVars.RMCPlayVoicelinesMoth, RMCCVars.RMCPlayEmotesMoth),
-        ("reptilian", RMCCVars.RMCPlayVoicelinesReptilian, RMCCVars.RMCPlayEmotesReptilian),
-        ("rodentia", RMCCVars.RMCPlayVoicelinesRodentia, RMCCVars.RMCPlayEmotesRodentia),
-        ("skrell", RMCCVars.RMCPlayVoicelinesSkrell, RMCCVars.RMCPlayEmotesSkrell),
-        ("slime", RMCCVars.RMCPlayVoicelinesSlime, RMCCVars.RMCPlayEmotesSlime),
-        ("vulpkanin", RMCCVars.RMCPlayVoicelinesVulpkanin, RMCCVars.RMCPlayEmotesVulpkanin),
-    };
+    // CMU14: species sound toggles removed - we ship humans only and never will support other
+    // species (dwarves, lizards, moths etc.). Commented out, not deleted, so a downstream fork
+    // can revive the option; the RMC cvars themselves stay (upstream voiceline system uses them).
+    // private static readonly (string Loc, CVarDef<bool> Voiceline, CVarDef<bool> Emote)[] Species =
+    // {
+    //     ("arachnid", RMCCVars.RMCPlayVoicelinesArachnid, RMCCVars.RMCPlayEmotesArachnid),
+    //     ("avali", RMCCVars.RMCPlayVoicelinesAvali, RMCCVars.RMCPlayEmotesAvali),
+    //     ("diona", RMCCVars.RMCPlayVoicelinesDiona, RMCCVars.RMCPlayEmotesDiona),
+    //     ("dwarf", RMCCVars.RMCPlayVoicelinesDwarf, RMCCVars.RMCPlayEmotesDwarf),
+    //     ("felinid", RMCCVars.RMCPlayVoicelinesFelinid, RMCCVars.RMCPlayEmotesFelinid),
+    //     ("feroxi", RMCCVars.RMCPlayVoicelinesFeroxi, RMCCVars.RMCPlayEmotesFeroxi),
+    //     ("human", RMCCVars.RMCPlayVoicelinesHuman, RMCCVars.RMCPlayEmotesHuman),
+    //     ("moth", RMCCVars.RMCPlayVoicelinesMoth, RMCCVars.RMCPlayEmotesMoth),
+    //     ("reptilian", RMCCVars.RMCPlayVoicelinesReptilian, RMCCVars.RMCPlayEmotesReptilian),
+    //     ("rodentia", RMCCVars.RMCPlayVoicelinesRodentia, RMCCVars.RMCPlayEmotesRodentia),
+    //     ("skrell", RMCCVars.RMCPlayVoicelinesSkrell, RMCCVars.RMCPlayEmotesSkrell),
+    //     ("slime", RMCCVars.RMCPlayVoicelinesSlime, RMCCVars.RMCPlayEmotesSlime),
+    //     ("vulpkanin", RMCCVars.RMCPlayVoicelinesVulpkanin, RMCCVars.RMCPlayEmotesVulpkanin),
+    // };
 
     public AudioTab()
     {
@@ -101,6 +105,7 @@ public sealed partial class AudioTab : Control
         Control.AddOptionCheckBox(CCVars.LobbyMusicEnabled, LobbyMusicCheckBox);
         Control.AddOptionCheckBox(CCVars.RestartSoundsEnabled, RestartSoundsCheckBox);
         Control.AddOptionCheckBox(CCVars.EventMusicEnabled, EventMusicCheckBox);
+        // CMU14
         Control.AddOptionCheckBox(CCVars.MuteScriptedSounds, MuteScriptedSoundsCheckBox);
         Control.AddOptionCheckBox(CCVars.AdminSoundsEnabled, AdminSoundsCheckBox);
         Control.AddOptionCheckBox(CCVars.BwoinkSoundEnabled, BwoinkSoundCheckBox);
@@ -114,14 +119,15 @@ public sealed partial class AudioTab : Control
         Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesYourself, RMCVoicelinesYourself);
         Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesYourself, RMCEmotesYourself);
 
-        foreach (var (locId, voicelineCVar, emoteCVar) in Species)
-        {
-            var (voiceline, emote) = SpeciesMatrix.Add(Loc.GetString($"cmu-ui-options-species-{locId}"));
-            Control.AddOptionCheckBox(voicelineCVar, voiceline);
-            Control.AddOptionCheckBox(emoteCVar, emote);
-        }
+        // CMU14: species sound toggles removed - humans only, see the Species array above.
+        // foreach (var (locId, voicelineCVar, emoteCVar) in Species)
+        // {
+        //     var (voiceline, emote) = SpeciesMatrix.Add(Loc.GetString($"cmu-ui-options-species-{locId}"));
+        //     Control.AddOptionCheckBox(voicelineCVar, voiceline);
+        //     Control.AddOptionCheckBox(emoteCVar, emote);
+        // }
 
-        SpeciesSection.Expanded = false;
+        // SpeciesSection.Expanded = false;
 
         Control.Initialize();
     }

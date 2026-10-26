@@ -12,13 +12,17 @@ using Content.Shared.Chat;
 using Robust.Client.Console;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
+// CMU14
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.RichText;
+// CMU14
 using Robust.Shared;
 using Robust.Shared.Configuration;
+// CMU14
 using Robust.Shared.Input;
 using Robust.Shared.IoC;
+// CMU14
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -45,6 +49,7 @@ public sealed partial class ChatMessageRow : PanelContainer
     [Dependency] private IClientConsoleHost _consoleHost = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    // CMU14
     [Dependency] private IGameTiming _timing = default!;
 
     /// <summary>
@@ -57,6 +62,7 @@ public sealed partial class ChatMessageRow : PanelContainer
     private readonly Label _repeatBadge;
     private readonly RichTextLabel _messageLabel;
 
+    // CMU14
     // Set only for a row whose follow is double-click rather than button - see CCVars.ChatGhostFollowButton.
     private NetEntity _doubleClickFollowEntity;
     private TimeSpan? _lastClickTime;
@@ -136,6 +142,7 @@ public sealed partial class ChatMessageRow : PanelContainer
 
         if (message.GhostFollowEntity.Valid)
         {
+            // CMU14
             if (_config.GetCVar(CCVars.ChatGhostFollowButton))
             {
                 row.AddChild(CreateFollowButton(message, metrics, textColor));
@@ -261,6 +268,7 @@ public sealed partial class ChatMessageRow : PanelContainer
         return output;
     }
 
+    // CMU14
     protected override void KeyBindDown(GUIBoundKeyEventArgs args)
     {
         base.KeyBindDown(args);

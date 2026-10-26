@@ -61,6 +61,10 @@ public sealed partial class ChatTab : Control
 
         Control.AddOptionPercentSlider(CCVars.ChatWindowOpacity, ChatWindowOpacitySlider);
 
+        Control.AddOptionCheckBox(CCVars.ChatSpeechSounds, ChatSpeechSoundsCheckBox);
+        Control.AddOptionCheckBox(CCVars.ChatResetToLocal, ChatResetToLocalCheckBox);
+        Control.AddOptionCheckBox(CCVars.ChatCenterInput, ChatCenterInputCheckBox);
+
         Control.AddOptionCheckBox(CCVars.ChatEnableRunechatBubbles, RunechatSpeechBubblesCheckBox);
         Control.AddOptionCheckBox(CCVars.LoocAboveHeadShow, ShowLoocAboveHeadCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatEnableFancyBubbles, FancySpeechBubblesCheckBox);
@@ -75,6 +79,10 @@ public sealed partial class ChatTab : Control
 
         Control.AddOptionCheckBox(CCVars.ExamineLogInChat, ExamineLogInChatCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineFullTextInChat, ExamineFullTextInChatCheckBox);
+        Control.AddOptionCheckBox(CCVars.ExamineWoundsInChat, ExamineWoundsInChatCheckBox);
+        Control.AddOptionCheckBox(CCVars.HideExamineTooltip, HideExamineTooltipCheckBox);
+        Control.AddOptionCheckBox(CCVars.PopupsInChat, PopupsInChatCheckBox);
+        Control.AddOptionCheckBox(CCVars.HidePopupsOnScreen, HidePopupsOnScreenCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatGhostFollowButton, ChatGhostFollowButton);
 
         Control.AddOptionCheckBox(CCVars.ChatAutoFillHighlights, AutoFillHighlightsCheckBox);

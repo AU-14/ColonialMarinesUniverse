@@ -160,7 +160,7 @@ entities:
     - type: MohawkMechanisms
       rampPreviewFullDeck: true
       keepRampThreshold: true
-- proto: CMUAirFillerVent
+- proto: CMULifeSupportVent
   entities:
   - uid: 908
     components:

@@ -1,3 +1,4 @@
+// CMU14
 using System.Collections.Generic;
 using System.Numerics;
 using Content.Shared.Ghost.Roles;
@@ -6,9 +7,11 @@ using Robust.Client.GameObjects;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
+// CMU14
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 
+// CMU14
 namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles;
 
 /// <summary>
@@ -17,6 +20,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles;
 [GenerateTypedNameReferences]
 public sealed partial class GhostRoleButtonsBox : BoxContainer
 {
+    // CMU14
     private readonly List<GhostRoleEntryButtons> _rows = new();
     private readonly bool _hasAccess;
 
@@ -30,26 +34,34 @@ public sealed partial class GhostRoleButtonsBox : BoxContainer
         SpriteSystem spriteSystem,
         Color accent)
     {
+        // CMU14
         RobustXamlLoader.Load(this);
         _hasAccess = hasAccess;
 
+        // CMU14
         foreach (var role in roles)
         {
+            // CMU14
             var row = new GhostRoleEntryButtons(role);
             row.RequestButton.OnPressed += _ => OnRoleSelected?.Invoke(role);
             row.FollowButton.OnPressed += _ => OnRoleFollow?.Invoke(role);
 
+            // CMU14
             if (!hasAccess)
             {
+                // CMU14
                 row.SetRequestDisabled();
 
+                // CMU14
                 if (reason != null && !reason.IsEmpty)
                 {
+                    // CMU14
                     var tooltip = new Tooltip();
                     tooltip.SetMessage(reason);
                     row.RequestButton.TooltipSupplier = _ => tooltip;
                 }
 
+                // CMU14
                 // Not HorizontalExpand: expanding makes this span the whole button and defeats KeepCentered.
                 row.RequestButton.AddChild(new TextureRect
                 {
@@ -61,6 +73,7 @@ public sealed partial class GhostRoleButtonsBox : BoxContainer
                 });
             }
 
+            // CMU14
             _rows.Add(row);
             AddChild(row);
         }

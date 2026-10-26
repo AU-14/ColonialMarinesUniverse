@@ -1,4 +1,5 @@
 using Content.Server.CMU14.Diagnostics.Performance;
+using Content.Server.CMU14.LinkAccount; // CMU14: discord account linking
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Acz;
 using Content.Server.Administration;
@@ -48,6 +49,7 @@ namespace Content.Server.Entry
         [Dependency] private ContentNetworkResourceManager _netResMan = default!;
         [Dependency] private DiscordChatLink _discordChatLink = default!;
         [Dependency] private DiscordLink _discordLink = default!;
+        [Dependency] private DiscordLinkAccountManager _discordLinkAccount = default!; // CMU14: eager construct, subscribes to the DiscordLink gateway
         [Dependency] private EuiManager _euiManager = default!;
         [Dependency] private GhostKickManager _ghostKick = default!;
         [Dependency] private IAdminManager _admin = default!;

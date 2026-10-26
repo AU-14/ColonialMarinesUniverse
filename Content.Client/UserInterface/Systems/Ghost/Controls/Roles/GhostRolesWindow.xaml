@@ -2,6 +2,7 @@
                Title="{Loc 'ghost-roles-window-title'}"
                MinSize="760 520"
                SetSize="940 620">
+               <!-- CMU14: larger window with role search -->
     <PanelContainer Name="Ground" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical"
                       HorizontalExpand="True"
@@ -13,8 +14,10 @@
                     <LineEdit Name="SearchBar"
                               PlaceHolder="{Loc 'ghost-roles-window-search-placeholder'}"
                               HorizontalExpand="True" />
+                              <!-- CMU14: role count beside the search -->
                     <Label Name="CountLabel" Text="" VerticalAlignment="Center" />
                 </BoxContainer>
+            <!-- CMU14 -->
             </PanelContainer>
             <BoxContainer Orientation="Horizontal"
                           HorizontalExpand="True"
@@ -25,6 +28,7 @@
                                      HScrollEnabled="False"
                                      HorizontalExpand="True"
                                      VerticalExpand="True">
+                        <!-- CMU14: category rail list -->
                         <BoxContainer Name="RailList"
                                       Orientation="Vertical"
                                       HorizontalExpand="True"
@@ -36,6 +40,7 @@
                     <Label Name="GhostCallStatus" StyleClasses="CrtDimText" />
                     <Button Name="GhostCallButton" /> <!-- CMU14 -->
                 </BoxContainer>
+                <!-- CMU14 -->
                 <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
                     <ScrollContainer Name="RoleScroll"
                                      HScrollEnabled="False"
@@ -55,6 +60,7 @@
                            Visible="False" />
                 </BoxContainer>
             </BoxContainer>
+        <!-- CMU14 -->
         </BoxContainer>
     </PanelContainer>
 </DefaultWindow>

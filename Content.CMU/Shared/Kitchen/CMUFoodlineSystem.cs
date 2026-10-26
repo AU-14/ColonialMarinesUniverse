@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Vendors;
+using Content.Shared.CMU14.Nutrition;
 using Content.Shared.CMU14.Vendors;
 using Content.Shared.Doors;
 using Content.Shared.Doors.Components;
@@ -14,6 +15,7 @@ namespace Content.Shared.CMU14.Kitchen;
 /// </summary>
 public sealed partial class CMUFoodlineSystem : EntitySystem
 {
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
 
@@ -21,6 +23,7 @@ public sealed partial class CMUFoodlineSystem : EntitySystem
     {
         SubscribeLocalEvent<CMUKitchenShutterComponent, DoorStateChangedEvent>(OnShutterStateChanged);
         SubscribeLocalEvent<CMUKitchenShutterComponent, ComponentShutdown>(OnShutterShutdown);
+        SubscribeLocalEvent<CMUKitchenShutterComponent, MapInitEvent>(OnShutterMapInit);
         SubscribeLocalEvent<CMUFoodlineVendorComponent, MapInitEvent>(OnVendorMapInit);
         SubscribeLocalEvent<CMUFoodlineVendorComponent, ActivatableUIOpenAttemptEvent>(OnVendorUIOpenAttempt);
     }
@@ -31,6 +34,11 @@ public sealed partial class CMUFoodlineSystem : EntitySystem
     }
 
     private void OnShutterShutdown(Entity<CMUKitchenShutterComponent> ent, ref ComponentShutdown args)
+    {
+        UpdateMap(Transform(ent).MapID);
+    }
+
+    private void OnShutterMapInit(Entity<CMUKitchenShutterComponent> ent, ref MapInitEvent args)
     {
         UpdateMap(Transform(ent).MapID);
     }
@@ -88,12 +96,39 @@ public sealed partial class CMUFoodlineSystem : EntitySystem
             return;
 
         var open = IsFoodlineOpen(map);
+
+        // The MRE gate reads these from the map entity, so keep the replicated copy current.
+        var mapEnt = _map.GetMapOrInvalid(map);
+        if (TryComp<CMUShipMREStateComponent>(mapEnt, out var mre))
+        {
+            var hasShutters = HasShutters(map);
+
+            if (mre.HasFoodline != hasShutters || mre.FoodlineOpen != open)
+            {
+                mre.HasFoodline = hasShutters;
+                mre.FoodlineOpen = open;
+                Dirty(mapEnt, mre);
+            }
+        }
+
         var vendors = EntityQueryEnumerator<CMUFoodlineVendorComponent, TransformComponent>();
         while (vendors.MoveNext(out var uid, out var vendor, out var xform))
         {
             if (xform.MapID == map)
                 SetOpen((uid, vendor), open);
         }
+    }
+
+    private bool HasShutters(MapId map)
+    {
+        var shutters = EntityQueryEnumerator<CMUKitchenShutterComponent, TransformComponent>();
+        while (shutters.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.MapID == map && !TerminatingOrDeleted(uid))
+                return true;
+        }
+
+        return false;
     }
 
     private void SetOpen(Entity<CMUFoodlineVendorComponent> ent, bool open)

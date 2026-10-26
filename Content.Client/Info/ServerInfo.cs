@@ -12,11 +12,13 @@ using Robust.Shared.Utility;
 namespace Content.Client.Info
 {
     /// <summary>
+    // CMU14
     ///     The lobby's round-info panel. Three bands on one screen: the planet and gamemode, then the
     ///     two forces under their own headings, then the player count and round timer.
     /// </summary>
     public sealed class ServerInfo : BoxContainer
     {
+        // CMU14
         private readonly Label _planet;
         private readonly Label _gamemode;
         private readonly BoxContainer _groups;
@@ -25,23 +27,30 @@ namespace Content.Client.Info
         public ServerInfo()
         {
             Orientation = LayoutOrientation.Vertical;
+            // CMU14
             HorizontalExpand = true;
 
+            // CMU14
             // Natural width, like the row labels below it - the leader beside it is what expands.
             _planet = new Label
             {
+                // CMU14
                 StyleClasses = { StyleNano.StyleClassCrtHeading },
             };
 
+            // CMU14
             // No ClipText without HorizontalExpand: a clipping Label measures at zero width and draws nothing.
             _gamemode = new Label
             {
+                // CMU14
                 StyleClasses = { StyleNano.StyleClassCrtFieldValue },
             };
 
+            // CMU14
             AddChild(new BoxContainer
             {
                 Orientation = LayoutOrientation.Horizontal,
+                // CMU14
                 HorizontalExpand = true,
                 SeparationOverride = 8,
                 Children = { _planet, Leader(), _gamemode },
@@ -83,30 +92,37 @@ namespace Content.Client.Info
                 SeparationOverride = 6,
                 Children =
                 {
+                    // CMU14
                     FieldLabel(Loc.GetString("lobby-info-players")),
                     PlayersLabel,
+                    // CMU14
                     Leader(),
                     FieldLabel(Loc.GetString("lobby-info-round-time")),
                     RoundTimeLabel,
                 },
+            // CMU14
             });
 
             _extraLines = new BoxContainer
             {
                 Orientation = LayoutOrientation.Vertical,
                 HorizontalExpand = true,
+                // CMU14
                 Margin = new Thickness(0, 4, 0, 0),
             };
             AddChild(_extraLines);
         }
 
+        // CMU14
         /// <summary>The round timer, driven per-frame by LobbyState.</summary>
         public Label RoundTimeLabel { get; }
 
+        // CMU14
         /// <summary>The player count, drawn beside the timer at the foot of the panel.</summary>
         public Label PlayersLabel { get; }
 
         /// <summary>
+        // CMU14
         ///     Sets the server's intro text. The first line is the server's own name and is dropped -
         ///     the housing's nameplate already says which server this is. Any further lines render
         ///     under the panel.
@@ -128,6 +144,7 @@ namespace Content.Client.Info
                     continue;
                 }
 
+                // CMU14
                 // The class opts out of the generic CRT body-text style; CrtLobbyTheme leaves it alone.
                 var label = new RichTextLabel
                 {
@@ -139,20 +156,25 @@ namespace Content.Client.Info
             }
         }
 
+        // CMU14
         /// <summary>Rebuilds the panel from the server's fields.</summary>
         public void SetRoundInfo(IReadOnlyList<LobbyRoundInfoField> fields)
         {
+            // CMU14
             _groups.DisposeAllChildren();
 
+            // CMU14
             if (fields.Count > 0)
                 _planet.Text = fields[0].Value;
 
+            // CMU14
             if (fields.Count > 1)
                 _gamemode.Text = fields[1].Value;
 
             if (fields.Count > 0)
                 PlayersLabel.Text = fields[^1].Value;
 
+            // CMU14
             string? openGroup = null;
             for (var i = 2; i < fields.Count - 1; i++)
             {
@@ -173,6 +195,7 @@ namespace Content.Client.Info
             }
         }
 
+        // CMU14
         private static BoxContainer Row(string label, string value, Color? colour, bool indent)
         {
             var valueLabel = new Label
@@ -217,12 +240,15 @@ namespace Content.Client.Info
             {
                 Text = text,
                 VerticalAlignment = VAlignment.Center,
+                // CMU14
                 StyleClasses = { StyleNano.StyleClassCrtFieldLabel },
             };
         }
 
+        // CMU14
         private static Color? ParseColour(string? hex)
         {
+            // CMU14
             return hex != null && Color.TryFromHex(hex, out var colour) ? colour : null;
         }
     }

@@ -1,3 +1,4 @@
+# CMU14: fork tool - renders the lobby housing screen edge sprites
 """
 Derives two screen textures from screen_<tone>.png: one with a square bottom edge and one with a
 square top edge.

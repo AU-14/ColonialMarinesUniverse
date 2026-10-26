@@ -26,6 +26,7 @@
             </BoxContainer>
             <alerts:AlertsUI Name="Alerts" Access="Protected" />
         </LayoutContainer>
+        <!-- CMU14 -->
         <!-- CMU: one ground for the whole panel, the menu bar on its own band, a heavy rule under it. -->
         <PanelContainer Name="SeparatedChatPanel" MinWidth="160" StyleClasses="CmuChatSidePanel">
             <BoxContainer Name="SeparatedChatContent" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="0">

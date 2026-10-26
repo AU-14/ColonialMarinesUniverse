@@ -15,6 +15,7 @@ using Content.Shared.Roles;
 using Content.Shared.StatusIcon;
 using Robust.Client.Console;
 using Robust.Client.GameObjects;
+// CMU14
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -27,6 +28,7 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client.LateJoin
 {
+    // CMU14
     /// <summary>
     ///     The rail-and-pane design from <c>docs/cmu/crt-joinmenu.html</c> (direction C), on real
     ///     stations, departments and jobs instead of invented ones. Role groups down a rail on the
@@ -41,6 +43,7 @@ namespace Content.Client.LateJoin
         [Dependency] private JobRequirementsManager _jobRequirements = default!;
         [Dependency] private IClientPreferencesManager _preferencesManager = default!;
         [Dependency] private IStylesheetManager _stylesheetManager = default!;
+        // CMU14
         [Dependency] private IResourceCache _resourceCache = default!;
         [Dependency] private ILogManager _logManager = default!;
 
@@ -55,11 +58,14 @@ namespace Content.Client.LateJoin
 
         private readonly Dictionary<NetEntity, Dictionary<string, List<JobButton>>> _jobButtons = new();
 
+        // CMU14
         private readonly List<StationSection> _sections = new();
 
         private readonly Control _base;
+        // CMU14
         private readonly LineEdit _filter;
 
+        // CMU14
         private PanelContainer _ground = default!;
         private CrtScreenControl _shaderPass = default!;
         private Control _cornerTicks = default!;
@@ -86,6 +92,7 @@ namespace Content.Client.LateJoin
         public LateJoinGui(string? factionFilter = null)
         {
             _factionFilter = factionFilter?.ToLowerInvariant();
+            // CMU14
             MinSize = new Vector2(700, 480);
             SetSize = new Vector2(820, 560);
             IoCManager.InjectDependencies(this);
@@ -100,16 +107,19 @@ namespace Content.Client.LateJoin
             {
                 Orientation = LayoutOrientation.Vertical,
                 HorizontalExpand = true,
+                // CMU14
                 // Top, not Stretch: the scroll below hands this the full window height, which Stretch would keep.
                 VerticalAlignment = VAlignment.Top,
                 SeparationOverride = 10,
                 Margin = new Thickness(8),
             };
 
+            // CMU14
             var scroll = new ScrollContainer
             {
                 HorizontalExpand = true,
                 VerticalExpand = true,
+                // CMU14
                 Children = { _base },
             };
 
@@ -173,10 +183,12 @@ namespace Content.Client.LateJoin
 
             _gameTicker.LobbyJobsAvailableUpdated += JobsAvailableUpdated;
             _configManager.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            // CMU14
             _configManager.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
         }
 
 
+        // CMU14
         private void OnCrtUiColorChanged(string _) => ApplyTheme();
 
         private void OnCrtUiEnabledChanged(bool _) => ApplyTheme();
@@ -186,6 +198,7 @@ namespace Content.Client.LateJoin
             Stylesheet = _stylesheetManager.SheetNano;
             CrtLobbyTheme.Apply(this);
 
+            // CMU14
             var crt = StyleNano.CrtUiEnabled;
             var header = FindControl<PanelContainer>("WindowHeader");
             var titleLabel = FindControl<Label>("TitleLabel");
@@ -278,6 +291,7 @@ namespace Content.Client.LateJoin
         {
             _base.RemoveAllChildren();
             _jobButtons.Clear();
+            // CMU14
             _sections.Clear();
 
             if (!_gameTicker.DisallowedLateJoin && _gameTicker.StationNames.Count == 0)
@@ -285,6 +299,7 @@ namespace Content.Client.LateJoin
 
             foreach (var (id, name) in _gameTicker.StationNames)
             {
+                // CMU14
                 var section = BuildStationSection(id, name);
                 _sections.Add(section);
             }
@@ -299,6 +314,7 @@ namespace Content.Client.LateJoin
 
                 foreach (var group in section.Groups)
                 {
+                    // CMU14
                     StyleRailEntry(group, group.Id == section.SelectedGroup);
 
                     foreach (var job in group.Jobs)
@@ -405,10 +421,12 @@ namespace Content.Client.LateJoin
                 {
                     Text = Loc.GetString("crew-manifest-button-label")
                 };
+                // CMU14
                 crewManifestButton.OnPressed += _ => _crewManifest.RequestCrewManifest(id);
                 body.AddChild(crewManifestButton);
             }
 
+            // CMU14
             var section = new StationSection(bannerName, bannerCount, noneLabel);
             _jobButtons[id] = new Dictionary<string, List<JobButton>>();
 
@@ -427,20 +445,25 @@ namespace Content.Client.LateJoin
                 var jobsAvailable = new List<JobPrototype>();
                 foreach (var jobId in department.Roles)
                 {
+                    // CMU14
                     if (!JobMatchesFilter(_factionFilter, jobId))
                         continue;
 
+                    // CMU14
                     if (!stationAvailable.ContainsKey(jobId))
                         continue;
 
+                    // CMU14
                     jobsAvailable.Add(_prototypeManager.Index<JobPrototype>(jobId));
                 }
 
+                // CMU14
                 if (JobUIComparer.TryCreate(
                         _prototypeManager,
                         _gameTicker.JobWeightsByStation.GetValueOrDefault(id),
                         out var comparer))
                 {
+                    // CMU14
                     jobsAvailable.Sort(comparer);
                 }
 
@@ -480,18 +503,23 @@ namespace Content.Client.LateJoin
                 {
                     Orientation = LayoutOrientation.Vertical,
                     HorizontalExpand = true,
+                    // CMU14
                     Name = group.Id,
                     Visible = false,
                     ToolTip = Loc.GetString("late-join-gui-jobs-amount-in-department-tooltip",
                         ("departmentName", deptName)),
                 };
+                // CMU14
                 paneList.AddChild(category);
 
+                // CMU14
                 var railGroup = new RailGroup(group.Id, deptName, category, dept.Color);
                 section.Groups.Add(railGroup);
 
+                // CMU14
                 var header = new Label
                 {
+                    // CMU14
                     Text = group.Name,
                     Visible = false,
                     FontOverride = StyleNano.GetCrtFont(_resourceCache, RailSize),
@@ -501,8 +529,10 @@ namespace Content.Client.LateJoin
                 category.AddChild(header);
                 railGroup.Header = header;
 
+                // CMU14
                 var openCount = 0;
 
+                // CMU14
                 foreach (var prototype in group.Jobs)
                 {
                     var value = stationAvailable[prototype.ID];
@@ -510,15 +540,18 @@ namespace Content.Client.LateJoin
                     var jobLabel = new Label { HorizontalExpand = true, ClipText = true, VerticalAlignment = VAlignment.Center };
                     var countLabel = new Label
                     {
+                        // CMU14
                         Align = Label.AlignMode.Right,
                         VerticalAlignment = VAlignment.Center,
                         MinWidth = 52,
                     };
 
+                    // CMU14
                     var jobButton = new JobButton(jobLabel, countLabel, prototype.ID, prototype.LocalizedName, value);
 
                     var jobSelector = new BoxContainer
                     {
+                        // CMU14
                         Orientation = LayoutOrientation.Horizontal,
                         HorizontalExpand = true,
                         SeparationOverride = 9,
@@ -553,17 +586,21 @@ namespace Content.Client.LateJoin
                     }
                     else
                     {
+                        // CMU14
                         jobButton.SetState(value == 0 ? JobButton.State.Full : JobButton.State.Open);
                         if (value != 0)
                             openCount++;
                     }
 
+                    // CMU14
                     if (!_jobButtons[id].ContainsKey(prototype.ID))
                         _jobButtons[id][prototype.ID] = new List<JobButton>();
 
+                    // CMU14
                     _jobButtons[id][prototype.ID].Add(jobButton);
                 }
 
+                // CMU14
                 railList.AddChild(BuildRailEntry(section, railGroup, group.Name, openCount));
 
                 return openCount;
@@ -593,6 +630,7 @@ namespace Content.Client.LateJoin
                 segments[^1].Jobs.Add(job);
             }
 
+            // CMU14
             return segments.Count > 1 ? segments : whole;
         }
 
@@ -891,8 +929,10 @@ namespace Content.Client.LateJoin
                 _jobRequirements.Updated -= RebuildUI;
                 _gameTicker.LobbyJobsAvailableUpdated -= JobsAvailableUpdated;
                 _configManager.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+                // CMU14
                 _configManager.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
                 _jobButtons.Clear();
+                // CMU14
                 _sections.Clear();
             }
         }
@@ -900,6 +940,7 @@ namespace Content.Client.LateJoin
 
     sealed class JobButton : ContainerButton
     {
+        // CMU14
         /// <summary>
         ///     Why a row cannot be taken, or that it can. Open and <see cref="Full"/> swap as slots
         ///     come and go; <see cref="Locked"/> is decided once, when the row is built.
@@ -912,25 +953,30 @@ namespace Content.Client.LateJoin
         }
 
         public Label JobLabel { get; }
+        // CMU14
         public Label CountLabel { get; }
         public string JobId { get; }
         public string JobLocalisedName { get; }
         public int? Amount { get; private set; }
 
+        // CMU14
         private State _state = State.Open;
         private bool _initialised;
 
         public JobButton(Label jobLabel, Label countLabel, ProtoId<JobPrototype> jobId, string jobLocalisedName, int? amount)
         {
             JobLabel = jobLabel;
+            // CMU14
             CountLabel = countLabel;
             JobId = jobId;
             JobLocalisedName = jobLocalisedName;
+            // CMU14
             JobLabel.Text = JobLocalisedName;
             RefreshLabel(amount);
             _initialised = true;
         }
 
+        // CMU14
         /// <summary>
         ///     Both signals for a state are set here together - the text colour and what the count
         ///     column says - so neither can drift out of step with the other.
@@ -954,6 +1000,7 @@ namespace Content.Client.LateJoin
 
             Amount = amount;
 
+            // CMU14
             // Slots can drain to zero while the window is open, so an Open row has to fall to Full itself.
             if (_initialised && _state != State.Locked)
                 SetState(amount == 0 ? State.Full : State.Open);

@@ -1697,7 +1697,8 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 0.8341541,1.5
       parent: 1
-- proto: CMUAirFillerVent
+# CMU14
+- proto: CMULifeSupportVent
   entities:
   - uid: 78
     components:

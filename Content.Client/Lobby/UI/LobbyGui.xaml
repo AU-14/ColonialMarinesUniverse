@@ -21,11 +21,13 @@
                 <Control Name="DefaultState" VerticalExpand="True">
                     <BoxContainer Name="TopLeft" Orientation="Vertical">
                         <!-- Left Top Panel -->
+                        <!-- CMU14 -->
                         <!-- Ticked panel so this reads as the same piece of equipment as a VotePopup. -->
                         <PanelContainer StyleClasses="CrtPanelTicked" HorizontalAlignment="Left" Name="LeftSideTop"
                                         VerticalAlignment="Top">
                             <BoxContainer Orientation="Vertical" SeparationOverride="5" MaxWidth="1040"
                                           MinWidth="{x:Static cmu:CmuPanelMetrics.LobbyActionColumnWidth}">
+                                <!-- CMU14 -->
                                 <!-- Ranked, not a grid of equals. -->
                                 <BoxContainer Name="ActionButtons" Orientation="Vertical" HorizontalExpand="True"
                                               SeparationOverride="{x:Static cmu:CmuPanelMetrics.GroupSeparation}">
@@ -35,6 +37,7 @@
                                             ToolTip="{Loc 'cmu-lobby-clock-restore-tooltip'}"
                                             HorizontalExpand="True" Visible="False"
                                             MinHeight="{x:Static cmu:CmuPanelMetrics.Row}" />
+                                    <!-- CMU14 -->
                                     <!-- CrtReadyToggle, not ButtonBig: this control says which of two
                                          states you are in, where a button box says only that it is
                                          pressable. CrtLobbyTheme withholds its own class from this. -->
@@ -48,6 +51,7 @@
                                             StyleClasses="ButtonBig" HorizontalExpand="True"
                                             MinHeight="{x:Static cmu:CmuPanelMetrics.Row}"
                                             Visible="False" />
+                                    <!-- CMU14 -->
                                     <!-- A rule, not just a gap. -->
                                     <PanelContainer StyleClasses="CrtDivider" />
                                     <cc:UICommandButton Command="observe" Name="ObserveButton" Access="Public"
@@ -57,6 +61,7 @@
                                                         WindowType="{x:Type lobbyUi:ObserveWarningWindow}" />
                                 </BoxContainer>
 
+                                <!-- CMU14 -->
                                 <!-- Reference links share the action grid's metrics but sit under a rule,
                                      so Rules doesn't read as another faction choice. -->
                                 <PanelContainer StyleClasses="CrtDivider" />
@@ -95,6 +100,7 @@
             <PanelContainer Name="RightSide" Access="Public" StyleClasses="CrtScreenPanel" HorizontalAlignment="Right" VerticalExpand="True"
                             VerticalAlignment="Stretch">
                 <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                <!-- CMU14 -->
                 <!-- The nameplate, on the plastic above the screen rather than printed inside it. It
                      cannot sit in the captured subtree or the roll bar would shear it. -->
                 <BoxContainer Name="LobbyPlate" Orientation="Horizontal" HorizontalExpand="True"
@@ -106,6 +112,7 @@
                            VAlign="Center" Visible="False" />
                 </BoxContainer>
 
+                <!-- CMU14 -->
                 <!-- The server/character switch: a two-position detent toggle on the case rather than a
                      tab on the glass. Housing only; with it off both blocks stay stacked. -->
                 <PanelContainer Name="PanelSwitch" Access="Public" HorizontalExpand="True"
@@ -126,6 +133,7 @@
                     <Control Name="LobbyCrtContent" HorizontalExpand="True">
                         <PanelContainer Name="LobbyCrtBacking" HorizontalExpand="True"
                                         VerticalExpand="True" />
+                        <!-- CMU14 -->
                         <!-- The inset lives here, not on RightSide. -->
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True"
                                       Margin="10 8 10 8">
@@ -168,6 +176,7 @@
                             <!-- RowCompact, not Header. The old row's buttons were centred inside a
                                  40px line at their own natural height; these fill the band, so the
                                  same 40 made every command twice as tall as its label needs. -->
+                            <!-- CMU14 -->
                             <PanelContainer Name="CommandBand" Access="Public" StyleClasses="CrtCommandBand"
                                             MinHeight="{x:Static cmu:CmuPanelMetrics.RowCompact}">
                                 <BoxContainer Orientation="Horizontal" Name="HeaderContainer" Access="Public"
@@ -179,6 +188,7 @@
                                             StyleClasses="CrtCommandCell" HorizontalExpand="True" VerticalExpand="True"
                                             Visible="False" />
                                     <!-- CMU14 End -->
+                                    <!-- CMU14 -->
                                     <vote:VoteCallMenuButton Name="CallVoteButton" Access="Public" StyleClasses="CrtCommandCell"
                                                              HorizontalExpand="True" VerticalExpand="True" />
                                     <Button Name="OptionsButton" Access="Public" StyleClasses="CrtCommandCell"
@@ -189,6 +199,7 @@
                                          panel, not a fifth command, and stretching it to a fifth of
                                          the row would say otherwise. Wrapped because a TextureButton
                                          has no stylebox of its own to carry the cell fill. -->
+                                    <!-- CMU14 -->
                                     <PanelContainer Name="CollapseCell" Access="Public"
                                                     StyleClasses="CrtCommandCellPanel" VerticalExpand="True">
                                         <TextureButton Name="CollapseButton"
@@ -210,16 +221,19 @@
                                  background: the shader writes opaque, so without something solid underneath
                                  it the transparent gaps between cells would come back as black. It is the
                                  panel colour, so it is invisible against the CrtPanel behind it. -->
+                            <!-- CMU14 -->
                             <Control Name="ServerInfoScreen" Access="Public" HorizontalExpand="True" VerticalExpand="True" Margin="0 0 0 3">
                                 <Control Name="ServerInfoContent" HorizontalExpand="True" VerticalExpand="True">
                                     <PanelContainer Name="ServerInfoBacking" HorizontalExpand="True"
                                                     VerticalExpand="True" />
+                                    <!-- CMU14 -->
                                     <!-- Inset, not flush. -->
                                     <info:ServerInfo Name="ServerInfo" Access="Public" VerticalExpand="True"
                                            HorizontalExpand="True" />
                                 </Control>
                             </Control>
                             <controls:HSpacer Spacing="5" />
+                            <!-- CMU14 -->
                             <!-- Expands so its own head/body/foot spacers have slack: at natural height
                                  the foot sits under the body rather than on the bottom edge. -->
                             <lobbyUi:LobbyCharacterPreviewPanel Name="CharacterPreview" Access="Public"
@@ -229,6 +243,7 @@
                     <cmu:CrtScreenControl Name="LobbyCrt" HorizontalExpand="True"
                                           VerticalExpand="True" />
                 </Control>
+                <!-- CMU14 -->
                 </PanelContainer>
                 <!-- The join - and a sibling of the two screens, not something drawn inside one of them. -->
                 <PanelContainer Name="LobbySeam" Access="Public" HorizontalExpand="True"
@@ -242,10 +257,12 @@
                         <cmu:CrtScanlineOverlay Name="ChatScanlines" HorizontalExpand="True"
                                                 VerticalExpand="True" />
                     </Control>
+                <!-- CMU14 -->
                 </PanelContainer>
                 </BoxContainer>
             </PanelContainer>
         </SplitContainer>
+        <!-- CMU14 -->
         <!-- Takes the collapse arrow's place, so it has to land on the same pixel or the arrow jumps as
              the panel opens and closes. -->
         <PanelContainer Name="ExpandPanel"
@@ -263,6 +280,7 @@
             </BoxContainer>
         </PanelContainer>
     </BoxContainer>
+    <!-- CMU14 -->
     <!-- The round clock. -->
     <LayoutContainer Name="ClockLayer" Access="Public" MouseFilter="Ignore"
                      HorizontalExpand="True" VerticalExpand="True">
@@ -273,6 +291,7 @@
                 <BoxContainer Orientation="Horizontal" SeparationOverride="4">
                     <Label Name="ClockCaption" Access="Public" Align="Center"
                            StyleClasses="CrtDimText" HorizontalExpand="True" />
+                    <!-- CMU14 -->
                     <!-- CrtLobbyTheme never reaches this subtree (it runs on MainContainer only), so
                          CmuIconButton colours itself. -->
                     <cmu:CmuIconButton Name="ClockMinimizeButton" Access="Public"

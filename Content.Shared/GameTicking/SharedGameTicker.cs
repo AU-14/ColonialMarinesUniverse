@@ -119,6 +119,7 @@ namespace Content.Shared.GameTicking
     }
 
     /// <summary>
+    // CMU14
     ///     One line of the lobby's round-info panel: a label and its value, optionally belonging to a
     ///     named group. Sent as structured fields rather than pre-formatted text so the client can lay
     ///     them out however it likes and keep them aligned at any panel width.
@@ -134,6 +135,7 @@ namespace Content.Shared.GameTicking
         /// </summary>
         public string? Color { get; }
 
+        // CMU14
         /// <summary>
         ///     Heading for the run of fields this one belongs to, e.g. "GOVFOR". Consecutive fields
         ///     sharing a group are drawn under one heading, which is what lets the two sides be named
@@ -146,6 +148,7 @@ namespace Content.Shared.GameTicking
             Label = label;
             Value = value;
             Color = color;
+            // CMU14
             Group = group;
         }
     }

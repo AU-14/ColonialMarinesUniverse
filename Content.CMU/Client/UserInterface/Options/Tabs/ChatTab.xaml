@@ -20,6 +20,15 @@
                     <ui:OptionDropDown Name="ChatBigFontDropDown" Title="{Loc 'ui-options-crt-chat-big-font'}" ToolTip="{Loc 'ui-options-crt-chat-big-font-tooltip'}" />
                     <ui:OptionDropDown Name="ChatRowTintDropDown" Title="{Loc 'ui-options-crt-chat-row-tint'}" ToolTip="{Loc 'ui-options-crt-chat-row-tint-tooltip'}" />
                     <ui:OptionSlider Name="ChatWindowOpacitySlider" Title="{Loc 'ui-options-chat-window-opacity'}" />
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="ChatSpeechSoundsCheckBox" Text="{Loc 'cmu-ui-options-chat-speech-sounds'}" ToolTip="{Loc 'cmu-ui-options-chat-speech-sounds-tooltip'}" />
+                            <CheckBox Name="ChatResetToLocalCheckBox" Text="{Loc 'cmu-ui-options-chat-reset-to-local'}" ToolTip="{Loc 'cmu-ui-options-chat-reset-to-local-tooltip'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="ChatCenterInputCheckBox" Text="{Loc 'cmu-ui-options-chat-center-input'}" ToolTip="{Loc 'cmu-ui-options-chat-center-input-tooltip'}" />
+                        </BoxContainer>
+                    </BoxContainer>
                 </cmu:CmuOptionSection>
 
                 <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-chat-bubbles'}">
@@ -44,9 +53,13 @@
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
                             <CheckBox Name="ExamineLogInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-log-in-chat'}" ToolTip="{Loc 'cmu-ui-options-examine-log-in-chat-tooltip'}" />
                             <CheckBox Name="ChatGhostFollowButton" Text="{Loc 'cmu-ui-options-chat-follow-button'}" ToolTip="{Loc 'cmu-ui-options-chat-follow-button-tooltip'}" />
+                            <CheckBox Name="PopupsInChatCheckBox" Text="{Loc 'cmu-ui-options-popups-in-chat'}" ToolTip="{Loc 'cmu-ui-options-popups-in-chat-tooltip'}" />
+                            <CheckBox Name="HidePopupsOnScreenCheckBox" Text="{Loc 'cmu-ui-options-hide-popups-on-screen'}" ToolTip="{Loc 'cmu-ui-options-hide-popups-on-screen-tooltip'}" />
                         </BoxContainer>
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
                             <CheckBox Name="ExamineFullTextInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-full-text-in-chat'}" ToolTip="{Loc 'cmu-ui-options-examine-full-text-in-chat-tooltip'}" />
+                            <CheckBox Name="ExamineWoundsInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-wounds-in-chat'}" />
+                            <CheckBox Name="HideExamineTooltipCheckBox" Text="{Loc 'cmu-ui-options-hide-examine-tooltip'}" ToolTip="{Loc 'cmu-ui-options-hide-examine-tooltip-tooltip'}" />
                         </BoxContainer>
                     </BoxContainer>
                 </cmu:CmuOptionSection>

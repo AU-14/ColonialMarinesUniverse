@@ -16,7 +16,9 @@ public sealed class DropshipNavigationTacticalLandBuiState(
     bool canMoveDown,
     int rotationDegrees,
     Dictionary<DoorLocation, bool> doorLockStatus,
-    bool remoteControlStatus) : BoundUserInterfaceState
+    bool remoteControlStatus,
+    bool hasFirearm,
+    bool firearmArmed) : BoundUserInterfaceState
 {
     public readonly NetEntity? Eye = eye;
     public readonly bool ClearForLanding = clearForLanding;
@@ -26,6 +28,9 @@ public sealed class DropshipNavigationTacticalLandBuiState(
     public readonly int RotationDegrees = rotationDegrees;
     public readonly Dictionary<DoorLocation, bool> DoorLockStatus = doorLockStatus;
     public readonly bool RemoteControlStatus = remoteControlStatus;
+    // CMU14: gunship firearm fire-control toggle
+    public readonly bool HasFirearm = hasFirearm;
+    public readonly bool FirearmArmed = firearmArmed;
 }
 
 [Serializable, NetSerializable]

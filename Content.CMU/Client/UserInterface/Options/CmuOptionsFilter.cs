@@ -144,26 +144,29 @@ public sealed class CmuOptionsFilter
 
         switch (node)
         {
-            case CmuSpeciesSoundMatrix matrix:
-            {
-                var matches = 0;
-                foreach (var (row, text) in matrix.SpeciesRows)
-                {
-                    if (!Remember(row))
-                        continue;
-
-                    var show = Matches($"{context} {text}", tokens);
-                    row.Visible = show;
-                    if (show)
-                        matches++;
-                }
-
-                if (Remember(matrix.Header))
-                    matrix.Header.Visible = matches > 0;
-
-                matrix.Visible = matches > 0;
-                return matches;
-            }
+            // CMU14: species sound matrix disabled - we ship humans only and never will support
+            // other species. Commented out with the matrix in CmuSpeciesSoundMatrix.cs so a
+            // downstream fork can revive the pair.
+            // case CmuSpeciesSoundMatrix matrix:
+            // {
+            //     var matches = 0;
+            //     foreach (var (row, text) in matrix.SpeciesRows)
+            //     {
+            //         if (!Remember(row))
+            //             continue;
+            //
+            //         var show = Matches($"{context} {text}", tokens);
+            //         row.Visible = show;
+            //         if (show)
+            //             matches++;
+            //     }
+            //
+            //     if (Remember(matrix.Header))
+            //         matrix.Header.Visible = matches > 0;
+            //
+            //     matrix.Visible = matches > 0;
+            //     return matches;
+            // }
 
             // The paired-column layouts.
             case BoxContainer layout:

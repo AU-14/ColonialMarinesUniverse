@@ -12,6 +12,7 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> CMUVoteUiLarge =
         CVarDef.Create("cmu.vote_ui_large", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    // CMU14
     public const string CMUMenuBarStyleOutlined = "outlined";
     public const string CMUMenuBarStyleRaised = "raised";
 

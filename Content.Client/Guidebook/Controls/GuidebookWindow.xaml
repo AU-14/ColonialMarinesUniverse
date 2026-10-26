@@ -1,3 +1,4 @@
+<!-- CMU14: wider window for the section list -->
 <controls:FancyWindow xmlns="https://spacestation14.io"
                 xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
                 xmlns:fancyTree="clr-namespace:Content.Client.UserInterface.Controls.FancyTree"
@@ -6,6 +7,7 @@
                 MinSize="100 200"
                 Resizable="True"
                 Title="{Loc 'guidebook-window-title'}">
+    <!-- CMU14 -->
     <PanelContainer Name="Housing" StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="6">
             <!-- CMU: history keys and the path to the open page, on the housing above the screen. -->
@@ -17,6 +19,7 @@
                     <Button Name="HomeButton" Text="{Loc 'ui-rules-button-home'}"/>
                 </BoxContainer>
             </BoxContainer>
+            <!-- CMU14 -->
             <SplitContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" Name="Split">
                 <!-- Contents: no frame of its own, it sits on the window ground. -->
                 <BoxContainer Name="TreeBox" Orientation="Vertical" MinWidth="250" SeparationOverride="4" Margin="2 0 8 0">
@@ -43,6 +46,7 @@
                             <fancyTree:FancyTree Name="TableOfContents" HorizontalExpand="True" Margin="4"/>
                         </PanelContainer>
 
+            <!-- CMU14: single scroll container for the page body -->
                         <ScrollContainer Name="Scroll" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
                             <Control>
                                 <BoxContainer Orientation="Vertical" Name="EntryContainer" Margin="10 8" Visible="False">

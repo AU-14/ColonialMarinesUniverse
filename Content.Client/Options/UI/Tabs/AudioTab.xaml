@@ -4,13 +4,16 @@
          xmlns:s="clr-namespace:Content.Client.Stylesheets"
          xmlns:cmu="clr-namespace:Content.Client.CMU14.UserInterface.Options">
     <BoxContainer Orientation="Vertical">
+        <!-- CMU14 -->
         <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
             <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
 
+                <!-- CMU14 -->
                 <!-- Master first. These used to be ordered by contributing fork, which put the two niche
                      RMC volumes above the control every player reaches for. -->
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-volume-label'}">
                     <ui:OptionDropDown Name="DropDownAudioDevice" Title="{Loc 'ui-options-audio-device'}" />
+                    <!-- CMU14 -->
                     <ui:OptionSlider Name="SliderVolumeMaster" Title="{Loc 'cmu-ui-options-master-volume'}" />
                     <ui:OptionSlider Name="SliderVolumeMidi" Title="{Loc 'cmu-ui-options-midi-volume'}" />
                     <ui:OptionSlider Name="SliderVolumeAmbientMusic" Title="{Loc 'cmu-ui-options-ambient-music-volume'}" />
@@ -20,11 +23,13 @@
                     <!-- cmu edit start: jukebox volume -->
                     <ui:OptionSlider Name="SliderVolumeJukebox" Title="{Loc 'cmu-ui-options-jukebox-volume'}" />
                     <!-- cmu edit end -->
+                    <!-- CMU14 -->
                     <ui:OptionSlider Name="SliderVolumeCassettes" Title="{Loc 'cmu-ui-options-cassettes-volume'}" />
                     <ui:OptionSlider Name="SliderVolumeHijackSong" Title="{Loc 'cmu-ui-options-hijack-song-volume'}" />
                 </cmu:CmuOptionSection>
 
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-audio-toggles'}">
+                    <!-- CMU14 -->
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
                             <CheckBox Name="LobbyMusicCheckBox" Text="{Loc 'cmu-ui-options-lobby-music'}" />
@@ -49,6 +54,7 @@
                     <ui:OptionSlider Name="SliderMaxAmbienceSounds" Title="{Loc 'cmu-ui-options-ambience-max-sounds'}" ToolTip="{Loc 'cmu-ui-options-ambience-max-sounds-tooltip'}" />
                 </cmu:CmuOptionSection>
 
+                <!-- CMU14: mono echo section -->
                 <!-- Mono's audio propagation. -->
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-general-area-echo'}">
                     <CheckBox Name="AreaEchoCheckBox" Text="{Loc 'cmu-ui-options-area-echo'}" ToolTip="{Loc 'cmu-ui-options-area-echo-tooltip'}" />
@@ -57,6 +63,7 @@
                     </cmu:CmuDependentOptions>
                 </cmu:CmuOptionSection>
 
+                <!-- CMU14: self voicelines section -->
                 <cmu:CmuOptionSection Title="{Loc 'rmc-ui-audio-voicelines-self-header'}">
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
@@ -68,11 +75,13 @@
                     </BoxContainer>
                 </cmu:CmuOptionSection>
 
-                <!-- Thirteen species by two sound kinds, filled in code - see CmuSpeciesSoundMatrix.
-                     Collapsed by default: it is the one genuinely long group left in the menu. -->
+                <!-- CMU14: species sound toggles removed - we ship humans only and never will support
+                     other species (dwarves, lizards, moths etc.). Kept for any downstream fork that
+                     wants it; requires CmuSpeciesSoundMatrix.cs and the Species array in AudioTab.xaml.cs.
                 <cmu:CmuOptionSection Name="SpeciesSection" Title="{Loc 'cmu-ui-options-group-species-sounds'}">
                     <cmu:CmuSpeciesSoundMatrix Name="SpeciesMatrix" />
                 </cmu:CmuOptionSection>
+                -->
 
             </BoxContainer>
         </ScrollContainer>

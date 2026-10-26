@@ -14,10 +14,14 @@ role_timers = false
 role_whitelist = false
 admin_job_tracking = true
 role_loadout_timers = false
+auto_pause_empty = false
 
 [cmu]
 # enable in-game: "> cvar cmu.server_performance.log_enabled true"
 server_performance.log_enabled = false
+
+[cmu.game]
+vote_start_delay = 0  # stops "Round start has been paused." on localhost
 
 [rmc]
 distress_xenos_minimum = 0  # stop blocking distress testing
@@ -40,6 +44,7 @@ tickrate = 30
 max_rapid_connections = 413
 max_ip_connections = 413
 
+# CMU14
 [status]
 # localhost only, matches the net.bindto flag in the ss14 wrapper
 bind = "127.0.0.1:1212"
@@ -78,6 +83,11 @@ time = 0
 afk_time = 0
 see_own_notes = true
 new_player_threshold = 120
+
+# CMU14
+[console]
+# named host for non-loopback binds; loopback is auto-host via loginlocal anyway
+login_host_user = "localhost@JoeGenero"
 
 [ic]
 # random_characters = true

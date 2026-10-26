@@ -76,6 +76,7 @@ namespace Content.Client.Stylesheets
 
         public const string StyleClassCrtButton = "CrtButton";
 
+        // CMU14
         /// <summary>A row in a long selectable list - the late-join roster.</summary>
         public const string StyleClassCrtListRow = "CrtListRow";
         public const string StyleClassCrtAttentionButton = "CrtAttentionButton";
@@ -130,6 +131,7 @@ namespace Content.Client.Stylesheets
         public const string StyleClassCrtHeadingBigDanger = "CrtHeadingBigDanger";
         public const string StyleClassCrtRichText = "CrtRichText";
 
+        // CMU14
         /// <summary>
         ///     A mixed-case body face for prose meant to be read at length rather than scanned - the
         ///     join-round faction blurbs.
@@ -214,6 +216,7 @@ namespace Content.Client.Stylesheets
         public const string StyleClassCrtSliderValue = "CrtSliderValue";
         public const string StyleClassCrtOptionRow = "CrtOptionRow";
 
+        // CMU14
         /// <summary>
         ///     Options menu only: underlined text tabs over an unbordered panel, and checkboxes drawn
         ///     from the monotone texture in the theme colour. Added by <c>CmuOptionsLook</c> on top of
@@ -351,6 +354,7 @@ namespace Content.Client.Stylesheets
         public const string StyleClassCrtItemList = "CrtItemList";
         public const string StyleClassCrtScrollBar = "CrtScrollBar";
 
+        // CMU14
         // The ghost roles window is the one themed window that is not a green terminal - see HivePalette.
         public const string StyleClassHiveLineEdit = "HiveLineEdit";
         public const string StyleClassHiveScrollBar = "HiveScrollBar";
@@ -426,6 +430,7 @@ namespace Content.Client.Stylesheets
             _crtUiEnabled = enabled;
         }
 
+        // CMU14
         private static string _chatHousing = CmuHousingPalette.Off;
 
         /// <summary>The <c>cmu.chat_housing</c> tone, or <see cref="CmuHousingPalette.Off"/>.</summary>
@@ -764,6 +769,7 @@ namespace Content.Client.Stylesheets
         private static StyleRule[] BuildCrtRules(IResourceCache resCache, out CrtShared shared)
         {
             var notoSans10 = resCache.NotoStack(size: 10);
+            // CMU14
             var monotoneCheckChecked = resCache.GetTexture("/Textures/Interface/Nano/Monotone/monotone_checkbox_checked.svg.96dpi.png");
             var monotoneCheckUnchecked = resCache.GetTexture("/Textures/Interface/Nano/Monotone/monotone_checkbox_unchecked.svg.96dpi.png");
             var notoSans12 = resCache.NotoStack(size: 12);
@@ -825,6 +831,7 @@ namespace Content.Client.Stylesheets
             var crtClockFont = useCrtUi ? GetCrtFont(resCache, 22) : notoSansBold28;
             var crtRichTextFont = useCrtUi ? uavOsd14 : notoSans12;
 
+            // CMU14
             // Mixed-case and smaller than crtChatAnnouncementFont: prose in a wide column, not a narrow one.
             var crtProseFont = useCrtUi ? GetCrtChatFont(resCache, 10) : notoSans10;
 
@@ -1126,6 +1133,7 @@ namespace Content.Client.Stylesheets
             // The bottom rule is what separates back-to-back toggles: a run of them reads as a list
             // of rows instead of one undifferentiated block, which matters most where several are
             // checked at once and their fills would otherwise merge.
+            // CMU14
             // No rule under the row. There are 84 checkboxes in the options menu and a line under
             // every one of them is what made it read as busy - the same fault CrtTerminalPalette was
             // written to fix everywhere else, where surfaces are told apart by fill rather than by
@@ -1137,6 +1145,7 @@ namespace Content.Client.Stylesheets
             var crtCheckBox = new StyleBoxFlat
             {
                 BackgroundColor = Color.Transparent,
+                // CMU14
                 BorderColor = Color.Transparent,
                 BorderThickness = new Thickness(0),
                 ContentMarginLeftOverride = 2,
@@ -1157,10 +1166,12 @@ namespace Content.Client.Stylesheets
             // "on"; that is what the control is for.
             var crtCheckBoxPressed = new StyleBoxFlat(crtCheckBox);
 
+            // CMU14
             // Spacing for a slider or dropdown row, and nothing else.
             var crtOptionRow = new StyleBoxFlat
             {
                 BackgroundColor = Color.Transparent,
+                // CMU14
                 BorderColor = Color.Transparent,
                 BorderThickness = new Thickness(0),
                 ContentMarginLeftOverride = 2,
@@ -1409,6 +1420,7 @@ namespace Content.Client.Stylesheets
                 BackgroundColor = CrtTerminalPalette.Surface1,
             };
 
+            // CMU14
             // List rows.
             var crtListRow = new CrtStyleBox
             {
@@ -1833,6 +1845,7 @@ namespace Content.Client.Stylesheets
                 BorderColor = CrtGreenSoft.WithAlpha(0.8f)
             };
 
+            // CMU14
             var hiveLineEdit = new CrtStyleBox
             {
                 BackgroundColor = HivePalette.Surface0,
@@ -2103,6 +2116,7 @@ namespace Content.Client.Stylesheets
                     .Prop(ContainerButton.StylePropertyStyleBox, crtCheckBoxPressed)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
 
+                // CMU14
                 Element<TextureRect>().Class(CheckBox.StyleClassCheckBox).Class(StyleClassCmuOptionCheck)
                     .Prop(TextureRect.StylePropertyTexture, monotoneCheckUnchecked)
                     .Prop(Control.StylePropertyModulateSelf, CrtGreen.WithAlpha(0.6f)),
@@ -2171,6 +2185,7 @@ namespace Content.Client.Stylesheets
                     .Prop(ContainerButton.StylePropertyStyleBox, crtButtonDisabled)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
 
+                // CMU14
                 Element<ContainerButton>().Class(StyleClassCrtListRow)
                     .Prop(ContainerButton.StylePropertyStyleBox, crtListRow)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
@@ -2377,6 +2392,7 @@ namespace Content.Client.Stylesheets
                     // gap between lines. Tune this if CRT body text looks cramped or too airy.
                     .Prop(nameof(RichTextLabel.LineHeightScale), 1.25f),
 
+                // CMU14
                 Element<RichTextLabel>().Class(StyleClassCrtProseText)
                     .Prop("font", crtProseFont)
                     .Prop(nameof(RichTextLabel.LineHeightScale), 1.2f),
@@ -2453,6 +2469,7 @@ namespace Content.Client.Stylesheets
                     .Prop(LineEdit.StylePropertyCursorColor, crtHeadingColor)
                     .Prop(LineEdit.StylePropertySelectionColor, crtSelectionColor),
 
+                // CMU14
                 Element<LineEdit>().Class(StyleClassHiveLineEdit)
                     .Prop(LineEdit.StylePropertyStyleBox, hiveLineEdit)
                     .Prop("font", crtLineEditFont)
@@ -2506,6 +2523,7 @@ namespace Content.Client.Stylesheets
                     .Prop(TabContainer.stylePropertyTabFontColor, crtHeadingColor)
                     .Prop(TabContainer.StylePropertyTabFontColorInactive, crtDimTextColor),
 
+                // CMU14
                 // Class + pseudo outranks StyleNano's MenuButton rules; ModulateSelf undoes their slate tint.
                 Element<MenuButton>().Class(StyleClassCmuMenuKeyOutlined).Pseudo(ContainerButton.StylePseudoClassNormal)
                     .Prop(ContainerButton.StylePropertyStyleBox, menuKeyOutlined)

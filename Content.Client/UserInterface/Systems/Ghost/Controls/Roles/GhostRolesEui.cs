@@ -101,6 +101,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                 foreach (var force in ghostState.Forces)
                     _window.AddForceEntry(force);
 
+                // CMU14
                 // TODO: role.Requirements value doesn't work at all as an equality key, this must be fixed
                 // Grouping roles. Category joins the key so a role offered by two factions - a working
                 // joe on the colony and one aboard a corporate vessel - does not end up under one
@@ -115,6 +116,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                             role.Requirements,
                             null,
                             out var reason),
+                        // CMU14
                         reason,
                         role.Category));
 
@@ -127,6 +129,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                     var prototypesAllowed = group.Key.Item3;
 
                     // Adding a new role
+                    // CMU14
                     _window.AddEntry(name, description, group.Key.Category, prototypesAllowed, reason, group, spriteSystem);
                 }
             }

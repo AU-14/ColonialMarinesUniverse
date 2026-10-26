@@ -1,6 +1,7 @@
 using Content.Server.CMU14.Administration.Console;
 using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.HelpRelay;
+using Content.Server.CMU14.LinkAccount;
 using Content.Server.CMU14.Yautja;
 using Content.Server._RMC14.Actions;
 using Content.Server._RMC14.Admin;
@@ -101,7 +102,9 @@ internal static class ServerContentIoC
         // CMU14
         deps.Register<ServerLogsDownloadManager>();
         deps.Register<ICMUServerPerformanceDiagnostics, CMUServerPerformanceDiagnosticsManager>();
+        // CMU14
         deps.Register<HelpRelayManager>();
+        deps.Register<DiscordLinkAccountManager>();
 
         // RMC14
         deps.Register<LinkAccountManager>();

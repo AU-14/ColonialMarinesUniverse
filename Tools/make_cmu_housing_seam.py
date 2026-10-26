@@ -1,3 +1,4 @@
+# CMU14: fork tool - stitches the lobby housing seam sprites
 """
 Generates the housing seam tile: a strip of the case's own plastic laid between two screens, so the
 housing itself says they are two separate tubes rather than one screen with a line drawn on it.

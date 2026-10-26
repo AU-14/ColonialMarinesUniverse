@@ -38,7 +38,7 @@
                             Visible="False" />
                     <Button Name="TeleportButton" Access="Public" Text="Teleport"
                             Visible="False" />
-                    <!-- CMU14: promote this conversation into a bug report (BUGHELP-DESIGN.md §4.2). -->
+                    <!-- CMU14: promote this conversation into a bug report -->
                     <Button Name="PromoteButton" Access="Public" Text="File bug report"
                             Visible="False" />
                 </BoxContainer>

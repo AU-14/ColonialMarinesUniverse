@@ -11,6 +11,7 @@
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
                             <CheckBox Name="ShowHeldItemCheckBox" Text="{Loc 'ui-options-show-held-item'}" />
                             <CheckBox Name="RMCShowNewPlayerIcons" Text="{Loc 'cmu-ui-options-new-player-icons'}" ToolTip="{Loc 'cmu-ui-options-new-player-icons-tooltip'}" />
+                            <CheckBox Name="TemperatureFahrenheitCheckBox" Text="{Loc 'cmu-ui-options-temperature-fahrenheit'}" ToolTip="{Loc 'cmu-ui-options-temperature-fahrenheit-tooltip'}" />
                         </BoxContainer>
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
                             <CheckBox Name="ShowCombatModeIndicatorsCheckBox" Text="{Loc 'cmu-ui-options-combat-mode-cursor'}" ToolTip="{Loc 'cmu-ui-options-combat-mode-cursor-tooltip'}" />

@@ -189,7 +189,13 @@ public sealed partial class CrtScreenControl : Control
             // Re-entrant render pass: we are inside the UI's own draw when this runs. If the engine
             // objects to that, it will surface here rather than taking the client down.
             handle.RenderInRenderTarget(_target,
-                () => _ui.RenderControl(renderHandle, Source, Vector2i.Zero),
+                () =>
+                {
+                    var old = handle.GetTransform();
+                    handle.SetTransform(Matrix3x2.Identity);
+                    _ui.RenderControl(renderHandle, Source, Vector2i.Zero);
+                    handle.SetTransform(old);
+                },
                 Color.Transparent);
         }
         catch (Exception e)

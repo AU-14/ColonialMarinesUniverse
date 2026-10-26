@@ -4,11 +4,13 @@
          xmlns:cmu="clr-namespace:Content.Client.CMU14.UserInterface.Options">
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+            <!-- CMU14 -->
             <!-- Only things that are actually accessibility. Alternate sprites, xeno ability
                  previews, the chat opacity sliders and the highlight colour used to live here and
                  have moved to the tab for whatever they are about. -->
             <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
 
+                <!-- CMU14 -->
                 <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-motion'}">
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
@@ -43,6 +45,7 @@
                     <ui:OptionSlider Name="ScreenShakeIntensitySlider" Title="{Loc 'ui-options-screen-shake-intensity'}" />
                 </cmu:CmuOptionSection>
 
+                <!-- CMU14 -->
                 <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-vision'}">
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
@@ -67,6 +70,8 @@
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-cmu-zlevels'}">
                     <ui:OptionSlider Name="ZLevelBlurSlider" Title="{Loc 'cmu-ui-options-zlevel-blur'}" />
                     <ui:OptionSlider Name="FaintLookUpOpacitySlider" Title="{Loc 'cmu-ui-options-faint-look-up-opacity'}" />
+                    <!-- CMU14 -->
+                    <CheckBox Name="HideCassetteMusicNotesCheckBox" Text="{Loc 'cmu-ui-options-hide-cassette-music-notes'}" ToolTip="{Loc 'cmu-ui-options-hide-cassette-music-notes-tooltip'}" />
                 </cmu:CmuOptionSection>
 
             </BoxContainer>

@@ -655,6 +655,7 @@ public sealed partial class UserAHelpUIHandler : IAHelpUIHandler
     }
 
     // One message, not five: a header coloured in code rather than baked into the loc string, then
+    // CMU14
     // the bullet body. Stays a normal log line so it scrolls away with the conversation.
     internal static string BuildIntroText()
     {

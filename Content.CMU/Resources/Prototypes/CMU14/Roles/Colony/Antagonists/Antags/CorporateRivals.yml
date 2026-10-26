@@ -70,6 +70,8 @@
 - type: antag
   parent: CMUAntagColonyBase
   id: WeylandYutaniAgentRole
+  blacklistedGamemodes:
+  - DistressSignal
   name: cmu-antag-wy-agent-name
   setPreference: true
   objective: cmu-antag-wy-agent-objective
@@ -147,6 +149,8 @@
   id: CorporateSpyRole
   name: roles-antag-spy-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-spy-objective
 
 - type: startingGear

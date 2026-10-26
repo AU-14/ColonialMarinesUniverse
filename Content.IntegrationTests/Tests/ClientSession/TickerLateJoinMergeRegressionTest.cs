@@ -226,9 +226,11 @@ public sealed class TickerLateJoinMergeRegressionTest : GameTest
                     label.Text == Loc.GetString("late-join-gui-no-departments-available")).ToArray();
                 Assert.Multiple(() =>
                 {
+                    // CMU14
                     Assert.That(notes, Has.Length.EqualTo(1));
                     Assert.That(notes[0].Visible, Is.True,
                         "an empty faction section must collapse instead of splitting the window height");
+                    // CMU14
                     Assert.That(descendants.OfType<ScrollContainer>().All(scroll => !scroll.VisibleInTree),
                         Is.True);
                 });

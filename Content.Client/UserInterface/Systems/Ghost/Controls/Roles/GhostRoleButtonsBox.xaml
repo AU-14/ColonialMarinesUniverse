@@ -1,6 +1,8 @@
+<!-- CMU14: entry-buttons stack, tighter separation -->
 <BoxContainer xmlns="https://spacestation14.io"
               Orientation="Vertical"
               HorizontalExpand="True"
               SeparationOverride="0">
+                  <!-- CMU14: one entry-buttons stack per role -->
     <!-- One GhostRoleEntryButtons per entity is added here by code. -->
 </BoxContainer>

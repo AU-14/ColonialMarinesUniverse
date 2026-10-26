@@ -15,6 +15,7 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
 
     public Button CharacterSetupButton => CharacterSetup;
 
+    // CMU14
     /// <summary>The dotted run between the name and its tag; CmuLobbyLook gives it its stylebox.</summary>
     public PanelContainer HeadLeaderPanel => HeadLeader;
     public Button PrevCharacterButton => PrevCharButton;
@@ -63,17 +64,21 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
         Loaded.Visible = value;
         Unloaded.Visible = !value;
 
+        // CMU14
         HeadRow.Visible = value;
         HeadRule.Visible = value;
     }
 
     /// <summary>
+    // CMU14
     ///     Sets the page's head: the character's name as the big fact, and their pronoun and age as
     ///     the tag beside it. The name is plain text because it is one value at heading size; the tag
     ///     stays markup so the pronoun and the age keep their own colours.
     /// </summary>
+    // CMU14
     public void SetSummaryText(string name, string ageMarkup)
     {
+        // CMU14
         SummaryName.Text = name;
         SetSummaryLine(SummaryAge, ageMarkup);
     }

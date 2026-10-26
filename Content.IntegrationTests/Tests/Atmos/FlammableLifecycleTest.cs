@@ -12,6 +12,8 @@ using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
+// CMU14
+using Content.Shared.Whitelist;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using ServerFlammableSystem = Content.Server.Atmos.EntitySystems.FlammableSystem;
@@ -23,6 +25,65 @@ namespace Content.IntegrationTests.Tests.Atmos;
 [TestOf(typeof(RMCFlammableSystem))]
 public sealed class FlammableLifecycleTest : GameTest
 {
+    // CMU14: minimal fire entities with the same fixture shape as RMCTileFire,
+    // minus the atmos machinery, so collide immunity can be tested in isolation.
+    [TestPrototypes]
+    private const string TileFireCollidePrototypes = """
+- type: entity
+  id: CMUTestFireCollideNormal
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.35,0.35,0.35"
+        density: 100
+        hard: false
+        layer:
+        - MobMask
+  - type: DamageOnCollide
+    fire: true
+    damage:
+      types:
+        Heat: 45
+    ignoreResistances: true
+- type: entity
+  id: CMUTestFireCollideBypass
+  parent: CMUTestFireCollideNormal
+  components:
+  - type: RMCFireImmunityBypass
+""";
+
+    // CMU14 test: ignition-source fixture for the walking tick. RMCIgniteOnCollide with
+    // TileDamage and no DamageOnCollide, so only ApplyTileEffect's per-meter path can deal damage.
+    [TestPrototypes]
+    private const string WalkingFirePrototypes = """
+- type: entity
+  id: CMUTestFireWalkSource
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,2.2,0.45"
+        density: 100
+        hard: false
+        layer:
+        - MobMask
+  - type: RMCIgniteOnCollide
+    intensity: 10
+    duration: 60
+    tileDamage:
+      types:
+        Heat: 20
+""";
+
     [TestCase("CMMobHuman")]
     [TestCase("CMXenoDrone")]
     public async Task RmcFireKeepsBurningWithoutSimulatedAtmosphere(string prototype)
@@ -283,6 +344,121 @@ public sealed class FlammableLifecycleTest : GameTest
         });
     }
 
+    // CMU14 test: pin the collide path to RMCImmuneToFireTileDamage.BypassWhitelist
+    // semantics, matching SharedRMCFlammableSystem.CanFireBypassImmunity (AU-14 PR #2296).
+    [Test]
+    public async Task FireCollideDamageHonorsTileFireImmunityBypassWhitelist()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid blocked = default;
+        EntityUid bypassed = default;
+        EntityUid plain = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            blocked = SpawnBurnable(map.MapId, 0);
+            bypassed = SpawnBurnable(map.MapId, 1);
+            plain = SpawnBurnable(map.MapId, 2);
+
+            SEntMan.EnsureComponent<RMCImmuneToFireTileDamageComponent>(blocked);
+
+            var carrier = SEntMan.EnsureComponent<RMCImmuneToFireTileDamageComponent>(bypassed);
+            carrier.BypassWhitelist = new EntityWhitelist
+            {
+                Components = new[] { "RMCFireImmunityBypass" },
+            };
+
+            SEntMan.SpawnEntity("CMUTestFireCollideNormal", new MapCoordinates(new Vector2(0, 0), map.MapId));
+            SEntMan.SpawnEntity("CMUTestFireCollideBypass", new MapCoordinates(new Vector2(1, 0), map.MapId));
+            SEntMan.SpawnEntity("CMUTestFireCollideNormal", new MapCoordinates(new Vector2(2, 0), map.MapId));
+        });
+
+        await Pair.RunTicksSync(3);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(TotalDamage(blocked), Is.Zero,
+                    "tile-fire immunity must block collide hits from fires outside the bypass whitelist");
+                Assert.That(TotalDamage(bypassed), Is.GreaterThan(0),
+                    "fires on the bypass whitelist must ignore tile-fire immunity on collide hits");
+                Assert.That(TotalDamage(plain), Is.GreaterThan(0),
+                    "wearers without tile-fire immunity take fire collide hits");
+            });
+        });
+    }
+
+    // CMU14 test: pin ApplyTileEffect's per-meter walking tick to fire protection
+    // (AU-14 PR #2296 residual case) and to tile-fire immunity blocking it outright.
+    // Bearers use RMCImmuneToIgnition so the flammable standing burn stays out of the
+    // measurement; the walking tick is the only damage source in play.
+    [Test]
+    public async Task WalkingFireTickAppliesFireProtectionAndHonorsTileFireImmunity()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid full = default;
+        EntityUid shielded = default;
+        EntityUid blocked = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            _ = Server.System<FlammableLifecycleProbeSystem>();
+
+            full = SpawnBurnableOnGrid(map, -4, -6);
+            shielded = SpawnBurnableOnGrid(map, -4, -4);
+            blocked = SpawnBurnableOnGrid(map, -4, -2);
+
+            SEntMan.EnsureComponent<RMCImmuneToIgnitionComponent>(full);
+            SEntMan.EnsureComponent<RMCImmuneToIgnitionComponent>(shielded);
+            SEntMan.EnsureComponent<FireProtectionProbeComponent>(shielded).Reduction = 0.5f;
+            SEntMan.EnsureComponent<RMCImmuneToIgnitionComponent>(blocked);
+            SEntMan.EnsureComponent<RMCImmuneToFireTileDamageComponent>(blocked);
+
+            // One fire per bearer, co-located on its tile: tile fires ignite the mob that comes
+            // onto them (collide/anchor paths), so each bearer needs its own burning tile.
+            SEntMan.SpawnEntity("CMUTestFireWalkSource", map.GridCoords.Offset(new Vector2(-4, -6)));
+            SEntMan.SpawnEntity("CMUTestFireWalkSource", map.GridCoords.Offset(new Vector2(-4, -4)));
+            SEntMan.SpawnEntity("CMUTestFireWalkSource", map.GridCoords.Offset(new Vector2(-4, -2)));
+        });
+
+        // First update: RunIgniteOnCollide hands out SteppingOnFireComponent and
+        // RunSteppingOnFire records LastPosition; the walking tick has no distance yet.
+        await Pair.RunTicksSync(1);
+
+        await Server.WaitAssertion(() =>
+        {
+            var transform = Server.System<SharedTransformSystem>();
+            var walk = new Vector2(1, 0);
+            foreach (var uid in new[] { full, shielded, blocked })
+            {
+                var coords = SEntMan.GetComponent<TransformComponent>(uid).Coordinates;
+                transform.SetCoordinates(uid, coords.Offset(walk));
+            }
+        });
+
+        // Second update: one accumulated metre, one walking tick per bearer in contact.
+        await Pair.RunTicksSync(1);
+
+        await Server.WaitAssertion(() =>
+        {
+            var fullDamage = TotalDamage(full);
+            Assert.Multiple(() =>
+            {
+                Assert.That(SEntMan.GetComponent<FlammableComponent>(full).OnFire, Is.False,
+                    "ignition-immune bearers must not burn; tile damage is the only source in play");
+                // Contact fires an immediate standing tick (intensity/5 x Damage = 2) on top of
+                // the per-metre walking tick (tile 20 x intensity 10 = 200).
+                Assert.That(fullDamage, Is.EqualTo(202f).Within(1f),
+                    "one metre through Heat 20 x intensity 10 fire deals one walking tick (200) plus the immediate standing tick (2)");
+                Assert.That(TotalDamage(shielded), Is.EqualTo(fullDamage * 0.5f).Within(1f),
+                    "fire protection must scale the per-meter walking tick, not just the standing tick");
+                Assert.That(TotalDamage(blocked), Is.Zero,
+                    "tile-fire immunity must block the walking tick for fires outside the bypass whitelist");
+            });
+        });
+    }
+
     [Test]
     public async Task ResistUsesConfiguredTimeThenWaterExtinguishesBeforeAcidCleanup()
     {
@@ -483,6 +659,20 @@ public sealed class FlammableLifecycleTest : GameTest
                 Assert.That(flammable.OnFire, Is.True);
             });
         });
+    }
+
+    private EntityUid SpawnBurnableAt(TestMapData map, float x, float y)
+    {
+        var uid = SEntMan.SpawnEntity("CMMobHuman", new MapCoordinates(new Vector2(x, y), map.MapId));
+        PrepareBurnable(uid);
+        return uid;
+    }
+
+    private EntityUid SpawnBurnableOnGrid(TestMapData map, float x, float y)
+    {
+        var uid = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(x, y)));
+        PrepareBurnable(uid);
+        return uid;
     }
 
     private EntityUid SpawnBurnable(MapId mapId, float x, string prototype = "CMMobHuman")

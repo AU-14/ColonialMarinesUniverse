@@ -1,4 +1,6 @@
 using System.Linq;
+// CMU14
+using Content.Client.Lobby.UI;
 using Content.Shared.Body;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
@@ -87,5 +89,8 @@ public sealed partial class OrganMarkingPicker : Control
         }
 
         LayerTabs.TabsVisible = i > 1;
+
+        // CMU14: OrganProfileDataChanged rebuilds the layer pickers after the CRT walk; re-theme them here.
+        CrtLobbyTheme.Apply(this);
     }
 }

@@ -268,6 +268,7 @@ public sealed partial class ChatUIController : UIController
         }
 
         _config.OnValueChanged(CCVars.ChatWindowOpacity, OnChatWindowOpacityChanged);
+        // CMU14
         _config.OnValueChanged(CCVars.CMUChatHousing, _ => SetChatWindowOpacity(_config.GetCVar(CCVars.ChatWindowOpacity)));
         _config.OnValueChanged(CCVars.AccessibilityColorblindFriendly, v => _colorBlindMode = v, true);
 
@@ -306,14 +307,18 @@ public sealed partial class ChatUIController : UIController
     private void SetChatWindowOpacity(float opacity)
     {
         var chatBox = UIManager.ActiveScreen?.GetWidget<ChatBox>() ?? UIManager.ActiveScreen?.GetWidget<ResizableChatBox>();
+        // CMU14
         if (chatBox?.ChatWindowPanel is null)
             return;
 
+        // CMU14
         SetChatWindowOpacity(chatBox, opacity);
     }
 
+    // CMU14
     internal static void SetChatWindowOpacity(ChatBox chatBox, float opacity)
     {
+        // CMU14
         var panel = chatBox.ChatWindowPanel;
 
         // CMU: on the chat housing's tube screen the log is see-through so the glass shows.

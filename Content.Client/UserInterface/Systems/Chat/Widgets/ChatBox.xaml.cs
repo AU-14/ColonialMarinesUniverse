@@ -171,6 +171,7 @@ public partial class ChatBox : UIWidget
         _stylesheetManager.ChatFontChanged += RemakeForChatFontChange;
         _config.OnValueChanged(CCVars.CMUChatRowTint, OnChatRowTintCvarChanged);
         _stylesheetManager.CrtThemeChanged += OnCrtThemeChanged;
+        // CMU14
         _config.OnValueChanged(CCVars.ChatGhostFollowButton, OnChatGhostFollowButtonCvarChanged);
         _config.OnValueChanged(CCVars.CMUChatHousing, OnChatHousingCvarChanged);
 
@@ -1269,6 +1270,7 @@ public partial class ChatBox : UIWidget
         Repopulate();
     }
 
+    // CMU14
     private void OnChatGhostFollowButtonCvarChanged(bool enabled)
     {
         Repopulate();
@@ -1285,6 +1287,7 @@ public partial class ChatBox : UIWidget
         ChatWindowPanel.PanelOverride = null;
         ChatWindowPanel.InvalidateStyleSheet();
         ChatWindowPanel.ForceRunStyleUpdate();
+        // CMU14
         ChatUIController.SetChatWindowOpacity(this, _config.GetCVar(CCVars.ChatWindowOpacity));
         RemakeForChatFontChange();
     }
@@ -1292,6 +1295,7 @@ public partial class ChatBox : UIWidget
     /// <summary>
     ///     The seam, when this chat is the lobby sidebar's lower zone.
     /// </summary>
+    // CMU14
     /// <summary>
     ///     CMU: this chat sits on the chat housing's tube screen (<c>cmu.chat_housing</c>), where the
     ///     log, tab strip and input are see-through so the glass shows.
@@ -1347,6 +1351,7 @@ public partial class ChatBox : UIWidget
     {
         TabHeaderPanel.PanelOverride = new StyleBoxFlat
         {
+            // CMU14
             BackgroundColor = OnHousingScreen
                 ? Color.Transparent
                 : crtEnabled
@@ -1482,6 +1487,7 @@ public partial class ChatBox : UIWidget
         // colour its prototype gives it.
         var crtColor = ChatUserSettings.CrtChannelColor(msg.Channel);
 
+        // CMU14
         // Radio never passes through the curated CrtStyleTargets table; RadioSystem bakes its hex into the markup.
         var displayAccent = msg.Display?.AccentColor;
         var retoned = false;
@@ -1496,6 +1502,7 @@ public partial class ChatBox : UIWidget
         var accentColor = styleColor ?? displayAccent ?? crtColor;
         var messageColor = styleColor ?? msg.MessageColorOverride ?? displayAccent ?? crtColor ?? msg.Channel.TextColor();
         var bodyColor = _colorWholeMessage ? messageColor : StructuredMessageTextColor;
+        // CMU14
         // A markup colour tag beats the colour pushed around it, so a retone has to rewrite the tag
         // RadioSystem baked into WrappedMessage rather than just wrap the message in a new colour.
         var recolor = retoned && styleColor == null ? messageColor : (Color?) null;
@@ -1531,6 +1538,7 @@ public partial class ChatBox : UIWidget
         AddLine(msg);
     }
 
+    // CMU14
     private FormattedMessage CreateFormattedMessage(
         ChatMessage message,
         Color color,
@@ -1543,6 +1551,7 @@ public partial class ChatBox : UIWidget
         var markup = StripChatActionCommandLink(message.WrappedMessage.TrimEnd(), message);
         markup = StripDuplicateChannelPrefix(markup, message);
 
+        // CMU14
         if (recolor is { } bodyColor)
             markup = ChatUserSettings.ApplyColorMarkup(markup, bodyColor);
 
@@ -1888,6 +1897,7 @@ public partial class ChatBox : UIWidget
         _stylesheetManager.ChatFontChanged -= RemakeForChatFontChange;
         _config.UnsubValueChanged(CCVars.CMUChatRowTint, OnChatRowTintCvarChanged);
         _stylesheetManager.CrtThemeChanged -= OnCrtThemeChanged;
+        // CMU14
         _config.UnsubValueChanged(CCVars.ChatGhostFollowButton, OnChatGhostFollowButtonCvarChanged);
         _config.UnsubValueChanged(CCVars.CMUChatHousing, OnChatHousingCvarChanged);
         ChatInput.Input.OnTextEntered -= OnTextEntered;

@@ -1,3 +1,4 @@
+<!-- CMU14 -->
 <PanelContainer xmlns="https://spacestation14.io"
                 HorizontalExpand="True">
     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="0">
@@ -6,11 +7,13 @@
                       HorizontalExpand="True"
                       SeparationOverride="12"
                       Margin="12 10 14 9">
+                              <!-- CMU14: tighter preview layout with accent edge -->
             <PanelContainer Name="PreviewFrame" MinSize="56 56" VerticalAlignment="Center" />
             <BoxContainer Orientation="Vertical"
                           HorizontalExpand="True"
                           VerticalAlignment="Center"
                           SeparationOverride="3">
+                                      <!-- CMU14: compact title and description column -->
                 <Label Name="Title" ClipText="True" HorizontalExpand="True" />
                 <!-- The right margin is load-bearing, and it has to be here rather than a minimum width
                      on the count beside it. -->
@@ -23,5 +26,6 @@
                 <Label Name="KindLabel" Align="Right" />
             </BoxContainer>
         </BoxContainer>
+    <!-- CMU14 -->
     </BoxContainer>
 </PanelContainer>

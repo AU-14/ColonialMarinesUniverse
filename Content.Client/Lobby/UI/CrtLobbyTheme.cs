@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Chat.Widgets;
+// CMU14
 using Robust.Shared.Maths;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -28,6 +29,7 @@ internal static class CrtLobbyTheme
         }
     }
 
+    // CMU14
     /// <summary>
     ///     The four corner brackets a CRT window wears, as an overlay to lay over its ground.
     ///     <paramref name="corner"/> overrides <see cref="CrtStyleBox"/>'s terminal-green default.
@@ -182,6 +184,7 @@ internal static class CrtLobbyTheme
             case RichTextLabel richText when useCrtTypography:
                 // Controls that already carry a more specific CRT rich-text class style themselves.
                 if (!richText.HasStyleClass(StyleNano.StyleClassCrtServerInfoText) &&
+                    // CMU14
                     !richText.HasStyleClass(StyleNano.StyleClassCrtCharacterSummary) &&
                     !richText.HasStyleClass(StyleNano.StyleClassCrtProseText))
                     AddClass(richText, StyleNano.StyleClassCrtRichText);

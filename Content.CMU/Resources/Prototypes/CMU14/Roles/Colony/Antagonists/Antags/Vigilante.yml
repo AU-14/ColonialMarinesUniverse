@@ -55,6 +55,8 @@
   id: VigilanteRole
   name: cmu-antag-vigilante-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: cmu-antag-vigilante-objective
 
 - type: startingGear

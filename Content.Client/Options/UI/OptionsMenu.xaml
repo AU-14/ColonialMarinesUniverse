@@ -5,13 +5,16 @@
             Title="{Loc 'ui-options-title'}"
             MinSize="800 450"
             SetSize="860 640">
+                    <!-- CMU14: taller window with options filter bar -->
     <!-- CrtContent holds everything the shader re-draws; CrtOverlay is its sibling and draws after it, so
          the shaded copy covers the original. -->
     <Control>
         <Control Name="CrtContent" HorizontalExpand="True" VerticalExpand="True">
+            <!-- CMU14 -->
             <!-- CrtPanelFill, not CrtPanel: a plain ground with no border and no inset, so this is still
                  not a third concentric rectangle. -->
             <PanelContainer StyleClasses="CrtPanelFill" HorizontalExpand="True" VerticalExpand="True">
+            <!-- CMU14 -->
             <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="0">
             <!-- Above the tabs rather than inside one, because it searches all of them at once and hides
                  the tabs with nothing to show - see CmuOptionsFilter. -->
@@ -24,16 +27,20 @@
                 </BoxContainer>
             </PanelContainer>
             <TabContainer Name="Tabs" Access="Public" StyleClasses="CrtTabContainer" VerticalExpand="True" HorizontalExpand="True">
+                <!-- CMU14 -->
                 <!-- Tabs are named for the subject a player is looking for. -->
                 <cmutabs:GameplayTab Name="GameplayTab" />
                 <cmutabs:InterfaceTab Name="InterfaceTab" />
                 <cmutabs:ChatTab Name="ChatTab" />
                 <tabs:AudioTab Name="AudioTab" />
+                <!-- CMU14 -->
                 <tabs:GraphicsTab Name="GraphicsTab" />
                 <tabs:AccessibilityTab Name="AccessibilityTab" />
+                <!-- CMU14 -->
                 <tabs:KeyRebindTab Name="KeyRebindTab" />
                 <tabs:AdminOptionsTab Name="AdminOptionsTab" />
             </TabContainer>
+            <!-- CMU14 -->
             </BoxContainer>
             </PanelContainer>
         </Control>

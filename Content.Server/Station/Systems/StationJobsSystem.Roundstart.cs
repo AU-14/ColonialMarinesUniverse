@@ -481,8 +481,10 @@ public sealed partial class StationJobsSystem
                     // them unassigned instead of dealing the other side's roles.
                     var fofFallback = !string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase);
                     if (fofFallback)
+                        // CMU14
                         continue;
 
+                    // CMU14
                     var overflows = stationOverflows.ToList();
                     _random.Shuffle(overflows);
                     if (overflows.Count == 0)

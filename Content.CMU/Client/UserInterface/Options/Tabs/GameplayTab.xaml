@@ -38,12 +38,28 @@
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
                             <CheckBox Name="ScreamOnHotbarCheckBox" Text="{Loc 'cmu-ui-options-scream-on-hotbar'}" ToolTip="{Loc 'cmu-ui-options-scream-on-hotbar-tooltip'}" />
+                            <CheckBox Name="TileMovementCheckBox" Text="{Loc 'cmu-ui-options-tile-movement'}" ToolTip="{Loc 'cmu-ui-options-tile-movement-tooltip'}" />
+                            <CheckBox Name="TileMovementWalkOnlyCheckBox" Text="{Loc 'cmu-ui-options-tile-movement-walk-only'}" ToolTip="{Loc 'cmu-ui-options-tile-movement-walk-only-tooltip'}" />
+                            <CheckBox Name="VaultOnBumpCheckBox" Text="{Loc 'cmu-ui-options-vault-on-bump'}" ToolTip="{Loc 'cmu-ui-options-vault-on-bump-tooltip'}" />
                         </BoxContainer>
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
                             <CheckBox Name="RMCAutoPunctuate" Text="{Loc 'cmu-ui-options-auto-punctuate'}" ToolTip="{Loc 'cmu-ui-options-auto-punctuate-tooltip'}" />
+                            <CheckBox Name="AutoIngestCheckBox" Text="{Loc 'cmu-ui-options-auto-ingest'}" ToolTip="{Loc 'cmu-ui-options-auto-ingest-tooltip'}" />
+                            <CheckBox Name="NoShakeWhenRestingCheckBox" Text="{Loc 'cmu-ui-options-no-shake-when-resting'}" ToolTip="{Loc 'cmu-ui-options-no-shake-when-resting-tooltip'}" />
                         </BoxContainer>
                     </BoxContainer>
                     <ui:OptionDropDown Name="DropDownConstructionMode" Title="{Loc 'cmu-ui-options-construction-mode'}" />
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-options-tacmap'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="ClassicTacMapCheckBox" Text="{Loc cmu-options-tacmap-classic}" ToolTip="{Loc cmu-options-tacmap-classic-tooltip}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="CenterTacMapCheckBox" Text="{Loc cmu-options-tacmap-center}" ToolTip="{Loc cmu-options-tacmap-center-tooltip}" />
+                        </BoxContainer>
+                    </BoxContainer>
                 </cmu:CmuOptionSection>
 
             </BoxContainer>

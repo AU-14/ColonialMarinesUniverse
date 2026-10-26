@@ -24,6 +24,7 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         public Label StationTime => ServerInfo.RoundTimeLabel;
 
+        // CMU14
         /// <summary>
         ///     Which half of the housing's panel switch is down. Ignored with the housing off, where the
         ///     server block and the character block are both shown at once as they always have been.
@@ -65,11 +66,13 @@ namespace Content.Client.Lobby.UI
             CollapseButton.OnPressed += _ => TogglePanel(false);
             ExpandButton.OnPressed += _ => TogglePanel(true);
 
+            // CMU14
             // Re-applying the whole look is what moves the paddle; the switch holds no state of its own.
             ServerPanelButton.OnPressed += _ => SetPanel(true);
             CharacterPanelButton.OnPressed += _ => SetPanel(false);
 
             SetUpLobbyCrt();
+            // CMU14
             CmuLobbyLook.Apply(this);
             _cfg.OnValueChanged(CCVars.CMUChatHousing, OnHousingChanged);
         }
@@ -93,6 +96,7 @@ namespace Content.Client.Lobby.UI
             base.ExitedTree();
         }
 
+        // CMU14
         // Panel overrides, not style classes, so a stylesheet rebuild does not reach them.
         private void OnHousingChanged(string _) => CmuLobbyLook.Apply(this);
 
@@ -115,6 +119,7 @@ namespace Content.Client.Lobby.UI
             CrtLobbyTheme.Apply(MainContainer);
             CharacterPreview.RefreshTheme();
 
+            // CMU14
             // Two planes, one step apart: Surface0 behind the whole column and Surface1 for the
             // server-info block, so that block reads as a section inside a screen rather than the
             // whole field being flat. That is the mock's Surface0/Surface1 relationship, and it only

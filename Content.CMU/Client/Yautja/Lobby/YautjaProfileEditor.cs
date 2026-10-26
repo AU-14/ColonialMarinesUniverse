@@ -2,6 +2,7 @@ using Content.Shared.Body;
 using System.Linq;
 using System.Numerics;
 using Content.Client.Lobby;
+using Content.Client.Lobby.UI;
 using Content.Client.Humanoid;
 using Content.Client.Stylesheets;
 using Content.Shared.CMU14.Yautja;
@@ -129,7 +130,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         _previewWithoutGear.Text = Loc.GetString("cmu-yautja-lobby-preview-without-gear");
         _flavorText.Placeholder = new Rope.Leaf(Loc.GetString("cmu-yautja-lobby-flavor-placeholder"));
         _flavorText.ToolTip = Loc.GetString("cmu-yautja-lobby-flavor-limit-tooltip", ("max", YautjaCharacterProfile.MaxFlavorTextLength));
-        _flavorLimit.FontColorOverride = Color.FromHex("#b8aaa0");
+        _flavorLimit.FontColorOverride = CrtColor(Color.FromHex("#b8aaa0"), StyleNano.CrtGreenDim);
         UpdateFlavorLimit(0);
 
         HorizontalExpand = true;
@@ -427,6 +428,8 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         RebuildCasterSelector(yautja);
         RebuildCapeSelector(yautja);
         UpdateResponsiveGridColumns();
+
+        CrtLobbyTheme.Apply(this, useCrtTypography: true);
     }
 
     private void RebuildSkinSelector(YautjaCharacterProfile yautja)
@@ -792,7 +795,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             rows.AddChild(new Label
             {
                 Text = section.Title,
-                FontColorOverride = Color.FromHex("#d6bf94"),
+                FontColorOverride = CrtColor(Color.FromHex("#d6bf94"), StyleNano.CrtGreen),
             });
             rows.AddChild(grid);
         }
@@ -1057,7 +1060,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                     MaxSize = new Vector2(LabeledVisualButtonSize - 8, 18),
                     Align = Label.AlignMode.Center,
                     ClipText = true,
-                    FontColorOverride = Color.FromHex("#d6bf94"),
+                    FontColorOverride = CrtColor(Color.FromHex("#d6bf94"), StyleNano.CrtGreen),
                 },
                 visual,
             },
@@ -1101,7 +1104,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         Vector2? size = null)
     {
         var actualSize = size ?? new Vector2(VisualButtonSize, VisualButtonSize);
-        return new Button
+        var button = new Button
         {
             MinSize = actualSize,
             MaxSize = actualSize,
@@ -1109,8 +1112,10 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             Pressed = selected,
             Group = group,
             ToolTip = tooltip,
-            StyleClasses = { StyleClass.ButtonSquare },
         };
+        if (!StyleNano.CrtUiEnabled)
+            button.StyleClasses.Add(StyleClass.ButtonSquare);
+        return button;
     }
 
     private static Button BuildSwatchButton(
@@ -1234,7 +1239,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                 new Label
                 {
                     Text = title,
-                    FontColorOverride = Color.FromHex("#d6bf94"),
+                    FontColorOverride = CrtColor(Color.FromHex("#d6bf94"), StyleNano.CrtGreen),
                 },
                 content,
             },
@@ -1245,13 +1250,16 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             HorizontalExpand = !compact,
             PanelOverride = new StyleBoxFlat
             {
-                BackgroundColor = Color.FromHex("#14100e"),
-                BorderColor = Color.FromHex("#4b3c2a"),
+                BackgroundColor = CrtColor(Color.FromHex("#14100e"), StyleNano.CrtInsetBackground),
+                BorderColor = CrtColor(Color.FromHex("#4b3c2a"), StyleNano.CrtGreenDim),
                 BorderThickness = new Thickness(1),
             },
             Children = { inner },
         };
     }
+
+    private static Color CrtColor(Color legacy, Color themed)
+        => StyleNano.CrtUiEnabled ? themed : legacy;
 
     private static string MaterialTitle(YautjaGearMaterial material)
     {
@@ -1312,7 +1320,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                     Text = Loc.GetString("cmu-yautja-lobby-filter-label"),
                     MinWidth = 52,
                     VerticalAlignment = VAlignment.Center,
-                    FontColorOverride = Color.FromHex("#d6bf94"),
+                    FontColorOverride = CrtColor(Color.FromHex("#d6bf94"), StyleNano.CrtGreen),
                 },
                 selector,
             },
@@ -1594,7 +1602,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         }
 
         help.HorizontalExpand = true;
-        help.FontColorOverride = Color.FromHex("#b8aaa0");
+        help.FontColorOverride = CrtColor(Color.FromHex("#b8aaa0"), StyleNano.CrtGreenDim);
 
         var block = new BoxContainer
         {

@@ -1,6 +1,7 @@
 late-join-gui-title = Late Join
 late-join-gui-jobs-amount-in-department-tooltip = Jobs in the {$departmentName} department
 late-join-gui-no-departments-available = This faction is not active on this map
+# CMU14: role filter and slot-count labels
 late-join-gui-filter-placeholder = Filter roles
 late-join-gui-all-roles = All roles
 late-join-gui-station-open-count = {$count} OPEN

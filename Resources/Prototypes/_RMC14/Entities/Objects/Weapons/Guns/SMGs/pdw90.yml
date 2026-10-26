@@ -1,7 +1,9 @@
+# CMU14
 - type: entity
   parent: CMBaseWeaponSMG
   name: FN P90 submachine gun
   id: RMCWeaponSMGPDW90
+  # CMU14
   description: May seem primitive, but carries a 50-round, top-loaded magazine of Teflon-coated ordance, with a cyclic rate of 900 rounds a minute. A weapon of war, made to kill your enemy.
   suffix: Filled
   components:
@@ -264,4 +266,5 @@
   id: RMCCartridge57x28mm
 
 - type: Tag
+  # CMU14
   id: RMCCartridge57x28mmAP

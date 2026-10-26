@@ -1,3 +1,4 @@
+// CMU14
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
@@ -314,10 +315,7 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         };
     }
 
-    // CMU14: public entry for the bug report window's Talk-to-staff button. The title retitles
-    // the player chat window for the door it was opened from (mockup pane 3: "Staff Help" from
-    // the bug door); null keeps the mentor card's "Mentor Help". Staff never see it - they get
-    // the console regardless of door.
+    // CMU14: public entry for the bug report window's Talk-to-staff button.
     public void OpenMentorOrHelpWindow(string? title = null)
     {
         SetAHelpButtonPressed(false);
@@ -346,6 +344,7 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         else
         {
             if (OpenWindow(ref _mentorHelpWindow,
+                    // CMU14
                     () => CreateMentorHelpWindow(title),
                     () => _mentorHelpWindow = null,
                     window => window.Chat,
@@ -356,11 +355,11 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         }
     }
 
+    // CMU14
     private MentorHelpWindow CreateMentorHelpWindow(string? title = null)
     {
         var window = new MentorHelpWindow();
-        // CMU14: retitle for the bug report door - a player asking about a stuck flamer should
-        // not land in a window titled "Mentor Help" (design §4.1, §12.6).
+        // CMU14: retitle for the bug report door
         if (title != null)
             window.Title = title;
         ApplyCrtChrome(window);

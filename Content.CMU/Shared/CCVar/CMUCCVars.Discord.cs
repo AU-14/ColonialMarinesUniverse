@@ -54,4 +54,11 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<int> BugHelpRateLimitCount =
         CVarDef.Create("cmu.bug_help_rate_limit_count", 3, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Discord channel where players post their lobby linking code. The message author gets linked.
+    ///     Requires <c>discord.token</c> (the in-process DiscordLink gateway). 0 disables linking.
+    /// </summary>
+    public static readonly CVarDef<ulong> DiscordLinkChannel =
+        CVarDef.Create("cmu.discord_link_channel", 0ul, CVar.SERVERONLY);
 }

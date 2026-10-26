@@ -114,6 +114,7 @@ public sealed partial class GhostRoleComponent : Component
     [Access(typeof(GhostRoleSystem), Other = AccessPermissions.ReadWriteExecute)] // also FIXME Friends
     public ProtoId<JobPrototype>? JobProto = null;
 
+    // CMU14
     /// <summary>
     /// Which rail entry the ghost roles window lists this role under.
     /// </summary>

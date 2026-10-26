@@ -51,8 +51,7 @@ public sealed partial class StaffHelpWindow : DefaultWindow
         // files a report about another player.
         _adminCard = new CmuChoiceCard(
             "Admin Help",
-            // CMU14: shed sentence, part 2 §7 - ahelp sheds game traffic to Bug Report.
-            "For reporting issues with another player to an admin, or asking about the rules. For problems with the game itself, use Bug Report.",
+            "For reporting issues with another player to an admin, or asking about the rules. For problems with the game itself, use Bug Report.", // CMU14
             AdminPalette,
             buttonOnLeft: true);
 
@@ -63,7 +62,6 @@ public sealed partial class StaffHelpWindow : DefaultWindow
             buttonOnLeft: false);
 
         // CMU14: bug report card - for problems with the game itself, not players or rules.
-        // Copy is final per part 2 §7: dual-mode, get help during the round and report the bug.
         _bugCard = new CmuChoiceCard(
             "Bug Report",
             "Game problems: broken mechanics, bad spawns, being stuck in geometry. Get help during the round and report bugs to the developers.",

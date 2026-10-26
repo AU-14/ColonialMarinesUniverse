@@ -97,6 +97,7 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
                 //     .ToArray();
                 var entries = entryContainer.Children.ToArray();
                 var sharedEntries = entries
+                    // CMU14
                     .Where(group => Descendants(group).OfType<GhostRoleInfoBox>()
                         .Single().FindControl<Label>("Title").Text == "Shared role")
                     .ToArray();
@@ -107,6 +108,7 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
                     Assert.That(sharedEntries, Has.Length.EqualTo(2));
                     Assert.That(GetPrivate<int>(window, "_availableRoleCount"), Is.EqualTo(roles.Length));
                     Assert.That(countLabel.Text, Does.Contain(roles.Length.ToString()));
+                    // CMU14
                     Assert.That(sharedEntries.Select(group =>
                             Descendants(group).OfType<GhostRoleEntryButtons>().Single().RequestButton.Disabled),
                         Is.EquivalentTo(new[] { false, true }),
@@ -156,6 +158,7 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(entryContainer.Children.Count(child => child.Visible), Is.EqualTo(1));
+                    // CMU14
                     Assert.That(roleScroll!.Visible, Is.True);
                     Assert.That(noRolesMessage!.Visible, Is.False);
                     Assert.That(GetPrivate<int>(window, "_availableRoleCount"), Is.EqualTo(roles.Length),
@@ -167,6 +170,7 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(entryContainer.Children, Has.All.Matches<Control>(child => !child.Visible));
+                    // CMU14
                     Assert.That(roleScroll!.Visible, Is.False);
                     Assert.That(noRolesMessage!.Visible, Is.True);
                     Assert.That(noRolesMessage.Text,

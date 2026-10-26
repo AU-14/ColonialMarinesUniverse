@@ -95,6 +95,7 @@ namespace Content.Client.Stylesheets
 
             StyleNano.SetCrtUiEnabled(_configurationManager.GetCVar(CCVars.CrtUiEnabled));
             StyleNano.SetCrtPalette(_configurationManager.GetCVar(CCVars.CrtUiColor));
+            // CMU14
             StyleNano.SetChatHousing(_configurationManager.GetCVar(CCVars.CMUChatHousing));
             StyleNano.SetChatReadableFont(_configurationManager.GetCVar(CCVars.CMUChatReadableFont));
             StyleNano.SetChatFontStep(
@@ -118,6 +119,7 @@ namespace Content.Client.Stylesheets
             sawmill.Debug($"Initialized {_styleRuleCount} style rules in {sw.Elapsed}");
             _configurationManager.OnValueChanged(CCVars.CMUChatReadableFont, OnChatReadableFontChanged);
             _configurationManager.OnValueChanged(CCVars.CMUChatBigFont, OnChatBigFontChanged);
+            // CMU14
             _configurationManager.OnValueChanged(CCVars.CMUChatHousing, OnChatHousingChanged);
         }
 
@@ -141,6 +143,7 @@ namespace Content.Client.Stylesheets
             RefreshCrtTheme();
         }
 
+        // CMU14
         private void OnChatHousingChanged(string tone)
         {
             StyleNano.SetChatHousing(tone);

@@ -637,6 +637,12 @@ namespace Content.Client.Options.UI.Tabs
             {
                 foreach (var control in _allControls)
                     control.Visible = true;
+                // CMU14: restore-on-clear removed again (was 84d5ce6f2, resurrected by 39263606f74).
+                // Clearing the search keeps every section expanded; restoring pre-search states
+                // re-collapsed sections the caller had collapsed before searching.
+                // foreach (var (section, expanded) in _unfilteredExpansion)
+                //     section.Expanded = expanded;
+                // _unfilteredExpansion.Clear();
                 return;
             }
 
@@ -683,6 +689,9 @@ namespace Content.Client.Options.UI.Tabs
             ApplySearchResults(matchingControls);
         }
 
+        // CMU14: dead since the restore-on-clear removal - see the empty-search branch above.
+        // private readonly Dictionary<CmuOptionSection, bool> _unfilteredExpansion = new();
+
         private void ApplySearchResults(IReadOnlySet<Control> matchingControls)
         {
             CmuOptionSection? section = null;
@@ -691,6 +700,8 @@ namespace Content.Client.Options.UI.Tabs
                 if (control is CmuOptionSection nextSection)
                 {
                     section = nextSection;
+                    // CMU14: snapshot dropped with the restore-on-clear removal.
+                    // _unfilteredExpansion.TryAdd(section, section.Expanded);
                     section.Visible = false;
                     section.Expanded = true;
                     continue;

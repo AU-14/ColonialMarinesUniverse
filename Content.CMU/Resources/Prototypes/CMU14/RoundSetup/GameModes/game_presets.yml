@@ -25,6 +25,7 @@
   showInVote: true
   description: cmu-gamemode-distresssignal-desc
   requiresGovforVote: true
+  thirdPartyForceShuttle: true
   dropshipFabricatorStartingPoints: 18000
   supportedPlanets:
 # - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats

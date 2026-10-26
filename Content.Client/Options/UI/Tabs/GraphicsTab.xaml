@@ -3,10 +3,12 @@
           xmlns:ui="clr-namespace:Content.Client.Options.UI"
           xmlns:cmu="clr-namespace:Content.Client.CMU14.UserInterface.Options">
     <BoxContainer Orientation="Vertical">
+        <!-- CMU14 -->
         <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
             <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
 
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-display-label'}">
+                    <!-- CMU14 -->
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
                             <CheckBox Name="FullscreenCheckBox" Text="{Loc 'ui-options-fullscreen'}" />
@@ -26,6 +28,7 @@
                     </BoxContainer>
                 </cmu:CmuOptionSection>
 
+                <!-- CMU14 -->
                 <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-performance'}">
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
@@ -41,8 +44,10 @@
                     <ui:OptionSlider Name="SharpnessSlider" Title="{Loc 'ui-options-sharpness'}" />
                 </cmu:CmuOptionSection>
 
+                <!-- CMU14 -->
                 <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-viewport'}">
                     <CheckBox Name="ViewportStretchCheckBox" Text="{Loc 'ui-options-vp-stretch'}" />
+                    <!-- CMU14 -->
                     <!-- Only shown while stretching; GraphicsTab toggles them. -->
                     <cmu:CmuDependentOptions Name="StretchOptions">
                         <CheckBox Name="ViewportVerticalFitCheckBox" Text="{Loc 'ui-options-vp-vertical-fit'}" ToolTip="{Loc 'ui-options-vp-vertical-fit-tooltip'}" />

@@ -848,6 +848,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
                 Requirements = role.Requirements,
                 Kind = kind,
                 RafflePlayerCount = rafflePlayerCount,
+                // CMU14
                 RaffleEndTime = raffleEndTime,
                 RaffleDuration = raffle?.CumulativeTime ?? TimeSpan.Zero,
                 Category = _ghostRoleCategories.GetCategory(uid, role.Category?.Id, role.JobProto?.Id),

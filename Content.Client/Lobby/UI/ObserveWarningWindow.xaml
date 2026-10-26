@@ -1,9 +1,12 @@
+<!-- CMU14 -->
 <!-- Chrome is hand-set in the code-behind, the same way JoinRoundWindow and LateJoinGui set theirs - see
      ApplyTheme there and here. -->
+<!-- CMU14: narrower window so the body wraps -->
 <DefaultWindow
     xmlns="https://spacestation14.io"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     SetSize="504 232">
+        <!-- CMU14: narrower window so the body text wraps -->
     <PanelContainer Name="Ground" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" Margin="14 14 14 12" SeparationOverride="8">
             <Label Name="Question"

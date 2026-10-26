@@ -1,3 +1,4 @@
+<!-- CMU14: window title -->
 <controls:StaffHelpWindow
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -5,8 +6,7 @@
     xmlns:ui="clr-namespace:Content.Client.CMU14.Interface"
     Title="Help"
     MinWidth="{x:Static ui:CmuPanelMetrics.ChoiceWindowWidth}">
-    <!-- CMU14: third choice (bug report) added and the window retitled - three cards under "Admin and
-         Mentor Help" was false advertising. -->
+    <!-- CMU14: third choice (bug report) -->
     <!-- Just a ground and a slot. The two choices are CmuChoiceCards built in the code-behind, which
          is where their colours live - see CmuChoiceCard for why the look is not a style class.
 

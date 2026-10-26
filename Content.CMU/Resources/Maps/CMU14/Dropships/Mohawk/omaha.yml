@@ -159,7 +159,7 @@ entities:
     - type: ShipFaction
       faction: govfor
     - type: MohawkMechanisms
-- proto: CMUAirFillerVent
+- proto: CMULifeSupportVent
   entities:
   - uid: 910
     components:

@@ -151,7 +151,11 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
         if (_hive.FromSameHive(ent.Owner, other))
             return;
 
-        if (ent.Comp.Fire && HasComp<RMCImmuneToFireTileDamageComponent>(other))
+        // CMU14: tile-fire immunity honors its bypass whitelist here too, matching
+        // SharedRMCFlammableSystem.CanFireBypassImmunity (AU-14 PR #2296 scope).
+        if (ent.Comp.Fire &&
+            TryComp<RMCImmuneToFireTileDamageComponent>(other, out var tileFireImmunity) &&
+            !_whitelist.IsWhitelistPass(tileFireImmunity.BypassWhitelist, ent.Owner))
             return;
 
         if (HasComp<UncloakOnHitComponent>(ent.Owner))

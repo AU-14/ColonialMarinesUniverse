@@ -146,23 +146,6 @@ cmu-ui-options-group-performance = Performance
 
 cmu-ui-options-group-viewport = Viewport
 
-cmu-ui-options-group-species-sounds = Species sounds
-
-cmu-ui-options-species-column = Species
-cmu-ui-options-species-arachnid = Arachnid
-cmu-ui-options-species-avali = Avali
-cmu-ui-options-species-diona = Diona
-cmu-ui-options-species-dwarf = Dwarf
-cmu-ui-options-species-felinid = Felinid
-cmu-ui-options-species-feroxi = Feroxi
-cmu-ui-options-species-human = Human
-cmu-ui-options-species-moth = Moth
-cmu-ui-options-species-reptilian = Reptilian
-cmu-ui-options-species-rodentia = Rodentia
-cmu-ui-options-species-skrell = Skrell
-cmu-ui-options-species-slime = Slime
-cmu-ui-options-species-vulpkanin = Vulpkanin
-
 cmu-ui-options-filter-placeholder = Filter settings and keybinds
 
 cmu-ui-options-filter-matches = { $count ->

@@ -39,6 +39,7 @@ public abstract partial class SharedXenoAnnounceSystem : EntitySystem
         }
     }
 
+    // CMU14
     /// <summary>
     ///     Wraps a hive announcement's heading. The fallback is the shared xeno announcement violet,
     ///     not the old #921992: that magenta measured 1.9:1 against the announcement band, the worst
@@ -46,6 +47,7 @@ public abstract partial class SharedXenoAnnounceSystem : EntitySystem
     /// </summary>
     public string WrapHive(string message, Color? color = null, EntityUid? hive = null)
     {
+        // CMU14
         color ??= Color.FromHex("#C9A7EA");
         return $"[color={color.Value.ToHex()}][font size=16][bold]{message}[/bold][/font][/color]\n\n";
     }

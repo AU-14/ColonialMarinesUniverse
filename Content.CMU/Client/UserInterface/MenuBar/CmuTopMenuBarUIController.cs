@@ -228,7 +228,7 @@ public sealed partial class CmuTopMenuBarUIController : UIController
 
         if (root.Children.FirstOrDefault(c => c.Name == CaptionName) is not Label captionLabel)
         {
-            captionLabel = new Label { Name = CaptionName, HorizontalAlignment = Control.HAlignment.Center };
+            captionLabel = new Label { Name = CaptionName, ClipText = true, HorizontalAlignment = Control.HAlignment.Center };
             root.AddChild(captionLabel);
         }
 
@@ -313,7 +313,7 @@ public sealed partial class CmuTopMenuBarUIController : UIController
     private Font GetFont(int size)
     {
         return StyleNano.CrtUiEnabled
-            ? StyleNano.GetCrtFont(_resources, size)
+            ? StyleNano.GetCrtChatFont(_resources, size)
             : _resources.NotoStack(size: size);
     }
 

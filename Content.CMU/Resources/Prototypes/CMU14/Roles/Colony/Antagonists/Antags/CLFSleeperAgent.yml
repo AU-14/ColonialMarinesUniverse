@@ -73,4 +73,6 @@
   id: CLFSleeperAgentRole
   name: roles-antag-clf-sleeper-agent-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-clf-sleeper-agent-objective

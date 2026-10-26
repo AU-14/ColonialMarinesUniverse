@@ -1,4 +1,4 @@
-﻿lobby-character-preview-panel-header = Character
+lobby-character-preview-panel-header = Character
 lobby-character-preview-panel-character-setup-button = Customize
 lobby-character-preview-panel-unloaded-preferences-label = Your character preferences have not yet loaded, please stand by.
 lobby-character-preview-prev-char-tooltip = Previous character
@@ -22,6 +22,7 @@ lobby-character-preview-ignore-allegiance-on = /// Ignore Allegiance: On ///
 # The pronoun keeps its own colour from the age; both hues sit well under the terminal text's own
 # brightness so they read as secondary rather than as two alarm colours on a green screen:
 # saturation 0.22, luminance 0.62. See docs/cmu/09-theming.md.
+# CMU14: compact summary; pronoun selector rewritten, name passed plain
 lobby-character-summary-age = [color=#88A3AF]{$gender ->
     [male] He
     [female] She

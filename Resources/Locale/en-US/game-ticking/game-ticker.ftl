@@ -1,4 +1,4 @@
-﻿game-ticker-restart-round = Restarting round...
+game-ticker-restart-round = Restarting round...
 game-ticker-start-round = The round is starting now...
 game-ticker-start-round-cannot-start-game-mode-fallback = Failed to start {$failedGameMode} mode! Defaulting to {$fallbackMode}...
 game-ticker-start-round-cannot-start-game-mode-restart = Failed to start {$failedGameMode} mode! Restarting round...
@@ -15,6 +15,7 @@ game-ticker-player-join-game-message = Welcome to CMU! If this is your first tim
 game-ticker-get-info-text = Colonial Marines Universe
 game-ticker-get-info-preround-text = Colonial Marines Universe
 
+# CMU14: side-less labels + group headings for the CRT lobby readout
 # Labels for the lobby round-info panel. SHIP and PLATOON are deliberately not qualified with the
 # side they belong to: the two sides are group headings (lobby-info-govfor / -opfor) and each side's
 # rows sit underneath its own, so the side is said once instead of on every row.
@@ -25,6 +26,7 @@ lobby-info-platoon = PLATOON
 lobby-info-planet = PLANET
 lobby-info-gamemode = GAMEMODE
 lobby-info-players = PLAYERS
+# CMU14: shortened for panel width
 lobby-info-round-time = ROUND
 lobby-info-players-value = {$count} ({$ready} ready)
 lobby-info-none = None
