@@ -36,4 +36,7 @@ public sealed partial class XenoScissorCutComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntProtoId TelegraphEffectEdge = "RMCEffectXenoTelegraphRedSmall";
+
+    [DataField, AutoNetworkedField]
+    public bool AlwaysSlows = false;
 }
