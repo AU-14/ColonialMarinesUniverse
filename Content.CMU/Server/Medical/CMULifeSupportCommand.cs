@@ -2,7 +2,6 @@ using Content.Server.Administration;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Toolshed;
 
 namespace Content.Server.CMU14.Medical;
 
@@ -10,7 +9,7 @@ namespace Content.Server.CMU14.Medical;
 /// Toggles the life support set (respiration, barotrauma, heat damage, crit asphyxiation)
 /// that the species base keeps disabled.
 /// </summary>
-[ToolshedCommand, AdminCommand(AdminFlags.Debug)]
+[AdminCommand(AdminFlags.Debug)]
 public sealed partial class CMULifeSupportCommand : IConsoleCommand
 {
     [Dependency] private readonly IEntityManager _entities = default!;
