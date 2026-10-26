@@ -29,6 +29,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
 using Content.Shared.Mind;
+using Robust.Shared.Map;
 using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
@@ -60,6 +61,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedJobSystem _job = default!;
@@ -87,6 +89,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
     private readonly Dictionary<EntProtoId, CMVendorEntry> _entries = new();
     private readonly List<CMVendorEntry> _boxEntries = new();
+    private readonly HashSet<Entity<CMAutomatedVendorComponent>> _vendors = new();
 
     public override void Initialize()
     {
@@ -1072,6 +1075,54 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         user.Comp.ExtraPoints ??= new Dictionary<string, int>();
         user.Comp.ExtraPoints[key] = points;
         Dirty(user);
+    }
+
+    public bool TryTakeStockedItem(EntityCoordinates coords, float range, EntProtoId prototype, out EntityUid item)
+    {
+        item = default;
+
+        _vendors.Clear();
+        _entityLookup.GetEntitiesInRange(coords, range, _vendors);
+        foreach (var vendor in _vendors)
+        {
+            foreach (var section in vendor.Comp.Sections)
+            {
+                foreach (var entry in section.Entries)
+                {
+                    if (entry.Id != prototype || entry.Amount is not { } amount || amount <= 0)
+                        continue;
+
+                    entry.Amount = amount - 1;
+                    AmountUpdated(vendor, entry);
+                    Dirty(vendor);
+
+                    item = Spawn(prototype, coords);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public int GetStockedAmount(EntityCoordinates coords, float range, EntProtoId prototype)
+    {
+        var total = 0;
+        _vendors.Clear();
+        _entityLookup.GetEntitiesInRange(coords, range, _vendors);
+        foreach (var vendor in _vendors)
+        {
+            foreach (var section in vendor.Comp.Sections)
+            {
+                foreach (var entry in section.Entries)
+                {
+                    if (entry.Id == prototype && entry.Amount is { } amount)
+                        total += amount;
+                }
+            }
+        }
+
+        return total;
     }
 
     public void AmountUpdated(Entity<CMAutomatedVendorComponent> vendor, CMVendorEntry entry)
