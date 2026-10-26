@@ -12,8 +12,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      750: Critical
-      850: Dead
+      650: Critical
+      750: Dead
     stateAlertDict:
       Alive: XenoHealth
       Critical: XenoCrit
@@ -87,7 +87,7 @@
     baseWalkSpeed: 2.5
     baseSprintSpeed: 4
   - type: MeleeWeapon
-    attackRate: 0.75
+    attackRate: 0.5 # slow attacks
     damage:
       types:
         Blunt: 75
