@@ -2476,6 +2476,9 @@
   # Static so it can't be pushed or thrown; anchoring would snap it off the spot where the jeep stood.
   - type: Physics
     bodyType: Static
+  # Mobs pass through the husk instead of wedging on it: pinned against a wall it was out-killing the
+  # live jeeps, and a sliding hulk would plough into anyone in its path. It keeps the wall masks so a
+  # slide still fetches up against walls, but sits on no layer, so nothing collides into it.
   - type: Fixtures
     fixtures:
       fix1:
@@ -2487,9 +2490,6 @@
         - Impassable
         - HighImpassable
         - LowImpassable
-        - LargeMobLayer
-        layer:
-        - LargeMobLayer
   # Like the live jeep, shots pass over it unless it is the target.
   - type: RequireProjectileTarget
   # It stays where it burnt out: nothing damages it, blasts and acid leave it, and only a welder cuts
