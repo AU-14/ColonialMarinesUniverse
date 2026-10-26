@@ -2369,10 +2369,12 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("description");
 
+                    // cmu edit start
                     b.Property<string>("EliteNotes")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("elite_notes");
+                    // cmu edit end
 
                     b.Property<int>("Honor")
                         .HasColumnType("INTEGER")
@@ -2383,6 +2385,7 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("name");
 
+                    // cmu edit start
                     b.Property<string>("Notice")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -2392,6 +2395,7 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("sigil");
+                    // cmu edit end
 
                     b.HasKey("Id")
                         .HasName("PK_yautja_clan");
@@ -2399,6 +2403,7 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.ToTable("yautja_clan", (string)null);
                 });
 
+            // cmu edit start
             modelBuilder.Entity("Content.Server.Database.YautjaClanPetition", b =>
                 {
                     b.Property<int>("Id")
@@ -2423,6 +2428,7 @@ namespace Content.Server.Database.Migrations.Sqlite
 
                     b.ToTable("yautja_clan_petition", (string)null);
                 });
+            // cmu edit end
 
             modelBuilder.Entity("Content.Server.Database.YautjaClanMember", b =>
                 {

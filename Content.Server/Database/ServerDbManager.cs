@@ -186,12 +186,13 @@ namespace Content.Server.Database
         Task<bool> DeleteYautjaClanMemberAsync(Guid userId);
         Task<int> GetYautjaWhitelistFlagsAsync(Guid userId);
         Task SetYautjaWhitelistFlagsAsync(Guid userId, int flags);
-        // CMU14: yautja clan hall
+        // CMU14 Clan Hall Begin
         Task<List<YautjaHunterBoardRecord>> GetYautjaHunterBoardAsync();
         Task<bool> UpdateYautjaClanExtrasAsync(int clanId, string sigil, string notice, string eliteNotes);
         Task<bool> AddYautjaHonorAsync(Guid userId, int honor);
         Task<List<YautjaClanPetitionRecord>> GetYautjaClanPetitionsAsync(int? clanId = null);
         Task<bool> SetYautjaClanPetitionAsync(Guid userId, int? clanId);
+        // CMU14 End
         #endregion
 
         #region Connection Logs
@@ -889,7 +890,7 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.SetYautjaWhitelistFlagsAsync(userId, flags));
         }
 
-        // CMU14: yautja clan hall
+        // CMU14 Clan Hall Begin
         public Task<List<YautjaHunterBoardRecord>> GetYautjaHunterBoardAsync()
         {
             DbReadOpsMetric.Inc();
@@ -919,6 +920,7 @@ namespace Content.Server.Database
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.SetYautjaClanPetitionAsync(userId, clanId));
         }
+        // CMU14 End
 
         public Task<int> AddConnectionLogAsync(
             NetUserId userId,

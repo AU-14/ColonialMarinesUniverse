@@ -143,10 +143,11 @@ public abstract partial class ServerDbBase
             .Select(entry => entry.PlayerUserId)
             .ToList();
 
-        // CMU14: a disbanded clan's open petitions go with it
+        // CMU14 Clan Hall Begin: a disbanded clan's open petitions go with it
         await db.DbContext.YautjaClanPetitions
             .Where(entry => entry.ClanId == clanId)
             .ExecuteDeleteAsync();
+        // CMU14 End
 
         foreach (var member in members)
         {
@@ -216,13 +217,14 @@ public abstract partial class ServerDbBase
 
         player.YautjaRank = member.Rank;
 
-        // CMU14: in a clan now, any open petition is settled
+        // CMU14 Clan Hall Begin: in a clan now, any open petition is settled
         if (member.ClanId != null)
         {
             await db.DbContext.YautjaClanPetitions
                 .Where(entry => entry.PlayerUserId == member.PlayerUserId)
                 .ExecuteDeleteAsync();
         }
+        // CMU14 End
 
         await db.DbContext.SaveChangesAsync();
         await transaction.CommitAsync();
@@ -281,16 +283,17 @@ public abstract partial class ServerDbBase
 
             player.YautjaRank = null;
 
-            // CMU14
+            // CMU14 Clan Hall Begin: losing the whitelist withdraws any open petition
             await db.DbContext.YautjaClanPetitions
                 .Where(entry => entry.PlayerUserId == userId)
                 .ExecuteDeleteAsync();
+            // CMU14 End
         }
 
         await db.DbContext.SaveChangesAsync();
     }
 
-    // CMU14: clan hall
+    // CMU14 Clan Hall Begin: boards, clan extras, honor banking and petitions
 
     public async Task<List<YautjaHunterBoardRecord>> GetYautjaHunterBoardAsync()
     {
@@ -411,10 +414,11 @@ public abstract partial class ServerDbBase
         await transaction.CommitAsync();
         return true;
     }
+    // CMU14 End
 
     private static YautjaClanRecord ToRecord(YautjaClan clan)
     {
-        return new(clan.Id, clan.Name, clan.Description, clan.Honor, clan.Color, clan.Active, clan.Sigil, clan.Notice, clan.EliteNotes);
+        return new(clan.Id, clan.Name, clan.Description, clan.Honor, clan.Color, clan.Active, clan.Sigil, clan.Notice, clan.EliteNotes); // CMU14
     }
 
     private static YautjaClanMemberRecord ToRecord(YautjaClanMember member)
