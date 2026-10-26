@@ -72,6 +72,8 @@ public sealed partial class AntagPitySystem : EntitySystem
 
             _missed = missed;
             _loaded = true;
+
+            Log.Debug($"Loaded {missed.Count} antag pity entries");
         }
         catch (Exception e)
         {
@@ -119,6 +121,7 @@ public sealed partial class AntagPitySystem : EntitySystem
             var toSave = new List<CmuAntagPityEntry>();
 
             // Accrue first, all on the main thread; only locals cross an await.
+            var accrued = 0;
             foreach (var userId in _eligible)
             {
                 if (_selected.Contains(userId))
@@ -126,12 +129,15 @@ public sealed partial class AntagPitySystem : EntitySystem
 
                 _missed.TryGetValue(userId, out var missed);
                 _missed[userId] = missed + 1;
+                accrued++;
             }
 
             foreach (var userId in _eligible)
                 toSave.Add(new CmuAntagPityEntry(userId.UserId, _missed.GetValueOrDefault(userId), now));
             foreach (var userId in _selected)
                 toSave.Add(new CmuAntagPityEntry(userId.UserId, _missed.GetValueOrDefault(userId), now));
+
+            Log.Debug($"Antag pity round end: {accrued} accrued, {_selected.Count} reset");
 
             _eligible.Clear();
             _selected.Clear();

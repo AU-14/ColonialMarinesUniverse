@@ -202,7 +202,7 @@ public sealed class ShipMreGateTest
     private static OpenableOpenAttemptEvent RaiseAttempt(RobustIntegrationTest.ServerIntegrationInstance server, EntityUid mre, EntityUid user)
     {
         var ev = new OpenableOpenAttemptEvent(user);
-        server.EntMan.RaiseLocalEvent(mre, ref ev);
+        server.EntMan.EventBus.RaiseLocalEvent(mre, ref ev);
         return ev;
     }
 

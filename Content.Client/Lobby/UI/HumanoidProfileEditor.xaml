@@ -233,7 +233,6 @@
 
 
                             <!-- CMU14 -->
-                            </BoxContainer>
                             <BoxContainer HorizontalExpand="True">
                                 <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-hair-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-hair-color-tooltip'}" />
                                 <Label Name="HairColorNameLabel" VAlign="Center" />
@@ -266,6 +265,7 @@
                                 <!-- cmu edit end -->
                             </BoxContainer>
                             <!-- cmu edit end -->
+                        </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical">

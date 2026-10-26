@@ -881,6 +881,8 @@ public sealed partial class HumanoidProfileEditor
                 break;
             }
         }
+
+        CrtLobbyTheme.Apply(CharacterHairPickers);
     }
     // cmu edit end
 
