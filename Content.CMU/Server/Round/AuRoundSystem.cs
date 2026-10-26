@@ -173,6 +173,7 @@ namespace Content.Server.CMU14.Round
         {
 
             base.Initialize();
+            SubscribeLocalEvent<LoadingMapsEvent>(OnLoadingMaps);
             _voteSequence.Reset();
             _state.Reset();
             SelectedPlanetMap = null;
@@ -300,15 +301,12 @@ namespace Content.Server.CMU14.Round
                     }
                 }
 
-                // Filter planets by their MinPlayers/MaxPlayers so planets intended for
-                // specific player counts cannot be voted for when out of range.
+                // Planets intended for specific player counts cannot be voted for when out of range.
                 var playerCount = _playerManager.PlayerCount;
-                planetProtos.RemoveAll(p =>
-                    // If MinPlayers is set (>0) and current players are fewer, exclude.
-                    (p.Planet.MinPlayers > 0 && playerCount < p.Planet.MinPlayers) ||
-                    // If MaxPlayers is set (>0) and current players exceed it, exclude.
-                    (p.Planet.MaxPlayers > 0 && playerCount > p.Planet.MaxPlayers)
-                );
+                planetProtos.RemoveAll(p => !AuRoundSelectionRules.IsPlanetInPopulationRange(
+                    p.Planet,
+                    _prototypeManager.TryIndex<GameMapPrototype>(p.Planet.MapId, out var map) ? map : null,
+                    playerCount));
 
                 if (planetProtos.Count == 0)
                 {
@@ -1245,6 +1243,15 @@ namespace Content.Server.CMU14.Round
             }
 
             return false;
+        }
+
+        // Camo follows the planet actually being loaded; the lobby vote timer can miss it and leave the last round's camo
+        private void OnLoadingMaps(LoadingMapsEvent ev)
+        {
+            if (_selectedPlanet is { } planet && ev.Maps.Any(map => map.ID == planet.MapId))
+                SetCamoType(planet.Camouflage);
+            else
+                SetCamoType(CamouflageType.Jungle);
         }
 
         public void SetCamoType(CamouflageType? ct = null)
