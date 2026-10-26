@@ -1,7 +1,8 @@
 - type: loadoutGroup
   id: MedJumpsuitAU14
-  name: au14-loadout-group-civilian-jumpsuit
-  minLimit: 1
+  name: au14-loadout-group-medical-jumpsuit
+  minLimit: 0
+  defaultSelected: 1
   maxLimit: 1
   loadouts:
   - CivilianWorkwearYellowAU14
