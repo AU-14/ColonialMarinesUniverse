@@ -163,7 +163,7 @@
     displayDamageInAlert: true
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.5
-    baseSprintSpeed: 6.0
+    baseSprintSpeed: 6.5
   - type: MeleeWeapon
     attackRate: 2.0
     damage:
@@ -187,10 +187,8 @@
   - type: XenoImpale  
     damage:  
       types:
-        Slash: 11.66
-        Blunt: 11.66
-        Piercing: 11.67
-    bloodloss: 50
+        Slash: 35
+    bloodloss: 40
   - type: XenoHeadbite
     damage:
       types:
