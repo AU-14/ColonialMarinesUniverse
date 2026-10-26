@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v278.0.0
+  engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/14/2026 09:32:32
+  time: 10/25/2026 02:24:27
   entityCount: 2
 maps:
 - 2
@@ -16,7 +16,7 @@ tilemap:
   0: Space
   1: CMFloorPlating
 entities:
-- proto: ''
+- proto: ""
   entities:
   - uid: 1
     components:
@@ -32,9 +32,9 @@ entities:
           version: 7
     - type: Broadphase
     - type: Physics
-      bodyStatus: InAir
       fixedRotation: False
       bodyType: Dynamic
+      bodyStatus: InAir
     - type: Fixtures
       fixtures: {}
     - type: OccluderTree
@@ -46,10 +46,6 @@ entities:
     - type: Gravity
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
-    - type: DecalGrid
-      chunkCollection:
-        version: 2
-        nodes: []
     - type: GasTileOverlay
     - type: GridAtmosphere
       version: 2
@@ -68,6 +64,7 @@ entities:
       chunkEntities: []
     - type: TileHistory
       chunkHistory: {}
+    - type: GridSplitNode
   - uid: 2
     components:
     - type: MetaData
@@ -79,12 +76,12 @@ entities:
     - type: MapAtmosphere
       space: False
       mixture:
-        volume: 2500
-        immutable: True
         temperature: 293.15
+        volume: 2500
         moles:
           Oxygen: 21.8124
           Nitrogen: 81.1594
+        immutable: True
     - type: Broadphase
     - type: OccluderTree
     - type: ChunkContainer
