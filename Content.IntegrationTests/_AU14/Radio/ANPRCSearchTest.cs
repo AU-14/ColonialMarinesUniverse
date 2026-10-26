@@ -256,47 +256,62 @@ public sealed class ANPRCSearchTest
     }
 
     [Test]
-    public async Task FixedNetBanksTrialsAndPutsABearingOnTheMap()
+    public async Task FixedNetBanksTrialsButNeverMarksTheMap()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var testMap = await pair.CreateTestMap();
 
-        EntityUid pack = default, talker = default;
+        EntityUid pack = default, talker = default, rto = default, rtoPack = default;
+        RadioFrequency frequency = default;
         TacticalMapComponent tacmap = default!;
-        var intelKey = 0;
 
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
             (_, pack) = SpawnSearcher(server, testMap.GridCoords, sweep: false);
             talker = entities.SpawnEntity(null, testMap.GridCoords);
+            (rto, rtoPack) = SpawnOperator(server, testMap.GridCoords.Offset(new Vector2(0, 30)), OpforPack, trained: true);
             tacmap = entities.EnsureComponent<TacticalMapComponent>(testMap.Grid.Owner);
+            frequency = Frequency(server, OpforBravo);
 
-            entities.GetComponent<ANPRCRadioComponent>(pack).DiscoveredFrequencies.Add(Frequency(server, OpforBravo));
+            entities.GetComponent<ANPRCRadioComponent>(pack).DiscoveredFrequencies.Add(frequency);
         });
 
+        // a headset line banks a trial but gives nothing away about where it came from
         await Say(pair, talker, OpforBravo);
         await pair.RunTicksSync(2);
 
         await server.WaitAssertion(() =>
         {
+            var radio = server.EntMan.GetComponent<ANPRCRadioComponent>(pack);
             Assert.That(Analysis(server, pack).Depth, Is.EqualTo(1), "an encrypted line on a fixed net banks a trial");
-            Assert.That(tacmap.LastUpdateGovforBlips, Is.Not.Empty, "the bearing is on the map every tacmap on the side draws");
-
-            // the 3D reconstruction places contacts by the entity behind the key; an intel blip has none,
-            // so it has to be able to ask which grid the blip sits on or it drops it
-            intelKey = tacmap.LastUpdateGovforBlips.Keys.First();
-            Assert.That(server.System<Content.Server._RMC14.TacticalMap.TacticalMapSystem>().TryGetIntelBlipGrid(intelKey, out var grid), Is.True);
-            Assert.That(grid, Is.EqualTo(testMap.Grid.Owner));
+            Assert.That(radio.FixedNetDFLast, Does.Not.ContainKey(frequency), "headsets never give a bearing");
         });
 
-        await pair.RunSeconds(9);
+        // a manpack on FH leaks a bearing, but only into the operator's chat
+        await Say(pair, rto, OpforBravo, rtoPack);
+        await pair.RunTicksSync(2);
 
         await server.WaitAssertion(() =>
         {
-            Assert.That(tacmap.LastUpdateGovforBlips, Is.Empty, "and gone again after a few seconds");
-            Assert.That(server.System<Content.Server._RMC14.TacticalMap.TacticalMapSystem>().TryGetIntelBlipGrid(intelKey, out _), Is.False);
+            var radio = server.EntMan.GetComponent<ANPRCRadioComponent>(pack);
+            Assert.That(radio.FixedNetDFLast, Does.ContainKey(frequency), "an FH manpack line gives a bearing");
+            // intel blips take negative keys, so the marines' own blips don't count here
+            Assert.That(tacmap.GovforBlips.Keys.Where(k => k < 0), Is.Empty, "nothing goes on the ops map");
+            Assert.That(tacmap.LastUpdateGovforBlips.Keys.Where(k => k < 0), Is.Empty, "nothing goes on anyone's map");
+
+            radio.FixedNetDFLast.Clear();
+            server.EntMan.GetComponent<ANPRCRadioComponent>(rtoPack).Burst = true;
+        });
+
+        await Say(pair, rto, OpforBravo, rtoPack);
+        await pair.RunTicksSync(2);
+
+        await server.WaitAssertion(() =>
+        {
+            var radio = server.EntMan.GetComponent<ANPRCRadioComponent>(pack);
+            Assert.That(radio.FixedNetDFLast, Does.Not.ContainKey(frequency), "a burst line is too short to take a bearing on");
 
             // the bank is a buffer, not a hoard
             var crypto = server.System<ANPRCCryptoSystem>();
@@ -306,6 +321,36 @@ public sealed class ANPRCSearchTest
             }
 
             Assert.That(Analysis(server, pack).Depth, Is.EqualTo(ANPRCCryptoSystem.DepthMax));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task IntelBlipKnowsItsGrid()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var tacmapSystem = server.System<Content.Server._RMC14.TacticalMap.TacticalMapSystem>();
+            var tacmap = entities.EnsureComponent<TacticalMapComponent>(testMap.Grid.Owner);
+            var source = entities.SpawnEntity(null, testMap.GridCoords);
+
+            // jammer DF still marks the map. the 3D reconstruction places contacts by the entity behind
+            // the key; an intel blip has none, so it has to be able to ask which grid it sits on or it drops it
+            var location = tacmapSystem.CreateFactionIntelBlip(source, string.Empty, "GOVFOR");
+            Assert.That(location, Is.Not.Null);
+            Assert.That(tacmap.GovforBlips, Does.ContainKey(location!.Value.Key));
+            Assert.That(tacmapSystem.TryGetIntelBlipGrid(location.Value.Key, out var grid), Is.True);
+            Assert.That(grid, Is.EqualTo(testMap.Grid.Owner));
+
+            tacmapSystem.EraseFactionIntelBlip(location.Value.GridId, location.Value.Key, "GOVFOR");
+            Assert.That(tacmap.GovforBlips, Does.Not.ContainKey(location.Value.Key));
+            Assert.That(tacmapSystem.TryGetIntelBlipGrid(location.Value.Key, out _), Is.False);
         });
 
         await pair.CleanReturnAsync();

@@ -1,0 +1,7 @@
+author: Vixting
+category: CMU
+changes:
+- message: Added generatereagent command for spawning in custom reagents
+  type: Add
+time: '2026-10-23T20:18:48.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2269

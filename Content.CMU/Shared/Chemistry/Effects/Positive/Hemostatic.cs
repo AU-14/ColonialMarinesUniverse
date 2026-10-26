@@ -15,12 +15,17 @@ namespace Content.Shared.CMU14.Chemistry.Effects.Positive;
 
 public sealed partial class Hemostatic : RMCChemicalEffect
 {
+    /// <summary>
+    ///     How long internal bleeding stays held back after the last tick, so it comes back soon after the drug is gone.
+    /// </summary>
+    private static readonly TimeSpan InternalBleedHold = TimeSpan.FromSeconds(5);
+
     private static readonly ProtoId<DamageTypePrototype> BluntType = "Blunt";
     private static readonly ProtoId<DamageTypePrototype> HeatType = "Heat";
     private static readonly ProtoId<DamageTypePrototype> PoisonType = "Poison";
 
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
-        => "Stops all current surface bleeding and suppresses current internal bleeding without treating the wounds.\n" +
+        => "Stops all current surface bleeding and holds internal bleeding back while in the bloodstream without treating the wounds. The internal bleeding returns once it wears off.\n" +
            $"Overdoses cause [color=red]{PotencyPerSecond * 2}[/color] clotting damage.\n" +
            $"Critical overdoses cause [color=red]{PotencyPerSecond * 4}[/color] heart damage and " +
            $"[color=red]{PotencyPerSecond * 9}[/color] each of brute, burn, and toxin damage.";
@@ -32,7 +37,7 @@ public sealed partial class Hemostatic : RMCChemicalEffect
         foreach (var (part, _) in index.GetBodyParts(args.TargetEntity))
         {
             wounds.StopSurfaceBleedingOnPart(part);
-            wounds.SuppressInternalBleed(part);
+            wounds.SuppressInternalBleedFor(part, InternalBleedHold);
         }
     }
 

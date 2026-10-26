@@ -19,6 +19,9 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: XenoEvolutionCapped 
+    id: CMU14XenoHarbingerBase
+    max: 2
   - type: XenoHeavy
   - type: CMUXenoCyclone
     plasmaCost: 75

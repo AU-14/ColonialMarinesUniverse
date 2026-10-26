@@ -291,12 +291,12 @@
 
   Once a net is resolved, detectable transmissions on it can provide:
 
-  - a bearing toward the transmitter
-  - approximate distance
-  - a temporary tactical-map marker
+  - an eight-point bearing toward the transmitter and a rough range, at most once every 30 seconds per net
   - one trial toward key analysis
 
-  Secured SC and CT transmissions do not provide bearings.
+  Only manpack transmissions give a bearing. Secured SC and CT, BURST, and ordinary headsets do not.
+
+  Bearings only appear in chat. Cross two taken from different spots to work out where the speaker is.
 
   Select a [bold]resolved[/bold] contact and press ENT to tune it into the working memory.
 
@@ -361,22 +361,22 @@
     <ColorBox Color="#263238"><Box Margin="4">[bold]Power[/bold]</Box></ColorBox>
     <ColorBox Color="#263238"><Box Margin="4">[bold]Relay range[/bold]</Box></ColorBox>
     <ColorBox Color="#263238"><Box Margin="4">[bold]Battery use[/bold]</Box></ColorBox>
-    <ColorBox Color="#263238"><Box Margin="4">[bold]DF chance[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Heard by enemy search[/bold]</Box></ColorBox>
 
     <ColorBox><Box Margin="4">LO</Box></ColorBox>
     <ColorBox><Box Margin="4">60%</Box></ColorBox>
     <ColorBox><Box Margin="4">Half</Box></ColorBox>
-    <ColorBox><Box Margin="4">Half</Box></ColorBox>
+    <ColorBox><Box Margin="4">60%</Box></ColorBox>
 
     <ColorBox><Box Margin="4">MED</Box></ColorBox>
     <ColorBox><Box Margin="4">100%</Box></ColorBox>
     <ColorBox><Box Margin="4">Standard</Box></ColorBox>
-    <ColorBox><Box Margin="4">Standard</Box></ColorBox>
+    <ColorBox><Box Margin="4">100%</Box></ColorBox>
 
     <ColorBox><Box Margin="4">HI</Box></ColorBox>
     <ColorBox><Box Margin="4">150%</Box></ColorBox>
     <ColorBox><Box Margin="4">Double</Box></ColorBox>
-    <ColorBox><Box Margin="4">Double</Box></ColorBox>
+    <ColorBox><Box Margin="4">150%</Box></ColorBox>
   </Table>
 
   ### BACKLIGHT
@@ -446,7 +446,7 @@
   While enabled:
 
   - transmission battery cost is reduced by 30%
-  - direction-finding chance is reduced by 50%
+  - enemy direction finding gets no bearing on it
   - message contents are unchanged
 
   Burst can be combined with other radio settings.
@@ -488,7 +488,7 @@
   - relay traffic
   - telephone traffic
 
-  Because the radio does not transmit, it produces no direction-finding signature.
+  Because the radio does not transmit, there is nothing to take a bearing on.
 
   The radio continues to:
 
@@ -527,7 +527,7 @@
   Retransmissions:
 
   - consume battery
-  - can produce a direction-finding signature
+  - can give a bearing to an enemy that has resolved the net
   - cannot be retransmitted again
 
   This prevents bridged radios from creating retransmission loops.
@@ -569,7 +569,6 @@
   Sending a key:
 
   - consumes a large amount of battery
-  - can produce a direction-finding signature
   - has a 30-second cooldown
 
   [bold]Captured radios containing one of your faction's fill cards are still treated as friendly sets.[/bold]

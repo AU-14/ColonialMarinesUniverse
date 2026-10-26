@@ -35,11 +35,16 @@ cmu-autochef-nothing = Nothing on the menu matches.
 cmu-autochef-readout = > { $count } SERVINGS READY
 
 # Coffee machine
-cmu-coffee-machine-hint = Use a cup or mug on the coffee machine to brew a coffee.
-cmu-coffee-machine-examine = Use a cup or mug on it to brew a fresh coffee.
-cmu-coffee-machine-brewing = The coffee machine gurgles and hisses.
-cmu-coffee-machine-done = The coffee machine fills { THE($container) } with fresh coffee.
-cmu-coffee-machine-full = { CAPITALIZE(THE($container)) } is already full.
+cmu-coffee-machine-hint = Put a cup or mug in the coffee machine to brew a coffee.
+cmu-coffee-machine-examine = Put a cup or mug in it to brew a fresh coffee.
+cmu-coffee-machine-examine-brewing = It's brewing coffee into {THE($container)}.
+cmu-coffee-machine-examine-ready = {CAPITALIZE(THE($container))} sits ready in it.
+cmu-coffee-machine-brewing = You put {THE($container)} in the coffee machine. It gurgles and hisses.
+cmu-coffee-machine-still-brewing = The coffee machine is still brewing.
+cmu-coffee-machine-occupied = There's already {THE($container)} in there.
+cmu-coffee-machine-done = The coffee machine fills {THE($container)} with fresh coffee.
+cmu-coffee-machine-take = You take {THE($container)} out of the coffee machine.
+cmu-coffee-machine-full = {CAPITALIZE(THE($container))} is already full.
 
 # Platoon mess drinks
 cmu-reagent-horchata-name = horchata
@@ -56,3 +61,5 @@ cmu-reagent-kvass-name = kvass
 cmu-reagent-kvass-desc = A lightly fizzy, malty drink fermented from rye bread.
 cmu-reagent-sbiten-name = sbiten
 cmu-reagent-sbiten-desc = A hot drink of honey, water and spices.
+
+cmu-foodline-open = The DEFAC foodline is open. Grab a tray from the kitchen.
