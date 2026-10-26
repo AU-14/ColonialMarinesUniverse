@@ -73,6 +73,7 @@
           tags:
           - GlassBeaker
           - ChemDispensable
+          - CMBloodPack
       centrifuge_output_box_slot:
         name: Vial Box
         whitelist:

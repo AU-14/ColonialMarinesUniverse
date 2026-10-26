@@ -68,6 +68,3 @@
     contents:
     - id: RMCVial
       amount: 6
-
-- type: Tag
-  id: VialBox

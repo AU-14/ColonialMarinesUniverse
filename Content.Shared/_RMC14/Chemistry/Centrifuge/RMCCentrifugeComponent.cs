@@ -5,7 +5,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._RMC14.Chemistry.Centrifuge;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
-[Access(typeof(RMCCentrifugeSystem))]
+[Access(typeof(SharedRMCCentrifugeSystem))]
 public sealed partial class RMCCentrifugeComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -24,19 +24,22 @@ public sealed partial class RMCCentrifugeComponent : Component
     public string? Label;
 
     [DataField, AutoNetworkedField]
-    public int MaxLabelLength = 32;
-
-    [DataField, AutoNetworkedField]
-    public string VialSolution = "beaker";
-
-    [DataField, AutoNetworkedField]
     public EntityUid? TuringDispenser;
 
     [DataField, AutoNetworkedField]
     public float TetherRange = 20;
 
     [DataField, AutoNetworkedField]
+    public bool Processing;
+
+    [DataField, AutoNetworkedField]
     public bool Spinning;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan ProcessEvery = TimeSpan.FromSeconds(3.5);
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan NextProcess;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan FinishAt;

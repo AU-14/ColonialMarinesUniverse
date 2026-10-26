@@ -31,7 +31,7 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
     private readonly RMCReagentSystem _rmcReagent;
     private readonly SharedRMCSmartFridgeSystem _smartFridge;
     private readonly SolutionContainerSystem _solution;
-    private readonly RMCTuringDispenserSystem _turing;
+    private readonly SharedRMCTuringDispenserSystem _turing;
 
     private RMCTuringDispenserWindow? _window;
     private readonly List<RMCTuringDispenserBeakerRow> _beakerRows = new();
@@ -45,7 +45,7 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
         _rmcReagent = EntMan.System<RMCReagentSystem>();
         _smartFridge = EntMan.System<SharedRMCSmartFridgeSystem>();
         _solution = EntMan.System<SolutionContainerSystem>();
-        _turing = EntMan.System<RMCTuringDispenserSystem>();
+        _turing = EntMan.System<SharedRMCTuringDispenserSystem>();
     }
 
     protected override void Open()
