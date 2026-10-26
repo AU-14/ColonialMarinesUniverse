@@ -322,7 +322,9 @@ public sealed partial class HumanoidProfileEditor
     {
         // CMU14: shared FoF role priorities.
         yield return FoFJobList;
-        yield return ColonyRolesJobList;
+        yield return InsurgencyGovernmentJobList;
+        yield return InsurgencyInsurgentJobList;
+        yield return InsurgencyCivilianJobList;
         yield return ColonyCivilianJobList;
         yield return ColonyThreatJobList;
         yield return DistressGovernmentJobList;
@@ -400,6 +402,11 @@ public sealed partial class HumanoidProfileEditor
         {
             var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);
             yield return (
+                InsurgencyGovernmentJobList,
+                GamemodeInsurgency,
+                $"insurgency-govfor-{segmentKey}",
+                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", segmentTitle)));
+            yield return (
                 DistressGovernmentJobList,
                 GamemodeDistressSignal,
                 $"distress-govfor-{segmentKey}",
@@ -413,9 +420,9 @@ public sealed partial class HumanoidProfileEditor
         if (IsInsurgencyDepartment(department))
         {
             yield return (
-                ColonyRolesJobList,
+                InsurgencyInsurgentJobList,
                 GamemodeInsurgency,
-                $"colony-roles-{department.ID}",
+                $"insurgency-jobs-{department.ID}",
                 department.CustomName ?? Loc.GetString(
                     "humanoid-profile-editor-department-jobs-label",
                     ("departmentName", departmentName)));
@@ -428,9 +435,9 @@ public sealed partial class HumanoidProfileEditor
                 "humanoid-profile-editor-department-jobs-label",
                 ("departmentName", departmentName));
             yield return (
-                ColonyRolesJobList,
+                InsurgencyCivilianJobList,
                 GamemodeInsurgency,
-                $"colony-roles-{department.ID}",
+                $"insurgency-civilian-{department.ID}",
                 title);
             yield return (
                 ColonyCivilianJobList,
@@ -595,12 +602,12 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshAntags()
     {
-        ColonyRolesAntagList.ReleaseChildren();
+        InsurgencyAntagList.ReleaseChildren();
         ColonyAntagList.ReleaseChildren();
         DistressAntagList.ReleaseChildren();
         _antagPreferences.Clear();
 
-        PopulateAntagPreferences(ColonyRolesAntagList, GamemodeInsurgency);
+        PopulateAntagPreferences(InsurgencyAntagList, GamemodeInsurgency);
         PopulateAntagPreferences(ColonyAntagList, GamemodeColonyFall);
         PopulateAntagPreferences(DistressAntagList, GamemodeDistressSignal);
     }

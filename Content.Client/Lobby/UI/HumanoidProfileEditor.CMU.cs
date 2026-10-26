@@ -41,7 +41,7 @@ public sealed partial class HumanoidProfileEditor
 {
     private const int CharacterDescriptionTabIndex = 1;
     private const int RegulationAppearanceTabIndex = 2;
-    private const int ColonyRolesTabIndex = 5;
+    private const int InsurgencyTabIndex = 5;
     private const int ColonyFallTabIndex = 6;
     private const int DistressSignalTabIndex = 7;
     // CMU14: Force on Force roles, hijacking, announcements and identification.
@@ -106,7 +106,7 @@ public sealed partial class HumanoidProfileEditor
         TabContainer.SetTabVisible(CharacterDescriptionTabIndex, _allowCharacterDescription);
         TabContainer.SetTabTitle(RegulationAppearanceTabIndex,
             Loc.GetString("humanoid-profile-editor-regulation-appearance-tab"));
-        TabContainer.SetTabTitle(ColonyRolesTabIndex, Loc.GetString("humanoid-profile-editor-colony-roles-tab"));
+        TabContainer.SetTabTitle(InsurgencyTabIndex, Loc.GetString("humanoid-profile-editor-insurgency-tab"));
         TabContainer.SetTabTitle(ColonyFallTabIndex, Loc.GetString("humanoid-profile-editor-colony-fall-tab"));
         TabContainer.SetTabTitle(DistressSignalTabIndex,
             Loc.GetString("humanoid-profile-editor-distress-signal-tab"));
@@ -354,6 +354,10 @@ public sealed partial class HumanoidProfileEditor
 
     private void SetupGamemodeTabTitles()
     {
+        InsurgencyTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-government-jobs-tab"));
+        InsurgencyTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-insurgency-jobs-tab"));
+        InsurgencyTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-civilian-jobs-tab"));
+        InsurgencyTabs.SetTabTitle(3, Loc.GetString("humanoid-profile-editor-antags-tab"));
         ColonyFallTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-civilian-jobs-tab"));
         ColonyFallTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-threat-roles-tab"));
         ColonyFallTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
