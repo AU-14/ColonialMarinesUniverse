@@ -20,27 +20,8 @@ public sealed partial class WorldMarketComponent : Component
     // What is going on that was told in the news: for the list of the console.
     public readonly List<ActiveEvent> Active = new();
 
-    public readonly List<SignedAgreement> Agreements = new();
-    public readonly List<ActiveQuota> Quotas = new();
-    public readonly List<QuotaRecord> QuotaLog = new();
-
-    // The standing with the mother company: it goes up with every quota done and down with every one that is missed, and lowers or raises the duty.
-    public int Standing;
-
-    // The inspection of the mother company: the duty is higher until this time.
-    public TimeSpan InspectionUntil;
-
-    // The voyages: the next one, the longest that they have been put off to, and when the colony can call an extra one again.
-    public TimeSpan NextVoyage;
-    public TimeSpan DelayUntil;
-    public TimeSpan UrgentReadyAt;
-
     public TimeSpan NextEvent;
-    public TimeSpan NextQuota;
     public TimeSpan NextTick;
-
-    // The organizations outside the law: what the colony stands with each, how much the law looks at it, the orders that the colony has taken, and the crates on their way.
-    public readonly Dictionary<string, UnderworldState> Underworld = new();
 
     // The number that the map of the round is made from (the same for the server and the clients, new every round). Nothing else is kept of the map: the land and the places of the cities
     // come of it.
@@ -105,12 +86,8 @@ public sealed partial class WorldMarketComponent : Component
     public TimeSpan NextHazard;
     public TimeSpan NextBidCheck;
     public TimeSpan NextCityCrisis;
-    public readonly List<IncomingWare> Incoming = new();
 
     public bool Started;
-
-    // Whether the platforms wait for the voyages. A table that has it off lets the drones come at once, as they did before the schedule.
-    public bool VoyagesScheduled = true;
 }
 
 public sealed class NewsItem(string text, TimeSpan at)
@@ -123,46 +100,4 @@ public sealed class ActiveEvent(string id, TimeSpan until)
 {
     public readonly string Id = id;
     public TimeSpan Until = until;
-}
-
-public sealed class SignedAgreement(string id, TimeSpan until)
-{
-    public readonly string Id = id;
-    public TimeSpan Until = until;
-}
-
-public sealed class ActiveQuota(string id, TimeSpan deadline)
-{
-    public readonly string Id = id;
-    public readonly TimeSpan Deadline = deadline;
-    public int Progress;
-}
-
-// A quota that is over, for the list: done or missed.
-public sealed class QuotaRecord(string id, bool done, TimeSpan at)
-{
-    public readonly string Id = id;
-    public readonly bool Done = done;
-    public readonly TimeSpan At = at;
-}
-
-public sealed class UnderworldState
-{
-    public int Standing = 20;
-    public float Heat;
-    public readonly List<TakenOrder> Orders = new();
-}
-
-public sealed class TakenOrder(string id, TimeSpan deadline)
-{
-    public readonly string Id = id;
-    public readonly TimeSpan Deadline = deadline;
-    public int Progress;
-}
-
-public sealed class IncomingWare(string org, string ware, TimeSpan at)
-{
-    public readonly string Org = org;
-    public readonly string Ware = ware;
-    public readonly TimeSpan At = at;
 }
