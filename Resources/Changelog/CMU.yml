@@ -15152,5 +15152,19 @@
   id: 880
   time: '2026-10-25T17:45:09.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2283
+- author: Mary-Marilyn
+  changes:
+  - message: Added more loadout clothes to scientists and doctors
+    type: Add
+  id: 881
+  time: '2026-10-26T00:41:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2295
+- author: AngryAl1123
+  changes:
+  - message: CCA diplomatic console
+    type: Add
+  id: 882
+  time: '2026-10-26T04:19:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2299
 Name: CMU
 Order: -1
