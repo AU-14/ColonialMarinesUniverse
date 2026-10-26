@@ -9,6 +9,7 @@
     icon:  
       sprite: _RMC14/Actions/xeno_actions.rsi
       state: retrieve
+      map: ["enum.ActionVisuals.Icon"]
     useDelay: 20
   - type: TargetAction
     checkCanAccess: true
