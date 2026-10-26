@@ -42,6 +42,8 @@
     plasma: 800
     maxPlasma: 800
     plasmaRegenOnWeeds: 3
+  - type: XenoRegen  
+    restHealMultiplier: 2.0 
   - type: CMArmor
     xenoArmor: 25
     explosionArmor: 40
