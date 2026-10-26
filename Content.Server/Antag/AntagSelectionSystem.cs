@@ -4,6 +4,7 @@ using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Antag.Components;
 using Content.Server.Chat.Managers;
+using Content.Server.CMU14.Round; // CMU14
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.GameTicking.Rules;
@@ -349,8 +350,9 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
 
     private float GetWeight(ICommonSession player)
     {
+        // CMU14: pity weighting, see AntagPitySystem.
         // TODO: Actually add weights! This is placeholder for a future PR.
-        return 1f;
+        return EntityManager.EntitySysManager.GetEntitySystem<AntagPitySystem>().GetWeight(player);
     }
 
     private void AssignAntags(Entity<AntagSelectionComponent> gameRule)

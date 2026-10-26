@@ -184,6 +184,9 @@ namespace Content.Server.Database
         Task<YautjaClanDeleteResult> DeactivateYautjaClanAsync(int clanId);
         Task<bool> UpsertYautjaClanMemberAsync(YautjaClanMemberRecord member);
         Task<bool> DeleteYautjaClanMemberAsync(Guid userId);
+        // CMU14: round-start antag pity persistence
+        Task<List<CmuAntagPityEntry>> GetCmuAntagPityAsync(long pruneBefore);
+        Task SaveCmuAntagPityAsync(CmuAntagPityEntry entry);
         Task<int> GetYautjaWhitelistFlagsAsync(Guid userId);
         Task SetYautjaWhitelistFlagsAsync(Guid userId, int flags);
         // CMU14 Clan Hall Begin
@@ -810,6 +813,18 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetYautjaClanAsync(clanId));
+        }
+
+        public Task<List<CmuAntagPityEntry>> GetCmuAntagPityAsync(long pruneBefore)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetCmuAntagPityAsync(pruneBefore));
+        }
+
+        public Task SaveCmuAntagPityAsync(CmuAntagPityEntry entry)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SaveCmuAntagPityAsync(entry));
         }
 
         public Task<List<YautjaClanRecord>> GetYautjaClansAsync()
