@@ -99,7 +99,7 @@ public sealed partial class AntagPitySystem : EntitySystem
         _eligible.Add(args.Player.UserId);
     }
 
-    private void OnAfterAntagSelected(AfterAntagEntitySelectedEvent ev)
+    private void OnAfterAntagSelected(ref AfterAntagEntitySelectedEvent ev)
     {
         if (ev.Session is not { } session)
             return;

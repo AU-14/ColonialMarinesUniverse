@@ -1,3 +1,4 @@
+using System; // CMU14
 using System.Linq;
 using Content.Server.Antag.Components;
 using Content.Server.Antag.Selectors;
@@ -569,6 +570,10 @@ public sealed partial class AntagSelectionSystem
         var presetId = GameTicker.CurrentPreset?.ID ?? GameTicker.Preset?.ID;
         foreach (var antag in prefs.SelectedCharacter.GetAntagPreferencesForGamemode(presetId))
         {
+            // CMU14: an antag blacklisted for the running preset cannot roll there, whatever a saved profile still says.
+            if (_proto.Index(antag).BlacklistedGamemodes.Contains(presetId, StringComparer.OrdinalIgnoreCase))
+                continue;
+
             // We also check this in IsSessionValid, but we also check it here since this is public API.
             if (_ban.IsRoleBanned(session, antag) || !_playTime.IsAllowed(session, antag))
                 continue;
