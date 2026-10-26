@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore; // CMU14
 
 namespace Content.Server.Database;
 
@@ -24,7 +25,33 @@ public sealed class YautjaClan
 
     public bool Active { get; set; } = true;
 
+    // CMU14 Clan Hall Begin: sigil is a clan mask icon id, notice is the clan's pinned message,
+    // elite notes are only shown to Elite and up
+    [Required]
+    public string Sigil { get; set; } = string.Empty;
+
+    [Required]
+    public string Notice { get; set; } = string.Empty;
+
+    [Required]
+    public string EliteNotes { get; set; } = string.Empty;
+    // CMU14 End
+
     public List<YautjaClanMember> Members { get; set; } = new();
+}
+
+// CMU14 class: a clanless hunter asking to join a clan. one open petition per player, no FKs on
+// purpose, clans are deactivated rather than deleted and the disband path clears these
+[Table("yautja_clan_petition")]
+[Index(nameof(PlayerUserId), IsUnique = true)]
+public sealed class YautjaClanPetition
+{
+    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
+
+    public Guid PlayerUserId { get; set; }
+
+    public int ClanId { get; set; }
 }
 
 [Table("yautja_clan_member")]
@@ -57,7 +84,25 @@ public sealed record YautjaClanRecord(
     string Description,
     int Honor,
     string Color,
-    bool Active);
+    bool Active,
+    string Sigil = "", // CMU14
+    string Notice = "", // CMU14
+    string EliteNotes = ""); // CMU14
+
+// CMU14 Clan Hall Begin: petitions, and a hunter row for the hall's boards named with the last
+// seen username so offline hunters read right
+public sealed record YautjaClanPetitionRecord(Guid PlayerUserId, int ClanId);
+
+public sealed record YautjaHunterBoardRecord(
+    Guid PlayerUserId,
+    string Name,
+    int? ClanId,
+    int Rank,
+    int Permissions,
+    int Honor,
+    bool IsLegacy,
+    int WhitelistFlags);
+// CMU14 End
 
 public sealed record YautjaClanMemberRecord(
     Guid PlayerUserId,

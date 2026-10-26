@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.CMU14.Xenonids.Hive;
+using Content.Server.EUI;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Actions;
@@ -11,6 +12,7 @@ using Content.Shared.Popups;
 using Content.Shared.Station;
 using Content.Shared.UserInterface;
 using Robust.Shared.Containers;
+using Robust.Shared.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -42,6 +44,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
     [Dependency] private YautjaThrallSystem _thralls = default!;
     [Dependency] private YautjaYoungbloodSystem _youngbloods = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private EuiManager _eui = default!;
 
     private TimeSpan _nextTrackerRefresh;
 
@@ -148,6 +151,10 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
                 break;
             case YautjaBracerPanelCommand.RemoteExecuteYoungblood:
                 _youngbloods.TryOpenRemoteExecution(ent, args.Actor);
+                break;
+            case YautjaBracerPanelCommand.OpenClanHall:
+                if (TryComp<ActorComponent>(args.Actor, out var actor))
+                    _eui.OpenEui(new YautjaClanHallEui(), actor.PlayerSession);
                 break;
             case YautjaBracerPanelCommand.OpenTranslator:
                 _utility.TryOpenTranslator(ent, args.Actor);

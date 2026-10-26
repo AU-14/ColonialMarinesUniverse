@@ -680,7 +680,7 @@ public sealed class YautjaPredatorRoleTest
     }
 
     [Test]
-    public async Task PredatorAdminEditorAppliesChanceSlotsAndInitializesHunterShip()
+    public async Task ClanHallRoundPageAppliesChanceSlotsAndInitializesHunterShip()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -698,13 +698,13 @@ public sealed class YautjaPredatorRoleTest
 
             var session = server.PlayerMan.Sessions.Single();
             var euiManager = server.ResolveDependency<EuiManager>();
-            var editor = new Content.Server.CMU14.Yautja.YautjaPredatorAdminEditorEui();
+            var editor = new Content.Server.CMU14.Yautja.YautjaClanHallEui(YautjaClanHallPage.Round);
             EntityUid predatorSpawn = default;
             euiManager.OpenEui(editor, session);
 
             try
             {
-                editor.HandleMessage(new YautjaPredatorAdminEditorSetRandomMessage(true, 3, 5));
+                editor.HandleMessage(new YautjaClanHallRoundRandomMessage(true, 3, 5));
                 Assert.Multiple(() =>
                 {
                     Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.RandomEnabled), Is.True);
@@ -712,7 +712,7 @@ public sealed class YautjaPredatorRoleTest
                     Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.RandomMaximumRounds), Is.EqualTo(5));
                 });
 
-                editor.HandleMessage(new YautjaPredatorAdminEditorSetHunterSlotsMessage(4));
+                editor.HandleMessage(new YautjaClanHallRoundSlotsMessage(4));
                 Assert.That(entMan.System<YautjaPredatorRoundSystem>().ConfiguredHunterSlots, Is.EqualTo(4));
 
                 // Keep this EUI routing test focused on the admin controls. The
@@ -724,7 +724,7 @@ public sealed class YautjaPredatorRoleTest
                 // spawn-point path without loading the large map into this
                 // connected EUI test.
                 predatorSpawn = entMan.SpawnEntity("CMUHunterShipMarkerPredatorSpawn", MapCoordinates.Nullspace);
-                editor.HandleMessage(new YautjaPredatorAdminEditorInitializeMessage());
+                editor.HandleMessage(new YautjaClanHallRoundInitializeMessage());
 
                 var ruleQuery = entMan.EntityQueryEnumerator<YautjaPredatorRoundComponent>();
                 Assert.That(ruleQuery.MoveNext(out _, out var rule), Is.True);
@@ -736,17 +736,16 @@ public sealed class YautjaPredatorRoleTest
                     Assert.That(rule.HunterShipLoaded, Is.True);
                 });
 
-                var state = editor.GetNewState();
-                Assert.That(state, Is.TypeOf<YautjaPredatorAdminEditorEuiState>());
-                var editorState = (YautjaPredatorAdminEditorEuiState) state;
+                // the hall's round page reads these same values
+                var round = entMan.System<YautjaPredatorRoundSystem>();
                 Assert.Multiple(() =>
                 {
-                    Assert.That(editorState.HuntInitialized, Is.True);
-                    Assert.That(editorState.ActiveHunterSlots, Is.EqualTo(4));
-                    Assert.That(editorState.HunterSlots, Is.EqualTo(4));
-                    Assert.That(editorState.RandomEnabled, Is.True);
-                    Assert.That(editorState.RandomMinimumRounds, Is.EqualTo(3));
-                    Assert.That(editorState.RandomMaximumRounds, Is.EqualTo(5));
+                    Assert.That(round.TryGetActiveHunterSlots(out var activeSlots), Is.True);
+                    Assert.That(activeSlots, Is.EqualTo(4));
+                    Assert.That(round.ConfiguredHunterSlots, Is.EqualTo(4));
+                    Assert.That(round.RandomEnabled, Is.True);
+                    Assert.That(round.RandomMinimumRounds, Is.EqualTo(3));
+                    Assert.That(round.RandomMaximumRounds, Is.EqualTo(5));
                 });
             }
             finally
