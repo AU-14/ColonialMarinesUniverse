@@ -10,4 +10,9 @@ public sealed partial class SubmissionStorageComponent : Component
 {
     [DataField, ViewVariables]
     public Dictionary<ProtoId<TagPrototype>, float>? Rewards;
+
+    // generic tags like Fruit, only paid when nothing in Rewards matches.
+    // otherwise a tomato would sell at the fruit price
+    [DataField, ViewVariables]
+    public Dictionary<ProtoId<TagPrototype>, float>? FallbackRewards;
 }

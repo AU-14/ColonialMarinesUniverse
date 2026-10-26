@@ -5,6 +5,7 @@ using Content.Shared.Containers;
 using Content.Shared.Stacks;
 using Content.Shared.Tag;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.ColonyEconomy;
 
@@ -31,29 +32,15 @@ public sealed partial class SubmissionStorageSystem : EntitySystem
 
         if (!TryComp<TagComponent>(args.Entity, out var tags))
             return;
-        if (submission.Rewards is null)
-            return;
 
-        float sum = 0f;
-        int num = 0;
-        foreach (var tag in tags.Tags)
-        {
-            if (submission.Rewards.TryGetValue(tag, out var val))
-            {
-                sum += val;
-                num++;
-            }
-        }
-        // can never be too careful
-        if (num == 0)
-            num = 1;
-
-        // e.g. $10 + $15 != $25 instead it equals $12.5
-        float amount = sum / num;
+        // best specific tag wins. this used to average every match, so a tomato
+        // (tomato + fruit + vegetable) got dragged down to the generic price
+        var amount = BestReward(submission.Rewards, tags.Tags);
+        if (amount <= 0f)
+            amount = BestReward(submission.FallbackRewards, tags.Tags);
 
         var mult = _ambassador.GetSubmissionMultiplier();
         var tariff = _corporateConsole.GetTariff();
-        //var amount = submission.Rewards.TryGetValue()
 
         float reward;
         if (TryComp<StackComponent>(args.Entity, out var stack))
@@ -70,5 +57,20 @@ public sealed partial class SubmissionStorageSystem : EntitySystem
         _colonyBudget.AddToBudget(colonyAmount);
         if (tariffAmount > 0f)
             _corporateConsole.AddToCorporateBudget(tariffAmount);
+    }
+
+    private static float BestReward(Dictionary<ProtoId<TagPrototype>, float>? rewards, IEnumerable<ProtoId<TagPrototype>> tags)
+    {
+        if (rewards is null)
+            return 0f;
+
+        var best = 0f;
+        foreach (var tag in tags)
+        {
+            if (rewards.TryGetValue(tag, out var value) && value > best)
+                best = value;
+        }
+
+        return best;
     }
 }

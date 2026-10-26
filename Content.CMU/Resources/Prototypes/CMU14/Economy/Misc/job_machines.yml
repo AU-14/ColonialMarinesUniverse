@@ -55,14 +55,52 @@
   - type: ThrowInsertContainer
     containerId: submission
     probability: 100
+  # one price list for every point, the children only change what they take.
+  # crops are priced so a tray earns about the same per hour whatever is planted
   - type: SubmissionStorage
     rewards:
       SteelOre: 5
-      AUwood: 20
-      Vegetable: 1
-      Fruit: 2
-      CottonBoll: 2
-      CMUGrain: 2
+      AUwood: 8
+      CottonBoll: 6.5
+      Wheat: 5.25
+      Oat: 5.25
+      Rice: 5.25
+      MeatWheat: 5.25
+      Sugarcane: 4
+      Papercane: 4
+      Apple: 4
+      Lemon: 4
+      Lime: 4
+      Orange: 4
+      Pineapple: 4
+      Banana: 6.25
+      Grape: 6.25
+      Berries: 3
+      Cherry: 2.5
+      Cocoa: 2
+      Watermelon: 25
+      Pea: 5.75
+      Soybeans: 6.75
+      Cabbage: 6.75
+      Carrot: 7.25
+      Potato: 7.25
+      Garlic: 7.25
+      Flower: 7.25
+      Chili: 7.75
+      Eggplant: 7.75
+      Tomato: 8.5
+      Onion: 9
+      Corn: 11.75
+      Pumpkin: 11.75
+      SalvageTier1: 2
+      SalvageTier2: 4
+      SalvageTier3: 6
+      SalvageTier4: 9
+      SalvageTier5: 14
+    # only for produce with no entry above
+    fallbackRewards:
+      Fruit: 3
+      Vegetable: 3
   - type: ContainerContainer
     containers:
       submission: !type:Container
@@ -86,6 +124,18 @@
       - Fruit
       - CottonBoll
       - CMUGrain
+      - Flower
+    # cooked food carries the fruit/veg tags too, keep it out
+    blacklist:
+      tags:
+      - Slice
+      - Cake
+      - Pie
+      - Donut
+      - Soup
+      - Bread
+      - Pancake
+      - Creamsicle
     container:
       ents: []
       showEnts: False
@@ -97,31 +147,10 @@
   suffix: Steel
   description: A place to submit  resources for shipping.
   components:
-  - type: ContainerContainer
-    containers:
-      submission: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-      disposals: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-      DisposalUnitComponent: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-  - type: SubmissionStorage
-    rewards:
-      SteelOre: 10
   - type: DisposalUnit
     whitelist:
       tags:
       - SteelOre
-    container:
-      ents: []
-      showEnts: False
-      occludes: True
 - type: Tag
   id: SteelOre
 
@@ -132,31 +161,10 @@
   suffix: Wood
   description: A place to submit  resources for shipping.
   components:
-  - type: ContainerContainer
-    containers:
-      submission: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-      disposals: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-      DisposalUnitComponent: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-  - type: SubmissionStorage
-    rewards:
-      AUwood: 20
   - type: DisposalUnit
     whitelist:
       tags:
       - AUwood
-    container:
-      ents: []
-      showEnts: False
-      occludes: True
 - type: Tag
   id: AUwood
 
@@ -167,154 +175,34 @@
   description: A place to submit  resources for shipping.
   suffix: Vegetables
   components:
-  - type: ContainerContainer
-    containers:
-      submission: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-      disposals: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-      DisposalUnitComponent: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-  - type: SubmissionStorage
-    rewards:
-      Vegetable: 2
   - type: DisposalUnit
     whitelist:
       tags:
       - Vegetable
-    container:
-      ents: []
-      showEnts: False
-      occludes: True
 - type: entity
   parent: AUSubmissionPointBase
   id: AUSubmissionPointFruit
   name: submission point (fruit)
   description: A place to submit  resources for shipping.
   components:
-  - type: ContainerContainer
-    containers:
-      submission: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-      disposals: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-      DisposalUnitComponent: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-  - type: SubmissionStorage
-    rewards:
-      Fruit: 2
   - type: DisposalUnit
     whitelist:
       tags:
       - Fruit
-    container:
-      ents: []
-      showEnts: False
-      occludes: True
 - type: entity
   parent: AUSubmissionPointBase
   id: AUSubmissionPointCrop
   name: submission point (crop)
   components:
-  - type: ContainerContainer
-    containers:
-      submission: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-      disposals: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-      DisposalUnitComponent: !type:Container
-        ents: []
-        showEnts: False
-        occludes: True
-  - type: SubmissionStorage
-    rewards:
-      Wheat: 5
-      #MeatWheat: TODO
-      Oat: 5
-      Sugarcane: 2.5
-      #Papercane: TODO
-      Banana: 7.5
-      Carrot: 14
-      Cabbage: 11
-      Garlic: 12
-      Lemon: 6
-      Lime: 5
-      Orange: 5
-      Pineapple: 5
-      Potato: 14
-      Tomato: 8.5
-      Eggplant: 8.5
-      Apple: 5
-      Cocoa: 1.25
-      Corn: 17
-      Onion: 17
-      Chili: 7.5
-      Flower: 14
-      Rice: 5
-      Soybeans: 5
-      Watermelon: 36
-      Grape: 10
-      Berries: 3.75
-      Pea: 6
-      Pumpkin: 19
-      #CottonBoll: TODO
-      Cherry: 3
-      AUwood: 15
   - type: DisposalUnit
     whitelist:
       tags:
-      - Wheat
-      #- MeatWheat
-      - Oat
-      - Sugarcane
-      #- Papercane
-      - Banana
-      - Carrot
-      - Cabbage
-      - Garlic
-      - Lemon
-      - Lime
-      - Orange
-      - Pineapple
-      - Potato
-      - Tomato
-      - Eggplant
-      - Apple
-      - Cocoa
-      - Corn
-      - Onion
-      - Chili
+      - Fruit
+      - Vegetable
+      - CMUGrain
       - Flower
-      - Rice
-      - Soybeans
-      - Watermelon
-      - Grape
-      - Berries
-      - Pea
-      - Pumpkin
-      #- CottonBoll
-      - Cherry
+      - CottonBoll
       - AUwood
-    container:
-      ents: []
-      showEnts: False
-      occludes: True
 - type: entity
   parent: RMCCommunicationsConsoleBase
   id: AUColonyCommsConsole
