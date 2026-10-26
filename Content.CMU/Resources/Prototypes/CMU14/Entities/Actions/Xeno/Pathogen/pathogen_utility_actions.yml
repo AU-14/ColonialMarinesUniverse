@@ -8,7 +8,7 @@
     itemIconStyle: NoItem
     icon:  
       sprite: _RMC14/Actions/xeno_actions.rsi
-      state: guardian_link
+      state: retrieve
     useDelay: 20
   - type: TargetAction
     checkCanAccess: true
