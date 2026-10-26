@@ -170,26 +170,27 @@
       types:
         Slash: 40
   - type: XenoClawBloodloss
-    bloodloss: 8
+    bloodloss: 10
   - type: XenoScissorCut
     damage:
       types:
-        Slash: 20
-    bloodloss: 12
+        Slash: 40
+    bloodloss: 18
+    AlwaysSlows: true
   - type: XenoTailStab
     tailDamage:
       types:
         Slash: 10
         Blunt: 10
         Piercing: 10
-    bloodloss: 25
+    bloodloss: 35
   - type: XenoImpale  
     damage:  
       types:
         Slash: 11.66
         Blunt: 11.66
         Piercing: 11.67
-    bloodloss: 25
+    bloodloss: 50
   - type: XenoHeadbite
     damage:
       types:
