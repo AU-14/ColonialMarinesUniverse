@@ -4,7 +4,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;  
 using Robust.Shared.Prototypes; 
 
-namespace Content.Shared._RMC14.Xenonids.GuardianSweep;  
+namespace Content.Shared._RMC14.Xenonids.Guardian.XenoGuardianSweep;
   
 [RegisterComponent, NetworkedComponent]  
 public sealed partial class XenoGuardianSweepComponent : Component  
