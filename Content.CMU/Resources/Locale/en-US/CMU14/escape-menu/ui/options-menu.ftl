@@ -168,6 +168,7 @@ cmu-ui-options-filter-placeholder = Filter settings and keybinds
 cmu-ui-options-filter-matches = { $count ->
     [one] 1 MATCH
    *[other] { $count } MATCHES
+}
 
 cmu-ui-options-filter-none = NO MATCHES
 
