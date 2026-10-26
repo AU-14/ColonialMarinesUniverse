@@ -176,7 +176,7 @@
       types:
         Slash: 40
     bloodloss: 18
-    AlwaysSlows: true
+    alwaysSlows: true
   - type: XenoTailStab
     tailDamage:
       types:
