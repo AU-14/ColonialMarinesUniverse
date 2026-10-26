@@ -61,6 +61,8 @@
         Piercing: 16
   - type: Tackle
     chance: 0.45
+    stunMin: 5
+    stunMin: 6
   - type: Fixtures
     fixtures:
       fix1:
