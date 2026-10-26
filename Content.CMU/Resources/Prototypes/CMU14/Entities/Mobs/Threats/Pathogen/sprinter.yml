@@ -12,8 +12,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      230: Critical
-      330: Dead
+      270: Critical
+      360: Dead
     stateAlertDict:
       Alive: XenoHealth
       Critical: XenoCrit
