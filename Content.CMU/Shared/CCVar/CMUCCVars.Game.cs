@@ -55,4 +55,12 @@ public sealed partial class CCVars
     [CVarControl(AdminFlags.VarEdit, min: 0, max: 255)]
     public static readonly CVarDef<int> FoFMaxGap =
         CVarDef.Create("cmu.game.fof_max_force_balance_gap", 3, CVar.SERVERONLY);
+
+    /// <summary>
+    /// MREs aboard the warship stay sealed while the mess hall is serving: unconditionally for the first ten
+    /// minutes of the round, then only while the DEFAC shutters are up. A hijacked dropship still overrides it.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit)]
+    public static readonly CVarDef<bool> ShipMreLock =
+        CVarDef.Create("cmu.game.ship_mre_lock", true, CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
 }
