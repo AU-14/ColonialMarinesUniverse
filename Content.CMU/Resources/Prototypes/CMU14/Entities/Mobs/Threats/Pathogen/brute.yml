@@ -96,15 +96,15 @@
     animation: WeaponArcSmash
   - type: CMArmor
     explosionArmor: 50
-    xenoArmor: 30
+    xenoArmor: 20
   - type: XenoClaws
     clawType: VerySharp
   - type: Tackle
     min: 2
-    max: 3
+    max: 6
     chance: 0.35
-    stunMin: 5
-    stunMax: 5
+    stunMin: 3
+    stunMax: 4
   - type: RMCSize
     size: Big
   - type: XenoDevour
