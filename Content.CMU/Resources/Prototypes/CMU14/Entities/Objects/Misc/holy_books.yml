@@ -1,0 +1,69 @@
+# Holy books for chaplains whose faith isn't the Bible's. They work like the Bible, with the guidebook's book sprite.
+- type: entity
+  abstract: true
+  parent: RMCBible
+  id: CMUHolyBookBase
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/Books/Other/book.rsi
+    state: icon
+
+- type: entity
+  parent: CMUHolyBookBase
+  id: CMUHolyBookTanakh
+  name: Tanakh
+  description: The Hebrew scriptures, the Torah, the Prophets and the Writings, bound in one well-worn volume.
+
+- type: entity
+  parent: CMUHolyBookBase
+  id: CMUHolyBookQuran
+  name: Qur'an
+  description: The holy book of Islam, carefully kept and wrapped against the dust of the field.
+
+- type: entity
+  parent: CMUHolyBookBase
+  id: CMUHolyBookBhagavadGita
+  name: Bhagavad Gita
+  description: Krishna's counsel to Arjuna on the eve of battle. Fitting reading for a soldier.
+
+- type: entity
+  parent: CMUHolyBookBase
+  id: CMUHolyBookDhammapada
+  name: Dhammapada
+  description: A collection of the Buddha's sayings, small enough to carry anywhere.
+
+- type: entity
+  parent: CMUHolyBookBase
+  id: CMUHolyBookGuruGranthSahib
+  name: Guru Granth Sahib
+  description: A travelling copy of the Sikh scripture, the living Guru.
+
+- type: entity
+  parent: CMUHolyBookBase
+  id: CMUHolyBookKojiki
+  name: Kojiki
+  description: The oldest chronicle of Japan's myths and the kami.
+
+- type: entity
+  parent: CMUHolyBookBase
+  id: CMUHolyBookTaoTeChing
+  name: Tao Te Ching
+  description: Laozi's short book on the Way. The Way that can be told is not the eternal Way.
+
+- type: entity
+  parent: CMUHolyBookBase
+  id: CMUHolyBookPagan
+  name: book of the old ways
+  description: A hand-copied book of seasonal rites, prayers and lore.
+
+- type: entity
+  parent: CMUHolyBookBase
+  id: CMUHolyBookReflections
+  name: book of reflections
+  description: Meditations and questions from many faiths, and answers from none of them.
+
+- type: entity
+  parent: CMUHolyBookBase
+  id: CMUHolyBookOther
+  name: holy book
+  description: The sacred text of a chaplain's own faith.

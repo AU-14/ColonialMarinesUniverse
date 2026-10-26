@@ -83,6 +83,7 @@
   id: CMUMedicalJeepDropLaser
   name: medical vehicle delivery beam
   description: A blue beacon marking an incoming vehicle crate. Stand clear!
+  categories: [ HideSpawnMenu, DoNotMap ] # categories aren't inherited from CMUFighterLaser
   components:
   - type: FighterLaser
     beamColor: "#388FFF"

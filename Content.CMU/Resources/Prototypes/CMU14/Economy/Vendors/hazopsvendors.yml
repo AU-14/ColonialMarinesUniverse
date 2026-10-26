@@ -422,8 +422,9 @@
     Standard issue across the frontier where threats can appear without warning.
     Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
 
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+    For immediate combat readiness: select a primary weapon and a sidearm.
   components:
+  - type: CMUVendGunsOnSafety
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
   - type: CMAutomatedVendor
@@ -431,29 +432,35 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponXMP5A6
-      - id: AU14GunCaseRifleXM20A2
+      - id: AU14WeaponSMGXMP5A6HAZOPS
+      - id: AUWeaponRifleXM20A2HAZOPS
     - name: Primary Ammunition
       entries:
       - id: AU14MagazineXMP5A6
-        amount: 60
+        amount: 120
       - id: AU14MagazineRifleXM20A2
-        amount: 45
+        amount: 120
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: CMUKitWeaponMarkIV
-      - id: AU14GunCasePistolM50HAZOPS
+      - id: CMUWeaponPistolMarkIVEmpty
+      - id: AU14WeaponPistolM50HAZOPS
     - name: Handgun Ammunition
       entries:
       - id: CMUMagazinePistolMarkIV
-        amount: 60
+        amount: 120
       - id: AU14MagazinePistolM50
-        amount: 60
-    - name: Attachments
-      choices: { CMUAttachmentsVendor: 1 }
+        amount: 120
+    - name: Unrestricted Attachments
       entries:
+      - id: RMCAttachmentRailFlashlight
+        maxPerUser: 1
       - id: RMCAttachmentTwoPointSling
+        maxPerUser: 1
+    - name: Special Ammunition
+      choices: { CMUSpecialAmmo: 2 }
+      entries:
+      - id: CMMagazineRifleM54CAP
 
 - type: entity
   parent: AU14SpecVend
@@ -466,6 +473,7 @@
 
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMAutomatedVendor
     sections:
     - name: Weapons Specialist Sets
@@ -739,6 +747,7 @@
   name: HAZOPS automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]

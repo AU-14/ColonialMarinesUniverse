@@ -23,7 +23,7 @@
   ### Selecting the Energy
   The Lifepak delivers a set amount of energy, measured in joules (J). Right-click it and choose [bold]Raise energy[/bold] or [bold]Lower energy[/bold], or use the energy keys on its monitor. It starts at 150 J. Examine it to see the current setting.
 
-  More energy heals more and is more likely to bring someone back, but it burns the patient more. For the Lifepak, each setting heals up to this much suffocation damage [bold]and[/bold] up to this much blood loss damage:
+  More energy can heal more suffocation and blood loss damage, but it burns the patient more. The shock never heals any other kind of damage, and it can't heal more than the patient has. A patient with little suffocation or blood loss damage gets nothing from a higher setting except the extra burns. For the Lifepak, each setting heals up to this much suffocation damage [bold]and[/bold] up to this much blood loss damage:
   - [bold]50 J[/bold]: heals 30 of each. No burns.
   - [bold]70 J[/bold]: heals 37 of each. Deals 5 shock damage.
   - [bold]100 J[/bold]: heals 45 of each. Deals 10 shock damage.
@@ -34,7 +34,7 @@
 
   Shock damage is a type of burn damage, treated like any other burn.
 
-  Use the lowest energy that will do the job. The monitor's ANALYZE key works this out for you.
+  Use the lowest energy that will do the job. The monitor's ANALYZE key works this out for you. If a patient died mostly of other injuries, like gunshots or burns, treat those first: no energy setting will make up for them.
 
   ## The AED
   The AED is small and simple, and chooses everything itself. It can't be adjusted by hand.

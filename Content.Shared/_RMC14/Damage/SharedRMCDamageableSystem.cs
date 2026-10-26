@@ -41,6 +41,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CMU14.GasMask;
+using Content.Shared.CMU14.ShipWeapons; // CMU14
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Smoke;
 using Content.Shared.Storage;
@@ -769,10 +770,11 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                                     slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
                                     TryComp<GasMaskFilterComponent>(slot.ContainerSlot.ContainedEntity.Value, out var filt))
                                 {
-                                    if (filt.Integrity != 0.0f && TryComp<GasMaskFilterDamageComponent>(contact, out var dam))
+                                    if (TryComp<GasMaskFilterDamageComponent>(contact, out var dam) &&
+                                        (filt.Integrity != 0.0f || dam.OrbitalGas && filt.LastOrbitalGasDamage == time)) // CMU14
                                     {
                                         _mask.DamageFilter(slot.ContainerSlot.ContainedEntity.Value, filt, dam);
-                                        if (dam.Neurotoxin == filt.NeurotoxinResist)
+                                        if (dam.OrbitalGas || dam.Neurotoxin == filt.NeurotoxinResist) // CMU14
                                             blocked = true;
                                     }
                                 }
@@ -798,11 +800,11 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                                             TryComp<GasMaskFilterComponent>
                                             (slot.ContainerSlot.ContainedEntity.Value, out var filt))
                                         {
-                                            if (filt.Integrity != 0.0f && TryComp<GasMaskFilterDamageComponent>
-                                                (contact, out var dam))
+                                            if (TryComp<GasMaskFilterDamageComponent>(contact, out var dam) &&
+                                                (filt.Integrity != 0.0f || dam.OrbitalGas && filt.LastOrbitalGasDamage == time)) // CMU14
                                             {
                                                 _mask.DamageFilter(slot.ContainerSlot.ContainedEntity.Value, filt, dam);
-                                                if (dam.Neurotoxin == filt.NeurotoxinResist)
+                                                if (dam.OrbitalGas || dam.Neurotoxin == filt.NeurotoxinResist) // CMU14
                                                     blocked = true;
                                             }
                                         }
@@ -820,6 +822,13 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                     _random.Prob(0.75f))
                 {
                     continue;
+                }
+
+                // CMU14: orbital organ and xeno effects use the same filter/internals protection as poison.
+                if (HasComp<CMUOrbitalGasComponent>(contact))
+                {
+                    var exposure = new CMUOrbitalGasExposureEvent(user);
+                    RaiseLocalEvent(contact, ref exposure);
                 }
 
                 // CMU14 Begin: internals keep smoke out of the lungs, so only the burn on the skin gets through

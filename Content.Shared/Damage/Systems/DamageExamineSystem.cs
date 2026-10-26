@@ -29,11 +29,14 @@ public sealed partial class DamageExamineSystem : EntitySystem
         RaiseLocalEvent(uid, ref ev);
         if (!ev.Message.IsEmpty)
         {
+            // cmu edit start: a gun's verb also lists its fire rate, accuracy and scatter, so it's its weapon stats
+            var isGun = HasComp<Content.Shared.Weapons.Ranged.Components.GunComponent>(uid);
             _examine.AddDetailedExamineVerb(args, component, ev.Message,
-                Loc.GetString("damage-examinable-verb-text"),
+                Loc.GetString(isGun ? "cmu-weapon-stats-verb-text" : "damage-examinable-verb-text"),
                 "/Textures/Interface/VerbIcons/smite.svg.192dpi.png",
-                Loc.GetString("damage-examinable-verb-message")
+                Loc.GetString(isGun ? "cmu-weapon-stats-verb-message" : "damage-examinable-verb-message")
             );
+            // cmu edit end
         }
     }
 

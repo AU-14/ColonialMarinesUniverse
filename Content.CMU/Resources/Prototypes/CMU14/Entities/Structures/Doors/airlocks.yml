@@ -1,0 +1,8 @@
+# A normal airlock in the black evacuation-airlock style. It's an ordinary door, so evacuation doesn't lock or unlock it.
+- type: entity
+  parent: CMAirlock
+  id: CMUAirlockEvacuationStyleBlack
+  name: airlock
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/escape_pod_door_black.rsi
