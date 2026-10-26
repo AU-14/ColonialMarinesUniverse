@@ -30,24 +30,25 @@
 # - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats
 # - CMUPlanetStableGarrisonDistress # govfor spawns planetside
 # - AUPlanetShepherdsPride # lot of forests/chokes
-# - CMUPlanetHopesRetreat # govfor spawns planetside
+  - CMUPlanetHopesRetreat
   - AUPlanetBosenmoriBasho
 # - AUPlanetLV759 # Hybrisa Metro # missing threat spawns, scenario fails
   - AUPlanetLV327 # Port Nereid
   - AUPlanetSorokyne
-  - AUPlanetCorsatStation
+# - AUPlanetCorsatStation # temporarily removed
   - CMUPlanetSolarisRidge
   - CMUPlanetFortMcNeil
   - AUPlanetTrijent
-  - AuPlanetKutjevo
+# - AuPlanetKutjevo # temporarily removed
   - AuPlanetShivasSnowball
-  - AuPlanetChances
+# - AuPlanetChances # temporarily removed
+  - CMUPlanetLV624
   rules:
   - AuVoteRule
   - PlatoonSpawn
   - RemoveAllJobs
   - AddGovfor
-  - AddGovforCorrespondent
+  - AddGovforAuxiliaryStaffDistress
 
 - type: gamePreset
   id: Insurgency
@@ -70,7 +71,7 @@
   - AuVoteRule
   - PlatoonSpawn
   - AddGovfor
-  - AddGovforCorrespondent
+  - AddGovforAuxiliaryStaff
   - AddClf
   - ColonyAntags
   - InsWinConditionsRule
@@ -82,7 +83,7 @@
   name: cmu-gamemode-forceonforce-name
   showInVote: true
   description: cmu-gamemode-forceonforce-desc
-  minPlayers: 80
+  minPlayers: 100
   burrowedLarvaEnabled: false
   requiresOpforVote: true
   requiresGovforVote: true
@@ -98,7 +99,9 @@
   - PlatoonSpawn
   - RemoveAllJobs
   - AddGovfor
+  - AddGovforAuxiliaryStaff
   - AddOpfor
+  - AddOpforAuxiliaryStaff
 
 - type: gamePreset
   id: Jailbreak

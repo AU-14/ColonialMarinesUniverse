@@ -183,7 +183,7 @@
     shoes: RMCBootsSPPFilled
     gloves: RMCHandsVeteranSPP
     belt: CMBeltSecurityMPFilled
-    back: RMCBackpackSPPCommando
+    back: RMCSatchelSPP # BUG-1060: the commando cloak needs scout armor and a skill the patrol doesn't have
     pocket1: RMCPouchMagazineLarge
     pocket2: RMCPouchFirstAidERTFill
   storage:

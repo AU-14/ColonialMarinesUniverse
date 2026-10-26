@@ -29,7 +29,10 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
     [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
 
     private static readonly ProtoId<JobPrototype> LesserDroneRole = "CMXenoLesserDrone";
+    private static readonly TimeSpan CheckEvery = TimeSpan.FromSeconds(5);
     private const string DefaultWinMsg = "The threat has been eliminated!";
+
+    private TimeSpan _nextCheck;
 
     public override void Initialize()
     {
@@ -62,6 +65,20 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
     }
 
     private void OnAdriftChanged(ref CMUAdriftChangedEvent ev) => CheckVictoryCondition();
+
+    // gibs and deletes take a xeno out without it ever going Dead, so the death hook alone left
+    // the round hanging after the last one got gibbed
+    protected override void ActiveTick(EntityUid uid, KillAllXenoRuleComponent component, GameRuleComponent gameRule,
+        float frameTime)
+    {
+        base.ActiveTick(uid, component, gameRule, frameTime);
+
+        if (Timing.CurTime < _nextCheck)
+            return;
+
+        _nextCheck = Timing.CurTime + CheckEvery;
+        CheckVictoryCondition();
+    }
 
     private void CheckVictoryCondition()
     {

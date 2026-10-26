@@ -678,6 +678,11 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
 
         elevator.Value.Comp.Orders.Add(deptOrder);
         Dirty(elevator.Value);
+
+        // Department orders are the colony's too, so their guns go on the firearm registry under whoever ordered them.
+        var bought = new Content.Server.CMU14.Requisitions.CMURequisitionsOrderBoughtEvent(elevator.Value,
+            elevator.Value.Comp.Orders.Count - 1, msg.Actor, elevator.Value.Comp.Faction);
+        RaiseLocalEvent(ref bought);
         UpdateAllUiForDepartment(uid, comp);
     }
 

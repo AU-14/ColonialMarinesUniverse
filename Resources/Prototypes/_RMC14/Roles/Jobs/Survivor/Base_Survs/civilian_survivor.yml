@@ -153,7 +153,7 @@
     rareItems:
       RMCMotionDetectorCompact:
         1: 4 # 2%
-      RMCDefibrillatorCompact:
+      AU14CMDefibrillator: # cmu edit: was RMCDefibrillatorCompact
         5: 8 # 2%
       RMCTankFlamerColony:
         9: 16 # 4%

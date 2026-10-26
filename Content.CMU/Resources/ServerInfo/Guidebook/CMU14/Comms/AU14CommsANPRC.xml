@@ -198,7 +198,7 @@
 
   If the radio link is lost during a call, the call ends.
 
-  Spoken telephone traffic consumes power and may produce a direction-finding signature.
+  Spoken telephone traffic consumes power.
 
   ## Storage
 
@@ -335,19 +335,19 @@
 
     <ColorBox><Box Margin="4">[bold]FH[/bold] frequency hop</Box></ColorBox>
     <ColorBox><Box Margin="4">Reduces jamming by one tier.</Box></ColorBox>
-    <ColorBox><Box Margin="4">1.5x transmission power cost and a small DF signature.</Box></ColorBox>
+    <ColorBox><Box Margin="4">1.5x transmission power cost. Gives a bearing to an enemy that has found the net.</Box></ColorBox>
 
     <ColorBox><Box Margin="4">[bold]SC[/bold] single channel</Box></ColorBox>
-    <ColorBox><Box Margin="4">Low power cost. Secured SC produces no DF signature.</Box></ColorBox>
+    <ColorBox><Box Margin="4">Low power cost. Secured SC gives no bearing.</Box></ColorBox>
     <ColorBox><Box Margin="4">No resistance to jamming.</Box></ColorBox>
 
     <ColorBox><Box Margin="4">[bold]CT[/bold] cipher text</Box></ColorBox>
-    <ColorBox><Box Margin="4">Unreadable without the matching fill card. Produces no DF signature.</Box></ColorBox>
+    <ColorBox><Box Margin="4">Unreadable without the matching fill card. Gives no bearing.</Box></ColorBox>
     <ColorBox><Box Margin="4">Requires a fill card. Ordinary headsets cannot receive CT.</Box></ColorBox>
 
     <ColorBox><Box Margin="4">[bold]PT[/bold] plain text</Box></ColorBox>
     <ColorBox><Box Margin="4">Uses half the normal transmission power.</Box></ColorBox>
-    <ColorBox><Box Margin="4">Unencrypted and produces the largest DF signature.</Box></ColorBox>
+    <ColorBox><Box Margin="4">Unencrypted. Gives a bearing to an enemy that has found the net.</Box></ColorBox>
   </Table>
 
   Waveforms are selected from the expert faceplate.
@@ -364,23 +364,20 @@
 
   Heavy jamming prevents field-telephone connections.
 
-  Hostile electronic-warfare equipment may detect the location of radio transmissions.
+  Talking does not put you on the enemy's map. An enemy operator has to search the band and resolve your net first, and even then they only get a rough bearing.
 
-  Direction-finding risk increases with:
+  Once your net is resolved, manpack traffic on it gives a bearing when it is:
 
-  - PT transmissions
+  - PT
   - faction-net traffic transmitted without a fill card
-  - FH transmissions
-  - HI output power
-  - repeated transmissions from the same position
-  - transmissions made near a jammer
+  - FH
 
-  Secured SC and CT transmissions produce no DF signature.
+  Secured SC and CT transmissions and ordinary headsets give no bearing. HI output power lets enemy search sets hear you from further away.
 
   The expert faceplate provides additional emission controls:
 
-  - [bold]BURST[/bold] halves detection chance
-  - [bold]EMCON[/bold] prevents radio transmissions from producing a DF signature
+  - [bold]BURST[/bold] lines are too short to take a bearing on
+  - [bold]EMCON[/bold] stops the set transmitting at all
 
   ### Radio check
 
@@ -462,12 +459,14 @@
   - PT traffic is readable.
   - CT traffic is not displayed.
 
-  Once an enemy net has been identified, transmissions on that net can still provide direction-finding information even when their contents cannot be read.
+  Once an enemy net has been identified, manpack transmissions on that net can still give a rough bearing even when their contents cannot be read.
 
-  Each detected transmission within range provides:
+  At most once every 30 seconds per net, a transmission within range gives:
 
-  - a bearing toward the transmitter
-  - a temporary tactical-map marker
+  - an eight-point compass bearing toward the transmitter
+  - a rough range: close, some way off, or a long way off
+
+  Nothing is marked on the tactical map. Take bearings from two different spots and cross them yourself.
 
   Expert operators can also attempt to break an enemy net's key from the faceplate.
 

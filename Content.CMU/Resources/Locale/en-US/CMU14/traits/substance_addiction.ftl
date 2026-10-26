@@ -15,3 +15,12 @@ cmu-drugaddict-shake = You break into a cold sweat and your hands start shaking.
 cmu-drugaddict-satisfied = The rush hits and the shaking finally stops.
 cmu-alert-drugcraving-name = Drug Craving
 cmu-alert-drugcraving-desc = You need a fix. Space drugs, stimulants or opioid painkillers will do.
+
+cmu-trait-caffeineaddict-name = Caffeine Addict
+cmu-trait-caffeineaddict-desc = You run on coffee, tea and cola, and your body won't let you forget it. Go too long without caffeine and you'll start craving it; if you don't get any, your hands will begin shaking until you have some.
+cmu-caffeineaddict-onset = You could really go for a coffee right now.
+cmu-caffeineaddict-craving = You need caffeine. Your head is pounding.
+cmu-caffeineaddict-shake = Your hands jitter and your head throbs without caffeine.
+cmu-caffeineaddict-satisfied = The caffeine kicks in and your head clears.
+cmu-alert-caffeinecraving-name = Caffeine Craving
+cmu-alert-caffeinecraving-desc = You need caffeine. Coffee, tea, cola or an energy drink will do.

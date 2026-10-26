@@ -4,8 +4,8 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/20/2026 02:36:12
-  entityCount: 6624
+  time: 10/22/2026 04:58:35
+  entityCount: 6606
 maps:
 - 1
 grids:
@@ -6487,21 +6487,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -18.5,4.5
-  - uid: 277
-    components:
-    - type: Transform
-      parent: 1
-      pos: 4.5,-6.5
-  - uid: 647
-    components:
-    - type: Transform
-      parent: 1
-      pos: -7.5,-6.5
-  - uid: 762
-    components:
-    - type: Transform
-      parent: 1
-      pos: 16.5,-6.5
   - uid: 793
     components:
     - type: Transform
@@ -6512,13 +6497,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -12.5,-21.5
-- proto: CMVendorDinnerware
-  entities:
-  - uid: 3104
-    components:
-    - type: Transform
-      parent: 1
-      pos: 11.5,-32.5
 - proto: AU14CashVendorSnackMachine
   entities:
   - uid: 136
@@ -6526,21 +6504,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -17.5,4.5
-  - uid: 646
-    components:
-    - type: Transform
-      parent: 1
-      pos: -7.5,-7.5
-  - uid: 732
-    components:
-    - type: Transform
-      parent: 1
-      pos: 16.5,-7.5
-  - uid: 770
-    components:
-    - type: Transform
-      parent: 1
-      pos: 4.5,-7.5
   - uid: 803
     components:
     - type: Transform
@@ -12985,26 +12948,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -3.5,48.5
-- proto: CMDispenserSoda
-  entities:
-  - uid: 1257
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 13.5,-6.5
-  - uid: 1258
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -10.5,-6.5
-  - uid: 1301
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 1.5,-6.5
 - proto: CMDisposalUnit
   entities:
   - uid: 1588
@@ -13621,6 +13564,23 @@ entities:
     - type: Transform
       parent: 1
       pos: 16.5,-10.5
+- proto: CMLockerFridge
+  entities:
+  - uid: 277
+    components:
+    - type: Transform
+      parent: 1
+      pos: -11.5,-6.5
+  - uid: 647
+    components:
+    - type: Transform
+      parent: 1
+      pos: 12.5,-6.5
+  - uid: 762
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-6.5
 - proto: CMMedilinkSupplyPort
   entities:
   - uid: 1123
@@ -14718,6 +14678,11 @@ entities:
     - type: Transform
       parent: 1
       pos: 16.5,44.5
+  - uid: 254
+    components:
+    - type: Transform
+      parent: 1
+      pos: -7.5,-7.5
   - uid: 365
     components:
     - type: Transform
@@ -14808,11 +14773,21 @@ entities:
     - type: Transform
       parent: 1
       pos: -3.5,-0.5
+  - uid: 646
+    components:
+    - type: Transform
+      parent: 1
+      pos: -7.5,-6.5
   - uid: 677
     components:
     - type: Transform
       parent: 1
       pos: -9.5,-6.5
+  - uid: 732
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-7.5
   - uid: 782
     components:
     - type: Transform
@@ -14938,6 +14913,11 @@ entities:
     - type: Transform
       parent: 1
       pos: -18.5,2.5
+  - uid: 1425
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.5,-6.5
   - uid: 1581
     components:
     - type: Transform
@@ -15003,6 +14983,11 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.5,-58.5
+  - uid: 2358
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.5,-7.5
   - uid: 2393
     components:
     - type: Transform
@@ -15058,6 +15043,11 @@ entities:
     - type: Transform
       parent: 1
       pos: 2.5,-6.5
+  - uid: 3444
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-6.5
   - uid: 3484
     components:
     - type: Transform
@@ -15244,58 +15234,58 @@ entities:
       pos: -9.5,-35.5
 - proto: CMUAirtightSeal
   entities:
-  - uid: 6476
+  - uid: 770
     components:
     - type: Transform
       parent: 1
       pos: -4.5,-69.5
       anchored: True
-  - uid: 6477
+  - uid: 1257
     components:
     - type: Transform
       parent: 1
       pos: -2.5,-69.5
       anchored: True
-  - uid: 6478
+  - uid: 1258
     components:
     - type: Transform
       parent: 1
       pos: 0.5,-69.5
       anchored: True
-  - uid: 6479
+  - uid: 1301
     components:
     - type: Transform
       parent: 1
       pos: 2.5,-69.5
       anchored: True
-  - uid: 6480
+  - uid: 1344
     components:
     - type: Transform
       parent: 1
       pos: -23.5,17.5
       anchored: True
-  - uid: 6481
+  - uid: 1405
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: -16.5,-52.5
       anchored: True
-  - uid: 6482
+  - uid: 1407
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 14.5,-52.5
       anchored: True
-  - uid: 6483
+  - uid: 1408
     components:
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 15.5,-19.5
       anchored: True
-  - uid: 6484
+  - uid: 1424
     components:
     - type: Transform
       parent: 1
@@ -15398,6 +15388,42 @@ entities:
       parent: 1
       pos: 0.5,43.5
       anchored: True
+- proto: CMUArmoryLockerRedM890FilledCommand
+  entities:
+  - uid: 1239
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-61.5
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          ents:
+          - 3114
+          - 6057
+          showEnts: False
+          occludes: True
+        paper_label: !type:ContainerSlot
+          ent: null
+          showEnts: False
+          occludes: True
+  - uid: 1426
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-61.5
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          ents:
+          - 6058
+          - 6059
+          showEnts: False
+          occludes: True
+        paper_label: !type:ContainerSlot
+          ent: null
+          showEnts: False
+          occludes: True
 - proto: CMUAutodocConsole
   entities:
   - uid: 456
@@ -25336,6 +25362,13 @@ entities:
     - type: Transform
       parent: 1
       pos: -4.5,57.5
+- proto: CMVendorDinnerware
+  entities:
+  - uid: 3104
+    components:
+    - type: Transform
+      parent: 1
+      pos: 11.5,-32.5
 - proto: CMVendorElectronics
   entities:
   - uid: 4467
@@ -34307,42 +34340,6 @@ entities:
       parent: 1
       pos: 21.5,-22.5
       anchored: False
-- proto: CMUArmoryLockerRedM890FilledCommand
-  entities:
-  - uid: 1239
-    components:
-    - type: Transform
-      parent: 1
-      pos: -2.5,-61.5
-    - type: ContainerContainer
-      containers:
-        entity_storage: !type:Container
-          ents:
-          - 3114
-          - 6057
-          showEnts: False
-          occludes: True
-        paper_label: !type:ContainerSlot
-          ent: null
-          showEnts: False
-          occludes: True
-  - uid: 1426
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-61.5
-    - type: ContainerContainer
-      containers:
-        entity_storage: !type:Container
-          ents:
-          - 6058
-          - 6059
-          showEnts: False
-          occludes: True
-        paper_label: !type:ContainerSlot
-          ent: null
-          showEnts: False
-          occludes: True
 - proto: RMCBarricadeWireRail
   entities:
   - uid: 177
@@ -36594,7 +36591,7 @@ entities:
       pos: -1.5,-35.5
     - type: Door
       state: Closing
-      secondsUntilStateChange: -95806
+      secondsUntilStateChange: -96600.85
   - uid: 1021
     components:
     - type: Transform
@@ -40581,15 +40578,6 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 9.5,-68.5
-- proto: RMCLockerFridgeDry
-  entities:
-  - uid: 3444
-    components:
-    - type: Transform
-      parent: 1
-      pos: 12.5,-6.5
-    - type: Lock
-      locked: False
 - proto: RMCLockerFridgeGroceries
   entities:
   - uid: 455
@@ -40599,20 +40587,6 @@ entities:
       pos: 7.5,-35.5
     - type: Lock
       locked: False
-- proto: RMCLockerFridgeMeat
-  entities:
-  - uid: 2358
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-6.5
-- proto: RMCLockerFridgeOrganic
-  entities:
-  - uid: 3456
-    components:
-    - type: Transform
-      parent: 1
-      pos: -11.5,-6.5
 - proto: RMCLZFloodlight
   entities:
   - uid: 3791
@@ -44646,6 +44620,8 @@ entities:
       pos: 26.338696,10.404172
     - type: Fixtures
       fixtures: {}
+    - type: RMCDoorButton
+      id: AILockdown
   - uid: 4322
     components:
     - type: MetaData
@@ -46527,98 +46503,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 12.5,47.5
-- proto: SpawnPointLatejoin
-  entities:
-  - uid: 254
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -3.5,-8.5
-  - uid: 1344
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -16.5,-6.5
-  - uid: 1405
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 7.5,-6.5
-  - uid: 1407
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -15.5,-6.5
-  - uid: 1408
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -4.5,-6.5
-  - uid: 1424
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -3.5,-6.5
-  - uid: 1425
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 8.5,-6.5
-  - uid: 3472
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -4.5,-8.5
-  - uid: 3476
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -4.5,-10.5
-  - uid: 3497
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -16.5,-8.5
-  - uid: 3498
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -15.5,-8.5
-  - uid: 3499
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: -16.5,-10.5
-  - uid: 3500
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 7.5,-8.5
-  - uid: 3501
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 8.5,-8.5
-  - uid: 3545
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 7.5,-10.5
 - proto: TableReinforced
   entities:
   - uid: 289

@@ -48,7 +48,10 @@
   - type: GuideHelp
     openOnActivation: true
     guides:
-    - RMC14
+    # cmu edit start: guidebooks open the CMU guidebook
+    # - RMC14
+    - CMUGuidebook
+    # cmu edit end
   - type: MeleeWeapon
     soundHit:
       collection: Punch

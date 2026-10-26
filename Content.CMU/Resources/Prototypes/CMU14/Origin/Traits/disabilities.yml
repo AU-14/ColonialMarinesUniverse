@@ -47,7 +47,7 @@
   id: CMUAlcoholic
   name: cmu-trait-alcoholic-name
   description: cmu-trait-alcoholic-desc
-  category: Disabilities
+  category: CMUAddictions
   cost: 1
   components:
     - type: CMUSubstanceAddiction
@@ -62,7 +62,7 @@
   id: CMUDrugAddict
   name: cmu-trait-drugaddict-name
   description: cmu-trait-drugaddict-desc
-  category: Disabilities
+  category: CMUAddictions
   cost: 1
   components:
     - type: CMUSubstanceAddiction
@@ -83,6 +83,44 @@
       cravingMessage: cmu-drugaddict-craving
       shakeMessage: cmu-drugaddict-shake
       satisfiedMessage: cmu-drugaddict-satisfied
+
+- type: trait
+  id: CMUCaffeineAddict
+  name: cmu-trait-caffeineaddict-name
+  description: cmu-trait-caffeineaddict-desc
+  category: CMUAddictions
+  cost: 1
+  components:
+    - type: CMUSubstanceAddiction
+      reagents:
+      - Coffee
+      - RMCCoffee
+      - IcedCoffee
+      - IceCafe
+      - CafeLatte
+      - SoyLatte
+      - CMUCafeDeOlla
+      - IrishCoffee
+      - EspressoMartini
+      - CoffeeLiqueur
+      - LongIslandIcedTea
+      - Tea
+      - RMCTea
+      - GreenTea
+      - IcedTea
+      - IcedGreenTea
+      - CMUChaiTea
+      - Cola
+      - CMSodaBobdaClassic
+      - DrGibb
+      - SpaceMountainWind
+      - NuclearCola
+      - EnergyDrink
+      cravingAlert: CMUCaffeineCraving
+      onsetMessage: cmu-caffeineaddict-onset
+      cravingMessage: cmu-caffeineaddict-craving
+      shakeMessage: cmu-caffeineaddict-shake
+      satisfiedMessage: cmu-caffeineaddict-satisfied
 
 - type: trait
   id: CMUOpiateReceptorDeficiency

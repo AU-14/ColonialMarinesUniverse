@@ -95,7 +95,8 @@ namespace Content.Server.Atmos.EntitySystems
             SubscribeLocalEvent<FlammableComponent, MapInitEvent>(OnMapInit);
             // CMU14: components gained mid-cycle join the live snapshot without waiting for a rebuild.
             SubscribeLocalEvent<FlammableComponent, ComponentInit>(OnFlammableInit);
-            SubscribeLocalEvent<FlammableComponent, InteractUsingEvent>(OnInteractUsing);
+            // CMU14: a lit welder on a damaged cade is a repair, not a lighter. without the order the cade just caught fire
+            SubscribeLocalEvent<FlammableComponent, InteractUsingEvent>(OnInteractUsing, after: [typeof(Content.Shared._RMC14.Repairable.RMCRepairableSystem)]);
             SubscribeLocalEvent<FlammableComponent, StartCollideEvent>(OnCollide);
             SubscribeLocalEvent<FlammableComponent, IsHotEvent>(OnIsHot);
             SubscribeLocalEvent<FlammableComponent, TileFireEvent>(OnTileFire);

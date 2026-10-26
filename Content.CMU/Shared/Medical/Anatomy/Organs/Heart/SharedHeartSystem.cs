@@ -491,6 +491,20 @@ public abstract partial class SharedHeartSystem : EntitySystem
         RaiseLocalEvent(ent, ref ev);
     }
 
+    /// <summary>Stops the heart in <paramref name="body"/>, like a heart condition giving out. False if it has none.</summary>
+    public bool TryInduceCardiacArrest(EntityUid body)
+    {
+        if (!MedicalIndex.TryGetOrgan<HeartComponent>(body, out var heart) ||
+            !TryComp(heart, out HeartComponent? comp) ||
+            comp.Stopped)
+        {
+            return false;
+        }
+
+        StopHeart((heart, comp), body, Timing.CurTime);
+        return comp.Stopped;
+    }
+
     public bool TryPrepareDefibrillation(EntityUid body, bool allowBeatingHeart,
         out CMUHeartRevivalToken? token, out string reason)
     {
