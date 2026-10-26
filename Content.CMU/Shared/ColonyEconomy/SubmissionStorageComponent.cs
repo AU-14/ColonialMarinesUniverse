@@ -1,18 +1,23 @@
 // Content.Shared/CMU14/ColonyEconomy/SubmissionStorageComponent.cs
-using Content.Shared.Tag;
+using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.ColonyEconomy;
 
+// a point buys every commodity in its categories plus the ones listed by hand.
+// prices live on the commodities so the same item pays the same everywhere
 [RegisterComponent, NetworkedComponent]
 public sealed partial class SubmissionStorageComponent : Component
 {
     [DataField, ViewVariables]
-    public Dictionary<ProtoId<TagPrototype>, float>? Rewards;
+    public List<ProtoId<CMUCommodityCategoryPrototype>> Categories = new();
 
-    // generic tags like Fruit, only paid when nothing in Rewards matches.
-    // otherwise a tomato would sell at the fruit price
     [DataField, ViewVariables]
-    public Dictionary<ProtoId<TagPrototype>, float>? FallbackRewards;
+    public List<ProtoId<CMUCommodityPrototype>> Commodities = new();
+
+    // turned away even when a commodity matches. thrown items skip the disposal unit's own
+    // lists, so this is checked in the insert veto instead
+    [DataField]
+    public EntityWhitelist? Blacklist;
 }

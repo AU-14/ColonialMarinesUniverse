@@ -5,11 +5,6 @@
   description: A collection unit for salvaged goods. Insert items to receive payment based on their grade.
   suffix: Salvage
   components:
-  - type: DisposalUnit
-    whitelist:
-      tags:
-      - SalvageTier1
-      - SalvageTier2
-      - SalvageTier3
-      - SalvageTier4
-      - SalvageTier5
+  - type: SubmissionStorage
+    categories:
+    - CMUCommodityCategorySalvage
