@@ -539,6 +539,13 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             or YautjaTrophyKind.XenoSkull;
     }
 
+    // cmss13 only polishes human bones, but most pred trophies are xeno skulls and the rag did nothing on them.
+    // pelts are hide, not bone, so they stay out
+    private static bool IsPolishableTrophy(YautjaTrophyKind kind)
+    {
+        return IsHumanSkeletonTrophy(kind) || kind == YautjaTrophyKind.XenoSkull;
+    }
+
     private static bool IsHumanSkeletonTrophy(YautjaTrophyKind kind)
     {
         return kind is YautjaTrophyKind.HumanSkull
@@ -1196,18 +1203,20 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private void OnTrophyInteractUsing(Entity<YautjaTrophyComponent> ent, ref InteractUsingEvent args)
     {
-        if (args.Handled ||
-            !TryComp(args.Used, out YautjaPolishingRagComponent? rag) ||
-            !IsHumanSkeletonTrophy(ent.Comp.Kind))
-        {
+        if (args.Handled || !TryComp(args.Used, out YautjaPolishingRagComponent? rag))
             return;
-        }
 
         args.Handled = true;
 
         if (!CanUseYautjaTech(args.User))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-polish-denied"), args.User, args.User, PopupType.SmallCaution);
+            return;
+        }
+
+        if (!IsPolishableTrophy(ent.Comp.Kind))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-polish-not-bone", ("trophy", ent.Owner)), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -1258,7 +1267,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         args.Handled = true;
 
-        if (!IsHumanSkeletonTrophy(ent.Comp.Kind) ||
+        if (!IsPolishableTrophy(ent.Comp.Kind) ||
             !CanUseYautjaTech(args.User) ||
             ent.Comp.Polished ||
             args.Used is not { } used ||
@@ -1436,7 +1445,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
                     : "cmu-yautja-trophy-polished-no"))));
         }
 
-        if (!canUseTech || !IsHumanSkeletonTrophy(ent.Comp.Kind))
+        if (!canUseTech || !IsPolishableTrophy(ent.Comp.Kind))
             return;
 
         args.PushMarkup(Loc.GetString(ent.Comp.Polished

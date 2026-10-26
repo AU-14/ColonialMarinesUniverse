@@ -300,6 +300,7 @@ cmu-yautja-trophy-harvest-finished-others = {$hunter} tears {$trophy} free from 
 cmu-yautja-polish-denied = You do not understand this ritual tool.
 cmu-yautja-polish-already = That trophy is already polished.
 cmu-yautja-polish-finished = You polish {$trophy}.
+cmu-yautja-polish-not-bone = There is no bone on {$trophy} to polish.
 cmu-yautja-trophy-source-unknown = unknown prey
 cmu-yautja-trophy-polished-yes = polished
 cmu-yautja-trophy-polished-no = unpolished

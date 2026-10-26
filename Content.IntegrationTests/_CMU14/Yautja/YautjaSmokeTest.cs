@@ -19403,8 +19403,8 @@ public sealed class YautjaSmokeTest
                     Assert.That(entMan.GetComponent<YautjaTrophyComponent>(humanBone).Polished, Is.False,
                         "Non-tech users should fail the CMSS13 HAS_TRAIT(user, TRAIT_YAUTJA_TECH) gate.");
                     Assert.That(ActivePolishDoAfters(entMan, ordinaryUser), Is.Zero);
-                    Assert.That(peltInteract.Handled, Is.False,
-                        "CMSS13 polishing_rag only handles /obj/item/clothing/accessory/limb/skeleton targets, not xeno pelts.");
+                    Assert.That(peltInteract.Handled, Is.True,
+                        "pelts can't be polished, the rag answers with a popup instead of silently doing nothing.");
                     Assert.That(entMan.GetComponent<YautjaTrophyComponent>(xenoPelt).Polished, Is.False);
                     Assert.That(ActivePolishDoAfters(entMan, hunter), Is.Zero);
                 });

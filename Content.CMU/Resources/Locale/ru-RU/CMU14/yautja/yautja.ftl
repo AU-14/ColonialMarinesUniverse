@@ -360,6 +360,7 @@ cmu-yautja-trophy-harvest-finished-others = {$hunter} вырывает {$trophy}
 cmu-yautja-polish-denied = Вы не понимаете этот ритуальный инструмент.
 cmu-yautja-polish-already = Этот трофей уже отполирован.
 cmu-yautja-polish-finished = Вы полируете {$trophy}.
+cmu-yautja-polish-not-bone = На {$trophy} нет кости, которую можно отполировать.
 cmu-yautja-trophy-source-unknown = неизвестная добыча
 cmu-yautja-trophy-polished-yes = отполирован
 cmu-yautja-trophy-polished-no = не отполирован

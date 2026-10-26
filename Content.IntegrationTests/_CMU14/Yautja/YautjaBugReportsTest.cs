@@ -56,6 +56,39 @@ public sealed class YautjaBugReportsTest
         await pair.CleanReturnAsync();
     }
 
+    [TestCase("CMUYautjaHumanSkullTrophy")]
+    [TestCase("CMUYautjaRunnerSkullTrophy")]
+    public async Task PolishingRagPolishesSkullsThroughRealClick(string trophyId)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid trophy = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            var rag = entMan.SpawnEntity("CMUYautjaPolishingRag", map.GridCoords);
+            trophy = entMan.SpawnEntity(trophyId, map.GridCoords.Offset(new Vector2(0.5f, 0)));
+            PickUpOnly(entMan, hunter, rag);
+
+            entMan.System<SharedInteractionSystem>().UserInteraction(
+                hunter,
+                entMan.GetComponent<TransformComponent>(trophy).Coordinates,
+                trophy);
+        });
+
+        await pair.RunTicksSync(pair.SecondsToTicks(6));
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.GetComponent<YautjaTrophyComponent>(trophy).Polished, Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task AbandonedMedicompSlowdownWearsOff()
     {
