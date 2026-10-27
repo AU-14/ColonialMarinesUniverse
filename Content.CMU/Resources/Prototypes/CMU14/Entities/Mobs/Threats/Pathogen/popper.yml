@@ -105,7 +105,7 @@
   - type: CMUXenoDirectSporeInfect
     plasmaCost: 50
     embryoSpawn: CMU14XenoBloodburster
-    protectionBypassChance: 0.1
+    protectionBypassChance: 0.2
   - type: CMUSporeCloudOnDeath
     cloudPrototype: CMUPathogenSporeCloud
   # popper still counts toward victory, so the kill objective needs its own minion flag
