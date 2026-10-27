@@ -4,6 +4,9 @@ using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Fighter;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
+using Content.Shared.Blocking;
+using Content.Shared.Blocking.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.ParaDrop;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -73,6 +76,34 @@ public sealed class FighterGroundTest : GameTest
         SEntMan.DeleteEntity(_hull);
         if (!SEntMan.Deleted(_pilot)) SEntMan.DeleteEntity(_pilot);
         if (!SEntMan.Deleted(_officer)) SEntMan.DeleteEntity(_officer);
+    }
+
+    [Test]
+    public async Task ShieldPickedUpInFighterDoesNotRestoreSeatedBodyTypeAfterExit()
+    {
+        await CreateWorld();
+        await Server.WaitAssertion(() =>
+        {
+            var body = SEntMan.GetComponent<Robust.Shared.Physics.Components.PhysicsComponent>(_pilot);
+            Assert.That(body.BodyType, Is.EqualTo(Robust.Shared.Physics.BodyType.Static),
+                "The seat must own the pilot's temporary static physics during pickup.");
+            var shield = SEntMan.SpawnEntity("AU14BallisticShieldRMC", Server.Transform(_pilot).Coordinates);
+            Assert.That(SEntMan.System<SharedHandsSystem>().TryPickupAnyHand(_pilot, shield), Is.True);
+
+            Assert.That(SEntMan.System<SharedBuckleSystem>().TryUnbuckle(_pilot, _pilot), Is.True);
+            var standingBodyType = body.BodyType;
+            Assert.That(standingBodyType, Is.EqualTo(Robust.Shared.Physics.BodyType.KinematicController));
+            Transform.SetCoordinates(_pilot, _site.Offset(new Vector2(5, 0)));
+            var blocking = SEntMan.GetComponent<BlockingComponent>(shield);
+            var system = SEntMan.System<BlockingSystem>();
+            Assert.That(system.RaiseShield((shield, blocking), _pilot), Is.True);
+            Assert.That(system.LowerShield((shield, blocking), _pilot), Is.True);
+
+            Assert.That(body.BodyType, Is.EqualTo(standingBodyType),
+                "Lowering the shield must restore the standing body, not the old fighter-seat state.");
+            Assert.That(Server.Transform(_pilot).Anchored, Is.False);
+            CleanWorld();
+        });
     }
 
     [Test]

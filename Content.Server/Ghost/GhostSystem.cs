@@ -512,7 +512,8 @@ namespace Content.Server.Ghost
                 TryComp<XenoComponent>(attached, out var xeno);
 
                 _jobs.MindTryGetJob(mind?.Mind, out var job);
-                if (xeno != null && ProtoMan.TryIndex(xeno.Role, out JobPrototype? xenoJob))
+                if (xeno != null && !string.IsNullOrEmpty(xeno.Role.Id) && // CMU14: incomplete xeno setup must not break the entire warp list.
+                    ProtoMan.TryIndex(xeno.Role, out JobPrototype? xenoJob))
                     job = xenoJob;
 
                 var department = GetDepartment(job);

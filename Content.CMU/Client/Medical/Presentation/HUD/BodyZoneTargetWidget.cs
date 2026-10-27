@@ -134,8 +134,8 @@ public sealed class BodyZoneTargetWidget : Control
         if (!hover && button.Zone != selected)
             return;
 
-        foreach (var state in button.States)
-            DrawState(handle, hover ? $"{state}_hover" : state);
+        foreach (var state in hover ? button.HoverStates : button.States)
+            DrawState(handle, state);
     }
 
     private void DrawState(DrawingHandleScreen handle, string state)
@@ -160,5 +160,8 @@ public sealed class BodyZoneTargetWidget : Control
     private readonly record struct ZoneButton(
         TargetBodyZone Zone,
         UIBox2 Rect,
-        string[] States);
+        string[] States)
+    {
+        public readonly string[] HoverStates = Array.ConvertAll(States, state => $"{state}_hover");
+    }
 }

@@ -86,32 +86,49 @@ namespace Content.Client.ContextMenu.UI
 
             Close();
             RootMenu.OnPopupHide -= Close;
-            RootMenu.Orphan();
+            // CMU14: release the root as well as every submenu across state transitions.
+            // RootMenu.Orphan();
+            RootMenu.Dispose();
+            Menus.Clear();
             RootMenu = default!;
         }
 
         /// <summary>
         ///     Close and clear the root menu. This will also dispose any sub-menus.
         /// </summary>
+        // CMU14: unwind popups before removing their parent rows; hide callbacks can reenter Close.
         public void Close()
         {
-            RootMenu.MenuBody.RemoveAllChildren();
-            CancelOpen?.Cancel();
-            CancelClose?.Cancel();
-            OnContextClosed?.Invoke();
-            RootMenu.Close();
+            if (RootMenu == null || _cmuClosing)
+                return;
+
+            _cmuClosing = true;
+            try
+            {
+                CMUCancelTimer(ref CancelOpen);
+                CMUCancelTimer(ref CancelClose);
+                CloseSubMenus(RootMenu);
+                RootMenu.MenuBody.RemoveAllChildren();
+                RootMenu.Close();
+                OnContextClosed?.Invoke();
+            }
+            finally
+            {
+                _cmuClosing = false;
+            }
         }
 
         /// <summary>
         ///     Starts closing menus until the top-most menu is the given one.
         /// </summary>
         /// <remarks>
-        ///     Note that this does not actually check if the given menu IS a sub menu of this presenter. In that case
-        ///     this will close all menus.
+        ///     CMU14: ignore popups that no longer belong to this stack, including delayed callbacks after teardown.
         /// </remarks>
         public void CloseSubMenus(ContextMenuPopup? menu)
         {
-            if (menu == null || !menu.Visible)
+            // CMU14: hidden roots still own open submenu entries during teardown.
+            // if (menu == null || !menu.Visible)
+            if (menu == null || !Menus.Contains(menu))
                 return;
 
             while (Menus.TryPeek(out var subMenu) && subMenu != menu)
@@ -120,8 +137,8 @@ namespace Content.Client.ContextMenu.UI
             }
 
             // ensure no accidental double-closing happens.
-            CancelClose?.Cancel();
-            CancelClose = null;
+            // CMU14: release cancelled timer sources too.
+            CMUCancelTimer(ref CancelClose);
         }
 
         /// <summary>
@@ -136,13 +153,13 @@ namespace Content.Client.ContextMenu.UI
             }
 
             if (element.ParentMenu == topMenu || element.SubMenu == topMenu)
-                CancelClose?.Cancel();
+                CMUCancelTimer(ref CancelClose); // CMU14
 
             if (element.SubMenu == topMenu)
                 return;
 
             // open the sub-menu after a short delay.
-            CancelOpen?.Cancel();
+            CMUCancelTimer(ref CancelOpen); // CMU14
             CancelOpen = new();
             Timer.Spawn(HoverDelay, () => OpenSubMenu(element), CancelOpen.Token);
         }
@@ -155,12 +172,12 @@ namespace Content.Client.ContextMenu.UI
         /// </remarks>
         private void OnMouseExited(ContextMenuElement element)
         {
-            CancelOpen?.Cancel();
+            CMUCancelTimer(ref CancelOpen); // CMU14
 
             if (element.SubMenu == null)
                 return;
 
-            CancelClose?.Cancel();
+            CMUCancelTimer(ref CancelClose); // CMU14
             CancelClose = new();
             Timer.Spawn(HoverDelay, () => CloseSubMenus(element.ParentMenu), CancelClose.Token);
             OnContextMouseExited?.Invoke(element);
@@ -197,11 +214,13 @@ namespace Content.Client.ContextMenu.UI
             CloseSubMenus(element.ParentMenu);
 
             // cancel any queued openings to prevent weird double-open scenarios.
-            CancelOpen?.Cancel();
-            CancelOpen = null;
+            // CMU14: release the completed/cancelled timer's closure and populate lazy verb categories.
+            CMUCancelTimer(ref CancelOpen);
 
             if (element.SubMenu == null)
                 return;
+
+            element.SubMenu.CMUEnsureContents(); // CMU14
 
             // open pop-up adjacent to the parent element. We want the sub-menu elements to align with this element
             // which depends on the panel container style margins.
@@ -219,11 +238,14 @@ namespace Content.Client.ContextMenu.UI
         /// <summary>
         ///     Add an element to a menu and subscribe to GUI events.
         /// </summary>
+        // CMU14: use removable handlers, including when a row is reattached.
         public void AddElement(ContextMenuPopup menu, ContextMenuElement element)
         {
-            element.OnMouseEntered += _ => OnMouseEntered(element);
-            element.OnMouseExited += _ => OnMouseExited(element);
-            element.OnKeyBindDown += args => OnKeyBindDown(element, args);
+            CMUUnbindElement(element);
+            element.OnMouseEntered += CMUOnMouseEntered;
+            element.OnMouseExited += CMUOnMouseExited;
+            element.CMUKeyHandler = args => OnKeyBindDown(element, args);
+            element.OnKeyBindDown += element.CMUKeyHandler;
             element.ParentMenu = menu;
             menu.MenuBody.AddChild(element);
             menu.InvalidateMeasure();
@@ -232,14 +254,13 @@ namespace Content.Client.ContextMenu.UI
         /// <summary>
         ///     Removes event subscriptions when an element is removed from a menu,
         /// </summary>
+        // CMU14: remove the same delegates that were registered by AddElement.
         public void OnRemoveElement(ContextMenuPopup menu, Control control)
         {
             if (control is not ContextMenuElement element)
                 return;
 
-            element.OnMouseEntered -= _ => OnMouseEntered(element);
-            element.OnMouseExited -= _ => OnMouseExited(element);
-            element.OnKeyBindDown -= args => OnKeyBindDown(element, args);
+            CMUUnbindElement(element);
 
             menu.InvalidateMeasure();
         }

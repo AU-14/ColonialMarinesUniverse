@@ -51,6 +51,23 @@ public sealed partial class XenoHudOverlay : Overlay
     private static readonly ResPath RsiPathHypertension = new("/Textures/_RMC14/Interface/Alerts/hypertension.rsi");
     private static readonly ResPath RsiPathIntoxicated = new("/Textures/_RMC14/Interface/Alerts/xeno_toxins.rsi");
 
+    // CMU14 Begin: cache descriptors, while GetFrame still selects the current animation frame.
+    private static readonly Rsi[] HealthIcons = CreateBarIcons("xenohealth");
+    private static readonly Rsi[] CriticalHealthIcons = CreateBarIcons("xenohealth-", "1");
+    private static readonly Rsi[] PlasmaIcons = CreateBarIcons("plasma");
+    private static readonly Rsi[] ShieldIcons = CreateBarIcons("xenoshield");
+    private static readonly Rsi[] EnergyIcons = CreateBarIcons("xenoenergy");
+    private static readonly Rsi[] EnergyCapIcons = CreateBarIcons("cap");
+    private static readonly Rsi[] HypertensionIcons =
+    [
+        new(RsiPathHypertension, "level_0"),
+        new(RsiPathHypertension, "level_1"),
+        new(RsiPathHypertension, "level_2"),
+        new(RsiPathHypertension, "level_3"),
+        new(RsiPathHypertension, "level_4"),
+    ];
+    // CMU14 End
+
     private static readonly Rsi[] AcidStackIcons =
     [
         new(RsiPath, "acid_stacks0"),
@@ -681,7 +698,7 @@ public sealed partial class XenoHudOverlay : Overlay
             _mobThresholds.TryGetDeadThreshold(uid, out deadThresholdNullable, mobThresholds);
         }
 
-        string state;
+        Rsi icon; // CMU14: reuse the descriptor for this bar level.
         if (_mobState.IsCritical(uid, mobState) ||
             _mobState.IsAlive(uid) &&
             critThresholdNullable != null &&
@@ -693,8 +710,9 @@ public sealed partial class XenoHudOverlay : Overlay
             deadThreshold -= critThreshold;
             damage -= critThreshold;
             var level = ContentHelpers.RoundToLevels(damage.Double(), deadThreshold.Double(), 11);
-            var name = level > 0 ? $"{level * 10}" : "1";
-            state = $"xenohealth-{name}";
+            // CMU14 Begin
+            icon = CriticalHealthIcons[level];
+            // CMU14 End
         }
         else
         {
@@ -703,11 +721,13 @@ public sealed partial class XenoHudOverlay : Overlay
                 return;
 
             var level = ContentHelpers.RoundToLevels((critThresholdNullable - damage).Value.Double(), critThresholdNullable.Value.Double(), 11);
-            var name = level > 0 ? $"{level * 10}" : "0";
-            state = $"xenohealth{name}";
+            // CMU14 Begin
+            icon = HealthIcons[level];
+            // CMU14 End
         }
 
-        var icon = new Rsi(RsiPath, state);
+        // CMU14: the health descriptor is selected above.
+        // var icon = new Rsi(RsiPath, state);
         var rsi = _resourceCache.GetResource<RSIResource>(icon.RsiPath).RSI;
         if (!rsi.TryGetState(icon.RsiState, out _))
             return;
@@ -734,9 +754,9 @@ public sealed partial class XenoHudOverlay : Overlay
         var plasma = comp.Plasma;
         var max = comp.MaxPlasma;
         var level = ContentHelpers.RoundToLevels(plasma.Double(), max, 11);
-        var name = level > 0 ? $"{level * 10}" : "0";
-        var state = $"plasma{name}";
-        var icon = new Rsi(RsiPath, state);
+        // CMU14 Begin
+        var icon = PlasmaIcons[level];
+        // CMU14 End
         var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
         var bounds = _sprite.GetLocalBounds((uid, sprite));
@@ -754,7 +774,11 @@ public sealed partial class XenoHudOverlay : Overlay
             return;
 
         var level = Math.Clamp(hyper.Stacks, 0, hyper.MaxStacks);
-        var icon = new Rsi(RsiPathHypertension, $"level_{level}");
+        // CMU14 Begin: retain lookup behavior for custom prototypes beyond the bundled states.
+        var icon = level < HypertensionIcons.Length
+            ? HypertensionIcons[level]
+            : new Rsi(RsiPathHypertension, $"level_{level}");
+        // CMU14 End
         var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
         var bounds = _sprite.GetLocalBounds((uid, sprite));
@@ -789,9 +813,9 @@ public sealed partial class XenoHudOverlay : Overlay
         var shield = xenoShield.ShieldAmount;
         var max = critThresholdNullable.Value.Double();
         var level = ContentHelpers.RoundToLevels(shield.Double(), max, 11);
-        var name = level > 0 ? $"{level * 10}" : "0";
-        var state = $"xenoshield{name}";
-        var icon = new Rsi(RsiPath, state);
+        // CMU14 Begin
+        var icon = ShieldIcons[level];
+        // CMU14 End
         var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
         var bounds = _sprite.GetLocalBounds((uid, sprite));
@@ -817,9 +841,9 @@ public sealed partial class XenoHudOverlay : Overlay
     {
         var (uid, xeno, sprite) = ent;
         var level = ContentHelpers.RoundToLevels(energy, max, 11);
-        var name = level > 0 ? $"{level * 10}" : "0";
-        var state = $"xenoenergy{name}";
-        var icon = new Rsi(RsiPath, state);
+        // CMU14 Begin
+        var icon = EnergyIcons[level];
+        // CMU14 End
         var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
         var bounds = _sprite.GetLocalBounds((uid, sprite));
@@ -832,9 +856,9 @@ public sealed partial class XenoHudOverlay : Overlay
         if (generationCap != null && energy >= generationCap)
         {
             var level2 = ContentHelpers.RoundToLevels(generationCap.Value, max, 11);
-            var name2 = level2 > 0 ? $"{level2 * 10}" : "0";
-            var state2 = $"cap{name2}";
-            var icon2 = new Rsi(RsiPath, state2);
+            // CMU14 Begin
+            var icon2 = EnergyCapIcons[level2];
+            // CMU14 End
             var texture2 = _sprite.GetFrame(icon2, _timing.CurTime);
             handle.DrawTexture(texture2, position);
         }
