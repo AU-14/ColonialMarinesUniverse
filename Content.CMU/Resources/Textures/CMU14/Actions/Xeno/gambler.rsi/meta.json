@@ -1,0 +1,89 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "template_won from CMSS13, others modified based on it for cmu",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "gamble"
+        },
+        {
+            "name": "template_won"
+        },
+        {
+            "name": "won_common"
+        },
+        {
+            "name": "won_rare",
+            "delays": [
+                [
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "won_epic",
+            "delays": [
+                [
+                    0.12,
+                    0.12,
+                    0.12,
+                    0.12,
+                    0.12,
+                    0.12,
+                    0.12,
+                    0.12
+                ]
+            ]
+        },
+        {
+            "name": "won_legendary",
+            "delays": [
+                [
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.08
+                ]
+            ]
+        },
+        {
+            "name": "won_jackpot",
+            "delays": [
+                [
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "flash"
+        }
+    ]
+}
