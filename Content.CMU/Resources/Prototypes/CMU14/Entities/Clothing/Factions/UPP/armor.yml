@@ -78,3 +78,30 @@
   id: AU14CoatUPPMP
   name: UL4 camouflaged jacket
   description: A lightweight jacket, issued to troops when they're not expected to engage in combat. Still studded to the brim with kevlar shards, though the synthread construction reduces its effectiveness.
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU146B79
+  name: 6B79-D "Minquanzhuyi"
+  description: A set of modified ICSC Pattern armor. Outfitted with ceramic plating and identification marks. Standard issue for NRA soldiers.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/armor/6B79D.rsi
+  - type: CMArmor
+    melee: 25
+    bullet: 25
+    explosionArmor: 15
+
+- type: entity
+  parent: AU14BaseArmorLight
+  id: AU14UPPArmorMinimalisticNRA
+  name: UL-4M
+  description: A modified set of UPP armor, outfitted with shoulderpads and a groinpad. Issued to NRA recruits.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/armor/UL4M.rsi
+  - type: CMArmor
+    melee: 5
+    bullet: 15
+    explosionArmor: 10
+
