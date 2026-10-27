@@ -87,3 +87,8 @@
   license: "CC-BY-SA-3.0"
   copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
   source: "https://github.com/cmss13-devs/cmss13/blob/e97c5f08fdcfd60743481011e30ccdccc7fd7c88/sound/hallucinations/i_see_you2.ogg"
+
+- files: ["runedsanddoor.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13 at commit 2eda215ec73ecbcfa4e2c3b0d51b47e68a5b7fe7"
+  source: "https://github.com/cmss13-devs/cmss13/blob/2eda215ec73ecbcfa4e2c3b0d51b47e68a5b7fe7/sound/effects/runedsanddoor.ogg"

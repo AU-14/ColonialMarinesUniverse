@@ -1,0 +1,8 @@
+- files: ["floor.png", "deco_square_vertical.png", "deco_square_horizontal.png", "deco_diamond.png", "deco_pattern_vertical.png", "deco_pattern_horizontal.png", "dark_deco_square_vertical.png", "dark_deco_square_horizontal.png", "dark_deco_diamond.png", "dark_deco_pattern_vertical.png", "dark_deco_pattern_horizontal.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/2eda215ec73ecbcfa4e2c3b0d51b47e68a5b7fe7/icons/turf/floors/hunter/ancientfloor.dmi"
+  source: "https://github.com/cmss13-devs/cmss13/blob/2eda215ec73ecbcfa4e2c3b0d51b47e68a5b7fe7/icons/turf/floors/hunter/ancientfloor.dmi"
+- files: ["engraved.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/2eda215ec73ecbcfa4e2c3b0d51b47e68a5b7fe7/icons/turf/floors/floors.dmi"
+  source: "https://github.com/cmss13-devs/cmss13/blob/2eda215ec73ecbcfa4e2c3b0d51b47e68a5b7fe7/icons/turf/floors/floors.dmi"
