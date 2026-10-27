@@ -66,6 +66,9 @@
   - type: XenoPheromones
     pheromonesMultiplier: 4
   - type: CMUXenoBlightWave
+  - type: CMUXenoMycotoxinInject
+    plasmaCost: 150
+    range: 3.0
   - type: CMUXenoOvermind
     eyeFormActions:
     - CMU14ActionXenoPathogenHeal
