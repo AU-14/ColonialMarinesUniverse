@@ -38,9 +38,9 @@ public sealed class WorldMapTerrain
         var rng = new Rng(seed);
         var pieces = new List<(Vector3, float)>();
 
-        // Nine to twelve pieces of land, not on one another.
-        var count = 9 + (int) (rng.Next() * 4f);
-        for (var tries = 0; pieces.Count < count && tries < 300; tries++)
+        // Eighteen to twenty-four pieces of land (the world has about twice the land that it had), not on one another.
+        var count = 18 + (int) (rng.Next() * 7f);
+        for (var tries = 0; pieces.Count < count && tries < 1500; tries++)
         {
             var latitude = MathF.Asin(-0.8f + 1.6f * rng.Next()) / Degrees;
             var longitude = -180f + 360f * rng.Next();
@@ -50,7 +50,7 @@ public sealed class WorldMapTerrain
             var overlaps = false;
             foreach (var (other, otherRadius) in pieces)
             {
-                if (AngleBetween(center, other) < (radius + otherRadius) * 0.6f)
+                if (AngleBetween(center, other) < (radius + otherRadius) * 0.45f)
                 {
                     overlaps = true;
                     break;
@@ -305,7 +305,7 @@ public sealed class WorldMapTerrain
             (float, float)? chosen = null;
 
             // As far from the others as is asked, and less and less if the land is too small for it.
-            foreach (var separation in new[] { 18f, 11f, 6f, 0f })
+            foreach (var separation in new[] { 13f, 8f, 4f, 0f })
             {
                 foreach (var pool in pools)
                 {

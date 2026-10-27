@@ -22,8 +22,13 @@ public sealed partial class WorldMarketSystem
 
     // The money that the mother faction sends: a base, and more for every point of the favour that the faction has in the cities (all the cities together); the trust of the mother faction
     // makes the whole of it smaller or bigger.
-    public const int StipendBase = 400;
-    public const int StipendPerInfluence = 5;
+    public const int StipendBase = 120;
+    public const int StipendPerInfluence = 1;
+
+    // The money that the mother faction pays for a main goal is cut the same way as the other incomes of the ambassadors.
+    public const float RewardMoneyFactor = 0.4f;
+
+    private static int RewardMoneyOf(WorldMotherTaskPrototype proto) => (int) Math.Round(proto.RewardMoney * RewardMoneyFactor);
 
     public int TrustOf(string faction)
     {
@@ -46,7 +51,21 @@ public sealed partial class WorldMarketSystem
         if (PmcAccess(faction, offer) == PmcAccessKind.Ally)
             factor *= 2f;
 
+        // A fighting company costs more than it did, and twice as much again for every time the faction has ordered it already. (The medics, the engineers, the workers and the rest do not.)
+        if (offer.Group == MotherOfferGroup.Pmc)
+            factor *= CombatCostFactor * MathF.Pow(2f, Math.Min(BoughtCount(faction, offer), MaxDoublings));
+
         return Math.Max(1, (int) Math.Round(offer.Cost * factor, MidpointRounding.AwayFromZero));
+    }
+
+    // How much dearer the fighting companies are than they were, and how many times the price of one may double (so that it does not run away to the sky).
+    public const float CombatCostFactor = 2f;
+    public const int MaxDoublings = 8;
+
+    // How many times a faction has ordered an offer.
+    public int BoughtCount(string faction, WorldMotherOfferPrototype offer)
+    {
+        return TryMarket(out var market) ? market.Comp.OffersBought.GetValueOrDefault(faction + "|" + offer.ID) : 0;
     }
 
     private FactionStats StatsOf(Entity<WorldMarketComponent> market, string faction)
@@ -60,8 +79,18 @@ public sealed partial class WorldMarketSystem
     // An order of the mother faction was done: workers are counted for the missions.
     public void NoteMotherOrder(string faction, WorldMotherOfferPrototype offer)
     {
-        if (offer.Group == MotherOfferGroup.Workers && TryMarket(out var market))
+        if (!TryMarket(out var market))
+            return;
+
+        if (offer.Group == MotherOfferGroup.Workers)
             StatsOf(market, faction).Workers++;
+
+        // The next order of the same fighting company costs twice as much.
+        if (offer.Group == MotherOfferGroup.Pmc)
+        {
+            var key = faction + "|" + offer.ID;
+            market.Comp.OffersBought[key] = market.Comp.OffersBought.GetValueOrDefault(key) + 1;
+        }
     }
 
     private int ControlledCities(Entity<WorldMarketComponent> market, string faction, int level)
@@ -153,7 +182,7 @@ public sealed partial class WorldMarketSystem
             market.Comp.CompletedMissions.Add(task.Faction + "|" + proto.ID);
 
         if (proto.RewardMoney > 0)
-            PayFaction(market, task.Faction, proto.RewardMoney);
+            PayFaction(market, task.Faction, RewardMoneyOf(proto));
 
         if (proto.RewardCrate is { } crate)
         {
@@ -208,7 +237,7 @@ public sealed partial class WorldMarketSystem
                 reward.Add(Loc.GetString("rumc-mother-reward-points", ("points", proto.RewardPoints)));
 
             if (proto.RewardMoney > 0)
-                reward.Add($"${proto.RewardMoney:N0}");
+                reward.Add($"${RewardMoneyOf(proto):N0}");
 
             if (proto.RewardCrate != null)
                 reward.Add(Loc.GetString("rumc-mother-reward-crate"));
@@ -279,6 +308,11 @@ public sealed partial class WorldMarketSystem
             foreach (var faction in comp.KnownFactions)
             {
                 var amount = StipendAmount(faction);
+
+                // The mother faction has been told of the faction and inspects it: this payment is cut by half.
+                if (comp.Inspected.Remove(faction))
+                    amount /= 2;
+
                 PayFaction(market, faction, amount);
             }
         }

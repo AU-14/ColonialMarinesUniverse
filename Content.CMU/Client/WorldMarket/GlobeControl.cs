@@ -62,7 +62,9 @@ internal sealed class MapCell
 internal sealed class GlobeControl : Control
 {
     private const float Degrees = MathF.PI / 180f;
-    private const float RowDegrees = 2.5f;
+    // The cells of the ball are a third of the size they were in area (three times as many of them): 125 rows instead of 72 (a row is 2.5 divided by the root of three).
+    private const int Rows = 125;
+    private const float RowDegrees = 180f / Rows;
     private const float MinZoom = 0.7f;
     private const float MaxZoom = 6f;
 
@@ -510,7 +512,7 @@ internal sealed class GlobeControl : Control
         _batched = false;
 
         var cells = new List<MapCell>();
-        var rows = (int) (180f / RowDegrees);
+        const int rows = Rows;
         var starts = new int[rows];
         var counts = new int[rows];
 
@@ -1007,12 +1009,21 @@ internal sealed class GlobeControl : Control
                 handle.DrawCircle(point, size + 3f, CraftPalette.Gold, filled: false);
             }
 
-            // A mark in the manner of a settlement: a dark square with a square of the colour of the city in it.
-            handle.DrawRect(UIBox2.FromDimensions(point - new Vector2(size + 1f, size + 1f), new Vector2(size * 2f + 2f, size * 2f + 2f)), new Color(0f, 0f, 0f, 0.8f));
-            handle.DrawRect(UIBox2.FromDimensions(point - new Vector2(size, size), new Vector2(size * 2f, size * 2f)), hover ? Color.White : city.Color);
+            // A mark in the manner of a settlement: a dark square with a square of the colour of the city in it. The other objects of the map (the sites) are round and smaller.
+            if (city.Site)
+            {
+                var small = size * 0.72f;
+                handle.DrawCircle(point, small + 1.5f, new Color(0f, 0f, 0f, 0.8f));
+                handle.DrawCircle(point, small, hover ? Color.White : city.Color);
+            }
+            else
+            {
+                handle.DrawRect(UIBox2.FromDimensions(point - new Vector2(size + 1f, size + 1f), new Vector2(size * 2f + 2f, size * 2f + 2f)), new Color(0f, 0f, 0f, 0.8f));
+                handle.DrawRect(UIBox2.FromDimensions(point - new Vector2(size, size), new Vector2(size * 2f, size * 2f)), hover ? Color.White : city.Color);
+            }
 
-            // The name, when it can be read.
-            if (_zoom >= 1.15f || hover || selected)
+            // The name, when it can be read (the sites are named only when the map is nearer).
+            if (_zoom >= (city.Site ? 1.7f : 1.15f) || hover || selected)
             {
                 var at = point + new Vector2(size + 4f, -6f);
                 handle.DrawString(_small, at + new Vector2(1f, 1f), city.Name, new Color(0f, 0f, 0f, 0.9f));

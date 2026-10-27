@@ -33,3 +33,7 @@ au14-pit-tool-in-vehicle = You can't dig inside a vehicle.
 au14-pit-tool-wall-below = There is a wall under there that cannot be dug through: a pit cannot be dug down here.
 au14-pit-tool-wall-above = There is a wall over there that cannot be dug through: a pit cannot be dug up here.
 au14-pit-tool-needs-jackhammer = Only a jackhammer can drill down into that rock.
+
+au14-ladder-dismantle = Take the ladder and hatch down (30 s)
+au14-ladder-dismantle-started = You begin to take the ladder down...
+au14-ladder-dismantle-done = The ladder is down and the pit is open. The metal is given back: { $amount }.

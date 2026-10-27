@@ -193,3 +193,6 @@ rumc-action-bankinghouse-name = Банковский дом
 rumc-action-bankinghouse-desc = Банк, купленный за очки влияния. Ставится сразу и приносит в бюджет хороший постоянный доход.
 rumc-action-portterminal-name = Портовый терминал
 rumc-action-portterminal-desc = Огромный грузовой терминал, купленный за очки влияния. Ставится сразу и приносит самый большой доход в бюджет.
+
+rumc-ambassador-withdraw-locked = Первые { $floor } на счету посольства нельзя снять наличными. Можно снять только сумму сверх этого.
+rumc-ambassador-withdraw-floor-hint = Наличными можно снять только деньги сверх { $floor }: эта сумма остаётся на счету посольства.

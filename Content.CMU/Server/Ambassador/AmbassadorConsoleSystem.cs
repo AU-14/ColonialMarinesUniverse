@@ -649,6 +649,14 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     private void OnWithdraw(EntityUid uid, AmbassadorConsoleComponent comp, AmbassadorWithdrawBuiMsg msg)
     {
         if (msg.Amount <= 0 || msg.Amount > comp.Budget) return;
+
+        // RUMC: the first part of the account cannot be taken out as cash.
+        if (comp.Budget - msg.Amount < comp.WithdrawFloor)
+        {
+            _popup.PopupEntity(Loc.GetString("rumc-ambassador-withdraw-locked", ("floor", (int) comp.WithdrawFloor)), uid, msg.Actor);
+            return;
+        }
+
         comp.Budget -= msg.Amount;
         _stack.SpawnMultipleNextToOrDrop(CashPrototype, (int) msg.Amount, uid);
         UpdateAllFactionUi(comp);

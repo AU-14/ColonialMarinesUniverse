@@ -17,6 +17,9 @@ public sealed partial class WorldMarketSystem
 
     private static readonly TimeSpan FirstCityCrisis = TimeSpan.FromMinutes(3 * RareFactor);
 
+    // The share of what the standing things were meant to bring in that they do bring: the incomes of the ambassadors are cut hard.
+    public const float ProjectIncomeFactor = 0.3f;
+
     private static bool Has(List<ProtoId<WorldCrisisPrototype>> list, string id)
     {
         foreach (var entry in list)
@@ -44,7 +47,56 @@ public sealed partial class WorldMarketSystem
         ofFaction[cityId] = after;
 
         if (after > before)
+        {
+            // There is one scale of favour in a city for all the ambassadors: what one wins above the hundred that there are is taken from the others.
+            ShareCity(market, faction, cityId);
             PayMotherSteps(market, faction, cityId, before, after);
+        }
+    }
+
+    // The favour of all the factions in a city adds up to MaxInfluence at most: when the faction that has just won some takes the sum over it, the others lose the difference in
+    // proportion to what each of them has (so thirty for one and seventy for another stay one scale, not two).
+    private void ShareCity(Entity<WorldMarketComponent> market, string winner, string cityId)
+    {
+        var influence = market.Comp.CityInfluence;
+        var total = influence.Values.Sum(f => f.GetValueOrDefault(cityId));
+        var excess = total - MaxInfluence;
+        if (excess <= 0)
+            return;
+
+        var others = influence.Where(pair => pair.Key != winner && pair.Value.GetValueOrDefault(cityId) > 0).Select(pair => pair.Key).ToList();
+        var pool = others.Sum(f => influence[f][cityId]);
+        if (pool <= 0)
+            return;
+
+        excess = Math.Min(excess, pool);
+        var taken = 0;
+        foreach (var other in others)
+        {
+            var cut = (int) (excess * (long) influence[other][cityId] / pool);
+            influence[other][cityId] -= cut;
+            taken += cut;
+        }
+
+        // What the division left over is taken one point at a time from whoever has the most.
+        for (var left = excess - taken; left > 0; left--)
+        {
+            var biggest = others.OrderByDescending(f => influence[f][cityId]).First();
+            if (influence[biggest][cityId] <= 0)
+                break;
+
+            influence[biggest][cityId]--;
+        }
+    }
+
+    // The share of each faction in the one scale of a city (those that have any).
+    public List<BidEntry> SharesOf(Entity<WorldMarketComponent> market, string cityId)
+    {
+        return market.Comp.CityInfluence
+            .Select(pair => new BidEntry(pair.Key, pair.Value.GetValueOrDefault(cityId)))
+            .Where(entry => entry.Total > 0)
+            .OrderByDescending(entry => entry.Total)
+            .ToList();
     }
 
     // How many great buildings (those that bring points) a faction has now, and how many it may have.
@@ -74,10 +126,37 @@ public sealed partial class WorldMarketSystem
         return false;
     }
 
+    // A deposit (a mine, a well, a plantation) makes what is built on it bring in twice as much.
+    private float DepositFactor(string cityId)
+    {
+        return _proto.TryIndex<WorldCityPrototype>(cityId, out var place) && place.Capabilities.Contains(CityCapability.Deposit) ? 2f : 1f;
+    }
+
+    // Can the action be done in this place at all: some buildings are for the cities only, some for the other objects of the map only.
+    private bool FitsPlace(string cityId, WorldCityActionPrototype action)
+    {
+        if (!_proto.TryIndex<WorldCityPrototype>(cityId, out var place))
+            return false;
+
+        return action.Placement switch
+        {
+            WorldPlacement.City => !place.Site,
+            WorldPlacement.Site => place.Site,
+            _ => true,
+        };
+    }
+
     // Why the action cannot be done now (in words), or nothing if it can.
     public string? ActionBlocked(Entity<WorldMarketComponent> market, string faction, string cityId, WorldCityActionPrototype action, float budget)
     {
         var now = _timing.CurTime;
+
+        if (!FitsPlace(cityId, action))
+            return Loc.GetString(action.Placement == WorldPlacement.City ? "rumc-map-only-cities" : "rumc-map-only-sites");
+
+        // A faction has one of the buildings that are only one in the world.
+        if (action.Unique && HasUnique(market, faction, action.ID, now))
+            return Loc.GetString("rumc-map-unique");
 
         var influence = InfluenceOf(market, faction, cityId);
         if (influence < action.MinInfluence)
@@ -211,7 +290,11 @@ public sealed partial class WorldMarketSystem
     {
         foreach (var project in market.Comp.CityProjects)
         {
-            if (project.City != cityId || !project.Rewarded || project.ExpiresAt <= now || !_proto.TryIndex<WorldCityActionPrototype>(project.Action, out var action))
+            if (project.City != cityId || !project.Rewarded || project.ExpiresAt <= now || project.FrozenUntil > now || !_proto.TryIndex<WorldCityActionPrototype>(project.Action, out var action))
+                continue;
+
+            // A joint work protects only while both partners keep their favour in the city.
+            if (!JointWorks(market, project))
                 continue;
 
             if (absorbing ? project.Charges > 0 && Has(action.Absorbs, crisisId) : Has(action.Protects, crisisId))
@@ -243,12 +326,12 @@ public sealed partial class WorldMarketSystem
                 AddCityInfluence(market, project.Faction, project.City, project.Gain);
             }
 
-            if (project.Rewarded && project.ExpiresAt > now && action.IncomePerMinute != 0f && JointWorks(market, project))
+            if (project.Rewarded && project.ExpiresAt > now && project.FrozenUntil <= now && action.IncomePerMinute != 0f && JointWorks(market, project))
             {
                 // What it brings in is less in a bad season, under a hazard, and when all the roads to the city are shut; what it costs is not.
                 var income = action.IncomePerMinute / 60f;
                 if (income > 0f)
-                    income *= IncomeFactorOf(project.City);
+                    income *= IncomeFactorOf(project.City) * ProjectIncomeFactor * DepositFactor(project.City) * (project.Partner.Length > 0 ? JointIncomeFactor : 1f);
 
                 PayFaction(market, project.Faction, income);
 
@@ -392,7 +475,7 @@ public sealed partial class WorldMarketSystem
         }
 
         var actions = new List<ActionEntry>();
-        foreach (var action in _proto.EnumeratePrototypes<WorldCityActionPrototype>().Where(a => !a.Joint).OrderBy(a => a.MinInfluence).ThenBy(a => a.Order).ThenBy(a => a.Cost))
+        foreach (var action in _proto.EnumeratePrototypes<WorldCityActionPrototype>().Where(a => !a.Joint && FitsPlace(cityId, a)).OrderBy(a => a.MinInfluence).ThenBy(a => a.Order).ThenBy(a => a.Cost))
         {
             actions.Add(new ActionEntry(action.ID, Loc.GetString(action.Name), Loc.GetString(action.Description), CityPrice(market, faction, cityId, action.Cost, out _, out _), action.Influence,
                 ActionBlocked(market, faction, cityId, action, budget) ?? string.Empty, action.PointCost));

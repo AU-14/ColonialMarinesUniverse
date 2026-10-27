@@ -3,7 +3,7 @@ ent-RUMCMinePlateLaid = floor
 
 au14-pit-build-mineplate-verb = Build the plate
 
-au14-mine-plate-laid = The pit is covered with a plate and is part of the floor now. Your own will pass over it, the others will fall through.
+au14-mine-plate-laid = The pit is covered with a plate and is part of the floor now. Anyone who steps on it will fall through. Only the CLF can see where it lies.
 au14-mine-plate-gave-way = The floor gives way under you!
 
 au14-pit-climb-out = You climb out of the pit.

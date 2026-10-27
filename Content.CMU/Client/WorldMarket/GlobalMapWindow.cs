@@ -286,6 +286,14 @@ public sealed class GlobalMapWindow : BaseWindow
         column.AddChild(Text(Loc.GetString("rumc-map-influence", ("value", city.Influence))));
         column.AddChild(new FillBar(city.Influence / 100f, city.Color));
 
+        // The favour in a city is one scale for all the ambassadors: who has how much of the hundred.
+        if (city.Extras.Shares.Count > 0)
+        {
+            column.AddChild(Muted(Loc.GetString("rumc-map-shares")));
+            foreach (var share in city.Extras.Shares)
+                column.AddChild(Text(Loc.GetString("rumc-map-share-line", ("faction", share.Faction), ("value", share.Total))));
+        }
+
         var id = city.Id;
         var full = city.Influence >= WorldMarketInfluenceMax;
         var gift = full
@@ -464,6 +472,68 @@ public sealed class GlobalMapWindow : BaseWindow
                 column.AddChild(Wrapped(extras.IntelBlocked, TermPalette.Muted));
         }
 
+        // The headquarters of the intelligence: the scouts, and the harm that is done in secret.
+        if (extras.Hq)
+        {
+            column.AddChild(Rule());
+            column.AddChild(Gold(Loc.GetString("rumc-map-hq-title")));
+            column.AddChild(Wrapped(Loc.GetString("rumc-map-hq-hint"), TermPalette.Muted));
+
+            if (extras.ScoutSeconds > 0)
+            {
+                column.AddChild(Wrapped(Loc.GetString("rumc-map-scouts-away", ("time", Time(extras.ScoutSeconds))), TermPalette.Gold));
+            }
+            else
+            {
+                column.AddChild(Action(Loc.GetString("rumc-map-scouts-send", ("cost", Money(extras.ScoutCost))), () => Command(MapCommandKind.Scouts, id), extras.ScoutBlocked.Length == 0));
+                if (extras.ScoutBlocked.Length > 0)
+                    column.AddChild(Wrapped(extras.ScoutBlocked, TermPalette.Muted));
+            }
+
+            if (extras.ScoutReport.Count > 0)
+            {
+                column.AddChild(Text(Loc.GetString("rumc-map-scouts-report"), TermPalette.Gold));
+                foreach (var line in extras.ScoutReport)
+                    column.AddChild(Wrapped("• " + line, TermPalette.Text));
+            }
+
+            foreach (var smear in extras.Smears)
+            {
+                var target = smear.Target;
+                var label = Loc.GetString("rumc-map-smear", ("target", target), ("cost", Money(smear.Cost)), ("chance", smear.Chance));
+                column.AddChild(Action(label, () => Command(MapCommandKind.Smear, id, target), smear.Blocked.Length == 0));
+                if (smear.Blocked.Length > 0)
+                    column.AddChild(Wrapped(smear.Blocked, TermPalette.Muted));
+            }
+
+            foreach (var sabotage in extras.Sabotages)
+            {
+                var target = sabotage.Target;
+                var label = Loc.GetString("rumc-map-sabotage", ("target", target), ("cost", Money(sabotage.Cost)), ("chance", sabotage.Chance));
+                column.AddChild(Action(label, () => Command(MapCommandKind.Sabotage, id, target), sabotage.Blocked.Length == 0));
+                if (sabotage.Blocked.Length > 0)
+                    column.AddChild(Wrapped(sabotage.Blocked, TermPalette.Muted));
+            }
+
+            AddHarmButtons(column, extras.Buyouts, "rumc-map-buyout", MapCommandKind.Buyout, id);
+            AddHarmButtons(column, extras.Freezes, "rumc-map-freeze", MapCommandKind.Freeze, id);
+            AddHarmButtons(column, extras.Poisons, "rumc-map-poison", MapCommandKind.Poison, id);
+
+            // The scouts of the others that are on their way here.
+            foreach (var spotted in extras.Intercepts)
+            {
+                var target = spotted.Target;
+                var label = Loc.GetString("rumc-map-intercept", ("target", target), ("cost", Money(spotted.Cost)), ("chance", spotted.Chance));
+                column.AddChild(Action(label, () => Command(MapCommandKind.Intercept, id, target), spotted.Blocked.Length == 0));
+                if (spotted.Blocked.Length > 0)
+                    column.AddChild(Wrapped(spotted.Blocked, TermPalette.Muted));
+            }
+
+            column.AddChild(Action(Loc.GetString("rumc-map-provoke", ("cost", Money(extras.ProvokeCost))), () => Command(MapCommandKind.Provoke, id), extras.ProvokeBlocked.Length == 0));
+            if (extras.ProvokeBlocked.Length > 0)
+                column.AddChild(Wrapped(extras.ProvokeBlocked, TermPalette.Muted));
+        }
+
         if (extras.JointActions.Count > 0 && state.Extras.Factions.Count > 0)
         {
             column.AddChild(Rule());
@@ -486,6 +556,32 @@ public sealed class GlobalMapWindow : BaseWindow
         }
     }
 
+    // The button of a harm to a faction as a whole (not in a place), if there is one for the faction: the cost is in points for a complaint, in money for the rest.
+    private void AddFactionHarm(BoxContainer column, List<StrikeEntry> entries, string faction, string textKey, MapCommandKind kind, bool points)
+    {
+        var entry = entries.FirstOrDefault(e => e.Target == faction);
+        if (entry == null)
+            return;
+
+        var label = Loc.GetString(textKey, ("cost", points ? Loc.GetString("rumc-mother-cost", ("points", entry.Cost)) : Money(entry.Cost)), ("chance", entry.Chance));
+        column.AddChild(Action(label, () => Command(kind, faction), entry.Blocked.Length == 0));
+        if (entry.Blocked.Length > 0)
+            column.AddChild(Wrapped(entry.Blocked, TermPalette.Muted));
+    }
+
+    // A button for each faction that a secret harm can be done to in a place: what it is called (a text with the target, the cost and the chance), the command, the place.
+    private void AddHarmButtons(BoxContainer column, List<StrikeEntry> entries, string textKey, MapCommandKind kind, string place)
+    {
+        foreach (var entry in entries)
+        {
+            var target = entry.Target;
+            var label = Loc.GetString(textKey, ("target", target), ("cost", Money(entry.Cost)), ("chance", entry.Chance));
+            column.AddChild(Action(label, () => Command(kind, place, target), entry.Blocked.Length == 0));
+            if (entry.Blocked.Length > 0)
+                column.AddChild(Wrapped(entry.Blocked, TermPalette.Muted));
+        }
+    }
+
     // The other ambassadors: a pact with each, and the joint works that they offer.
     private Control DiplomacyList()
     {
@@ -497,6 +593,62 @@ public sealed class GlobalMapWindow : BaseWindow
         if (extras.Factions.Count == 0)
             column.AddChild(Muted(Loc.GetString("rumc-map-diplomacy-none")));
 
+        // The counter-intelligence of the headquarters: harm to the faction is less likely to succeed and does not stay secret.
+        if (extras.Hq)
+        {
+            column.AddChild(Rule());
+            column.AddChild(Gold(Loc.GetString("rumc-map-counter-title")));
+            column.AddChild(Wrapped(Loc.GetString("rumc-map-counter-hint"), TermPalette.Muted));
+
+            if (extras.CounterSeconds > 0)
+            {
+                column.AddChild(Wrapped(Loc.GetString("rumc-map-counter-running", ("time", Time(extras.CounterSeconds))), TermPalette.Good));
+            }
+            else
+            {
+                column.AddChild(Action(Loc.GetString("rumc-map-counter-on-button", ("cost", Money(extras.CounterCost))), () => Command(MapCommandKind.CounterIntel), extras.CounterBlocked.Length == 0));
+                if (extras.CounterBlocked.Length > 0)
+                    column.AddChild(Wrapped(extras.CounterBlocked, TermPalette.Muted));
+            }
+
+            // False reports for the scouts of the others.
+            column.AddChild(Rule());
+            column.AddChild(Gold(Loc.GetString("rumc-map-disinfo-title")));
+            column.AddChild(Wrapped(Loc.GetString("rumc-map-disinfo-hint"), TermPalette.Muted));
+            if (extras.DisinfoSeconds > 0)
+            {
+                column.AddChild(Wrapped(Loc.GetString("rumc-map-disinfo-running", ("time", Time(extras.DisinfoSeconds))), TermPalette.Good));
+            }
+            else
+            {
+                column.AddChild(Action(Loc.GetString("rumc-map-disinfo-button", ("cost", Money(extras.DisinfoCost))), () => Command(MapCommandKind.Disinfo), extras.DisinfoBlocked.Length == 0));
+                if (extras.DisinfoBlocked.Length > 0)
+                    column.AddChild(Wrapped(extras.DisinfoBlocked, TermPalette.Muted));
+            }
+
+            // What the spy in a headquarters of another has seen.
+            if (extras.SpySeconds > 0)
+            {
+                column.AddChild(Rule());
+                column.AddChild(Text(Loc.GetString("rumc-map-spy-title", ("time", Time(extras.SpySeconds))), TermPalette.Gold));
+                if (extras.SpyLines.Count == 0)
+                    column.AddChild(Muted(Loc.GetString("rumc-map-spy-quiet")));
+
+                foreach (var line in extras.SpyLines)
+                    column.AddChild(Wrapped("• " + line, TermPalette.Text));
+            }
+        }
+
+        // The mother faction has been told of the faction: its next payment is cut by half unless it pays the inspectors off.
+        if (extras.Inspected)
+        {
+            column.AddChild(Rule());
+            column.AddChild(Wrapped(Loc.GetString("rumc-map-inspected"), new Color(1f, 0.6f, 0.4f)));
+            column.AddChild(Action(Loc.GetString("rumc-map-payoff-button", ("cost", Money(extras.PayOffCost))), () => Command(MapCommandKind.PayOff), extras.PayOffBlocked.Length == 0));
+            if (extras.PayOffBlocked.Length > 0)
+                column.AddChild(Wrapped(extras.PayOffBlocked, TermPalette.Muted));
+        }
+
         foreach (var faction in extras.Factions)
         {
             var name = faction.Name;
@@ -507,6 +659,12 @@ public sealed class GlobalMapWindow : BaseWindow
 
             if (faction.Answer)
                 column.AddChild(Wrapped(Loc.GetString("rumc-map-answer"), new Color(1f, 0.75f, 0.4f)));
+
+            // Against the faction: a complaint to the mother faction (paid in points), and with the headquarters leaking its secrets, a spy, spoiling its main goals.
+            AddFactionHarm(column, extras.Complaints, name, "rumc-map-complain", MapCommandKind.Complain, true);
+            AddFactionHarm(column, extras.Leaks, name, "rumc-map-leak", MapCommandKind.Leak, false);
+            AddFactionHarm(column, extras.Spies, name, "rumc-map-spy", MapCommandKind.Spy, false);
+            AddFactionHarm(column, extras.TaskSabotages, name, "rumc-map-tasks", MapCommandKind.SabotageTasks, false);
 
             if (faction.Pact)
                 column.AddChild(Action(Loc.GetString("rumc-map-pact-break"), () => Command(MapCommandKind.PactBreak, name)));

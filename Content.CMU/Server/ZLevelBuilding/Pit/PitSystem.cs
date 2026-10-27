@@ -32,7 +32,7 @@ public sealed class PitSystem : SharedPitSystem
     private EntityQuery<MapGridComponent> _gridQuery;
 
     private static readonly TimeSpan BuildDelay = TimeSpan.FromSeconds(12);
-    private const string MetalStackType = "CMSteel";
+    public const string MetalStackType = "CMSteel"; // RUMC: public, the ladders that are taken down give the metal back
     private const string RopeCoilProto = "RUMCRopeCoil";
 
     public override void Initialize()
@@ -159,7 +159,7 @@ public sealed class PitSystem : SharedPitSystem
         }
     }
 
-    private static int GetMetalCost(PitBuildOption option) => option switch
+    public static int GetMetalCost(PitBuildOption option) => option switch
     {
         PitBuildOption.Ladder => 25,
         PitBuildOption.Hatch => 35,
@@ -331,7 +331,7 @@ public sealed class PitSystem : SharedPitSystem
         return (down, up);
     }
 
-    // The pit is covered with a plate that has the code of a mine in it: it is floor now, and gives way under whoever is not of the faction of the one who built it.
+    // The pit is covered with a plate that has the code of a mine in it: it is floor now, and gives way under whoever steps on it.
     private void BuildMinePlate(EntityUid pit, EntityUid user)
     {
         var coordinates = Transform(pit).Coordinates;

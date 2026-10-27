@@ -39,6 +39,7 @@ public sealed partial class MineDetectorSystem : EntitySystem
     private EntityQuery<MineDetectorComponent> _detectorQuery = default!;
     private EntityQuery<StorageComponent> _storageQuery = default!;
     private EntityQuery<LandMineComponent> _mineQuery = default!;
+    private EntityQuery<MineDetectableComponent> _detectableQuery = default!; // RUMC: the plates over the pits
 
     private readonly HashSet<EntityUid> _mines = new();
 
@@ -47,6 +48,7 @@ public sealed partial class MineDetectorSystem : EntitySystem
         _detectorQuery = GetEntityQuery<MineDetectorComponent>();
         _storageQuery = GetEntityQuery<StorageComponent>();
         _mineQuery = GetEntityQuery<LandMineComponent>();
+        _detectableQuery = GetEntityQuery<MineDetectableComponent>(); // RUMC
 
         SubscribeLocalEvent<MineDetectorComponent, UseInHandEvent>(OnMineDetectorUseInHand);
         SubscribeLocalEvent<MineDetectorComponent, GetVerbsEvent<AlternativeVerb>>(OnMineDetectorGetVerbs);
@@ -235,8 +237,16 @@ public sealed partial class MineDetectorSystem : EntitySystem
             detector.Blips.Clear();
             foreach (var mine in _mines)
             {
+                // RUMC: a plate over a pit is found only from close by
                 if (!_mineQuery.HasComp(mine))
-                    continue;
+                {
+                    if (!_detectableQuery.TryComp(mine, out var detectable))
+                        continue;
+
+                    var offset = _transform.GetMapCoordinates(mine).Position - _transform.GetMapCoordinates(uid).Position;
+                    if (offset.Length() > detectable.Range)
+                        continue;
+                }
 
                 detector.Blips.Add(new Blip(_transform.GetMapCoordinates(mine), false));
             }

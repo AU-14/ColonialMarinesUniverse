@@ -42,9 +42,9 @@ rumc-map-sea-silver = Серебряный океан
 rumc-map-sea-calm = Море Штилей
 
 rumc-city-capability-tradehub = Торговый узел: пошлина ниже на 1% за каждые 25 влияния (все узлы вместе до 5%).
-rumc-city-capability-armsmarket = Рынок оружия (пока для проверки: эффекта нет).
-rumc-city-capability-intelligence = Разведка (пока для проверки: эффекта нет).
-rumc-city-capability-blackmarket = Чёрный рынок (пока для проверки: эффекта нет).
+rumc-city-capability-armsmarket = Рынок оружия.
+rumc-city-capability-intelligence = Разведка.
+rumc-city-capability-blackmarket = Чёрный рынок.
 
 rumc-city-whitehall-name = Порт Вайтхолл
 rumc-city-whitehall-desc = Большой торговый порт на побережье моря. Через него идёт половина грузов мира, пошлины здесь ниже, чем где-либо.
@@ -178,3 +178,6 @@ rumc-action-university-name = Университет
 rumc-action-university-desc = Большой университет. Приносит доход в бюджет и каждые 15 минут очко влияния у материнской фракции. Очень дорого.
 rumc-action-congress-name = Дворец конгрессов
 rumc-action-congress-desc = Величайшая постройка колонии. Защищает город от эпидемий, засух и голода и каждые 15 минут приносит очко влияния у материнской фракции. Крайне дорого.
+
+rumc-map-shares = Шкала репутации города одна на всех послов:
+rumc-map-share-line = { $faction }: { $value }

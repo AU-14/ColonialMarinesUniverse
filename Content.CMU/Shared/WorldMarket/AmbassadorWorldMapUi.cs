@@ -31,7 +31,8 @@ public sealed class CityEntry(
     List<ProjectEntry>? projects = null,
     List<ActionEntry>? actions = null,
     string zoneOwner = "",
-    CityExtras? extras = null)
+    CityExtras? extras = null,
+    bool site = false)
 {
     public readonly string Id = id;
     public readonly string Name = name;
@@ -61,6 +62,9 @@ public sealed class CityEntry(
 
     // The bargain, the patron, the good thing that is going on, the secret strikes, the joint works.
     public readonly CityExtras Extras = extras ?? new CityExtras();
+
+    // Not a city but another object of the map (a mine, a fort, ruins...).
+    public readonly bool Site = site;
 }
 
 // A bid in a bargain for a city.
@@ -105,9 +109,31 @@ public sealed class CityExtras
     public List<StrikeEntry> Strikes = new();
     public List<ActionEntry> JointActions = new();
 
+    // The one scale of favour in the city: how much of the hundred each faction has (BidEntry is a faction and a number).
+    public List<BidEntry> Shares = new();
+
     // A report of intelligence can be bought here (nothing in IntelCost: it cannot), and why not.
     public int IntelCost;
     public string IntelBlocked = string.Empty;
+
+    // The headquarters of the intelligence: the faction has one (the rest is filled only then). The scouts (what they cost, why they cannot be sent, how long till they are back, what they
+    // found out), the secret harm (discredit, sabotage, provocation) with its cost and why it cannot be done.
+    public bool Hq;
+    public int ScoutCost;
+    public string ScoutBlocked = string.Empty;
+    public int ScoutSeconds;
+    public List<string> ScoutReport = new();
+    public int ProvokeCost;
+    public string ProvokeBlocked = string.Empty;
+    public List<StrikeEntry> Smears = new();
+    public List<StrikeEntry> Sabotages = new();
+
+    // More secret harm: buying the local leaders over, bribing an official to hold a building up, poisoning the wells where the target is guarded, and catching the scouts of another that are on
+    // their way here.
+    public List<StrikeEntry> Buyouts = new();
+    public List<StrikeEntry> Freezes = new();
+    public List<StrikeEntry> Poisons = new();
+    public List<StrikeEntry> Intercepts = new();
 }
 
 // The things of the whole map: the season, the hazards, the other factions and what the faction stands in with each, the joint works that are offered to it.
@@ -124,6 +150,28 @@ public sealed class MapExtras
     public List<DossierEntry> Dossiers = new();
     public int IntelSeconds;
     public int IntelLevel;
+
+    // The headquarters of the intelligence: the faction has one, what the counter-intelligence costs, how long it has to run, and why it cannot be turned on.
+    public bool Hq;
+    public int CounterCost;
+    public int CounterSeconds;
+    public string CounterBlocked = string.Empty;
+
+    // Against a faction: leak what it did in secret, put a spy in its headquarters, complain of it to the mother faction (the cost is in points), spoil its main goals.
+    public List<StrikeEntry> Leaks = new();
+    public List<StrikeEntry> Spies = new();
+    public List<StrikeEntry> Complaints = new();
+    public List<StrikeEntry> TaskSabotages = new();
+
+    // The false reports for the scouts of the others (what it costs, how long it runs, why it cannot be turned on), what the spy sees, and the inspection that hangs over the faction.
+    public int DisinfoCost;
+    public int DisinfoSeconds;
+    public string DisinfoBlocked = string.Empty;
+    public int SpySeconds;
+    public List<string> SpyLines = new();
+    public bool Inspected;
+    public int PayOffCost;
+    public string PayOffBlocked = string.Empty;
 }
 
 // A caravan on its way: whose, what it carries, where to, where it is now, whether it has an escort, whether it is of the faction of the console, how long yet, what an escort costs.
@@ -227,6 +275,26 @@ public enum MapCommandKind : byte
     DealPropose,
     DealAnswer,
     Intel,
+
+    // The intelligence (needs the headquarters): scouts into a place, discredit, sabotage, provocation, counter-intelligence.
+    Scouts,
+    Smear,
+    Sabotage,
+    Provoke,
+    CounterIntel,
+
+    // More of it: buy the leaders over, bribe an official, poison the wells, leak a secret harm, false reports, catch the scouts, a spy in a headquarters, a complaint to the mother faction
+    // (and paying off the inspection that it brings), spoiling the main goals.
+    Buyout,
+    Freeze,
+    Poison,
+    Leak,
+    Disinfo,
+    Intercept,
+    Spy,
+    Complain,
+    PayOff,
+    SabotageTasks,
 }
 
 [Serializable, NetSerializable]

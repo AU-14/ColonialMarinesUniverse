@@ -346,6 +346,8 @@ public sealed partial class WorldMarketSystem
         UpdateHazards(market, now);
         RecomputeHazardEffects(market);
         UpdateTrade(market, now);
+        UpdateEspionage(market, now);
+        UpdateSabotage(market, now);
     }
 
     // The things of the whole map for the console of a faction: the season, the hazards, the other factions, the joint works that are offered to it.
@@ -364,7 +366,13 @@ public sealed partial class WorldMarketSystem
             Dossiers = BuildDossiers(market, faction),
             IntelSeconds = IntelSecondsLeft(faction),
             IntelLevel = market.Comp.IntelLevel.GetValueOrDefault(faction),
+            Hq = HasHq(market, faction),
+            CounterCost = CounterCost,
+            CounterSeconds = CounterSecondsLeft(market, faction),
+            CounterBlocked = CounterBlocked(market, faction, budget) ?? string.Empty,
         };
+
+        FillSabotageMap(market, faction, budget, extras);
 
         foreach (var hazard in market.Comp.Hazards.Where(h => h.EndsAt > now))
         {

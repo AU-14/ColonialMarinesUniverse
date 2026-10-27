@@ -33,6 +33,20 @@ public sealed partial class WorldMarketComponent : Component
     public readonly Dictionary<string, int> MotherPoints = new();
     public readonly HashSet<string> MotherSteps = new();
 
+    // How many times each faction has ordered each fighting company ("faction|offer"): every order doubles the price of the next.
+    public readonly Dictionary<string, int> OffersBought = new();
+
+    // The intelligence: the scouts that the factions have sent ("faction|place"), and until when each faction has counter-intelligence on.
+    public readonly Dictionary<string, ScoutReport> Scouts = new();
+    public readonly Dictionary<string, TimeSpan> CounterUntil = new();
+
+    // The secret harm that was done lately (to be leaked or spied on), until when each faction feeds false reports to the scouts of the others, the spies in the headquarters (by the faction
+    // that put them), and the factions that the mother faction is going to inspect: the next payment to them is cut by half.
+    public readonly List<HarmRecord> HarmLog = new();
+    public readonly Dictionary<string, TimeSpan> DisinfoUntil = new();
+    public readonly Dictionary<string, SpyOrder> Spies = new();
+    public readonly HashSet<string> Inspected = new();
+
     // The holidays from taxes that are on.
     public readonly List<TaxBreak> TaxBreaks = new();
 

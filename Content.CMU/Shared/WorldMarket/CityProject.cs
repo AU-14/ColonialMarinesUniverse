@@ -20,6 +20,34 @@ public sealed class CityProject
 
     // When a great building next brings its point of influence (nothing until it is ready).
     public TimeSpan NextPoint;
+
+    // Until when an official has been bribed to hold it up: it brings in no money and keeps no trouble away.
+    public TimeSpan FrozenUntil;
+}
+
+// A harm that a faction did in secret (to remember it for a while): who, to whom (nothing for a trouble stirred up), where, what (a text), when, and whether it has been leaked already.
+public sealed class HarmRecord
+{
+    public string Offender = string.Empty;
+    public string Victim = string.Empty;
+    public string City = string.Empty;
+    public string Kind = string.Empty;
+    public TimeSpan At;
+    public bool Leaked;
+}
+
+// A spy that a faction has put in the headquarters of another: whose, and until when it sees what the other does.
+public sealed class SpyOrder
+{
+    public string Target = string.Empty;
+    public TimeSpan Until;
+}
+
+// The scouts that a faction has sent into a place: they are back at ReadyAt, and what they found out is good until Until.
+public sealed class ScoutReport
+{
+    public TimeSpan ReadyAt;
+    public TimeSpan Until;
 }
 
 // A trouble that a city is in.

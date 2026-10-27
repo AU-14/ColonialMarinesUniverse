@@ -42,7 +42,7 @@
   description: rumc-task-reportprofit-desc
   report: true
   durationSeconds: 600
-  earn: 60
+  earn: 20
   rewardPoints: 1
   trustGain: 6
   trustLoss: 8
@@ -75,7 +75,7 @@
   id: RUMCTaskMissionEarn
   name: rumc-task-missionearn-name
   description: rumc-task-missionearn-desc
-  earn: 300
+  earn: 90
   rewardPoints: 0
   rewardMoney: 1000
   trustGain: 8
@@ -145,7 +145,7 @@
   id: RUMCTaskMissionIndustry
   name: rumc-task-missionindustry-name
   description: rumc-task-missionindustry-desc
-  earn: 600
+  earn: 180
   rewardPoints: 0
   rewardMoney: 1800
   rewardCrate: RMCCrateFoodPizza
@@ -194,7 +194,7 @@
   id: RUMCTaskMissionWealth
   name: rumc-task-missionwealth-name
   description: rumc-task-missionwealth-desc
-  earn: 150
+  earn: 45
   projects: 2
   rewardPoints: 0
   rewardMoney: 800

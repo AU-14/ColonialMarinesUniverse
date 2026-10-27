@@ -17,6 +17,6 @@ public enum PitBuildOption : byte
 
     Steps,
 
-    // The pit is covered with a plate of the floor that has the code of a mine in it: it gives way again under whoever is not of the faction of the one who built it.
+    // The pit is covered with a plate of the floor that has the code of a mine in it: it gives way again under whoever steps on it.
     MinePlate,
 }

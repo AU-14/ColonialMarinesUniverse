@@ -11,7 +11,7 @@ namespace Content.Server.CMU14.WorldMarket;
 public sealed partial class WorldMarketSystem
 {
     // How much money one point of influence is changed for.
-    public const int MoneyPerPoint = 5000;
+    public const int MoneyPerPoint = 1500;
 
     // The steps of favour in a city, and the points that each is paid with.
     private static readonly (int Step, int Points)[] MotherSteps = { (25, 1), (50, 1), (75, 2), (100, 2) };

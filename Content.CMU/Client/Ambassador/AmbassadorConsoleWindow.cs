@@ -66,6 +66,7 @@ public sealed class AmbassadorConsoleWindow : DefaultWindow
         // Treasury.
         body.AddChild(_kit.Section(Loc.GetString("cmu-ambassador-treasury"), out var treasury));
         treasury.AddChild(CrtConsoleKit.Wrapping(Loc.GetString("cmu-ambassador-treasury-hint"), CrtTerminalPalette.TextDim));
+        treasury.AddChild(CrtConsoleKit.Wrapping(Loc.GetString("rumc-ambassador-withdraw-floor-hint", ("floor", (int) AmbassadorConsoleComponent.WithdrawFloorDefault)), CrtTerminalPalette.TextDim)); // RUMC
         var withdraw = CrtConsoleKit.Row(4);
         foreach (var amount in new[] { 100, 250, 500 })
         {

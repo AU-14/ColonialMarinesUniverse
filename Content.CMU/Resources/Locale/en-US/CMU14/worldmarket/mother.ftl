@@ -193,3 +193,6 @@ rumc-action-bankinghouse-name = Banking house
 rumc-action-bankinghouse-desc = A bank, bought for the points of influence. It is put up at once and brings a good steady income to the budget.
 rumc-action-portterminal-name = Port terminal
 rumc-action-portterminal-desc = A vast freight terminal, bought for the points of influence. It is put up at once and brings the greatest income to the budget.
+
+rumc-ambassador-withdraw-locked = The first { $floor } of the embassy account cannot be withdrawn as cash. Only what is above it can be taken out.
+rumc-ambassador-withdraw-floor-hint = Only the money above { $floor } can be withdrawn as cash: that sum stays on the embassy account.

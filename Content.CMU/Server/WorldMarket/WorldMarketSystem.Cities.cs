@@ -13,9 +13,12 @@ public sealed partial class WorldMarketSystem
     public const int MaxInfluence = 100;
     public const int GiftInfluence = 12;
 
-    // How many cities a round has: at least, and how many more there may be.
-    private const int FewestCities = 8;
-    private const int MoreCities = 3;
+    // How many cities a round has: at least, and how many more there may be (the map is three times as big as it was, and so is what is on it), and how many of the other objects of the
+    // map (the sites) there are besides.
+    private const int FewestCities = 13;
+    private const int MoreCities = 5;
+    private const int FewestSites = 9;
+    private const int MoreSites = 4;
 
     // The favour that takes one percent off the duty in a trade hub, and the most that all the hubs together take off.
     private const int HubInfluencePerPercent = 25;
@@ -68,7 +71,9 @@ public sealed partial class WorldMarketSystem
         if (_activeSeed == seed && _active.Count > 0)
             return _active;
 
-        var pool = _proto.EnumeratePrototypes<WorldCityPrototype>().OrderBy(c => c.ID, StringComparer.Ordinal).ToList();
+        var all = _proto.EnumeratePrototypes<WorldCityPrototype>().OrderBy(c => c.ID, StringComparer.Ordinal).ToList();
+        var pool = all.Where(c => !c.Site).ToList();
+        var sitePool = all.Where(c => c.Site).ToList();
         var rng = new System.Random(seed);
 
         // Mixed, and the first ones taken.
@@ -84,7 +89,17 @@ public sealed partial class WorldMarketSystem
         if (chosen.Count > 0 && !chosen.Any(c => c.Capabilities.Contains(CityCapability.TradeHub)) && pool.Skip(count).FirstOrDefault(c => c.Capabilities.Contains(CityCapability.TradeHub)) is { } hub)
             chosen[^1] = hub;
 
-        _active = chosen.OrderBy(c => Loc.GetString(c.Name)).ToList();
+        // The other objects of the map, taken the same way.
+        for (var i = sitePool.Count - 1; i > 0; i--)
+        {
+            var j = rng.Next(i + 1);
+            (sitePool[i], sitePool[j]) = (sitePool[j], sitePool[i]);
+        }
+
+        var sites = sitePool.Take(Math.Min(sitePool.Count, FewestSites + rng.Next(MoreSites + 1))).ToList();
+
+        // The cities first (the roads are made of them), then the sites; each in the order of the names.
+        _active = chosen.OrderBy(c => Loc.GetString(c.Name)).Concat(sites.OrderBy(c => Loc.GetString(c.Name))).ToList();
         _activeSeed = seed;
         _terrain = null;
         return _active;
@@ -117,6 +132,9 @@ public sealed partial class WorldMarketSystem
         var joined = new HashSet<int> { 0 };
         var pairs = new HashSet<(int, int)>();
 
+        // The cities come first in the list, then the sites: the roads join the cities to one another, and each site is joined to the nearest city by a trail.
+        var cityCount = cities.Count(c => !c.Site);
+
         void Link(int a, int b, WorldRoadKind intended)
         {
             pairs.Add((Math.Min(a, b), Math.Max(a, b)));
@@ -124,7 +142,7 @@ public sealed partial class WorldMarketSystem
             _roadPoints.Add(SampleRoad(points[a], points[b]));
         }
 
-        while (joined.Count < cities.Count)
+        while (joined.Count < cityCount)
         {
             var bestA = -1;
             var bestB = -1;
@@ -132,7 +150,7 @@ public sealed partial class WorldMarketSystem
 
             foreach (var a in joined)
             {
-                for (var b = 0; b < cities.Count; b++)
+                for (var b = 0; b < cityCount; b++)
                 {
                     if (joined.Contains(b))
                         continue;
@@ -153,17 +171,35 @@ public sealed partial class WorldMarketSystem
 
         // A few more, between the nearest of those that are not joined yet.
         var extra = new List<(float Distance, int A, int B)>();
-        for (var a = 0; a < cities.Count; a++)
+        for (var a = 0; a < cityCount; a++)
         {
-            for (var b = a + 1; b < cities.Count; b++)
+            for (var b = a + 1; b < cityCount; b++)
             {
                 if (!pairs.Contains((a, b)))
                     extra.Add((WorldMapTerrain.AngleBetween(points[a], points[b]), a, b));
             }
         }
 
-        foreach (var (_, a, b) in extra.OrderBy(e => e.Distance).Take(Math.Max(1, cities.Count / 3)))
+        foreach (var (_, a, b) in extra.OrderBy(e => e.Distance).Take(Math.Max(1, cityCount / 3)))
             Link(a, b, WorldRoadKind.Trail);
+
+        // Every site has a trail to the city that is nearest to it.
+        for (var site = cityCount; site < cities.Count && cityCount > 0; site++)
+        {
+            var nearest = 0;
+            var nearestAngle = float.MaxValue;
+            for (var city = 0; city < cityCount; city++)
+            {
+                var angle = WorldMapTerrain.AngleBetween(points[site], points[city]);
+                if (angle >= nearestAngle)
+                    continue;
+
+                nearestAngle = angle;
+                nearest = city;
+            }
+
+            Link(nearest, site, WorldRoadKind.Trail);
+        }
     }
 
     // The cities of the map for a console, with the favour of its faction in each and whether the budget of the console is enough for a gift (the price is higher in the region of interest of
@@ -203,7 +239,8 @@ public sealed partial class WorldMarketSystem
                 status.Projects,
                 status.Actions,
                 owner ?? string.Empty,
-                BuildCityExtras(market, faction, city.ID, budget)));
+                BuildCityExtras(market, faction, city.ID, budget),
+                city.Site));
         }
 
         roads = new List<RoadEntry>();

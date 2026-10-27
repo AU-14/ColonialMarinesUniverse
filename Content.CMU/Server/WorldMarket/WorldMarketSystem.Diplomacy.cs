@@ -71,6 +71,36 @@ public sealed partial class WorldMarketSystem
                 return DealAnswer(market, faction, a, n != 0, budget);
             case MapCommandKind.Intel:
                 return Intel(market, faction, a, budget);
+            case MapCommandKind.Scouts:
+                return Scouts(market, faction, a, budget);
+            case MapCommandKind.Smear:
+                return Smear(market, faction, a, b, budget);
+            case MapCommandKind.Sabotage:
+                return Sabotage(market, faction, a, b, budget);
+            case MapCommandKind.Provoke:
+                return Provoke(market, faction, a, budget);
+            case MapCommandKind.CounterIntel:
+                return Counter(market, faction, budget);
+            case MapCommandKind.Buyout:
+                return Buyout(market, faction, a, b, budget);
+            case MapCommandKind.Freeze:
+                return Freeze(market, faction, a, b, budget);
+            case MapCommandKind.Poison:
+                return Poison(market, faction, a, b, budget);
+            case MapCommandKind.Leak:
+                return Leak(market, faction, a, budget);
+            case MapCommandKind.Disinfo:
+                return Disinfo(market, faction, budget);
+            case MapCommandKind.Intercept:
+                return Intercept(market, faction, a, b, budget);
+            case MapCommandKind.Spy:
+                return Spy(market, faction, a, budget);
+            case MapCommandKind.Complain:
+                return Complain(market, faction, a);
+            case MapCommandKind.PayOff:
+                return PayOff(market, faction, budget);
+            case MapCommandKind.SabotageTasks:
+                return SabotageTasks(market, faction, a, budget);
             default:
                 return null;
         }
@@ -156,8 +186,23 @@ public sealed partial class WorldMarketSystem
     // How likely a strike is to succeed, in percent: the more favour the striker has in the city and the less the target, the likelier; an answer to a harm is likelier.
     private int StrikeChance(Entity<WorldMarketComponent> market, string faction, string cityId, string target)
     {
-        var chance = Math.Clamp(35 + InfluenceOf(market, faction, cityId) - InfluenceOf(market, target, cityId), 10, 85);
+        var chance = Math.Clamp(35 + InfluenceOf(market, faction, cityId) - InfluenceOf(market, target, cityId) - JointGuard(market, target, cityId), 10, 85);
         return HasRetaliation(market, faction, target) ? Math.Min(95, chance + 40) : chance;
+    }
+
+    // What the partners of a joint work gain from it besides the work itself: it brings in half as much again, the mother faction thinks the better of both when it is begun, and the two
+    // guard one another in the city while it stands (a harm to either is less likely to succeed).
+    public const float JointIncomeFactor = 1.5f;
+    public const int JointTrustGain = 3;
+    public const int JointGuardPercent = 20;
+
+    // How much less likely a secret harm to the faction in the city is, because of the joint works that it has standing there.
+    private int JointGuard(Entity<WorldMarketComponent> market, string faction, string cityId)
+    {
+        var now = _timing.CurTime;
+        return market.Comp.CityProjects.Any(p => p.Faction == faction && p.City == cityId && p.Partner.Length > 0 && p.Rewarded && p.ExpiresAt > now && JointWorks(market, p))
+            ? JointGuardPercent
+            : 0;
     }
 
     private int StrikePrice(Entity<WorldMarketComponent> market, string faction, string target)
@@ -192,6 +237,7 @@ public sealed partial class WorldMarketSystem
         var answering = HasRetaliation(market, faction, target);
 
         comp.StrikeReady[faction] = now + StrikeCooldown;
+        LogHarm(market, faction, target, cityId, "rumc-map-harm-strike");
 
         // A strike against a faction that there is a pact with breaks the pact, even if it succeeds (unless it is the answer to a harm).
         if (answering)
@@ -284,6 +330,9 @@ public sealed partial class WorldMarketSystem
 
     private string? JointBlocked(Entity<WorldMarketComponent> market, string faction, string cityId, WorldCityActionPrototype action, float budget)
     {
+        if (!FitsPlace(cityId, action))
+            return Loc.GetString(action.Placement == WorldPlacement.City ? "rumc-map-only-cities" : "rumc-map-only-sites");
+
         if (InfluenceOf(market, faction, cityId) < Math.Max(JointMinInfluence, action.MinInfluence))
             return Loc.GetString("rumc-map-need-influence", ("value", Math.Max(JointMinInfluence, action.MinInfluence)));
 
@@ -348,6 +397,9 @@ public sealed partial class WorldMarketSystem
     private void StartJointProject(Entity<WorldMarketComponent> market, string faction, string partner, string cityId, WorldCityActionPrototype action)
     {
         var now = _timing.CurTime;
+
+        // Working together pleases the mother faction.
+        AddTrust(market, faction, JointTrustGain);
         var ready = now + TimeSpan.FromSeconds(action.BuildSeconds);
         var project = new CityProject
         {
@@ -446,7 +498,7 @@ public sealed partial class WorldMarketSystem
     {
         var comp = market.Comp;
         var now = _timing.CurTime;
-        var extras = new CityExtras();
+        var extras = new CityExtras { Shares = SharesOf(market, cityId) };
 
         if (comp.CityEvents.TryGetValue(cityId, out var cityEvent) && _proto.TryIndex<WorldCityEventPrototype>(cityEvent.Id, out var eventProto))
         {
@@ -487,11 +539,13 @@ public sealed partial class WorldMarketSystem
             extras.IntelBlocked = IntelBlocked(market, faction, cityProto, budget) ?? string.Empty;
         }
 
-        foreach (var action in _proto.EnumeratePrototypes<WorldCityActionPrototype>().Where(a => a.Joint).OrderBy(a => a.Order))
+        foreach (var action in _proto.EnumeratePrototypes<WorldCityActionPrototype>().Where(a => a.Joint && FitsPlace(cityId, a)).OrderBy(a => a.Order))
         {
             extras.JointActions.Add(new ActionEntry(action.ID, Loc.GetString(action.Name), Loc.GetString(action.Description), action.Cost, action.Influence,
                 JointBlocked(market, faction, cityId, action, budget) ?? string.Empty));
         }
+
+        FillEspionage(market, faction, cityId, budget, extras);
 
         return extras;
     }

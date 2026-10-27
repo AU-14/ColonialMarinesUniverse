@@ -61,6 +61,11 @@ public sealed partial class WorldCityPrototype : IPrototype
     // What a gift costs the colony; every gift gives the same favour.
     [DataField]
     public int GiftCost = 400;
+
+    // Not a city but another object of the map (a mine, a fort, ruins, a relay...): it has the favour of the factions and can be built on like a city, a few of them are taken every round
+    // besides the cities, and they are joined to the nearest city by a trail.
+    [DataField]
+    public bool Site;
 }
 
 // What a city can do for the colony. Each has a text of its own (rumc-city-capability-<name>); for now only the trade hub does something (it takes a part off the duty). The farm cities sell food and seeds, the rich cities sell and dearly buy luxuries (see colonyWorldGood).
@@ -73,6 +78,9 @@ public enum CityCapability : byte
     BlackMarket,
     Agrarian,
     Wealthy,
+
+    // A deposit (a mine, a well, a plantation): what the factions build there brings in twice as much.
+    Deposit,
 }
 
 // A biome of the world map: what a cell of the globe is (the sea, the ice, the forest...), with its colour and its description, which the console shows when a cell is picked.
@@ -214,6 +222,35 @@ public sealed partial class WorldCityActionPrototype : IPrototype
     // A big work of two factions: the one that offers it pays Cost, the other pays Cost too, and then both have it (the favour, the income) while both keep Influence 20 in the city.
     [DataField]
     public bool Joint;
+
+    // Where it can be built: in the cities, in the other objects of the map (the sites), or in both.
+    [DataField]
+    public WorldPlacement Placement = WorldPlacement.Any;
+
+    // What the building lets its faction do while it stands (nothing for most).
+    [DataField]
+    public WorldBuildingFeature Feature = WorldBuildingFeature.None;
+
+    // A faction may have only one of it at a time (in the whole world).
+    [DataField]
+    public bool Unique;
+}
+
+// Where a building can be put up.
+[Serializable]
+public enum WorldPlacement : byte
+{
+    Any,
+    City,
+    Site,
+}
+
+// What a building gives to its faction. The headquarters of the intelligence lets it send scouts and do harm to the others in secret (see WorldMarketSystem.Espionage).
+[Serializable]
+public enum WorldBuildingFeature : byte
+{
+    None,
+    IntelHq,
 }
 
 // Something that an ambassador can order of the mother faction for the points of influence that it has with it (see WorldMarketSystem.Mother): a private military company of a faction (as many

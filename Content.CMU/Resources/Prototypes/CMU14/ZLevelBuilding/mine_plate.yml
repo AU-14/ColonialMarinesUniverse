@@ -1,6 +1,6 @@
 # The plate of the floor with the code of a mine in it. It is built over a pit (the "build on" menu of the pit, for ten sheets of metal) and the pit becomes floor: the
-# plate has no picture, so that nothing on the tile shows it. It remembers the factions of the one who built it and gives way under anyone else (see MinePlateSystem): it
-# turns back into a pit and whoever stepped on it falls in.
+# plate has no picture, so that nothing on the tile shows it. It gives way under anyone who steps on it, friend or foe (see MinePlateSystem): it turns back into a pit and
+# whoever stepped on it falls in. The CLF see a mark over it (MinePlateMarkSystem) and a mine detector finds it from a tile away (MineDetectable).
 
 - type: entity
   id: RUMCMinePlateLaid
@@ -27,3 +27,5 @@
     intersectRatio: 0.3
     stepOn: true
   - type: MinePlate
+  - type: MineDetectable
+    range: 1.5

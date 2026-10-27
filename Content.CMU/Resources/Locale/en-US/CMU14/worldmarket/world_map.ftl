@@ -42,9 +42,9 @@ rumc-map-sea-silver = Silver Ocean
 rumc-map-sea-calm = Sea of Calms
 
 rumc-city-capability-tradehub = Trade hub: the duty is lower by 1% for every 25 of influence (all the hubs together up to 5%).
-rumc-city-capability-armsmarket = Arms market (for trying the map out: no effect yet).
-rumc-city-capability-intelligence = Intelligence (for trying the map out: no effect yet).
-rumc-city-capability-blackmarket = Black market (for trying the map out: no effect yet).
+rumc-city-capability-armsmarket = Arms market.
+rumc-city-capability-intelligence = Intelligence.
+rumc-city-capability-blackmarket = Black market.
 
 rumc-city-whitehall-name = Port Whitehall
 rumc-city-whitehall-desc = A great trading port on the coast of the sea. Half of the cargo of the world passes through it, and the duties here are lower than anywhere.
@@ -178,3 +178,6 @@ rumc-action-university-name = University
 rumc-action-university-desc = A great university. It brings money to the budget and a point of influence with the mother faction every 15 minutes. Very dear.
 rumc-action-congress-name = Palace of congresses
 rumc-action-congress-desc = The greatest building of the colony. It keeps epidemics, droughts and famine away from the city and brings a point of influence with the mother faction every 15 minutes. Extremely dear.
+
+rumc-map-shares = The reputation of the city is one scale shared by all the ambassadors:
+rumc-map-share-line = { $faction }: { $value }

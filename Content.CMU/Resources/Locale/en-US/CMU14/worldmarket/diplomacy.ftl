@@ -24,7 +24,7 @@ rumc-map-joint-offer-line = { $from }: { $action } — { $city }
 rumc-map-joint-accept = Accept · { $cost }
 rumc-map-joint-decline = Decline
 rumc-map-joint-title = Joint works
-rumc-map-joint-hint = A big work for two: each pays a share, both get influence and income while both keep influence of 20 in the city.
+rumc-map-joint-hint = A big work for two: each pays a share, both get influence and income (half as much again as usual) while both keep influence of 20 in the city. The partners guard one another: a secret harm to either of them in this city succeeds 20% less often. The mother faction adds 3 trust to each for working together.
 rumc-map-joint-propose = { $action } with { $faction } · { $cost }
 
 rumc-map-strikes = Secret strikes
