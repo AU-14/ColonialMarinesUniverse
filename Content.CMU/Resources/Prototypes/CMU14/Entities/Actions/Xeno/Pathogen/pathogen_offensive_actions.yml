@@ -1101,3 +1101,25 @@
   - type: ActionBlockIfResting  
   - type: XenoActionPlasma  
     cost: 50
+
+- type: entity  
+  id: CMU14ActionXenoPathogenGuardianFling
+  parent: ActionXenoBase  
+  name: Tentacle Slam
+  description: Smash a target with your tentacles and send them flying away. Also heals you.
+  components:  
+  - type: Action  
+    itemIconStyle: NoItem  
+    icon:  
+      sprite: _RMC14/Actions/xeno_actions.rsi  
+      state: fling
+      map: ["enum.ActionVisuals.Icon"]
+    useDelay: 7
+  - type: TargetAction  
+    range: 2
+    deselectOnMiss: false  
+  - type: EntityTargetAction  
+    event: !type:XenoFlingActionEvent  
+    toggleOutline: false  
+  - type: XenoOffensiveAction  
+  - type: RMCDazeableAction
