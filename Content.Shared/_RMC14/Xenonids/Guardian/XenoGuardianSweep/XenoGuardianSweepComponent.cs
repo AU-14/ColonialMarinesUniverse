@@ -18,8 +18,8 @@ public sealed partial class XenoGuardianSweepComponent : Component
     [DataField]  
     public EntProtoId Effect = "CMEffectPunch";  
   
-    [DataField]  
-    public SoundSpecifier Sound = new SoundCollectionSpecifier("/Audio/_RMC14/Xeno/alien_claw_block.ogg");  
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier HitSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_claw_block.ogg");  
   
     [DataField]  
     public ProtoId<EmotePrototype> HissEmote = "Hiss";  
