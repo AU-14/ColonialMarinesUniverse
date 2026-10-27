@@ -32,6 +32,7 @@
     - CMU14ActionXenoPathogenPlaceSporeSac
     - CMU14ActionXenoPathogenDirectSporeInfect
     - CMU14ActionXenoPathogenRegurgitate
+    - CMUActionXenoZJump
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
