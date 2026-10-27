@@ -148,6 +148,7 @@
       collection: PathogenAberrationDeath
       params:
         volume: -4
+  - type: CMUXenoZJump
  
 - type: entity
   parent: CMU14XenoAberrationBase

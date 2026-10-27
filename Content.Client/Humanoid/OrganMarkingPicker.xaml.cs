@@ -87,5 +87,6 @@ public sealed partial class OrganMarkingPicker : Control
         }
 
         LayerTabs.TabsVisible = i > 1;
+        ApplyWorkspaceGallery(); // CMU14: refresh newly rebuilt layers as well.
     }
 }

@@ -566,11 +566,12 @@ namespace Content.Client.Lobby
             var window = new JoinRoundWindow();
             _joinRoundWindow = window;
 
-            // Each choice is terminal - it opens a late-join or ghost-roles window on top - so close
-            // this one first rather than leaving it stranded behind whatever the choice opened.
+            // CMU14: human faction cards expand their live roster inside this window.
+            /*
             window.JoinColonistsButton.OnPressed += args2 => { window.Close(); OnReadyPressed(args2); };
             window.JoinGovforButton.OnPressed += args2 => { window.Close(); OnJoinGovforPressed(args2); };
             window.JoinOpforButton.OnPressed += args2 => { window.Close(); OnJoinOpforPressed(args2); };
+            */
             window.SetHuntVisible(HasYautjaWhitelist());
             window.JoinHuntButton.OnPressed += args2 => { window.Close(); OnJoinHuntPressed(args2); };
             window.JoinOtherButton.OnPressed += args2 => { window.Close(); OnJoinOtherPressed(args2); };

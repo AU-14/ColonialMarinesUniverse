@@ -67,10 +67,11 @@ namespace Content.Client.Lobby.UI
                 IoCManager.Resolve<CommendationsManager>().OpenGivenWindow();
 
             _cfg.OnValueChanged(CCVars.SeeOwnNotes, OnSeeOwnNotesChanged, true);
-            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
-            _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            // CMU14: also follow unsaved previews, after the shared stylesheet has been updated.
+            _stylesheetManager.CrtThemeChanged += ApplyCrtPalette;
             _cfg.OnValueChanged(CCVars.GameMaxCharacterSlots, OnGameMaxCharacterSlotsChanged);
             _cvarSubscriptionsActive = true;
+            InitializeWorkspaceHeader(); // CMU14: service actions and compact character cards.
         }
 
         [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
@@ -90,8 +91,7 @@ namespace Content.Client.Lobby.UI
                 return;
 
             _cfg.UnsubValueChanged(CCVars.SeeOwnNotes, OnSeeOwnNotesChanged);
-            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
-            _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _stylesheetManager.CrtThemeChanged -= ApplyCrtPalette; // CMU14
             _cfg.UnsubValueChanged(CCVars.GameMaxCharacterSlots, OnGameMaxCharacterSlotsChanged);
             _cvarSubscriptionsActive = false;
         }
@@ -106,17 +106,7 @@ namespace Content.Client.Lobby.UI
             ReloadCharacterPickers();
         }
 
-        private void OnCrtUiEnabledChanged(bool _)
-        {
-            ApplyCrtPalette();
-            CrtLobbyTheme.Apply(this);
-        }
-
-        private void OnCrtUiColorChanged(string _)
-        {
-            ApplyCrtPalette();
-        }
-
+        // CMU14: the live theme event replaces the individual colour and enabled callbacks.
         private void ApplyCrtPalette()
         {
             Stylesheet = _stylesheetManager.SheetNano;
@@ -151,7 +141,7 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         public void ReloadCharacterPickers()
         {
-            _createNewCharacterButton.Orphan();
+            // CMU14: New character stays in the workspace toolbar while slots refresh.
             Characters.RemoveAllChildren();
 
             var numberOfFullSlots = 0;
@@ -192,6 +182,8 @@ namespace Content.Client.Lobby.UI
                 characterPickerButton.OnPressed += args =>
                 {
                     SelectCharacter?.Invoke(slot);
+                    if (_workspaceCharacters != null) _workspaceCharacters.Visible = false; // CMU14
+                    RefreshWorkspaceCharacterTitle(); // CMU14
                 };
 
                 characterPickerButton.OnDeletePressed += () =>
@@ -201,7 +193,7 @@ namespace Content.Client.Lobby.UI
             }
 
             _createNewCharacterButton.Disabled = numberOfFullSlots >= maxCharactersSlots;
-            Characters.AddChild(_createNewCharacterButton);
+            RefreshWorkspaceCharacterTitle(); // CMU14: keep the toolbar switcher synchronized.
         }
     }
 }
