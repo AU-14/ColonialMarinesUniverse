@@ -371,16 +371,13 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         }
     }
 
-    // Same consent rule as the pool check: no explicit threat preferences means open to all.
+    // Use the latest saved preferences after voting, including an explicit opt-out of every threat.
     private bool AllowsThreat(NetUserId playerId, ThreatPrototype threat, string presetId)
     {
         if (_prefs.GetPreferencesOrNull(playerId)?.SelectedCharacter is not HumanoidCharacterProfile profile)
             return true;
 
-        IReadOnlySet<ProtoId<ThreatPrototype>> preferences = profile.GetThreatPreferencesForGamemode(presetId);
-
-        return preferences.Count == 0
-            || preferences.Any(preference => preference.Id.Equals(threat.ID, StringComparison.OrdinalIgnoreCase));
+        return profile.AllowsThreatForGamemode(presetId, threat.ID);
     }
 
     private void ReleaseOptedOutPlayers(IReadOnlyCollection<NetUserId> optedOut, ThreatPrototype selected)

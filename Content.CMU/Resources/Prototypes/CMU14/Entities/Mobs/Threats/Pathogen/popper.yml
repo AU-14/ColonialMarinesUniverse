@@ -109,6 +109,7 @@
     cloudPrototype: CMUPathogenSporeCloud
   # popper still counts toward victory, so the kill objective needs its own minion flag
   - type: CMUObjectiveMinion
+  - type: CMUXenoZJump
 
 - type: entity
   parent: CMU14XenoPopperBase

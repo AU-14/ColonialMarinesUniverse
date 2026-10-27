@@ -231,10 +231,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         _poweredDemolitionContacts.Remove(ent.Owner);
         _wallSmashCooldowns.RemoveVehicle(ent.Owner);
         _collisionDamageContacts.RemoveVehicle(ent.Owner);
+        _cmuResinContacts.RemoveVehicle(ent.Owner); // CMU14
     }
 
     private void OnMoverMove(Entity<GridVehicleMoverComponent> ent, ref MoveEvent args)
     {
+        CMUUpdateResinContacts(ent.Owner, args.ParentChanged); // CMU14
         if (!_net.IsClient && _collisionDamageContacts.HasContacts(ent.Owner) &&
             fixtureQ.TryComp(ent.Owner, out var fixtures) &&
             TryGetFixtureAabb(fixtures, physics.GetPhysicsTransform(ent.Owner), out var bounds))

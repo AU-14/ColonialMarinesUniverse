@@ -146,6 +146,9 @@ public sealed partial class HumanoidProfileEditor
                 });
             }
 
+            // CMU14: a readable grid keeps native costs, conflicts and selection callbacks intact.
+            var grid = new Content.Client.CMU14.Lobby.CmuAdaptiveGrid(290) { HorizontalExpand = true };
+            TraitsList.AddChild(grid);
             foreach (var selector in selectors)
             {
                 if (category is { MaxTraitPoints: >= 0 } &&
@@ -154,7 +157,15 @@ public sealed partial class HumanoidProfileEditor
                     selector.Checkbox.Label.FontColorOverride = Color.Red;
                 }
 
-                TraitsList.AddChild(selector);
+                // CMU14: compact trait cards instead of one long checkbox column.
+                selector.Margin = new Thickness(10);
+                grid.AddChild(new PanelContainer
+                {
+                    PanelOverride = Content.Client.CMU14.Lobby.CmuLobbyPresentation.Box(padding: 2),
+                    MinWidth = 280,
+                    Margin = new Thickness(3),
+                    Children = { selector },
+                });
             }
         }
     }

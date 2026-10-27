@@ -255,7 +255,7 @@ cmu-manpad-radar-legend = Green: friendly · red: target · yellow: unknown
     Cyan: you / your sector · ring: acquiring
 cmu-manpad-radar-height = { $height } m
 ent-CMUActionBoilerWatchAirspace = Look at airspace
-    .desc = Watch your current sector and automatically launch plasma at passing aircraft. Stay still under open sky for two seconds to acquire a target. Each shot costs 200 plasma and has a fifteen-second cooldown. Toggle again to stop.
+    .desc = Watch your current sector and automatically launch plasma at passing aircraft, including flying gunships. Stay still under open sky for two seconds to acquire a target. Each shot costs 200 plasma and has a fifteen-second cooldown. Gunship hits deal 800 hull damage. Toggle again to stop.
 cmu-boiler-air-watching = You watch the sky, ready to spit plasma at aircraft crossing your sector.
 cmu-boiler-air-lowered = You lower your gaze. Airspace acquisition cancelled.
 cmu-boiler-air-title = BOILER / AIRSPACE

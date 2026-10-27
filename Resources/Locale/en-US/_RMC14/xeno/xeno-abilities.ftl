@@ -472,3 +472,12 @@ rmc-doomed-fail = It's not working...
 # Destroy
 rmc-destroy-cant-reach = We don't have a clear path to that location!
 rmc-destroy-cant-area = We can't leap to that area!
+
+# Root (Pathogen)
+rmc-xeno-guardian-link-self = We cannot link to ourself!  
+rmc-xeno-guardian-link-dead = {$target} is already dead!  
+rmc-xeno-guardian-link-see-fail = We can't see that target clearly enough!  
+rmc-xeno-guardian-link-start-self = We link ourselves to {$target}, ready to absorb their wounds!  
+rmc-xeno-guardian-link-start-target = {$user} links itself to us, ready to absorb our wounds!
+rmc-xeno-guardian-absorbing-damage = The Confluence shields {$target} from harm!
+
