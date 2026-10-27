@@ -37,6 +37,7 @@
     - CMU14ActionXenoPathogenSecreteStructure
     - CMU14ActionXenoPathogenSlowingSpit
     - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenDirectSporeInfect
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenOrderConstruction
     - CMU14ActionXenoPathogenRegurgitate
@@ -112,6 +113,8 @@
     chance: 0.3
     stunMin: 3
     stunMax: 4
+  - type: CMUXenoDirectSporeInfect
+    
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/CMU14/Interface/neo_blips.rsi
