@@ -1,0 +1,725 @@
+# yautja lodge building, ported from cmss13's runed sandstone and sandstone stack recipes.
+# recipes live in Recipes/lodge_recipes.yml, floor tiles in tiles.yml
+
+# --- materials ---
+
+- type: stack
+  id: CMUSandstone
+  name: sandstone brick
+  icon: { sprite: CMU14/Yautja/Lodge/sandstone.rsi, state: sandstone }
+  spawn: CMUSheetSandstone1
+  maxCount: 50
+
+- type: stack
+  id: CMURunedSandstone
+  name: runed sandstone brick
+  icon: { sprite: CMU14/Yautja/Lodge/sandstone.rsi, state: runed }
+  spawn: CMUSheetRunedSandstone1
+  maxCount: 50
+
+- type: entity
+  parent: SheetOtherBase
+  id: CMUSheetSandstone
+  name: sandstone brick
+  description: This appears to be a combination of both sand and stone.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: CMUSandstone
+    count: 50
+    baseLayer: base
+    layerStates:
+    - sandstone
+    - sandstone_2
+    - sandstone_3
+    - sandstone_4
+  - type: Sprite
+    sprite: CMU14/Yautja/Lodge/sandstone.rsi
+    state: sandstone_4
+    layers:
+    - state: sandstone_4
+      map: ["base"]
+  - type: Item
+    sprite: CMU14/Yautja/Lodge/sandstone.rsi
+    size: Normal
+  - type: Appearance
+  - type: Tag
+    tags:
+    - Sheet
+  - type: RMCConstructionItem
+    buildable:
+    - CMUSandstoneDoorBuild
+    - CMUSandstoneWallBuild
+    - CMUSandstoneFloorBuild
+    - CMUSandstoneHandrailBuild
+    - CMUSandstoneHandrailFlatBuild
+    - CMUSandstoneHandrailDarkBuild
+    - CMUSandstoneHandrailDarkFlatBuild
+    - CMUSandstoneDirtPileBuild
+  - type: UserInterface
+    interfaces:
+      enum.RMCConstructionUiKey.Key:
+        type: RMCConstructionBui
+
+- type: entity
+  parent: CMUSheetSandstone
+  id: CMUSheetSandstone10
+  suffix: 10
+  components:
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: CMUSheetSandstone
+  id: CMUSheetSandstone1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: SheetOtherBase
+  id: CMUSheetRunedSandstone
+  name: runed sandstone brick
+  description: Sandstone with strange glyphs etched into it, cut by hunter hands.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: CMURunedSandstone
+    count: 50
+    baseLayer: base
+    layerStates:
+    - runed
+    - runed_2
+    - runed_3
+    - runed_4
+  - type: Sprite
+    sprite: CMU14/Yautja/Lodge/sandstone.rsi
+    state: runed_4
+    layers:
+    - state: runed_4
+      map: ["base"]
+  - type: Item
+    sprite: CMU14/Yautja/Lodge/sandstone.rsi
+    size: Normal
+  - type: Appearance
+  - type: Tag
+    tags:
+    - Sheet
+  - type: RMCConstructionItem
+    buildable:
+    - CMUYautjaTempleDoorBuild
+    - CMUYautjaTempleDoorDarkBuild
+    - CMUYautjaTempleWallsBuild
+    - CMUYautjaTempleFloorsBuild
+    - CMUYautjaBrazierFrameBuild
+    - CMUYautjaWallTorchFrameBuild
+    - CMUYautjaAlienChairBuild
+    - CMUYautjaAlienBedBuild
+    - CMUYautjaStatueAncientBuild
+    - CMUYautjaStatueTanBuild
+    - CMUYautjaStatueGreyBuild
+  - type: UserInterface
+    interfaces:
+      enum.RMCConstructionUiKey.Key:
+        type: RMCConstructionBui
+
+- type: entity
+  parent: CMUSheetRunedSandstone
+  id: CMUSheetRunedSandstone10
+  suffix: 10
+  components:
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: CMUSheetRunedSandstone
+  id: CMUSheetRunedSandstone1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# --- temple walls ---
+# no girder stage, xeno claws scrape off them, and knocking one down drops some of the bricks
+
+- type: entity
+  abstract: true
+  parent: CMWallReinforced
+  id: CMUYautjaTempleWallBase
+  name: sandstone temple wall
+  description: A heavy wall of sandstone.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Lodge/temple_wall.rsi
+    state: ancient_stone
+  - type: Icon
+    sprite: CMU14/Yautja/Lodge/temple_wall.rsi
+    state: ancient_stone
+  - type: IconSmooth
+    key: walls
+    additionalKeys:
+    - windows
+    - doors
+    base: ancient_stone
+  - type: ReceiverXenoClaws
+    minimumClawStrength: ImpossiblySharp
+  - type: Construction
+    graph: CMUYautjaLodgeStatic
+    node: static
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 9000
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMUSheetRunedSandstone1:
+            min: 3
+            max: 3
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMUYautjaTempleWallBase
+  id: CMUYautjaTempleWall
+
+- type: entity
+  parent: CMUYautjaTempleWallBase
+  id: CMUYautjaTempleWallDecorated1
+  name: decorated sandstone temple wall
+  description: A heavy wall of sandstone, with elegant carvings and runes inscribed upon its face.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Lodge/temple_wall_deco.rsi
+  - type: Icon
+    sprite: CMU14/Yautja/Lodge/temple_wall_deco.rsi
+
+- type: entity
+  parent: CMUYautjaTempleWallDecorated1
+  id: CMUYautjaTempleWallDecorated2
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Lodge/temple_wall_deco_2.rsi
+  - type: Icon
+    sprite: CMU14/Yautja/Lodge/temple_wall_deco_2.rsi
+
+- type: entity
+  parent: CMUYautjaTempleWallDecorated1
+  id: CMUYautjaTempleWallDecorated3
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Lodge/temple_wall_deco_3.rsi
+  - type: Icon
+    sprite: CMU14/Yautja/Lodge/temple_wall_deco_3.rsi
+
+- type: entity
+  parent: CMUYautjaTempleWallBase
+  id: CMUYautjaTempleWallDark
+  name: dark temple wall
+  description: Dark temple walls, the bricks look ancient - made of a rare type of stone.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Walls/runedstone.rsi
+    state: runedstone
+    color: "#524e49"
+  - type: Icon
+    sprite: _RMC14/Structures/Walls/runedstone.rsi
+    state: runedstone
+  - type: IconSmooth
+    base: runedstone
+
+# --- temple doors ---
+
+- type: entity
+  parent: RMCBaseMaterialDoor
+  id: CMUYautjaTempleDoor
+  name: runed sandstone airlock
+  description: A massive slab of runed sandstone. There's no handle, no panel, nothing to pry at.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Lodge/temple_door.rsi
+    layers:
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+  - type: Door
+    bumpOpen: false
+    clickOpen: false
+    canCrush: false
+    openTimeOne: 1.2
+    openTimeTwo: 0.5
+    closeTimeOne: 0.5
+    closeTimeTwo: 1.2
+    openingAnimationTime: 1.7
+    closingAnimationTime: 1.7
+    openSound:
+      path: /Audio/CMU14/Yautja/runedsanddoor.ogg
+      params:
+        volume: -4
+    closeSound:
+      path: /Audio/CMU14/Yautja/runedsanddoor.ogg
+      params:
+        volume: -4
+  - type: YautjaTempleDoor
+    locked: true
+  - type: AirlockReceiverXenoClaws
+    minimumClawStrength: ImpossiblySharp
+  - type: Corrodible
+    isCorrodible: false
+  - type: Construction
+    graph: CMUYautjaLodgeStatic
+    node: static
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 9000
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMUSheetRunedSandstone1:
+            min: 4
+            max: 4
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMUYautjaTempleDoor
+  id: CMUYautjaTempleDoorDark
+  suffix: Dark
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Lodge/temple_door_dark.rsi
+    color: "#4a4641"
+
+# --- sandstone handrails ---
+
+- type: entity
+  parent: RMCBarricadeHandrail
+  id: CMUSandstoneHandrail
+  name: sandstone handrail
+  components:
+  - type: Sprite
+    color: "#b6a38f"
+    layers:
+    - state: hr_stone
+    - map: [ "acided" ]
+  - type: Construction
+    graph: CMUYautjaLodgeStatic
+    node: static
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 30
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMUSheetSandstone1:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMUSandstoneHandrail
+  id: CMUSandstoneHandrailFlat
+  suffix: Flat
+  components:
+  - type: Sprite
+    layers:
+    - state: hr_stone_b
+    - map: [ "acided" ]
+
+- type: entity
+  parent: CMUSandstoneHandrail
+  id: CMUSandstoneHandrailDark
+  name: dark sandstone handrail
+  components:
+  - type: Sprite
+    color: "#524e49"
+
+- type: entity
+  parent: CMUSandstoneHandrailFlat
+  id: CMUSandstoneHandrailDarkFlat
+  name: dark sandstone handrail
+  components:
+  - type: Sprite
+    color: "#524e49"
+
+# --- lighting ---
+
+- type: entity
+  parent: CMBaseStructure
+  id: CMUYautjaBrazierFrame
+  name: empty brazier
+  description: An empty brazier. Five planks of wood would fill it.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
+    state: brazier_frame
+  - type: Construction
+    graph: CMUYautjaBrazier
+    node: frame
+  - type: RMCMesonsNonviewable
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+
+- type: entity
+  parent: RMCBrazier
+  id: CMUYautjaBrazier
+  name: brazier
+  description: A brazier full of wood. Something hot could ignite it.
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
+    layers:
+    - state: brazier_frame_filled
+    - state: brazier
+      map: ["burning"]
+      visible: false
+  - type: PointLight
+    radius: 6
+  - type: Construction
+    graph: CMUYautjaBrazier
+    node: brazier
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaWallTorchFrame
+  name: unlit torch
+  description: It's a torch, but it's not lit or placed down. Click on a wall to place it.
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
+    state: torch_frame
+  - type: Item
+    size: Small
+  - type: YautjaWallTorchFrame
+    mounted: CMUYautjaWallTorch
+
+# not anchored on purpose, it's pushed up against the wall instead of sitting mid-tile
+- type: entity
+  parent: BaseStructure
+  id: CMUYautjaWallTorch
+  name: unlit torch
+  description: It's a torch, but it's not lit. Use something hot to ignite it, like a welding tool.
+  placement:
+    mode: PlaceFree
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    noRot: true
+    drawdepth: WallMountedItems
+    sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
+    layers:
+    - state: torch_frame
+    - state: torch
+      map: ["burning"]
+      visible: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Campfire
+    fuelRequired: false
+  - type: PointLight
+    enabled: false
+    radius: 5
+    energy: 1.5
+    color: "#FFC90C"
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CampfireVisuals.Lit:
+        burning:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Damageable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 25
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# --- furniture and statues ---
+
+- type: entity
+  parent: CMChairComfy
+  id: CMUYautjaAlienChair
+  name: alien chair
+  description: A sturdy chair of carved stone, sized for something far bigger than a human.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Structures/yautja_machines.rsi
+    state: chair
+  - type: Construction
+    graph: CMUYautjaLodgeStatic
+    node: static
+
+- type: entity
+  parent: CMBed
+  id: CMUYautjaAlienBed
+  name: bed
+  description: A slab of stone covered in pelts. Hard, but a hunter doesn't need soft.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Structures/yautja_machines.rsi
+    state: abed
+  - type: Construction
+    graph: CMUYautjaLodgeStatic
+    node: static
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMUSheetRunedSandstone1:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMBaseStructure
+  id: CMUYautjaStatueTan
+  name: alien warrior statue
+  description: A statue of some armored alien humanoid.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Yautja/Structures/ancientsmallstatue.rsi
+    state: statue_sandstone
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Damageable
+    damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMUSheetRunedSandstone1:
+            min: 3
+            max: 3
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMUYautjaStatueTan
+  id: CMUYautjaStatueGrey
+  components:
+  - type: Sprite
+    state: statue_grey
+
+- type: entity
+  parent: CMUYautjaStatueTan
+  id: CMUYautjaStatueAncient
+  components:
+  - type: Sprite
+    state: statue_ancient
+
+# --- floors, each recipe builds one of these and it swaps itself for the tile ---
+
+- type: entity
+  abstract: true
+  id: CMUYautjaTileApplierBase
+  suffix: Yautja lodge, tile
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    noRot: true
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierTempleFloor
+  name: temple floor
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/floor.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleFloor
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDecoSquareVertical
+  name: temple floor deco square vertical
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/deco_square_vertical.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleDecoSquareVertical
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDecoSquareHorizontal
+  name: temple floor deco square horizontal
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/deco_square_horizontal.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleDecoSquareHorizontal
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDecoDiamond
+  name: temple floor deco diamond pattern
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/deco_diamond.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleDecoDiamond
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDecoPatternVertical
+  name: temple floor deco pattern vertical
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/deco_pattern_vertical.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleDecoPatternVertical
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDecoPatternHorizontal
+  name: temple floor deco pattern horizontal
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/deco_pattern_horizontal.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleDecoPatternHorizontal
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDarkDecoSquareVertical
+  name: dark temple floor deco square vertical
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/dark_deco_square_vertical.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleDarkDecoSquareVertical
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDarkDecoSquareHorizontal
+  name: dark temple floor deco square horizontal
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/dark_deco_square_horizontal.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleDarkDecoSquareHorizontal
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDarkDecoDiamond
+  name: dark temple floor deco diamond pattern
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/dark_deco_diamond.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleDarkDecoDiamond
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDarkDecoPatternVertical
+  name: dark temple floor deco pattern vertical
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/dark_deco_pattern_vertical.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleDarkDecoPatternVertical
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDarkDecoPatternHorizontal
+  name: dark temple floor deco pattern horizontal
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/dark_deco_pattern_horizontal.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleDarkDecoPatternHorizontal
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierEngraved
+  name: engraved floor
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/temple/engraved.png
+  - type: TileApplier
+    tile: CMUYautjaTileTempleEngraved
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierDarkRed
+  name: dark red floor
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/hunter_floors/hunter_red.png
+  - type: TileApplier
+    tile: CMUYautjaTileHunterFloorsHunterRed
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierSunRuned
+  name: sun runed floor
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/hunter_floors/hunter_red_2.png
+  - type: TileApplier
+    tile: CMUYautjaTileHunterFloorsHunterRed2
+
+- type: entity
+  parent: CMUYautjaTileApplierBase
+  id: CMUYautjaTileApplierSquareRuned
+  name: square runed floor
+  components:
+  - type: Sprite
+    texture: /Textures/CMU14/Tiles/Yautja/hunter_floors/hunter_red_3.png
+  - type: TileApplier
+    tile: CMUYautjaTileHunterFloorsHunterRed3
