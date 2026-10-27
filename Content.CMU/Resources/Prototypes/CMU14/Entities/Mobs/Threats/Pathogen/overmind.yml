@@ -55,6 +55,7 @@
     - CMU14ActionXenoPathogenPsychicRadiance
     - CMU14ActionXenoPathogenGiveOrder
     - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoDirectSporeInfect
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 2.0
@@ -152,6 +153,10 @@
     chance: 0.50
     stunMin: 3
     stunMax: 4
+  - type: CMUXenoDirectSporeInfect
+    plasmaCost: 50
+    embryoSpawn: CMU14XenoBloodburster
+    protectionBypassChance: 1.0
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/CMU14/Interface/neo_blips.rsi
