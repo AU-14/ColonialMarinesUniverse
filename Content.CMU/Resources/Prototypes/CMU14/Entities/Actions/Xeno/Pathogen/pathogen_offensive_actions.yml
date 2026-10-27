@@ -1094,7 +1094,7 @@
     useDelay: 10
   - type: Sprite
     layers:
-    - sprite: _RMC14/Actions/actions_pathogen.rsi
+    - sprite: CMU14/Actions/actions_pathogen.rsi
       state: tail_sweep
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction  
@@ -1114,7 +1114,7 @@
     useDelay: 7
   - type: Sprite
     layers:
-    - sprite: _RMC14/Actions/actions_pathogen.rsi
+    - sprite: CMU14/Actions/actions_pathogen.rsi
       state: fling
       map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction  
