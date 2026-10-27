@@ -1,10 +1,13 @@
 using System.Linq;
 using Content.Server.CrewManifest;
+using Content.Server.GameTicking;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Lobby;
 using Content.Shared.CMU14.CriminalRecords;
+using Content.Shared.CrewManifest;
 using Content.Shared.GameTicking;
 using Content.Shared.Inventory;
+using Content.Shared.Roles;
 using Content.Shared.Station.Components;
 using Content.Shared.StationRecords;
 using Content.Shared.StationRecords.Systems;
@@ -23,6 +26,7 @@ public sealed partial class CmuLobbyRosterSystem : EntitySystem
     [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private GameTicker _ticker = default!;
     private readonly Dictionary<(NetUserId, NetEntity), TimeSpan> _nextRequest = new();
     private readonly Dictionary<StationRecordKey, Dictionary<string, EntProtoId>> _outfits = new();
 
@@ -92,7 +96,26 @@ public sealed partial class CmuLobbyRosterSystem : EntitySystem
                         _outfits.GetValueOrDefault(new StationRecordKey(id, station))));
                 }
             }
+            AddAnonymousInsurgents(station, entries);
         }
         RaiseNetworkEvent(new CmuLobbyRosterResponse(request.Station, entries), session.Channel);
+    }
+
+    private void AddAnonymousInsurgents(EntityUid station, List<CmuLobbyRosterEntry> entries)
+    {
+        if (!string.Equals((_ticker.CurrentPreset ?? _ticker.Preset)?.ID, "Insurgency", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        // CLF stays excluded from the public manifest. The join roster exposes only occupied
+        // job slots, never the hidden record's identity or an image that could identify them.
+        foreach (var (_, record) in _records.GetRecordsOfType<GeneralStationRecord>(station))
+        {
+            if (!ProtoMan.TryIndex(record.JobPrototype, out JobPrototype? job) ||
+                !string.Equals(job.RoundForce, "CLF", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            var anonymous = new CrewManifestEntry(string.Empty, job.LocalizedName, job.Icon.Id, job.ID);
+            entries.Add(new CmuLobbyRosterEntry(anonymous, null, identityHidden: true));
+        }
     }
 }

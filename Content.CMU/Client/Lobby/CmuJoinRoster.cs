@@ -12,6 +12,7 @@ using Content.Shared.CMU14.Lobby;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Client.Console;
+using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
@@ -190,9 +191,19 @@ public sealed partial class CmuJoinRoster : BoxContainer
             Name = job.ID, PanelOverride = CmuLobbyPresentation.Box(accent, padding: 12), HorizontalExpand = true,
         };
         var content = new BoxContainer { Orientation = LayoutOrientation.Vertical, SeparationOverride = 10 };
+        var heading = new BoxContainer { SeparationOverride = 8, HorizontalExpand = true };
+        var jobIcon = _prototypes.Index(job.Icon);
+        heading.AddChild(new TextureRect
+        {
+            Texture = _entities.System<SpriteSystem>().Frame0(jobIcon.Icon),
+            TextureScale = new Vector2(2),
+            VerticalAlignment = VAlignment.Center,
+            MouseFilter = MouseFilterMode.Ignore,
+        });
         var title = new RichTextLabel { HorizontalExpand = true, ToolTip = job.LocalizedDescription };
         title.SetMessage(job.LocalizedName, CmuLobbyPresentation.Text);
-        content.AddChild(title);
+        heading.AddChild(title);
+        content.AddChild(heading);
         card.AddChild(content);
         grid.AddChild(card);
         foreach (var entry in occupants)
@@ -242,7 +253,11 @@ public sealed partial class CmuJoinRoster : BoxContainer
     private Control Occupied(CmuLobbyRosterEntry entry)
     {
         var row = new BoxContainer { SeparationOverride = 12, MinHeight = 88 };
-        if (entry.Portrait is { } portrait && entry.Outfit is { Count: > 0 } outfit)
+        if (entry.IdentityHidden)
+        {
+            row.AddChild(new CmuObscuredPortrait());
+        }
+        else if (entry.Portrait is { } portrait && entry.Outfit is { Count: > 0 } outfit)
         {
             var view = new ProfilePreviewSpriteView { MinSize = new Vector2(64, 88), MaxWidth = 64, Scale = new Vector2(2), OverrideDirection = Direction.South };
             var profile = HumanoidCharacterProfile.DefaultWithSpecies(portrait.Species, portrait.Sex)
@@ -261,9 +276,12 @@ public sealed partial class CmuJoinRoster : BoxContainer
             });
         }
         var text = new BoxContainer { Orientation = LayoutOrientation.Vertical, HorizontalExpand = true, VerticalAlignment = VAlignment.Center };
-        text.AddChild(new Label { Text = entry.Record.Name, ClipText = true, ToolTip = entry.Record.Name, FontColorOverride = CmuLobbyPresentation.Text });
-        if (entry.Record.Squad != null)
-            text.AddChild(new CmuAccentLabel(entry.Record.SquadColor) { Text = entry.Record.Squad, ClipText = true });
+        if (!entry.IdentityHidden)
+        {
+            text.AddChild(new Label { Text = entry.Record.Name, ClipText = true, ToolTip = entry.Record.Name, FontColorOverride = CmuLobbyPresentation.Text });
+            if (entry.Record.Squad != null)
+                text.AddChild(new CmuAccentLabel(entry.Record.SquadColor) { Text = entry.Record.Squad, ClipText = true });
+        }
         text.AddChild(new Label { Text = Loc.GetString("cmu-workspace-assigned"), ClipText = true, FontColorOverride = CmuLobbyPresentation.Muted });
         row.AddChild(text);
         return row;
