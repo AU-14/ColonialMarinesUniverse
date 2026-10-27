@@ -17,7 +17,7 @@ public sealed partial class GuardianAbsorbComponent : Component
     public float AbsorbPercent = 0.5f;  
   
     [DataField, AutoNetworkedField]  
-    public bool IgnoreGuardianResistances = true;  
+    public bool IgnoreGuardianResistances = false;  
   
     [DataField, AutoNetworkedField]  
     public FixedPoint2 GuardianCachedDamage;  
