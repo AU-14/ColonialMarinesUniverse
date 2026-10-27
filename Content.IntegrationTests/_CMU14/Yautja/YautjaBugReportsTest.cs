@@ -128,33 +128,45 @@ public sealed class YautjaBugReportsTest
     }
 
     [Test]
-    public async Task AbandonedMedicompSlowdownWearsOff()
+    public async Task MedicompSlowdownLastsUntilTheClamp()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
         EntityUid patient = default;
+        EntityUid part = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
             patient = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
-            var part = entMan.System<SharedBodySystem>().GetBodyChildren(patient)
+            part = entMan.System<SharedBodySystem>().GetBodyChildren(patient)
                 .Select(entry => entry.Id)
                 .First(uid => entMan.HasComponent<BodyPartComponent>(uid));
 
             RaiseStep(entMan, "CMUSurgeryStepMcompStabilizeWounds", patient, part);
-            Assert.That(entMan.HasComponent<RMCSlowdownComponent>(patient), Is.True);
-            Assert.That(entMan.HasComponent<RMCSuperSlowdownComponent>(patient), Is.True);
+            var now = server.Timing.CurTime;
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.GetComponent<RMCSlowdownComponent>(patient).ExpiresAt - now,
+                    Is.EqualTo(TimeSpan.FromMinutes(10)).Within(TimeSpan.FromSeconds(1)));
+                Assert.That(entMan.GetComponent<RMCSuperSlowdownComponent>(patient).ExpiresAt - now,
+                    Is.EqualTo(TimeSpan.FromMinutes(5)).Within(TimeSpan.FromSeconds(1)));
+            });
         });
 
-        // walked away after stabilizing, never clamped
+        // walking off after stabilizing doesn't shake it
         await pair.RunTicksSync(pair.SecondsToTicks(32));
 
         await server.WaitAssertion(() =>
         {
-            Assert.That(server.EntMan.HasComponent<RMCSlowdownComponent>(patient), Is.False);
-            Assert.That(server.EntMan.HasComponent<RMCSuperSlowdownComponent>(patient), Is.False);
+            var entMan = server.EntMan;
+            Assert.That(entMan.HasComponent<RMCSlowdownComponent>(patient), Is.True);
+            Assert.That(entMan.HasComponent<RMCSuperSlowdownComponent>(patient), Is.True);
+
+            RaiseStep(entMan, "CMUSurgeryStepMcompClampWound", patient, part);
+            Assert.That(entMan.HasComponent<RMCSlowdownComponent>(patient), Is.False);
+            Assert.That(entMan.HasComponent<RMCSuperSlowdownComponent>(patient), Is.False);
         });
 
         await pair.CleanReturnAsync();

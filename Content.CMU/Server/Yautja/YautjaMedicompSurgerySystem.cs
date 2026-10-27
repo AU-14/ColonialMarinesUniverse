@@ -41,10 +41,10 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
-    // each step refreshes these, so a pred mid-surgery stays slowed but walking away wears off.
-    // the old 10 minute timer only cleared on clamp, so abandoning the surgery felt permanent
-    private static readonly TimeSpan MedicompSlowdownDuration = TimeSpan.FromSeconds(30);
-    private static readonly TimeSpan MedicompSuperSlowdownDuration = TimeSpan.FromSeconds(15);
+    // cmss13 Slow(300) / Superslow(150) on stabilize and tend, ticked down every 2s life tick. only the clamp
+    // clears it, so a pred can't tend early, walk off and bank the clamp's full heal for later
+    private static readonly TimeSpan MedicompSlowdownDuration = TimeSpan.FromMinutes(10);
+    private static readonly TimeSpan MedicompSuperSlowdownDuration = TimeSpan.FromMinutes(5);
 
     public override void Initialize()
     {
@@ -189,7 +189,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     {
         // CMSS13's clamp completes the treatment: finishing the surgery restores
         // full health no matter how much damage is left. The speed debuffs from
-        // stabilize and tend clear here, an abandoned treatment just wears off.
+        // stabilize and tend only clear here, so an incomplete treatment stays slow.
         HealToFull(args.Body);
         RemComp<RMCSlowdownComponent>(args.Body);
         RemComp<RMCSuperSlowdownComponent>(args.Body);
@@ -250,7 +250,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     }
 
     /// <summary>
-    ///     CMU14: the patient is heavily slowed while the procedure is underway, the clamp step clears it early.
+    ///     CMU14: the patient is heavily slowed from the stabilize step until the wound is clamped shut.
     /// </summary>
     private void ApplyMedicompSlowdown(EntityUid body)
     {
