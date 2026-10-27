@@ -36,7 +36,7 @@
   - type: XenoLeap
     plasmaCost: 20
     delay: 0
-    moveDelayTime: 1.5
+    moveDelayTime: 0
     knockdownTime: 5
     leapSound: /Audio/CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
     knockdownRequiresInvisibility: true
