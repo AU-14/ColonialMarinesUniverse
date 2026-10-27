@@ -33,7 +33,6 @@
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
-    - CMUActionXenoZJump
   - type: XenoLeap
     plasmaCost: 20
     delay: 0
@@ -126,7 +125,7 @@
     name: cmu-job-name-pathogen-blight
   - type: Speech
     speechSounds: Pathogen
-    
+  - type: CMUXenoZJump
  
 - type: entity
   parent: CMU14XenoBlightBase
