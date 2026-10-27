@@ -67,6 +67,8 @@ public sealed partial class GunshipPilotSeatComponent : Component
     public EntProtoId PilotZoomActionId = "ActionGunshipPilotZoom";
 
     public GunshipControlInput HeldInputs;
+    public GunshipControlInput UncontrolledInputs;
+    public TimeSpan NextUncontrolledDirection;
     public ushort PressedActions;
     public EntityUid? MasterAlarmAction;
     public EntityUid? CameraCycleAction;

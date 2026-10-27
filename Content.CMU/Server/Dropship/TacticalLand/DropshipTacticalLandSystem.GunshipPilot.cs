@@ -18,6 +18,7 @@ using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Actions;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -41,12 +42,15 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Physics;
 using Robust.Server.GameObjects;
+using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Dropship.TacticalLand;
 
 public sealed partial class DropshipTacticalLandSystem
 {
     [Dependency] private AccessReaderSystem _access = default!;
+    [Dependency] private ActionBlockerSystem _gunshipActionBlocker = default!;
+    [Dependency] private IRobustRandom _gunshipRandom = default!;
     [Dependency] private InventorySystem _pilotInventory = default!;
     [Dependency] private SharedNightVisionSystem _nightVision = default!;
     [Dependency] private SharedContainerSystem _gunshipContainers = default!;
@@ -760,7 +764,8 @@ public sealed partial class DropshipTacticalLandSystem
         if (!TryComp(pilot, out BuckleComponent? buckle) ||
             buckle.BuckledTo is not { } seatUid ||
             !TryComp(seatUid, out GunshipPilotSeatComponent? seatComp) ||
-            seatComp.Pilot != pilot)
+            seatComp.Pilot != pilot ||
+            !_gunshipActionBlocker.CanConsciouslyPerformAction(pilot))
         {
             return false;
         }
@@ -793,6 +798,32 @@ public sealed partial class DropshipTacticalLandSystem
             {
                 StopGunshipControl((seatUid, seat), restorePilot: true);
                 continue;
+            }
+
+            if (!_gunshipActionBlocker.CanConsciouslyPerformAction(pilot))
+            {
+                seat.HeldInputs = GunshipControlInput.None;
+                seat.PressedActions = 0;
+                if (seat.UncontrolledInputs == GunshipControlInput.None || _timing.CurTime >= seat.NextUncontrolledDirection)
+                {
+                    var previous = seat.UncontrolledInputs;
+                    do
+                    {
+                        seat.UncontrolledInputs = _gunshipRandom.Next(4) switch
+                        {
+                            0 => GunshipControlInput.Forward,
+                            1 => GunshipControlInput.Back,
+                            2 => GunshipControlInput.Left,
+                            _ => GunshipControlInput.Right,
+                        };
+                    } while (seat.UncontrolledInputs == previous);
+                    seat.NextUncontrolledDirection = _timing.CurTime + TimeSpan.FromSeconds(10);
+                }
+            }
+            else
+            {
+                seat.UncontrolledInputs = GunshipControlInput.None;
+                seat.NextUncontrolledDirection = TimeSpan.Zero;
             }
 
             if (Transform(seatUid).GridUid is not { } grid ||
@@ -894,7 +925,9 @@ public sealed partial class DropshipTacticalLandSystem
         var maneuveringAccelerationMultiplier = maneuveringFault ? 0.45f : 1f;
         var maximumTurnSpeedMultiplier = maneuveringFault ? 0.60f : 1f;
         var controls = seat?.Comp;
-        var thrustMultiplier = controls != null
+        var uncontrolled = controls != null && controls.UncontrolledInputs != GunshipControlInput.None;
+        var inputs = uncontrolled ? controls!.UncontrolledInputs : controls?.HeldInputs ?? GunshipControlInput.None;
+        var thrustMultiplier = uncontrolled ? 1f : controls != null
             ? Math.Clamp(controls.ThrustPercent / 100f, 0f, 1f)
             : 0f;
 
@@ -929,9 +962,9 @@ public sealed partial class DropshipTacticalLandSystem
         }
 
         var turn = 0f;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.RotateLeft) == true)
+        if (inputs.HasFlag(GunshipControlInput.RotateLeft))
             turn += 1f;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.RotateRight) == true)
+        if (inputs.HasFlag(GunshipControlInput.RotateRight))
             turn -= 1f;
 
         hover.Comp.GunshipVisualTurn = turn * maneuveringAccelerationMultiplier * thrustMultiplier;
@@ -952,13 +985,13 @@ public sealed partial class DropshipTacticalLandSystem
         }
 
         var localMovement = Vector2.Zero;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.Forward) == true)
+        if (inputs.HasFlag(GunshipControlInput.Forward))
             localMovement += Vector2.UnitY;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.Back) == true)
+        if (inputs.HasFlag(GunshipControlInput.Back))
             localMovement -= Vector2.UnitY;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.Right) == true)
+        if (inputs.HasFlag(GunshipControlInput.Right))
             localMovement += Vector2.UnitX;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.Left) == true)
+        if (inputs.HasFlag(GunshipControlInput.Left))
             localMovement -= Vector2.UnitX;
 
         if (localMovement != Vector2.Zero)
@@ -2192,6 +2225,10 @@ public sealed partial class DropshipTacticalLandSystem
 
     private void StopGunshipControl(Entity<GunshipPilotSeatComponent> seat, bool restorePilot)
     {
+        seat.Comp.HeldInputs = GunshipControlInput.None;
+        seat.Comp.PressedActions = 0;
+        seat.Comp.UncontrolledInputs = GunshipControlInput.None;
+        seat.Comp.NextUncontrolledDirection = TimeSpan.Zero;
         if (seat.Comp.Pilot is { } pilot)
         {
             DisablePilotHudActions(pilot, seat);

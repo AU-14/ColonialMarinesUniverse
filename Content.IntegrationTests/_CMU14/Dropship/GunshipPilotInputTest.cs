@@ -4,6 +4,8 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared.Buckle;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.Input;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Input;
 
@@ -13,6 +15,61 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 public sealed class GunshipPilotInputTest : InteractionTest
 {
     protected override string PlayerPrototype => "MobHuman";
+
+    [TestCase(MobState.Critical)]
+    [TestCase(MobState.Dead)]
+    public async Task IncapacitatedPilotLosesControlAndDriftsUntilRecovery(MobState state)
+    {
+        await SpawnTarget("Chair", coords: PlayerCoords);
+        var seat = STarget!.Value;
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.EnsureComponent<DropshipComponent>(MapData.Grid);
+            SEntMan.AddComponent<GunshipPilotSeatComponent>(seat);
+            Assert.That(Server.System<SharedBuckleSystem>().TryBuckle(SPlayer, SPlayer, seat), Is.True);
+            SEntMan.AddComponent<DropshipTacticalHoverComponent>(MapData.Grid);
+        });
+        await RunTicks(10);
+        await SetKey(CMUKeyFunctions.CMUGunshipForward, BoundKeyState.Down);
+        await RunTicks(5);
+        await Server.WaitAssertion(() => Server.System<MobStateSystem>().ChangeMobState(SPlayer, state));
+        await RunTicks(5);
+        var initialDirection = GunshipControlInput.None;
+        await Server.WaitAssertion(() =>
+        {
+            var controls = SEntMan.GetComponent<GunshipPilotSeatComponent>(seat);
+            Assert.That(controls.HeldInputs, Is.EqualTo(GunshipControlInput.None));
+            Assert.That(controls.UncontrolledInputs, Is.Not.EqualTo(GunshipControlInput.None));
+            initialDirection = controls.UncontrolledInputs;
+        });
+        await SetKey(CMUKeyFunctions.CMUGunshipRight, BoundKeyState.Down);
+        await RunTicks(5);
+        await Server.WaitAssertion(() =>
+        {
+            var controls = SEntMan.GetComponent<GunshipPilotSeatComponent>(seat);
+            Assert.That(controls.HeldInputs, Is.EqualTo(GunshipControlInput.None));
+            controls.NextUncontrolledDirection = TimeSpan.Zero;
+        });
+        await RunTicks(1);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<GunshipPilotSeatComponent>(seat).UncontrolledInputs,
+                Is.Not.EqualTo(initialDirection));
+            Server.System<MobStateSystem>().ChangeMobState(SPlayer, MobState.Alive);
+        });
+        await RunTicks(5);
+        await SetKey(CMUKeyFunctions.CMUGunshipForward, BoundKeyState.Up);
+        await SetKey(CMUKeyFunctions.CMUGunshipRight, BoundKeyState.Up);
+        await SetKey(CMUKeyFunctions.CMUGunshipForward, BoundKeyState.Down);
+        await RunTicks(5);
+        await Server.WaitAssertion(() =>
+        {
+            var controls = SEntMan.GetComponent<GunshipPilotSeatComponent>(seat);
+            Assert.That(controls.UncontrolledInputs, Is.EqualTo(GunshipControlInput.None));
+            Assert.That(controls.HeldInputs, Is.EqualTo(GunshipControlInput.Forward));
+        });
+        await SetKey(CMUKeyFunctions.CMUGunshipForward, BoundKeyState.Up);
+    }
 
     [Test]
     public async Task SeatedPilotCanSendMovementAndThrustWithoutVisor()
