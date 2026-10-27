@@ -63,6 +63,8 @@
       effects:
       - !type:Crossmetabolizing
         potency: 1
+      - !type:Painkilling
+        potency: 4
       - !type:Antitoxic
         potency: 1
       - !type:Yautjahemogenic
