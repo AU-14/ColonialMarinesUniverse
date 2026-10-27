@@ -46,8 +46,8 @@
   - type: XenoRegen  
     restHealMultiplier: 2.0 
   - type: CMArmor
-    xenoArmor: 25
-    explosionArmor: 40
+    xenoArmor: 30
+    explosionArmor: 60
   - type: MeleeWeapon
     damage:
       types:
