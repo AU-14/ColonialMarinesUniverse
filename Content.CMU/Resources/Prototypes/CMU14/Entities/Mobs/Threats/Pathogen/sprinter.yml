@@ -35,7 +35,6 @@
     - CMU14ActionXenoPathogenZoom
     - CMU14ActionXenoPathogenRegurgitate
     - CMU14ActionXenoPathogenDevolve
-    - CMUActionXenoZJump
   - type: XenoZoom
   - type: XenoBoneChips
   - type: XenoLeap
@@ -121,6 +120,7 @@
     name: cmu-job-name-pathogen-sprinter
   - type: Speech
     speechSounds: Pathogen
+  - type: CMUXenoZJump
  
 - type: entity
   parent: CMU14XenoSprinterBase
