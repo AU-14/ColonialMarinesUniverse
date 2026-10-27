@@ -1,7 +1,9 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Ambassador;
 using Content.Server.CMU14.ColonyEconomy;
+using Content.Shared.CCVar;
 using Content.Shared.CMU14.ColonyEconomy;
+using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -24,6 +26,9 @@ public sealed class CMUSubmissionMarketTest : GameTest
     public async Task SalesGoThroughTheMarket()
     {
         var map = await Pair.CreateTestMap();
+        await Server.WaitPost(() =>
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(CCVars.CMUMarketEnabled, true));
+
         await Server.WaitAssertion(() =>
         {
             var budget = SEntMan.System<ColonyBudgetSystem>();
@@ -45,8 +50,9 @@ public sealed class CMUSubmissionMarketTest : GameTest
             }
 
             // tomato is tagged tomato + fruit + vegetable, it has to sell as a tomato
+            // prices come off the prototypes so a rebalance doesn't break this
             var tomato = protos.Index(Tomato);
-            var expected = 8.5f * market.GetMultiplier(tomato) * trade * (1f - tariff);
+            var expected = tomato.Prices["Tomato"] * market.GetMultiplier(tomato) * trade * (1f - tariff);
             var first = Sell("FoodTomato");
             Assert.That(first, Is.EqualTo(expected).Within(0.01f));
 
@@ -58,7 +64,7 @@ public sealed class CMUSubmissionMarketTest : GameTest
             var pumpkinMultiplier = market.GetMultiplier(pumpkin);
             Assert.That(pumpkinMultiplier, Is.GreaterThan(market.GetMultiplier(tomato)));
             var pumpkinPay = Sell("FoodPumpkin");
-            Assert.That(pumpkinPay, Is.EqualTo(11.75f * pumpkinMultiplier * trade * (1f - tariff)).Within(0.01f));
+            Assert.That(pumpkinPay, Is.EqualTo(pumpkin.Prices["Pumpkin"] * pumpkinMultiplier * trade * (1f - tariff)).Within(0.01f));
 
             // cooked food carries the fruit tag but the blacklist bounces it
             var slice = SEntMan.SpawnEntity("FoodCakeAppleSlice", map.GridCoords);
