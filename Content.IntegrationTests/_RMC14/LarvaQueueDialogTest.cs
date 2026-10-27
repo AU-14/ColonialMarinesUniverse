@@ -1108,8 +1108,9 @@ public sealed class LarvaQueueJoinXenoUiTest
         await pair.CleanReturnAsync();
     }
 
+    // CMU14: exercise active-hive filtering through the UI and queue events.
     [Test]
-    public async Task JoinXenoUiShowsJoinOrLeaveWithQueuePosition()
+    public async Task JoinXenoUiHidesInactiveHivesAndRetainsQueuedHivesUntilLeaving()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -1127,6 +1128,7 @@ public sealed class LarvaQueueJoinXenoUiTest
 
         EntityUid ghost = default;
         EntityUid hive = default;
+        EntityUid drone = default;
 
         await server.WaitAssertion(() =>
         {
@@ -1142,6 +1144,18 @@ public sealed class LarvaQueueJoinXenoUiTest
             OpenJoinXenoUi(entMan, ghost);
 
             var state = GetJoinXenoState(entMan, ghost);
+            Assert.That(state.Entries.Any(e => e.Hive == entMan.GetNetEntity(hive)), Is.False,
+                "Empty setup hives must not appear in Join as Xeno.");
+
+            entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
+            var queues = new GetLarvaQueueStatusEvent(player.UserId);
+            entMan.EventBus.RaiseEvent(EventSource.Local, queues);
+            Assert.That(queues.Queues.ContainsKey(hive), Is.False, "A stale window cannot enroll in an inactive hive.");
+
+            drone = entMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            entMan.System<SharedXenoHiveSystem>().SetHive(drone, hive);
+            OpenJoinXenoUi(entMan, ghost);
+            state = GetJoinXenoState(entMan, ghost);
             var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
             Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.NotQueued));
             Assert.That(entry.Position, Is.EqualTo(0));
@@ -1156,6 +1170,23 @@ public sealed class LarvaQueueJoinXenoUiTest
             var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
             Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
             Assert.That(entry.Position, Is.EqualTo(1));
+
+            var mobStates = entMan.System<Content.Shared.Mobs.Systems.MobStateSystem>();
+            mobStates.ChangeMobState(drone, Content.Shared.Mobs.MobState.Dead);
+            OpenJoinXenoUi(entMan, ghost);
+            entry = GetJoinXenoState(entMan, ghost).Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
+            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued),
+                "The queued player must still be able to leave after the last member dies.");
+
+            entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
+            OpenJoinXenoUi(entMan, ghost);
+            Assert.That(GetJoinXenoState(entMan, ghost).Entries.Any(e => e.Hive == entMan.GetNetEntity(hive)), Is.False);
+
+            mobStates.ChangeMobState(drone, Content.Shared.Mobs.MobState.Alive);
+            OpenJoinXenoUi(entMan, ghost);
+            entry = GetJoinXenoState(entMan, ghost).Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
+            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.NotQueued),
+                "Reviving the last member must make the hive available again.");
         });
 
         await pair.CleanReturnAsync();
