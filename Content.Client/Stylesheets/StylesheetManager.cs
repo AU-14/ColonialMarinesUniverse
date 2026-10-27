@@ -100,6 +100,8 @@ namespace Content.Client.Stylesheets
                 StyleNano.ParseChatFontStep(_configurationManager.GetCVar(CCVars.CMUChatBigFont)));
             RefreshNanoSheet();
 
+            RememberCrtUiSettings(); // CMU14: avoid rebuilding an unchanged preview on opening options.
+
             _configurationManager.OnValueChanged(CCVars.CMUUiFont, OnUiFontChanged);
             _configurationManager.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _configurationManager.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
@@ -119,31 +121,7 @@ namespace Content.Client.Stylesheets
             _configurationManager.OnValueChanged(CCVars.CMUChatBigFont, OnChatBigFontChanged);
         }
 
-        public void PreviewCrtUi(bool enabled, string color)
-        {
-            StyleNano.SetCrtUiEnabled(enabled);
-            StyleNano.SetCrtPalette(color);
-            RefreshCrtTheme();
-        }
-
-        public void ResetCrtUiPreview()
-        {
-            StyleNano.SetCrtUiEnabled(_configurationManager.GetCVar(CCVars.CrtUiEnabled));
-            StyleNano.SetCrtPalette(_configurationManager.GetCVar(CCVars.CrtUiColor));
-            RefreshCrtTheme();
-        }
-
-        private void OnCrtUiEnabledChanged(bool enabled)
-        {
-            StyleNano.SetCrtUiEnabled(enabled);
-            RefreshCrtTheme();
-        }
-
-        private void OnCrtUiColorChanged(string color)
-        {
-            StyleNano.SetCrtPalette(color);
-            RefreshCrtTheme();
-        }
+        // CMU14: preview scheduling and saved-colour callbacks live in StylesheetManager.CrtPreview.cs.
 
         private void RefreshCrtTheme()
         {

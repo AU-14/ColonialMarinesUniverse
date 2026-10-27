@@ -1,33 +1,34 @@
+<!-- CMU14: portrait character cards keep room for the editing stage. -->
 <ContainerButton xmlns="https://spacestation14.io"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
          xmlns:style="clr-namespace:Content.Client.Stylesheets">
-    <BoxContainer Orientation="Horizontal"
+    <BoxContainer Orientation="Vertical"
                   HorizontalExpand="True"
                   SeparationOverride="0"
                   Name="InternalHBox">
         <profile:ProfilePreviewSpriteView Scale="2 2"
-                                          Margin="0 4 4 4"
+                                          Margin="0 8 0 4" HorizontalAlignment="Center"
                                           OverrideDirection="South"
                                           Name="View"
                                           SetSize="64 64"/>
         <BoxContainer Orientation="Vertical"
                       HorizontalExpand="True"
                       VerticalAlignment="Center"
-                      MinWidth="145"
-                      MaxWidth="145">
+                      MinWidth="180"
+                      MaxWidth="190">
             <Label Name="NameLabel"
                    StyleClasses="CharacterName"
                    ClipText="True"
-                   MinWidth="145"
-                   MaxWidth="145"
+                   MinWidth="180"
+                   MaxWidth="190"
                    HorizontalExpand="True"/>
             <Label Name="JobLabel"
                    ClipText="True"
-                   MinWidth="145"
-                   MaxWidth="145"
+                   MinWidth="180"
+                   MaxWidth="190"
                    HorizontalExpand="True"
-                   StyleClasses="CrtDimText"/>
+                   StyleClasses="CrtDimText" Margin="0 0 0 8"/>
         </BoxContainer>
         <Button Name="DeleteButton"
                 MinWidth="88"

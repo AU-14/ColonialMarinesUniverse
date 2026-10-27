@@ -70,3 +70,14 @@
     itemIconStyle: BigItem
   - type: InstantAction
     event: !type:ToggleActionEvent
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14UPPPilot
+  name: ZSh-7A
+  description: A standard Soviet and Russian fighter pilot flight helmet developed in the late 1980s, Still issued to UPP pilots today.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi

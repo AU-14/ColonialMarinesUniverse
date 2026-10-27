@@ -1,35 +1,15 @@
 using System;
+using System.Linq;
 using Content.Shared.CMU14.Yautja;
 using NUnit.Framework;
 using Robust.Shared.Network;
 
 namespace Content.Tests.Shared.CMU14.Yautja;
 
+// the clan hall's lore ladder: every rank adds a power and only ever acts on ranks below it
 [TestFixture]
 public sealed class YautjaClanPolicyTest
 {
-    [TestCase(YautjaRank.Unblooded, YautjaClanPermission.AdminModify, null, null)]
-    [TestCase(YautjaRank.Blooded, YautjaClanPermission.UserModify, null, null)]
-    [TestCase(YautjaRank.Elite, YautjaClanPermission.UserModify, 5, null)]
-    [TestCase(YautjaRank.Elder, YautjaClanPermission.UserModify, null, 12)]
-    [TestCase(YautjaRank.Leader, YautjaClanPermission.AdminModify, 1, null)]
-    [TestCase(YautjaRank.Ancient, YautjaClanPermission.AdminAncient, null, null)]
-    public void RankRulesMatchCmss13(
-        YautjaRank rank,
-        YautjaClanPermission permission,
-        int? absoluteLimit,
-        int? membersPerRankLimit)
-    {
-        var rule = YautjaClanPolicy.GetRule(rank);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(rule.RequiredPermission, Is.EqualTo(permission));
-            Assert.That(rule.AbsoluteLimit, Is.EqualTo(absoluteLimit));
-            Assert.That(rule.MembersPerRankLimit, Is.EqualTo(membersPerRankLimit));
-        });
-    }
-
     [TestCase(YautjaRank.Unblooded, "predhud")]
     [TestCase(YautjaRank.YoungBlood, "predhud")]
     [TestCase(YautjaRank.Blooded, "predhud")]
@@ -40,62 +20,6 @@ public sealed class YautjaClanPolicyTest
     public void RankHudStatesMatchCmss13(YautjaRank rank, string expectedIconState)
     {
         Assert.That(YautjaRankMetadata.For(rank).IconState, Is.EqualTo(expectedIconState));
-    }
-
-    [Test]
-    public void ActorCannotTargetSelfOrEqualOrHigherRank()
-    {
-        var actor = Member(1, YautjaRank.Leader, YautjaClanPermission.UserAll);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(YautjaClanPolicy.CanTarget(actor, actor), Is.False);
-            Assert.That(YautjaClanPolicy.CanTarget(
-                actor,
-                Member(2, YautjaRank.Leader, YautjaClanPermission.UserAll)), Is.False);
-            Assert.That(YautjaClanPolicy.CanTarget(
-                actor,
-                Member(3, YautjaRank.Ancient, YautjaClanPermission.AdminAncient)), Is.False);
-        });
-    }
-
-    [Test]
-    public void ManagerStillCannotTargetAncientAdministrator()
-    {
-        var actor = Member(1, YautjaRank.Ancient, YautjaClanPermission.All);
-        var target = Member(2, YautjaRank.Leader, YautjaClanPermission.AdminAncient);
-
-        Assert.That(YautjaClanPolicy.CanTarget(actor, target), Is.False);
-    }
-
-    [Test]
-    public void AncientManagerCanDemoteClanAncient()
-    {
-        var actor = Member(1, YautjaRank.Ancient, YautjaClanPermission.All);
-        var target = Member(2, YautjaRank.Ancient, YautjaClanPermission.AdminAncient);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(YautjaClanPolicy.CanSetAncient(actor, target, true), Is.False);
-            Assert.That(YautjaClanPolicy.CanSetAncient(actor, target, false), Is.True);
-        });
-    }
-
-    [Test]
-    public void CouncilAncientCannotChangeAncientStatus()
-    {
-        var council = Member(1, YautjaRank.Ancient, YautjaClanPermission.AdminAncient);
-        var target = Member(2, YautjaRank.Blooded, YautjaClanPermission.UserAll);
-
-        Assert.That(YautjaClanPolicy.CanSetAncient(council, target, true), Is.False);
-    }
-
-    [TestCase(YautjaClanPermission.UserView, true)]
-    [TestCase(YautjaClanPermission.AdminView, true)]
-    [TestCase(YautjaClanPermission.AdminModify, false)]
-    public void ClanInfoRequiresViewPermission(YautjaClanPermission permissions, bool expected)
-    {
-        Assert.That(YautjaClanPolicy.CanView(Member(1, YautjaRank.Blooded, permissions)), Is.EqualTo(expected));
     }
 
     [Test]
@@ -122,58 +46,190 @@ public sealed class YautjaClanPolicyTest
                        YautjaClanPermission.AdminManager));
     }
 
-    [Test]
-    public void OrdinaryLeaderCanOnlyManageOwnClan()
+    [TestCase(YautjaRank.YoungBlood, false)]
+    [TestCase(YautjaRank.Unblooded, false)]
+    [TestCase(YautjaRank.Blooded, true)]
+    [TestCase(YautjaRank.Elite, true)]
+    public void OnlyBloodedLookInsideOtherClans(YautjaRank rank, bool expected)
     {
-        var leader = Member(1, YautjaRank.Leader, YautjaClanPermission.UserAll);
+        var viewer = Actor(1, rank, clanId: null);
+        Assert.That(YautjaClanHallPolicy.CanViewClanPage(viewer, 2), Is.EqualTo(expected));
+    }
 
+    [Test]
+    public void EveryoneSeesTheirOwnClan()
+    {
+        Assert.That(YautjaClanHallPolicy.CanViewClanPage(Actor(1, YautjaRank.Unblooded), 1), Is.True);
+    }
+
+    [TestCase(YautjaRank.Blooded, false)]
+    [TestCase(YautjaRank.Elite, true)]
+    [TestCase(YautjaRank.Leader, true)]
+    public void EliteNotesStartAtElite(YautjaRank rank, bool expected)
+    {
         Assert.Multiple(() =>
         {
-            Assert.That(YautjaClanPolicy.CanManageClan(leader, 1, YautjaClanPermission.UserModify), Is.True);
-            Assert.That(YautjaClanPolicy.CanManageClan(leader, 2, YautjaClanPermission.UserModify), Is.False);
-            Assert.That(YautjaClanPolicy.CanManageClan(leader, 1, YautjaClanPermission.AdminModify), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanSeeEliteNotes(Actor(1, rank), 1), Is.EqualTo(expected));
+            // and never another clan's
+            Assert.That(YautjaClanHallPolicy.CanSeeEliteNotes(Actor(1, rank), 2), Is.False);
         });
     }
 
     [Test]
-    public void CouncilCanManageRanksAcrossClansButNotAncientStatus()
+    public void ElderHandlesUnbloodedAndBloodedOnly()
     {
-        var council = Member(1, YautjaRank.Ancient, YautjaClanPermission.AdminAncient);
-        var target = Member(2, YautjaRank.Blooded, YautjaClanPermission.UserAll, 2);
+        var elder = Actor(1, YautjaRank.Elder);
+        var blooded = Member(2, YautjaRank.Blooded);
+        var elite = Member(3, YautjaRank.Elite);
 
         Assert.Multiple(() =>
         {
-            Assert.That(
-                YautjaClanPolicy.CanModifyRank(council, target, YautjaRank.Elder, 1, 0),
-                Is.True);
-            Assert.That(YautjaClanPolicy.CanSetAncient(council, target, true), Is.False);
+            Assert.That(YautjaClanHallPolicy.AssignableRanks(elder, blooded), Is.EquivalentTo(new[] { YautjaRank.Unblooded }));
+            Assert.That(YautjaClanHallPolicy.CanSetRank(elder, blooded, YautjaRank.Elite), Is.False);
+            // an Elite is above an Elder's band, even though the Elder outranks them
+            Assert.That(YautjaClanHallPolicy.CanSetRank(elder, elite, YautjaRank.Blooded), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanEditNotice(elder, 1), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanEditPresentation(elder, 1), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanExile(elder, blooded), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanAnswerPetitions(elder, 1), Is.True);
         });
     }
 
-    [TestCase(YautjaRank.Elite, 5, 5, false)]
-    [TestCase(YautjaRank.Elite, 4, 5, true)]
-    [TestCase(YautjaRank.Elder, 1, 12, false)]
-    [TestCase(YautjaRank.Elder, 1, 13, true)]
-    [TestCase(YautjaRank.Leader, 1, 1, false)]
-    public void RankLimitsUsePostChangeOccupancy(
+    [Test]
+    public void LeaderRunsTheirClanUpToElder()
+    {
+        var leader = Actor(1, YautjaRank.Leader);
+        var elite = Member(2, YautjaRank.Elite);
+        var otherClan = Member(3, YautjaRank.Blooded, clanId: 2);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(YautjaClanHallPolicy.CanSetRank(leader, elite, YautjaRank.Elder), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanSetRank(leader, elite, YautjaRank.Leader), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanExile(leader, elite), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanEditPresentation(leader, 1), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanRename(leader), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanSetRank(leader, otherClan, YautjaRank.Unblooded), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanExile(leader, otherClan), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanMove(leader, elite), Is.False);
+        });
+    }
+
+    [Test]
+    public void NobodyActsOnTheirEqualsOrThemselves()
+    {
+        var leader = Actor(1, YautjaRank.Leader);
+        var otherLeader = Member(2, YautjaRank.Leader);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(YautjaClanHallPolicy.Outranks(leader, leader.Member), Is.False);
+            Assert.That(YautjaClanHallPolicy.Outranks(leader, otherLeader), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanExile(leader, otherLeader), Is.False);
+        });
+    }
+
+    [Test]
+    public void AncientWorksAcrossClansButNotOnAncients()
+    {
+        var ancient = Actor(1, YautjaRank.Ancient, YautjaClanPermission.AdminAncient, clanId: null);
+        var leader = Member(2, YautjaRank.Leader, clanId: 5);
+        var otherAncient = Member(3, YautjaRank.Ancient, YautjaClanPermission.AdminAncient, clanId: 5);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(YautjaClanHallPolicy.CanSetRank(ancient, leader, YautjaRank.Elder), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanMove(ancient, leader), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanFoundOrDisband(ancient), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanSetHonor(ancient), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanSeeEliteNotes(ancient, 5), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanMove(ancient, otherAncient), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanSetAncient(ancient, leader), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanManageWhitelist(ancient), Is.False);
+        });
+    }
+
+    [Test]
+    public void CouncilManagerRaisesAndDropsAncients()
+    {
+        var manager = Actor(1, YautjaRank.Ancient, YautjaClanPermission.All, clanId: null);
+        var ancient = Member(2, YautjaRank.Ancient, YautjaClanPermission.AdminAncient);
+        var otherManager = Member(3, YautjaRank.Ancient, YautjaClanPermission.All);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(YautjaClanHallPolicy.CanSetAncient(manager, ancient), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanMove(manager, ancient), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanSetAncient(manager, otherManager), Is.False);
+        });
+    }
+
+    [Test]
+    public void StaffCanDoEverythingButActOnThemselves()
+    {
+        var staff = Actor(1, YautjaRank.Blooded, clanId: null, staff: true);
+        var manager = Member(2, YautjaRank.Ancient, YautjaClanPermission.All);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(YautjaClanHallPolicy.CanManageWhitelist(staff), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanSetAncient(staff, manager), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanPurge(staff, manager), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanPurge(staff, staff.Member), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanEditRound(staff), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanEditRound(staff with { Host = true }), Is.True);
+        });
+    }
+
+    [Test]
+    public void OnlyClanlessNonYoungbloodsPetition()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That(YautjaClanHallPolicy.CanPetition(Actor(1, YautjaRank.Blooded, clanId: null)), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanPetition(Actor(1, YautjaRank.YoungBlood, clanId: null)), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanPetition(Actor(1, YautjaRank.Blooded)), Is.False);
+        });
+    }
+
+    [Test]
+    public void SigilsRoundTripAndRejectJunk()
+    {
+        Assert.Multiple(() =>
+        {
+            foreach (var material in YautjaClanSigils.Materials)
+            {
+                for (var style = 1; style <= YautjaClanSigils.Styles; style++)
+                {
+                    var sigil = YautjaClanSigils.Make(style, material);
+                    Assert.That(YautjaClanSigils.TryParse(sigil, out var parsedStyle, out var parsedMaterial), Is.True, sigil);
+                    Assert.That((parsedStyle, parsedMaterial), Is.EqualTo((style, material)));
+                }
+            }
+
+            Assert.That(YautjaClanSigils.IsValid("pred_mask0_ebony"), Is.False);
+            Assert.That(YautjaClanSigils.IsValid("pred_mask21_ebony"), Is.False);
+            Assert.That(YautjaClanSigils.IsValid("pred_mask_ancient"), Is.False);
+            Assert.That(YautjaClanSigils.IsValid("../../etc"), Is.False);
+            Assert.That(YautjaClanSigils.OrDefault(""), Is.EqualTo(YautjaClanSigils.Default));
+        });
+    }
+
+    private static YautjaClanHallActor Actor(
+        int id,
         YautjaRank rank,
-        int currentOccupancy,
-        int clanSize,
-        bool expectedAllowed)
+        YautjaClanPermission permissions = YautjaClanPermission.UserAll,
+        int? clanId = 1,
+        bool staff = false)
     {
-        var actor = Member(1, YautjaRank.Leader, YautjaClanPermission.UserAll | YautjaClanPermission.AdminModify);
-        var target = Member(2, YautjaRank.Blooded, YautjaClanPermission.UserModify);
-
-        Assert.That(
-            YautjaClanPolicy.CanModifyRank(actor, target, rank, clanSize, currentOccupancy),
-            Is.EqualTo(expectedAllowed));
+        return new YautjaClanHallActor(Member(id, rank, permissions, clanId), staff, false);
     }
 
     private static YautjaClanMemberSnapshot Member(
         int id,
         YautjaRank rank,
-        YautjaClanPermission permissions,
-        int clanId = 1)
+        YautjaClanPermission permissions = YautjaClanPermission.UserAll,
+        int? clanId = 1)
     {
         return new YautjaClanMemberSnapshot(
             new NetUserId(new Guid(id, 0, 0, new byte[8])),

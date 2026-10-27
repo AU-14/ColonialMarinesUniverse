@@ -41,6 +41,7 @@ public sealed class YautjaBracerWindow : DefaultWindow
 
     public Button MarksButton = default!;
     public Button TranslatorButton = default!;
+    public Button ClanHallButton = default!;
     public Button LockButton = default!;
     public Button IdChipButton = default!;
     public Button SelfDestructButton = default!;
@@ -120,6 +121,7 @@ public sealed class YautjaBracerWindow : DefaultWindow
 
         Bind(MarksButton, YautjaBracerPanelCommand.OpenMarks);
         Bind(TranslatorButton, YautjaBracerPanelCommand.OpenTranslator);
+        Bind(ClanHallButton, YautjaBracerPanelCommand.OpenClanHall);
         Bind(LockButton, YautjaBracerPanelCommand.ToggleBracerLock);
         Bind(IdChipButton, YautjaBracerPanelCommand.ToggleBracerIdChip);
         Bind(SelfDestructButton, YautjaBracerPanelCommand.ToggleSelfDestruct);
@@ -270,6 +272,14 @@ public sealed class YautjaBracerWindow : DefaultWindow
             out _,
             out _);
         body.AddChild(TranslatorButton);
+
+        ClanHallButton = YautjaBracerUiStyle.ActionButton(
+            Loc.GetString("cmu-yautja-bracer-menu-clan-hall"),
+            Loc.GetString("cmu-yautja-bracer-menu-clan-hall-detail"),
+            YautjaBracerUiStyle.HotRed,
+            out _,
+            out _);
+        body.AddChild(ClanHallButton);
 
         LockButton = YautjaBracerUiStyle.ActionButton(
             Loc.GetString("cmu-yautja-bracer-menu-toggle-lock"),

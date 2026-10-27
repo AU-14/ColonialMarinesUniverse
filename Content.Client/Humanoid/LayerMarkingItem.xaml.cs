@@ -95,6 +95,7 @@ public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
     {
         var selected = _markingsModel.IsMarkingSelected(_organ, _layer, _markingPrototype.ID);
         SelectButton.Pressed = selected && _interactive;
+        RefreshCmuGallerySelection(); // CMU14: keep gallery selection in sync with the native marking model.
         ColorsButton.Visible = selected && _interactive && _markingsModel.IsMarkingColorCustomizable(_organ, _layer, _markingPrototype.ID);
 
         if (!selected || !_interactive)

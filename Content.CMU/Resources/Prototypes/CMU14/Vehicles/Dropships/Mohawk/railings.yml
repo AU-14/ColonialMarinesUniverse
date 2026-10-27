@@ -1,0 +1,36 @@
+- type: entity
+  abstract: true
+  parent: CMRailing
+  id: CMUMohawkRampRailing
+  components:
+  - type: Transform
+    anchored: true
+    gridTraversal: false
+  - type: MohawkRampRailing
+  - type: RequisitionsRailing
+    mode: Lowered
+    loweredState: railing0
+    raisedState: railing1
+    loweringState: railingc0
+    raisingState: railingc1
+  - type: Sprite
+    layers:
+    - state: railing0
+      map: ["enum.RequisitionsRailingLayers.Base"]
+  - type: RemoveComponents
+    components:
+    - type: Corrodible
+
+- type: entity
+  parent: CMUMohawkRampRailing
+  id: CMUMohawkOmahaRampRailing
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/railing.rsi
+
+- type: entity
+  parent: CMUMohawkRampRailing
+  id: CMUMohawkMidwayRampRailing
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/railing.rsi

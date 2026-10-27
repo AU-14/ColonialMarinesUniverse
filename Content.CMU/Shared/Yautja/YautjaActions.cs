@@ -240,6 +240,7 @@ public enum YautjaBracerPanelCommand : byte
     RemoveTrackedItem,
     ToggleBracerName,
     ToggleBracerNotificationSound,
+    OpenClanHall,
 }
 
 [Serializable, NetSerializable]
