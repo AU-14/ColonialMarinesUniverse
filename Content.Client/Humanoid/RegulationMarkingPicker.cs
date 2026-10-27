@@ -155,6 +155,7 @@ public sealed partial class RegulationMarkingPicker : BoxContainer
         }
 
         _updating = false;
+        RefreshWorkspaceMarkings(); // CMU14: keep the visual gallery on the same whitelist and selection.
     }
 
     private void PopulateColors(string filter)
@@ -181,6 +182,7 @@ public sealed partial class RegulationMarkingPicker : BoxContainer
         }
 
         _updating = false;
+        RefreshWorkspaceColors(); // CMU14: keep restricted color choices in the gallery.
     }
 
     //CMU14 hardcode Localization Begin: Fix hardcode localization for forks
