@@ -33,6 +33,7 @@
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
+    - CMUActionXenoZJump
   - type: XenoLeap
     plasmaCost: 20
     delay: 0
