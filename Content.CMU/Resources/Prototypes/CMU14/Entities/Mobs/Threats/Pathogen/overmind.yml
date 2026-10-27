@@ -55,6 +55,7 @@
     - CMU14ActionXenoPathogenPsychicRadiance
     - CMU14ActionXenoPathogenGiveOrder
     - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenMycotoxinInjectMatriarch
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 2.0
