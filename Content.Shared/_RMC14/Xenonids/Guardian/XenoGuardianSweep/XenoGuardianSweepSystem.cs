@@ -75,7 +75,7 @@ public sealed partial class XenoGuardianSweepSystem : EntitySystem
             if (_net.IsServer)  
                 SpawnAttachedTo(xeno.Comp.Effect, ent.Owner.ToCoordinates());  
   
-            _audio.PlayPredicted(xeno.Comp.Sound, xeno, xeno);  
+            _audio.PlayPredicted(xeno.Comp.HitSound, xeno, xeno);  
         }  
     }  
 }
