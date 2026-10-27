@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.Destruction;
+using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared.Containers.ItemSlots;
@@ -478,6 +479,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         out CollisionCandidate candidate)
     {
         candidate = default;
+
+        // Movement probes do not raise PreventCollideEvent like ordinary physics contacts do.
+        if (HasComp<MohawkRampRailingComponent>(other))
+            return false;
 
         var otherXform = Transform(other);
         if (!otherXform.Anchored && HasComp<ItemComponent>(other))
