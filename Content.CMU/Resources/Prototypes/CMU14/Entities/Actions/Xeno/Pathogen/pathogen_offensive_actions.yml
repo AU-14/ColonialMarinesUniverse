@@ -1090,12 +1090,13 @@
   description: Swing your tentacles in a wide arc, knocking enemies away and slowing them down. 
   components:  
   - type: Action  
-    itemIconStyle: NoItem  
-    icon:  
-      sprite: _RMC14/Actions/actions_pathogen.rsi  
+    itemIconStyle: NoItem
+    useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/actions_pathogen.rsi
       state: tail_sweep
       map: ["enum.ActionVisuals.Icon"]
-    useDelay: 10
   - type: InstantAction  
     event: !type:XenoGuardianSweepActionEvent  
   - type: ActionBlockIfResting  
@@ -1109,12 +1110,13 @@
   description: Smash a target with your tentacles and send them flying away. Also heals you.
   components:  
   - type: Action  
-    itemIconStyle: NoItem  
-    icon:  
-      sprite: _RMC14/Actions/actions_pathogen.rsi  
+    itemIconStyle: NoItem
+    useDelay: 7
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/actions_pathogen.rsi
       state: fling
       map: ["enum.ActionVisuals.Icon"]
-    useDelay: 7
   - type: TargetAction  
     range: 2
     deselectOnMiss: false  
