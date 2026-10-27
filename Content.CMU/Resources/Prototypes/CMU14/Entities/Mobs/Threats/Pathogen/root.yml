@@ -33,6 +33,7 @@
     - CMU14ActionXenoPathogenGuardianLink
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
+    - CMU14ActionXenoPathogenGuardianFling
   - type: XenoHeavy
   - type: XenoDevolve
     devolvesTo:
@@ -104,6 +105,16 @@
     damage:
       types:
         blunt: 30
+  - type: XenoFling
+    range: 5
+    healAmount: 125
+    paralyzeTime: 3
+    slowTime: 5
+    dazeTime: 4
+    throwSpeed: 12
+    damage:  
+      types:  
+        blunt: 50
   - type: XenoGuardian
     linkDuration: 10
   - type: GuardianCritSave
