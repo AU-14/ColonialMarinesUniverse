@@ -296,7 +296,8 @@ namespace Content.Server.Database
             where T : class, IPrototype
         {
             var payload = preferences
-                .Where(pair => pair.Value.Count > 0)
+                // CMU14: preserve an explicit empty mode override; dropping it restores legacy opt-ins.
+                // .Where(pair => pair.Value.Count > 0)
                 .ToDictionary(
                     pair => pair.Key,
                     pair => pair.Value.Select(value => value.Id).OrderBy(id => id).ToList());

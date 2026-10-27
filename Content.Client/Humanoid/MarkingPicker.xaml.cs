@@ -86,5 +86,6 @@ public sealed partial class MarkingPicker : Control
         if (i > 0)
             OrganTabs.CurrentTab = 0;
         OrganTabs.TabsVisible = i > 1;
+        ApplyWorkspaceGallery(); // CMU14: preserve the full organ/layer catalog in the workspace gallery.
     }
 }

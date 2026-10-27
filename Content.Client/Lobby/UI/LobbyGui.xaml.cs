@@ -116,18 +116,24 @@ namespace Content.Client.Lobby.UI
 
         public void SwitchState(LobbyGuiState state)
         {
+            ClockLayer.Visible = state != LobbyGuiState.CharacterSetup; // CMU14: keep the floating clock out of the editor header.
             DefaultState.Visible = false;
             CharacterSetupState.Visible = false;
+            SetCharacterSetupLayout(state == LobbyGuiState.CharacterSetup); // CMU14: reserve a live chat column beside setup.
 
             switch (state)
             {
                 case LobbyGuiState.Default:
                     DefaultState.Visible = true;
                     RightSide.Visible = true;
+                    ExpandPanel.Visible = false; // CMU14: restore the standard lobby after leaving setup.
                     break;
                 case LobbyGuiState.CharacterSetup:
                     CharacterSetupState.Visible = true;
 
+                    // CMU14 Begin: the setup layout hosts chat separately from the lobby information panel.
+                    ExpandPanel.Visible = false;
+                    /*
                     var actualWidth = (float) UserInterfaceManager.RootControl.PixelWidth;
                     var setupWidth = (float) LeftSide.PixelWidth;
 
@@ -135,6 +141,8 @@ namespace Content.Client.Lobby.UI
                     {
                         RightSide.Visible = false;
                     }
+                    */
+                    // CMU14 End
 
                     UserInterfaceManager.GetUIController<LobbyUIController>().ReloadCharacterSetup();
 
@@ -144,6 +152,8 @@ namespace Content.Client.Lobby.UI
 
         private void TogglePanel(bool value)
         {
+            if (CharacterSetupState.Visible) // CMU14: never reopen the lobby over the editor.
+                return;
             RightSide.Visible = value;
             ExpandPanel.Visible = !value;
         }
