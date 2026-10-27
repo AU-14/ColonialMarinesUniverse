@@ -147,12 +147,16 @@ public abstract partial class ServerDbBase
         await db.DbContext.YautjaClanPetitions
             .Where(entry => entry.ClanId == clanId)
             .ExecuteDeleteAsync();
+        await db.DbContext.YautjaClanSects
+            .Where(entry => entry.ClanId == clanId)
+            .ExecuteDeleteAsync();
         // CMU14 End
 
         foreach (var member in members)
         {
             var preserveAncient = member.Rank == (int) YautjaRank.Ancient;
             member.ClanId = null;
+            member.SectId = null; // CMU14
             if (!preserveAncient)
             {
                 member.Rank = (int) YautjaRank.Blooded;
@@ -208,6 +212,10 @@ public abstract partial class ServerDbBase
         }
         else
         {
+            // CMU14: a sect belongs to one clan, moving clans leaves it behind
+            if (existing.ClanId != member.ClanId)
+                existing.SectId = null;
+
             existing.ClanId = member.ClanId;
             existing.Rank = member.Rank;
             existing.Permissions = member.Permissions;
@@ -307,7 +315,8 @@ public abstract partial class ServerDbBase
                 entry.Permissions,
                 entry.Honor,
                 entry.IsLegacy,
-                entry.Player.YautjaWhitelistFlags))
+                entry.Player.YautjaWhitelistFlags,
+                entry.SectId))
             .ToListAsync();
 
         // whitelisted hunters who never got a membership row still belong on the board
@@ -413,6 +422,83 @@ public abstract partial class ServerDbBase
 
         await transaction.CommitAsync();
         return true;
+    }
+
+    public async Task<List<YautjaClanSectRecord>> GetYautjaClanSectsAsync(int? clanId = null)
+    {
+        await using var db = await GetDb();
+        var query = db.DbContext.YautjaClanSects.AsQueryable();
+        if (clanId is { } id)
+            query = query.Where(entry => entry.ClanId == id);
+
+        return await query
+            .OrderBy(entry => entry.Id)
+            .Select(entry => new YautjaClanSectRecord(entry.Id, entry.ClanId, entry.Name, entry.Description))
+            .ToListAsync();
+    }
+
+    // null when the clan is gone or already has the most sects allowed
+    public async Task<int?> CreateYautjaClanSectAsync(int clanId, string name, string description, int maxSects)
+    {
+        await using var db = await GetDb();
+        await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
+
+        if (!await db.DbContext.YautjaClans.AnyAsync(entry => entry.Id == clanId && entry.Active) ||
+            await db.DbContext.YautjaClanSects.CountAsync(entry => entry.ClanId == clanId) >= maxSects)
+        {
+            return null;
+        }
+
+        var sect = new YautjaClanSect { ClanId = clanId, Name = name, Description = description };
+        db.DbContext.YautjaClanSects.Add(sect);
+        await db.DbContext.SaveChangesAsync();
+        await transaction.CommitAsync();
+        return sect.Id;
+    }
+
+    public async Task<bool> UpdateYautjaClanSectAsync(int sectId, int clanId, string name, string description)
+    {
+        await using var db = await GetDb();
+        var updated = await db.DbContext.YautjaClanSects
+            .Where(entry => entry.Id == sectId && entry.ClanId == clanId)
+            .ExecuteUpdateAsync(setters => setters
+                .SetProperty(entry => entry.Name, name)
+                .SetProperty(entry => entry.Description, description));
+        return updated == 1;
+    }
+
+    public async Task<bool> DeleteYautjaClanSectAsync(int sectId, int clanId)
+    {
+        await using var db = await GetDb();
+        await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
+
+        var deleted = await db.DbContext.YautjaClanSects
+            .Where(entry => entry.Id == sectId && entry.ClanId == clanId)
+            .ExecuteDeleteAsync();
+        if (deleted != 1)
+            return false;
+
+        await db.DbContext.YautjaClanMembers
+            .Where(entry => entry.SectId == sectId)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(entry => entry.SectId, (int?) null));
+        await transaction.CommitAsync();
+        return true;
+    }
+
+    // only for a member of that clan, and only into one of that clan's sects. null takes them out
+    public async Task<bool> SetYautjaClanMemberSectAsync(Guid userId, int clanId, int? sectId)
+    {
+        await using var db = await GetDb();
+        if (sectId is { } id &&
+            !await db.DbContext.YautjaClanSects.AnyAsync(entry => entry.Id == id && entry.ClanId == clanId))
+        {
+            return false;
+        }
+
+        var updated = await db.DbContext.YautjaClanMembers
+            .Where(entry => entry.PlayerUserId == userId && entry.ClanId == clanId)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(entry => entry.SectId, sectId));
+        return updated == 1;
     }
     // CMU14 End
 

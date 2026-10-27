@@ -54,6 +54,24 @@ public sealed class YautjaClanPetition
     public int ClanId { get; set; }
 }
 
+// CMU14 class: a subdivision of a clan the leader sets up, a household or a group with its own
+// purpose. members point at it by id, no FK on purpose like petitions, the hall clears them
+[Table("yautja_clan_sect")]
+[Index(nameof(ClanId))]
+public sealed class YautjaClanSect
+{
+    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
+
+    public int ClanId { get; set; }
+
+    [Required]
+    public string Name { get; set; } = string.Empty;
+
+    [Required]
+    public string Description { get; set; } = string.Empty;
+}
+
 [Table("yautja_clan_member")]
 public sealed class YautjaClanMember
 {
@@ -76,6 +94,8 @@ public sealed class YautjaClanMember
     public int Honor { get; set; }
 
     public bool IsLegacy { get; set; }
+
+    public int? SectId { get; set; } // CMU14
 }
 
 public sealed record YautjaClanRecord(
@@ -93,6 +113,8 @@ public sealed record YautjaClanRecord(
 // seen username so offline hunters read right
 public sealed record YautjaClanPetitionRecord(Guid PlayerUserId, int ClanId);
 
+public sealed record YautjaClanSectRecord(int Id, int ClanId, string Name, string Description);
+
 public sealed record YautjaHunterBoardRecord(
     Guid PlayerUserId,
     string Name,
@@ -101,7 +123,8 @@ public sealed record YautjaHunterBoardRecord(
     int Permissions,
     int Honor,
     bool IsLegacy,
-    int WhitelistFlags);
+    int WhitelistFlags,
+    int? SectId = null);
 // CMU14 End
 
 public sealed record YautjaClanMemberRecord(
