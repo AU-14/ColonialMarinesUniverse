@@ -1,0 +1,5 @@
+- type: tile
+  parent: CMShuttleTileBase
+  id: CMUMohawkTile65e5843a05a8
+  name: cmu-mohawk-floor
+  sprite: /Textures/CMU14/Dropships/Mohawk/tiles/CMUMohawkTile65e5843a05a8.png
