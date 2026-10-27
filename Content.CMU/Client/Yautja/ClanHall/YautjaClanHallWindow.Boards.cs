@@ -6,36 +6,20 @@ using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client.CMU14.Yautja.ClanHall;
 
-// leaderboard tab: every clan by honor, every hunter by honor
+// leaderboard tab: every clan by honor. no individual hunter ranking on purpose
 public sealed partial class YautjaClanHallWindow
 {
-    private const int AllClans = -1;
-    private const int NoClan = -2;
-
-    private HudButton _clansButton = default!;
-    private HudButton _huntersButton = default!;
     private HudButton _foundButton = default!;
     private HudFrame _foundForm = default!;
     private LineEdit _foundName = default!;
     private LineEdit _foundColor = default!;
     private HudFrame _clanBoard = default!;
-    private HudFrame _hunterBoard = default!;
-    private BoxContainer _hunterRows = default!;
-    private LineEdit _hunterSearch = default!;
-    private OptionButton _hunterFilter = default!;
-    private readonly List<int> _filterIds = new();
-    private int _filter = AllClans;
-    private bool _showHunters;
 
     private Control BuildBoardsPage()
     {
         var page = VBox(10);
 
         var modes = HBox(6);
-        _clansButton = Button("cmu-yautja-hall-board-clans", () => ShowBoard(false));
-        _huntersButton = Button("cmu-yautja-hall-board-hunters", () => ShowBoard(true));
-        modes.AddChild(_clansButton);
-        modes.AddChild(_huntersButton);
         modes.AddChild(Gap());
         _foundButton = Button("cmu-yautja-hall-found", () =>
         {
@@ -73,42 +57,7 @@ public sealed partial class YautjaClanHallWindow
         _clanBoard = Frame("cmu-yautja-hall-board-clans");
         page.AddChild(_clanBoard);
 
-        _hunterBoard = Frame("cmu-yautja-hall-board-hunters");
-        var filters = HBox(6);
-        _hunterSearch = Hud.LineEdit(Loc.GetString("cmu-yautja-hall-search"));
-        _hunterSearch.HorizontalExpand = true;
-        _hunterSearch.OnTextChanged += _ => RebuildHunterBoard();
-        // enter asks the server, so staff can open someone who isn't listed yet
-        _hunterSearch.OnTextEntered += args =>
-        {
-            if (!string.IsNullOrWhiteSpace(args.Text))
-                Request(new YautjaClanHallFindMessage(args.Text));
-        };
-        filters.AddChild(_hunterSearch);
-        _hunterFilter = new OptionButton { MinWidth = 180, StyleBoxOverride = Hud.Field() };
-        _hunterFilter.OnItemSelected += args =>
-        {
-            _hunterFilter.SelectId(args.Id);
-            _filter = _filterIds[args.Id];
-            RebuildHunterBoard();
-        };
-        filters.AddChild(_hunterFilter);
-        _hunterBoard.Body.AddChild(filters);
-        _hunterRows = VBox(1);
-        _hunterBoard.Body.AddChild(_hunterRows);
-        page.AddChild(_hunterBoard);
-
-        ShowBoard(false);
         return page;
-    }
-
-    private void ShowBoard(bool hunters)
-    {
-        _showHunters = hunters;
-        _clansButton.Selected = !hunters;
-        _huntersButton.Selected = hunters;
-        _clanBoard.Visible = !hunters;
-        _hunterBoard.Visible = hunters;
     }
 
     private void UpdateBoardsPage(YautjaClanHallEuiState state)
@@ -168,49 +117,5 @@ public sealed partial class YautjaClanHallWindow
 
         if (state.Clans.Count == 0)
             _clanBoard.Body.AddChild(Empty("cmu-yautja-hall-no-clans"));
-
-        var selected = _filter;
-        _hunterFilter.Clear();
-        _filterIds.Clear();
-        _hunterFilter.AddItem(Loc.GetString("cmu-yautja-hall-filter-all"), _filterIds.Count);
-        _filterIds.Add(AllClans);
-        _hunterFilter.AddItem(Loc.GetString("cmu-yautja-hall-clanless"), _filterIds.Count);
-        _filterIds.Add(NoClan);
-        foreach (var clan in state.Clans)
-        {
-            _hunterFilter.AddItem(clan.Name, _filterIds.Count);
-            _filterIds.Add(clan.Id);
-        }
-
-        var index = _filterIds.IndexOf(selected);
-        _filter = index < 0 ? AllClans : selected;
-        _hunterFilter.SelectId(index < 0 ? 0 : index);
-        RebuildHunterBoard();
-    }
-
-    private void RebuildHunterBoard()
-    {
-        _hunterRows.RemoveAllChildren();
-        if (_state is not { } state)
-            return;
-
-        var search = _hunterSearch.Text.Trim();
-        var shown = 0;
-        for (var i = 0; i < state.Hunters.Count; i++)
-        {
-            var hunter = state.Hunters[i];
-            if (_filter == NoClan && hunter.ClanId != null ||
-                _filter >= 0 && hunter.ClanId != _filter ||
-                search.Length > 0 && !hunter.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            _hunterRows.AddChild(HunterRow(hunter, (i + 1).ToString(), showClan: true));
-            shown++;
-        }
-
-        if (shown == 0)
-            _hunterRows.AddChild(Empty("cmu-yautja-hall-no-hunters"));
     }
 }

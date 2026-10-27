@@ -70,15 +70,12 @@ cmu-yautja-hall-new-clan-description = No description yet.
 
 # leaderboard tab
 cmu-yautja-hall-board-clans = Clans
-cmu-yautja-hall-board-hunters = Hunters
 cmu-yautja-hall-col-clan = Clan
 cmu-yautja-hall-col-leader = Leader
 cmu-yautja-hall-col-members = Members
 cmu-yautja-hall-col-honor = Honor
-cmu-yautja-hall-filter-all = All clans
 cmu-yautja-hall-clan-locked = Only Blooded hunters can view other clans.
 cmu-yautja-hall-no-clans = There are no clans.
-cmu-yautja-hall-no-hunters = No hunters found.
 cmu-yautja-hall-found = New clan
 
 # hunter tab
