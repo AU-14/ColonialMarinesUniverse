@@ -234,7 +234,7 @@ rmc-xeno-bloodletter-description = You trade your Abduct and most of your damage
     You gain:
     - Scissor Cut, Impale, Tailstab and your Melee Attacks cause the target to lose blood.
     - Scissor Cut always slows enemies on hit.
-    - An Exsanguinate ability that kills downed targets, drains large amounts of blood and heals you.
+    - An Exsanguinate ability that kills downed targets, drains large amounts of blood and heals you. Your attacks also heal you.
     - Some health and movement speed.
     You Lose:
     - Some armor.
