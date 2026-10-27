@@ -98,7 +98,8 @@ public sealed partial class CMUBalanceRatingPopup : Control
             return;
 
         Complete();
-        Expired?.Invoke();
+        // Expiry handlers remove this popup. Wait until the engine has finished traversing its parent.
+        UserInterfaceManager.DeferAction(() => Expired?.Invoke());
     }
 
     private void SelectRating(byte rating)

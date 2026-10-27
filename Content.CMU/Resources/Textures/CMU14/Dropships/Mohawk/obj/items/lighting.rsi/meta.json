@@ -1,0 +1,51 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "ptube1",
+            "directions": 4
+        },
+        {
+            "name": "ptube0",
+            "directions": 4
+        },
+        {
+            "name": "ptube-empty",
+            "directions": 4
+        },
+        {
+            "name": "ptube-broken",
+            "directions": 4
+        },
+        {
+            "name": "ptube-burned",
+            "directions": 4
+        },
+        {
+            "name": "bptube1",
+            "directions": 4
+        },
+        {
+            "name": "bptube0",
+            "directions": 4
+        },
+        {
+            "name": "bptube-empty",
+            "directions": 4
+        },
+        {
+            "name": "bptube-broken",
+            "directions": 4
+        },
+        {
+            "name": "bptube-burned",
+            "directions": 4
+        }
+    ],
+    "copyright": "CM-SS13 contributors: thwomper, PoltavskaPraca, Steelpoint. https://github.com/cmss13-devs/cmss13/pull/12866; 4b1f9b6bcd3c456b2adca874ff89d0a7fd5ce012."
+}

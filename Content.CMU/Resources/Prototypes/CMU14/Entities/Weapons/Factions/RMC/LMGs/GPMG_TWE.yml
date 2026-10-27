@@ -25,17 +25,17 @@
     recoilUnwielded: 0
     scatterWielded: 1
     scatterUnwielded: 1
-    baseFireRate: 6
+    baseFireRate: 4.5
     burstScatterMult: 3
     modifiers:
       Burst:
         fireDelay: 0.35
         maxScatterModifier: 10
-        shotsToMaxScatter: 6
+        shotsToMaxScatter: 10
       FullAuto:
         fireDelay: 0.01
         maxScatterModifier: 3
-        shotsToMaxScatter: 6
+        shotsToMaxScatter: 4
   - type: Sprite
     sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
     layers:
@@ -128,7 +128,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 40
+        Piercing: 28
   - type: DamageImpactProfile
     projectile:
       contact: Generic
@@ -136,16 +136,16 @@
       energy: Medium
   - type: RMCProjectileDamageFalloff
     thresholds:
-    - range: 22
-      falloff: 9999
+    - range: 20
+      falloff: 6
       ignoreModifiers: true
   - type: CMArmorPiercing
-    amount: 30
+    amount: 25
   - type: RMCProjectileAccuracy
-    accuracy: 95
+    accuracy: 50
     thresholds:
     - range: 14
-      falloff: 10
+      falloff: 8
 
 - type: Tag
   id: CMUWeaponGPMGTWE

@@ -438,11 +438,11 @@
   - type: DropshipPointVisuals
     spriteOverrides:
       fuel_enhancer_installed:
-        sprite: CMU14/Dropships/Mohawk/obj/structures/props/dropship/dropship_equipment64.rsi
-        state: fuel_enhancer_omaha
+        sprite: CMU14/Dropships/Mohawk/obj/structures/props/dropship/dropship_equipment.rsi
+        state: fuel_enhancer_mohawk
       cooling_system_installed:
-        sprite: CMU14/Dropships/Mohawk/obj/structures/props/dropship/dropship_equipment64.rsi
-        state: cooling_system_omaha
+        sprite: CMU14/Dropships/Mohawk/obj/structures/props/dropship/dropship_equipment.rsi
+        state: cooling_system_mohawk
   - type: Clickable
     bounds:
       all: '-0.5,-0.5,0.5,0.5'

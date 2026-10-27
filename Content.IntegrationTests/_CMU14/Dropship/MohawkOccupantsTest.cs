@@ -6,6 +6,7 @@ using Content.Server.CMU14.ZLevels.Core;
 using Content.Server._RMC14.Shuttles;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
+using Content.Shared._RMC14.Requisitions.Components; // CMU14
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Damage.Components;
@@ -44,7 +45,7 @@ public sealed class MohawkOccupantsTest
             ship = LoadShip(entities, variant);
             var transform = entities.System<SharedTransformSystem>();
             var seats = entities.QueryEntities<MohawkSeatComponent>().ToArray();
-            Assert.That(seats, Has.Length.EqualTo(variant.StartsWith("omaha") ? 64 : 21));
+            Assert.That(seats, Has.Length.EqualTo(variant.StartsWith("omaha") ? 64 : 29)); // CMU14: retain Omaha's original cabin layout.
             foreach (var x in new[] { -0.5f, 1.5f })
                 Assert.That(seats.Count(s => entities.GetComponent<TransformComponent>(s.Owner).LocalPosition == new Vector2(x, 9.5f)),
                     Is.EqualTo(1), "Both cockpit crew consoles need a seat.");
@@ -111,6 +112,82 @@ public sealed class MohawkOccupantsTest
         await pair.Server.WaitAssertion(() => pair.Server.EntMan.DeleteEntity(ship));
         await pair.CleanReturnAsync();
     }
+
+    // CMU14 Begin: cargo and safety barriers follow real ramp transitions on both peers.
+    [Test]
+    public async Task RampCarriesLooseCargoAndSynchronizesSafetyRailings()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
+        EntityUid ship = default;
+        EntityUid lower = default;
+        EntityUid cargo = default;
+        EntityUid outside = default;
+        NetEntity[] railings = [];
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            ship = LoadShip(entities, "midway");
+            lower = entities.GetComponent<MultiDeckDropshipComponent>(ship).Decks[-1];
+            cargo = entities.SpawnEntity("CMCrowbar", new EntityCoordinates(ship, -0.5f, -4.5f));
+            outside = entities.SpawnEntity("CMCrowbar", new EntityCoordinates(ship, 0.5f, 0.5f));
+            railings = entities.QueryEntities<MohawkRampRailingComponent>()
+                .Select(r => entities.GetNetEntity(r.Owner)).ToArray();
+            Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true), Is.True);
+            foreach (var net in railings)
+            {
+                var uid = entities.GetEntity(net);
+                Assert.That(entities.GetComponent<RequisitionsRailingComponent>(uid).Mode, Is.EqualTo(RequisitionsRailingMode.Raising));
+                Assert.That(entities.GetComponent<FixturesComponent>(uid).Fixtures.Values.Any(f => f.Hard), Is.True,
+                    "Safety barriers must block the edges as soon as the ramp starts opening.");
+            }
+        });
+        await pair.RunSeconds(4);
+        await pair.RunUntilSynced();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            Assert.That(entities.GetComponent<TransformComponent>(cargo).MapUid,
+                Is.EqualTo(entities.GetComponent<TransformComponent>(lower).MapUid));
+            Assert.That(entities.GetComponent<TransformComponent>(cargo).LocalPosition,
+                Is.EqualTo(new Vector2(-0.5f, -5.5f)));
+            Assert.That(entities.GetComponent<TransformComponent>(outside).GridUid, Is.EqualTo(ship));
+        });
+        await pair.Client.WaitAssertion(() =>
+        {
+            var entities = pair.Client.EntMan;
+            foreach (var net in railings)
+            {
+                var uid = entities.GetEntity(net);
+                Assert.That(entities.GetComponent<RequisitionsRailingComponent>(uid).Mode, Is.EqualTo(RequisitionsRailingMode.Raised));
+                Assert.That(entities.GetComponent<SpriteComponent>(uid)[RequisitionsRailingLayers.Base].RsiState.ToString(), Is.EqualTo("railing1"));
+            }
+        });
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var departing = new BeforeFTLStartedEvent();
+            entities.EventBus.RaiseLocalEvent(ship, ref departing);
+            Assert.That(entities.GetComponent<TransformComponent>(cargo).GridUid, Is.EqualTo(ship));
+            Assert.That(entities.GetComponent<TransformComponent>(cargo).LocalPosition, Is.EqualTo(new Vector2(-0.5f, -4.5f)));
+            foreach (var net in railings)
+            {
+                var uid = entities.GetEntity(net);
+                Assert.That(entities.GetComponent<TransformComponent>(uid).GridUid, Is.EqualTo(ship));
+                Assert.That(entities.GetComponent<FixturesComponent>(uid).Fixtures.Values.Any(f => f.Hard), Is.False,
+                    "Departure must retract the barriers with the ramp.");
+            }
+        });
+        await pair.RunUntilSynced();
+        await pair.Client.WaitAssertion(() =>
+        {
+            var entities = pair.Client.EntMan;
+            foreach (var net in railings)
+                Assert.That(entities.GetComponent<RequisitionsRailingComponent>(entities.GetEntity(net)).Mode, Is.EqualTo(RequisitionsRailingMode.Lowered));
+        });
+        await pair.Server.WaitAssertion(() => pair.Server.EntMan.DeleteEntity(ship));
+        await pair.CleanReturnAsync();
+    }
+    // CMU14 End
 
     [TestCase("omaha", 0, false)]
     [TestCase("omaha", 90, true)]

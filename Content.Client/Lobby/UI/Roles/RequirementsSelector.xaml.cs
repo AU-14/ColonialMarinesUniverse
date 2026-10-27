@@ -138,5 +138,6 @@ public sealed partial class RequirementsSelector : BoxContainer
     public void Select(int id)
     {
         _options.Select(id);
+        RefreshDeploymentColors(); // CMU14
     }
 }

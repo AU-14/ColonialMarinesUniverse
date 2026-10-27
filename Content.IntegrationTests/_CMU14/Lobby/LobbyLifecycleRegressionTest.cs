@@ -5,6 +5,7 @@ using System.Threading;
 using Content.Client.Gameplay;
 using Content.Client.Lobby;
 using Content.Client.Lobby.UI;
+using Content.Client.Stylesheets;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Allegiance;
 using Content.Shared.CMU14.Allegiance;
@@ -22,8 +23,6 @@ public sealed class LobbyLifecycleRegressionTest : GameTest
     private static readonly string[] CharacterSetupCvars =
     [
         CCVars.SeeOwnNotes.Name,
-        CCVars.CrtUiEnabled.Name,
-        CCVars.CrtUiColor.Name,
         CCVars.GameMaxCharacterSlots.Name,
     ];
 
@@ -155,7 +154,7 @@ public sealed class LobbyLifecycleRegressionTest : GameTest
         return (Dictionary<Type, ProcessMessage>) field!.GetValue(netManager)!;
     }
 
-    private static void AssertCharacterSetupSubscriptions(IConfigurationManager configuration, int expected)
+    private void AssertCharacterSetupSubscriptions(IConfigurationManager configuration, int expected)
     {
         var method = FindInstanceMethod(configuration.GetType(), "GetSubs");
         foreach (var cvar in CharacterSetupCvars)
@@ -164,6 +163,14 @@ public sealed class LobbyLifecycleRegressionTest : GameTest
             var count = subscriptions.Cast<Delegate>().Count(subscription => subscription.Target is CharacterSetupGui);
             Assert.That(count, Is.EqualTo(expected), $"Unexpected CharacterSetupGui subscription count for {cvar}.");
         }
+
+        // Setup follows the applied theme event, including unsaved colour previews.
+        var styles = Client.ResolveDependency<IStylesheetManager>();
+        var theme = (Delegate?) styles.GetType()
+            .GetField(nameof(IStylesheetManager.CrtThemeChanged), BindingFlags.Instance | BindingFlags.NonPublic)!
+            .GetValue(styles);
+        var themeCount = theme?.GetInvocationList().Count(callback => callback.Target is CharacterSetupGui) ?? 0;
+        Assert.That(themeCount, Is.EqualTo(expected), "Unexpected CharacterSetupGui theme subscription count.");
     }
 
     private static MethodInfo FindInstanceMethod(Type type, string name)
