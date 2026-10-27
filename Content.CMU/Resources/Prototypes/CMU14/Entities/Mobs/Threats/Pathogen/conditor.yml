@@ -114,7 +114,9 @@
     stunMin: 3
     stunMax: 4
   - type: CMUXenoDirectSporeInfect
-    
+    plasmaCost: 50
+    embryoSpawn: CMU14XenoBloodburster
+    protectionBypassChance: 0.9
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/CMU14/Interface/neo_blips.rsi
