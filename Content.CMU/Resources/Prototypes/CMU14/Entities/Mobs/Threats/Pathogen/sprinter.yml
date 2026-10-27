@@ -35,6 +35,7 @@
     - CMU14ActionXenoPathogenZoom
     - CMU14ActionXenoPathogenRegurgitate
     - CMU14ActionXenoPathogenDevolve
+    - CMUActionXenoZJump
   - type: XenoZoom
   - type: XenoBoneChips
   - type: XenoLeap
