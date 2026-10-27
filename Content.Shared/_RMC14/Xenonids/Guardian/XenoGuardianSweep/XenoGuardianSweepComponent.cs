@@ -18,7 +18,7 @@ public sealed partial class XenoGuardianSweepComponent : Component
     [DataField]  
     public EntProtoId Effect = "CMEffectPunch";  
   
-    [DataField, AutoNetworkedField]
+    [DataField]
     public SoundSpecifier HitSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_claw_block.ogg");  
   
     [DataField]  
