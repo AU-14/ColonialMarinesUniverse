@@ -1092,7 +1092,7 @@
   - type: Action  
     itemIconStyle: NoItem  
     icon:  
-      sprite: _RMC14/Actions/xeno_actions.rsi  
+      sprite: _RMC14/Actions/actions_pathogen.rsi  
       state: tail_sweep
       map: ["enum.ActionVisuals.Icon"]
     useDelay: 10
@@ -1111,7 +1111,7 @@
   - type: Action  
     itemIconStyle: NoItem  
     icon:  
-      sprite: _RMC14/Actions/xeno_actions.rsi  
+      sprite: _RMC14/Actions/actions_pathogen.rsi  
       state: fling
       map: ["enum.ActionVisuals.Icon"]
     useDelay: 7
