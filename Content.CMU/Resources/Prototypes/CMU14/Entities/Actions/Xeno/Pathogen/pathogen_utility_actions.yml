@@ -6,13 +6,12 @@
   components:  
   - type: Action
     itemIconStyle: NoItem
-    icon:  
-      sprite: _RMC14/Actions/actions_pathogen.rsi
-      state: shield_xeno
-      map: ["enum.ActionVisuals.Icon"]
     useDelay: 30
   - type: Sprite
-    
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: shield_xeno
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: true
     range: 30
