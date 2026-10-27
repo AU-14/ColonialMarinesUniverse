@@ -763,7 +763,7 @@
         showEnts: False
         occludes: True
   - type: HardpointIntegrity
-    integrity: 1000
+    integrity: 700
   - type: VehicleWheelSlots
     slots:
     - wheel-1
