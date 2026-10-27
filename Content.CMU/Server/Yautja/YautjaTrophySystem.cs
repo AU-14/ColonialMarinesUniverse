@@ -206,6 +206,20 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     {
         if (!TryComp(target, out YautjaRitualDuelComponent? ritual))
         {
+            if (HasComp<YautjaComponent>(target))
+            {
+                if (!_ritual.CanChallengeHonorDuel(hunter, target))
+                    return;
+
+                verbs.Add(new TVerb
+                {
+                    Text = Loc.GetString("cmu-yautja-honor-duel-challenge-verb"),
+                    Priority = 4,
+                    Act = () => _ritual.TryChallengeHonorDuel(hunter, target),
+                });
+                return;
+            }
+
             if (!_ritual.CanClaimCaptive(hunter, target, true, false))
                 return;
 
@@ -233,7 +247,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         verbs.Add(new TVerb
         {
-            Text = Loc.GetString("cmu-yautja-ritual-release-verb"),
+            Text = Loc.GetString(ritual.HonorDuel ? "cmu-yautja-honor-duel-call-off-verb" : "cmu-yautja-ritual-release-verb"),
             Priority = 3,
             Act = () => _ritual.TryReleaseCaptive(hunter, target),
         });

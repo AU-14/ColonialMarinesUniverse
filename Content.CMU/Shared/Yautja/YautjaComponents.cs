@@ -2764,6 +2764,10 @@ public sealed partial class YautjaRitualDuelComponent : Component
     [DataField]
     public TimeSpan DuelStartedAt;
 
+    // hunter vs hunter honor duel, accepted by both. either side can win it
+    [DataField]
+    public bool HonorDuel;
+
     [DataField]
     public SoundSpecifier ClaimSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Voice/Roars/pred_roar1.wav");
 
