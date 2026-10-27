@@ -1357,7 +1357,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return 0f;
 
         var maxSpeed = mover.MaxSpeed * GetSmashSlowdownMultiplier(mover) * GetDamageSpeedMultiplier(uid, mover, false);
-        maxSpeed *= CMUTyreSpeed(uid); // CMU14: tyres on the ground under the vehicle
+        maxSpeed *= CMUTyreSpeed(uid) * CMUResinSpeed(uid); // CMU14: tyres and resin on the running gear
 
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             maxSpeed *= overcharge.SpeedMultiplier;
@@ -1380,7 +1380,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return 0f;
 
         var maxSpeed = mover.MaxReverseSpeed * GetSmashSlowdownMultiplier(mover) * GetDamageSpeedMultiplier(uid, mover, true);
-        maxSpeed *= CMUTyreSpeed(uid); // CMU14: tyres on the ground under the vehicle
+        maxSpeed *= CMUTyreSpeed(uid) * CMUResinSpeed(uid); // CMU14: tyres and resin on the running gear
 
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             maxSpeed *= overcharge.SpeedMultiplier;

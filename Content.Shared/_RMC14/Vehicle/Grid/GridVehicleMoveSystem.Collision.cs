@@ -327,6 +327,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 if (candidate.CollisionClass == VehicleCollisionClass.Ignore)
                     continue;
 
+                // CMU14: only real movement contacts can foul tracks, never occupancy probes.
+                if (applyEffects)
+                    CMUTryStickResin(uid, mover, candidate.Entity);
+
                 if (candidate.CollisionClass == VehicleCollisionClass.Breakable)
                 {
                     var plowImpact = GridVehicleMotionSimulator.IsFrontImpact(
