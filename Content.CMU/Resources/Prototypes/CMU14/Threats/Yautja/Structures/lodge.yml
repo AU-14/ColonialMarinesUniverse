@@ -167,6 +167,7 @@
   - type: Construction
     graph: CMUYautjaLodgeStatic
     node: static
+    deconstructionTarget: null
   - type: Destructible
     thresholds:
     - trigger:
@@ -273,6 +274,7 @@
   - type: Construction
     graph: CMUYautjaLodgeStatic
     node: static
+    deconstructionTarget: null
   - type: Destructible
     thresholds:
     - trigger:
@@ -314,6 +316,7 @@
   - type: Construction
     graph: CMUYautjaLodgeStatic
     node: static
+    deconstructionTarget: null
   - type: Destructible
     thresholds:
     - trigger:
@@ -372,6 +375,7 @@
   - type: Construction
     graph: CMUYautjaBrazier
     node: frame
+    deconstructionTarget: null
   - type: RMCMesonsNonviewable
   - type: Physics
     bodyType: Static
@@ -395,6 +399,7 @@
   - type: Construction
     graph: CMUYautjaBrazier
     node: brazier
+    deconstructionTarget: null
 
 - type: entity
   parent: BaseItem
@@ -473,6 +478,7 @@
   - type: Construction
     graph: CMUYautjaLodgeStatic
     node: static
+    deconstructionTarget: null
 
 - type: entity
   parent: CMBed
@@ -486,6 +492,7 @@
   - type: Construction
     graph: CMUYautjaLodgeStatic
     node: static
+    deconstructionTarget: null
   - type: Destructible
     thresholds:
     - trigger:
