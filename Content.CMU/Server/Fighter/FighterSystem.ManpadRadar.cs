@@ -30,27 +30,7 @@ public sealed partial class FighterSystem
     private void SendAirspaceRadar(EntityUid source, EntityUid user, EntityUid terrain, Vector2 position,
         bool aiming, bool loaded, TimeSpan readyAt, TimeSpan launchAt, bool ignoreIFF, EntityUid? target, bool organic = false)
     {
-        if (!TryComp(user, out ActorComponent? actor)) return;
-
-        if (!_manpadCharts.TryGetValue(terrain, out var chart))
-        {
-            // The radar uses exactly the same battlefield and sectors as the jets.
-            foreach (var aircraft in _combatAircraft)
-            {
-                if (aircraft.Comp1.TerrainMap != terrain || !TryComp(aircraft, out FighterChartComponent? existing)) continue;
-                chart = new ManpadChart(aircraft.Comp1.Battlefield, existing.Terrain);
-                break;
-            }
-            if (chart.Terrain == null || chart.Terrain.Length == 0)
-            {
-                var flight = new FighterAircraftComponent();
-                var newChart = new FighterChartComponent();
-                BuildChart(terrain, flight, newChart);
-                if (newChart.Terrain.Length == 0) return;
-                chart = new ManpadChart(flight.Battlefield, newChart.Terrain);
-            }
-            _manpadCharts[terrain] = chart;
-        }
+        if (!TryComp(user, out ActorComponent? actor) || !TryGetAirspaceChart(terrain, out var chart)) return;
 
         var session = actor.PlayerSession;
         var location = (source, terrain);
@@ -84,7 +64,42 @@ public sealed partial class FighterSystem
             ev.Contacts.Add(new FighterAirspaceContact(flight.Position, flight.Heading, flight.Height,
                 disposition, target == aircraft.Owner));
         }
+        if (organic)
+        {
+            foreach (var ship in _boilerTargets)
+            {
+                if (!TryGetBoilerGunship(ship, terrain, out _)) continue;
+                var shipPosition = _transform.GetWorldPosition(ship);
+                if (!chart.Bounds.Contains(shipPosition)) continue;
+                ev.Contacts.Add(new FighterAirspaceContact(shipPosition, (float) _transform.GetWorldRotation(ship).Theta,
+                    0f, FighterContactDisposition.Hostile, target == ship));
+            }
+        }
         RaiseNetworkEvent(ev, session);
+    }
+
+    private bool TryGetAirspaceChart(EntityUid terrain, out ManpadChart chart)
+    {
+        if (_manpadCharts.TryGetValue(terrain, out chart))
+            return true;
+
+        // Target selection and the radar must use the same sectors, even without a jet present.
+        foreach (var aircraft in _combatAircraft)
+        {
+            if (aircraft.Comp1.TerrainMap != terrain || !TryComp(aircraft, out FighterChartComponent? existing)) continue;
+            chart = new ManpadChart(aircraft.Comp1.Battlefield, existing.Terrain);
+            break;
+        }
+        if (chart.Terrain == null || chart.Terrain.Length == 0)
+        {
+            var flight = new FighterAircraftComponent();
+            var newChart = new FighterChartComponent();
+            BuildChart(terrain, flight, newChart);
+            if (newChart.Terrain.Length == 0) return false;
+            chart = new ManpadChart(flight.Battlefield, newChart.Terrain);
+        }
+        _manpadCharts[terrain] = chart;
+        return true;
     }
 
     private void ClearInactiveManpadRadars()

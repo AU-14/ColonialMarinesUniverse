@@ -53,6 +53,19 @@ public sealed partial class HardpointSystem
                 parts.Add(item);
         }
 
+        // Protected modules must not absorb the whole damage budget or keep the hull alive forever.
+        // Keep their protection while vulnerable parts survive; once only protected parts remain,
+        // further hull hits consume their integrity directly.
+        var routedDamage = args.Damage;
+        var vulnerableParts = parts.FindAll(part => GetRoutedDamageAmount(part, routedDamage) > 0f);
+        if (parts.Count > 0 && vulnerableParts.Count == 0)
+        {
+            ApplyHullChunk(ent.Owner, Comp<HardpointIntegrityComponent>(ent.Owner), totalDamage);
+            args.Damage = ScaleDamage(args.Damage, ent.Comp.FrameDamageFractionWhileIntact);
+            return;
+        }
+        parts = vulnerableParts;
+
         if (parts.Count > 0)
         {
             var failureDamage = totalDamage;
