@@ -56,8 +56,12 @@ public sealed partial class RMCAdminEui
                 !proto.HasComp<XenoHiddenComponent>(_compFactory) && !proto.HasComp<XenoStrainComponent>(_compFactory))
             {
                 var category = proto.HasComp<CMUPathogenHiveMemberComponent>(_compFactory) ? 1 : 0;
+                // Variants such as Gambler inherit their caste's name and must survive deduplication.
+                var name = string.IsNullOrWhiteSpace(proto.EditorSuffix)
+                    ? proto.Name
+                    : Loc.GetString("cmu-admin-transform-variant", ("name", proto.Name), ("variant", proto.EditorSuffix));
                 _cmuTransforms.Add(new CMUTransformChoice(
-                    proto.ID, proto.Name, category, xeno.Tier, proto.Description));
+                    proto.ID, name, category, xeno.Tier, proto.Description));
             }
 
             if (proto.HasComp<HiveComponent>(_compFactory))
