@@ -55,7 +55,7 @@
     - CMU14ActionXenoPathogenPsychicRadiance
     - CMU14ActionXenoPathogenGiveOrder
     - CMU14ActionXenoPathogenPheromones
-    - CMU14ActionXenoDirectSporeInfect
+    - CMU14ActionXenoPathogenDirectSporeInfect
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 2.0
