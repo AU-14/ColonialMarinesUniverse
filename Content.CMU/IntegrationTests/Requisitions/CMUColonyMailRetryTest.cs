@@ -23,6 +23,8 @@ public sealed class CMUColonyMailRetryTest : GameTest
           description: cm-job-name-hospital-corpsman
           color: "#FFFFFF"
           faction: colonist
+          # Test prototypes load globally; this auxiliary membership must not replace CMSquad.
+          primary: false
           roles: [CMHospitalCorpsman]
         """;
 
