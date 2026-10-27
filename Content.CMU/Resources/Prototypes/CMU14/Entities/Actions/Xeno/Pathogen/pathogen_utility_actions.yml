@@ -11,6 +11,8 @@
       state: shield_xeno
       map: ["enum.ActionVisuals.Icon"]
     useDelay: 30
+  - type: Sprite
+    
   - type: TargetAction
     checkCanAccess: true
     range: 30
