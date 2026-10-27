@@ -32,7 +32,6 @@
     - CMU14ActionXenoPathogenPlaceSporeSac
     - CMU14ActionXenoPathogenDirectSporeInfect
     - CMU14ActionXenoPathogenRegurgitate
-    - CMUActionXenoZJump
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
@@ -110,6 +109,7 @@
     cloudPrototype: CMUPathogenSporeCloud
   # popper still counts toward victory, so the kill objective needs its own minion flag
   - type: CMUObjectiveMinion
+  - type: CMUXenoZJump
 
 - type: entity
   parent: CMU14XenoPopperBase
