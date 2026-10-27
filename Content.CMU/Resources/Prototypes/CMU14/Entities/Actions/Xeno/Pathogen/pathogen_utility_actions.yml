@@ -7,10 +7,10 @@
   - type: Action
     itemIconStyle: NoItem
     icon:  
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: retrieve
+      sprite: _RMC14/Actions/actions_pathogen.rsi
+      state: shield_xeno
       map: ["enum.ActionVisuals.Icon"]
-    useDelay: 20
+    useDelay: 30
   - type: TargetAction
     checkCanAccess: true
     range: 30
