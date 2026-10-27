@@ -62,7 +62,7 @@ public sealed class GuardianAbsorbSystem : EntitySystem
         if (redirected.AnyPositive())  
         {  
             _damageable.TryChangeDamage(guardian, redirected, ignoreResistances: ent.Comp.IgnoreGuardianResistances, origin: ent.Comp.Guardian);  
-            _popup.PopupEntity(Loc.GetString("guardian-absorbing-damage"), guardian, PopupType.Small);  
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-guardian-absorbing-damage"), guardian, PopupType.Small);  
         }  
   
         // Whatever fraction of the original hit was actually redirected comes off the original target.  
