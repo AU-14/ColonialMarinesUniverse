@@ -162,6 +162,15 @@ public sealed class BodyZoneTargetWidget : Control
         UIBox2 Rect,
         string[] States)
     {
-        public readonly string[] HoverStates = Array.ConvertAll(States, state => $"{state}_hover");
+        public readonly string[] HoverStates = CreateHoverStates(States);
+
+        private static string[] CreateHoverStates(string[] states)
+        {
+            var hoverStates = new string[states.Length];
+            for (var i = 0; i < states.Length; i++)
+                hoverStates[i] = $"{states[i]}_hover";
+
+            return hoverStates;
+        }
     }
 }
