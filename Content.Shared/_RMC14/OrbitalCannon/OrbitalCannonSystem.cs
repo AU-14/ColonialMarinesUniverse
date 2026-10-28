@@ -999,6 +999,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 }
 
                 // TODO RMC14 cluster laser pointers
+                // CMU14 Orbital Steps Begin: share each rolled strike position across Z-levels.
                 for (var i = 0; i < step.TimesPer; i++)
                 {
                     var mapCoordinates = _transform.GetMapCoordinates(uid);
@@ -1008,8 +1009,9 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                         mapCoordinates = mapCoordinates.Offset(spread);
                     }
 
-                    CMUFireOrbitalExplosionStep(uid, explosion.MultiZ, step, mapCoordinates); // CMU14: share the same spread across Z-levels
+                    CMUFireOrbitalExplosionStep(uid, explosion.MultiZ, step, mapCoordinates);
                 }
+                // CMU14 End
             }
         }
     }

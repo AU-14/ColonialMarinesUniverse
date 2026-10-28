@@ -971,3 +971,62 @@
     state: "source"
     noRot: true
     offset: 0.28125,-0.03125
+
+- type: entity
+  id: CMUBosenmoriExact0a3113f0f8b1878a
+  # CMSS13 source: /obj/structure/prop/dam/drill
+  name: "drill"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/e7a096db8da87afab8c4.rsi
+    state: "source"
+    noRot: true
+    offset: 0,1
+
+- type: entity
+  id: CMUBosenmoriExact2056adc5992958f8
+  # CMSS13 source: /obj/item/storage/fancy/vials/empty
+  name: "empty vials"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/00b0bc6030959750a65f.rsi
+    state: "source"
+    noRot: true
+    offset: 0,0.0625
+
+- type: entity
+  id: CMUBosenmoriExact3951317c0ed23a5d
+  # CMSS13 source: /obj/structure/sign/poster
+  name: "YOU ALWAYS KNOW A WORKING JOE."
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/dea7338ccea55ca092f4.rsi
+    state: "source"
+    noRot: true
+    offset: 0.21875,1.03125
+
+- type: entity
+  id: CMUBosenmoriExact52a504fb335e4b61
+  # CMSS13 source: /obj/structure/prop/server_equipment/laptop
+  name: "laptop"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/33f02f49f1f6a965daa2.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactb3bdea832f1385d1
+  # CMSS13 source: /obj/item/trash/uscm_mre
+  name: " crumbled TWE MRE"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/d859f7fd53ce3c1ef2c2.rsi
+    state: "source"
+    noRot: true
+    offset: 0.40625,-0.03125

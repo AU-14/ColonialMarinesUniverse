@@ -116,6 +116,7 @@ research-sim-ui-header-mode = Mode
 research-sim-ui-header-actions = Actions
 research-sim-ui-header-target = Target
 research-sim-ui-header-reference = Reference
+research-sim-ui-property = {$NAME} {$LEVEL}
 research-sim-ui-header-pick-recipe = Pick a recipe
 
 research-sim-ui-credits = SAMPLE DATA: {$NUM}

@@ -1,6 +1,7 @@
 using System.Linq;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests._CMU14.Dropship;
@@ -31,9 +32,26 @@ public sealed class DynamicGunshipMapTest
             var grid = grids!.Single();
             Assert.That(maps.GetAllTiles(grid.Owner, grid.Comp).Count(), Is.EqualTo(55));
 
+            var descendants = 0;
+            CountDescendants(grid.Owner, ref descendants);
+            // 78 includes the 2 invisible CMUAirtightSeal companions the wide-airtight
+            // system spawns under the multi-tile aft door, and the 5 door fans and
+            // the cockpit air filler vent that keep the cabin's air in.
+            Assert.That(descendants, Is.EqualTo(78));
+
             maps.DeleteMap(map!.Value.Comp.MapId);
         });
 
         await pair.CleanReturnAsync();
+
+        void CountDescendants(EntityUid parent, ref int count)
+        {
+            var enumerator = server.Transform(parent).ChildEnumerator;
+            while (enumerator.MoveNext(out var child))
+            {
+                count++;
+                CountDescendants(child, ref count);
+            }
+        }
     }
 }

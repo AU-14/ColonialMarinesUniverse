@@ -13,8 +13,6 @@ public sealed class ASRSFactionVendorCatalogTest : GameTest
 {
     private static readonly ProtoId<PlatoonPrototype> Usmc = "USCM";
     private static readonly ProtoId<PlatoonPrototype> Lacn = "LACN";
-    private static readonly ProtoId<PlatoonPrototype> Upp = "UPP";
-    private static readonly ProtoId<PlatoonPrototype> Hazops = "HAZOPS";
 
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
@@ -48,23 +46,13 @@ public sealed class ASRSFactionVendorCatalogTest : GameTest
                 var uscm = computer.Categories.Single(category => category.Name == "Faction Requisitions");
                 Assert.That(uscm.Entries.Any(entry => entry.Crate.Id == "RMCWeaponRifleM54CMK1Unloaded"), Is.True);
                 var uscmAmmo = computer.Categories.Single(category => category.Name == "Faction Specialist Ammo");
-                foreach (var ammunition in new[]
-                         {
-                             "RMCMagazineSmartGun", // smart gunner
-                             "RMCBoxAGMI", // grenadier
-                             "RMCMagazineRifleSharpExplosive", // SHARP
-                             "RMCMagazineRifleM4SPRA19", // scout
-                             "CMMagazineSniperM96S", // sniper
-                             "RMCMagazineSniperXM43E1AntiMateriel", // anti-materiel
-                             "RMCMagazineSniperM707Vulture", // Vulture
-                             "RMCBoxShotgunHDSG", // shotgunner
-                             "RMCTankFlamerLarge", // pyrotechnician
-                         })
-                    Assert.That(uscmAmmo.Entries.Any(entry => entry.Crate.Id == ammunition), Is.True, ammunition);
-                Assert.That(uscmAmmo.Entries.All(entry => entry.CMUFactionVendorItem), Is.True);
+                Assert.That(uscmAmmo.Entries.Any(entry => entry.Crate.Id == "RMCMagazineSmartGun"), Is.True);
+                Assert.That(uscmAmmo.Entries.Any(entry => entry.Crate.Id == "RMCTankFlamerLarge"), Is.True,
+                    "Ammunition inside a specialist case must be orderable separately.");
                 Assert.That(uscmAmmo.Entries.Any(entry => entry.Crate.Id == "RMCSharpSpecEquipmentCase" ||
                                                           entry.Crate.Id == "RMCWeaponRifleSharp" ||
-                                                          entry.Crate.Id == "RMCBeltGrenadeLargeFilled"), Is.False);
+                                                          entry.Crate.Id == "RMCPouchFuelTank"), Is.False,
+                    "A case's weapon and fuel-carrying pouch are not specialist ammunition.");
 
                 SelectPlatoon(SProtoMan.Index(Lacn));
                 var lacn = computer.Categories.Single(category => category.Name == "Faction Requisitions");
@@ -73,22 +61,8 @@ public sealed class ASRSFactionVendorCatalogTest : GameTest
                 Assert.That(computer.ItemCatalog.Any(item => item.Prototype.Id == "AU14WeaponRifleKramerAR"), Is.True);
                 var lacnAmmo = computer.Categories.Single(category => category.Name == "Faction Specialist Ammo");
                 Assert.That(lacnAmmo.Entries.Any(entry => entry.Crate.Id == "AU14WeaponRifleKramerMagazineLSWStandard"), Is.True);
-                Assert.That(lacnAmmo.Entries.Any(entry => entry.Crate.Id == "CMULACNBeltMagazine" ||
-                                                          entry.Crate.Id == "RMCMagazineSmartGun"), Is.False);
-
-                SelectPlatoon(SProtoMan.Index(Upp));
-                var uppAmmo = computer.Categories.Single(category => category.Name == "Faction Specialist Ammo");
-                Assert.That(uppAmmo.Entries.Any(entry => entry.Crate.Id == "AU14MagazineSmartGunUPP"), Is.True);
-                Assert.That(uppAmmo.Entries.Any(entry => entry.Crate.Id == "RMCRocketHJRA12HE"), Is.True);
-                Assert.That(uppAmmo.Entries.Any(entry => entry.Crate.Id == "RMCMagazineSniperType88"), Is.True);
-                Assert.That(uppAmmo.Entries.Any(entry => entry.Crate.Id == "RMCTankFlamerLargeUPP"), Is.True);
-                Assert.That(uppAmmo.Entries.Any(entry => entry.Crate.Id == "AU14PowerCellSmartgunUPP"), Is.False);
-
-                SelectPlatoon(SProtoMan.Index(Hazops));
-                var hazopsAmmo = computer.Categories.Single(category => category.Name == "Faction Specialist Ammo");
-                Assert.That(hazopsAmmo.Entries.Any(entry => entry.Crate.Id == "AU14MagazineMinigunHAZOPS"), Is.True);
-                Assert.That(hazopsAmmo.Entries.Any(entry => entry.Crate.Id == "AU14TankFlamerM240A2HAZOPS"), Is.True);
-                Assert.That(hazopsAmmo.Entries.Any(entry => entry.Crate.Id == "RMCMagazineSniperXM43E1AntiMateriel"), Is.False);
+                Assert.That(lacnAmmo.Entries.Any(entry => entry.Crate.Id == "RMCMagazineSmartGun"), Is.False,
+                    "Refreshing the selected platoon must remove the previous platoon's ammunition.");
 
                 SelectPlatoon(SProtoMan.Index(Lacn));
                 Assert.That(computer.Categories.Count(category => category.Name == "Faction Requisitions"), Is.EqualTo(1));

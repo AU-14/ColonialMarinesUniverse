@@ -4,6 +4,9 @@
   name: hunting bracer
   description: A heavy wrist computer packed with alien hunting tools.
   components:
+  - type: GuideHelp
+    guides:
+    - AU14YautjaHonorCode
   - type: Insulated
     coefficient: 0
   - type: Sprite

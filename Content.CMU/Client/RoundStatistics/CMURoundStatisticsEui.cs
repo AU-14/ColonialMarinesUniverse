@@ -16,7 +16,8 @@ public sealed class CMURoundStatisticsEui : BaseEui
 
         _window = new CMURoundStatisticsWindow();
         _window.OnRefresh += OnRefresh;
-        _window.OnPeriodChanged += OnPeriodChanged;
+        _window.OnQuery += OnQuery;
+        _window.OnClose += OnWindowClosed;
         _window.OpenCentered();
     }
 
@@ -27,7 +28,8 @@ public sealed class CMURoundStatisticsEui : BaseEui
         if (_window != null)
         {
             _window.OnRefresh -= OnRefresh;
-            _window.OnPeriodChanged -= OnPeriodChanged;
+            _window.OnQuery -= OnQuery;
+            _window.OnClose -= OnWindowClosed;
         }
 
         _window?.Close();
@@ -39,7 +41,7 @@ public sealed class CMURoundStatisticsEui : BaseEui
         base.HandleState(state);
 
         if (state is CMURoundStatisticsEuiState s)
-            _window?.UpdateDashboard(s.Dashboard, s.Period);
+            _window?.UpdateDashboard(s.Dashboard, s.Loading, s.Failed);
     }
 
     private void OnRefresh()
@@ -47,8 +49,7 @@ public sealed class CMURoundStatisticsEui : BaseEui
         SendMessage(new CMURoundStatisticsRefreshMsg());
     }
 
-    private void OnPeriodChanged(CMURoundStatisticsPeriod period)
-    {
-        SendMessage(new CMURoundStatisticsPeriodMsg(period));
-    }
+    private void OnQuery(CMURoundStatisticsQuery query) => SendMessage(new CMURoundStatisticsQueryMsg(query));
+
+    private void OnWindowClosed() => SendMessage(new CloseEuiMessage());
 }

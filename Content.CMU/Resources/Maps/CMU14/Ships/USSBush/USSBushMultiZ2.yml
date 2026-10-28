@@ -4551,6 +4551,20 @@ entities:
     - type: Transform
       parent: 1
       pos: 18.5,16.5
+- proto: CMUAirtightSeal
+  entities:
+  - uid: 3075
+    components:
+    - type: Transform
+      parent: 1
+      pos: 30.5,12.5
+      anchored: True
+  - uid: 3076
+    components:
+    - type: Transform
+      parent: 1
+      pos: 31.5,12.5
+      anchored: True
 - proto: CMUCallsignConsoleGovfor
   entities:
   - uid: 139

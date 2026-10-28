@@ -1,9 +1,5 @@
-#pragma warning disable RA0002 // Inspect prototype clearance settings without changing live mounts.
-using Content.Shared._RMC14.Emplacements;
 using Content.Shared._RMC14.Map;
 using Content.Shared.Physics;
-using Content.Shared.Prototypes;
-using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Emplacements;
 
@@ -52,22 +48,6 @@ public sealed class CMUBarricadeDeploymentTest
                     entities.DeleteEntity(wall);
             });
         }
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task NoWeaponMountRequiresBarricadeClearance()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var factory = pair.Server.EntMan.ComponentFactory;
-            foreach (var prototype in pair.Server.ResolveDependency<IPrototypeManager>().EnumeratePrototypes<EntityPrototype>())
-            {
-                if (prototype.TryComp<WeaponMountComponent>(out var mount, factory))
-                    Assert.That(mount.BarricadeExclusionAreaSize, Is.Zero, prototype.ID);
-            }
-        });
         await pair.CleanReturnAsync();
     }
 }

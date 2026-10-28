@@ -29,7 +29,6 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.CCVar;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.util;
-using Content.Shared._RMC14.Vendors; // CMU14
 using Content.Shared.Cargo.Components;
 using Content.Shared.Chasm;
 using Content.Shared.Chat;
@@ -39,9 +38,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Stacks;
-using Content.Shared.Storage.Components; // CMU14
 using Content.Shared.UserInterface;
-using Content.Shared.Weapons.Ranged.Components; // CMU14
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
@@ -241,197 +238,6 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         Dirty(consoleUid, comp);
         Log.Debug($"[Requisitions] Applied catalog {catalogProtoId} to console {consoleUid}");
     }
-
-    // CMU14 begin: expose the selected platoon's requisitions vendor inventory through its ASRS.
-    private void AppendFactionVendorGear(EntityUid consoleUid, RequisitionsComputerComponent comp)
-    {
-        var platoons = EntityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
-        var platoon = comp.Faction switch
-        {
-            "govfor" => platoons.SelectedGovforPlatoon,
-            "opfor" => platoons.SelectedOpforPlatoon,
-            _ => null,
-        };
-        if (platoon == null)
-            return;
-
-        var sources = new List<RequisitionsPriceSource>();
-        foreach (var category in comp.Categories)
-        foreach (var order in category.Entries)
-        {
-            if (TryGetDeterministicManifest(order, out var manifest))
-                sources.Add(new RequisitionsPriceSource(order.Cost, manifest));
-        }
-
-        var knownPrices = RequisitionsPriceCalculator.Calculate(sources);
-        var comparablePrices = new Dictionary<string, List<int>>(StringComparer.OrdinalIgnoreCase);
-        foreach (var category in comp.Categories)
-        {
-            var prices = new List<int>();
-            foreach (var order in category.Entries)
-            {
-                if (!TryGetDeterministicManifest(order, out var manifest))
-                    continue;
-                foreach (var item in manifest.Keys)
-                {
-                    if (knownPrices.TryGetValue(item, out var price))
-                        prices.Add(price);
-                }
-            }
-
-            if (prices.Count > 0)
-                comparablePrices[category.Name] = prices;
-        }
-        var seen = new HashSet<EntProtoId>();
-        var categoryEntries = new List<RequisitionsEntry>();
-        foreach (var markerClass in new[] { PlatoonMarkerClass.ReqVend, PlatoonMarkerClass.ReqEquipment })
-        {
-            if (!platoons.TryResolvePlatoonVendor(platoon, markerClass, out var vendorId) ||
-                !_prototypeManager.TryIndex<EntityPrototype>(vendorId, out var vendor) ||
-                !vendor.TryComp<CMAutomatedVendorComponent>(
-                    CompName.Get<CMAutomatedVendorComponent>(EntityManager.ComponentFactory), out var stock))
-                continue;
-
-            foreach (var section in stock.Sections)
-            foreach (var entry in section.Entries)
-            {
-                if (!seen.Add(entry.Id) || !_prototypeManager.TryIndex<EntityPrototype>(entry.Id, out var itemPrototype))
-                    continue;
-
-                var price = knownPrices.TryGetValue(entry.Id, out var existing)
-                    ? existing
-                    : EstimateVendorItemCost(section.Name, entry.Points, comparablePrices);
-                categoryEntries.Add(new RequisitionsEntry
-                {
-                    Name = itemPrototype.Name,
-                    Crate = entry.Id,
-                    Cost = price,
-                    CMUFactionVendorItem = true,
-                });
-            }
-        }
-
-        if (categoryEntries.Count > 0)
-        {
-            comp.Categories.Add(new RequisitionsCategory
-            {
-                Name = "Faction Requisitions",
-                Entries = categoryEntries,
-            });
-        }
-
-        // CMU14: gunner racks list ammunition directly; specialist racks issue cases.
-        // Use the selected platoon's case contents so each specialist class receives
-        // only its own ammunition, without also selling the case or its weapon.
-        var ammoSeen = new HashSet<EntProtoId>();
-        var specialistAmmo = new List<RequisitionsEntry>();
-        foreach (var markerClass in new[] { PlatoonMarkerClass.Arifleman, PlatoonMarkerClass.SWeapons })
-        {
-            if (!platoons.TryResolvePlatoonVendor(platoon, markerClass, out var vendorId) ||
-                !_prototypeManager.TryIndex<EntityPrototype>(vendorId, out var vendor) ||
-                !vendor.TryComp<CMAutomatedVendorComponent>(
-                    CompName.Get<CMAutomatedVendorComponent>(EntityManager.ComponentFactory), out var stock))
-                continue;
-
-            foreach (var section in stock.Sections)
-            foreach (var entry in section.Entries)
-            {
-                AddSpecialistAmmo(entry.Id, section.Name);
-                if (markerClass != PlatoonMarkerClass.SWeapons ||
-                    !_prototypeManager.TryIndex<EntityPrototype>(entry.Id, out var casePrototype) ||
-                    !casePrototype.TryComp<StorageFillComponent>(
-                        CompName.Get<StorageFillComponent>(EntityManager.ComponentFactory), out var fill))
-                    continue;
-
-                foreach (var content in fill.Contents)
-                {
-                    if (content.PrototypeId is { } ammoId)
-                        AddSpecialistAmmo(ammoId, "Specialist Ammo");
-                }
-            }
-        }
-
-        if (specialistAmmo.Count > 0)
-        {
-            comp.Categories.Add(new RequisitionsCategory
-            {
-                Name = "Faction Specialist Ammo",
-                Entries = specialistAmmo,
-            });
-        }
-
-        Dirty(consoleUid, comp);
-
-        void AddSpecialistAmmo(EntProtoId id, string section)
-        {
-            if (!_prototypeManager.TryIndex<EntityPrototype>(id, out var prototype) ||
-                !IsSpecialistAmmunition(id, prototype) ||
-                !ammoSeen.Add(id))
-                return;
-
-            var price = knownPrices.TryGetValue(id, out var existing)
-                ? existing
-                : EstimateVendorItemCost(section, null, comparablePrices);
-            specialistAmmo.Add(new RequisitionsEntry
-            {
-                Name = prototype.Name,
-                Crate = id,
-                Cost = price,
-                CMUFactionVendorItem = true,
-            });
-        }
-    }
-
-    // CMU14: recognize ammunition, including specialist rockets, grenades, shotgun
-    // boxes and fuel tanks, while excluding filled belts, pouches and weapons.
-    private bool IsSpecialistAmmunition(EntProtoId id, EntityPrototype prototype)
-    {
-        var name = id.Id;
-        if (name.Contains("Magazine", StringComparison.OrdinalIgnoreCase) &&
-            prototype.TryComp<BallisticAmmoProviderComponent>(
-                CompName.Get<BallisticAmmoProviderComponent>(EntityManager.ComponentFactory), out _))
-            return true;
-
-        return name.Contains("Rocket", StringComparison.OrdinalIgnoreCase) ||
-               name.Contains("TankFlamer", StringComparison.OrdinalIgnoreCase) ||
-               name.Contains("FuelTank", StringComparison.OrdinalIgnoreCase) ||
-               name.Contains("BoxShotgun", StringComparison.OrdinalIgnoreCase) ||
-               name.Contains("BoxAGM", StringComparison.OrdinalIgnoreCase) ||
-               name.Contains("PacketGrenade", StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static int EstimateVendorItemCost(
-        string section,
-        int? vendorPoints,
-        Dictionary<string, List<int>> comparablePrices)
-    {
-        var name = section.ToLowerInvariant();
-        var category = name.Contains("ammun") || name.Contains("munition") || name.Contains("magazine") || name.Contains("ammo") ? "Ammo"
-            : name.Contains("weapon") || name.Contains("firearm") || name.Contains("primar") || name.Contains("secondar") ? "Weapons"
-            : name.Contains("explosive") || name.Contains("mine") ? "Explosives"
-            : name.Contains("material") ? "Materials"
-            : name.Contains("tool") || name.Contains("engineering") ? "Engineering"
-            : "Gear";
-        var fallback = category switch
-        {
-            "Weapons" => 600,
-            "Ammo" => 150,
-            "Explosives" => 350,
-            "Engineering" => 300,
-            "Materials" => 200,
-            _ => 250,
-        };
-        var comparable = fallback;
-        if (comparablePrices.TryGetValue(category, out var candidates) && candidates.Count > 0)
-        {
-            candidates.Sort();
-            comparable = candidates[candidates.Count / 2];
-        }
-
-        var rarity = name.Contains("special") || name.Contains("heavy") ? 2 : 1;
-        return Math.Max(comparable * rarity, (vendorPoints ?? 0) * 100);
-    }
-    // CMU14 end
 
     private void OnComputerBeforeActivatableUIOpen(Entity<RequisitionsComputerComponent> computer, ref BeforeActivatableUIOpenEvent args)
     {
@@ -903,6 +709,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         var time = _timing.CurTime;
         var updateUI = false;
         _stockUiUpdates.Clear();
+        int? groundXenos = null; // CMU14: share the count only among pools due in this update.
         var accounts = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (accounts.MoveNext(out var uid, out var account))
         {
@@ -915,7 +722,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             //     updateUI = true;
             // }
 
-            var xenos = _xeno.GetGroundXenosAlive();
+            // CMU14: count lazily below, after checking the pool deadline.
+            // var xenos = _xeno.GetGroundXenosAlive();
             var randomCrates = CollectionsMarshal.AsSpan(account.RandomCrates);
             foreach (ref var pool in randomCrates)
             {
@@ -925,7 +733,10 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 if (pool.Next >= time)
                     continue;
 
-                var crates = Math.Max(0, Math.Sqrt((float)xenos / _freeCratesXenoDivider));
+                // CMU14 Begin: idle pools need no population scan.
+                groundXenos ??= _xeno.GetGroundXenosAlive();
+                var crates = Math.Max(0, Math.Sqrt((float) groundXenos.Value / _freeCratesXenoDivider));
+                // CMU14 End
 
                 if (crates < pool.Minimum && pool.Given < pool.MinimumFor)
                     crates = pool.Minimum;
@@ -1179,7 +990,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             }
         }
 
-        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate)
+        // CMU14: stock replenishes above even when nobody is watching its countdown.
+        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate &&
+            _itemizedUi.IsUiOpen(computer.Owner, RequisitionsUIKey.Key))
         {
             computer.Comp.NextStockUiUpdate = time + TimeSpan.FromSeconds(1);
             updateUi = true;

@@ -703,7 +703,7 @@
         amount: 5
     - name: Backpack
       entries:
-      - id: RMCBackpackRTOPMC
+      - id: ANPRC117GRadioIssued
         amount: 5
     - name: Pouches
       entries:

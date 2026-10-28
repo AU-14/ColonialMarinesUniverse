@@ -1,0 +1,19 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "fuel_enhancer_mohawk",
+            "directions": 1
+        },
+        {
+            "name": "cooling_system_mohawk",
+            "directions": 1
+        }
+    ],
+    "copyright": "CM-SS13 contributors: thwomper, PoltavskaPraca, Steelpoint. https://github.com/cmss13-devs/cmss13/pull/12866; 4b1f9b6bcd3c456b2adca874ff89d0a7fd5ce012."
+}

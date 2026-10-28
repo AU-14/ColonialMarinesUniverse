@@ -1467,7 +1467,7 @@ namespace Content.Shared.Preferences
                 _ => BuildType.Average // Invalid enum values.
             };
 
-            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, sex);
+            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, sex); // CMU14: validate markings against the normalized sex.
             appearance = CMUHumanBodyType.Apply(appearance, Species, sex, build); // CMU14: migrate and validate saved character builds.
 
             var prefsUnavailableMode = PreferenceUnavailable switch

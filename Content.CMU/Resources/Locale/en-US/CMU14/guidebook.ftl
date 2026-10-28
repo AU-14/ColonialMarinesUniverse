@@ -11,6 +11,22 @@ cmu-guide-entry-rules-force-on-force = Force on Force Rules
 cmu-guide-entry-rules-distress-signal = Distress Signal Rules
 cmu-guide-entry-rules-colony-fall = Colony Fall Rules
 cmu-guide-entry-rules-prometheus = Prometheus Rules
+cmu-guide-entry-yautja-honor-code = Yautja Honor Code
+cmu-guide-entry-yautja-honor-code-prey = Prey
+cmu-guide-entry-yautja-honor-code-prey-caveats = Prey Caveats
+cmu-guide-entry-yautja-honor-code-trophies = Trophies and Prey Welfare
+cmu-guide-entry-yautja-honor-code-weapons = Weapons and Tools
+cmu-guide-entry-yautja-honor-code-hunting-grounds = The Hunting Grounds
+cmu-guide-entry-yautja-honor-code-preserve = The Hunting Preserve
+cmu-guide-entry-yautja-honor-code-blooded = Other Blooded
+cmu-guide-entry-yautja-honor-code-youngbloods = Youngbloods
+cmu-guide-entry-yautja-honor-code-thralls = Thralls
+cmu-guide-entry-yautja-honor-code-gear-recovery = Gear Recovery
+cmu-guide-entry-yautja-honor-code-lodges = Lodges
+cmu-guide-entry-yautja-honor-code-hellhounds = Hellhounds
+cmu-guide-entry-yautja-honor-code-ancients = Ancient's Privilege
+cmu-guide-entry-yautja-honor-code-gamemodes = Game Modes
+cmu-guide-entry-yautja-honor-code-spirit = Spirit of the Whitelist
 
 # Standard Operating Procedure
 cmu-guide-entry-sop = Military Standard Operating Procedure

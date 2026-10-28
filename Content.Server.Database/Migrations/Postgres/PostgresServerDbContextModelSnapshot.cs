@@ -2468,6 +2468,13 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("description");
 
+                    // cmu edit start
+                    b.Property<string>("EliteNotes")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("elite_notes");
+                    // cmu edit end
+
                     b.Property<int>("Honor")
                         .HasColumnType("integer")
                         .HasColumnName("honor");
@@ -2477,11 +2484,52 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("name");
 
+                    // cmu edit start
+                    b.Property<string>("Notice")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("notice");
+
+                    b.Property<string>("Sigil")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("sigil");
+                    // cmu edit end
+
                     b.HasKey("Id")
                         .HasName("PK_yautja_clan");
 
                     b.ToTable("yautja_clan", (string)null);
                 });
+
+            // cmu edit start
+            modelBuilder.Entity("Content.Server.Database.YautjaClanPetition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("yautja_clan_petition_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClanId")
+                        .HasColumnType("integer")
+                        .HasColumnName("clan_id");
+
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_yautja_clan_petition");
+
+                    b.HasIndex("PlayerUserId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_yautja_clan_petition_player_user_id");
+
+                    b.ToTable("yautja_clan_petition", (string)null);
+                });
+            // cmu edit end
 
             modelBuilder.Entity("Content.Server.Database.YautjaClanMember", b =>
                 {

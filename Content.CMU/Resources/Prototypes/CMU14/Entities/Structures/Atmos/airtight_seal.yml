@@ -1,5 +1,5 @@
-# CMU14: Retain the legacy door-seal prototype for older maps and extensions.
-# Current CMU maps no longer place it.
+# Used by CMUWideAirtightSystem to fix the leaks on multi-tile entities (doors).
+# Engine airtightness only covers the anchored tile.
 - type: entity
   id: CMUAirtightSeal
   name: airtight seal

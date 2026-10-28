@@ -7,7 +7,7 @@
     mapId: au14sorokyne
     lorePrimer: AU14PrimerPlanetSorokyne
     allegiance: UPP
-    camouflage: Desert
+    camouflage: Jungle
     announcement: "Sorokyne Strata, a Union of Progressive Peoples research outpost in the Neroid Sector, has stopped responding. A response force has been dispatched to investigate."
     platoonsGovfor:
     - UPP
@@ -88,7 +88,7 @@
   - /Maps/CMU14/Planets/SorokyneStrata/sorokyne1.yml
   - /Maps/CMU14/Planets/SorokyneStrata/sorokyne2.yml
   minPlayers: 0
-  maxPlayers: 200
+  maxPlayers: 500
   maxRandomOffset: 0
   randomRotation: false
   stations:

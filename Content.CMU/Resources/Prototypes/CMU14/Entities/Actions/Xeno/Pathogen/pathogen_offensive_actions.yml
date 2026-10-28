@@ -928,7 +928,7 @@
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenImpale
   name: Impale (80)
-  description: Impales an adjacent enemy with your tail. Hits twice on a marked target and removes the mark. Pierces armor.
+  description: Impales an adjacent enemy with your tail. Penetrates armor.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -950,6 +950,12 @@
     cost: 80
   - type: RMCCooldownOnMiss
     missCooldown: 0.7
+
+- type: entity
+  parent: CMU14ActionXenoPathogenImpale
+  id: CMU14ActionXenoPathogenImpaleBloodletter  
+  name: Open Vein (80)
+  description: Strike directly at a vulnerable vein, causing major blood loss. Penetrates armor.
 
 - type: entity
   parent: ActionXenoBase
@@ -1013,6 +1019,12 @@
   - type: ActionBlockIfResting
   - type: XenoOffensiveAction
 
+- type: entity  
+  parent: CMU14ActionXenoPathogenHeadbite  
+  id: CMU14ActionXenoPathogenHeadbiteBloodletter  
+  name: Exsanguinate
+  description: Execute a critically injured target, causing massive blood loss and healing you for 150 HP.
+
 - type: entity
   id: CMU14ActionXenoPathogenDislocate
   parent: ActionXenoBase
@@ -1064,7 +1076,7 @@
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenScissorCut
   name: Savage (25)
-  description: Cuts enemies and fences in a straight line. If Super-Empowered, slows enemies hit too.
+  description: Cuts enemies in an area in front of you.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -1082,3 +1094,51 @@
   - type: ActionBlockIfResting
   - type: XenoActionPlasma
     cost: 25
+
+- type: entity
+  parent: CMU14ActionXenoPathogenScissorCut
+  id: CMU14ActionXenoPathogenScissorCutBloodletter
+  name: Ravage (25)
+  description: Cuts enemies in an area in front of you, causing slight blood loss. Also slows targets.
+- type: entity  
+  parent: ActionXenoBase  
+  id: CMU14ActionXenoPathogenGuardianSweep  
+  name: Tentacle Sweep  
+  description: Swing your tentacles in a wide arc, knocking enemies away and slowing them down. 
+  components:  
+  - type: Action  
+    itemIconStyle: NoItem
+    useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: tail_sweep
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction  
+    event: !type:XenoGuardianSweepActionEvent  
+  - type: ActionBlockIfResting  
+  - type: XenoActionPlasma  
+    cost: 50
+
+- type: entity  
+  id: CMU14ActionXenoPathogenGuardianFling
+  parent: ActionXenoBase  
+  name: Tentacle Slam
+  description: Smash a target with your tentacles and send them flying away. Also heals you.
+  components:  
+  - type: Action  
+    itemIconStyle: NoItem
+    useDelay: 7
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: fling
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction  
+    range: 2
+    deselectOnMiss: false  
+  - type: EntityTargetAction  
+    event: !type:XenoFlingActionEvent  
+    toggleOutline: false  
+  - type: XenoOffensiveAction  
+  - type: RMCDazeableAction

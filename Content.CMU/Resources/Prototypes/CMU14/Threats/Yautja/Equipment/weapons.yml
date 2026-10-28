@@ -1669,7 +1669,7 @@
   parent: ClothingBeltQuiver
   id: CMUYautjaQuiverStrap
   name: quiver strap
-  description: A strap that can hold a bow with a quiver for arrows.
+  description: A strap that holds up to eight bows and arrows in total, with room for one hunting bow and seven arrows.
   components:
   - type: Sprite
     sprite: CMU14/Yautja/quiver.rsi
@@ -1705,7 +1705,7 @@
       - CMUYautjaBow
   - type: LimitedStorage
     limits:
-    - popup: rmc-storage-limit-cant-fit
+    - popup: cmu-quiver-full
       count: 8
       whitelist:
         tags:

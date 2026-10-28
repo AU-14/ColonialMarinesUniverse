@@ -22,11 +22,11 @@ public sealed class CMUInternalBleedPainSystem : EntitySystem
     private static readonly TimeSpan MinInterval = TimeSpan.FromSeconds(45);
     private static readonly TimeSpan MaxInterval = TimeSpan.FromSeconds(95);
 
+    [Dependency] private AudioSystem _audio = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private AudioSystem _audio = default!;
 
     private readonly Dictionary<EntityUid, TimeSpan> _nextPain = new();
     private readonly Dictionary<EntityUid, TimeSpan> _nextCough = new();

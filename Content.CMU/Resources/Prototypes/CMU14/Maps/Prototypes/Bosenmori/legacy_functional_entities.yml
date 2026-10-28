@@ -176,13 +176,6 @@
     offset: 0.15625,0.40625
 
 - type: entity
-  parent: RMCVialBox
-  id: CMUBosenmoriExact2056adc5992958f8
-  components:
-  - type: Sprite
-    offset: 0,0.0625
-
-- type: entity
   parent: RMCPonchoDesert
   id: CMUBosenmoriExact2099bd5259c88ec6
   components:

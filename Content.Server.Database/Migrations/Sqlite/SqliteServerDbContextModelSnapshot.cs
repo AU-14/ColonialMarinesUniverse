@@ -2369,6 +2369,13 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("description");
 
+                    // cmu edit start
+                    b.Property<string>("EliteNotes")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("elite_notes");
+                    // cmu edit end
+
                     b.Property<int>("Honor")
                         .HasColumnType("INTEGER")
                         .HasColumnName("honor");
@@ -2378,11 +2385,50 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("name");
 
+                    // cmu edit start
+                    b.Property<string>("Notice")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("notice");
+
+                    b.Property<string>("Sigil")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("sigil");
+                    // cmu edit end
+
                     b.HasKey("Id")
                         .HasName("PK_yautja_clan");
 
                     b.ToTable("yautja_clan", (string)null);
                 });
+
+            // cmu edit start
+            modelBuilder.Entity("Content.Server.Database.YautjaClanPetition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("yautja_clan_petition_id");
+
+                    b.Property<int>("ClanId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("clan_id");
+
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_yautja_clan_petition");
+
+                    b.HasIndex("PlayerUserId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_yautja_clan_petition_player_user_id");
+
+                    b.ToTable("yautja_clan_petition", (string)null);
+                });
+            // cmu edit end
 
             modelBuilder.Entity("Content.Server.Database.YautjaClanMember", b =>
                 {

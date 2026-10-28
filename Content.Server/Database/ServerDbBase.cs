@@ -1187,26 +1187,24 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             await db.DbContext.SaveChangesAsync();
         }
 
-        // CMU14: retain the previous all-time dashboard query for existing callers.
-        public Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
-            int recentRounds,
+        // CMU14 method: scoped statistics and a paginated archive.
+        public async Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
+            CMURoundStatisticsQuery query,
             CancellationToken cancel = default)
-            => GetCMURoundStatisticsDashboardCore(recentRounds, null, cancel);
-
-        // CMU14: retain the exact filtered signature as well as the all-time overload.
-        public Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
-            int recentRounds,
-            DateTime from,
-            CancellationToken cancel = default)
-            => GetCMURoundStatisticsDashboardCore(recentRounds, from, cancel);
-
-        private async Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboardCore(
-            int recentRounds,
-            DateTime? from,
-            CancellationToken cancel)
         {
             await using var db = await GetDb();
 
+            var now = DateTime.UtcNow;
+            DateTime? from = query.Period switch
+            {
+                CMURoundStatisticsPeriod.OneWeek => now.AddDays(-7),
+                CMURoundStatisticsPeriod.TwoWeeks => now.AddDays(-14),
+                CMURoundStatisticsPeriod.ThreeMonths => now.AddMonths(-3),
+                CMURoundStatisticsPeriod.SixMonths => now.AddMonths(-6),
+                CMURoundStatisticsPeriod.OneYear => now.AddYears(-1),
+                CMURoundStatisticsPeriod.AllTime => null,
+                _ => now.AddMonths(-1),
+            };
             var outcomes = db.DbContext.CMURoundOutcomes.AsNoTracking();
             if (from is { } start)
                 outcomes = outcomes.Where(outcome => outcome.RecordedAt >= start);
@@ -1217,31 +1215,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 .Select(MakeCMURoundOutcomeRecord)
                 .ToList();
 
-            var modes = new List<CMURoundModeStatistics>
-            {
-                BuildModeStatistics(
-                    records,
-                    CMURoundStatisticsPreset.DistressSignal,
-                    "Distress Signal",
-                    "Xeno",
-                    "Govfor"),
-                BuildModeStatistics(
-                    records,
-                    CMURoundStatisticsPreset.Insurgency,
-                    "Insurgency",
-                    "Govfor",
-                    "CLF"),
-                BuildModeStatistics(
-                    records,
-                    CMURoundStatisticsPreset.ColonyFall,
-                    "Colony Fall",
-                    "Colonists",
-                    "Threat"),
-            };
-
-            return new CMURoundStatisticsDashboard(
-                modes,
-                records.Take(Math.Max(0, recentRounds)).ToList());
+            return BuildCMURoundStatisticsDashboard(records, query);
         }
 
         // CMU14 method: flat playtime rows for the cmuleaderboard panel
@@ -1519,13 +1493,18 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 : source.Trim();
         }
 
+        // CMU14 method: retain useful population detail on busy servers.
         private static List<CMURoundPlayerCountBandBreakdown> BuildPlayerCountBands(List<CMURoundOutcomeRecord> records)
         {
             return new List<CMURoundPlayerCountBandBreakdown>
             {
                 BuildPlayerCountBand(records, "0-59", 0, 59),
                 BuildPlayerCountBand(records, "60-99", 60, 99),
-                BuildPlayerCountBand(records, "100+", 100, int.MaxValue),
+                BuildPlayerCountBand(records, "100-149", 100, 149),
+                BuildPlayerCountBand(records, "150-199", 150, 199),
+                BuildPlayerCountBand(records, "200-249", 200, 249),
+                BuildPlayerCountBand(records, "250-299", 250, 299),
+                BuildPlayerCountBand(records, "300+", 300, int.MaxValue),
             }
                 .Where(band => band.Total > 0)
                 .ToList();
@@ -1559,6 +1538,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 CMURoundStatisticsPreset.DistressSignal => record.Winner == CMURoundStatisticsWinner.Xeno,
                 CMURoundStatisticsPreset.Insurgency => record.Winner == CMURoundStatisticsWinner.Govfor,
                 CMURoundStatisticsPreset.ColonyFall => record.Winner == CMURoundStatisticsWinner.Colonists,
+                CMURoundStatisticsPreset.ForceOnForce => record.Winner == CMURoundStatisticsWinner.Govfor, // CMU14
                 _ => false,
             };
         }
@@ -1570,6 +1550,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 CMURoundStatisticsPreset.DistressSignal => record.Winner == CMURoundStatisticsWinner.Govfor,
                 CMURoundStatisticsPreset.Insurgency => record.Winner == CMURoundStatisticsWinner.Clf,
                 CMURoundStatisticsPreset.ColonyFall => record.Winner == CMURoundStatisticsWinner.Threat,
+                CMURoundStatisticsPreset.ForceOnForce => record.Winner == CMURoundStatisticsWinner.Opfor, // CMU14
                 _ => false,
             };
         }

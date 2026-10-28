@@ -3,11 +3,7 @@
   parent: AU14EncryptionKey
   id: AU14EncryptionKeyGovfor # blank key, channel set by SquadSystem.cs
   name: GOVFOR encryption key
-  description: An encryption key automatically assigned a GOVFOR squad channel, with access to GOVFOR medical.
-  components:
-  - type: EncryptionKey
-    channels:
-    - radioGovforMedical
+  description: An encryption key used to communicate on the GOVFOR channel, it is automatically assigned the right channel.
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
@@ -78,8 +74,8 @@
   components:
   - type: EncryptionKey
     channels:
-    - radioGovforMedical
-    defaultChannel: radioGovforMedical
+    - CMURadioGovforMedical
+    defaultChannel: CMURadioGovforMedical
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
@@ -125,6 +121,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
     trackerModes:
@@ -146,6 +143,7 @@
     containers:
       key_slots: # give all usable keys for emergencies/promotions
       - AU14EncryptionKeyGovfor # empty key when taken out
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforCommand
       - AU14EncryptionKeyGovforBravo
       - AU14EncryptionKeyGovforCharlie
@@ -166,6 +164,7 @@
     containers:
       key_slots: # no command key, SLs talk to command through the RTO's manpack
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforJTAC
 
 - type: entity
@@ -178,6 +177,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforJTAC
       - AU14EncryptionKeyGovforIntel
 
@@ -191,6 +191,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforJTAC
 
 - type: entity
@@ -203,6 +204,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforIntel
 
 - type: entity
@@ -215,6 +217,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforJTAC
       - AU14EncryptionKeyGovforIntel
 
@@ -228,6 +231,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforCommandOnly
       - AU14EncryptionKeyGovforIntel
   - type: RMCStaticDefaultChannel
@@ -274,6 +278,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforCommand
 #     - AU14EncryptionKeyGovforCommandOnly
       - AU14EncryptionKeyGovforMILP
@@ -326,7 +331,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
-    - radioGovforMedical
+    - CMURadioGovforMedical
     - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP

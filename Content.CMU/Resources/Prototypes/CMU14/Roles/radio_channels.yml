@@ -55,8 +55,8 @@
   anchorGated: true
 
 - type: radioChannel
-  id: radioGovforMedical
-  name: chat-radio-govformedical
+  id: CMURadioGovforMedical
+  name: cmu-radio-govfor-medical
   keycode: "z"
   frequency: 259.6
   color: "#1b5e20"
@@ -155,8 +155,8 @@
   anchorGated: true
 
 - type: radioChannel
-  id: radioOpforMedical
-  name: chat-radio-opformedical
+  id: CMURadioOpforMedical
+  name: cmu-radio-opfor-medical
   keycode: "z"
   frequency: 147.8
   color: "#1b5e20"

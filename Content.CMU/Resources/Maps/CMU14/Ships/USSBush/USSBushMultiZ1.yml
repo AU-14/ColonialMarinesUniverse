@@ -15232,6 +15232,162 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: -9.5,-35.5
+- proto: CMUAirtightSeal
+  entities:
+  - uid: 770
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,-69.5
+      anchored: True
+  - uid: 1257
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-69.5
+      anchored: True
+  - uid: 1258
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-69.5
+      anchored: True
+  - uid: 1301
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-69.5
+      anchored: True
+  - uid: 1344
+    components:
+    - type: Transform
+      parent: 1
+      pos: -23.5,17.5
+      anchored: True
+  - uid: 1405
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: -16.5,-52.5
+      anchored: True
+  - uid: 1407
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: 14.5,-52.5
+      anchored: True
+  - uid: 1408
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: 15.5,-19.5
+      anchored: True
+  - uid: 1424
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: -16.5,-19.5
+      anchored: True
+  - uid: 10017
+    components:
+    - type: Transform
+      parent: 1
+      pos: -22.5,-21.5
+      anchored: True
+  - uid: 10018
+    components:
+    - type: Transform
+      parent: 1
+      pos: -21.5,-21.5
+      anchored: True
+  - uid: 10019
+    components:
+    - type: Transform
+      parent: 1
+      pos: -20.5,-21.5
+      anchored: True
+  - uid: 10020
+    components:
+    - type: Transform
+      parent: 1
+      pos: -19.5,-21.5
+      anchored: True
+  - uid: 10021
+    components:
+    - type: Transform
+      parent: 1
+      pos: 18.5,-21.5
+      anchored: True
+  - uid: 10022
+    components:
+    - type: Transform
+      parent: 1
+      pos: 19.5,-21.5
+      anchored: True
+  - uid: 10023
+    components:
+    - type: Transform
+      parent: 1
+      pos: 20.5,-21.5
+      anchored: True
+  - uid: 10024
+    components:
+    - type: Transform
+      parent: 1
+      pos: 21.5,-21.5
+      anchored: True
+  - uid: 10025
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,41.5
+      anchored: True
+  - uid: 10026
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,41.5
+      anchored: True
+  - uid: 10027
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,41.5
+      anchored: True
+  - uid: 10028
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,42.5
+      anchored: True
+  - uid: 10029
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,43.5
+      anchored: True
+  - uid: 10030
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,41.5
+      anchored: True
+  - uid: 10031
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,42.5
+      anchored: True
+  - uid: 10032
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,43.5
+      anchored: True
 - proto: CMUArmoryLockerRedM890FilledCommand
   entities:
   - uid: 1239
@@ -15364,36 +15520,28 @@ entities:
     - type: Transform
       parent: 1
       pos: -21.5,53.5
-- proto: RMCVialBox
+- proto: CMUBosenmoriExact2056adc5992958f8
   entities:
   - uid: 1501
     components:
     - type: Transform
       parent: 1
       pos: 21.512259,38.459873
-    - type: Sprite
-      offset: 0,0.0625
   - uid: 1503
     components:
     - type: Transform
       parent: 1
       pos: 21.512259,38.459873
-    - type: Sprite
-      offset: 0,0.0625
   - uid: 1507
     components:
     - type: Transform
       parent: 1
       pos: 21.512259,38.459873
-    - type: Sprite
-      offset: 0,0.0625
   - uid: 1607
     components:
     - type: Transform
       parent: 1
       pos: 21.512259,38.459873
-    - type: Sprite
-      offset: 0,0.0625
 - proto: CMUCanisterOxygen
   entities:
   - uid: 271
@@ -25197,7 +25345,7 @@ entities:
       pos: -1.5,-37.5
     - type: Fixtures
       fixtures: {}
-- proto: CMVendorChemistry
+- proto: CMUVendorChemistryGovfor
   entities:
   - uid: 1982
     components:
@@ -40539,7 +40687,7 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: -8.5,46.5
-- proto: RMCMonitorCameraAlmayer
+- proto: CMUMonitorCameraBush
   entities:
   - uid: 4535
     components:

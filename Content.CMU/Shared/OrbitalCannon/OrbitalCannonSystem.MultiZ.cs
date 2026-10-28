@@ -7,6 +7,8 @@ namespace Content.Shared._RMC14.OrbitalCannon;
 
 public sealed partial class OrbitalCannonSystem
 {
+    [Dependency] private SharedMapSystem _cmuOrbitalMap = default!;
+
     // Preserve the previous API for callers that select the ordnance permission gate.
     public void SpawnExplosion(EntProtoId prototype, EntityCoordinates coordinates, CMUTopDownOrdnanceKind kind)
     {
@@ -47,7 +49,11 @@ public sealed partial class OrbitalCannonSystem
 
         foreach (var layer in GetOrbitalExplosionLayers(impact, multiZ))
         {
-            var coordinates = _transform.ToCoordinates(layer);
+            // Area permissions and tile fire use grid-relative coordinates. A Z-level
+            // map can contain a separate grid rather than being a grid itself.
+            var coordinates = _cmuOrbitalMap.TryFindGridAt(layer, out var grid, out _)
+                ? _transform.ToCoordinates(grid, layer)
+                : _transform.ToCoordinates(layer);
             if (step.CheckProtectionPer && kind != CMUTopDownOrdnanceKind.Scuttle &&
                 !(kind == CMUTopDownOrdnanceKind.Mortar
                     ? _area.CanMortarFire(coordinates)
