@@ -319,11 +319,18 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         if (addLog) // dont log if already created a separate, more detailed, log.
             _adminLogger.Add(LogType.Explosion, LogImpact.High, $"Explosion ({typeId}) spawned at {epicenter:coordinates} with intensity {totalIntensity} slope {slope}");
 
+        // CMU14: snapshot the firing vehicle before the projectile is deleted.
+        var sourceVehicle = GetCMUProjectileVehicle(cause);
+
         // try to combine explosions on the same tile if they are the same type
         foreach (var queued in _queuedExplosions)
         {
             // ignore different types or those on different maps
             if (queued.Proto.ID != type.ID || queued.Epicenter.MapId != epicenter.MapId)
+                continue;
+
+            // CMU14: merging different shooters would also merge their crew-damage exemptions.
+            if (queued.SourceVehicle != sourceVehicle)
                 continue;
 
             var dst2 = queued.Proto.MaxCombineDistance * queued.Proto.MaxCombineDistance;
@@ -345,7 +352,8 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             TileBreakScale = tileBreakScale,
             MaxTileBreak = maxTileBreak,
             CanCreateVacuum = canCreateVacuum,
-            Cause = cause
+            Cause = cause,
+            SourceVehicle = sourceVehicle, // CMU14
         };
         _explosionQueue.Enqueue(boom);
         _queuedExplosions.Add(boom);
@@ -437,6 +445,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             EntityManager,
             visualEnt,
             queued.Cause,
+            queued.SourceVehicle, // CMU14
             _map,
             _damageableSystem,
             _tileHistoryQuery);
