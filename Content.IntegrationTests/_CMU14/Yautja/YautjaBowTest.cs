@@ -10207,8 +10207,8 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/weapon/harpoon/yautja flags_item omits ITEM_PREDATOR.");
                     Assert.That(entMan.HasComponent<ClothingComponent>(harpoon), Is.False,
                         "CMSS13 /obj/item/weapon/harpoon/yautja does not set flags_equip_slot.");
-                    Assert.That(entMan.HasComponent<LandAtCursorComponent>(harpoon), Is.False,
-                        "CMSS13 /obj/item/weapon/harpoon/yautja does not set throw_speed = SPEED_VERY_FAST.");
+                    Assert.That(entMan.HasComponent<LandAtCursorComponent>(harpoon), Is.True,
+                        "CMSS13's thrown harpoon hits whatever is in its path. Without LandAtCursor a hand throw lands short and slides through the target.");
                     Assert.That(entMan.HasComponent<DisarmMalusComponent>(harpoon), Is.False,
                         "CMSS13 /obj/item/weapon/harpoon/yautja does not inherit predator weapon disarm resistance.");
                 });
@@ -10260,7 +10260,8 @@ public sealed class YautjaBowTest
                 var itemRange = entMan.GetComponent<ItemThrowRangeComponent>(harpoon).Range;
                 var thrown = entMan.GetComponent<ThrownItemComponent>(harpoon);
                 var flightTime = thrown.LandTime!.Value - thrown.ThrownTime!.Value;
-                var expectedFlightTime = TimeSpan.FromSeconds(itemRange / hunterHands.BaseThrowspeed * ThrowingSystem.FlyTimePercentage);
+                // LandAtCursor, so the full flight with no friction trim
+                var expectedFlightTime = TimeSpan.FromSeconds(itemRange / hunterHands.BaseThrowspeed);
 
                 Assert.That(flightTime.TotalSeconds,
                     Is.EqualTo(expectedFlightTime.TotalSeconds).Within(0.001),

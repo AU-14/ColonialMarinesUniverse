@@ -69,6 +69,9 @@
         Piercing: 30
   - type: ItemThrowRange
     range: 14
+  # without this a ctrl+q throw touches down short of the cursor and slides the rest, and a sliding harpoon goes
+  # straight through whoever it was aimed at. the other throwing weapons all have it
+  - type: LandAtCursor
   - type: RemoveComponents
     components:
     - type: YautjaTechItem
