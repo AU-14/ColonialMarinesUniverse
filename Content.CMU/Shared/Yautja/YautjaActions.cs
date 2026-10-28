@@ -18,13 +18,13 @@ public sealed partial class YautjaMarkForHuntActionEvent : EntityTargetActionEve
 
 public sealed partial class YautjaOpenBracerMenuActionEvent : InstantActionEvent;
 
-public sealed partial class YautjaRecallActionEvent : InstantActionEvent;
-
 public sealed partial class YautjaCallDiscActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaCallCombiActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaButcherActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaLeapActionEvent : WorldTargetActionEvent;
 
 [Serializable, NetSerializable]
 public sealed record YautjaButcherTargetSelectedEvent(NetEntity User, NetEntity Target);

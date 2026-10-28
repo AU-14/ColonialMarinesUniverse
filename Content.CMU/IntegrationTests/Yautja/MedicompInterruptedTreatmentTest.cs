@@ -91,8 +91,6 @@ public sealed class MedicompInterruptedTreatmentTest : GameTest
         void StartStage(string prototype, int step)
         {
             tool = SEntMan.SpawnEntity(prototype, SEntMan.GetComponent<TransformComponent>(hunter).Coordinates);
-            if (SEntMan.TryGetComponent<YautjaRecallableComponent>(tool, out var recall))
-                recall.YautjaOwner = hunter;
             Assert.That(SEntMan.System<SharedHandsSystem>().TryPickupAnyHand(hunter, tool), Is.True);
             Assert.That(SEntMan.System<CMUSurgeryFlowSystem>().TryArmExactStep(hunter, hunter, torso,
                 "CMUSurgeryMcompWounds", step, BodyPartType.Torso, BodyPartSymmetry.None), Is.Not.Null);

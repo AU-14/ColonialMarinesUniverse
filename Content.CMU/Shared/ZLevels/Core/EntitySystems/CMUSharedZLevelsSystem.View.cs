@@ -119,6 +119,27 @@ public abstract partial class CMUSharedZLevelsSystem
         return true;
     }
 
+    /// <summary>
+    /// CMU14: ends the whole look up cycle - full mode and the faint upper ghost - for a viewer whose level is changing
+    /// under it. The faint ghost is otherwise a latched preference the renderer suppresses under a ceiling, but a
+    /// crossing that the player did not ask for (a Yautja leap aimed with look up, arriving on another deck) must not
+    /// leave the upper level ghosted over the level they end up on.
+    /// </summary>
+    public bool EndLookUpCycle(EntityUid uid)
+    {
+        if (!TryComp<CMUZLevelViewerComponent>(uid, out var viewer) ||
+            (!viewer.LookUp && !viewer.FaintUp))
+        {
+            return false;
+        }
+
+        viewer.LookUp = false;
+        viewer.FaintUp = false;
+        DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.LookUp));
+        DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.FaintUp));
+        return true;
+    }
+
     public Entity<CMUZLevelViewerComponent> EnsureZLevelViewer(EntityUid uid)
     {
         return (uid, EnsureComp<CMUZLevelViewerComponent>(uid));

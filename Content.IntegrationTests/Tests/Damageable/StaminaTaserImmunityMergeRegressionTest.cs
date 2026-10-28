@@ -93,12 +93,26 @@ public sealed class StaminaTaserImmunityMergeRegressionTest : GameTest
                     "Taser-tagged melee stamina damage is skipped for Yautja");
                 AssertStamina(hitNormal, 10, true, true,
                     "the same Taser-tagged melee source retains the vanilla path for ordinary targets");
-                AssertStamina(hitPlain, 10, true, false,
-                    "untagged melee stamina damage still accumulates without slowing Yautja");
+                AssertStamina(hitPlain, 10, true, true,
+                    "untagged melee stamina damage accumulates and takes the vanilla stamina-low status, because a " +
+                    "Yautja is no longer SlowImmune (CM-SS13 xeno slows reach them; the real guarantee is no stamina)");
                 AssertStamina(collideImmune, 0, false, false,
                     "Taser-tagged collide stamina damage is skipped for Yautja");
-                AssertStamina(collidePlain, 10, true, false,
-                    "untagged collide stamina damage still accumulates without slowing Yautja");
+
+                // CM-SS13 gives Yautja no stamina system at all, which is why the forced Stamina above is only a
+                // harness: a spawned hunter never accumulates stamina, so the slowdown can never apply in play.
+                var realHunter = SEntMan.Spawn("CMUMobYautja");
+                try
+                {
+                    Assert.That(SEntMan.HasComponent<StaminaComponent>(realHunter), Is.False,
+                        "a spawned Yautja has no Stamina component, so stamina slowdown cannot apply");
+                }
+                finally
+                {
+                    SEntMan.DeleteEntity(realHunter);
+                }
+                AssertStamina(collidePlain, 10, true, true,
+                    "untagged collide stamina damage accumulates and takes the vanilla stamina-low status");
             }
             finally
             {

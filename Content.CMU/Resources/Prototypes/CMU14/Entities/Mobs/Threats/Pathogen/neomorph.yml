@@ -5,6 +5,11 @@
   name: Neomorph
   description: A sleek, fast alien with sharp claws.
   components:
+  - type: FiremanCarriable
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GhostRole
     name: cmu-job-name-pathogen-neomorph
   - type: Sprite
