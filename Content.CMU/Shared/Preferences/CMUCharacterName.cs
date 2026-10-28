@@ -76,6 +76,15 @@ public static class CMUCharacterName
     /// </summary>
     public static string StripNickname(string name)
     {
+        // Rosters repeatedly receive already-normalized names. Keep the parser for names that
+        // can contain a nickname/tag or need space normalization, without splitting the common case.
+        if (name.Length == 0 || name[0] != ' ' && name[^1] != ' ' &&
+            !name.Contains('\'') && !name.Contains("A.W", StringComparison.OrdinalIgnoreCase) &&
+            !name.Contains("  ", StringComparison.Ordinal))
+        {
+            return name;
+        }
+
         var tokens = new List<string>(name.Split(' ', StringSplitOptions.RemoveEmptyEntries));
         tokens.RemoveAll(IsArtificialWombToken);
 

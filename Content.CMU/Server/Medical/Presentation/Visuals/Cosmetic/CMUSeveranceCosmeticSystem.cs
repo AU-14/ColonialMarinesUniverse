@@ -55,6 +55,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
         SubscribeLocalEvent<CMUHumanMedicalComponent, BodyPartRemovedEvent>(OnPartRemoved);
         SubscribeLocalEvent<CMUHumanMedicalComponent, BodyPartAddedEvent>(OnPartAdded);
         SubscribeLocalEvent<CMUHumanMedicalComponent, StandAttemptEvent>(OnStandAttempt);
+        SubscribeLocalEvent<CMULegLossDownedComponent, EntGotRemovedFromContainerMessage>(OnRestoredPatientRemoved);
     }
 
     public override void Update(float frameTime)
@@ -180,6 +181,12 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
         // deferred: this fires before SharedBodySystem counts the leg back in
         if (partType is BodyPartType.Leg or BodyPartType.Foot)
             _deferredLegRestore.Enqueue(ent.Owner);
+    }
+
+    private void OnRestoredPatientRemoved(Entity<CMULegLossDownedComponent> ent, ref EntGotRemovedFromContainerMessage args)
+    {
+        // Removal fires before reparenting. Retry after the pod/body bag releases the patient.
+        _deferredLegRestore.Enqueue(ent.Owner);
     }
 
     private void OnStandAttempt(Entity<CMUHumanMedicalComponent> ent, ref StandAttemptEvent args)

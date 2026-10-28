@@ -80,12 +80,13 @@ namespace Content.Client.Examine
             if (_examineTooltipOpen is not {Visible: true}) return;
             if (!_examinedEntity.Valid || _playerManager.LocalEntity is not { } player) return;
 
-            if (!CanExamine(player, _examinedEntity))
+            if (!CMUCanStillExamine(player)) // CMU14: reuse the pair predicate, keep live visibility checks.
                 CloseTooltip();
         }
 
         public override void Shutdown()
         {
+            CloseTooltip(); // CMU14: release UI references when the system shuts down.
             CommandBinds.Unregister<ExamineSystem>();
             base.Shutdown();
         }
@@ -178,92 +179,10 @@ namespace Content.Client.Examine
         ///     not fill it with information. This is done when the server sends examine info/verbs,
         ///     or immediately if it's entirely clientside.
         /// </summary>
+        // CMU14: retain the popup and its layout while refreshing the same examined target.
         public void OpenTooltip(EntityUid player, EntityUid target, bool centeredOnCursor=true, bool openAtOldTooltip=true, bool knowTarget = true)
         {
-            // Close any examine tooltip that might already be opened
-            // Before we do that, save its position. We'll prioritize opening any new popups there if
-            // openAtOldTooltip is true.
-            ScreenCoordinates? oldTooltipPos = _examineTooltipOpen != null ? _popupPos : null;
-            CloseTooltip();
-
-            // CMU14: players can turn the examine popup off and read examines in chat instead.
-            if (_config.GetCVar(CCVars.HideExamineTooltip))
-                return;
-
-            // cache entity for Update function
-            _examinedEntity = target;
-
-            const float minWidth = 300;
-
-            if (openAtOldTooltip && oldTooltipPos != null)
-            {
-                _popupPos = oldTooltipPos.Value;
-            }
-            else if (centeredOnCursor)
-            {
-                _popupPos = _userInterfaceManager.MousePositionScaled;
-            }
-            else
-            {
-                _popupPos = _eyeManager.CoordinatesToScreen(Transform(target).Coordinates);
-                _popupPos = _userInterfaceManager.ScreenToUIPosition(_popupPos);
-            }
-
-            // Actually open the tooltip.
-            _examineTooltipOpen = new Popup { MaxWidth = 400 };
-            _userInterfaceManager.ModalRoot.AddChild(_examineTooltipOpen);
-            var panel = new PanelContainer() { Name = "ExaminePopupPanel" };
-            panel.AddStyleClass(StyleClassEntityTooltip);
-            panel.ModulateSelfOverride = Color.LightGray.WithAlpha(0.90f);
-            _examineTooltipOpen.AddChild(panel);
-
-            var vBox = new BoxContainer
-            {
-                Name = "ExaminePopupVbox",
-                Orientation = LayoutOrientation.Vertical,
-                MaxWidth = _examineTooltipOpen.MaxWidth
-            };
-            panel.AddChild(vBox);
-
-            var hBox = new BoxContainer
-            {
-                Orientation = LayoutOrientation.Horizontal,
-                SeparationOverride = 5,
-                Margin = new Thickness(6, 0, 6, 0)
-            };
-
-            vBox.AddChild(hBox);
-
-            if (HasComp<SpriteComponent>(target))
-            {
-                var spriteView = new SpriteView
-                {
-                    OverrideDirection = Direction.South,
-                    SetSize = new Vector2(32, 32)
-                };
-                spriteView.SetEntity(target);
-                hBox.AddChild(spriteView);
-            }
-
-            if (knowTarget)
-            {
-                var itemName = FormattedMessage.EscapeText(Identity.Name(target, EntityManager, player));
-                var labelMessage = FormattedMessage.FromMarkupPermissive($"[bold]{itemName}[/bold]");
-                var label = new RichTextLabel();
-                label.SetMessage(labelMessage);
-                hBox.AddChild(label);
-            }
-            else
-            {
-                var label = new RichTextLabel();
-                label.SetMessage(FormattedMessage.FromMarkupOrThrow("[bold]???[/bold]"));
-                hBox.AddChild(label);
-            }
-
-            panel.Measure(Vector2Helpers.Infinity);
-            var size = Vector2.Max(new Vector2(minWidth, 0), panel.DesiredSize);
-
-            _examineTooltipOpen.Open(UIBox2.FromDimensions(_popupPos.Position, size));
+            CMUOpenTooltip(player, target, centeredOnCursor, openAtOldTooltip, knowTarget);
         }
 
         /// <summary>
@@ -277,21 +196,8 @@ namespace Content.Client.Examine
                 return;
             }
 
-            foreach (var msg in message.Nodes)
-            {
-                if (msg.Name != null)
-                    continue;
-
-                var text = msg.Value.StringValue ?? "";
-
-                if (string.IsNullOrWhiteSpace(text))
-                    continue;
-
-                var richLabel = new RichTextLabel() { Margin = new Thickness(4, 4, 0, 4)};
-                richLabel.SetMessage(message);
-                vBox.AddChild(richLabel);
-                break;
-            }
+            // CMU14: replace the contents of one body label instead of appending another label.
+            CMUUpdateBody(message);
 
             var totalVerbs = _verbSystem.GetLocalVerbs(target, player, typeof(ExamineVerb));
 
@@ -320,79 +226,25 @@ namespace Content.Client.Examine
             AddVerbsToTooltip(totalVerbs);
         }
 
+        // CMU14: keep the button layout, but bind each refresh to its freshly generated verbs.
         private void AddVerbsToTooltip(IEnumerable<Verb> verbs)
         {
             if (_examineTooltipOpen == null)
                 return;
-
-            var buttonsHBox = new BoxContainer
-            {
-                Name = "ExamineButtonsHBox",
-                Orientation = LayoutOrientation.Horizontal,
-                HorizontalAlignment = Control.HAlignment.Stretch,
-                VerticalAlignment = Control.VAlignment.Bottom,
-            };
-
-            var hoverExamineBox = new BoxContainer
-            {
-                Name = "HoverExamineHBox",
-                Orientation = LayoutOrientation.Horizontal,
-                HorizontalAlignment = Control.HAlignment.Left,
-                VerticalAlignment = Control.VAlignment.Center,
-                HorizontalExpand = true
-            };
-
-            var clickExamineBox = new BoxContainer
-            {
-                Name = "ClickExamineHBox",
-                Orientation = LayoutOrientation.Horizontal,
-                HorizontalAlignment = Control.HAlignment.Right,
-                VerticalAlignment = Control.VAlignment.Center,
-                HorizontalExpand = true
-            };
-
-            // Examine button time
+            CMUClearButtons();
             foreach (var verb in verbs)
             {
-                if (verb is not ExamineVerb examine)
+                if (verb is not ExamineVerb examine || examine.Icon == null || !examine.ShowOnExamineTooltip)
                     continue;
-
-                if (examine.Icon == null)
-                    continue;
-
-                if (!examine.ShowOnExamineTooltip)
-                    continue;
-
                 var button = new ExamineButton(examine, _sprite);
-
                 if (examine.HoverVerb)
-                {
-                    hoverExamineBox.AddChild(button);
-                }
+                    _cmuHoverButtons!.AddChild(button);
                 else
                 {
                     button.OnPressed += VerbButtonPressed;
-                    clickExamineBox.AddChild(button);
+                    _cmuClickButtons!.AddChild(button);
                 }
             }
-
-            var vbox = _examineTooltipOpen?.GetChild(0).GetChild(0);
-            if (vbox == null)
-            {
-                buttonsHBox.Orphan();
-                return;
-            }
-
-            // Remove any existing buttons hbox, in case we generated it from the client
-            // then received ones from the server
-            var hbox = vbox.Children.Where(c => c.Name == "ExamineButtonsHBox").ToArray();
-            if (hbox.Any())
-            {
-                vbox.Children.Remove(hbox.First());
-            }
-            buttonsHBox.AddChild(hoverExamineBox);
-            buttonsHBox.AddChild(clickExamineBox);
-            vbox.AddChild(buttonsHBox);
         }
 
         /// <summary>
@@ -444,27 +296,21 @@ namespace Content.Client.Examine
             RaiseLocalEvent(entity, new ClientExaminedEvent(entity, playerEnt.Value));
         }
 
+        // CMU14: clear nested button handlers and all cached controls with the popup.
         private void CloseTooltip()
         {
-            if (_examineTooltipOpen != null)
-            {
-                foreach (var control in _examineTooltipOpen.Children)
-                {
-                    if (control is ExamineButton button)
-                    {
-                        button.OnPressed -= VerbButtonPressed;
-                    }
-                }
-                _examineTooltipOpen.Orphan();
-                _examineTooltipOpen = null;
-            }
-
+            var popup = _examineTooltipOpen;
+            _examineTooltipOpen = null;
+            CMUResetTooltip();
+            popup?.Dispose();
             if (_requestCancelTokenSource != null)
             {
                 _requestCancelTokenSource.Cancel();
+                _requestCancelTokenSource.Dispose();
                 _requestCancelTokenSource = null;
             }
         }
+
     }
 
     /// <summary>

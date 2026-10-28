@@ -65,7 +65,6 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
     };
 
     private readonly GridContainer _skinGrid = new() { Columns = 6 };
-    private readonly GridContainer _eyeGrid = new() { Columns = 7 };
     private readonly GridContainer _dreadGrid = new() { Columns = 7 };
     private readonly GridContainer _quillGrid = new() { Columns = 6 };
     private readonly GridContainer _legacyGrid = new() { Columns = 4 };
@@ -246,7 +245,6 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             Children =
             {
                 VisualBlock("cmu-yautja-lobby-skin-color", _skinGrid),
-                VisualBlock("cmu-yautja-lobby-eyes", _eyeGrid),
                 VisualBlock("cmu-yautja-lobby-dread-color", _dreadGrid),
                 VisualBlock("cmu-yautja-lobby-quills", _quillGrid),
             },
@@ -414,7 +412,6 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         ResetResponsiveGrids();
 
         RebuildSkinSelector(yautja);
-        RebuildEyeSelector(yautja);
         RebuildDreadSelector(yautja);
         RebuildQuillSelector(yautja);
         RebuildLegacySelector(yautja);
@@ -434,7 +431,14 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         _skinGrid.RemoveAllChildren();
         var group = new ButtonGroup();
 
-        foreach (var skinColor in YautjaCharacterProfile.SkinColorOrder)
+        // CMU14: only the six CM-SS13 PRED_SKIN_COLOR tones are offered; the CMU-only Gray/White extras are not valid
+        // choices for the pre-coloured variants and should not appear in the lobby. A profile already saved with one of
+        // them keeps that option so the current selection stays representable.
+        var choices = YautjaCharacterProfile.SkinColorOrder[..6].ToList();
+        if (!choices.Contains(yautja.SkinColor))
+            choices.Add(yautja.SkinColor);
+
+        foreach (var skinColor in choices)
         {
             var button = BuildSelectorButton(
                 Loc.GetString(YautjaCharacterProfile.GetSkinColorDisplayName(skinColor)),
@@ -456,24 +460,6 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                 },
             });
             _skinGrid.AddChild(button);
-        }
-    }
-
-    private void RebuildEyeSelector(YautjaCharacterProfile yautja)
-    {
-        _eyeGrid.RemoveAllChildren();
-        var group = new ButtonGroup();
-
-        foreach (var eyeColor in YautjaCharacterProfile.EyeColorOrder)
-        {
-            var button = BuildSwatchButton(
-                Loc.GetString(YautjaCharacterProfile.GetEyeColorDisplayName(eyeColor)),
-                yautja.EyeColor == eyeColor,
-                group,
-                YautjaCharacterProfile.GetEyeColorColor(eyeColor));
-
-            button.OnPressed += _ => Mutate(profile => profile.WithEyeColor(eyeColor), true);
-            _eyeGrid.AddChild(button);
         }
     }
 
@@ -1371,7 +1357,6 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         _bracerResponsiveGrids.Clear();
         _casterResponsiveGrids.Clear();
         RegisterResponsiveGrid(_skinGrid, 6);
-        RegisterResponsiveGrid(_eyeGrid, 7);
         RegisterResponsiveGrid(_dreadGrid, 7);
         RegisterResponsiveGrid(_quillGrid, 6);
         RegisterResponsiveGrid(_legacyGrid, 4);

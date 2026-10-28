@@ -6,7 +6,7 @@ meta:
   forkId: ''
   forkVersion: ''
   time: '2026-09-18T00:00:00'
-  entityCount: 343
+  entityCount: 351
 maps: []
 grids:
 - 1
@@ -159,6 +159,7 @@ entities:
     - type: ShipFaction
       faction: govfor
     - type: MohawkMechanisms
+      landingShadow: CMUMohawkOmahaApproachShadow
 - proto: CMUAirFillerVent
   entities:
   - uid: 910
@@ -538,7 +539,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -3.5,1.5
-- proto: CMUMohawkOmahaLight9338e70f86
+- proto: CMUMohawkOmahaDouble282a0d5617
   entities:
   - uid: 48
     components:
@@ -575,7 +576,7 @@ entities:
       parent: 1
       pos: -3.5,-2.5
       rot: 1.5707963267948966 rad
-- proto: CMUMohawkOmahaLightd7964ff1ef
+- proto: CMUMohawkOmahaDouble56db8e3126
   entities:
   - uid: 53
     components:
@@ -709,7 +710,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,4.5
-- proto: CMUMohawkOmahaLightd7964ff1ef
+- proto: CMUMohawkOmahaDouble56db8e3126
   entities:
   - uid: 71
     components:
@@ -1447,7 +1448,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 0.5,-5.5
-- proto: CMUMohawkOmahaLight9338e70f86
+- proto: CMUMohawkOmahaDouble282a0d5617
   entities:
   - uid: 168
     components:
@@ -1491,7 +1492,7 @@ entities:
       parent: 1
       pos: 0.5,-8.5
       rot: 3.141592653589793 rad
-- proto: CMUMohawkOmahaLight9338e70f86
+- proto: CMUMohawkOmahaDouble282a0d5617
   entities:
   - uid: 174
     components:
@@ -1601,7 +1602,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,7.5
-- proto: CMUMohawkOmahaLight9338e70f86
+- proto: CMUMohawkOmahaDouble282a0d5617
   entities:
   - uid: 189
     components:
@@ -2033,7 +2034,7 @@ entities:
       parent: 1
       pos: 3.5,4.5
       rot: 1.5707963267948966 rad
-- proto: CMUMohawkOmahaLightc896f21898
+- proto: CMUMohawkOmahaDouble10fdc607b4
   entities:
   - uid: 246
     components:
@@ -2289,7 +2290,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 4.5,1.5
-- proto: CMUMohawkOmahaLight9338e70f86
+- proto: CMUMohawkOmahaDouble282a0d5617
   entities:
   - uid: 281
     components:
@@ -2326,7 +2327,7 @@ entities:
       parent: 1
       pos: 4.5,-2.5
       rot: -1.5707963267948966 rad
-- proto: CMUMohawkOmahaLightc896f21898
+- proto: CMUMohawkOmahaDouble10fdc607b4
   entities:
   - uid: 286
     components:
@@ -2670,3 +2671,67 @@ entities:
     - type: Transform
       parent: 1
       pos: -4.5,-4.5
+- proto: CMUMohawkOmahaRampRailing
+  entities:
+  - uid: 949
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-2.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaRampRailing
+  entities:
+  - uid: 950
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-3.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaRampRailing
+  entities:
+  - uid: 951
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-4.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaRampRailing
+  entities:
+  - uid: 952
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-5.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaRampRailing
+  entities:
+  - uid: 981
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-2.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaRampRailing
+  entities:
+  - uid: 982
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-3.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaRampRailing
+  entities:
+  - uid: 983
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-4.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaRampRailing
+  entities:
+  - uid: 984
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-5.5
+      rot: -1.5707963267948966 rad

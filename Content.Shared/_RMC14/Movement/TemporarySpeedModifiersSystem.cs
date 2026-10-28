@@ -49,7 +49,9 @@ public sealed partial class TemporarySpeedModifiersSystem : EntitySystem
 
         // Modify the slowdown the clothing applies based on the wearers current movement speed.
         // Slowed entities get a reduced slow effect from clothing while fast entities get an increased slow effect.
-        var newModifier = 1 - (1 - args.SprintModifier) * (movement.CurrentSprintSpeed / movement.BaseSprintSpeed);
+        // CMU14: use the stored ratio directly; losing both legs makes current/base speed 0/0.
+        var speedModifier = float.IsFinite(movement.SprintSpeedModifier) ? movement.SprintSpeedModifier : 1f;
+        var newModifier = 1 - (1 - args.SprintModifier) * speedModifier;
         args.WalkModifier = newModifier;
         args.SprintModifier = newModifier;
     }
@@ -121,7 +123,10 @@ public sealed partial class TemporarySpeedModifiersSystem : EntitySystem
     /// <returns>Null or a float representing the calculated speed multiplier</returns>
     public float? CalculateSpeedModifier(EntityUid uid, float modifier, MovementSpeedModifierComponent? movement = null)
     {
-        if (!Resolve(uid, ref movement) || movement.CurrentSprintSpeed == 0)
+        // CMU14: a refresh must be able to recover from invalid speed left by a previous slowdown.
+        if (!Resolve(uid, ref movement) ||
+            !float.IsFinite(movement.CurrentSprintSpeed) || movement.CurrentSprintSpeed <= 0 ||
+            !float.IsFinite(movement.BaseSprintSpeed) || movement.BaseSprintSpeed <= 0)
             return null;
 
         var currentSpeed = movement.CurrentSprintSpeed;

@@ -3,6 +3,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Atmos.Components;
 using Content.Shared.Alert;
 using Content.Shared.Atmos;
+using Content.Shared.Damage; // CMU14
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
@@ -239,7 +240,10 @@ namespace Content.Server.Atmos.EntitySystems
                 if (pressure <= Atmospherics.HazardLowPressure)
                 {
                     // Deal damage and ignore resistances. Resistance to pressure damage should be done via pressure protection gear.
-                    _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * Atmospherics.LowPressureDamage, true, false);
+                    // CMU14: pressure injury must not produce impact blood splatter.
+                    // _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * Atmospherics.LowPressureDamage, true, false);
+                    _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * Atmospherics.LowPressureDamage, true, false,
+                        impact: DamageImpact.Generic with { Delivery = DamageImpactDelivery.Environment });
 
                     if (!barotrauma.TakingDamage)
                     {
@@ -254,7 +258,10 @@ namespace Content.Server.Atmos.EntitySystems
                     var damageScale = MathF.Min(((pressure / Atmospherics.HazardHighPressure) - 1) * Atmospherics.PressureDamageCoefficient, Atmospherics.MaxHighPressureDamage);
 
                     // Deal damage and ignore resistances. Resistance to pressure damage should be done via pressure protection gear.
-                    _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * damageScale, true, false);
+                    // CMU14: pressure injury must not produce impact blood splatter.
+                    // _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * damageScale, true, false);
+                    _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * damageScale, true, false,
+                        impact: DamageImpact.Generic with { Delivery = DamageImpactDelivery.Environment });
 
                     if (!barotrauma.TakingDamage)
                     {

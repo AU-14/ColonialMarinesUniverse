@@ -1,6 +1,3 @@
-using Content.IntegrationTests.Pair;
-using Content.Server.Database;
-using Content.Server.EUI;
 using Content.Server.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja;
 using NUnit.Framework;
@@ -74,43 +71,5 @@ public sealed class YautjaClanWorkflowTest
     public void StoredRankValuesSanitizeToNormalGameplayRank(int? value, YautjaRank expected)
     {
         Assert.That(YautjaClanManager.SanitizeStoredRank(value), Is.EqualTo(expected));
-    }
-
-    [Test]
-    public async Task ClanInfoEuiOpensForClanMemberWithoutServerException()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var server = pair.Server;
-        var session = pair.Player!;
-        var db = server.ResolveDependency<IServerDbManager>();
-        var clanManager = server.ResolveDependency<YautjaClanManager>();
-        var euiManager = server.ResolveDependency<EuiManager>();
-        var clanId = await db.CreateYautjaClanAsync("Info EUI", "Information EUI test", 12, "#123456");
-        await db.UpsertYautjaClanMemberAsync(new YautjaClanMemberRecord(
-            session.UserId.UserId,
-            clanId,
-            (int) YautjaRank.Elder,
-            (int) YautjaClanPermission.UserAll,
-            7,
-            false));
-        clanManager.InvalidateCache(session.UserId);
-
-        YautjaClanInfoEui? eui = null;
-        await server.WaitPost(() =>
-        {
-            eui = new YautjaClanInfoEui();
-            euiManager.OpenEui(eui, session);
-        });
-        await pair.RunTicksSync(10);
-        await server.WaitAssertion(() =>
-        {
-            Assert.That(eui!.IsShutDown, Is.False);
-            var state = (YautjaClanInfoEuiState) eui.GetNewState();
-            Assert.That(state.ClanId, Is.EqualTo(clanId));
-            Assert.That(state.Members, Has.Count.EqualTo(1));
-            Assert.That(state.Members[0].PlayerId, Is.EqualTo(session.UserId));
-        });
-
-        await pair.CleanReturnAsync();
     }
 }

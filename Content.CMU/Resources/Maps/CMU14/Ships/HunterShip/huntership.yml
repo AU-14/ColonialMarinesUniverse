@@ -5,7 +5,7 @@ meta:
   forkId: cmu14
   forkVersion: huntership-port-visual-1to1
   time: "2026-06-03T17:16:10.811Z"
-  entityCount: 6151
+  entityCount: 6178
 maps:
 - 200001
 grids:
@@ -30141,6 +30141,143 @@ entities:
     components:
     - type: Transform
       pos: 72.5,49.5
+      parent: 200002
+- proto: CMUSheetRunedSandstone
+  entities:
+  - uid: 206158
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206159
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206160
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206161
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206162
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206163
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206164
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206165
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206166
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206167
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206168
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206169
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206170
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206171
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206172
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206173
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206174
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206175
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206176
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206177
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206178
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206179
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206180
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206181
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206182
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206183
+    components:
+    - type: Transform
+      pos: 75.5,64.5
+      parent: 200002
+  - uid: 206184
+    components:
+    - type: Transform
+      pos: 75.5,64.5
       parent: 200002
 - proto: WallInvisible
   entities:
