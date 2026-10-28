@@ -18,6 +18,7 @@
     skills:
       RMCSkillEndurance: 2
       RMCSkillFirearms: 3
+      RMCSkillFireman: 1
       RMCSkillCqc: 1
       RMCSkillPolice: 1
   - type: JobPrefix
