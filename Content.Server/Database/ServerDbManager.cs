@@ -391,6 +391,9 @@ namespace Content.Server.Database
         // CMU14 method
         Task<ulong?> GetLinkedDiscordId(Guid player, CancellationToken cancel);
 
+        // CMU14 method
+        Task<DiscordLinkResult> LinkDiscordAccountByCode(Guid code, ulong discordId);
+
         Task<RMCPatron?> GetPatron(Guid player, CancellationToken cancel);
 
         Task<List<RMCPatron>> GetAllPatrons();
@@ -820,6 +823,7 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.GetYautjaClanAsync(clanId));
         }
 
+        // CMU14
         public Task<List<CmuAntagPityEntry>> GetCmuAntagPityAsync(long pruneBefore)
         {
             DbReadOpsMetric.Inc();
@@ -1509,6 +1513,13 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetLinkedDiscordId(player, cancel));
+        }
+
+        // CMU14 method
+        public Task<DiscordLinkResult> LinkDiscordAccountByCode(Guid code, ulong discordId)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.LinkDiscordAccountByCode(code, discordId));
         }
 
         public Task<RMCPatron?> GetPatron(Guid player, CancellationToken cancel)
