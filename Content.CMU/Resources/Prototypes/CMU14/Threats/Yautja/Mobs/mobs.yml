@@ -141,6 +141,9 @@
     emoteCooldown: 8
     hiddenFromChatWindow: true
   - type: MotionDetectorTracked
+  # a recovered hunter body is worth as much intel as a queen's
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 1.4
 
 - type: entity
   parent: CMUMobYautja
@@ -370,6 +373,8 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.2
     baseSprintSpeed: 8.0
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 1.4
   - type: PainShock
     minimumFeltTier: Shock
     maximumFeltTier: Severe
