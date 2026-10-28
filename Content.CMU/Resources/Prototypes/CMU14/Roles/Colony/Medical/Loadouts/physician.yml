@@ -26,6 +26,11 @@
 # CLF
 
 - type: loadout
+  id: CMUCLFPhysicianSpecializationSurgeon
+  equipment:
+    id: AU14IDCardCLFSurgeon
+
+- type: loadout
   id: CLFPhysicianSpecializationDefaultAU14
   equipment:
     id: AU14IDCardCLFPhysician
