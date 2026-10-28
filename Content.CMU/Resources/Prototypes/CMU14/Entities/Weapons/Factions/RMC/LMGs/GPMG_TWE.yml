@@ -88,7 +88,7 @@
 - type: entity
   parent: RMCMagazineLMGBase
   id: CMUMagazineGPMGTWE
-  name: "L66A2 Ammo Box (10x30mm)"
+  name: L66A2 magazine (10x30mm)
   components:
   - type: Tag
     tags:
@@ -101,6 +101,8 @@
       - CMUCartridgeGPMGTWE
     proto: CMCCartridgeGPMGTWE
     capacity: 250
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsL66A2
   - type: Sprite
     sprite: CMU14/Weapons/Guns/Ammo/Magazines/twe_GPMG.rsi
     layers:
@@ -110,8 +112,8 @@
 - type: entity
   parent: RMCCartridgeRifleAR10
   id: CMCCartridgeGPMGTWE
-  name: cartridge (10x30mm)
-  description: A 10x30mm cartridge
+  name: cartridge (10x30mm L66A2)
+  description: A 10x30mm cartridge for the L66A2 general purpose machine gun.
   components:
   - type: Tag
     tags:

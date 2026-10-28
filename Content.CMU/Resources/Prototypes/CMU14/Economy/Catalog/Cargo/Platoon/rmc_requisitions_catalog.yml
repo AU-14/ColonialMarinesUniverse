@@ -506,6 +506,8 @@
         crate: AU14CrateM7SLAWHERocket
       - cost: 250
         crate: RMCCrateMagazineML66DDrum
+      - cost: 600
+        crate: CMUCrateBoxBulletsL66A2
       - cost: 500
         crate: RMCCrateMagazineM2C
       - cost: 700

@@ -1,0 +1,8 @@
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateBoxBulletsL66A2
+  name: L66A2 ammunition crate (600x 10x30mm)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxBulletsL66A2
