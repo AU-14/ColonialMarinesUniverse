@@ -674,6 +674,7 @@
       penetration: Low
   - type: DisarmMalus
     malus: 0.225
+  - type: YautjaHumanMelee
   - type: YautjaStoredGear
     kind: WristBlades
 
@@ -723,6 +724,7 @@
       penetration: Low
   - type: DisarmMalus
     malus: 0.45
+  - type: YautjaHumanMelee
   - type: YautjaStoredGear
     kind: Scimitar
 
@@ -760,6 +762,8 @@
       energy: Medium
   - type: DisarmMalus
     malus: 0.2
+  # still sharp + edged in cm, chain_gauntlets never overrides what it gets from the wristblade base
+  - type: YautjaHumanMelee
   - type: YautjaStoredGear
     kind: ChainGauntlet
 
