@@ -232,6 +232,8 @@
   description: A gun case containing the SVAROG sniper rifle and other equipment.
   suffix: UPP
   components:
+  - type: Item
+    size: Colossal
   - type: Storage
     maxItemSize: Colossal
   - type: StorageFill
@@ -251,3 +253,6 @@
     - id: RuMcMagazineSniperRifleSVAROGFlak
       amount: 4
     - id: RuMcSniperRifleSVAROG
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: SniperWhitelist
