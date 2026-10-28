@@ -40,7 +40,7 @@ public sealed class MohawkMappedGunneryTest : GameTest
             var maps = Server.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(Server.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out _), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out _), Is.True);
         });
         await Pair.RunSeconds(1);
         NetEntity consoleNet = default;
