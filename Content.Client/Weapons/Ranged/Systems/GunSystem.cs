@@ -687,6 +687,11 @@ public sealed partial class GunSystem : SharedGunSystem
 
         foreach (var entity in entities)
         {
+            // CMU14: proximity targeting must not turn a missed click into a shot at the shooter.
+            // Direct clicks on the shooter are handled separately by GetClickedEntity.
+            if (entity.Uid == _player.LocalEntity)
+                continue;
+
             // Don't add the target if we can't shoot the target!
             if (!CheckFixtures(entity.Uid))
                 continue;
