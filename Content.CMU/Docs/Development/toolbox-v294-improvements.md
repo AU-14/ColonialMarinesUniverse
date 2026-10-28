@@ -52,6 +52,59 @@ implementation. Packaging and publishing retain their original behavior.
 
 ## Verification
 
+### Follow-up content system efficiency work
+
+- Radio panels send revisioned telemetry for drift instead of rebuilding and
+  transmitting the preset dictionaries, frequency directory, traffic log and
+  sweep contacts. Expert readings remain live, and reopening sends full state.
+- Relay coverage indexes channel membership. Pack configuration, mast keys,
+  splicing and component lifecycle update that index; position, power, range
+  and vertical reach are still read at lookup time. Fresh jammer bearings also
+  supply the tick's cached intensity reading, avoiding a second query.
+- Reconstruction reuses contact buffers and compares before allocating a wire
+  snapshot. Completed geometry produces no empty patches. Background preload
+  scheduling visits active transfers and retains the existing request throttle.
+- Expedition fire and acid membership is gathered on demand; bounds and tile
+  indexes are built only for queried maps and refreshed for the next update.
+  Decision budgets and native weapon execution are unchanged.
+- 3D viewers share one network topology snapshot per update; each viewer still
+  checks access and updates probe positions and visibility every tick.
+- The additional scan removed rotation-only stair/ladder work, unchanged-map
+  prey-tracking dirties, and a duplicate jammer query during radio checks.
+  Nearby atmosphere and random light update loops already had suitable cadence
+  or unchanged-state guards and were left alone.
+
+These changes affect content only. They do not change the engine or restore
+build provenance. CPU and FPS gains require a representative live-round profile.
+
+The follow-up client/server build passed. Two focused integration runs passed
+20 and 17 cases respectively, with no failures or skips: 34 distinct cases and
+three repeated after the final cache/measurement changes. The radio test measured
+**1,201 bytes for full panel state and 113 bytes for telemetry**, approximately
+91% smaller for that fixture. These are serialized payload sizes, not total
+traffic or live-round CPU measurements.
+
+| Requirement | Regression evidence |
+| --- | --- |
+| Telemetry preserves configuration, survives reopen and rejects stale readings | `TelemetryPreservesConfigurationAndReopeningResynchronizes` |
+| Channel index follows retuning, movement and component removal | `RelayRetuningMovementAndRemovalImmediatelyChangeCoverage` |
+| Lazy hazards remain scoped to the right map and expire | `RoutesSeeHazardsOnEachMapAndRefreshAfterRemoval` |
+| Reconstruction preloads and camera permissions remain correct | `PersonalPreloadOpensWithoutRetransmittingOrReuploadingTerrain`; six `MarineIconOpensOverwatchCameraAndReleasesIt` cases |
+| 3D subscriptions follow access and map changes | `PlayerCanToggleReduxViewAndLeavingMapRevokesSubscription` |
+| AI scheduling, radio techniques and vertical traversal remain intact | `DeferredDecisionStillRunsWeaponExecution`, `OverdueDecisionsAreCappedAndEveryAgentGetsATurn`, `ANPRCExpertTest`, `CMUSwarmStairsTest`, `HunterShipLadderTest` |
+
+Both test commands use the repository's isolated build/test wrapper:
+
+```powershell
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMURadioEfficiencyTest|FullyQualifiedName~CMUAgentHazardSnapshotTest|FullyQualifiedName~CMUAgentPerformanceTest|FullyQualifiedName~PersonalPreloadOpensWithoutRetransmittingOrReuploadingTerrain|FullyQualifiedName~MarineIconOpensOverwatchCameraAndReleasesIt|FullyQualifiedName~PlayerCanToggleReduxViewAndLeavingMapRevokesSubscription|FullyQualifiedName~ANPRCQuickSetupTest|FullyQualifiedName~AU14FieldMastTest'
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMURadioEfficiencyTest|FullyQualifiedName~CMUAgentHazardSnapshotTest|FullyQualifiedName~RadioJammerToggleTest|FullyQualifiedName~ANPRCExpertTest|FullyQualifiedName~CMUSwarmStairsTest|FullyQualifiedName~HunterShipLadderTest'
+```
+
+Existing analyzer warnings remain. Content whitespace, UTF-8/LF checks and the
+unmodified engine checkout were verified. No live gameplay session was launched.
+
+### Release integration checks
+
 - Shared, client, server and packaging projects compiled successfully.
 - Before the stock-pin correction, 56 retained integration cases passed:
   five new cases covering medical snapshots, fighter state, hitscan geometry

@@ -125,8 +125,6 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
-        // the fire/acid index below walks every burning tile and acid splash on the server, so don't build it
-        // for nobody. most rounds have no expedition agents at all
         if (EntityManager.Count<CMUExpeditionAgentComponent>() == 0)
             return;
 
@@ -138,8 +136,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         _doorPassageCache.Clear();
         _windowSightCache.Clear();
         _groundCache.Clear();
-        RefreshAcidTiles();
-        RefreshFireRegions();
+        _fireSnapshotTick = null;
+        _acidSnapshotTick = null;
         _smokeTiles.Clear();
         _smokeScreens.RemoveAll(screen => screen.Until <= now);
         _grenadeHazards.RemoveAll(hazard => hazard.Until <= now);
