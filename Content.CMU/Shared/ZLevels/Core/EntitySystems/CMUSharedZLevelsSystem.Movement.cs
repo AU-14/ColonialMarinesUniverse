@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Yautja;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared.CMU14.Dropship.MultiDeck;
@@ -190,6 +191,12 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private void OnFallDamage(Entity<DamageableComponent> ent, ref CMUZLevelHitEvent args)
     {
+        // CMU14: a Yautja descent is a controlled landing - CM-SS13 gives the species no fall damage from dropping a
+        // level, so this returns before both the knockdown and the Blunt damage. YautjaComponent is the species marker
+        // (CMUMobYautja, and a youngblood gains it when the role is taken); plain humans keep normal fall damage.
+        if (HasComp<YautjaComponent>(ent.Owner))
+            return;
+
         var knockdownTime = MathF.Min(args.ImpactPower * 0.25f, 5f);
         _stun.TryKnockdown(ent.Owner, TimeSpan.FromSeconds(knockdownTime), true);
 
@@ -209,7 +216,7 @@ public abstract partial class CMUSharedZLevelsSystem
     /// </summary>
     private void OnFallAreaImpact(Entity<PhysicsComponent> ent, ref CMUZLevelHitEvent args)
     {
-        if (_vehicleTraversalQuery.HasComp(ent.Owner))
+        if (_vehicleTraversalQuery.HasComp(ent.Owner) || !HasSolidFallImpact(ent.Owner))
             return;
 
         _fallImpactVictims.Clear();
@@ -228,6 +235,21 @@ public abstract partial class CMUSharedZLevelsSystem
 
             _damage.TryChangeDamage(victim, new DamageSpecifier(damageType, damageAmount));
         }
+    }
+
+    private bool HasSolidFallImpact(EntityUid uid)
+    {
+        if (!TryComp<FixturesComponent>(uid, out var fixtures))
+            return false;
+
+        // Sensors can contribute mass without representing anything that can crush a body.
+        foreach (var fixture in fixtures.Fixtures.Values)
+        {
+            if (fixture.Hard)
+                return true;
+        }
+
+        return false;
     }
 
     private bool IsBuckledTo(EntityUid victim, EntityUid strap)

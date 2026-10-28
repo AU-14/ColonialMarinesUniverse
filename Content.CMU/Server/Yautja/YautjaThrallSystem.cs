@@ -625,7 +625,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
 
         args.Cancel();
         args.Reason = "cmu-yautja-thrall-bracer-locked";
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-bracer-locked"), args.User, args.User, PopupType.SmallCaution);
+        // CMU14: cancel silently, same as the hunter bracer above - an unequip attempt (which a right-click
+        // also produces) must not pop a message; the thrall lock still cancels the attempt.
     }
 
     private void OnToggleThrallBracerLock(Entity<YautjaThrallBracerComponent> ent, ref YautjaToggleThrallBracerLockActionEvent args)
@@ -1405,7 +1406,12 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             comp.Blooded = _marks.IsMarkedBy(uid, YautjaMarkKind.Blooded, master);
             comp.BloodedBy = comp.Blooded ? master : null;
             comp.BloodingReason = comp.Blooded ? _marks.GetMarkReason(uid, YautjaMarkKind.Blooded) ?? string.Empty : string.Empty;
-            comp.TechAuthorized = comp.Blooded;
+            // CMU14: this revalidation must not clobber an explicit AuthorizeTechOnConversion grant set when the
+            // thrall was created or reset - that flag is what authorizes a non-blooded thrall, and CM-SS13's
+            // equivalent trait is granted permanently at conversion (yaut_hudprocs.dm:526 gives TRAIT_YAUTJA_TECH
+            // to the newblood). Blooded always authorizes, so this still grants tech when the blooded mark is
+            // present and still leaves a deliberate revocation (which sets TechAuthorized = false) revoked.
+            comp.TechAuthorized = comp.TechAuthorized || comp.Blooded;
             Dirty(uid, comp);
 
             if (comp.TechAuthorized)
@@ -1838,7 +1844,6 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         bracer.Comp.NextSelfDestructWarning = TimeSpan.Zero;
         Dirty(bracer);
 
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-self-destruct-cancelled", ("target", thrall)), master, master);
         _audio.PlayPvs(bracer.Comp.SelfDestructWarningSound, bracer.Owner);
 
         _adminLog.Add(LogType.Action, LogImpact.Medium,

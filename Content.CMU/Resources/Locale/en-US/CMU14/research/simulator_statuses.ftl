@@ -32,7 +32,7 @@ research-sim-status-no-target-picked = NO TARGET PROPERTY SELECTED
 research-sim-status-unadjustable = TARGET PROPERTY CAN NOT BE ADJUSTED
 research-sim-status-insufficient-clearance-amplify = INSUFFICIENT CLEARANCE TO AMPLIFY FURTHER
 research-sim-status-unable-amplify-further = TARGET PROPERTY AT MAXIMUM LEVEL
-research-sim-status-insufficient-funds = INSUFFICIENT RESEARCH CREDITS
+research-sim-status-insufficient-funds = INSUFFICIENT SAMPLE DATA
 
 research-sim-status-no-reference = NO REFERENCE INSERTED
 research-sim-status-bad-reference-data = REFERENCE DATA UNREADABLE
@@ -43,3 +43,7 @@ research-sim-status-no-reference-picked = NO REFERENCE PROPERTY SELECTED
 research-sim-status-reference-unadjustable = REFERENCE PROPERTY CAN NOT BE ADJUSTED
 research-sim-status-already-in-target = REFERENCE PROPERTY ALREADY IN TARGET
 research-sim-status-inequal = TARGET AND REFERENCE PROPERTY LEVELS MUST BE EQUAL
+
+research-sim-status-conflict-cancel = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - BOTH WILL CANCEL OUT
+research-sim-status-conflict-target-survives = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - {$REFERENCE} WILL NOT BE ADDED, {$TARGET} DROPS TO LEVEL {$LEVEL}
+research-sim-status-conflict-reference-survives = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - {$TARGET} WILL BE REMOVED, {$REFERENCE} ADDED AT LEVEL {$LEVEL}

@@ -10,6 +10,7 @@
     movementKind: Grid
     transferDamage: false
   - type: VehicleOperatorDamage
+  - type: CMUVehiclePermanentWreck
   - type: Clickable
   - type: RMCIgnoreGhostInteractionLimits
   - type: RequireProjectileTarget

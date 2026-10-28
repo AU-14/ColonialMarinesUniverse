@@ -476,10 +476,6 @@ cmu-yautja-profile-skin-color-red = красный
 
 cmu-yautja-profile-skin-color-black = чёрный
 
-cmu-yautja-profile-skin-color-gray = серый
-
-cmu-yautja-profile-skin-color-white = белый
-
 cmu-yautja-profile-eye-color-black = чёрный
 
 cmu-yautja-profile-eye-color-gold = золотой

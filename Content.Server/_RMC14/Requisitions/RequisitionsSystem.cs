@@ -127,6 +127,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         // Also apply platoon catalog in case the console needs a custom catalog based on current round
         ApplyPlatoonCatalogToComputer(uid, comp);
+        AppendFactionVendorGear(uid, comp); // CMU14: use the ReqVend/ReqEquipment vmarker mapping for ASRS stock.
         AddXRFToCatalog(uid, comp);
         var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
         ResetStock((uid, comp));
@@ -708,6 +709,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         var time = _timing.CurTime;
         var updateUI = false;
         _stockUiUpdates.Clear();
+        int? groundXenos = null; // CMU14: share the count only among pools due in this update.
         var accounts = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (accounts.MoveNext(out var uid, out var account))
         {
@@ -720,7 +722,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             //     updateUI = true;
             // }
 
-            var xenos = _xeno.GetGroundXenosAlive();
+            // CMU14: count lazily below, after checking the pool deadline.
+            // var xenos = _xeno.GetGroundXenosAlive();
             var randomCrates = CollectionsMarshal.AsSpan(account.RandomCrates);
             foreach (ref var pool in randomCrates)
             {
@@ -730,7 +733,10 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 if (pool.Next >= time)
                     continue;
 
-                var crates = Math.Max(0, Math.Sqrt((float)xenos / _freeCratesXenoDivider));
+                // CMU14 Begin: idle pools need no population scan.
+                groundXenos ??= _xeno.GetGroundXenosAlive();
+                var crates = Math.Max(0, Math.Sqrt((float) groundXenos.Value / _freeCratesXenoDivider));
+                // CMU14 End
 
                 if (crates < pool.Minimum && pool.Given < pool.MinimumFor)
                     crates = pool.Minimum;
@@ -984,7 +990,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             }
         }
 
-        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate)
+        // CMU14: stock replenishes above even when nobody is watching its countdown.
+        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate &&
+            _itemizedUi.IsUiOpen(computer.Owner, RequisitionsUIKey.Key))
         {
             computer.Comp.NextStockUiUpdate = time + TimeSpan.FromSeconds(1);
             updateUi = true;
@@ -1218,6 +1226,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         while (computers.MoveNext(out var uid, out var comp))
         {
             ApplyPlatoonCatalogToComputer(uid, comp);
+            AppendFactionVendorGear(uid, comp); // CMU14: keep selected platoon vendor stock after round-start catalog refreshes.
             AddResearchTerminalToCatalog(uid, comp); // CMU14
             var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
             ResetStock((uid, comp));

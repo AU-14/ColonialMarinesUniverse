@@ -107,7 +107,8 @@
   - type: GunRequiresWield
   - type: Corrodible
     isCorrodible: false
-  - type: SmartGun
+  # CMU14: The QYJ is a conventional LMG without the smartgun's IFF or power system.
+  # - type: SmartGun
   - type: RMCMagneticItem
 
 - type: entity

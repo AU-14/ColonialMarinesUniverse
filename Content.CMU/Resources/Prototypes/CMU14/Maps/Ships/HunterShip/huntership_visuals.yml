@@ -13136,6 +13136,7 @@
       visuals: {}
   - type: Strap
     position: Stand
+    buckleOffset: "0.5313,-0.05"
   - type: YautjaChairFacing
     direction: South
   - type: Clickable
@@ -20755,8 +20756,8 @@
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: Items
-    noRot: true
-    enableOverrideDir: true
+    noRot: false
+    enableOverrideDir: false
     layers:
     - state: "spike"
   - type: Icon
@@ -33382,7 +33383,7 @@
   parent: [ RMCChemDispenserGround, CMUYautjaStructureYautjaMachinesDispenser ]
   id: CMUHunterShipPlacedRMCChemDispenserGroundDispenserSouth
   name: "Chemical dispenser"
-  description: "A complex machine for mixing elements into chemicals. A Wey-Yu product."
+  description: "A hunter-built machine that draws elements from its reserves and blends them into chemicals."
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
@@ -33402,6 +33403,10 @@
     state: "dispenser"
   - type: RMCChemicalStorage
     network: RMCChemStorageGround
+  # the base dispenser wants doctor level medical, preds only have medic level and this is their own ship
+  - type: RequiresSkill
+    skills:
+      RMCSkillMedical: 2
   - type: ApcPowerReceiver
     needsPower: false
     powerLoad: 0

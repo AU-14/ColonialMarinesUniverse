@@ -1224,7 +1224,7 @@ public sealed partial class YautjaItemSystem : EntitySystem
         if (!_actionBlocker.CanConsciouslyPerformAction(user))
             return;
 
-        if (!HasComp<HumanoidProfileComponent>(user) || !CanUseYautjaTech(user))
+        if (!HasComp<HumanoidProfileComponent>(user))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-falcon-drone-denied"), user, user, PopupType.SmallCaution);
             return;

@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Dropship;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Shared._RMC14.Dropship;
@@ -21,6 +22,19 @@ namespace Content.Server.CMU14.Hospital;
 
 public sealed partial class HospitalEmergencySystem
 {
+    private void OnHospitalLandingPermission(Entity<HospitalTransportShuttleComponent> ent,
+        ref CMUDropshipLandingPermissionEvent args)
+    {
+        if (!TryGetTransportLease(ent, out var lease) || lease.Comp.Retiring ||
+            !TryGetTransportController(lease, out _) || !IsOriginalHospitalMap(lease.Comp) ||
+            args.Destination != lease.Comp.HospitalDestination || TransportUnavailable(args.Destination) ||
+            !HasComp<HospitalDropshipLandingZoneComponent>(args.Destination) ||
+            Transform(args.Destination).MapUid != lease.Comp.HospitalMap)
+            return;
+
+        args.Allowed = true;
+    }
+
     private bool TransportUnavailable(EntityUid uid)
         => TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid);
 

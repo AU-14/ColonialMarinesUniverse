@@ -69,7 +69,7 @@
 - type: reaction
   id: Doxarubixadone
   reactants:
-    Cryoxadone:
+    CMCryoxadone: # CMU14: cryogenic medicines use Marine Cryoxadone
       amount: 1
     UnstableMutagen:
       amount: 1
@@ -79,7 +79,7 @@
 - type: reaction
   id: Urishoxadone
   reactants:
-    Cryoxadone:
+    CMCryoxadone: # CMU14: cryogenic medicines use Marine Cryoxadone
       amount: 3
     CMUUrishiol:
       amount: 5
@@ -97,7 +97,7 @@
       amount: 3
     MindbreakerToxin:
       amount: 1
-    Cryoxadone:
+    CMCryoxadone: # CMU14: cryogenic medicines use Marine Cryoxadone
       amount: 2
   products:
     Necrosol: 2
@@ -622,7 +622,7 @@
       amount: 1
     Tricordrazine:
       amount: 1
-    Cryoxadone:
+    CMCryoxadone: # CMU14: cryogenic medicines use Marine Cryoxadone
       amount: 1
   products:
     Arcryox: 3
@@ -631,7 +631,7 @@
   id: Aloxadone
   impact: Medium
   reactants:
-    Cryoxadone:
+    CMCryoxadone: # CMU14: cryogenic medicines use Marine Cryoxadone
       amount: 2
     Aloe:
       amount: 1

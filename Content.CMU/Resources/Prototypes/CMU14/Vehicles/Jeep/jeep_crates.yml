@@ -275,5 +275,10 @@
     state: flare
   - type: PointLight
     color: "#FFE2AA"
+  # Keep an early signal burning long enough to wait out the shared support cooldown.
+  - type: ExpendableLight
+    glowDuration: 1800
   - type: CMUVehicleDropFlare
     crate: CMUCrateJeepGunner
+    supplyTeam: clf
+    supplyOption: cmu-tech-clf-jeep

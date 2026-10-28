@@ -134,6 +134,8 @@ public sealed partial class NightVisionItemComponent : Component
     [DataField, AutoNetworkedField]
     public bool PreviousOverlay;
 
+    public bool PreviousDrawVisibleMobs = true;
+
     /// <summary>
     /// Previous wearer meson state restored when this item is disabled.
     /// </summary>
