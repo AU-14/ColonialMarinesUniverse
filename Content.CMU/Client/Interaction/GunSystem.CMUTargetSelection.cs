@@ -24,6 +24,10 @@ public sealed partial class GunSystem
         _spriteTree.QueryAabb(ref query,
             static (ref CMUGunTargetQuery state, in ComponentTreeEntry<SpriteComponent> entry) =>
             {
+                // A missed click must not fall back to the shooter; direct cursor hits still take precedence.
+                if (entry.Uid == state.Gun._player.LocalEntity)
+                    return true;
+
                 if (!state.Gun.CheckFixtures(entry.Uid))
                     return true;
                 var candidate = state.Gun.CheckTarget((entry.Uid, entry.Component, entry.Transform),

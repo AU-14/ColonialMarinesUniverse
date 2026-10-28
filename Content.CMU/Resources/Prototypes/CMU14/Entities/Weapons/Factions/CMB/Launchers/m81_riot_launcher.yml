@@ -5,6 +5,16 @@
   name: M81 Riot grenade launcher
   description: The M81 riot grenade launcher is a single-shot, shoulder-fired, break-action grenade launcher designed for police use. Built for less-lethal munitions, but it will fire any standard 30mm grenade just as well.
   components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: 0, 0.093
   # The parent needs police training to fire; anyone can use this one. A required level of 0 is never checked.
   - type: RequiresSkill
     skills:

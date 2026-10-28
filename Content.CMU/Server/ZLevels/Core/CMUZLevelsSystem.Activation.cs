@@ -70,7 +70,13 @@ public sealed partial class CMUZLevelsSystem
         OnZPhysicsMoveGroundSnap(ent, ref args, out var unchangedGround);
 
         if (!TryGetFallCheckTile(ent, out var map, out var tile))
+        {
+            // A hovering shuttle can unload onto an empty upper map with no terrain grid.
+            // Leaving its deck must wake falling even though there is no tile to cache.
+            ent.Comp.LastFallCheckMap = EntityUid.Invalid;
+            CheckActivation(ent, unchangedGround);
             return;
+        }
 
         if (ent.Comp.LastFallCheckMap == map &&
             ent.Comp.LastFallCheckTile == tile)

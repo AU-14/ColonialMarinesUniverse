@@ -25345,7 +25345,7 @@ entities:
       pos: -1.5,-37.5
     - type: Fixtures
       fixtures: {}
-- proto: CMVendorChemistry
+- proto: CMUVendorChemistryGovfor
   entities:
   - uid: 1982
     components:

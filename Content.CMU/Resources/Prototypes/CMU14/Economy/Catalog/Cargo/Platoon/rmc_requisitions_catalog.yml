@@ -480,6 +480,8 @@
         crate: AU14KitWeaponRXFM
     - name: Ammo
       entries:
+      - cost: 600
+        crate: CMUCrateCombatDroneAmmo
       - cost: 250
         crate: RMCCrateBoxMagazineSmartPistol
       - cost: 400
