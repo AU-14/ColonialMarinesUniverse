@@ -192,6 +192,11 @@ namespace Content.Server.Database
         Task<bool> AddYautjaHonorAsync(Guid userId, int honor);
         Task<List<YautjaClanPetitionRecord>> GetYautjaClanPetitionsAsync(int? clanId = null);
         Task<bool> SetYautjaClanPetitionAsync(Guid userId, int? clanId);
+        Task<List<YautjaClanSectRecord>> GetYautjaClanSectsAsync(int? clanId = null);
+        Task<int?> CreateYautjaClanSectAsync(int clanId, string name, string description, int maxSects);
+        Task<bool> UpdateYautjaClanSectAsync(int sectId, int clanId, string name, string description);
+        Task<bool> DeleteYautjaClanSectAsync(int sectId, int clanId);
+        Task<bool> SetYautjaClanMemberSectAsync(Guid userId, int clanId, int? sectId);
         // CMU14 End
         #endregion
 
@@ -920,6 +925,36 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.SetYautjaClanPetitionAsync(userId, clanId));
+        }
+
+        public Task<List<YautjaClanSectRecord>> GetYautjaClanSectsAsync(int? clanId = null)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaClanSectsAsync(clanId));
+        }
+
+        public Task<int?> CreateYautjaClanSectAsync(int clanId, string name, string description, int maxSects)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.CreateYautjaClanSectAsync(clanId, name, description, maxSects));
+        }
+
+        public Task<bool> UpdateYautjaClanSectAsync(int sectId, int clanId, string name, string description)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.UpdateYautjaClanSectAsync(sectId, clanId, name, description));
+        }
+
+        public Task<bool> DeleteYautjaClanSectAsync(int sectId, int clanId)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.DeleteYautjaClanSectAsync(sectId, clanId));
+        }
+
+        public Task<bool> SetYautjaClanMemberSectAsync(Guid userId, int clanId, int? sectId)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetYautjaClanMemberSectAsync(userId, clanId, sectId));
         }
         // CMU14 End
 

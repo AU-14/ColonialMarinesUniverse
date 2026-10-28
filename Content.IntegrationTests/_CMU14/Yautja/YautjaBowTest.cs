@@ -10207,8 +10207,8 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/weapon/harpoon/yautja flags_item omits ITEM_PREDATOR.");
                     Assert.That(entMan.HasComponent<ClothingComponent>(harpoon), Is.False,
                         "CMSS13 /obj/item/weapon/harpoon/yautja does not set flags_equip_slot.");
-                    Assert.That(entMan.HasComponent<LandAtCursorComponent>(harpoon), Is.False,
-                        "CMSS13 /obj/item/weapon/harpoon/yautja does not set throw_speed = SPEED_VERY_FAST.");
+                    Assert.That(entMan.HasComponent<LandAtCursorComponent>(harpoon), Is.True,
+                        "CMSS13's thrown harpoon hits whatever is in its path. Without LandAtCursor a hand throw lands short and slides through the target.");
                     Assert.That(entMan.HasComponent<DisarmMalusComponent>(harpoon), Is.False,
                         "CMSS13 /obj/item/weapon/harpoon/yautja does not inherit predator weapon disarm resistance.");
                 });
@@ -10260,7 +10260,8 @@ public sealed class YautjaBowTest
                 var itemRange = entMan.GetComponent<ItemThrowRangeComponent>(harpoon).Range;
                 var thrown = entMan.GetComponent<ThrownItemComponent>(harpoon);
                 var flightTime = thrown.LandTime!.Value - thrown.ThrownTime!.Value;
-                var expectedFlightTime = TimeSpan.FromSeconds(itemRange / hunterHands.BaseThrowspeed * ThrowingSystem.FlyTimePercentage);
+                // LandAtCursor, so the full flight with no friction trim
+                var expectedFlightTime = TimeSpan.FromSeconds(itemRange / hunterHands.BaseThrowspeed);
 
                 Assert.That(flightTime.TotalSeconds,
                     Is.EqualTo(expectedFlightTime.TotalSeconds).Within(0.001),
@@ -18277,10 +18278,10 @@ public sealed class YautjaBowTest
             SlotFlags.BACK,
             true,
             1f / 1.4f,
-            10,
-            10,
+            15,
+            15,
             RequiresWield: true,
-            WieldBonusDamageTotal: 35);
+            WieldBonusDamageTotal: 30);
         yield return new Cmss13RackedMeleeRow(
             "CMUYautjaCleavingGlaive",
             "/obj/item/weapon/twohanded/yautja/glaive/alt",
@@ -18290,10 +18291,10 @@ public sealed class YautjaBowTest
             SlotFlags.BACK,
             true,
             1f / 1.4f,
-            10,
-            10,
+            15,
+            15,
             RequiresWield: true,
-            WieldBonusDamageTotal: 35);
+            WieldBonusDamageTotal: 30);
         yield return new Cmss13RackedMeleeRow(
             "CMUYautjaLongaxe",
             "/obj/item/weapon/twohanded/yautja/glaive/longaxe",
@@ -18303,10 +18304,10 @@ public sealed class YautjaBowTest
             SlotFlags.BACK,
             true,
             1f / 1.4f,
-            10,
-            10,
+            15,
+            15,
             RequiresWield: true,
-            WieldBonusDamageTotal: 35);
+            WieldBonusDamageTotal: 30);
         yield return new Cmss13RackedMeleeRow(
             "CMUYautjaAncientWarGlaive",
             "/obj/item/weapon/twohanded/yautja/glaive/damaged",
@@ -18316,8 +18317,8 @@ public sealed class YautjaBowTest
             SlotFlags.BACK,
             true,
             1f / 1.4f,
-            5,
-            5,
+            10,
+            10,
             ItemPredator: false,
             RequiresWield: true,
             WieldBonusDamageTotal: 15);
@@ -18330,8 +18331,8 @@ public sealed class YautjaBowTest
             null,
             true,
             1f / 0.9f,
-            30,
-            5,
+            35,
+            10,
             ItemPredator: false,
             Unacidable: false);
         yield return new Cmss13RackedMeleeRow(
@@ -18343,7 +18344,7 @@ public sealed class YautjaBowTest
             null,
             false,
             null,
-            30,
+            35,
             7,
             ItemPredator: false,
             Unacidable: false,
@@ -18357,7 +18358,7 @@ public sealed class YautjaBowTest
             null,
             true,
             null,
-            20,
+            25,
             20,
             ItemPredator: false,
             Unacidable: false,
@@ -18372,7 +18373,7 @@ public sealed class YautjaBowTest
             true,
             1f / 1.2f,
             25,
-            30,
+            35,
             ItemPredator: false,
             Unacidable: false);
     }
@@ -19451,10 +19452,10 @@ public sealed class YautjaBowTest
         Assert.That(entMan.HasComponent<YautjaTechItemComponent>(spear), Is.False,
             "CMSS13 hunter spear overrides flags_item to TWOHANDED|ADJACENT_CLICK_DELAY and drops ITEM_PREDATOR.");
         AssertNonCorrodible(entMan, spear);
-        Assert.That(DamageTotal(melee.Damage), Is.EqualTo((FixedPoint2) 10),
-            "CMSS13 hunter spear force = MELEE_FORCE_TIER_3 local mapping.");
-        Assert.That(DamageTotal(wield.BonusDamage), Is.EqualTo((FixedPoint2) 35),
-            "CMSS13 hunter spear force_wielded = MELEE_FORCE_TIER_7 local mapping.");
+        Assert.That(DamageTotal(melee.Damage), Is.EqualTo((FixedPoint2) 15),
+            "CMSS13 hunter spear force = MELEE_FORCE_TIER_3 (15).");
+        Assert.That(DamageTotal(melee.Damage + wield.BonusDamage), Is.EqualTo((FixedPoint2) 35),
+            "CMSS13 hunter spear force_wielded = MELEE_FORCE_TIER_7 (35) once wielded.");
     }
 
     private static void RaiseShieldHit(IEntityManager entMan, EntityUid shield, EntityUid user, EntityUid target)

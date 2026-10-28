@@ -1194,8 +1194,22 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         {
             await using var db = await GetDb();
 
-            var records = (await db.DbContext.CMURoundOutcomes
-                    .AsNoTracking()
+            var now = DateTime.UtcNow;
+            DateTime? from = query.Period switch
+            {
+                CMURoundStatisticsPeriod.OneWeek => now.AddDays(-7),
+                CMURoundStatisticsPeriod.TwoWeeks => now.AddDays(-14),
+                CMURoundStatisticsPeriod.ThreeMonths => now.AddMonths(-3),
+                CMURoundStatisticsPeriod.SixMonths => now.AddMonths(-6),
+                CMURoundStatisticsPeriod.OneYear => now.AddYears(-1),
+                CMURoundStatisticsPeriod.AllTime => null,
+                _ => now.AddMonths(-1),
+            };
+            var outcomes = db.DbContext.CMURoundOutcomes.AsNoTracking();
+            if (from is { } start)
+                outcomes = outcomes.Where(outcome => outcome.RecordedAt >= start);
+
+            var records = (await outcomes
                     .OrderByDescending(outcome => outcome.RecordedAt)
                     .ToListAsync(cancel))
                 .Select(MakeCMURoundOutcomeRecord)

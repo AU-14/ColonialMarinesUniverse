@@ -69,6 +69,16 @@
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
+  id: CMUEncryptionKeyGovforMedical
+  name: GOVFOR medical encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - CMURadioGovforMedical
+    defaultChannel: CMURadioGovforMedical
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
   id: AU14EncryptionKeyGovforFoxtrot
   name: GOVFOR Foxtrot encryption key
   description: An encryption key used to communicate on the GOVFOR Foxtrot channel.
@@ -111,6 +121,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
     trackerModes:
@@ -132,6 +143,7 @@
     containers:
       key_slots: # give all usable keys for emergencies/promotions
       - AU14EncryptionKeyGovfor # empty key when taken out
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforCommand
       - AU14EncryptionKeyGovforBravo
       - AU14EncryptionKeyGovforCharlie
@@ -152,6 +164,7 @@
     containers:
       key_slots: # no command key, SLs talk to command through the RTO's manpack
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforJTAC
 
 - type: entity
@@ -164,6 +177,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforJTAC
       - AU14EncryptionKeyGovforIntel
 
@@ -177,6 +191,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforJTAC
 
 - type: entity
@@ -189,6 +204,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforIntel
 
 - type: entity
@@ -201,6 +217,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforJTAC
       - AU14EncryptionKeyGovforIntel
 
@@ -214,11 +231,42 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforCommandOnly
       - AU14EncryptionKeyGovforIntel
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
     defaultChannel: radioGovforCommand
+
+- type: entity
+  parent: AU14HeadsetGovforAuxiliary
+  id: CMUHeadsetGovforDoctor
+  name: GOVFOR medical headset
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforCommandOnly
+      - AU14EncryptionKeyGovforIntel
+      - CMUEncryptionKeyGovforMedical
+
+- type: entity
+  parent: AU14HeadsetGovforCommand
+  id: CMUHeadsetGovforMedicalCommand
+  name: GOVFOR medical command headset
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforCommand
+      - AU14EncryptionKeyGovforBravo
+      - AU14EncryptionKeyGovforCharlie
+      - AU14EncryptionKeyGovforIntel
+      - AU14EncryptionKeyGovforJTAC
+      - AU14EncryptionKeyGovforMILP
+      - CMUEncryptionKeyGovforMedical
 
 - type: entity
   parent: AU14HeadsetGovforMarine
@@ -230,12 +278,26 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGovfor
+      - CMUEncryptionKeyGovforMedical
       - AU14EncryptionKeyGovforCommand
 #     - AU14EncryptionKeyGovforCommandOnly
       - AU14EncryptionKeyGovforMILP
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
     defaultChannel: radioGovforCommand
+
+- type: entity
+  parent: CMHeadsetHighCommand
+  id: CMUHeadsetGovforHighCommand
+  name: GOVFOR high command headset
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyCommon
+      - RMCEncryptionKeySeniorCommand
+      - RMCEncryptionKeyHighCommand
+      - CMUEncryptionKeyGovforMedical
 
 - type: entity
   parent: RMCBaseUniformAccessory
@@ -269,6 +331,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - CMURadioGovforMedical
     - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP

@@ -248,14 +248,14 @@ entities:
     - type: Transform
       pos: 45.5,72.5
       parent: 200002
-- proto: CMUHunterShipMeatLockerBoxCardboardx5Offset0x1
+- proto: CMUHunterShipMeatLockerThrallGearBoxx5Offset0x1
   entities:
   - uid: 200012
     components:
     - type: Transform
       pos: 42.5,67.5
       parent: 200002
-- proto: CMUHunterShipMeatLockerBoxCardboardx5Offset1x1
+- proto: CMUHunterShipMeatLockerThrallGearBoxx5Offset1x1
   entities:
   - uid: 200013
     components:

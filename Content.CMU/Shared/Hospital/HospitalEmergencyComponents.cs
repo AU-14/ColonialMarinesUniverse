@@ -68,8 +68,9 @@ public sealed partial class HospitalEmergencyComputerComponent : Component
     [DataField]
     public EntProtoId ReturnDestinationPrototype = "CMDropshipDestinationThirdPartyReturn";
 
+    /// <summary>ASRS faction receiving treatment payments; null deposits into the colony budget.</summary>
     [DataField]
-    public EntProtoId CashPrototype = "RMCSpaceCash";
+    public string? RequisitionsFaction;
 
     [DataField]
     public int MinCasualties = 3;

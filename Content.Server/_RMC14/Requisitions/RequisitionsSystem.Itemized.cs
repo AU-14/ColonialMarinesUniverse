@@ -118,6 +118,14 @@ public sealed partial class RequisitionsSystem
             return false;
 
         var componentFactory = EntityManager.ComponentFactory;
+        // CMU14 begin: ASRS vendor entries are already items. Keep filled gear intact.
+        if (entry.CMUFactionVendorItem &&
+            cratePrototype.TryComp<ItemComponent>(CompName.Get<ItemComponent>(componentFactory), out _))
+        {
+            AddManifestItem(manifest, entry.Crate, 1);
+            return true;
+        }
+        // CMU14 end
         // Keep deployment crates intact when their contents cannot be carried as items.
         // Spawning the machine directly can leave it anchored on the delivery pad.
         if (cratePrototype.TryComp<SpawnOnTerminateComponent>(

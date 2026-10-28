@@ -64,7 +64,7 @@
       limit: 0
       required: false
     enum.HumanoidVisualLayers.Special:
-      limit: 0
+      limit: 1 # CMU14: reserve a slot for the character's Build overlay.
       required: false
 
 - type: entity
