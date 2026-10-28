@@ -6,11 +6,13 @@ using Content.Shared._RMC14.Dialog;
 using Content.Shared.Actions.Components;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.Lodge;
+using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Maps;
+using Content.Shared.Prying.Systems;
 using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -191,8 +193,14 @@ public sealed class YautjaLodgeTest
             Assert.That(entMan.System<SharedVerbSystem>().GetLocalVerbs(door, human, typeof(AlternativeVerb))
                 .Any(verb => verb.Text == Loc.GetString("cmu-yautja-temple-door-verb-lock")), Is.False);
 
-            entMan.EventBus.RaiseLocalEvent(door, new InteractUsingEvent(hunter, wristBlades, door, map.GridCoords));
+            // the blades can pry, and the client only has the pry system, so it used to predict a pry bar the server
+            // never ran. prying has to refuse these doors outright
+            Assert.That(entMan.System<PryingSystem>().TryPry(door, hunter, out var pryId, wristBlades), Is.True);
+            Assert.That(pryId, Is.Null);
+
+            Assert.That(entMan.System<SharedInteractionSystem>().InteractUsing(hunter, wristBlades, door, map.GridCoords), Is.True);
             Assert.That(entMan.GetComponent<DoorComponent>(door).State, Is.EqualTo(DoorState.Opening));
+            Assert.That(entMan.TryGetComponent(hunter, out DoAfterComponent? doAfters) && doAfters.DoAfters.Count > 0, Is.False);
         });
 
         await pair.RunTicksSync(pair.SecondsToTicks(3));

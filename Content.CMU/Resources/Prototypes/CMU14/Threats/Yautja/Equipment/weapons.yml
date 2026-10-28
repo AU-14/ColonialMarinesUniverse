@@ -34,6 +34,8 @@
       penetration: None
   - type: DisarmMalus
     malus: 0.2
+  # cmss13 human hits: no skill bonus, sharp + edge penetration. default is sharp and edged
+  - type: YautjaHumanMelee
   - type: Clothing
     slots:
     - suitStorage
@@ -69,6 +71,9 @@
         Piercing: 30
   - type: ItemThrowRange
     range: 14
+  # without this a ctrl+q throw touches down short of the cursor and slides the rest, and a sliding harpoon goes
+  # straight through whoever it was aimed at. the other throwing weapons all have it
+  - type: LandAtCursor
   - type: RemoveComponents
     components:
     - type: YautjaTechItem
@@ -470,6 +475,9 @@
       types:
         Piercing: 16
         Slash: 4
+  # sharp but not edged in cm
+  - type: YautjaHumanMelee
+    penetration: 30
   - type: ItemThrowRange
     range: 14
   - type: Clothing
@@ -624,7 +632,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Piercing: 10
+        Piercing: 15
     animation: WeaponArcThrust
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
@@ -633,7 +641,7 @@
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Piercing: 35
+        Piercing: 20
   - type: MeleeRequiresWield
   - type: DamageOtherOnHit
     damage:
@@ -685,7 +693,7 @@
     attackRate: 0.71428573
     damage:
       types:
-        Slash: 10
+        Slash: 15
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: Wieldable
@@ -693,12 +701,12 @@
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Slash: 35
+        Slash: 30
   - type: MeleeRequiresWield
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 10
+        Slash: 15
   - type: YautjaPounceBlock
   - type: Clothing
     clothingVisuals:
@@ -760,7 +768,7 @@
     attackRate: 0.71428573
     damage:
       types:
-        Slash: 5
+        Slash: 10
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: Wieldable
@@ -772,7 +780,7 @@
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 5
+        Slash: 10
   - type: RemoveComponents
     components:
     - type: YautjaTechItem
@@ -814,13 +822,13 @@
     attackRate: 1.1111112
     damage:
       types:
-        Slash: 30
+        Slash: 35
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 5
+        Slash: 10
   - type: RemoveComponents
     components:
     - type: YautjaTechItem
@@ -845,7 +853,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 30
+        Blunt: 35
     soundHit:
       path: /Audio/Weapons/genhit3.ogg
   - type: StaminaDamageOnHit
@@ -854,6 +862,9 @@
     damage:
       types:
         Blunt: 7
+  # blunt, no penetration, still no skill bonus on humans
+  - type: YautjaHumanMelee
+    penetration: 0
   - type: LandAtCursor
   - type: RemoveComponents
     components:
@@ -880,7 +891,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 20
+        Slash: 25
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: DamageOtherOnHit
@@ -922,7 +933,10 @@
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 30
+        Slash: 35
+  # edged but not sharp in cm
+  - type: YautjaHumanMelee
+    penetration: 10
   - type: Tag
     tags:
     - Knife

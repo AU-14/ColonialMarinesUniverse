@@ -404,7 +404,8 @@ public sealed partial class YautjaClanHallEui : BaseEui
 
     private void RoundAction(RoundTry action)
     {
-        if (!IsHost)
+        // clan staff run the hunt, it shouldn't need a server host
+        if (!IsStaff)
         {
             Report(false, "cmu-yautja-hall-denied-round");
             return;
@@ -618,7 +619,7 @@ public sealed partial class YautjaClanHallEui : BaseEui
                 .ToList();
         }
 
-        if (actor.Host)
+        if (actor.Staff)
             state.Round = RoundState();
 
         return state;

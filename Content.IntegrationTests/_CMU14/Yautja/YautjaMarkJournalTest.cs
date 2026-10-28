@@ -56,6 +56,32 @@ public sealed class YautjaMarkJournalTest
         await pair.CleanReturnAsync();
     }
 
+    // prey that died to someone else kept the mark, and the hunter could never mark anything again
+    [Test]
+    public async Task MarkingNewPreyReleasesTheOldOne()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var map = await pair.CreateTestMap();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var em = pair.Server.EntMan;
+            var (hunter, bracer) = SpawnHunter(em, map.GridCoords);
+            var oldPrey = em.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(2, 0)));
+            var newPrey = em.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(3, 0)));
+            var marks = em.System<YautjaMarkSystem>();
+            Assert.That(marks.TryMark(bracer, hunter, oldPrey, YautjaMarkKind.Prey, null), Is.True);
+            em.System<Content.Shared.Mobs.Systems.MobStateSystem>().ChangeMobState(oldPrey, Content.Shared.Mobs.MobState.Dead);
+
+            Assert.That(marks.TryMark(bracer, hunter, newPrey, YautjaMarkKind.Prey, null), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(marks.IsMarkedBy(newPrey, YautjaMarkKind.Prey, hunter), Is.True);
+                Assert.That(marks.IsMarkedBy(oldPrey, YautjaMarkKind.Prey, hunter), Is.False);
+            });
+        });
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task UndefinedMarkKindsAreRejected()
     {
