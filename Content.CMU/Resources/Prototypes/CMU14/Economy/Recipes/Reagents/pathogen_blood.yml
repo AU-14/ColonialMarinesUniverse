@@ -1,0 +1,206 @@
+- type: reagent
+  parent: CMReagent
+  id: CMUPathogenBlood
+  name: reagent-name-pathogen-blood
+  desc: reagent-desc-pathogen-blood
+  physicalDesc: reagent-physical-desc-unidentifiable
+  class: Special
+  color: "#e6e6e6"
+  reward: 2
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.1
+      effects:
+      - !type:Corrosive
+        potency: 3
+
+- type: reagent
+  parent: CMUPathogenBlood
+  id: CMUPathogenRoyalBlood
+  name: reagent-name-pathogen-royal-blood
+  desc: reagent-desc-pathogen-royal-blood
+  color: "#cac703"
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.1
+      effects:
+      - !type:Corrosive
+        potency: 6
+
+
+- type: reagent
+  parent: CMReagent
+  id: CMUPathogenPlasma
+  name: reagent-name-pathogen-plasma
+  desc: reagent-desc-pathogen-plasma
+  color: "#f1e8cf"
+  physicalDesc: reagent-physical-desc-unidentifiable
+
+- type: reagent
+  parent: CMUPathogenPlasma
+  id: CMUPathogenPlasmaPhero
+  name: reagent-name-pathogen-phero-plasma
+  desc: reagent-desc-pathogen-phero-plasma
+  color: "#a2e7d6"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Hallucinogenic
+        potency: 8
+      - !type:Nervestimulating
+        potency: 2
+  
+- type: reagent
+  parent: CMUPathogenPlasma
+  id: CMUPathogenPlasmaChitin
+  name: reagent-name-pathogen-chitin-plasma
+  desc: reagent-desc-pathogen-chitin-plasma
+  color: "#6d7694"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Hyperdensificating
+        potency: 1
+
+- type: reagent
+  parent: CMUPathogenPlasma
+  id: CMUPathogenPlasmaCatecholamine
+  name: reagent-name-pathogen-cat-plasma
+  desc: reagent-desc-pathogen-cat-plasma
+  color: "#cf7551"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Neuropathic
+        potency: 2
+      - !type:Musclestimulating
+        potency: 6
+
+- type: reagent
+  parent: CMUPathogenPlasma
+  id: CMUPathogenPlasmaSpore
+  name: reagent-name-pathogen-spore-plasma
+  desc: reagent-desc-pathogen-spore-plasma
+  color: "#c3c371"
+  reward: 2
+  class: Special
+  overdose: 80
+  criticalOverdose: 100
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Hemositic
+        potency: 4
+#TODO: special crit OD behavior for this
+
+- type: reagent
+  parent: CMUPathogenPlasma
+  id: CMUPathogenPlasmaNeuro
+  name: reagent-name-pathogen-neuro-plasma
+  desc: reagent-desc-pathogen-neuro-plasma
+  color: "#ba8216"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Neurotoxic
+        potency: 4
+      - !type:Excreting
+        potency: 2
+      - !type:Hallucinogenic
+        potency: 6
+
+- type: reagent
+  parent: CMUPathogenPlasma
+  id: CMUPathogenPlasmaNutrient
+  # Nothing produces this plasma yet; keep it out of research contract pools until something does.
+  flags: NoGeneration
+  name: reagent-name-pathogen-nutrient-plasma
+  desc: reagent-desc-pathogen-nutrient-plasma
+  color: "#2fbe88"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Fueling
+        potency: 1
+      - !type:Viscous
+        potency: 3
+      - !type:Addictive
+        potency: 4
+      - !type:Nutritious
+        potency: 3
+
+- type: reagent
+  parent: CMUPathogenPlasma
+  id: CMUPathogenPlasmaMycotoxin
+  name: reagent-name-pathogen-myxotoxin-plasma
+  desc: reagent-desc-pathogen-mycotoxin-plasma
+  color: "#a65d7f"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Biocidic
+        potency: 2
+
+- type: reagent
+  parent: CMUPathogenPlasma
+  id: CMUPathogenPlasmaRoyal
+  name: reagent-name-pathogen-royal-plasma
+  desc: reagent-desc-pathogen-royal-plasma
+  color: "#ffeb9c"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Biocidic
+        potency: 4
+      - !type:Addictive
+        potency: 1
+      - !type:Hallucinogenic
+        potency: 4
+      - !type:Encrypted
+        potency: 1
