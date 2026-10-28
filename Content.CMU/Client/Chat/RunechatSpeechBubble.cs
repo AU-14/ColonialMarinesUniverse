@@ -60,17 +60,27 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
     private readonly record struct TextRun(string Text, bool Bold, bool Italic, Color? ColorOverride = null);
 
     public RunechatSpeechBubble(SpeechType type, ChatMessage message, EntityUid senderEntity)
-        : base(
-            message,
-            senderEntity,
-            GetStyleClass(type, message),
-            GetTextColor(type, message, senderEntity),
-            GetLifetime(GetRunPages(GetRuns(message, GetStyleClass(type, message)))))
+        : this(message, senderEntity, GetStyleClass(type, message), GetTextColor(type, message, senderEntity))
+    {
+    }
+
+    private RunechatSpeechBubble(ChatMessage message, EntityUid senderEntity, string style, Color color)
+        : this(message, senderEntity, style, color, PrepareBubble(message, style, color))
+    {
+    }
+
+    private RunechatSpeechBubble(ChatMessage message, EntityUid senderEntity, string style, Color color,
+        (Control Bubble, TimeSpan Lifetime) prepared)
+        : base(message, senderEntity, style, color, prepared.Lifetime, prepared.Bubble)
     {
         RectClipContent = false;
     }
 
     protected override Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null)
+        => PrepareBubble(message, speechStyleClass, fontColor).Bubble;
+
+    private static (Control Bubble, TimeSpan Lifetime) PrepareBubble(ChatMessage message, string speechStyleClass,
+        Color? fontColor)
     {
         var runs = GetRuns(message, speechStyleClass);
         var (style, forceBold) = GetVisualStyle(message, speechStyleClass, runs);
@@ -89,7 +99,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             ? GetLanguageIconTexture(message)
             : null;
 
-        return new RunechatTextControl(pages, fontColor ?? DefaultColor, style, languageIcon);
+        return (new RunechatTextControl(pages, fontColor ?? DefaultColor, style, languageIcon), GetLifetime(pages));
     }
 
     private static Texture? GetLanguageIconTexture(ChatMessage message)
@@ -1293,9 +1303,9 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             bool useRunColor,
             float textOpacity)
         {
-            foreach (var direction in offsets)
+            for (var i = 0; i < offsets.Count; i++)
             {
-                DrawLineMain(handle, position + direction * offset, line, color, useRunColor, textOpacity);
+                DrawLineMain(handle, position + offsets[i] * offset, line, color, useRunColor, textOpacity);
             }
         }
 

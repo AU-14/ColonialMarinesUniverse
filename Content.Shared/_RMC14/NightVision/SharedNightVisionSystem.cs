@@ -285,9 +285,11 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         if (!_timing.ApplyingState)
         {
             var defaultState = item.Comp.DefaultState;
-            if (TryComp(user, out NightVisionComponent? nightVision))
+            // CMU14: a source pending deferred removal is no longer a state to restore.
+            // if (TryComp(user, out NightVisionComponent? nightVision))
+            if (EnsureComp(user, out NightVisionComponent nightVision))
             {
-                nightVision = EnsureComp<NightVisionComponent>(user);
+                // nightVision = EnsureComp<NightVisionComponent>(user);
 
                 // CMU14: innate too, otherwise a visor's green filter overwrote a synth's own NV for good
                 if (item.Comp.ExperimentalMesonFov || item.Comp.RestorePreviousState || nightVision.Innate)
@@ -332,21 +334,16 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
             else
             {
                 item.Comp.HadNightVision = false;
-                nightVision = new NightVisionComponent()
-                {
-                    State = defaultState,
-                    Green = item.Comp.Green,
-                    // CMU Related Change
-                    Overlay = item.Comp.Overlay,
-                    Mesons = item.Comp.Mesons,
-                    ExperimentalMesonFov = item.Comp.ExperimentalMesonFov,
-                    BlockScopes = item.Comp.BlockScopes,
-                    Tint = item.Comp.Tint,
-                    NoiseStrength = item.Comp.NoiseStrength,
-                    VignetteStrength = item.Comp.VignetteStrength,
-                };
-
-                AddComp(user, nightVision, true);
+                // CMU14: EnsureComp already created the replacement component.
+                nightVision.State = defaultState;
+                nightVision.Green = item.Comp.Green;
+                nightVision.Overlay = item.Comp.Overlay;
+                nightVision.Mesons = item.Comp.Mesons;
+                nightVision.ExperimentalMesonFov = item.Comp.ExperimentalMesonFov;
+                nightVision.BlockScopes = item.Comp.BlockScopes;
+                nightVision.Tint = item.Comp.Tint;
+                nightVision.NoiseStrength = item.Comp.NoiseStrength;
+                nightVision.VignetteStrength = item.Comp.VignetteStrength;
                 Dirty(user, nightVision);
             }
         }

@@ -5,6 +5,7 @@ using Robust.Shared.Serialization;
 using Content.Shared.Doors.Components;
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Dropship.MultiDeck;
 
@@ -37,6 +38,11 @@ public sealed partial class MohawkMechanismsComponent : Component
     /// <summary>The lower boarding equipment was lost during a hijack crash.</summary>
     [DataField]
     public bool BoardingDisabled;
+
+    [DataField]
+    public EntProtoId? LandingShadow;
+
+    public readonly List<EntityUid> ApproachShadows = new();
 
     /// <summary>Deployed ramp displacement from its raised cabin floor, in ship-local axes.</summary>
     [DataField]
@@ -108,6 +114,9 @@ public sealed partial class MohawkHatchComponent : Component;
 
 [RegisterComponent]
 public sealed partial class MohawkRampEdgingComponent : Component;
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class MohawkRampRailingComponent : Component;
 
 [RegisterComponent]
 public sealed partial class MohawkLowerLadderComponent : Component;

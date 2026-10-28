@@ -30,6 +30,9 @@ public sealed partial class YautjaButcherActionEvent : InstantActionEvent;
 public sealed record YautjaButcherTargetSelectedEvent(NetEntity User, NetEntity Target);
 
 [Serializable, NetSerializable]
+public sealed record YautjaHonorDuelAcceptedEvent(NetEntity Challenger);
+
+[Serializable, NetSerializable]
 public sealed record YautjaButcherProcedureSelectedEvent(NetEntity User, NetEntity Target, YautjaButcherProcedure Procedure);
 
 public sealed partial class YautjaFalconControlActionEvent : InstantActionEvent;

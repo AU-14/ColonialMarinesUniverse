@@ -110,6 +110,10 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 3.7
     baseSprintSpeed: 7.1
+  # preds shrug off cold, without this their open gear lets them cool to room temp and read hypothermic.
+  # heating is left alone so fire still cooks them
+  - type: TemperatureProtection
+    coolingCoefficient: 0.1
   # cmss13 /datum/pain/yautja: nothing until horrible, and horrible only gives the distressing slowdown
   - type: PainShock
     minimumFeltTier: Shock

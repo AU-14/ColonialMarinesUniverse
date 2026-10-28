@@ -299,7 +299,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         var footprint = console is { } c ? GetFootprint(c, dropship) : dropship.TacticalLandFootprint;
 
         _audio.PlayPvs(WarningSound, destCoords, AudioParams.Default.WithVolume(2f));
-        SpawnWarningBorder(destCoords, footprint, xform.LocalRotation, lifetime);
+        if (!TrySpawnMohawkApproachShadows(destination, dropshipGrid, lifetime, ftl.StateTime.End))
+            SpawnWarningBorder(destCoords, footprint, xform.LocalRotation, lifetime);
 
         EnsureComp<DropshipLandingMarkersSpawnedComponent>(destination);
     }

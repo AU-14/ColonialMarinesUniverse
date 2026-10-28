@@ -121,6 +121,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         SubscribeLocalEvent<YautjaScalpComponent, ExaminedEvent>(OnScalpExamined);
         SubscribeLocalEvent<MobStateComponent, ExaminedEvent>(OnMobStateExamined);
         SubscribeLocalEvent<MobStateChangedEvent>(OnAnyMobStateChanged);
+
+        InitializeRag();
     }
 
     private void OnMobStateExamined(Entity<MobStateComponent> ent, ref ExaminedEvent args)
@@ -204,6 +206,20 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     {
         if (!TryComp(target, out YautjaRitualDuelComponent? ritual))
         {
+            if (HasComp<YautjaComponent>(target))
+            {
+                if (!_ritual.CanChallengeHonorDuel(hunter, target))
+                    return;
+
+                verbs.Add(new TVerb
+                {
+                    Text = Loc.GetString("cmu-yautja-honor-duel-challenge-verb"),
+                    Priority = 4,
+                    Act = () => _ritual.TryChallengeHonorDuel(hunter, target),
+                });
+                return;
+            }
+
             if (!_ritual.CanClaimCaptive(hunter, target, true, false))
                 return;
 
@@ -231,7 +247,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         verbs.Add(new TVerb
         {
-            Text = Loc.GetString("cmu-yautja-ritual-release-verb"),
+            Text = Loc.GetString(ritual.HonorDuel ? "cmu-yautja-honor-duel-call-off-verb" : "cmu-yautja-ritual-release-verb"),
             Priority = 3,
             Act = () => _ritual.TryReleaseCaptive(hunter, target),
         });
@@ -537,6 +553,13 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         return kind is YautjaTrophyKind.HumanSkull
             or YautjaTrophyKind.HumanRibcage
             or YautjaTrophyKind.XenoSkull;
+    }
+
+    // cmss13 only polishes human bones, but most pred trophies are xeno skulls and the rag did nothing on them.
+    // pelts are hide, not bone, so they stay out
+    private static bool IsPolishableTrophy(YautjaTrophyKind kind)
+    {
+        return IsHumanSkeletonTrophy(kind) || kind == YautjaTrophyKind.XenoSkull;
     }
 
     private static bool IsHumanSkeletonTrophy(YautjaTrophyKind kind)
@@ -1196,18 +1219,20 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private void OnTrophyInteractUsing(Entity<YautjaTrophyComponent> ent, ref InteractUsingEvent args)
     {
-        if (args.Handled ||
-            !TryComp(args.Used, out YautjaPolishingRagComponent? rag) ||
-            !IsHumanSkeletonTrophy(ent.Comp.Kind))
-        {
+        if (args.Handled || !TryComp(args.Used, out YautjaPolishingRagComponent? rag))
             return;
-        }
 
         args.Handled = true;
 
         if (!CanUseYautjaTech(args.User))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-polish-denied"), args.User, args.User, PopupType.SmallCaution);
+            return;
+        }
+
+        if (!IsPolishableTrophy(ent.Comp.Kind))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-polish-not-bone", ("trophy", ent.Owner)), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -1258,7 +1283,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         args.Handled = true;
 
-        if (!IsHumanSkeletonTrophy(ent.Comp.Kind) ||
+        if (!IsPolishableTrophy(ent.Comp.Kind) ||
             !CanUseYautjaTech(args.User) ||
             ent.Comp.Polished ||
             args.Used is not { } used ||
@@ -1436,7 +1461,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
                     : "cmu-yautja-trophy-polished-no"))));
         }
 
-        if (!canUseTech || !IsHumanSkeletonTrophy(ent.Comp.Kind))
+        if (!canUseTech || !IsPolishableTrophy(ent.Comp.Kind))
             return;
 
         args.PushMarkup(Loc.GetString(ent.Comp.Polished

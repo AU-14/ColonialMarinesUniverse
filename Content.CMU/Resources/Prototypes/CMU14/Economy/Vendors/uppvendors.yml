@@ -562,6 +562,7 @@
     - name: Headgear
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
+      - id: AU14UPPPilot
       - id: AU14JungleM50Helmet
       - id: AU14CamoM50Helmet
       - id: AU14UPPPatrolCap
@@ -584,6 +585,7 @@
     - name: Flight Mask
       choices: { CMUPlatoonAirCrewFlightMask: 1 }
       entries:
+      - id: AU14MaskUPPPilotOxygen
       - id: AU14MaskUSASFPilotOxygen
     - name: Webbings
       choices: { CMUPlatoonAirCrewWebbings: 1 }

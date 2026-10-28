@@ -161,7 +161,7 @@ public sealed class MohawkAttachmentsTest
                     if (installed)
                     {
                         Assert.That(attachment.Color.A, Is.EqualTo(1f));
-                        Assert.That(attachment.RsiState.ToString(), Is.AnyOf("fuel_enhancer_omaha", "cooling_system_omaha"));
+                        Assert.That(attachment.RsiState.ToString(), Is.AnyOf("fuel_enhancer_mohawk", "cooling_system_mohawk")); // CMU14: current upstream engine art.
                         Assert.That(((SpriteComponent.Layer) attachment).Rotation, Is.EqualTo(Angle.Zero));
                         var rsi = attachment.ActualRsi!;
                         var clicks = pair.Client.ResolveDependency<IClickMapManager>();
@@ -172,9 +172,11 @@ public sealed class MohawkAttachmentsTest
                         {
                             if (!clicks.IsOccluding(rsi, attachment.RsiState, direction, 0, new Vector2i(x, y)))
                                 continue;
-                            // Click maps add a two-pixel tolerance around the 20x12 equipment face.
-                            Assert.That(x, Is.InRange(20, 43));
-                            Assert.That(y, Is.InRange(24, 39), "The long engine housing must not be drawn.");
+                            // CMU14 Begin: upstream centers the same 20x12 face in a 32px sheet.
+                            // Click maps add a two-pixel tolerance around the equipment face.
+                            Assert.That(x, Is.InRange(4, 27));
+                            Assert.That(y, Is.InRange(8, 23), "The long engine housing must not be drawn.");
+                            // CMU14 End
                             pixels++;
                         }
                         Assert.That(pixels, Is.GreaterThan(100), "The compact equipment face must remain visible.");

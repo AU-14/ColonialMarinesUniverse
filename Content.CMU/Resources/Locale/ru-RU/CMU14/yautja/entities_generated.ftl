@@ -2018,7 +2018,7 @@ ent-CMUYautjaStructureYautjaMachinesMixer1Nopower = яутжа mixer1 nopower
     .desc = Древняя постройка охотничьих угодий яутжа.
 
 ent-CMUYautjaStructureYautjaMachinesDispenser = химический раздатчик
-    .desc = complex machine для смешивание элементы в chemicals. Вэй-Ю product.
+    .desc = Машина охотников, которая берёт элементы из своих запасов и смешивает их в химикаты.
 
 ent-CMUYautjaStructureYautjaMachinesBeaker1 = яутжа +beaker1
     .desc = Древняя постройка охотничьих угодий яутжа.
