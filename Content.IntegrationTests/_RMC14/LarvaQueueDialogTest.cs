@@ -95,8 +95,10 @@ public sealed class LarvaQueueJoinXenoUiTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task LarvaQueueOffersLarvaInsteadOfGhostedAdult()
+    // CMU14: bloodbursters use the same queue-only claim path.
+    [TestCase("CMXenoLarva")]
+    [TestCase("CMU14XenoBloodburster")]
+    public async Task LarvaQueueOffersLarvaInsteadOfGhostedAdult(string prototype)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -126,7 +128,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
             runner = entMan.SpawnEntity("CMXenoRunner", map.GridCoords.Offset(new Vector2(2, 0)));
             hiveSystem.SetHive(runner, hive);
-            larva = entMan.SpawnEntity("CMXenoLarva", map.GridCoords.Offset(new Vector2(3, 0)));
+            larva = entMan.SpawnEntity(prototype, map.GridCoords.Offset(new Vector2(3, 0)));
             hiveSystem.SetHive(larva, hive);
             larvaName = entMan.GetComponent<MetaDataComponent>(larva).EntityName;
 
