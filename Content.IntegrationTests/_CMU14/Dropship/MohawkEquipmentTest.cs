@@ -49,13 +49,13 @@ public sealed class MohawkEquipmentTest
                 if (parent == "CMUMohawkMapTable")
                     table = xform.Owner;
                 if (parent is not ("CMUMohawkCamera" or "CMUMohawkIntercom" or "CMUMohawkMedicalCabinet"
-                    or "CMUMohawkLight" or "CMUMohawkBlueLight"))
+                    or "CMUMohawkDoubleLight" or "CMUMohawkDoubleBlueLight"))
                     continue;
                 Assert.That(xform.Comp.Anchored, Is.True, $"{meta.EntityName} must stay attached to the cabin.");
                 fixtures.Add(entities.GetNetEntity(xform.Owner), (xform.Comp.LocalPosition, xform.Comp.LocalRotation, parent));
             }
             Assert.That(table, Is.Not.EqualTo(default(EntityUid)));
-            Assert.That(fixtures, Has.Count.EqualTo(variant.StartsWith("omaha") ? 23 : 18));
+            Assert.That(fixtures, Has.Count.EqualTo(variant.StartsWith("omaha") ? 23 : 19));
 
             var mounts = entities.QueryEntities<DropshipUtilityPointComponent>()
                 .Where(p => entities.GetComponent<TransformComponent>(p.Owner).ParentUid == ship &&
@@ -138,10 +138,10 @@ public sealed class MohawkEquipmentTest
                     Assert.That(sprite.DrawDepth, Is.GreaterThan((int) Content.Shared.DrawDepth.DrawDepth.Walls));
                     if (expected.Kind == "CMUMohawkMedicalCabinet")
                         Assert.That(sprite.BaseRSI!.Path.ToString(), Does.EndWith("/nanomed.rsi"));
-                    if (expected.Kind is "CMUMohawkLight" or "CMUMohawkBlueLight")
+                    if (expected.Kind is "CMUMohawkDoubleLight" or "CMUMohawkDoubleBlueLight")
                     {
                         Assert.That(entities.HasComponent<RMCLightOffsetComponent>(uid), Is.False);
-                        Assert.That(sprite.BaseRSI!.Path.ToString(), Does.EndWith("/Lighting/light_tube.rsi"));
+                        Assert.That(sprite.BaseRSI!.Path.ToString(), Does.EndWith("/Mohawk/obj/items/lighting.rsi"));
                     }
                     if (expected.Kind == "CMUMohawkCamera")
                     {
