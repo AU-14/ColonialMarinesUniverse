@@ -8,6 +8,7 @@ using Content.Server.Roles.Jobs;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared._RMC14.Ghost;
+using Content.Shared._RMC14.Mentor.ImaginaryFriend; // CMU14
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Actions;
@@ -166,6 +167,11 @@ namespace Content.Server.Ghost
 
         private void OnRelayMoveInput(EntityUid uid, GhostOnMoveComponent component, ref MoveInputEvent args)
         {
+            // CMU14 start: humanoid friends inherit a brain's GhostOnMove but must keep their mentor's mind.
+            if (HasComp<ImaginaryFriendComponent>(uid))
+                return;
+            // CMU14 end
+
             // If they haven't actually moved then ignore it.
             if ((args.Entity.Comp.HeldMoveButtons &
                  (MoveButtons.Down | MoveButtons.Left | MoveButtons.Up | MoveButtons.Right)) == 0x0)

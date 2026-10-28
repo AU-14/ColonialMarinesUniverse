@@ -354,6 +354,10 @@
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 1900
+        crate: CMUCrateVehiclePartAPCDualCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
         crate: CMUCrateVehiclePartAPCFrontCannonWolfpack
         maxStock: 2
         stockReplenishDelay: 300
