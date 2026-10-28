@@ -5,6 +5,8 @@ using Content.Server.CMU14.Round.ColonyShift;
 using Content.Server.GameTicking;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14;
+using Content.Shared.Doors.Components;
+using Content.Shared.Doors.Systems;
 using Content.Shared.Mind;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
@@ -90,6 +92,24 @@ public sealed class CMUColonyRotationTest : GameTest
             minds.TransferTo(mind, colonist);
             SEntMan.SpawnEntity("CMUTestColonyRotationLumber", aboard);
             SEntMan.SpawnEntity("CMUTestColonyRotationLumber", aboard);
+        });
+
+        // the grid has no power network, its doors still have to open for someone walking up empty handed
+        await Server.WaitAssertion(() =>
+        {
+            var doors = SEntMan.System<SharedDoorSystem>();
+            var found = 0;
+            var children = SEntMan.GetComponent<TransformComponent>(rotation.Shuttle!.Value).ChildEnumerator;
+            while (children.MoveNext(out var child))
+            {
+                if (!SEntMan.TryGetComponent(child, out DoorComponent? door))
+                    continue;
+
+                found++;
+                Assert.That(doors.TryOpen(child, door, colonist), Is.True, $"{SEntMan.ToPrettyString(child)} won't open");
+            }
+
+            Assert.That(found, Is.GreaterThan(0));
         });
 
         await RunUntil(() => rotation.Status == ColonyRotationTransportStatus.None, 60);

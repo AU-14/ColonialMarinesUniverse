@@ -138,7 +138,7 @@ entities:
         params:
           volume: -1
         path: /Audio/_RMC14/Dropship/dropship_incoming.ogg
-- proto: CMAirlockSecure
+- proto: CMUAirlockShuttleSecure
   entities:
   - uid: 3
     components:

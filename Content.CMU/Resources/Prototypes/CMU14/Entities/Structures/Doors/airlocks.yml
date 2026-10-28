@@ -6,3 +6,12 @@
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/escape_pod_door_black.rsi
+
+# secure airlock look on a shuttle door, opens without a power grid like CMAirlockShuttle (the colony rotation transport has none)
+- type: entity
+  parent: CMAirlockShuttle
+  id: CMUAirlockShuttleSecure
+  name: secure airlock
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/secure_door.rsi
