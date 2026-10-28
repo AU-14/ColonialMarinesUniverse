@@ -14,6 +14,7 @@ using Content.Shared.Shuttles.Components;
 using Content.Shared.Tag;
 using Content.Shared.Vehicle.Components;
 using Content.Shared.CMU14.TileMovement;
+using Content.Shared.CMU14.Movement; // CMU14
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -462,6 +463,10 @@ public abstract partial class SharedMoverController : VirtualController
                 TryGetSound(weightless, uid, mover, mobMover, xform, out var sound, tileDef: tileDef))
             {
                 var soundModifier = mover.Sprinting ? InputMoverComponent.SprintingSoundModifier : InputMoverComponent.WalkingSoundModifier;
+                // CMU14
+                var volumeEv = new GetMobFootstepVolumeEvent();
+                RaiseLocalEvent(uid, ref volumeEv);
+                soundModifier += volumeEv.Modifier;
 
                 var audioParams = sound.Params
                     .AddVolume(sound.Params.Volume + soundModifier)
@@ -855,6 +860,10 @@ public abstract partial class SharedMoverController : VirtualController
                 TryGetSound(false, uid, inputMover, mobMover, targetTransform, out var sound, tileDef: tileDef))
             {
                 var soundModifier = inputMover.Sprinting ? 3.5f : 1.5f;
+                // CMU14
+                var volumeEv = new GetMobFootstepVolumeEvent();
+                RaiseLocalEvent(uid, ref volumeEv);
+                soundModifier += volumeEv.Modifier;
                 var volume = sound.Params.Volume + soundModifier;
 
                 var audioParams = sound.Params

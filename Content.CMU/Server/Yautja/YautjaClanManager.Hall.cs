@@ -204,6 +204,61 @@ public sealed partial class YautjaClanManager
             : YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-clan-gone");
     }
 
+    // sect id null makes a new one
+    public async Task<YautjaClanMutationResult> HallEditSect(
+        YautjaClanHallActor actor,
+        int clanId,
+        int? sectId,
+        string name,
+        string description)
+    {
+        if (!YautjaClanHallPolicy.CanManageSects(actor, clanId))
+            return YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-edit");
+
+        name = name.Trim();
+        description = description.Trim();
+        if (name.Length == 0 || name.Length > YautjaClanHallPolicy.MaxNameLength)
+            return YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-name");
+
+        if (description.Length > YautjaClanHallPolicy.MaxSectDescriptionLength)
+            return YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-text");
+
+        if (sectId is { } id)
+        {
+            return await _db.UpdateYautjaClanSectAsync(id, clanId, name, description)
+                ? Finish(Done())
+                : YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-sect-gone");
+        }
+
+        return await _db.CreateYautjaClanSectAsync(clanId, name, description, YautjaClanHallPolicy.MaxSects) != null
+            ? Finish(Done())
+            : YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-sect-limit");
+    }
+
+    public async Task<YautjaClanMutationResult> HallDeleteSect(YautjaClanHallActor actor, int clanId, int sectId)
+    {
+        if (!YautjaClanHallPolicy.CanManageSects(actor, clanId))
+            return YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-edit");
+
+        return await _db.DeleteYautjaClanSectAsync(sectId, clanId)
+            ? Finish(Done())
+            : YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-sect-gone");
+    }
+
+    public async Task<YautjaClanMutationResult> HallSetSect(
+        YautjaClanHallActor actor,
+        int clanId,
+        NetUserId targetId,
+        int? sectId)
+    {
+        if (!YautjaClanHallPolicy.CanManageSects(actor, clanId))
+            return YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-edit");
+
+        return await _db.SetYautjaClanMemberSectAsync(targetId.UserId, clanId, sectId)
+            ? Finish(Done(targetId))
+            : YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-sect-gone");
+    }
+
     public async Task<YautjaClanMutationResult> HallEditLook(
         YautjaClanHallActor actor,
         int clanId,

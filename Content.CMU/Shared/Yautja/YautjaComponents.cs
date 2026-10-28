@@ -63,6 +63,13 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public float StunResistance = 1.5f;
 
+    // dB added to every footstep, cloaked replaces it rather than stacking
+    [DataField]
+    public float FootstepVolume = -4f;
+
+    [DataField]
+    public float CloakedFootstepVolume = -12f;
+
     [DataField]
     public Dictionary<FixedPoint2, float> SlowOnDamageThresholds = new()
     {
@@ -176,6 +183,10 @@ public sealed partial class YautjaComponent : Component
     /// </summary>
     [DataField]
     public float ThrowSpeedMultiplier = 1.8f;
+
+    // a carried body only goes this far. cmss13 mobs have the default throw_range 7, the hand range above is for items
+    [DataField]
+    public float CarriedThrowRange = 7f;
 
     [DataField]
     public float LeapThrowSpeed = 5f;
