@@ -8,6 +8,7 @@ using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Popups;
 using Content.Shared.Shuttles.Systems;
+using Content.Shared.Tag;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -23,6 +24,8 @@ namespace Content.Shared._RMC14.Dropship.Weapon;
 /// </summary>
 public sealed class DropshipHandLoadSystem : EntitySystem
 {
+    private static readonly ProtoId<TagPrototype> InteriorWeaponPointTag = "AU14InteriorWeaponPoint";
+
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedDropshipSystem _dropships = default!;
@@ -31,6 +34,7 @@ public sealed class DropshipHandLoadSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly PowerLoaderSystem _powerLoader = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly SharedVirtualItemSystem _virtualItem = default!;
 
     public override void Initialize()
@@ -126,7 +130,8 @@ public sealed class DropshipHandLoadSystem : EntitySystem
             return false;
 
         if (_dropships.TryGetGridDropship(point, out var ship) &&
-            (_dropships.IsInFlight((ship.Owner, ship.Comp)) || ship.Comp.State == FTLState.Starting))
+            (ship.Comp.State == FTLState.Starting ||
+             (_dropships.IsInFlight((ship.Owner, ship.Comp)) && !_tag.HasTag(point, InteriorWeaponPointTag))))
         {
             _popup.PopupClient(Loc.GetString("cmu-dropship-hand-load-flight"), point, user, PopupType.SmallCaution);
             return false;
