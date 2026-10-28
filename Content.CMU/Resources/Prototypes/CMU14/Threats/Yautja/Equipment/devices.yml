@@ -1632,6 +1632,9 @@
     overlay: true
     blockScopes: true
     ignoreUserOnlyHalf: true
+    # the client reapplies night vision on every parent change (buckling to a chair is one) and without this it
+    # switched FOV back on over the visor, so you lost the view until you cycled the mask
+    experimentalMesonFov: true
   - type: YautjaMaskVisorGlasses
   - type: Unremoveable
 
