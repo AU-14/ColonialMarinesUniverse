@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMJobBase
   id: AU14JobUNISCEnforcer
   icon: AU14JobIconMP
@@ -28,7 +28,7 @@
     currentLanguage: English
     defaultLanguage: English
 
-  name: United Nations Interstellar Space Corps Enforcer
+  name: Enforcer
   description: au14-unisc-description
   playTimeTracker: AU14JobUNISCEnforcer
   ranks:

@@ -1,0 +1,25 @@
+author: troytroy400
+category: CMU
+changes:
+- message: The Mohawk's cabin no longer vents when its ramp is lowered.
+  type: Fix
+- message: The Mohawk's lowered ramp, undercarriage and roof share the air of whatever
+    they're parked over instead of reading as vacuum.
+  type: Fix
+- message: Dropship hatches and doors have tiny fans so opening them doesn't vent
+    the cabin. Covers the Omaha, Midway and the dynamic gunship.
+  type: Fix
+- message: Every dropship has an air vent that keeps the cabin topped up with breathable
+    air.
+  type: Add
+- message: Observing from the lobby gives you a ghost that looks like your selected
+    character, dressed in your selected job's clothes.
+  type: Tweak
+- message: The server name no longer gets "| gamemode day Playtest" appended each
+    round. Set cmu.game.hostname_round_suffix to bring it back.
+  type: Admin
+- message: Dropship grids without air of their own can borrow the air of the grid
+    beneath them (CMUBorrowedAtmosphereComponent).
+  type: Code
+time: '2026-10-21T23:31:49.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2256

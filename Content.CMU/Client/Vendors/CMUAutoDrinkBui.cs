@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Client.CMU14.Telephone;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.CMU14.Kitchen;
 using Content.Shared.CMU14.Vendors;
 using Content.Shared.FixedPoint;
 using Robust.Client.Graphics;
@@ -10,6 +11,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 using static Content.Client.CMU14.Vendors.CMUNutriCoStyle;
 
 namespace Content.Client.CMU14.Vendors;
@@ -28,6 +30,14 @@ public sealed class CMUAutoDrinkBui(EntityUid owner, Enum uiKey) : BoundUserInte
         _window.OnPour += (drink, amount) => SendMessage(new CMUAutoDrinkPourBuiMsg(drink, amount));
         _window.OnCup += () => SendMessage(new CMUAutoDrinkCupBuiMsg());
         _window.OnEject += () => SendMessage(new CMUAutoDrinkEjectBuiMsg());
+        Refresh();
+    }
+
+    /// <summary>Called when the foodline opens or closes.</summary>
+    public void Refresh()
+    {
+        EntMan.TryGetComponent(Owner, out CMUFoodlineVendorComponent? foodline);
+        _window?.SetFoodline(foodline is { FoodlineOpen: true } ? Loc.GetString(foodline.Message) : null);
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -63,7 +73,10 @@ public sealed class CMUAutoDrinkWindow : DefaultWindow
     private readonly BoxContainer _contents;
     private readonly Button _cup;
     private readonly Button _eject;
+    private readonly RichTextLabel _foodline;
+    private readonly List<BaseButton> _pourKeys = new();
     private readonly List<PanelContainer> _leds;
+    private bool _foodlineOpen;
 
     private CMUAutoDrinkComponent? _machine;
     private FixedPoint2 _amount;
@@ -96,6 +109,9 @@ public sealed class CMUAutoDrinkWindow : DefaultWindow
         display.VerticalExpand = true;
         var menu = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, SeparationOverride = 6 };
         menu.AddChild(CMUPhoneStyle.Text(Loc.GetString("cmu-autodrink-select"), _bold, Phosphor));
+        // Wraps, so a long notice stays inside the display instead of stretching the window.
+        _foodline = new RichTextLabel { HorizontalExpand = true, Visible = false };
+        menu.AddChild(_foodline);
         var scroll = new ScrollContainer { VerticalExpand = true, HScrollEnabled = false };
         var menuBody = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, SeparationOverride = 6, HorizontalExpand = true };
         _drinks = new GridContainer { Columns = 2, HSeparationOverride = 4, VSeparationOverride = 4, HorizontalExpand = true };
@@ -165,8 +181,28 @@ public sealed class CMUAutoDrinkWindow : DefaultWindow
         BuildSizes();
     }
 
+    /// <summary>Shows why it won't pour while the DEFAC foodline is open, or null once it's closed again.</summary>
+    public void SetFoodline(string? message)
+    {
+        _foodlineOpen = message != null;
+        var notice = new FormattedMessage();
+        notice.PushTag(new MarkupNode("bold", null, null));
+        notice.AddText(message?.ToUpperInvariant() ?? string.Empty);
+        notice.Pop();
+        _foodline.SetMessage(notice, Warning);
+        _foodline.Visible = _foodlineOpen;
+        foreach (var key in _pourKeys)
+        {
+            key.Disabled = _foodlineOpen;
+        }
+
+        if (_state != null)
+            UpdateState(_state);
+    }
+
     private void BuildMenu()
     {
+        _pourKeys.Clear();
         _drinks.RemoveAllChildren();
         _extras.RemoveAllChildren();
         if (_machine == null)
@@ -206,6 +242,8 @@ public sealed class CMUAutoDrinkWindow : DefaultWindow
             button.OnMouseEntered += _ => panel.PanelOverride = CMUPhoneStyle.Box(KeyFaceLit, Orange, 1, 6, 4);
             button.OnMouseExited += _ => panel.PanelOverride = CMUPhoneStyle.Box(DisplayRow, Trim, 1, 6, 4);
             button.OnPressed += _ => OnPour?.Invoke(drink.Reagent, _amount);
+            button.Disabled = _foodlineOpen;
+            _pourKeys.Add(button);
 
             if (drink.Extra)
             {
@@ -271,7 +309,7 @@ public sealed class CMUAutoDrinkWindow : DefaultWindow
             _contents.AddChild(row);
         }
 
-        _cup.Disabled = loaded;
+        _cup.Disabled = loaded || _foodlineOpen;
         _eject.Disabled = !loaded;
 
         // Power, water, concentrate, bay.

@@ -1,0 +1,103 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobCCAFGrenadier
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: CMUCCAF
+  roundRole: CMUJobCCAFGrenadier
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_rifleman
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: JobPrefix
+    prefix: cmu-job-prefix-ccaf-grenadier
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - French
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - French
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: cmu-job-name-ccaf-grenadier-title
+  description: cmu-job-description-ccaf
+  playTimeTracker: CMUJobCCAFGrenadier
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMURankCCAFCorporal:
+      entity: CMUChevronCCAFCorporal
+      requirements: []
+  spawnMenuRoleName: CCAF Grenadier (CMU, Fire Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearCCAFGrenadier
+  greeting: cmu-job-greeting-ccaf
+  joinNotifyCrew: false
+  supervisors: cmu-job-name-ccaf-section-commander
+  hidden: true
+
+- type: entity
+  parent: CMUBaseMobSpeciesCCAF
+  suffix: CMU, CCAF, Fire Team
+  id: CMUJobCCAFGrenadier
+  name: CCAF Grenadier (Fire Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadCCAF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-ccaf-grenadier
+    description: cmu-job-description-ccaf
+    reregister: false
+    job: CMUJobCCAFGrenadier
+    raffle:
+      settings: short
+    rules: cmu-job-rules-ccaf
+
+- type: startingGear
+  id: CMUGearCCAFGrenadier
+  equipment:
+    id: CMUIDCardCCAFGrenadier
+    jumpsuit: AU14CCAFUniform
+    outerClothing: AU14CCAFArmor
+    head: AU14CCAFHelmetISACV
+    shoes: CMBootsBlackFilled
+    gloves: CMHandsBlackMarine
+    ears: CMUHeadsetCCAF
+    pocket2: AU14PouchIFAKFill
+    belt: RMCBeltGrenade
+    pocket1: RMCPouchPistol
+    back: CMBackpackSniper
+    suitstorage: CMUWeaponRifleM100MGRLoaded
+  storage:
+    belt:
+    - RMC40MMGrenadeM74AGMF
+    - RMC40MMGrenadeM74AGMF
+    - RMC40MMGrenadeM74AGMF
+    - RMC40MMGrenadeM74AGMF
+    - RMC40MMGrenadeM74AGMF
+    - RMC40MMGrenadeM74AGMF
+    - RMC40MMGrenadeM74AGMF
+    - RMC40MMGrenadeM74AGMF
+    pocket1:
+    - AU14WeaponPistolM4A4
+    back:
+    - AU14MagazineRifleM100MGR
+    - AU14MagazineRifleM100MGR
+    - AU14MagazineRifleM100MGR
+    - AU14MagazineRifleM100MGR
+    - AU14MagazineRifleM100MGR
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984

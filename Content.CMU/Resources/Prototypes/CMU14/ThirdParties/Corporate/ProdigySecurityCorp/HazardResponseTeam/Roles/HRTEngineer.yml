@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: AU14JobHRTPartyEngineer
+  chevrons:
+    AU14RankPrDEnforcer:
+      entity: AU14ChevronPrDEnforcer
+      requirements: []
   roundSide: ThirdParty
   roundForce: PSC
   roundRole: HRTPartyEngineer
@@ -14,7 +18,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: Prodigy Hazard Combat Engineer
+  name: Hazard Engineer
   description: au14-prodigyhazard-description
   playTimeTracker: AU14JobHRTPartyEngineerTracker
   ranks:
@@ -75,7 +79,7 @@
     #- AU14Tourniquet
     # no need, pouch already has 6 slots and is filled with med supplies
     back:
-    - CMMRE
+    - CMUMREFSR
     - RMCBinocularsPVE
     - AU14PacketGrenadeFragM12Filled
     - CMSheetMetal50

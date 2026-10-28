@@ -40,6 +40,10 @@
   categories: [ HideSpawnMenu ]
   name: yautja appearance
   components:
+  - type: NightVision
+    state: Half
+    innate: true
+    drawVisibleMobs: false
   - type: InitialBody
     organs:
       Torso: CMUPartYautjaTorso

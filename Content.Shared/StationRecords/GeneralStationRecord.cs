@@ -80,4 +80,12 @@ public sealed partial record GeneralStationRecord : StationRecord
     /// </summary>
     [DataField]
     public string? DNA;
+
+    // cmu edit start: mugshot and physical description from the character, taken when they arrived
+    [DataField]
+    public Content.Shared.CMU14.CriminalRecords.CMURecordPortrait? CMUPortrait;
+
+    [DataField]
+    public string? CMUHeight;
+    // cmu edit end
 }

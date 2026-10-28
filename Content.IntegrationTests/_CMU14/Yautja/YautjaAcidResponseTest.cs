@@ -66,35 +66,33 @@ public sealed class YautjaAcidResponseTest
     }
 
     [Test]
-    public async Task RegularYautjaRejectAcidAndNeuroMovementEffects()
+    public async Task RegularYautjaTakeAcidSpitButShrugOffNeurotoxinSpit()
     {
         await using var pair = await PoolManager.GetServerClient();
         var map = await pair.CreateTestMap();
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
-            var regular = entities.SpawnEntity("CMUMobYautja", map.GridCoords);
-            var badBlood = entities.SpawnEntity("CMUMobYautjaBadBloodGrunt", map.GridCoords);
-            var policy = entities.System<YautjaAcidResponseSystem>();
-            Assert.Multiple(() =>
-            {
-                Assert.That(policy.ShouldSkipAcidMoveEffects(regular), Is.True);
-                Assert.That(policy.ShouldSkipAcidMoveEffects(badBlood), Is.False);
-            });
+            var standing = entities.System<StandingStateSystem>();
 
+            var acidTarget = entities.SpawnEntity("CMUMobYautja", map.GridCoords);
             var acid = entities.SpawnEntity("XenoBombardAcidProjectile", map.GridCoords);
-            var acidHit = new ProjectileHitEvent(new DamageSpecifier(), regular);
+            var acidHit = new ProjectileHitEvent(new DamageSpecifier(), acidTarget);
             entities.EventBus.RaiseLocalEvent(acid, ref acidHit);
-            Assert.That(entities.System<StandingStateSystem>().IsDown(regular), Is.False,
-                "an explicitly acid-tagged slowing projectile must not paralyze a regular Yautja");
+            Assert.That(standing.IsDown(acidTarget), Is.True,
+                "CM-SS13 has no acid paralysis exemption for Yautja");
 
+            // CM-SS13 parity: /proc/apply_neuro returns early for NO_NEURO species, so a neurotoxin spit
+            // skips both its slow and its paralysis for a Yautja; the gas/injector path guards itself.
+            var neuroTarget = entities.SpawnEntity("CMUMobYautja", map.GridCoords);
             var neuro = entities.SpawnEntity("XenoQueenNeuroSpitProjectile", map.GridCoords);
-            var neuroHit = new ProjectileHitEvent(new DamageSpecifier(), regular);
+            var neuroHit = new ProjectileHitEvent(new DamageSpecifier(), neuroTarget);
             entities.EventBus.RaiseLocalEvent(neuro, ref neuroHit);
-            Assert.That(entities.System<StandingStateSystem>().IsDown(regular), Is.False,
-                "neurotoxin must not paralyze a regular Yautja");
-            entities.DeleteEntity(regular);
-            entities.DeleteEntity(badBlood);
+            Assert.That(standing.IsDown(neuroTarget), Is.False,
+                "NO_NEURO species shrug the neurotoxin spit off");
+
+            entities.DeleteEntity(acidTarget);
+            entities.DeleteEntity(neuroTarget);
         });
         await pair.CleanReturnAsync();
     }

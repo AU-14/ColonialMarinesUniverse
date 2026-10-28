@@ -115,11 +115,11 @@
   description: Source-referenced cabin solids with inferred depth; see SOURCES_VEHICLE_INTERIORS.md.
 - type: cmu3DModel
   id: CMU3DInteriorCMDefibrillator
-  label: CMDefibrillator
+  label: AU14CMDefibrillator
   status: draft
   sourcePrototypes:
-  - CMDefibrillator
-  referencePrototype: CMDefibrillator
+  - AU14CMDefibrillator
+  referencePrototype: AU14CMDefibrillator
   useEntityRotation: true
   parts:
   - label: portable body

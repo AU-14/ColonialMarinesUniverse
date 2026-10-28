@@ -56,7 +56,7 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
             clearance = state.Clearance.ToString();
         }
         _window.Clearance.Text = Loc.GetString("research-data-ui-clearance", ("NUM", clearance));
-        _window.Credits.Text = Loc.GetString("research-data-ui-credits", ("NUM", state.Credits));
+        _window.Credits.Text = Loc.GetString("research-data-ui-credits", ("NUM", state.Credits), ("DATA", state.SampleData));
         _window.Tabs.SetTabTitle(0, Loc.GetString("research-data-ui-manage"));
         _window.Tabs.SetTabTitle(1, Loc.GetString("research-data-ui-view"));
         _window.NextUpdate = state.NextUpdate;

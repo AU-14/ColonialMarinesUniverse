@@ -1,0 +1,25 @@
+# Red alert gun cabinets for the USS Bush. They still open on their own at red alert, but before then only GOVFOR or
+# OPFOR command and MPs can unlock them.
+- type: entity
+  parent: RMCLockerGunRed
+  id: CMULockerGunRedCommand
+  suffix: Command/MP access
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforCommand"], ["AU14AccessGovforSecurity"], ["AU14AccessOpforCommand"], ["AU14AccessOpforSecurity"]]
+
+- type: entity
+  parent: RMCArmoryLockerRedM890Filled
+  id: CMUArmoryLockerRedM890FilledCommand
+  suffix: Filled 890Tactical, Three, Command/MP access
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforCommand"], ["AU14AccessGovforSecurity"], ["AU14AccessOpforCommand"], ["AU14AccessOpforSecurity"]]
+
+- type: entity
+  parent: RMCArmoryLockerRedM890FilledSingle
+  id: CMUArmoryLockerRedM890FilledSingleCommand
+  suffix: Filled 890Tactical, Single, Command/MP access
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforCommand"], ["AU14AccessGovforSecurity"], ["AU14AccessOpforCommand"], ["AU14AccessOpforSecurity"]]

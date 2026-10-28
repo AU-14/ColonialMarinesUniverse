@@ -161,6 +161,11 @@ public abstract partial class SharedGunSystem : EntitySystem
 #endif
 
         RefreshModifiers((gun, gun));
+
+        // cmu edit start: serial numbers and firing-pin signatures are given out here
+        var cmuMapInit = new Content.Shared.CMU14.Weapons.SerialNumber.CMUGunMapInitEvent();
+        RaiseLocalEvent(gun, ref cmuMapInit);
+        // cmu edit end
     }
 
     private void OnGunMelee(Entity<GunComponent> ent, ref MeleeHitEvent args)
@@ -542,6 +547,7 @@ public abstract partial class SharedGunSystem : EntitySystem
                 predictedProjectiles,
                 userSession);
             _zLevelShooting.ApplyProjectileVisualOffset(projectiles, projectileVisualOffset);
+            _zLevelShooting.ApplyCrossZShotOrigin(projectiles, sourceFromCoordinates, fromCoordinates); // CMU14
         }
 
         var shotEv = new GunShotEvent(user, ev.Ammo, fromCoordinates, toCoordinates.Value);

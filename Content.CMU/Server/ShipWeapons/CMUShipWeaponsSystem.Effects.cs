@@ -1,9 +1,17 @@
 using System.Numerics;
 using Content.Shared._RMC14.Explosion;
+using Content.Shared._RMC14.Slow;
+using Content.Shared._RMC14.Xenonids;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.ShipWeapons;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Explosion;
+using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
@@ -16,13 +24,47 @@ public sealed partial class CMUShipWeaponsSystem
 {
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     private readonly HashSet<Entity<DamageableComponent>> _railTargets = new();
     public static readonly EntProtoId EmsStun = "CMUShipWeaponEmsStun";
     private static readonly ProtoId<ExplosionPrototype> RailExplosion = "RMCOBXenoTunnel";
+    public static readonly EntProtoId GasHaze = "CMUShipWeaponGasHaze";
 
     private void InitializeEffects()
     {
         SubscribeLocalEvent<MobStateComponent, MoveEvent>(OnEmsMobMoved);
+        SubscribeLocalEvent<CMUOrbitalGasComponent, CMUOrbitalGasExposureEvent>(OnGasExposure);
+    }
+
+    private void OnGasExposure(Entity<CMUOrbitalGasComponent> ent, ref CMUOrbitalGasExposureEvent args)
+    {
+        var victim = args.Victim;
+        if (HasComp<XenoComponent>(victim))
+        {
+            _slow.TrySlowdown(victim, TimeSpan.FromSeconds(1.5), ignoreDurationModifier: true);
+            if (!_status.TryUpdateStatusEffectDuration(victim, GasHaze, TimeSpan.FromSeconds(1.5), force: true))
+                Log.Warning($"Could not apply orbital gas haze to {ToPrettyString(victim)}.");
+            return;
+        }
+
+        var exposure = EnsureComp<CMUOrbitalGasVictimComponent>(victim);
+        var now = _timing.CurTime;
+        if (exposure.NextOrganDamage == TimeSpan.Zero || now - exposure.LastExposure > TimeSpan.FromSeconds(1.5))
+            exposure.NextOrganDamage = now + TimeSpan.FromSeconds(3);
+        exposure.LastExposure = now;
+        if (now < exposure.NextOrganDamage)
+            return;
+
+        exposure.NextOrganDamage = now + TimeSpan.FromSeconds(3);
+        var damage = new DamageSpecifier { DamageDict = { ["Poison"] = FixedPoint2.New(1) } };
+        foreach (var organ in _medicalIndex.GetOrgans(victim))
+        {
+            if (!HasComp<LungsComponent>(organ.Owner) && !HasComp<CMUBrainComponent>(organ.Owner))
+                continue;
+            var damaged = new OrganDamagedEvent(victim, organ.Owner, damage, OrganDamageSource.Reagent);
+            RaiseLocalEvent(organ.Owner, ref damaged);
+        }
     }
 
     private void OnEmsMobMoved(Entity<MobStateComponent> ent, ref MoveEvent args)
@@ -70,6 +112,8 @@ public sealed partial class CMUShipWeaponsSystem
             !_area.CanOrbitalBombard(coordinates, out _))
             return;
 
+        ApplyEmsBurn(mob, fieldUid, field);
+
         var stunUntil = field.EndsAt + field.StunAfterField;
         if (_status.TryGetStatusEffect(mob, EmsStun, out _) &&
             _status.TryGetTime(mob, EmsStun, out var active) &&
@@ -80,6 +124,38 @@ public sealed partial class CMUShipWeaponsSystem
         if (!_status.TryUpdateStatusEffectDuration(mob, EmsStun,
                 stunUntil - _timing.CurTime, force: true))
             Log.Warning($"Could not apply orbital EMS stun to {ToPrettyString(mob)}.");
+    }
+
+    private void ApplyEmsBurn(EntityUid mob, EntityUid fieldUid, CMUShipWeaponEmsFieldComponent field)
+    {
+        var now = _timing.CurTime;
+        if (!field.Exposures.TryGetValue(mob, out var exposure))
+        {
+            field.Exposures[mob] = (now + TimeSpan.FromSeconds(1), now, 0f);
+            return;
+        }
+
+        // Preserve the strike's damage budget, but don't charge time spent outside the field.
+        if (now - exposure.LastExposure > TimeSpan.FromSeconds(0.5))
+            exposure.NextDamage = now + TimeSpan.FromSeconds(1);
+        exposure.LastExposure = now;
+        field.Exposures[mob] = exposure;
+        if (now < exposure.NextDamage)
+            return;
+
+        var amount = HasComp<XenoComponent>(mob)
+            ? field.BurnDamagePerSecond
+            : Math.Min(field.BurnDamagePerSecond, field.HumanDamageCap - exposure.Damage);
+        var next = exposure.NextDamage + TimeSpan.FromSeconds(1);
+        field.Exposures[mob] = (next, now, exposure.Damage);
+        if (amount <= 0f)
+            return;
+
+        var damage = new DamageSpecifier { DamageDict = { ["Heat"] = FixedPoint2.New(amount) } };
+        var applied = _damage.TryChangeDamage(mob, damage, ignoreResistances: true, origin: fieldUid,
+            ignoreGlobalModifiers: true);
+        if (applied != null)
+            field.Exposures[mob] = (next, now, exposure.Damage + applied.GetTotal().Float());
     }
 
     private void RailImpact(EntityUid source, DamageSpecifier damage, MapCoordinates impact)

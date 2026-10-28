@@ -63,6 +63,11 @@ public sealed class HealthScannerBuiState(
     public float CMUSalinePercent;
     /// <summary>Set during an allergic reaction: the allergen's name, or empty if unknown.</summary>
     public string? CMUAllergicReaction;
+    /// <summary>Trait episodes going on right now, which the scanner flags at the top of its advice.</summary>
+    public bool CMUSeizure;
+    public bool CMUAsthmaAttack;
+    public bool CMUPanicAttack;
+    public bool CMUHeartEpisode;
     // cmu edit end
 }
 

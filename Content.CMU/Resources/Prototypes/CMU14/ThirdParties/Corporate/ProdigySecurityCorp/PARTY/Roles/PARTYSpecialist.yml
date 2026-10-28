@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobPARTYPartyContractorBase
   id: AU14JobProdigyPartySpecialist
+  chevrons:
+    AU14RankPrDSeniorOperator:
+      entity: AU14ChevronPrDSeniorOperator
+      requirements: []
   roundSide: ThirdParty
   roundForce: PSC
   roundRole: ProdigyPartySpecialist
@@ -27,7 +31,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: smartgunner
 
-  name: Prodigy Yankee Weapon Specialist
+  name: Weapon Specialist
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobProdigyPartySpecialistTracker
   ranks:
@@ -84,7 +88,7 @@
     #- AU14Tourniquet
     # no need, pouch already has 6 slots and is filled with med supplies
     back:
-    - CMMRE
+    - CMUMREFSR
     - RMCBinocularsPVE
     - AU14PacketGrenadeFragM12Filled
     jumpsuit:

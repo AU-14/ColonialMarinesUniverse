@@ -14,6 +14,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Materials;
+using Content.Shared.CMU14.Materials; // CMU14
 using Content.Shared.Mind;
 using Content.Shared.Power;
 using Content.Shared.Repairable;
@@ -208,7 +209,11 @@ public sealed partial class MaterialReclaimerSystem : SharedMaterialReclaimerSys
         foreach (var (material, amount) in composition.MaterialComposition)
         {
             var outputAmount = (int) (amount * efficiency * modifier);
-            _materialStorage.TryChangeMaterialAmount(reclaimer, material, outputAmount, storage);
+            // CMU14: local recycler variants can translate upstream material identities.
+            // _materialStorage.TryChangeMaterialAmount(reclaimer, material, outputAmount, storage);
+            var reclaim = new CMUReclaimMaterialEvent(material);
+            RaiseLocalEvent(reclaimer, ref reclaim);
+            _materialStorage.TryChangeMaterialAmount(reclaimer, reclaim.Material, outputAmount, storage);
         }
 
         foreach (var (storedMaterial, storedAmount) in storage.Storage)

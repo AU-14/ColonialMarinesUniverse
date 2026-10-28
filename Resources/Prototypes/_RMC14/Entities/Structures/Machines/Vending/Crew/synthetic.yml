@@ -315,7 +315,7 @@
       # /obj/item/reagent_container/hypospray/autoinjector/empty/small - 1 Point
       # /obj/item/reagent_container/hypospray/autoinjector/empty/medium - 2 Points
       # /obj/item/reagent_container/hypospray/autoinjector/empty/large - 4 Points
-      - id: CMDefibrillator
+      - id: AU14CMDefibrillator # cmu edit: was CMDefibrillator
         points: 4
         # mandatory: true, TODO allow vendors to mark entries as mandatory
       - id: CMHealthAnalyzer
@@ -372,7 +372,7 @@
       entries:
       - id: RMCSynthBreachingHammer
         points: 15
-      - id: RMCDefibrillatorCompact
+      - id: AU14CMDefibrillator # cmu edit: was RMCDefibrillatorCompact
         points: 15
       - id: RMCVendorBundleCompactNailgunKit
         points: 15

@@ -4,6 +4,9 @@
   abstract: true
   suffix: AU14, UA, FORECON
   components:
+  - type: NpcFactionMember
+    factions:
+    - AUUnitedAmericas
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearance
   - type: RandomHumanoidAppearanceWhitelisted

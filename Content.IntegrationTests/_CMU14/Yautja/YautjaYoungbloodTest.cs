@@ -988,12 +988,13 @@ public sealed class YautjaYoungbloodTest
                 {
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaOpenBracerMenu"));
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleCloak"));
-                    Assert.That(actionIds, Does.Contain("CMUActionYautjaRecall"));
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaTranslator"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleWristBlades"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleScimitar"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleChainGauntlet"));
-                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaSelfDestruct"));
+                    // CMU14: CM-SS13 grants the self-destruct action to every bracer wearer (equipped()
+                    // hands out bracer_actions wholesale); a youngblood simply cannot arm it.
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaSelfDestruct"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleCaster"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleShield"));
                 });
@@ -2311,7 +2312,7 @@ public sealed class YautjaYoungbloodTest
     }
 
     [Test]
-    public async Task YoungbloodGhostRoleTakeoverEquipsBaseGearForMaskPower()
+    public async Task YoungbloodGhostRoleTakeoverEquipsBaseGearWithoutAClanMask()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
         var server = pair.Server;
@@ -2334,9 +2335,13 @@ public sealed class YautjaYoungbloodTest
 
                 AssertEquippedPrototype(entMan, inventory, youngblood, "gloves", "CMUYautjaBracer");
                 AssertEquippedPrototype(entMan, inventory, youngblood, "ears", "CMUYautjaCommunicator");
-                AssertEquippedPrototype(entMan, inventory, youngblood, "mask", "CMUYautjaMask");
-                Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(youngblood), Is.True,
-                    "The F7 Youngblood must receive the mask HUD used to see Yautja ranks.");
+
+                // A youngblood is unblooded and is not issued a clan mask, so the mask slot stays empty and the rank HUD
+                // that a mask grants does not apply.
+                Assert.That(inventory.TryGetSlotEntity(youngblood, "mask", out _), Is.False,
+                    "The F7 Youngblood must not spawn wearing a clan mask.");
+                Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(youngblood), Is.False,
+                    "Without a mask there is no mask HUD to show Yautja ranks.");
             }
             finally
             {

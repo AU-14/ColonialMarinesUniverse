@@ -4,6 +4,8 @@ using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Empower;
+using Content.Shared.Body.Components;  
+using Content.Shared.Body.Systems;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -35,6 +37,7 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
     [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
 
     private readonly HashSet<EntityUid> _areaHits = new();
     private readonly List<EntityUid> _destructibles = new();
@@ -54,7 +57,7 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
         if (!_rmcActions.TryUseAction(args))
             return;
 
-        var slows = HasComp<XenoSuperEmpoweredComponent>(xeno);
+        var slows = xeno.Comp.AlwaysSlows || HasComp<XenoSuperEmpoweredComponent>(xeno);
         args.Handled = true;
 
         if (_transform.GetGrid(args.Target) is not { } gridId ||
@@ -140,6 +143,9 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
                 hitEnt = victim;
 
             var change = _damage.TryChangeDamage(victim, xeno.Comp.Damage, origin: xeno, tool: xeno);
+
+            if (xeno.Comp.Bloodloss > FixedPoint2.Zero && TryComp<BloodstreamComponent>(victim, out var bloodstream))  
+    _bloodstream.TryModifyBloodLevel((victim, bloodstream), -xeno.Comp.Bloodloss); // CMU14 Bloodletter Venetor Bloodloss
 
             if (change?.GetTotal() > FixedPoint2.Zero)
             {

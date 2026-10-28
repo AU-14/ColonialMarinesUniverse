@@ -122,5 +122,9 @@ public sealed partial class AGhostCommand : LocalizedCommands
 
         var comp = _entities.GetComponent<GhostComponent>(ghost);
         ghostSystem.SetCanReturnToBody((ghost, comp), canReturn);
+
+        // cmu edit start: admin ghosts look like the admin's selected character, the same as observers
+        _entities.System<Content.Server.CMU14.Ghost.CMUGhostProfileAppearanceSystem>().DressAsSelectedCharacter(ghost, player);
+        // cmu edit end
     }
 }

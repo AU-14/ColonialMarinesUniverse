@@ -1,4 +1,6 @@
+using System.Linq;
 using System.Numerics;
+using Content.Server.CMU14.Atmos;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Components;
@@ -10,6 +12,7 @@ using Content.Shared._RMC14.PowerLoader;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared.Parallax;
 using Content.Shared.Shuttles.Components;
+using Content.Shared.Atmos.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
@@ -75,6 +78,14 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
                 // Content automatically gives every new grid a shuttle controller.
                 // Followers are moved only by this assembly, never by FTL/thrusters.
                 RemComp<ShuttleComponent>(grid.Value);
+                // Decks saved without air of their own (the roof, the undercarriage and the lowered ramp) breathe
+                // whatever they're over. Loading them adds an empty atmosphere automatically; drop it.
+                if (!TryComp<GridAtmosphereComponent>(grid.Value, out var deckAtmosphere) ||
+                    deckAtmosphere.Tiles.Values.All(tile => tile.Air is not { TotalMoles: > 0f }))
+                {
+                    RemComp<GridAtmosphereComponent>(grid.Value);
+                    EnsureComp<CMUBorrowedAtmosphereComponent>(grid.Value);
+                }
                 _physics.SetBodyType(grid.Value, BodyType.Kinematic);
                 _physics.SetFixedRotation(grid.Value, true);
                 var deck = EnsureComp<DropshipDeckComponent>(grid.Value);

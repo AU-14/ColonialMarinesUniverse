@@ -23,10 +23,11 @@
           - RMCAttachmentS6ReflexSight
       rmc-aslot-stock:
         locked: true
-        startingAttachable: RMCAttachmentM54CStockCollapsible # RMCAttachmentM54CE2Stock
+        startingAttachable: CMUAttachmentM41AE2Stock
         whitelist:
           tags:
-          - RMCAttachmentM54CStockCollapsible # RMCAttachmentM54CE2Stock
+          - RMCAttachmentM54CStockCollapsible
+          - CMUAttachmentM41AE2Stock
       rmc-aslot-underbarrel:
         startingAttachable: RMCAttachmentVerticalGrip
         whitelist:
@@ -51,7 +52,7 @@
     proto: CMCartridgeRifle10x24mmAP
     capacity: 300
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54ce2/desert.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/m41ae2/desert.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]

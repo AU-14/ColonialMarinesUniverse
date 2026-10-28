@@ -1,3 +1,4 @@
+using Content.Server.Administration.Managers; // cmu edit
 using System.Linq;
 using System.Text;
 using Content.Server._RMC14.Chat.Chat;
@@ -42,11 +43,11 @@ public sealed partial class ChatSystem
         var initialResult = range switch
         {
             ChatTransmitRange.Normal => MessageRangeCheckResult.Full,
-            ChatTransmitRange.GhostRangeLimit => data.Observer && data.Range < 0 && !_adminManager.IsAdmin(session)
+            ChatTransmitRange.GhostRangeLimit => data.Observer && data.Range < 0 && !_adminManager.HasAdminFlag(session, Content.Shared.Administration.AdminFlags.GhostSenses) // cmu edit
                 ? MessageRangeCheckResult.HideChat
                 : MessageRangeCheckResult.Full,
             ChatTransmitRange.HideChat => MessageRangeCheckResult.HideChat,
-            ChatTransmitRange.NoGhosts => data.Observer && !_adminManager.IsAdmin(session)
+            ChatTransmitRange.NoGhosts => data.Observer && !_adminManager.HasAdminFlag(session, Content.Shared.Administration.AdminFlags.GhostSenses) // cmu edit
                 ? MessageRangeCheckResult.Disallowed
                 : MessageRangeCheckResult.Full,
             _ => MessageRangeCheckResult.Full,
@@ -202,7 +203,7 @@ public sealed partial class ChatSystem
         return Filter.Empty()
             .AddWhereAttachedEntity(HasComp<GhostComponent>)
             .Recipients
-            .Union(_adminManager.ActiveAdmins)
+            .Union(_adminManager.ActiveAdminsWithFlag(Content.Shared.Administration.AdminFlags.GhostSenses)) // cmu edit
             .Select(player => player.Channel);
     }
 

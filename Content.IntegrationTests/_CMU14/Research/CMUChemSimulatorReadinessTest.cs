@@ -38,9 +38,11 @@ public sealed class CMUChemSimulatorReadinessTest : GameTest
             var faction = research.GetFaction(simulator);
             var credits = research.GetCredits(faction);
             var clearance = research.GetClearance(faction);
+            var sampleData = research.GetSampleData(faction);
             try
             {
-                research.UpdateClearance(100, 5, faction);
+                // Simulations are paid for with sample data; clearance still gates amplification.
+                research.UpdateClearance(100, 5, faction, 100);
 
                 // Reinserting a target preserves the selected reference but starts with no cost table.
                 var interaction = new InteractUsingEvent(user, target, simulator, map.GridCoords);
@@ -51,7 +53,7 @@ public sealed class CMUChemSimulatorReadinessTest : GameTest
             }
             finally
             {
-                research.UpdateClearance(credits, clearance, faction);
+                research.UpdateClearance(credits, clearance, faction, sampleData);
             }
 
             EntityUid Report(Dictionary<string, int> properties)

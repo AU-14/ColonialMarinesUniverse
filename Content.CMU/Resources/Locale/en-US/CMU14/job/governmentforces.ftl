@@ -3,6 +3,7 @@ au14-department-govforces = Government Forces
 
 au14-job-supervisors-govforplatco = High Command
 au14-job-supervisors-govfor = Commanding Officer
+cmu-job-supervisors-rifleman = your Fireteam Leader and Squad Leader
 
 au14-job-name-govforplatco = Commanding Officer
 au14-job-description-govforplatco = Command the unit. Manage strategy, unit coordination and liaise with command from the CIC.
@@ -72,9 +73,16 @@ au14-job-name-govforsquadrifleman = Rifleman
 au14-job-description-govforsquadrifleman = The backbone of the unit. Follow orders, pull security, and shoot straight.
 au14-job-prefix-govforsquadrifleman = RFN
 
-au14-job-name-govforcombatcorrespondent = Combat Correspondent
-au14-job-description-govforcombatcorrespondent = Embed with the unit to report on the operation. Follow orders, pull security, and get the story.
+au14-job-name-govforcombatcorrespondent = Auxiliary Staff
+au14-job-description-govforcombatcorrespondent = Support the unit as its chaplain, mess technician or combat correspondent. Pick which in your loadout.
 au14-job-prefix-govforcombatcorrespondent = CC
+cmu-auxiliary-staff-prefix-chaplain = Chap
+cmu-auxiliary-staff-prefix-mess-technician = MT
+cmu-auxiliary-staff-combat-correspondent = Combat Correspondent
+cmu-auxiliary-staff-chaplain = Chaplain
+cmu-auxiliary-staff-mess-technician = Mess Technician
+cmu-loadout-group-auxiliary-staff = Auxiliary staff role
+cmu-auxiliary-staff-needs-religion = Chaplains need a religion other than atheism.
 
 au14-job-name-govforsquadautomaticrifleman = Automatic Rifleman
 au14-job-name-govforsquadautomaticrifleman-plural = Automatic Riflemen

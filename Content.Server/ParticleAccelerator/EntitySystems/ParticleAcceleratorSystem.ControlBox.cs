@@ -188,7 +188,7 @@ public sealed partial class ParticleAcceleratorSystem
                         ("powerState", GetPANumericalLevel(strength)),
                         ("coordinates", pos.Coordinates)));
                     _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Misc/adminlarm.ogg"),
-                        Filter.Empty().AddPlayers(_adminManager.ActiveAdmins),
+                        Filter.Empty().AddPlayers(_adminManager.ActiveAdminsWithFlag(Content.Shared.Administration.AdminFlags.AdminAlerts)), // cmu edit
                         false,
                         AudioParams.Default.AddVolume(-8f));
                     comp.EffectCooldown = _gameTiming.CurTime + comp.CooldownDuration;

@@ -1,0 +1,225 @@
+# Shuttle reinforcements keep their service weapons and specialist gear, but arrive supplied.
+
+
+- type: job
+  parent: CMUJobParamarineRifleman
+  id: CMUJobParamarineReinforcementRifleman
+  startingGear: CMUGearParamarineReinforcementRifleman
+  hidden: true
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillFireman: 2
+
+- type: entity
+  parent: CMUJobParamarineRifleman
+  id: CMUJobParamarineReinforcementRifleman
+  suffix: Reinforcements
+  components:
+  - type: GhostRole
+    job: CMUJobParamarineReinforcementRifleman
+
+- type: startingGear
+  parent: CMUGearParamarineRifleman
+  id: CMUGearParamarineReinforcementRifleman
+  equipment:
+    pocket1: AU14PouchIFAKFill
+    belt: RMCBeltHolsterPistolParaM44
+    pocket2: RMCPouchMagazineLarge
+  storage:
+    back:
+    - RMCMRETSE
+    pocket2:
+    - RMCMagazineRifleL88
+    - RMCMagazineRifleL88
+    - RMCMagazineRifleL88
+
+- type: job
+  parent: CMUJobParamarineTeamLeader
+  id: CMUJobParamarineReinforcementTeamLeader
+  startingGear: CMUGearParamarineReinforcementTeamLeader
+  hidden: true
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 2
+      RMCSkillLeadership: 2
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillFireman: 2
+
+- type: entity
+  parent: CMUJobParamarineTeamLeader
+  id: CMUJobParamarineReinforcementTeamLeader
+  suffix: Reinforcements
+  components:
+  - type: GhostRole
+    job: CMUJobParamarineReinforcementTeamLeader
+
+- type: startingGear
+  parent: CMUGearParamarineTeamLeader
+  id: CMUGearParamarineReinforcementTeamLeader
+  equipment:
+    pocket1: AU14PouchIFAKFill
+    belt: RMCBeltHolsterPistolParaM44
+    pocket2: RMCPouchMagazineLarge
+  storage:
+    back:
+    - RMCMRETSE
+    pocket2:
+    - RMCMagazineRifleL88
+    - RMCMagazineRifleL88
+    - RMCMagazineRifleL88
+
+- type: job
+  parent: CMUJobParamarineAssaultEngineer
+  id: CMUJobParamarineReinforcementAssaultEngineer
+  startingGear: CMUGearParamarineReinforcementAssaultEngineer
+  hidden: true
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 2
+
+- type: entity
+  parent: CMUJobParamarineAssaultEngineer
+  id: CMUJobParamarineReinforcementAssaultEngineer
+  suffix: Reinforcements
+  components:
+  - type: GhostRole
+    job: CMUJobParamarineReinforcementAssaultEngineer
+
+- type: startingGear
+  parent: CMUGearParamarineAssaultEngineer
+  id: CMUGearParamarineReinforcementAssaultEngineer
+  equipment:
+    pocket1: AU14PouchIFAKFill
+    pocket2: RMCPouchMagazineLarge
+  storage:
+    back:
+    - RMCMRETSE
+    pocket2:
+    - RMCMagazineRifleL88
+    - RMCMagazineRifleL88
+    - RMCMagazineRifleL88
+
+- type: job
+  parent: CMUJobParamarineMedicalTechnician
+  id: CMUJobParamarineReinforcementMedicalTechnician
+  startingGear: CMUGearParamarineReinforcementMedicalTechnician
+  hidden: true
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillFireman: 2
+
+- type: entity
+  parent: CMUJobParamarineMedicalTechnician
+  id: CMUJobParamarineReinforcementMedicalTechnician
+  suffix: Reinforcements
+  components:
+  - type: GhostRole
+    job: CMUJobParamarineReinforcementMedicalTechnician
+
+- type: startingGear
+  parent: CMUGearParamarineMedicalTechnician
+  id: CMUGearParamarineReinforcementMedicalTechnician
+  equipment:
+    pocket1: AU14PouchIFAKFill
+    pocket2: RMCPouchMagazineLarge
+  storage:
+    back:
+    - RMCMRETSE
+    pocket2:
+    - RMCMagazineSMGPDW90AP
+    - RMCMagazineSMGPDW90AP
+    - RMCMagazineSMGPDW90AP
+
+- type: job
+  parent: CMUJobParamarinePilot
+  id: CMUJobParamarineReinforcementPilot
+  startingGear: CMUGearParamarineReinforcementPilot
+  hidden: true
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillPilot: 3
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillFireman: 2
+
+- type: entity
+  parent: CMUJobParamarinePilot
+  id: CMUJobParamarineReinforcementPilot
+  suffix: Reinforcements
+  components:
+  - type: GhostRole
+    job: CMUJobParamarineReinforcementPilot
+
+- type: startingGear
+  parent: CMUGearParamarinePilot
+  id: CMUGearParamarineReinforcementPilot
+  equipment:
+    pocket1: AU14PouchIFAKFill
+    belt: RMCBeltHolsterPistolParaM44
+    pocket2: RMCPouchMagazineLarge
+  storage:
+    back:
+    - RMCMRETSE
+    pocket2:
+    - RMCMagazineSMGPDW90AP
+    - RMCMagazineSMGPDW90AP
+    - RMCMagazineSMGPDW90AP
+
+- type: job
+  parent: CMUJobParamarineCommander
+  id: CMUJobParamarineReinforcementCommander
+  startingGear: CMUGearParamarineReinforcementCommander
+  hidden: true
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 2
+      RMCSkillLeadership: 3
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillFireman: 2
+
+- type: entity
+  parent: CMUJobParamarineCommander
+  id: CMUJobParamarineReinforcementCommander
+  suffix: Reinforcements
+  components:
+  - type: GhostRole
+    job: CMUJobParamarineReinforcementCommander
+
+- type: startingGear
+  parent: CMUGearParamarineCommander
+  id: CMUGearParamarineReinforcementCommander
+  equipment:
+    pocket1: AU14PouchIFAKFill
+  storage:
+    back:
+    - RMCMRETSE

@@ -10,8 +10,8 @@ emplacement-mount-CMUMachineGunM2CDropshipLoaded-name = M2C heavy machine gun
 emplacement-mount-CMUMachineGunM2CDropshipLoaded-description = The disassembled M2C HMG, with its telescopic tripods folded up and unable to fire.
 emplacement-mount-CMUMachineGunM2CDropshipLoaded-description-mounted = A dropship-mounted M2C heavy machine gun. The M2C 'Chimp' HB is a modified M2 HB reconfigured to fire 10x28 Caseless Tungsten rounds for USCM use.
 
-emplacement-mount-RMCSmartGunMountedStatic-name = ML66D mount
-emplacement-mount-RMCSmartGunMountedStatic-description = A foldable mount for the ML66D, provides stability to the ML66D.
+emplacement-mount-RMCSmartGunMountedStatic-name = M56D mount
+emplacement-mount-RMCSmartGunMountedStatic-description = A foldable mount for the M56D, provides stability to the M56D.
 emplacement-mount-RMCSmartGunMountedStatic-description-mounted = A deployable, heavy machine gun. It fires specialized tungsten rounds for increased armor penetration.
 
 emplacement-mount-RuMCMachineGunUTES-C-name = UTES-C heavy machine gun

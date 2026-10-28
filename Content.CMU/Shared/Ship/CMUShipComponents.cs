@@ -29,7 +29,7 @@ public sealed partial class CMUHijackCrashHullBreachComponent : Component
 
     /// <summary>How long after the crash every floor tile aboard can be blown out by explosions.</summary>
     [DataField]
-    public TimeSpan TilesBreakableDelay = TimeSpan.FromMinutes(8);
+    public TimeSpan TilesBreakableDelay = TimeSpan.FromMinutes(4);
 
     /// <summary>When the hijacked dropship crashed into the ship, or null if it hasn't.</summary>
     [ViewVariables]

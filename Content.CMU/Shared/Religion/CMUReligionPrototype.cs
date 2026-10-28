@@ -24,4 +24,10 @@ public sealed partial class CMUReligionPrototype : IPrototype
     /// </summary>
     [DataField]
     public int Order;
+
+    /// <summary>
+    ///     The holy book a chaplain of this religion carries.
+    /// </summary>
+    [DataField]
+    public EntProtoId HolyBook = "RMCBible";
 }

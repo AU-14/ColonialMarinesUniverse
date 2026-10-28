@@ -238,6 +238,15 @@ public sealed partial class PryingSystem : EntitySystem
 
         var ev = new PriedEvent(args.User);
         RaiseLocalEvent(uid, ref ev);
+
+        // cmu edit start: the tool leaves its marks for forensics
+        if (args.Used is { } pryTool)
+        {
+            var toolmark = new Content.Shared.CMU14.Forensics.Toolmarks.CMUToolmarkEvent(uid, pryTool,
+                Content.Shared.CMU14.Forensics.Toolmarks.CMUToolmarkKind.Pry);
+            RaiseLocalEvent(ref toolmark);
+        }
+        // cmu edit end
     }
 
     private void CancelDoorPry(EntityUid target, EntityUid user)

@@ -121,6 +121,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         SubscribeLocalEvent<YautjaScalpComponent, ExaminedEvent>(OnScalpExamined);
         SubscribeLocalEvent<MobStateComponent, ExaminedEvent>(OnMobStateExamined);
         SubscribeLocalEvent<MobStateChangedEvent>(OnAnyMobStateChanged);
+
+        InitializeRag();
     }
 
     private void OnMobStateExamined(Entity<MobStateComponent> ent, ref ExaminedEvent args)
@@ -204,6 +206,20 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     {
         if (!TryComp(target, out YautjaRitualDuelComponent? ritual))
         {
+            if (HasComp<YautjaComponent>(target))
+            {
+                if (!_ritual.CanChallengeHonorDuel(hunter, target))
+                    return;
+
+                verbs.Add(new TVerb
+                {
+                    Text = Loc.GetString("cmu-yautja-honor-duel-challenge-verb"),
+                    Priority = 4,
+                    Act = () => _ritual.TryChallengeHonorDuel(hunter, target),
+                });
+                return;
+            }
+
             if (!_ritual.CanClaimCaptive(hunter, target, true, false))
                 return;
 
@@ -231,7 +247,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         verbs.Add(new TVerb
         {
-            Text = Loc.GetString("cmu-yautja-ritual-release-verb"),
+            Text = Loc.GetString(ritual.HonorDuel ? "cmu-yautja-honor-duel-call-off-verb" : "cmu-yautja-ritual-release-verb"),
             Priority = 3,
             Act = () => _ritual.TryReleaseCaptive(hunter, target),
         });
@@ -475,9 +491,22 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         args.Handled = true;
         if (args.Procedure == YautjaButcherProcedure.Skin)
-            TryCompleteButcherStage(args.User, target, args.Stage);
+        {
+            if (!TryCompleteButcherStage(args.User, target, args.Stage))
+                return;
+
+            // CMU14: chain the four skinning stages, so one Skin selection runs the whole pelt instead of making
+            // the player reopen the action three more times. Each stage starts only after the previous one
+            // completes successfully - a cancelled do-after returns above, so the chain simply stops there, and
+            // BreakOnMove on the do-after is what cancels it. ButcheryProgress is advanced by the completion above,
+            // so the next stage passes its own progress validation and no stage can run twice.
+            if (args.Stage < 4)
+                TryStartButcher(args.User, target.Owner, YautjaButcherProcedure.Skin);
+        }
         else
+        {
             TryCompleteButcherLimb(args.User, target.Owner, args.Procedure);
+        }
     }
 
     public bool TryHarvestTrophy(EntityUid hunter, EntityUid target, YautjaTrophyKind kind, out EntityUid trophy)
@@ -537,6 +566,13 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         return kind is YautjaTrophyKind.HumanSkull
             or YautjaTrophyKind.HumanRibcage
             or YautjaTrophyKind.XenoSkull;
+    }
+
+    // cmss13 only polishes human bones, but most pred trophies are xeno skulls and the rag did nothing on them.
+    // pelts are hide, not bone, so they stay out
+    private static bool IsPolishableTrophy(YautjaTrophyKind kind)
+    {
+        return IsHumanSkeletonTrophy(kind) || kind == YautjaTrophyKind.XenoSkull;
     }
 
     private static bool IsHumanSkeletonTrophy(YautjaTrophyKind kind)
@@ -1196,18 +1232,20 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private void OnTrophyInteractUsing(Entity<YautjaTrophyComponent> ent, ref InteractUsingEvent args)
     {
-        if (args.Handled ||
-            !TryComp(args.Used, out YautjaPolishingRagComponent? rag) ||
-            !IsHumanSkeletonTrophy(ent.Comp.Kind))
-        {
+        if (args.Handled || !TryComp(args.Used, out YautjaPolishingRagComponent? rag))
             return;
-        }
 
         args.Handled = true;
 
         if (!CanUseYautjaTech(args.User))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-polish-denied"), args.User, args.User, PopupType.SmallCaution);
+            return;
+        }
+
+        if (!IsPolishableTrophy(ent.Comp.Kind))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-polish-not-bone", ("trophy", ent.Owner)), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -1258,7 +1296,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         args.Handled = true;
 
-        if (!IsHumanSkeletonTrophy(ent.Comp.Kind) ||
+        if (!IsPolishableTrophy(ent.Comp.Kind) ||
             !CanUseYautjaTech(args.User) ||
             ent.Comp.Polished ||
             args.Used is not { } used ||
@@ -1436,7 +1474,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
                     : "cmu-yautja-trophy-polished-no"))));
         }
 
-        if (!canUseTech || !IsHumanSkeletonTrophy(ent.Comp.Kind))
+        if (!canUseTech || !IsPolishableTrophy(ent.Comp.Kind))
             return;
 
         args.PushMarkup(Loc.GetString(ent.Comp.Polished

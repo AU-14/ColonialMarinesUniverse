@@ -29,10 +29,11 @@ public sealed partial class SapperTrapSystem : SharedSapperTrapSystem
 
     private void OnTripped(Entity<SapperTrapComponent> ent, ref TriggerEvent args)
     {
-        if (!ent.Comp.Deployed || args.User is not { } victim)
+        if (!ent.Comp.Deployed || args.User is not { } victim || TerminatingOrDeleted(victim) ||
+            !TryComp<TransformComponent>(victim, out var transform))
             return;
 
-        var coords = Transform(victim).Coordinates;
+        var coords = transform.Coordinates;
         if (ent.Comp.TripEffect is { } effect)
             Spawn(effect, coords);
         if (ent.Comp.TripSound is { } sound)

@@ -24,7 +24,7 @@ namespace Content.IntegrationTests.Tests.Movement;
 public sealed class ShuttleBoardingTest : InteractionTest
 {
     protected override string PlayerPrototype => "CMMobHuman";
-    protected override ResPath? TestMapPath => new("/Maps/CMU14/Shuttles/alamo.yml");
+    protected override ResPath? TestMapPath => new("/Maps/CMU14/Dropships/alamo.yml");
 
     [TestCase(true, false)]
     [TestCase(false, false)]

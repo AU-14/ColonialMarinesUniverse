@@ -119,6 +119,27 @@ public abstract partial class CMUSharedZLevelsSystem
         return true;
     }
 
+    /// <summary>
+    /// CMU14: ends the whole look up cycle - full mode and the faint upper ghost - for a viewer whose level is changing
+    /// under it. The faint ghost is otherwise a latched preference the renderer suppresses under a ceiling, but a
+    /// crossing that the player did not ask for (a Yautja leap aimed with look up, arriving on another deck) must not
+    /// leave the upper level ghosted over the level they end up on.
+    /// </summary>
+    public bool EndLookUpCycle(EntityUid uid)
+    {
+        if (!TryComp<CMUZLevelViewerComponent>(uid, out var viewer) ||
+            (!viewer.LookUp && !viewer.FaintUp))
+        {
+            return false;
+        }
+
+        viewer.LookUp = false;
+        viewer.FaintUp = false;
+        DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.LookUp));
+        DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.FaintUp));
+        return true;
+    }
+
     public Entity<CMUZLevelViewerComponent> EnsureZLevelViewer(EntityUid uid)
     {
         return (uid, EnsureComp<CMUZLevelViewerComponent>(uid));
@@ -365,8 +386,15 @@ public abstract partial class CMUSharedZLevelsSystem
     /// True when a cross-z shot from <paramref name="from"/> to <paramref name="to"/> crosses no floor
     /// tiles on <paramref name="map"/>, including floors on child grids such as dropship cabins.
     /// </summary>
-    public bool IsZShotPathOpen(EntityUid map, Vector2 from, Vector2 to)
+    public bool IsZShotPathOpen(EntityUid map, Vector2 from, Vector2 to, EntityUid? supportingMap = null)
     {
+        // An empty upper tile can still be supported by a wall on the lower map. Such shots
+        // must use the opening search to clear the wall before creating the projectile below.
+        if (supportingMap is { } below &&
+            _map.TryFindGridAt(below, from, out var supportGrid, out var support) &&
+            HasWallAt(supportGrid, support, _map.WorldToTile(supportGrid, support, from)))
+            return false;
+
         if (_gridQuery.TryComp(map, out var mapGrid) && !IsGridPathOpen((map, mapGrid)))
             return false;
 

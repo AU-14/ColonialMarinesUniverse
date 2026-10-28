@@ -221,11 +221,7 @@
     size: Large
   - type: Clothing
     sprite: CMU14/Weapons/Guns/DogWar/m20a2.rsi
-  - type: AttachableHolderVisuals
-    offsets:
-      rmc-aslot-barrel: 0.8125, 0.0625 # muzzle 32,19
-      rmc-aslot-rail: -0.09375, 0.09375 # rail 12,20
-      rmc-aslot-underbarrel: 0.15625, -0.21875 # under 18,15, for the masterkey shotgun's sprite (+3,-6px)
+  # Attachment offsets come from the M20A.
 
 # XM24A
 

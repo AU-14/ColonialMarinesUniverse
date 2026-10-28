@@ -1,0 +1,108 @@
+- type: entity
+  parent: BaseItem
+  id: CMUMedicalJeepBeacon
+  name: medical jeep drop beacon
+  description: A single-use medical vehicle beacon. Activate it and throw it onto open ground. Stand clear of the blue beam while the jeep crate drops in.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Grenades/m40smoke.rsi
+    layers:
+    - state: icon
+      color: "#70BFFF"
+      map: [ "enum.ExpendableLightVisualLayers.Base" ]
+    - state: primed
+      color: "#70BFFF"
+      visible: false
+      map: [ "enum.ExpendableLightVisualLayers.Glow" ]
+    - state: icon
+      color: "#70BFFF"
+      map: [ "enum.ExpendableLightVisualLayers.Overlay" ]
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Grenades/m40smoke.rsi
+    state: icon
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Grenades/m40smoke.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#70BFFF"
+      right:
+      - state: inhand-right
+        color: "#70BFFF"
+  - type: ToggleableVisuals
+    spriteLayer: beacon
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#70BFFF"
+      right:
+      - state: inhand-right
+        color: "#70BFFF"
+  - type: ExpendableLight
+    glowDuration: 20
+    fadeOutDuration: 1
+    turnOnBehaviourID: turn_on
+    fadeOutBehaviourID: fade_out
+    heldPrefixLit: null
+    heldPrefixUnlit: null
+    iconStateLit: primed
+    iconStateSpent: icon
+    glowColorLit: "#70BFFF"
+    spentName: cmu-medical-jeep-beacon-spent-name
+    spentDesc: cmu-medical-jeep-beacon-spent-desc
+    litSound:
+      path: /Audio/Machines/button.ogg
+  - type: Appearance
+  - type: PointLight
+    enabled: false
+    color: "#388FFF"
+    radius: 1
+    energy: 2
+    netsync: false
+  - type: LightBehaviour
+    behaviours:
+    - !type:FadeBehaviour
+      id: turn_on
+      maxDuration: 0.3
+      startValue: 0
+      endValue: 2
+    - !type:FadeBehaviour
+      id: fade_out
+      maxDuration: 1
+      startValue: 2
+      endValue: 0
+  - type: CMUVehicleDropFlare
+    crate: CMUCrateJeepMedicalDrop
+    landingEffect: CMUMedicalJeepDropLaser
+    skyFall: 8
+    useParachute: false
+    calledMessage: cmu-medical-jeep-beacon-called
+
+- type: entity
+  parent: CMUFighterLaser
+  id: CMUMedicalJeepDropLaser
+  name: medical vehicle delivery beam
+  description: A blue beacon marking an incoming vehicle crate. Stand clear!
+  categories: [ HideSpawnMenu, DoNotMap ] # categories aren't inherited from CMUFighterLaser
+  components:
+  - type: FighterLaser
+    beamColor: "#388FFF"
+  - type: PointLight
+    color: "#388FFF"
+    radius: 5
+    energy: 3
+
+- type: entity
+  parent: CMUCrateJeepMedicalColony
+  id: CMUCrateJeepMedicalDrop
+  suffix: Airdrop
+  components:
+  - type: CanBeSupplyDropped
+    dropDuration: 0.8
+    arrivingSound: /Audio/Effects/thudswoosh.ogg
+  - type: CMUVehicleDropImpact
+    sound:
+      path: /Audio/_RMC14/Effects/metal_crash.ogg
+      params:
+        volume: 3
+        pitch: 0.7

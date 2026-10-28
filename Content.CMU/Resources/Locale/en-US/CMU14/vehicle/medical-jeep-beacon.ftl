@@ -1,0 +1,9 @@
+ent-CMUMedicalJeepBeacon = medical jeep drop beacon
+    .desc = A single-use medical vehicle beacon. Activate it and throw it onto open ground. Stand clear of the blue beam while the jeep crate drops in.
+ent-CMUMedicalJeepDropLaser = medical vehicle delivery beam
+    .desc = A blue beacon marking an incoming vehicle crate. Stand clear!
+ent-CMUCrateJeepMedicalDrop = civilian medical jeep crate
+    .desc = A civilian medical jeep in a wooden crate, ready to drive. Unlatch it by hand on clear ground and the walls fall away.
+cmu-medical-jeep-beacon-spent-name = spent medical jeep beacon
+cmu-medical-jeep-beacon-spent-desc = A depleted medical vehicle delivery beacon.
+cmu-medical-jeep-beacon-called = Medical jeep inbound! Stand clear of the blue beam!

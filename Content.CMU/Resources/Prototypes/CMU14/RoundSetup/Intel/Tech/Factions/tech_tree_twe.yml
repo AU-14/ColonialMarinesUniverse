@@ -1,0 +1,317 @@
+# Three World Empire and Weyland-Yutani: Royal Marines Commando and WEYU.
+# Every faction list shares the budgets, ship fire missions and ICRC relief; keep those entries the same across the lists.
+# K9 teams: USASF on UA, militsiya MP dogs on UPP, S&R on Other, none on TWE.
+- type: entity
+  parent: RMCIntelTechTree
+  id: CMUIntelTechTree_TWE
+  name: intel tech tree (TWE)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+# ├──[ Tier 0 ]────────────────────────────────────────────────────────┤
+      -
+        - name: cmu-tech-govfor-icrc-relief
+          description: cmu-tech-govfor-icrc-relief-desc
+          cost: 12
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ICRCReliefParty
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-icrc-relief-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-tier-one
+          description: cmu-tech-tier-unlock-desc
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 1: Budget & support ]──────────────────────────────────────┤
+      -
+        - name: cmu-tech-govfor-req-budget
+          description: cmu-tech-govfor-req-budget-desc
+          cost: 12
+          increase: 3
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-req-budget-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: cmu-tech-twe-nspa
+          description: cmu-tech-twe-nspa-desc
+          cost: 10
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: NSPAInvestigationParty
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-nspa-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-tier-two
+          description: cmu-tech-tier-unlock-desc
+          cost: 3
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 2
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-twe-command
+            message: cmu-tech-govfor-tier-two-announce
+            sound: /Audio/_RMC14/AI/commandreport.ogg
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 2: Specialists ]───────────────────────────────────────────┤
+      -
+        - name: cmu-tech-govfor-dropship-budget
+          description: cmu-tech-govfor-dropship-budget-desc
+          cost: 12
+          increase: 2
+          repurchasable: true
+          events:
+          - !type:TechDropshipBudgetEvent
+            amount: 2000
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-dropship-budget-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_ds
+        - name: cmu-tech-govfor-disk-smoke
+          description: cmu-tech-govfor-disk-smoke-desc
+          cost: 8
+          increase: 4
+          repurchasable: true
+          maxPurchases: 3
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUSmokeStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_cluster
+        - name: cmu-tech-twe-paramarines-command
+          description: cmu-tech-twe-paramarines-command-desc
+          cost: 15
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: TWEParamarinesCommand
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-paramarines-command-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-twe-sas
+          description: cmu-tech-twe-sas-desc
+          cost: 28
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: SAS
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-sas-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: weapon
+        - name: cmu-tech-twe-iasf-mortar
+          description: cmu-tech-twe-iasf-mortar-desc
+          cost: 20
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUIASFMortarTeam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-iasf-mortar-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: weapon
+        - name: cmu-tech-twe-wy-security
+          description: cmu-tech-twe-wy-security-desc
+          cost: 15
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUWYSecurityTeam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-wy-security-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-twe-rmc-engineers
+          description: cmu-tech-twe-rmc-engineers-desc
+          cost: 15
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMURMCCombatEngineers
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-rmc-engineers-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-twe-nspa-tactical
+          description: cmu-tech-twe-nspa-tactical-desc
+          cost: 18
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUNSPATacticalTeam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-nspa-tactical-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-tier-three
+          description: cmu-tech-tier-unlock-desc
+          cost: 5
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 3
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-twe-command
+            message: cmu-tech-govfor-tier-three-announce
+            sound: /Audio/_RMC14/AI/commandreport.ogg
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 3: Force multipliers ]─────────────────────────────────────┤
+      -
+        - name: cmu-tech-govfor-disk-ems
+          description: cmu-tech-govfor-disk-ems-desc
+          cost: 45
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUEMSStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_incend
+        - name: cmu-tech-twe-paramarines
+          description: cmu-tech-twe-paramarines-desc
+          cost: 30
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: TWEParamarines
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-paramarines-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: marine
+        - name: cmu-tech-twe-rmc-rrt
+          description: cmu-tech-twe-rmc-rrt-desc
+          cost: 30
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: RMCRRT
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-rmc-rrt-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: marine
+        - name: cmu-tech-twe-wy-pmc
+          description: cmu-tech-twe-wy-pmc-desc
+          cost: 28
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUWYPMCTeamSmall
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-wy-pmc-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: weapon
+        - name: cmu-tech-tier-four
+          description: cmu-tech-tier-unlock-desc
+          cost: 5
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 4
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-twe-command
+            message: cmu-tech-govfor-tier-four-announce
+            sound: /Audio/_RMC14/AI/commandreport.ogg
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 4: Capstones ]─────────────────────────────────────────────┤
+      -
+        - name: cmu-tech-twe-iasf
+          description: cmu-tech-twe-iasf-desc
+          cost: 40
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUIASFReinforcements
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-iasf-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-twe-sas-assault
+          description: cmu-tech-twe-sas-assault-desc
+          cost: 45
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUSASAssaultSquad
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-twe-sas-assault-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: weapon
+        - name: cmu-tech-twe-disk-precision
+          description: cmu-tech-twe-disk-precision-desc
+          cost: 45
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUPrecisionStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_he
+        - name: cmu-tech-govfor-disk-railcannon
+          description: cmu-tech-govfor-disk-railcannon-desc
+          cost: 60
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMURailcannonStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: railgun
+        - name: cmu-tech-govfor-disk-gatling
+          description: cmu-tech-govfor-disk-gatling-desc
+          cost: 50
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUGatlingBarrage
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_he

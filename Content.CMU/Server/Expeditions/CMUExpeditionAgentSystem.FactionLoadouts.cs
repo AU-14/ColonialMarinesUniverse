@@ -77,7 +77,7 @@ public sealed partial class CMUExpeditionAgentSystem
             [Scout("AU14WeaponRifleM49A", "CMMagazineRifleM4SPR")],
             Compact("WeaponSMGM63", "CMMagazineSMGM63")),
         ["uacg"] = new(
-            [Rifle("AUWeaponRifleM20A", "AU14MagazineRifleM20A"), Rifle("RMCWeaponRifleM54CMK1", "CMMagazineRifleM54CMK1")],
+            [Rifle("AUWeaponRifleM20A", "AU14MagazineRifleM20A"), Rifle("CMUWeaponRifleM20A2", "AU14MagazineRifleM20A")],
             [Compact("WeaponSMGM63", "CMMagazineSMGM63"), Shotgun("WeaponShotgunM890", "CMShellShotgunSlugs")],
             [Support("RMCWeaponLMGM60", "RMCMagazineLMGM60")],
             [Marksman("WeaponRifleM4SPR", "CMMagazineRifleM4SPR")],

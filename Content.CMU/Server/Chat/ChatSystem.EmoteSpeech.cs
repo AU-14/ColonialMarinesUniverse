@@ -182,6 +182,10 @@ public sealed partial class ChatSystem
             null,
             MessageRangeHideChatForReplay(range)));
 
+        // Raised before the speech so a boom mic can relay the whole emote and skip its quoted part.
+        var emoted = new Content.Server.CMU14.Chat.CMUEntityEmotedEvent(source, action);
+        RaiseLocalEvent(ref emoted);
+
         if (spoken.Count > 0)
             RaiseLocalEvent(source, new EntitySpokeEvent(source, string.Join(' ', spoken), null, null, language), true);
 

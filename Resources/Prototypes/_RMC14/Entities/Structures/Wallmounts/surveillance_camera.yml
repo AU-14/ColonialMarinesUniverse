@@ -88,10 +88,18 @@
   description: Used to access the various cameras on the station.
   suffix: Almayer
   components:
+  # cmu edit start: typing sound when opened, like the other consoles
+  - type: EmitSoundOnUIOpen
+    sound:
+      collection: RMCKeyboardTyping
+      params:
+        volume: -1
+  # cmu edit end
   - type: Transform
     anchored: false
   - type: Physics
     bodyType: Static
+    canCollide: false # CMU14: wall-mounted terminal, shouldn't block the tile like the prop camera consoles don't
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: security_cam

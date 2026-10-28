@@ -99,7 +99,7 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
             return TimeSpan.Zero;
         }
 
-        return comp.BleedControlDelay;
+        return comp.BleedControlDelay * Content.Shared.CMU14.Traits.Conditions.CMUFearOfBloodComponent.GetTreatmentMultiplier(EntityManager, user);
     }
 
     private void OnBleedControlDoAfter(Entity<CMUMedicalMixingBaseComponent> ent, ref CMUFieldBleedControlDoAfterEvent args)

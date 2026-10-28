@@ -4,6 +4,9 @@
   id: RMCWeaponRifleM54C2
   description: A modified version M41A pulse rifle MK2, re-engineered for better weight, handling and accuracy. Fires precise two-round bursts. A very rare sight, often seen in use by wealthy PMCs.
   components:
+  # cmu edit start: M41s have a built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Sprite
     sprite: CMU14/Weapons/Guns/WY/m41a2.rsi
     layers:

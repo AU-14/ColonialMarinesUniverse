@@ -12,6 +12,12 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> ForceOnForceUnidentifiedMarkerEnabled =
         CVarDef.Create("cmu.fof.unidentified_marker_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// Whether each round start rewrites the server name to "name | gamemode day Playtest". Off leaves game.hostname as set.
+    /// </summary>
+    public static readonly CVarDef<bool> CMUHostnameRoundSuffix =
+        CVarDef.Create("cmu.game.hostname_round_suffix", false, CVar.SERVERONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> EnableEvacSfx =
         CVarDef.Create("cmu.game.enable_evac_sfx", false, CVar.SERVERONLY | CVar.ARCHIVE);
 

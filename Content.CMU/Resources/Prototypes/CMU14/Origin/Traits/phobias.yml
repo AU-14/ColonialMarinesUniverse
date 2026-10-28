@@ -4,7 +4,7 @@
   id: CMUFearOfHeights
   name: cmu-trait-fear-of-heights-name
   description: cmu-trait-fear-of-heights-desc
-  category: Disabilities
+  category: CMUPhobias
   cost: 1
   components:
   - type: CMUFearOfHeights
@@ -13,7 +13,7 @@
   id: CMUFearOfWater
   name: cmu-trait-fear-of-water-name
   description: cmu-trait-fear-of-water-desc
-  category: Disabilities
+  category: CMUPhobias
   cost: 1
   components:
   - type: CMUFearOfWater
@@ -64,3 +64,25 @@
   - AU14JobCivilianColonist
   components:
   - type: CMUMute
+
+- type: trait
+  id: CMULightStutter
+  name: cmu-trait-light-stutter-name
+  description: cmu-trait-light-stutter-desc
+  category: SpeechTraits
+  cost: 1
+  components:
+  - type: StutteringAccent
+    matchRandomProb: 0.04
+    fourRandomProb: 0
+    threeRandomProb: 0.01
+    cutRandomProb: 0
+
+- type: trait
+  id: CMULightLisp
+  name: cmu-trait-light-lisp-name
+  description: cmu-trait-light-lisp-desc
+  category: SpeechTraits
+  cost: 1
+  components:
+  - type: CMULightLisp

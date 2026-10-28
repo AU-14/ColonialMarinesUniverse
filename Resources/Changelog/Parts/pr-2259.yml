@@ -1,0 +1,15 @@
+author: Dongo4
+category: CMU
+changes:
+- message: Added WY Executive survivor party
+  type: Add
+- message: Removed wall between LZ2 and mining
+  type: Remove
+- message: Various poorly offset APC's have been re-oriented
+  type: Fix
+- message: Third party shuttles can now land at LZ1 and LZ2
+  type: Tweak
+- message: Added more individual threat spawners to the existing threat spawn points
+  type: Tweak
+time: '2026-10-22T13:17:18.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2259
