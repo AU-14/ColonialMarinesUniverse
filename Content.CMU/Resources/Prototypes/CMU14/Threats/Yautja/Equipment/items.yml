@@ -288,6 +288,9 @@
     size: Small
     sprite: CMU14/Yautja/yautja_items.rsi
     heldPrefix: wrench
+    storedSprite:
+      sprite: CMU14/Yautja/yautja_items.rsi
+      state: wrench
     storedRotation: 0
 
 - type: entity
