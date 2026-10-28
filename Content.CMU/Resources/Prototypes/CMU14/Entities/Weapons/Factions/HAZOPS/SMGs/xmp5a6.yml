@@ -2,7 +2,6 @@
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   name: XMP5A6/10 CQW
   id: AU14WeaponSMGXMP5A6HAZOPS
-  description: Winner of the 2172 HAZOPS Close Quarters Weapon program, this German-based "SMG" answers the question; "What if we put the standard USCMC rifle caliber in a machinepistol?". Despite low accuracy, it has a high firerate and impressive stopping power. Chambered in 10x24mm. Can load M41A magazines.
   components:
   - type: CMUAmmoCounter
   - type: Sprite
