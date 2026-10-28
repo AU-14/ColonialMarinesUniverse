@@ -88,6 +88,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         SubscribeLocalEvent<DoorComponent, YautjaBracerAttachmentForceDoorDoAfterEvent>(OnBracerAttachmentForceDoorDoAfter);
         SubscribeLocalEvent<AirlockComponent, InteractUsingEvent>(OnForceAirlockWithBracerAttachment);
         SubscribeLocalEvent<ResinDoorComponent, InteractUsingEvent>(OnForceResinDoorWithBracerAttachment);
+        InitializeTempleDoor();
     }
 
     private void OnMapInit(Entity<YautjaGearContainerComponent> ent, ref MapInitEvent args)

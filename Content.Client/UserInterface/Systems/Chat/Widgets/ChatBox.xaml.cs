@@ -1281,13 +1281,21 @@ public partial class ChatBox : UIWidget
         RemakeForChatFontChange();
     }
 
-    // CMU14: share the chat panel's themed background and opacity across the channel strip.
+    /// <summary>
+    ///     The seam, when this chat is the lobby sidebar's lower zone.
+    /// </summary>
+    /// <remarks>
+    ///     The strip names which conversation is showing, so it belongs to the zone above the log and
+    ///     carries that zone's <c>Surface1</c>; the step down to <c>Surface0</c> and the 1px rule land
+    ///     on its bottom edge, one boundary rather than two. Tabs sit on that rule with no bottom
+    ///     margin, which lets a selected tab's accent underline replace its segment of it.
+    /// </remarks>
     private void ApplyTabHeaderBackground(bool crtEnabled)
     {
         TabHeaderPanel.PanelOverride = new StyleBoxFlat
         {
             BackgroundColor = crtEnabled
-                ? Color.Transparent
+                ? CrtTerminalPalette.Surface1
                 : Color.FromHex("#0C0F12"),
             BorderColor = CrtTerminalPalette.Line,
             BorderThickness = crtEnabled ? new Thickness(0, 0, 0, 1) : new Thickness(0),

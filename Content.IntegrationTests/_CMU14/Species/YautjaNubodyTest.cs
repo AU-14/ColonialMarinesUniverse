@@ -6,11 +6,9 @@ using Content.Server.Humanoid;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.Organs;
 using Content.Shared.Body;
-using Content.Shared.CMU14.Yautja;
 using Content.Shared.Humanoid;
 using Content.Shared.Speech.Components;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Maths;
 
 namespace Content.IntegrationTests.CMU14.Species;
 
@@ -63,6 +61,7 @@ public sealed class YautjaNubodyTest : GameTest
                 });
 
                 var profile = SEntMan.GetComponent<HumanoidProfileComponent>(uid);
+                var appearance = HumanoidCharacterAppearance.DefaultWithSpecies(profile.Species, profile.Sex);
                 var vocal = SEntMan.GetComponent<VocalComponent>(uid);
                 Assert.Multiple(() =>
                 {
@@ -104,10 +103,10 @@ public sealed class YautjaNubodyTest : GameTest
                     Assert.Multiple(() =>
                     {
                         Assert.That(visual.Profile.Sex, Is.EqualTo(Sex.Male), category);
-                        // CM-SS13's predator default is the "tan" skin (PRED_SKIN_COLOR), which the species
-                        // defaultSkinTone now uses; it used to be white.
+                        // CMU14: organ profiles must retain the body's skin selection; the client chooses
+                        // a pre-coloured sprite variant from it instead of tinting the body art.
                         Assert.That(visual.Profile.SkinColor,
-                            Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Tan)), category);
+                            Is.EqualTo(appearance.SkinColor), category);
                     });
                 }
 

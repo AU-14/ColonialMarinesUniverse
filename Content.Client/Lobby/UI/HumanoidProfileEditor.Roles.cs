@@ -61,14 +61,61 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshLoadouts()
     {
-        CloseWorkspaceLoadout(); // CMU14: profile changes close the previous role editor.
         _loadoutWindow?.Release();
     }
 
     private void OpenLoadout(JobPrototype jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
     {
-        // CMU14: the persistent native dock replaces the separate loadout window.
-        OpenWorkspaceLoadout(jobProto, roleLoadout, roleLoadoutProto);
+        _loadoutWindow?.Release();
+        _loadoutWindow = null;
+        var collection = IoCManager.Instance;
+
+        if (collection == null || _playerManager.LocalSession == null || Profile == null)
+            return;
+
+        JobOverride = jobProto;
+        var session = _playerManager.LocalSession;
+
+        _loadoutWindow = new LoadoutWindow(Profile, roleLoadout, roleLoadoutProto, session, collection)
+        {
+            Title = Loc.GetString("loadout-window-title-loadout", ("job", jobProto.LocalizedName)),
+        };
+
+        _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+        _loadoutWindow.OpenCenteredLeft();
+
+        var concreteKey = LoadoutSystem.GetJobPrototype(jobProto.ID);
+        _loadoutWindow.OnNameChanged += name =>
+        {
+            roleLoadout.EntityName = name;
+            Profile = Profile.WithLoadout(concreteKey, roleLoadout);
+            SetDirty();
+        };
+
+        _loadoutWindow.OnLoadoutPressed += (loadoutGroup, loadoutProto) =>
+        {
+            roleLoadout.AddLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+            _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+            Profile = Profile?.WithLoadout(concreteKey, roleLoadout);
+            ReloadPreview();
+        };
+
+        _loadoutWindow.OnLoadoutUnpressed += (loadoutGroup, loadoutProto) =>
+        {
+            roleLoadout.RemoveLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+            _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+            Profile = Profile?.WithLoadout(concreteKey, roleLoadout);
+            ReloadPreview();
+        };
+
+        ReloadPreview();
+        _loadoutWindow.OnClose += () =>
+        {
+            JobOverride = null;
+            ReloadPreview();
+        };
+
+        UpdateJobPriorities();
     }
 
     public void RefreshJobs()
@@ -147,12 +194,10 @@ public sealed partial class HumanoidProfileEditor
             visible,
             departmentName);
 
-        // CMU14: actions wrap below priorities when the editor is narrow.
-        var jobContainer = new WrapContainer
+        var jobContainer = new BoxContainer
         {
+            Orientation = LayoutOrientation.Horizontal,
             HorizontalExpand = true,
-            SeparationOverride = 6,
-            CrossSeparationOverride = 6,
         };
         var selector = new RequirementsSelector
         {
@@ -225,7 +270,7 @@ public sealed partial class HumanoidProfileEditor
             HorizontalAlignment = HAlignment.Right,
             VerticalAlignment = VAlignment.Center,
             Margin = new Thickness(3f, 3f, 0f, 0f),
-            MinWidth = 76, // CMU14: leave room for the inline loadout dock.
+            MinWidth = 110,
             StyleClasses = { StyleNano.StyleClassCrtButton },
         };
 
@@ -259,7 +304,7 @@ public sealed partial class HumanoidProfileEditor
             HorizontalAlignment = HAlignment.Right,
             VerticalAlignment = VAlignment.Center,
             Margin = new Thickness(3f, 3f, 0f, 0f),
-            MinWidth = 62, // CMU14: compact deployment action.
+            MinWidth = 90,
             StyleClasses = { StyleNano.StyleClassCrtButton },
             Disabled = rankEntry == null,
         };
@@ -270,16 +315,7 @@ public sealed partial class HumanoidProfileEditor
         jobContainer.AddChild(loadoutButton);
         jobContainer.AddChild(rankButton);
         CrtLobbyTheme.Apply(jobContainer);
-        // CMU14: separate role cards while retaining the existing selectors and access checks.
-        var card = new PanelContainer
-        {
-            PanelOverride = Content.Client.CMU14.Lobby.CmuLobbyPresentation.Box(padding: 8),
-            Margin = new Thickness(0, 4),
-            Children = { jobContainer },
-        };
-        selector.UseDeploymentLayout(card);
-        selector.AddDeploymentActions(loadoutButton, rankButton);
-        category.AddChild(card);
+        category.AddChild(jobContainer);
     }
 
     private IEnumerable<BoxContainer> GetGamemodeJobLists()
@@ -464,7 +500,7 @@ public sealed partial class HumanoidProfileEditor
             "AU14JobThirdPartyMember";
     }
 
-    internal static (string Key, string Title) GetMilitaryJobSegment(JobPrototype job) // CMU14: shared with the live deployment roster.
+    private static (string Key, string Title) GetMilitaryJobSegment(JobPrototype job)
     {
         var id = job.ID;
         var name = job.LocalizedName;
@@ -621,10 +657,6 @@ public sealed partial class HumanoidProfileEditor
 
                 _antagPreferences.Add((gamemode, antag.ID, selector));
                 row.AddChild(selector);
-                // CMU14: an antagonist preference is a complete choice card, with no unsupported loadout action.
-                var card = new PanelContainer { Margin = new Thickness(0, 4), Children = { row } };
-                selector.UseDeploymentLayout(card, binary: true);
-                /*
                 row.AddChild(new Button
                 {
                     Disabled = true,
@@ -632,8 +664,7 @@ public sealed partial class HumanoidProfileEditor
                     HorizontalAlignment = HAlignment.Right,
                     Margin = new Thickness(3f, 0f, 0f, 0f),
                 });
-                */
-                category.AddChild(card);
+                category.AddChild(row);
             }
 
             target.AddChild(category);

@@ -216,7 +216,7 @@ public abstract partial class CMUSharedZLevelsSystem
     /// </summary>
     private void OnFallAreaImpact(Entity<PhysicsComponent> ent, ref CMUZLevelHitEvent args)
     {
-        if (_vehicleTraversalQuery.HasComp(ent.Owner))
+        if (_vehicleTraversalQuery.HasComp(ent.Owner) || !HasSolidFallImpact(ent.Owner))
             return;
 
         _fallImpactVictims.Clear();
@@ -235,6 +235,21 @@ public abstract partial class CMUSharedZLevelsSystem
 
             _damage.TryChangeDamage(victim, new DamageSpecifier(damageType, damageAmount));
         }
+    }
+
+    private bool HasSolidFallImpact(EntityUid uid)
+    {
+        if (!TryComp<FixturesComponent>(uid, out var fixtures))
+            return false;
+
+        // Sensors can contribute mass without representing anything that can crush a body.
+        foreach (var fixture in fixtures.Fixtures.Values)
+        {
+            if (fixture.Hard)
+                return true;
+        }
+
+        return false;
     }
 
     private bool IsBuckledTo(EntityUid victim, EntityUid strap)

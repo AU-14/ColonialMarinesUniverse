@@ -7,11 +7,10 @@
          xmlns:userInterface="clr-namespace:Content.Client._RMC14.UserInterface"
          xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
          HorizontalExpand="True">
-        <!-- CMU14 workspace: named anchors retain the existing field bindings. -->
         <!-- Left side -->
-        <BoxContainer Name="EditorColumn" Orientation="Vertical" Margin="10" HorizontalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="10 10 10 10" HorizontalExpand="True">
             <!-- Middle container -->
-            <BoxContainer Name="IdentityHeader" Orientation="Horizontal" SeparationOverride="10" HorizontalExpand="True">
+            <BoxContainer Orientation="Horizontal" SeparationOverride="10" HorizontalExpand="True">
                 <!-- Name box-->
                 <BoxContainer Orientation="Vertical">
                     <ui:HighlightedContainer>
@@ -478,8 +477,8 @@
                 </BoxContainer>
             </TabContainer>
         </BoxContainer>
-        <!-- CMU14: named preview anchor for the responsive workspace. -->
-        <BoxContainer Name="PreviewColumn" Orientation="Vertical"
+        <!-- Right side -->
+        <BoxContainer Orientation="Vertical"
                       VerticalExpand="True"
                       VerticalAlignment="Center"
                       MinWidth="300"

@@ -116,8 +116,6 @@ public sealed partial class LayerMarkingPicker : BoxContainer
     {
         base.Resized();
 
-        // CMU14: compact visual cards in the character workspace; preserve other marking pickers.
-        if (!_cmuGallery)
-            Items.Columns = Math.Max(1, (int)(Width / _columnWidth));
+        Items.Columns = (int)(Width / _columnWidth);
     }
 }

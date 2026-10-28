@@ -306,6 +306,9 @@ cmu-yautja-trophy-harvest-finished-others = {$hunter} tears {$trophy} free from 
 cmu-yautja-polish-denied = You do not understand this ritual tool.
 cmu-yautja-polish-already = That trophy is already polished.
 cmu-yautja-polish-finished = You polish {$trophy}.
+cmu-yautja-polish-not-bone = There is no bone on {$trophy} to polish.
+cmu-yautja-rag-wipe-start = You start wiping the blood off {$target}.
+cmu-yautja-rag-wiped = You wipe {$target} clean.
 cmu-yautja-trophy-source-unknown = unknown prey
 cmu-yautja-trophy-polished-yes = polished
 cmu-yautja-trophy-polished-no = unpolished
@@ -333,6 +336,14 @@ cmu-yautja-ritual-released = You release {$target} from the ritual.
 cmu-yautja-ritual-release-others = {$hunter} releases {$target} from the ritual.
 cmu-yautja-ritual-examine-captive = Claimed as ritual prey by {$hunter}.
 cmu-yautja-ritual-examine-duel = Bound in an active ritual duel with {$hunter}.
+cmu-yautja-honor-duel-challenge-verb = Challenge to an honor duel
+cmu-yautja-honor-duel-call-off-verb = Call off the honor duel
+cmu-yautja-honor-duel-challenge-title = Honor duel
+cmu-yautja-honor-duel-challenge-message = {$hunter} challenges you to an honor duel, to the death. Accept?
+cmu-yautja-honor-duel-challenge-sent = You challenge {$target} to an honor duel.
+cmu-yautja-honor-duel-accepted = You accept the honor duel. Only one of you leaves.
+cmu-yautja-honor-duel-unavailable = The honor duel can't happen anymore.
+cmu-yautja-honor-duel-others = Two hunters face each other in an honor duel!
 cmu-yautja-self-destruct-armed = You set the timer. May your journey to the great hunting grounds be swift.
 cmu-yautja-self-destruct-warning = Bracer self-destruct: {$seconds} seconds.
 cmu-yautja-self-destruct-critical = As you fall into unconsciousness you fail to activate your self-destruct device before you collapse.
@@ -1250,6 +1261,7 @@ cmu-yautja-lobby-invisibility-help-retro = Old retro cloak activation and deacti
 
 cmu-yautja-medicomp-empty-gun = The healing gun is empty.
 cmu-yautja-medicomp-stabilized = You stabilize the wounds.
+cmu-yautja-medicomp-treated = You treat the wounds. Use the wound clamp to finish treatment and restore normal movement.
 
 ent-CMUActionYautjaLeap = Leap
     .desc = Leap quickly toward a nearby location.
@@ -1266,3 +1278,27 @@ cmu-yautja-combistick-wield-folded = {CAPITALIZE(THE($item))} must be extended b
 
 cmu-yautja-emote-name-loudroar = Loud Roar
 cmu-yautja-emote-msg-loudroar = {THE($entity)} roars loudly!
+
+# lodge floors
+tiles-cmu-yautja-temple-floor = sandstone temple floor
+tiles-cmu-yautja-temple-deco-square-vertical = temple floor, square deco
+tiles-cmu-yautja-temple-deco-square-horizontal = temple floor, square deco
+tiles-cmu-yautja-temple-deco-diamond = temple floor, diamond deco
+tiles-cmu-yautja-temple-deco-pattern-vertical = temple floor, patterned deco
+tiles-cmu-yautja-temple-deco-pattern-horizontal = temple floor, patterned deco
+tiles-cmu-yautja-temple-dark-deco-square-vertical = dark temple floor, square deco
+tiles-cmu-yautja-temple-dark-deco-square-horizontal = dark temple floor, square deco
+tiles-cmu-yautja-temple-dark-deco-diamond = dark temple floor, diamond deco
+tiles-cmu-yautja-temple-dark-deco-pattern-vertical = dark temple floor, patterned deco
+tiles-cmu-yautja-temple-dark-deco-pattern-horizontal = dark temple floor, patterned deco
+tiles-cmu-yautja-temple-engraved = engraved floor
+
+# lodge
+cmu-yautja-temple-door-locked = The stone bolts hold it fast.
+cmu-yautja-temple-door-examine-locked = Heavy stone bolts hold it in place.
+cmu-yautja-temple-door-verb-lock = Lock door
+cmu-yautja-temple-door-verb-unlock = Unlock door
+cmu-yautja-temple-door-lock = You rotate your wristblades and heavy stone bolts grind into place.
+cmu-yautja-temple-door-unlock = You rotate your wristblades and the stone bolts slide free.
+cmu-yautja-wall-torch-placed = You place the torch on the wall.
+cmu-yautja-wall-torch-no-room = There's no room on that side of the wall.
