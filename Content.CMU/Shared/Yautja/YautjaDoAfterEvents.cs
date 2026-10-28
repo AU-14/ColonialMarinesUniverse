@@ -55,6 +55,9 @@ public sealed partial class YautjaButcherDoAfterEvent : SimpleDoAfterEvent
 public sealed partial class YautjaPolishTrophyDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]
+public sealed partial class YautjaRagWipeDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
 public sealed partial class YautjaCauldronBoilDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]

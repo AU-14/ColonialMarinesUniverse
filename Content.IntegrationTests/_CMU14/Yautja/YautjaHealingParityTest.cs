@@ -162,6 +162,8 @@ public sealed class YautjaHealingParityTest
             AssertMedicineEffects(thwei, new()
             {
                 ["Crossmetabolizing"] = 1,
+                // not in CMSS13, thwei kills pain for yautja here
+                ["Painkilling"] = 4,
                 ["Antitoxic"] = 1,
                 ["Yautjahemogenic"] = 9,
                 ["YautjaWoundHealing"] = 9,

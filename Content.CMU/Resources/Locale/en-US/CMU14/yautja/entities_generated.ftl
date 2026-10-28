@@ -1997,7 +1997,7 @@ ent-CMUYautjaStructureYautjaMachinesMixer1Nopower = yautja mixer1 nopower
     .desc = An ancient Yautja hunting-ground structure.
 
 ent-CMUYautjaStructureYautjaMachinesDispenser = Chemical dispenser
-    .desc = A complex machine for mixing elements into chemicals. A Wey-Yu product.
+    .desc = A hunter-built machine that draws elements from its reserves and blends them into chemicals.
 
 ent-CMUYautjaStructureYautjaMachinesBeaker1 = yautja +beaker1
     .desc = An ancient Yautja hunting-ground structure.

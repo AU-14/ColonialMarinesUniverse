@@ -36,7 +36,6 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
-    [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -44,7 +43,10 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
+    // cmss13 Slow(300) / Superslow(150) on stabilize and tend, ticked down every 2s life tick. only the clamp
+    // clears it, so a pred can't tend early, walk off and bank the clamp's full heal for later
     private static readonly TimeSpan MedicompSlowdownDuration = TimeSpan.FromMinutes(10);
+    private static readonly TimeSpan MedicompSuperSlowdownDuration = TimeSpan.FromMinutes(5);
 
     public override void Initialize()
     {
@@ -169,8 +171,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
             _organHealth.HealOrgan((organ.Owner, health), args.Body, health.Max);
         }
 
-        _slow.TrySlowdown(args.Body, MedicompSlowdownDuration);
-        _slow.TrySuperSlowdown(args.Body, MedicompSlowdownDuration);
+        ApplyMedicompSlowdown(args.Body);
 
         // Keep master's deep repairs in the authoritative surgery completion,
         // so the healing capsule and session checks also apply to these wounds.
@@ -261,19 +262,19 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     {
         // CMU14: RMCSlowSystem refuses to slow a regular Yautja, and the medicomp patient is normally a
         // Yautja hunter, so the procedure has to drive the slow components itself. The clamp step clears them.
-        var expire = _timing.CurTime + MedicompSlowdownDuration;
+        var now = _timing.CurTime;
 
         var slow = EnsureComp<RMCSlowdownComponent>(body);
-        if (expire > slow.ExpiresAt)
+        if (now + MedicompSlowdownDuration > slow.ExpiresAt)
         {
-            slow.ExpiresAt = expire;
+            slow.ExpiresAt = now + MedicompSlowdownDuration;
             Dirty(body, slow);
         }
 
         var super = EnsureComp<RMCSuperSlowdownComponent>(body);
-        if (expire > super.ExpiresAt)
+        if (now + MedicompSuperSlowdownDuration > super.ExpiresAt)
         {
-            super.ExpiresAt = expire;
+            super.ExpiresAt = now + MedicompSuperSlowdownDuration;
             Dirty(body, super);
         }
     }
