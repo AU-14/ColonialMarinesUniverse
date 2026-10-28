@@ -10,10 +10,22 @@
   scalewithpop: false
   spawnTogether: true
 
+- type: partySpawn
+  id: CMUParamarinesReinforcementSpawn
+  leadersToSpawn:
+    CMUJobParamarineReinforcementTeamLeader: 1
+  gruntsToSpawn:
+    CMUJobParamarineReinforcementRifleman: 2
+    CMUJobParamarineReinforcementAssaultEngineer: 1
+    CMUJobParamarineReinforcementMedicalTechnician: 1
+    CMUJobParamarineSynthetic: 1
+  scalewithpop: false
+  spawnTogether: true
+
 - type: thirdParty
   id: TWEParamarines
   announceAsSurvivors: true
-  partyspawn: ParamarinesSpawn
+  partyspawn: CMUParamarinesReinforcementSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
   weight: 15
@@ -25,11 +37,11 @@
 - type: partySpawn
   id: ParamarinesCommandSpawn
   leadersToSpawn:
-    CMUJobParamarineCommander: 1
+    CMUJobParamarineReinforcementCommander: 1
   gruntsToSpawn:
-    CMUJobParamarinePilot: 1
-    CMUJobParamarineRifleman: 1
-    CMUJobParamarineMedicalTechnician: 1
+    CMUJobParamarineReinforcementPilot: 1
+    CMUJobParamarineReinforcementRifleman: 1
+    CMUJobParamarineReinforcementMedicalTechnician: 1
   scalewithpop: false
   spawnTogether: true
 
@@ -48,6 +60,7 @@
 - type: thirdParty
   parent: TWEParamarines
   id: TWEParamarinesSurv
+  partyspawn: ParamarinesSpawn
   displayName: IASF Parachute Regiment (Survivors)
   entrymethod: ground
   weight: 5
