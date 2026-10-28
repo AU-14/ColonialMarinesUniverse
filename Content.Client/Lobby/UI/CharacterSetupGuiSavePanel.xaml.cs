@@ -10,7 +10,6 @@ public sealed partial class CharacterSetupGuiSavePanel : DefaultWindow
     public CharacterSetupGuiSavePanel()
     {
         RobustXamlLoader.Load(this);
-        InitializeWorkspaceDialog(); // CMU14: use the character workspace presentation.
 
         CancelButton.OnPressed += _ =>
         {
