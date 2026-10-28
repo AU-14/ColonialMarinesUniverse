@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.ZLevels.Ordnance;
+using Content.Shared.CMU14.ZLevels.Core.Components; // CMU14
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Alert;
@@ -239,6 +240,16 @@ public sealed partial class AreaInfoSystem : EntitySystem
             severityToUse = (short)1;
         }
 
+        // CMU14 Begin: physical ceilings can collapse independently of an area's support restrictions.
+        bool? openToSky = HasComp<CMUZLevelMapComponent>(_transform.GetMap(ent.Owner))
+            ? _topDownOrdnance.IsOpenToSky(mapCoordinates)
+            : null;
+        if (openToSky == true)
+            severityToUse = 1;
+        else if (openToSky == false && ceilingLevel == 0)
+            severityToUse = 2;
+        // CMU14 End
+
         // Read permissions every time, but only rebuild text when its inputs change.
         var restrictionState = new AreaInfoRestrictionState(
             ceilingLevel, hasHiveCoreProtection, hasPylonProtection,
@@ -246,7 +257,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
             canMortarFire, mortarFire is { Redirected: true }, canMortarPlacement, canLase,
             // CMU14: area.Value.Comp.Medevac, area.Value.Comp.Paradropping, area.Value.Comp.NoTunnel,
             canMedevac, canParadrop, area.Value.Comp.NoTunnel,
-            area.Value.Comp.Unweedable, area.Value.Comp.ResinAllowed);
+            area.Value.Comp.Unweedable, area.Value.Comp.ResinAllowed, openToSky); // CMU14
         if (ent.Comp.LastRestrictionState == restrictionState && ent.Comp.LastRestrictionText is { } cachedRestrictions)
             return (areaProto.Name, severityToUse, cachedRestrictions);
 
@@ -310,7 +321,12 @@ public sealed partial class AreaInfoSystem : EntitySystem
         else if (hasPylonProtection)
             protectionSource = "\nProtection: Hive Pylon";
 
-        var restrictionsStr = $"\nCeiling level: {ceilingLevel}{protectionSource}";
+        // CMU14 Begin: describe actual cover separately from unchanged area permissions.
+        var restrictionsStr = openToSky is { } open
+            ? "\n" + Loc.GetString(open ? "cmu-area-roof-open" : "cmu-area-roof-covered") +
+              "\n" + Loc.GetString("cmu-area-protection-level", ("level", ceilingLevel)) + protectionSource
+            : $"\nCeiling level: {ceilingLevel}{protectionSource}";
+        // CMU14 End
 
         if (allowedActions.Count > 0)
         {
