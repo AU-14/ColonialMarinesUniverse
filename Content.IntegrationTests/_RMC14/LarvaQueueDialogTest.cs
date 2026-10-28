@@ -658,6 +658,9 @@ public sealed class LarvaQueueJoinXenoUiTest
             hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
             // CMU14: real rounds assign this hive during xeno initialization, before SpawnLarva returns.
             entMan.System<CMDistressSignalRuleSystem>().TheHive = hive;
+            // CMU14: an active hive is required to queue before a new larva bursts.
+            var drone = entMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            entMan.System<SharedXenoHiveSystem>().SetHive(drone, hive);
 
             var mindId = mind.CreateMind(player.UserId, "Observer");
             mind.TransferTo(mindId, ghost);
@@ -669,6 +672,11 @@ public sealed class LarvaQueueJoinXenoUiTest
             mind.SetUserId(infectorMind, infector.UserId);
 
             entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
+            // CMU14: priority is only exercised when a competing player is actually in the queue.
+            var queues = new GetLarvaQueueStatusEvent(player.UserId);
+            entMan.EventBus.RaiseEvent(EventSource.Local, queues);
+            Assert.That(queues.Queues.TryGetValue(hive, out var queued), Is.True);
+            Assert.That(queued.Position, Is.EqualTo(1));
         });
 
         await pair.RunTicksSync(5);
@@ -784,6 +792,9 @@ public sealed class LarvaQueueJoinXenoUiTest
         {
             ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
             hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
+            // CMU14: keep the hive active so only the round-start delay blocks enrollment.
+            var drone = entMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            entMan.System<SharedXenoHiveSystem>().SetHive(drone, hive);
 
             var mindId = mind.CreateMind(player.UserId, "Observer");
             mind.TransferTo(mindId, ghost);

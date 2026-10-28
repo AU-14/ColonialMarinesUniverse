@@ -82,7 +82,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     }
 
     private void OnPlayerAttached(Entity<CMUExpeditionAgentComponent> ent, ref PlayerAttachedEvent args) => Stop(ent);
-    private void OnShutdown(Entity<CMUExpeditionAgentComponent> ent, ref ComponentShutdown args) => Stop(ent);
+    private void OnShutdown(Entity<CMUExpeditionAgentComponent> ent, ref ComponentShutdown args)
+    {
+        Stop(ent);
+        RemoveFromSquadPlan(ent);
+    }
 
     private void Stop(Entity<CMUExpeditionAgentComponent> ent)
     {
