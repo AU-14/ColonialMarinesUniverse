@@ -182,6 +182,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
         EnsureComp<CMUYautjaMedicompTreatedComponent>(args.Part);
         gun.Comp.Loaded = false;
         Dirty(gun);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-medicomp-treated"), args.Body, args.User);
     }
 
     private void OnClamp(Entity<CMUYautjaMedicompClampStepComponent> ent, ref CMSurgeryStepEvent args)
