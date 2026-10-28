@@ -169487,7 +169487,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 100.5,-61.5
-- proto: Recycler
+- proto: CMURecycler
   entities:
   - uid: 73018
     components:
