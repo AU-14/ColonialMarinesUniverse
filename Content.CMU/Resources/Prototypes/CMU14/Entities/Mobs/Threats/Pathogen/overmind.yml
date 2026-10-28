@@ -135,6 +135,8 @@
   - type: CMArmor
     explosionArmor: 25
     xenoArmor: 15
+  - type: RMCSize
+    size: Immobile
   - type: XenoConstruction
     buildDelay: 1
     canBuild:
