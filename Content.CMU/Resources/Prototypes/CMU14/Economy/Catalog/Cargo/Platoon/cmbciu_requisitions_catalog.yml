@@ -446,6 +446,8 @@
         stockReplenishDelay: 1200
     - name: Ammo
       entries:
+      - cost: 500
+        crate: RMCCrateBatterySmartGun
       - cost: 250
         crate: RMCCrateBoxMagazineSmartPistol
       - cost: 300
