@@ -26,6 +26,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedStunSystem _stun = default!; // CMU14: resume knockdown recovery when leaving rest
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -235,6 +236,9 @@ public sealed partial class RMCStandingSystem : EntitySystem
         Dirty(rest);
 
         if (!resting)
+        {
+            _stun.SetAutoStand(rest.Owner, true); // CMU14: a stand request also resumes timed knockdown recovery
             _standing.Stand(rest);
+        }
     }
 }
