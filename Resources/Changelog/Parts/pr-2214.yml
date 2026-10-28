@@ -1,0 +1,21 @@
+author: Operator-Exi
+category: CMU
+changes:
+- message: New blueprints including custom grenade components have been shipped to
+    WY Tools & Engi component vends, And autolathes.
+  type: Add
+- message: Management has updated Weyland Yutanis chemical synthesizers and analyzers
+    to give you over 30 new properties that now function as intended.
+  type: Add
+- message: Management has also updated your chemical synthesizers and analyzers to
+    give you several new Napalm related properies that function as intended.
+  type: Add
+- message: New smoke based and foam based chemicals and reactions have been discovered
+    and disseminated amongst the scientific community.
+  type: Add
+- message: Everyone has updated their safety standards to allow the mixing of chemical
+    napalms within their respective tanks. Tanks now have safety limits for the stats
+    of the fuels they carry.
+  type: Tweak
+time: '2026-10-21T10:21:02.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2214

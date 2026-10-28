@@ -74,9 +74,9 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
         if (xform.MapUid is not { } map || !IsZeroGMap(map))
             return;
 
-        // Out over bare space outside the hull, or anywhere aboard once the ship's gravity is off. Open-air tiles inside
-        // the ship (the hangar ceilings) keep gravity while the generator runs.
-        if (!IsSpaceAt(_transform.GetMapCoordinates(ent, xform)) &&
+        // Out over bare space or on the outer hull, or anywhere aboard once the ship's gravity is off. Open-air tiles
+        // inside the ship (the hangar ceilings) keep gravity while the generator runs.
+        if (!IsExposedToSpaceAt(_transform.GetMapCoordinates(ent, xform)) &&
             _gravity.EntityGridOrMapHaveGravity((ent, xform)))
         {
             return;
@@ -178,6 +178,15 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
     public bool IsSpaceAt(MapCoordinates coordinates)
     {
         return GetTileAt(coordinates) is not { } definition || definition.ID == SpaceTile;
+    }
+
+    /// <summary>
+    ///     True if these coordinates are out in space: bare space, or a tile open to it like the outer hull plating.
+    ///     The hull is still a floor to stand on, so this only decides gravity, not falling.
+    /// </summary>
+    public bool IsExposedToSpaceAt(MapCoordinates coordinates)
+    {
+        return GetTileAt(coordinates) is not { } definition || definition.ID == SpaceTile || definition.MapAtmosphere;
     }
 
     /// <summary>The tile at these coordinates, or null if there's none there.</summary>

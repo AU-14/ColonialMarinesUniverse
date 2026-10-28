@@ -1,0 +1,161 @@
+# Loadout items for the CMB detective that no other job had a loadout for yet.
+
+- type: loadout
+  id: CMUDetectiveClothingNeckTieRed
+  equipment:
+    neck: ClothingNeckTieRed
+
+- type: loadout
+  id: CMUDetectiveClothingNeckTieSerious
+  equipment:
+    neck: ClothingNeckTieSerious
+
+- type: loadout
+  id: CMUDetectiveRMCJacketCorporateKhaki
+  equipment:
+    outerClothing: RMCJacketCorporateKhaki
+
+- type: loadout
+  id: CMUDetectiveRMCJacketCorporateBlack
+  equipment:
+    outerClothing: RMCJacketCorporateBlack
+
+- type: loadout
+  id: CMUDetectiveRMCJacketCorporateBlue
+  equipment:
+    outerClothing: RMCJacketCorporateBlue
+
+- type: loadout
+  id: CMUDetectiveRMCJacketCorporateBrown
+  equipment:
+    outerClothing: RMCJacketCorporateBrown
+
+- type: loadout
+  id: CMUDetectiveAU14WindbreakerBlue
+  equipment:
+    outerClothing: AU14WindbreakerBlue
+
+- type: loadout
+  id: CMUDetectiveRMCJacketWindbreakerGrey
+  equipment:
+    outerClothing: RMCJacketWindbreakerGrey
+
+- type: loadout
+  id: CMUDetectiveRMCJacketWindbreaker
+  equipment:
+    outerClothing: RMCJacketWindbreaker
+
+- type: loadout
+  id: CMUDetectiveRMCJacketWindbreakerFirstResponder
+  equipment:
+    outerClothing: RMCJacketWindbreakerFirstResponder
+
+- type: loadout
+  id: CMUDetectiveRMCJacketWindbreakerBrown
+  equipment:
+    outerClothing: RMCJacketWindbreakerBrown
+
+- type: loadout
+  id: CMUDetectiveAU14CivilianTanTrenchCoat
+  equipment:
+    outerClothing: AU14CivilianTanTrenchCoat
+
+- type: loadout
+  id: CMUDetectiveAU14CivilianBrownTrenchCoat
+  equipment:
+    outerClothing: AU14CivilianBrownTrenchCoat
+
+- type: loadout
+  id: CMUDetectiveAU14CivilianGrayTrenchCoat
+  equipment:
+    outerClothing: AU14CivilianGrayTrenchCoat
+
+- type: loadout
+  id: CMUDetectiveAU14CivilianJacketGrayPufferVest
+  equipment:
+    outerClothing: AU14CivilianJacketGrayPufferVest
+
+- type: loadout
+  id: CMUDetectiveAU14CivilianJacketKhakiPufferVest
+  equipment:
+    outerClothing: AU14CivilianJacketKhakiPufferVest
+
+- type: loadout
+  id: CMUDetectiveAU14CivilianJacketTanPufferVest
+  equipment:
+    outerClothing: AU14CivilianJacketTanPufferVest
+
+- type: loadout
+  id: CMUDetectiveAU14CivilianJacketGrayPufferJacket
+  equipment:
+    outerClothing: AU14CivilianJacketGrayPufferJacket
+
+- type: loadout
+  id: CMUDetectiveAU14CivilianJacketOrangePufferJacket
+  equipment:
+    outerClothing: AU14CivilianJacketOrangePufferJacket
+
+- type: loadout
+  id: CMUDetectiveAU14CivilianJacketKhakiPufferJacket
+  equipment:
+    outerClothing: AU14CivilianJacketKhakiPufferJacket
+
+- type: loadout
+  id: CMUDetectiveCMUCivBoonieHatTan
+  equipment:
+    head: CMUCivBoonieHatTan
+
+- type: loadout
+  id: CMUDetectiveCMUCivBoonieHatGreen
+  equipment:
+    head: CMUCivBoonieHatGreen
+
+- type: loadout
+  id: CMUDetectiveCMUCivWorkCapTan
+  equipment:
+    head: CMUCivWorkCapTan
+
+- type: loadout
+  id: CMUDetectiveCMUCivWorkCapGreen
+  equipment:
+    head: CMUCivWorkCapGreen
+
+- type: loadout
+  id: CMUDetectiveCMUCivSunCapTan
+  equipment:
+    head: CMUCivSunCapTan
+
+- type: loadout
+  id: CMUDetectiveCMUCivSunCapGreen
+  equipment:
+    head: CMUCivSunCapGreen
+
+- type: loadout
+  id: CMUDetectiveRMCSunglassesBig
+  equipment:
+    eyes: RMCSunglassesBig
+
+- type: loadout
+  id: CMUDetectiveAU14GlassesPersonalOrange
+  equipment:
+    eyes: AU14GlassesPersonalOrange
+
+- type: loadout
+  id: CMUDetectiveRMCGlassesTriMaxYellow
+  equipment:
+    eyes: RMCGlassesTriMaxYellow
+
+- type: loadout
+  id: CMUDetectiveRMCGlassesTriMaxBlack
+  equipment:
+    eyes: RMCGlassesTriMaxBlack
+
+- type: loadout
+  id: CMUDetectiveRMCGlassesTriMaxBronze
+  equipment:
+    eyes: RMCGlassesTriMaxBronze
+
+- type: loadout
+  id: CMUDetectiveAU14GlassesBiMexOrange
+  equipment:
+    eyes: AU14GlassesBiMexOrange

@@ -34,6 +34,11 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
   playTimeTracker: AU14JobCivilianUSASFRecruiter
   ranks:
     RMCRankCivilian: []

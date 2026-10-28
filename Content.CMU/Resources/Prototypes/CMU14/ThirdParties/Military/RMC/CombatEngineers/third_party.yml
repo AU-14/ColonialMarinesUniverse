@@ -1,0 +1,217 @@
+# Royal Marines combat engineers, called in through the TWE intel list: an engineer corporal and two sappers
+# with L90s, demolition charges, tools and building materials.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobRMCEngineerLead
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: RMC
+  roundRole: CMUJobRMCEngineerLead
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_engi_pve
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 2
+      RMCSkillCqc: 1
+      RMCSkillMedical: 1
+      RMCSkillLeadership: 1
+  name: cmu-job-title-rmc-engineer-lead
+  description: cmu-rmc-engineer-description
+  playTimeTracker: CMUJobRMCEngineerLead
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMC_Corporal:
+      entity: AU14ChevronRMCCorporal
+      requirements: []
+  spawnMenuRoleName: RMC Engineer Corporal (Combat Engineers)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearRMCEngineerLead
+  greeting: cmu-rmc-engineer-greeting
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-rmcrrt-commander
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobRMCEngineerLead
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicRMCRRT
+  id: CMUJobRMCEngineerLead
+  name: RMC Engineer Corporal (Combat Engineers)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadRMCRRT
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-rmc-engineer-lead-name
+    description: cmu-rmc-engineer-description
+    reregister: false
+    job: CMUJobRMCEngineerLead
+    raffle:
+      settings: short
+    rules: au14-rmcert-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobRMCEngineer
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: RMC
+  roundRole: CMUJobRMCEngineer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_engi_pve
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 2
+      RMCSkillCqc: 1
+      RMCSkillMedical: 1
+  name: cmu-job-title-rmc-engineer
+  description: cmu-rmc-engineer-description
+  playTimeTracker: CMUJobRMCEngineer
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMC_LanceCorporal:
+      entity: AU14ChevronRMCLanceCorporal
+      requirements: []
+  spawnMenuRoleName: RMC Combat Engineer (Combat Engineers)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearRMCEngineer
+  greeting: cmu-rmc-engineer-greeting
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-rmcrrt-commander
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobRMCEngineer
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicRMCRRT
+  id: CMUJobRMCEngineer
+  name: RMC Combat Engineer (Combat Engineers)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadRMCRRT
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-rmc-engineer-name
+    description: cmu-rmc-engineer-description
+    reregister: false
+    job: CMUJobRMCEngineer
+    raffle:
+      settings: short
+    rules: au14-rmcert-rules
+
+- type: startingGear
+  id: CMUGearRMCEngineerBase
+  equipment:
+    outerClothing: AU14ArmorRMC
+    jumpsuit: CMUFatiguesRMC
+    shoes: RMCBootsRoyalFilled
+    eyes: RMCWeldingGoggles
+    head: AU14HeadHelmetRMC
+    gloves: AU14HandsRMC
+    belt: AU14BeltMarineRMCFullL90
+    pocket1: RMCPouchConstructionFillFull
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelWelder
+    ears: AU14HeadsetRMCRRT
+    suitstorage: AU14WeaponRifleL90Full
+  storage:
+    back:
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - CMSheetPlasteel10
+    - CMSandbagEmpty25
+    - CMMRE
+
+- type: startingGear
+  parent: CMUGearRMCEngineerBase
+  id: CMUGearRMCEngineerLead
+  equipment:
+    id: CMUIDCardRMCEngineerLead
+  inhand:
+  - RMCBeltUtilityGeneralRCM
+  - CMSheetMetal50
+
+- type: startingGear
+  parent: CMUGearRMCEngineerBase
+  id: CMUGearRMCEngineer
+  equipment:
+    id: CMUIDCardRMCEngineer
+  inhand:
+  - CMBeltUtilityFilled
+  - CMSheetMetal50
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardRMCEngineerLead
+  name: RMC engineer corporal ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobRMCEngineerLead
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardRMCEngineer
+  name: RMC combat engineer ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobRMCEngineer
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: partySpawn
+  id: CMURMCCombatEngineersSpawn
+  leadersToSpawn:
+    CMUJobRMCEngineerLead: 1
+  gruntsToSpawn:
+    CMUJobRMCEngineer: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMURMCCombatEngineers
+  displayName: Royal Marines Combat Engineers
+  partyspawn: CMURMCCombatEngineersSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false

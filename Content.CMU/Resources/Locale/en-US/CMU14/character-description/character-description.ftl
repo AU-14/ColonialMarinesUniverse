@@ -75,3 +75,30 @@ cmu-edit-description-full = Full Character Description
 cmu-edit-description-limit = { $count }/{ $max }
 cmu-edit-description-save = Save
 cmu-edit-description-cancel = Cancel
+faction-roster-dossier-print = PRINT FILE
+faction-roster-print-name = personnel file ({$name})
+faction-roster-print-content = [head=2]PERSONNEL FILE[/head]
+    {"["}bold]{$name}[/bold], {$job}
+
+    Age: {$age}
+    Height: {$height}
+    Weight: {$weight}
+    Build: {$build}
+    Skin tone: {$skin}
+    Hair: {$hair}
+    Eyes: {$eyes}
+    Allegiance: {$allegiance}
+    Origin: {$origin}
+    Religion: {$religion}
+
+    {"["}bold]Description[/bold]
+    {$description}
+
+    {"["}bold]Medical record[/bold]
+    {$medical}
+
+    {"["}bold]Criminal record[/bold]
+    {$criminal}
+
+    {"["}bold]General record[/bold]
+    {$general}

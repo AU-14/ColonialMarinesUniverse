@@ -48,6 +48,7 @@
     - AU14JobLEOBase
     - AU14JobLEOLeaderBase
     - AU14JobCivilianCMBDeputy
+    - AU14JobCivilianCMBDetective
     - AU14JobCivilianCMBMarshal
     - AU14JobCivilianCWPSRanger
     - AU14JobCivilianPaPOfficer

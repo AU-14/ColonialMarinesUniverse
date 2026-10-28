@@ -1,0 +1,31 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: GOVFOR ghost warp no longer has two LINE sections
+  type: Fix
+- message: Overminds can have up to 3 blight cores
+  type: Tweak
+- message: Ghosts can't open the Bison cargo bay
+  type: Fix
+- message: Chemical payloads only take beaker-sized containers
+  type: Fix
+- message: The IO earpiece shows rank and role icons
+  type: Fix
+- message: The comms net directory no longer wipes what you're typing
+  type: Fix
+- message: Medicomp tools work without the surgery window
+  type: Fix
+- message: The ammo counter no longer draws over the TV
+  type: Fix
+- message: Ship camera terminals no longer block their tile
+  type: Fix
+- message: Synths no longer bleed forever from a lost limb
+  type: Fix
+- message: Synth reset keys no longer call the target an inanimate object
+  type: Fix
+- message: Gear that can't exist in the current mode isn't sold in vendors or req
+  type: Fix
+- message: Things tucked into a PMC beret no longer cover the beret
+  type: Fix
+time: '2026-10-22T21:14:07.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2262

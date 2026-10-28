@@ -118,6 +118,14 @@ public sealed partial class RequisitionsSystem
             return false;
 
         var componentFactory = EntityManager.ComponentFactory;
+        // CMU14 begin: ASRS vendor entries are already items. Keep filled gear intact.
+        if (entry.CMUFactionVendorItem &&
+            cratePrototype.TryComp<ItemComponent>(CompName.Get<ItemComponent>(componentFactory), out _))
+        {
+            AddManifestItem(manifest, entry.Crate, 1);
+            return true;
+        }
+        // CMU14 end
         // Keep deployment crates intact when their contents cannot be carried as items.
         // Spawning the machine directly can leave it anchored on the delivery pad.
         if (cratePrototype.TryComp<SpawnOnTerminateComponent>(
@@ -367,7 +375,9 @@ public sealed partial class RequisitionsSystem
             }
         }
 
-        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate)
+        // CMU14: stock replenishes above even when nobody is watching its countdown.
+        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate &&
+            _itemizedUi.IsUiOpen(computer.Owner, RequisitionsUIKey.Key))
         {
             computer.Comp.NextStockUiUpdate = time + TimeSpan.FromSeconds(1);
             changed = true;
@@ -497,7 +507,18 @@ public sealed partial class RequisitionsSystem
 
         account.Balance -= (int) totalCost;
         Dirty(computer.Comp.Account.Value, account);
+        // cmu edit start: who bought each shipment, for the colony firearm registry
+        var firstShipment = elevator.Comp.Orders.Count;
+        // cmu edit end
         elevator.Comp.Orders.AddRange(shipments);
+        // cmu edit start
+        for (var i = 0; i < shipments.Count; i++)
+        {
+            var bought = new Content.Server.CMU14.Requisitions.CMURequisitionsOrderBoughtEvent(elevator, firstShipment + i, actor,
+                computer.Comp.Faction);
+            RaiseLocalEvent(ref bought);
+        }
+        // cmu edit end
         Dirty(elevator);
         SendCheckoutResult(computer, actor, args.RequestId, RequisitionsCheckoutResult.Success);
         SendUIStateAll();
@@ -607,7 +628,24 @@ public sealed partial class RequisitionsSystem
         public readonly int MaxBundles;
         public TimeSpan NextReplenish;
 
-        public bool IsFull => Unlimited || Current.All(pair => pair.Value >= Maximum[pair.Key]);
+        // CMU14 Begin: this check runs for every itemized source on each update.
+        public bool IsFull
+        {
+            get
+            {
+                if (Unlimited)
+                    return true;
+
+                foreach (var (prototype, amount) in Current)
+                {
+                    if (amount < Maximum[prototype])
+                        return false;
+                }
+
+                return true;
+            }
+        }
+        // CMU14 End
 
         public ItemizedSource(RequisitionsEntry entry, Dictionary<EntProtoId, int> manifest, TimeSpan time)
         {

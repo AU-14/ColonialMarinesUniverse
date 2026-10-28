@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobParamarineCommander
+  chevrons:
+    IASF_Captain:
+      entity: AU14ChevronIASFCaptain
+      requirements: []
   roundSide: ThirdParty
   roundForce: CMUParamarines
   roundRole: ParamarineCommander
@@ -24,13 +28,13 @@
     - English
     currentLanguage: English
     defaultLanguage: English
-  name: cmu-paramarines-name-commander
+  name: cmu-paramarines-name-commander-title
   description: cmu-paramarines-description-commander
   playTimeTracker: CMUJobParamarineCommander
   ranks:
     RMCRankCivilian: []
   startingGear: CMUGearParamarineCommander
-  spawnMenuRoleName: TWE Royal Paramarine Commander (3rd party)
+  spawnMenuRoleName: IASF Parachute Regiment Commander (3rd party)
   greeting: cmu-paramarines-greeting
   icon: RMCJobIconParaCommander
   joinNotifyCrew: false
@@ -42,7 +46,7 @@
 - type: entity
   parent: CMUBaseMobSpeciesParamarines
   id: CMUJobParamarineCommander
-  name: TWE Royal Paramarine Commander
+  name: IASF Parachute Regiment Commander
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial

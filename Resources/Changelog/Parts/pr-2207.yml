@@ -1,0 +1,20 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Added the jump pack, a back-slot thruster pack that refuels from gas canisters
+    like an oxygen tank. A full tank gives about 5 minutes of use.
+  type: Add
+- message: Jump pack Boost launches you 6 tiles in your chosen direction. Change direction
+    with the Direction action, and alt-click the pack to switch between 4 and 8 directions.
+  type: Add
+- message: Jump pack Jump launches you up one level through open sky. It shares Boost's
+    7 second cooldown.
+  type: Add
+- message: Jump pack Hover lifts you one level up for up to 20 seconds, with no Boost
+    cooldown while hovering. End it early and you float safely back down. Hover has
+    a 35 second cooldown.
+  type: Add
+- message: Added Z-level hover support (StartZHover/StopZHover) to the Z-levels system.
+  type: Code
+time: '2026-10-21T00:08:46.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2207

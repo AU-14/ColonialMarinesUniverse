@@ -2,7 +2,7 @@
   parent: CMIDCardBase
   categories: [ HideSpawnMenu ]
   id: CMUIDCardCLFEngineer
-  name: CLF engineer ID card
+  name: INSFOR engineer ID card
   components:
   - type: PresetIdCard
     job: CMUJobCLFEngineer
@@ -14,7 +14,7 @@
   parent: CMIDCardBase
   categories: [ HideSpawnMenu ]
   id: CMUIDCardCLFSpecialist
-  name: CLF specialist ID card
+  name: INSFOR specialist ID card
   components:
   - type: PresetIdCard
     job: CMUJobCLFSpecialist

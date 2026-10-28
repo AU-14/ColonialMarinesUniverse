@@ -11,6 +11,11 @@
   name: Praetorian
   description: A huge, looming beast of an alien.
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite

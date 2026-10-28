@@ -19,6 +19,11 @@
       - FrontalLisp
       - NonResuscitable
       - Epilepsy
+      - CMUHeartCondition
+      - CMUHemophilia
+      - CMUHardOfHearing
+      - CMUClaustrophobic
+      - CMUFearOfBlood
       - NoEnglish
       - SignLanguage
       - LatinLanguage
@@ -106,6 +111,11 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
     - CMUProstheticLeftArm
     - CMUProstheticRightArm
     - CMUProstheticLeftLeg

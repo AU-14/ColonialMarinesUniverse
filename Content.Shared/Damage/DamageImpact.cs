@@ -54,6 +54,7 @@ public enum DamageImpactContext : byte
 {
     None = 0,
     PointBlank = 1 << 0,
+    XenoClaw = 1 << 1, // CMU14: xeno claw swing, so the XVX slash multiplier is applied per target
 }
 
 public readonly record struct DamageImpact(

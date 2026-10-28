@@ -8,25 +8,27 @@
   category: cargoproduct-category-name-space
   group: market
 
-- type: cargoProduct
-  id: SpaceJetpack
-  icon:
-    sprite: Objects/Tanks/Jetpacks/blue.rsi
-    state: icon
-  product: CrateSpaceJetpack
-  cost: 1000
-  category: cargoproduct-category-name-space
-  group: market
-
-- type: cargoProduct
-  id: SpaceMiniJetpack
-  icon:
-    sprite: Objects/Tanks/Jetpacks/mini.rsi
-    state: icon
-  product: CrateSpaceMiniJetpack
-  cost: 750
-  category: cargoproduct-category-name-space
-  group: market
+# cmu edit start: jetpacks can't be bought
+#- type: cargoProduct
+#  id: SpaceJetpack
+#  icon:
+#    sprite: Objects/Tanks/Jetpacks/blue.rsi
+#    state: icon
+#  product: CrateSpaceJetpack
+#  cost: 1000
+#  category: cargoproduct-category-name-space
+#  group: market
+#
+#- type: cargoProduct
+#  id: SpaceMiniJetpack
+#  icon:
+#    sprite: Objects/Tanks/Jetpacks/mini.rsi
+#    state: icon
+#  product: CrateSpaceMiniJetpack
+#  cost: 750
+#  category: cargoproduct-category-name-space
+#  group: market
+# cmu edit end
 
 - type: cargoProduct
   id: SpaceGyroscope

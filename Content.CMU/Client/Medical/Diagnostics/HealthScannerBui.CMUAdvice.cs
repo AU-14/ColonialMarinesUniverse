@@ -8,8 +8,8 @@ using Robust.Shared.Utility;
 namespace Content.Client._RMC14.Medical.Scanner;
 
 /// <summary>
-///     CMU14 medical advice: what to do about the readings the CMU medical scan adds (breathing, bleeding,
-///     fractures, stumps, shrapnel, pain, temperature and overdoses).
+///     CMU14 medical advice: what to do about the readings the CMU medical scan adds (trait episodes like seizures,
+///     breathing, bleeding, fractures, stumps, shrapnel, pain, temperature and overdoses).
 /// </summary>
 public sealed partial class HealthScannerBui
 {
@@ -27,6 +27,18 @@ public sealed partial class HealthScannerBui
                 ? Loc.GetString("cmu-health-analyzer-advice-allergy", ("reagent", FormattedMessage.EscapeText(allergen)))
                 : Loc.GetString("cmu-health-analyzer-advice-allergy-unknown"));
         }
+
+        if (uiState.CMUSeizure)
+            AddAdviceCandidate(recommendations, 95, Loc.GetString("cmu-health-analyzer-advice-seizure"));
+
+        if (uiState.CMUAsthmaAttack)
+            AddAdviceCandidate(recommendations, 94, Loc.GetString("cmu-health-analyzer-advice-asthma-attack"));
+
+        if (uiState.CMUPanicAttack)
+            AddAdviceCandidate(recommendations, 86, Loc.GetString("cmu-health-analyzer-advice-panic-attack"));
+
+        if (uiState.CMUHeartEpisode)
+            AddAdviceCandidate(recommendations, 93, Loc.GetString("cmu-health-analyzer-advice-heart-episode"));
 
         if (uiState.Advice.CMUShowInternals)
             AddAdviceCandidate(recommendations, 91, Loc.GetString("cmu-health-analyzer-advice-internals"));

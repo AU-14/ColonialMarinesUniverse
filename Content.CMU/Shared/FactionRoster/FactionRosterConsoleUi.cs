@@ -46,3 +46,10 @@ public sealed class FactionRosterConsoleBuiState : BoundUserInterfaceState
 public sealed class FactionRosterConsoleRefreshBuiMsg : BoundUserInterfaceMessage
 {
 }
+
+/// <summary>Prints the named person's personnel file at the console.</summary>
+[Serializable, NetSerializable]
+public sealed class FactionRosterConsolePrintBuiMsg(string name) : BoundUserInterfaceMessage
+{
+    public readonly string Name = name;
+}

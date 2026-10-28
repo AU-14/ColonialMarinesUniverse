@@ -1,0 +1,185 @@
+# A full Colonial Guard platoon, bought through intel: one squad leader and eleven guardsmen. Still lightly armed, but
+# kitted for a fight: M3 pattern armor, riot helmets, and riot visors on some of them. The leader wears a patrol cap.
+- type: partySpawn
+  id: CMUUACGPlatoonSpawn
+  leadersToSpawn:
+    CMUJobUACGPlatoonSquadLeader: 1
+  gruntsToSpawn:
+    CMUJobUACGPlatoonRiflemanVisor: 5
+    CMUJobUACGPlatoonRifleman: 5
+    CMUJobUACGPlatoonRiflemanXM24: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUACGPlatoon
+  displayName: UA Colonial Guard Platoon
+  partyspawn: CMUUACGPlatoonSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 12
+  roundstart: false
+
+# Roles: the patrol roles with platoon gear.
+
+- type: job
+  parent: CMUJobUACGPatrolSquadLeader
+  id: CMUJobUACGPlatoonSquadLeader
+  startingGear: CMUGearUACGPlatoonSquadLeader
+  spawnMenuRoleName: Colonial Guard Squad Leader (Platoon)
+
+- type: entity
+  parent: CMUJobUACGPatrolSquadLeader
+  id: CMUJobUACGPlatoonSquadLeader
+  name: Colonial Guard Squad Leader (Platoon)
+  components:
+  - type: GhostRole
+    job: CMUJobUACGPlatoonSquadLeader
+
+- type: job
+  parent: CMUJobUACGPatrolRifleman
+  id: CMUJobUACGPlatoonRifleman
+  startingGear: CMUGearUACGPlatoonRifleman
+  spawnMenuRoleName: Colonial Guard Rifleman (Platoon)
+
+- type: entity
+  parent: CMUJobUACGPatrolRifleman
+  id: CMUJobUACGPlatoonRifleman
+  name: Colonial Guard Rifleman (Platoon)
+  components:
+  - type: GhostRole
+    job: CMUJobUACGPlatoonRifleman
+
+- type: job
+  parent: CMUJobUACGPatrolRifleman
+  id: CMUJobUACGPlatoonRiflemanVisor
+  startingGear: CMUGearUACGPlatoonRiflemanVisor
+  spawnMenuRoleName: Colonial Guard Rifleman (Platoon, Riot Visor, M20A2)
+
+- type: entity
+  parent: CMUJobUACGPatrolRifleman
+  id: CMUJobUACGPlatoonRiflemanVisor
+  name: Colonial Guard Rifleman (Platoon, Riot Visor, M20A2)
+  components:
+  - type: GhostRole
+    job: CMUJobUACGPlatoonRiflemanVisor
+
+# Gear. The armor only holds tiny items, so the magazines the patrol keeps in its webbing go in the rucksack here.
+
+- type: startingGear
+  parent: CMUGearUACGPatrolBase
+  id: CMUGearUACGPlatoonBase
+  equipment:
+    outerClothing: AU14ArmorM3UACG
+    head: AU14UACGHelmet
+  storage:
+    outerClothing: []
+    back:
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+
+- type: startingGear
+  parent: CMUGearUACGPlatoonBase
+  id: CMUGearUACGPlatoonRifleman
+  equipment:
+    id: AU14IDCardUACGRifleman
+
+# The visor guardsmen carry the riot-control M20A2. Written out in full rather than built on the base gear, because
+# in-hand lists add to the parent's and the base already puts an M20A in hand. The M20A2 takes M20A magazines.
+- type: startingGear
+  id: CMUGearUACGPlatoonRiflemanVisor
+  equipment:
+    id: AU14IDCardUACGRifleman
+    outerClothing: AU14ArmorM3UACG
+    jumpsuit: AU14UACGFatigues
+    shoes: CMBootsBrownFilled
+    mask: RMCMaskScarfTanDown
+    head: AU14UACGHelmet
+    belt: AU14UACGBeltFilledM20a
+    pocket1: AU14UACGCigPouch
+    pocket2: AU14PouchIFAKFill
+    back: AU14UACGPatrolRucksack
+  storage:
+    head:
+    - AU14HelmetGarbRiotVisor
+    back:
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+  inhand:
+  - CMUWeaponRifleM20A2
+
+- type: startingGear
+  parent: CMUGearUACGPlatoonBase
+  id: CMUGearUACGPlatoonSquadLeader
+  equipment:
+    id: AU14IDCardUACGSquadleader
+    head: AU14UACGPatrolCap
+    pocket1: RMCPouchPistol
+  # Storage lists replace the parent's per slot, so the rucksack's rifle magazines are listed again here.
+  storage:
+    pocket1:
+    - CMWeaponPistolM1984Custom
+    back:
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+  # The rifle comes from the patrol base gear; in-hand lists add to the parent's rather than replacing it.
+  inhand:
+  - RMCBinocularsPVE
+
+# One guardsman carries an XM24A instead of the M20A. Their gear is written out in full rather than built on the base
+# gear, because in-hand lists add to the parent's and the base already puts an M20A in hand.
+
+- type: job
+  parent: CMUJobUACGPatrolRifleman
+  id: CMUJobUACGPlatoonRiflemanXM24
+  startingGear: CMUGearUACGPlatoonRiflemanXM24
+  spawnMenuRoleName: Colonial Guard Rifleman (Platoon, XM24A)
+
+- type: entity
+  parent: CMUJobUACGPatrolRifleman
+  id: CMUJobUACGPlatoonRiflemanXM24
+  name: Colonial Guard Rifleman (Platoon, XM24A)
+  components:
+  - type: GhostRole
+    job: CMUJobUACGPlatoonRiflemanXM24
+
+- type: startingGear
+  id: CMUGearUACGPlatoonRiflemanXM24
+  equipment:
+    id: AU14IDCardUACGRifleman
+    outerClothing: AU14ArmorM3UACG
+    jumpsuit: AU14UACGFatigues
+    shoes: CMBootsBrownFilled
+    mask: RMCMaskScarfTanDown
+    head: AU14UACGHelmet
+    belt: CMBeltMarine
+    pocket1: AU14UACGCigPouch
+    pocket2: AU14PouchIFAKFill
+    back: AU14UACGPatrolRucksack
+  storage:
+    belt:
+    - RMCMagazineRifleL42A
+    - RMCMagazineRifleL42A
+    - RMCMagazineRifleL42A
+    - RMCMagazineRifleL42A
+    - RMCMagazineRifleL42A
+    back:
+    - RMCMagazineRifleL42A
+    - RMCMagazineRifleL42A
+    - RMCMagazineRifleL42A
+  inhand:
+  - CMUWeaponRifleXM24AStandard

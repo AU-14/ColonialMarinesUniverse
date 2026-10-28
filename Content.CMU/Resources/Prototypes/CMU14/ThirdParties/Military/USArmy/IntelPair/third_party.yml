@@ -1,0 +1,230 @@
+# US Army intelligence pair from the 525th Military Intelligence Brigade, called in through the UA intel list:
+# a warrant officer and an analyst, sent to gather and process intel for the UA forces on the ground.
+
+# Army uniform with the US Army and 525th MI Brigade patches already on it.
+- type: entity
+  parent: AU14ArmyJumpsuitCavalry
+  id: CMUArmyJumpsuitIntel
+  suffix: CMU, 525th MI Brigade
+  components:
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUSArmy
+    - AU14Patch525thAIB
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUSArmyIntelOfficer
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: USARMY
+  roundRole: CMUJobUSArmyIntelOfficer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: io
+  - type: Skills
+    skills:
+      RMCSkillIntel: 3
+      RMCSkillFirearms: 2
+      RMCSkillLeadership: 1
+      RMCSkillEndurance: 1
+      RMCSkillCqc: 1
+      RMCSkillMedical: 1
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 2
+      RMCSkillOverwatch: 1
+  name: cmu-job-title-usarmy-intel-officer
+  description: cmu-job-description-usarmy-intel
+  playTimeTracker: CMUJobUSArmyIntelOfficer
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    USArmy_ChiefWarrantOfficer2:
+      entity: AU14ChevronUSArmyChiefWarrantOfficer2
+      requirements: []
+  spawnMenuRoleName: US Army Intelligence Officer (Intel Pair)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUSArmyIntelOfficer
+  greeting: cmu-job-greeting-usarmy-intel
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-uscm-plasma
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobUSArmyIntelOfficer
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUSArmy
+  suffix: CMU, US Army, Intel Pair
+  id: CMUJobUSArmyIntelOfficer
+  name: US Army Intelligence Officer (Intel Pair)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUSArmy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-usarmy-intel-officer
+    description: cmu-job-description-usarmy-intel
+    reregister: false
+    job: CMUJobUSArmyIntelOfficer
+    raffle:
+      settings: short
+    rules: cmu-job-rules-usarmy-intel
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUSArmyIntelAnalyst
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: USARMY
+  roundRole: CMUJobUSArmyIntelAnalyst
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: io
+  - type: Skills
+    skills:
+      RMCSkillIntel: 3
+      RMCSkillFirearms: 2
+      RMCSkillLeadership: 1
+      RMCSkillEndurance: 1
+      RMCSkillCqc: 1
+      RMCSkillMedical: 1
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 2
+      RMCSkillOverwatch: 1
+  name: cmu-job-title-usarmy-intel-analyst
+  description: cmu-job-description-usarmy-intel
+  playTimeTracker: CMUJobUSArmyIntelAnalyst
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    USArmy_StaffSergeant:
+      entity: AU14ChevronUSArmyStaffSergeant
+      requirements: []
+  spawnMenuRoleName: US Army Intelligence Analyst (Intel Pair)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUSArmyIntelAnalyst
+  greeting: cmu-job-greeting-usarmy-intel
+  joinNotifyCrew: false
+  supervisors: cmu-job-title-usarmy-intel-officer
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobUSArmyIntelAnalyst
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUSArmy
+  suffix: CMU, US Army, Intel Pair
+  id: CMUJobUSArmyIntelAnalyst
+  name: US Army Intelligence Analyst (Intel Pair)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUSArmy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-usarmy-intel-analyst
+    description: cmu-job-description-usarmy-intel
+    reregister: false
+    job: CMUJobUSArmyIntelAnalyst
+    raffle:
+      settings: short
+    rules: cmu-job-rules-usarmy-intel
+
+- type: startingGear
+  id: CMUGearUSArmyIntelBase
+  equipment:
+    jumpsuit: CMUArmyJumpsuitIntel
+    outerClothing: AU14ArmorUSArmy
+    head: AU14HelmetUSArmy
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: AU14BootsUSArmyFilled
+    ears: AU14HeadsetUSArmy
+    belt: RMCBeltHolsterPistol
+    pocket1: AU14PouchIFAKFill
+    pocket2: RMCPouchDocument
+    back: CMSatchelMarineIntel
+    suitstorage: RMCWeaponRifleM54CFilled
+  storage:
+    belt:
+    - AU14WeaponPistolM4A4
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    back:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - RMCBinoculars
+    - RMCIntelDetector
+
+- type: startingGear
+  parent: CMUGearUSArmyIntelBase
+  id: CMUGearUSArmyIntelOfficer
+  equipment:
+    id: CMUIDCardUSArmyIntelOfficer
+
+- type: startingGear
+  parent: CMUGearUSArmyIntelBase
+  id: CMUGearUSArmyIntelAnalyst
+  equipment:
+    id: CMUIDCardUSArmyIntelAnalyst
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUSArmyIntelOfficer
+  name: US Army intelligence officer ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUSArmyIntelOfficer
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUSArmyIntelAnalyst
+  name: US Army intelligence analyst ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUSArmyIntelAnalyst
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: partySpawn
+  id: CMUUSArmyIntelPairSpawn
+  leadersToSpawn:
+    CMUJobUSArmyIntelOfficer: 1
+  gruntsToSpawn:
+    CMUJobUSArmyIntelAnalyst: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUSArmyIntelPair
+  displayName: US Army Intelligence Pair
+  partyspawn: CMUUSArmyIntelPairSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 2
+  roundstart: false

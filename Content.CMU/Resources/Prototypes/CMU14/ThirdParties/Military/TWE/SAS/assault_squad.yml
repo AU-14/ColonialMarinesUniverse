@@ -1,0 +1,92 @@
+# SAS assault squad, called in through the TWE intel list: the SAS team doubled up on breachers and riflemen.
+- type: partySpawn
+  id: CMUSASAssaultSquadSpawn
+  leadersToSpawn:
+    CMUJobSASAssaultCommander: 1
+  gruntsToSpawn:
+    CMUJobSASAssaultBreacher: 2
+    CMUJobSASAssaultMedic: 1
+    CMUJobSASAssaultRifleman: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUSASAssaultSquad
+  displayName: SAS Assault Squad
+  partyspawn: CMUSASAssaultSquadSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 6
+  roundstart: false
+
+- type: job
+  parent: CMUJobSASCommander
+  id: CMUJobSASAssaultCommander
+  description: cmu-sas-assault-description
+  greeting: cmu-sas-assault-greeting
+  supervisors: cmu-sas-assault-supervisors
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: entity
+  parent: CMUJobSASCommander
+  id: CMUJobSASAssaultCommander
+  components:
+  - type: GhostRole
+    job: CMUJobSASAssaultCommander
+    description: cmu-sas-assault-description
+    rules: cmu-sas-assault-rules
+
+- type: job
+  parent: CMUJobSASBreacher
+  id: CMUJobSASAssaultBreacher
+  description: cmu-sas-assault-description
+  greeting: cmu-sas-assault-greeting
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: entity
+  parent: CMUJobSASBreacher
+  id: CMUJobSASAssaultBreacher
+  components:
+  - type: GhostRole
+    job: CMUJobSASAssaultBreacher
+    description: cmu-sas-assault-description
+    rules: cmu-sas-assault-rules
+
+- type: job
+  parent: CMUJobSASMedic
+  id: CMUJobSASAssaultMedic
+  description: cmu-sas-assault-description
+  greeting: cmu-sas-assault-greeting
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: entity
+  parent: CMUJobSASMedic
+  id: CMUJobSASAssaultMedic
+  components:
+  - type: GhostRole
+    job: CMUJobSASAssaultMedic
+    description: cmu-sas-assault-description
+    rules: cmu-sas-assault-rules
+
+- type: job
+  parent: CMUJobSASRifleman
+  id: CMUJobSASAssaultRifleman
+  description: cmu-sas-assault-description
+  greeting: cmu-sas-assault-greeting
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: entity
+  parent: CMUJobSASRifleman
+  id: CMUJobSASAssaultRifleman
+  components:
+  - type: GhostRole
+    job: CMUJobSASAssaultRifleman
+    description: cmu-sas-assault-description
+    rules: cmu-sas-assault-rules

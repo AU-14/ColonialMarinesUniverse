@@ -12,6 +12,11 @@
   name: Drone
   description: An alien drone.
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste, matching
+    canThrow: true           # CM-SS13's grab gate (mob_grab.dm:82-89: Yautja reach MOB_SIZE_XENO, 3).
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: MobState

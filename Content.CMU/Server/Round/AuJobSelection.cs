@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.CMU14.Threats;
+using Content.Server.Ghost.Roles;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.Preferences;
 using Content.Shared.CMU14.util;
@@ -7,6 +8,7 @@ using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Round;
 
@@ -18,6 +20,8 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private GhostRoleSystem _ghostRole = default!;
+    [Dependency] private ISharedPlayerManager _players = default!;
 
 
     public Dictionary<NetUserId, string> ForcedJobAssignments { get; } = new();
@@ -43,7 +47,8 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
             candidateThreats,
             heldBodyCount.Leaders,
             heldBodyCount.Members,
-            presetId);
+            presetId,
+            (player, job) => _players.TryGetSessionById(player, out var session) && _ghostRole.CanPlayForceJob(session, job));
 
         foreach (var assignment in assignments)
         {

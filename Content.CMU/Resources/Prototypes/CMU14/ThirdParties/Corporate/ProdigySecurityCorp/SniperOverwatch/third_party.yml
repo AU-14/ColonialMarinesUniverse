@@ -1,0 +1,234 @@
+# Prodigy sniper overwatch, called in through the Other intel list: a marksman with the M96S and a spotter.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobProdigySniper
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: PSC
+  roundRole: CMUJobProdigySniper
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spec_sniper
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 1
+      RMCSkillPolice: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillMedical: 1
+  - type: SniperWhitelist
+  - type: SpotterWhitelist
+  name: cmu-job-title-prodigy-sniper
+  description: cmu-prodigy-sniper-description
+  playTimeTracker: CMUJobProdigySniper
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankPrDEnforcer:
+      entity: AU14ChevronPrDEnforcer
+      requirements: []
+  spawnMenuRoleName: Prodigy Marksman (Sniper Overwatch)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearProdigySniper
+  greeting: cmu-prodigy-callin-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-prodigy-callin-supervisors
+  accessGroups:
+  - auprodigy
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobProdigySniper
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMUJobProdigySniper
+  name: Prodigy Marksman (Sniper Overwatch)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-prodigy-sniper-name
+    description: cmu-prodigy-sniper-description
+    reregister: false
+    job: CMUJobProdigySniper
+    raffle:
+      settings: short
+    rules: cmu-prodigy-callin-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobProdigySpotter
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: PSC
+  roundRole: CMUJobProdigySpotter
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spotter
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+      RMCSkillPolice: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillMedical: 1
+      RMCSkillJtac: 2
+      RMCSkillOverwatch: 1
+  - type: SpotterWhitelist
+  name: cmu-job-title-prodigy-spotter
+  description: cmu-prodigy-sniper-description
+  playTimeTracker: CMUJobProdigySpotter
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankPrDSeniorOperator:
+      entity: AU14ChevronPrDSeniorOperator
+      requirements: []
+  spawnMenuRoleName: Prodigy Spotter (Sniper Overwatch)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearProdigySpotter
+  greeting: cmu-prodigy-callin-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-prodigy-callin-supervisors
+  accessGroups:
+  - auprodigy
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobProdigySpotter
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMUJobProdigySpotter
+  name: Prodigy Spotter (Sniper Overwatch)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-prodigy-spotter-name
+    description: cmu-prodigy-sniper-description
+    reregister: false
+    job: CMUJobProdigySpotter
+    raffle:
+      settings: short
+    rules: cmu-prodigy-callin-rules
+
+- type: startingGear
+  id: CMUGearProdigySniperBase
+  equipment:
+    jumpsuit: AU14ProdigyFatigues
+    outerClothing: CMUArmorProdigyFlakVest
+    head: AU14ProdigyCap
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: RMCBootsSPPBlackFilled
+    ears: AU14HeadsetPART
+    pocket2: AU14PouchIFAKFill
+    mask: RMCMaskScarfBlack
+    belt: AU14BeltHolsterPistolBlack
+    back: RMCSatchelLightpackBlack
+  storage:
+    belt:
+    - CMU14WeaponPistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+
+- type: startingGear
+  parent: CMUGearProdigySniperBase
+  id: CMUGearProdigySniper
+  equipment:
+    id: CMUIDCardProdigySniper
+    suitstorage: RMCM96SBSniperRifle
+    pocket1: RMCPouchMagazineLarge
+  storage:
+    pocket1:
+    - CMMagazineSniperM96S
+    - CMMagazineSniperM96S
+    - CMMagazineSniperM96S
+    back:
+    - CMMagazineSniperM96S
+    - CMMagazineSniperM96S
+    - CMUMREFSR
+    - CMCanteen
+
+- type: startingGear
+  parent: CMUGearProdigySniperBase
+  id: CMUGearProdigySpotter
+  equipment:
+    id: CMUIDCardProdigySpotter
+    suitstorage: AU14WeaponRifleprodigyrifleAR
+    pocket1: AU14PouchSlingBinocs
+  storage:
+    back:
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    - RMCRangefinder
+    - CMUMREFSR
+    - CMCanteen
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardProdigySniper
+  name: Prodigy marksman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobProdigySniper
+  - type: ItemIFF
+    factions:
+    - FactionProdigy
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardProdigySpotter
+  name: Prodigy spotter ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobProdigySpotter
+  - type: ItemIFF
+    factions:
+    - FactionProdigy
+
+- type: partySpawn
+  id: CMUProdigySniperOverwatchSpawn
+  leadersToSpawn:
+    CMUJobProdigySniper: 1
+  gruntsToSpawn:
+    CMUJobProdigySpotter: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUProdigySniperOverwatch
+  displayName: Prodigy Sniper Overwatch
+  partyspawn: CMUProdigySniperOverwatchSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 2
+  roundstart: false

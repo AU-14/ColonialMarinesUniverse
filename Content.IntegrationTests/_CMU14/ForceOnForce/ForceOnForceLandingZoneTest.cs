@@ -32,8 +32,8 @@ public sealed class ForceOnForceLandingZoneTest : GameTest
             Assert.That(planets, Is.EquivalentTo(new[]
             {
                 "AUPlanetTrijent", "AUPlanetBosenmoriBasho",
-                "AuPlanetChances", "AUPlanetCorsatStation", "AUPlanetLV624", "AUPlanetShepherdsPride",
-                "AUPlanetLV747", "AUPlanetSorokyne",
+                "AuPlanetChances", "AUPlanetCorsatStation", "AUPlanetShepherdsPride",
+                "AUPlanetSorokyne",
             }));
             foreach (var id in planets)
             {

@@ -1,7 +1,7 @@
 - type: entity
   abstract: false
   id: CMBCIUCargoCatalog
-  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor ]
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor, CMUASRSJeepKits ]
   components:
   - type: RequisitionsComputer
     categories:
@@ -11,6 +11,8 @@
         crate: RMCCrateEmptySandbags
       - cost: 500
         crate: RMCCrateSandbagsConstructionKit
+      - cost: 1200
+        crate: CMUCrateHESCO
       - cost: 600
         crate: AU14CrateConcreteBags
       - cost: 700
@@ -145,6 +147,8 @@
         crate: RMCCrateGearParachute
       - cost: 800
         crate: RMCCrateAttachmentSmartScope
+      - cost: 2500
+        crate: CMUCrateAttachmentNightVisionScope
     - name: Pouches
       entries:
       - cost: 150
@@ -313,6 +317,10 @@
         crate: CMUCrateVehiclePartAPCFrontCannon
         maxStock: 2
         stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartAPCDualCannon
+        maxStock: 2
+        stockReplenishDelay: 300
 
     - name: Vehicle Main Modules
       entries:
@@ -444,12 +452,12 @@
         stockReplenishDelay: 1200
     - name: Ammo
       entries:
+      - cost: 500
+        crate: RMCCrateBatterySmartGun
       - cost: 250
         crate: RMCCrateBoxMagazineSmartPistol
-      - cost: 500
-        crate: CMUCrateBoxMagazineRifleM16APExt
       - cost: 300
-        crate: CMUCrateBoxMagazineRifleM16AP
+        crate: CMUCrateBoxMagazineRifleM20AAP
       - cost: 400
         crate: RMCCrateBoxShellsShotgunBreaching
       - cost: 650

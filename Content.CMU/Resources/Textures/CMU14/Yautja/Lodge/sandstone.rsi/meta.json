@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/2eda215ec73ecbcfa4e2c3b0d51b47e68a5b7fe7/icons/obj/items/stacks.dmi; Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/2eda215ec73ecbcfa4e2c3b0d51b47e68a5b7fe7/icons/mob/humans/onmob/inhands/items/material_stacks_lefthand.dmi; Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/2eda215ec73ecbcfa4e2c3b0d51b47e68a5b7fe7/icons/mob/humans/onmob/inhands/items/material_stacks_righthand.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "sandstone"
+    },
+    {
+      "name": "sandstone_2"
+    },
+    {
+      "name": "sandstone_3"
+    },
+    {
+      "name": "sandstone_4"
+    },
+    {
+      "name": "runed"
+    },
+    {
+      "name": "runed_2"
+    },
+    {
+      "name": "runed_3"
+    },
+    {
+      "name": "runed_4"
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    }
+  ]
+}

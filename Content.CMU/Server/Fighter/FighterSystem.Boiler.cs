@@ -1,7 +1,12 @@
 using System.Numerics;
+using Content.Server.CMU14.Dropship.Integrity;
 using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared.CMU14.Dropship.Integrity;
+using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.Fighter;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.Shuttles.Components;
+using Content.Shared.Shuttles.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Spawners;
@@ -11,7 +16,10 @@ namespace Content.Server.CMU14.Fighter;
 public sealed partial class FighterSystem
 {
     [Dependency] private FighterBoilerAirDefenseSystem _boilerAirDefense = default!;
+    [Dependency] private DropshipIntegritySystem _boilerGunshipIntegrity = default!;
     [Dependency] private XenoPlasmaSystem _boilerPlasma = default!;
+    private readonly List<EntityUid> _boilerTargets = [];
+    private static readonly TimeSpan BoilerFlightTime = TimeSpan.FromSeconds(5);
     private static readonly SoundSpecifier BoilerPlasmaSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/blobattack.ogg");
     private static readonly SoundSpecifier BoilerPrepareSound = new SoundCollectionSpecifier("XenoDrool");
 
@@ -29,6 +37,24 @@ public sealed partial class FighterSystem
     private void UpdateBoilerAirDefense(bool updateRadar)
     {
         var now = _timing.CurTime;
+        var shots = EntityQueryEnumerator<CMUBoilerGunshipShotComponent>();
+        while (shots.MoveNext(out var shot, out var pending))
+        {
+            if (now < pending.ImpactAt)
+                continue;
+
+            if (TryGetBoilerGunship(pending.Target, pending.Terrain, out var hull))
+                _boilerGunshipIntegrity.DamageIntegrity((pending.Target, hull), pending.Damage);
+            QueueDel(shot);
+        }
+
+        _boilerTargets.Clear();
+        foreach (var aircraft in _combatAircraft)
+            _boilerTargets.Add(aircraft.Owner);
+        var gunships = EntityQueryEnumerator<DropshipIntegrityComponent, DropshipTacticalHoverComponent>();
+        while (gunships.MoveNext(out var ship, out _, out _))
+            _boilerTargets.Add(ship);
+
         var query = EntityQueryEnumerator<FighterBoilerAirDefenseComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var boiler, out var xform))
         {
@@ -51,12 +77,13 @@ public sealed partial class FighterSystem
                 continue;
             }
             var retained = false;
-            foreach (var target in _combatAircraft)
+            foreach (var target in _boilerTargets)
             {
-                if (boiler.Target is { } locked && locked != target.Owner || !InGroundWeaponSector(terrain, position, target)) continue;
+                if (boiler.Target is { } locked && locked != target ||
+                    !CanAcquireBoilerTarget(target, terrain, position)) continue;
                 if (boiler.Target == null)
                 {
-                    boiler.Target = target.Owner;
+                    boiler.Target = target;
                     boiler.StartedPosition = position;
                     boiler.LaunchAt = now + boiler.AcquisitionTime;
                     var visual = Spawn("CMUFighterBoilerPlasma", xform.Coordinates);
@@ -78,12 +105,30 @@ public sealed partial class FighterSystem
                     break;
                 }
                 boiler.ReadyAt = now + boiler.Cooldown;
-                BeginInterception(target, position, TimeSpan.FromSeconds(5), fromGround: true, plasma: true);
+                if (TryComp(target, out FighterAircraftComponent? aircraft) &&
+                    TryComp(target, out FighterAirCombatComponent? combat) &&
+                    TryComp(target, out FighterWeaponsComponent? weapons))
+                {
+                    BeginInterception((target, aircraft, combat, weapons), position, BoilerFlightTime, fromGround: true, plasma: true);
+                    bolt.Direction = -combat.IncomingDirection;
+                }
+                else
+                {
+                    var shot = AddComp<CMUBoilerGunshipShotComponent>(launch);
+                    shot.Target = target;
+                    shot.Terrain = terrain;
+                    shot.Damage = boiler.GunshipDamage;
+                    shot.ImpactAt = now + BoilerFlightTime;
+                    var direction = _transform.GetWorldPosition(target) - position;
+                    bolt.Direction = direction.LengthSquared() > 0f ? Vector2.Normalize(direction) : Vector2.UnitY;
+                }
                 bolt.Launched = true;
-                bolt.Direction = -target.Comp2.IncomingDirection;
                 bolt.StartedAt = now;
                 bolt.ExpiresAt = now + TimeSpan.FromSeconds(3);
-                Comp<TimedDespawnComponent>(launch).Lifetime = 3;
+                // Keep the existing ground visual, but retain gunship shots until their damage resolves.
+                Comp<TimedDespawnComponent>(launch).Lifetime = HasComp<CMUBoilerGunshipShotComponent>(launch)
+                    ? (float) BoilerFlightTime.TotalSeconds + 1
+                    : 3;
                 Dirty(launch, bolt);
                 boiler.WindupVisual = null;
                 CancelBoilerWindup(boiler);
@@ -92,5 +137,37 @@ public sealed partial class FighterSystem
             }
             if (!retained && boiler.Target != null) CancelBoilerWindup(boiler);
         }
+    }
+
+    private bool CanAcquireBoilerTarget(EntityUid target, EntityUid terrain, Vector2 position)
+    {
+        if (TryComp(target, out FighterAircraftComponent? aircraft) &&
+            TryComp(target, out FighterAirCombatComponent? combat) &&
+            TryComp(target, out FighterWeaponsComponent? weapons))
+            return InGroundWeaponSector(terrain, position, (target, aircraft, combat, weapons));
+
+        if (!TryGetBoilerGunship(target, terrain, out _) || !TryGetAirspaceChart(terrain, out var chart))
+            return false;
+
+        var sector = FighterAirCombat.SectorAt(chart.Bounds, position);
+        return sector >= 0 && sector == FighterAirCombat.SectorAt(chart.Bounds, _transform.GetWorldPosition(target));
+    }
+
+    private bool TryGetBoilerGunship(EntityUid target, EntityUid terrain, out DropshipIntegrityComponent hull)
+    {
+        hull = default!;
+        if (TerminatingOrDeleted(target) ||
+            !TryComp(target, out DropshipTacticalHoverComponent? hover) || hover.GroundMap is not { } ground ||
+            !TryComp(target, out DropshipIntegrityComponent? integrity) || integrity.Crashing || integrity.Wrecked ||
+            TryComp(target, out FTLComponent? ftl) && ftl.State is FTLState.Starting or FTLState.Travelling or FTLState.Arriving)
+            return false;
+
+        while (TryComp(ground, out CMUZLevelMapComponent? level) && level.Depth > 0 && level.MapBelow is { } below)
+            ground = below;
+        if (ground != terrain)
+            return false;
+
+        hull = integrity;
+        return true;
     }
 }

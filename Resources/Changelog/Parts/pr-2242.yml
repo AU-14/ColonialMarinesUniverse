@@ -1,0 +1,8 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Queen swarm lessers no longer get stuck crowding the bottom of a staircase
+    when following across floors.
+  type: Fix
+time: '2026-10-20T15:11:07.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2242

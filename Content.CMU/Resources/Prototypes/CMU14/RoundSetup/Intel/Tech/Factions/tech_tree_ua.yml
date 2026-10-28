@@ -1,14 +1,29 @@
+# United Americas: USCM, LACN, CMB CIU, HAZOPS, VAIPO.
+# Every faction list shares the budgets, ship fire missions and ICRC relief; keep those entries the same across the lists.
+# K9 teams: USASF on UA, militsiya MP dogs on UPP, S&R on Other, none on TWE.
 - type: entity
   parent: RMCIntelTechTree
-  id: CMUIntelTechTree_UA # faction specific (USCM)
+  id: CMUIntelTechTree_UA
   name: intel tech tree (UA)
   categories: [ HideSpawnMenu ]
   components:
   - type: IntelTechTree
     tree:
       options:
-# ├──[ Tier 0 ]──────────────────────────────────────────────────────┤
+# ├──[ Tier 0 ]────────────────────────────────────────────────────────┤
       -
+        - name: cmu-tech-govfor-icrc-relief
+          description: cmu-tech-govfor-icrc-relief-desc
+          cost: 12
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ICRCReliefParty
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-icrc-relief-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
         - name: cmu-tech-tier-one
           description: cmu-tech-tier-unlock-desc
           cost: 0
@@ -18,10 +33,10 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: upgrade
-# ├──[ Tier 1: Budget ]──────────────────────────────────────────────┤
+# ├──[ Tier 1: Budget & support ]──────────────────────────────────────┤
       -
-        - name: cmu-tech-ua-req-budget
-          description: cmu-tech-ua-req-budget-desc
+        - name: cmu-tech-govfor-req-budget
+          description: cmu-tech-govfor-req-budget-desc
           cost: 12
           increase: 3
           repurchasable: true
@@ -30,45 +45,333 @@
             amount: 5000
           - !type:TechAnnounceEvent
             author: cmu-tech-author-special-assets
-            message: cmu-tech-ua-req-budget-announce
+            message: cmu-tech-govfor-req-budget-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_req
+        - name: cmu-tech-govfor-k9-usasf
+          description: cmu-tech-govfor-k9-usasf-desc
+          cost: 6
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUIntelThirdPartyK9USASF
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-k9-usasf-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: medic_qol
+        - name: cmu-tech-govfor-cmb-patrol
+          description: cmu-tech-govfor-cmb-patrol-desc
+          cost: 10
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMBInvestigationParty
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-cmb-patrol-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-govfor-uacg-patrol
+          description: cmu-tech-govfor-uacg-patrol-desc
+          cost: 8
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUUACGPatrol
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-uacg-patrol-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-govfor-lacn-construction
+          description: cmu-tech-govfor-lacn-construction-desc
+          cost: 10
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMULACNConstructionTeam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-lacn-construction-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-govfor-usarmy-intel
+          description: cmu-tech-govfor-usarmy-intel-desc
+          cost: 10
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUUSArmyIntelPair
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-usarmy-intel-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
         - name: cmu-tech-tier-two
           description: cmu-tech-tier-unlock-desc
           cost: 3
           events:
           - !type:TechUnlockTierEvent
             tier: 2
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-ua-command
+            message: cmu-tech-govfor-tier-two-announce
+            sound: /Audio/_RMC14/AI/commandreport.ogg
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: upgrade
-# ├──[ Tier 2: Reinforcements ]──────────────────────────────────────┤
+# ├──[ Tier 2: Specialists ]───────────────────────────────────────────┤
       -
-        - name: cmu-tech-ua-us-army-armored
-          description: cmu-tech-ua-us-army-armored-desc
-          cost: 55
-          repurchasable: false
+        - name: cmu-tech-govfor-dropship-budget
+          description: cmu-tech-govfor-dropship-budget-desc
+          cost: 12
+          increase: 2
+          repurchasable: true
+          events:
+          - !type:TechDropshipBudgetEvent
+            amount: 2000
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-dropship-budget-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_ds
+        - name: cmu-tech-govfor-disk-smoke
+          description: cmu-tech-govfor-disk-smoke-desc
+          cost: 8
+          increase: 4
+          repurchasable: true
+          maxPurchases: 3
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUSmokeStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_cluster
+        - name: cmu-tech-govfor-lacn-sniper
+          description: cmu-tech-govfor-lacn-sniper-desc
+          cost: 20
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: LACNSniperteamIntel
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-lacn-sniper-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-govfor-uscm-mp
+          description: cmu-tech-govfor-uscm-mp-desc
+          cost: 15
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUUSCMMPFireteam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-uscm-mp-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-govfor-lacn-mash
+          description: cmu-tech-govfor-lacn-mash-desc
+          cost: 18
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMULACNMASH
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-lacn-mash-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: medic_qol
+        - name: cmu-tech-govfor-uscm-engineers
+          description: cmu-tech-govfor-uscm-engineers-desc
+          cost: 15
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUUSCMEngineerTeam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-uscm-engineers-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-govfor-cmb-tactical
+          description: cmu-tech-govfor-cmb-tactical-desc
+          cost: 18
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUCMBTacticalTeam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-cmb-tactical-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-tier-three
+          description: cmu-tech-tier-unlock-desc
+          cost: 5
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 3
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-ua-command
+            message: cmu-tech-govfor-tier-three-announce
+            sound: /Audio/_RMC14/AI/commandreport.ogg
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 3: Force multipliers ]─────────────────────────────────────┤
+      -
+        - name: cmu-tech-govfor-disk-ems
+          description: cmu-tech-govfor-disk-ems-desc
+          cost: 45
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUEMSStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_incend
+        - name: cmu-tech-govfor-us-army-infantry
+          description: cmu-tech-govfor-us-army-infantry-desc
+          cost: 40
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUUSArmyReinforcements
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-us-army-infantry-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: marine
+        - name: cmu-tech-govfor-forecon
+          description: cmu-tech-govfor-forecon-desc
+          cost: 25
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: FORECONKillTeam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-forecon-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: weapon
+        - name: cmu-tech-govfor-ccaf
+          description: cmu-tech-govfor-ccaf-desc
+          cost: 22
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUCCAFFireTeam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-ccaf-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: weapon
+        - name: cmu-tech-govfor-uscm-plasma
+          description: cmu-tech-govfor-uscm-plasma-desc
+          cost: 30
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUUSCMPlasmaTeam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-uscm-plasma-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: weapon
+        - name: cmu-tech-govfor-lacn-commandos
+          description: cmu-tech-govfor-lacn-commandos-desc
+          cost: 35
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMULACNCommandoTeam
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-lacn-commandos-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: weapon
+        - name: cmu-tech-tier-four
+          description: cmu-tech-tier-unlock-desc
+          cost: 5
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 4
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-ua-command
+            message: cmu-tech-govfor-tier-four-announce
+            sound: /Audio/_RMC14/AI/commandreport.ogg
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 4: Capstones ]─────────────────────────────────────────────┤
+      -
+        - name: cmu-tech-govfor-uacg-platoon
+          description: cmu-tech-govfor-uacg-platoon-desc
+          cost: 50
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUUACGPlatoon
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-uacg-platoon-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: marine
+        - name: cmu-tech-govfor-us-army-armored
+          description: cmu-tech-govfor-us-army-armored-desc
+          cost: 45
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: USArmyArmored
           - !type:TechAnnounceEvent
             author: cmu-tech-author-intel-operations
-            message: cmu-tech-ua-us-army-armored-announce
+            message: cmu-tech-govfor-us-army-armored-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-
-        - name: cmu-tech-ua-prodigy-yankee
-          description: cmu-tech-ua-prodigy-yankee-desc
-          cost: 45
-          repurchasable: false
+        - name: cmu-tech-ua-disk-airburst
+          description: cmu-tech-ua-disk-airburst-desc
+          cost: 55
           events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: ProdigyPARTY
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUAirburstStrike
           - !type:TechAnnounceEvent
-            author: cmu-tech-author-intel-operations
-            message: cmu-tech-ua-prodigy-yankee-announce
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
-            state: beacon
+            state: ob_cluster
+        - name: cmu-tech-govfor-disk-railcannon
+          description: cmu-tech-govfor-disk-railcannon-desc
+          cost: 60
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMURailcannonStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: railgun
+        - name: cmu-tech-govfor-disk-gatling
+          description: cmu-tech-govfor-disk-gatling-desc
+          cost: 50
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUGatlingBarrage
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_he

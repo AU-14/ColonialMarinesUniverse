@@ -45,7 +45,7 @@ public sealed class MohawkLandingAudioTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var dropship = entities.GetComponent<DropshipComponent>(ship);
             Assert.That(((SoundPathSpecifier) dropship.ArrivalSound).Path.ToString(), Is.EqualTo(Landing));

@@ -416,3 +416,36 @@
   - type: AccessReader
     access: [["AU14AccessGovfor"]]
   - type: CMUAtmosBolt
+
+# Kitchen, for the mess technicians.
+- type: entity
+  parent: CMAirlockGovforLocked
+  id: CMAirlockGovforLockedKitchen
+  suffix: Kitchen, Govfor, Locked
+  components:
+  - type: AccessReader
+    access: [["CMUAccessKitchen"]]
+
+- type: entity
+  parent: CMAirlockGovforGlassLocked
+  id: CMAirlockGovforGlassLockedKitchen
+  suffix: Kitchen, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMUAccessKitchen"]]
+
+- type: entity
+  parent: CMDoubleDoorGovforLocked
+  id: CMDoubleDoorGovforLockedKitchen
+  suffix: Kitchen, Govfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["CMUAccessKitchen"]]
+
+- type: entity
+  parent: CMDoubleDoorGovforGlassLocked
+  id: CMDoubleDoorGovforGlassLockedKitchen
+  suffix: Kitchen, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMUAccessKitchen"]]

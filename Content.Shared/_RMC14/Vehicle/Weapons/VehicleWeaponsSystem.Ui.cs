@@ -18,7 +18,7 @@ public sealed partial class VehicleWeaponsSystem
         if (!Equals(args.UiKey, VehicleWeaponsUiKey.Key))
             return;
 
-        if (!_vehicleSystem.TryGetVehicleFromInterior(ent.Owner, out var vehicle) || vehicle == null)
+        if (!CMUTryGetSeatVehicle(ent.Owner, out var vehicle) || vehicle == null) // CMU14: open-vehicle seats
             return;
 
         var vehicleUid = vehicle.Value;
@@ -64,7 +64,7 @@ public sealed partial class VehicleWeaponsSystem
         if (args.Actor == default || !Exists(args.Actor))
             return;
 
-        if (!_vehicleSystem.TryGetVehicleFromInterior(ent.Owner, out var vehicle) || vehicle == null)
+        if (!CMUTryGetSeatVehicle(ent.Owner, out var vehicle) || vehicle == null) // CMU14: open-vehicle seats
             return;
 
         var vehicleUid = vehicle.Value;
@@ -117,7 +117,7 @@ public sealed partial class VehicleWeaponsSystem
         if (args.Actor == default || !Exists(args.Actor))
             return;
 
-        if (!_vehicleSystem.TryGetVehicleFromInterior(ent.Owner, out var vehicle) || vehicle == null)
+        if (!CMUTryGetSeatVehicle(ent.Owner, out var vehicle) || vehicle == null) // CMU14: open-vehicle seats
             return;
 
         var vehicleUid = vehicle.Value;

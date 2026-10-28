@@ -1,0 +1,57 @@
+# A full Territorial Defense platoon, bought through intel: one squad leader, ten of the same lightly armed militia,
+# and a marksman with a Type 40 sniper rifle.
+- type: partySpawn
+  id: CMUUPPTDPlatoonSpawn
+  leadersToSpawn:
+    CMUJobUPPTDPatrolSquadLeader: 1
+  gruntsToSpawn:
+    CMUJobUPPTDPatrolRifleman: 10
+    CMUJobUPPTDPlatoonMarksman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUPPTDPlatoon
+  displayName: UPP Territorial Defense Platoon
+  partyspawn: CMUUPPTDPlatoonSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 12
+  roundstart: false
+
+# Marksman: a patrol rifleman with the Type 40 sniper rifle. It's loaded with armor-piercing; the spares are standard.
+
+- type: job
+  parent: CMUJobUPPTDPatrolRifleman
+  id: CMUJobUPPTDPlatoonMarksman
+  startingGear: CMUGearUPPTDPlatoonMarksman
+  spawnMenuRoleName: Territorial Defense Marksman (Platoon)
+
+- type: entity
+  parent: CMUJobUPPTDPatrolRifleman
+  id: CMUJobUPPTDPlatoonMarksman
+  name: Territorial Defense Marksman (Platoon)
+  components:
+  - type: GhostRole
+    job: CMUJobUPPTDPlatoonMarksman
+
+- type: startingGear
+  parent: CMUGearUPPTDPatrolRifleman
+  id: CMUGearUPPTDPlatoonMarksman
+  equipment:
+    suitstorage: CMUWeaponRifleType40Sniper
+    belt: AU14BeltMarineArmyUPP
+  storage:
+    belt:
+    - CMUMagazineRifleType40
+    - CMUMagazineRifleType40
+    - CMUMagazineRifleType40
+    - CMUMagazineRifleType40
+    - CMUMagazineRifleType40
+    pocket1:
+    - CMUMagazineRifleType40
+    - CMUMagazineRifleType40
+    - CMUMagazineRifleType40

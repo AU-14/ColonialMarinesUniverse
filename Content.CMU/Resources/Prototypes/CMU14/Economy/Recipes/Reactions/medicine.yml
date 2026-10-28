@@ -1,12 +1,11 @@
 # Tranexamic acid is made in two steps, like the real thing: aminomethylbenzoic acid, then hydrogen.
+# No raw oxygen in the first step: carbon, nitrogen and oxygen together turn straight into epinephrine.
 - type: reaction
   id: CMUAminomethylbenzoicAcid
   reactants:
     RMCCarbon:
       amount: 2
     RMCNitrogen:
-      amount: 1
-    RMCOxygen:
       amount: 1
     RMCSulphuricAcid:
       amount: 1
@@ -24,3 +23,55 @@
       amount: 1
   products:
     CMUTranexamicAcid: 3
+
+# Phenytoin sodium, the anticonvulsant.
+- type: reaction
+  id: CMUPhenytoin
+  reactants:
+    CMUAmmonia:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+    RMCSodium:
+      amount: 1
+  products:
+    CMUPhenytoin: 3
+
+# Propranolol, the beta blocker.
+- type: reaction
+  id: CMUPropranolol
+  reactants:
+    CMInaprovaline:
+      amount: 1
+    RMCPotassium:
+      amount: 1
+    RMCChlorine:
+      amount: 1
+  products:
+    CMUPropranolol: 3
+
+# Disulfiram, the alcohol deterrent.
+- type: reaction
+  id: CMUDisulfiram
+  reactants:
+    CMEthylredoxrazine:
+      amount: 1
+    RMCSulfur:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+  products:
+    CMUDisulfiram: 3
+
+# Meclizine, the anti-vertigo drug.
+- type: reaction
+  id: CMUMeclizine
+  reactants:
+    CMDylovene:
+      amount: 1
+    RMCChlorine:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+  products:
+    CMUMeclizine: 3

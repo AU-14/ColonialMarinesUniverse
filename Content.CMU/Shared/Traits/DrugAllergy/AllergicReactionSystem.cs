@@ -1,6 +1,11 @@
+using System.Linq;
 using Content.Shared._RMC14.Body;
+using Content.Shared._RMC14.Chemistry.Effects;
+using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Xenonids.Screech;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.Alert;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
@@ -23,7 +28,9 @@ public sealed partial class AllergicReactionSystem : EntitySystem
 
     [Dependency] private INetManager _net = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -35,6 +42,59 @@ public sealed partial class AllergicReactionSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<DrugAllergyComponent, ExaminedEvent>(OnExamined);
+    }
+
+    /// <summary>
+    ///     Whether <paramref name="reagent"/> sets off any of this entity's drug allergies: an allergen itself, a
+    ///     reagent of an allergen's class, or one carrying a property listed for an allergen in
+    ///     <see cref="DrugAllergyComponent.CrossReactiveProperties"/>. The caller decides whether the reagent
+    ///     is allergenic at all; this only resolves which allergy it maps onto.
+    /// </summary>
+    public bool IsAllergen(Entity<DrugAllergyComponent?> ent, ReagentPrototype reagent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        if (ent.Comp.IsAllergen(reagent.ID))
+            return true;
+
+        if (ent.Comp.Allergen is { } allergen && MatchesAllergen(ent.Comp, allergen, reagent))
+            return true;
+
+        foreach (var extra in ent.Comp.ExtraAllergens)
+        {
+            if (MatchesAllergen(ent.Comp, extra, reagent))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool MatchesAllergen(DrugAllergyComponent comp, ProtoId<ReagentPrototype> allergen, ReagentPrototype reagent)
+    {
+        if (!_reagent.TryIndex(allergen, out var allergenProto))
+            return false;
+
+        if (reagent.Class != ReagentClass.None && reagent.Class == allergenProto.Class)
+            return true;
+
+        if (!comp.CrossReactiveProperties.TryGetValue(allergen, out var properties) || properties.Count == 0)
+            return false;
+
+        var effectNames = new HashSet<string>();
+        foreach (var property in properties)
+        {
+            if (_prototypes.TryIndex(property, out var proto) && !string.IsNullOrEmpty(proto.EffectName))
+                effectNames.Add(proto.EffectName);
+        }
+
+        if (effectNames.Count == 0 || reagent.Metabolisms == null)
+            return false;
+
+        return reagent.Metabolisms.Metabolisms.Values
+            .SelectMany(entry => entry.Effects)
+            .OfType<RMCChemicalEffect>()
+            .Any(effect => effectNames.Contains(effect.GetType().Name));
     }
 
     /// <summary>

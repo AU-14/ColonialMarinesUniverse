@@ -16,13 +16,34 @@ public sealed partial class SpawnThirdPartyCommand : LocalizedEntityCommands
     public override string Command => "spawnthirdparty";
 
     public override string Help
-        => "spawnthirdparty [third party name] [dropship (true/false)]\nSpawns a third party. If dropship is true, they will enter by shuttle.";
+        => "spawnthirdparty [third party name] [dropship (true/false)] [summoning faction (govfor/opfor/none), optional] [now (true/false), optional]\n" +
+           "Spawns a third party. If dropship is true, they will enter by shuttle. Give a summoning faction to spawn them " +
+           "as if that faction called them in through intel, so they're held to its ship's third party pad while it's shipside. " +
+           "With now set to true they spawn straight away as open ghost roles, without waiting for enough interested players.";
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if (args.Length != 2)
+        if (args.Length is < 2 or > 4)
         {
-            shell.WriteError("Usage: spawnthirdparty [third party name] [dropship (true/false)]");
+            shell.WriteError("Usage: spawnthirdparty [third party name] [dropship (true/false)] [summoning faction (govfor/opfor/none), optional] [now (true/false), optional]");
+            return;
+        }
+
+        string? summoningFaction = null;
+        if (args.Length >= 3 && !args[2].Equals("none", StringComparison.OrdinalIgnoreCase))
+        {
+            summoningFaction = args[2].ToLowerInvariant();
+            if (summoningFaction is not ("govfor" or "opfor"))
+            {
+                shell.WriteError("Summoning faction must be govfor, opfor or none.");
+                return;
+            }
+        }
+
+        var now = false;
+        if (args.Length == 4 && !bool.TryParse(args[3], out now))
+        {
+            shell.WriteError("Fourth argument must be true or false for spawning now.");
             return;
         }
 
@@ -57,12 +78,23 @@ public sealed partial class SpawnThirdPartyCommand : LocalizedEntityCommands
             return;
         }
 
-        if (dropship)
-            thirdPartySystem.SpawnThirdParty(party, partySpawnProto, false, null, true);
-        else
-            thirdPartySystem.SpawnThirdParty(party, partySpawnProto, false);
+        if (now)
+        {
+            if (thirdPartySystem.SpawnThirdPartyImmediately(party, partySpawnProto, dropship ? true : null, summoningFaction))
+                shell.WriteLine($"Spawned third party '{party.ID}' now as open ghost roles (dropship={dropship}" +
+                                (summoningFaction != null ? $", summoned by {summoningFaction})" : ")"));
+            else
+                shell.WriteError($"Couldn't spawn third party '{party.ID}'; check the server log for why.");
+            return;
+        }
 
-        shell.WriteLine($"Queued third party '{party.ID}' for player interest (dropship={dropship})");
+        if (dropship)
+            thirdPartySystem.SpawnThirdParty(party, partySpawnProto, false, null, true, summoningFaction);
+        else
+            thirdPartySystem.SpawnThirdParty(party, partySpawnProto, false, summoningFaction: summoningFaction);
+
+        shell.WriteLine($"Queued third party '{party.ID}' for player interest (dropship={dropship}" +
+                        (summoningFaction != null ? $", summoned by {summoningFaction})" : ")"));
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
@@ -71,6 +103,8 @@ public sealed partial class SpawnThirdPartyCommand : LocalizedEntityCommands
         {
             1 => CompletionResult.FromHintOptions(GetThirdPartyCompletions(), "<thirdPartyId>"),
             2 => CompletionResult.FromHintOptions(CompletionHelper.Booleans, "<dropship>"),
+            3 => CompletionResult.FromHintOptions(["govfor", "opfor", "none"], "[summoning faction]"),
+            4 => CompletionResult.FromHintOptions(CompletionHelper.Booleans, "[now]"),
             _ => CompletionResult.Empty
         };
     }

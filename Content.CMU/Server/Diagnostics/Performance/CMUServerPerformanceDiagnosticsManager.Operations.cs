@@ -24,6 +24,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager
 
     private void ObserveRuntime(TimeSpan now)
     {
+        using var cost = _runtimeCost.Measure();
         _memory.Sample(now);
         var pause = GC.GetTotalPauseDuration();
         _runtimeWindowMs = _lastRuntimeSample == default ? 0 : (now - _lastRuntimeSample).TotalMilliseconds;

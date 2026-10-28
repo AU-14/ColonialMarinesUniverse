@@ -250,6 +250,9 @@
   name: APC port gun
   description: A mounted M56 FPW port gun.
   components:
+  # cmu edit start: caseless
+  - type: CMUCaselessGun
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/Interiors/apc.rsi
     state: m56_FPW

@@ -255,7 +255,7 @@ cmu-manpad-radar-legend = Green: friendly · red: target · yellow: unknown
     Cyan: you / your sector · ring: acquiring
 cmu-manpad-radar-height = { $height } m
 ent-CMUActionBoilerWatchAirspace = Look at airspace
-    .desc = Watch your current sector and automatically launch plasma at passing aircraft. Stay still under open sky for two seconds to acquire a target. Each shot costs 200 plasma and has a fifteen-second cooldown. Toggle again to stop.
+    .desc = Watch your current sector and automatically launch plasma at passing aircraft, including flying gunships. Stay still under open sky for two seconds to acquire a target. Each shot costs 200 plasma and has a fifteen-second cooldown. Gunship hits deal 800 hull damage. Toggle again to stop.
 cmu-boiler-air-watching = You watch the sky, ready to spit plasma at aircraft crossing your sector.
 cmu-boiler-air-lowered = You lower your gaze. Airspace acquisition cancelled.
 cmu-boiler-air-title = BOILER / AIRSPACE
@@ -291,3 +291,9 @@ ent-CMUFighterGroundLoaded = two-seat VTOL fighter
 cmu-fighter-crash-warning = AIRFRAME FAILURE — EJECT! Impact in { $seconds } seconds!
 cmu-fighter-crashed = AIRFRAME LOST — Aircraft cannot be repaired.
 cmu-fighter-exit-blocked = There is no clear footing beside the cockpit to climb out.
+
+cmu-fighter-pad-unfold-hint = Use a wrench to unfold the fighter VTOL pad.
+cmu-fighter-pad-unfolded = The fighter VTOL pad unfolds and its guide lights come on.
+cmu-fighter-pad-anchors-loosened = The VTOL pad anchor bolts are loosened.
+cmu-fighter-pad-panel-opened = The VTOL pad guide light panel is opened.
+cmu-fighter-pad-packed = The fighter VTOL pad is folded and packed.

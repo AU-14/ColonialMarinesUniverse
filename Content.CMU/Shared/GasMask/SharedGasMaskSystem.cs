@@ -81,6 +81,16 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
 
     public void DamageFilter(EntityUid uid, GasMaskFilterComponent comp, GasMaskFilterDamageComponent dam)
     {
+        if (dam.OrbitalGas)
+        {
+            // A body can overlap several cloud tiles; charge only once per exposure tick.
+            if (comp.LastOrbitalGasDamage is { } last && _timing.CurTime - last < TimeSpan.FromSeconds(1))
+                return;
+            comp.LastOrbitalGasDamage = _timing.CurTime;
+            DamageFilter(uid, comp, comp.BaseIntegrity / comp.OrbitalGasProtectionSeconds);
+            return;
+        }
+
         float newhp = comp.Integrity;
         newhp -= dam.Neurotoxin
             ? dam.Damage * comp.NeurotoxinDamageMultiplier

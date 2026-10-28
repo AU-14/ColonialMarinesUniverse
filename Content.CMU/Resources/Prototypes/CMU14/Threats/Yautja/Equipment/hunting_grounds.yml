@@ -82,8 +82,5 @@
   parent: MarkerBase
   id: CMUYautjaYoungbloodSpawn
   name: Yautja youngblood spawn
-  description: Invisible spawn marker for youngblood blooding calls.
+  description: Invisible spawn marker for a youngblood called out for its blooding.
   categories: [ HideSpawnMenu ]
-  components:
-  - type: YautjaHuntSpawnPoint
-    kind: Youngblood

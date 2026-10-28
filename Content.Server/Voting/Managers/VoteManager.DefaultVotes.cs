@@ -529,7 +529,7 @@ namespace Content.Server.Voting.Managers
                         return;
                     }
                     // Check if the target is an admin/de-admined admin
-                    else if (targetSession.AttachedEntity != null && _adminMgr.IsAdmin(targetSession.AttachedEntity.Value, true))
+                    else if (targetSession.AttachedEntity != null && _adminMgr.HasAdminFlag(targetSession.AttachedEntity.Value, Content.Shared.Administration.AdminFlags.Staff, true)) // cmu edit
                     {
                         _adminLogger.Add(LogType.Vote, LogImpact.Extreme, $"Votekick for {located.Username} due to {reason} finished, created by {initiator}, but was cancelled due to the target being a de-admined admin.");
                         AnnounceCancelledVotekickForVoters(targetEntityName);
@@ -620,7 +620,7 @@ namespace Content.Server.Voting.Managers
                 presets[preset.ID] = Loc.GetString(preset.ModeTitle); // CMU14: Hardcode localization
             }
 
-            _entityManager.System<CMUPresetVoteSystem>().RemoveLastPlayedPreset(presets); // CMU14
+            _entityManager.System<CMUPresetVoteSystem>().FilterVotePresets(presets); // CMU14: admin gamemode lock, then last-played exclusion
             return presets;
         }
     }

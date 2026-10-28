@@ -289,7 +289,14 @@ public abstract partial class SharedGunSystem
                     ("color", component.BoltClosed.Value ? Color.FromHex("#94e1f2") : Color.FromHex("#f29d94"))));
             }
 
-            args.PushMarkup(Loc.GetString("gun-magazine-examine", ("color", AmmoExamineColor), ("count", count)));
+            // cmu edit start: only guns with an ammo counter show their rounds; anyone can check the chamber
+            args.PushMarkup(Loc.GetString(GetChamberEntity(uid) != null
+                ? "cmu-gun-chamber-loaded-examine"
+                : "cmu-gun-chamber-empty-examine"));
+
+            if (CMUShowsAmmoCount(uid))
+                args.PushMarkup(Loc.GetString("gun-magazine-examine", ("color", AmmoExamineColor), ("count", count)));
+            // cmu edit end
         }
     }
 

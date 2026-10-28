@@ -24,7 +24,7 @@ public sealed class MohawkFlightAlignmentTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/midway.yml"), out var loaded), Is.True);
+                new ResPath("/Maps/CMU14/Dropships/Mohawk/midway.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             netShip = entities.GetNetEntity(ship);
             netLower = entities.GetNetEntity(entities.GetComponent<MultiDeckDropshipComponent>(ship).Decks[-1]);

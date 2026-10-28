@@ -1,3 +1,4 @@
+using Content.Client.CMU14.ZLevels.Core; // cmu edit
 using Content.Shared._RMC14.BlurredVision;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -34,7 +35,7 @@ public sealed partial class RMCBlurOverlay : Overlay
         if (!_entityManager.HasComponent<RMCBlindedComponent>(_playerManager.LocalEntity))
             return false;
 
-        return args.Viewport.Eye == eyeComp.Eye;
+        return args.Viewport.Eye.IsPlayerView(eyeComp.Eye); // cmu edit
     }
 
     protected override void Draw(in OverlayDrawArgs args)

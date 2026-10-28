@@ -70,7 +70,9 @@ namespace Content.Client.Administration.Managers
         /// <returns>true if the player is an admin, false otherwise.</returns>
         bool IsAdmin(bool includeDeAdmin = false)
         {
-            return GetAdminData(includeDeAdmin) != null;
+            // cmu edit start: being on the admin list isn't enough; "admin" means holding the Admin flag
+            return GetAdminData(includeDeAdmin) is { } data && data.HasFlag(Content.Shared.Administration.AdminFlags.Admin, includeDeAdmin);
+            // cmu edit end
         }
     }
 }

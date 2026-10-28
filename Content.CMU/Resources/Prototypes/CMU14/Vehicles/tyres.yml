@@ -1,0 +1,16 @@
+# Tyres a vehicle's wheel set can have. Paved ground is anything a shovel can't dig, rough ground
+# anything it can; water drag scales how hard water slows the vehicle.
+
+# Knobbly all terrain tyres, the military's: as the vehicles were tuned on any ground.
+- type: cmuVehicleTyre
+  id: CMUTyreOffRoad
+  examine: cmu-vehicle-tyre-offroad
+
+# Road tyres: quicker on paving, slower off it, and they bog down in water.
+- type: cmuVehicleTyre
+  id: CMUTyreRoad
+  pavedSpeed: 1.15
+  roughSpeed: 0.8
+  waterDrag: 1.35
+  statePrefix: road_
+  examine: cmu-vehicle-tyre-road

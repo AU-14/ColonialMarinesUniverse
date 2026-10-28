@@ -18,7 +18,7 @@
   announceAsSurvivors: true
   partyspawn: WYPMCPartySpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
   weight: 20
   # minplayers: 30
   maxplayers: 400
@@ -43,9 +43,33 @@
   announceAsSurvivors: true
   partyspawn: WYPMCPartySpawnAlt
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
   weight: 20
   minplayers: 30
   maxplayers: 400
   ghostsNeeded: 6
+  roundstart: false
+
+# Small PMC team for intel call-ins: leader, medic and two contractors.
+- type: partySpawn
+  id: CMUWYPMCTeamSmallSpawn
+  leadersToSpawn:
+    AU14JobWYPMCPartyLeader: 1
+  gruntsToSpawn:
+    AU14JobWYPMCPartyMedic: 1
+    AU14JobWYPMCPartyContractorM42A: 1
+    AU14JobWYPMCPartyContractor: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUWYPMCTeamSmall
+  displayName: WY PMC Team (Small)
+  partyspawn: CMUWYPMCTeamSmallSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 4
   roundstart: false

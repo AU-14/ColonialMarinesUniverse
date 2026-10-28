@@ -307,9 +307,15 @@ public sealed class CMUItemStainTest
             var oilTool = entMan.SpawnEntity(StainableItem, MapCoordinates.Nullspace);
             var burnTool = entMan.SpawnEntity(StainableItem, MapCoordinates.Nullspace);
             var healingTool = entMan.SpawnEntity(StainableItem, MapCoordinates.Nullspace);
+            var pressureTool = entMan.SpawnEntity(StainableItem, MapCoordinates.Nullspace);
 
             try
             {
+                RaisePartDamage(entMan, body, part, pressureTool, "Blunt", 40,
+                    DamageImpact.Generic with { Delivery = DamageImpactDelivery.Environment });
+                Assert.That(entMan.HasComponent<CMUItemStainComponent>(pressureTool), Is.False,
+                    "Environmental injury must not create impact splatter even when brute damage is present.");
+
                 RaisePartDamage(entMan, body, part, bloodTool, "Blunt", 40);
                 var bloodStain = entMan.GetComponent<CMUItemStainComponent>(bloodTool);
                 Assert.Multiple(() =>
@@ -343,6 +349,7 @@ public sealed class CMUItemStainTest
                 entMan.DeleteEntity(oilTool);
                 entMan.DeleteEntity(burnTool);
                 entMan.DeleteEntity(healingTool);
+                entMan.DeleteEntity(pressureTool);
             }
         });
 
@@ -604,6 +611,51 @@ public sealed class CMUItemStainTest
         await pair.CleanReturnAsync();
     }
 
+    [Test]
+    public async Task SoapCleansExposedEquipmentWhenTargetingWearer()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        EntityUid wearer = default, shoes = default, uniform = default, coat = default, cleaner = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var stains = server.System<CMUItemStainSystem>();
+            var inventory = server.System<InventorySystem>();
+            wearer = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            shoes = entities.SpawnEntity("CMBootsBlack", MapCoordinates.Nullspace);
+            uniform = entities.SpawnEntity("CMJumpsuitMarineEngineer", MapCoordinates.Nullspace);
+            coat = entities.SpawnEntity("RMCArmorVest", MapCoordinates.Nullspace);
+            cleaner = entities.SpawnEntity(CleanerItem, MapCoordinates.Nullspace);
+            Assert.That(inventory.TryEquip(wearer, shoes, "shoes", silent: true, force: true), Is.True);
+            Assert.That(inventory.TryEquip(wearer, uniform, "jumpsuit", silent: true, force: true), Is.True);
+            Assert.That(inventory.TryEquip(wearer, coat, "outerClothing", silent: true, force: true), Is.True);
+            stains.TryStain(shoes, CMUItemStainKind.Blood, Color.Red);
+            stains.TryStain(coat, CMUItemStainKind.Oil, Color.Black);
+            stains.TryStain(uniform, CMUItemStainKind.Blood, Color.Red);
+            entities.RemoveComponent<ForensicsComponent>(wearer);
+
+            Assert.That(server.System<ForensicsSystem>().TryStartCleaning(
+                (cleaner, entities.GetComponent<CleansForensicsComponent>(cleaner)), wearer, wearer), Is.True);
+        });
+
+        await pair.RunTicksSync(20);
+        await server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(server.EntMan.GetComponent<CMUItemStainComponent>(shoes).Color, Is.Null);
+                Assert.That(server.EntMan.GetComponent<CMUItemStainComponent>(coat).Color, Is.Null);
+                Assert.That(server.EntMan.GetComponent<CMUItemStainComponent>(uniform).Color, Is.EqualTo(Color.Red),
+                    "Soap on the wearer must use the same exposed-slot rules as contact cleaning.");
+            });
+            server.EntMan.DeleteEntity(wearer);
+            server.EntMan.DeleteEntity(cleaner);
+        });
+        await pair.CleanReturnAsync();
+    }
+
     private static void AssertWornState(
         IPrototypeManager prototypes,
         IComponentFactory factory,
@@ -622,7 +674,8 @@ public sealed class CMUItemStainTest
         EntityUid part,
         EntityUid tool,
         string damageType,
-        FixedPoint2 amount)
+        FixedPoint2 amount,
+        DamageImpact impact = default)
     {
         var damage = new DamageSpecifier
         {
@@ -636,7 +689,7 @@ public sealed class CMUItemStainTest
             amount,
             Array.Empty<EntityUid>(),
             tool,
-            default,
+            impact,
             default);
         entMan.EventBus.RaiseLocalEvent(part, ref damaged, broadcast: true);
     }

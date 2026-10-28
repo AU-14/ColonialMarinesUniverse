@@ -363,7 +363,7 @@
 # abstract: true
   parent: AU14CassetteTape
   id: AU14CassetteTapeCLF
-  name: CLF cassette
+  name: INSFOR cassette
   components:
   - type: Sprite
     state: cassette_worstmap

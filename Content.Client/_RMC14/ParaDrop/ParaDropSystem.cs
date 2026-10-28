@@ -52,7 +52,7 @@ public sealed partial class ParaDropSystem : SharedParaDropSystem
         };
     }
 
-    private Animation GetFallingDisappearingAnimation(float duration, Vector2 originalScale, Vector2 endScale)
+    private Animation GetFallingDisappearingAnimation(float duration, Vector2 originalScale, Vector2 endScale, Vector2 originalOffset) // CMU14
     {
         return new Animation
         {
@@ -76,8 +76,11 @@ public sealed partial class ParaDropSystem : SharedParaDropSystem
                     Property = nameof(SpriteComponent.Offset),
                     KeyFrames =
                     {
-                        new AnimationTrackProperty.KeyFrame(new Vector2(0f, 0), 0f),
-                        new AnimationTrackProperty.KeyFrame(new Vector2(0f, -1), duration),
+                        // CMU14: animate relative to the existing sprite offset.
+                        // new AnimationTrackProperty.KeyFrame(new Vector2(0f, 0), 0f),
+                        // new AnimationTrackProperty.KeyFrame(new Vector2(0f, -1), duration),
+                        new AnimationTrackProperty.KeyFrame(originalOffset, 0f),
+                        new AnimationTrackProperty.KeyFrame(originalOffset + new Vector2(0f, -1), duration),
                     },
                 },
             }
@@ -93,6 +96,7 @@ public sealed partial class ParaDropSystem : SharedParaDropSystem
         }
 
         ent.Comp.OriginalScale = sprite.Scale;
+        ent.Comp.OriginalOffset = sprite.Offset; // CMU14
 
         if (!TryComp<AnimationPlayerComponent>(ent, out var player))
             return;
@@ -100,7 +104,7 @@ public sealed partial class ParaDropSystem : SharedParaDropSystem
         if (_animPlayer.HasRunningAnimation(player, SkyFallingAnimationKey))
             return;
 
-        _animPlayer.Play((ent, player), GetFallingDisappearingAnimation(ent.Comp.RemainingTime, ent.Comp.OriginalScale, ent.Comp.AnimationScale), SkyFallingAnimationKey);
+        _animPlayer.Play((ent, player), GetFallingDisappearingAnimation(ent.Comp.RemainingTime, ent.Comp.OriginalScale, ent.Comp.AnimationScale, ent.Comp.OriginalOffset), SkyFallingAnimationKey); // CMU14
     }
 
     private void OnComponentRemove(Entity<SkyFallingComponent> ent, ref ComponentRemove args)
@@ -115,6 +119,7 @@ public sealed partial class ParaDropSystem : SharedParaDropSystem
             _animPlayer.Stop((ent, animation),SkyFallingAnimationKey);
 
         _sprite.SetScale((ent.Owner, sprite), ent.Comp.OriginalScale);
+        _sprite.SetOffset((ent.Owner, sprite), ent.Comp.OriginalOffset); // CMU14
     }
 
     private void OnParaDroppingRemove(Entity<ParaDroppingComponent> ent, ref ComponentRemove args)

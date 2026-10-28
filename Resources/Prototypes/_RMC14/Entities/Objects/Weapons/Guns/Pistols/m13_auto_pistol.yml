@@ -4,6 +4,9 @@
   name: M13 Auto Pistol
   description: The M13 Auto Pistol, a compact, rapid-firing sidearm designed for close-quarters defense. With a 40-round magazine, it emphasizes fire rate over precision, providing effective suppressive fire in short-range engagements.
   components:
+  # cmu edit start: built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Tag
     tags:
     - Sidearm

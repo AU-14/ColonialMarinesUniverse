@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobPMCWhiteout
+  chevrons:
+    AU14RankWeYuEnforcerSenior:
+      entity: AU14ChevronWeYuEnforcerSenior
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: PMCWhiteout
@@ -28,7 +32,7 @@
     - Japanese
     currentLanguage: English
     defaultLanguage: English
-  name: cmu-whiteout-name
+  name: cmu-job-title-whiteout
   description: cmu-whiteout-description
   playTimeTracker: CMUJobPMCWhiteout
   ranks:
@@ -79,7 +83,7 @@
     belt: RMCWeaponFL3FlamerWhiteout
     pocket1: RMCPouchMagazineLargePMC
     pocket2: RMCPouchMagazineLargePMC
-    suitstorage: RMCWeaponRifleM54C2Whiteout
+    suitstorage: CMUWeaponRifleM54C2WhiteoutStandard
   storage:
     back:
     - RMCExplosivePlastic
@@ -90,18 +94,40 @@
     - RMCTankFlamerFL3Whiteout
     - RMCTankFlamerFL3Whiteout
     outerClothing:
-    - RMCMagazineRifleM54CHEAP
-    - RMCMagazineRifleM54CHEAP
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
     pocket1:
-    - RMCMagazineRifleM54CHEAP
-    - RMCMagazineRifleM54CHEAP
-    - RMCMagazineRifleM54CHEAP
-    - RMCMagazineRifleM54CHEAP
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
     pocket2:
-    - RMCMagazineRifleM54CHEAP
-    - RMCMagazineRifleM54CHEAP
-    - RMCMagazineRifleM54CHEAP
-    - RMCMagazineRifleM54CHEAP
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
 
 - type: playTimeTracker
   id: CMUJobPMCWhiteout
+
+# Whiteout M41A loaded with standard rounds instead of HEAP.
+- type: entity
+  parent: RMCWeaponRifleM54C2Whiteout
+  id: CMUWeaponRifleM54C2WhiteoutStandard
+  suffix: Standard ammo
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMMagazineRifleM54C
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineRifleM54C
+          - CMMagazineRifleM54CAP
+          - CMMagazineRifleM54CExt
+          - RMCMagazineRifleM54CIncendiary
+          - RMCMagazineRifleM54CHEAP
