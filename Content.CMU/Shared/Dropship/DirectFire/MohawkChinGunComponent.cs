@@ -47,6 +47,9 @@ public sealed partial class MohawkChinGunComponent : Component
     [DataField, AutoNetworkedField] public bool IffEnabled = true;
     [DataField, AutoNetworkedField] public bool FreeFireEnabled;
     public EntityUid? ApprovedAutomaticTarget;
+    public EntityUid? AutomaticFireOperator;
+    public TimeSpan AutomaticFireAuthorizedUntil;
+    public bool AutomaticFireAirborne;
     public EntityUid? AutomaticEye;
     public Vector2 KeyboardPan;
     public TimeSpan KeyboardPanUntil;
@@ -62,6 +65,10 @@ public sealed partial class MohawkChinGunComponent : Component
     public float SlewDegreesPerSecond = 60f;
     [DataField]
     public TimeSpan AuthorizationDuration = TimeSpan.FromSeconds(30);
+    [DataField]
+    public TimeSpan AirburstTravelTime = TimeSpan.FromSeconds(2);
+    [DataField]
+    public TimeSpan AirburstMarkerDuration = TimeSpan.FromSeconds(1);
     public TimeSpan AuthorizedUntil;
     public EntityCoordinates? PendingManualShot;
     public float DesiredAimDegrees;

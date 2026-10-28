@@ -2,7 +2,6 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Tools;
-using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -12,7 +11,6 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Stacks;
 using Content.Shared.Tools.Systems;
-using Content.Shared.Weapons.Melee;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Dropship.DirectFire;
@@ -30,19 +28,11 @@ public sealed partial class MohawkChinGunSystem
 
     private void InitializeDamage()
     {
-        SubscribeLocalEvent<MohawkChinGunComponent, DamageModifyEvent>(OnDamageModify);
         SubscribeLocalEvent<MohawkChinGunComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<MohawkChinGunComponent, ExaminedEvent>(OnDamageExamined);
         SubscribeLocalEvent<MohawkChinGunComponent, InteractUsingEvent>(OnRepairInteract);
         SubscribeLocalEvent<MohawkChinGunComponent, MohawkChinGunRepairDoAfterEvent>(OnRepairDoAfter);
         SubscribeLocalEvent<MohawkChinGunComponent, MohawkChinGunSetupDoAfterEvent>(OnSetupFinished);
-    }
-
-    private void OnDamageModify(Entity<MohawkChinGunComponent> point, ref DamageModifyEvent args)
-    {
-        if (args.Tool is { } tool && HasComp<MeleeWeaponComponent>(tool) &&
-            TryComp(tool, out XenoComponent? xeno) && xeno.Tier < 2)
-            args.Damage = new DamageSpecifier();
     }
 
     private void OnDamageChanged(Entity<MohawkChinGunComponent> point, ref DamageChangedEvent args)

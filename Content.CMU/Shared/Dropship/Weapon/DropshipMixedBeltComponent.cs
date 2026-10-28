@@ -6,7 +6,7 @@ namespace Content.Shared._RMC14.Dropship.Weapon;
 [Access(typeof(SharedDropshipWeaponSystem))]
 public sealed partial class DropshipMixedBeltComponent : Component
 {
-    public static readonly string[] Slots = ["belt1", "belt2", "belt3"];
+    public static readonly string[] Slots = ["belt1", "belt2"];
 
     [DataField, AutoNetworkedField]
     public int NextSlot;

@@ -274,7 +274,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 : Loc.GetString("cmu-mohawk-ai-none");
             Window.ApproveAiButton.Visible = terminal.Gunnery;
             Window.ApproveAiButton.Disabled = terminal.ChinGunOperator != null || terminal.ChinGunAiTarget == null ||
-                !terminal.ChinGunInFlight ||
+                !terminal.ChinGunAiEnabled || // CMU14: grounded AI also requires target authorization.
                 !terminal.ChinGunSetupReady || terminal.ChinGunDisabled;
             Window.ApproveAiButton.Text = Loc.GetString(terminal.ChinGunAiApproved ? "cmu-mohawk-ai-revoke" : "cmu-mohawk-ai-approve");
             Window.ChinGunHealthLabel.Text = terminal.ChinGunDisabled

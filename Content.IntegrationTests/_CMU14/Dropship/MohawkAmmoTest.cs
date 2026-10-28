@@ -123,6 +123,7 @@ public sealed class MohawkAmmoTest : GameTest
             // Ember is airborne-only and alternation skips feeds the gun cannot fire, so alternate in flight.
             SEntMan.EnsureComponent<Content.Shared.Shuttles.Components.FTLComponent>(map.Grid).State =
                 Content.Shared.Shuttles.Systems.FTLState.Travelling;
+            SEntMan.EnsureComponent<DropshipInFlyByComponent>(map.Grid);
             chin.AlternateFeeds = true;
             Assert.That(Prototype(Consume()), Is.EqualTo("CMUMohawkM90HEAP"));
             Assert.That(chin.ActiveFeed, Is.EqualTo(1));
@@ -212,7 +213,7 @@ public sealed class MohawkAmmoTest : GameTest
     [TestCase("CMUMohawkM90AmmoScatter", "CMUMohawkM90Scatter", 60, 60, 10, 1500, false)]
     [TestCase("CMUMohawkM90AmmoIncendiary", "CMUMohawkM90Incendiary", 130, 130, 2, 1250, true)]
     [TestCase("CMUMohawkM90AmmoDevastator", "CMUMohawkM90Devastator", 300, 300, 12, 3500, false)]
-    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 25, 20, 0, 750, false)]
+    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 20, 20, 0, 1000, false)]
     public async Task PowerloaderLoadsVariantAndGunConsumesItsProjectile(
         string crateId, string projectileId, double impactDamage, double projectileDamage, int spread, int cost, bool burns)
     {
@@ -239,9 +240,9 @@ public sealed class MohawkAmmoTest : GameTest
                 "Squall fills its reserved third feed first; every other crate fills the primary feed.");
             var payload = SEntMan.GetComponent<DropshipAmmoComponent>(crate);
             Assert.That(payload.Weapon.Id, Is.EqualTo("CMUMohawkM90"));
-            var capacity = squall ? 2400 : 400;
+            var capacity = squall ? 1200 : 400;
             if (squall)
-                Assert.That(payload.DirectFireRate, Is.EqualTo(15));
+                Assert.That(payload.DirectFireRate, Is.EqualTo(10));
             Assert.That(payload.Rounds, Is.EqualTo(capacity));
             Assert.That(payload.MaxRounds, Is.EqualTo(capacity));
             Assert.That(payload.RoundsPerShot, Is.EqualTo(1));
@@ -252,29 +253,13 @@ public sealed class MohawkAmmoTest : GameTest
             var chin = SEntMan.GetComponent<MohawkChinGunComponent>(point);
             chin.Calibrated = true;
             chin.IffConfigured = true;
-            var transform = Server.System<SharedTransformSystem>();
-            var maximumScatter = 0f;
             chin.DefensiveFire = true;
             chin.FreeFireEnabled = true;
-            for (var sample = 0; sample < 100; sample++)
-            {
-                var attempt = new AttemptShootEvent(weapon, null, map.GridCoords,
-                    map.GridCoords.Offset(new Vector2(1.5f, 20)));
-                SEntMan.EventBus.RaiseLocalEvent(weapon, ref attempt);
-                Assert.That(attempt.Cancelled, Is.EqualTo(!payload.GroundCompatible),
-                    "Only Squall and HEAP ammunition can be fired groundside.");
-                if (!payload.GroundCompatible)
-                    continue;
-                var direction = transform.ToMapCoordinates(attempt.ToCoordinates!.Value).Position -
-                                transform.ToMapCoordinates(attempt.FromCoordinates).Position;
-                var degrees = MathF.Abs(MathHelper.RadiansToDegrees(MathF.Atan2(direction.X, direction.Y)));
-                maximumScatter = MathF.Max(maximumScatter, degrees);
-                Assert.That(degrees, Is.LessThanOrEqualTo(spread + 0.001f));
-            }
+            var attempt = new AttemptShootEvent(weapon, null, map.GridCoords,
+                map.GridCoords.Offset(new Vector2(1.5f, 20)));
+            SEntMan.EventBus.RaiseLocalEvent(weapon, ref attempt);
+            Assert.That(attempt.Cancelled, Is.True, "Loading a compatible feed cannot authorize autonomous fire.");
             chin.DefensiveFire = false;
-            if (payload.GroundCompatible && spread > 0)
-                Assert.That(maximumScatter, Is.GreaterThan(spread * 0.5f),
-                    "The ammo must actually scatter firing trajectories, not merely advertise a spread field.");
             var take = new TakeAmmoEvent(1, new(), map.GridCoords, null);
             SEntMan.EventBus.RaiseLocalEvent(weapon, take);
             Assert.That(take.Ammo, Has.Count.EqualTo(1));

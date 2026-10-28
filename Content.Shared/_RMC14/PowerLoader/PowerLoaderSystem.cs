@@ -523,6 +523,9 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         if (!TryGetPointContainer(args, out var user, out _, out var contained, out var slot))
             return;
 
+        if (!CanAttachDropshipPayload(user, ent, contained)) // CMU14: recheck after takeoff during loading.
+            return;
+
         InsertPoint(user, contained, slot);
         SyncAppearance(ent.Owner);
     }
@@ -530,6 +533,9 @@ public sealed partial class PowerLoaderSystem : EntitySystem
     private void OnDropshipAttach(Entity<DropshipUtilityPointComponent> ent, ref DropshipAttachDoAfterEvent args)
     {
         if (!TryGetPointContainer(args, out var user, out var container, out var contained, out var slot))
+            return;
+
+        if (!CanAttachDropshipPayload(user, ent, contained)) // CMU14: recheck flight and other internal installs.
             return;
 
         if (TryComp(contained, out DropshipUtilityComponent? utilityComp))
@@ -777,8 +783,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         }
         else if (HasComp<DropshipAmmoComponent>(used))
         {
-            if (_transform.GetGrid(target.Owner) is { } grid &&
-                _dropship.IsInFlight(grid))
+            if (!CanAttachDropshipPayload(user, target, used)) // CMU14: resolve secondary decks too.
             {
                 return false;
             }
@@ -892,6 +897,9 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         [NotNullWhen(true)] out ContainerSlot? slot)
     {
         slot = null;
+
+        if (!CanAttachDropshipPayload(user, target, used)) // CMU14: one internal weapon and grounded reloads.
+            return false;
 
         // AU-14: weapons installed on crew compartment points (JDAM bomb clamp, etc.)
         // take their matching ammo in the point's ammo slot.

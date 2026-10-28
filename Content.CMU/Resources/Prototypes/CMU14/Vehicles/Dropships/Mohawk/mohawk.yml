@@ -532,7 +532,7 @@
   parent: RMCDropshipAttachmentGau21Cannon
   id: CMUMohawkM90
   name: twin-linked M90 90mm chin guns
-  description: The Midway's triple-feed twin 90mm turret fires three explosive shells or fifteen Squall kinetic rounds per second. Supports five M90 ammunition types, selected or alternating feeds, a landed 225-degree forward arc and 20-tile range, and delayed flare-assisted bombardment during CAS flybys and transit. The 2000-HP mount disables when wrecked and requires an engineer-led rebuild with dedicated repair parts.
+  description: The Midway's triple-feed twin 90mm turret fires three explosive shells or ten Squall kinetic rounds per second. Supports five M90 ammunition types, selected or alternating feeds, a landed 225-degree forward arc and 20-tile range, and delayed flare-assisted bombardment during active CAS flybys. Squall is the only ground-compatible feed. Ground AI fire requires a seated gunner's approval, renewed every thirty seconds. The 2000-HP mount disables when wrecked and requires an engineer-led rebuild with dedicated repair parts.
   components:
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc_96x96.rsi
@@ -594,7 +594,7 @@
   parent: RMCDropshipAttachmentAmmoGAU
   id: CMUMohawkM90Ammo
   name: PGU-420 HEAP 90mm ammunition crate
-  description: Four hundred high-explosive armor-piercing rounds for the Midway's dual-feed M90 guns. Fires as a landed turret or as delayed explosive impacts near a signal flare in flight. HEAP heats the barrels quickly; sustained fire overheats the guns.
+  description: Four hundred high-explosive armor-piercing rounds for the Midway's M90 guns. Fires delayed explosive impacts near a signal flare during an active CAS flyby. HEAP heats the barrels quickly; sustained fire overheats the guns.
   components:
   - type: RMCGenericExamine
     message: It can penetrate 2 z-levels.
@@ -620,7 +620,7 @@
       max: 10
     weapon: CMUMohawkM90
     directFireProjectile: CMUMohawkM90HEAP
-    groundCompatible: true
+    groundCompatible: false
     directFireHeat: 8
   - type: DropshipFabricatorPrintable
     category: Ammo
@@ -730,7 +730,7 @@
   parent: CMUMohawkM90Ammo
   id: CMUMohawkM90AmmoKinetic
   name: PGU-410 'Squall' 90mm rapid-fire kinetic ammunition crate
-  description: Twenty-four hundred budget kinetic rounds for the three-feed M90. Fires fifteen rounds per second with GAU-style non-explosive impacts. Supports groundside, transit, and flyby fire without ejecting casings.
+  description: Twelve hundred kinetic rounds for the three-feed M90. Fires ten rounds per second with GAU-style non-explosive impacts. Supports groundside and active CAS flyby fire without ejecting casings.
   components:
   - type: RMCGenericExamine
     message: Squall kinetic rounds support groundside and flyby fire but cannot penetrate overhead cover.
@@ -741,25 +741,25 @@
     armorPiercing: 30
     zLevelPenetration: 0
     directFireProjectile: CMUMohawkM90Kinetic
-    directFireRate: 15
+    directFireRate: 10
     groundCompatible: true
-    directFireHeat: 0.6
+    directFireHeat: 1.2
     livingTargetsOnly: true
     ejectCasing: false
-    rounds: 2400
-    maxRounds: 2400
-    roundsPerSprite: 240
+    rounds: 1200
+    maxRounds: 1200
+    roundsPerSprite: 120
     friendlyImpactRadius: 2
     damage:
       types:
         Piercing: 20
-        Heat: 5
+        Heat: 0
     explosion: null
     impactEffects:
     - RMCEffectExplosionParticle
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 750
+    cost: 1000
 
 - type: entity
   parent: CMBulletBase

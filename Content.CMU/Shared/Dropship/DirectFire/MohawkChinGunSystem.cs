@@ -123,8 +123,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
 
     public bool IsAirborne(EntityUid point)
     {
-        // Flybys and plain transit flight both count; only a tactical hover is excluded.
         return _dropships.TryGetGridDropship(point, out var ship) && !ship.Comp.Crashed &&
+               HasComp<DropshipInFlyByComponent>(ship) &&
                !HasComp<DropshipTacticalHoverComponent>(ship) &&
                TryComp(ship, out FTLComponent? ftl) &&
                ftl.State is FTLState.Travelling or FTLState.Arriving;
@@ -172,7 +172,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
 
         if (actor == weapon)
             return _net.IsServer && point.Comp.Operator == null && point.Comp.DefensiveFire &&
-                   IsFreeFireActive(point.Comp) && (IsGroundedOnPlanet(point) || IsAirborne(point));
+                   IsFreeFireActive(point.Comp) && HasAutomaticFireAuthorization(point);
 
         if (point.Comp.Operator != actor || !IsSeatedOperator(point, actor))
         {
@@ -477,6 +477,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         {
             var point = new Entity<MohawkChinGunComponent>(uid, chin);
             CoolBarrels(point, frameTime);
+            if (chin.ApprovedAutomaticTarget != null && !HasAutomaticFireAuthorization(point))
+                ClearAutomaticFireAuthorization(point);
             UpdateForcedIff(point, IsFreeFireActive(chin) && !chin.Disabled);
             SyncFreeFireDisplay(point);
             if (chin.Disabled)
@@ -592,15 +594,13 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 continue;
             var observed = selected ?? SelectTarget(point);
             if (chin.ApprovedAutomaticTarget != selected)
-                chin.ApprovedAutomaticTarget = null;
+                ClearAutomaticFireAuthorization(point);
             SyncAutomaticCamera(point, selected ?? observed);
             if (observed is { } hostile)
             {
                 if (IsGrounded(uid))
                     RequestAim(point, weapon, Transform(hostile).Coordinates);
-                // All AI fire requires activation; airborne picks also need individual approval.
-                if (freeFire && selected != null &&
-                    (IsGroundedOnPlanet(uid) || chin.ApprovedAutomaticTarget == selected))
+                if (freeFire && selected != null && HasAutomaticFireAuthorization(point))
                 {
                     chin.DefensiveFire = true;
                     try
@@ -609,7 +609,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                             TryComp(freeConsole, out DropshipTerminalWeaponsComponent? terminal))
                             _weapons.TryFireChinGunAirburst(point, weapon, weapon, Transform(hostile).Coordinates, terminal);
                         else
-                            _guns.AttemptShoot(weapon, (weapon, gun), Transform(hostile).Coordinates, hostile);
+                            FireGroundAt(weapon, weapon, gun, Transform(hostile).Coordinates, hostile);
                     }
                     finally
                     {
@@ -625,6 +625,29 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     public bool IsFreeFireActive(MohawkChinGunComponent chin)
     {
         return chin.FreeFireEnabled;
+    }
+
+    private bool HasAutomaticFireAuthorization(Entity<MohawkChinGunComponent> point)
+    {
+        var chin = point.Comp;
+        if (!chin.FreeFireEnabled || chin.ApprovedAutomaticTarget == null ||
+            chin.ApprovedAutomaticTarget != chin.AutomaticTarget)
+            return false;
+
+        if (chin.AutomaticFireAirborne)
+            return IsAirborne(point);
+
+        return IsGroundedOnPlanet(point) && _timing.CurTime < chin.AutomaticFireAuthorizedUntil &&
+               chin.AutomaticFireOperator is { } actor && IsSeatedOperator(point, actor) &&
+               chin.FreeFireConsole is { } console && _ui.IsUiOpen(console, DropshipTerminalWeaponsUi.Key, actor);
+    }
+
+    private static void ClearAutomaticFireAuthorization(Entity<MohawkChinGunComponent> point)
+    {
+        point.Comp.ApprovedAutomaticTarget = null;
+        point.Comp.AutomaticFireOperator = null;
+        point.Comp.AutomaticFireAuthorizedUntil = TimeSpan.Zero;
+        point.Comp.AutomaticFireAirborne = false;
     }
 
     /// <summary>Whether friendly protection applies: the gunner's toggle, or the AI free-fire IFF lock.</summary>
@@ -687,10 +710,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
 
     public float FiringArc(Entity<MohawkChinGunComponent> point, EntityUid weapon, EntityCoordinates target)
     {
-        var closeDefense = point.Comp.Operator == null && IsGrounded(point) &&
-                           target.TryDistance(EntityManager, _transform, GetMountCoordinates(point), out var distance) &&
-                           distance <= point.Comp.CloseDefenseRange;
-        return closeDefense ? 360f : Comp<GunshipDirectFireWeaponComponent>(weapon).GimbalDegrees;
+        return Comp<GunshipDirectFireWeaponComponent>(weapon).GimbalDegrees;
     }
 
     public EntityCoordinates GetMountCoordinates(Entity<MohawkChinGunComponent> point)
@@ -1223,13 +1243,22 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             return;
         }
         var target = point.Comp.AutomaticTarget;
-        if (point.Comp.Operator != null || target == null || GetNetEntity(target.Value) != args.Target ||
+        if (!point.Comp.FreeFireEnabled || point.Comp.FreeFireConsole != console.Owner ||
+            point.Comp.Operator != null || target == null || GetNetEntity(target.Value) != args.Target ||
             !IsAutomaticTarget(point, target.Value))
         {
             _popup.PopupEntity(Loc.GetString("cmu-mohawk-ai-approval-invalid"), console, args.Actor);
             return;
         }
-        point.Comp.ApprovedAutomaticTarget = point.Comp.ApprovedAutomaticTarget == target ? null : target;
+        if (point.Comp.ApprovedAutomaticTarget == target)
+            ClearAutomaticFireAuthorization(point);
+        else
+        {
+            point.Comp.ApprovedAutomaticTarget = target;
+            point.Comp.AutomaticFireOperator = args.Actor;
+            point.Comp.AutomaticFireAuthorizedUntil = _timing.CurTime + point.Comp.AuthorizationDuration;
+            point.Comp.AutomaticFireAirborne = IsAirborne(point);
+        }
         Dirty(point);
         SyncAutomaticCamera(point, target);
         _adminLog.Add(LogType.RMCDropshipWeapon,
@@ -1596,7 +1625,24 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             point.Comp.PendingManualShot = null;
         }
         else
-            _guns.AttemptShoot(actor, (weapon, gun), coordinates, target);
+            FireGroundAt(actor, weapon, gun, coordinates, target);
+    }
+
+    private void FireGroundAt(EntityUid actor, EntityUid weapon, GunComponent gun,
+        EntityCoordinates coordinates, EntityUid? target)
+    {
+        var previousNextFire = gun.NextFire;
+        if (!_guns.AttemptShoot(actor, (weapon, gun), coordinates, target))
+            return;
+
+        // Remote trigger requests reset the shot counter. Carry sub-tick lateness forward
+        // so sustained fire keeps its configured cadence, without catching up after an idle period.
+        var now = _timing.CurTime;
+        var interval = TimeSpan.FromSeconds(1f / gun.FireRateModified);
+        var nextShot = previousNextFire == TimeSpan.Zero || previousNextFire < now - interval
+            ? now
+            : previousNextFire;
+        _guns.SetNextFire((weapon, gun), nextShot + interval);
     }
 
     private void OnTrigger(Entity<DropshipTerminalWeaponsComponent> console, ref MohawkChinGunTriggerMessage args)
@@ -1802,10 +1848,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     public bool IsSafeShot(Entity<MohawkChinGunComponent> point, MapCoordinates muzzle, MapCoordinates target,
         EntityUid weapon)
     {
-        var freeTravel = point.Comp.Operator != null && (IsGrounded(point) &&
-            Vector2.DistanceSquared(_transform.ToMapCoordinates(GetMountCoordinates(point)).Position,
-                target.Position) > point.Comp.Range * point.Comp.Range ||
-            point.Comp.VisionMode == MohawkChinGunVisionMode.Thermal);
+        var freeTravel = point.Comp.Operator != null && point.Comp.VisionMode == MohawkChinGunVisionMode.Thermal;
         if (!EnsureTrackingFaction(point) || !TryComp(point, out SentryTargetingComponent? targeting) ||
             !freeTravel && !_interaction.InRangeUnobstructed(muzzle, target, MathF.Max(point.Comp.Range, Vector2.Distance(muzzle.Position, target.Position)), CollisionGroup.Opaque,
                 predicate: blocker => blocker == point.Owner || blocker == weapon || HasComp<MobStateComponent>(blocker) ||

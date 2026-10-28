@@ -304,7 +304,7 @@
   - type: AmmoHolder
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 1200
+    cost: 1500
 
 - type: entity
   parent: CMUDropshipAmmoBOFORSTray
@@ -345,6 +345,8 @@
   name: 40mm BOFORS AP ammo tray
   description: A heavy tray holding three 20-round 40mm AP magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
+  - type: DropshipFabricatorPrintable
+    cost: 1650
   - type: Sprite
     layers:
     - state: bofors_40mm_tray_ap_3
@@ -384,6 +386,8 @@
   name: 40mm BOFORS Airburst ammo tray
   description: A heavy tray holding three 20-round 40mm airburst magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
+  - type: DropshipFabricatorPrintable
+    cost: 1650
   - type: Sprite
     layers:
     - state: bofors_40mm_tray_ab_3
@@ -423,6 +427,8 @@
   name: 40mm BOFORS HEAT ammo tray
   description: A heavy tray holding three 20-round 40mm HEAT magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
+  - type: DropshipFabricatorPrintable
+    cost: 1800
   - type: Sprite
     layers:
     - state: bofors_40mm_tray_ht_3
@@ -462,6 +468,8 @@
   name: 40mm BOFORS Incendiary ammo tray
   description: A heavy tray holding three 20-round 40mm incendiary magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
+  - type: DropshipFabricatorPrintable
+    cost: 1800
   - type: Sprite
     layers:
     - state: bofors_40mm_tray_in_3
@@ -747,6 +755,6 @@
           - CMUHowitzerShell
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 1000
+    cost: 2800
 
 # endregion

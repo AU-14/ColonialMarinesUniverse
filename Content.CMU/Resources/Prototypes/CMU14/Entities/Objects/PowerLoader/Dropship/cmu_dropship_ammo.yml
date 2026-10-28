@@ -346,6 +346,8 @@
   name: M137 105mm HEAT shell rack
   description: A heavy rack holding four PGU-46/B 105mm high-explosive anti-tank shells for the M137 105mm Howitzer. Too heavy to carry - drag it or move it with a powerloader.
   components:
+  - type: DropshipFabricatorPrintable
+    cost: 3000
   - type: ItemSlots
     slots:
       shell1:
@@ -390,9 +392,9 @@
   components:
   - type: CMUCasFallout
     fallout: WeedKiller
-    radius: 3
+    radius: 2
   - type: TimedDespawn
-    lifetime: 300
+    lifetime: 60
 
 - type: entity
   parent: CMUCasFalloutBase
@@ -451,3 +453,12 @@
         Piercing: 40
   - type: TimedDespawn
     lifetime: 1
+
+- type: entity
+  parent: CMUCasFalloutResin
+  id: CMUCasFalloutMiniMikeResin
+  components:
+  - type: CMUCasFallout
+    damage:
+      types:
+        Structural: 150

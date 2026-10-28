@@ -81,7 +81,8 @@ public sealed class MohawkDamageRepairTest : GameTest
             Assert.That(chin.IffConfigured, Is.True);
             Assert.That(SEntMan.GetComponent<Content.Shared._RMC14.Sentry.SentryTargetingComponent>(point).FriendlyFactions,
                 Does.Contain("OPFOR"), "Programming takes the operator's faction, not the ship's.");
-            Assert.That(system.CanOperate((point, chin), weapon, weapon, out _), Is.True);
+            Assert.That(system.CanOperate((point, chin), weapon, weapon, out _), Is.False,
+                "Calibration alone must not authorize autonomous fire.");
         });
     }
 
@@ -121,7 +122,7 @@ public sealed class MohawkDamageRepairTest : GameTest
     }
 
     [Test]
-    public async Task LowTierClawsCannotDamageButHigherTierClawsAndBulletDamageCanDisable()
+    public async Task LowTierClawsDamageTheMountAndBulletDamageCanDisable()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -135,10 +136,8 @@ public sealed class MohawkDamageRepairTest : GameTest
             Assert.That(xeno.Tier, Is.EqualTo(1));
             var hit = new DamageSpecifier { DamageDict = new() { ["Slash"] = 50 } };
             damage.TryChangeDamage(point, hit, origin: claw, tool: claw);
-            Assert.That(damage.GetTotalDamage(point), Is.EqualTo(FixedPoint2.Zero));
-            xeno.Tier = 2;
-            damage.TryChangeDamage(point, hit, origin: claw, tool: claw);
-            Assert.That(damage.GetTotalDamage(point), Is.EqualTo(FixedPoint2.New(50)));
+            Assert.That(damage.GetTotalDamage(point), Is.EqualTo(FixedPoint2.New(50)),
+                "Tier-one claws must damage the exposed mount.");
             Assert.That(chin.MaxHealth, Is.EqualTo(2000));
             var mount = SEntMan.GetComponent<DropshipWeaponPointComponent>(point);
             var weapon = Server.System<SharedContainerSystem>().GetContainer(point, mount.WeaponContainerSlotId).ContainedEntities.Single();

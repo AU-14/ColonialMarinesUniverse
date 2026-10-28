@@ -543,6 +543,13 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (args.Handled)
             return;
 
+        // CMU14: refilling a mounted crate or mixed belt must obey the same ground-only loading rule.
+        if (!_powerloader.CanAttachDropshipPayload(args.PowerLoader, args.Target, ent.Owner))
+        {
+            args.Handled = true;
+            return;
+        }
+
         if (TryLoadMixedBelt(ent, ref args))
             return;
 
@@ -3020,7 +3027,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         AddComp(inFlight, new AmmoInFlightComponent
         {
             Target = landing,
-            MarkerAt = now + TimeSpan.FromSeconds(_random.NextFloat(1f, 2f)),
+            // CMU14: fixed travel time followed by a visible warning before impact.
+            MarkerAt = now + point.Comp.AirburstTravelTime,
+            MarkerDuration = point.Comp.AirburstMarkerDuration,
             ShotsLeft = 1,
             ShotsPerVolley = 1,
             BulletSpread = 0,

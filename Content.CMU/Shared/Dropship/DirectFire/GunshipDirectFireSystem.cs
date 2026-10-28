@@ -117,6 +117,14 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         if (chinMount)
         {
             var chin = Comp<MohawkChinGunComponent>(point);
+            if (Vector2.DistanceSquared(mountPosition, target.Position) > chin.Range * chin.Range)
+            {
+                chin.PendingManualShot = null;
+                args.Cancelled = true;
+                args.ResetCooldown = true;
+                args.Message = Loc.GetString("cmu-mohawk-gunnery-out-of-range");
+                return;
+            }
             if (ammo != null && !_chinGun.IsAmmoUsable(point, ammo))
             {
                 args.Cancelled = true;
@@ -341,9 +349,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
     {
         if (TryComp(ent, out GunComponent? gun) && gun.ProjectileSpeedModified > 0 &&
             _containers.TryGetContainingContainer(ent.Owner, out var container) &&
-            TryComp(container.Owner, out MohawkChinGunComponent? chin) &&
-            Vector2.DistanceSquared(_transform.ToMapCoordinates(args.ToCoordinates).Position,
-                _transform.ToMapCoordinates(_chinGun.GetMountCoordinates((container.Owner, chin))).Position) <= chin.Range * chin.Range)
+            HasComp<MohawkChinGunComponent>(container.Owner))
         {
             var from = _transform.ToMapCoordinates(args.FromCoordinates);
             var target = _transform.ToMapCoordinates(args.ToCoordinates);

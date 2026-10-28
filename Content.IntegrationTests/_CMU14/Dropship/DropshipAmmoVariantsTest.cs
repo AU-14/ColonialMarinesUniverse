@@ -72,8 +72,8 @@ public sealed class DropshipAmmoVariantsTest
                 else if (id.EndsWith("ArmorPiercing"))
                 {
                     Assert.That(ammo.Explosion, Is.Null);
-                    Assert.That(ammo.ArmorPiercing, Is.EqualTo(80));
-                    Assert.That(ammo.ZLevelPenetration, Is.EqualTo(3));
+                    Assert.That(ammo.ArmorPiercing, Is.EqualTo(60));
+                    Assert.That(ammo.ZLevelPenetration, Is.EqualTo(2));
                     Assert.That(ammo.BulletSpread, Is.EqualTo(1));
                 }
                 else
@@ -186,6 +186,8 @@ public sealed class DropshipAmmoVariantsTest
                 {
                     var uid = entities.GetEntity(net);
                     var ammo = entities.GetComponent<DropshipAmmoComponent>(uid);
+                    if (shotsLeft > ammo.MaxRounds / ammo.RoundsPerShot)
+                        continue;
                     ammo.Rounds = ammo.RoundsPerShot * shotsLeft;
                     entities.Dirty(uid, ammo);
                     entities.System<SharedAppearanceSystem>().SetData(uid, DropshipAmmoVisuals.Fill, ammo.Rounds);
@@ -200,6 +202,8 @@ public sealed class DropshipAmmoVariantsTest
                 {
                     var uid = entities.GetEntity(net);
                     var ammo = entities.GetComponent<DropshipAmmoComponent>(uid);
+                    if (shotsLeft > ammo.MaxRounds / ammo.RoundsPerShot)
+                        continue;
                     var layer = entities.GetComponent<SpriteComponent>(uid)[DropshipAmmoVisuals.Fill];
                     Assert.That(layer.RsiState.ToString(), Is.EqualTo(ammo.AmmoSpriteType + "_" + shotsLeft));
                     Assert.That(layer.ActualRsi!.TryGetState(layer.RsiState, out _), Is.True);
@@ -211,7 +215,7 @@ public sealed class DropshipAmmoVariantsTest
     }
 
     [Test]
-    public async Task RapidBatteryFiresTenFiveLaserSpreadsThenRunsOut()
+    public async Task RapidBatteryFiresFiveThreeLaserSpreadsThenRunsOut()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         await pair.Server.WaitAssertion(() =>
@@ -240,17 +244,17 @@ public sealed class DropshipAmmoVariantsTest
             config.SetCVar(RMCCVars.RMCDropshipCASDebug, true);
             var weapons = entities.System<SharedDropshipWeaponSystem>();
             var target = new EntityCoordinates(map, 30, 30);
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < 5; i++)
             {
                 Assert.That(weapons.TryFireWeapon(weapon, target, DropshipWeaponStrikeType.Direct), Is.True);
-                Assert.That(ammo.Rounds, Is.EqualTo(100 - (i + 1) * 10));
+                Assert.That(ammo.Rounds, Is.EqualTo(100 - (i + 1) * 20));
             }
             Assert.That(weapons.TryFireWeapon(weapon, target, DropshipWeaponStrikeType.Direct), Is.False);
             var flights = entities.QueryEntities<AmmoInFlightComponent>().ToArray();
-            Assert.That(flights, Has.Length.EqualTo(10));
+            Assert.That(flights, Has.Length.EqualTo(5));
             foreach (var flight in flights)
             {
-                Assert.That(flight.Comp.ImpactsPerVolley, Is.EqualTo(5));
+                Assert.That(flight.Comp.ImpactsPerVolley, Is.EqualTo(3));
                 Assert.That(flight.Comp.ShotsPerVolley, Is.EqualTo(flight.Comp.ShotsLeft));
                 flight.Comp.MarkerAt = TimeSpan.Zero;
                 flight.Comp.MarkerDuration = TimeSpan.Zero;
@@ -258,7 +262,7 @@ public sealed class DropshipAmmoVariantsTest
             weapons.Update(0);
             var pulses = entities.QueryEntities<MetaDataComponent>()
                 .Where(e => e.Comp.EntityPrototype?.ID == "CMUDropshipLaserPulse").ToArray();
-            Assert.That(pulses, Has.Length.EqualTo(50), "Ten shots must produce fifty actual laser impact effects.");
+            Assert.That(pulses, Has.Length.EqualTo(15), "Five shots must produce fifteen actual laser impact effects.");
             var transform = entities.System<SharedTransformSystem>();
             foreach (var pulse in pulses)
             {
@@ -267,7 +271,7 @@ public sealed class DropshipAmmoVariantsTest
                     "Actual dispersed hits must remain widely spread after tile snapping.");
             }
             foreach (var flight in flights)
-                Assert.That(flight.Comp.ShotsLeft, Is.EqualTo(0), "A five-laser shot must complete in one volley.");
+                Assert.That(flight.Comp.ShotsLeft, Is.EqualTo(0), "A three-laser shot must complete in one volley.");
             config.SetCVar(RMCCVars.RMCDropshipCASDebug, false);
             entities.DeleteEntity(map);
         });
