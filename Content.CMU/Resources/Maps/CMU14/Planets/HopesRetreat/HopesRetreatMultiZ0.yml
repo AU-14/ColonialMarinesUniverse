@@ -180898,16 +180898,22 @@ entities:
   entities:
   - uid: 51982
     components:
+    - type: AccessReader
+      access: [[CMAccessColonyBrig]]
     - type: Transform
       parent: 1
       pos: 109.5,-11.5
   - uid: 51983
     components:
+    - type: AccessReader
+      access: [[CMAccessColonyBrig]]
     - type: Transform
       parent: 1
       pos: 110.5,-11.5
   - uid: 51987
     components:
+    - type: AccessReader
+      access: [[CMAccessColonyBrig]]
     - type: Transform
       parent: 1
       pos: 110.5,-14.5
