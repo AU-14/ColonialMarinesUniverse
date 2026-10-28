@@ -184,6 +184,10 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public float ThrowSpeedMultiplier = 1.8f;
 
+    // a carried body only goes this far. cmss13 mobs have the default throw_range 7, the hand range above is for items
+    [DataField]
+    public float CarriedThrowRange = 7f;
+
     [DataField]
     public float LeapThrowSpeed = 5f;
 
