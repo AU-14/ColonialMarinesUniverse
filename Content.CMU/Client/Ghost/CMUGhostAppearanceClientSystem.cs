@@ -126,7 +126,7 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
     /// </summary>
     private void FadeBody(Entity<SpriteComponent> ghost, Entity<SpriteComponent> source)
     {
-        var layers = ghost.Comp.AllLayers.ToList();
+        var layers = ghost.Comp.LayerData;
         foreach (var key in FaintLayers)
         {
             if (!_sprite.LayerMapTryGet(source.AsNullable(), key, out var index, false) || index >= layers.Count)
@@ -176,7 +176,7 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
     private void ShowAlive(Entity<SpriteComponent> ghost, Entity<SpriteComponent> source)
     {
         if (!_sprite.LayerMapTryGet(source.AsNullable(), XenoVisualLayers.Base, out var layer, false) ||
-            layer >= ghost.Comp.AllLayers.Count() ||
+            layer >= ghost.Comp.LayerData.Count ||
             _sprite.LayerGetEffectiveRsi(ghost.AsNullable(), layer) is not { } rsi ||
             !rsi.TryGetState("alive", out _))
         {
