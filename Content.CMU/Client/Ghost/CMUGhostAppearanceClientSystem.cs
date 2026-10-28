@@ -102,6 +102,9 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
             _applied.Add(uid);
             _waitingSince.Remove(uid);
 
+            // Damage variants only apply to the default ghost sprite, not the body's copied layers.
+            RemComp<GenericVisualizerComponent>(uid);
+
             var drawDepth = sprite.DrawDepth;
             var visible = sprite.Visible;
             var color = sprite.Color;
