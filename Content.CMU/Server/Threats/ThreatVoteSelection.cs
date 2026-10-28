@@ -216,7 +216,16 @@ public static class ThreatVoteSelection
         if (priority == JobPriority.Never)
             return false;
 
-        return candidateThreatIds.Any(threat => profile.AllowsThreatForGamemode(presetId, threat));
+        IReadOnlySet<ProtoId<ThreatPrototype>> threatPreferences = profile.GetThreatPreferencesForGamemode(presetId);
+
+        if (threatPreferences.Count == 0)
+            return true;
+
+        HashSet<string> candidates = candidateThreatIds
+            .Select(id => id.Id)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        return threatPreferences.Any(preference => candidates.Contains(preference.Id));
     }
 
     private static JobPriority GetThreatJobPriority(HumanoidCharacterProfile profile,
