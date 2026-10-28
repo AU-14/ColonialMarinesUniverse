@@ -36,6 +36,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
     private LocalPlayerSnapshot? _lastFrameSnapshot;
     private TimeSpan _nextCatchupLog;
     private TimeSpan _nextSnapLog;
+    private TimeSpan _nextParentMotionLog;
     private uint _stateApplyFrame;
     private int _stateApplicationsThisFrame;
     private GameTick _lastAppliedStateTick;
@@ -82,13 +83,21 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
             return;
         }
 
-        if (_lastFrameSnapshot is { } previous &&
-            IsComparable(previous, current) &&
-            TryGetDistance(previous, current, out var distance) &&
-            distance >= GetFrameSnapThreshold(previous, current, frameTime) &&
-            CanLog(ref _nextSnapLog))
+        if (_lastFrameSnapshot is { } previous && IsComparable(previous, current))
         {
-            LogSnap(previous, current, distance);
+            var distance = (current.LocalPosition - previous.LocalPosition).Length();
+            var worldDistance = (current.MapPosition - previous.MapPosition).Length();
+            var threshold = GetFrameSnapThreshold(previous, current, frameTime);
+            if (float.IsFinite(distance) && distance >= threshold)
+            {
+                if (CanLog(ref _nextSnapLog))
+                    LogMotion(previous, current, distance, worldDistance, parentMotion: false);
+            }
+            else if (float.IsFinite(worldDistance) && worldDistance >= threshold && CanLog(ref _nextParentMotionLog))
+            {
+                // A seated passenger inherits shuttle motion. Retain it as context, not a player correction.
+                LogMotion(previous, current, distance, worldDistance, parentMotion: true);
+            }
         }
 
         _lastFrameSnapshot = current;
@@ -180,12 +189,8 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
             return false;
 
         var velocity = Vector2.Zero;
-        var physics = "none";
         if (TryComp(entity, out PhysicsComponent? body))
-        {
             velocity = body.LinearVelocity;
-            physics = $"bodyType={body.BodyType} bodyStatus={body.BodyStatus} awake={body.Awake} predict={body.Predict} canCollide={body.CanCollide} contacts={body.ContactCount}";
-        }
 
         snapshot = new LocalPlayerSnapshot(
             entity,
@@ -197,9 +202,6 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
             xform.LocalPosition,
             velocity,
             velocity.Length(),
-            physics,
-            FormatMover(entity),
-            FormatRelay(entity),
             _timing.CurTick,
             _timing.LastRealTick,
             _timing.CurFrame,
@@ -208,12 +210,18 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         return true;
     }
 
-    private void LogSnap(
+    private void LogMotion(
         LocalPlayerSnapshot previous,
         LocalPlayerSnapshot current,
-        float distance)
+        float distance,
+        float worldDistance,
+        bool parentMotion)
     {
-        _sawmill.Warning($"snap reason=frame dist={F(distance)} state=none previous={FormatPrevious(previous)} current={FormatSnapshot(current)} {FormatTiming()}");
+        var message = $"{(parentMotion ? "parent-motion" : "snap reason=frame")} dist={F(distance)} space=parent worldDist={F(worldDistance)} state=none previous={FormatPrevious(previous)} current={FormatSnapshot(current)} {FormatTiming()}";
+        if (parentMotion)
+            _sawmill.Info(message);
+        else
+            _sawmill.Warning(message);
     }
 
     private string FormatState(GameStateAppliedArgs args, uint stateTickGap)
@@ -223,7 +231,15 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
 
     private string FormatSnapshot(LocalPlayerSnapshot snapshot)
     {
-        return $"player={FormatPlayer()} ping={_players.LocalSession?.Ping ?? -1} ent={ToPrettyString(snapshot.Entity)} net={snapshot.NetEntity} map={snapshot.MapId} grid={FormatEntity(snapshot.GridUid)} parent={FormatEntity(snapshot.ParentUid)} pos={FormatVector(snapshot.MapPosition)} local={FormatVector(snapshot.LocalPosition)} vel={FormatVector(snapshot.LinearVelocity)} speed={F(snapshot.Speed)} snapTick={snapshot.CurTick} snapRealTick={snapshot.LastRealTick} snapFrame={snapshot.Frame} snapTime={F(snapshot.RealTime.TotalSeconds)} physics=\"{snapshot.Physics}\" mover=\"{snapshot.Mover}\" relay=\"{snapshot.Relay}\"";
+        return $"player={FormatPlayer()} ping={_players.LocalSession?.Ping ?? -1} ent={ToPrettyString(snapshot.Entity)} net={snapshot.NetEntity} map={snapshot.MapId} grid={FormatEntity(snapshot.GridUid)} parent={FormatEntity(snapshot.ParentUid)} pos={FormatVector(snapshot.MapPosition)} local={FormatVector(snapshot.LocalPosition)} vel={FormatVector(snapshot.LinearVelocity)} speed={F(snapshot.Speed)} snapTick={snapshot.CurTick} snapRealTick={snapshot.LastRealTick} snapFrame={snapshot.Frame} snapTime={F(snapshot.RealTime.TotalSeconds)} physics=\"{FormatPhysics(snapshot.Entity)}\" mover=\"{FormatMover(snapshot.Entity)}\" relay=\"{FormatRelay(snapshot.Entity)}\"";
+    }
+
+    private string FormatPhysics(EntityUid entity)
+    {
+        if (!TryComp(entity, out PhysicsComponent? body))
+            return "none";
+
+        return $"bodyType={body.BodyType} bodyStatus={body.BodyStatus} awake={body.Awake} predict={body.Predict} canCollide={body.CanCollide} contacts={body.ContactCount}";
     }
 
     private static string FormatPrevious(LocalPlayerSnapshot snapshot)
@@ -322,18 +338,12 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
             previous.GridUid == current.GridUid && previous.ParentUid == current.ParentUid;
     }
 
-    private static bool TryGetDistance(LocalPlayerSnapshot previous, LocalPlayerSnapshot current, out float distance)
-    {
-        distance = (current.MapPosition - previous.MapPosition).Length();
-        return float.IsFinite(distance);
-    }
-
     private void ResetSnapshots()
     {
         _lastFrameSnapshot = null;
         _stateApplicationsThisFrame = 0;
         _lastAppliedStateTick = GameTick.Zero;
-        _nextCatchupLog = _nextSnapLog = TimeSpan.Zero;
+        _nextCatchupLog = _nextSnapLog = _nextParentMotionLog = TimeSpan.Zero;
     }
 
     private readonly record struct LocalPlayerSnapshot(
@@ -346,9 +356,6 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         Vector2 LocalPosition,
         Vector2 LinearVelocity,
         float Speed,
-        string Physics,
-        string Mover,
-        string Relay,
         GameTick CurTick,
         GameTick LastRealTick,
         uint Frame,
