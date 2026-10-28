@@ -13136,6 +13136,7 @@
       visuals: {}
   - type: Strap
     position: Stand
+    buckleOffset: "0.5313,-0.05"
   - type: YautjaChairFacing
     direction: South
   - type: Clickable
