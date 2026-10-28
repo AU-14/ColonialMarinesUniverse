@@ -49,7 +49,8 @@ public sealed partial class TemporarySpeedModifiersSystem : EntitySystem
 
         // Modify the slowdown the clothing applies based on the wearers current movement speed.
         // Slowed entities get a reduced slow effect from clothing while fast entities get an increased slow effect.
-        var newModifier = 1 - (1 - args.SprintModifier) * (movement.CurrentSprintSpeed / movement.BaseSprintSpeed);
+        // CMU14: the ratio is SprintSpeedModifier, including when missing legs make both speeds zero.
+        var newModifier = 1 - (1 - args.SprintModifier) * movement.SprintSpeedModifier;
         args.WalkModifier = newModifier;
         args.SprintModifier = newModifier;
     }

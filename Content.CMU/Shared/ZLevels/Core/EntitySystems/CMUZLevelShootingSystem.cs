@@ -269,7 +269,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         // Open air between shooter and target: nothing to shoot through, so skip the
         // opening hunt and range clamp (straight shots at hovering dropships).
-        if (_zLevels.IsZShotPathOpen(offset < 0 ? shooterMap.Value : targetMap.Value, fromMap.Position, toMap.Position))
+        if (_zLevels.IsZShotPathOpen(offset < 0 ? shooterMap.Value : targetMap.Value,
+                fromMap.Position, toMap.Position, offset < 0 ? targetMap.Value : null))
         {
             adjustedFromCoordinates = _transform.ToCoordinates(new MapCoordinates(fromMap.Position, map.MapId));
             adjustedToCoordinates = _transform.ToCoordinates(new MapCoordinates(toMap.Position, map.MapId));
@@ -337,7 +338,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         // Open air between shooter and target: nothing to shoot through, so skip the
         // opening hunt and range clamp (straight shots at hovering dropships).
-        if (_zLevels.IsZShotPathOpen(offset < 0 ? shooterMap.Value : targetMap.Value, fromCoordinates.Position, toCoordinates.Position))
+        if (_zLevels.IsZShotPathOpen(offset < 0 ? shooterMap.Value : targetMap.Value,
+                fromCoordinates.Position, toCoordinates.Position, offset < 0 ? targetMap.Value : null))
         {
             adjustedFromCoordinates = new MapCoordinates(fromCoordinates.Position, map.MapId);
             adjustedToCoordinates = new MapCoordinates(toCoordinates.Position, map.MapId);

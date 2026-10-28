@@ -8,6 +8,7 @@ namespace Content.Server.CMU14.Diagnostics.Performance;
 internal sealed class CMURuntimeMemorySampler : IDisposable
 {
     private Process? _process;
+    public CMUPerformanceDiagnosticsCost Cost { get; } = new();
     public CMURuntimeMemorySample? Last { get; private set; }
 
     public CMURuntimeMemorySample Sample(TimeSpan now)
@@ -15,6 +16,7 @@ internal sealed class CMURuntimeMemorySampler : IDisposable
         if (Last is { } previous && now >= previous.At && now - previous.At < TimeSpan.FromSeconds(5))
             return previous;
 
+        using var cost = Cost.Measure();
         var gc = GC.GetGCMemoryInfo();
         var allocated = GC.GetTotalAllocatedBytes(false);
         var allocationRate = Last is { } last && now > last.At

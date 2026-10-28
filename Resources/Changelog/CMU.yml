@@ -15166,5 +15166,40 @@
   id: 882
   time: '2026-10-26T04:19:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2299
+- author: rokudara-sen
+  changes:
+  - message: The Yautja clan hall replaces clan info and clan admin. Open it from
+      the bracer, the self verb or the clanhall command.
+    type: Add
+  - message: Clan and hunter leaderboards, clan notices, elite notes and requests
+      to join a clan.
+    type: Add
+  - message: Round trophy score now adds to a hunter's and their clan's honor.
+    type: Tweak
+  - message: Yautja whitelists and hunt settings are tabs in the clan hall now.
+    type: Admin
+  id: 883
+  time: '2026-10-26T18:50:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2278
+- author: Vixting
+  changes:
+  - message: Added the turing dispenser, a machine that allows you to automatically
+      make reagents based on the loaded vial container. It can output directly to
+      connected smart fridges, centrifuges or loaded beaker. It will take reagents
+      from a connected smart fridge if present in the vial recipe.
+    type: Add
+  - message: Added centrifuge, mainly used to load auto injectors evenly from the
+      output from the turing.
+    type: Add
+  id: 884
+  time: '2026-10-26T19:24:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2305
+- author: Vixting
+  changes:
+  - message: Added the gambler drone
+    type: Add
+  id: 885
+  time: '2026-10-26T21:04:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2291
 Name: CMU
 Order: -1

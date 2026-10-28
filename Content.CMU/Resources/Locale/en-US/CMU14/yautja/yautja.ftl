@@ -1258,4 +1258,5 @@ cmu-yautja-lobby-invisibility-help-modern = Modern cloak activation and deactiva
 cmu-yautja-lobby-invisibility-help-retro = Old retro cloak activation and deactivation sounds.
 
 cmu-yautja-medicomp-empty-gun = The healing gun is empty.
-cmu-yautja-medicomp-stabilized = You stabilize the wounds.
+cmu-yautja-medicomp-stabilized = You stabilize the wounds. Finish treatment with the healing gun and wound clamp to restore normal movement.
+cmu-yautja-medicomp-treated = You treat the wounds. Use the wound clamp to finish treatment and restore normal movement.

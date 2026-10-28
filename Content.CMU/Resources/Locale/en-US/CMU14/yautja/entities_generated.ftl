@@ -1196,7 +1196,7 @@ ent-CMUYautjaSnareArrow = snare arrow
     .desc = A bow launched snare.
 
 ent-CMUYautjaQuiverStrap = quiver strap
-    .desc = A strap that can hold a bow with a quiver for arrows.
+    .desc = A strap that holds up to eight bows and arrows in total, with room for one hunting bow and seven arrows.
 
 ent-CMUYautjaArrowProjectile = arrow
 

@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-venator
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/venator.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Venator/venator.rsi
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -32,12 +32,13 @@
     - CMU14ActionXenoPathogenAbduct
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenScissorCut
+    - CMU14ActionXenoPathogenEvolve
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
   - type: XenoScissorCut
     damage:
       types:
-        Slash: 40
+        Slash: 75
   - type: XenoHook
   - type: XenoHeavy
   - type: XenoDevour
@@ -84,9 +85,9 @@
     attackRate: 2.2
     damage:
       types:
-        Blunt: 14
-        Slash: 14
-        Piercing: 14
+        Blunt: 15
+        Slash: 15
+        Piercing: 15
   - type: CMArmor
     explosionArmor: 20
     xenoArmor: 30
@@ -116,14 +117,103 @@
     name: cmu-job-name-pathogen-venator
   - type: Speech
     speechSounds: Pathogen
+
  
 - type: entity
   parent: CMU14XenoVenatorBase
   id: CMU14XenoVenator
   name: Venator
   components:
+  - type: XenoEvolution  
+    strains:  
+    - CMU14XenoVenatorBloodletter
   - type: RMCGibOnDeath
     gibChance: 0.1
   - type: RMCSpawnEntitiesOnGib
     entities:
     - CMU14GibEffectPathogenVenator
+
+
+- type: entity 
+  parent: CMU14XenoVenatorBase
+  id: CMU14XenoVenatorBloodletter
+  suffix: Bloodletter
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Venator/bloodletter_venator.rsi
+  - type: Xeno
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenImpaleBloodletter
+    - CMU14ActionXenoPathogenScissorCutBloodletter
+    - CMU14ActionXenoPathogenHeadbiteBloodletter
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      750: Critical
+      850: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 6.5
+  - type: MeleeWeapon
+    attackRate: 2.0
+    damage:
+      types:
+        Slash: 40
+  - type: XenoClawBloodloss
+    bloodloss: 10
+  - type: XenoScissorCut
+    damage:
+      types:
+        Slash: 40
+    bloodloss: 18
+    alwaysSlows: true
+  - type: XenoTailStab
+    tailDamage:
+      types:
+        Slash: 10
+        Blunt: 10
+        Piercing: 10
+    bloodloss: 35
+  - type: XenoImpale  
+    damage:  
+      types:
+        Slash: 35
+    bloodloss: 40
+  - type: XenoHeadbite
+    damage:
+      types:
+        Slash: 20
+        Blunt: 20
+        Piercing: 20
+    bloodloss: 100
+  - type: CMArmor
+    explosionArmor: 20
+    xenoArmor: 25
+  - type: XenoLifesteal  
+    basePercentage: 0.065  
+    maxPercentage: 0.085  
+    minHeal: 30  
+    maxHeal: 60
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenVenator
+  - type: XenoStrain
+    name: rmc-xeno-bloodletter-name
+    description: rmc-xeno-bloodletter-description
+    popup: rmc-xeno-bloodletter-popup
+  - type: XenoHidden  
+  - type: RMCActionOrder  
+    id: CMU14XenoVenatorBloodletter
+    

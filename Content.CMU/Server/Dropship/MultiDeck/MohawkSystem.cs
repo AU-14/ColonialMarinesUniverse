@@ -9,7 +9,11 @@ using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Vehicles;
+using Content.Shared.CMU14.Blackfoot;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Requisitions;
+using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
@@ -28,6 +32,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Timing;
 using Robust.Shared.Random;
 
@@ -54,6 +59,7 @@ public sealed partial class MohawkSystem : EntitySystem
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private ITileDefinitionManager _tileDefinitions = default!;
+    [Dependency] private SharedRequisitionsSystem _requisitions = default!;
 
     private const string OpenRampTileId = "CMUFloorOpenAirSealed";
 
@@ -92,6 +98,7 @@ public sealed partial class MohawkSystem : EntitySystem
 
     private void OnShutdown(Entity<MohawkMechanismsComponent> ship, ref ComponentShutdown args)
     {
+        ClearApproachShadows(ship.Comp);
         // Open ramp cells have no tile and their markers may be parented to the
         // map. They still belong to the ship and must not survive its deletion.
         foreach (var marker in ship.Comp.CabinRampMarkers.Keys)
@@ -219,6 +226,8 @@ public sealed partial class MohawkSystem : EntitySystem
 
     private void OnLanded(Entity<MohawkMechanismsComponent> ship, ref FTLCompletedEvent args)
     {
+        ClearApproachShadows(ship.Comp);
+
         if (!TryComp<MultiDeckDropshipComponent>(ship, out var decks) ||
             !_multiDeck.Synchronize((ship, decks)))
             return;
@@ -307,6 +316,17 @@ public sealed partial class MohawkSystem : EntitySystem
             !TryComp<MultiDeckDropshipComponent>(ship, out var decks) || !decks.Initialized)
             return false;
 
+        foreach (var uid in GetShipEntities(ship))
+        {
+            if (!HasComp<MohawkRampRailingComponent>(uid) || !TryComp<RequisitionsRailingComponent>(uid, out var railing))
+                continue;
+
+            var mode = deployed
+                ? force ? RequisitionsRailingMode.Raised : RequisitionsRailingMode.Raising
+                : force ? RequisitionsRailingMode.Lowered : RequisitionsRailingMode.Lowering;
+            _requisitions.SetRailingMode((uid, railing), mode);
+        }
+
         if (deployed && !mechanisms.RampDeployed &&
             (!TryComp<MohawkRampMovingComponent>(ship, out var previousMovement) || !previousMovement.Deploying))
         {
@@ -319,7 +339,10 @@ public sealed partial class MohawkSystem : EntitySystem
                     continue;
 
                 foreach (var victim in GetRampOccupants(uid))
-                    mechanisms.RampCrushTargets.Add(victim);
+                {
+                    if (HasComp<MobStateComponent>(victim))
+                        mechanisms.RampCrushTargets.Add(victim);
+                }
             }
         }
 
@@ -330,7 +353,7 @@ public sealed partial class MohawkSystem : EntitySystem
             moving.Step = 0;
             moving.NextStep = _timing.CurTime + mechanisms.RampStepDelay;
             ApplyRampGeometry(ship, 2);
-            _audio.PlayPvs(RampSound, ship);
+            _zLevels.PlayPvsDirectlyAcrossZ(RampSound, ship);
             return true;
         }
 
@@ -455,9 +478,9 @@ public sealed partial class MohawkSystem : EntitySystem
                                 continue;
 
                             _damage.TryChangeDamage(victim, new DamageSpecifier { DamageDict = { ["Blunt"] = 40 } }, origin: ship);
-                            _stun.TryKnockdown(victim.Owner, TimeSpan.FromSeconds(5), false);
+                            _stun.TryKnockdown(victim, TimeSpan.FromSeconds(5), false);
                             var angle = _random.NextFloat() * MathF.Tau;
-                            _throwing.TryThrow(victim.Owner, new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * 4, baseThrowSpeed: 3f);
+                            _throwing.TryThrow(victim, new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * 4, baseThrowSpeed: 3f);
                         }
                     }
                 }
@@ -540,11 +563,20 @@ public sealed partial class MohawkSystem : EntitySystem
         MoveRampVehicles(ship, vehicles, deployedStages != 0);
     }
 
-    private IEnumerable<Entity<MobStateComponent>> GetRampOccupants(EntityUid segment)
+    private IEnumerable<EntityUid> GetRampOccupants(EntityUid segment)
     {
         var inverse = _transform.GetInvWorldMatrix(segment);
-        foreach (var occupant in _lookup.GetEntitiesInRange<MobStateComponent>(Transform(segment).Coordinates, 0.8f))
+        foreach (var occupant in _lookup.GetEntitiesInRange<PhysicsComponent>(Transform(segment).Coordinates, 0.8f))
         {
+            // Loose cargo rides the lift too. Fixed fittings stay with their deck;
+            // large vehicles use their collision footprint in CollectRampVehicles.
+            var xform = Transform(occupant);
+            if (xform.Anchored || !xform.GridTraversal ||
+                (xform.ParentUid != xform.GridUid && xform.ParentUid != xform.MapUid) ||
+                HasComp<MapGridComponent>(occupant) || HasComp<CMUVehicleZTraversalComponent>(occupant) ||
+                HasComp<BlackfootFlightComponent>(occupant))
+                continue;
+
             // Mounted crew travel with their seat and vehicle. Moving them as
             // loose ramp passengers first would tear them out of the buckle.
             if (TryComp(occupant, out BuckleComponent? buckle) && buckle.Buckled)
@@ -554,8 +586,15 @@ public sealed partial class MohawkSystem : EntitySystem
             // Query whole tiles, including corners, without hitting someone in
             // the next row merely because their collision shape overlaps it.
             if (local.X >= -0.5f && local.X < 0.5f && local.Y >= -0.5f && local.Y < 0.5f)
-                yield return occupant;
+                yield return occupant.Owner;
         }
+    }
+
+    private void ClearApproachShadows(MohawkMechanismsComponent mechanisms)
+    {
+        foreach (var shadow in mechanisms.ApproachShadows)
+            QueueDel(shadow);
+        mechanisms.ApproachShadows.Clear();
     }
 
     private List<EntityUid> GetShipEntities(EntityUid ship)

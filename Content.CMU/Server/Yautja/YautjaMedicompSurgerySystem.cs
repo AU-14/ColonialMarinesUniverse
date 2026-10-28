@@ -5,6 +5,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Yautja;
@@ -30,6 +31,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedOrganHealthSystem _organHealth = default!;
+    [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private CMUSurgerySystem _surgery = default!;
     [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
@@ -98,6 +100,8 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
             foreach (var (part, _) in _medicalIndex.GetBodyParts(args.Body))
             {
                 if (!HasComp<CMUEscharComponent>(part)
+                    && (!TryComp<BodyPartWoundComponent>(part, out var wounds) || _woundLedger.GetEntries(wounds).Count == 0)
+                    && (!TryComp<BodyPartHealthComponent>(part, out var health) || health.Current >= health.Max)
                     && !HasComp<InternalBleedingComponent>(part)
                     && !HasComp<CMUSurgicalInternalBleedingComponent>(part)
                     && _surgicalTraits.CountTraits(part) == 0)
@@ -183,6 +187,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
         EnsureComp<CMUYautjaMedicompTreatedComponent>(args.Part);
         gun.Comp.Loaded = false;
         Dirty(gun);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-medicomp-treated"), args.Body, args.User);
     }
 
     private void OnClamp(Entity<CMUYautjaMedicompClampStepComponent> ent, ref CMSurgeryStepEvent args)
@@ -196,8 +201,9 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
 
         foreach (var (part, _) in _medicalIndex.GetBodyParts(args.Body))
         {
-            _wounds.StopSurfaceBleedingOnPart(part);
-            _woundLedger.TryUpdateExternalBleeding(part, ExternalBleedTier.None);
+            _wounds.ClearAllWounds(part);
+            if (TryComp<BodyPartHealthComponent>(part, out var health))
+                _partHealth.SetCurrent((part, health), health.Max);
             // CMSS13's clamp returns the selected defense zone to surface
             // depth. In CMU that is represented by removing the open-incision
             // markers and suppressing only the surgical bleed source.

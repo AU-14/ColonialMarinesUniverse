@@ -392,6 +392,17 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
                 source = existing.Source;
             }
         }
+
+        // Drug suppression hides the active bleed, but does not treat its persistent source.
+        // Include it even at expiry so recomputation can restore it before removing the suppression.
+        if (TryComp<CMUInternalBleedingSuppressedComponent>(part, out var suppressed)
+            && suppressed.ExpiresAt != null
+            && IsPersistentSeedSource(suppressed.Source)
+            && suppressed.BloodlossPerSecond > maxRate)
+        {
+            maxRate = suppressed.BloodlossPerSecond;
+            source = suppressed.Source;
+        }
     }
 
     /// <summary>
@@ -571,7 +582,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
         foreach (var part in _expiredSuppressions)
         {
-            RemComp<CMUInternalBleedingSuppressedComponent>(part);
             RecomputeInternalBleed(part);
         }
     }
@@ -589,6 +599,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
                 var suppressed = EnsureComp<CMUInternalBleedingSuppressedComponent>(part);
                 suppressed.Source = existing.Source;
                 suppressed.BloodlossPerSecond = existing.BloodlossPerSecond;
+                suppressed.ExpiresAt = null;
             }
             else
             {
@@ -598,6 +609,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
                     var suppressed = EnsureComp<CMUInternalBleedingSuppressedComponent>(part);
                     suppressed.Source = source;
                     suppressed.BloodlossPerSecond = rate;
+                    suppressed.ExpiresAt = null;
                 }
             }
         }

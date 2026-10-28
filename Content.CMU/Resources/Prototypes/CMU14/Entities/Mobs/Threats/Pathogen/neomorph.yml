@@ -12,8 +12,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      375: Critical
-      475: Dead
+      475: Critical
+      575: Dead
     stateAlertDict:
       Alive: XenoHealth
       Critical: XenoCrit
@@ -163,6 +163,7 @@
     name: cmu-job-name-pathogen-neomorph
   - type: Speech
     speechSounds: Pathogen
+  - type: CMUXenoZJump
 
 - type: entity
   parent: CMU14XenoNeomorphBase

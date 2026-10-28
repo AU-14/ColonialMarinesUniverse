@@ -1,0 +1,8 @@
+// CC0-1.0. Preserve the imported silhouette's edge while recovering its faint source alpha.
+light_mode unshaded;
+
+void fragment() {
+    // The upstream mask peaks at 46/255 alpha; it is not an opaque black silhouette.
+    highp float hull = clamp(zTexture(UV).a * (255.0 / 46.0), 0.0, 1.0);
+    COLOR = vec4(0.0, 0.0, 0.0, hull * 0.86);
+}

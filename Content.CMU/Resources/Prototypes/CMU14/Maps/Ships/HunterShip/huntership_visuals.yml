@@ -13136,6 +13136,7 @@
       visuals: {}
   - type: Strap
     position: Stand
+    buckleOffset: "0.5313,-0.05"
   - type: YautjaChairFacing
     direction: South
   - type: Clickable
@@ -33385,6 +33386,9 @@
   description: "A hunter-built machine that draws elements from its reserves and blends them into chemicals."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: RequiresSkill
+    skills:
+      RMCSkillMedical: 2
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
     drawdepth: SmallObjects
