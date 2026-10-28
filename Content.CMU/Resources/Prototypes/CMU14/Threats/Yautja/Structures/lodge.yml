@@ -455,6 +455,7 @@
     bodyType: Static
     canCollide: false
   - type: Damageable
+  - type: Injurable
   - type: Destructible
     thresholds:
     - trigger:
