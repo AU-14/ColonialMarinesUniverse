@@ -13,7 +13,7 @@ cmu-dropship-airburst-high = Airburst: high
 cmu-dropship-payload-preview = Bursts left: {$bursts} | Impacts per volley: {$impacts}
     Next round: {$ammo}
 cmu-dropship-preview-help = Yellow: estimated payload footprint. Orange: dispersion envelope. Cover and blast resistance affect actual damage. Laser patterns follow the dropship's orientation.
-cmu-dropship-hand-load-flight = Land the dropship before loading ammunition by hand.
+cmu-dropship-hand-load-flight = Hand-loading is blocked during takeoff. In flight, use a dedicated interior weapon point or land first.
 cmu-dropship-hand-load-failed = The ammunition could not be loaded.
 cmu-dropship-load-flight = Land the dropship before loading ammunition.
 cmu-dropship-internal-weapon-limit = This dropship already has an internal weapon. Remove it before installing another.

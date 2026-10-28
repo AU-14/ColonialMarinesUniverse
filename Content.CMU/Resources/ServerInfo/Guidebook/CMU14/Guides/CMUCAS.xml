@@ -29,7 +29,7 @@
 
   ### Preparing a Loadout
 
-  Hand-loading a BOFORS magazine or Howitzer shell takes three uninterrupted seconds and requires the dropship to be landed. Four-shell HE, HE-FRAG, and Airburst racks cost 2800 points; HEAT racks cost 3000. BOFORS three-magazine trays cost 1500 for HE, 1650 for AP or Airburst, and 1800 for HEAT or Incendiary. Dedicated interior weapon points and ordinary utility points both accept compatible internal weapons; each dropship may install one internal weapon across those points. The JDAM clamp has a ten-second firing delay. Existing mini-rockets retain their eight-second travel time and two-second fire-mission delay.
+  Hand-loading a BOFORS magazine or Howitzer shell takes three uninterrupted seconds. Dedicated interior weapon points can be hand-loaded during flight; other mounts require landing. Loading cannot start or finish during takeoff at any mount. Four-shell HE, HE-FRAG, and Airburst racks cost 2800 points; HEAT racks cost 3000. BOFORS three-magazine trays cost 1500 for HE, 1650 for AP or Airburst, and 1800 for HEAT or Incendiary. Dedicated interior weapon points and ordinary utility points both accept compatible internal weapons; each dropship may install one internal weapon across those points. The JDAM clamp has a ten-second firing delay. Existing mini-rockets retain their eight-second travel time and two-second fire-mission delay.
 
   1. Print the weapon and its matching ammunition from the Dropship Part Fabricator.
   2. Use a powerloader to move and install heavy weapon attachments on compatible points.
