@@ -33,6 +33,9 @@
     requiredSeverAttempts: 2
     severAttemptWindow: 30
     regrowDelay: 300
+  # the queen rolls 40% a hit to take a limb, which shredded hunters. a quarter of that here
+  - type: XenoMeleeSeverResistance
+    chanceMultiplier: 0.25
   - type: TacticalMapTracked
     trackDead: true
   - type: YautjaMapTracked
@@ -276,6 +279,9 @@
   # the applied profile never reaches the body organs. Hunters inherit it from CMUMobYautja; youngbloods parent the human
   # base and must declare it.
   - type: VisualBody
+  # same queen sever cut as hunters, and youngbloods don't even regrow
+  - type: XenoMeleeSeverResistance
+    chanceMultiplier: 0.25
   - type: Language
     spokenLanguages:
     - Yautja
