@@ -63,4 +63,15 @@ public sealed partial class CCVars
     [CVarControl(AdminFlags.VarEdit)]
     public static readonly CVarDef<bool> ShipMreLock =
         CVarDef.Create("cmu.game.ship_mre_lock", true, CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
+
+    /// <summary>
+    /// The preset an admin locked the gamemode vote to, empty when unlocked. Archived so the lock survives
+    /// server restarts and round recycling.
+    /// </summary>
+    public static readonly CVarDef<string> GamemodeLockPreset =
+        CVarDef.Create("cmu.game.gamemode_lock_preset", "", CVar.SERVER | CVar.ARCHIVE);
+
+    /// <summary>How many more rounds the gamemode vote lock covers, counting the next one. Zero means until cleared.</summary>
+    public static readonly CVarDef<int> GamemodeLockRounds =
+        CVarDef.Create("cmu.game.gamemode_lock_rounds", 0, CVar.SERVER | CVar.ARCHIVE);
 }
