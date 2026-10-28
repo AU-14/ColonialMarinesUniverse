@@ -106,6 +106,9 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
             var visible = sprite.Visible;
             var color = sprite.Color;
             var noRotation = sprite.NoRotation;
+            // Its original visualizer targets ghostVariant and ghost_* states. Those layers no longer exist
+            // after copying a body; a later appearance update would recreate them against the body's RSI.
+            RemComp<GenericVisualizerComponent>(uid);
             _sprite.CopySprite((source, sourceSprite), (uid, sprite));
             _sprite.SetDrawDepth((uid, sprite), drawDepth);
             _sprite.SetVisible((uid, sprite), visible);

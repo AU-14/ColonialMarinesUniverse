@@ -144,6 +144,78 @@ public sealed class CMUZAudioLifecycleTest : GameTest
         });
     }
 
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task DirectSoundOnlyAllocatesOnTheListenersFloor(bool predicted)
+    {
+        foreach (var listenerMap in new[] { _lower, _upper })
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SEntMan.System<SharedTransformSystem>().SetCoordinates(_listener,
+                    new EntityCoordinates(listenerMap, new Vector2(0.5f)));
+                var z = SEntMan.System<CMUZLevelsSystem>();
+                var sound = new SoundPathSpecifier(SoundPath, LoopParameters);
+                if (predicted)
+                    Assert.That(z.PlayPredictedDirectlyAcrossZ(sound, _emitter, null), Is.True);
+                else
+                    z.PlayPvsDirectlyAcrossZ(sound, _emitter);
+
+                Assert.That(AudioOn(listenerMap), Has.Count.EqualTo(1));
+                Assert.That(AudioOn(listenerMap == _lower ? _upper : _lower), Is.Empty,
+                    "Cross-floor visibility must not allocate a second, inaudible copy of the same sound.");
+                _sources.AddRange(AudioOn(listenerMap));
+            });
+            await Pair.RunUntilSynced();
+            await Client.WaitAssertion(() =>
+            {
+                var sounds = CEntMan.EntityQuery<AudioComponent>().Count(audio => audio.FileName == SoundPath);
+                Assert.That(sounds, Is.EqualTo(1), "The listener must receive the audible original or projection.");
+            });
+            await Server.WaitPost(() =>
+            {
+                foreach (var source in _sources)
+                    _audio.Stop(source);
+                _sources.Clear();
+            });
+            await Pair.RunTicksSync(2);
+            await Pair.RunUntilSynced();
+        }
+    }
+
+    [Test]
+    public async Task DirectPredictedSoundDoesNotAllocateForItsOnlyExcludedListener()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.System<CMUZLevelsSystem>().PlayPredictedDirectlyAcrossZ(
+                new SoundPathSpecifier(SoundPath, LoopParameters), _emitter, _listener), Is.True);
+            Assert.That(AudioOn(_lower), Is.Empty);
+            Assert.That(AudioOn(_upper), Is.Empty);
+        });
+    }
+
+    [Test]
+    public async Task DirectSoundFollowsRemoteEyeInsteadOfTheBody()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.System<SharedEyeSystem>().SetTarget(_listener, _emitter);
+            SEntMan.System<CMUZLevelsSystem>().PlayPredictedDirectlyAcrossZ(
+                new SoundPathSpecifier(SoundPath, LoopParameters), _emitter, null);
+            Assert.That(AudioOn(_lower), Is.Empty, "The body floor is inaudible while viewing through a remote eye.");
+            var original = AudioOn(_upper).Single();
+            _sources.Add(original);
+            Assert.That(SComp<AudioComponent>(original).IncludedEntities, Does.Contain(_listener));
+        });
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var sounds = CEntMan.EntityQuery<AudioComponent>().Count(audio => audio.FileName == SoundPath);
+            Assert.That(sounds, Is.EqualTo(1));
+        });
+    }
+
     [Test]
     public async Task LoopCrossesUpperHoleIntoSolidRoomAndTracksMotionAndClosure()
     {
