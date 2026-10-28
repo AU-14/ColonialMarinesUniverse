@@ -260,11 +260,9 @@ public sealed partial class GunSystem : SharedGunSystem
             EntityManager.System<CMU14.ZLevels.Core.CMUZLevelAimSystem>().TryGetCrossZAim(entity, mousePos, out zAim);
         var coordinates = GetAimCoordinates(TransformSystem, coordinateEntity, zAim); // CMU14
 
-        // CMU14: keep the source entity selected by the visible 3D ray.
-        var target = crossZ ? null : firstPerson ? GetNetEntity(firstPersonTarget) : GetBestTarget(_eyeManager.CurrentEye, mousePos); // CMU14
-        if (!crossZ && !firstPerson && _state.CurrentState is GameplayStateBase screen && // CMU14
-            screen.GetClickedEntity(mousePos) is { } clicked && CheckFixtures(clicked))
-            target = GetNetEntity(clicked);
+        // CMU14: preserve special aim paths; only search the fallback when no eligible cursor hit exists.
+        var target = crossZ ? null : firstPerson ? GetNetEntity(firstPersonTarget)
+            : CMUGetCursorTarget(_state.CurrentState as GameplayStateBase, _eyeManager.CurrentEye, mousePos);
 
         if (_player.LocalSession is not { } session)
             return;
@@ -677,36 +675,10 @@ public sealed partial class GunSystem : SharedGunSystem
     }
 
     /// <remarks>We use our own sorting algorithm separate from the default for smarter configurability.</remarks>
+    // CMU14: select the same ordered winner without allocating and sorting a candidate list.
     private NetEntity? GetBestTarget(IEye eye, MapCoordinates coordinates)
     {
-        // Find all the entities intersecting our click
-        var entities = _spriteTree.QueryAabb(coordinates.MapId, Box2.CenteredAround(coordinates.Position, new Vector2(1, 1)));
-
-        // Check the entities against whether or not we can click them
-        var foundEntities = new List<(EntityUid, bool, bool, int, uint, float, float)>(entities.Count);
-
-        foreach (var entity in entities)
-        {
-            // Don't add the target if we can't shoot the target!
-            if (!CheckFixtures(entity.Uid))
-                continue;
-
-            var entry = CheckTarget((entity.Uid, entity.Component, entity.Transform), eye, coordinates);
-            foundEntities.Add(entry);
-        }
-
-        if (foundEntities.Count == 0)
-            return null;
-
-        // Do drawdepth & y-sorting. First index is the top-most sprite (opposite of normal render order).
-        foundEntities.Sort(_comparer);
-        var (target, alive, occluded, _, _, _, _) = foundEntities.FirstOrDefault();
-
-        // Prevents us from just selecting a random target nearby our cursor. It must either be alive, or our cursor must be on top of it!
-        if (!occluded && !alive)
-            return null;
-
-        return GetNetEntity(target);
+        return CMUGetBestTarget(eye, coordinates);
     }
 
     private (EntityUid, bool, bool, int, uint, float, float) CheckTarget(Entity<SpriteComponent, TransformComponent> target, IEye eye, MapCoordinates coordinates)

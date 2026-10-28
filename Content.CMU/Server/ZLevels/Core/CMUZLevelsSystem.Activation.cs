@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Ship;
+using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Gravity;
 using Content.Shared.Ghost.Components;
@@ -117,7 +118,7 @@ public sealed partial class CMUZLevelsSystem
             return false;
         }
 
-        if (HasComp<GhostComponent>(ent))
+        if (HasComp<GhostComponent>(ent) || HasComp<QueenEyeComponent>(ent))
             return false;
 
         var xform = Transform(ent);

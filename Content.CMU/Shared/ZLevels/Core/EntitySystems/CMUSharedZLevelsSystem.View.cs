@@ -365,8 +365,15 @@ public abstract partial class CMUSharedZLevelsSystem
     /// True when a cross-z shot from <paramref name="from"/> to <paramref name="to"/> crosses no floor
     /// tiles on <paramref name="map"/>, including floors on child grids such as dropship cabins.
     /// </summary>
-    public bool IsZShotPathOpen(EntityUid map, Vector2 from, Vector2 to)
+    public bool IsZShotPathOpen(EntityUid map, Vector2 from, Vector2 to, EntityUid? supportingMap = null)
     {
+        // An empty upper tile can still be supported by a wall on the lower map. Such shots
+        // must use the opening search to clear the wall before creating the projectile below.
+        if (supportingMap is { } below &&
+            _map.TryFindGridAt(below, from, out var supportGrid, out var support) &&
+            HasWallAt(supportGrid, support, _map.WorldToTile(supportGrid, support, from)))
+            return false;
+
         if (_gridQuery.TryComp(map, out var mapGrid) && !IsGridPathOpen((map, mapGrid)))
             return false;
 

@@ -64,7 +64,6 @@ public sealed partial class HardpointSystem
             args.Damage = ScaleDamage(args.Damage, ent.Comp.FrameDamageFractionWhileIntact);
             return;
         }
-        parts = vulnerableParts;
 
         if (parts.Count > 0)
         {
@@ -80,6 +79,9 @@ public sealed partial class HardpointSystem
             }
             else
             {
+                // CMU14: filter protected targets only for direct hits. Blasts split their budget before
+                // module protection; excluding immune parts first increases every other part's share.
+                parts = vulnerableParts;
                 var primary = SelectDamageHardpoint(ent.Owner, parts, args.Origin);
                 var spillover = parts.Count > 1 ? Math.Clamp(ent.Comp.DamageSpilloverFraction, 0f, 1f) : 0f;
                 ApplyRoutedDamage(ent.Owner, primary, ScaleDamage(args.Damage, 1f - spillover));

@@ -133,8 +133,8 @@ public sealed partial class PlantTraySystem : EntitySystem
         if (!_solutionContainer.ResolveSolution(trayUid, trayComp.SoilSolutionName, ref trayComp.SoilSolution, out var solution))
             return;
 
-        if (!TryGetPlant(ent, out var plantUid))
-            return;
+        // CMU14: soil can absorb nutrients before a seed is planted.
+        TryGetPlant(ent, out var plantUid);
 
         if (solution.Volume <= 0)
             return;
@@ -159,12 +159,16 @@ public sealed partial class PlantTraySystem : EntitySystem
                 [.. reagentProto.PlantMetabolisms],
                 entry.Quantity.Float(),
                 reagentContext: reagentContext);
-            _entityEffects.ApplyEffects(
-                plantUid.Value,
-                [.. reagentProto.PlantMetabolisms],
-                entry.Quantity.Float(),
-                reagentContext: reagentContext);
-
+            // CMU14 Begin: plant-specific effects require an occupant; tray effects do not.
+            if (plantUid is { } plant)
+            {
+                _entityEffects.ApplyEffects(
+                    plant,
+                    [.. reagentProto.PlantMetabolisms],
+                    entry.Quantity.Float(),
+                    reagentContext: reagentContext);
+            }
+            // CMU14 End
         }
 
         var removed = _solutionContainer.RemoveEachReagent(

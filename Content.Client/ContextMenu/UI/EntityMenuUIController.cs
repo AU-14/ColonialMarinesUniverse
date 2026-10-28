@@ -195,6 +195,7 @@ namespace Content.Client.ContextMenu.UI
         /// <summary>
         ///     Check that entities in the context menu are still visible. If not, remove them from the context menu.
         /// </summary>
+        // CMU14 method: reuse mutation-safe snapshots and entry-owned examine predicates.
         public override void FrameUpdate(FrameEventArgs args)
         {
             if (!_updating || _context.RootMenu == null)
@@ -225,31 +226,7 @@ namespace Content.Client.ContextMenu.UI
 
             _entityManager.TryGetComponent(player, out ExaminerComponent? examiner);
 
-            foreach (var entity in Elements.Keys.ToList())
-            {
-                if (!_xformQuery.TryGetComponent(entity, out var xform))
-                {
-                    // entity was deleted
-                    RemoveEntity(entity);
-                    continue;
-                }
-
-                if ((visibility & MenuVisibility.Invisible) == 0
-                    && _spriteQuery.TryGetComponent(entity, out var sprite)
-                    && !sprite.Visible)
-                {
-                    RemoveEntity(entity);
-                    continue;
-                }
-
-                if ((visibility & MenuVisibility.NoFov) == MenuVisibility.NoFov)
-                    continue;
-
-                var pos = new MapCoordinates(_xform.GetWorldPosition(xform, _xformQuery), xform.MapID);
-
-                if (!_examineSystem.CanExamine(player, pos, e => e == player || e == entity, entity, examiner))
-                    RemoveEntity(entity);
-            }
+            CMUUpdateVisibility(player, visibility, examiner);
         }
 
         /// <summary>
