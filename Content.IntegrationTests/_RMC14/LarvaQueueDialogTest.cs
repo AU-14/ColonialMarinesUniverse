@@ -658,6 +658,9 @@ public sealed class LarvaQueueJoinXenoUiTest
             hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
             // CMU14: real rounds assign this hive during xeno initialization, before SpawnLarva returns.
             entMan.System<CMDistressSignalRuleSystem>().TheHive = hive;
+            // CMU14: empty hives can't be queued for, give it a living member
+            var drone = entMan.SpawnEntity("CMXenoDrone", map.GridCoords.Offset(new Vector2(-2, 0)));
+            entMan.System<SharedXenoHiveSystem>().SetHive(drone, hive);
 
             var mindId = mind.CreateMind(player.UserId, "Observer");
             mind.TransferTo(mindId, ghost);
@@ -784,6 +787,9 @@ public sealed class LarvaQueueJoinXenoUiTest
         {
             ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
             hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
+            // CMU14: empty hives are hidden, give it a living member so only the delay blocks joining
+            var drone = entMan.SpawnEntity("CMXenoDrone", map.GridCoords.Offset(new Vector2(2, 0)));
+            entMan.System<SharedXenoHiveSystem>().SetHive(drone, hive);
 
             var mindId = mind.CreateMind(player.UserId, "Observer");
             mind.TransferTo(mindId, ghost);
