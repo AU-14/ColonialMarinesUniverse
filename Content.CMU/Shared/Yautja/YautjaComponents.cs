@@ -63,6 +63,13 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public float StunResistance = 1.5f;
 
+    // dB added to every footstep, cloaked replaces it rather than stacking
+    [DataField]
+    public float FootstepVolume = -4f;
+
+    [DataField]
+    public float CloakedFootstepVolume = -12f;
+
     [DataField]
     public Dictionary<FixedPoint2, float> SlowOnDamageThresholds = new()
     {
