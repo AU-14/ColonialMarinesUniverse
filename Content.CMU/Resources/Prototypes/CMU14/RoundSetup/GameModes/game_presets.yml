@@ -25,7 +25,7 @@
   - greenshift
   name: cmu-gamemode-colonyshift-name
   showInVote: true
-  maxPlayers: 45
+  maxPlayers: 25
   description: cmu-gamemode-colonyshift-desc
   burrowedLarvaEnabled: false
   supportedPlanets:
