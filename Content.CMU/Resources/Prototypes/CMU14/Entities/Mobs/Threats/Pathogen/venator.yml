@@ -40,6 +40,7 @@
       types:
         Slash: 75
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     strains:
     - CMU14XenoVenatorBloodletter
   - type: XenoHook
@@ -126,7 +127,22 @@
   parent: CMU14XenoVenatorBase
   id: CMU14XenoVenator
   name: Venator
-  components:
+  components:  
+  actionIds:
+  - CMU14ActionXenoPathogenRest
+  - CMU14ActionXenoPathogenWatch
+  - CMU14ActionXenoPathogenTailStab
+  - CMU14ActionXenoPathogenImpale
+  - CMU14ActionXenoPathogenAbduct
+  - CMU14ActionXenoPathogenParalyzingSlash
+  - CMU14ActionXenoPathogenScissorCut
+  - CMU14ActionXenoPathogenEvolve
+  - CMU14ActionXenoPathogenDevolve
+  - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoEvolution  
+    actionId: CMU14ActionXenoPathogenEvolve
+    strains:
+    - CMU14XenoVenatorBloodletter
   - type: RMCGibOnDeath
     gibChance: 0.1
   - type: RMCSpawnEntitiesOnGib
