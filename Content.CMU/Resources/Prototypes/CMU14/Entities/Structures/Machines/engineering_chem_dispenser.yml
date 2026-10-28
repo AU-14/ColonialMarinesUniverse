@@ -1,0 +1,17 @@
+- type: entity
+  parent: RMCChemDispenserMedbay
+  id: CMUChemDispenserEngineeringMedbay
+  suffix: Engineering, Medbay supply, DO NOT MAP OUTSIDE WARSHIPS
+  components:
+  - type: RequiresSkill
+    skills:
+      RMCSkillMedical: 0
+      RMCSkillEngineer: 3
+
+- type: entity
+  parent: CMUChemDispenserEngineeringMedbay
+  id: CMUChemDispenserEngineeringResearch
+  suffix: Engineering, Research supply, DO NOT MAP OUTSIDE WARSHIPS
+  components:
+  - type: RMCChemicalDispenser
+    network: RMCChemStorageResearch
