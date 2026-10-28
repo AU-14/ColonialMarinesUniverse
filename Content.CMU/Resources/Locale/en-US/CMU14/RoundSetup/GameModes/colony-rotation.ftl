@@ -54,3 +54,14 @@ colony-rotation-summary-stayed = {$count} {$count ->
 colony-rotation-summary-no-shipment = Nothing was loaded aboard for the quarterly shipment.
 colony-rotation-summary-shipment = The quarterly shipment was worth ${$value}:
 colony-rotation-summary-shipment-line = {$count}x {$item}
+
+colony-rotation-command-call-description = Sends the crew rotation transport now, skipping the minimum shift length.
+colony-rotation-command-call-help = Usage: rotationcall [minutes until landing]
+colony-rotation-command-recall-description = Recalls the inbound crew rotation transport.
+colony-rotation-command-recall-help = Usage: rotationrecall
+colony-rotation-command-minutes-hint = <minutes until landing>
+colony-rotation-command-called = Crew rotation transport dispatched.
+colony-rotation-command-recalled = Crew rotation transport recalled.
+colony-rotation-command-no-rule = There's no crew rotation transport this round. It only runs in Colony Shift.
+colony-rotation-command-already-called = The crew rotation transport is already on its way.
+colony-rotation-command-nothing-inbound = There's no inbound crew rotation transport to recall.

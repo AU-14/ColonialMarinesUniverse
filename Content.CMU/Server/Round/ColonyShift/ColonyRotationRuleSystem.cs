@@ -126,6 +126,47 @@ public sealed partial class ColonyRotationRuleSystem : GameRuleSystem<ColonyRota
         return true;
     }
 
+    // admin version, skips the minimum shift length and the cooldown. eta defaults to the normal inbound time
+    public bool TryAdminCall(TimeSpan? eta, out string? reason)
+    {
+        reason = null;
+        if (!TryGetActive(out var comp))
+        {
+            reason = Loc.GetString("colony-rotation-command-no-rule");
+            return false;
+        }
+
+        if (comp.Status != ColonyRotationTransportStatus.Scheduled)
+        {
+            reason = Loc.GetString("colony-rotation-command-already-called");
+            return false;
+        }
+
+        Dispatch(comp, false, eta);
+        return true;
+    }
+
+    public bool TryAdminRecall(out string? reason)
+    {
+        reason = null;
+        if (!TryGetActive(out var comp))
+        {
+            reason = Loc.GetString("colony-rotation-command-no-rule");
+            return false;
+        }
+
+        if (!CanRecall(comp, Timing.CurTime, true))
+        {
+            reason = Loc.GetString(comp.Status == ColonyRotationTransportStatus.Scheduled
+                ? "colony-rotation-command-nothing-inbound"
+                : "colony-rotation-recall-committed");
+            return false;
+        }
+
+        Recall(comp);
+        return true;
+    }
+
     public bool TryRecall(out string? reason)
     {
         reason = null;
