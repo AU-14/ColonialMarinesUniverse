@@ -1258,5 +1258,28 @@ cmu-yautja-lobby-invisibility-help-modern = Modern cloak activation and deactiva
 cmu-yautja-lobby-invisibility-help-retro = Old retro cloak activation and deactivation sounds.
 
 cmu-yautja-medicomp-empty-gun = The healing gun is empty.
-cmu-yautja-medicomp-stabilized = You stabilize the wounds. Finish treatment with the healing gun and wound clamp to restore normal movement.
-cmu-yautja-medicomp-treated = You treat the wounds. Use the wound clamp to finish treatment and restore normal movement.
+cmu-yautja-medicomp-stabilized = You stabilize the wounds.
+
+# lodge floors
+tiles-cmu-yautja-temple-floor = sandstone temple floor
+tiles-cmu-yautja-temple-deco-square-vertical = temple floor, square deco
+tiles-cmu-yautja-temple-deco-square-horizontal = temple floor, square deco
+tiles-cmu-yautja-temple-deco-diamond = temple floor, diamond deco
+tiles-cmu-yautja-temple-deco-pattern-vertical = temple floor, patterned deco
+tiles-cmu-yautja-temple-deco-pattern-horizontal = temple floor, patterned deco
+tiles-cmu-yautja-temple-dark-deco-square-vertical = dark temple floor, square deco
+tiles-cmu-yautja-temple-dark-deco-square-horizontal = dark temple floor, square deco
+tiles-cmu-yautja-temple-dark-deco-diamond = dark temple floor, diamond deco
+tiles-cmu-yautja-temple-dark-deco-pattern-vertical = dark temple floor, patterned deco
+tiles-cmu-yautja-temple-dark-deco-pattern-horizontal = dark temple floor, patterned deco
+tiles-cmu-yautja-temple-engraved = engraved floor
+
+# lodge
+cmu-yautja-temple-door-locked = The stone bolts hold it fast.
+cmu-yautja-temple-door-examine-locked = Heavy stone bolts hold it in place.
+cmu-yautja-temple-door-verb-lock = Lock door
+cmu-yautja-temple-door-verb-unlock = Unlock door
+cmu-yautja-temple-door-lock = You rotate your wristblades and heavy stone bolts grind into place.
+cmu-yautja-temple-door-unlock = You rotate your wristblades and the stone bolts slide free.
+cmu-yautja-wall-torch-placed = You place the torch on the wall.
+cmu-yautja-wall-torch-no-room = There's no room on that side of the wall.
