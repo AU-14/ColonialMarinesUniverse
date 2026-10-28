@@ -36,7 +36,6 @@ public sealed class YautjaClanHallEuiState : EuiStateBase
     public bool Navigate;
     public YautjaClanHallViewer Viewer = new();
     public List<YautjaClanHallClanRow> Clans = [];
-    public List<YautjaClanHallHunterRow> Hunters = [];
     public YautjaClanHallClanPage? Clan;
     public YautjaClanHallDossier? Hunter;
     public List<YautjaClanHallWhitelistRow>? Whitelist;
@@ -118,7 +117,6 @@ public sealed class YautjaClanHallDossier
     public int? ClanId;
     public int Honor;
     public bool Online;
-    public int Standing;
     public bool IsSelf;
     public YautjaWhitelistFlags? Whitelist;
     public List<YautjaRank> AssignableRanks = [];

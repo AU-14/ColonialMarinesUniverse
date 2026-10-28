@@ -71,7 +71,9 @@
     ears: AU14ColonyWeylandHeadset
     ears2: RMCM5CameraGear
     outerClothing: RMCLabcoatOpened
-    pocket1: AU14StampWYSci
+  storage:
+    back:
+    - AU14StampWYSci
 
 - type: entity
   parent: CMSpawnPointJobBase

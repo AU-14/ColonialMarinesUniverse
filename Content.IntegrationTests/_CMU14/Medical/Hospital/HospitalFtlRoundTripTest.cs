@@ -1,5 +1,6 @@
 #pragma warning disable RA0002 // The fixture controls phase durations and inspects committed transport state.
 using Content.Server.CMU14.Hospital;
+using Content.Server.CMU14.Dropship;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
@@ -7,6 +8,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Hospital;
+using Content.Shared.CMU14;
 using Content.Shared.CMU14.Round;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
@@ -52,6 +54,8 @@ public sealed class HospitalFtlRoundTripTest
                 server.CfgMan.SetCVar(CCVars.FTLArrivalTime, 0.1f);
                 if (differentDeck)
                 {
+                    // The Bush hospital pad is on another deck of a faction-owned carrier.
+                    entities.EnsureComponent<ShipFactionComponent>(computerDeck.Grid).Faction = "govfor";
                     var zLevels = server.System<CMUZLevelsSystem>();
                     var network = zLevels.CreateZNetwork();
                     deckNetwork = network.Owner;
@@ -81,6 +85,12 @@ public sealed class HospitalFtlRoundTripTest
                 Assert.That(hospital.Status, Is.EqualTo(HospitalEmergencyStatus.Arriving), hospital.TransportFailure);
                 delivery = CaptureTransport();
                 Assert.That(hospital.ExpectedDestination, Is.EqualTo(landing));
+                var otherPad = entities.SpawnEntity("AU14HospitalDropshipLandingZone",
+                    new EntityCoordinates(map.MapUid, new Vector2(60, 0)));
+                var permission = new CMUDropshipLandingPermissionEvent(otherPad);
+                entities.EventBus.RaiseLocalEvent(delivery, ref permission);
+                Assert.That(permission.Allowed, Is.False, "the hospital lease must not authorize another pad on the same carrier");
+                entities.DeleteEntity(otherPad);
                 patient = hospital.Patients.Single();
                 // Treatment is exercised by other tests. Preserve a healthy patient
                 // through the real transport clocks without adding ambient pathology.

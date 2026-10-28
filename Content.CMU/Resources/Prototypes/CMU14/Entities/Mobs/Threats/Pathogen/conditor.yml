@@ -5,6 +5,11 @@
   name: Conditor
   description: A masterful cultivator of mycelium and death.
   components:
+  - type: FiremanCarriable
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GhostRole
     name: cmu-job-name-pathogen-conditor
   - type: Sprite

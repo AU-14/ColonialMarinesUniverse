@@ -338,6 +338,10 @@ public sealed partial class CMUXenoFrozenProjectileComponent : Component
     [DataField, AutoNetworkedField]
     public bool AllowTriggerWhileFrozen;
 
+    // Making a thrown body static stops its throw and removes ThrownItemComponent.
+    [DataField, AutoNetworkedField]
+    public bool WasThrown;
+
     [DataField, AutoNetworkedField]
     public EntityUid? Shooter;
 
@@ -578,6 +582,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         SubscribeLocalEvent<CMUXenoWarlockComponent, MobStateChangedEvent>(OnWarlockMobStateChanged);
         SubscribeLocalEvent<CMUXenoWarlockComponent, RejuvenateEvent>(OnWarlockRejuvenate);
         SubscribeLocalEvent<CMUXenoWarlockComponent, ThrownEvent>(OnWarlockThrown);
+        SubscribeLocalEvent<CMUXenoWarlockComponent, ComponentShutdown>(OnWarlockShutdown);
 
         // Re-initialize the Event field of swapped shield action components. The Event field is
         // NonSerialized, so after a client receives a networked add of InstantAction (or
@@ -1824,6 +1829,11 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         warlock.Comp.PsychicShieldMoveCancelGraceUntil = TimeSpan.Zero;
         warlock.Comp.NextPsychicShieldAt = _timing.CurTime + warlock.Comp.PsychicShieldCooldown;
         StopWarlockChannelEffect(warlock, CMUXenoWarlockChannelKind.PsychicShield);
+        // Deletion still releases the shield's independent entities, but must not recreate
+        // action components or refresh movement on an owner that is being torn down.
+        if (TerminatingOrDeleted(warlock))
+            return;
+
         // Swap the shield action back to WorldTargetAction so the next press enters target mode.
         // The icon toggle back to the raise icon is handled inside SetPsychicShieldActionMode.
         SetPsychicShieldActionMode(warlock, shieldUp: false);
@@ -1839,13 +1849,18 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     {
         foreach (EntityUid projectile in warlock.Comp.FrozenProjectiles)
         {
-            if (!TryComp(projectile, out CMUXenoFrozenProjectileComponent? frozen))
+            if (TerminatingOrDeleted(projectile) || !TryComp(projectile, out CMUXenoFrozenProjectileComponent? frozen))
                 continue;
 
             RemComp<CMUXenoFrozenProjectileComponent>(projectile);
 
             if (TryComp(projectile, out PhysicsComponent? physics))
-                RestoreFrozenProjectilePhysics(projectile, frozen, frozen.Velocity, physics);
+            {
+                // Freezing stopped the throw. Disruption drops the item, so it has no flight
+                // timer left to bring an airborne body back down. Projectiles resume their flight.
+                var status = frozen.WasThrown ? BodyStatus.OnGround : frozen.BodyStatus;
+                RestoreFrozenProjectilePhysics(projectile, frozen, frozen.Velocity, physics, status);
+            }
 
             RestoreFrozenProjectile(projectile, frozen);
             ResetShieldProjectilePrediction(projectile);
@@ -1864,24 +1879,18 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             if (!TryComp(frozenEnt, out CMUXenoFrozenProjectileComponent? frozen))
                 continue;
 
-            // Thrown items (grenades, molotovs) are not projectiles - they do not carry a
-            // velocity that ThrowingSystem's flight loop reads. Reflecting them means feeding
-            // the reflected direction into TryThrow so ThrownItemComponent gets rebuilt with a
-            // proper LandTime, throw-fixture, and spin. The remove-frozen-component still runs
-            // for the outline shutdown; TryThrow handles the physics restore itself.
-            bool isThrownItem = !HasComp<ProjectileComponent>(frozenEnt)
-                && TryComp(frozenEnt, out ThrownItemComponent? _);
+            // Freezing stops the original throw. Remember how the item was caught so that
+            // reflection rebuilds its flight deadline and throwing fixture.
+            bool isThrownItem = frozen.WasThrown;
 
             // Everything reflects straight back along the shield face, projectiles and thrown
             // items alike.
             Vector2 reflected = CMUXenoWarlockSystem.ReflectProjectileVelocity(frozen.Velocity,
                 warlock.Comp.PsychicShieldDirection);
 
-            if (!isThrownItem)
-            {
-                if (TryComp(frozenEnt, out PhysicsComponent? physics))
-                    RestoreFrozenProjectilePhysics(frozenEnt, frozen, reflected, physics);
-            }
+            // TryThrow requires a movable body and applies its own impulse.
+            if (TryComp(frozenEnt, out PhysicsComponent? physics))
+                RestoreFrozenProjectilePhysics(frozenEnt, frozen, isThrownItem ? Vector2.Zero : reflected, physics, BodyStatus.InAir);
 
             RemComp<CMUXenoFrozenProjectileComponent>(frozenEnt);
 
@@ -2008,8 +2017,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     // Freeze a thrown item (grenade, molotov, etc.) at the shield face. Same pattern as
     // TryFreezeShieldProjectile but keys on ThrownItemComponent instead of ProjectileComponent.
     // The thrown item is added to the warlock's FrozenProjectiles list so it participates in
-    // reflect and release; ReflectShieldProjectiles reads HasComp<ProjectileComponent> to pick
-    // the projectile-reflect vs throw-back-via-ThrowingSystem branch.
+    // reflect and release; WasThrown preserves its flight kind after freezing stops the throw.
     private bool TryFreezeShieldThrownItem(Entity<CMUXenoPsychicShieldSegmentComponent> segment,
         EntityUid thrown,
         ThrownItemComponent thrownComp,
@@ -2053,6 +2061,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         frozen.BodyStatus = bodyStatus;
         frozen.CanCollide = canCollide;
         frozen.BodyType = bodyType;
+        frozen.WasThrown = true;
         // Keep the fuse alive. Rockets keep the default (false) so their trigger cannot fire
         // at the shield; grenades opt in here so their timer expires normally at the shield face.
         frozen.AllowTriggerWhileFrozen = true;
@@ -2151,10 +2160,11 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     private void RestoreFrozenProjectilePhysics(EntityUid projectile,
         CMUXenoFrozenProjectileComponent frozen,
         Vector2 velocity,
-        PhysicsComponent physics)
+        PhysicsComponent physics,
+        BodyStatus status)
     {
         _physics.SetBodyType(projectile, frozen.BodyType, body: physics);
-        _physics.SetBodyStatus(projectile, physics, BodyStatus.InAir);
+        _physics.SetBodyStatus(projectile, physics, status);
         _physics.SetLinearVelocity(projectile, velocity, body: physics);
         _physics.SetCanCollide(projectile, frozen.CanCollide, body: physics);
     }
@@ -2293,6 +2303,12 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     private void OnWarlockThrown(Entity<CMUXenoWarlockComponent> warlock, ref ThrownEvent args)
     {
         if (warlock.Comp.PsychicShieldSegments.Count > 0)
+            EndPsychicShield(warlock, false, false);
+    }
+
+    private void OnWarlockShutdown(Entity<CMUXenoWarlockComponent> warlock, ref ComponentShutdown args)
+    {
+        if (warlock.Comp.PsychicShieldSegments.Count > 0 || warlock.Comp.FrozenProjectiles.Count > 0)
             EndPsychicShield(warlock, false, false);
     }
 

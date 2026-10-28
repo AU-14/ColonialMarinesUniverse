@@ -1,5 +1,7 @@
 using Content.Server.Shuttles.Components;
 using Content.Shared.CCVar;
+using Content.Shared._RMC14.Construction;
+using Content.Shared._RMC14.Dropship;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
@@ -11,6 +13,36 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class DropshipBoardingMomentumTest
 {
+    [Test]
+    public async Task NavigationConsoleCannotTurnTerrainIntoADropship()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var em = pair.Server.EntMan;
+            var maps = em.System<SharedMapSystem>();
+            var ground = maps.CreateMap(out var mapId);
+            var groundGrid = em.EnsureComponent<MapGridComponent>(ground);
+            em.EnsureComponent<ShuttleComponent>(ground);
+            var floor = new Tile(pair.Server.ResolveDependency<ITileDefinitionManager>()["FloorSteel"].TileId);
+            maps.SetTile(ground, groundGrid, Vector2i.Zero, floor);
+            var coordinates = new EntityCoordinates(ground, 0.5f, 0.5f);
+            em.SpawnEntity("CMComputerDropshipNavigation", coordinates);
+            Assert.That(em.System<RMCConstructionSystem>().CanBuildAt(coordinates, (string) null, out _), Is.True,
+                "Placing a navigation console must not veto construction across the planet.");
+
+            var ship = maps.CreateGridEntity(mapId);
+            maps.SetTile(ship, Vector2i.Zero, floor);
+            var shipCoordinates = new EntityCoordinates(ship, 0.5f, 0.5f);
+            em.SpawnEntity("CMComputerDropshipNavigation", shipCoordinates);
+            Assert.That(em.HasComponent<DropshipComponent>(ship), Is.True);
+            Assert.That(em.System<RMCConstructionSystem>().CanBuildAt(shipCoordinates, (string) null, out _), Is.False,
+                "A real dropship must retain its construction restrictions.");
+            maps.DeleteMap(mapId);
+        });
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task MapShuttlePhysicsCannotLaunchPeopleOrItemsOntoUnderside()
     {

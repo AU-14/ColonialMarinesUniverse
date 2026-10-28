@@ -8,6 +8,8 @@ namespace Content.Shared.ParaDrop;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class SkyFallingComponent : Component
 {
+    public Vector2 OriginalOffset; // CMU14: restore the sprite's position after the departure animation.
+
     /// <summary>
     ///     The remaining duration of the animation.
     /// </summary>

@@ -27,14 +27,12 @@ public sealed partial class YautjaClanHallWindow
             return;
         }
 
-        var top = state.Hunters.Count == 0 ? 1 : Math.Max(1, state.Hunters.Max(h => h.Honor));
+        // no individual ranking, so the ring isn't measured against anyone else
         var header = HBox(18);
         var gauge = new HudGauge(170, _number, _small);
-        gauge.Set(hunter.Honor / (float) top, hunter.Honor.ToString(),
+        gauge.Set(hunter.Honor > 0 ? 1f : 0f, hunter.Honor.ToString(),
             Loc.GetString("cmu-yautja-hall-honor").ToUpperInvariant(),
-            hunter.Standing > 0
-                ? Loc.GetString("cmu-yautja-hall-rank-of", ("standing", hunter.Standing), ("clans", state.Hunters.Count)).ToUpperInvariant()
-                : string.Empty);
+            string.Empty);
         header.AddChild(gauge);
 
         var id = VBox(8);

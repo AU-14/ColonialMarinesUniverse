@@ -20,6 +20,12 @@ public sealed partial class YautjaCarryThrowSystem : EntitySystem
         if (args.Cancelled)
             return;
 
+        // CMU14: a Yautja throws harder. This is baseThrowSpeed, which ThrowingSystem feeds into its compensateFriction
+        // formula, so the object reaches the target sooner while still stopping on it (the formula solves for the
+        // distance). A human's throw is untouched - this handler only runs for a Yautja thrower.
+        if (ent.Comp.ThrowSpeedMultiplier > 1f)
+            args.ThrowSpeed *= ent.Comp.ThrowSpeedMultiplier;
+
         // the carried mob is held as a virtual item, same unwrap fireman carry does
         var carried = TryComp(args.ItemUid, out VirtualItemComponent? virtualItem)
             ? virtualItem.BlockingEntity

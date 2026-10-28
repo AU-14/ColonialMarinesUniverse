@@ -141,8 +141,26 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             return;
 
         args.Handled = true;
+
+        // CMU14: CM-SS13 has no species gate on the cloak itself - a non-tech wearer goes through the bracer's
+        // check_random_function roll and only then cloaks. The utility system owns that flow (it lives in the
+        // server assembly), so it hands us the misuse entry point. A non-tech activation never falls through to
+        // TryToggleCloak(requireTechUser: true) below any more, so it can no longer print the refusal message for
+        // an action that was not refused - that refusal showed up alongside the do-after that had just started.
+        if (!CanUseYautjaCloak(args.Performer))
+        {
+            TryToggleCloakMisuse?.Invoke(ent, args.Performer);
+            return;
+        }
+
         TryToggleCloak(args.Performer, ent);
     }
+
+    /// <summary>
+    /// CMU14: set by <c>YautjaBracerUtilitySystem</c> so a non-tech wearer's cloak button runs the bracer
+    /// misuse roll (CM-SS13 <c>check_random_function</c>) instead of being refused outright.
+    /// </summary>
+    public Func<Entity<YautjaBracerComponent>, EntityUid, bool>? TryToggleCloakMisuse;
 
     public bool TryToggleCloakForced(Entity<YautjaBracerComponent> bracer, EntityUid user, FixedPoint2 powerCost)
     {
@@ -263,6 +281,9 @@ public sealed partial class YautjaCloakSystem : EntitySystem
                 return false;
 
             var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
+            // CMU14: ThermalCloakSystem.OnAttemptShoot refuses any gun while RestrictWeapons is set, and the bracer
+            // used to set it for every wearer. Cloak no longer locks weapons at all - the bracer's
+            // CloakRestrictWeapons field defaults to false - so hunters and humans alike can fire while cloaked.
             turnInvisible.RestrictWeapons = bracer.Comp.CloakRestrictWeapons;
             turnInvisible.UncloakWeaponLock = bracer.Comp.CloakUncloakWeaponLock;
 
@@ -304,6 +325,9 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         if (!enabling && TryComp<EntityActiveInvisibleComponent>(user, out var invisible))
         {
             var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
+            // CMU14: ThermalCloakSystem.OnAttemptShoot refuses any gun while RestrictWeapons is set, and the bracer
+            // used to set it for every wearer. Cloak no longer locks weapons at all - the bracer's
+            // CloakRestrictWeapons field defaults to false - so hunters and humans alike can fire while cloaked.
             turnInvisible.RestrictWeapons = bracer.Comp.CloakRestrictWeapons;
             turnInvisible.UncloakWeaponLock = bracer.Comp.CloakUncloakWeaponLock;
 

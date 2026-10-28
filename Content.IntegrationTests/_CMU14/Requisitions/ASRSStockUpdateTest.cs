@@ -7,6 +7,8 @@ using Content.Server.CMU14.Round;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CMU14.util;
+using Content.Shared.Interaction.Components; // CMU14
+using Content.Shared.UserInterface; // CMU14
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -72,6 +74,10 @@ public sealed class ASRSStockUpdateTest : GameTest
           id: ASRSStockComputerBase
           abstract: true
           components:
+          # CMU14 Begin: exercise the real terminal opening lifecycle.
+          - type: ActivatableUI
+            key: enum.RequisitionsUIKey.Key
+          # CMU14 End
           - type: UserInterface
             interfaces:
               enum.RequisitionsUIKey.Key:
@@ -279,6 +285,12 @@ public sealed class ASRSStockUpdateTest : GameTest
             var other = SEntMan.GetComponent<RequisitionsComputerComponent>(otherUid);
             var system = Server.System<RequisitionsSystem>();
 
+            // CMU14 Begin: only a watched countdown needs periodic snapshots.
+            var actor = SEntMan.SpawnEntity(null, map.GridCoords);
+            SEntMan.AddComponent<ComplexInteractionComponent>(actor);
+            Assert.That(Server.System<ActivatableUISystem>().InteractUI(actor, dueUid), Is.True);
+            // CMU14 End
+
             // A reservation publishes both terminals through the existing global path.
             Assert.That(system.TryReserveStock((dueUid, due), 0, 0), Is.True);
             var dueBefore = GetState(dueUid);
@@ -300,6 +312,42 @@ public sealed class ASRSStockUpdateTest : GameTest
             Assert.That(GetState(dueUid), Is.SameAs(dueAfter),
                 "the next update before the countdown interval must not publish again");
             Assert.That(GetState(otherUid), Is.SameAs(otherBefore));
+        });
+    }
+
+    // CMU14 method
+    [TestCase("ASRSStockLegacyComputer")]
+    [TestCase("ASRSStockItemizedComputer")]
+    public async Task ClosedCountdownSkipsSnapshotsAndReopeningShowsCurrentStock(string prototype)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var uid = SEntMan.SpawnEntity(prototype, map.GridCoords);
+            var computer = SEntMan.GetComponent<RequisitionsComputerComponent>(uid);
+            var system = Server.System<RequisitionsSystem>();
+            var actor = SEntMan.SpawnEntity(null, map.GridCoords);
+            SEntMan.AddComponent<ComplexInteractionComponent>(actor);
+            var activatable = Server.System<ActivatableUISystem>();
+            var ui = Server.System<UserInterfaceSystem>();
+            Assert.That(activatable.InteractUI(actor, uid), Is.True);
+            Assert.That(system.TryReserveStock((uid, computer), 0, 0), Is.True);
+            ui.CloseUi(uid, RequisitionsUIKey.Key, actor);
+            var before = GetState(uid);
+            computer.NextStockUiUpdate = TimeSpan.Zero;
+            system.Update(0);
+            Assert.That(GetState(uid), Is.SameAs(before), "closed countdowns must not rebuild stock projections");
+
+            Assert.That(activatable.InteractUI(actor, uid), Is.True);
+            var reopened = GetState(uid);
+            Assert.That(reopened, Is.Not.SameAs(before), "opening must publish an up-to-date snapshot");
+            if (computer.ItemCatalog.Count == 0)
+                Assert.That(reopened.Stock.Single().Current, Is.EqualTo(1));
+            else
+                Assert.That(reopened.ItemStock.Single().Current, Is.EqualTo(11));
+
+            system.Update(0);
+            Assert.That(GetState(uid), Is.Not.SameAs(reopened), "watched countdowns still refresh");
         });
     }
 

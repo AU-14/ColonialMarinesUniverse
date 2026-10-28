@@ -394,10 +394,20 @@ WHERE to_tsvector('english'::regconfig, a.message) @@ websearch_to_tsquery('engl
             await _dbReadyTask;
             await _prefsSemaphore.WaitAsync(cancel);
 
-            if (_msLag > 0)
-                await Task.Delay(_msLag, cancel);
+            // CMU14 Begin: the guard owns the slot only after context creation succeeds.
+            try
+            {
+                if (_msLag > 0)
+                    await Task.Delay(_msLag, cancel);
 
-            return new DbGuardImpl(this, new PostgresServerDbContext(_options));
+                return new DbGuardImpl(this, new PostgresServerDbContext(_options));
+            }
+            catch
+            {
+                _prefsSemaphore.Release();
+                throw;
+            }
+            // CMU14 End
         }
 
         protected override async Task<DbGuard> GetDb(
@@ -422,8 +432,16 @@ WHERE to_tsvector('english'::regconfig, a.message) @@ websearch_to_tsquery('engl
 
             public override async ValueTask DisposeAsync()
             {
-                await DbContext.DisposeAsync();
-                _db._prefsSemaphore.Release();
+                // CMU14 Begin: a connection disposal failure must not consume a database slot forever.
+                try
+                {
+                    await DbContext.DisposeAsync();
+                }
+                finally
+                {
+                    _db._prefsSemaphore.Release();
+                }
+                // CMU14 End
             }
         }
     }

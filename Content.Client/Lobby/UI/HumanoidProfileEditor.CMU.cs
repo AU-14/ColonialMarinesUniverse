@@ -402,7 +402,6 @@ public sealed partial class HumanoidProfileEditor
     {
         base.FrameUpdate(args);
         UpdatePreviewJobRotation(args.DeltaSeconds);
-        UpdateWorkspaceStatus(); // CMU14: profile name and unsaved state beside the editing stage.
     }
 
     private HumanoidCharacterProfile GetPreviewProfile(HumanoidCharacterProfile profile)
@@ -563,12 +562,22 @@ public sealed partial class HumanoidProfileEditor
 
     private void UpdatePreviewJobLabel(LobbyHighJobPreviewEntry? entry)
     {
-        // CMU14: the workspace uses wrapped role text instead of a fixed-width clipped label.
-        var text = ShowClothes.Pressed ? JobOverride?.LocalizedName ?? entry?.DisplayName ?? string.Empty : string.Empty;
-        PreviewJobLabel.Text = text;
-        PreviewJobLabel.Visible = false;
-        _workspacePreviewRole.Visible = text.Length > 0;
-        _workspacePreviewRole.SetMessage(text, Content.Client.CMU14.Lobby.CmuLobbyPresentation.Text);
+        if (!ShowClothes.Pressed)
+        {
+            PreviewJobLabel.Visible = false;
+            PreviewJobLabel.Text = string.Empty;
+            return;
+        }
+
+        if (JobOverride != null)
+        {
+            PreviewJobLabel.Text = JobOverride.LocalizedName;
+            PreviewJobLabel.Visible = true;
+            return;
+        }
+
+        PreviewJobLabel.Text = entry?.DisplayName ?? string.Empty;
+        PreviewJobLabel.Visible = entry != null;
     }
 
     private void SetArmorPreference(ArmorPreference value)
@@ -842,9 +851,7 @@ public sealed partial class HumanoidProfileEditor
 
     private void RefreshCharacterHairPickers()
     {
-        // CMU14: independent galleries use the full appearance workspace.
-        _workspaceHair.RemoveAllChildren();
-        _workspaceFace.RemoveAllChildren();
+        CharacterHairPickers.RemoveAllChildren();
 
         foreach (var layer in new[] { HumanoidVisualLayers.Hair, HumanoidVisualLayers.FacialHair })
         {
@@ -863,16 +870,13 @@ public sealed partial class HumanoidProfileEditor
                 if (markings.Count == 0)
                     break;
 
-                // CMU14: retain marking restrictions and callbacks in the focused gallery.
-                var target = layer == HumanoidVisualLayers.Hair ? _workspaceHair : _workspaceFace;
-                target.AddChild(new Label { Text = Loc.GetString($"markings-layer-{layer}") });
-                target.AddChild(new LayerMarkingPicker(_markingsModel, organ, layer, markings)
+                CharacterHairPickers.AddChild(new HSeparator { Color = StyleNano.CrtGreenDim, Margin = new Thickness(0, 5) });
+                CharacterHairPickers.AddChild(new Label { Text = Loc.GetString($"markings-layer-{layer}") });
+                CharacterHairPickers.AddChild(new LayerMarkingPicker(_markingsModel, organ, layer, markings)
                 {
                     HorizontalExpand = true,
-                    VerticalExpand = true,
-                    MinHeight = 400,
+                    MinHeight = 350,
                     ShowFooter = false,
-                    CmuGallery = true, // CMU14: use the workspace's visual hair cards.
                 });
                 break;
             }
@@ -1016,29 +1020,26 @@ public sealed partial class HumanoidProfileEditor
             StyleClasses = { StyleNano.StyleClassCrtHeading },
         });
 
-        // CMU14: responsive preference cards use the same presentation in both threat modes.
-        var grid = new Content.Client.CMU14.Lobby.CmuAdaptiveGrid(230) { HorizontalExpand = true, HSeparationOverride = 8, VSeparationOverride = 8 };
-        target.AddChild(grid);
         foreach (var threat in _prototypeManager.EnumeratePrototypes<ThreatPrototype>()
                      .Where(threat => IsThreatVisibleForGamemode(threat, gamemode))
                      .OrderBy(GetThreatDisplayName))
         {
             var row = new BoxContainer
             {
-                Orientation = LayoutOrientation.Vertical,
+                Orientation = LayoutOrientation.Horizontal,
                 HorizontalExpand = true,
                 Margin = new Thickness(6f, 0f, 6f, 4f),
                 SeparationOverride = 4,
             };
-            var title = new RichTextLabel
+            row.AddChild(new Label
             {
+                Text = GetThreatDisplayName(threat),
                 HorizontalExpand = true,
+                ClipText = true,
                 VerticalAlignment = VAlignment.Center,
                 ToolTip = threat.ID,
                 StyleClasses = { StyleNano.StyleClassCrtText },
-            };
-            title.SetMessage(GetThreatDisplayName(threat), Content.Client.CMU14.Lobby.CmuLobbyPresentation.Text);
-            row.AddChild(title);
+            });
 
             var yes = MakeThreatPreferenceButton(Loc.GetString("humanoid-profile-editor-antag-preference-yes-button"));
             var no = MakeThreatPreferenceButton(Loc.GetString("humanoid-profile-editor-antag-preference-no-button"));
@@ -1053,18 +1054,9 @@ public sealed partial class HumanoidProfileEditor
                 SyncThreatPreferenceButtons();
             };
             _threatPreferenceButtons.Add((gamemode, threat.ID, yes, no));
-            // CMU14: retain the threat heading above its paired choices at narrow widths.
-            var choices = new BoxContainer { SeparationOverride = 6 };
-            yes.HorizontalExpand = no.HorizontalExpand = true;
-            yes.MinHeight = no.MinHeight = 36;
-            choices.AddChild(yes);
-            choices.AddChild(no);
-            row.AddChild(choices);
-            grid.AddChild(new PanelContainer
-            {
-                PanelOverride = Content.Client.CMU14.Lobby.CmuLobbyPresentation.Box(Content.Client.CMU14.Lobby.CmuLobbyPresentation.FactionColor("other"), padding: 10),
-                Children = { row },
-            });
+            row.AddChild(yes);
+            row.AddChild(no);
+            target.AddChild(row);
         }
     }
 
@@ -1081,8 +1073,9 @@ public sealed partial class HumanoidProfileEditor
 
     private void SetThreatPreference(string gamemode, string threat, bool value)
     {
-        // CMU14: seed only an unset selection. An explicitly empty selection means No to all.
-        if (Profile != null && !Profile.HasExplicitThreatPreferences(gamemode))
+        // An empty preference set means "open to all" server-side, so a first No press would be a
+        // no-op. Seed every visible threat so the press does what the buttons show.
+        if (Profile != null && Profile.GetThreatPreferencesForGamemode(gamemode).Count == 0)
         {
             foreach (var visible in _prototypeManager.EnumeratePrototypes<ThreatPrototype>()
                          .Where(visible => IsThreatVisibleForGamemode(visible, gamemode)))
@@ -1099,13 +1092,12 @@ public sealed partial class HumanoidProfileEditor
     {
         foreach (var (gamemode, threat, yes, no) in _threatPreferenceButtons)
         {
-            // CMU14: use the same consent interpretation as assignment and the post-vote check.
-            var selected = Profile?.AllowsThreatForGamemode(gamemode, threat) == true;
+            // An empty preference set behaves as "open to all"; show that instead of a false No.
+            var preferences = Profile?.GetThreatPreferencesForGamemode(gamemode);
+            var selected = preferences is not { Count: > 0 }
+                || preferences.Any(id => id.Id == threat);
             yes.Pressed = selected;
             no.Pressed = !selected;
-            // CMU14: both resting and selected threat choices remain identifiable.
-            Content.Client.CMU14.Lobby.CmuLobbyPresentation.Style(yes, Color.FromHex("#5CE09D"), selected);
-            Content.Client.CMU14.Lobby.CmuLobbyPresentation.Style(no, Color.FromHex("#FF7F8C"), !selected);
         }
     }
 

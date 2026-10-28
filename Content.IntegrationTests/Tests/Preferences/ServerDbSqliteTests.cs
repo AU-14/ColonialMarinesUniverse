@@ -172,7 +172,7 @@ namespace Content.IntegrationTests.Tests.Preferences
             var user = NewUserId();
             var yautja = YautjaCharacterProfile.Default
                 .WithName("Database Hunter")
-                .WithSkinColor(YautjaSkinColor.Gray)
+                .WithSkinColor(YautjaSkinColor.Black)
                 .WithDreadColor(YautjaDreadColor.Brown)
                 .WithQuillStyle(YautjaQuillStyle.LongCurved)
                 .WithEyeColor(YautjaEyeColor.Jade);
@@ -185,7 +185,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 Assert.Multiple(() =>
                 {
                     Assert.That(restored.Name, Is.EqualTo(yautja.Name));
-                    Assert.That(restored.SkinColor, Is.EqualTo(YautjaSkinColor.Gray));
+                    Assert.That(restored.SkinColor, Is.EqualTo(YautjaSkinColor.Black));
                     Assert.That(restored.DreadColor, Is.EqualTo(YautjaDreadColor.Brown));
                     Assert.That(restored.QuillStyle, Is.EqualTo(YautjaQuillStyle.LongCurved));
                     Assert.That(restored.Appearance.EyeColor, Is.EqualTo(yautja.Appearance.EyeColor));

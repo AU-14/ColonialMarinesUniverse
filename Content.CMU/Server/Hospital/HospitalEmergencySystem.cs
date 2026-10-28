@@ -1,4 +1,5 @@
 using Content.Server.Chat.Systems;
+using Content.Server.CMU14.Dropship;
 using Content.Server.Stack;
 using Content.Server.Shuttles.Events;
 using Content.Server.CMU14.Ops.ThirdParty;
@@ -288,6 +289,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<HospitalTransportShuttleComponent, CMUDropshipLandingPermissionEvent>(OnHospitalLandingPermission);
         SubscribeLocalEvent<HospitalEmergencyComputerComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<HospitalEmergencyComputerComponent, ComponentShutdown>(OnComputerShutdown);
         SubscribeLocalEvent<HospitalEmergencyComputerComponent, BoundUIOpenedEvent>(OnUiOpened);

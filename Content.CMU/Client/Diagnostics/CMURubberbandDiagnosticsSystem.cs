@@ -34,7 +34,6 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
     private float _logCooldown = 1f;
 
     private LocalPlayerSnapshot? _lastFrameSnapshot;
-    private LocalPlayerSnapshot? _lastStateSnapshot;
     private TimeSpan _nextCatchupLog;
     private TimeSpan _nextSnapLog;
     private uint _stateApplyFrame;
@@ -80,7 +79,6 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         if (!TryGetSnapshot(out var current))
         {
             _lastFrameSnapshot = null;
-            _lastStateSnapshot = null;
             return;
         }
 
@@ -90,7 +88,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
             distance >= GetFrameSnapThreshold(previous, current, frameTime) &&
             CanLog(ref _nextSnapLog))
         {
-            LogSnap("frame", previous, current, distance, null, 0);
+            LogSnap(previous, current, distance);
         }
 
         _lastFrameSnapshot = current;
@@ -105,30 +103,16 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         {
             _stateApplyFrame = _timing.CurFrame;
             _stateApplicationsThisFrame = 0;
-            _lastStateSnapshot = _lastFrameSnapshot;
         }
 
         _stateApplicationsThisFrame++;
 
         var stateTickGap = GetStateTickGap(args.AppliedState.ToSequence);
 
-        LocalPlayerSnapshot? current = null;
-        if (TryGetSnapshot(out var snapshot))
-        {
-            current = snapshot;
-            if (_lastStateSnapshot is { } previous &&
-                IsComparable(previous, snapshot) &&
-                TryGetDistance(previous, snapshot, out var distance) &&
-                distance >= _snapThreshold &&
-                CanLog(ref _nextSnapLog))
-            {
-                LogSnap("state-applied", previous, snapshot, distance, args, stateTickGap);
-            }
-
-            _lastStateSnapshot = snapshot;
-        }
-
-        MaybeLogCatchup(args, current, stateTickGap);
+        // This callback runs before prediction replay. Comparing its older authoritative position
+        // with the last rendered frame mistakes normal prediction rewind for visible rubberbanding.
+        // FrameUpdate compares positions after replay; state callbacks only describe buffer health.
+        MaybeLogCatchup(args, stateTickGap);
         _lastAppliedStateTick = args.AppliedState.ToSequence;
     }
 
@@ -163,7 +147,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         _sawmill.Info($"diagnostics-enabled snapThreshold={F(_snapThreshold)} catchupApplyThreshold={_catchupApplyThreshold} cooldown={F(_logCooldown)}");
     }
 
-    private void MaybeLogCatchup(GameStateAppliedArgs args, LocalPlayerSnapshot? snapshot, uint stateTickGap)
+    private void MaybeLogCatchup(GameStateAppliedArgs args, uint stateTickGap)
     {
         var applicable = _gameStates.GetApplicableStateCount();
         var catchup = _stateApplicationsThisFrame >= _catchupApplyThreshold;
@@ -176,6 +160,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         if (!CanLog(ref _nextCatchupLog))
             return;
 
+        LocalPlayerSnapshot? snapshot = TryGetSnapshot(out var current) ? current : null;
         _sawmill.Warning($"state-catchup appliesThisFrame={_stateApplicationsThisFrame} lowBuffer={lowBuffer} skippedStateTick={skippedStateTick} {FormatState(args, stateTickGap)} {(snapshot is { } value ? FormatSnapshot(value) : $"player={FormatPlayer()} ent=none")} {FormatTiming()}");
     }
 
@@ -224,18 +209,11 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
     }
 
     private void LogSnap(
-        string reason,
         LocalPlayerSnapshot previous,
         LocalPlayerSnapshot current,
-        float distance,
-        GameStateAppliedArgs? args,
-        uint stateTickGap)
+        float distance)
     {
-        var state = args != null
-            ? FormatState(args, stateTickGap)
-            : "state=none";
-
-        _sawmill.Warning($"snap reason={reason} dist={F(distance)} {state} previous={FormatPrevious(previous)} current={FormatSnapshot(current)} {FormatTiming()}");
+        _sawmill.Warning($"snap reason=frame dist={F(distance)} state=none previous={FormatPrevious(previous)} current={FormatSnapshot(current)} {FormatTiming()}");
     }
 
     private string FormatState(GameStateAppliedArgs args, uint stateTickGap)
@@ -339,7 +317,9 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
 
     private static bool IsComparable(LocalPlayerSnapshot previous, LocalPlayerSnapshot current)
     {
-        return previous.Entity == current.Entity && previous.MapId == current.MapId;
+        // Following a different entity or moving between coordinate spaces starts a new baseline.
+        return previous.Entity == current.Entity && previous.MapId == current.MapId &&
+            previous.GridUid == current.GridUid && previous.ParentUid == current.ParentUid;
     }
 
     private static bool TryGetDistance(LocalPlayerSnapshot previous, LocalPlayerSnapshot current, out float distance)
@@ -351,9 +331,9 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
     private void ResetSnapshots()
     {
         _lastFrameSnapshot = null;
-        _lastStateSnapshot = null;
         _stateApplicationsThisFrame = 0;
         _lastAppliedStateTick = GameTick.Zero;
+        _nextCatchupLog = _nextSnapLog = TimeSpan.Zero;
     }
 
     private readonly record struct LocalPlayerSnapshot(

@@ -549,7 +549,6 @@ public sealed partial class YautjaClanHallEui : BaseEui
                 PetitionClanId = petitions.FirstOrDefault(entry => entry.PlayerUserId == Player.UserId.UserId)?.ClanId,
             },
             Clans = clanRows,
-            Hunters = hunters,
             Status = _status,
             StatusIsError = _statusIsError,
             Revision = ++_revision,
@@ -570,7 +569,7 @@ public sealed partial class YautjaClanHallEui : BaseEui
             _clanId = null;
         }
 
-        state.Hunter = await Dossier(actor, _hunterId ?? Player.UserId, hunters, snapshots);
+        state.Hunter = await Dossier(actor, _hunterId ?? Player.UserId, snapshots);
 
         if (actor.Staff)
         {
@@ -664,7 +663,6 @@ public sealed partial class YautjaClanHallEui : BaseEui
     private async Task<YautjaClanHallDossier?> Dossier(
         YautjaClanHallActor actor,
         NetUserId id,
-        List<YautjaClanHallHunterRow> hunters,
         Dictionary<NetUserId, (YautjaClanMemberSnapshot Snapshot, YautjaHunterBoardRecord Row)> snapshots)
     {
         YautjaClanMemberSnapshot target;
@@ -691,7 +689,6 @@ public sealed partial class YautjaClanHallEui : BaseEui
         if (id == Player.UserId)
             target = actor.Member;
 
-        var standing = hunters.FindIndex(hunter => hunter.PlayerId == id);
         return new YautjaClanHallDossier
         {
             PlayerId = id,
@@ -700,7 +697,6 @@ public sealed partial class YautjaClanHallEui : BaseEui
             ClanId = target.ClanId,
             Honor = target.Honor,
             Online = _players.TryGetSessionById(id, out _),
-            Standing = standing < 0 ? 0 : standing + 1,
             IsSelf = id == Player.UserId,
             Whitelist = actor.Staff ? flags : null,
             AssignableRanks = YautjaClanHallPolicy.AssignableRanks(actor, target).ToList(),

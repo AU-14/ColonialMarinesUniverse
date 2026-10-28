@@ -12,6 +12,7 @@ using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Vehicle.Supply;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Projectiles;
@@ -200,6 +201,34 @@ public sealed class CMUTankExplosiveDamageTest : GameTest
                 CreateTankLoadoutCategory("support", "support"),
             },
         };
+    }
+
+    [Test]
+    public async Task ProtectedLauncherCannotPreventNaturalCookOff()
+    {
+        var (_, vehicle) = await SpawnTank(true, 0f, 1f);
+        await Server.WaitAssertion(() =>
+        {
+            var parts = Server.System<VehicleTopologySystem>().GetMountedSlots(vehicle)
+                .Where(slot => slot.Item != null).Select(slot => slot.Item!.Value).Distinct().ToArray();
+            var protectedPart = parts.First(part => SEntMan.TryGetComponent<HardpointItemComponent>(part, out var item)
+                && item.DamageMultiplier == 0);
+            foreach (var part in parts.Where(part => part != protectedPart))
+                Server.System<HardpointSystem>().DamageHardpoint(vehicle, part,
+                    SEntMan.GetComponent<HardpointIntegrityComponent>(part).Integrity);
+
+            var hull = SEntMan.GetComponent<HardpointIntegrityComponent>(vehicle);
+            Assert.That(hull.Integrity, Is.GreaterThan(0));
+            Assert.That(SEntMan.HasComponent<ActiveTankCookOffComponent>(vehicle), Is.False);
+            var hit = new DamageSpecifier();
+            hit.DamageDict["Blunt"] = 20;
+            for (var i = 0; i < 1000 && hull.Integrity > 0; i++)
+                Server.System<DamageableSystem>().TryChangeDamage(vehicle, hit);
+            Assert.That(hull.Integrity, Is.Zero, "Ordinary damage must consume the last protected module.");
+        });
+        await RunTicksSync(2);
+        await Server.WaitAssertion(() => Assert.That(SEntMan.HasComponent<ActiveTankCookOffComponent>(vehicle), Is.True,
+            "Zero hull integrity must start cook-off without a critical projectile or orbital strike."));
     }
 
     private static VehicleSupplyLoadoutCategory CreateTankLoadoutCategory(string categoryId, string slot)

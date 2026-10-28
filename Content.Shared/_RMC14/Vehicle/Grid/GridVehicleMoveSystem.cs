@@ -472,12 +472,11 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 if (currentXform.GridUid is not { } currentGrid || !gridQ.TryComp(currentGrid, out var currentGridComp))
                     break;
 
-                // Z movement only applies to entities parented directly to a map.
-                // A replicated marker can briefly outlive reparenting onto a
-                // shuttle grid and must not suppress driver input there.
+                // CMU14: unsupported vehicles drift even where zero-g suppresses Z falling.
+                // A falling marker can briefly outlive reparenting onto a shuttle grid.
                 if (TryComp(uid, out CMUVehicleZTraversalComponent? zTraversal) &&
-                    HasComp<CMUZFallingComponent>(uid) &&
-                    currentXform.MapUid == currentXform.ParentUid)
+                    ((HasComp<CMUZFallingComponent>(uid) && currentXform.MapUid == currentXform.ParentUid) ||
+                     !HasCMUSpaceTraction((uid, zTraversal))))
                 {
                     UpdateFallingMovement(uid, mover, currentGrid, currentGridComp, zTraversal, MovementFixedStep);
                 }

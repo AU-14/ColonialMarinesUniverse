@@ -34,6 +34,18 @@ public sealed partial class CMUVehicleDropFlareComponent : Component
     [DataField]
     public LocId CalledMessage = "cmu-vehicle-drop-flare-called";
 
+    /// <summary>
+    /// Optional intel option whose round limit and cooldown also govern this delivery.
+    /// The flare is paid for separately; calling it does not charge intel points.
+    /// </summary>
+    [DataField]
+    public string? SupplyOption;
+
+    [DataField]
+    public string SupplyTeam = string.Empty;
+
+    public LocId? SupplyWarning;
+
     public bool Called;
 
     public bool Warned;

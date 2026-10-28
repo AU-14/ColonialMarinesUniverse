@@ -295,7 +295,7 @@ public abstract partial class InventorySystem
             return false;
 
         DebugTools.Assert(slotDefinition.Name == slot);
-        if (slotDefinition.DependsOn != null)
+        if (slotDefinition.DependsOn != null && !CMUHasIndependentSuitStorage(itemUid, slot)) // CMU14: an attached sling supports the weapon without armor.
         {
             if (!TryGetSlotEntity(target, slotDefinition.DependsOn, out EntityUid? slotEntity, inventory))
                 return false;

@@ -4,6 +4,7 @@
   id: AU14JobSquadRiflemanBaseAbstract # Rifleman Abstraction
   name: au14-job-name-govforsquadrifleman
   description: au14-job-description-govforsquadrifleman
+  supervisors: cmu-job-supervisors-rifleman
   icon: "AU14JobIconGovRifleman"
   spawnMenuRoleName: cmu-spawn-role-rifleman-govfor
   startingGear: AU14GearGOVFORSquadRifleman
@@ -175,7 +176,7 @@
   roundForce: OPFOR
   icon: "AU14JobIconOPFORRifleman"
   spawnMenuRoleName: Rifleman (OPFOR)
-  supervisors: au14-job-supervisors-opfor
+  supervisors: cmu-job-supervisors-rifleman
   startingGear: AU14GearopforSquadRifleman
   dummyStartingGear: AU14GearopforRiflemanDummy
   accessGroups:

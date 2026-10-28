@@ -343,7 +343,7 @@
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
-      - id: CMUFieldOxygenTankHAZOPS
+      - id: CMUFieldOxygenTankHAZOPSFilled
         amount: 40
     - name: Hearing Protection
       entries:
@@ -981,7 +981,7 @@
         amount: 2
     - name: Oxygen and Gas Mask Filters
       entries:
-      - id: CMUFieldOxygenTankHAZOPS
+      - id: CMUFieldOxygenTankHAZOPSFilled
         amount: 15
       - id: CMUGasMaskFilterHAZOPS
         amount: 30

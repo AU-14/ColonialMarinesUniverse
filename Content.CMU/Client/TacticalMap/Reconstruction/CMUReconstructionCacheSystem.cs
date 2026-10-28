@@ -27,7 +27,10 @@ public sealed partial class CMUReconstructionCacheSystem : EntitySystem
 
     public int NextRequestId() => ++_requestId;
 
-    private sealed record Entry(EntityUid Console, EntityUid Actor, string? Faction, EntityUid? Map,
+    // Null PersonalLayers distinguishes a console from a personal map with no faction layers.
+    private readonly record struct FactionIdentity(string? ComputerFaction, CMUReconLayer? PersonalLayers);
+
+    private sealed record Entry(EntityUid Console, EntityUid Actor, FactionIdentity Faction, EntityUid? Map,
         EntityUid? Location, EntityUid? ActorLocation, CMUReconSnapshotMessage Scene, CMUReconCamera Camera,
         CMUReconRenderData Render);
 
@@ -100,21 +103,30 @@ public sealed partial class CMUReconstructionCacheSystem : EntitySystem
         return true;
     }
 
-    private bool Identity(EntityUid source, out string? faction, out EntityUid? map)
+    private bool Identity(EntityUid source, out FactionIdentity faction, out EntityUid? map)
     {
         if (TryComp<TacticalMapUserComponent>(source, out var user))
         {
-            faction = $"{user.Marines}:{user.Xenos}:{user.Govfor}:{user.Opfor}:{user.Clf}:{user.WeYu}:{user.Abomination}";
+            CMUReconLayer layers = 0;
+            if (user.Marines) layers |= CMUReconLayer.Marines;
+            if (user.Xenos) layers |= CMUReconLayer.Xenos;
+            if (user.Govfor) layers |= CMUReconLayer.Govfor;
+            if (user.Opfor) layers |= CMUReconLayer.Opfor;
+            if (user.Clf) layers |= CMUReconLayer.Clf;
+            if (user.WeYu) layers |= CMUReconLayer.WeYu;
+            if (user.Abomination) layers |= CMUReconLayer.Abomination;
+            if (user.Yautja) layers |= CMUReconLayer.Yautja;
+            faction = new FactionIdentity(null, layers);
             map = user.Map;
             return true;
         }
         if (TryComp<TacticalMapComputerComponent>(source, out var computer))
         {
-            faction = computer.Faction;
+            faction = new FactionIdentity(computer.Faction, null);
             map = computer.Map;
             return true;
         }
-        faction = null;
+        faction = default;
         map = null;
         return false;
     }

@@ -237,8 +237,8 @@
   - type: YautjaTechItem
     blockPickup: false
     blockUse: true
-    blockMelee: true
-    blockThrow: true
+    blockMelee: false # CMU14: CM-SS13 only gates the yautja comms channel (yaut_items.dm headset), not melee
+    blockThrow: false # CMU14: ITEM_PREDATOR never restricted throwing (items.dm)
     blockShoot: true
   - type: Corrodible
     isCorrodible: false

@@ -11,6 +11,11 @@
   description: A huge, nasty red alien with enormous scythed claws.
   abstract: true
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GuideHelp
     guides:
     - RMCGuideRoleRavager

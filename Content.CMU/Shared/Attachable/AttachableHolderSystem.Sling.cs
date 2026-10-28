@@ -10,6 +10,21 @@ public sealed partial class AttachableHolderSystem
     private const string CMUSlingUnderbarrelSlot = "rmc-aslot-underbarrel";
     public const string CMUSlingSlot = "cmu-aslot-sling";
 
+    public bool HasCMUSling(EntityUid item)
+    {
+        if (!TryComp<AttachableHolderComponent>(item, out var holder))
+            return false;
+
+        foreach (var slot in holder.Slots.Keys)
+        {
+            if (TryGetAttachable((item, holder), slot, out var attachment) &&
+                HasComp<CMUSlingComponent>(attachment))
+                return true;
+        }
+
+        return false;
+    }
+
     private void EnsureCMUSlingSlot(Entity<AttachableHolderComponent> holder)
     {
         if (!holder.Comp.Slots.TryGetValue(CMUSlingRailSlot, out var rail) ||
