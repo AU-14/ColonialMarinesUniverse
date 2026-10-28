@@ -2712,6 +2712,9 @@ public sealed class YautjaSmokeTest
 
                 entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 5;
 
+                // Seed the shared RNG directly: the roll must not depend on which tests ran before on this server.
+                server.ResolveDependency<IRobustRandom>().SetSeed(5);
+
                 Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
                 Assert.That(entMan.HasComponent<EntityActiveInvisibleComponent>(user), Is.False,
