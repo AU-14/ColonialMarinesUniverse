@@ -1,35 +1,35 @@
 # K9 entities
 ent-AU14MobK9 = Synthetic K9
-  .desc = An Interdyne-produced synthetic dog. Standard model without special harness gear.
+  .desc = A Hyperdyne-produced synthetic dog. Standard model without special harness gear.
 
 ent-AU14MobK9GhostRole = Synthetic K9
-  .desc = An Interdyne-produced synthetic dog. Standard model without special harness gear.
+  .desc = A Hyperdyne-produced synthetic dog. Standard model without special harness gear.
   .suffix = Ghost Role
 
 ent-AU14MobK9GhostRoleGOVFOR = Synthetic K9
-  .desc = An Interdyne-produced synthetic dog. Standard model without special harness gear.
+  .desc = A Hyperdyne-produced synthetic dog. Standard model without special harness gear.
   .suffix = GOVFOR, Ghost Role
 
 ent-AU14MobK9MP = Military Police K9
-  .desc = An Interdyne-produced synthetic dog in a military police harness.
+  .desc = A Hyperdyne-produced synthetic dog in a military police harness.
 
 ent-AU14MobK9MPGhostRole = Military Police K9
-  .desc = An Interdyne-produced synthetic dog in a military police harness.
+  .desc = A Hyperdyne-produced synthetic dog in a military police harness.
   .suffix = MP, Ghost Role
 
 ent-AU14MobK9MPGhostRoleGOVFOR = Military Police K9
-  .desc = An Interdyne-produced synthetic dog in a military police harness.
+  .desc = A Hyperdyne-produced synthetic dog in a military police harness.
   .suffix = MP, GOVFOR
 
 ent-AU14MobK9BagMedic = Search and Rescue K9
-  .desc = An Interdyne-produced synthetic dog in a harness for carrying medical supplies.
+  .desc = A Hyperdyne-produced synthetic dog in a harness for carrying medical supplies.
 
 ent-AU14MobK9BagMedicGhostRole = Search and Rescue K9
-  .desc = An Interdyne-produced synthetic dog in a harness for carrying medical supplies.
+  .desc = A Hyperdyne-produced synthetic dog in a harness for carrying medical supplies.
   .suffix = S&R, Ghost Role
 
 ent-AU14MobK9BagMedicGhostRoleGOVFOR = Search and Rescue K9
-  .desc = An Interdyne-produced synthetic dog in a harness for carrying medical supplies.
+  .desc = A Hyperdyne-produced synthetic dog in a harness for carrying medical supplies.
   .suffix = S&R, GOVFOR
 
 # K9 Dog Actions
