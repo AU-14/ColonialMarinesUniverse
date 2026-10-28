@@ -47,6 +47,7 @@ namespace Content.Server.CMU14.Round
         {
             "ForceOnForce",
             "Insurgency",
+            "ColonyShift",
         };
 
         private static readonly HashSet<string> PostRoundstartThreatVotePresets = new(StringComparer.OrdinalIgnoreCase)

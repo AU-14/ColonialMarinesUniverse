@@ -146,6 +146,15 @@
   - type: ColonyAntagsRule
 
 - type: entity
+  id: ColonyRotation
+  parent: BaseGameRule
+  name: Colony Rotation
+  description: Sends the crew rotation transport at the end of the shift and ends the round when it leaves.
+  components:
+  - type: GameRule
+  - type: ColonyRotationRule
+
+- type: entity
   id: AuVoteRule
   parent: BaseGameRule
   name: Start Game Votes

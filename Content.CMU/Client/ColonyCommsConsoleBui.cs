@@ -20,10 +20,13 @@ public sealed class ColonyCommsConsoleBui(EntityUid owner, Enum uiKey) : BoundUs
             var message = _window.Announcement.Text;
             SendPredictedMessage(new ColonyCommsConsoleSendMessageBuiMsg(message));
         };
+        _window.TransportCall.OnPressed += _ => SendMessage(new ColonyCommsConsoleTransportCallBuiMsg());
+        _window.TransportRecall.OnPressed += _ => SendMessage(new ColonyCommsConsoleTransportRecallBuiMsg());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
-
+        if (state is ColonyCommsConsoleBuiState comms)
+            _window?.UpdateTransport(comms);
     }
 }

@@ -26,5 +26,19 @@
                     Margin="0 2" />
             <Control HorizontalExpand="True" />
         </BoxContainer>
+        <BoxContainer Name="TransportBox" Access="Public" Orientation="Vertical" Visible="False" Margin="0 6 0 0">
+            <Label Text="{Loc colony-rotation-console-header}" StyleClasses="LabelHeading" HorizontalAlignment="Center" />
+            <Label Name="TransportStatus" Access="Public" HorizontalAlignment="Center" />
+            <BoxContainer Orientation="Horizontal">
+                <Control HorizontalExpand="True" />
+                <Button Name="TransportCall" Access="Public" Text="{Loc colony-rotation-console-call}"
+                        HorizontalExpand="True" SizeFlagsStretchRatio="3"
+                        Margin="0 2" />
+                <Button Name="TransportRecall" Access="Public" Text="{Loc colony-rotation-console-recall}"
+                        StyleClasses="negative" HorizontalExpand="True" SizeFlagsStretchRatio="3"
+                        Margin="0 2" />
+                <Control HorizontalExpand="True" />
+            </BoxContainer>
+        </BoxContainer>
     </BoxContainer>
 </au14:ColonyCommsConsole>
