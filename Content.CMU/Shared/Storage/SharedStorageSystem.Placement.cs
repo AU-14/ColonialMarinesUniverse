@@ -6,6 +6,34 @@ namespace Content.Shared.Storage.EntitySystems;
 public abstract partial class SharedStorageSystem
 {
     /// <summary>
+    /// A short-lived placement snapshot for checking multiple saved positions.
+    /// Rebuild for each UI update so moves and storage-specific shapes stay live.
+    /// </summary>
+    public CMUPlacementSnapshot CMUGetPlacementSnapshot(Entity<StorageComponent> storage, EntityUid ignored)
+    {
+        return new CMUPlacementSnapshot(storage.Comp.Grid.GetBoundingBox(), BuildPlacementOccupancy(storage, ignored));
+    }
+
+    public readonly struct CMUPlacementSnapshot
+    {
+        private readonly Box2i _bounds;
+        private readonly Dictionary<Vector2i, ulong> _occupied;
+
+        internal CMUPlacementSnapshot(Box2i bounds, Dictionary<Vector2i, ulong> occupied)
+        {
+            _bounds = bounds;
+            _occupied = occupied;
+        }
+
+        /// <param name="shape">The item shape already transformed to the candidate location.</param>
+        /// <param name="origin">The candidate location, also checked against the grid bounds.</param>
+        public bool Fits(IReadOnlyList<Box2i> shape, Vector2i origin)
+        {
+            return _bounds.Contains(origin) && FitsPlacementOccupancy(_occupied, shape, Vector2i.Zero);
+        }
+    }
+
+    /// <summary>
     /// Builds a snapshot for one placement operation. Reusing the component's occupied
     /// mask would incorrectly ignore overlapping items when moving an existing item,
     /// and can miss changes to storage-specific item shapes.

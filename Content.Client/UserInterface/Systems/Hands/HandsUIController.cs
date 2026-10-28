@@ -395,7 +395,7 @@ public sealed partial class HandsUIController : UIController, IOnStateEntered<Ga
             }
             var delay = _useDelay.GetLastEndingDelay((hand.Entity.Value, useDelay));
 
-            hand.CooldownDisplay.Visible = true;
+            // hand.CooldownDisplay.Visible = true; // CMU14: FromTime owns visibility, including expired delays.
             hand.CooldownDisplay.FromTime(delay.StartTime, delay.EndTime);
         }
     }

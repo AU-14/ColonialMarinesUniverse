@@ -10,7 +10,7 @@ using Robust.Client.UserInterface.CustomControls;
 
 namespace Content.Client.UserInterface.Systems.Storage.Controls;
 
-public sealed class ItemGridPiece : Control, IEntityControl
+public sealed partial class ItemGridPiece : Control, IEntityControl // CMU14: control-owned label presentation.
 {
     private readonly IEntityManager _entityManager;
     private readonly StorageUIController _storageController;
@@ -225,7 +225,9 @@ public sealed class ItemGridPiece : Control, IEntityControl
             }
         }
 
-        _entityManager.System<RMCIconLabelSystem>().DrawStorage(Entity, UIScale, iconPosition, handle);
+        // CMU14: reuse localized label text between draws.
+        // _entityManager.System<RMCIconLabelSystem>().DrawStorage(Entity, UIScale, iconPosition, handle);
+        CMUDrawIconLabel(iconPosition, handle);
     }
 
     protected override bool HasPoint(Vector2 point)

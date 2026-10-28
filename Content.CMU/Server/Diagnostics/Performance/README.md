@@ -85,6 +85,17 @@ Client synchronization captures also carry `syncIncidentId`, linking to `cmu.cli
 can remain constant on the server. GC generation counters are always included when retained, even when zero;
 collection counts do not measure pause duration.
 
+## Measuring diagnostics overhead
+
+The `diagnostics-cost` record also separates runtime observation (`runtime*`), actual uncached
+process/GC memory reads (`memoryRead*`), profiler probes (`probe*`), and incident sampling/reporting
+(`sample*`). Each reports completed calls, cumulative elapsed milliseconds and the largest call.
+These are inclusive wall-clock scopes: memory reads normally occur inside runtime observation,
+and detailed reporting can occur inside sampling or a deferred profile retry. Do not sum these
+fields or their independent maxima. The current open scope appears in the next report. These
+timings locate expensive diagnostic work; scheduler or off-CPU tracing is still needed to
+distinguish CPU work from waiting or descheduling.
+
 ## Missing or partial profiles
 
 The engine publishes a frame index only after its frame-post callbacks return. The older reporter ran inside

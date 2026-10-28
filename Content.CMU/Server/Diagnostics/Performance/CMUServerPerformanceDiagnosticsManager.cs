@@ -41,6 +41,9 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
     private readonly CMUPerformanceSpikeCapture _spikeCapture = new();
     private readonly CMUPerformanceDiagnosticsCost _updateCost = new();
     private readonly CMUPerformanceDiagnosticsCost _detailCost = new();
+    private readonly CMUPerformanceDiagnosticsCost _runtimeCost = new();
+    private readonly CMUPerformanceDiagnosticsCost _probeCost = new();
+    private readonly CMUPerformanceDiagnosticsCost _sampleCost = new();
     private readonly CMUPerformanceDetailGate _detailGate = new();
     private readonly CMUPerformanceRollingWindow _shortRates = new(ShortRateWindowSeconds);
     private readonly CMUPerformanceRollingWindow _churnRates = new(ChurnRateWindowSeconds);
@@ -298,6 +301,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
 
     private void Sample(TimeSpan now)
     {
+        using var cost = _sampleCost.Measure();
         double interval = Math.Clamp(_config.GetCVar(CCVars.CMUServerPerformanceSampleInterval), 0.1f, 60f);
         double elapsed = _lastSampleTime == default
             ? interval
@@ -751,8 +755,12 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         $"updateCalls={_updateCost.Calls} updateTotalMs={_updateCost.TotalMilliseconds:F3} updateMaxMs={_updateCost.MaximumMilliseconds:F3} ",
         $"updateAllocatedBytes={_updateCost.AllocatedBytes} detailCalls={_detailCost.Calls} detailTotalMs={_detailCost.TotalMilliseconds:F3} ",
         $"detailMaxMs={_detailCost.MaximumMilliseconds:F3} detailAllocatedBytes={_detailCost.AllocatedBytes} ",
+        $"runtimeCalls={_runtimeCost.Calls} runtimeTotalMs={_runtimeCost.TotalMilliseconds:F3} runtimeMaxMs={_runtimeCost.MaximumMilliseconds:F3} ",
+        $"memoryReadCalls={_memory.Cost.Calls} memoryReadTotalMs={_memory.Cost.TotalMilliseconds:F3} memoryReadMaxMs={_memory.Cost.MaximumMilliseconds:F3} ",
+        $"probeCalls={_probeCost.Calls} probeTotalMs={_probeCost.TotalMilliseconds:F3} probeMaxMs={_probeCost.MaximumMilliseconds:F3} ",
+        $"sampleCalls={_sampleCost.Calls} sampleTotalMs={_sampleCost.TotalMilliseconds:F3} sampleMaxMs={_sampleCost.MaximumMilliseconds:F3} ",
         $"coalescedDetails={_detailGate.Coalesced} coalescedWorstFrameMs={_detailGate.WorstFrameMilliseconds:F3} ",
-        $"coalescedWorstAllocatedBytes={_detailGate.WorstAllocatedBytes} elapsedMainThread=true detailIncludedInUpdate=true cumulative=true");
+        $"coalescedWorstAllocatedBytes={_detailGate.WorstAllocatedBytes} elapsedMainThread=true detailIncludedInUpdate=true subspansOverlap=true cumulative=true");
 
     private void LogProfile(CMUPerformanceProfileReport profile, int top)
     {
@@ -908,6 +916,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         if (now < _nextProfilerProbeTime)
             return _allocationBreachPending;
 
+        using var cost = _probeCost.Measure();
         _nextProfilerProbeTime = now + TimeSpan.FromSeconds(ProfilerProbeSeconds);
         if (!CMUPerformanceProfilerReader.TryGetFrameWindow(
                 _profiler,

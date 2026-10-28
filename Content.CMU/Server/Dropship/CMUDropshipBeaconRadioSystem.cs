@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Server.CMU14.Radio;
 using Content.Server.CMU14.Round;
 using Content.Server.Radio.EntitySystems;
@@ -65,7 +64,19 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
             return;
 
         TryComp(ev.Stretcher, out StrapComponent? strap);
-        var patient = strap?.BuckledEntities.FirstOrDefault();
+        EntityUid? patient = null;
+        if (strap != null)
+        {
+            foreach (var buckled in strap.BuckledEntities)
+            {
+                if (TerminatingOrDeleted(buckled))
+                    continue;
+
+                patient = buckled;
+                break;
+            }
+        }
+
         var factionSource = ev.User ?? patient;
         if (factionSource is not { } source || !TryGetJtacChannel(source, out var channel, out var faction))
             return;

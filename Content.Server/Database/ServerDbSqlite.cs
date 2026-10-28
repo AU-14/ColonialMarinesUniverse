@@ -402,9 +402,18 @@ namespace Content.Server.Database
 
             await _prefsSemaphore.WaitAsync(cancel);
 
-            var dbContext = new SqliteServerDbContext(_options());
-
-            return new DbGuardImpl(this, dbContext);
+            // CMU14 Begin: the guard owns the slot only after context creation succeeds.
+            try
+            {
+                var dbContext = new SqliteServerDbContext(_options());
+                return new DbGuardImpl(this, dbContext);
+            }
+            catch
+            {
+                _prefsSemaphore.Release();
+                throw;
+            }
+            // CMU14 End
         }
 
         protected override async Task<DbGuard> GetDb(
@@ -430,8 +439,16 @@ namespace Content.Server.Database
 
             public override async ValueTask DisposeAsync()
             {
-                await _ctx.DisposeAsync();
-                _db._prefsSemaphore.Release();
+                // CMU14 Begin: a connection disposal failure must not consume a database slot forever.
+                try
+                {
+                    await _ctx.DisposeAsync();
+                }
+                finally
+                {
+                    _db._prefsSemaphore.Release();
+                }
+                // CMU14 End
             }
         }
 

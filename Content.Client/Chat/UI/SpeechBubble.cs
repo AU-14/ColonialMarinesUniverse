@@ -110,7 +110,8 @@ namespace Content.Client.Chat.UI
             }
         }
 
-        public SpeechBubble(ChatMessage message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null, TimeSpan? totalTime = null)
+        public SpeechBubble(ChatMessage message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null,
+            TimeSpan? totalTime = null, Control? cmuPreparedBubble = null) // CMU14: reuse prepared Runechat content.
         {
             IoCManager.InjectDependencies(this);
             _senderEntity = senderEntity;
@@ -121,7 +122,7 @@ namespace Content.Client.Chat.UI
             // Use text clipping so new messages don't overlap old ones being pushed up.
             RectClipContent = true;
 
-            var bubble = BuildBubble(message, speechStyleClass, fontColor);
+            var bubble = cmuPreparedBubble ?? BuildBubble(message, speechStyleClass, fontColor); // CMU14
 
             AddChild(bubble);
 
@@ -227,10 +228,14 @@ namespace Content.Client.Chat.UI
             var screenPos = lowerCenter - new Vector2(ContentSize.X / 2, ContentSize.Y + _verticalOffsetAchieved);
             // Round to nearest 0.5
             screenPos = (screenPos * 2).Rounded() / 2;
-            LayoutContainer.SetPosition(this, screenPos);
+            // CMU14: unchanged positions still box margins and invalidate layout in SetPosition.
+            if (Position != screenPos)
+                LayoutContainer.SetPosition(this, screenPos);
 
             var height = MathF.Ceiling(MathHelper.Clamp(lowerCenter.Y - screenPos.Y, 0, ContentSize.Y));
-            SetHeight = height;
+            // CMU14: SetHeight invalidates measurement even when the value is unchanged.
+            if (SetHeight != height)
+                SetHeight = height;
         }
 
         private float GetSenderVisibilityAlpha()

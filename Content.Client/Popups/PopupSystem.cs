@@ -106,7 +106,7 @@ public sealed partial class PopupSystem : SharedPopupSystem
         }
 
         // CMU14: popup chat/screen options
-        if (CMUCanSeePopup(coordinates, entity))
+        if (_configManager.GetCVar(CCVars.PopupsInChat) && CMUCanSeePopup(coordinates, entity))
             CMUEchoPopupToChat(message, type);
         if (_configManager.GetCVar(CCVars.HidePopupsOnScreen))
             return;
@@ -171,8 +171,8 @@ public sealed partial class PopupSystem : SharedPopupSystem
             return false;
 
         var distance = (popupPos.Position - ourPos.Position).Length();
-        return _examine.InRangeUnOccluded(ourPos, popupPos, distance,
-            e => e == coordinates.EntityId || e == entity || e == local);
+        return _examine.InRangeUnOccluded(ourPos, popupPos, distance, (coordinates.EntityId, entity, local),
+            static (uid, state) => uid == state.EntityId || uid == state.entity || uid == state.local);
     }
 
     /// <summary>

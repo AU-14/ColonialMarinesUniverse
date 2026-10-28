@@ -742,35 +742,9 @@ namespace Content.Shared.Interaction
             Ignored? predicate = null,
             bool checkAccess = true)
         {
-            // Have to be on same map regardless.
-            if (other.MapId != origin.MapId)
-                return false;
-
-            if (!checkAccess)
-                return true;
-
-            var dir = other.Position - origin.Position;
-            var length = dir.Length();
-
-            // If range specified also check it
-            if (range > 0f && length > range)
-                return false;
-
-            if (MathHelper.CloseTo(length, 0))
-                return true;
-
-            predicate ??= _ => false;
-
-            if (length > MaxRaycastRange)
-            {
-                Log.Warning("InRangeUnobstructed check performed over extreme range. Limiting CollisionRay size.");
-                length = MaxRaycastRange;
-            }
-
-            var ray = new CollisionRay(origin.Position, dir.Normalized(), (int)collisionMask);
-            var rayResults = _broadphase.IntersectRayWithPredicate(origin.MapId, ray, length, predicate.Invoke, false).ToList();
-
-            return rayResults.Count == 0;
+            // CMU14: pass filter state without closures or a second ray-result collection.
+            return CMUInRangeUnobstructed(origin, other, range, collisionMask,
+                new CMURayFilter(null, null, predicate, null), checkAccess);
         }
 
         public bool InRangeUnobstructed(
@@ -865,7 +839,7 @@ namespace Content.Shared.Interaction
                 otherAngle = other.Comp.LocalRotation;
             }
 
-            Ignored combinedPredicate = e => e == origin.Owner || (predicate?.Invoke(e) ?? false);
+            // Ignored combinedPredicate = e => e == origin.Owner || (predicate?.Invoke(e) ?? false); // CMU14: defer value filter creation until after fixture early-outs.
             var inRange = true;
             MapCoordinates originPos = default;
             var targetPos = _transform.ToMapCoordinates(otherCoordinates);
@@ -935,8 +909,9 @@ namespace Content.Shared.Interaction
             // Do a raycast to check if relevant
             if (inRange)
             {
-                var rayPredicate = GetPredicate(originPos, other, targetPos, targetRot, collisionMask, combinedPredicate);
-                inRange = InRangeUnobstructed(originPos, targetPos, range, collisionMask, rayPredicate, ShouldCheckAccess(origin));
+                // CMU14: keep origin/target exclusions query-local without captured delegates.
+                var rayPredicate = GetPredicate(originPos, other, targetPos, targetRot, collisionMask, predicate, origin.Owner);
+                inRange = CMUInRangeUnobstructed(originPos, targetPos, range, collisionMask, rayPredicate, ShouldCheckAccess(origin));
             }
 
             if (!inRange && popup && _gameTiming.IsFirstTimePredicted)
@@ -960,7 +935,7 @@ namespace Content.Shared.Interaction
             var mapPos = new MapCoordinates(position, transform.MapID);
             var combinedPredicate = GetPredicate(origin, target, mapPos, rotation, collisionMask, predicate);
 
-            return InRangeUnobstructed(origin, mapPos, range, collisionMask, combinedPredicate);
+            return CMUInRangeUnobstructed(origin, mapPos, range, collisionMask, combinedPredicate); // CMU14: value-state filter.
         }
 
         /// <summary>
@@ -972,71 +947,17 @@ namespace Content.Shared.Interaction
         /// <remarks>
         /// This can run from parallel BUI range checks, so scratch collections must stay local.
         /// </remarks>
-        private Ignored GetPredicate(
+        // CMU14 method: retain special collision exemptions only for targets that need them.
+        private CMURayFilter GetPredicate(
             MapCoordinates originCoords,
             EntityUid target,
             MapCoordinates targetCoords,
             Angle targetRotation,
             CollisionGroup collisionMask,
-            Ignored? predicate = null)
+            Ignored? predicate = null,
+            EntityUid? ignoreOrigin = null)
         {
-            HashSet<EntityUid> ignored = new();
-
-            if (_itemQuery.HasComp(target) && _physicsQuery.TryComp(target, out var physics) && physics.CanCollide)
-            {
-                // If the target is an item, we ignore any colliding entities. Currently done so that if items get stuck
-                // inside of walls, users can still pick them up.
-                // TODO: Bandaid, alloc spam
-                // We use 0.01 range just in case it's perfectly in between 2 walls and 1 gets missed.
-                var lookupResults = new HashSet<EntityUid>();
-                _lookup.GetEntitiesInRange(target, 0.01f, lookupResults, LookupFlags.Static);
-                foreach (var otherEnt in lookupResults)
-                {
-                    if (target == otherEnt ||
-                        !_physicsQuery.TryComp(otherEnt, out var otherBody) ||
-                        !otherBody.CanCollide ||
-                        ((int)collisionMask & otherBody.CollisionLayer) == 0x0)
-                    {
-                        continue;
-                    }
-
-                    ignored.Add(otherEnt);
-                }
-            }
-            else if (_wallMountQuery.TryComp(target, out var wallMount))
-            {
-                // wall-mount exemptions may be restricted to a specific angle range.da
-
-                bool ignoreAnchored;
-                if (wallMount.Arc >= Math.Tau)
-                    ignoreAnchored = true;
-                else
-                {
-                    var angle = Angle.FromWorldVec(originCoords.Position - targetCoords.Position);
-                    var angleDelta = (wallMount.Direction + targetRotation - angle).Reduced().FlipPositive();
-                    ignoreAnchored = angleDelta < wallMount.Arc / 2 || Math.Tau - angleDelta < wallMount.Arc / 2;
-                }
-
-                if (ignoreAnchored && _map.TryFindGridAt(targetCoords, out var gridUid, out var grid))
-                {
-                    ignored.UnionWith(_map.GetAnchoredEntities((gridUid, grid), targetCoords));
-                    var lookupResults = new HashSet<EntityUid>();
-                    _lookup.GetEntitiesInRange(targetCoords.MapId, targetCoords.Position, 0.2f, lookupResults);
-                    foreach (var ent in lookupResults)
-                    {
-                        if (!TryComp(ent, out TransformComponent? xform) ||
-                            !xform.Anchored)
-                        {
-                            continue;
-                        }
-
-                        ignored.Add(ent);
-                    }
-                }
-            }
-
-            Ignored combinedPredicate = e => e == target || (predicate?.Invoke(e) ?? false) || ignored.Contains(e);
-            return combinedPredicate;
+            return CMUCreateRayFilter(originCoords, target, targetCoords, targetRotation, collisionMask, predicate, ignoreOrigin);
         }
 
         /// <summary>
@@ -1106,9 +1027,12 @@ namespace Content.Shared.Interaction
             Ignored? predicate = null,
             bool popup = false)
         {
-            Ignored combinedPredicate = e => e == origin || (predicate?.Invoke(e) ?? false);
+            // CMU14 Begin: pass the origin exclusion as value state.
+            // Ignored combinedPredicate = e => e == origin || (predicate?.Invoke(e) ?? false);
             var originPosition = _transform.GetMapCoordinates(origin);
-            var inRange = InRangeUnobstructed(originPosition, other, range, collisionMask, combinedPredicate, ShouldCheckAccess(origin));
+            var filter = new CMURayFilter(origin, null, predicate, null);
+            var inRange = CMUInRangeUnobstructed(originPosition, other, range, collisionMask, filter, ShouldCheckAccess(origin));
+            // CMU14 End
 
             if (!inRange && popup && _gameTiming.IsFirstTimePredicted)
             {

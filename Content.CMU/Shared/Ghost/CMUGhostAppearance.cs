@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.EntityReferences;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Ghost;
@@ -13,8 +14,25 @@ public sealed partial class CMUGhostAppearanceComponent : Component
     public EntityUid? Source;
 }
 
-public sealed class CMUGhostAppearanceSystem : EntitySystem
+public sealed partial class CMUGhostAppearanceSystem : EntitySystem
 {
+    [Dependency] private EntityReferenceSystem _references = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<CMUGhostAppearanceComponent, ReferencedEntityTerminatingEvent>(OnSourceTerminating);
+    }
+
+    private void OnSourceTerminating(Entity<CMUGhostAppearanceComponent> ent, ref ReferencedEntityTerminatingEvent args)
+    {
+        if (ent.Comp.Source != args.Entity)
+            return;
+
+        // Clients that copied the sprite keep it; future states must not reference the deleted body.
+        ent.Comp.Source = null;
+        Dirty(ent);
+    }
+
     /// <summary>
     ///     Makes <paramref name="ghost"/> take on the look of <paramref name="source"/>, the body it left.
     /// </summary>
@@ -25,6 +43,7 @@ public sealed class CMUGhostAppearanceSystem : EntitySystem
 
         var comp = EnsureComp<CMUGhostAppearanceComponent>(ghost);
         comp.Source = body;
+        _references.Watch(ghost, body);
         Dirty(ghost, comp);
     }
 }

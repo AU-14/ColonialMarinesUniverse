@@ -367,7 +367,9 @@ public sealed partial class RequisitionsSystem
             }
         }
 
-        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate)
+        // CMU14: stock replenishes above even when nobody is watching its countdown.
+        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate &&
+            _itemizedUi.IsUiOpen(computer.Owner, RequisitionsUIKey.Key))
         {
             computer.Comp.NextStockUiUpdate = time + TimeSpan.FromSeconds(1);
             changed = true;
@@ -618,7 +620,24 @@ public sealed partial class RequisitionsSystem
         public readonly int MaxBundles;
         public TimeSpan NextReplenish;
 
-        public bool IsFull => Unlimited || Current.All(pair => pair.Value >= Maximum[pair.Key]);
+        // CMU14 Begin: this check runs for every itemized source on each update.
+        public bool IsFull
+        {
+            get
+            {
+                if (Unlimited)
+                    return true;
+
+                foreach (var (prototype, amount) in Current)
+                {
+                    if (amount < Maximum[prototype])
+                        return false;
+                }
+
+                return true;
+            }
+        }
+        // CMU14 End
 
         public ItemizedSource(RequisitionsEntry entry, Dictionary<EntProtoId, int> manifest, TimeSpan time)
         {
