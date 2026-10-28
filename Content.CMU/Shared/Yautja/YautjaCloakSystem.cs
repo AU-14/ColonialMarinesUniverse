@@ -15,6 +15,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Light.Components;
 using Content.Shared.Mobs;
+using Content.Shared.CMU14.Movement;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Devour;
@@ -75,6 +76,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, XenoDevouredEvent>(OnDevour);
         SubscribeLocalEvent<YautjaComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
         SubscribeLocalEvent<YautjaComponent, ExamineAttemptEvent>(OnExamineAttempt);
+        SubscribeLocalEvent<YautjaComponent, GetMobFootstepVolumeEvent>(OnFootstepVolume);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnAnyDamageChanged);
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
     }
@@ -459,6 +461,12 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         }
 
         args.Cancel();
+    }
+
+    private void OnFootstepVolume(Entity<YautjaComponent> ent, ref GetMobFootstepVolumeEvent args)
+    {
+        var cloaked = TryComp(ent, out EntityTurnInvisibleComponent? cloak) && cloak.Enabled;
+        args.Modifier += cloaked ? ent.Comp.CloakedFootstepVolume : ent.Comp.FootstepVolume;
     }
 
     private void OnAnyDamageChanged(Entity<DamageableComponent> target, ref DamageChangedEvent args)
