@@ -33382,10 +33382,11 @@
 - type: entity
   parent: [ RMCChemDispenserGround, CMUYautjaStructureYautjaMachinesDispenser ]
   id: CMUHunterShipPlacedRMCChemDispenserGroundDispenserSouth
-  name: "Chemical dispenser"
-  description: "A complex machine for mixing elements into chemicals. A Wey-Yu product."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: RequiresSkill
+    skills:
+      RMCSkillMedical: 2
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
     drawdepth: SmallObjects
