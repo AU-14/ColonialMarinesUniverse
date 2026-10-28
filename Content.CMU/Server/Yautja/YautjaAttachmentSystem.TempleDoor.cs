@@ -1,6 +1,7 @@
 using Content.Shared.CMU14.Yautja.Lodge;
 using Content.Shared.Doors.Components;
 using Content.Shared.Interaction;
+using Content.Shared.Prying.Systems;
 using Content.Shared.Verbs;
 
 namespace Content.Server.CMU14.Yautja;
@@ -9,7 +10,9 @@ public sealed partial class YautjaAttachmentSystem
 {
     private void InitializeTempleDoor()
     {
-        SubscribeLocalEvent<YautjaTempleDoorComponent, InteractUsingEvent>(OnTempleDoorInteractUsing);
+        // ahead of prying, which says no to these doors and would swallow the click. the engine wants every
+        // InteractUsing sub in this system on the same ordering, so the others carry it too
+        SubscribeLocalEvent<YautjaTempleDoorComponent, InteractUsingEvent>(OnTempleDoorInteractUsing, before: [typeof(PryingSystem)]);
         SubscribeLocalEvent<YautjaTempleDoorComponent, GetVerbsEvent<AlternativeVerb>>(OnTempleDoorGetVerbs);
     }
 

@@ -2428,6 +2428,35 @@ namespace Content.Server.Database.Migrations.Sqlite
 
                     b.ToTable("yautja_clan_petition", (string)null);
                 });
+            modelBuilder.Entity("Content.Server.Database.YautjaClanSect", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("yautja_clan_sect_id");
+
+                    b.Property<int>("ClanId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("clan_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("PK_yautja_clan_sect");
+
+                    b.HasIndex("ClanId")
+                        .HasDatabaseName("IX_yautja_clan_sect_clan_id");
+
+                    b.ToTable("yautja_clan_sect", (string)null);
+                });
             // cmu edit end
 
             modelBuilder.Entity("Content.Server.Database.YautjaClanMember", b =>
@@ -2460,6 +2489,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Property<int>("Rank")
                         .HasColumnType("INTEGER")
                         .HasColumnName("rank");
+
+                    b.Property<int?>("SectId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("sect_id");
 
                     b.HasKey("Id")
                         .HasName("PK_yautja_clan_member");
