@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Client._RMC14.Xenonids.UI;
 using Content.Client.Message;
+using Content.Shared.CMU14.Xenonids.Evolution; // CMU14 evolution queue
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Strain;
@@ -27,6 +28,7 @@ public sealed partial class XenoEvolutionBui : BoundUserInterface
 
     private readonly Dictionary<EntProtoId, XenoChoiceControl> _evolutionControls = new();
     private readonly Dictionary<EntProtoId, XenoChoiceControl> _strainControls = new();
+    private readonly HashSet<EntProtoId> _pointLocked = new(); // CMU14 evolution queue: choices lacking points
 
     public XenoEvolutionBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -41,6 +43,7 @@ public sealed partial class XenoEvolutionBui : BoundUserInterface
         // CMU14: a reopened window owns fresh controls.
         _evolutionControls.Clear();
         _strainControls.Clear();
+        _pointLocked.Clear(); // CMU14 evolution queue
         _window.OvipositorNeededLabel.Visible = false;
         _window.OvermindNeededLabel.Visible = false;
 
@@ -70,20 +73,41 @@ public sealed partial class XenoEvolutionBui : BoundUserInterface
         {
             control = new XenoChoiceControl();
             control.Set(evolution.Name, _sprite.Frame0(evolution));
-            control.Button.Disabled = !enabled;
 
+            // CMU14 Evolution Queue Begin: locked choices stay clickable to wait in the tier queue
             control.Button.OnPressed += _ =>
             {
+                if (_pointLocked.Contains(evolutionId))
+                {
+                    SendPredictedMessage(new CMUXenoEvolveQueueBuiMsg(evolutionId));
+                    return;
+                }
+
                 SendPredictedMessage(new XenoEvolveBuiMsg(evolutionId));
                 Close();
             };
+            // CMU14 End
 
             _evolutionControls[evolutionId] = control;
             _window?.EvolutionsContainer.AddChild(control);
         }
 
         control.Visible = true;
-        control.Button.Disabled = !enabled;
+        // CMU14 Evolution Queue Begin: show locked choices as queueable instead of disabling them
+        // control.Button.Disabled = !enabled;
+        control.Button.Disabled = false;
+        if (enabled)
+        {
+            _pointLocked.Remove(evolutionId);
+            control.Set(evolution.Name, _sprite.Frame0(evolution));
+        }
+        else
+        {
+            _pointLocked.Add(evolutionId);
+            control.Set(Loc.GetString("cmu-xeno-ui-evolution-queue-choice", ("name", evolution.Name)),
+                _sprite.Frame0(evolution));
+        }
+        // CMU14 End
     }
 
     private void AddStrain(EntProtoId strainId)

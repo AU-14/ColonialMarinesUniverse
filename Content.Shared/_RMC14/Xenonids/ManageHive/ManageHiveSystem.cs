@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Shared.CMU14.Threats.Mobs.Xeno;
 using Content.Shared.CMU14.Threats.Mobs.Xeno.ManageHive;
+using Content.Shared.CMU14.Xenonids.Evolution; // CMU14 evolution queue
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Commendations;
@@ -109,6 +110,7 @@ public sealed partial class ManageHiveSystem : EntitySystem
 
         options.Add(new DialogOption(Loc.GetString("rmc-hivemanagement-exchange-larva"), new ManageHiveSacrificeBurrowedEvent()));
         options.Add(new DialogOption(Loc.GetString("rmc-boon-activate"), new ManageHiveActivateBoonsEvent()));
+        options.Add(new DialogOption(Loc.GetString("cmu-xeno-evolution-queue-manage"), new CMUManageHiveEvolutionQueueEvent())); // CMU14 evolution queue
 
         if (TryComp<HiveMemberComponent>(manage.Owner, out var h) && TryComp<HiveComponent>(h.Hive, out var hi) &&
             hi.CanMakeAlliances)

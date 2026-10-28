@@ -79,6 +79,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedXenoWeedsSystem _xenoWeeds = default!;    [Dependency] private ISharedPlaytimeManager _playtime = default!;
     [Dependency] private FollowerSystem _follower = default!;
+    [Dependency] private CMUEvolutionQueueSystem _cmuEvolutionQueue = default!; // CMU14 evolution queue
 
     private TimeSpan _evolutionPointsRequireOvipositorAfter;
     private TimeSpan _evolutionAccumulatePointsBefore;
@@ -127,6 +128,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             {
                 subs.Event<XenoEvolveBuiMsg>(OnXenoEvolveBui);
                 subs.Event<XenoStrainBuiMsg>(OnXenoStrainBui);
+                subs.Event<CMUXenoEvolveQueueBuiMsg>(OnXenoEvolveQueueBui); // CMU14 evolution queue
             });
 
         Subs.BuiEvents<XenoDevolveComponent>(XenoDevolveUIKey.Key,
@@ -239,6 +241,16 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             _popup.PopupEntity(popupSelf, xeno, xeno, PopupType.Medium);
         }
     }
+
+    // CMU14 Evolution Queue Begin: clicking a caste without enough points waits in its tier queue
+    private void OnXenoEvolveQueueBui(Entity<XenoEvolutionComponent> xeno, ref CMUXenoEvolveQueueBuiMsg args)
+    {
+        if (_net.IsClient)
+            return;
+
+        _cmuEvolutionQueue.ToggleQueue(xeno, args.Choice);
+    }
+    // CMU14 End
 
     private void OnXenoStrainBui(Entity<XenoEvolutionComponent> xeno, ref XenoStrainBuiMsg args)
     {
@@ -716,6 +728,28 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
                 return false;
             }
+
+            // CMU14 Evolution Queue Begin: contested tier slots go to waiting xenos in queue order
+            if (total != 0 &&
+                (!slotCount.TryGetValue(newXeno, out var reservedSlots) || reservedSlots <= 0))
+            {
+                var freeSlots = Math.Max(0, (int) Math.Ceiling(total * limit.Double()) - existing);
+                if (_cmuEvolutionQueue.IsBlockedByQueue(xeno.Owner, oldHive, newXenoComp.Tier, freeSlots, out var ahead))
+                {
+                    if (doPopup)
+                    {
+                        _popup.PopupEntity(
+                            Loc.GetString("cmu-xeno-evolution-failed-queue", ("ahead", ahead)),
+                            xeno,
+                            xeno,
+                            PopupType.MediumCaution
+                        );
+                    }
+
+                    return false;
+                }
+            }
+            // CMU14 End
         }
 
         if (TryComp(xeno, out XenoRecentlyDevolvedComponent? recently) &&

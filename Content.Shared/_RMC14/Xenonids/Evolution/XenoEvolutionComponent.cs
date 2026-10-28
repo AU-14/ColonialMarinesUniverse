@@ -1,4 +1,5 @@
 using Content.Shared.Actions.Components;
+using Content.Shared.CMU14.Xenonids.Evolution; // CMU14 evolution queue
 using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
@@ -8,7 +9,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._RMC14.Xenonids.Evolution;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
-[Access(typeof(XenoEvolutionSystem))]
+[Access(typeof(XenoEvolutionSystem), typeof(CMUEvolutionQueueSystem))] // CMU14: the evolution queue validates choices
 public sealed partial class XenoEvolutionComponent : Component
 {
     [DataField, AutoNetworkedField]
