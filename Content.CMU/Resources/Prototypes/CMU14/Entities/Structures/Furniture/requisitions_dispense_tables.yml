@@ -1,0 +1,19 @@
+# Requisitions tables that order slips are filled onto. The vendor uses whichever is closest to the person handing in
+# the slip, so put one either side of the vendor. North and South are the same table, named for where it goes.
+- type: entity
+  abstract: true
+  parent: CMTableReinforcedRequisition
+  id: CMUTableReinforcedRequisitionDispenseBase
+  description: A square metal surface resting on its fat metal bottom. Filled requisition orders are set out here.
+  components:
+  - type: CMURequisitionsDispenseTable
+
+- type: entity
+  parent: CMUTableReinforcedRequisitionDispenseBase
+  id: CMUTableReinforcedRequisitionDispenseNorth
+  suffix: Order Dispense, North
+
+- type: entity
+  parent: CMUTableReinforcedRequisitionDispenseBase
+  id: CMUTableReinforcedRequisitionDispenseSouth
+  suffix: Order Dispense, South

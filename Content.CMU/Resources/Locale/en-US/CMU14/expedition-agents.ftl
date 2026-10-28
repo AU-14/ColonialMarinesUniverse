@@ -38,6 +38,7 @@ cmu-expedition-outfit-applied = Requested {$outfit} clothing. Team and IFF remai
 cmu-expedition-sniper-identity = scavenger sniper
 cmu-expedition-variant-sniper = Sniper with an M42A, native aimed shots and a backup pistol
 cmu-expedition-ai-vision-status = Sight={ $sight } flares={ $flares } flashShots={ $flashShots } bipodAttempts={ $bipods }
+cmu-expedition-ai-perception-status = Perception: sight checks { $checks }/{ $limit }, contact records { $contacts }, searching { $searching }, search remaining { $remaining }s
 cmu-expedition-ai-logistics-status = Outfit={ $outfit } supplies={ $decision } shared={ $shared } received={ $received } cratesOpened={ $crates }
 cmu-expedition-contact-steady-1 = Contact. Stay spread out and watch your lanes.
 cmu-expedition-contact-steady-2 = Eyes on a hostile. Keep it controlled.

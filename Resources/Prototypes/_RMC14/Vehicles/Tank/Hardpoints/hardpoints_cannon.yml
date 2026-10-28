@@ -76,6 +76,9 @@
   name: 20mm LTAA AP rotary cannon
   description: A light anti-air rotary cannon hardpoint.
   components:
+  # cmu edit start: caseless
+  - type: CMUCaselessGun
+  # cmu edit end
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container

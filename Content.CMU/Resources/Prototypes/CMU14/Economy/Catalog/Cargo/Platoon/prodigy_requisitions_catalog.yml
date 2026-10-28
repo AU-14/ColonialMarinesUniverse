@@ -1,7 +1,7 @@
 - type: entity
   abstract: false
   id: ProdigyCargoCatalog
-  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor ]
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor, CMUASRSJeepKits ]
   components:
   - type: RequisitionsComputer
     categories:
@@ -11,6 +11,8 @@
         crate: RMCCrateEmptySandbags
       - cost: 500
         crate: RMCCrateSandbagsConstructionKit
+      - cost: 1200
+        crate: CMUCrateHESCO
       - cost: 600
         crate: AU14CrateConcreteBags
       - cost: 700
@@ -134,7 +136,7 @@
     - name: Food
       entries:
       - cost: 100
-        crate: RMCCrateFoodMRE
+        crate: CMUCrateFoodMREFSR
       - cost: 100
         crate: RMCCrateFoodIngredients
     - name: Gear
@@ -161,6 +163,8 @@
         crate: RMCCrateGearParachute
       - cost: 800
         crate: RMCCrateAttachmentSmartScope
+      - cost: 2500
+        crate: CMUCrateAttachmentNightVisionScope
     - name: Pouches
       entries:
       - cost: 150
@@ -345,6 +349,10 @@
         stockReplenishDelay: 300
       - cost: 1900
         crate: CMUCrateVehiclePartAPCFrontCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartAPCDualCannon
         maxStock: 2
         stockReplenishDelay: 300
 

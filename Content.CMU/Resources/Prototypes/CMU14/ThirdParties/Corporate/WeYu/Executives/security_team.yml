@@ -1,0 +1,21 @@
+# Weyland-Yutani corporate security team, called in through the TWE intel list: a security lead and three guards.
+- type: partySpawn
+  id: CMUWYSecurityTeamSpawn
+  leadersToSpawn:
+    CMUJobWeYuGoonLeader: 1
+  gruntsToSpawn:
+    CMUJobWeYuGoon: 3
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUWYSecurityTeam
+  displayName: WY Corporate Security Team
+  partyspawn: CMUWYSecurityTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 4
+  roundstart: false

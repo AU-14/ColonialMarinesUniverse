@@ -65,7 +65,7 @@
     - CMSheetPlasteel20
     - RMCAttachmentFlashlightGrip
     - RMCAttachmentS6ReflexSight
-    - CMDefibrillator
+    - AU14CMDefibrillator # cmu edit: was CMDefibrillator
     # TODO RMC14: Crew monitor
     outerClothing:
     - RMCMREWeYa

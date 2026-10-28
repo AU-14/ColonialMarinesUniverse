@@ -38,6 +38,7 @@ public sealed partial class FighterSystem
             var point = SpawnAttachedTo(cannon ? "CMUFighterGauFeed" : "CMUFighterHardpoint",
                 new EntityCoordinates(aircraft, new Vector2(x, cannon ? 5.5f : -1.5f - i % 3 * .7f)));
             var component = Comp<FighterHardpointComponent>(point);
+            AddComp<CMUFighterPartOwnerComponent>(point).Aircraft = aircraft;
             component.Aircraft = aircraft;
             component.Index = i;
             component.Internal = cannon;

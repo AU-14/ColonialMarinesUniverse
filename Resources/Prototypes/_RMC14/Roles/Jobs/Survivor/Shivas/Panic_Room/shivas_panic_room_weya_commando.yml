@@ -139,7 +139,7 @@
     - id: CMWEYAFlask
     - id: RMCZippo
     - id: RMCCigarettePackWeYaGold
-    - id: CMDefibrillator # TODO: Low charge (?)
+    - id: AU14CMDefibrillator # cmu edit: was CMDefibrillator; TODO: Low charge (?)
     - id: CMFirstAidKitFilledCommando
 
 - type: jobIcon

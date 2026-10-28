@@ -1,5 +1,6 @@
 - type: loadout
   id: AU14SprayCleanerExperimentalAU14
+  cost: 2
   inhand:
   - AU14SprayCleanerExperimental
 # Civilian Synth Specializations

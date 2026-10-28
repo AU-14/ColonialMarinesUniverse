@@ -22,7 +22,9 @@ public sealed partial class RMCSelectiveFireSystem : EntitySystem
     {
         SubscribeAllEvent<RequestStopShootEvent>(OnStopShootRequest);
 
-        SubscribeLocalEvent<RMCSelectiveFireComponent, ExaminedEvent>(OnExamine);
+        // cmu edit start: listed under the weapon stats examine verb instead (CMUWeaponStatsSystem)
+        // SubscribeLocalEvent<RMCSelectiveFireComponent, ExaminedEvent>(OnExamine);
+        // cmu edit end
         SubscribeLocalEvent<RMCSelectiveFireComponent, ItemWieldedEvent>(SelectiveFireRefreshWield,
             after: new[] { typeof(AttachableHolderSystem) });
         SubscribeLocalEvent<RMCSelectiveFireComponent, ItemUnwieldedEvent>(SelectiveFireRefreshWield,
@@ -132,6 +134,13 @@ public sealed partial class RMCSelectiveFireSystem : EntitySystem
 
         RefreshWieldableFireModeValues(gun);
     }
+
+    // cmu edit start: read by the weapon stats examine window
+    public int? GetShotsToMaxScatter(Entity<RMCSelectiveFireComponent> gun, SelectiveFire mode)
+    {
+        return gun.Comp.Modifiers.TryGetValue(mode, out var mods) ? mods.ShotsToMaxScatter : null;
+    }
+    // cmu edit end
 
     public bool ContainsMods(Entity<RMCSelectiveFireComponent> gun, SelectiveFire mode)
     {

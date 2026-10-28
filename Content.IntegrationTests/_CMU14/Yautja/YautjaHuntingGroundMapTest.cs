@@ -6,14 +6,11 @@ using System.Numerics;
 using Content.Client._RMC14.Interaction;
 using Content.Client._RMC14.Dialog;
 using Content.Client.Clickable;
-using Content.Server.Maps;
-using Content.Server.GameTicking.Presets;
 using Content.Server.Power.Components;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Doors;
-using Content.Shared._RMC14.Rules;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -110,12 +107,12 @@ public sealed class YautjaHuntingGroundMapTest
     private static readonly ResPath JungleMoonPath = new("/Maps/CMU14/HuntingGrounds/jungle_moon.yml");
     private static readonly ResPath DesertMoonPath = new("/Maps/CMU14/HuntingGrounds/desert_moon.yml");
     private static readonly ResPath DesertMoonCavesPath = new("/Maps/CMU14/HuntingGrounds/desert_moon_caves.yml");
-    private static readonly ResPath HunterShipPath = new("/Maps/CMU14/huntership.yml");
+    private static readonly ResPath HunterShipPath = new("/Maps/CMU14/Ships/HunterShip/huntership.yml");
     private static readonly ResPath[] HunterShipZLevelPaths =
     [
-        new("/Maps/CMU14/huntership.yml"),
-        new("/Maps/CMU14/huntership_upper.yml"),
-        new("/Maps/CMU14/huntership_lower.yml"),
+        new("/Maps/CMU14/Ships/HunterShip/huntership.yml"),
+        new("/Maps/CMU14/Ships/HunterShip/huntership_upper.yml"),
+        new("/Maps/CMU14/Ships/HunterShip/huntership_lower.yml"),
     ];
 
     private static readonly string[] HunterShipHuntConsolePrototypes =
@@ -170,35 +167,6 @@ public sealed class YautjaHuntingGroundMapTest
 
                 Assert.That(actual, Is.EquivalentTo(expected), prototypeId);
             }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task PlayablePlanetMapsHaveGroundRelayMarkers()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var componentFactory = server.EntMan.ComponentFactory;
-            var resources = server.ResolveDependency<IResourceManager>();
-            var errors = new List<string>();
-
-            foreach (var mapPath in GetPlayablePlanetMapPaths(prototypes, componentFactory, pair.IsTestPrototype))
-            {
-                var markerCount = CountMapPrototypes(resources, mapPath)
-                    .GetValueOrDefault("CMUYautjaGroundRelayDestination");
-                if (markerCount < 1 || !ContainsLine(resources, mapPath, "kind: Ground"))
-                    errors.Add(mapPath.ToString());
-            }
-
-            Assert.That(errors, Is.Empty,
-                "Playable planet maps missing a CMUYautjaGroundRelayDestination marker:\n" +
-                string.Join('\n', errors));
         });
 
         await pair.CleanReturnAsync();
@@ -309,10 +277,10 @@ public sealed class YautjaHuntingGroundMapTest
                 Assert.That(CountMapPrototypeEntities(resources, DesertMoonPath, "CMUYautjaHuntingGroundPreserveEdge"), Is.EqualTo(3));
                 Assert.That(CountMapPrototypeEntities(resources, DesertMoonCavesPath, "CMUYautjaHuntingGroundPreserveEdge"), Is.EqualTo(14));
 
-                Assert.That(CountMapPrototypes(resources, JungleMoonPath).GetValueOrDefault("CMUYautjaYoungbloodSpawn"), Is.GreaterThanOrEqualTo(1));
+                Assert.That(CountMapPrototypes(resources, JungleMoonPath).GetValueOrDefault("CMUYautjaYoungbloodSpawn"), Is.Zero);
                 Assert.That(CountMapPrototypes(resources, DesertMoonCavesPath).GetValueOrDefault("CMUYautjaHuntDestinationDesertMoon"), Is.GreaterThanOrEqualTo(1));
                 Assert.That(CountMapPrototypes(resources, DesertMoonCavesPath).GetValueOrDefault("CMUYautjaYoungbloodDestinationDesertMoon"), Is.GreaterThanOrEqualTo(1));
-                Assert.That(CountMapPrototypes(resources, DesertMoonCavesPath).GetValueOrDefault("CMUYautjaYoungbloodSpawn"), Is.GreaterThanOrEqualTo(1));
+                Assert.That(CountMapPrototypes(resources, DesertMoonCavesPath).GetValueOrDefault("CMUYautjaYoungbloodSpawn"), Is.Zero);
             });
         });
 
@@ -359,7 +327,6 @@ public sealed class YautjaHuntingGroundMapTest
                     prototype.ID is not (
                         "CMUYautjaHuntDestinationDesertMoon" or
                         "CMUYautjaYoungbloodDestinationDesertMoon" or
-                        "CMUYautjaYoungbloodSpawn" or
                         "CMUYautjaHuntingGroundPreserveShutter" or
                         "CMUYautjaHuntingGroundPreserveEdge" or
                         "CMUYautjaHuntingGroundEscapeConsole"))
@@ -386,17 +353,11 @@ public sealed class YautjaHuntingGroundMapTest
                 "CMUYautjaYoungbloodDestinationDesertMoon",
                 [new Vector2(76.5f, 39.5f)],
                 Angle.Zero);
-            AssertLandmarks(
-                landmarks,
-                "CMUYautjaYoungbloodSpawn",
-                [new Vector2(76.5f, 39.5f)],
-                Angle.Zero);
 
             foreach (var prototypeId in new[]
                      {
                          "CMUYautjaHuntDestinationDesertMoon",
                          "CMUYautjaYoungbloodDestinationDesertMoon",
-                         "CMUYautjaYoungbloodSpawn",
                      })
             {
                 foreach (var landmark in landmarks[prototypeId])
@@ -486,7 +447,6 @@ public sealed class YautjaHuntingGroundMapTest
                         "CMUYautjaHuntDestinationDesertMoon" or
                         "CMUYautjaYoungbloodDestinationDesertMoon" or
                         "CMUYautjaHuntPreySpawn" or
-                        "CMUYautjaYoungbloodSpawn" or
                         "CMUYautjaHuntingGroundPreserveShutter" or
                         "CMUYautjaHuntingGroundPreserveEdge" or
                         "CMUYautjaHuntingGroundEscapeConsole"))
@@ -511,7 +471,6 @@ public sealed class YautjaHuntingGroundMapTest
                              "CMUYautjaHuntDestinationDesertMoon",
                              "CMUYautjaYoungbloodDestinationDesertMoon",
                              "CMUYautjaHuntPreySpawn",
-                             "CMUYautjaYoungbloodSpawn",
                          })
             {
                 Assert.That(landmarks.GetValueOrDefault(prototypeId), Is.Not.Empty, prototypeId);
@@ -519,8 +478,7 @@ public sealed class YautjaHuntingGroundMapTest
 
             foreach (var landmark in landmarks["CMUYautjaHuntDestinationDesertMoon"]
                              .Concat(landmarks["CMUYautjaYoungbloodDestinationDesertMoon"])
-                             .Concat(landmarks["CMUYautjaHuntPreySpawn"])
-                             .Concat(landmarks["CMUYautjaYoungbloodSpawn"]))
+                             .Concat(landmarks["CMUYautjaHuntPreySpawn"]))
             {
                 var xform = entMan.GetComponent<TransformComponent>(landmark.Uid);
                     if (!xform.GridUid.HasValue ||
@@ -1224,36 +1182,6 @@ public sealed class YautjaHuntingGroundMapTest
     private static bool LoadMap(MapLoaderSystem loader, ResPath path)
     {
         return loader.TryLoadMap(path, out var map, out _) && map != null;
-    }
-
-    private static IReadOnlyList<ResPath> GetPlayablePlanetMapPaths(
-        IPrototypeManager prototypes,
-        IComponentFactory componentFactory,
-        Func<EntityPrototype, bool> isTestPrototype)
-    {
-        var checkedPaths = new HashSet<ResPath>();
-        var paths = new List<ResPath>();
-        var presetPlanets = prototypes.EnumeratePrototypes<GamePresetPrototype>()
-            .Where(preset => preset.ShowInVote)
-            .SelectMany(preset => preset.SupportedPlanets ?? Enumerable.Empty<string>())
-            .ToHashSet();
-
-        foreach (var planetPrototype in prototypes.EnumeratePrototypes<EntityPrototype>())
-        {
-            if (isTestPrototype(planetPrototype) ||
-                !planetPrototype.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory) ||
-                !(planet!.InRotation || presetPlanets.Contains(planetPrototype.ID)))
-            {
-                continue;
-            }
-
-            var mapPath = prototypes.Index<GameMapPrototype>(planet.MapId).MapPath;
-            if (checkedPaths.Add(mapPath))
-                paths.Add(mapPath);
-        }
-
-        paths.Sort((left, right) => string.Compare(left.ToString(), right.ToString(), StringComparison.Ordinal));
-        return paths;
     }
 
     private readonly record struct LoadedHuntingGroundLandmark(

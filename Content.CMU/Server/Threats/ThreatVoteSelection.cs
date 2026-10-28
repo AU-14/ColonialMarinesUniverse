@@ -245,7 +245,8 @@ public static class ThreatVoteSelection
         IReadOnlyList<ProtoId<ThreatPrototype>> candidateThreatIds,
         int leaderSlots,
         int memberSlots,
-        string? presetId)
+        string? presetId,
+        Func<NetUserId, ProtoId<JobPrototype>, bool>? canPlayJob = null)
     {
         var assignments = new List<ThreatVoteAssignment>(Math.Max(0, leaderSlots) + Math.Max(0, memberSlots));
         var assigned = new HashSet<NetUserId>();
@@ -265,7 +266,10 @@ public static class ThreatVoteSelection
                 .Where(candidate =>
                     !assigned.Contains(candidate.player) &&
                     profiles.TryGetValue(candidate.player, out HumanoidCharacterProfile? profile) &&
-                    ThreatVoteSelection.CanEnterThreatVotePoolForJob(profile, presetId, candidateThreatIds, jobId))
+                    ThreatVoteSelection.CanEnterThreatVotePoolForJob(profile, presetId, candidateThreatIds, jobId) &&
+                    // BUG-1061: someone without the queen's playtime got held for her slot, then the force
+                    // refused them and nothing spawned for ten minutes
+                    (canPlayJob == null || canPlayJob(candidate.player, jobId)))
                 .Select(candidate =>
                 {
                     HumanoidCharacterProfile profile = profiles[candidate.player];

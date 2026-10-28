@@ -55,7 +55,8 @@ public enum DamageImpactContext : byte
     None = 0,
     PointBlank = 1 << 0,
     // CMU14 Begin
-    NonGibbing = 1 << 1,
+    XenoClaw = 1 << 1, // Apply the XVX slash multiplier per target.
+    NonGibbing = 1 << 2,
     // CMU14 End
 }
 

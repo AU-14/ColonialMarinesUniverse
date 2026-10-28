@@ -69,3 +69,10 @@ cmu-forensics-injury-shrapnel = { $count } { $count ->
    *[other] fragments
 } of shrapnel lodged
 cmu-forensics-injury-missing = missing
+
+cmu-forensic-tool-signature = tool signature {$signature}
+cmu-forensic-pry-marks = pry marks matching tool signature {$signature}
+cmu-forensic-weld-marks = weld marks matching tool signature {$signature}
+cmu-forensics-floor-nothing = There's no blood here to scan.
+cmu-forensics-blood-stain = blood stain
+cmu-forensics-degraded-blood = old blood, too degraded to type

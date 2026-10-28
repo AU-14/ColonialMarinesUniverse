@@ -4,6 +4,9 @@
   suffix: RuMC, BEAR
   abstract: true
   components:
+  - type: NpcFactionMember
+    factions:
+    - AUUpp
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearance
   - type: RandomHumanoidAppearanceWhitelisted

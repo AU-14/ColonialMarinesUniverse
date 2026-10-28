@@ -60,7 +60,8 @@ public sealed partial class NightVisionOverlay : Overlay
 
         _entries.Clear();
         var entities = _entity.EntityQueryEnumerator<RMCNightVisionVisibleComponent, SpriteComponent, TransformComponent>();
-        while (entities.MoveNext(out var uid, out var visible, out var sprite, out var xform))
+        while (nightVision.DrawVisibleMobs &&
+               entities.MoveNext(out var uid, out var visible, out var sprite, out var xform))
         {
             _entries.Add(new NightVisionRenderEntry((uid, sprite, xform),
                 eye?.Position.MapId,

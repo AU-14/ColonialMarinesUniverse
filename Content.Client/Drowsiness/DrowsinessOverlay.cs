@@ -1,3 +1,4 @@
+using Content.Client.CMU14.ZLevels.Core; // cmu edit
 using Content.Shared.Drowsiness;
 using Content.Shared.StatusEffectNew;
 using Robust.Client.Graphics;
@@ -58,7 +59,7 @@ public sealed partial class DrowsinessOverlay : Overlay
         if (!_entityManager.TryGetComponent(_playerManager.LocalEntity, out EyeComponent? eyeComp))
             return false;
 
-        if (args.Viewport.Eye != eyeComp.Eye)
+        if (!args.Viewport.Eye.IsPlayerView(eyeComp.Eye)) // cmu edit
             return false;
 
         _visualScale = Math.Clamp(CurrentPower / PowerDivisor, 0.0f, 1.0f);

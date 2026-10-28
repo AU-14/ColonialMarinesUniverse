@@ -8,7 +8,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._RMC14.NightVision;
 
 /// <summary>
-/// Gives a wearable item an action that applies night vision settings to the wearer.
+/// CMU14: Gives wearable items or scopes night vision settings to apply to their user.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedNightVisionSystem))]
@@ -133,6 +133,8 @@ public sealed partial class NightVisionItemComponent : Component
     // CMU Related Change
     [DataField, AutoNetworkedField]
     public bool PreviousOverlay;
+
+    public bool PreviousDrawVisibleMobs = true;
 
     /// <summary>
     /// Previous wearer meson state restored when this item is disabled.

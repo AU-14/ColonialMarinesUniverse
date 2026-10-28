@@ -1,6 +1,8 @@
 cmu-mohawk-floor = Mohawk deck
 cmu-guide-entry-mohawk-m90 = Midway M90 Chin Turret
 cmu-mohawk-roof = Mohawk upper hull plating
+ent-CMUMohawkApproachShadow = approaching dropship
+    .desc = A large dropship is descending toward this spot.
 cmu-mohawk-ramp = Mohawk boarding ramp
 cmu-mohawk-camera-omaha = Omaha cameras
 cmu-mohawk-camera-midway = Midway cameras

@@ -1,0 +1,8 @@
+author: johnnny34y
+category: CMU
+changes:
+- message: HAZOPS armor has been buffed with a speed increase and a bullet resistance
+    of 15.
+  type: Tweak
+time: '2026-10-23T20:16:10.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2263

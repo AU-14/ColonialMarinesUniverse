@@ -245,7 +245,7 @@
   This means:
 
   - compatible receivers can read the message
-  - the transmission produces a direction-finding signature
+  - an enemy that has resolved the net can take a rough bearing on it
 
   Check the SECURITY tab if the radio warns about its encryption state.
 

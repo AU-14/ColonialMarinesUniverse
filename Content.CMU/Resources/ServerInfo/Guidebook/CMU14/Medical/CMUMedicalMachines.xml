@@ -52,6 +52,6 @@
   The cryo pod injects medicine from an inserted beaker and chills the patient with gas from a connected freezer.
   - Load a beaker with the cryogenic medicine needed for the patient's injuries, then put the patient inside.
   - The new cryogenic medicines start healing when the patient's body reaches 213 K or colder. Opporozidone needs 150 K or colder.
-  - Cryoxadone treats suffocation and blood loss; Aloxadone treats burns; Traumoxadone treats brute damage; Urishoxadone treats poison and radiation; Doxarubixadone treats cellular damage; Necrosol heals multiple injuries and regenerates missing native limbs; Opporozidone reverses rot in dead patients.
-  - See [textlink="Other Medications" link="CMUGuideMedsOther"] for doses and reagent details.
+  - Cryoxadone treats suffocation and blood loss; Aloxadone treats burns; Traumoxadone treats brute damage; Urishoxadone treats poison and radiation; Doxarubixadone treats cellular and organ damage; Necrosol repairs fractures, restores blood and regenerates missing native limbs; Opporozidone reverses rot in dead patients.
+  - See [textlink="Cryogenic Medicines and Recipes" link="CMUGuideMedsCryogenic"] for mixing ratios, precursor recipes, heating requirements and treatment details.
 </Document>

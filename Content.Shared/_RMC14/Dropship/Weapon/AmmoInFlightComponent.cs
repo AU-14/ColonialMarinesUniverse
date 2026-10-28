@@ -65,7 +65,8 @@ public sealed partial class AmmoInFlightComponent : Component
     [DataField, AutoNetworkedField]
     public int BulletSpread = 3;
 
-    [DataField, AutoNetworkedField]
+    // CMU14: impact safety is server-only; the source may be deleted before the round finishes.
+    [DataField]
     public EntityUid? ChinGunSource;
 
     [DataField, AutoNetworkedField]

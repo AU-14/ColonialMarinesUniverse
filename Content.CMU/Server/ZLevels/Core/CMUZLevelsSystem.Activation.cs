@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Ship;
+using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Gravity;
 using Content.Shared.Ghost.Components;
@@ -69,7 +70,13 @@ public sealed partial class CMUZLevelsSystem
         OnZPhysicsMoveGroundSnap(ent, ref args, out var unchangedGround);
 
         if (!TryGetFallCheckTile(ent, out var map, out var tile))
+        {
+            // A hovering shuttle can unload onto an empty upper map with no terrain grid.
+            // Leaving its deck must wake falling even though there is no tile to cache.
+            ent.Comp.LastFallCheckMap = EntityUid.Invalid;
+            CheckActivation(ent, unchangedGround);
             return;
+        }
 
         if (ent.Comp.LastFallCheckMap == map &&
             ent.Comp.LastFallCheckTile == tile)
@@ -117,7 +124,7 @@ public sealed partial class CMUZLevelsSystem
             return false;
         }
 
-        if (HasComp<GhostComponent>(ent))
+        if (HasComp<GhostComponent>(ent) || HasComp<QueenEyeComponent>(ent))
             return false;
 
         var xform = Transform(ent);

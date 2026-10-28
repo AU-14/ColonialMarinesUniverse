@@ -42,6 +42,14 @@ public sealed partial record CriminalRecord : StationRecord
     /// </summary>
     [DataField]
     public int Bounty;
+
+    // cmu edit start: warrants and arrests
+    [DataField]
+    public List<Content.Shared.CMU14.CriminalRecords.CMURecordWarrant> CMUWarrants = new();
+
+    [DataField]
+    public List<Content.Shared.CMU14.CriminalRecords.CMURecordArrest> CMUArrests = new();
+    // cmu edit end
 }
 
 /// <summary>

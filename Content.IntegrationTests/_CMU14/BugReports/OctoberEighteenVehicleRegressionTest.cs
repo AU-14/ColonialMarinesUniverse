@@ -34,7 +34,7 @@ public sealed class OctoberEighteenVehicleRegressionTest : GameTest
             var maps = SEntMan.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(SEntMan.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/midway.yml"), out var loaded), Is.True);
+                new ResPath("/Maps/CMU14/Dropships/Mohawk/midway.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
         });
         await Pair.RunSeconds(1);
@@ -91,7 +91,7 @@ public sealed class OctoberEighteenVehicleRegressionTest : GameTest
             var maps = SEntMan.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(SEntMan.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
         });
         await Pair.RunTicksSync(5);

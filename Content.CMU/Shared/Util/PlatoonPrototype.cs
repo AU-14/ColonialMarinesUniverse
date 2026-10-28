@@ -72,6 +72,13 @@ public sealed partial class PlatoonPrototype : IPrototype
     public Dictionary<EntProtoId, EntProtoId> StartingGearOverrides = new();
 
     /// <summary>
+    ///     The ration pack this platoon eats. Ration crates aboard its ship open full of these instead of UA MREs.
+    ///     Unset keeps the UA MRE.
+    /// </summary>
+    [DataField]
+    public EntProtoId? Rations;
+
+    /// <summary>
     ///     Jobs that spawn with a different set of starting gear in this platoon, e.g. the platoon's own uniform,
     ///     helmet and vest for its engineers. The player's loadout is still equipped first and keeps its slots.
     /// </summary>

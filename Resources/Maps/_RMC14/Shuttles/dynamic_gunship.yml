@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 08/11/2026 21:32:38
-  entityCount: 72
+  entityCount: 78
 maps:
 - 72
 grids:
@@ -1697,6 +1697,13 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 0.8341541,1.5
       parent: 1
+- proto: CMUAirFillerVent
+  entities:
+  - uid: 78
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,3.5
 - proto: CMUComputerGunshipControls
   entities:
   - uid: 56
@@ -2014,6 +2021,33 @@ entities:
       nextSound: -1007.2126694
     - type: Physics
       canCollide: False
+- proto: RMCTinyFan
+  entities:
+  - uid: 73
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,3.5
+  - uid: 74
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,3.5
+  - uid: 75
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-1.5
+  - uid: 76
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-1.5
+  - uid: 77
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-1.5
 - proto: VehicleInteriorNanomed
   entities:
   - uid: 63

@@ -18,6 +18,7 @@ public readonly partial record struct TechOption(
     TimeSpan TimeLock,
     // cmu edit start: how many times a repurchasable option can be bought; 0 is no limit
     int MaxPurchases = 0,
-    int TimesPurchased = 0
+    int TimesPurchased = 0,
+    TimeSpan PurchaseCooldown = default // CMU14: delay between purchases, using the round-relative TimeLock.
     // cmu edit end
 );

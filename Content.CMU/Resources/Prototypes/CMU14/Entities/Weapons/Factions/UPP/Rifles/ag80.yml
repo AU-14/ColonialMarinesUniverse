@@ -4,6 +4,7 @@
   id: AU14WeaponRifleAG80
   description: Pulse action 9.7x16mm caseless assault rifle of the UPPAC Naval Infantry. Only recently entered service and has yet to see full integration.
   components:
+  - type: CMUAmmoCounter
   - type: Sprite
     sprite: CMU14/Weapons/Guns/UPP/ag80.rsi
     layers:

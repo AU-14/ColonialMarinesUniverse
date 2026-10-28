@@ -1942,3 +1942,9 @@ DrinkNeurotoxinGlass: null
 
 #2026-08-19
 JanitorServiceLight: null
+
+# cmu edit start: 2026-10-21 the CM defibrillators and their compact variants are replaced by the AU14 lifepak
+CMDefibrillator: AU14CMDefibrillator
+CMDefibrillatorEmpty: AUCMDefibrillatorEmpty
+RMCDefibrillatorCompact: AU14CMDefibrillator
+# cmu edit end

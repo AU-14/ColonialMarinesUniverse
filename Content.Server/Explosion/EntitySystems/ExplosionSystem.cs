@@ -312,6 +312,8 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         // CMU14 Begin
         var nonGibbing = HasComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(cause) ||
                         EntityManager.System<Content.Shared.Gibbing.GibbingSystem>().GibbingSuppressed;
+        // Snapshot the firing vehicle before the projectile is deleted.
+        var sourceVehicle = GetCMUProjectileVehicle(cause);
         // CMU14 End
         // try to combine explosions on the same tile if they are the same type
         foreach (var queued in _queuedExplosions)
@@ -321,7 +323,8 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
                 continue;
 
             // CMU14 Begin
-            if (queued.NonGibbing != nonGibbing)
+            // Keep gibbing policy and crew-damage exemptions separate when combining blasts.
+            if (queued.NonGibbing != nonGibbing || queued.SourceVehicle != sourceVehicle)
                 continue;
             // CMU14 End
             var dst2 = queued.Proto.MaxCombineDistance * queued.Proto.MaxCombineDistance;
@@ -346,6 +349,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             Cause = cause,
             // CMU14 Begin
             NonGibbing = nonGibbing,
+            SourceVehicle = sourceVehicle,
             // CMU14 End
         };
         _explosionQueue.Enqueue(boom);
@@ -440,6 +444,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             queued.Cause,
             // CMU14 Begin
             queued.NonGibbing,
+            queued.SourceVehicle,
             // CMU14 End
             _map,
             _damageableSystem,

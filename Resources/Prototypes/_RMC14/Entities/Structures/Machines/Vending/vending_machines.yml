@@ -320,6 +320,7 @@
   - type: ContainerContainer
     containers:
       autodrink_bay: !type:ContainerSlot
+  - type: CMUFoodlineVendor
   - type: CMUAutoDrink
     bay:
       whitelistFailPopup: reagent-dispenser-component-cannot-put-entity-message
@@ -372,6 +373,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/drink.rsi
     offset: 0, 0.5
+  - type: CMUFoodlineVendor # cmu edit: shut off while the DEFAC foodline is open
 
 - type: entity
   parent: CMVendor
@@ -554,9 +556,13 @@
     # Pepper spray 4
     # InvestigationPepperSpray: 4
     CMStunbaton: 4
-    RMCGunCasePistolM77: 4
-    CMMagazinePistolM77AP: 16
-    CMMagazinePistolM88Rubber: 40
+    # cmu edit start: no Mod 88 in SecTech; pepper spray instead
+    # RMCGunCasePistolM77: 4
+    # CMMagazinePistolM77AP: 16
+    # CMMagazinePistolM88Rubber: 40
+    CMUPepperSpray: 4
+    CMUPepperSprayAntidote: 2
+    # cmu edit end
     # CMBeltSecurityMP: 10
     CMFlash: 5
     RMCGrenadeFlashBang: 6
@@ -565,8 +571,8 @@
     #RegulationTape: 5
     #TapeRecorder: 3
     #ClueScanner: 3
-    #Camera: 8
-    #CameraFilm: 8
+    CMUPhotoCamera: 8 # CMU14
+    CMUCameraFilm: 8 # CMU14
     CMU14TearGasGrenade: 4
     RMCWhistle: 5
     RMCFoodDonut: 12

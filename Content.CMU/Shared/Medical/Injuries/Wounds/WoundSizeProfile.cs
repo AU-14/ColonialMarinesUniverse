@@ -5,131 +5,131 @@ namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 
 public static class WoundSizeProfile
 {
-    private readonly record struct WoundStage(float Threshold, string Name);
+    private readonly record struct WoundStage(float Threshold, string LocId);
 
     private static readonly WoundStage[] CutSmallStages =
     {
-        new(20f, "ugly ripped cut"),
-        new(10f, "ripped cut"),
-        new(5f, "cut"),
-        new(2f, "healing cut"),
-        new(0f, "small scab"),
+        new(20f, "cmu-wound-stage-cutsmall-0"),
+        new(10f, "cmu-wound-stage-cutsmall-1"),
+        new(5f, "cmu-wound-stage-cutsmall-2"),
+        new(2f, "cmu-wound-stage-cutsmall-3"),
+        new(0f, "cmu-wound-stage-cutsmall-4"),
     };
 
     private static readonly WoundStage[] CutDeepStages =
     {
-        new(25f, "ugly deep ripped cut"),
-        new(20f, "deep ripped cut"),
-        new(15f, "deep cut"),
-        new(8f, "clotted cut"),
-        new(2f, "scab"),
-        new(0f, "fresh skin"),
+        new(25f, "cmu-wound-stage-cutdeep-0"),
+        new(20f, "cmu-wound-stage-cutdeep-1"),
+        new(15f, "cmu-wound-stage-cutdeep-2"),
+        new(8f, "cmu-wound-stage-cutdeep-3"),
+        new(2f, "cmu-wound-stage-cutdeep-4"),
+        new(0f, "cmu-wound-stage-cutdeep-5"),
     };
 
     private static readonly WoundStage[] CutFleshStages =
     {
-        new(35f, "ugly ripped flesh wound"),
-        new(30f, "ugly flesh wound"),
-        new(25f, "flesh wound"),
-        new(15f, "blood soaked clot"),
-        new(5f, "large scab"),
-        new(0f, "fresh skin"),
+        new(35f, "cmu-wound-stage-cutflesh-0"),
+        new(30f, "cmu-wound-stage-cutflesh-1"),
+        new(25f, "cmu-wound-stage-cutflesh-2"),
+        new(15f, "cmu-wound-stage-cutflesh-3"),
+        new(5f, "cmu-wound-stage-cutflesh-4"),
+        new(0f, "cmu-wound-stage-cutflesh-5"),
     };
 
     private static readonly WoundStage[] CutGapingStages =
     {
-        new(50f, "gaping wound"),
-        new(25f, "large blood soaked clot"),
-        new(15f, "large clot"),
-        new(5f, "small angry scar"),
-        new(0f, "small straight scar"),
+        new(50f, "cmu-wound-stage-cutgaping-0"),
+        new(25f, "cmu-wound-stage-cutgaping-1"),
+        new(15f, "cmu-wound-stage-cutgaping-2"),
+        new(5f, "cmu-wound-stage-cutgaping-3"),
+        new(0f, "cmu-wound-stage-cutgaping-4"),
     };
 
     private static readonly WoundStage[] CutGapingBigStages =
     {
-        new(60f, "big gaping wound"),
-        new(40f, "healing gaping wound"),
-        new(10f, "large angry scar"),
-        new(0f, "large straight scar"),
+        new(60f, "cmu-wound-stage-cutgapingbig-0"),
+        new(40f, "cmu-wound-stage-cutgapingbig-1"),
+        new(10f, "cmu-wound-stage-cutgapingbig-2"),
+        new(0f, "cmu-wound-stage-cutgapingbig-3"),
     };
 
     private static readonly WoundStage[] CutMassiveStages =
     {
-        new(70f, "massive wound"),
-        new(50f, "massive healing wound"),
-        new(10f, "massive angry scar"),
-        new(0f, "massive jagged scar"),
+        new(70f, "cmu-wound-stage-cutmassive-0"),
+        new(50f, "cmu-wound-stage-cutmassive-1"),
+        new(10f, "cmu-wound-stage-cutmassive-2"),
+        new(0f, "cmu-wound-stage-cutmassive-3"),
     };
 
     private static readonly WoundStage[] BruiseStages =
     {
-        new(80f, "monumental bruise"),
-        new(50f, "huge bruise"),
-        new(30f, "large bruise"),
-        new(20f, "moderate bruise"),
-        new(10f, "small bruise"),
-        new(5f, "tiny bruise"),
-        new(0f, "fading bruise"),
+        new(80f, "cmu-wound-stage-bruise-0"),
+        new(50f, "cmu-wound-stage-bruise-1"),
+        new(30f, "cmu-wound-stage-bruise-2"),
+        new(20f, "cmu-wound-stage-bruise-3"),
+        new(10f, "cmu-wound-stage-bruise-4"),
+        new(5f, "cmu-wound-stage-bruise-5"),
+        new(0f, "cmu-wound-stage-bruise-6"),
     };
 
     private static readonly WoundStage[] BurnModerateStages =
     {
-        new(10f, "ripped burn"),
-        new(5f, "moderate burn"),
-        new(2f, "healing moderate burn"),
-        new(0f, "fresh skin"),
+        new(10f, "cmu-wound-stage-burnmoderate-0"),
+        new(5f, "cmu-wound-stage-burnmoderate-1"),
+        new(2f, "cmu-wound-stage-burnmoderate-2"),
+        new(0f, "cmu-wound-stage-burnmoderate-3"),
     };
 
     private static readonly WoundStage[] BurnLargeStages =
     {
-        new(20f, "ripped large burn"),
-        new(15f, "large burn"),
-        new(5f, "healing large burn"),
-        new(0f, "fresh skin"),
+        new(20f, "cmu-wound-stage-burnlarge-0"),
+        new(15f, "cmu-wound-stage-burnlarge-1"),
+        new(5f, "cmu-wound-stage-burnlarge-2"),
+        new(0f, "cmu-wound-stage-burnlarge-3"),
     };
 
     private static readonly WoundStage[] BurnSevereStages =
     {
-        new(35f, "ripped severe burn"),
-        new(30f, "severe burn"),
-        new(10f, "healing severe burn"),
-        new(0f, "burn scar"),
+        new(35f, "cmu-wound-stage-burnsevere-0"),
+        new(30f, "cmu-wound-stage-burnsevere-1"),
+        new(10f, "cmu-wound-stage-burnsevere-2"),
+        new(0f, "cmu-wound-stage-burnsevere-3"),
     };
 
     private static readonly WoundStage[] BurnDeepStages =
     {
-        new(45f, "ripped deep burn"),
-        new(40f, "deep burn"),
-        new(15f, "healing deep burn"),
-        new(0f, "large burn scar"),
+        new(45f, "cmu-wound-stage-burndeep-0"),
+        new(40f, "cmu-wound-stage-burndeep-1"),
+        new(15f, "cmu-wound-stage-burndeep-2"),
+        new(0f, "cmu-wound-stage-burndeep-3"),
     };
 
     private static readonly WoundStage[] BurnCarbonisedStages =
     {
-        new(50f, "carbonised area"),
-        new(20f, "healing carbonised area"),
-        new(0f, "massive burn scar"),
+        new(50f, "cmu-wound-stage-burncarbonised-0"),
+        new(20f, "cmu-wound-stage-burncarbonised-1"),
+        new(0f, "cmu-wound-stage-burncarbonised-2"),
     };
 
     private static readonly WoundStage[] InternalBleedingStages =
     {
-        new(0f, "bruised artery"),
+        new(0f, "cmu-wound-stage-internalbleeding-0"),
     };
 
     private static readonly WoundStage[] LostLimbSmallStages =
     {
-        new(40f, "ripped stump"),
-        new(30f, "bloody stump"),
-        new(15f, "clotted stump"),
-        new(0f, "scarred stump"),
+        new(40f, "cmu-wound-stage-lostlimbsmall-0"),
+        new(30f, "cmu-wound-stage-lostlimbsmall-1"),
+        new(15f, "cmu-wound-stage-lostlimbsmall-2"),
+        new(0f, "cmu-wound-stage-lostlimbsmall-3"),
     };
 
     private static readonly WoundStage[] LostLimbStages =
     {
-        new(65f, "ripped stump"),
-        new(50f, "bloody stump"),
-        new(25f, "clotted stump"),
-        new(0f, "scarred stump"),
+        new(65f, "cmu-wound-stage-lostlimb-0"),
+        new(50f, "cmu-wound-stage-lostlimb-1"),
+        new(25f, "cmu-wound-stage-lostlimb-2"),
+        new(0f, "cmu-wound-stage-lostlimb-3"),
     };
 
     public static WoundSize FromDamage(float damage)
@@ -194,24 +194,24 @@ public static class WoundSizeProfile
         return StageName(damage, Stages(size));
     }
 
-    public static string TierName(WoundSize size) => size switch
+    public static string TierName(WoundSize size) => Loc.GetString(size switch
     {
-        WoundSize.CutSmall => "small cut",
-        WoundSize.CutDeep => "deep cut",
-        WoundSize.CutFlesh => "flesh wound",
-        WoundSize.CutGaping => "gaping wound",
-        WoundSize.CutGapingBig => "big gaping wound",
-        WoundSize.CutMassive => "massive wound",
-        WoundSize.Bruise => "bruise",
-        WoundSize.BurnModerate => "moderate burn",
-        WoundSize.BurnLarge => "large burn",
-        WoundSize.BurnSevere => "severe burn",
-        WoundSize.BurnDeep => "deep burn",
-        WoundSize.BurnCarbonised => "carbonised area",
-        WoundSize.InternalBleeding => "bruised artery",
-        WoundSize.LostLimbSmall or WoundSize.LostLimb => "stump",
-        _ => "wound",
-    };
+        WoundSize.CutSmall => "cmu-wound-tier-cutsmall",
+        WoundSize.CutDeep => "cmu-wound-tier-cutdeep",
+        WoundSize.CutFlesh => "cmu-wound-tier-cutflesh",
+        WoundSize.CutGaping => "cmu-wound-tier-cutgaping",
+        WoundSize.CutGapingBig => "cmu-wound-tier-cutgapingbig",
+        WoundSize.CutMassive => "cmu-wound-tier-cutmassive",
+        WoundSize.Bruise => "cmu-wound-tier-bruise",
+        WoundSize.BurnModerate => "cmu-wound-tier-burnmoderate",
+        WoundSize.BurnLarge => "cmu-wound-tier-burnlarge",
+        WoundSize.BurnSevere => "cmu-wound-tier-burnsevere",
+        WoundSize.BurnDeep => "cmu-wound-tier-burndeep",
+        WoundSize.BurnCarbonised => "cmu-wound-tier-burncarbonised",
+        WoundSize.InternalBleeding => "cmu-wound-tier-internalbleeding",
+        WoundSize.LostLimbSmall or WoundSize.LostLimb => "cmu-wound-tier-stump",
+        _ => "cmu-wound-tier-default",
+    });
 
     public static int SeverityRank(WoundSize size, float damage = 0f)
     {
@@ -315,9 +315,9 @@ public static class WoundSizeProfile
         foreach (var stage in stages)
         {
             if (damage >= stage.Threshold)
-                return stage.Name;
+                return Loc.GetString(stage.LocId);
         }
 
-        return stages[^1].Name;
+        return Loc.GetString(stages[^1].LocId);
     }
 }

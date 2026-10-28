@@ -1,0 +1,59 @@
+- type: entity
+  id: CMUPlanetLV624
+  name: LV624 Lazarus Landing
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "LV624 Lazarus Landing"
+    mapId: CMULV624
+    lorePrimer: AU14PrimerPlanetLV624
+    allegiance: UA
+    camouflage: Jungle
+    announcement: "A distress signal has been received from the frontier colony of Lazarus Landing on LV-624 'Green Hell'. A response force has been dispatched to investigate."
+    platoonsGovfor:
+    - USCM
+    - RMC
+    - LACN
+    platoonsOpfor:
+    - UPP
+    - ProdigySF
+    - VAIPO
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: false
+    thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    threats:
+    - XenoThreat
+    # - NeomorphsThreat
+    # - BadBloodClanThreat
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
+      AU14JobLEOBase: AU14JobCivilianCMBDeputy
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: gameMap
+  id: CMULV624
+  mapName: LV624 Lazarus Landing
+  allegiance: UA
+  mapPath: /Maps/CMU14/Planets/LV624/LV624MultiZ0.yml
+  mapsBelow:
+  - /Maps/CMU14/Planets/LV624/LV624MultiZ-1.yml
+  mapsAbove:
+  - /Maps/CMU14/Planets/LV624/LV624MultiZ1.yml
+  - /Maps/CMU14/Planets/LV624/LV624MultiZ2.yml
+  - /Maps/CMU14/Planets/LV624/LV624MultiZ3.yml
+  minPlayers: 0
+  maxPlayers: 500
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    lv624:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'LV624 Lazarus Landing'

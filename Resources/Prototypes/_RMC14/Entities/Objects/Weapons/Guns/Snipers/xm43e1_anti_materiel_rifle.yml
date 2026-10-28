@@ -11,21 +11,20 @@
     whitelist:
       components:
       - SniperWhitelist
-  # cmu edit start: old pre-resprite XM43E1 sprites (reverts RMC-14 PR 6041)
+  # cmu edit start: CM13 AMR resprite (cmss13-devs/cmss13#12397); the muzzle brake is part of the new sprite
   - type: Sprite
-    sprite: CMU14/Weapons/Snipers/xm43e1_old.rsi
+    sprite: CMU14/Weapons/Snipers/xm43e1_inhands.rsi
     layers:
     - state: bolt-open
+      sprite: CMU14/Weapons/Snipers/xm43e1_icon.rsi
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
+      sprite: CMU14/Weapons/Snipers/xm43e1_icon.rsi
       map: [ "enum.GunVisualLayers.Mag" ]
-    - sprite: _RMC14/Objects/Weapons/Guns/Attachments/barrel.rsi
-      state: pmc_sniperbarrel
-      offset: 0.500, 0.050
   - type: Item
     size: Large
   - type: Clothing
-    sprite: CMU14/Weapons/Snipers/xm43e1_old.rsi
+    sprite: CMU14/Weapons/Snipers/xm43e1_inhands.rsi
   # cmu edit end
   - type: Tag
     tags:
@@ -110,8 +109,8 @@
     proto: RMCCartridgeSniper10x99mmAntiMateriel
     capacity: 8
   - type: Sprite
-    # cmu edit start: old magazine sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m42c.rsi
+    # cmu edit start: CM13 AMR resprite magazine (cmss13-devs/cmss13#12397)
+    sprite: CMU14/Weapons/Ammunition/xm43e1_magazine.rsi
     # cmu edit end
     layers:
     - state: mag-0

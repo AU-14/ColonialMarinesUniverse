@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMJobBase
   id: AU14JobUNISCCorpsman
   icon: AU14JobIconCorpsman
@@ -28,7 +28,7 @@
     currentLanguage: English
     defaultLanguage: English
 
-  name: United Nations Interstellar Space Corps Corpsman
+  name: Corpsman
   description: au14-unisc-description
   playTimeTracker: AU14JobUNISCCorpsman
   ranks:

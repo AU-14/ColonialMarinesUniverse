@@ -39,6 +39,23 @@ public sealed class GhostWarpGroupingTest
     }
 
     [Test]
+    public void UnmatchedGovforRoleJoinsTheLineSection()
+    {
+        var grouping = GhostWarpGrouping.Classify(
+            isWarpPoint: false,
+            jobId: "AU14JobGOVFORSquadMachineGunner",
+            departmentId: "AU14DepartmentGovernmentForces",
+            factions: new[] { "GOVFOR" },
+            isXeno: false,
+            isYautja: false,
+            isCorruptedHive: false,
+            xenoTier: null,
+            realDisplayWeight: 1);
+
+        Assert.That(grouping.Section, Is.EqualTo(GhostWarpGrouping.SectionLine));
+    }
+
+    [Test]
     public void UnmcMilitaryRolesUseRoleSpecificSubtabs()
     {
         AssertMilitarySection("CMJobPilotDropship", GhostWarpGrouping.SectionPilotsCrew, GhostWarpGrouping.TabMilitary, "UNMC", "CMEngineering");

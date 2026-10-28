@@ -299,7 +299,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         var footprint = console is { } c ? GetFootprint(c, dropship) : dropship.TacticalLandFootprint;
 
         _audio.PlayPvs(WarningSound, destCoords, AudioParams.Default.WithVolume(2f));
-        SpawnWarningBorder(destCoords, footprint, xform.LocalRotation, lifetime);
+        if (!TrySpawnMohawkApproachShadows(destination, dropshipGrid, lifetime, ftl.StateTime.End))
+            SpawnWarningBorder(destCoords, footprint, xform.LocalRotation, lifetime);
 
         EnsureComp<DropshipLandingMarkersSpawnedComponent>(destination);
     }
@@ -1199,6 +1200,13 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
 
     private bool CanDesignateTacticalLanding(Entity<DropshipNavigationComputerComponent> console)
     {
+        // Summoned third parties held to their faction's ship land only on its pad.
+        if (Transform(console.Owner).GridUid is { } grid &&
+            EntityManager.System<Content.Server._RMC14.Dropship.DropshipSystem>().GetSummonedThirdPartyShipFaction(grid) != null)
+        {
+            return false;
+        }
+
         if (console.Comp.CanTacticalLand)
             return true;
 

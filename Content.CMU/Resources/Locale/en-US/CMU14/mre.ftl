@@ -55,3 +55,5 @@ cmu-food-spread-examine = You can put this onto other food.
 cmu-food-spread-closed = Open { THE($spread) } first.
 cmu-food-spread-empty = { CAPITALIZE(THE($spread)) } is empty.
 cmu-food-spread-full = You can't put any more onto { THE($food) }.
+
+cmu-mre-ship-mess-hall = You don't feel like eating an MRE when there's good food available in the mess hall.

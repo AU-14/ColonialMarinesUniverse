@@ -20,6 +20,10 @@ public sealed partial class MeleeWeaponComponent : Component
     [DataField]
     public bool WidePrimary;
 
+    // CMU14: when false this weapon cannot perform a wide (arc) swing.
+    [DataField]
+    public bool WideAttackAllowed = true;
+
     // TODO: This is becoming bloated as shit.
     // This should just be its own component for alt attacks.
     /// <summary>

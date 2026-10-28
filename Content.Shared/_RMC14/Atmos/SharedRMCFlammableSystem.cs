@@ -848,11 +848,36 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     }
 
     // CMU14: fire growth and synthetic resistance.
-    /// <summary>Fire bypasses worn armor, but respects synthetic and Yautja heat resistance.</summary>
-    public void DamageFromFire(EntityUid target, DamageSpecifier damage, bool interruptsDoAfters = true, EntityUid? origin = null)
+    /// <summary>
+    /// Fire bypasses worn armor, but respects synthetic and Yautja heat resistance unless the fire is
+    /// <paramref name="penetrating"/> (Firepenetrating fuel), in which case every resistance is ignored.
+    /// </summary>
+    public void DamageFromFire(EntityUid target, DamageSpecifier damage, bool interruptsDoAfters = true, EntityUid? origin = null, bool penetrating = false)
     {
-        _damageable.TryChangeDamage(target, damage, ignoreResistances: !HasComp<SynthComponent>(target) && !HasComp<YautjaComponent>(target),
+        var ignoreResistances = penetrating || (!HasComp<SynthComponent>(target) && !HasComp<YautjaComponent>(target));
+        _damageable.TryChangeDamage(target, damage, ignoreResistances: ignoreResistances,
             interruptsDoAfters: interruptsDoAfters, origin: origin);
+    }
+
+    // CMU14 method - Firepenetrating fuel
+    public void SetFirePenetrating(Entity<RMCIgniteOnCollideComponent?> ent, bool penetrating)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        ent.Comp.FirePenetrating = penetrating;
+        Dirty(ent.Owner, ent.Comp);
+    }
+
+    // CMU14 method - flamer blends scale the tile fire's lifetime
+    /// <summary>Multiplies the remaining lifetime of a tile fire, keeping its spawn time.</summary>
+    public void ScaleTileFireDuration(Entity<TileFireComponent?> fire, float multiplier)
+    {
+        if (multiplier <= 0 || !Resolve(fire, ref fire.Comp, false))
+            return;
+
+        fire.Comp.Duration *= multiplier;
+        Dirty(fire.Owner, fire.Comp);
     }
 
     private void TryIgnite(Entity<RMCIgniteOnCollideComponent> ent, EntityUid other, bool checkIgnited)
@@ -899,7 +924,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
         if (!wasOnFire && IsOnFire(flammableEnt) && CanFireBypassImmunity(ent, other))
             // CMU14: fire growth and synthetic resistance.
-            DamageFromFire(other, flammableEnt.Comp.Damage * ent.Comp.Intensity);
+            DamageFromFire(other, flammableEnt.Comp.Damage * ent.Comp.Intensity, penetrating: ent.Comp.FirePenetrating);
     }
 
     private void ApplyTileEffect(Entity<SteppingOnFireComponent> ent, RMCIgniteOnCollideComponent ignite, EntityUid fireEntity)
@@ -930,7 +955,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
                 stepping.Distance = 0;
                 if (CanFireBypassImmunity(fireEntity, uid))
                     // CMU14: fire growth and synthetic resistance.
-                    DamageFromFire(uid, tile * ignite.Intensity);
+                    DamageFromFire(uid, tile * ignite.Intensity, penetrating: ignite.FirePenetrating);
             }
         }
 
@@ -969,7 +994,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             if (ent.Comp.UpdateAt <= timing)
             {
                 // CMU14: fire growth and synthetic resistance.
-                DamageFromFire(uid, ignite.Intensity / 5f * flammable.Damage * ev.Multiplier, interruptsDoAfters: false);
+                DamageFromFire(uid, ignite.Intensity / 5f * flammable.Damage * ev.Multiplier, interruptsDoAfters: false, penetrating: ignite.FirePenetrating);
                 ent.Comp.UpdateAt = timing + ent.Comp.UpdateTime;
             }
         }

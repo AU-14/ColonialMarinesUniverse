@@ -92,7 +92,16 @@ public sealed partial class RMCWeatherSystem : EntitySystem
         _rmcLight.SetColor((ent, lightComp), lightningEffect, lightningDuration);
 
         var sound = ent.Comp.CurrentEvent.LightningSound;
-        _audio.PlayGlobal(_audio.ResolveSound(sound), Filter.BroadcastMap(Transform(ent).MapID), true);
+        // cmu edit start: thunder carries to every floor of the z-network, which share the ground's lightning flash
+        var thunderFilter = Filter.Empty();
+        foreach (var zMap in _zLevels.GetAllNetworkMaps(Transform(ent).MapUid ?? ent))
+        {
+            if (TryComp<MapComponent>(zMap, out var zMapComp))
+                thunderFilter.AddInMap(zMapComp.MapId);
+        }
+
+        _audio.PlayGlobal(_audio.ResolveSound(sound), thunderFilter, true);
+        // cmu edit end
     }
 
     public override void Update(float frameTime)

@@ -1,0 +1,236 @@
+# Prodigy security guard detail, called in through the Other intel list: a senior guard and two guards in the
+# colony guard kit, with tasers, rubber and live Glock rounds and riot gear for crowd work.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobProdigyGuardDetailLead
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: PSC
+  roundRole: CMUJobProdigyGuardDetailLead
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_ld
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+      RMCSkillPolice: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillMedical: 1
+  name: cmu-job-title-prodigy-guard-lead
+  description: cmu-prodigy-guard-description
+  playTimeTracker: CMUJobProdigyGuardDetailLead
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankPrDEnforcer:
+      entity: AU14ChevronPrDEnforcer
+      requirements: []
+  spawnMenuRoleName: Prodigy Senior Guard (Guard Detail)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearProdigyGuardDetailLead
+  greeting: cmu-prodigy-callin-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-prodigy-callin-supervisors
+  accessGroups:
+  - auprodigy
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobProdigyGuardDetailLead
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMUJobProdigyGuardDetailLead
+  name: Prodigy Senior Guard (Guard Detail)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-prodigy-guard-lead-name
+    description: cmu-prodigy-guard-description
+    reregister: false
+    job: CMUJobProdigyGuardDetailLead
+    raffle:
+      settings: short
+    rules: cmu-prodigy-callin-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobProdigyGuardDetail
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: PSC
+  roundRole: CMUJobProdigyGuardDetail
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_mp
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+      RMCSkillPolice: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillMedical: 1
+  name: cmu-job-title-prodigy-guard
+  description: cmu-prodigy-guard-description
+  playTimeTracker: CMUJobProdigyGuardDetail
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankPrDOperator:
+      entity: AU14ChevronPrDOperator
+      requirements: []
+  spawnMenuRoleName: Prodigy Security Guard (Guard Detail)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearProdigyGuardDetail
+  greeting: cmu-prodigy-callin-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-prodigy-callin-supervisors
+  accessGroups:
+  - auprodigy
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobProdigyGuardDetail
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMUJobProdigyGuardDetail
+  name: Prodigy Security Guard (Guard Detail)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-prodigy-guard-name
+    description: cmu-prodigy-guard-description
+    reregister: false
+    job: CMUJobProdigyGuardDetail
+    raffle:
+      settings: short
+    rules: cmu-prodigy-callin-rules
+
+- type: startingGear
+  id: CMUGearProdigyGuardDetailBase
+  equipment:
+    outerClothing: CMUArmorProdigyFlakVestAlt
+    jumpsuit: CMU14ProdigyJumpsuitGrey
+    shoes: RMCBootsSPPBlackFilled
+    head: CMU14ProdigyCapGrey
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    belt: RMCBeltSecurityWeYaFilled
+    back: CMSatchelMarine
+    ears: AU14HeadsetPART
+    ears2: RMCM5CameraGear
+    pocket2: AU14PouchIFAKFill
+    suitstorage: AU14BeltHolsterPistolBlack
+  storage:
+    suitstorage:
+    - CMU14WeaponPistolGlock75Taser
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    back:
+    - CMU14MagazinePistolGlock75Rubber
+    - CMU14MagazinePistolGlock75Rubber
+    - CMU14MagazinePistolGlock75Rubber
+    - CMCanteen
+    - CMU14TearGasGrenade
+    - RMCGrenadeFlashBang
+    - RMCZipties
+
+- type: startingGear
+  parent: CMUGearProdigyGuardDetailBase
+  id: CMUGearProdigyGuardDetailLead
+  equipment:
+    id: CMUIDCardProdigyGuardDetailLead
+    head: AU14ProdigyBeret
+    pocket1: RMCPouchShotgunLarge
+  storage:
+    pocket1:
+    - CMShellShotgunBeanbag
+    - CMShellShotgunBeanbag
+    - CMShellShotgunBeanbag
+    - CMShellShotgunBeanbag
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+  inhand:
+  - RMCWeaponShotgunHG3712
+
+- type: startingGear
+  parent: CMUGearProdigyGuardDetailBase
+  id: CMUGearProdigyGuardDetail
+  equipment:
+    id: CMUIDCardProdigyGuardDetail
+    pocket1: RMCPouchGeneralMedium
+  inhand:
+  - CMStunbaton
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardProdigyGuardDetailLead
+  name: Prodigy senior guard ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobProdigyGuardDetailLead
+  - type: ItemIFF
+    factions:
+    - FactionProdigy
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardProdigyGuardDetail
+  name: Prodigy security guard ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobProdigyGuardDetail
+  - type: ItemIFF
+    factions:
+    - FactionProdigy
+
+- type: partySpawn
+  id: CMUProdigyGuardDetailSpawn
+  leadersToSpawn:
+    CMUJobProdigyGuardDetailLead: 1
+  gruntsToSpawn:
+    CMUJobProdigyGuardDetail: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUProdigyGuardDetail
+  displayName: Prodigy Security Guard Detail
+  partyspawn: CMUProdigyGuardDetailSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false

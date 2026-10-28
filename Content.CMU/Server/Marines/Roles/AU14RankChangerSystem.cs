@@ -57,6 +57,7 @@ public sealed partial class RankChangerSystem : EntitySystem
         if (!_prototypes.TryIndex(comp.Rank, out var rankProto))
             return;
 
+        comp.PreviousRank = CompOrNull<RankComponent>(wearer)?.Rank;
         comp.Applied = true;
         _rank.SetRank(wearer, rankProto);
 
@@ -81,7 +82,7 @@ public sealed partial class RankChangerSystem : EntitySystem
         // Check if another chevron is present — apply that instead
         if (!HasComp<InventoryComponent>(wearer))
         {
-            _rank.ReapplyJobRank(wearer);
+            RestorePreviousRank(wearer, comp);
             return;
         }
 
@@ -93,6 +94,7 @@ public sealed partial class RankChangerSystem : EntitySystem
             {
                 if (_prototypes.TryIndex(changer.Rank, out var otherProto))
                 {
+                    changer.PreviousRank = comp.PreviousRank;
                     changer.Applied = true;
                     _rank.SetRank(wearer, otherProto);
                     return;
@@ -110,6 +112,7 @@ public sealed partial class RankChangerSystem : EntitySystem
                     {
                         if (_prototypes.TryIndex(accessoryChanger.Rank, out var otherProto))
                         {
+                            accessoryChanger.PreviousRank = comp.PreviousRank;
                             accessoryChanger.Applied = true;
                             _rank.SetRank(wearer, otherProto);
                             return;
@@ -120,8 +123,21 @@ public sealed partial class RankChangerSystem : EntitySystem
         }
 
         // No other chevron found — restore job rank
-        _rank.ReapplyJobRank(wearer);
+        RestorePreviousRank(wearer, comp);
         _marine.ClearMarineIcon(wearer);
+    }
+
+    private void RestorePreviousRank(EntityUid wearer, RankChangerComponent comp)
+    {
+        if (comp.PreviousRank is { } previous)
+            _rank.SetRank(wearer, previous);
+        else
+            _rank.ClearRank(wearer);
+
+        comp.PreviousRank = null;
+
+        // job ranks still win when the job has them
+        _rank.ReapplyJobRank(wearer);
     }
 
     private bool IsAnyChevronActive(EntityUid wearer, RankChangerComponent excluded)

@@ -67,8 +67,16 @@ public sealed partial class CMUShipWeaponStrikeComponent : Component
 [Access(typeof(CMUShipWeaponsSystem))]
 public sealed partial class CMUShipWeaponEmsFieldComponent : Component
 {
+    public readonly Dictionary<EntityUid, (TimeSpan NextDamage, TimeSpan LastExposure, float Damage)> Exposures = new();
+
     [DataField]
     public float Radius = 30;
+
+    [DataField(required: true)]
+    public float BurnDamagePerSecond;
+
+    [DataField(required: true)]
+    public float HumanDamageCap;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan EndsAt;
@@ -78,4 +86,14 @@ public sealed partial class CMUShipWeaponEmsFieldComponent : Component
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextPulse;
+}
+
+[RegisterComponent, AutoGenerateComponentPause]
+public sealed partial class CMUOrbitalGasVictimComponent : Component
+{
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan NextOrganDamage;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan LastExposure;
 }

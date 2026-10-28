@@ -5,6 +5,9 @@
   description: Developed by Weyland-Yutani as a modern successor to the aging M5 platform, the SpezialSturmGewehr is engineered for precision mid-to-long range combat. The primary rifle of the Weyland-Yutani PMCs.
   suffix: No ID Lock
   components:
+  # cmu edit start: built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/ssg45/ssg45_inhands.rsi
     layers:

@@ -19,7 +19,10 @@ public sealed partial class HumanoidProfileEditor
         if (Profile is null)
             return;
 
-        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithMarkings(_markingsModel.Markings));
+        var appearance = Profile.Appearance.WithMarkings(_markingsModel.Markings); // CMU14: Build may override an edited torso marking.
+        Profile = Profile.WithCharacterAppearance(appearance); // CMU14
+        if (!ReferenceEquals(Profile.Appearance, appearance))
+            _markingsModel.Markings = Profile.Appearance.Markings; // CMU14: refresh only when the Build overlay replaced the edit.
         ReloadProfilePreview();
         SetDirty();
     }

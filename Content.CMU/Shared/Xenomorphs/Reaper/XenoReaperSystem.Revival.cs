@@ -1,7 +1,10 @@
 using Content.Shared.CMU14.Xenomorphs.Reaper;
 using Content.Shared._RMC14.Xenonids.Evolution;
+using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.Damage.Components;
 using Content.Shared.DoAfter;
+using Content.Shared.GameTicking;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Spawners;
@@ -11,13 +14,44 @@ namespace Content.Shared._RMC14.Xenonids.Reaper;
 
 public sealed partial class XenoReaperSystem
 {
+    [Dependency] private SharedActionsSystem _revivalActions = default!;
     [Dependency] private MobThresholdSystem _revivalThresholds = default!;
+
+    private TimeSpan _revivalCooldownStart;
+    private TimeSpan _revivalCooldownEnd;
 
     private void InitializeCmuRevival()
     {
         SubscribeLocalEvent<XenoReaperComponent, CMUReaperReviveActionEvent>(OnReviveAction);
         SubscribeLocalEvent<XenoReaperComponent, CMUReaperReviveDoAfterEvent>(OnReviveDoAfter);
         SubscribeLocalEvent<XenoReaperComponent, DoAfterAttemptEvent<CMUReaperReviveDoAfterEvent>>(OnReviveAttempt);
+        SubscribeLocalEvent<CMUReaperRevivalComponent, ActionAddedEvent>(OnRevivalActionAdded);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRevivalRoundRestart);
+    }
+
+    private void OnRevivalRoundRestart(RoundRestartCleanupEvent args)
+    {
+        _revivalCooldownStart = TimeSpan.Zero;
+        _revivalCooldownEnd = TimeSpan.Zero;
+    }
+
+    private void OnRevivalActionAdded(Entity<CMUReaperRevivalComponent> ent, ref ActionAddedEvent args)
+    {
+        if (!_net.IsClient && _timing.CurTime < _revivalCooldownEnd
+            && _revivalActions.GetEvent(args.Action) is CMUReaperReviveActionEvent)
+            _revivalActions.SetCooldown((args.Action, args.Component), _revivalCooldownStart, _revivalCooldownEnd);
+    }
+
+    private void StartRevivalCooldown(Entity<ActionComponent> action)
+    {
+        _revivalCooldownStart = _timing.CurTime;
+        _revivalCooldownEnd = _revivalCooldownStart + (action.Comp.UseDelay ?? TimeSpan.Zero);
+        var query = EntityQueryEnumerator<CMUReaperRevivalComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            foreach (var other in _rmcActions.GetActionsWithEvent<CMUReaperReviveActionEvent>(uid))
+                _revivalActions.SetCooldown(other.AsNullable(), _revivalCooldownStart, _revivalCooldownEnd);
+        }
     }
 
     private bool CanRevive(EntityUid caster, EntityUid target)
@@ -27,14 +61,7 @@ public sealed partial class XenoReaperSystem
             && _mobState.IsAlive(caster) && _mobState.IsDead(target)
             && HasComp<XenoComponent>(target) && HasComp<DamageableComponent>(target)
             && HasComp<MobThresholdsComponent>(target) && _hive.FromSameHive(caster, target)
-            && !HasOtherLivingQueen(target);
-    }
-
-    private bool HasOtherLivingQueen(EntityUid target)
-    {
-        return HasComp<XenoEvolutionGranterComponent>(target)
-            && _hive.GetHive(target) is { } hive && hive.Comp.CurrentQueen is { } queen
-            && queen != target && !TerminatingOrDeleted(queen) && !_mobState.IsDead(queen);
+            && !HasComp<XenoEvolutionGranterComponent>(target);
     }
 
     private void OnReviveAction(Entity<XenoReaperComponent> xeno, ref CMUReaperReviveActionEvent args)
@@ -42,9 +69,16 @@ public sealed partial class XenoReaperSystem
         if (args.Handled || _net.IsClient || !TryComp<CMUReaperRevivalComponent>(xeno, out var revival))
             return;
 
-        if (HasOtherLivingQueen(args.Target))
+        if (_timing.CurTime < _revivalCooldownEnd)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-reaper-revive-queen-exists"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cmu-reaper-revive-cooldown"), xeno, xeno);
+            return;
+        }
+
+        // a dead queen stays dead, the hive has to raise a new one
+        if (HasComp<XenoEvolutionGranterComponent>(args.Target))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-reaper-revive-queen"), xeno, xeno);
             return;
         }
 
@@ -87,6 +121,7 @@ public sealed partial class XenoReaperSystem
 
         // The accepted cast pays up front. Cancellation deliberately does not refund it.
         TryRemoveFleshResin(xeno, revival.FleshCost);
+        StartRevivalCooldown(args.Action);
         args.Handled = true;
         var started = new CMUReaperRevivalStartedEvent();
         RaiseLocalEvent(args.Target, ref started);

@@ -75,7 +75,9 @@ public interface ISharedAdminManager
     /// <returns>true if the player is an admin, false otherwise.</returns>
     bool IsAdmin(EntityUid uid, bool includeDeAdmin = false)
     {
-        return GetAdminData(uid, includeDeAdmin) != null;
+        // cmu edit start: being on the admin list isn't enough; "admin" means holding the Admin flag
+        return GetAdminData(uid, includeDeAdmin) is { } data && data.HasFlag(AdminFlags.Admin, includeDeAdmin);
+        // cmu edit end
     }
 
     /// <summary>
@@ -90,6 +92,8 @@ public interface ISharedAdminManager
     /// <returns>true if the player is an admin, false otherwise.</returns>
     bool IsAdmin(ICommonSession session, bool includeDeAdmin = false)
     {
-        return GetAdminData(session, includeDeAdmin) != null;
+        // cmu edit start: being on the admin list isn't enough; "admin" means holding the Admin flag
+        return GetAdminData(session, includeDeAdmin) is { } data && data.HasFlag(AdminFlags.Admin, includeDeAdmin);
+        // cmu edit end
     }
 }

@@ -2,6 +2,9 @@ using Content.Server.CMU14.Systems;
 using Content.Server.CMU14.Round.Antags.ColonyBounty;
 using Content.Server.Humanoid;
 using Content.Server.Popups;
+using Content.Server._RMC14.Marines.Roles.Ranks;
+using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared.Access.Systems;
 using Content.Shared.Actions;
 using Content.Shared.CMU14.Round.Antags.Replicant;
@@ -10,12 +13,16 @@ using Content.Shared.Humanoid;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Paper;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
+using Content.Shared.NPC.Prototypes;
 
 namespace Content.Server.CMU14.Round.Antags.Replicant;
 
@@ -35,6 +42,9 @@ public sealed partial class ReplicantSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private SharedMarineSystem _marine = default!;
+    [Dependency] private RankSystem _rank = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private WantedSystem _wanted = default!;
 
@@ -157,7 +167,34 @@ public sealed partial class ReplicantSystem : EntitySystem
         Dirty(ent);
 
         SyncTransponder(ent, target, name);
+        CopyIdentityMarkers(ent, target);
         _popup.PopupEntity(Loc.GetString("replicant-transform-finish", ("name", name)), ent, ent);
+    }
+
+    /// <summary>
+    /// Examine and HUDs read rank, job icon and faction off the mob itself, so the copy kept showing
+    /// the replicant's own job. Take the target's instead.
+    /// </summary>
+    private void CopyIdentityMarkers(EntityUid replicant, EntityUid target)
+    {
+        if (CompOrNull<RankComponent>(target)?.Rank is { } rank)
+            _rank.SetRank(replicant, rank);
+        else if (HasComp<RankComponent>(replicant))
+            _rank.ClearRank(replicant);
+
+        if (CompOrNull<MarineComponent>(target)?.Icon is { } icon)
+            _marine.SetMarineIcon(replicant, icon);
+        else
+            _marine.ClearMarineIcon(replicant);
+
+        if (!TryComp(target, out NpcFactionMemberComponent? targetFactions) ||
+            !TryComp(replicant, out NpcFactionMemberComponent? ownFactions))
+        {
+            return;
+        }
+
+        _faction.ClearFactions((replicant, ownFactions), false);
+        _faction.AddFactions((replicant, ownFactions), new HashSet<ProtoId<NpcFactionPrototype>>(targetFactions.Factions));
     }
 
     private void SyncTransponder(EntityUid replicant, EntityUid target, string name)

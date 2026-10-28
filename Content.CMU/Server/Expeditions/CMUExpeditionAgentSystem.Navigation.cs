@@ -53,7 +53,8 @@ public sealed partial class CMUExpeditionAgentSystem
         return true;
     }
 
-    private void InvestigateContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates contact, TimeSpan now, bool visible = false)
+    private void InvestigateContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates contact, TimeSpan now,
+        bool visible = false, bool sound = false)
     {
         if (agent.HoldPosition || agent.LastDamage >= agent.RetreatDamage ||
             agent.Duty == CMUSquadDuty.Recover || agent.SquadPhase == "withdraw")
@@ -66,8 +67,13 @@ public sealed partial class CMUExpeditionAgentSystem
         var localContact = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(contact));
         var delta = localContact.Position - start.Position;
         var distance = delta.Length();
+        var melee = !sound && agent.LastContactWasMelee;
         var stopRange = visible ? Math.Max(1, WeaponFireRange(uid, agent) - 1.5f) :
-            agent.LastContactWasMelee ? agent.MeleeStandoffRange : 2.5f;
+            melee ? agent.MeleeStandoffRange : 2.5f;
+        // Proximity on the opposite side of a wall does not mean an area was checked.
+        // Melee contacts retain their safety standoff rather than closing blindly.
+        if (!visible && !melee && distance <= stopRange && !SightLine(uid, contact, stopRange))
+            stopRange = 0.5f;
         if (distance <= stopRange)
         {
             _steering.Unregister(uid);
@@ -103,7 +109,7 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var candidate in NearbySquadPositions(ideal, 2))
         {
             if (!ValidOrderPoint(uid, candidate) || Reserved(uid, candidate) || agent.Home is not { } home ||
-                agent.LastContactWasMelee && _transform.InRange(candidate, contact, agent.MeleeStandoffRange) ||
+                melee && _transform.InRange(candidate, contact, agent.MeleeStandoffRange) ||
                 !_transform.InRange(home, candidate, agent.LeashRange) || _transform.InRange(start, candidate, 0.75f) ||
                 agent.FailedPosition is { } failed && now < agent.AvoidPositionUntil + TimeSpan.FromSeconds(3) && _transform.InRange(candidate, failed, 1.4f))
                 continue;

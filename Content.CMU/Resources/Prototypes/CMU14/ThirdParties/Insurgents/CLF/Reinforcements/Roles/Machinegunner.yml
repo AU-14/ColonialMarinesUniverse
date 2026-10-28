@@ -45,6 +45,11 @@
     traits:
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFMachineGunnerReinforcement
@@ -74,6 +79,9 @@
   id: AU14IntelThirdPartyCLFInsurgentReinforcementsMachineGunner
   name: Insurgent Machine Gunner
   components:
+  - type: NpcFactionMember
+    factions:
+    - CLF
   - type: GhostRoleApplySpecial
   - type: GhostRole
     makeSentient: true

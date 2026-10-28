@@ -3,6 +3,8 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared._RMC14.Projectiles;
+using Content.Shared._RMC14.Stun;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Hands.EntitySystems;
@@ -39,6 +41,21 @@ public sealed class CMUZAimDownShotTest : GameTest
   id: CMUZAimDownTestRifle
   components:
   - type: Wieldable
+
+- type: entity
+  parent: CMCartridgePistol9mm
+  id: CMUZAimDownTestBuckshotCartridge
+  components:
+  - type: CartridgeAmmo
+    proto: RMCPelletHeavyShotgunBuckshot
+
+- type: entity
+  parent: CMUZAimDownTestPistol
+  id: CMUZAimDownTestShotgun
+  components:
+  - type: BallisticAmmoProvider
+    proto: CMUZAimDownTestBuckshotCartridge
+    capacity: 1
 ";
 
     [TestCase("CMUZAimDownTestPistol", false, -1, TestName = "AimDownShootsBelow")]
@@ -94,6 +111,83 @@ public sealed class CMUZAimDownShotTest : GameTest
 
                 shooting.SetAimDown(shooter, false);
                 Assert.That(shooting.IsAimingDown(shooter), Is.False);
+            }
+            finally
+            {
+                foreach (var level in levels)
+                {
+                    if (level.Valid && !SEntMan.Deleted(level))
+                        SEntMan.DeleteEntity(level);
+                }
+
+                SEntMan.DeleteEntity(network);
+            }
+        });
+    }
+
+    // BUG-1069: buckshot fired through the floor spawned right on top of the xeno below, so falloff
+    // and the point blank stun measured from there and every pellet hit at full power
+    [TestCase(true, TestName = "CrossZShotCountsTheLevelGap")]
+    [TestCase(false, TestName = "SameLevelShotKeepsItsOrigin")]
+    public async Task CrossZShotOriginIsPushedBack(bool aimDown)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            var zLevels = Server.System<CMUZLevelsSystem>();
+            var shooting = Server.System<CMUZLevelShootingSystem>();
+            var guns = Server.System<SharedGunSystem>();
+            var transform = Server.System<SharedTransformSystem>();
+            var tiles = Server.ResolveDependency<ITileDefinitionManager>();
+            var floor = new Tile(tiles["Plating"].TileId);
+            var network = zLevels.CreateZNetwork();
+            var levels = new EntityUid[2];
+
+            try
+            {
+                var depths = new Dictionary<EntityUid, int>();
+                for (var i = 0; i < levels.Length; i++)
+                {
+                    var map = maps.CreateMap(runMapInit: true);
+                    levels[i] = map;
+                    var grid = SEntMan.EnsureComponent<MapGridComponent>(map);
+                    maps.SetTile(map, grid, new Vector2i(8, 8), floor);
+                    if (i == 1)
+                        maps.SetTile(map, grid, Vector2i.Zero, floor);
+                    depths.Add(map, i);
+                }
+
+                Assert.That(zLevels.TryAddMapsIntoZNetwork(network, depths), Is.True);
+                var origin = new EntityCoordinates(levels[1], new Vector2(0.5f));
+                var shooter = SEntMan.SpawnEntity("MobHuman", origin);
+                var gun = SEntMan.SpawnEntity("CMUZAimDownTestShotgun", origin);
+                Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(shooter, gun), Is.True);
+                shooting.SetAimDown(shooter, aimDown);
+
+                var gunComp = SEntMan.GetComponent<GunComponent>(gun);
+                gunComp.NextFire = SGameTiming.CurTime;
+                gunComp.ShootCoordinates = new EntityCoordinates(levels[1], new Vector2(3.5f, 0.5f));
+                var projectiles = guns.AttemptShoot(shooter, (gun, gunComp));
+                Assert.That(projectiles, Is.Not.Null.And.Not.Empty, "The shot must actually fire.");
+
+                foreach (var pellet in projectiles!)
+                {
+                    var spawn = transform.GetMapCoordinates(pellet);
+                    Assert.That(spawn.MapId, Is.EqualTo(SEntMan.GetComponent<MapComponent>(levels[aimDown ? 0 : 1]).MapId));
+
+                    // the gap is one floor plus however far the shot slid sideways to reach the opening
+                    var sideways = (spawn.Position - transform.GetMapCoordinates(shooter).Position).Length();
+                    var expectedDistance = aimDown ? MathF.Sqrt(sideways * sideways + 9f) : 0f;
+
+                    var falloff = SEntMan.GetComponent<RMCProjectileDamageFalloffComponent>(pellet);
+                    var falloffFrom = transform.ToMapCoordinates(falloff.ShotFrom!.Value);
+                    Assert.That((falloffFrom.Position - spawn.Position).Length(), Is.EqualTo(expectedDistance).Within(0.05f),
+                        "Falloff has to count the floor the shot came through.");
+
+                    var stun = SEntMan.GetComponent<RMCStunOnHitComponent>(pellet);
+                    Assert.That((stun.ShotFrom!.Value.Position - spawn.Position).Length(), Is.EqualTo(expectedDistance).Within(0.05f),
+                        "The point blank stun range has to count the floor too.");
+                }
             }
             finally
             {

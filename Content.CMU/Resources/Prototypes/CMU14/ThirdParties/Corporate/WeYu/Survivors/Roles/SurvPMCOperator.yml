@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobWYPMCPartyContractorBase
   id: AU14JobWYSurvPMC
+  chevrons:
+    AU14RankWeYuOperator:
+      entity: AU14ChevronWeYuOperator
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYSurvPMC
@@ -30,7 +34,7 @@
       tags:
       - SquadPMC
 
-  name: au14-job-name-wypmc
+  name: cmu-job-title-wypmc
   description: au14-wysurv-greeting
   ranks:
     AU14RankWeYuRecruit: []

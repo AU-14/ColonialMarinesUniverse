@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "M2C and M56D resprite taken from cmss13 at https://github.com/cmss13-devs/cmss13/pull/12283 (commit c057d53c6b5e58fdd2b573a5dc77fd3cc948e8be). M2C sprites by Crowford (sir.crow), M56D sprites by Tommy (sponge_4781). Ported by troy. Remaining states taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/b36381d345bd0591ca115bd58fee67e4660ddb31/icons/obj/items/weapons/guns/guns_by_faction/USCM/hmg.dmi",
+  "size": {
+    "x": 64,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "mag-0"
+    },
+    {
+      "name": "ml66d_gun_e"
+    },
+    {
+      "name": "ml66d_gun_e_broken"
+    },
+    {
+      "name": "ml66d_gun_broken"
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "equipped-SUITSTORAGE",
+      "directions": 4
+    },
+    {
+      "name": "equipped-BACKPACK",
+      "directions": 4
+    }
+  ]
+}

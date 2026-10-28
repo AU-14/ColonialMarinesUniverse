@@ -3,6 +3,7 @@ using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.Ops.ForceOnForce;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared._RMC14.Dropship.Weapon;
+using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.CMU14.Callsigns;
@@ -96,6 +97,10 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         // Store the resolved selections back onto the system so other systems can access them
         SelectedGovforPlatoon = govPlatoon;
         SelectedOpforPlatoon = opPlatoon;
+
+        // Each side gets its platoon's intel list however the platoon was picked (vote, planet default or admin),
+        // not only when it won a vote.
+        ApplyPlatoonTechTrees();
 
         // --- SHIP VENDOR MARKER LOGIC ---
         if ((planetComp.GovforInShip || planetComp.OpforInShip))
@@ -727,5 +732,17 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         // Clear selections on rule end/restart so they don't persist across restarts
         SelectedGovforPlatoon = null;
         SelectedOpforPlatoon = null;
+        ApplyPlatoonTechTrees();
+    }
+
+    /// <summary>
+    ///     Points each side's intel console at its platoon's faction list, or back to the default when there's no
+    ///     platoon (so a list never carries over into the next round).
+    /// </summary>
+    private void ApplyPlatoonTechTrees()
+    {
+        var intel = EntityManager.System<IntelSystem>();
+        intel.SetTeamTechTreeOverride(Team.GovFor, SelectedGovforPlatoon?.TechTree);
+        intel.SetTeamTechTreeOverride(Team.OpFor, SelectedOpforPlatoon?.TechTree);
     }
 }
