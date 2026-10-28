@@ -1,10 +1,8 @@
-<!-- CMU14: compact character rail. -->
 <Control xmlns="https://spacestation14.io"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
          xmlns:style="clr-namespace:Content.Client.Stylesheets"
          xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
-         xmlns:cmu="clr-namespace:Content.Client.CMU14.Lobby"
          VerticalExpand="True">
     <Control>
         <PanelContainer Name="BackgroundPanel" />
@@ -43,8 +41,8 @@
                 </PanelContainer.PanelOverride>
             </PanelContainer>
             <BoxContainer Orientation="Horizontal" VerticalExpand="True" SeparationOverride="0">
-                <ScrollContainer MinWidth="210" MaxWidth="210" Margin="5 5 0 0" HScrollEnabled="False">
-                    <cmu:CmuAdaptiveGrid Name="Characters" HorizontalExpand="True" />
+                <ScrollContainer MinWidth="325" MaxWidth="325" Margin="5 5 0 0">
+                    <BoxContainer Name="Characters" Orientation="Vertical" />
                 </ScrollContainer>
                 <PanelContainer Name="BodyDividerPanel" MinSize="2 0">
                     <PanelContainer.PanelOverride>
