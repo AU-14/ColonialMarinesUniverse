@@ -64,7 +64,6 @@ public sealed partial class HardpointSystem
             args.Damage = ScaleDamage(args.Damage, ent.Comp.FrameDamageFractionWhileIntact);
             return;
         }
-        parts = vulnerableParts;
 
         if (parts.Count > 0)
         {
@@ -72,6 +71,7 @@ public sealed partial class HardpointSystem
             if (args.Impact.Delivery == DamageImpactDelivery.Explosion)
             {
                 // FLOW-09: split evenly, capped per blast on tanks with a blast profile.
+                // Split over every intact module, protected ones soak their share; dropping them would hand the rest a bigger cut.
                 var hullLoss = ApplyRoutedBlastDamage(ent.Owner, parts, args.Damage, blast);
                 // The profile's multiplier is a tank balance knob, not a bigger blast: roll structural failure on the
                 // hull the blast actually removed so it cannot inflate the failure chance past the blast cap.
@@ -80,13 +80,13 @@ public sealed partial class HardpointSystem
             }
             else
             {
-                var primary = SelectDamageHardpoint(ent.Owner, parts, args.Origin);
-                var spillover = parts.Count > 1 ? Math.Clamp(ent.Comp.DamageSpilloverFraction, 0f, 1f) : 0f;
+                var primary = SelectDamageHardpoint(ent.Owner, vulnerableParts, args.Origin);
+                var spillover = vulnerableParts.Count > 1 ? Math.Clamp(ent.Comp.DamageSpilloverFraction, 0f, 1f) : 0f;
                 ApplyRoutedDamage(ent.Owner, primary, ScaleDamage(args.Damage, 1f - spillover));
                 if (spillover > 0f)
                 {
-                    parts.Remove(primary);
-                    ApplyRoutedDamage(ent.Owner, _random.Pick(parts), ScaleDamage(args.Damage, spillover));
+                    vulnerableParts.Remove(primary);
+                    ApplyRoutedDamage(ent.Owner, _random.Pick(vulnerableParts), ScaleDamage(args.Damage, spillover));
                 }
             }
 
