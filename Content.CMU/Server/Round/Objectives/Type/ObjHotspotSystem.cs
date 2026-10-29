@@ -189,8 +189,8 @@ public sealed partial class ObjHotspotSystem : ObjectiveSystem
                 _ => 1.5f,
             };
 
-            // Dampen tiers during overtime (after 75min / ~450 ticks) to cap comeback power.
-            if (comp.ElapsedTicks >= 450)
+            // Dampen tiers during overtime to cap comeback power.
+            if (comp.ElapsedTicks >= comp.OvertimeFlattenTicks)
                 tierMultiplier = 1.0f;
 
             var points = comp.PointsPerTick * tierMultiplier;

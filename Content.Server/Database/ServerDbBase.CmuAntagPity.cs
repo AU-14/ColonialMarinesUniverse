@@ -27,14 +27,24 @@ public abstract partial class ServerDbBase
         return entries.Select(row => new CmuAntagPityEntry(row.PlayerUserId, row.Missed, row.LastSeen)).ToList();
     }
 
-    public async Task SaveCmuAntagPityAsync(CmuAntagPityEntry entry)
+    public Task SaveCmuAntagPityAsync(CmuAntagPityEntry entry)
+        => SaveCmuAntagPityBatchAsync([entry]);
+
+    // One transaction for the whole round-end flush so a restart cannot leave it half-written.
+    public async Task SaveCmuAntagPityBatchAsync(IReadOnlyList<CmuAntagPityEntry> entries)
     {
         await using var db = await GetDb();
+        await using var tx = await db.DbContext.Database.BeginTransactionAsync();
 
-        await db.DbContext.Database.ExecuteSqlRawAsync(
-            $"INSERT INTO cmu_antag_pity (player_user_id, missed, last_seen) " +
-            $"VALUES ({entry.PlayerUserId}, {entry.Missed}, {entry.LastSeen}) " +
-            "ON CONFLICT (player_user_id) DO UPDATE SET missed = EXCLUDED.missed, last_seen = EXCLUDED.last_seen");
+        foreach (var entry in entries)
+        {
+            await db.DbContext.Database.ExecuteSqlRawAsync(
+                $"INSERT INTO cmu_antag_pity (player_user_id, missed, last_seen) " +
+                $"VALUES ({entry.PlayerUserId}, {entry.Missed}, {entry.LastSeen}) " +
+                "ON CONFLICT (player_user_id) DO UPDATE SET missed = EXCLUDED.missed, last_seen = EXCLUDED.last_seen");
+        }
+
+        await tx.CommitAsync();
     }
 
     private sealed class CmuAntagPityRow

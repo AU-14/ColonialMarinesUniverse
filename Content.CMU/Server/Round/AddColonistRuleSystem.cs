@@ -60,7 +60,7 @@ public sealed partial class AddColonistRuleSystem : GameRuleSystem<AddColonistRu
             if (candidates.Count == 0)
                 _logs.Warning("no randomJobs candidate is declared by this planet's map");
             else
-                counts[_random.Pick(candidates)] = 1;
+                counts.TryAdd(_random.Pick(candidates), 1);
         }
 
         foreach (var (jobId, count) in counts)

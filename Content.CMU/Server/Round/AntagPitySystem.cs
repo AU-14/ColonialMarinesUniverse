@@ -131,15 +131,20 @@ public sealed partial class AntagPitySystem : EntitySystem
             }
 
             foreach (var userId in _eligible)
+            {
+                if (_selected.Contains(userId))
+                    continue;
+
                 toSave.Add(new CmuAntagPityEntry(userId.UserId, _missed.GetValueOrDefault(userId), now));
+            }
+
             foreach (var userId in _selected)
                 toSave.Add(new CmuAntagPityEntry(userId.UserId, _missed.GetValueOrDefault(userId), now));
 
             _eligible.Clear();
             _selected.Clear();
 
-            foreach (var entry in toSave)
-                await _db.SaveCmuAntagPityAsync(entry);
+            await _db.SaveCmuAntagPityBatchAsync(toSave);
         }
         catch (Exception e)
         {

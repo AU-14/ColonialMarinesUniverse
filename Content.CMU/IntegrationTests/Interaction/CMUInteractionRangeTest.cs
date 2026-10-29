@@ -30,11 +30,20 @@ public sealed class CMUInteractionRangeTest : GameTest
         - Impassable
 
 - type: entity
-  parent: CMURangeFixture
-  id: CMURangeWall
+  id: CMURangeBareWall
   components:
   - type: Transform
     anchored: true
+
+- type: entity
+  id: CMURangeWall
+  components:
+  # Transform must resolve before Physics: the anchor at spawn has to run before the body
+  # is registered into a broadphase tree, or the wall ends up Dynamic and unanchored.
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
   - type: Fixtures
     fixtures:
       test:
@@ -49,10 +58,8 @@ public sealed class CMUInteractionRangeTest : GameTest
   id: CMURangeItem
   components:
   - type: Physics
-      bodyType: Static
-      canCollide: true
-  - type: Fixtures
-      fixtures: {}
+    bodyType: Static
+    canCollide: true
   - type: Item
     size: Tiny
 
@@ -130,10 +137,13 @@ public sealed class CMUInteractionRangeTest : GameTest
     {
         var map = await Pair.CreateTestMap();
         EntityUid user = default, item = default, mount = default, mountUser = default;
+        EntityUid wall = default, secondWall = default;
+        WallMountComponent wallMount = default!;
+        MapCoordinates wallPosition = default, mountPosition = default;
+
         await Server.WaitAssertion(() =>
         {
             var transform = Server.System<SharedTransformSystem>();
-            var system = Server.System<SharedInteractionSystem>();
             var maps = Server.System<SharedMapSystem>();
             // one connected floor, loose tiles split off into their own grids and unanchor the walls
             for (var x = 0; x <= 2; x++)
@@ -142,24 +152,52 @@ public sealed class CMUInteractionRangeTest : GameTest
                     maps.SetTile(map.Grid.Owner, map.Grid.Comp, map.GridCoords.Offset(new Vector2(x, y)), map.Tile.Tile);
             }
             user = SEntMan.SpawnEntity(null, map.GridCoords);
-            var wall = SEntMan.SpawnEntity("CMURangeWall", map.GridCoords.Offset(new Vector2(2, 0)));
-            var wallPosition = transform.GetMapCoordinates(wall);
+            wall = SEntMan.SpawnEntity("CMURangeWall", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
+            // Walls must spawn anchored over a plated tile; a failed anchor silently leaves
+            // a Dynamic body the exemption lookups never see.
+            // temp diag: names the broken anchor link in one run.
+            var wallXform = SEntMan.GetComponent<TransformComponent>(wall);
+            var indices = maps.TileIndicesFor(map.Grid.Owner, map.Grid.Comp, wallXform.Coordinates);
+            var tile = maps.GetTileRef(map.Grid.Owner, map.Grid.Comp, indices);
+            var bare = SEntMan.SpawnEntity("CMURangeBareWall", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
+            var diag = $"[anchor-diag] indices={indices} tileEmpty={tile.Tile.IsEmpty} " +
+                       $"parentIsGrid={wallXform.ParentUid == map.Grid.Owner} gridUidIsGrid={wallXform.GridUid == map.Grid.Owner} " +
+                       $"coords={wallXform.Coordinates} mapPaused={SEntMan.GetComponent<MetaDataComponent>(map.MapUid).EntityPaused} " +
+                       $"bareAnchored={SEntMan.GetComponent<TransformComponent>(bare).Anchored}";
+            Assert.That(wallXform.Anchored, Is.True, diag);
+            wallPosition = transform.GetMapCoordinates(wall);
             item = SEntMan.SpawnEntity("CMURangeItem", SEntMan.GetComponent<TransformComponent>(wall).Coordinates);
             transform.SetCoordinates(user, transform.ToCoordinates(map.Grid.Owner, wallPosition.Offset(new Vector2(-2, 0))));
+
+            secondWall = SEntMan.SpawnEntity("CMURangeWall", map.GridCoords.Offset(new Vector2(2.5f, 2.5f)));
+            Assert.That(SEntMan.GetComponent<TransformComponent>(secondWall).Anchored, Is.True);
+            mountPosition = transform.GetMapCoordinates(secondWall);
+            mount = SEntMan.SpawnEntity("CMURangeMount", SEntMan.GetComponent<TransformComponent>(secondWall).Coordinates);
+            mountUser = SEntMan.SpawnEntity(null, SEntMan.GetComponent<TransformComponent>(secondWall).Coordinates.Offset(new Vector2(-2, 0)));
+            wallMount = SEntMan.GetComponent<WallMountComponent>(mount);
+            wallMount.Direction = Angle.FromWorldVec(new Vector2(-1, 0));
+        });
+
+        // The embedded-item and wall-mount exemptions both resolve through the entity
+        // lookup broadphase, which only settles on the next update; querying in the
+        // spawn frame reads a tree that does not know the walls yet.
+        await Pair.RunUntilSynced();
+        // Extra tick to let physics broadphase process anchoring/collision for embedded entities.
+        await Server.WaitRunTicks(1);
+
+        await Server.WaitAssertion(() =>
+        {
+            var transform = Server.System<SharedTransformSystem>();
+            var system = Server.System<SharedInteractionSystem>();
+
             Assert.That(system.InRangeUnobstructed(user, item, 3, lagCompensate: false), Is.True,
                 "An item embedded in a colliding static wall remains reachable.");
             transform.SetCoordinates(item, SEntMan.GetComponent<TransformComponent>(wall).Coordinates.Offset(new Vector2(0.8f, 0)));
             Assert.That(system.InRangeUnobstructed(user, item, 3, lagCompensate: false), Is.False,
                 "Moving the item clear of the wall must remove that wall's exemption.");
 
-            var secondWall = SEntMan.SpawnEntity("CMURangeWall", map.GridCoords.Offset(new Vector2(2, 2)));
-            var position = transform.GetMapCoordinates(secondWall);
-            mount = SEntMan.SpawnEntity("CMURangeMount", SEntMan.GetComponent<TransformComponent>(secondWall).Coordinates);
-            mountUser = SEntMan.SpawnEntity(null, SEntMan.GetComponent<TransformComponent>(secondWall).Coordinates.Offset(new Vector2(-2, 0)));
-            var wallMount = SEntMan.GetComponent<WallMountComponent>(mount);
-            wallMount.Direction = Angle.FromWorldVec(new Vector2(-1, 0));
             Assert.That(system.InRangeUnobstructed(mountUser, mount, 3, lagCompensate: false), Is.True);
-            transform.SetCoordinates(mountUser, transform.ToCoordinates(map.Grid.Owner, position.Offset(new Vector2(2, 0))));
+            transform.SetCoordinates(mountUser, transform.ToCoordinates(map.Grid.Owner, mountPosition.Offset(new Vector2(2, 0))));
             Assert.That(system.InRangeUnobstructed(mountUser, mount, 3, lagCompensate: false), Is.False,
                 "The opposite side of a directional mount must remain obstructed.");
             wallMount.Arc = Angle.FromDegrees(360);

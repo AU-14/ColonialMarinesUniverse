@@ -18,7 +18,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using ServerFlammableSystem = Content.Server.Atmos.EntitySystems.FlammableSystem;
 
-namespace Content.IntegrationTests.Tests.Atmos;
+namespace Content.IntegrationTests.CMU14.Atmos;
 
 [TestFixture]
 [TestOf(typeof(ServerFlammableSystem))]

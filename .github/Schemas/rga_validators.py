@@ -21,7 +21,7 @@ class License(Validator):
         "OFL-1.1",
         "Apache-2.0",
         "Custom",  # implies that the license is described in the copyright field.
-    ]
+    ] # CMU14
 
     def _is_valid(self, value):
         return value in self.licenses

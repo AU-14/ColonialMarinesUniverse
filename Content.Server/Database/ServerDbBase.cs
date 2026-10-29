@@ -2437,7 +2437,9 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             if (linking == null)
                 return new DiscordLinkResult(DiscordLinkStatus.UnknownCode, default, string.Empty);
 
-            if (linking.CreationTime < DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
+            // CMU14: 15-minute window. Codes are minted live in the lobby and used within minutes,
+            // so a day-old code only extends the interception window.
+            if (linking.CreationTime < DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(15)))
             {
                 db.DbContext.RMCLinkingCodes.Remove(linking);
                 await db.DbContext.SaveChangesAsync();

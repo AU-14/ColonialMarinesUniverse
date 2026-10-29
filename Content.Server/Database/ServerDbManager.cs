@@ -187,6 +187,8 @@ namespace Content.Server.Database
         // CMU14: round-start antag pity persistence
         Task<List<CmuAntagPityEntry>> GetCmuAntagPityAsync(long pruneBefore);
         Task SaveCmuAntagPityAsync(CmuAntagPityEntry entry);
+        // CMU14: round-end flush writes every entry in one transaction
+        Task SaveCmuAntagPityBatchAsync(IReadOnlyList<CmuAntagPityEntry> entries);
         Task<int> GetYautjaWhitelistFlagsAsync(Guid userId);
         Task SetYautjaWhitelistFlagsAsync(Guid userId, int flags);
         // CMU14 Clan Hall Begin
@@ -834,6 +836,13 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.SaveCmuAntagPityAsync(entry));
+        }
+
+        // CMU14
+        public Task SaveCmuAntagPityBatchAsync(IReadOnlyList<CmuAntagPityEntry> entries)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SaveCmuAntagPityBatchAsync(entries));
         }
 
         public Task<List<YautjaClanRecord>> GetYautjaClansAsync()

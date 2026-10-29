@@ -73,7 +73,9 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.bug_help_rate_limit_count", 3, CVar.SERVERONLY);
 
     /// <summary>
-    ///     Discord channel where players post their lobby linking code. The message author gets linked.
+    ///     Discord channel whose posters get linked; the link always binds to the Discord account
+    ///     that delivers the code, so this can never link one person on another's behalf. Players
+    ///     normally link by DMing their code to the bot, which no one else can read.
     ///     Requires <c>discord.token</c> (the in-process DiscordLink gateway). 0 disables linking.
     /// </summary>
     public static readonly CVarDef<ulong> DiscordLinkChannel =

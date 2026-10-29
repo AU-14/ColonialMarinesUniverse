@@ -14,6 +14,7 @@ using Content.Shared.Doors.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared.Gravity;
 using Content.Shared.Physics;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
@@ -78,6 +79,8 @@ public sealed class YautjaPreserveConsoleTest
         EntityUid prey = default;
         EntityUid hunterEdge = default;
         EntityUid preyEdge = default;
+        Vector2 preyStart = Vector2.Zero;
+        string diag = "";
 
         try
         {
@@ -85,16 +88,16 @@ public sealed class YautjaPreserveConsoleTest
             {
                 var entMan = server.EntMan;
                 var mapSystem = entMan.System<SharedMapSystem>();
-                // edges only anchor on real tiles, and mobs sit on tile centres so the prey
-                // isn't wedged between two edges, which shoves it and breaks the escape doafter
-                for (var x = 1; x <= 3; x++)
-                    mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, 0), map.Tile.Tile);
+                mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(1, 0), map.Tile.Tile);
+                mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(2, 0), map.Tile.Tile);
+                mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(3, 0), map.Tile.Tile);
+                entMan.EnsureComponent<GravityComponent>(map.Grid).Enabled = true;
 
-                var start = map.GridCoords.Offset(new Vector2(0.5f, 0.5f));
-                hunter = entMan.SpawnEntity("CMMobHuman", start);
-                prey = entMan.SpawnEntity("CMMobHuman", start.Offset(new Vector2(2, 0)));
-                hunterEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", start.Offset(new Vector2(1, 0)));
-                preyEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", start.Offset(new Vector2(3, 0)));
+                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+                prey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
+                hunterEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(1.5f, 0.5f)));
+                preyEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(3.5f, 0.5f)));
+                preyStart = entMan.GetComponent<TransformComponent>(prey).WorldPosition;
                 entMan.EnsureComponent<YautjaComponent>(hunter);
 
                 entMan.EventBus.RaiseLocalEvent(hunterEdge, new InteractHandEvent(hunter, hunterEdge));
@@ -116,10 +119,25 @@ public sealed class YautjaPreserveConsoleTest
                         active.Args.Event is YautjaPreserveEscapeDoAfterEvent));
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(5.5f));
+            // Capture the doafter just before the 5s delay completes: cleanup drops
+            // finished doafters after delay+excess, so a later dump can't tell
+            // cancelled from completed.
+            await pair.RunTicksSync(pair.SecondsToTicks(4.9f));
 
             await server.WaitAssertion(() =>
-                Assert.That(server.EntMan.GetComponent<TransformComponent>(prey).MapID, Is.EqualTo(MapId.Nullspace)));
+            {
+                var entMan = server.EntMan;
+                diag = $"preyPaused={entMan.GetComponent<MetaDataComponent>(prey).EntityPaused} preyPos={entMan.GetComponent<TransformComponent>(prey).WorldPosition} preyStart={preyStart}";
+                foreach (var da in entMan.GetComponent<DoAfterComponent>(prey).DoAfters.Values)
+                    diag += $" | idx={da.Index} cancelled={da.Cancelled} cancelledAt={da.CancelledTime} completed={da.Completed} breakOnWeightlessMove={da.Args.BreakOnWeightlessMove}";
+                if (!diag.Contains("idx="))
+                    diag += " | no doafters present";
+            });
+
+            await pair.RunTicksSync(pair.SecondsToTicks(0.6f));
+
+            await server.WaitAssertion(() =>
+                Assert.That(server.EntMan.GetComponent<TransformComponent>(prey).MapID, Is.EqualTo(MapId.Nullspace), $"[preserve-diag] {diag}"));
         }
         finally
         {

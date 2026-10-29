@@ -230,10 +230,10 @@ public sealed class CMUZOpeningSealSystem : EntitySystem
             if (member is not { } map)
                 continue;
 
-            var query = EntityQueryEnumerator<GridAtmosphereComponent, TransformComponent>();
-            while (query.MoveNext(out var grid, out var atmos, out var xform))
+            var children = Transform(map).ChildEnumerator;
+            while (children.MoveNext(out var grid))
             {
-                if (xform.MapUid != map)
+                if (!_gridAtmosQuery.TryComp(grid, out var atmos))
                     continue;
 
                 foreach (var (indices, tile) in atmos.Tiles)

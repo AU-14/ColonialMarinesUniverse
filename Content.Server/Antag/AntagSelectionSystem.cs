@@ -354,6 +354,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         // CMU14: pity weighting, see AntagPitySystem.
         // TODO: Actually add weights! This is placeholder for a future PR.
         // CMU14
+        // return 1f;
         return EntityManager.EntitySysManager.GetEntitySystem<AntagPitySystem>().GetWeight(player);
     }
 

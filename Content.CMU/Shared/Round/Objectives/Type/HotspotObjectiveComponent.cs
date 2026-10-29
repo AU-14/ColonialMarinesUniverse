@@ -36,6 +36,12 @@ public sealed partial class HotspotObjectiveComponent : Robust.Shared.GameObject
     [DataField] public bool NormalizeByTeamSize { get; private set; } = true;
 
     /// <summary>
+    /// Ticks after which engagement tiers flatten to 1x, capping comeback power. Tracks the
+    /// FoF time limit: 450 ticks at the default 10s tick is 75 minutes.
+    /// </summary>
+    [DataField] public int OvertimeFlattenTicks { get; private set; } = 450;
+
+    /// <summary>
     /// Feeds scored points into the faction win-point pool shown on the objectives console and
     /// intel readouts; the pool's threshold unlocks the final objective.
     /// </summary>

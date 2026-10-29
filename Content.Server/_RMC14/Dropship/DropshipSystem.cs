@@ -420,7 +420,8 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             return;
 
         gunship.Armed = !gunship.Armed;
-        Dirty(ent, gunship);
+        // CMU14: the component carries no auto state, clients read the toggle from the BUI refresh
+        // Dirty(ent, gunship);
         RefreshUI();
     }
 
