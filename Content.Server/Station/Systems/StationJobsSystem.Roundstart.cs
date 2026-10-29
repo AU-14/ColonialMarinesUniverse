@@ -475,6 +475,7 @@ public sealed partial class StationJobsSystem
                 if (chosenOverflow == null)
                 {
                     var overflows = stationOverflows.ToList();
+<<<<<<< Updated upstream
                     // CMU14
                     var fofFallback = !string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase);
                     if (fofFallback)
@@ -483,6 +484,20 @@ public sealed partial class StationJobsSystem
                         overflows.RemoveAll(id => id.Id.Contains(wrong));
                     }
 
+||||||| ancestor
+                    if (!string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase) && !_forceOnForceNextGovfor)
+                        overflows.RemoveAll(id => id.Id.Contains("GOVFOR"));
+=======
+                    // CMU14 Force on Force: last resort still owes the dealt side a job, so the
+                    // wrong side's overflows are dropped and the alternation flip stays honest.
+                    var fofFallback = !string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase);
+                    if (fofFallback)
+                    {
+                        var wrong = _forceOnForceNextGovfor ? "OPFOR" : "GOVFOR";
+                        overflows.RemoveAll(id => id.Id.Contains(wrong));
+                    }
+
+>>>>>>> Stashed changes
                     _random.Shuffle(overflows);
                     if (overflows.Count == 0)
                         continue;
