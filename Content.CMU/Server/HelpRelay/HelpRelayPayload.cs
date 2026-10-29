@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
-using Content.Shared.GameTicking;
+using Content.Server.GameTicking;
 
 namespace Content.Server.CMU14.HelpRelay;
 
