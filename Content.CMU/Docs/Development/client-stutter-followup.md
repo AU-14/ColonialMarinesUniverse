@@ -117,6 +117,10 @@ Meaningful regression coverage:
 
 ## Remaining limits
 
+A [later content investigation and fix](client-stutter-content-fixes.md) reproduces
+a climbing trigger for the prediction exception and addresses additional
+appearance and audio work. The observations below describe the initial pass.
+
 The v294.0.1 prediction exception reads a missing `TransformComponent` for
 entity zero inside Toolbox's `PhysicsSystem.UpdateIsTouching`. Its contact
 snapshot is processed while collision callbacks can invalidate contacts.
