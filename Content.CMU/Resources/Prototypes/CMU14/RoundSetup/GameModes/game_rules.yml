@@ -146,6 +146,15 @@
   - type: ColonyAntagsRule
 
 - type: entity
+  id: DistressAntags
+  parent: BaseGameRule
+  name: Distress Signal Antags
+  description: Randomly rolls for each distress signal antag to be present this round.
+  components:
+  - type: GameRule
+  - type: DistressAntagsRule
+
+- type: entity
   id: AuVoteRule
   parent: BaseGameRule
   name: Start Game Votes

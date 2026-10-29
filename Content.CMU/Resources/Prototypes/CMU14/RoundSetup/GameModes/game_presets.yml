@@ -50,6 +50,7 @@
   - RemoveAllJobs
   - AddGovfor
   - AddGovforAuxiliaryStaffDistress
+  - DistressAntags
 
 - type: gamePreset
   id: Insurgency
