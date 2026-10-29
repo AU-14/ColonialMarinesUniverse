@@ -9,6 +9,7 @@
   - type: Tag
     tags:
     - MRE
+    - Trash
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/mre.rsi
     state: closed

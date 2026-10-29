@@ -204,6 +204,9 @@ public sealed class ForceInterestTest : GameTest
         });
         await Server.WaitAssertion(() =>
         {
+            // Integration sessions are local and ConsoleLoginLocal auto-promotes them to host
+            // admin, so demote first to exercise the non-admin path.
+            admins.DeAdmin(ServerSession!);
             SEntMan.System<ForceInterestSystem>().CompleteForce(ServerSession!, id);
             Assert.That(spawned, Is.Zero, "a completion without the admin flag must not deploy");
             Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(id), Is.True);
@@ -212,7 +215,15 @@ public sealed class ForceInterestTest : GameTest
         {
             admins.PromoteHost(ServerSession!);
             SEntMan.System<ForceInterestSystem>().CompleteForce(ServerSession!, id);
-            Assert.That(spawned, Is.EqualTo(1), "an admin completion must deploy immediately without quorum");
+            // The deploy leaves the queue synchronously; the spawn callback runs on the
+            // deployment iterator's next update, so the body count needs a tick first.
+            Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(id), Is.False,
+                "an admin completion must deploy immediately without quorum");
+        });
+        await RunSeconds(1);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(spawned, Is.EqualTo(1), "the admin-completed deployment must spawn its bodies");
             Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(id), Is.False);
         });
     }

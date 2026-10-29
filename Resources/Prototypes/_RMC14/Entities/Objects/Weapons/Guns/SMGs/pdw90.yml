@@ -1,8 +1,8 @@
-﻿- type: entity
+- type: entity
   parent: CMBaseWeaponSMG
   name: FN P90 submachine gun
   id: RMCWeaponSMGPDW90
-  description: The P90 submachine gun. An archaic design, but still widely used by corporate and mercenary groups, sometimes seen in the hands of civilian populations. This weapon only accepts 5.7×28mm rounds.
+  description: May seem primitive, but carries a 50-round, top-loaded magazine of Teflon-coated ordance, with a cyclic rate of 900 rounds a minute. A weapon of war, made to kill your enemy.
   suffix: Filled
   components:
   - type: Sprite
@@ -91,7 +91,7 @@
       rmc-aslot-rail: 0.2, 0.219
   - type: GunDamageModifier
     multiplier: 1.2
-    
+
 - type: entity
   parent: RMCWeaponSMGPDW90
   name: L57 submachine gun
@@ -153,7 +153,7 @@
   - type: Appearance
   - type: RefillableByBulletBox
     bulletType: CMUBoxBulletsSMGP90
-    
+
 - type: entity
   parent: CMMagazineRifleBase
   id: RMCMagazineSMGPDW90AP
@@ -186,7 +186,7 @@
     - type: Appearance
     - type: RefillableByBulletBox
       bulletType: CMUBoxBulletsSMGP90AP
-    
+
 - type: entity
   parent: CMCartridge10x20mm
   id: RMCCartridge57x28mm
@@ -199,7 +199,7 @@
     - RMCCartridge57x28mm
   - type: CartridgeAmmo
     proto: RMCBullet57x28mm
-    
+
 - type: entity
   parent: CMCartridge10x20mm
   id: RMCCartridge57x28mmAP
@@ -253,10 +253,10 @@
 
 - type: Tag
   id: RMCWeaponSMGPDW90TSE
-  
+
 - type: Tag
   id: RMCMagazineSMGPDW90
-  
+
 - type: Tag
   id: RMCMagazineSMGPDW90AP
 

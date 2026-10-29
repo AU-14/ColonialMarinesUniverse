@@ -63,6 +63,14 @@ public sealed class HelpRelayManager : IPostInjectInit
     void IPostInjectInit.PostInject()
     {
         _sawmill = _log.GetSawmill("helprelay");
+    }
+
+    /// <summary>
+    /// CVar subscriptions live here, not in PostInject: unit tests build the IoC graph before
+    /// content CVars are registered, and OnValueChanged would throw for every fixture.
+    /// </summary>
+    public void Initialize()
+    {
         _config.OnValueChanged(CCVars.HelpRelayWebhook, v => _webhook = v, true);
         _config.OnValueChanged(CCVars.HelpRelayWebhookAHelp, v => _webhookAHelp = v, true);
         _config.OnValueChanged(CCVars.HelpRelayWebhookMHelp, v => _webhookMHelp = v, true);
