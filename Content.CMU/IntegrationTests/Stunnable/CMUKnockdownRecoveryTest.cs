@@ -76,6 +76,7 @@ public sealed class CMUKnockdownRecoveryTest : GameTest
                 Server.System<SharedTransformSystem>().SetCoordinates(target, coordinates);
             });
             await Pair.RunTicksSync(2);
+            await Pair.RunTicksSync(1);
             await Server.WaitAssertion(() =>
             {
                 var stun = Server.System<StunSystem>();
