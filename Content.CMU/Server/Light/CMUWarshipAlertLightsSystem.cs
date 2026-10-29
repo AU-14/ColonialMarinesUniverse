@@ -255,5 +255,3 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
             && HasComp<RMCAlertLevelComponent>(primary);
     }
 }
-
-}
