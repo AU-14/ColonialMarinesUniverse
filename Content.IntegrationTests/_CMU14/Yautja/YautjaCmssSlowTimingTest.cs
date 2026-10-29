@@ -14,6 +14,8 @@ using Content.Shared._RMC14.Xenonids.Tail_Lash;
 using Content.Shared._RMC14.Xenonids.TailJab;
 using Content.Shared._RMC14.Xenonids.TailTrip;
 using Content.Shared.CMU14.Yautja.Slow;
+using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -125,6 +127,46 @@ public sealed class YautjaCmssSlowTimingTest : GameTest
                 Assert.That(hunterLeft.TotalSeconds, Is.InRange(2.0, 4.0), "pred fling slow left cmss13's window");
             });
         });
+    }
+
+    // cmss13 takes most of the human slow off preds, so the long windows above aren't marine strength
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task PredsAreSlowedLighterThanMarines(bool super)
+    {
+        var map = await Pair.CreateTestMap();
+
+        await Server.WaitAssertion(() =>
+        {
+            var human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var hunter = SEntMan.SpawnEntity("CMUMobYautja", map.GridCoords.Offset(new Vector2(2, 0)));
+
+            var humanKept = SpeedKept(human);
+            var hunterKept = SpeedKept(hunter);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(humanKept, Is.LessThan(1f), "the slow didn't slow a marine at all");
+                Assert.That(hunterKept, Is.LessThan(1f), "the slow didn't slow a pred at all");
+                Assert.That(hunterKept, Is.GreaterThan(humanKept), "preds should lose less speed to a slow than marines");
+            });
+        });
+
+        float SpeedKept(EntityUid mob)
+        {
+            var speed = Server.System<MovementSpeedModifierSystem>();
+            speed.RefreshMovementSpeedModifiers(mob);
+            var before = SEntMan.GetComponent<MovementSpeedModifierComponent>(mob).CurrentSprintSpeed;
+
+            var slow = Server.System<RMCSlowSystem>();
+            if (super)
+                slow.TrySuperSlowdown(mob, TimeSpan.FromSeconds(10));
+            else
+                slow.TrySlowdown(mob, TimeSpan.FromSeconds(10));
+
+            speed.RefreshMovementSpeedModifiers(mob);
+            return SEntMan.GetComponent<MovementSpeedModifierComponent>(mob).CurrentSprintSpeed / before;
+        }
     }
 
     private void Fling(EntityUid warrior, EntityUid target)
