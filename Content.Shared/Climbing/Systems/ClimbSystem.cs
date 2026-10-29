@@ -76,6 +76,8 @@ public sealed partial class ClimbSystem : VirtualController
     {
         base.UpdateBeforeSolve(prediction, frameTime);
 
+        FlushCMUPendingClimbEnds(); // CMU14: prediction reset dispatches contacts before the physics step.
+
         var query = EntityQueryEnumerator<ClimbingComponent>();
         var curTime = _timing.CurTime;
 
@@ -420,7 +422,9 @@ public sealed partial class ClimbSystem : VirtualController
                 return;
         }
 
-        StopClimb(uid, component);
+        // CMU14: contact dispatch still holds other contacts belonging to this fixture.
+        // StopClimb(uid, component);
+        QueueCMUClimbEnd(uid, component);
     }
 
     private void StopClimb(EntityUid uid, ClimbingComponent? climbing = null, FixturesComponent? fixtures = null)
