@@ -23,7 +23,7 @@ public sealed partial class Mycotoxigenic : RMCChemicalEffect
         if (IoCManager.Resolve<INetManager>().IsClient)  
             return;  
   
-        var entman = args.EntityManager;  
+        var entman = IoCManager.Resolve<IEntityManager>();
         var target = args.TargetEntity;  
   
           
