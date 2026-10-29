@@ -6,6 +6,7 @@ using Content.IntegrationTests.Pair;
 using Content.Server.CMU14.Medical.Diagnostics;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Body;
 using Content.Shared.CMU14.Medical.Anatomy.Organs;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
@@ -34,6 +35,90 @@ namespace Content.IntegrationTests.CMU14.Medical.Diagnostics;
 [TestFixture]
 public sealed class StethoscopeInteractionContractTest
 {
+    [TestCase("CMU14XenoBloodburster", 1, false)]
+    [TestCase("CMU14XenoBloodburster", 2, true)]
+    [TestCase("CMU14XenoBloodburster", 6, true)]
+    [TestCase("CMXenoLarva", 6, false)]
+    public async Task LegacyDiagnosticsPreserveTheNeomorphOnlyBreathingClue(string spawn, int stage, bool expected)
+    {
+        await WithPatient(false, 2, async (pair, scene) =>
+        {
+            await pair.Server.WaitAssertion(() =>
+            {
+                pair.Server.ResolveDependency<IConfigurationManager>().SetCVar(CMUMedicalCCVars.DiagnosticsEnabled, false);
+                var entities = scene.Entities;
+                var infection = entities.AddComponent<VictimInfectedComponent>(scene.Patient);
+                entities.System<SharedXenoParasiteSystem>().SetBurstSpawn((scene.Patient, infection), spawn);
+                infection.CurrentStage = stage;
+                Assert.That(entities.System<RMCStethoscopeSystem>().TryExamine(scene.Medic, scene.Patient,
+                    (scene.Tool, entities.GetComponent<RMCStethoscopeComponent>(scene.Tool)), fromVerb: false), Is.True);
+            });
+            await pair.RunTicksSync(8);
+            await pair.Client.WaitAssertion(() =>
+            {
+                var results = Results(pair, scene);
+                Assert.That(results, Has.Count.EqualTo(1));
+                Assert.That(results[0].Text.Contains(Loc.GetString("cmu-medical-stethoscope-raspy-breathing"),
+                    StringComparison.Ordinal), Is.EqualTo(expected));
+            });
+        });
+    }
+
+    [TestCase("held", 1)]
+    [TestCase("held", 2)]
+    [TestCase("worn", 1)]
+    [TestCase("worn", 2)]
+    [TestCase("innate", 2)]
+    public async Task NeomorphBreathingClueStartsAfterStageOneAndUsesCurrentInfection(string route, int skill)
+    {
+        await WithPatient(route != "held", skill, async (pair, scene) =>
+        {
+            var clue = string.Empty;
+            await pair.Server.WaitAssertion(() =>
+            {
+                clue = Loc.GetString("cmu-medical-stethoscope-raspy-breathing");
+                var entities = scene.Entities;
+                var stethoscope = entities.System<CMUStethoscopeSystem>();
+                Assert.That(stethoscope.ReadStethoscope(scene.Medic, scene.Patient), Does.Not.Contain(clue));
+                var infection = entities.AddComponent<VictimInfectedComponent>(scene.Patient);
+                foreach (var spawn in new[] { "CMXenoLarva", "CMU14XenoBloodburster" })
+                {
+                    entities.System<SharedXenoParasiteSystem>().SetBurstSpawn((scene.Patient, infection), spawn);
+                    foreach (var stage in new[] { 0, 1, 2, 6 })
+                    {
+                        infection.CurrentStage = stage;
+                        var result = stethoscope.ReadStethoscope(scene.Medic, scene.Patient);
+                        Assert.That(result.Contains(clue, StringComparison.Ordinal),
+                            Is.EqualTo(spawn == "CMU14XenoBloodburster" && stage >= 2),
+                            $"Unexpected breathing clue for {spawn} at stage {stage}");
+                    }
+                }
+                entities.RemoveComponent<VictimInfectedComponent>(scene.Patient);
+                Assert.That(stethoscope.ReadStethoscope(scene.Medic, scene.Patient), Does.Not.Contain(clue));
+            });
+
+            await Start(pair, scene, route);
+            await pair.Server.WaitAssertion(() =>
+            {
+                AssertPending(scene);
+                var infection = scene.Entities.AddComponent<VictimInfectedComponent>(scene.Patient);
+                scene.Entities.System<SharedXenoParasiteSystem>()
+                    .SetBurstSpawn((scene.Patient, infection), "CMU14XenoBloodburster");
+                infection.CurrentStage = 2;
+            });
+            await pair.RunTicksSync(pair.SecondsToTicks(3));
+            await pair.Client.WaitAssertion(() =>
+            {
+                var results = Results(pair, scene);
+                Assert.That(results, Has.Count.EqualTo(1));
+                Assert.That(results[0].Text, Does.Contain(clue));
+                Assert.That(results[0].Text, Does.Not.Contain("neomorph").IgnoreCase);
+                Assert.That(results[0].Text, Does.Not.Contain("infection").IgnoreCase);
+                AssertNoLocalFallback(pair, scene);
+            });
+        });
+    }
+
     [TestCase("held", 1)]
     [TestCase("held", 2)]
     [TestCase("worn", 1)]
@@ -353,6 +438,7 @@ public sealed class StethoscopeInteractionContractTest
     private static List<StethoscopeNetworkOutput> Results(TestPair pair, Scene scene)
         => pair.Client.EntMan.System<StethoscopeNetworkProbeSystem>().Outputs
             .Where(value => value.Target == scene.PatientNet && (value.Text == scene.Fallback || value.Text == Loc.GetString("rmc-stethoscope-unskilled") ||
+                value.Text.Contains(Loc.GetString("cmu-medical-stethoscope-raspy-breathing"), StringComparison.Ordinal) ||
                 value.Text.Contains("Lungs", StringComparison.Ordinal) || value.Text.Contains("lungs", StringComparison.Ordinal)))
             .ToList();
 
