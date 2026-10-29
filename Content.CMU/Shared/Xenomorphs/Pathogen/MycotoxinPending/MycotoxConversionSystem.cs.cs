@@ -3,7 +3,7 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.CMU14.Xenomorphs.Pathogen;  
 using Content.Shared.CMU14.Xenomorphs.Pathogen.MycotoxinInject;  
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
-using Content.Shared.SharedPopupSystem;
+using Content.Shared.Popups.SharedPopupSystem;
 using Content.Shared.Mobs;  
 using Content.Shared.Mobs.Components;  
 using Robust.Shared.GameObjects;  
