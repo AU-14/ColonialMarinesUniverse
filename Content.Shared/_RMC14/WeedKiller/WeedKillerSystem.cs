@@ -35,7 +35,8 @@ public sealed partial class WeedKillerSystem : EntitySystem
 
     private EntityQuery<DeletedByWeedKillerComponent> _deletedByWeedKillerQuery;
 
-    private static readonly EntProtoId WeedKiller = "RMCGasWeedKiller";
+    // CMU14: RMCGasWeedKiller visuals are sent as tile batches by PublishSmoke.
+    // private static readonly EntProtoId WeedKiller = "RMCGasWeedKiller";
     private const int WeedKillerRadius = 1; // CMU14: +1 tile ≈ +20% coverage
     private TimeSpan _dropshipDelay;
     private TimeSpan _disableDuration;
@@ -165,9 +166,10 @@ public sealed partial class WeedKillerSystem : EntitySystem
             _marineAnnounce.AnnounceARESStaging(null, Loc.GetString("rmc-weed-killer-deploying", ("dropship", Name(dropship.Value))));
         }
 
+        PublishSmoke(killer.Comp.Positions); // CMU14: cosmetic smoke does not need a server entity per tile.
         foreach (var position in killer.Comp.Positions)
         {
-            Spawn(WeedKiller, _map.ToCoordinates(position.Grid, position.Indices, position.Grid));
+            // CMU14: Spawn(WeedKiller, _map.ToCoordinates(position.Grid, position.Indices, position.Grid));
             var anchored = _rmcMap.GetAnchoredEntitiesEnumerator(position.Grid, position.Indices);
             while (anchored.MoveNext(out var anchoredId))
             {
@@ -180,6 +182,8 @@ public sealed partial class WeedKillerSystem : EntitySystem
                     QueueDel(anchoredId);
             }
         }
+
+        killer.Comp.Positions.Clear(); // CMU14: release tile/grid references once the one-shot deployment completes.
     }
 
     public override void Update(float frameTime)

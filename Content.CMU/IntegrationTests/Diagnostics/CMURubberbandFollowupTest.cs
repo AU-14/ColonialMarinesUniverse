@@ -148,6 +148,22 @@ public sealed class CMURubberbandFollowupTest : GameTest
                 system.FrameUpdate(1f / 30);
                 Assert.That(capture.Messages.Count(m => m.StartsWith("snap ")), Is.EqualTo(1),
                     "Changing the camera's parent establishes a new comparison baseline.");
+
+                frame++;
+                now += TimeSpan.FromSeconds(1d / 30);
+                transform.SetCoordinates(followed, new EntityCoordinates(map, new Vector2(40, 0)));
+                system.FrameUpdate(1f / 30);
+                Assert.That(capture.Messages.Count(m => m.StartsWith("snap ")), Is.EqualTo(1),
+                    "Moving the parent must not count as a correction of its stationary passenger.");
+                Assert.That(capture.Messages.Any(m => m.StartsWith("parent-motion dist=0 space=parent worldDist=10 ")), Is.True,
+                    "Parent movement remains available separately for investigating vehicle motion.");
+
+                frame++;
+                now += TimeSpan.FromSeconds(1d / 30);
+                transform.SetCoordinates(actor, new EntityCoordinates(followed, new Vector2(5.6f, 0)));
+                system.FrameUpdate(1f / 30);
+                Assert.That(capture.Messages.Count(m => m.StartsWith("snap ")), Is.EqualTo(2),
+                    "Parent-motion logging must not suppress a later correction relative to that parent.");
             }
             finally
             {

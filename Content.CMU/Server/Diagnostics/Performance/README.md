@@ -10,7 +10,7 @@ It never automatically invokes `serverperf deep` or retains per-entity details. 
 
 ## Default behavior
 
-- Diagnostics and healthy one-minute heartbeats are enabled.
+- Diagnostics and one-minute heartbeats are enabled, including during active incidents.
 - Log output is enabled by default (`cmu.server_performance.log_enabled = true`). An explicit saved false value still mutes it; `cmuperf status` and runtime configuration should be checked when deploying to an existing server.
 - A real frame of 50 ms opens an incident during gameplay after the first 30 round seconds (`gameplay_stall_ms`). Other phases use 250 ms (`stall_ms`); 1,000 ms is critical. Set the gameplay threshold to zero to use the general threshold throughout.
 - TPS or average FPS below 80% of target for three seconds opens an incident.
@@ -55,7 +55,7 @@ The principal records are:
 | `runtime-metrics-disabled` | Continuous external metrics are disabled; bounded memory log samples and GC pause windows remain available. |
 | `memory` | Server process RSS/private bytes, estimated managed memory, heap/fragmentation at last GC, allocation rate, GC counts and thread-pool queue. |
 | `tracking-reset` / `epoch-reset` | Bounded ECS counters and rate windows were safely re-anchored. |
-| `heartbeat` | Healthy/warmup scalar snapshot. Absence is externally alertable. |
+| `heartbeat` | Scalar snapshot at a fixed cadence, including active incidents and their ID/severity. Absence is externally alertable. |
 | `baseline-refresh` | New healthy prototype/component churn comparison point. |
 | `incident-open` | First coalesced trigger with all scalar context. |
 | `incident-reasons-changed` | Reasons were added or cleared while the incident remained active. |
@@ -188,7 +188,7 @@ All automatic-monitor CVars are server-only and archived. In the table, the firs
 | `log_enabled` | `true` | Write diagnostic logs; does not control metrics or collection. |
 | `sample_interval` | `1` s | Full observation cadence; hard stalls are still checked every frame. |
 | `warmup` | `30` s | Suppresses rate/growth triggers after startup or a new round. Hard stalls/allocation/network remain active. |
-| `heartbeat_interval` | `60` s | Healthy log heartbeat; `0` disables it. |
+| `heartbeat_interval` | `60` s | Log heartbeat in every incident state; `0` disables it. |
 | `incident_update_interval` | `30` s | Sustained-incident update cadence. |
 | `baseline_interval` | `300` s | Healthy churn baseline cadence. |
 | `stall_ms` | `250` ms | General hard-frame trigger; `0` disables this threshold. |
