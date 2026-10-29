@@ -61,6 +61,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     [Dependency] private IBanManager _ban = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _proto = default!; // CMU14: antag gamemode-blacklist lookups
     [Dependency] private IServerPreferencesManager _pref = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private ArrivalsSystem _arrivals = default!;
@@ -352,6 +353,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     {
         // CMU14: pity weighting, see AntagPitySystem.
         // TODO: Actually add weights! This is placeholder for a future PR.
+        // CMU14
         return EntityManager.EntitySysManager.GetEntitySystem<AntagPitySystem>().GetWeight(player);
     }
 

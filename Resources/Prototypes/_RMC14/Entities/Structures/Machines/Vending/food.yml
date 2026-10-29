@@ -26,16 +26,22 @@
       # CMU14 Begin: doubled prepared meal stock, base stock sold out around hour two
       - id: CMMRE
         name: Meal Ready to Eat
+        # CMU14
         amount: 50
       - id: CMMarinePreparedMealChicken
+        # CMU14
         amount: 40
       - id: CMMarinePreparedMealCornbread
+        # CMU14
         amount: 40
       - id: CMMarinePreparedMealPasta
+        # CMU14
         amount: 40
       - id: CMMarinePreparedMealPizza
+        # CMU14
         amount: 40
       - id: CMMarinePreparedMealPork
+        # CMU14
         amount: 40
       - id: CMMarinePreparedMealTofu
         amount: 40
@@ -81,14 +87,19 @@
     - name: Prepared Meals
       entries:
       - id: CMMarinePreparedMealChicken
+        # CMU14
         amount: 40
       - id: CMMarinePreparedMealCornbread
+        # CMU14
         amount: 40
       - id: CMMarinePreparedMealPasta
+        # CMU14
         amount: 40
       - id: CMMarinePreparedMealPizza
+        # CMU14
         amount: 40
       - id: CMMarinePreparedMealPork
+        # CMU14
         amount: 40
     - name: Utensils
       entries:
@@ -133,24 +144,33 @@
       # CMU14 Begin: doubled prepared meal stock, base stock sold out around hour two
       - id: RMCMRESPP
         name: UPP Combat Ration
+        # CMU14
         amount: 30
       - id: RMCMarinePreparedMealSPPBanush
+        # CMU14
         amount: 30
       - id: RMCMarinePreparedMealSPPChowMein
+        # CMU14
         amount: 30
       - id: RMCMarinePreparedMealSPPCuban
+        # CMU14
         amount: 30
       - id: RMCMarinePreparedMealSPPFrankfurter
+        # CMU14
         amount: 30
       - id: RMCMarinePreparedMealSPPJiaozi
+        # CMU14
         amount: 30
       - id: RMCMarinePreparedMealSPPLuncheon
+        # CMU14
         amount: 30
       - id: RMCMarinePreparedMealSPPShrimp
+        # CMU14
         amount: 30
       - id: RMCMarinePreparedMealSPPMeatballs
         amount: 1 # parity amount is 0 but i think this is funnier
       - id: RMCMarinePreparedMealSPPWursts
+        # CMU14
         amount: 30
       - id: RMCSurvivalRationSPP
         name: SPP Survival Ration

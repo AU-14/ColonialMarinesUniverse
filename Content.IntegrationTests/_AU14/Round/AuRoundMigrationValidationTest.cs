@@ -191,6 +191,7 @@ public sealed class AuRoundMigrationValidationTest
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
             DummyTicker = false,
+            // CMU14
             InLobby = true,
         });
         var server = pair.Server;

@@ -91,7 +91,7 @@ public sealed partial class DropshipComponent : Component
     public EntityUid? LaunchAlarmEntity;
 
     // CMU14: set while a ship fire alarm is active; life support vents hold their gas mix.
-    [DataField]
+    [DataField, Access(typeof(SharedDropshipSystem), Other = AccessPermissions.ReadWrite)] // CMU14
     public bool FireAlarmActive;
 
     /// <summary>Optional takeoff cue; null preserves the standard shuttle startup sound.</summary>

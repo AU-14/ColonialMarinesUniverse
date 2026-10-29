@@ -389,7 +389,7 @@
   parent: RMCSuitEVABase
   id: CMUSuitEVA
   name: '"Salamander" PS-2 pressure suit'
-  description: Salamander's heavy pressure suit for hard vacuum work. Toggle the helmet on before you need it, which only holds with the dome sealed.
+  description: Salamander's heavy pressure suit for hard vacuum work. Helmet not included.
   components:
   - type: ContainerContainer
     containers:
@@ -411,7 +411,7 @@
   parent: RMCHelmetEVABase
   id: CMUHelmetEVA
   name: '"Salamander" PH-2 pressure helmet'
-  description: The sealed dome that completes the PS-2 rating. The seal is honest, the lamp is bright, and the window is rated for debris coming the other way.
+  description: The sealed dome to complete the PS-2 rating.
   components:
   - type: PressureProtection
     highPressureMultiplier: 0.1

@@ -95,6 +95,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         // which throws mid-enumeration; snapshot the uids first.
         var toReplace = new List<EntityUid>();
         var query = EntityQueryEnumerator<RMCReplaceOnHijackLandComponent>();
+        // CMU14
         while (query.MoveNext(out var uid, out _))
         {
             toReplace.Add(uid);
