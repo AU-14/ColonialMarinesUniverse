@@ -44,6 +44,7 @@
   # crossing into crit keeps them up and fighting for a bit before they drop, same thing xenos get
   - type: CriticalGraceTime
     graceDuration: 20
+  - type: YautjaVitalsWarning
   - type: TacticalMapTracked
     trackDead: true
   - type: YautjaMapTracked
@@ -295,6 +296,7 @@
     chanceMultiplier: 0.25
   - type: CriticalGraceTime
     graceDuration: 20
+  - type: YautjaVitalsWarning
   - type: Language
     spokenLanguages:
     - Yautja
