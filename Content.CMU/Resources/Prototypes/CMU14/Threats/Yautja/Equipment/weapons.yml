@@ -1161,7 +1161,6 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/CMU14/Yautja/Weapons/Plasma/pulse3.wav
-  - type: GunRequiresWield
   - type: BatteryAmmoProvider
     proto: CMUYautjaPlasmaPistolBolt
     fireCost: 1
