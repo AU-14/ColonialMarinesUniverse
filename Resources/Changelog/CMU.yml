@@ -15654,5 +15654,172 @@
   id: 912
   time: '2026-10-28T12:04:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2306
+- author: Vencallium
+  changes:
+  - message: Medical vendors now offer one pressurized reagent canister pouch.
+    type: Add
+  - message: Machine guns, temporary emplacements, weapon mounts, and sentries can
+      be deployed beside barricades. Other solid obstructions still block placement.
+    type: Tweak
+  - message: Hospital incident payments go directly to the colony budget or the appropriate
+      GOVFOR or OPFOR requisitions budget.
+    type: Tweak
+  - message: Hospital consoles report that earned payments were deposited instead
+      of dispensed as cash.
+    type: Fix
+  - message: The medical guide has a dedicated cryogenic medicine page covering treatments,
+      recipes, temperatures, and precursors.
+    type: Add
+  - message: Cryogenic recipes that call for Cryoxadone now use Marine Cryoxadone,
+      including Necrosol.
+    type: Tweak
+  - message: The filled Cryoxadone beaker contains and is labeled as Marine Cryoxadone.
+    type: Tweak
+  - message: Replaced many Bosenmori placeholder objects with matching functional
+      CM, RMC, or CMU prototypes and consolidated matching sprite duplicates.
+    type: Map
+  - message: Converted distinctive Bosenmori floor art into named, functional floor
+      tiles.
+    type: Map
+  - message: Corrected the Bosenmori asteroid floor tile's variant count so its texture
+      loads.
+    type: Fix
+  - message: Long telephone lists can scroll within the phone window.
+    type: Fix
+  - message: Orbital bombardments strike the matching position on every connected
+      Z-level.
+    type: Add
+  - message: Multi-Z orbital strikes show target markers and apply explosion steps
+      on each affected level.
+    type: Tweak
+  - message: Orbital protection is checked on each affected level.
+    type: Tweak
+  - message: Moderators can use `stopglobalsound` to stop admin-played global audio
+      for everyone or specified players.
+    type: Admin
+  - message: Moderators can use `intel:spawnintel`.
+    type: Admin
+  - message: CMU round statistics can be filtered to 1 week, 2 weeks, 1 month, 3 months,
+      6 months, or 1 year.
+    type: Add
+  - message: "Internal bleeding can cause a brief \u201CYou cough up some blood\u201D\
+      \ warning with cough and blood-splash sounds."
+    type: Add
+  - message: Blood-cough warnings become more frequent as the number of internally
+      bleeding body parts increases.
+    type: Tweak
+  - message: GOVFOR and OPFOR ASRS catalogs include gear from the selected platoon's
+      requisitions and equipment vendors.
+    type: Add
+  - message: Faction ASRS gear is priced using comparable requisitions items and delivered
+      as the complete item, including its contents.
+    type: Tweak
+  - message: Faction ASRS catalogs include ammunition for their smart gunners and
+      specialist-weapon classes.
+    type: Add
+  - message: Faction ASRS stock refreshes when the selected platoon catalog is reapplied.
+    type: Tweak
+  - message: Cellphones have a 5% chance to use the IED ringtone when they ring.
+    type: Add
+  - message: GOVFOR and OPFOR each have a faction-specific medical radio channel colored
+      evergreen.
+    type: Add
+  - message: Faction headsets include separate medical-channel keys; doctors, medical
+      officers, and high command receive suitable headsets, and faction relays support
+      the channels.
+    type: Tweak
+  - message: Research-contract synthesis excludes food and drink reagents, while Water
+      and Sugar remain available.
+    type: Tweak
+  - message: Removed duplicate research-simulator localization definitions.
+    type: Fix
+  - message: Hunger drains 1.5 times more slowly. Thirst and gains from eating are
+      unchanged.
+    type: Tweak
+  - message: Athletic and Muscular selections in Character Records apply sex-specific
+      muscular sprites to human characters.
+    type: Add
+  - message: The character's Build field keeps that appearance in sync when sex, or
+      markings change.
+    type: Tweak
+  - message: Added focused regression coverage for barricade placement, global audio,
+      ringtone resets, multi-Z impacts, faction ASRS stock, and character Build appearance.
+    type: Code
+  id: 913
+  time: '2026-10-28T16:22:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2287
+- author: rokudara-sen
+  changes:
+  - message: The queen's slashes are much less likely to sever a yautja's limbs.
+    type: Tweak
+  id: 914
+  time: '2026-10-28T20:23:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2359
+- author: rokudara-sen
+  changes:
+  - message: Yautja can open their runed sandstone doors with wristblades again.
+    type: Fix
+  - message: Thrown yautja harpoons hit their target instead of sliding through.
+    type: Fix
+  - message: Marking new prey removes your old prey mark.
+    type: Fix
+  - message: Buckling into a chair no longer breaks the yautja mask visor.
+    type: Fix
+  - message: The hunter ship has its thrall bracer kits again.
+    type: Fix
+  - message: A recovered yautja body gives as much intel as a recovered queen.
+    type: Tweak
+  - message: Yautja melee weapons hit humans like in CM-SS13, through armor and without
+      the skill bonus.
+    type: Tweak
+  - message: Yautja can only throw a carried body 7 tiles.
+    type: Tweak
+  - message: Yautja stay conscious for 20 seconds after going into crit.
+    type: Tweak
+  - message: Clan hall hunt settings need the Clans admin flag instead of Host.
+    type: Admin
+  id: 915
+  time: '2026-10-28T21:27:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2360
+- author: TheHellFireo
+  changes:
+  - message: Preserve docking when docked grids transfer between levels.
+    type: Fix
+  - message: Correct XM99A hitscan obstruction around fixture geometry.
+    type: Fix
+  - message: Prevent rejected reinforcement shuttles from retaining maps and allow
+      lemon-drop boxes to fit inside ration packs.
+    type: Fix
+  - message: Preserve copied ghost sprites and the Venator gib visual.
+    type: Fix
+  - message: Avoid inaudible cross-floor and vehicle audio allocations and repeated
+      hidden lobby trait-control construction.
+    type: Code
+  - message: Update to stock RobustToolbox v294.0.1 and reduce networking, deployment
+      and diagnostic allocation costs.
+    type: Code
+  id: 916
+  time: '2026-10-29T00:35:23.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2357
+- author: KeiKiyomi
+  changes:
+  - message: Stethoscopes can now detect raspy breathing in patients with neomorph
+      infections from stage 2 onward.
+    type: Add
+  id: 917
+  time: '2026-10-29T09:25:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2358
+- author: TheHellFireo
+  changes:
+  - message: Fixed a climbing interaction that could interrupt client movement prediction.
+    type: Fix
+  - message: Reduced repeated work when updating clothing, stains and metabolism.
+    type: Fix
+  - message: Reduced unnecessary combat sound allocations while preserving sounds
+      inside vehicles.
+    type: Fix
+  id: 918
+  time: '2026-10-29T10:44:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2366
 Name: CMU
 Order: -1
