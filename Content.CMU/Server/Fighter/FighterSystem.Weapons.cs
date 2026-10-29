@@ -120,6 +120,7 @@ public sealed partial class FighterSystem
             if (!TerminatingOrDeleted(uid) && TryComp(uid, out FighterHardpointComponent? point))
                 weapons.Loadout.Add(GetWeaponStatus((uid, point)));
         weapons.Targets.Clear();
+        designations.Clear();
         foreach (var pointUid in weapons.Hardpoints)
         {
             if (TryComp(pointUid, out FighterHardpointComponent? point) && point.Ammo is { } ammo &&
