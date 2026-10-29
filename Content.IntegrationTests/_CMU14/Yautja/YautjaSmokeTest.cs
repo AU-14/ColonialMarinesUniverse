@@ -2698,6 +2698,7 @@ public sealed class YautjaSmokeTest
                 comp.NonYautjaWorkingChance = 0f;
                 comp.NonYautjaRandomFunctionChance = 1f;
                 comp.NonYautjaDelimbChance = 0f;
+                comp.NonYautjaShockChance = 0f;
                 comp.Charge = 300;
                 comp.Regen = 0;
             });
