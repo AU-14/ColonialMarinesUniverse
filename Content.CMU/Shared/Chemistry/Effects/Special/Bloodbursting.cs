@@ -1,74 +1,70 @@
 using Content.Shared._RMC14.Chemistry.Effects;  
 using Content.Shared._RMC14.Xenonids.Parasite;  
 using Content.Shared.Damage;  
-using Content.Shared.EntityEffects;  
 using Content.Shared.FixedPoint;  
 using Robust.Shared.Network;  
 using Robust.Shared.Prototypes;  
   
-namespace Content.Shared._CMU14.Chemistry.Effects.Special;  
+namespace Content.Shared.CMU14.Chemistry.Effects.Special;  
   
-public sealed partial class Embryonic : RMCChemicalEffect  
+public sealed partial class Bloodbursting : RMCChemicalEffect  
 {  
-     
+      
     [DataField]  
     public bool RequiresOverdose = true;  
   
-     
+    
     [DataField]  
-    public EntProtoId? EmbryoSpawn = "CMU14XenoBloodburster";
+    public EntProtoId EmbryoSpawn = "CMU14XenoBloodburster";  
   
-     
+      
     [DataField]  
     public TimeSpan? BurstDelay;  
   
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)  
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)  
     {  
         if (RequiresOverdose)  
             return;  
   
-        TryInfect(args);  
+        TryInfect(system, args);  
     }  
   
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)  
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)  
     {  
-        TryInfect(args);  
+        TryInfect(system, args);  
     }  
   
-    private void TryInfect(EntityEffectReagentArgs args)  
+    private void TryInfect(RMCChemicalEffectSystem system, RMCReagentEffectArgs args)  
     {  
         var entman = args.EntityManager;  
-        var targ = args.TargetEntity;  
+        var target = args.TargetEntity;  
   
-        var net = IoCManager.Resolve<INetManager>();  
-        if (!net.IsServer)  
+          
+        if (IoCManager.Resolve<INetManager>().IsClient)  
             return;  
   
-        
-        if (!entman.TryGetComponent<InfectableComponent>(targ, out var infectable))  
+          
+        if (!entman.TryGetComponent<InfectableComponent>(target, out var infectable) ||  
+            infectable.BeingInfected ||  
+            entman.HasComponent<VictimInfectedComponent>(target))  
+        {  
             return;  
-        if (infectable.BeingInfected)  
-            return;  
-        if (entman.HasComponent<VictimInfectedComponent>(targ))  
-            return;
+        }  
   
         var parasiteSys = entman.System<SharedXenoParasiteSystem>();  
-        var infected = entman.EnsureComp<VictimInfectedComponent>(targ);  
+        var infected = entman.EnsureComp<VictimInfectedComponent>(target);  
   
-         
+        
         if (BurstDelay != null)  
-            parasiteSys.SetBurstDelay((targ, infected), BurstDelay.Value);  
-        if (EmbryoSpawn != null)  
-            parasiteSys.SetBurstSpawn((targ, infected), EmbryoSpawn.Value);  
+            parasiteSys.SetBurstDelay((target, infected), BurstDelay.Value);  
   
-        parasiteSys.RefreshIncubationMultipliers((targ, infected));  
-        entman.Dirty(targ, infected);  
+        parasiteSys.SetBurstSpawn((target, infected), EmbryoSpawn);  
+        parasiteSys.RefreshIncubationMultipliers((target, infected));  
+        entman.Dirty(target, infected);  
     }  
   
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)  
-    {  
-        return RequiresOverdose  
-            ? "Overdoses implant a neomorph embryo."  
-            : "Implants a neomorph embryo.";  
-    }  
+        => RequiresOverdose  
+            ? "Overdoses implant a xeno embryo that hatches into a bloodburster."  
+            : "Implants a xeno embryo that hatches into a bloodburster.";  
 }
