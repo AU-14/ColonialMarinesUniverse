@@ -206,15 +206,21 @@
         potency: 1
 
 - type: reagent  
-  id: TestEmbryo  
-  name: test-embryo-chem  
-  group: Medicine  
+  parent: CMReagent  
+  id: TestBloodbursting  
+  name: test-bloodbursting-chem  
+  desc: test chem for bloodburster infection  
+  physicalDesc: reagent-physical-desc-unidentifiable  
+  class: Special  
+  color: "#bed700"  
+  reward: 0  
   overdose: 10  
   metabolisms:  
-    Poison:  
-      metabolismRate: 0.5  
+    Bloodstream:  
+      cmuToxicity: [ Poison ]  
+      metabolismRate: 0.1  
       effects:  
-        - type: Bloodbursting
-          embryoSpawn: CMU14XenoBloodburster  
-          requiresOverdose: true  
-          burstDelay: 0:00:30
+      - !type:Bloodbursting  
+        embryoSpawn: CMU14XenoBloodburster  
+        requiresOverdose: true  
+        burstDelay: 0:00:30
