@@ -169,7 +169,7 @@
 - type: reagent
   parent: CMUPathogenSporoplasm
   id: CMUPathogenSporoplasmMycotoxin
-  name: reagent-name-pathogen-myxotoxin-plasma
+  name: reagent-name-pathogen-mycotoxin-plasma
   desc: reagent-desc-pathogen-mycotoxin-plasma
   color: "#a65d7f"
   reward: 2
