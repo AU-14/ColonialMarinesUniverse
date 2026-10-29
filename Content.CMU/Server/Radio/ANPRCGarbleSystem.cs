@@ -25,7 +25,8 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
     private static readonly string[] HeavyNoise = ["*static*", "kzzkt", "fzzzt", "~~~~", "krrkk", "----", "*static*"];
 
     private GameTick _jamCacheTick;
-    private readonly Dictionary<EntityUid, RadioJamIntensity> _jamCache = new();
+    private readonly record struct JammerReading(float Distance, float Range, Vector2 Position, EntityUid Uid);
+    private readonly Dictionary<EntityUid, JammerReading?> _jamCache = new();
 
     public override void Initialize()
     {
@@ -190,24 +191,24 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
 
     public RadioJamIntensity GetJamIntensity(EntityUid radioSource)
     {
+        RefreshJamCache();
+        if (!_jamCache.TryGetValue(radioSource, out var jammer))
+            jammer = FindClosestCoveringJammer(radioSource);
+        return JamIntensity(jammer);
+    }
+
+    private void RefreshJamCache()
+    {
         if (_timing.CurTick != _jamCacheTick)
         {
             _jamCache.Clear();
             _jamCacheTick = _timing.CurTick;
         }
-
-        if (_jamCache.TryGetValue(radioSource, out var cached))
-            return cached;
-
-        var intensity = ComputeJamIntensity(radioSource);
-        _jamCache[radioSource] = intensity;
-
-        return intensity;
     }
 
-    private RadioJamIntensity ComputeJamIntensity(EntityUid radioSource)
+    private static RadioJamIntensity JamIntensity(JammerReading? reading)
     {
-        if (FindClosestCoveringJammer(radioSource) is not { } jammer)
+        if (reading is not { } jammer)
             return RadioJamIntensity.None;
 
         var normalised = jammer.Distance / jammer.Range;
@@ -251,8 +252,11 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
         return true;
     }
 
-    private (float Distance, float Range, Vector2 Position, EntityUid Uid)? FindClosestCoveringJammer(EntityUid radioSource)
+    private JammerReading? FindClosestCoveringJammer(EntityUid radioSource)
     {
+        // Bearings need live positions. A fresh direction lookup also supplies subsequent
+        // intensity checks in this tick, instead of repeating the same jammer query.
+        RefreshJamCache();
         var closestDist = float.MaxValue;
         var closestRange = 1f;
         var closestPos = Vector2.Zero;
@@ -285,10 +289,11 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
             closestUid = jammerUid;
         }
 
-        if (closestDist == float.MaxValue)
-            return null;
-
-        return (closestDist, closestRange, closestPos, closestUid);
+        JammerReading? reading = closestDist == float.MaxValue
+            ? null
+            : new(closestDist, closestRange, closestPos, closestUid);
+        _jamCache[radioSource] = reading;
+        return reading;
     }
 
     public string GarbleMessage(string message, RadioJamIntensity intensity)
