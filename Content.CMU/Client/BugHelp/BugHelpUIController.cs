@@ -19,11 +19,21 @@ public sealed class BugHelpUIController : UIController
     [Dependency] private readonly INetManager _net = default!;
 
     private BugHelpWindow? _window;
+    private bool _isEnabled;
+
+    public bool IsEnabled => _isEnabled;
 
     public override void Initialize()
     {
         _net.RegisterNetMessage<BugHelpOpenMsg>(OnOpen);
         _net.RegisterNetMessage<BugHelpSubmitMsg>();
+        _net.RegisterNetMessage<BugHelpConfigMsg>(OnConfig);
+    }
+
+    private void OnConfig(BugHelpConfigMsg message)
+    {
+        _isEnabled = message.Enabled;
+        UIManager.GetUIController<StaffHelpUIController>().RefreshBugHelpButton();
     }
 
     private void OnOpen(BugHelpOpenMsg message)
@@ -52,6 +62,7 @@ public sealed class BugHelpUIController : UIController
             var submission = window.Collect();
             _net.ClientSendMessage(new BugHelpSubmitMsg
             {
+                Category = submission.Category,
                 WhatHappened = submission.WhatHappened,
                 Expected = submission.Expected,
                 Steps = submission.Steps,

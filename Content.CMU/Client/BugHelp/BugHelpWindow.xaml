@@ -18,6 +18,8 @@
                            MaxWidth="{x:Static ui:CmuPanelMetrics.DescriptionWidth}" />
             <Button Name="TalkToStaffButton" Text="{Loc 'cmu-bughelp-talk-to-staff'}"
                     HorizontalExpand="True" Access="Public" />
+            <Label Text="{Loc 'cmu-bughelp-category'}" />
+            <OptionButton Name="Category" HorizontalExpand="True" Access="Public" />
             <Label Text="{Loc 'cmu-bughelp-what-happened'}" />
             <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
                 <TextEdit Name="WhatHappened" MinHeight="110" HorizontalExpand="True" Access="Public" />

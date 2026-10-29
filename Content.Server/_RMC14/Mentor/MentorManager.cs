@@ -15,6 +15,7 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Mentor;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.BugHelp; // CMU14: anonymity alias for Discord relay surfaces
 using Content.Shared.Players.RateLimiting;
 using Content.Shared.Roles;
 using Robust.Server.Player;
@@ -413,16 +414,6 @@ public sealed partial class MentorManager : IPostInjectInit
         if (string.IsNullOrWhiteSpace(message))
             return;
 
-        // CMU14 BugHelp: keep human lines only (author != null filters connect/disconnect notices)
-        // for bug report promotion; tail-capped to bound memory.
-        if (author != null)
-        {
-            var lines = _transcripts.GetOrNew(destination);
-            lines.Add((authorName ?? destinationName, message));
-            if (lines.Count > TranscriptLineCap)
-                lines.RemoveRange(0, lines.Count - TranscriptLineCap);
-        }
-
         var recipients = new HashSet<INetChannel>();
         if (destinationChannel is { IsConnected: true })
             recipients.Add(destinationChannel);
@@ -435,6 +426,18 @@ public sealed partial class MentorManager : IPostInjectInit
 
             if (active.Channel.IsConnected)
                 recipients.Add(active.Channel);
+        }
+
+        // CMU14 BugHelp: keep human lines only (author != null filters connect/disconnect notices)
+        // for bug report promotion; tail-capped to bound memory. The mentee is stored as the
+        // anonymity alias; staff keep their names. The relay channel itself mirrors ahelp and
+        // keeps real names; only promoted reports anonymize.
+        if (author != null)
+        {
+            var lines = _transcripts.GetOrNew(destination);
+            lines.Add((isMentor ? authorName ?? destinationName : BugHelpAnonymity.Alias, message));
+            if (lines.Count > TranscriptLineCap)
+                lines.RemoveRange(0, lines.Count - TranscriptLineCap);
         }
 
         var isAdmin = author != null && _admin.IsAdmin(author);

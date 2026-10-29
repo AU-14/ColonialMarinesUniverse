@@ -21,6 +21,13 @@ public sealed class BugHelpCommand : IConsoleCommand
             return;
         }
 
+        var system = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<BugHelpSystem>();
+        if (!system.IsEnabled)
+        {
+            shell.WriteError(Loc.GetString("cmu-cmd-bughelp-disabled"));
+            return;
+        }
+
         var message = string.Join(' ', args).Trim();
         if (string.IsNullOrWhiteSpace(message))
         {
@@ -30,8 +37,7 @@ public sealed class BugHelpCommand : IConsoleCommand
             return;
         }
 
-        var system = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<BugHelpSystem>();
-        switch (system.TrySubmit(player, message, null, null, null, null, out var reportId))
+        switch (system.TrySubmit(player, BugHelpCategory.Code, message, null, null, null, null, out var reportId))
         {
             case BugHelpOutcome.Sent:
                 shell.WriteLine(Loc.GetString("cmu-cmd-bughelp-sent", ("id", reportId!)));

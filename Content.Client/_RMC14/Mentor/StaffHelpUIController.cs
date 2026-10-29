@@ -308,10 +308,21 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         // CMU14: bug report choice.
         _staffHelpWindow.BugHelpButton.OnPressed += _ =>
         {
-            _bugHelp.OpenWindow();
-            _staffHelpWindow.Close();
-            SetAHelpButtonPressed(false);
+            if (_bugHelp.IsEnabled)
+            {
+                _bugHelp.OpenWindow();
+                _staffHelpWindow.Close();
+                SetAHelpButtonPressed(false);
+            }
         };
+        _staffHelpWindow.BugHelpButton.Visible = _bugHelp.IsEnabled;
+    }
+
+    // CMU14: bughelp config can flip mid-session; keep the choice card honest while the window is open.
+    public void RefreshBugHelpButton()
+    {
+        if (_staffHelpWindow != null)
+            _staffHelpWindow.BugHelpButton.Visible = _bugHelp.IsEnabled;
     }
 
     // CMU14: public entry for the bug report window's Talk-to-staff button. The title retitles

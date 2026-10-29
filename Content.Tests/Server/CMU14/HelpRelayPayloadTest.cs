@@ -37,6 +37,17 @@ namespace Content.Tests.Server.CMU14
         }
 
         [Test]
+        public void FooterIncludesBuiltAtWhenSet()
+        {
+            var payload = HelpRelayPayload.Build(HelpSource.BugHelp,
+                new HelpPost { Description = "x", Context = Context() },
+                revision: "20a11caad6",
+                builtAt: "2026-01-15");
+
+            Assert.That(payload.Embeds[0].Footer!.Text, Is.EqualTo("rev 20a11caad6 · built 2026-01-15 · CMU Main · CMU help relay"));
+        }
+
+        [Test]
         public void EmbedCarriesSourceFaceAndContext()
         {
             var payload = HelpRelayPayload.Build(HelpSource.BugHelp,
@@ -82,6 +93,21 @@ namespace Content.Tests.Server.CMU14
                 new HelpPost { Description = "x", Context = Context() },
                 revision: null);
             Assert.That(quiet.Content, Is.Null);
+            Assert.That(quiet.AllowedMentions, Is.Not.Null);
+            Assert.That(quiet.AllowedMentions!.Parse, Is.Empty);
+            Assert.That(quiet.AllowedMentions.Users, Is.Null);
+        }
+
+        [Test]
+        public void ReporterPingAllowsOnlyThatUser()
+        {
+            var payload = HelpRelayPayload.Build(HelpSource.BugHelp,
+                new HelpPost { Description = "x", Context = Context(), PingUserId = 123456789012345678 },
+                revision: null);
+
+            Assert.That(payload.Content, Is.EqualTo("<@123456789012345678>"));
+            Assert.That(payload.AllowedMentions!.Parse, Is.Empty);
+            Assert.That(payload.AllowedMentions.Users, Is.EqualTo(new[] { "123456789012345678" }));
         }
 
         [Test]
@@ -92,11 +118,37 @@ namespace Content.Tests.Server.CMU14
                 {
                     Description = "x",
                     Title = "BUG-R1234-03 · fire doesn't spread",
+                    ThreadName = "BUG-R1234-03 · fire doesn't spread",
                     Context = Context(),
                 },
                 revision: null);
 
+            Assert.That(payload.ThreadName, Is.EqualTo("BUG-R1234-03 · fire doesn't spread"));
             Assert.That(payload.Embeds[0].Title, Is.EqualTo("BUG-R1234-03 · fire doesn't spread"));
+        }
+
+        [Test]
+        public void TagsAndExtraFieldsPassThrough()
+        {
+            var payload = HelpRelayPayload.Build(HelpSource.BugHelp,
+                new HelpPost
+                {
+                    Description = "x",
+                    Context = Context(),
+                    AppliedTags = ["111", "222"],
+                    ExtraFields = [new() { Name = "Location", Value = "Grid · 12, 34" }],
+                },
+                revision: null);
+
+            Assert.That(payload.AppliedTags, Is.EqualTo(new[] { "111", "222" }));
+            Assert.That(payload.Embeds[0].Fields, Has.Count.EqualTo(5));
+            Assert.That(payload.Embeds[0].Fields[4].Name, Is.EqualTo("Location"));
+
+            var bare = HelpRelayPayload.Build(HelpSource.BugHelp,
+                new HelpPost { Description = "x", Context = Context() },
+                revision: null);
+            Assert.That(bare.AppliedTags, Is.Null);
+            Assert.That(bare.ThreadName, Is.Null);
         }
 
         [Test]

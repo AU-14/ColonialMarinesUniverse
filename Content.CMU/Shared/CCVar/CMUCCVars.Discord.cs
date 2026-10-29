@@ -22,6 +22,14 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.help_relay_revision", string.Empty, CVar.SERVERONLY);
 
     /// <summary>
+    ///     The date this server build was published, ISO yyyy-MM-dd. The revision hash says what code
+    ///     runs but nothing about its age; the date tells triage whether a report predates current
+    ///     fixes. Filled by the publish pipeline. Empty on dev builds.
+    /// </summary>
+    public static readonly CVarDef<string> HelpRelayBuiltAt =
+        CVarDef.Create("cmu.help_relay_built_at", string.Empty, CVar.SERVERONLY);
+
+    /// <summary>
     ///     Per-source override of <c>cmu.help_relay_webhook</c> for ahelp traffic. Empty falls through
     ///     to the primary webhook. Ahelp traffic still originates from the ahelp relay; this is the
     ///     R3 channel-split knob, kept here so no code changes when the split happens.
@@ -42,6 +50,15 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<string> HelpRelayWebhookBugHelp =
         CVarDef.Create("cmu.help_relay_webhook_bughelp", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    /// <summary>
+    ///     Forum tag ids for bughelp report categories, grammar <c>code:&lt;id&gt;,mapping:&lt;id&gt;</c>.
+    ///     Names match BugHelpCategory case-insensitively; unknown names are ignored, so tags for
+    ///     future categories can sit in the config before the enum grows. Requires the bughelp
+    ///     webhook to be a forum channel.
+    /// </summary>
+    public static readonly CVarDef<string> HelpRelayBugHelpTags =
+        CVarDef.Create("cmu.help_relay_bughelp_tags", string.Empty, CVar.SERVERONLY);
 
     /// <summary>
     ///     How long a player must wait between bug reports, in seconds.

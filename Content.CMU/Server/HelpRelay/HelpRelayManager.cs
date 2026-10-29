@@ -11,6 +11,7 @@ using Content.Server.GameTicking;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Robust.Shared.Configuration;
+using Robust.Shared.ContentPack;
 using Robust.Shared.Log;
 using Robust.Shared.Network;
 using Robust.Shared.Utility;
@@ -28,11 +29,27 @@ public sealed class HelpRelayManager : IPostInjectInit
     [Dependency] private readonly IEntityManager _entMan = default!;
     [Dependency] private readonly ILogManager _log = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
+    [Dependency] private readonly IResourceManager _res = default!;
+
+    // Failed one-shot posts retry briefly then spool to disk, and the backlog dies with the round:
+    // a dead webhook must not accumulate a queue over days of uptime. Posts are spaced out
+    // because Discord rate limits per webhook harder than a help burst.
+    private const int MaxRetries = 3;
+    private static readonly TimeSpan RetryDelay = TimeSpan.FromSeconds(15);
+    private static readonly TimeSpan PostSpacing = TimeSpan.FromMilliseconds(1200);
+    private const int MaxQueued = 64;
+
+    // Dropped posts land here for manual recovery; see SpoolDropped.
+    private static readonly ResPath DroppedPostDir = new("/dropped_relay");
 
     private readonly HttpClient _http = new();
-    private readonly ConcurrentQueue<(string Url, string PayloadJson, string? AttachmentJson)> _pending = new();
+    private readonly ConcurrentQueue<(HelpSource Source, string Url, string PayloadJson, string? AttachmentJson, int Attempts)> _pending = new();
     private readonly ConcurrentDictionary<NetUserId, ulong?> _discordIds = new();
     private int _queueRunning;
+    private int _spoolSeq;
+    // Bumped on round-end drain: an item held by the processor across a drain is stale, and
+    // re-enqueueing it would carry the backlog past the round the drain exists to end.
+    private int _roundGen;
     private ISawmill _sawmill = default!;
 
     // One Discord message per conversation, edited in place as lines arrive (the ahelp relay model).
@@ -45,8 +62,11 @@ public sealed class HelpRelayManager : IPostInjectInit
         public HelpSource Source;
         public string Username = string.Empty;
         public string? Revision;
+        public string? BuiltAt;
         public string? Server;
         public string? MessageId;
+        public string? ChannelId;
+        public string? GuildId;
         public string Description = string.Empty;
         public GameRunLevel LastRunLevel;
         public readonly ConcurrentQueue<string> Pending = new();
@@ -58,6 +78,7 @@ public sealed class HelpRelayManager : IPostInjectInit
     private string _webhookMHelp = string.Empty;
     private string _webhookBugHelp = string.Empty;
     private string _revision = string.Empty;
+    private string _builtAt = string.Empty;
     private string _serverName = string.Empty;
 
     void IPostInjectInit.PostInject()
@@ -76,6 +97,7 @@ public sealed class HelpRelayManager : IPostInjectInit
         _config.OnValueChanged(CCVars.HelpRelayWebhookMHelp, v => _webhookMHelp = v, true);
         _config.OnValueChanged(CCVars.HelpRelayWebhookBugHelp, v => _webhookBugHelp = v, true);
         _config.OnValueChanged(CCVars.HelpRelayRevision, v => _revision = v, true);
+        _config.OnValueChanged(CCVars.HelpRelayBuiltAt, v => _builtAt = v, true);
         _config.OnValueChanged(CCVars.AdminLogsServerName, v => _serverName = v, true);
     }
 
@@ -84,6 +106,7 @@ public sealed class HelpRelayManager : IPostInjectInit
 
     /// <summary>
     /// Queues one message for Discord delivery and returns; the spaced background task posts it.
+    /// Delivery is best-effort: failed posts retry briefly then spool to disk, and a full queue spools new posts.
     /// Call with <see cref="HelpPost.Context"/> set (or from the main thread) — context gathering
     /// touches entity systems, which background threads must not.
     /// </summary>
@@ -94,8 +117,15 @@ public sealed class HelpRelayManager : IPostInjectInit
             return;
 
         var context = post.Context ?? GetContext();
-        var payload = HelpRelayPayload.Build(source, post with { Context = context }, NullIfEmpty(_revision));
-        _pending.Enqueue((url, JsonSerializer.Serialize(payload), post.AttachmentJson));
+        var payloadJson = JsonSerializer.Serialize(HelpRelayPayload.Build(source, post with { Context = context }, NullIfEmpty(_revision), NullIfEmpty(_builtAt)));
+        if (_pending.Count >= MaxQueued)
+        {
+            _sawmill.Error($"Help relay queue full ({MaxQueued} posts), dropping a new one");
+            SpoolDropped(source, payloadJson, post.AttachmentJson);
+            return;
+        }
+
+        _pending.Enqueue((source, url, payloadJson, post.AttachmentJson, 0));
         StartQueueProcessor();
     }
 
@@ -158,6 +188,7 @@ public sealed class HelpRelayManager : IPostInjectInit
             conversation.Url = url;
             conversation.Username = username;
             conversation.Revision = NullIfEmpty(_revision);
+            conversation.BuiltAt = NullIfEmpty(_builtAt);
             conversation.Server = NullIfEmpty(_serverName);
             conversation.LastRunLevel = CurrentRunLevel();
         }
@@ -178,13 +209,24 @@ public sealed class HelpRelayManager : IPostInjectInit
 
     /// <summary>
     /// Round restart clears per-round relay state: conversations end (the next line starts a fresh
-    /// message) and linked-Discord lookups re-resolve next round, so a link added mid-session is
-    /// picked up instead of the cached "unlinked" result surviving the process.
+    /// message), linked-Discord lookups re-resolve next round, and the one-shot post queue dies with
+    /// the round so a failing webhook cannot carry a backlog across rounds.
     /// </summary>
     public void ClearRoundState()
     {
         _conversations.Clear();
         _discordIds.Clear();
+        Interlocked.Increment(ref _roundGen);
+
+        var dropped = 0;
+        while (_pending.TryDequeue(out var item))
+        {
+            SpoolDropped(item.Source, item.PayloadJson, item.AttachmentJson);
+            dropped++;
+        }
+
+        if (dropped > 0)
+            _sawmill.Warning($"Help relay cleared {dropped} undelivered post(s) at round end");
     }
 
     private GameRunLevel CurrentRunLevel() => _entMan.System<GameTicker>().RunLevel;
@@ -213,8 +255,13 @@ public sealed class HelpRelayManager : IPostInjectInit
     {
         if (conversation.Description.Length + line.Length + 1 > HelpRelayPayload.ConversationDescriptionMax)
         {
-            // No link to the previous message without webhook guild/channel ids; adjacent in-channel marker instead.
-            conversation.Description = "_(transcript continued)_\n";
+            // Link back to the previous transcript message when the create response carried ids.
+            var link = conversation.GuildId is { } guild
+                && conversation.ChannelId is { } channel
+                && conversation.MessageId is { } message
+                ? $"_Continued from [this message](https://discord.com/channels/{guild}/{channel}/{message})._\n"
+                : "_(transcript continued)_\n";
+            conversation.Description = link + line;
             conversation.MessageId = null;
         }
         else
@@ -227,7 +274,8 @@ public sealed class HelpRelayManager : IPostInjectInit
             conversation.Username,
             conversation.Description,
             conversation.Revision,
-            conversation.Server);
+            conversation.Server,
+            conversation.BuiltAt);
         var json = JsonSerializer.Serialize(payload);
 
         try
@@ -244,7 +292,8 @@ public sealed class HelpRelayManager : IPostInjectInit
                     return;
                 }
 
-                var id = JsonNode.Parse(content)?["id"]?.ToString();
+                var node = JsonNode.Parse(content);
+                var id = node?["id"]?.ToString();
                 if (id == null)
                 {
                     _sawmill.Error($"Help relay could not find message id in webhook response: {content}");
@@ -252,6 +301,8 @@ public sealed class HelpRelayManager : IPostInjectInit
                 }
 
                 conversation.MessageId = id;
+                conversation.ChannelId = node?["channel_id"]?.ToString();
+                conversation.GuildId = node?["guild_id"]?.ToString();
             }
             else
             {
@@ -279,7 +330,6 @@ public sealed class HelpRelayManager : IPostInjectInit
 
     private static string? NullIfEmpty(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
 
-    // Posts are spaced out because Discord rate limits per webhook harder than a help burst.
     private void StartQueueProcessor()
     {
         if (Interlocked.Exchange(ref _queueRunning, 1) == 1)
@@ -294,8 +344,24 @@ public sealed class HelpRelayManager : IPostInjectInit
         {
             while (_pending.TryDequeue(out var item))
             {
-                await PostWebhook(item);
-                await Task.Delay(1200);
+                var gen = Volatile.Read(ref _roundGen);
+                var sent = await PostWebhook((item.Url, item.PayloadJson, item.AttachmentJson, item.Attempts));
+
+                if (!sent && gen == Volatile.Read(ref _roundGen) && item.Attempts < MaxRetries)
+                {
+                    _sawmill.Warning($"Help relay post failed, retry {item.Attempts + 1}/{MaxRetries}");
+                    await Task.Delay(RetryDelay);
+                    _pending.Enqueue((item.Source, item.Url, item.PayloadJson, item.AttachmentJson, item.Attempts + 1));
+                    continue;
+                }
+
+                if (!sent)
+                {
+                    _sawmill.Error("Help relay post dropped after retries, webhook unreachable");
+                    SpoolDropped(item.Source, item.PayloadJson, item.AttachmentJson);
+                }
+
+                await Task.Delay(PostSpacing);
             }
 
             _queueRunning = 0;
@@ -305,7 +371,7 @@ public sealed class HelpRelayManager : IPostInjectInit
         }
     }
 
-    private async Task PostWebhook((string Url, string PayloadJson, string? AttachmentJson) item)
+    private async Task<bool> PostWebhook((string Url, string PayloadJson, string? AttachmentJson, int Attempts) item)
     {
         try
         {
@@ -319,8 +385,42 @@ public sealed class HelpRelayManager : IPostInjectInit
                 var body = await response.Content.ReadAsStringAsync();
                 _sawmill.Error($"Help relay webhook failed: {(int) response.StatusCode} {response.StatusCode}\n{body}");
             }
+
+            return response.IsSuccessStatusCode;
         }
-        catch (Exception e) { _sawmill.Error($"Help relay webhook error: {e}"); }
+        catch (Exception e)
+        {
+            _sawmill.Error($"Help relay webhook error: {e}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Last-ditch persistence for a post the relay gave up on: the reporter was already told it was
+    /// sent, so the payload lands on disk for manual recovery instead of vanishing with the round.
+    /// The webhook URL never goes in the file.
+    /// </summary>
+    private void SpoolDropped(HelpSource source, string payloadJson, string? attachmentJson)
+    {
+        try
+        {
+            _res.UserData.CreateDir(DroppedPostDir);
+            var seq = Interlocked.Increment(ref _spoolSeq);
+            var path = DroppedPostDir / $"{source.ToString().ToLowerInvariant()}_{DateTime.UtcNow:yyyyMMdd-HHmmssfff}_{seq:D3}.json";
+            var dropped = new DroppedPost
+            {
+                Source = source.ToString(),
+                DroppedAt = DateTime.UtcNow.ToString("o"),
+                Payload = JsonNode.Parse(payloadJson),
+                Attachment = attachmentJson is null ? null : JsonNode.Parse(attachmentJson),
+            };
+            _res.UserData.WriteAllText(path, JsonSerializer.Serialize(dropped));
+            _sawmill.Warning($"Spooled a dropped help relay post to {path}");
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"Failed to spool a dropped help relay post:\n{e}");
+        }
     }
 
     private static MultipartFormDataContent Multipart(string payloadJson, string attachmentJson)
