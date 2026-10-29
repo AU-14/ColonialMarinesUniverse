@@ -8908,7 +8908,7 @@ public sealed class YautjaSmokeTest
                     Assert.That(snareArrowMeta.EntityName, Is.EqualTo("snare arrow"));
                     Assert.That(snareArrowMeta.EntityDescription, Is.EqualTo("A bow launched snare."));
                     Assert.That(quiverMeta.EntityName, Is.EqualTo("quiver strap"));
-                    Assert.That(quiverMeta.EntityDescription, Is.EqualTo("A strap that can hold a bow with a quiver for arrows."));
+                    Assert.That(quiverMeta.EntityDescription, Is.EqualTo("A strap that holds up to eight bows and arrows in total, with room for one hunting bow and seven arrows."));
                 });
             }
             finally

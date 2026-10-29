@@ -5181,7 +5181,7 @@ public sealed class YautjaBowTest
                         storageSystem.CanInsert(quiver, extraArrow, out var reason, storage),
                         Is.False,
                         "CMSS13 quiver has storage_slots = 8, so a ninth bow/arrow item must be rejected.");
-                    Assert.That(reason, Is.EqualTo("rmc-storage-limit-cant-fit"));
+                    Assert.That(reason, Is.EqualTo("cmu-quiver-full"));
                     Assert.That(
                         storageSystem.Insert(quiver, extraArrow, out _, storageComp: storage, playSound: false),
                         Is.False);
