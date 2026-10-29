@@ -48,8 +48,9 @@ public sealed class CMUNapalmBalanceTest : GameTest
     ];
 
     /// <summary>
-    /// A standard M240 tank loaded with Napalm X (a blue-fire fuel) fires red fire, both in the examine readout
-    /// and in the chain it actually shoots; the M240-T and FL3 specialist tanks keep their blue fire.
+    /// A standard M240 tank loaded with Napalm X (a blue-fire fuel) fires the generic fire entity, both in the examine
+    /// readout and in the chain it actually shoots, and (FLOW-22) is capped below the blue colour tier at 39 intensity;
+    /// the M240-T and FL3 specialist tanks keep their blue fire entity and reach the blue tier.
     /// </summary>
     [Test]
     public async Task BlueFireIsReservedForSpecialistTanks()
@@ -70,7 +71,7 @@ public sealed class CMUNapalmBalanceTest : GameTest
             var containers = SEntMan.System<SharedContainerSystem>();
             var origin = map.GridCoords;
 
-            (EntProtoId Raw, EntProtoId Effective, EntProtoId Shot) Fire(string tankId, string? reload)
+            (EntProtoId Raw, EntProtoId Effective, EntProtoId Shot, int Intensity, int Tier) Fire(string tankId, string? reload)
             {
                 DeleteChains();
 
@@ -85,6 +86,8 @@ public sealed class CMUNapalmBalanceTest : GameTest
 
                 Assert.That(flamer.TryGetEffectiveFuel((tank, tankComp), out var raw, out var effective), Is.True,
                     $"{tankId} loaded with {reload} should report a fuel");
+                Assert.That(flamer.TryGetTankFireSpec((tank, tankComp), out var spec), Is.True);
+                Assert.That(effective.Intensity, Is.EqualTo(spec.Intensity), "the examine readout must match the fired spec");
 
                 var gun = SEntMan.SpawnEntity("RMCWeaponFlamerUnloaded", origin);
                 var provider = SComp<RMCFlamerAmmoProviderComponent>(gun);
@@ -94,7 +97,7 @@ public sealed class CMUNapalmBalanceTest : GameTest
                 flamer.ShootFlamer((gun, provider), (gun, SComp<GunComponent>(gun)), null, origin, origin.Offset(new Vector2(-3, 0)));
                 var chains = Chains();
                 Assert.That(chains, Has.Count.EqualTo(1), $"{tankId} should fire one flamer chain");
-                return (raw.FireEntity, effective.FireEntity, chains[0].Comp.Spawn);
+                return (raw.FireEntity, effective.FireEntity, chains[0].Comp.Spawn, chains[0].Comp.Intensity, spec.Tier);
             }
 
             var standard = Fire("RMCTankFlamer", "RMCNapalmX");
@@ -110,6 +113,16 @@ public sealed class CMUNapalmBalanceTest : GameTest
                 Assert.That(specialist.Effective, Is.EqualTo(SharedRMCFlamerSystem.BlueFire));
                 Assert.That(specialist.Shot, Is.EqualTo(SharedRMCFlamerSystem.BlueFire), "the M240-T X tank keeps blue fire");
                 Assert.That(fl3.Shot, Is.EqualTo(SharedRMCFlamerSystem.BlueFire), "the FL3 X tank keeps blue fire");
+
+                // FLOW-22: blue means intensity 40+, which only specialist tanks may reach.
+                Assert.That(standard.Intensity, Is.EqualTo(CMUFuelProfileSystem.NonSpecialistMaxIntensity),
+                    "a standard tank caps Napalm X at 39");
+                Assert.That(standard.Tier, Is.LessThan(4), "a standard tank must never reach the blue tier");
+                Assert.That(upgraded.Intensity, Is.LessThanOrEqualTo(CMUFuelProfileSystem.NonSpecialistMaxIntensity),
+                    "the upgraded tank's 60 cap does not make it a specialist tank");
+                Assert.That(specialist.Intensity, Is.EqualTo(40));
+                Assert.That(specialist.Tier, Is.EqualTo(4), "Napalm X from a specialist tank burns blue");
+                Assert.That(fl3.Tier, Is.EqualTo(4));
             });
 
             DeleteChains();

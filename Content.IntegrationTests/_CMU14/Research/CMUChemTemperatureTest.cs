@@ -2,7 +2,9 @@ using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Chemistry.Reagents;
 using Content.Shared._RMC14.Atmos;
+using Content.Shared.CMU14.Atmos;
 using Content.Shared.CMU14.Chemistry.Effects.Reaction;
+using Content.Shared.CMU14.Chemistry.Fuel;
 using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared.Chemistry.EntitySystems;
@@ -10,8 +12,10 @@ using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.EntityEffects.Effects.Solution;
 using Content.Shared.EntityEffects.Effects.Transform;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
 
 namespace Content.IntegrationTests._CMU14.Research;
 
@@ -134,7 +138,7 @@ public sealed class CMUChemTemperatureTest : GameTest
                 Assert.That(blast.IntensityPerUnit, Is.EqualTo(perUnit).Within(0.01f));
             });
 
-            // Fueling: tile fire, one tile without a range property.
+            // Fueling: tile fire whose stats come from the burning solution (FLOW-22), nothing fixed in the reaction.
             var fuel = Generate(2, 2, ("Fueling", 2));
             Assert.That(SProtoMan.Index<ReactionPrototype>(fuel.ID).Effects.OfType<CMUSolutionTileFire>(), Is.Empty);
             var fuelIgnition = SProtoMan.Index<ReactionPrototype>(SharedReagentGeneratorSystem.IgnitionRecipeId(fuel.ID));
@@ -143,18 +147,28 @@ public sealed class CMUChemTemperatureTest : GameTest
             {
                 Assert.That(fuelIgnition.MinimumTemperature, Is.EqualTo(SharedReagentGeneratorSystem.IgnitionTemperature(2)).Within(0.01f));
                 Assert.That(fuelIgnition.Effects.OfType<Explosion>(), Is.Empty);
-                Assert.That(fire.Range, Is.EqualTo(1));
                 Assert.That(fire.Reagent?.Id, Is.EqualTo(fuel.ID));
-                Assert.That(fire.Intensity, Is.Null, "no Intensity property: keep the tile fire's default");
-                Assert.That(fire.Duration, Is.Null, "no Duration property: keep the tile fire's default");
+                Assert.That(fire.Intensity, Is.Null, "intensity comes from the solution's fire spec");
+                Assert.That(fire.Duration, Is.Null, "duration comes from the solution's fire spec");
+                Assert.That(fire.FireEntity, Is.Null, "colour comes from the intensity tier, not a forced entity");
             });
 
-            // A range property widens the fire to the chemical's radius.
+            // A range property widens the fire through the chemical's radius in the fire spec, capped for containers.
             var wide = Generate(2, 3, ("Fueling", 1), ("Radius", 2));
             var wideFire = SProtoMan.Index<ReactionPrototype>(SharedReagentGeneratorSystem.IgnitionRecipeId(wide.ID))
                 .Effects.OfType<CMUSolutionTileFire>().Single();
-            Assert.That(wideFire.Range, Is.EqualTo(SProtoMan.Index<ReagentPrototype>(wide.ID).Radius));
-            Assert.That(wideFire.Range, Is.GreaterThan(1));
+            Assert.That(wideFire.Reagent?.Id, Is.EqualTo(wide.ID));
+            var wideSolution = new Solution();
+            wideSolution.AddReagent(wide.ID, FixedPoint2.New(100));
+            Assert.That(SEntMan.System<CMUFuelProfileSystem>().TryResolveFire(wideSolution, CMUFireSource.Container, out var wideSpec), Is.True);
+            Assert.That(wideSpec.Radius, Is.EqualTo(Math.Min(CMUFuelProfileSystem.MaxChemicalRadius, SProtoMan.Index<ReagentPrototype>(wide.ID).Radius)));
+            Assert.That(wideSpec.Radius, Is.GreaterThan(1));
+
+            // Igniting is a combustion property too: it gets an ignition reaction that sets a fire.
+            var igniting = Generate(2, 7, ("Igniting", 2));
+            Assert.That(SProtoMan.TryIndex<ReactionPrototype>(SharedReagentGeneratorSystem.IgnitionRecipeId(igniting.ID), out var ignitingIgnition),
+                Is.True, "Igniting must ignite when heated");
+            Assert.That(ignitingIgnition!.Effects.OfType<CMUSolutionTileFire>().Count(), Is.EqualTo(1));
 
             // The strongest combustion property sets the ignition point, which never drops below the floor.
             var volatileMix = Generate(2, 4, ("Fueling", 1), ("Oxidizing", 9), ("Explosive", 2));
@@ -263,13 +277,30 @@ public sealed class CMUChemTemperatureTest : GameTest
                 Assert.That(SEntMan.QueryEntities<TileFireComponent>().Any(), Is.False);
             });
 
-            // Hotplate temperature: it burns away and lights the tile under the beaker.
+            // Hotplate temperature: it burns away and lights a circle of floor around the beaker, √5 ≈ 2 tiles across.
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = -3; x <= 3; x++)
+                for (var y = -3; y <= 3; y++)
+                    maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
+            var fuelSolution = new Solution();
+            fuelSolution.AddReagent(fuel.ID, FixedPoint2.New(5));
+            Assert.That(SEntMan.System<CMUFuelProfileSystem>().TryResolveFire(fuelSolution, CMUFireSource.Container, out var expected), Is.True);
+
             solutions.SetTemperature(soln.Value, SharedReagentGeneratorSystem.IgnitionTemperature(2) + 10f);
+            var fires = SEntMan.QueryEntities<TileFireComponent>().ToArray();
             Assert.Multiple(() =>
             {
                 Assert.That(solution!.GetTotalPrototypeQuantity(fuel.ID), Is.EqualTo(FixedPoint2.Zero), "the fuel did not ignite");
-                Assert.That(SEntMan.QueryEntities<TileFireComponent>().Any(), Is.True, "igniting a fuel must spawn tile fire");
+                Assert.That(fires, Is.Not.Empty, "igniting a fuel must spawn tile fire");
+                Assert.That(fires, Has.Length.EqualTo(21), "radius 2 circle (dx² + dy² ≤ 6) on open floor");
+                foreach (var tileFire in fires)
+                {
+                    Assert.That(SComp<RMCIgniteOnCollideComponent>(tileFire.Owner).Intensity, Is.EqualTo(expected.Intensity));
+                    Assert.That(SComp<CMUFireTierComponent>(tileFire.Owner).Tier, Is.EqualTo(CMUFuelProfileSystem.TierFor(expected.Intensity)));
+                }
             });
+            foreach (var tileFire in fires)
+                SEntMan.DeleteEntity(tileFire.Owner);
 
             // An exothermic synthesis warms the beaker but stays below every ignition point.
             var flask = SEntMan.SpawnEntity("Beaker", map.GridCoords);

@@ -361,6 +361,8 @@
 
 - type: reaction
   id: CMUBiogenicMatrix
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     CMBicaridine:
       amount: 2

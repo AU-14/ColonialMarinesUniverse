@@ -945,7 +945,7 @@
   rarity: rare
   category: reactant
   value: 3
-  maxLevel: 1
+  maxLevel: 5 # CMU14: FLOW-23, levels 3+ make tile fires melt structures (CMUStructureMeltingFireSystem)
   effectName: Firepenetrating
 
 #special

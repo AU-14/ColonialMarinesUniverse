@@ -1,4 +1,7 @@
+using System.Diagnostics.CodeAnalysis; // CMU14
 using System.Linq;
+using Content.Shared.CMU14.Atmos; // CMU14
+using Content.Shared.CMU14.Chemistry.Fuel; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Armor;
@@ -15,6 +18,7 @@ using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Chemistry.Components; // CMU14
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Coordinates.Helpers;
@@ -30,6 +34,8 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
+using Content.Shared.Item; // CMU14
+using Content.Shared.Nutrition.Components; // CMU14
 using Content.Shared.Maps;
 using Content.Shared.Paper;
 using Content.Shared.Popups;
@@ -77,6 +83,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private RMCWaterSystem _rmcWater = default!; // CMU14
+    [Dependency] private CMUFuelProfileSystem _cmuFuel = default!; // CMU14
 
     private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
@@ -112,6 +119,10 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         SubscribeLocalEvent<CraftsIntoMolotovComponent, ExaminedEvent>(OnCraftsIntoMolotovExamined);
         SubscribeLocalEvent<CraftsIntoMolotovComponent, InteractUsingEvent>(OnCraftsIntoMolotovInteractUsing);
         SubscribeLocalEvent<CraftsIntoMolotovComponent, CraftMolotovDoAfterEvent>(OnCraftsIntoMolotovDoAfter);
+        // CMU14 start - any lidded bottle holding something that burns can be made into a molotov
+        SubscribeLocalEvent<OpenableComponent, InteractUsingEvent>(OnOpenableMolotovInteractUsing);
+        SubscribeLocalEvent<OpenableComponent, CraftMolotovDoAfterEvent>(OnOpenableMolotovDoAfter);
+        // CMU14 end
 
         SubscribeLocalEvent<TileFireOnTriggerComponent, RMCTriggerEvent>(OnTileFireTriggered);
         SubscribeLocalEvent<TileFireOnTriggerComponent, CMExplosiveTriggeredEvent>(OnTileFireOnTriggerExplosive);
@@ -228,7 +239,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
     private void OnCraftsIntoMolotovExamined(Entity<CraftsIntoMolotovComponent> ent, ref ExaminedEvent args)
     {
-        if (!CanCraftMolotovPopup(ent, args.Examiner, false, out _))
+        if (!CMUCanCraftMolotov(ent, args.Examiner, false, out _, out _)) // CMU14
             return;
 
         using (args.PushGroup(nameof(CraftsIntoMolotovComponent)))
@@ -242,9 +253,10 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         if (!HasComp<PaperComponent>(args.Used))
             return;
 
-        if (!CanCraftMolotovPopup(ent, args.User, true, out _))
+        if (!CMUCanCraftMolotov(ent, args.User, true, out _, out _)) // CMU14
             return;
 
+        args.Handled = true; // CMU14
         var ev = new CraftMolotovDoAfterEvent();
         var doAfter = new DoAfterArgs(EntityManager, args.User, ent.Comp.Delay, ev, ent, ent, args.Used)
         {
@@ -259,26 +271,12 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!HasComp<PaperComponent>(args.Used))
+        // CMU14 start - the molotov keeps the bottle's solution and burns with its fire spec (FLOW-22)
+        if (args.Used is not { } paper)
             return;
 
-        if (!CanCraftMolotovPopup(ent, args.User, true, out var intensity))
-            return;
-
-        if (_net.IsClient)
-            return;
-
-        var coords = _transform.GetMoverCoordinates(ent);
-        var molotov = Spawn(ent.Comp.Spawns, coords);
-
-        var tileFire = EnsureComp<TileFireOnTriggerComponent>(molotov);
-        tileFire.Duration = intensity.Int();
-        Dirty(molotov, tileFire);
-
-        Del(ent);
-        Del(args.Used);
-
-        _hands.TryPickupAnyHand(args.User, molotov);
+        CMUTryCraftMolotov(ent, paper, args.User, out _);
+        // CMU14 end
     }
 
     private void OnTileFireTriggered(Entity<TileFireOnTriggerComponent> ent, ref RMCTriggerEvent args)
@@ -287,7 +285,8 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         _audio.PlayPvs(ent.Comp.Sound, coords);
 
         var tile = coords.SnapToGrid(EntityManager);
-        SpawnFireDiamond(ent.Comp.Spawn, tile, ent.Comp.Range, ent.Comp.Intensity, ent.Comp.Duration);
+        if (!CMUTrySpawnContainedFire(ent, tile)) // CMU14: crafted molotovs burn their contents in a circle
+            SpawnFireDiamond(ent.Comp.Spawn, tile, ent.Comp.Range, ent.Comp.Intensity, ent.Comp.Duration);
         QueueDel(ent);
     }
 
@@ -315,7 +314,8 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     private void OnTileFireOnTriggerExplosive(Entity<TileFireOnTriggerComponent> ent, ref CMExplosiveTriggeredEvent args)
     {
         var coords = _transform.GetMoverCoordinates(ent).SnapToGrid(EntityManager);
-        SpawnFireDiamond(ent.Comp.Spawn, coords, ent.Comp.Range, ent.Comp.Intensity, ent.Comp.Duration);
+        if (!CMUTrySpawnContainedFire(ent, coords)) // CMU14
+            SpawnFireDiamond(ent.Comp.Spawn, coords, ent.Comp.Range, ent.Comp.Intensity, ent.Comp.Duration);
     }
 
     private void OnIgniteCollide(Entity<RMCIgniteOnCollideComponent> ent, ref StartCollideEvent args)
@@ -697,41 +697,283 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         return true;
     }
 
-    private bool CanCraftMolotovPopup(Entity<CraftsIntoMolotovComponent> ent, EntityUid user, bool popup, out FixedPoint2 intensity)
+    // CMU14 start - FLOW-22 molotovs: any lidded bottle of anything that burns, fired with its fire spec.
+    // Replaces RMC's CanCraftMolotovPopup (Σ intensityMod × units written into the molotov's Duration).
+    /// <summary>Solution a crafted molotov carries; its fire spec decides the burn when it shatters.</summary>
+    public const string CMUMolotovSolution = "cmu_molotov";
+
+    private static readonly EntProtoId CMUDefaultMolotov = "RMCGrenadeMolotov";
+    private static readonly TimeSpan CMUMolotovDelay = TimeSpan.FromSeconds(2);
+
+    private void OnOpenableMolotovInteractUsing(Entity<OpenableComponent> ent, ref InteractUsingEvent args)
     {
-        intensity = default;
-        if (!_solutionContainer.TryGetSolution(ent.Owner, ent.Comp.SolutionId, out _, out var solution) ||
+        if (args.Handled ||
+            HasComp<CraftsIntoMolotovComponent>(ent) || // the RMC alcohol path handles these
+            !HasComp<PaperComponent>(args.Used) ||
+            !CMUIsMolotovBottle(ent))
+        {
+            return;
+        }
+
+        args.Handled = true;
+        if (!CMUCanCraftMolotov(ent, args.User, true, out _, out _))
+            return;
+
+        var ev = new CraftMolotovDoAfterEvent();
+        var doAfter = new DoAfterArgs(EntityManager, args.User, CMUMolotovDelay, ev, ent, ent, args.Used)
+        {
+            BreakOnMove = true,
+        };
+        _doAfter.TryStartDoAfter(doAfter);
+    }
+
+    private void OnOpenableMolotovDoAfter(Entity<OpenableComponent> ent, ref CraftMolotovDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled || args.Used is not { } paper)
+            return;
+
+        args.Handled = true;
+        CMUTryCraftMolotov(ent, paper, args.User, out _);
+    }
+
+    /// <summary>
+    /// A bottle that can be made into a molotov: RMC's alcohol bottles (<see cref="CraftsIntoMolotovComponent"/>) or
+    /// any item with a closeable lid (<see cref="OpenableComponent.Closeable"/>) and a drainable solution.
+    /// </summary>
+    public bool CMUIsMolotovBottle(EntityUid container)
+    {
+        if (HasComp<CraftsIntoMolotovComponent>(container))
+            return true;
+
+        return TryComp(container, out OpenableComponent? openable) &&
+               openable.Closeable &&
+               HasComp<ItemComponent>(container) &&
+               HasComp<DrainableSolutionComponent>(container);
+    }
+
+    private bool CMUTryGetMolotovSolution(EntityUid container,
+        [NotNullWhen(true)] out Entity<SolutionComponent>? soln,
+        [NotNullWhen(true)] out Solution? solution)
+    {
+        if (TryComp(container, out CraftsIntoMolotovComponent? craft))
+            return _solutionContainer.TryGetSolution(container, craft.SolutionId, out soln, out solution);
+
+        return _solutionContainer.TryGetDrainableSolution(container, out soln, out solution);
+    }
+
+    /// <summary>
+    /// Whether paper can turn <paramref name="container"/> into a molotov: it must be a molotov bottle
+    /// (<see cref="CMUIsMolotovBottle"/>) whose contents resolve to a <see cref="CMUFireSource.Molotov"/> fire: any
+    /// fuel (stock napalm, generated Fueling/Oxidizing chemicals, blends) or enough alcohol.
+    /// </summary>
+    public bool CMUCanCraftMolotov(EntityUid container, EntityUid? user, bool popup, out CMUFireSpec spec,
+        [NotNullWhen(true)] out Entity<SolutionComponent>? soln)
+    {
+        spec = default;
+        soln = null;
+        if (!CMUIsMolotovBottle(container))
+            return false;
+
+        if (!CMUTryGetMolotovSolution(container, out soln, out var solution) ||
             solution.Volume <= FixedPoint2.Zero)
         {
-            if (popup)
-                _popup.PopupEntity($"The {Name(ent)} is empty...", ent, user, PopupType.SmallCaution);
+            if (popup && user != null)
+                _popup.PopupEntity($"The {Name(container)} is empty...", container, user.Value, PopupType.SmallCaution);
 
+            soln = null;
             return false;
         }
 
-        intensity = FixedPoint2.Zero;
-        foreach (var solutionReagent in solution)
+        if (!_cmuFuel.TryResolveFire(solution, CMUFireSource.Molotov, out spec))
         {
-            if (!_reagent.TryIndex(solutionReagent.Reagent.Prototype, out var reagent))
-                continue;
-
-            intensity += reagent.IntensityMod * solutionReagent.Quantity;
-        }
-
-        if (intensity < ent.Comp.MinIntensity)
-        {
-            if (popup)
+            if (popup && user != null)
             {
-                var msg = $"There's not enough flammable liquid in the {Name(ent)}!";
-                _popup.PopupEntity(msg, ent, user, PopupType.SmallCaution);
+                var msg = $"There's not enough flammable liquid in the {Name(container)}!";
+                _popup.PopupEntity(msg, container, user.Value, PopupType.SmallCaution);
             }
 
+            soln = null;
             return false;
         }
 
-        intensity = FixedPoint2.Min(intensity, ent.Comp.MaxIntensity);
         return true;
     }
+
+    /// <summary>
+    /// Turns <paramref name="container"/> and <paramref name="paper"/> into a molotov holding the container's whole
+    /// solution in <see cref="CMUMolotovSolution"/>. Server only; false, with nothing consumed, when it cannot burn.
+    /// </summary>
+    public bool CMUTryCraftMolotov(EntityUid container, EntityUid paper, EntityUid? user, [NotNullWhen(true)] out EntityUid? molotov)
+    {
+        molotov = null;
+        if (!HasComp<PaperComponent>(paper) ||
+            !CMUCanCraftMolotov(container, user, user != null, out var spec, out var soln))
+        {
+            return false;
+        }
+
+        if (_net.IsClient)
+            return false;
+
+        var coords = _transform.GetMoverCoordinates(container);
+        var spawns = TryComp(container, out CraftsIntoMolotovComponent? craft) ? craft.Spawns : CMUDefaultMolotov;
+        var uid = Spawn(spawns, coords);
+
+        var contents = _solutionContainer.SplitSolution(soln.Value, soln.Value.Comp.Solution.Volume);
+        _solutionContainer.EnsureSolution(uid, CMUMolotovSolution, out var molotovSoln);
+        molotovSoln.Comp.Solution.MaxVolume = FixedPoint2.Max(molotovSoln.Comp.Solution.MaxVolume, contents.Volume);
+        _solutionContainer.TryAddSolution(molotovSoln, contents);
+
+        // The fire comes from the contents (CMUTrySpawnContainedFire); these only matter if they are lost.
+        var tileFire = EnsureComp<TileFireOnTriggerComponent>(uid);
+        tileFire.Spawn = spec.BehaviourEntity;
+        tileFire.Intensity = spec.Intensity; // RMC wrote the strength into Duration here
+        tileFire.Duration = spec.Duration;
+        tileFire.Range = CMUFuelProfileSystem.CircleRadius(contents.Volume, spec);
+        Dirty(uid, tileFire);
+
+        Del(container);
+        Del(paper);
+
+        if (user != null)
+            _hands.TryPickupAnyHand(user.Value, uid);
+
+        molotov = uid;
+        return true;
+    }
+
+    /// <summary>
+    /// Shatters a crafted molotov: its contents resolve to a <see cref="CMUFireSource.Molotov"/> fire spec and fill a
+    /// circle of √units radius, capped by the spec. False for molotovs without contents (map-placed ones).
+    /// </summary>
+    private bool CMUTrySpawnContainedFire(EntityUid molotov, EntityCoordinates center)
+    {
+        if (!_solutionContainer.TryGetSolution(molotov, CMUMolotovSolution, out var soln, out var solution) ||
+            !_cmuFuel.TryResolveFire(solution, CMUFireSource.Molotov, out var spec))
+        {
+            return false;
+        }
+
+        if (_net.IsClient)
+            return true;
+
+        var radius = CMUFuelProfileSystem.CircleRadius(solution.Volume, spec);
+        _solutionContainer.RemoveAllSolution(soln.Value);
+        SpawnFireCircle(spec.BehaviourEntity, center, radius, spec);
+        return true;
+    }
+
+    /// <summary>
+    /// FLOW-22: applies a fire spec to a freshly spawned tile fire: intensity and burn duration, tile lifetime,
+    /// penetration (structure melting from level 3), the colour tier and its fire-stack cap. Raises
+    /// <see cref="CMUFireSpecAppliedEvent"/> for the server-side spread rule.
+    /// </summary>
+    public void ApplyFireSpec(EntityUid fire, CMUFireSpec spec)
+    {
+        ApplyFireSpecStats(fire, spec);
+        ScaleTileFireDuration(fire, spec.TileLifetimeMultiplier);
+        var ev = new CMUFireSpecAppliedEvent(spec, false);
+        RaiseLocalEvent(fire, ref ev);
+    }
+
+    /// <summary><see cref="ApplyFireSpec"/> without the lifetime scaling and the event.</summary>
+    private void ApplyFireSpecStats(EntityUid fire, CMUFireSpec spec)
+    {
+        SetIntensityDuration(fire, spec.Intensity, spec.Duration);
+        SetFirePenetrating(fire, spec.PenetrationLevel >= 1);
+
+        var tier = EnsureComp<CMUFireTierComponent>(fire);
+        tier.Tier = spec.Tier;
+        tier.Color = CMUFuelProfileSystem.TierColor(spec.Tier);
+        tier.PenetrationLevel = spec.PenetrationLevel;
+        tier.SpreadDepth = spec.SpreadDepth;
+        Dirty(fire, tier);
+
+        if (_igniteOnCollideQuery.TryComp(fire, out var ignite))
+        {
+            ignite.MaxStacks = CMUFuelProfileSystem.TierMaxStacks(spec.Tier, ignite.MaxStacks);
+            ignite.BurnColor = tier.Color;
+            Dirty(fire, ignite);
+        }
+
+        if (spec.PenetrationLevel >= 3)
+        {
+            var melting = EnsureComp<CMUStructureMeltingFireComponent>(fire);
+            melting.Level = spec.PenetrationLevel;
+            melting.Intensity = spec.Intensity;
+        }
+    }
+
+    /// <summary>
+    /// Fills a circle (dx² + dy² ≤ r² + r) around <paramref name="center"/> with <paramref name="spawn"/> fires sized by
+    /// <paramref name="spec"/>. Like <see cref="SpawnFireDiamond"/> the fire floods out from the centre and stops at
+    /// walls, structures and <see cref="BlockTileFireComponent"/> (which still catch alight), and skips space and tiles
+    /// it cannot project to the ground. Radius 0 lights only the centre tile.
+    /// </summary>
+    public void SpawnFireCircle(EntProtoId spawn, EntityCoordinates center, int radius, CMUFireSpec spec)
+    {
+        if (_net.IsClient)
+            return;
+
+        radius = Math.Max(0, radius);
+        var limit = radius * radius + radius;
+        var chain = _onCollide.SpawnChain();
+        var visited = new HashSet<Vector2i> { Vector2i.Zero };
+        var queue = new Queue<Vector2i>();
+        queue.Enqueue(Vector2i.Zero);
+        while (queue.TryDequeue(out var offset))
+        {
+            if (!CMUSpawnSpecFire(center.Offset(offset), spawn, chain, spec, out var blocks) || blocks)
+                continue;
+
+            foreach (var direction in _rmcMap.CardinalDirections)
+            {
+                var next = offset + direction.ToIntVec();
+                if (next.X * next.X + next.Y * next.Y > limit || !visited.Add(next))
+                    continue;
+
+                queue.Enqueue(next);
+            }
+        }
+    }
+
+    /// <summary>
+    /// One tile of a spec fire with <see cref="SpawnFire"/>'s checks. False when nothing was lit (space, nothing to
+    /// stand on); <paramref name="blocks"/> when the tile holds a wall, structure or fire blocker.
+    /// </summary>
+    private bool CMUSpawnSpecFire(EntityCoordinates target, EntProtoId spawn, EntityUid chain, CMUFireSpec spec, out bool blocks)
+    {
+        blocks = false;
+        if (!_zLevels.TryProjectToGround(target, out target))
+            return false;
+
+        if (!_rmcMap.TryGetTileDef(target, out var tile) ||
+            tile.ID == ContentTileDefinition.SpaceID)
+        {
+            return false;
+        }
+
+        if (_rmcMap.HasAnchoredEntityEnumerator<TileFireComponent>(target, out var oldTileFire))
+            QueueDel(oldTileFire);
+
+        var anchored = _rmcMap.GetAnchoredEntitiesEnumerator(target);
+        while (anchored.MoveNext(out var uid))
+        {
+            if (_blockTileFireQuery.HasComp(uid) ||
+                (_tag.HasAnyTag(uid, StructureTag, WallTag) && !_doorQuery.HasComp(uid)))
+            {
+                blocks = true;
+                break;
+            }
+        }
+
+        var spawned = Spawn(spawn, target);
+        ApplyFireSpec(spawned, spec);
+        var onCollide = EnsureComp<DamageOnCollideComponent>(spawned);
+        _onCollide.SetChain((spawned, onCollide), chain);
+        return true;
+    }
+    // CMU14 end
 
     private void OnPlasmaFrenzyIgnite(Entity<PlasmaFrenzyComponent> ent, ref IgnitedEvent args)
     {
@@ -819,6 +1061,21 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         {
             SetIntensityDuration((child, childIgnite, null), parentIgnite.Intensity, parentIgnite.Duration);
         }
+
+        // CMU14 start - FLOW-22: fires spread from a spec fire keep its tier, penetration and spread rule
+        if (TryComp(parent, out CMUFireTierComponent? parentTier) && parentIgnite != null)
+        {
+            var spec = CMUFuelProfileSystem.CreateSpec(parentIgnite.Intensity,
+                parentIgnite.Duration,
+                0,
+                CMUFuelProfileSystem.GenericFire, // only the stats are reapplied
+                parentTier.PenetrationLevel,
+                spreadDepth: parentTier.SpreadDepth);
+            ApplyFireSpecStats(child, spec);
+            var ev = new CMUFireSpecAppliedEvent(spec, true);
+            RaiseLocalEvent(child, ref ev);
+        }
+        // CMU14 end
     }
     // cmu edit end
 

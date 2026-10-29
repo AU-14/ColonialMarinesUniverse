@@ -117,6 +117,8 @@
 
 - type: reaction
   id: CMUOleoresinCapsicum
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCEthanol:
       amount: 2
@@ -129,6 +131,8 @@
 
 - type: reaction
   id: CMUOleoresinCapsicumFromPeppers
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     CapsaicinOil:
       amount: 2

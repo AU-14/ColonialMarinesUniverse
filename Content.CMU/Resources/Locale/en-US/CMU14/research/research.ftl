@@ -168,3 +168,9 @@ research-sim-ui-selected-targ-conflict = Conflicts with the selected target prop
 
 cmu-research-reduce-cooldown = [color=#ffbf00][head=3]-60s 1CR[/head][/color]
 research-report-contract-mix-required = This synthesis only takes place once mixed: close the container's lid and use Mix.
+
+# FLOW-24: GOVFOR research is locked during Insurgency
+research-locked-insurgency = [color=#ff4040][head=3]RESEARCH NETWORK OFFLINE[/head][/color] [color=#ffbf00]Government research authority is suspended in this operational zone. No contracts can be taken, and scans and simulations earn nothing.[/color]
+research-locked-popup = The research network rejects the request: government research is suspended here.
+research-xrf-locked = The scanner reports no connection to the research network.
+research-sim-status-locked = RESEARCH NETWORK OFFLINE - SIMULATION REFUSED

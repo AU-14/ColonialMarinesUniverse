@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Paper;
+using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using System;
@@ -23,6 +24,7 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
     [Dependency] private ServerResearchDataTerminalSystem _rdat = default!;
     [Dependency] private IGameTiming _time = default!;
     [Dependency] private SharedRequisitionsSystem _req = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -35,6 +37,12 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
         if (!TryComp<XRFScannerComponent>(scanner, out var scannerComp))
             return;
         var faction = scannerComp.Faction;
+        // FLOW-24: a locked faction gets no report, completion reward or report-log entry.
+        if (_rdat.IsResearchBlocked(faction))
+        {
+            _popup.PopupEntity(Loc.GetString("research-xrf-locked"), scanner, PopupType.SmallCaution);
+            return;
+        }
         // ARCH-02: a nested contract's sub-chemical is identified before the report is written, so the report
         // lists it as an ingredient rather than an unknown emission that invalidates it.
         _rdat.IdentifySubContract(args.Reagent);

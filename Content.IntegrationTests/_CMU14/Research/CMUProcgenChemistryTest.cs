@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Line;
 using Content.Shared._RMC14.Weapons.Ranged.Flamer;
+using Content.Shared.CMU14.Atmos;
 using Content.Shared.CMU14.Chemistry.Fuel;
 using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Reagents;
@@ -329,6 +330,15 @@ public sealed class CMUProcgenChemistryTest : GameTest
             Assert.That(fuel.TryCompute(pure, out var pureProfile), Is.True, "generated fuel alone is not a valid flamer fuel");
             // A generated fuel's own *Mod values are already in its stats, so a pure tank reports them unchanged.
             Assert.That(pureProfile.Intensity, Is.EqualTo(reagent.Intensity), "a generated fuel rescaled its own tank");
+            // FLOW-22: no fire entity is forced on generated fuels; the same stats resolve for a heated container.
+            Assert.That(reagent.FireEntity, Is.EqualTo(CMUFuelProfileSystem.GenericFire), "colour comes from the intensity tier, not the entity");
+            Assert.That(fuel.TryResolveFire(pure, CMUFireSource.Container, out var pureSpec), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(pureSpec.Intensity, Is.EqualTo(reagent.Intensity));
+                Assert.That(pureSpec.Duration, Is.EqualTo(reagent.Duration));
+                Assert.That(pureSpec.Tier, Is.EqualTo(CMUFuelProfileSystem.TierFor(reagent.Intensity)));
+            });
 
             var blend = new Solution();
             blend.AddReagent(data.ID, FixedPoint2.New(10));
@@ -472,14 +482,15 @@ public sealed class CMUProcgenChemistryTest : GameTest
             }
 
             var ut = Fill(("RMCNapalmUT", 100));
-            Assert.That((ut.Effective.Intensity, ut.Effective.Duration, ut.Effective.Radius), Is.EqualTo((30, 20, 5)));
+            // A standard LC9 projects 60% of UT's reach of 5.
+            Assert.That((ut.Effective.Intensity, ut.Effective.Duration, ut.Effective.Radius), Is.EqualTo((30, 20, 3)));
 
-            // Napalm X 40/40/6 averaged 1:1 with UT 30/20/5 → 35/30/6, range capped to the LC9's 5.
+            // Napalm X 40/40/6 averaged 1:1 with UT 30/20/5 → 35/30/6, range capped to the LC9's 5, then 60% of that.
             var x = Fill(("RMCNapalmUT", 30), ("RMCNapalmX", 30));
             Assert.Multiple(() =>
             {
                 Assert.That((x.Raw.Intensity, x.Raw.Duration), Is.EqualTo((35, 30)), "stock fuels must average");
-                Assert.That(x.Effective.Radius, Is.EqualTo(5), "range is limited by the tank");
+                Assert.That(x.Effective.Radius, Is.EqualTo(CMUFuelProfileSystem.NonSpecialistReach(5)), "range is limited by the tank");
                 Assert.That(x.Effective, Is.Not.EqualTo(ut.Effective), "a Napalm X blend must differ from plain UT");
             });
 
@@ -494,7 +505,10 @@ public sealed class CMUProcgenChemistryTest : GameTest
             {
                 Assert.That(ox.Raw.Intensity, Is.GreaterThan(ut.Raw.Intensity), "Oxidizing must make the blend hotter");
                 Assert.That(ox.Raw.Duration, Is.LessThan(ut.Raw.Duration), "Oxidizing must make the blend burn shorter");
-                Assert.That(ox.Effective.Intensity, Is.EqualTo(Math.Min(40, ox.Raw.Intensity)), "intensity is limited by the LC9 cap");
+                // FLOW-22: the LC9 is not a specialist tank, so the blue tier (40) is out of reach.
+                Assert.That(ox.Effective.Intensity, Is.EqualTo(Math.Min(CMUFuelProfileSystem.NonSpecialistMaxIntensity, ox.Raw.Intensity)),
+                    "intensity is limited by the LC9 cap and the non-specialist 39 cap");
+                Assert.That(CMUFuelProfileSystem.TierFor(ox.Effective.Intensity), Is.LessThan(4));
             });
         });
     }
@@ -520,6 +534,16 @@ public sealed class CMUProcgenChemistryTest : GameTest
                 Assert.That((profile.Intensity, profile.Duration, profile.Radius),
                     Is.EqualTo((reagent.Intensity, reagent.Duration, reagent.Radius)),
                     $"{reagent.ID}: a pure tank must burn at its prototype stats");
+
+                // FLOW-22: a heated container of it burns with the same stats under the non-specialist caps.
+                Assert.That(fuel.TryResolveFire(pure, CMUFireSource.Container, out var spec), Is.True, $"{reagent.ID} must ignite in a container");
+                Assert.Multiple(() =>
+                {
+                    Assert.That(spec.Intensity, Is.EqualTo(Math.Min(CMUFuelProfileSystem.NonSpecialistMaxIntensity, reagent.Intensity)), reagent.ID);
+                    Assert.That(spec.Duration, Is.EqualTo(reagent.Duration), reagent.ID);
+                    Assert.That(spec.Tier, Is.EqualTo(CMUFuelProfileSystem.TierFor(spec.Intensity)), reagent.ID);
+                    Assert.That(spec.Tier, Is.LessThan(4), $"{reagent.ID}: only specialist tanks burn blue");
+                });
                 checkedFuels++;
             }
             Assert.That(checkedFuels, Is.GreaterThanOrEqualTo(5), "expected the RMC napalm family to be checked");
@@ -682,7 +706,7 @@ public sealed class CMUProcgenChemistryTest : GameTest
             Assert.That(fireProto.TryGetComponent<TileFireComponent>(out var fireTemplate, SEntMan.ComponentFactory), Is.True);
             var baseLifetime = fireTemplate!.Duration;
 
-            Entity<TileFireComponent> LightTile(int duration, bool penetrating)
+            Entity<TileFireComponent> LightTile(int duration, bool penetrating, int penetrationLevel = 0)
             {
                 foreach (var old in SEntMan.QueryEntities<TileFireComponent>().ToArray())
                     SEntMan.DeleteEntity(old.Owner);
@@ -695,6 +719,7 @@ public sealed class CMUProcgenChemistryTest : GameTest
                 comp.Intensity = 20;
                 comp.Duration = duration;
                 comp.FirePenetrating = penetrating;
+                comp.PenetrationLevel = penetrationLevel;
                 flamer.Update(0);
                 var fires = SEntMan.QueryEntities<TileFireComponent>().ToArray();
                 Assert.That(fires, Has.Length.EqualTo(1), "the chain should light exactly one tile");
@@ -705,6 +730,15 @@ public sealed class CMUProcgenChemistryTest : GameTest
             var reference = LightTile(CMUFuelProfileSystem.ReferenceDuration, false);
             Assert.That(reference.Comp.Duration, Is.EqualTo(baseLifetime));
             Assert.That(SComp<RMCIgniteOnCollideComponent>(reference).FirePenetrating, Is.False);
+            // FLOW-22: the chain applies the whole fire spec, colour tier and tier stack cap included.
+            Assert.Multiple(() =>
+            {
+                var tier = SComp<CMUFireTierComponent>(reference);
+                Assert.That(tier.Tier, Is.EqualTo(CMUFuelProfileSystem.TierFor(20)));
+                Assert.That(tier.Color, Is.EqualTo(CMUFuelProfileSystem.TierColor(tier.Tier)));
+                Assert.That(SComp<RMCIgniteOnCollideComponent>(reference).MaxStacks, Is.EqualTo(CMUFuelProfileSystem.TierMaxStacks(tier.Tier)));
+                Assert.That(SEntMan.HasComponent<CMUStructureMeltingFireComponent>(reference), Is.False);
+            });
 
             // A blend above the tank cap is capped first, then scales the lifetime: 24 / 20 = 1.2.
             var longer = LightTile(30, true);
@@ -715,6 +749,16 @@ public sealed class CMUProcgenChemistryTest : GameTest
                 Assert.That(longer.Comp.Duration, Is.GreaterThan(baseLifetime));
                 Assert.That(SComp<RMCIgniteOnCollideComponent>(longer).Duration, Is.EqualTo(cappedDuration));
                 Assert.That(SComp<RMCIgniteOnCollideComponent>(longer).FirePenetrating, Is.True);
+            });
+
+            // Firepenetrating 3+ melts structures (FLOW-23 contract).
+            var melting = LightTile(CMUFuelProfileSystem.ReferenceDuration, false, 3);
+            Assert.Multiple(() =>
+            {
+                Assert.That(SComp<RMCIgniteOnCollideComponent>(melting).FirePenetrating, Is.True, "level 3 is still penetrating");
+                var melt = SComp<CMUStructureMeltingFireComponent>(melting);
+                Assert.That(melt.Level, Is.EqualTo(3));
+                Assert.That(melt.Intensity, Is.EqualTo(20));
             });
 
             // A weak fuel burns out sooner, never below the clamp.
@@ -747,6 +791,7 @@ public sealed class CMUProcgenChemistryTest : GameTest
             Assert.Multiple(() =>
             {
                 Assert.That(reagent.FirePenetrating, Is.True, "the generator should emit the penetration flag");
+                Assert.That(reagent.FirePenetratingLevel, Is.EqualTo(1), "the generator should emit the penetration level");
                 // base 15 with Fueling -3; no +10 stand-in any more
                 Assert.That(reagent.Intensity, Is.EqualTo(12));
             });
@@ -768,6 +813,27 @@ public sealed class CMUProcgenChemistryTest : GameTest
             blend.AddReagent(data.ID, FixedPoint2.New(40));
             Assert.That(fuel.TryCompute(blend, out var blendProfile), Is.True);
             Assert.That(blendProfile.FirePenetrating, Is.True);
+
+            // FLOW-22/23: the level travels through the fire spec, and traces do not count.
+            Assert.That(fuel.TryResolveFire(blend, CMUFireSource.Container, out var blendSpec), Is.True);
+            Assert.That(blendSpec.PenetrationLevel, Is.EqualTo(1));
+            Assert.That(fuel.TryResolveFire(trace, CMUFireSource.Container, out var traceSpec), Is.True);
+            Assert.That(traceSpec.PenetrationLevel, Is.Zero);
+
+            var melter = NewOffer(3, 910);
+            melter.Effects["Fueling"] = 1;
+            melter.Effects["Firepenetrating"] = 3;
+            melter.Recipe["RMCGold"] = (1, false);
+            melter.Recipe["RMCSilver"] = (1, false);
+            melter.Recipe["RMCPlatinum"] = (1, false);
+            melter.Recipe["CMUTearGas"] = (1, false);
+            SEntMan.EventBus.RaiseEvent(EventSource.Local, new GenerateReagentEvent(melter));
+            Assert.That(SProtoMan.Index<ReagentPrototype>(melter.ID).FirePenetratingLevel, Is.EqualTo(3));
+            var melt = new Solution();
+            melt.AddReagent("RMCNapalmUT", FixedPoint2.New(50));
+            melt.AddReagent(melter.ID, FixedPoint2.New(50));
+            Assert.That(fuel.TryResolveFire(melt, CMUFireSource.Container, out var meltSpec), Is.True);
+            Assert.That(meltSpec.PenetrationLevel, Is.EqualTo(3));
 
             // Damage: a Yautja keeps its modifier set against ordinary fire and loses it against penetrating fire.
             var yautja = SEntMan.SpawnEntity("CMUMobYautja", map.GridCoords);

@@ -21,7 +21,9 @@ public sealed class ResearchDataTerminalBuiState(
     int upgradecost,
     TimeSpan? xLockedUntil,
     bool picked,
-    List<ResearchContractEntry>? contracts = null) : BoundUserInterfaceState
+    List<ResearchContractEntry>? contracts = null,
+    bool locked = false,
+    string? lockedReason = null) : BoundUserInterfaceState
 {
     public readonly List<GeneratedReagentData> IDs = ids;
     public readonly Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> Data = data;
@@ -35,6 +37,10 @@ public sealed class ResearchDataTerminalBuiState(
     public readonly bool Picked = picked;
     /// <summary>ARCH-03: every contract the faction has picked, formatted like the contract paper.</summary>
     public readonly List<ResearchContractEntry> Contracts = contracts ?? new();
+    /// <summary>FLOW-24: the faction may not research right now (GOVFOR during Insurgency).</summary>
+    public readonly bool Locked = locked;
+    /// <summary>FLOW-24: the message shown in place of the contract offers while <see cref="Locked"/>.</summary>
+    public readonly string? LockedReason = lockedReason;
 }
 
 /// <summary>One entry of the terminal's Contracts tab: the chemical's name and its server-formatted contract text.</summary>

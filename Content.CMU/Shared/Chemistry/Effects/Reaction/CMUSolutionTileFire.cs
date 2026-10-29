@@ -6,32 +6,34 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.CMU14.Chemistry.Effects.Reaction;
 
 /// <summary>
-/// Reaction effect that sets the tiles around the reacting solution's holder on fire, as a diamond of
-/// <see cref="Range"/> tiles. The procgen generator puts it on a fuel or oxidizer's ignition reaction.
+/// Reaction effect that sets the floor around the reacting solution's holder alight. FLOW-22: the fire is the
+/// <c>Container</c> fire spec of the whole reacting solution (what is left plus the <see cref="Reagent"/> the reaction
+/// consumed), so a fuel burns with the same statistics as in a flamer, in a circle of √units radius capped by the
+/// spec's radius. Put on generated <c>{ID}Ignition</c> reactions and on the stock fuels' heat-ignition reactions.
 /// Executed server-side by <c>CMUSolutionTileFireSystem</c>.
 /// </summary>
 public sealed partial class CMUSolutionTileFire : EntityEffectBase<CMUSolutionTileFire>
 {
     /// <summary>
-    /// The reagent whose fire this is. Its <see cref="ReagentPrototype.FireEntity"/> is used when
-    /// <see cref="FireEntity"/> is not set.
+    /// The reagent the reaction burns (one unit per unit reaction). It is added back when the fire spec is resolved,
+    /// because the reaction has already removed it from the solution.
     /// </summary>
     [DataField]
     public ProtoId<ReagentPrototype>? Reagent;
 
-    /// <summary>The tile fire to spawn. Falls back to the reagent's fire, then to red RMC tile fire.</summary>
+    /// <summary>Overrides the spec's behaviour entity. Colour always comes from the intensity tier.</summary>
     [DataField]
     public EntProtoId? FireEntity;
 
-    /// <summary>Diamond radius in tiles. 1 sets the holder's tile and its four neighbours alight.</summary>
+    /// <summary>Legacy: the radius now comes from √units and the spec. Kept so older YAML still loads.</summary>
     [DataField]
     public int Range = 1;
 
-    /// <summary>Fire intensity. Null keeps the tile fire's default.</summary>
+    /// <summary>Fallback intensity when the solution resolves to no fire spec (not a fuel). Null: no fire.</summary>
     [DataField]
     public int? Intensity;
 
-    /// <summary>Fire duration. Null keeps the tile fire's default.</summary>
+    /// <summary>Fallback duration when the solution resolves to no fire spec. Null: the reference duration.</summary>
     [DataField]
     public int? Duration;
 

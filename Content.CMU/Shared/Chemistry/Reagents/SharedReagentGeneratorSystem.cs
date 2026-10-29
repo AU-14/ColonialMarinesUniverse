@@ -281,14 +281,14 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         if (stats.IsFuel)
         {
             yaml += $"  intensity: {stats.Intensity}\n  duration: {stats.Duration}\n  radius: {stats.Radius}\n";
-            if (stats.BlueFire)
-                yaml += "  fireEntity: RMCTileFireBlue\n";
+            // FLOW-22: no fireEntity. Colour comes from the effective intensity tier (blue from 40, which only
+            // specialist tanks reach), so a strong oxidizer no longer forces the blue fire entity.
             if (effects.ContainsKey("Flowing"))
                 yaml += "  fireSpread: true\n";
             // Firepenetrating: the fire ignores heat resistance (SharedRMCFlammableSystem.DamageFromFire)
-            // rather than simply burning hotter.
-            if (effects.ContainsKey("Firepenetrating"))
-                yaml += "  firePenetrating: true\n";
+            // rather than simply burning hotter; from level 3 it melts structures (FLOW-23).
+            if (effects.TryGetValue("Firepenetrating", out var penetrating) && penetrating > 0)
+                yaml += $"  firePenetrating: true\n  firePenetratingLevel: {penetrating}\n";
         }
         if (stats.IntensityMod != 0)
             yaml += $"  intensityMod: {stats.IntensityMod}\n";
@@ -300,7 +300,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
     }
 
     /// <summary>Properties that make a generated chemical ignite, and possibly detonate, once heated.</summary>
-    public static readonly string[] IgnitionProperties = ["Explosive", "Oxidizing", "Fueling"];
+    public static readonly string[] IgnitionProperties = ["Explosive", "Oxidizing", "Fueling", "Igniting"];
     /// <summary>Suffix of the generated reaction that ignites a combustible chemical: <c>{ID}Ignition</c>.</summary>
     public const string IgnitionRecipeSuffix = "Ignition";
     public const float IgnitionBaseTemperature = 500f;
@@ -443,9 +443,10 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
     }
 
     /// <summary>
-    /// ARCH-01 P2: a chemical with Explosive, Oxidizing or Fueling gets a second reaction, <c>{ID}Ignition</c>,
+    /// ARCH-01 P2: a chemical with Explosive, Oxidizing, Fueling or Igniting gets a second reaction, <c>{ID}Ignition</c>,
     /// that consumes it once the solution is heated to <see cref="IgnitionTemperature"/>. Explosive detonates
-    /// with the FLOW-01 parameters; Fueling and Oxidizing set the floor around the holder on fire. The engine
+    /// with the FLOW-01 parameters; any fuel sets the floor around the holder on fire with the fire spec of the
+    /// whole solution (FLOW-22: CMUSolutionTileFire, a circle by √units, no fixed stats). The engine
     /// re-checks reactions on every temperature change, so no watcher is needed. Not mix-gated.
     /// </summary>
     private void LoadIgnitionRecipe(
@@ -488,27 +489,17 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
                 $"    maxTotalIntensity: {FormatFloat(total)}\n";
         }
 
-        var fueling = args.Effects.TryGetValue("Fueling", out var fuelLevel) && fuelLevel > 0;
-        var oxidizing = args.Effects.TryGetValue("Oxidizing", out var oxLevel) && oxLevel > 0;
-        if (fueling || oxidizing)
+        // FLOW-22: every fuel (any fuel property, so its intensity/duration/radius are emitted) burns with the fire
+        // spec resolved from the whole reacting solution, exactly as it would in a flamer; nothing is fixed here.
+        var fire = ComputeFireValues(args.Effects, properties);
+        var combustible = (args.Effects.TryGetValue("Fueling", out var fuelLevel) && fuelLevel > 0) ||
+                          (args.Effects.TryGetValue("Oxidizing", out var oxLevel) && oxLevel > 0) ||
+                          (args.Effects.TryGetValue("Igniting", out var ignLevel) && ignLevel > 0);
+        if (combustible && fire.IsFuel)
         {
-            // Range comes from a range property (Radius), otherwise one tile. Intensity and duration keep the
-            // tile fire's defaults unless the Intensity / Duration property sets them.
-            var fire = ComputeFireValues(args.Effects, properties);
-            var hasRange = false;
-            foreach (var effectId in args.Effects.Keys)
-            {
-                if (properties.TryGetValue(effectId, out var prop) && prop.RangePerLevel != 0)
-                    hasRange = true;
-            }
-            var range = hasRange ? Math.Max(1, fire.Radius) : 1;
             yamlstr +=
                 "  - !type:CMUSolutionTileFire\n" +
-                $"    reagent: {args.ID}\n" +
-                $"    range: {range}\n" +
-                (args.Effects.ContainsKey("Intensity") ? $"    intensity: {fire.Intensity}\n" : string.Empty) +
-                (args.Effects.ContainsKey("Duration") ? $"    duration: {fire.Duration}\n" : string.Empty) +
-                (fire.BlueFire ? "    fireEntity: RMCTileFireBlue\n" : string.Empty);
+                $"    reagent: {args.ID}\n";
         }
 
         _protoMan.LoadString(yamlstr);

@@ -407,6 +407,14 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             return false;
 
         var faction = _dat.GetFaction(ent.Owner);
+        // FLOW-24: a locked faction is never charged and never simulates.
+        if (_dat.IsResearchBlocked(faction))
+        {
+            charged = 0;
+            ent.Comp.StatusBar = Loc.GetString("research-sim-status-locked");
+            Dirty(ent);
+            return false;
+        }
         if (_dat.GetSampleData(faction) < charged)
             return false;
         _dat.UpdateSampleData(_dat.GetSampleData(faction) - charged, faction);
@@ -463,6 +471,14 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
     }
     private void OnBeginProcess(Entity<ChemSimulatorComponent> ent, ref BeginChemSimulatorProcessEvent args)
     {
+        // FLOW-24: a locked faction cannot start a simulation; the status bar says why.
+        if (_dat.IsResearchBlocked(_dat.GetFaction(ent.Owner)))
+        {
+            ent.Comp.StatusBar = Loc.GetString("research-sim-status-locked");
+            _ui.SetUiState(ent.Owner, ChemSimulatorUI.Key, GetStateForBui(ent));
+            Dirty(ent);
+            return;
+        }
         _processing.Add(ent);
         ent.Comp.NextProcess = _time.CurTime + TimeSpan.FromSeconds(ent.Comp.SecondsPerProcess);
         ent.Comp.StatusBar = Loc.GetString("research-sim-status-commencing");

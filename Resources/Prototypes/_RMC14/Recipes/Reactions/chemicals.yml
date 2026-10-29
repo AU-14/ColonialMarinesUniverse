@@ -69,6 +69,8 @@
   id: RMCSmoke
   priority: 10
   impact: High
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCPhosphorus:
       amount: 0.5

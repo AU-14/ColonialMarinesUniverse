@@ -12,7 +12,7 @@ public sealed partial class Oxidizing : RMCChemicalEffect
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
         var level = (int) Math.Round(Potency);
-        return $"Makes chemical fires hotter but shorter; at level {SharedReagentGeneratorSystem.BlueFireOxidizingLevel}+ and above its Fueling level it burns blue.\n" +
+        return "Makes chemical fires hotter but shorter. Fire colour follows intensity; only specialist flamer tanks reach blue.\n" +
                $"Ignites when its solution is heated to [color=yellow]{SharedReagentGeneratorSystem.IgnitionTemperature(level)}[/color] K or more " +
                $"(lower if another combustion property is stronger), setting the floor around the container on fire.";
     }

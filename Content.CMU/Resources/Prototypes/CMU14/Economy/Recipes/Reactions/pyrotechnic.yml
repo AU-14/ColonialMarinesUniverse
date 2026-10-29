@@ -1,6 +1,8 @@
 - type: reaction
   id: CMUNapalmUT
   priority: 20
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCNapalm:
       amount: 1
@@ -14,6 +16,8 @@
 - type: reaction
   id: CMUNapalmB
   priority: 20
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCNapalm:
       amount: 2
@@ -29,6 +33,8 @@
 - type: reaction
   id: CMUNapalmE
   priority: 20
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCPhoron:
       amount: 1

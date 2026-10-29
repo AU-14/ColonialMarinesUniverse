@@ -87,6 +87,12 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
         _window.UpgradeText.Text = xLocked
             ? Loc.GetString("research-data-ui-improve-locked", ("TIME", Math.Ceiling((state.XLockedUntil!.Value - _time.CurTime).TotalMinutes)))
             : Loc.GetString("research-data-ui-improve", ("NUM", state.UpgradeCost));
+        // FLOW-24: a locked faction (GOVFOR during Insurgency) can neither upgrade nor buy cooldown.
+        if (state.Locked)
+        {
+            _window.Upgrade.Disabled = true;
+            _window.ReduceCooldown.Disabled = true;
+        }
         StyleBoxFlat panel = new();
         panel.BackgroundColor = Color.FromHex("#0f0f00");
         panel.BorderColor = Color.FromHex("#ffbf00");
@@ -201,7 +207,17 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
             //_window.DataTable.AddChild(con);
         }
 
-        foreach (var chem in state.IDs)
+        if (state.Locked)
+        {
+            // FLOW-24: the offers are replaced by the lock message; no pick buttons are shown.
+            var lockedPanel = new PanelContainer { PanelOverride = panel, HorizontalExpand = true };
+            var lockedLabel = new RichTextLabel { Margin = new Thickness(5f, 10f) };
+            lockedLabel.Text = state.LockedReason ?? Loc.GetString("research-locked-insurgency");
+            lockedPanel.AddChild(lockedLabel);
+            _window.ChemContainer.AddChild(lockedPanel);
+        }
+
+        foreach (var chem in state.IDs.Take(state.Locked ? 0 : state.IDs.Count))
         {
             BoxContainer box = new BoxContainer();
             PanelContainer panela = new PanelContainer();
@@ -240,7 +256,7 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
             RichTextLabel cont = new RichTextLabel();
             cont.Text = Loc.GetString("research-data-ui-chem-take");
             cont.HorizontalAlignment = Control.HAlignment.Left;
-            if (_time.CurTime < state.NextUpdate && state.Picked)
+            if ((_time.CurTime < state.NextUpdate && state.Picked) || state.Locked)
                 button.Disabled = true;
             name.Margin = new Thickness(5f, 10f);
             panela.AddChild(name);

@@ -10,10 +10,13 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Chat;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.GameTicking;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Paper;
+using Content.Shared.Popups;
 using Discord.Rest;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
@@ -60,6 +63,9 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     /// <summary>FLOW-02: sample data for completing a Hard contract chemical.</summary>
     public const int HardContractSampleData = 2;
 
+    /// <summary>FLOW-24: the GOVFOR research faction id, locked out of research while Insurgency runs.</summary>
+    public const string GovforFaction = "govfor";
+
     [Dependency] private Content.Server.CMU14.Threats.Mobs.Wendigo.Lab.CMUWendigoResearchUnlockSystem _wendigoUnlock = default!;
 
     private readonly Dictionary<string, FactionResearch> _factions = new(StringComparer.OrdinalIgnoreCase);
@@ -99,6 +105,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] private XRFScannerSystem _scanner = default!;
     [Dependency] private SharedGameTicker _ticker = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private Dictionary<Entity<ResearchDataTerminalComponent>, int> _printing = [];
     private HashSet<Entity<ResearchDataTerminalComponent>> _printingLast = [];
@@ -126,6 +133,24 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         Subs.CVar(_cfg, CCVars.TerminalChems, chems => ResearchChemAmount = chems, true);
         Subs.CVar(_cfg, CCVars.CashRewardMult, dosh => ResearchCashRewardMult = dosh, true);
         Subs.CVar(_cfg, CCVars.XClearanceLockout, t => XClearanceLockout = TimeSpan.FromSeconds(t), true);
+    }
+
+    /// <summary>
+    /// FLOW-24: GOVFOR may not research during Insurgency. True for the govfor faction while a game rule with
+    /// <see cref="InsurgencyRuleComponent"/> is active; every other faction, and govfor in other modes, is unaffected.
+    /// </summary>
+    public bool IsResearchBlocked(string faction)
+    {
+        if (!string.Equals(faction, GovforFaction, StringComparison.OrdinalIgnoreCase))
+            return false;
+        var query = EntityQueryEnumerator<InsurgencyRuleComponent, ActiveGameRuleComponent, GameRuleComponent>();
+        return query.MoveNext(out _, out _, out _, out _);
+    }
+
+    /// <summary>FLOW-24: tells the user the request was refused because the faction's research is locked.</summary>
+    private void PopupBlocked(EntityUid terminal, EntityUid user)
+    {
+        _popup.PopupEntity(Loc.GetString("research-locked-popup"), terminal, user, PopupType.SmallCaution);
     }
 
     protected override void OnResearchBalanceChanged(string faction) => UpdateFactionUI(faction);
@@ -173,6 +198,12 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     private void OnUpgradeAttempt(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalAttemptUpgradeBuiMsg args)
     {
         var faction = ent.Comp.Faction;
+        if (IsResearchBlocked(faction))
+        {
+            PopupBlocked(ent.Owner, args.Actor);
+            UpdateUI(ent);
+            return;
+        }
         var clearance = GetClearance(faction);
         if (clearance == 5 && _ticker.RoundDuration() < XClearanceLockout)
         {
@@ -198,6 +229,8 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     public bool ReduceCooldown(string faction)
     {
+        if (IsResearchBlocked(faction))
+            return false;
         var research = GetResearch(faction);
         if (!research.Picked || research.NextReroll <= _timer.CurTime || GetCredits(faction) < 1)
             return false;
@@ -212,6 +245,12 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     private void OnReduceCooldown(Entity<ResearchDataTerminalComponent> ent, ref CMUResearchReduceCooldownBuiMsg args)
     {
+        if (IsResearchBlocked(ent.Comp.Faction))
+        {
+            PopupBlocked(ent.Owner, args.Actor);
+            UpdateUI(ent);
+            return;
+        }
         ReduceCooldown(ent.Comp.Faction);
     }
 
@@ -480,6 +519,10 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     public void CompleteChemical(ReagentPrototype proto, string faction, EntityUid? scanner)
     {
+        // FLOW-24: a locked faction earns nothing (no credits, sample data, budget or identification), and the
+        // chemical is not marked completed for it.
+        if (IsResearchBlocked(faction))
+            return;
         if (!GetResearch(faction).CompletedChemicals.Add(proto.ID))
             return;
         // Chemical definitions are global, but each faction earns its own first-scan reward.
@@ -562,8 +605,9 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             if (_generator.ProceduralReagentData.TryGetValue(id, out var contract))
                 contracts.Add(new ResearchContractEntry(contract.Name, FormatContract(contract, true)));
         }
+        var locked = IsResearchBlocked(faction);
         var state = new ResearchDataTerminalBuiState(
-            ids: research.Selectable.ToList(),
+            ids: locked ? new List<GeneratedReagentData>() : research.Selectable.ToList(),
             data: new(research.Reports),
             nextUpdate: research.NextReroll,
             lastTime: research.LastTime,
@@ -573,7 +617,9 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             upgradecost: UpgradeCost(faction),
             xLockedUntil: xLockedUntil,
             picked: research.Picked,
-            contracts: contracts);
+            contracts: contracts,
+            locked: locked,
+            lockedReason: locked ? Loc.GetString("research-locked-insurgency") : null);
         _ui.SetUiState(ent.Owner, ResearchDataTerminalUI.Key, state);
     }
 
@@ -605,6 +651,8 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     public bool PickChem(string id, Entity<ResearchDataTerminalComponent>? ent = null)
     {
         var faction = ent?.Comp.Faction ?? "corporate";
+        if (IsResearchBlocked(faction))
+            return false;
         var research = GetResearch(faction);
         var nextReroll = research.NextReroll;
         var lastTime = research.LastTime;
@@ -635,7 +683,10 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     private void OnPickChem(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalPickChemBuiMsg args)
     {
-        PickChem(args.Pick, ent);
+        if (IsResearchBlocked(ent.Comp.Faction))
+            PopupBlocked(ent.Owner, args.Actor);
+        else
+            PickChem(args.Pick, ent);
         UpdateUI(ent);
     }
 
@@ -877,6 +928,14 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         var research = GetResearch(faction);
         research.Selectable.Clear();
         research.Picked = false;
+        if (IsResearchBlocked(faction))
+        {
+            // FLOW-24: no offers and no announcement for a locked faction; check again after the usual wait.
+            research.NextReroll = _timer.CurTime + RerollTime;
+            research.LastTime = _timer.CurTime;
+            UpdateFactionUI(faction);
+            return;
+        }
         for (int i = 0; i < ResearchChemAmount; i++)
         {
             GeneratedReagentData data = new();
