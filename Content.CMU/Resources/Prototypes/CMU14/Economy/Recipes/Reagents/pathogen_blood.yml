@@ -224,3 +224,20 @@
         embryoSpawn: CMU14XenoBloodburster  
         requiresOverdose: true  
         burstDelay: 0:00:30
+
+- type: reagent  
+  parent: CMReagent  
+  id: TestMycotoxigenic  
+  name: test-mycotoxigenic-chem  
+  desc: test chem for walker conversion  
+  physicalDesc: reagent-physical-desc-unidentifiable  
+  class: Special  
+  color: "#5a8a3c"  
+  reward: 0  
+  overdose: 10  
+  metabolisms:  
+    Bloodstream:  
+      cmuToxicity: [ Poison ]  
+      metabolismRate: 0.1  
+      effects:  
+      - !type:Mycotoxigenic
