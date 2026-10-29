@@ -91,9 +91,22 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        // CMU14 Begin: Del and Spawn below mutate the table this enumerates,
+        // which throws mid-enumeration; snapshot the uids first.
+        var toReplace = new List<EntityUid>();
         var query = EntityQueryEnumerator<RMCReplaceOnHijackLandComponent>();
-        while (query.MoveNext(out var uid, out var comp))
+        while (query.MoveNext(out var uid, out _))
         {
+            toReplace.Add(uid);
+        }
+
+        foreach (var uid in toReplace)
+        {
+            if (TerminatingOrDeleted(uid)
+                || !TryComp(uid, out RMCReplaceOnHijackLandComponent? comp))
+                continue;
+        // CMU14 End
+
             if (!TryComp(uid, out TransformComponent? xform)
                 || !_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
                 continue;
