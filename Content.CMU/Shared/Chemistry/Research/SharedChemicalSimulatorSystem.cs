@@ -37,6 +37,8 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
     private readonly int AddValue = 3;
     private readonly int MultAnomalous = 5;
     private readonly int MultRare = 3;
+    // 2^6 = x64 is as expensive as a repeat streak gets
+    private readonly int MaxStreakExponent = 6;
     public override void Initialize()
     {
         base.Initialize();
@@ -456,8 +458,60 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                     ent.Comp.PropertyCosts[prop.Key] = Math.Max(ent.Comp.PropertyCosts[prop.Key] - 2, 1);
                 }
             }
+            ApplyRecipeDiscountAndStreak(ent);
         }
 
+    }
+
+    /// <summary>
+    /// Final cost adjustments, so the displayed cost is exactly what the server charges:
+    /// a Rare-or-better recipe pick takes one off (never free), then repeating the last paid
+    /// operation doubles the price for every repeat in a row.
+    /// </summary>
+    private void ApplyRecipeDiscountAndStreak(Entity<ChemSimulatorComponent> ent)
+    {
+        var discount = ent.Comp.PickedRecipeChem is not null &&
+            _protoman.GetInstances<ReagentPrototype>().TryGetValue(ent.Comp.PickedRecipeChem, out var picked) &&
+            picked.Class >= ReagentClass.Rare;
+        var key = GetOperationKey(ent);
+        var exponent = key is not null && key == ent.Comp.LastOperation
+            ? Math.Clamp(ent.Comp.OperationStreak, 0, MaxStreakExponent)
+            : 0;
+        if (!discount && exponent == 0)
+            return;
+        foreach (var prop in new List<string>(ent.Comp.PropertyCosts.Keys))
+        {
+            long cost = ent.Comp.PropertyCosts[prop];
+            if (discount)
+                cost = Math.Max(1, cost - 1); // never free: see ServerResearchDataTerminalSystem.SampleDataForSimulated
+            cost <<= exponent;
+            ent.Comp.PropertyCosts[prop] = (int)Math.Min(cost, int.MaxValue);
+        }
+    }
+
+    /// <summary>
+    /// Identifies an operation for repeat pricing: the root of the target's simulator lineage plus the mode,
+    /// so editing a simulated child the same way still counts as a repeat. Null without a usable target.
+    /// </summary>
+    public string? GetOperationKey(Entity<ChemSimulatorComponent> ent)
+    {
+        if (!_con.TryGetContainer(ent.Owner, "target", out var targetCon) || targetCon.Count == 0 ||
+            !TryComp<ResearchReportComponent>(targetCon.ContainedEntities[0], out var targcomp) ||
+            targcomp.Data is null || !targcomp.Completed)
+            return null;
+        var data = targcomp.Data.Value;
+        var root = string.IsNullOrEmpty(data.OriginalID) ? data.ID : data.OriginalID;
+        if (string.IsNullOrEmpty(root))
+            return null;
+        return root + ":" + ent.Comp.Mode;
+    }
+
+    /// <summary>
+    /// Recomputes <see cref="ChemSimulatorComponent.PropertyCosts"/> from the inserted reports, pick and streak.
+    /// </summary>
+    public void RefreshCosts(Entity<ChemSimulatorComponent> ent)
+    {
+        UpdatePropertyCosts(ent);
     }
     #region User Interface
     private void OnBuiOpened(Entity<ChemSimulatorComponent> ent, ref BoundUIOpenedEvent args)

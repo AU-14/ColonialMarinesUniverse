@@ -20,7 +20,8 @@ public sealed class ResearchDataTerminalBuiState(
     int clearance,
     int upgradecost,
     TimeSpan? xLockedUntil,
-    bool picked) : BoundUserInterfaceState
+    bool picked,
+    List<ResearchContractEntry>? contracts = null) : BoundUserInterfaceState
 {
     public readonly List<GeneratedReagentData> IDs = ids;
     public readonly Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> Data = data;
@@ -32,8 +33,13 @@ public sealed class ResearchDataTerminalBuiState(
     public readonly int UpgradeCost = upgradecost;
     public readonly TimeSpan? XLockedUntil = xLockedUntil;
     public readonly bool Picked = picked;
-    
+    /// <summary>ARCH-03: every contract the faction has picked, formatted like the contract paper.</summary>
+    public readonly List<ResearchContractEntry> Contracts = contracts ?? new();
 }
+
+/// <summary>One entry of the terminal's Contracts tab: the chemical's name and its server-formatted contract text.</summary>
+[Serializable, NetSerializable]
+public readonly record struct ResearchContractEntry(string Name, string Text);
 
 [Serializable, NetSerializable]
 public sealed class ResearchDataTerminalPickChemBuiMsg(string pick) : BoundUserInterfaceMessage

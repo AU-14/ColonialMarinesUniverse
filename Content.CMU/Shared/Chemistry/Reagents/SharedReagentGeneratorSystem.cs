@@ -206,14 +206,26 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
     public const int BaseFuelIntensity = 15;
     public const int BaseFuelDuration = 20;
     public const int BaseFuelRadius = 4;
+    /// <summary>Oxidizing level at which a generated fuel burns blue (and only when it outweighs Fueling).</summary>
+    public const int BlueFireOxidizingLevel = 3;
+
+    /// <summary>The RMC fire numbers a generated chemical's properties add up to.</summary>
+    public readonly record struct GeneratedFireStats(
+        bool IsFuel,
+        int Intensity,
+        int Duration,
+        int Radius,
+        bool BlueFire,
+        FixedPoint2 IntensityMod,
+        FixedPoint2 DurationMod,
+        FixedPoint2 RadiusMod);
 
     /// <summary>
-    /// Turns the catalogue's per-level fire numbers into the RMC <c>ReagentPrototype</c> fire fields. A chemical
-    /// with a fuel property starts from a weak napalm baseline and every property's <c>*PerLevel</c> values are
-    /// added per level; the <c>*ModPerLevel</c> values are always emitted so non-fuel chemicals (Flowing, Viscous)
-    /// still shape a blend they are poured into. Returns YAML lines, or an empty string when nothing applies.
+    /// Adds up the catalogue's per-level fire numbers. A chemical with a fuel property starts from a weak napalm
+    /// baseline and every property's <c>*PerLevel</c> values are added per level. Intensity and duration are
+    /// clamped to 1-60 and radius to 1-7; all three are zero for a non-fuel.
     /// </summary>
-    public static string ComputeFireStats(Dictionary<string, int> effects, IReadOnlyDictionary<string, ReagentPropertyPrototype> properties)
+    public static GeneratedFireStats ComputeFireValues(Dictionary<string, int> effects, IReadOnlyDictionary<string, ReagentPropertyPrototype> properties)
     {
         var isFuel = false;
         foreach (var fuelProp in FuelProperties)
@@ -241,14 +253,35 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
                 fueling = level;
         }
 
+        if (!isFuel)
+            return new GeneratedFireStats(false, 0, 0, 0, false, intensityMod, durationMod, radiusMod);
+
+        return new GeneratedFireStats(
+            true,
+            Math.Clamp((int) Math.Round(intensity.Float()), 1, 60),
+            Math.Clamp((int) Math.Round(duration.Float()), 1, 60),
+            Math.Clamp((int) Math.Round(radius.Float()), 1, 7),
+            // FLOW-04: blue fire only from a strong oxidizer that outweighs its fuel.
+            oxidizing >= BlueFireOxidizingLevel && oxidizing > fueling,
+            intensityMod,
+            durationMod,
+            radiusMod);
+    }
+
+    /// <summary>
+    /// Turns the catalogue's per-level fire numbers into the RMC <c>ReagentPrototype</c> fire fields. A chemical
+    /// with a fuel property starts from a weak napalm baseline and every property's <c>*PerLevel</c> values are
+    /// added per level; the <c>*ModPerLevel</c> values are always emitted so non-fuel chemicals (Flowing, Viscous)
+    /// still shape a blend they are poured into. Returns YAML lines, or an empty string when nothing applies.
+    /// </summary>
+    public static string ComputeFireStats(Dictionary<string, int> effects, IReadOnlyDictionary<string, ReagentPropertyPrototype> properties)
+    {
+        var stats = ComputeFireValues(effects, properties);
         var yaml = string.Empty;
-        if (isFuel)
+        if (stats.IsFuel)
         {
-            var i = Math.Clamp((int) Math.Round(intensity.Float()), 1, 60);
-            var d = Math.Clamp((int) Math.Round(duration.Float()), 1, 60);
-            var r = Math.Clamp((int) Math.Round(radius.Float()), 1, 7);
-            yaml += $"  intensity: {i}\n  duration: {d}\n  radius: {r}\n";
-            if (oxidizing > fueling)
+            yaml += $"  intensity: {stats.Intensity}\n  duration: {stats.Duration}\n  radius: {stats.Radius}\n";
+            if (stats.BlueFire)
                 yaml += "  fireEntity: RMCTileFireBlue\n";
             if (effects.ContainsKey("Flowing"))
                 yaml += "  fireSpread: true\n";
@@ -257,14 +290,63 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             if (effects.ContainsKey("Firepenetrating"))
                 yaml += "  firePenetrating: true\n";
         }
-        if (intensityMod != 0)
-            yaml += $"  intensityMod: {intensityMod}\n";
-        if (durationMod != 0)
-            yaml += $"  durationMod: {durationMod}\n";
-        if (radiusMod != 0)
-            yaml += $"  radiusMod: {radiusMod}\n";
+        if (stats.IntensityMod != 0)
+            yaml += $"  intensityMod: {stats.IntensityMod}\n";
+        if (stats.DurationMod != 0)
+            yaml += $"  durationMod: {stats.DurationMod}\n";
+        if (stats.RadiusMod != 0)
+            yaml += $"  radiusMod: {stats.RadiusMod}\n";
         return yaml;
     }
+
+    /// <summary>Properties that make a generated chemical ignite, and possibly detonate, once heated.</summary>
+    public static readonly string[] IgnitionProperties = ["Explosive", "Oxidizing", "Fueling"];
+    /// <summary>Suffix of the generated reaction that ignites a combustible chemical: <c>{ID}Ignition</c>.</summary>
+    public const string IgnitionRecipeSuffix = "Ignition";
+    public const float IgnitionBaseTemperature = 500f;
+    public const float IgnitionTemperaturePerLevel = 15f;
+    /// <summary>
+    /// No chemical ignites below this. It sits above <see cref="SynthesisMaxTemperature"/>, so heat from a
+    /// Hyperthermic synthesis can never set its own product off.
+    /// </summary>
+    public const float IgnitionMinTemperature = 410f;
+    /// <summary>Temperature change per Hyperthermic/Hypothermic level for a fully converted synthesis.</summary>
+    public const float SynthesisKelvinPerLevel = 12f;
+    public const float SynthesisMinTemperature = 250f;
+    public const float SynthesisMaxTemperature = 400f;
+    /// <summary>Mixing category that Hard (GenTier 3+) generated recipes need: the lid-closed "Mix" verb.</summary>
+    public const string GeneratedMixingCategory = "CMUMix";
+    public const int MixGatedGenTier = 3;
+    public const int ExplosiveLevelCap = 10;
+    /// <summary>Strong-IED ceiling (AU14IEDLarge): about 10.5 tiles of radius and 15.7 peak intensity.</summary>
+    public const float MaxExplosionRadius = 10.5f;
+    public const float MaxExplosionPeak = 15.7f;
+    /// <summary>Units of an explosive chemical that reach the total-intensity cap.</summary>
+    public const float ExplosionUnitsToCap = 5f;
+
+    public static string IgnitionRecipeId(string reagentId) => reagentId + IgnitionRecipeSuffix;
+
+    /// <summary>The temperature (K) at which a chemical whose strongest combustion property has this level ignites.</summary>
+    public static float IgnitionTemperature(int level)
+        => MathF.Max(IgnitionMinTemperature, IgnitionBaseTemperature - IgnitionTemperaturePerLevel * level);
+
+    /// <summary>
+    /// FLOW-01: level-scaled explosion for the Explosive property. With Lc = min(L, 10) the blast has radius
+    /// <c>r = min(1.05 Lc, 10.5)</c> and peak <c>P = min(4 + 1.2 Lc, 15.7)</c>, so L10 matches AU14IEDLarge.
+    /// Total intensity is the cone volume <c>π/3 · P · r²</c>, reached with <see cref="ExplosionUnitsToCap"/> units.
+    /// </summary>
+    public static void ComputeExplosion(int level, out float slope, out float max, out float total, out float perUnit)
+    {
+        var lc = Math.Clamp(level, 1, ExplosiveLevelCap);
+        var radius = MathF.Min(1.05f * lc, MaxExplosionRadius);
+        max = MathF.Min(4f + 1.2f * lc, MaxExplosionPeak);
+        slope = max / radius;
+        total = MathF.PI / 3f * max * radius * radius;
+        perUnit = total / ExplosionUnitsToCap;
+    }
+
+    private static string FormatFloat(float value)
+        => value.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture);
 
     protected HashSet<string> CreateRecipe(GeneratedReagentData args)
     {
@@ -300,20 +382,26 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         recipe.Add("products", product);
         recipe.Add("reactants", ingredients);
         HashSet<string> recipeIds = [];
-        // Explosive: the reaction itself detonates, scaled by level. Sensitivity (spontaneous detonation
-        // near the overdose threshold) is not modelled; the explosion fires on synthesis.
+        // ARCH-01 P1: Hyperthermic heats and Hypothermic cools the synthesis. The delta is per unit reaction and
+        // scales with yield so a fully converted batch moves about SynthesisKelvinPerLevel K per level whatever
+        // its size. The clamp stays below IgnitionMinTemperature so a synthesis never sets its product off.
+        // The Explosive detonation is not here any more: it lives on the {ID}Ignition reaction below.
         var effectsYaml = string.Empty;
-        if (args.Effects.TryGetValue("Explosive", out var explosive) && explosive > 0)
+        var heatLevel = (args.Effects.TryGetValue("Hyperthermic", out var hyper) ? hyper : 0) -
+                        (args.Effects.TryGetValue("Hypothermic", out var hypo) ? hypo : 0);
+        if (heatLevel != 0)
         {
             effectsYaml =
                 "  effects:\n" +
-                "  - !type:Explosion\n" +
-                "    explosionType: RMC\n" +
-                $"    maxIntensity: {10 * explosive}\n" +
-                $"    intensityPerUnit: {(0.1f * explosive).ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)}\n" +
-                "    intensitySlope: 2\n" +
-                $"    maxTotalIntensity: {20 * explosive}\n";
+                "  - !type:AdjustSolutionThermalEnergy\n" +
+                $"    delta: {FormatFloat(SynthesisKelvinPerLevel * heatLevel * yield)}\n" +
+                $"    minTemp: {FormatFloat(SynthesisMinTemperature)}\n" +
+                $"    maxTemp: {FormatFloat(SynthesisMaxTemperature)}\n";
         }
+        // ARCH-04: Hard recipes need the lid-closed Mix verb on top of the right reagents.
+        var mixYaml = args.GenTier >= MixGatedGenTier
+            ? $"  requiredMixerCategories:\n  - {GeneratedMixingCategory}\n"
+            : string.Empty;
         LoadRecipe(args.ID, recipstr);
 
         // Sheets and uranium glass yield upstream Uranium, while RMC jugs and
@@ -325,15 +413,22 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
                 recipstr.Replace("    RMCUranium:\n", "    Uranium:\n"));
         }
 
+        LoadIgnitionRecipe(args, properties, recipeIds);
+
         return recipeIds;
 
         void LoadRecipe(string id, string reactants)
         {
+            // conserveEnergy: false. Generated recipes turn several units into one, and upstream energy
+            // conservation would multiply the solution's temperature by that ratio (3:1 at room temperature
+            // is ~880 K), which would set off every ignition reaction on synthesis.
             var yamlstr =
                 $"- type: reaction\n" +
                 $"  id: {id}\n" +
                 $"  abstract: false\n" +
                 $"  priority: {prio}\n" +
+                $"  conserveEnergy: false\n" +
+                mixYaml +
                 $"  reactants:\n{reactants}" +
                 $"  products:\n" +
                 $"    {args.ID}: {yield}\n" +
@@ -346,6 +441,84 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         _protoMan.TryLoadDynamic(recipe);
         */
     }
+
+    /// <summary>
+    /// ARCH-01 P2: a chemical with Explosive, Oxidizing or Fueling gets a second reaction, <c>{ID}Ignition</c>,
+    /// that consumes it once the solution is heated to <see cref="IgnitionTemperature"/>. Explosive detonates
+    /// with the FLOW-01 parameters; Fueling and Oxidizing set the floor around the holder on fire. The engine
+    /// re-checks reactions on every temperature change, so no watcher is needed. Not mix-gated.
+    /// </summary>
+    private void LoadIgnitionRecipe(
+        GeneratedReagentData args,
+        IReadOnlyDictionary<string, ReagentPropertyPrototype> properties,
+        HashSet<string> recipeIds)
+    {
+        var level = 0;
+        foreach (var ignitionProp in IgnitionProperties)
+        {
+            if (args.Effects.TryGetValue(ignitionProp, out var propLevel))
+                level = Math.Max(level, propLevel);
+        }
+        if (level <= 0)
+            return;
+
+        var id = IgnitionRecipeId(args.ID);
+        var yamlstr =
+            $"- type: reaction\n" +
+            $"  id: {id}\n" +
+            $"  abstract: false\n" +
+            $"  priority: {GeneratedRecipePriority}\n" +
+            $"  minTemp: {FormatFloat(IgnitionTemperature(level))}\n" +
+            // Burning the chemical away must not heat what is left and chain further ignitions.
+            $"  conserveEnergy: false\n" +
+            $"  reactants:\n" +
+            $"    {args.ID}:\n" +
+            $"      amount: 1\n" +
+            $"  effects:\n";
+
+        if (args.Effects.TryGetValue("Explosive", out var explosive) && explosive > 0)
+        {
+            ComputeExplosion(explosive, out var slope, out var max, out var total, out var perUnit);
+            yamlstr +=
+                "  - !type:Explosion\n" +
+                "    explosionType: RMC\n" +
+                $"    maxIntensity: {FormatFloat(max)}\n" +
+                $"    intensityPerUnit: {FormatFloat(perUnit)}\n" +
+                $"    intensitySlope: {FormatFloat(slope)}\n" +
+                $"    maxTotalIntensity: {FormatFloat(total)}\n";
+        }
+
+        var fueling = args.Effects.TryGetValue("Fueling", out var fuelLevel) && fuelLevel > 0;
+        var oxidizing = args.Effects.TryGetValue("Oxidizing", out var oxLevel) && oxLevel > 0;
+        if (fueling || oxidizing)
+        {
+            // Range comes from a range property (Radius), otherwise one tile. Intensity and duration keep the
+            // tile fire's defaults unless the Intensity / Duration property sets them.
+            var fire = ComputeFireValues(args.Effects, properties);
+            var hasRange = false;
+            foreach (var effectId in args.Effects.Keys)
+            {
+                if (properties.TryGetValue(effectId, out var prop) && prop.RangePerLevel != 0)
+                    hasRange = true;
+            }
+            var range = hasRange ? Math.Max(1, fire.Radius) : 1;
+            yamlstr +=
+                "  - !type:CMUSolutionTileFire\n" +
+                $"    reagent: {args.ID}\n" +
+                $"    range: {range}\n" +
+                (args.Effects.ContainsKey("Intensity") ? $"    intensity: {fire.Intensity}\n" : string.Empty) +
+                (args.Effects.ContainsKey("Duration") ? $"    duration: {fire.Duration}\n" : string.Empty) +
+                (fire.BlueFire ? "    fireEntity: RMCTileFireBlue\n" : string.Empty);
+        }
+
+        _protoMan.LoadString(yamlstr);
+        RecipeYamls[id] = yamlstr;
+        recipeIds.Add(id);
+    }
+
+    /// <summary>True for a generated <c>{ID}Ignition</c> reaction (see <see cref="LoadIgnitionRecipe"/>).</summary>
+    public bool IsIgnitionRecipe(string reactionId)
+        => reactionId.EndsWith(IgnitionRecipeSuffix, StringComparison.Ordinal) && _generatedRecipes.Contains(reactionId);
 
     /// <summary>
     /// this is so that prototyped chems can be used in the research machines
@@ -548,6 +721,10 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         {
             var reactants = reaction.Value.Reactants;
             if (reactants.Count == 0)
+                continue;
+            // A generated chemical's ignition consumes only itself and only when hot, so a recipe that uses
+            // that chemical as an ingredient does not collide with it.
+            if (IsIgnitionRecipe(reaction.Key))
                 continue;
             int matches = 0;
             foreach (var ingredient in reactants.Keys)

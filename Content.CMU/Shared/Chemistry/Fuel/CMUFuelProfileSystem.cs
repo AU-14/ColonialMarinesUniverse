@@ -30,9 +30,9 @@ public sealed partial class CMUFuelProfileSystem : EntitySystem
     /// <summary>
     /// Computes the fuel profile of <paramref name="solution"/>. Base stats are the volume-weighted mean of
     /// every fuel reagent (one with positive intensity, duration and radius), diluted by the fraction of the
-    /// solution that is fuel. Every reagent's <c>IntensityMod/DurationMod/RadiusMod</c> then scale the result as
-    /// a per-unit fractional multiplier, which lets non-fuel additives such as a Flowing or Viscous research
-    /// chemical shape a napalm blend. Fire entity and spread come from the largest fuel component. The blend is
+    /// solution that is fuel. Every non-fuel reagent's <c>IntensityMod/DurationMod/RadiusMod</c> then scale the
+    /// result as a per-unit fractional multiplier, which lets non-fuel additives such as a Flowing or Viscous
+    /// research chemical shape a napalm blend. Fire entity and spread come from the largest fuel component. The blend is
     /// fire-penetrating when at least <see cref="PenetratingFraction"/> of it is a <c>firePenetrating</c> reagent.
     /// </summary>
     public bool TryCompute(Solution solution, out CMUFuelProfile profile)
@@ -58,11 +58,12 @@ public sealed partial class CMUFuelProfileSystem : EntitySystem
                 penetratingVolume += volume;
             var isFuel = reagent.Intensity > 0 && reagent.Duration > 0 && reagent.Radius > 0;
 
-            // Hand-authored fuels' *Mod values are molotov tuning (SharedRMCFlammableSystem) and already
-            // baked into their own flamer stats, so they must not rescale a tank of that fuel. Modifiers
-            // apply from additives (non-fuels such as phoron or a Flowing chemical) and from generated
-            // chemicals, whose modifiers come from their properties.
-            if (!isFuel || reagent.Generated)
+            // A fuel's *Mod values never rescale a tank: hand-authored fuels' mods are molotov tuning
+            // (SharedRMCFlammableSystem) already baked into their flamer stats, and a generated fuel's
+            // per-level property bonuses are already in its intensity/duration, so applying its mods too
+            // would count every Oxidizing level twice. Modifiers apply only from additives (non-fuels such as
+            // phoron or a generated Flowing chemical); fuels shape a blend through the volume-weighted mean.
+            if (!isFuel)
             {
                 intensityMod += reagent.IntensityMod * volume;
                 durationMod += reagent.DurationMod * volume;

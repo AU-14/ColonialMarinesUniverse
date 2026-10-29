@@ -35,6 +35,16 @@ public sealed partial class ChemSimulatorComponent : Component
     public List<(string,int, bool, bool)> RecipeChemOptions = []; //i hate this too
     [AutoNetworkedField, ViewVariables(VVAccess.ReadOnly)]
     public int? SimulationCost = null;
+    /// <summary>
+    /// The last paid operation, as root chemical ID + ":" + mode. Repeating it doubles the cost per repeat.
+    /// </summary>
+    [AutoNetworkedField, ViewVariables(VVAccess.ReadOnly)]
+    public string? LastOperation;
+    /// <summary>
+    /// How many times in a row <see cref="LastOperation"/> has been paid for.
+    /// </summary>
+    [AutoNetworkedField, ViewVariables(VVAccess.ReadOnly)]
+    public int OperationStreak;
     [AutoNetworkedField, ViewVariables(VVAccess.ReadOnly)]
     public int? Overdose = null;
     [AutoNetworkedField, AutoPausedField, ViewVariables(VVAccess.ReadOnly)]

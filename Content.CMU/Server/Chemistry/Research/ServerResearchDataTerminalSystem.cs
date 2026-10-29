@@ -38,7 +38,27 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         public string LastPickName = string.Empty;
         public string LastPick = string.Empty;
         public Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> Reports = [];
+        /// <summary>
+        /// ARCH-03: every contract this faction has picked this round, in pick order, including new nested
+        /// sub-contracts. Shown on the terminal's Contracts tab.
+        /// </summary>
+        public List<string> PickedContracts = [];
     }
+
+    /// <summary>ARCH-02: chance that a picked Hard contract nests another contract chemical as a reactant.</summary>
+    public const float NestedContractChance = 0.30f;
+
+    /// <summary>ARCH-02: chance that a nested chemical reuses one of the faction's completed contracts, when any exist.</summary>
+    public const float ReuseCompletedSubContractChance = 0.5f;
+
+    /// <summary>ARCH-02: recipe rolls for the parent contract before nesting is abandoned for a plain recipe.</summary>
+    private const int NestedRecipeAttempts = 3;
+
+    /// <summary>FLOW-02: sample data for completing an Easy or Intermediate contract chemical.</summary>
+    public const int ContractSampleData = 1;
+
+    /// <summary>FLOW-02: sample data for completing a Hard contract chemical.</summary>
+    public const int HardContractSampleData = 2;
 
     [Dependency] private Content.Server.CMU14.Threats.Mobs.Wendigo.Lab.CMUWendigoResearchUnlockSystem _wendigoUnlock = default!;
 
@@ -220,39 +240,78 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     /// Turns a contract offer into a live reagent and reaction. Returns false, registering nothing,
     /// when no non-colliding recipe could be generated for it.
     /// </summary>
-    public bool LegalizeChem(GeneratedReagentData chem)
+    /// <param name="faction">The picking faction. Only faction picks can nest a sub-contract; admin and command
+    /// contracts pass null and are legalized exactly as authored.</param>
+    /// <param name="forceNested">Overrides the <see cref="NestedContractChance"/> roll for Hard contracts (tests).</param>
+    /// <param name="reuseCompleted">Overrides the <see cref="ReuseCompletedSubContractChance"/> roll (tests).</param>
+    public bool LegalizeChem(GeneratedReagentData chem, string? faction = null, bool? forceNested = null,
+        bool? reuseCompleted = null)
+    {
+        chem.SubContractID = string.Empty;
+        chem.SubContractIsNew = false;
+
+        // ARCH-02: Hard picks may need another contract chemical ("Chem A") as one of their reactants.
+        if (faction is not null && chem.GenTier >= 3 &&
+            (forceNested ?? _random.Prob(NestedContractChance)) &&
+            TryLegalizeNested(ref chem, faction, reuseCompleted))
+        {
+            return true;
+        }
+
+        if (!TryGenerateContractRecipe(ref chem, null))
+        {
+            _sawmill.Error($"Could not generate a non-colliding recipe for research chemical {chem.ID}; contract dropped.");
+            return false;
+        }
+        RegisterContractChem(chem);
+        return true;
+    }
+
+    /// <summary>
+    /// Generates a contract recipe containing its hint (and <paramref name="nested"/>, when given). The hint
+    /// reagent may be what collides: Hard contracts retry with a different precious metal or botanical so they
+    /// keep their guaranteed premium reactant; other tiers retry without a hint.
+    /// </summary>
+    private bool TryGenerateContractRecipe(ref GeneratedReagentData chem, string? nested)
     {
         HashSet<string> str = chem.RecipeHint == string.Empty ? [] : [chem.RecipeHint];
-        if (!_generator.GenerateRecipe(ref chem, str))
+        if (nested is not null)
+            str.Add(nested);
+        if (_generator.GenerateRecipe(ref chem, str))
+            return true;
+
+        var retried = false;
+        if (chem.GenTier >= 3)
         {
-            // The hint reagent may be what collides. Hard contracts retry with a different precious metal or
-            // botanical so they keep their guaranteed premium reactant; other tiers retry without a hint.
-            var retried = false;
-            if (chem.GenTier >= 3)
+            var hintToSkip = chem.RecipeHint;
+            var premium = _generator.ChemicalGenClassesList["H1"]
+                .Concat(_generator.ChemicalGenClassesList[SharedReagentGeneratorSystem.PreciousMetalPool])
+                .Where(id => id != hintToSkip)
+                .ToList();
+            for (var attempt = 0; attempt < 3 && premium.Count > 0 && !retried; attempt++)
             {
-                var premium = _generator.ChemicalGenClassesList["H1"]
-                    .Concat(_generator.ChemicalGenClassesList[SharedReagentGeneratorSystem.PreciousMetalPool])
-                    .Where(id => id != chem.RecipeHint)
-                    .ToList();
-                for (var attempt = 0; attempt < 3 && premium.Count > 0 && !retried; attempt++)
+                var hint = _random.PickAndTake(premium);
+                HashSet<string> required = [hint];
+                if (nested is not null)
+                    required.Add(nested);
+                if (_generator.GenerateRecipe(ref chem, required))
                 {
-                    var hint = _random.PickAndTake(premium);
-                    if (_generator.GenerateRecipe(ref chem, [hint]))
-                    {
-                        chem.RecipeHint = hint;
-                        retried = true;
-                    }
+                    chem.RecipeHint = hint;
+                    retried = true;
                 }
             }
-            if (!retried && (str.Count == 0 || chem.GenTier >= 3 || !_generator.GenerateRecipe(ref chem, [])))
-            {
-                _sawmill.Error($"Could not generate a non-colliding recipe for research chemical {chem.ID}; contract dropped.");
-                return false;
-            }
-            if (!retried)
-                chem.RecipeHint = chem.Recipe.Keys.First();
         }
-        _generator.ChemicalGenClassesList["TAU"].Add(chem.ID);
+        if (!retried && (nested is not null || str.Count == 0 || chem.GenTier >= 3 || !_generator.GenerateRecipe(ref chem, [])))
+            return false;
+        if (!retried)
+            chem.RecipeHint = chem.Recipe.Keys.First();
+        return true;
+    }
+
+    /// <summary>Loads a legalized contract chemical on the server and every client, and records it.</summary>
+    private void RegisterContractChem(GeneratedReagentData chem)
+    {
+        _generator.ChemicalGenClassesList[ServerReagentGeneratorSystem.ContractChemicalPool].Add(chem.ID);
         foreach (var ef in chem.Effects)
         {
             _generator.CheckGeneratedProperties(ef.Key);
@@ -261,7 +320,125 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         RaiseLocalEvent(ev);
         RaiseNetworkEvent(ev);
         _generator.ProceduralReagentData.Add(chem.ID, chem);
-        return true;
+    }
+
+    /// <summary>
+    /// ARCH-02: legalizes a Hard contract with a nested chemical as an extra reactant (at most
+    /// <see cref="ServerReagentGeneratorSystem.MaxPreciousMetalParts"/> parts). A new sub-contract is generated
+    /// first but only registered, before its parent, once the parent's recipe is known to work. Returns false,
+    /// registering nothing and leaving the offer's recipe empty, when nesting is not possible.
+    /// </summary>
+    private bool TryLegalizeNested(ref GeneratedReagentData chem, string faction, bool? reuseCompleted)
+    {
+        if (!TryPickSubContract(faction, chem.ID, reuseCompleted, out var sub, out var isNew))
+            return false;
+
+        var originalHint = chem.RecipeHint;
+        for (var attempt = 0; attempt < NestedRecipeAttempts; attempt++)
+        {
+            chem.Recipe.Clear();
+            chem.RecipeHint = originalHint;
+            if (!TryGenerateContractRecipe(ref chem, sub.ID))
+                break;
+            if (!chem.Recipe.TryGetValue(sub.ID, out var entry) || entry.Item2)
+                continue;
+            // A's reaction sits at the same generated priority as X's: if they share a reactant, mixing X's
+            // ingredients could make A out of them instead, or the other way round.
+            if (SubContractCollides(chem, sub))
+                continue;
+            if (entry.Item1 > ServerReagentGeneratorSystem.MaxPreciousMetalParts)
+                chem.Recipe[sub.ID] = (ServerReagentGeneratorSystem.MaxPreciousMetalParts, false);
+
+            chem.SubContractID = sub.ID;
+            chem.SubContractIsNew = isNew;
+            // CreateRecipe indexes every reactant, so A must be loaded before X.
+            if (isNew)
+                RegisterContractChem(sub);
+            RegisterContractChem(chem);
+            return true;
+        }
+
+        chem.Recipe.Clear();
+        chem.RecipeHint = originalHint;
+        chem.SubContractID = string.Empty;
+        chem.SubContractIsNew = false;
+        return false;
+    }
+
+    /// <summary>True when the nested chemical's recipe shares a reagent with the parent's other reactants.</summary>
+    public static bool SubContractCollides(GeneratedReagentData parent, GeneratedReagentData sub)
+    {
+        foreach (var reagent in sub.Recipe.Keys)
+        {
+            if (reagent != sub.ID && parent.Recipe.ContainsKey(reagent))
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Chooses Chem A: one of the faction's completed contract chemicals, or a newly rolled Easy/Intermediate
+    /// sub-contract with its own stats and recipe (not yet registered).
+    /// </summary>
+    private bool TryPickSubContract(string faction, string parentId, bool? reuseCompleted,
+        out GeneratedReagentData sub, out bool isNew)
+    {
+        var reagents = _protoman.GetInstances<ReagentPrototype>();
+        var completed = new List<GeneratedReagentData>();
+        foreach (var id in GetResearch(faction).CompletedChemicals)
+        {
+            if (id == parentId ||
+                !_generator.ProceduralReagentData.TryGetValue(id, out var done) ||
+                done.Class != ReagentClass.Ultra ||
+                !string.IsNullOrEmpty(done.OriginalID) ||
+                !string.IsNullOrEmpty(done.SubContractID) ||
+                _generator.LockedDownChems.Contains(id) ||
+                !reagents.ContainsKey(id))
+            {
+                continue;
+            }
+            completed.Add(done);
+        }
+
+        if (completed.Count > 0 && (reuseCompleted ?? _random.Prob(ReuseCompletedSubContractChance)))
+        {
+            sub = _random.Pick(completed);
+            isNew = false;
+            return true;
+        }
+
+        isNew = true;
+        return TryRollSubContract(faction, out sub);
+    }
+
+    /// <summary>A new sub-contract: GenTier 1 or 2, so it can never nest further.</summary>
+    private bool TryRollSubContract(string faction, out GeneratedReagentData sub)
+    {
+        sub = new GeneratedReagentData();
+        sub.Recipe = [];
+        sub.Effects = [];
+        sub.Class = ReagentClass.Ultra;
+        _generator.GenerateName(ref sub);
+        sub.ID = $"{sub.ID}-{faction}-{_nextContractId++}";
+        sub.GenTier = _random.Next(1, 3);
+        _generator.GenerateStats(ref sub);
+        AssignContractRewardAndHint(ref sub);
+        sub.PropertyHint = sub.Effects.Count > 0 ? _random.Pick(sub.Effects.Keys) : string.Empty;
+        return TryGenerateContractRecipe(ref sub, null);
+    }
+
+    /// <summary>
+    /// Marks a contract's nested chemical as identified, so the contract's own XRF report can name it instead of
+    /// reporting an unknown emission.
+    /// </summary>
+    public void IdentifySubContract(string id)
+    {
+        if (!_generator.ProceduralReagentData.TryGetValue(id, out var data) || string.IsNullOrEmpty(data.SubContractID))
+            return;
+        var sub = data.SubContractID;
+        var reward = _generator.ProceduralReagentData.TryGetValue(sub, out var subData) ? subData.ScanPointYield : 0;
+        if (_generator.IdentifiedChemicals.TryAdd(sub, reward))
+            RaiseNetworkEvent(new IdentifyChemicalEvent(sub, reward));
     }
 
     /// <summary>
@@ -280,6 +457,27 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     /// </summary>
     public static int SampleDataForSimulated(ReagentPrototype proto) => 1;
 
+    /// <summary>
+    /// FLOW-02: sample data paid for completing a contract chemical: exactly one, or two for Hard. Credits are
+    /// still the contract's full <see cref="ReagentPrototype.Reward"/>.
+    /// </summary>
+    public static int SampleDataForContract(ReagentPrototype proto)
+        => proto.GenTier >= 3 ? HardContractSampleData : ContractSampleData;
+
+    /// <summary>
+    /// Sample data paid for a faction's first completion of <paramref name="proto"/>: simulator output pays
+    /// <see cref="SampleDataForSimulated"/>, generated contract chemicals (Ultra) pay
+    /// <see cref="SampleDataForContract"/>, and other Special-or-better chemicals (xeno) pay their Reward.
+    /// </summary>
+    public static int SampleDataForCompleted(ReagentPrototype proto)
+    {
+        if (proto.Class < ReagentClass.Special)
+            return SampleDataForSimulated(proto);
+        if (proto.Generated && proto.Class == ReagentClass.Ultra)
+            return SampleDataForContract(proto);
+        return proto.Reward;
+    }
+
     public void CompleteChemical(ReagentPrototype proto, string faction, EntityUid? scanner)
     {
         if (!GetResearch(faction).CompletedChemicals.Add(proto.ID))
@@ -287,13 +485,15 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         // Chemical definitions are global, but each faction earns its own first-scan reward.
         if (_generator.IdentifiedChemicals.TryAdd(proto.ID, proto.Reward))
             RaiseNetworkEvent(new IdentifyChemicalEvent(proto.ID, proto.Reward));
+        // ARCH-02: completing a nested contract also identifies its sub-chemical (no separate reward).
+        IdentifySubContract(proto.ID);
         if (proto.Class < ReagentClass.Special)
         {
             // Simulator-made chemical: a flat sample-data reward (see SampleDataForSimulated), no credits or cash.
             UpdateSampleData(GetSampleData(faction) + SampleDataForSimulated(proto), faction);
             return;
         }
-        UpdateClearance(GetCredits(faction) + proto.Reward, -1, faction, GetSampleData(faction) + proto.Reward);
+        UpdateClearance(GetCredits(faction) + proto.Reward, -1, faction, GetSampleData(faction) + SampleDataForCompleted(proto));
         if (faction != string.Empty)
         {
             if (string.Equals(faction, "corporate", StringComparison.OrdinalIgnoreCase))
@@ -356,6 +556,12 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         TimeSpan? xLockedUntil = null;
         if (GetClearance(faction) == 5 && _ticker.RoundDuration() < XClearanceLockout)
             xLockedUntil = _timer.CurTime + (XClearanceLockout - _ticker.RoundDuration());
+        var contracts = new List<ResearchContractEntry>();
+        foreach (var id in research.PickedContracts)
+        {
+            if (_generator.ProceduralReagentData.TryGetValue(id, out var contract))
+                contracts.Add(new ResearchContractEntry(contract.Name, FormatContract(contract, true)));
+        }
         var state = new ResearchDataTerminalBuiState(
             ids: research.Selectable.ToList(),
             data: new(research.Reports),
@@ -366,7 +572,8 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             clearance: GetClearance(faction),
             upgradecost: UpgradeCost(faction),
             xLockedUntil: xLockedUntil,
-            picked: research.Picked);
+            picked: research.Picked,
+            contracts: contracts);
         _ui.SetUiState(ent.Owner, ResearchDataTerminalUI.Key, state);
     }
 
@@ -404,7 +611,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         if (!TryReserveContract(faction, id, out var reagent))
             return false;
 
-        if (!LegalizeChem(reagent))
+        if (!LegalizeChem(reagent, faction))
         {
             // Give the offer slot and the reroll timer back rather than leaving the faction locked on a dead contract.
             research.Picked = false;
@@ -414,8 +621,15 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             UpdateFactionUI(faction);
             return false;
         }
+        research.PickedContracts.Add(reagent.ID);
+        if (_generator.ProceduralReagentData.TryGetValue(reagent.ID, out var legalized) &&
+            legalized.SubContractIsNew && !string.IsNullOrEmpty(legalized.SubContractID))
+        {
+            research.PickedContracts.Add(legalized.SubContractID);
+        }
         if (ent is { } terminal)
             PrintContract(terminal, reagent.ID);
+        UpdateFactionUI(faction);
         return true;
     }
 
@@ -458,59 +672,14 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     private EntityUid? PrintContract(EntityUid source, string id, bool materializable)
     {
         var dat = _generator.ProceduralReagentData[id];
-        var reagents = _protoman.GetInstances<ReagentPrototype>();
         string name = Loc.GetString("research-data-contract-name", ("NAME", dat.Name));
 
-        string text = string.Empty;
-        text += Loc.GetString("cmu-paper-header-experiment") + '\n';
-        text += Loc.GetString("cmu-paper-subheader-experiment", ("NAME", dat.Name)) + '\n';
         string expnum = string.Empty;
         List<string> exppre = new List<string>{ "C", "Q", "V", "W", "X", "Y", "Z" };
         expnum += _random.Pick(exppre);
         expnum += _random.Next(100, 1000);
-        List<string> expsuf = new List<string> { "a", "b", "c" };
-        text += Loc.GetString("cmu-paper-contract-experiment", ("EXP", expnum), ("NAME", dat.Name)) + '\n';
-        HashSet<string> ingredients = [];
-        HashSet<string> catalysts = [];
-        foreach(var ingredient in dat.Recipe)
-        {
-            if (ingredient.Value.Item2)
-            {
-                catalysts.Add(Loc.GetString("research-report-ingredient", ("AMOUNT", ingredient.Value.Item1),
-                    ("NAME", reagents[ingredient.Key].LocalizedName)) + '\n');
-            }
-            else
-            {
-                ingredients.Add(Loc.GetString("research-report-ingredient", ("AMOUNT", ingredient.Value.Item1),
-                    ("NAME", reagents[ingredient.Key].LocalizedName)) + '\n');
-            }
-        }
-        foreach(string str in ingredients)
-        {
-            text += str;
-        }
-        if (catalysts.Count > 0)
-        {
-            text += Loc.GetString("research-chem-catalyst") + '\n';
-            foreach(string str in catalysts)
-            {
-                text += str;
-            }
-        }
-        if (materializable)
-        {
-            text += Loc.GetString("admin-chemical-contract-properties-header") + '\n';
-            var properties = _protoman.GetInstances<ReagentPropertyPrototype>();
-            foreach (var property in dat.Effects.OrderBy(effect => properties[effect.Key].LocalizedName))
-            {
-                text += Loc.GetString(
-                    "admin-chemical-contract-property-entry",
-                    ("name", properties[property.Key].LocalizedName),
-                    ("level", property.Value)) + '\n';
-            }
-        }
-
-        text += Loc.GetString("cmu-paper-contract-footer") + '\n';
+        // The paper keeps hiding the property profile except on admin (materializable) contracts.
+        var text = FormatContract(dat, materializable, expnum);
         var paperPrototype = materializable ? "CMUAdminChemicalContract" : "CMUResearchContract";
         var paper = SpawnNextToOrDrop(paperPrototype, source);
         _mets.SetEntityName(paper, name);
@@ -530,6 +699,97 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         }
         return paper;
     }
+
+    /// <summary>
+    /// ARCH-03: the contract text shared by the printed contract paper and the terminal's Contracts tab: the
+    /// difficulty, the recipe and catalysts, a new sub-contract's own recipe, and optionally the property profile.
+    /// With an <paramref name="experiment"/> number the text is the full paper, with the Weyland-Yutani header
+    /// and footer; without one it is the tab entry.
+    /// </summary>
+    public string FormatContract(GeneratedReagentData dat, bool includeProperties, string? experiment = null)
+    {
+        var text = string.Empty;
+        if (experiment is not null)
+        {
+            text += Loc.GetString("cmu-paper-header-experiment") + '\n';
+            text += Loc.GetString("cmu-paper-subheader-experiment", ("NAME", dat.Name)) + '\n';
+        }
+        text += Loc.GetString("research-report-contract-difficulty", ("DIFF", DifficultyName(dat.GenTier))) + '\n';
+        text += experiment is not null
+            ? Loc.GetString("cmu-paper-contract-experiment", ("EXP", experiment), ("NAME", dat.Name)) + '\n'
+            : Loc.GetString("research-report-contract-reagents", ("NAME", dat.Name)) + '\n';
+        AppendRecipe(ref text, dat);
+        if (dat.GenTier >= SharedReagentGeneratorSystem.MixGatedGenTier)
+            text += Loc.GetString("research-report-contract-mix-required") + '\n';
+
+        if (dat.SubContractIsNew && !string.IsNullOrEmpty(dat.SubContractID) &&
+            _generator.ProceduralReagentData.TryGetValue(dat.SubContractID, out var sub))
+        {
+            text += Loc.GetString("research-report-subcontract-header", ("NAME", sub.Name)) + '\n';
+            text += Loc.GetString("research-report-subcontract-reagents", ("NAME", sub.Name), ("PARENT", dat.Name)) + '\n';
+            AppendRecipe(ref text, sub);
+        }
+
+        if (includeProperties)
+        {
+            text += Loc.GetString("admin-chemical-contract-properties-header") + '\n';
+            var properties = _protoman.GetInstances<ReagentPropertyPrototype>();
+            foreach (var property in dat.Effects.OrderBy(effect =>
+                         properties.TryGetValue(effect.Key, out var p) ? p.LocalizedName : effect.Key))
+            {
+                var propertyName = properties.TryGetValue(property.Key, out var proto) ? proto.LocalizedName : property.Key;
+                text += Loc.GetString(
+                    "admin-chemical-contract-property-entry",
+                    ("name", propertyName),
+                    ("level", property.Value)) + '\n';
+            }
+        }
+
+        if (experiment is not null)
+            text += Loc.GetString("cmu-paper-contract-footer") + '\n';
+        return text;
+    }
+
+    /// <summary>Appends a contract's reactant lines, then its catalysts under their own header.</summary>
+    private void AppendRecipe(ref string text, GeneratedReagentData data)
+    {
+        var reagents = _protoman.GetInstances<ReagentPrototype>();
+        List<string> ingredients = new();
+        List<string> catalysts = new();
+        foreach (var ingredient in data.Recipe)
+        {
+            var reagentName = reagents.TryGetValue(ingredient.Key, out var reagent)
+                ? reagent.LocalizedName
+                : _generator.ProceduralReagentData.TryGetValue(ingredient.Key, out var generated)
+                    ? generated.Name
+                    : ingredient.Key;
+            var line = Loc.GetString("research-report-ingredient", ("AMOUNT", ingredient.Value.Item1),
+                ("NAME", reagentName)) + '\n';
+            if (ingredient.Value.Item2)
+                catalysts.Add(line);
+            else
+                ingredients.Add(line);
+        }
+        foreach (var str in ingredients)
+        {
+            text += str;
+        }
+        if (catalysts.Count > 0)
+        {
+            text += Loc.GetString("research-chem-catalyst") + '\n';
+            foreach (var str in catalysts)
+            {
+                text += str;
+            }
+        }
+    }
+
+    private string DifficultyName(int tier) => tier switch
+    {
+        >= 3 => Loc.GetString("research-data-ui-diff-hard"),
+        2 => Loc.GetString("research-data-ui-diff-inter"),
+        _ => Loc.GetString("research-data-ui-diff-easy"),
+    };
     private void PrintData(Entity<ResearchDataTerminalComponent> ent, int idx)
     {
         if (GetResearch(ent.Comp.Faction).Reports.TryGetValue(idx, out var value))
@@ -628,36 +888,41 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             data.ID = $"{data.ID}-{faction}-{_nextContractId++}";
             data.GenTier = _random.Next(1, 4);
             _generator.GenerateStats(ref data);
-
-            var roll = _random.Next(1, 101);
-            switch (data.GenTier)
-            {
-                case 1:
-                    data.ScanPointYield = 3;
-                    data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList["C1"]);
-                    break;
-                case 2:
-                    data.ScanPointYield = 5;
-                    data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList[roll <= 50 ? "C2" : "C3"]);
-                    break;
-                case 3:
-                    // Hard contracts always pin either a botanical or a precious metal.
-                    data.ScanPointYield = 7;
-                    var precious = _generator.ChemicalGenClassesList[SharedReagentGeneratorSystem.PreciousMetalPool];
-                    data.RecipeHint = roll <= 60 || precious.Count == 0
-                        ? _random.Pick(_generator.ChemicalGenClassesList["H1"])
-                        : _random.Pick(precious);
-                    break;
-                default:
-                    data.ScanPointYield = 3;
-                    data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList["C1"]);
-                    break;
-            }
+            AssignContractRewardAndHint(ref data);
             data.PropertyHint = _random.Pick(data.Effects.Keys);
             research.Selectable.Add(data);
         }
         research.NextReroll = _timer.CurTime + RerollTime;
         research.LastTime = _timer.CurTime;
         UpdateFactionUI(faction, announce: true);
+    }
+
+    /// <summary>Sets a contract's credit reward (3/5/7) and the reagent hint pinned into its recipe, by tier.</summary>
+    private void AssignContractRewardAndHint(ref GeneratedReagentData data)
+    {
+        var roll = _random.Next(1, 101);
+        switch (data.GenTier)
+        {
+            case 1:
+                data.ScanPointYield = 3;
+                data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList["C1"]);
+                break;
+            case 2:
+                data.ScanPointYield = 5;
+                data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList[roll <= 50 ? "C2" : "C3"]);
+                break;
+            case 3:
+                // Hard contracts always pin either a botanical or a precious metal.
+                data.ScanPointYield = 7;
+                var precious = _generator.ChemicalGenClassesList[SharedReagentGeneratorSystem.PreciousMetalPool];
+                data.RecipeHint = roll <= 60 || precious.Count == 0
+                    ? _random.Pick(_generator.ChemicalGenClassesList["H1"])
+                    : _random.Pick(precious);
+                break;
+            default:
+                data.ScanPointYield = 3;
+                data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList["C1"]);
+                break;
+        }
     }
 }

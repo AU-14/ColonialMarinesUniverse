@@ -289,8 +289,8 @@ public sealed class KeyedTimerMigrationTest
             Assert.That(entities.HasComponent<ActiveTimerTriggerComponent>(casing), Is.False,
                 "An incomplete chemical payload must cancel timer activation.");
 
-            var beakerA = entities.SpawnEntity("Beaker", MapCoordinates.Nullspace);
-            var beakerB = entities.SpawnEntity("Beaker", MapCoordinates.Nullspace);
+            var beakerA = entities.SpawnEntity("CMBeaker", MapCoordinates.Nullspace);
+            var beakerB = entities.SpawnEntity("CMBeaker", MapCoordinates.Nullspace);
             var chemical = entities.GetComponent<ChemicalPayloadComponent>(chemicalPayload);
             Assert.That(itemSlots.TryInsert(chemicalPayload, chemical.BeakerSlotA, beakerA, user), Is.True);
             Assert.That(itemSlots.TryInsert(chemicalPayload, chemical.BeakerSlotB, beakerB, user), Is.True);

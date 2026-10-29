@@ -35,6 +35,9 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
         if (!TryComp<XRFScannerComponent>(scanner, out var scannerComp))
             return;
         var faction = scannerComp.Faction;
+        // ARCH-02: a nested contract's sub-chemical is identified before the report is written, so the report
+        // lists it as an ingredient rather than an unknown emission that invalidates it.
+        _rdat.IdentifySubContract(args.Reagent);
         var dat = _generator.CreateReport(args.Reagent, false, args.SampleNum, _rdat.GetClearance(faction));
         if (dat is null || !_protoMan.GetInstances<ReagentPrototype>().TryGetValue(args.Reagent, out var chem))
             return;

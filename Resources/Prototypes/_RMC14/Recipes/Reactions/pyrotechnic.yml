@@ -68,6 +68,8 @@
 
 - type: reaction
   id: RMCNapalmHighCombustion
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCNapalm:
       amount: 1
@@ -78,6 +80,8 @@
 
 - type: reaction
   id: RMCNapalmSticky
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCNapalm:
       amount: 1

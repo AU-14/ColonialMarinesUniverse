@@ -29,6 +29,8 @@
   id: RMCAluminiumMetalFoam
   impact: High
   priority: 10
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCAluminum:
       amount: 0.6
@@ -47,6 +49,8 @@
   id: RMCIronMetalFoam
   impact: High
   priority: 10
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCIron:
       amount: 0.6

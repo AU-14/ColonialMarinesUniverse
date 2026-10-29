@@ -84,6 +84,7 @@
     maxIntensity: 80
     maxRange: 5
     maxDuration: 24
+    allowBlueFire: true # CMU14: specialist M240-T tanks (and their B/X/EX/custom children) may fire blue fire
   - type: Tag
     tags:
     - RMCTankFlamerLarge

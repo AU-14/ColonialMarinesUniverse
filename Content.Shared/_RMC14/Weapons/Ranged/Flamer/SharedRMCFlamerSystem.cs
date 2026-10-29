@@ -252,8 +252,42 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
             Intensity = Math.Min(tank.Comp.MaxIntensity, raw.Intensity),
             Duration = Math.Min(tank.Comp.MaxDuration, raw.Duration),
             Radius = tank.Comp.IgnoreReagentRange ? tank.Comp.MaxRange : Math.Min(tank.Comp.MaxRange, raw.Radius),
+            FireEntity = GetTankFireEntity(tank, raw.FireEntity),
         };
         return true;
+    }
+
+    /// <summary>Blue fire: 40 max stacks instead of 20, reserved for specialist tanks.</summary>
+    public static readonly EntProtoId BlueFire = "RMCTileFireBlue";
+
+    /// <summary>
+    /// The fire entity <paramref name="tank"/> actually fires for a fuel whose fire is <paramref name="fire"/>:
+    /// blue fire falls back to the tank's <see cref="RMCFlamerTankComponent.FallbackFire"/> unless the tank
+    /// allows it.
+    /// </summary>
+    public EntProtoId GetTankFireEntity(Entity<RMCFlamerTankComponent> tank, EntProtoId fire)
+    {
+        if (tank.Comp.AllowBlueFire || !IsBlueFire(fire))
+            return fire;
+
+        return tank.Comp.FallbackFire;
+    }
+
+    private bool IsBlueFire(EntProtoId fire)
+    {
+        if (fire.Id == BlueFire.Id)
+            return true;
+
+        if (!_prototypes.HasIndex(fire))
+            return false;
+
+        foreach (var parent in _prototypes.EnumerateParents<EntityPrototype>(fire.Id))
+        {
+            if (parent.ID == BlueFire.Id)
+                return true;
+        }
+
+        return false;
     }
 
     private void AddLoadedFuelExamine(Entity<RMCFlamerTankComponent> tank, FormattedMessage msg)
@@ -474,6 +508,8 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         // CMU14 start - the whole tank solution decides range, spread and fire type, not the first reagent
         if (!_fuelProfile.TryCompute(solution.Value.Comp.Solution, out fuel))
             return false;
+
+        fuel = fuel with { FireEntity = GetTankFireEntity(tank.Value, fuel.FireEntity) };
 
         var maxRange = tank.Value.Comp.IgnoreReagentRange
             ? tank.Value.Comp.MaxRange

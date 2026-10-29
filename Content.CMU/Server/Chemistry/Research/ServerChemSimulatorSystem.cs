@@ -328,7 +328,6 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
         if (chem.Overdose < 1)
             chem.Overdose = 1;
         chem.CriticalOverdose = Math.Max(Math.Min(ent.Comp.Overdose.Value * 2, ent.Comp.Overdose.Value + 30), 10);
-        int credloss = 0;
         if (ent.Comp.Mode != ChemSimulatorMode.Add)
         {
             if (ent.Comp.TargetProperty is null)
@@ -339,7 +338,6 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
                 Dirty(ent);
                 return;
             }
-            credloss = ent.Comp.PropertyCosts[ent.Comp.TargetProperty];
         }
         else
         {
@@ -351,22 +349,15 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
                 Dirty(ent);
                 return;
             }
-            credloss = ent.Comp.PropertyCosts[ent.Comp.ReferenceProperty];
         }
 
-        var reagents = _protoman.GetInstances<ReagentPrototype>();
-        var reagent = reagents[ent.Comp.PickedRecipeChem];
-        if (reagent is not null && reagent.Class >= ReagentClass.Rare)
-            credloss = Math.Max(1, credloss - 1); // never free: see SampleDataForSimulated
-        var faction = _dat.GetFaction(ent.Owner);
         // Simulations spend sample data, never the research credits used for clearance.
-        if (_dat.GetSampleData(faction) < credloss)
+        if (!TryChargeSimulation(ent, out _))
         {
             ent.Comp.Stage = ChemSimulatorStage.Failure;
             UpdateAppearance(ent.Owner, ent.Comp);
             return;
         }
-        _dat.UpdateSampleData(_dat.GetSampleData(faction) - credloss, faction);
         chem.Recipe = recipe.Recipe;
         // The copied parent (or stock) recipe can ask for more precious metal than contracts allow.
         _gen.ClampPreciousAmounts(chem.Recipe);
@@ -397,6 +388,43 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
         _gen.ProceduralReagentData.Add(chem.ID, chem);
         ent.Comp.StatusBar = Loc.GetString("research-sim-status-done");
         Print(ent, chem.ID);
+    }
+
+    /// <summary>
+    /// Charges the faction exactly the displayed cost of the current operation, then counts it towards the
+    /// repeat streak. The price is taken before the streak moves, so this operation pays the streak it was shown.
+    /// </summary>
+    public bool TryChargeSimulation(Entity<ChemSimulatorComponent> ent, out int charged)
+    {
+        charged = 0;
+        var costProperty = ent.Comp.Mode == ChemSimulatorMode.Add ? ent.Comp.ReferenceProperty : ent.Comp.TargetProperty;
+        if (costProperty is null)
+            return false;
+
+        // recompute so the bill is the same table the UI shows (recipe discount and repeat multiplier included)
+        RefreshCosts(ent);
+        if (!ent.Comp.PropertyCosts.TryGetValue(costProperty, out charged))
+            return false;
+
+        var faction = _dat.GetFaction(ent.Owner);
+        if (_dat.GetSampleData(faction) < charged)
+            return false;
+        _dat.UpdateSampleData(_dat.GetSampleData(faction) - charged, faction);
+
+        var key = GetOperationKey(ent);
+        if (key is not null && key == ent.Comp.LastOperation)
+        {
+            ent.Comp.OperationStreak++;
+        }
+        else
+        {
+            ent.Comp.LastOperation = key;
+            ent.Comp.OperationStreak = 1;
+        }
+        // show the next repeat's price straight away
+        RefreshCosts(ent);
+        Dirty(ent);
+        return true;
     }
 
     private void Print(Entity<ChemSimulatorComponent> ent, string ID)

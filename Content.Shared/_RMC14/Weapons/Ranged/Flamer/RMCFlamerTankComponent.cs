@@ -32,4 +32,18 @@ public sealed partial class RMCFlamerTankComponent : Component
 
     [DataField, AutoNetworkedField]
     public List<ProtoId<ReagentPrototype>>? ReagentWhitelist = null;
+
+    // CMU14 start
+    /// <summary>
+    /// Whether this tank can fire blue fire (<see cref="SharedRMCFlamerSystem.BlueFire"/> or a fire entity
+    /// inheriting from it). Only specialist tanks (M240-T, FL3 and equivalents) allow it; any other tank loaded
+    /// with a blue-fire fuel fires <see cref="FallbackFire"/> instead.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool AllowBlueFire;
+
+    /// <summary>Fire entity used in place of a blue fire this tank does not allow.</summary>
+    [DataField, AutoNetworkedField]
+    public EntProtoId FallbackFire = "RMCTileFire";
+    // CMU14 end
 }

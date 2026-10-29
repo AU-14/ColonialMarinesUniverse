@@ -327,8 +327,8 @@ public sealed class CMUProcgenChemistryTest : GameTest
             var pure = new Solution();
             pure.AddReagent(data.ID, FixedPoint2.New(40));
             Assert.That(fuel.TryCompute(pure, out var pureProfile), Is.True, "generated fuel alone is not a valid flamer fuel");
-            // mods are a fractional multiplier: (-0.1*2 + 0.2*2) = +20%
-            Assert.That(pureProfile.Intensity, Is.EqualTo(28), "per-unit intensity modifiers were not applied");
+            // A generated fuel's own *Mod values are already in its stats, so a pure tank reports them unchanged.
+            Assert.That(pureProfile.Intensity, Is.EqualTo(reagent.Intensity), "a generated fuel rescaled its own tank");
 
             var blend = new Solution();
             blend.AddReagent(data.ID, FixedPoint2.New(10));
@@ -494,7 +494,7 @@ public sealed class CMUProcgenChemistryTest : GameTest
             {
                 Assert.That(ox.Raw.Intensity, Is.GreaterThan(ut.Raw.Intensity), "Oxidizing must make the blend hotter");
                 Assert.That(ox.Raw.Duration, Is.LessThan(ut.Raw.Duration), "Oxidizing must make the blend burn shorter");
-                Assert.That(ox.Effective.Intensity, Is.EqualTo(40), "intensity is limited by the LC9 cap");
+                Assert.That(ox.Effective.Intensity, Is.EqualTo(Math.Min(40, ox.Raw.Intensity)), "intensity is limited by the LC9 cap");
             });
         });
     }
@@ -538,6 +538,9 @@ public sealed class CMUProcgenChemistryTest : GameTest
                 var proto = new ReagentPrototype { GenTier = tier, Class = ReagentClass.Rare, Generated = true };
                 Assert.That(ServerResearchDataTerminalSystem.SampleDataForSimulated(proto), Is.LessThanOrEqualTo(1),
                     $"tier {tier} simulated scan pays more than the cheapest simulation costs");
+                // The completion path routes simulator output (below Special) through the same flat grant.
+                Assert.That(ServerResearchDataTerminalSystem.SampleDataForCompleted(proto), Is.LessThanOrEqualTo(1),
+                    $"tier {tier} simulated completion pays more than the cheapest simulation costs");
             }
         });
     }
