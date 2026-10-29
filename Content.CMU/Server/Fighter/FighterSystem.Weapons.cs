@@ -18,6 +18,8 @@ public sealed partial class FighterSystem
     [Dependency] private FighterHardpointSystem _hardpoints = default!;
     [Dependency] private AreaSystem _areas = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
+    private readonly List<FighterWeaponStatus> _weaponLoadoutScratch = [];
+    private readonly List<FighterTarget> _weaponTargetsScratch = [];
 
     private void InitializeWeapons()
     {
@@ -109,19 +111,37 @@ public sealed partial class FighterSystem
     private void RefreshWeapons(Entity<FighterAircraftComponent> aircraft, FighterWeaponsComponent weapons)
     {
         weapons.NextRefresh = _timing.CurTime + TimeSpan.FromSeconds(.5);
-        weapons.Loadout.Clear();
+        var loadout = _weaponLoadoutScratch;
+        loadout.Clear();
         foreach (var uid in weapons.Hardpoints)
             if (!TerminatingOrDeleted(uid) && TryComp(uid, out FighterHardpointComponent? point))
-                weapons.Loadout.Add(GetWeaponStatus((uid, point)));
-        weapons.Targets.Clear();
+                loadout.Add(GetWeaponStatus((uid, point)));
+        var designations = _weaponTargetsScratch;
+        designations.Clear();
         var targets = EntityQueryEnumerator<DropshipTargetComponent>();
         while (targets.MoveNext(out var uid, out _))
-            if (TryGetGroundDesignation(uid, aircraft.Comp, weapons, out var target)) weapons.Targets.Add(target);
+            if (TryGetGroundDesignation(uid, aircraft.Comp, weapons, out var target)) designations.Add(target);
         foreach (var seatUid in new[] { aircraft.Comp.FrontSeat, aircraft.Comp.RearSeat })
             if (seatUid is { } seat && TryComp(seat, out FighterSeatComponent? operatorSeat) &&
                 operatorSeat.Laser is { } laser && TryGetTarget(laser, aircraft, weapons, out var designation))
-                weapons.Targets.Add(designation);
-        weapons.Targets.Sort((left, right) => string.CompareOrdinal(left.Name, right.Name));
+                designations.Add(designation);
+        designations.Sort((left, right) =>
+        {
+            var name = string.CompareOrdinal(left.Name, right.Name);
+            return name != 0 ? name : left.Id.CompareTo(right.Id);
+        });
+        if (!weapons.Loadout.SequenceEqual(loadout))
+        {
+            weapons.Loadout.Clear();
+            weapons.Loadout.AddRange(loadout);
+            DirtyField(aircraft.Owner, weapons, nameof(FighterWeaponsComponent.Loadout));
+        }
+        if (!weapons.Targets.SequenceEqual(designations))
+        {
+            weapons.Targets.Clear();
+            weapons.Targets.AddRange(designations);
+            DirtyField(aircraft.Owner, weapons, nameof(FighterWeaponsComponent.Targets));
+        }
         foreach (var seatUid in new[] { aircraft.Comp.FrontSeat, aircraft.Comp.RearSeat })
         {
             if (seatUid is not { } uid || !TryComp(uid, out FighterSeatComponent? seat) || seat.Target is not { } target) continue;
@@ -138,9 +158,8 @@ public sealed partial class FighterSystem
                 seat.TargetPosition = current.Position;
                 seat.SensorLock = current.Position + offset;
             }
-            Dirty(uid, seat);
+            DirtySeatChanges((uid, seat));
         }
-        Dirty(aircraft.Owner, weapons);
     }
 
     private void OnSelectWeapon(FighterSelectWeaponEvent ev, EntitySessionEventArgs args) => TrySelectWeapon(args.SenderSession.AttachedEntity, ev.Slot);

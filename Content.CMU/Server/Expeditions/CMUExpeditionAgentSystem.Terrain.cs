@@ -10,6 +10,7 @@ using Microsoft.Extensions.ObjectPool;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Utility;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Expeditions;
 
@@ -24,21 +25,39 @@ public sealed partial class CMUExpeditionAgentSystem
     private readonly ObjectPool<List<Box2>> _fireRegionPool =
         new DefaultObjectPool<List<Box2>>(new ListPolicy<Box2>(), 1024);
     private const float FireClearance = 0.1f;
+    private GameTick? _fireSnapshotTick;
+    private GameTick? _acidSnapshotTick;
+    private readonly HashSet<MapId> _fireMaps = new();
+    private readonly HashSet<MapId> _acidMaps = new();
+    private readonly List<(EntityUid Uid, TransformComponent Transform)> _fireCandidates = new();
+    private readonly List<(EntityUid Uid, TransformComponent Transform)> _acidCandidates = new();
 
-    private void RefreshFireRegions()
+    private void RefreshFireRegions(MapId map)
     {
-        foreach (var bucket in _fireCells.Values)
-            _fireRegionPool.Return(bucket);
-        foreach (var regions in _fireBounds.Values)
-            _fireRegionPool.Return(regions);
-        _fireCells.Clear();
-        _fireBounds.Clear();
-        // Soft ignition sensors are absent from the hard-obstacle sweep. Index their
-        // actual bounds once per update, including new spreading fire and extinguished tiles.
-        var query = EntityQueryEnumerator<RMCIgniteOnCollideComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out _, out var transform))
+        if (_fireSnapshotTick != _timing.CurTick)
         {
-            if (TerminatingOrDeleted(uid) || HasComp<ProjectileComponent>(uid) || _mobs.IsAlive(uid))
+            _fireSnapshotTick = _timing.CurTick;
+            _fireMaps.Clear();
+            _fireCandidates.Clear();
+            foreach (var bucket in _fireCells.Values)
+                _fireRegionPool.Return(bucket);
+            foreach (var regions in _fireBounds.Values)
+                _fireRegionPool.Return(regions);
+            _fireCells.Clear();
+            _fireBounds.Clear();
+            var query = EntityQueryEnumerator<RMCIgniteOnCollideComponent, TransformComponent>();
+            while (query.MoveNext(out var uid, out _, out var transform))
+            {
+                if (!TerminatingOrDeleted(uid) && !HasComp<ProjectileComponent>(uid) && !_mobs.IsAlive(uid))
+                    _fireCandidates.Add((uid, transform));
+            }
+        }
+        if (!_fireMaps.Add(map))
+            return;
+        // Gather membership once per tick; only build bounds for maps a route actually uses.
+        foreach (var (uid, transform) in _fireCandidates)
+        {
+            if (transform.MapID != map || TerminatingOrDeleted(uid))
                 continue;
             var position = _transform.GetWorldPosition(transform);
             var bounds = _lookup.GetWorldAABB(uid, transform);
@@ -69,6 +88,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var end = _transform.ToMapCoordinates(to);
         if (start.MapId != end.MapId)
             return false;
+        RefreshFireRegions(start.MapId);
         if (!_fireBounds.TryGetValue(start.MapId, out var regions))
             return true;
         radius += FireClearance;
@@ -98,15 +118,27 @@ public sealed partial class CMUExpeditionAgentSystem
             region.BottomLeft, region.TopRight, radius, escapingHazard);
     }
 
-    private void RefreshAcidTiles()
+    private void RefreshAcidTiles(MapId map)
     {
-        _acidTiles.Clear();
-        // RMC's short-lived spray splatters are static sensors, but are not anchored.
-        // Index them once per frame, not once for every candidate route tile.
-        var query = EntityQueryEnumerator<DamageOnCollideComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var acid, out var transform))
+        if (_acidSnapshotTick != _timing.CurTick)
         {
-            if (!acid.Acidic || HasComp<ProjectileComponent>(uid) || _mobs.IsAlive(uid) ||
+            _acidSnapshotTick = _timing.CurTick;
+            _acidMaps.Clear();
+            _acidCandidates.Clear();
+            _acidTiles.Clear();
+            // Short-lived spray splatters are static sensors, but are not anchored.
+            var query = EntityQueryEnumerator<DamageOnCollideComponent, TransformComponent>();
+            while (query.MoveNext(out var uid, out var acid, out var transform))
+            {
+                if (acid.Acidic && !HasComp<ProjectileComponent>(uid) && !_mobs.IsAlive(uid))
+                    _acidCandidates.Add((uid, transform));
+            }
+        }
+        if (!_acidMaps.Add(map))
+            return;
+        foreach (var (uid, transform) in _acidCandidates)
+        {
+            if (transform.MapID != map || TerminatingOrDeleted(uid) ||
                 !TrySquadCoordinates(transform.Coordinates, out var point) ||
                 !TryComp<MapGridComponent>(point.EntityId, out var grid))
                 continue;
@@ -134,6 +166,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         var indices = _maps.CoordinatesToTile(point.EntityId, grid, point);
         var key = (point.EntityId, indices);
+        RefreshAcidTiles(Transform(point.EntityId).MapID);
         if (_acidTiles.Contains(key))
             return false;
         if (_groundCache.TryGetValue(key, out var safe))
