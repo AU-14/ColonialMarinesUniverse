@@ -141,7 +141,7 @@
         potency: 6
 
 - type: reagent
-  parent: CMUPathogenSporoplasmPlasma
+  parent: CMUPathogenSporoplasm
   id: CMUPathogenSporoplasmNutrient
   # Nothing produces this plasma yet; keep it out of research contract pools until something does.
   flags: NoGeneration
