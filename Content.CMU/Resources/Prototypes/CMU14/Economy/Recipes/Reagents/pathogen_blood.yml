@@ -226,7 +226,7 @@
       - !type:Bloodbursting  
         embryoSpawn: CMU14XenoBloodburster  
         requiresOverdose: true  
-        burstDelay: 0:00:30
+        burstDelay: 30
 
 - type: reagent  
   parent: CMReagent  
