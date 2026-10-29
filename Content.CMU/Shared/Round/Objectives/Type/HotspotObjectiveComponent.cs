@@ -1,13 +1,16 @@
-using Robust.Shared.GameStates;
-
 namespace Content.Shared.CMU14.Round.Objectives.Type;
+
+public enum HotspotVisuals : byte
+{
+    Controller,
+}
 
 /// <summary>
 /// Presence-based zone objective: the strongest alive force inside the radius scores points
 /// every tick. Optional team-size normalization keeps outnumbered sides competitive, and the
 /// zone can relocate between mapper-placed objective markers to keep both teams moving.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class HotspotObjectiveComponent : Robust.Shared.GameObjects.Component
 {
     /// <summary>Spawns automatically from a random objective marker instead of map placement.</summary>
@@ -43,15 +46,16 @@ public sealed partial class HotspotObjectiveComponent : Robust.Shared.GameObject
 
     [DataField] public float NormalizationCap { get; private set; } = 3f;
 
-    /// <summary>Move the zone to a fresh marker after this many scoring ticks; 0 is static.</summary>
+    /// <summary>Move the zone to a fresh marker after this many elapsed ticks; 0 is static.</summary>
     [DataField] public int RelocateAfterTicks { get; private set; }
 
     /// <summary>Scoring ticks one faction needs in total to win the round outright; 0 is no win condition.</summary>
     [DataField] public int TicksToWin { get; private set; }
 
-    [AutoNetworkedField] public string CurrentController = string.Empty;
+    public string CurrentController = string.Empty;
 
-    [AutoNetworkedField] public int TicksScored;
+    // Counts every tick, scored or not, so contested zones still relocate.
+    public int ElapsedTicks;
 
     public float TickAccumulator;
 

@@ -162,12 +162,10 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         return false;
     }
 
-    // CMU14 method: draws a rectangle of line segments into the shared line list (FoF KoTH)
-    public void DrawTacticalMapRectangle(Color color, Vector2 center, int halfWidth, int halfHeight, float thickness = 3f)
+    // CMU14 method: draws a rectangle of line segments into the shared line list (FoF KoTH).
+    // Center and half sizes are classic canvas units: 3 px per tile, min-offset, Y flipped.
+    public void DrawTacticalMapRectangle(Entity<TacticalMapComponent> map, Color color, Vector2 center, float halfWidth, float halfHeight, float thickness = 3f, int depth = 0)
     {
-        if (!TryGetTacticalMap(out var map))
-            return;
-
         var corners = new List<Vector2>(4);
         corners.Add(new Vector2(center.X - halfWidth, center.Y - halfHeight));
         corners.Add(new Vector2(center.X + halfWidth, center.Y - halfHeight));
@@ -179,12 +177,12 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         {
             var a = corners[i];
             var b = corners[(i + 1) % 4];
-            rect.Add(new TacticalMapLine(new Vector2i((int) a.X, (int) a.Y), new Vector2i((int) b.X, (int) b.Y), color, thickness));
+            rect.Add(new TacticalMapLine(new Vector2i((int) a.X, (int) a.Y), new Vector2i((int) b.X, (int) b.Y), color, thickness, null, depth));
         }
 
-        // replace previous rect of same color
-        map.Comp.SharedLines.RemoveAll(l => l.Color == color);
-        map.Comp.SharedLines.AddRange(rect);
+        var shared = map.Comp.SharedLines.Where(l => l.Color != color).ToList();
+        shared.AddRange(rect);
+        map.Comp.SharedLines = shared;
 
         Dirty(map);
     }

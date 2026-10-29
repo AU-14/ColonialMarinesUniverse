@@ -187,6 +187,17 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
         }
     }
 
+    public void RecordObjectiveVictory(string? faction, CMURoundStatisticsOutcome outcome)
+        => TrySetPendingOutcome(ToWinner(faction), outcome, "FoFTimeLimitRule");
+
+    private CMURoundStatisticsWinner ToWinner(string? faction)
+        => faction switch
+        {
+            "govfor" => CMURoundStatisticsWinner.Govfor,
+            "opfor" => CMURoundStatisticsWinner.Threat,
+            _ => CMURoundStatisticsWinner.Unknown,
+        };
+
     private void TrySetPendingOutcome(PendingRoundOutcome outcome)
     {
         _pendingOutcome ??= outcome;

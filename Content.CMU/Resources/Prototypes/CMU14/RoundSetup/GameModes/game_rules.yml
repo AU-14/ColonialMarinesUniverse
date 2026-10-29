@@ -161,3 +161,22 @@
   description: Removes all jobs on the planet's main station prior to round start. Optionally removes jobs on ship stations.
   components:
   - type: RemoveJobsRule
+
+- type: entity
+  parent: BaseGameRule
+  id: AddColonist
+  name: Add Colonists
+  description: Restores the planet map's declared jobs, e.g. the colonist population after RemoveAllJobs. Slot counts come from the map's own StationJobs availableJobs.
+  components:
+  - type: AddColonistRule
+
+- type: entity
+  id: FoFTimeLimitRule
+  parent: BaseGameRule
+  name: Force on Force Time Limit
+  description: Ends Force on Force at the time limit with the hotspot score leader winning.
+  components:
+  - type: FoFTimeLimitRule
+    timeLimit: "75m"
+    scoreAnnounceInterval: "10m"
+    overtime: "20m"
