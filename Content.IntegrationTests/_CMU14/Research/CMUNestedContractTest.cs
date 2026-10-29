@@ -12,7 +12,7 @@ namespace Content.IntegrationTests._CMU14.Research;
 /// <summary>
 /// ARCH-02 / ARCH-03 / FLOW-02: Hard contracts can nest another contract chemical as a capped reactant, the
 /// nested chemical is registered before its parent, the contract paper and the terminal's Contracts tab share
-/// one formatter, and completing a contract pays exactly one sample data (two for Hard).
+/// one formatter, and completing a contract pays 1 / 2 / 4 sample data by difficulty.
 /// </summary>
 [TestFixture]
 public sealed class CMUNestedContractTest : GameTest
@@ -208,7 +208,7 @@ public sealed class CMUNestedContractTest : GameTest
     }
 
     [Test]
-    public async Task ContractSampleDataIsOneOrTwoForHard()
+    public async Task ContractSampleDataScalesWithDifficulty()
     {
         await Server.WaitAssertion(() =>
         {
@@ -236,19 +236,19 @@ public sealed class CMUNestedContractTest : GameTest
             research.CompleteChemical(reagents[hard.ID], faction, null);
             Assert.Multiple(() =>
             {
-                Assert.That(research.GetSampleData(faction), Is.EqualTo(sample + 3), "a Hard contract pays two sample data");
+                Assert.That(research.GetSampleData(faction), Is.EqualTo(sample + 5), "a Hard contract pays four sample data");
                 Assert.That(research.GetCredits(faction), Is.EqualTo(credits + 10));
             });
             research.CompleteChemical(reagents[hard.ID], faction, null);
-            Assert.That(research.GetSampleData(faction), Is.EqualTo(sample + 3), "a faction is paid once per chemical");
+            Assert.That(research.GetSampleData(faction), Is.EqualTo(sample + 5), "a faction is paid once per chemical");
 
-            // Static rules: contracts 1/1/2, simulator output 1, other Special chemicals keep their Reward.
+            // Static rules: contracts 1/2/4, simulator output 1, other Special chemicals keep their Reward.
             Assert.Multiple(() =>
             {
                 foreach (var tier in new[] { 1, 2, 3 })
                 {
                     var contract = new ReagentPrototype { GenTier = tier, Class = ReagentClass.Ultra, Generated = true, Reward = 7 };
-                    Assert.That(ServerResearchDataTerminalSystem.SampleDataForCompleted(contract), Is.EqualTo(tier >= 3 ? 2 : 1));
+                    Assert.That(ServerResearchDataTerminalSystem.SampleDataForCompleted(contract), Is.EqualTo(tier switch { >= 3 => 4, 2 => 2, _ => 1 }));
                 }
                 var simulated = new ReagentPrototype { GenTier = 3, Class = ReagentClass.Rare, Generated = true, Reward = 7 };
                 Assert.That(ServerResearchDataTerminalSystem.SampleDataForCompleted(simulated), Is.EqualTo(1));
@@ -276,14 +276,16 @@ public sealed class CMUNestedContractTest : GameTest
             Assert.Multiple(() =>
             {
                 Assert.That(gen.IdentifiedChemicals.ContainsKey(sub.ID), Is.True, "X's report would show Chem A as an unknown emission");
-                Assert.That(research.GetSampleData(faction), Is.EqualTo(sample + 2), "X is a Hard contract");
+                Assert.That(research.GetSampleData(faction), Is.EqualTo(sample + ServerResearchDataTerminalSystem.HardContractSampleData), "X is a Hard contract");
                 Assert.That(research.GetResearch(faction).CompletedChemicals, Does.Not.Contain(sub.ID),
                     "completing X identifies Chem A but does not complete it for the faction");
             });
 
             // Scanning Chem A on its own completes it under the contract rule for its own tier.
             research.CompleteChemical(reagents[sub.ID], faction, null);
-            Assert.That(research.GetSampleData(faction), Is.EqualTo(sample + 3), "a sub-contract pays one sample data");
+            Assert.That(research.GetSampleData(faction),
+                Is.EqualTo(sample + ServerResearchDataTerminalSystem.HardContractSampleData + ServerResearchDataTerminalSystem.SampleDataForCompleted(reagents[sub.ID])),
+                "a sub-contract pays the sample data of its own tier");
         });
     }
 }

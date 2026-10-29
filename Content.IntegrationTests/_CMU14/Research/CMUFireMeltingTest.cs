@@ -19,7 +19,6 @@ public sealed class CMUFireMeltingTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false };
 
-    private const string Fire = "RMCTileFire";
     private const string Barricade = "CMBarricadeMetal";
     private const string Wall = "CMWallMetal";
     private const string HullWall = "CMUWallWoodReinforcedHeavy";
@@ -91,7 +90,7 @@ public sealed class CMUFireMeltingTest : GameTest
     }
 
     /// <summary>
-    /// Spawns a fire, a barricade, a damageable wall and an indestructible hull wall on one tile, marks the fire
+    /// Spawns a melting source, a barricade, a damageable wall and an indestructible hull wall on one tile, marks the source
     /// as melting at <paramref name="level"/>, and runs the server for <paramref name="seconds"/>.
     /// </summary>
     private async Task<(EntityUid Barricade, EntityUid Wall, EntityUid Hull)> BurnFor(int level, int intensity, double seconds)
@@ -109,7 +108,10 @@ public sealed class CMUFireMeltingTest : GameTest
             barricade = SEntMan.SpawnEntity(Barricade, coords);
             wall = SEntMan.SpawnEntity(Wall, coords);
             hull = SEntMan.SpawnEntity(HullWall, coords);
-            var fire = SEntMan.SpawnEntity(Fire, coords);
+            // A bare anchored source carries the melting component: a real tile fire also burns flammable
+            // barricades on its own, which would make "melting adds no damage" depend on CI timing.
+            var fire = SEntMan.SpawnEntity(null, coords);
+            SEntMan.System<SharedTransformSystem>().AnchorEntity(fire);
 
             Assert.Multiple(() =>
             {

@@ -57,11 +57,14 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     /// <summary>ARCH-02: recipe rolls for the parent contract before nesting is abandoned for a plain recipe.</summary>
     private const int NestedRecipeAttempts = 3;
 
-    /// <summary>FLOW-02: sample data for completing an Easy or Intermediate contract chemical.</summary>
+    /// <summary>FLOW-02: sample data for completing an Easy contract chemical.</summary>
     public const int ContractSampleData = 1;
 
+    /// <summary>FLOW-02: sample data for completing an Intermediate contract chemical.</summary>
+    public const int IntermediateContractSampleData = 2;
+
     /// <summary>FLOW-02: sample data for completing a Hard contract chemical.</summary>
-    public const int HardContractSampleData = 2;
+    public const int HardContractSampleData = 4;
 
     /// <summary>FLOW-24: the GOVFOR research faction id, locked out of research while Insurgency runs.</summary>
     public const string GovforFaction = "govfor";
@@ -497,11 +500,16 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     public static int SampleDataForSimulated(ReagentPrototype proto) => 1;
 
     /// <summary>
-    /// FLOW-02: sample data paid for completing a contract chemical: exactly one, or two for Hard. Credits are
+    /// FLOW-02: sample data paid for completing a contract chemical: 1 Easy, 2 Intermediate, 4 Hard. Credits are
     /// still the contract's full <see cref="ReagentPrototype.Reward"/>.
     /// </summary>
     public static int SampleDataForContract(ReagentPrototype proto)
-        => proto.GenTier >= 3 ? HardContractSampleData : ContractSampleData;
+        => proto.GenTier switch
+        {
+            >= 3 => HardContractSampleData,
+            2 => IntermediateContractSampleData,
+            _ => ContractSampleData,
+        };
 
     /// <summary>
     /// Sample data paid for a faction's first completion of <paramref name="proto"/>: simulator output pays

@@ -1403,6 +1403,7 @@
     maxRange: 8
     maxIntensity: 70
     ignoreReagentRange: true
+    allowBlueFire: true # specialist weapon: full CMSS13 tank range and its own intensity cap
   - type: RMCSolutionTransferWhitelist
     popup: rmc-solution-transfer-whitelist-failed-not-reagent-tank
     targetWhitelist:

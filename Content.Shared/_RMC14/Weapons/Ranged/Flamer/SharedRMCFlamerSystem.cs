@@ -426,6 +426,9 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         if (!CanShootFlamer(flamer, fromCoordinates, toCoordinates, out var tiles, out var solution, out var spec, out var tank)) // CMU14
             return;
 
+        // CMU14: the chain records the tank's primary fuel (read before this shot's fuel is drawn).
+        _fuelProfile.TryCompute(solution.Value.Comp.Solution, out var primaryProfile);
+
         if (!_zLevels.PlayPredictedDirectlyAcrossZ(gun.Comp.SoundGunshotModified, gun, user))
             _audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
 
@@ -448,6 +451,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         chainComp.Spawn = spec.BehaviourEntity;
         chainComp.Tiles = tiles;
         chainComp.Origin = fromCoordinates;
+        chainComp.Reagent = primaryProfile.PrimaryReagent;
         chainComp.Intensity = spec.Intensity;
         chainComp.Duration = spec.Duration;
         chainComp.FirePenetrating = spec.PenetrationLevel >= 1;
