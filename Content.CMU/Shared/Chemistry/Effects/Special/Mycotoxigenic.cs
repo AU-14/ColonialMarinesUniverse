@@ -8,7 +8,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.Network;  
 using Robust.Shared.Prototypes;  
   
-namespace Content.Shared.CMU14.Chemistry.Effects.Special;  
+namespace Content.Shared.CMU.Chemistry.Effects.Special;  
   
 public sealed partial class Mycotoxigenic : RMCChemicalEffect  
 {  
