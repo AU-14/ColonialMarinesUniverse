@@ -1,9 +1,12 @@
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Content.Server.CMU14.HelpRelay;
+using Content.Server.Chat.Managers;
 using Content.Server.Players.RateLimiting;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.BugHelp;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
@@ -13,31 +16,41 @@ using Content.Shared.Roles.Jobs;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Server.CMU14.BugHelp;
 
 /// <summary>
 /// Turns a player's bughelp message into a machine-readable report and hands it to the help relay,
-/// which posts it to the bug report Discord forum channel as one thread per report. The AI fix bot
-/// and the status website consume the report.json attachment and key off the report id, so context
-/// fields are prototype IDs, never localized display names.
+/// which posts it to the bug report Discord channel. The AI fix bot and the status website consume
+/// the report.json attachment and key off the report id, so context fields are prototype IDs, never
+/// localized display names.
 /// </summary>
 public sealed class BugHelpSystem : EntitySystem
 {
     private const string RateLimitKey = "BugHelp";
     private const float NearbyRadius = 3f;
     private const int NearbyCap = 5;
-    private const int ThreadNameCap = 100;
+    private const int TitleCap = 100;
+    private const int WhatHappenedCap = 2000;
+    private const int OptionalTextCap = 1000;
+    private const int ExamineCap = 2000;
+    private const int ItemQueryCap = 64;
+    private const int ItemCandidatesMax = 5;
 
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly HelpRelayManager _relay = default!;
+    [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedJobSystem _jobs = default!;
     [Dependency] private readonly ILogManager _log = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly PlayerRateLimitManager _rateLimit = default!;
 
     private int _sequence;
@@ -55,7 +68,35 @@ public sealed class BugHelpSystem : EntitySystem
                 _ => { })
         );
         _sawmill = _log.GetSawmill("bughelp");
+        _net.RegisterNetMessage<BugHelpOpenMsg>();
+        _net.RegisterNetMessage<BugHelpSubmitMsg>(OnBugHelpSubmit);
     }
+
+    private void OnBugHelpSubmit(BugHelpSubmitMsg message)
+    {
+        if (!_playerManager.TryGetSessionById(message.MsgChannel.UserId, out var session))
+            return;
+
+        var outcome = TrySubmit(
+            session,
+            message.WhatHappened,
+            message.Expected,
+            message.Steps,
+            message.ItemQuery,
+            message.ExamineText,
+            out var reportId);
+        _chat.DispatchServerMessage(session, AckString(outcome, reportId));
+    }
+
+    /// <summary>The same Fluent acks the command uses, delivered to window users in chat.</summary>
+    public static string AckString(BugHelpOutcome outcome, string? reportId) => outcome switch
+    {
+        BugHelpOutcome.Sent => Loc.GetString("cmu-cmd-bughelp-sent", ("id", reportId!)),
+        BugHelpOutcome.Disabled => Loc.GetString("cmu-cmd-bughelp-disabled"),
+        BugHelpOutcome.RateLimited => Loc.GetString("cmu-cmd-bughelp-rate-limited"),
+        BugHelpOutcome.NoEntity => Loc.GetString("cmu-cmd-bughelp-no-entity"),
+        _ => Loc.GetString("cmu-bughelp-window-empty"),
+    };
 
     private void OnRoundRestart(RoundRestartCleanupEvent args)
     {
@@ -66,9 +107,25 @@ public sealed class BugHelpSystem : EntitySystem
     /// Builds the report and hands it to the help relay. All entity state is read synchronously
     /// here; only the Discord link lookup and the HTTP post run off-thread.
     /// </summary>
-    public BugHelpOutcome TrySubmit(ICommonSession player, string message, out string? reportId)
+    public BugHelpOutcome TrySubmit(
+        ICommonSession player,
+        string whatHappened,
+        string? expected,
+        string? steps,
+        string? itemQuery,
+        string? examineText,
+        out string? reportId)
     {
         reportId = null;
+        whatHappened = Cap(whatHappened.Trim(), WhatHappenedCap);
+        expected = Optional(expected, OptionalTextCap);
+        steps = Optional(steps, OptionalTextCap);
+        examineText = Optional(examineText, ExamineCap);
+        itemQuery = Optional(itemQuery, ItemQueryCap);
+
+        if (string.IsNullOrWhiteSpace(whatHappened))
+            return BugHelpOutcome.Empty;
+
         if (!_relay.IsEnabled(HelpSource.BugHelp))
             return BugHelpOutcome.Disabled;
 
@@ -100,7 +157,12 @@ public sealed class BugHelpSystem : EntitySystem
             },
             Report = new BugReportBody
             {
-                WhatHappened = message,
+                WhatHappened = whatHappened,
+                Expected = expected,
+                Steps = steps,
+                ItemQuery = itemQuery,
+                ItemCandidates = itemQuery == null ? null : ResolveItemCandidates(itemQuery),
+                ExamineText = examineText,
             },
             Snapshot = GatherSnapshot(attached),
         };
@@ -170,27 +232,88 @@ public sealed class BugHelpSystem : EntitySystem
 
     private string? OrNull(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
 
+    private static string Cap(string value, int cap) => value.Length > cap ? value[..cap] : value;
+
+    private static string? Optional(string? value, int cap) =>
+        string.IsNullOrWhiteSpace(value) ? null : Cap(value.Trim(), cap);
+
+    /// <summary>
+    /// Player words → ranked prototype IDs. Deterministic substring scoring over every non-abstract
+    /// entity prototype; the AI bot cross-checks candidates against the snapshot, so weak matches are
+    /// attached on purpose — a wrong top-1 is recoverable, a missing candidate is not.
+    /// </summary>
+    private List<BugItemCandidate> ResolveItemCandidates(string query)
+    {
+        var normalized = query.ToLowerInvariant();
+        var candidates = new List<(string Id, double Score)>();
+
+        foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
+        {
+            if (prototype.Abstract)
+                continue;
+
+            var name = prototype.Name;
+            if (Loc.TryGetString(name, out var localized))
+                name = localized;
+
+            var score = ScoreItem(normalized, prototype.ID.ToLowerInvariant(), name.ToLowerInvariant());
+            if (score > 0)
+                candidates.Add((prototype.ID, score));
+        }
+
+        return candidates
+            .OrderByDescending(candidate => candidate.Score)
+            .ThenBy(candidate => candidate.Id.Length)
+            .Take(ItemCandidatesMax)
+            .Select(candidate => new BugItemCandidate { Id = candidate.Id, Score = candidate.Score })
+            .ToList();
+    }
+
+    /// <summary>Substring scorer over already-normalized surfaces. Exposed for tests.</summary>
+    internal static double ScoreItem(string query, string id, string name)
+    {
+        if (id == query)
+            return 1.0;
+
+        if (name == query)
+            return 0.95;
+
+        if (id.Contains(query))
+            return 0.6 + (id.StartsWith(query) ? 0.1 : 0);
+
+        if (name.Contains(query))
+            return 0.55 + (name.StartsWith(query) ? 0.1 : 0);
+
+        if (Words(id).Any(word => word.StartsWith(query)) ||
+            Words(name).Any(word => word.StartsWith(query)))
+        {
+            return 0.3;
+        }
+
+        return 0;
+
+        static IEnumerable<string> Words(string value) => value.Split((char[]?) null, StringSplitOptions.RemoveEmptyEntries);
+    }
+
     private async Task PostReportAsync(BugReport report, NetUserId userId, HelpContext context)
     {
         try
         {
             report.Reporter.DiscordId = await _relay.GetLinkedDiscordId(userId);
 
-            var threadName = $"{report.Id} · {report.Report.WhatHappened}"
+            var title = $"{report.Id} · {report.Report.WhatHappened}"
                 .Replace('\n', ' ')
                 .Replace('\r', ' ');
-            if (threadName.Length > ThreadNameCap)
-                threadName = threadName[..ThreadNameCap];
+            if (title.Length > TitleCap)
+                title = title[..TitleCap];
 
             var reporter = report.Reporter;
             var job = reporter.Job ?? "no job";
             _relay.Post(HelpSource.BugHelp, new HelpPost
             {
                 Author = $"{reporter.Ckey} ({reporter.Character} · {job})",
-                Title = threadName,
-                ThreadName = threadName,
+                Title = title,
                 Description = report.Report.WhatHappened,
-                PingUserId = report.Reporter.DiscordId,
                 Context = context,
                 AttachmentJson = JsonSerializer.Serialize(report),
             });
@@ -208,6 +331,7 @@ public enum BugHelpOutcome
     Disabled,
     RateLimited,
     NoEntity,
+    Empty,
 }
 
 // Report artifact schema "cmu-bugreport/1". Additive changes only inside v1; breaking changes bump

@@ -35,12 +35,6 @@ public sealed record HelpPost
     /// <summary>Embed title; conversations may leave it empty.</summary>
     public string? Title { get; init; }
 
-    /// <summary>Set to create a forum thread (one per bug report). Empty = plain channel message.</summary>
-    public string? ThreadName { get; init; }
-
-    /// <summary>Verified Discord link id to ping. Only ever set from rmc_linked_accounts.</summary>
-    public ulong? PingUserId { get; init; }
-
     /// <summary>Caller-gathered context; when null the manager gathers it on the calling thread.</summary>
     public HelpContext? Context { get; init; }
 
@@ -63,9 +57,8 @@ public static class HelpRelayPayload
     public static HelpWebhookPayload Build(HelpSource source, HelpPost post, string? revision)
     {
         var context = post.Context;
-        var payload = new HelpWebhookPayload
+        return new HelpWebhookPayload
         {
-            ThreadName = post.ThreadName,
             Embeds =
             [
                 new HelpWebhookEmbed
@@ -88,15 +81,6 @@ public static class HelpRelayPayload
                 },
             ],
         };
-
-        // Only verified link-table ids are pinged, so impersonation via the message is impossible.
-        if (post.PingUserId is { } id)
-        {
-            payload.Content = $"<@{id}>";
-            payload.AllowedMentions = new() { Users = [$"{id}"] };
-        }
-
-        return payload;
     }
 
     /// <summary>
@@ -160,16 +144,9 @@ public static class HelpRelayPayload
 // Discord webhook API shapes; self-contained so no upstream Discord DTOs need extending.
 public sealed class HelpWebhookPayload
 {
-    [JsonPropertyName("thread_name")] public string? ThreadName { get; set; }
     [JsonPropertyName("content")] public string? Content { get; set; }
     [JsonPropertyName("username")] public string? Username { get; set; }
-    [JsonPropertyName("allowed_mentions")] public HelpWebhookMentions? AllowedMentions { get; set; }
     [JsonPropertyName("embeds")] public List<HelpWebhookEmbed> Embeds { get; set; } = [];
-}
-
-public sealed class HelpWebhookMentions
-{
-    [JsonPropertyName("users")] public List<string>? Users { get; set; }
 }
 
 public sealed class HelpWebhookEmbed
