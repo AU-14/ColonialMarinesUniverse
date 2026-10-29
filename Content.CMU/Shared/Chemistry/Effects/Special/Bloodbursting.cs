@@ -1,6 +1,6 @@
 using Content.Shared._RMC14.Chemistry.Effects;  
 using Content.Shared._RMC14.Xenonids.Parasite;  
-using Content.Shared.Damage;  
+using Content.Shared.Damage.Systems;  
 using Content.Shared.FixedPoint;  
 using Robust.Shared.Network;  
 using Robust.Shared.Prototypes;  
