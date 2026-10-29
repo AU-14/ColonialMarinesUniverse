@@ -39,7 +39,7 @@ public sealed partial class Mycotoxigenic : RMCChemicalEffect
             return;  
   
         
-        entman.EventBus.RaiseLocalEvent(new CMUMycotoxinInjectDoReanimateEvent(target, target));  
+        entman.EventBus.RaiseLocalEvent(target, new CMUMycotoxinInjectDoReanimateEvent(target, target));  
     }  
   
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)  
