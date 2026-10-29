@@ -9,6 +9,7 @@ using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Mentor;
+using Content.Shared.CMU14.BugHelp; // CMU14: promotion message from the staff window
 using Content.Shared.CCVar;
 using Content.Shared.Input;
 using Robust.Client.Audio;
@@ -75,6 +76,7 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         _net.RegisterNetMessage<MentorClaimMsg>(OnMentorClaim);
         _net.RegisterNetMessage<MentorUnclaimMsg>(OnMentorUnclaim);
         _net.RegisterNetMessage<MentorClientTeleportMsg>();
+        _net.RegisterNetMessage<BugHelpPromoteMsg>(); // CMU14
 
         _config.OnValueChanged(RMCCVars.RMCMentorHelpSound, v => _mHelpSound = new SoundPathSpecifier(v), true);
 
@@ -309,7 +311,8 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         };
     }
 
-    private void OpenMentorOrHelpWindow()
+    // CMU14: public entry for the bug report window's Talk-to-staff button.
+    public void OpenMentorOrHelpWindow()
     {
         SetAHelpButtonPressed(false);
         _unread = false;
@@ -411,6 +414,16 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
             });
         };
 
+        // CMU14: promote the selected conversation into a bug report; the server declines with
+        // a SERVER line in this conversation when the player is offline or nothing was said.
+        window.PromoteButton.OnPressed += _ =>
+        {
+            _net.ClientSendMessage(new BugHelpPromoteMsg
+            {
+                Destination = window.SelectedPlayer,
+            });
+        };
+
         return window;
     }
 
@@ -445,6 +458,7 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
             _mentorWindow.Messages.Clear();
             _mentorWindow.Chat.Editable = true;
             _mentorWindow.TeleportButton.Visible = _mentorWindow.SelectedPlayer != default;
+            _mentorWindow.PromoteButton.Visible = _mentorWindow.SelectedPlayer != default; // CMU14
             UpdateClaimIndicator(player);
             UpdateTypingIndicator();
             if (!_messages.TryGetValue(player, out var authorMessages))

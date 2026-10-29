@@ -18,6 +18,24 @@ public sealed class BugHelpOpenMsg : NetMessage
     }
 }
 
+/// <summary>Client → server: staff promotes a mentor conversation into a bug report (§4.2).</summary>
+public sealed class BugHelpPromoteMsg : NetMessage
+{
+    public override MsgGroups MsgGroup => MsgGroups.Core;
+
+    public Guid Destination;
+
+    public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
+    {
+        Destination = buffer.ReadGuid();
+    }
+
+    public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer)
+    {
+        buffer.Write(Destination);
+    }
+}
+
 /// <summary>Client → server: submit the bug report window's fields.</summary>
 public sealed class BugHelpSubmitMsg : NetMessage
 {
