@@ -38,10 +38,14 @@ jobs:
       - name: Check CRLF
         run: python3 Tools/check_crlf.py
 
-      # CMU14: org owners, maintainers and senior contributors may update the engine submodule in PRs
+      # CMU14: org owners, maintainers, senior contributors and allowlisted users may update the
+      # engine submodule in PRs. The default Actions token has no read:org scope, so the team and
+      # owner checks below 403/404 for everyone and the allowlist is the only exemption path.
       - name: Reject RobustToolbox submodule updates in PRs
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v9.0.0
+        env:
+          SUBMODULE_EXEMPT_USERS: "maertayn"
         with:
           script: |
             const files = await github.paginate(github.rest.pulls.listFiles, {
@@ -75,7 +79,13 @@ jobs:
               username: author,
             }).then(res => res.data.role === 'admin' && res.data.state === 'active').catch(() => false);
 
-            const exempt = isOrgOwner
+            const allowlist = (process.env.SUBMODULE_EXEMPT_USERS ?? '')
+                .split(',')
+                .map(name => name.trim())
+                .filter(name => name.length > 0);
+
+            const exempt = allowlist.includes(author)
+                || isOrgOwner
                 || (await isActiveTeamMember('maintainer'))
                 || (await isActiveTeamMember('senior-contributor'));
 
