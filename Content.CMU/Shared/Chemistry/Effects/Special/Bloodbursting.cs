@@ -3,7 +3,8 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Damage.Systems;  
 using Content.Shared.FixedPoint;  
 using Robust.Shared.Network;  
-using Robust.Shared.Prototypes;  
+using Robust.Shared.Prototypes;
+using Robust.Shared.GameObjects;
   
 namespace Content.Shared.CMU14.Chemistry.Effects.Special;  
   
