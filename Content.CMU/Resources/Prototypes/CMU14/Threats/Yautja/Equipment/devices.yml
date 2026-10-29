@@ -2211,7 +2211,6 @@
     bundle:
     - CMUYautjaClanArmor
     - CMUYautjaMask
-    - CMUYautjaMaskAccessory01Ebony
     - CMUYautjaClanGreaves
 
 - type: entity
