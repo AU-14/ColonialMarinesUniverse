@@ -38,6 +38,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
     private uint _nextIdentifier;
     private TimeSpan _nextRefresh;
     private bool _roundEnded;
+    private (uint Id, PendingForce Force, IEnumerator<ForceDeploymentStep> Steps)? _deployment;
 
     public override void Initialize()
     {
@@ -49,6 +50,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
+        CancelDeployment();
         _forces.Clear();
         _unclaimed.Clear();
         _nextRefresh = TimeSpan.Zero;
@@ -63,6 +65,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
             return;
 
         _roundEnded = true;
+        CancelDeployment();
         _forces.Clear();
         _ghostRole.UpdateAllEui();
     }
@@ -88,6 +91,16 @@ public sealed partial class ForceInterestSystem : EntitySystem
     /// <summary>Registers a deployment. A successful request means queued, not yet spawned.</summary>
     public uint QueueForce(string name, IReadOnlyDictionary<string, int> bodies, Func<IReadOnlySet<NetUserId>, bool> spawn,
         bool ready = true, IEnumerable<NetUserId>? interested = null, IReadOnlyDictionary<string, ProtoId<JobPrototype>>? fallbackJobs = null)
+        => QueueDeployment(name, bodies, players => SpawnImmediately(spawn, players), ready, interested, fallbackJobs);
+
+    /// <summary>
+    /// Queues a deployment whose iterator yields after preparation and each body. Only one step runs per update,
+    /// across all forces. An empty iterator means preparation failed and may be retried; exceptions are never retried.
+    /// </summary>
+    public uint QueueDeployment(string name, IReadOnlyDictionary<string, int> bodies,
+        Func<IReadOnlySet<NetUserId>, IEnumerator<ForceDeploymentStep>> spawn,
+        bool ready = true, IEnumerable<NetUserId>? interested = null,
+        IReadOnlyDictionary<string, ProtoId<JobPrototype>>? fallbackJobs = null)
     {
         var id = ++_nextIdentifier;
         var pending = new PendingForce(name, bodies, spawn, ready, fallbackJobs);
@@ -149,15 +162,21 @@ public sealed partial class ForceInterestSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        if (_roundEnded || _timing.CurTime < _nextRefresh)
+        if (_roundEnded)
             return;
+
+        if (_timing.CurTime < _nextRefresh)
+        {
+            AdvanceDeployment();
+            return;
+        }
 
         _nextRefresh = _timing.CurTime + RefreshInterval;
         var changed = false;
         foreach (var (id, force) in _forces.ToArray())
         {
             changed |= force.Interested.RemoveWhere(player => !CanJoin(force, player)) > 0;
-            if (!force.Ready || force.RetryAt > _timing.CurTime)
+            if (_deployment != null || !force.Ready || force.RetryAt > _timing.CurTime)
                 continue;
 
             // Interest gets first crack at filling the force. Once the wait expires it deploys
@@ -170,12 +189,8 @@ public sealed partial class ForceInterestSystem : EntitySystem
             _forces.Remove(id);
             try
             {
-                using var cost = _performance.MeasureOperation("force-deployment");
-                if (!force.Spawn(force.Interested))
-                {
-                    force.RetryAt = _timing.CurTime + RetryInterval;
-                    _forces.Add(id, force);
-                }
+                force.Started = false;
+                _deployment = (id, force, force.Spawn(force.Interested));
             }
             catch (Exception ex)
             {
@@ -203,6 +218,56 @@ public sealed partial class ForceInterestSystem : EntitySystem
 
         if (changed)
             _ghostRole.UpdateAllEui();
+
+        AdvanceDeployment();
+    }
+
+    private void AdvanceDeployment()
+    {
+        if (_deployment is not { } deployment)
+            return;
+
+        try
+        {
+            using var cost = _performance.MeasureOperation("force-deployment-step");
+            if (deployment.Steps.MoveNext())
+            {
+                deployment.Force.Started = true;
+                if (deployment.Steps.Current != ForceDeploymentStep.Completed)
+                    return;
+            }
+            else if (!deployment.Force.Started)
+            {
+                deployment.Force.RetryAt = _timing.CurTime + RetryInterval;
+                _forces.Add(deployment.Id, deployment.Force);
+                _ghostRole.UpdateAllEui();
+            }
+            else
+            {
+                _sawmill.Warning($"Force deployment '{deployment.Force.Name}' stopped before completion; not retrying partial work.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // A failed step may already have created entities. Retrying would duplicate them.
+            _sawmill.Error($"Force deployment '{deployment.Force.Name}' failed: {ex}");
+        }
+
+        CancelDeployment();
+    }
+
+    private void CancelDeployment()
+    {
+        var deployment = _deployment;
+        _deployment = null;
+        deployment?.Steps.Dispose();
+    }
+
+    private static IEnumerator<ForceDeploymentStep> SpawnImmediately(
+        Func<IReadOnlySet<NetUserId>, bool> spawn, IReadOnlySet<NetUserId> players)
+    {
+        if (spawn(players))
+            yield return ForceDeploymentStep.Completed;
     }
 
     /// <summary>Starts the claim window only for a newly deployed, unoccupied ghost role.</summary>
@@ -234,15 +299,16 @@ public sealed partial class ForceInterestSystem : EntitySystem
     }
 
     private sealed class PendingForce(string name, IReadOnlyDictionary<string, int> bodies,
-        Func<IReadOnlySet<NetUserId>, bool> spawn, bool ready, IReadOnlyDictionary<string, ProtoId<JobPrototype>>? fallbackJobs)
+        Func<IReadOnlySet<NetUserId>, IEnumerator<ForceDeploymentStep>> spawn, bool ready, IReadOnlyDictionary<string, ProtoId<JobPrototype>>? fallbackJobs)
     {
         public readonly string Name = name;
         public readonly IReadOnlyDictionary<string, int> Bodies = bodies;
         public readonly int TotalRoles = bodies.Values.Sum();
-        public readonly Func<IReadOnlySet<NetUserId>, bool> Spawn = spawn;
+        public readonly Func<IReadOnlySet<NetUserId>, IEnumerator<ForceDeploymentStep>> Spawn = spawn;
         public readonly IReadOnlyDictionary<string, ProtoId<JobPrototype>>? FallbackJobs = fallbackJobs;
         public readonly HashSet<NetUserId> Interested = new();
         public bool Ready = ready;
+        public bool Started;
         public TimeSpan ReadyAt;
         public TimeSpan RetryAt;
     }
