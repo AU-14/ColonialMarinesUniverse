@@ -204,3 +204,17 @@
         potency: 4
       - !type:Encrypted
         potency: 1
+
+- type: reagent  
+  id: TestEmbryo  
+  name: test-embryo-chem  
+  group: Medicine  
+  overdose: 10  
+  metabolisms:  
+    Poison:  
+      metabolismRate: 0.5  
+      effects:  
+        - type: Bloodbursting
+          embryoSpawn: CMU14XenoBloodburster  
+          requiresOverdose: true  
+          burstDelay: 0:00:30
