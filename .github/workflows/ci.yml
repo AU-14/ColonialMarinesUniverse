@@ -38,6 +38,7 @@ jobs:
       - name: Check CRLF
         run: python3 Tools/check_crlf.py
 
+      # CMU14: org owners, maintainers and senior contributors may update the engine submodule in PRs
       - name: Reject RobustToolbox submodule updates in PRs
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v9.0.0
@@ -50,7 +51,35 @@ jobs:
               per_page: 100,
             });
 
-            if (files.some(file => file.filename === 'RobustToolbox')) {
+            if (!files.some(file => file.filename === 'RobustToolbox')) {
+              return;
+            }
+
+            const author = context.payload.pull_request.user.login;
+
+            const isActiveTeamMember = async (team) => {
+              try {
+                const res = await github.rest.teams.getMembershipForUserInOrg({
+                  org: context.repo.owner,
+                  team_slug: team,
+                  username: author,
+                });
+                return res.data.state === 'active';
+              } catch {
+                return false;
+              }
+            };
+
+            const isOrgOwner = await github.rest.orgs.getMembershipForUser({
+              org: context.repo.owner,
+              username: author,
+            }).then(res => res.data.role === 'admin' && res.data.state === 'active').catch(() => false);
+
+            const exempt = isOrgOwner
+                || (await isActiveTeamMember('maintainer'))
+                || (await isActiveTeamMember('senior-contributor'));
+
+            if (!exempt) {
               core.setFailed('Do not update the RobustToolbox submodule in pull requests.');
             }
 
