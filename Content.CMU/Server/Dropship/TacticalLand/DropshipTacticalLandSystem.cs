@@ -6,7 +6,7 @@ using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server._RMC14.Dropship;
-using Content.Shared.CMU14.Dropship.GunshipControls; // CMU14
+using Content.Shared.CMU14.Dropship.GunshipControls;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
@@ -1085,8 +1085,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         var canMoveUp = CanMoveTacticalEye(eye, TacticalHoverMapOffset);
         var canMoveDown = CanMoveTacticalEye(eye, -TacticalHoverMapOffset);
         var rotationDegrees = pilotEye?.RotationQuarterTurns * 90 ?? 0;
-        TryComp(ent, out GunshipControlsComponent? gunshipControls); // CMU14: firearm toggle state
-        var state = new DropshipNavigationTacticalLandBuiState(GetNetEntity(eye), clearForLanding, tacticalHover, canMoveUp, canMoveDown, rotationDegrees, doorLocks, false, gunshipControls != null, gunshipControls?.Armed ?? false); // CMU14: firearm state
+        TryComp(ent, out GunshipControlsComponent? gunshipControls);
+        var state = new DropshipNavigationTacticalLandBuiState(GetNetEntity(eye), clearForLanding, tacticalHover, canMoveUp, canMoveDown, rotationDegrees, doorLocks, false, gunshipControls != null, gunshipControls?.Armed ?? false);
         _ui.SetUiState(ent.Owner, DropshipNavigationUiKey.Key, state);
     }
 

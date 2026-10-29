@@ -60,7 +60,7 @@ public sealed class GunshipDirectFireAimEvent(NetCoordinates coordinates) : Enti
 }
 
 /// <summary>
-/// Toggles pilot fire-control from the gunship console UI. // CMU14
+/// Toggles pilot fire-control from the gunship console UI.
 /// </summary>
 [Serializable, NetSerializable]
 public sealed class GunshipFirearmToggleMsg : BoundUserInterfaceMessage;

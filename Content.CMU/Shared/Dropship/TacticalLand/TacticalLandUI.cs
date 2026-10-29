@@ -28,7 +28,6 @@ public sealed class DropshipNavigationTacticalLandBuiState(
     public readonly int RotationDegrees = rotationDegrees;
     public readonly Dictionary<DoorLocation, bool> DoorLockStatus = doorLockStatus;
     public readonly bool RemoteControlStatus = remoteControlStatus;
-    // CMU14: gunship firearm fire-control toggle
     public readonly bool HasFirearm = hasFirearm;
     public readonly bool FirearmArmed = firearmArmed;
 }

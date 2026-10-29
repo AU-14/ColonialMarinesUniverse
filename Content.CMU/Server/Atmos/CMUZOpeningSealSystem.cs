@@ -13,7 +13,7 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.CMU14.Atmos;
 
-// CMU14: seals deck-to-deck atmos openings (stairwells, indoor dropship bay
+// Seals deck-to-deck atmos openings (stairwells, indoor dropship bay
 // pads, look-down openings) when the tile column through them ends in a real
 // floor on either end. The engine then holds those tiles as normal air
 // instead of draining the surrounding room into the deck's vacuum reservoir.

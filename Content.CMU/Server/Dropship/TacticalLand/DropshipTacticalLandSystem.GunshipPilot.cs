@@ -68,11 +68,11 @@ public sealed partial class DropshipTacticalLandSystem
     private static readonly AudioParams ProximityAlarmAudioParams = AudioParams.Default
         .WithLoop(true)
         .WithMaxDistance(24f)
-        .WithVolume(-10f); // CMU14: proximity and integrity alarms get distinct volumes
+        .WithVolume(-10f); // proximity and integrity alarms get distinct volumes
     private static readonly AudioParams LowIntegrityAlarmAudioParams = AudioParams.Default
         .WithLoop(true)
         .WithMaxDistance(24f)
-        .WithVolume(-17f); // CMU14
+        .WithVolume(-17f);
     private static readonly Vector2i[] GunshipProximityOffsets =
     [
         new(-1, -1), new(0, -1), new(1, -1),
@@ -2338,7 +2338,7 @@ public sealed partial class DropshipTacticalLandSystem
                 }
 
                 hasDirectFireWeapon = TryGetDirectFireMount(grid, out _, out var foundWeapon, out _, out _, out var directAmmo)
-                    && IsGunshipFirearmArmed(grid); // CMU14: fire-control toggle gates auto-selection
+                    && IsGunshipFirearmArmed(grid); // fire-control toggle gates auto-selection
                 if (hasDirectFireWeapon)
                 {
                     directFireWeapon = foundWeapon;
@@ -2460,7 +2460,7 @@ public sealed partial class DropshipTacticalLandSystem
         Dirty(pilot, remote);
     }
 
-    // CMU14 method: the ship's direct-fire weapon only auto-selects while every console arms fire-control.
+    // The ship's direct-fire weapon only auto-selects while every console arms fire-control.
     private bool IsGunshipFirearmArmed(EntityUid grid)
     {
         var children = Transform(grid).ChildEnumerator;
@@ -2615,18 +2615,18 @@ public sealed partial class DropshipTacticalLandSystem
         return hazards.Count > 0;
     }
 
-    // CMU14: made public so the nav console master alarm toggle can refresh streams.
+    // Made public so the nav console master alarm toggle can refresh streams.
     public void UpdateGunshipAlarmAudio(Entity<DropshipIntegrityComponent> dropship)
     {
         UpdateGunshipAlarmStream(dropship.Owner,
             dropship.Comp.ProximityAlarmActive && !dropship.Comp.MasterAlarmSilenced,
             dropship.Comp.ProximityAlarmSound,
-            ProximityAlarmAudioParams, // CMU14
+            ProximityAlarmAudioParams,
             ref dropship.Comp.ProximityAlarmStream);
         UpdateGunshipAlarmStream(dropship.Owner,
             dropship.Comp.LowIntegrityAlarmActive && !dropship.Comp.MasterAlarmSilenced,
             dropship.Comp.LowIntegrityAlarmSound,
-            LowIntegrityAlarmAudioParams, // CMU14
+            LowIntegrityAlarmAudioParams,
             ref dropship.Comp.LowIntegrityAlarmStream);
     }
 
@@ -2634,7 +2634,7 @@ public sealed partial class DropshipTacticalLandSystem
         EntityUid dropship,
         bool active,
         SoundSpecifier sound,
-        AudioParams audioParams, // CMU14
+        AudioParams audioParams,
         ref EntityUid? stream)
     {
         if (!active)

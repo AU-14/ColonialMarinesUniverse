@@ -119,7 +119,7 @@ cmu-gunship-lag14-requires-stable-hover = The LAG-14 can only deploy while the g
 cmu-gunship-lag14-no-ground-below = There is no ground directly below the LAG-14.
 cmu-gunship-lag14-area-obstructed = The LAG-14 deployment area below is obstructed.
 
-# CMU14: dropship nav console alarm toggles
+# Dropship nav console alarm toggles
 cmu-gunship-firearm-header = Firearm
 cmu-gunship-firearm-enabled = Enabled
 cmu-gunship-firearm-disabled = Disabled

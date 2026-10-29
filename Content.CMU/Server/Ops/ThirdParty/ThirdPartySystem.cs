@@ -261,7 +261,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         string? entryMethod = overrideDropship.HasValue
             ? overrideDropship.Value ? "shuttle" : "ground"
             : string.IsNullOrWhiteSpace(party.EntryMethod) ? "ground" : party.EntryMethod;
-        // CMU14: presets can force shuttle entry; ground spawn puts parties inside enemy lines unprepared.
+        // Presets can force shuttle entry; ground spawn puts parties inside enemy lines unprepared.
         // Admin overrides keep precedence.
         var groundEntryForbidden = _auRoundSystem.SelectedPreset is { ThirdPartyForceShuttle: true };
         if (groundEntryForbidden
