@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.Destruction;
+using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared.Containers.ItemSlots;
@@ -326,6 +327,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 if (candidate.CollisionClass == VehicleCollisionClass.Ignore)
                     continue;
 
+                // CMU14: only real movement contacts can foul tracks, never occupancy probes.
+                if (applyEffects)
+                    CMUTryStickResin(uid, mover, candidate.Entity);
+
                 if (candidate.CollisionClass == VehicleCollisionClass.Breakable)
                 {
                     var plowImpact = GridVehicleMotionSimulator.IsFrontImpact(
@@ -478,6 +483,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         out CollisionCandidate candidate)
     {
         candidate = default;
+
+        // Movement probes do not raise PreventCollideEvent like ordinary physics contacts do.
+        if (HasComp<MohawkRampRailingComponent>(other))
+            return false;
 
         var otherXform = Transform(other);
         if (!otherXform.Anchored && HasComp<ItemComponent>(other))

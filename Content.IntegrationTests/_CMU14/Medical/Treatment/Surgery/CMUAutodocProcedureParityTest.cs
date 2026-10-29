@@ -500,6 +500,73 @@ public sealed class CMUAutodocProcedureParityTest
         await pair.CleanReturnAsync();
     }
 
+    [Test]
+    public async Task RegeneratedLegsAndHandRestoreSupportAfterPodEjection()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        var em = pair.Server.EntMan;
+        Rig rig = default!;
+        var carriers = new List<EntityUid>();
+        var missing = new[]
+        {
+            (BodyPartType.Leg, BodyPartSymmetry.Left),
+            (BodyPartType.Leg, BodyPartSymmetry.Right),
+            (BodyPartType.Hand, BodyPartSymmetry.Left),
+        };
+        try
+        {
+            await pair.Server.WaitAssertion(() =>
+            {
+                rig = CreateRig(em, map.GridCoords);
+                foreach (var (type, symmetry) in missing)
+                    carriers.Add(em.System<DetachableOrganSystem>().Detach(Part(em, rig.Patient, type, symmetry))!.Value);
+            });
+            await pair.RunTicksSync(2);
+            await pair.Server.WaitAssertion(() =>
+            {
+                Assert.That(em.System<StandingStateSystem>().IsDown(rig.Patient), Is.True);
+                foreach (var (type, symmetry) in missing)
+                {
+                    var state = State(em, rig);
+                    var row = state.Parts.Single(p => p.Type == type && p.Symmetry == symmetry);
+                    var surgery = row.EligibleSurgeries.Single(s => s.SurgeryId == "CMUAutodocRegenerateLimb");
+                    Send(em, rig, new CMUAutodocQueueStepMessage(row.Part, type, symmetry, surgery.SurgeryId,
+                        surgery.NextStepIndex, state.CommandContext!.Value));
+                }
+                Assert.That(rig.Component.Queue.Count, Is.EqualTo(3));
+                for (var i = 0; i < rig.Component.Queue.Count; i++)
+                    rig.Component.Queue[i] = rig.Component.Queue[i] with { DurationSeconds = 1 };
+                Start(em, rig);
+            });
+            await pair.RunTicksSync(pair.SecondsToTicks(3.5f));
+            await pair.Server.WaitAssertion(() =>
+            {
+                Assert.That(rig.Component.Queue, Is.Empty);
+                Assert.That(em.System<CMULegSupportSystem>().HasLegsToStand(rig.Patient), Is.True,
+                    "Both regenerated legs need their feet before the patient can stand.");
+                foreach (var (type, symmetry) in missing)
+                    Part(em, rig.Patient, type, symmetry);
+                Assert.That(rig.Component.BodyContainer.ContainedEntity, Is.Null,
+                    "Completing the queue must automatically eject the restored patient.");
+            });
+            await pair.RunTicksSync(2);
+            await pair.Server.WaitAssertion(() =>
+                Assert.That(em.System<StandingStateSystem>().IsDown(rig.Patient), Is.False,
+                    "The leg-loss down state must be reevaluated after leaving the pod."));
+        }
+        finally
+        {
+            await pair.Server.WaitPost(() =>
+            {
+                foreach (var carrier in carriers)
+                    if (em.EntityExists(carrier)) em.DeleteEntity(carrier);
+                if (rig != null) DeleteRig(em, rig);
+            });
+        }
+        await pair.CleanReturnAsync();
+    }
+
     private static Rig CreateRig(IEntityManager em, EntityCoordinates coordinates)
     {
         var pod = em.SpawnEntity("CMUAutodocPod", coordinates.Offset(new Vector2(1, 0)));

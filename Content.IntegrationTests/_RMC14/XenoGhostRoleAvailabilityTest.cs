@@ -24,8 +24,10 @@ public sealed class XenoGhostRoleAvailabilityTest
       0: Alive
       200: Dead
 ";
-    [Test]
-    public async Task LarvaDoesNotRegisterAsGhostRole()
+    // CMU14: every queue-only caste must stay out of ghost-role registration.
+    [TestCase("CMXenoLarva")]
+    [TestCase("CMU14XenoBloodburster")]
+    public async Task LarvaDoesNotRegisterAsGhostRole(string prototype)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -42,7 +44,7 @@ public sealed class XenoGhostRoleAvailabilityTest
 
         await server.WaitAssertion(() =>
         {
-            larva = entMan.SpawnEntity("CMXenoLarva", MapCoordinates.Nullspace);
+            larva = entMan.SpawnEntity(prototype, MapCoordinates.Nullspace);
 
             var larvaNet = entMan.GetNetEntity(larva);
             Assert.That(ghostRole.GetGhostRoleCount(), Is.EqualTo(0));

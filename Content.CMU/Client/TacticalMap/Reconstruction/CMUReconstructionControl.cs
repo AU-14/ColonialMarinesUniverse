@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 using Content.Shared.Maps;
 using Content.Shared.CMU14.TacticalMap.Reconstruction;
@@ -175,9 +176,12 @@ public sealed partial class CMUReconstructionControl : Control
 
     private void UploadPending()
     {
-        var timer = System.Diagnostics.Stopwatch.StartNew();
+        if (_render.PendingUploads.Count == 0)
+            return;
+
+        var started = Stopwatch.GetTimestamp();
         var uploaded = 0;
-        while (uploaded < 24 && timer.Elapsed.TotalMilliseconds < 2 && _render.PendingUploads.TryDequeue(out var chunk))
+        while (uploaded < 24 && Stopwatch.GetElapsedTime(started).TotalMilliseconds < 2 && _render.PendingUploads.TryDequeue(out var chunk))
         {
             _render.QueuedUploads.Remove(chunk);
             UploadChunk(chunk.X, chunk.Y, chunk.Level);
@@ -281,8 +285,11 @@ public sealed partial class CMUReconstructionControl : Control
     public void PrepareResources()
     {
         UploadPending();
-        var timer = System.Diagnostics.Stopwatch.StartNew();
-        for (var i = 0; i < 4 && timer.Elapsed.TotalMilliseconds < 2 && _render.PendingSurfaces.TryDequeue(out var surface); i++)
+        if (_render.PendingSurfaces.Count == 0)
+            return;
+
+        var started = Stopwatch.GetTimestamp();
+        for (var i = 0; i < 4 && Stopwatch.GetElapsedTime(started).TotalMilliseconds < 2 && _render.PendingSurfaces.TryDequeue(out var surface); i++)
             LoadSurfaces([surface]);
     }
 

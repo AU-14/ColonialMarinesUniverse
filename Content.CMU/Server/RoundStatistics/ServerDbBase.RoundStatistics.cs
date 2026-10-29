@@ -12,6 +12,7 @@ public abstract partial class ServerDbBase
         CMURoundStatisticsQuery query)
     {
         var preset = Enum.IsDefined(query.Preset) ? query.Preset : CMURoundStatisticsPreset.DistressSignal;
+        var period = Enum.IsDefined(query.Period) ? query.Period : CMURoundStatisticsPeriod.OneMonth;
         var planet = string.IsNullOrWhiteSpace(query.PlanetId) ? null : query.PlanetId.Trim();
         var threat = string.IsNullOrWhiteSpace(query.ThreatId) ? null : query.ThreatId.Trim();
         var search = query.Search.Trim();
@@ -40,7 +41,7 @@ public abstract partial class ServerDbBase
         var dashboard = new CMURoundStatisticsDashboard(modes,
             archive.Skip(page * CMURoundStatisticsQuery.PageSize).Take(CMURoundStatisticsQuery.PageSize).ToList())
         {
-            Query = new CMURoundStatisticsQuery(preset, planet, search, page, threat, band.Band),
+            Query = new CMURoundStatisticsQuery(preset, planet, search, page, threat, band.Band, period),
             SelectedMode = selected,
             AvailablePlanets = fullMode.Planets,
             ArchiveTotal = archive.Count,

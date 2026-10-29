@@ -601,7 +601,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         }
 
         var dropshipId = Transform(computer).GridUid;
-        if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp))
+        // CMU14: if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp))
+        if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp) ||
+            HasComp<MapComponent>(dropshipId)) // CMU14: saved terrain can have Shuttle, but cannot fly.
         {
             Log.Warning($"Tried to launch {ToPrettyString(computer)} outside of a shuttle.");
             return false;
@@ -1125,7 +1127,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
     protected override bool IsShuttle(EntityUid dropship)
     {
-        return HasComp<ShuttleComponent>(dropship);
+        // CMU14: planet maps may retain Shuttle from their saved grid physics.
+        // return HasComp<ShuttleComponent>(dropship);
+        return HasComp<ShuttleComponent>(dropship) && !HasComp<MapComponent>(dropship);
     }
 
     protected override bool IsInFTL(EntityUid dropship)

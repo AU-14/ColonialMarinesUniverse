@@ -63,7 +63,8 @@ public sealed partial class YautjaPreyTrackingSystem : EntitySystem
         {
             _tacticalMap.RemoveYautjaPreyBlip(ent.Owner, oldMap);
             ent.Comp.Map = null;
-            Dirty(ent);
+            if (oldMap != null)
+                Dirty(ent);
             return;
         }
 
@@ -71,6 +72,7 @@ public sealed partial class YautjaPreyTrackingSystem : EntitySystem
             _tacticalMap.RemoveYautjaPreyBlip(ent.Owner, oldMapUid);
 
         ent.Comp.Map = newMap;
-        Dirty(ent);
+        if (oldMap != newMap)
+            Dirty(ent);
     }
 }

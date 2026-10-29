@@ -652,7 +652,6 @@ public sealed partial class ANPRCRadioSystem
             RetransSlotB = radio.RetransSlotB,
             AntennaPeaked = radio.AntennaPeaked,
             OffAuto = IsOffAuto(radio),
-            Jammed = radio.Enabled && _garble.GetJamIntensity(ent.Owner) != RadioJamIntensity.None,
             JammerBaselineNeeded = radio.JammerFixBaseline,
             DrawPerSecond = GetDrawPerSecond(ent),
             KeyAnalyses = _crypto.BuildAnalysisStates(ent.Owner, radio),
@@ -684,6 +683,7 @@ public sealed partial class ANPRCRadioSystem
             if (_garble.TryGetNearestJammer(ent.Owner, out var jammer, out var jammerPosition) && jammer == target)
                 state.JammerBearingDegrees = CompassBearing(_transform.GetWorldPosition(ent.Owner), jammerPosition);
         }
+        state.Jammed = radio.Enabled && _garble.GetJamIntensity(ent.Owner) != RadioJamIntensity.None;
 
         if (TryGetCarrier(ent, out var carrier, out var distance, out var bearing))
         {

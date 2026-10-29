@@ -1196,7 +1196,7 @@ ent-CMUYautjaSnareArrow = snare arrow
     .desc = A bow launched snare.
 
 ent-CMUYautjaQuiverStrap = quiver strap
-    .desc = A strap that can hold a bow with a quiver for arrows.
+    .desc = A strap that holds up to eight bows and arrows in total, with room for one hunting bow and seven arrows.
 
 ent-CMUYautjaArrowProjectile = arrow
 
@@ -1997,7 +1997,7 @@ ent-CMUYautjaStructureYautjaMachinesMixer1Nopower = yautja mixer1 nopower
     .desc = An ancient Yautja hunting-ground structure.
 
 ent-CMUYautjaStructureYautjaMachinesDispenser = Chemical dispenser
-    .desc = A complex machine for mixing elements into chemicals. A Wey-Yu product.
+    .desc = A hunter-built machine that draws elements from its reserves and blends them into chemicals.
 
 ent-CMUYautjaStructureYautjaMachinesBeaker1 = yautja +beaker1
     .desc = An ancient Yautja hunting-ground structure.

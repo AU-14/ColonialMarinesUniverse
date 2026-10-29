@@ -78,7 +78,7 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
         UpdateAllUi();
     }
 
-    private void UpdateAllUi()
+    public void UpdateAllUi()
     {
         var state = BuildState();
         var query = EntityQueryEnumerator<BudgetConsoleComponent>();

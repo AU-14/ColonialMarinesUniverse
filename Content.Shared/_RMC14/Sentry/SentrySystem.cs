@@ -522,7 +522,9 @@ public sealed partial class SentrySystem : EntitySystem
 
         var direction = rotation.GetCardinalDir();
         coordinates = coordinates.Offset(direction.ToVec());
-        if (!_rmcMap.CanBuildOn(coordinates))
+        // CMU14: allow deploying against barricades while preserving other obstruction checks.
+        // if (!_rmcMap.CanBuildOn(coordinates))
+        if (!_rmcMap.CanDeployWeaponOn(coordinates))
         {
             var msg = Loc.GetString("rmc-sentry-need-open-area", ("sentry", sentry));
             _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);

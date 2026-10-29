@@ -1122,7 +1122,7 @@ public sealed class CMUReconHandshakeTestSystem : EntitySystem
         SubscribeLocalEvent<BoundUserInterfaceMessageAttempt>(OnMessage);
     }
 
-    private void OnMessage(BoundUserInterfaceMessageAttempt args)
+    private void OnMessage(ref BoundUserInterfaceMessageAttempt args)
     {
         if (args.Target != Target)
             return;

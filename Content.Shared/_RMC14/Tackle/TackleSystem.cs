@@ -44,6 +44,9 @@ public sealed partial class TackleSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedGunSystem _gunSystem = default!;
 
+    private const float YautjaTackleChanceMultiplier = 0.2f; // CMU14: CM-SS13 tackle_mult for a Yautja target
+    private const int YautjaTackleCounterOffset = 2; // CMU14: CM-SS13 tackle counter offset for a Yautja target
+
     private readonly List<EntityUid> _trackersToRemove = new();
 
     public override void Initialize()
@@ -69,61 +72,6 @@ public sealed partial class TackleSystem : EntitySystem
 
         DoDisarmEffects(user, target);
 
-        // CMU14 Begin: regular Yautja require several successful Xeno tackle rolls.
-        if (TryComp(target, out YautjaComponent? yautja)
-            && !HasComp<YautjaBadBloodComponent>(target)
-            && HasComp<XenoComponent>(user))
-        {
-            if (_net.IsClient)
-                return;
-
-            if (!_random.Prob(yautja.XenoTackleSuccessChance))
-            {
-                ShowYautjaTackleAttempt(user, target);
-                return;
-            }
-
-            var now = _timing.CurTime;
-            var progress = EnsureComp<YautjaTackleProgressComponent>(target);
-            if (progress.Successes > 0 && now >= progress.LastSuccessAt + yautja.XenoTackleExpireAfter)
-                progress.Successes = 0;
-
-            progress.Successes++;
-            progress.LastSuccessAt = now;
-
-            if (progress.Successes < Math.Max(1, yautja.XenoTackleSuccessesRequired))
-            {
-                ShowYautjaTackleAttempt(user, target);
-                return;
-            }
-
-            RemComp<YautjaTackleProgressComponent>(target);
-            if (HasComp<KnockedDownComponent>(target))
-            {
-                ShowYautjaTackleAttempt(user, target);
-                return;
-            }
-
-            _adminLog.Add(LogType.RMCTackle, $"{ToPrettyString(user)} tackled down {ToPrettyString(target)}.");
-            var successSelf = Loc.GetString("cm-tackle-success-self", ("target", Identity.Name(target, EntityManager, user)));
-            var successTarget = Loc.GetString("cm-tackle-success-target", ("user", Identity.Name(user, EntityManager, target)));
-            DoPvsPopups(user,
-                target,
-                successSelf,
-                successTarget,
-                other => Loc.GetString("cm-tackle-success-observer",
-                    ("user", Identity.Name(user, EntityManager, other)),
-                    ("target", Identity.Name(target, EntityManager, other))));
-
-            _audio.PlayPvs(target.Comp.KnockdownSound, target);
-            var yautjaKnockdown = tackle.StunMin < tackle.StunMax
-                ? _random.Next(tackle.StunMin, tackle.StunMax)
-                : tackle.StunMin;
-            _stun.TryKnockdown(target.Owner, yautjaKnockdown * 2, true, drop: false, force: true);
-            return;
-        }
-        // CMU14 End
-
         var time = _timing.CurTime;
         var recently = EnsureComp<TackledRecentlyComponent>(user);
         var tracker = recently.Trackers.GetValueOrDefault(target);
@@ -140,8 +88,23 @@ public sealed partial class TackleSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (tracker.Count < tackle.Min ||
-            tracker.Count < _random.Next(tackle.Min, tackle.Max + 1))
+        // CMU14: upstream condition, kept verbatim and bound to a local so a Yautja can be resolved
+        // separately below; upstream was `if (tracker.Count < tackle.Min || tracker.Count < _random.Next(...))`.
+        var failing = tracker.Count < tackle.Min ||
+                      tracker.Count < _random.Next(tackle.Min, tackle.Max + 1);
+
+        // CMU14 Begin: CM-SS13 (/mob/living/carbon/xenomorph/attack_alien.dm) tackles a Yautja with
+        // tackle_mult 0.2 and +2 on both ends of the tackle counter, so its fail check differs.
+        if (IsRegularYautja(target))
+        {
+            var minTackles = tackle.Min + YautjaTackleCounterOffset;
+            var maxTackles = tackle.Max + YautjaTackleCounterOffset;
+            failing = tracker.Count < minTackles ||
+                      (tracker.Count < maxTackles && !_random.Prob(tackle.Chance * YautjaTackleChanceMultiplier));
+        }
+        // CMU14 End
+
+        if (failing) // CMU14: tests the condition assembled above instead of the upstream expression
         {
             _adminLog.Add(LogType.RMCTackle, $"{ToPrettyString(user)} tried to tackle {ToPrettyString(target)}.");
 
@@ -255,7 +218,6 @@ public sealed partial class TackleSystem : EntitySystem
         var attackerSkill = _skills.GetSkill(user, disarm.Skill);
         var defenderSkill = _skills.GetSkill(target.Owner, disarm.Skill);
         disarmChance -= 5 * attackerSkill;
-        disarmChance -= GetYautjaShoveChanceBonus(user) * 100f;
         disarmChance += 5 * defenderSkill;
 
         if (disarmChance <= 25)
@@ -352,26 +314,13 @@ public sealed partial class TackleSystem : EntitySystem
         _colorFlash.RaiseEffect(Color.Aqua, new List<EntityUid> { target }, Filter.PvsExcept(user));
     }
 
-    // CMU14 method: shared feedback for unsuccessful or incomplete Yautja tackle sequences.
-    private void ShowYautjaTackleAttempt(EntityUid user, EntityUid target)
+    // CMU14 method
+    /// <summary>
+    /// CM-SS13 keeps Bad Bloods outside its Yautja species rules, so only regular Yautja get them here.
+    /// </summary>
+    private bool IsRegularYautja(EntityUid target)
     {
-        _adminLog.Add(LogType.RMCTackle, $"{ToPrettyString(user)} tried to tackle {ToPrettyString(target)}.");
-        var selfPopup = Loc.GetString("cm-tackle-try-self", ("target", Identity.Name(target, EntityManager, user)));
-        var targetPopup = Loc.GetString("cm-tackle-try-target", ("user", Identity.Name(user, EntityManager, target)));
-        DoPvsPopups(user,
-            target,
-            selfPopup,
-            targetPopup,
-            other => Loc.GetString("cm-tackle-try-observer",
-                ("user", Identity.Name(user, EntityManager, other)),
-                ("target", Identity.Name(target, EntityManager, other))));
-    }
-
-    private float GetYautjaShoveChanceBonus(EntityUid user)
-    {
-        return TryComp(user, out YautjaComponent? yautja)
-            ? yautja.ShoveChanceBonus
-            : 0f;
+        return HasComp<YautjaComponent>(target) && !HasComp<YautjaBadBloodComponent>(target);
     }
 
     private void DoPvsPopups(EntityUid user, EntityUid target, string selfPopup, string targetPopup, Func<EntityUid, string> othersPopup, PopupType selfPopupType = PopupType.Small)

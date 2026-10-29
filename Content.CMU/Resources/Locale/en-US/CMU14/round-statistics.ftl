@@ -1,3 +1,10 @@
+cmu-round-stats-period = Period
+cmu-round-stats-one-week = 1 week
+cmu-round-stats-two-weeks = 2 weeks
+cmu-round-stats-one-month = 1 month
+cmu-round-stats-three-months = 3 months
+cmu-round-stats-six-months = 6 months
+cmu-round-stats-one-year = 1 year
 cmu-round-stats-title = CMU Round Outcomes
 cmu-round-stats-heading = Operational Outcomes
 cmu-round-stats-loading = Loading recorded history…
@@ -67,3 +74,5 @@ cmu-round-stats-matchup-file = MATCHUP FILE
 cmu-round-stats-round-file = ROUND FILE
 cmu-round-stats-round-label = Round
 cmu-round-stats-winner = Winner
+
+cmu-round-stats-all-time = All time
