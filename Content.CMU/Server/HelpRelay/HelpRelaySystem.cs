@@ -13,6 +13,6 @@ public sealed class HelpRelaySystem : EntitySystem
     public override void Initialize()
     {
         _relay.Initialize();
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _relay.ClearConversations());
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _relay.ClearRoundState());
     }
 }

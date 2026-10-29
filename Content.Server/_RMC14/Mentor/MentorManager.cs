@@ -647,6 +647,7 @@ public sealed partial class MentorManager : IPostInjectInit
     //    var username = authorName != null ? $"{authorName} → {destinationName}" : $"System → {destinationName}";
     //    var color = 0xFFA500;
 
+    // CMU14
     //    _ticker ??= _entMan.System<GameTicker>();
     //    var roundId = _ticker.RoundId;
     //    var roundState = _ticker.RunLevel switch
@@ -658,6 +659,7 @@ public sealed partial class MentorManager : IPostInjectInit
     //    };
     //    var footerText = $"Mentor Help – {roundState}";
 
+    // CMU14
     //    return new WebhookPayload
     //    {
     //        Username = username,
@@ -673,6 +675,7 @@ public sealed partial class MentorManager : IPostInjectInit
     //    };
     //}
 
+    // CMU14
     //private async Task PostWebhook(WebhookPayload payload)
     //{
     //    var json = JsonSerializer.Serialize(payload);
@@ -692,6 +695,7 @@ public sealed partial class MentorManager : IPostInjectInit
     //    }
     //}
 
+    // CMU14
     //private void StartQueueProcessor()
     //{
     //    if (Interlocked.Exchange(ref _queueProcessorStarted, 1) == 1)
@@ -699,6 +703,7 @@ public sealed partial class MentorManager : IPostInjectInit
     //    Task.Run(ProcessQueueAsync);
     //}
 
+    // CMU14
     //private async Task ProcessQueueAsync()
     //{
     //    while (true)
