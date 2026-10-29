@@ -48,6 +48,11 @@ public sealed class CMUInteractionRangeTest : GameTest
   parent: CMURangeFixture
   id: CMURangeItem
   components:
+  - type: Physics
+      bodyType: Static
+      canCollide: true
+  - type: Fixtures
+      fixtures: {}
   - type: Item
     size: Tiny
 
