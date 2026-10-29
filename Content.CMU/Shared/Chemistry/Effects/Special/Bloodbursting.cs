@@ -3,22 +3,22 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Damage.Systems;  
 using Content.Shared.FixedPoint;  
 using Robust.Shared.Network;  
-using Robust.Shared.Prototypes;
-using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;  
+using Robust.Shared.GameObjects;  
   
 namespace Content.Shared.CMU14.Chemistry.Effects.Special;  
   
 public sealed partial class Bloodbursting : RMCChemicalEffect  
 {  
-      
+  
     [DataField]  
     public bool RequiresOverdose = true;  
   
-    
+  
     [DataField]  
     public EntProtoId EmbryoSpawn = "CMU14XenoBloodburster";  
   
-      
+  
     [DataField]  
     public TimeSpan? BurstDelay;  
   
@@ -40,11 +40,11 @@ public sealed partial class Bloodbursting : RMCChemicalEffect
         var entman = IoCManager.Resolve<IEntityManager>();  
         var target = args.TargetEntity;  
   
-          
+  
         if (IoCManager.Resolve<INetManager>().IsClient)  
             return;  
   
-          
+  
         if (!entman.TryGetComponent<InfectableComponent>(target, out var infectable) ||  
             infectable.BeingInfected ||  
             entman.HasComponent<VictimInfectedComponent>(target))  
@@ -53,9 +53,9 @@ public sealed partial class Bloodbursting : RMCChemicalEffect
         }  
   
         var parasiteSys = entman.System<SharedXenoParasiteSystem>();  
-        var infected = entman.EnsureComp<VictimInfectedComponent>(target);  
+        var infected = entman.AddComponent<VictimInfectedComponent>(target);  
   
-        
+  
         if (BurstDelay != null)  
             parasiteSys.SetBurstDelay((target, infected), BurstDelay.Value);  
   
