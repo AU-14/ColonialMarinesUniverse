@@ -36,7 +36,7 @@ public sealed partial class Bloodbursting : RMCChemicalEffect
   
     private void TryInfect(RMCChemicalEffectSystem system, RMCReagentEffectArgs args)  
     {  
-        var entman = args.EntityManager;  
+        var entman = IoCManager.Resolve<IEntityManager>();  
         var target = args.TargetEntity;  
   
           
