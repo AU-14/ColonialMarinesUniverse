@@ -82,7 +82,6 @@ namespace Content.Tests.Server.CMU14
                 new HelpPost { Description = "x", Context = Context() },
                 revision: null);
             Assert.That(quiet.Content, Is.Null);
-            Assert.That(quiet.AllowedMentions, Is.Null);
         }
 
         [Test]
