@@ -65,6 +65,6 @@ public sealed partial class Bloodbursting : RMCChemicalEffect
   
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)  
         => RequiresOverdose  
-            ? "Overdoses implant a xeno embryo that hatches into a bloodburster."  
-            : "Implants a xeno embryo that hatches into a bloodburster.";  
+            ? "Overdoses implant a neomorph embyro."  
+            : "Implants a neomorph embyro.";  
 }
