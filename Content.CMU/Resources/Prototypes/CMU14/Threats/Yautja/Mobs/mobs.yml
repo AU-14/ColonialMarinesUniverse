@@ -41,9 +41,7 @@
   # the queen rolls 40% a hit to take a limb, which shredded hunters. a quarter of that here
   - type: XenoMeleeSeverResistance
     chanceMultiplier: 0.25
-  # crossing into crit keeps them up and fighting for a bit before they drop, same thing xenos get
-  - type: CriticalGraceTime
-    graceDuration: 20
+  # no crit grace, cmss13 preds drop the tick they cross crit. this beeps first so they know to SD
   - type: YautjaVitalsWarning
   - type: TacticalMapTracked
     trackDead: true
@@ -294,8 +292,6 @@
   # same queen sever cut as hunters, and youngbloods don't even regrow
   - type: XenoMeleeSeverResistance
     chanceMultiplier: 0.25
-  - type: CriticalGraceTime
-    graceDuration: 20
   - type: YautjaVitalsWarning
   - type: Language
     spokenLanguages:
