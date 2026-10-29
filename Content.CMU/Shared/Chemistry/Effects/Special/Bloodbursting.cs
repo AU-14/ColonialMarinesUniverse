@@ -6,7 +6,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Prototypes;  
 using Robust.Shared.GameObjects;  
   
-namespace Content.Shared.CMU14.Chemistry.Effects.Special;  
+namespace Content.Shared.CMU.Chemistry.Effects.Special;  
   
 public sealed partial class Bloodbursting : RMCChemicalEffect  
 {  
