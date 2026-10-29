@@ -115,6 +115,7 @@ public sealed partial class FighterSystem
     {
         weapons.NextRefresh = _timing.CurTime + TimeSpan.FromSeconds(.5);
         var loadout = _weaponLoadoutScratch;
+        var designations = _weaponTargetsScratch;
         loadout.Clear();
         foreach (var uid in weapons.Hardpoints)
             if (!TerminatingOrDeleted(uid) && TryComp(uid, out FighterHardpointComponent? point))
