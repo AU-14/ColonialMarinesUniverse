@@ -1,10 +1,12 @@
 using Content.Shared._RMC14.Xenonids;  
 using Content.Shared._RMC14.Xenonids.Parasite;  
+using Content.Shared.CMU14.Xenomorphs.Pathogen;  
+using Content.Shared.CMU14.Xenomorphs.Pathogen.MycotoxinInject;  
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;  
 using Content.Shared.Mobs;  
 using Content.Shared.Mobs.Components;  
-using Content.Shared.Popups;  
-using Robust.Shared.Network;  
+using Robust.Shared.GameObjects;  
+using Robust.Shared.Network;    
   
 namespace Content.Shared.CMU14.Xenomorphs.Pathogen;  
   
