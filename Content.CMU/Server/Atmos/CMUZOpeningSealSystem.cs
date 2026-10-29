@@ -115,8 +115,11 @@ public sealed class CMUZOpeningSealSystem : EntitySystem
 
     private bool IsAirtightSealed(EntityUid grid, Vector2i indices)
     {
-        if (!_gridAtmosQuery.TryComp(grid, out var atmos)
-            || !atmos.Tiles.TryGetValue(indices, out var tile))
+        if (!_gridAtmosQuery.TryComp(grid, out var atmos))
+            return false;
+
+        var tiles = atmos.Tiles;
+        if (!tiles.TryGetValue(indices, out var tile))
             return false;
 
         var data = tile.AirtightData;

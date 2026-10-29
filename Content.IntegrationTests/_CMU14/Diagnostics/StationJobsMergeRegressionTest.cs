@@ -214,6 +214,8 @@ public sealed class StationJobsMergeRegressionTest : GameTest
             await Server.WaitAssertion(() =>
             {
                 SetCurrentPreset(ticker, preset);
+                // Round boundary: the FoF alternation opens on GOVFOR regardless of pair history.
+                jobs.AssignJobs(new Dictionary<NetUserId, HumanoidCharacterProfile>(), [station]);
                 var blocked = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
                 jobs.AssignOverflowJobs(ref blocked, profiles.Keys, profiles, [station]);
                 Assert.That(blocked[player], Is.EqualTo(((ProtoId<JobPrototype>?) null, EntityUid.Invalid)),
@@ -222,7 +224,12 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                 profiles[player] = profiles[player].WithJobPriority(Opfor, JobPriority.Low);
                 var accepted = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
                 jobs.AssignOverflowJobs(ref accepted, profiles.Keys, profiles, [station]);
-                Assert.That(accepted[player], Is.EqualTo(((ProtoId<JobPrototype>?) Opfor, station)),
+                // FoF deals the alternating side: the queued OPFOR rifleman is served by its
+                // GOVFOR mirror on the first deal; other modes deal the queued role directly.
+                var expected = presetId == "ForceOnForce"
+                    ? (ProtoId<JobPrototype>?) Govfor
+                    : (ProtoId<JobPrototype>?) Opfor;
+                Assert.That(accepted[player], Is.EqualTo((expected, station)),
                     "An accepted overflow role must remain available when the mode's usual role is Never.");
             });
         }

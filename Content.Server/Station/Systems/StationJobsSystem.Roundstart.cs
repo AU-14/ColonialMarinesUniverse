@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
-using Content.Server.CMU14.Ops.ForceOnForce; // CMU14
+using Content.Server.CMU14.Ops.ForceOnForce;
 using Content.Server.CMU14.Round;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
@@ -13,6 +13,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
+using FofJobs = Content.Server.CMU14.Ops.ForceOnForce.FofJobs; // CMU14: Round also declares a FofJobs; this file binds the Ops twin.
 
 namespace Content.Server.Station.Systems;
 
@@ -362,14 +363,15 @@ public sealed partial class StationJobsSystem
         // Determine the current preset so we can apply gamemode specific overflow behaviour.
         var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
 
-        // CMU14: Force on Force roles, hijacking, announcements and identification.
-        // The joint roll has already considered both fallback options and team capacities.
-        if (IsForceOnForce)
-        {
-            foreach (var player in allPlayersToAssign)
-                assignedJobs.TryAdd(player, (null, EntityUid.Invalid));
-            return;
-        }
+        // CMU14: the joint roll assigns its own players, but SpawnAsOverflow opt-ins are still
+        // dealt below against the alternating sides; the roll-era hard block is dead since
+        // dealing returned:
+        // if (IsForceOnForce)
+        // {
+        //     foreach (var player in allPlayersToAssign)
+        //         assignedJobs.TryAdd(player, (null, EntityUid.Invalid));
+        //     return;
+        // }
 
         foreach (var player in allPlayersToAssign)
         {
@@ -474,16 +476,18 @@ public sealed partial class StationJobsSystem
                 // Fallback: pick any overflow job on the station as before
                 if (chosenOverflow == null)
                 {
-                    var overflows = stationOverflows.ToList();
-                    // CMU14 Force on Force: last resort still owes the dealt side a job, so the
-                    // wrong side's overflows are dropped and the alternation flip stays honest.
+                    // CMU14 Force on Force: the dealt side is served from its own overflow roles
+                    // only; a station without them hands the player to the next station or leaves
+                    // them unassigned instead of dealing the other side's roles.
                     var fofFallback = !string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase);
+                    if (fofFallback)
+                        continue;
+
+                    var overflows = stationOverflows.ToList();
                     _random.Shuffle(overflows);
                     if (overflows.Count == 0)
                         continue;
                     chosenOverflow = overflows[0];
-                    if (fofFallback)
-                        _forceOnForceNextGovfor = !_forceOnForceNextGovfor;
                 }
 
                 assignedJobs.Add(player, (chosenOverflow, station));
