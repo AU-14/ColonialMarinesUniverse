@@ -6,7 +6,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.CMU14.Fighter;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true)]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true, fieldDeltas: true)]
 public sealed partial class FighterWeaponsComponent : Component
 {
     public const int ExternalPoints = 6;

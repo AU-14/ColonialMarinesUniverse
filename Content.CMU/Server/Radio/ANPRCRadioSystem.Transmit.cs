@@ -511,8 +511,7 @@ public sealed partial class ANPRCRadioSystem
                 ("degraded", degraded.Count == 0 ? nothingHeard : string.Join(", ", degraded))),
             args.Actor);
 
-        if (_garble.GetJamIntensity(ent.Owner) != RadioJamIntensity.None &&
-            _garble.TryGetNearestJammerDirection(ent.Owner, out var jammerDirection))
+        if (_garble.TryGetNearestJammerDirection(ent.Owner, out var jammerDirection))
         {
             _anprcChat.Notice(
                 Loc.GetString("anprc-radio-check-interference", ("bearing", ShortBearing(jammerDirection))),

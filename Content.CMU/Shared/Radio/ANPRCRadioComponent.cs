@@ -193,6 +193,7 @@ public sealed partial class ANPRCRadioComponent : Component
     public float PanelLinkQuality = float.NaN;
 
     public float PanelBatteryFraction = float.NaN;
+    public long PanelRevision;
 
     // when the set last keyed up and last took traffic, so the panel lights its TX and RX
     // lamps off what the radio actually did rather than off a UI guess
