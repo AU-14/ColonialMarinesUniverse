@@ -38,7 +38,7 @@
     chanceMultiplier: 0.25
   # crossing into crit keeps them up and fighting for a bit before they drop, same thing xenos get
   - type: CriticalGraceTime
-    graceDuration: 20
+    graceDuration: 2.5
   - type: TacticalMapTracked
     trackDead: true
   - type: YautjaMapTracked
@@ -289,7 +289,7 @@
   - type: XenoMeleeSeverResistance
     chanceMultiplier: 0.25
   - type: CriticalGraceTime
-    graceDuration: 20
+    graceDuration: 2.5
   - type: Language
     spokenLanguages:
     - Yautja
