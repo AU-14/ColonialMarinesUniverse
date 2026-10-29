@@ -175,7 +175,7 @@ public sealed partial class ChatSystem
     private bool CanWhisperInCrit(EntityUid source) =>
         _critWhisperEnabled
         && IsUnconsciousForWhisper(source)
-        && !HasMuteOtherThanKnockout(source); // CMU14: fix missing semicolon
+        && !HasMuteOtherThanKnockout(source);
     // Knockouts mute normal speech; any other mute still blocks whispering.
     private bool HasMuteOtherThanKnockout(EntityUid source)
     {
