@@ -185,6 +185,10 @@
         Piercing: 8.34
   - type: XenoBulwarkOfTheHive
   - type: XenoDoom
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      super: true
+      ticks: 4
   - type: XenoDestroy
     structureDamage:
       types:
