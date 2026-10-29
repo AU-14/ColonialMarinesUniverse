@@ -140,7 +140,7 @@
   id: ColonyAntags
   parent: BaseGameRule
   name: Colony Antags
-  description: Randomly rolls for each colony antag to be present this round.
+  description: Rolls for each colony antag to be present this round, weighted by how many ready players enabled it.
   components:
   - type: GameRule
   - type: ColonyAntagsRule

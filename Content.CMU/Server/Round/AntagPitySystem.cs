@@ -20,6 +20,8 @@ namespace Content.Server.CMU14.Round;
 /// consumed by <see cref="AntagSelectionSystem"/>'s round-start player pool,
 /// so every player's long-run selection rate stays S/N — pity only compresses
 /// the variance of the wait.
+/// GetWeight is also fed into ColonyAntagsRuleSystem, which lifts a colony rule's
+/// round-start fire chance by the demand of players who enabled its antags.
 /// </summary>
 public sealed partial class AntagPitySystem : EntitySystem
 {
