@@ -55,7 +55,7 @@
       effects:
       - !type:Hallucinogenic
         potency: 8
-      - !type:NerveStimulating
+      - !type:Nervestimulating
         potency: 2
   
 - type: reagent
@@ -93,7 +93,7 @@
       effects:
       - !type:Neuropathic
         potency: 2
-      - !type:MuscleStimulating
+      - !type:Musclestimulating
         potency: 6
 
 - type: reagent
