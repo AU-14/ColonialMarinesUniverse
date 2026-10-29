@@ -63,6 +63,18 @@ public partial class AtmosphereSystem
             RefreshAllGridMapAtmospheres(uid);
     }
 
+    // CMU14 method: day/night drives this every 30s
+    public void SetMapGasTemperature(EntityUid uid, float temperature, MapAtmosphereComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        component.Mixture.Temperature = temperature;
+        SanitizeMapMixture(component.Mixture);
+        component.Overlay = _gasTileOverlaySystem.GetOverlayData(component.Mixture);
+        Dirty(uid, component);
+    }
+
     public void SetMapSpace(EntityUid uid, bool space, MapAtmosphereComponent? component = null, bool updateTiles = true)
     {
         if (!Resolve(uid, ref component))
