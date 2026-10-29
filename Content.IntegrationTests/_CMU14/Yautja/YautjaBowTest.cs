@@ -15094,7 +15094,6 @@ public sealed class YautjaBowTest
                 {
                     "CMUYautjaClanArmor",
                     "CMUYautjaMask",
-                    "CMUYautjaMaskAccessory01Ebony",
                     "CMUYautjaClanGreaves",
                 }));
             }
