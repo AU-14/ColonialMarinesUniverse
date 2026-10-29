@@ -525,6 +525,25 @@ cmu-yautja-job-name-military-soldier = Yautja Military Caste Soldier
 cmu-yautja-job-description-military-soldier = An event-only military caste Yautja soldier deployed as part of a Predator Deathsquad.
 cmu-yautja-job-name-military-enforcer = Yautja Military Caste Enforcer
 cmu-yautja-job-description-military-enforcer = An event-only military caste Yautja enforcer leading a Predator Deathsquad.
+cmu-job-supervisors-yautja-military = the Ancients and the Elder Overseer
+
+# Military Caste ERT, cmss13 /datum/emergency_call/yautja_mcaste
+cmu-yautja-mcaste-party-name = Yautja Military Caste Soldiers (Deathsquad)
+cmu-yautja-mcaste-low-threat-party-name = Yautja Military Caste Soldiers
+cmu-yautja-mcaste-arrival = 'Des#<oy *&l th!^ @he Anci#*$!>- d=!#?ee unwor%*y o# *xist?n&*.'
+cmu-yautja-mcaste-soldier-ghost-name = Yautja Military Caste Soldier
+cmu-yautja-mcaste-soldier-ghost-description = One of few Yautja equipped for full-scale warfare, sent by the Ancients to wipe out a threat to your species.
+cmu-yautja-mcaste-enforcer-ghost-name = Yautja Military Caste Enforcer
+cmu-yautja-mcaste-enforcer-ghost-description = Lead a team of military caste soldiers against a threat to your species.
+cmu-yautja-mcaste-ghost-rules = You are a Yautja deathsquad. You answer only to the Ancients and the Elder Overseer and are not bound by the Honor Code. You are hostile to everyone who is not Yautja.
+cmu-yautja-mcaste-enforcer-name = Enforcer {$name}
+cmu-yautja-mcaste-elite-name = Elite {$name}
+cmu-yautja-mcaste-high-name = High {$name}
+cmu-yautja-mcaste-briefing-soldier = [bold][font size=16][color=#ff5555]You are a Military Caste Soldier, one of few Yautja equipped for full-scale warfare.[/color][/font][/bold]
+cmu-yautja-mcaste-briefing-enforcer = [bold][font size=16][color=#ff5555]You are a Military Caste Enforcer, tasked with leading a team of soldiers against threats to your species.[/color][/font][/bold]
+cmu-yautja-mcaste-briefing-answer = [bold]You answer only to the Ancients and the Elder Overseer, and are not required to follow the Honor Code.[/bold]
+cmu-yautja-mcaste-briefing-prejudice = [bold]Execute your mission with extreme prejudice.[/bold]
+cmu-yautja-mcaste-briefing-hostile = [bold][font size=20][color=#ff5555]YOU ARE HOSTILE to everyone who is not Yautja.[/color][/font][/bold]
 
 cmu-job-supervisors-yautja-youngblood = the Blooded and higher ranks
 cmu-job-supervisors-yautja-hellhound = your bonded master, then the Blooded and higher ranks
