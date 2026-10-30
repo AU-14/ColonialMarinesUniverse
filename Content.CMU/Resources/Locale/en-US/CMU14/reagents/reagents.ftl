@@ -62,3 +62,41 @@ reagent-desc-capsicum-neutralizer = A soothing saline wash that neutralizes pepp
 
 reagent-name-cmu-tear-gas = tear gas
 reagent-desc-cmu-tear-gas = A lachrymatory agent. Harmless in a beaker, miserable as a smoke.
+
+# Pathogen fluids  
+reagent-name-pathogen-blood = Mycohemolymph  
+reagent-desc-pathogen-blood = Thick, pale fluid threaded with hyphal filaments. It is definitely not blood.  
+  
+reagent-name-pathogen-royal-blood = Royal Mycohemolymph  
+reagent-desc-pathogen-royal-blood = Golden-tinged circulatory fluid from a higher-order pathogen. It writhes faintly.  
+  
+reagent-name-pathogen-plasma = Sporoplasm  
+reagent-desc-pathogen-plasma = A nutrient-rich suspension of spores and cytoplasm, the pathogen's lifeblood.  
+  
+reagent-name-pathogen-phero-plasma = Pheromonal Sporoplasm  
+reagent-desc-pathogen-phero-plasma = Sporoplasm saturated with signaling compounds. It smells wrong in a way you can't place.  
+  
+reagent-name-pathogen-chitin-plasma = Chitinous Sporoplasm  
+reagent-desc-pathogen-chitin-plasma = Sporoplasm heavy with dissolved chitin platelets, used to knit fungal armor.  
+  
+reagent-name-pathogen-spore-plasma = Sporogenic Sporoplasm  
+reagent-desc-pathogen-spore-plasma = Sporoplasm dense with dormant spore clusters. Handle carefully.  
+  
+reagent-name-pathogen-neuro-plasma = Neural Sporoplasm  
+reagent-desc-pathogen-neuro-plasma = Sporoplasm carrying neuroactive alkaloids. Exposure causes fugue-like symptoms.  
+  
+reagent-name-pathogen-mycotoxin-plasma = Mycotoxic Sporoplasm  
+reagent-desc-pathogen-mycotoxin-plasma = Virulent sporoplasm. Overdose seeds the host with something that outlives them.  
+  
+reagent-name-pathogen-royal-plasma = Royal Sporoplasm  
+reagent-desc-pathogen-royal-plasma = Concentrated sporoplasm from a royal caste. It hums at the edge of hearing.  
+  
+reagent-name-pathogen-nutrient-plasma = Nutrient Sporoplasm  
+reagent-desc-pathogen-nutrient-plasma = Digested organic slurry the pathogen circulates as a food reserve.  
+  
+# Test reagents  
+reagent-name-test-bloodbursting-chem = Test Bloodbursting Chem  
+reagent-desc-test-bloodbursting-chem = Admin/test reagent. Overdose implants a bloodburster embryo.  
+  
+reagent-name-test-mycotoxigenic-chem = Test Mycotoxigenic Chem  
+reagent-desc-test-mycotoxigenic-chem = Admin/test reagent. Overdose seeds pending walker conversion.
