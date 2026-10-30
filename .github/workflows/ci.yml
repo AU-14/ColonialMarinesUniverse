@@ -38,9 +38,6 @@ jobs:
       - name: Check CRLF
         run: python3 Tools/check_crlf.py
 
-      # CMU14: org owners, maintainers, senior contributors and allowlisted users may update the
-      # engine submodule in PRs. The default Actions token has no read:org scope, so the team and
-      # owner checks below 403/404 for everyone and the allowlist is the only exemption path.
       - name: Reject RobustToolbox submodule updates in PRs
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v9.0.0
@@ -61,33 +58,13 @@ jobs:
 
             const author = context.payload.pull_request.user.login;
 
-            const isActiveTeamMember = async (team) => {
-              try {
-                const res = await github.rest.teams.getMembershipForUserInOrg({
-                  org: context.repo.owner,
-                  team_slug: team,
-                  username: author,
-                });
-                return res.data.state === 'active';
-              } catch {
-                return false;
-              }
-            };
-
-            const isOrgOwner = await github.rest.orgs.getMembershipForUser({
-              org: context.repo.owner,
-              username: author,
-            }).then(res => res.data.role === 'admin' && res.data.state === 'active').catch(() => false);
-
             const allowlist = (process.env.SUBMODULE_EXEMPT_USERS ?? '')
                 .split(',')
                 .map(name => name.trim())
                 .filter(name => name.length > 0);
 
             const exempt = allowlist.includes(author)
-                || isOrgOwner
-                || (await isActiveTeamMember('maintainer'))
-                || (await isActiveTeamMember('senior-contributor'));
+                || ['OWNER', 'MEMBER'].includes(context.payload.pull_request.author_association);
 
             if (!exempt) {
               core.setFailed('Do not update the RobustToolbox submodule in pull requests.');
@@ -104,6 +81,7 @@ jobs:
 
   build:
     name: Build
+    needs: source-guards
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -190,7 +168,16 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Run Content.Tests
-        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal -- NUnit.ConsoleOut=0 NUnit.ExplicitMode=None
+        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal --logger "trx;LogFileName=unit-tests.trx" --results-directory bin/Content.Tests/TestResults -- NUnit.ExplicitMode=None
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results-unit-tests
+          path: bin/Content.Tests/TestResults/
+          if-no-files-found: ignore
+          retention-days: 3
 
   yaml-linter:
     name: YAML Linter
@@ -223,6 +210,7 @@ jobs:
 
   asset-validation:
     name: Asset Validation
+    needs: source-guards
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -290,6 +278,7 @@ jobs:
     name: Required Checks
     if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     needs:
+      - source-guards
       - build
       - unit-tests
       - yaml-linter
@@ -303,6 +292,7 @@ jobs:
         with:
           script: |
             const results = {
+              'Source Guards': '${{ needs.source-guards.result }}',
               'Build': '${{ needs.build.result }}',
               'Unit Tests': '${{ needs.unit-tests.result }}',
               'YAML Linter': '${{ needs.yaml-linter.result }}',
@@ -734,7 +724,7 @@ jobs:
             --verbosity normal --filter "$FILTER" \
             --blame-hang-timeout "$hang_timeout" --blame-hang-dump-type none \
             --logger "trx;LogFileName=$shard.trx" --results-directory TestResults \
-            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.AssemblySelectLimit=10000 \
+            -- NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.AssemblySelectLimit=10000 \
             NUnit.NumberOfTestWorkers="$workers" # CMU14
 
       - name: Upload test results

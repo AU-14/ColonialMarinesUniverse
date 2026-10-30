@@ -3468,6 +3468,10 @@ public sealed partial class YautjaPlasmaRifleBoltComponent : Component
 
     [DataField]
     public float XenoExtraDamageMultiplier = 0.75f;
+
+    // cmss13 debilitate weaken 2 (x20 ds), humans only, yautja and synths shrug it off
+    [DataField]
+    public TimeSpan HumanKnockdownTime = TimeSpan.FromSeconds(4);
 }
 
 [RegisterComponent]
