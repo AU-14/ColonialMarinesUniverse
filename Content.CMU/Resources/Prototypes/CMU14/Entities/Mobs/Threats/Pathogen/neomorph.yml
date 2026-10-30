@@ -24,24 +24,24 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
-- type: DrawableSolution  
-  solution: blood  
-- type: Solution  
-  id: blood  
-  solution:  
-    maxVol: 600  
-    reagents:  
-    - ReagentId: CMUPathogenMycohemolymph  
-      Quantity: 300  
-    - ReagentId: CMUPathogenSporoplasm  
-      Quantity: 300  
-- type: SolutionRegeneration  
-  generated:  
-    reagents:  
-    - ReagentId: CMUPathogenMycohemolymph  
-      Quantity: 1  
-    - ReagentId: CMUPathogenSporoplasm  
-      Quantity: 1
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood  
+    solution:  
+      maxVol: 600
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 300  
+      - ReagentId: CMUPathogenSporoplasm  
+        Quantity: 300  
+  - type: SolutionRegeneration  
+    generated:  
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 1  
+      - ReagentId: CMUPathogenSporoplasm  
+        Quantity: 1
   - type: Xeno
     role: CMU14JobPathogenNeomorph
     tier: 2
