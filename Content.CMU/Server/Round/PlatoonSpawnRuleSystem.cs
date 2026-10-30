@@ -102,6 +102,14 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         // not only when it won a vote.
         ApplyPlatoonTechTrees();
 
+        // --- SHIP FACTION TAGGING ---
+        // Ships load as faction-less game maps, and every shipside system (hospital
+        // emergency console, faction terminals, requisition markers, the
+        // summoned-third-party pad) keys off ShipFactionComponent. Tag the round's
+        // voted ships now that the votes have concluded.
+        TagShipFaction("govfor");
+        TagShipFaction("opfor");
+
         // --- SHIP VENDOR MARKER LOGIC ---
         if ((planetComp.GovforInShip || planetComp.OpforInShip))
         {
@@ -639,6 +647,31 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
         vendorProtoId = default;
         return false;
+    }
+
+    /// <summary>
+    ///     Tags the round's voted ship for one side with its faction, using the grids
+    ///     its game map loaded with. Ships have no faction of their own; shipside
+    ///     systems resolve everything through ShipFactionComponent.
+    /// </summary>
+    private void TagShipFaction(string faction)
+    {
+        var shipId = faction == "govfor"
+            ? _auRoundSystem.ResolveGovforShip(null)
+            : _auRoundSystem.ResolveOpforShip(null);
+        if (string.IsNullOrEmpty(shipId) || !_auRoundSystem.TryGetLoadedShipGrids(shipId, out var grids))
+            return;
+
+        foreach (var grid in grids)
+        {
+            if (TerminatingOrDeleted(grid) ||
+                TryComp<ShipFactionComponent>(grid, out var existing) && !string.IsNullOrEmpty(existing.Faction))
+                continue;
+
+            var shipFaction = EnsureComp<ShipFactionComponent>(grid);
+            shipFaction.Faction = faction;
+            Dirty(grid, shipFaction);
+        }
     }
 
     private bool TrySpawnFactionTerminal(PlatoonMarkerClass markerClass, string faction, TransformComponent transform)

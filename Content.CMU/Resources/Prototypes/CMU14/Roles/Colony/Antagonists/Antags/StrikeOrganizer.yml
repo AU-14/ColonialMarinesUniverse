@@ -55,6 +55,8 @@
   id: StrikeOrganizerRole
   name: roles-antag-strikeorganizer-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-strikeorganizer-objective
 
 - type: startingGear

@@ -282,3 +282,9 @@ public sealed partial class YautjaLeapDoAfterEvent : SimpleDoAfterEvent
         GridLocalPosition = gridLocalPosition;
     }
 }
+
+[Serializable, NetSerializable]
+public sealed partial class YautjaRopeSecureDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class YautjaRopeHangDoAfterEvent : SimpleDoAfterEvent;
