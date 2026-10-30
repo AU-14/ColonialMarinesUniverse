@@ -47,6 +47,20 @@ roles-antag-cultist-name = Xeno Cultist
 roles-antag-cultist-objective = Listen to the commands of the Xenomorph Queen. Ensure the survival of the hive at all costs.
 roles-antag-cultist-greeting = You feel an alien presence enter your mind. "Obey these words. Assist my children in prosperity and you will earn a place amongst the angels." is what you hear as your mind fractures. As your mind reforms you have but one goal: The hive must grow.
 
+roles-antag-govforveteran-name = A.W. GOVFOR Veteran
+roles-antag-govforveteran-objective = You've spent years learning how to fight and kill. Now, you find yourself wanting to do it again. Make the people of the colony taste fear, and don't get too careless.
+govforveteran-role-greeting = You're an A.W. USCM veteran. You've spent years serving in the Colonial Marines, through countless deployments and conflicts. Eventually, you changed your name and settled down in this colony, trying to leave that life behind.
+Nobody in this colony knows who you used to be, and you would like to keep it that way.
+But something has changed. The quiet life you've built no longer feels right. The people around you are not just neighbours any more.
+Your old equipment is still packed away in your bag. You know how to use it.
+cmu-veteran-cloak-on = The field engages. Nothing on you reads as solid.
+cmu-veteran-cloak-watched = The field will not engage while you are being observed.
+cmu-veteran-cloak-watched-uncloak = The field will not disengage while you are being observed.
+cmu-veteran-cloak-off = The field disengages. You are back on every sensor.
+cmu-veteran-cloak-reveal = A camouflage field collapses nearby.
+cmu-veteran-cloak-denied = The field is engaged. Nothing you do reaches the world.
+cmu-veteran-cloak-unskilled = The field controls are locked out. You do not know this equipment.
+
 roles-antag-dealer-name = Drug Dealer
 roles-antag-dealer-objective = Sell your product.
 dealer-role-greeting = You're a drug dealer, sell your product.

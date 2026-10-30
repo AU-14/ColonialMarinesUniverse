@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Stun;
+using Content.Shared.CMU14.Combat; // CMU14
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
@@ -47,6 +48,7 @@ public sealed partial class RMCStaminaSystem : EntitySystem
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private CMUStunImmunitySystem _cmuStunImmunity = default!; // CMU14
 
     public override void Initialize()
     {
@@ -240,6 +242,10 @@ public sealed partial class RMCStaminaSystem : EntitySystem
 
     private bool IsYautjaTaserImmune(EntityUid source, EntityUid target)
     {
+        // CMU14: taser/baton immunity is a component so non-Yautja mobs can carry it too.
+        if (_cmuStunImmunity.IsImmune(target, source))
+            return true;
+
         return HasComp<YautjaComponent>(target) && _tag.HasTag(source, TaserTag);
     }
 
