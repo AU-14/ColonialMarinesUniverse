@@ -37,15 +37,15 @@
         Quantity: 200
       - ReagentId: CMUPathogenSporoplasmNeuro
         Quantity: 200
-- type: SolutionRegeneration  
-  generated:  
-    reagents:  
-    - ReagentId: CMUPathogenMycohemolymph  
-      Quantity: 1
-    - ReagentId: CMUPathogenSporoplasmPhero
-      Quantity: 1
-    - ReagentId: CMUPathogenSporoplasmNeuro
-      Quantity: 1
+  - type: SolutionRegeneration  
+    generated:  
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmPhero
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmNeuro
+        Quantity: 1
   - type: XenoDevour
   - type: Xeno
     role: CMU14JobPathogenConditor
