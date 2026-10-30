@@ -12373,7 +12373,7 @@ entities:
     - type: Transform
       pos: 43.5,-21.5
       parent: 1
-- proto: CMVendorMedical
+- proto: RMCVendorMedicalPVE
   entities:
   - uid: 1815
     components:

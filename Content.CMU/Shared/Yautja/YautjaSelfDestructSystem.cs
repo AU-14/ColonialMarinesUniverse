@@ -583,6 +583,13 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
             return false;
         }
 
+        // cmss13 blocks it past crit too, you have to pop it while the vitals warning is up
+        if (_mobState.IsCritical(user))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-critical"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
         return true;
     }
 

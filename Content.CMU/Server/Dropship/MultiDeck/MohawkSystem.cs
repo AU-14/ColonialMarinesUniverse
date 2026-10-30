@@ -313,7 +313,7 @@ public sealed partial class MohawkSystem : EntitySystem
             (!force && (mechanisms.RampDeployed == deployed || HasComp<MohawkRampMovingComponent>(ship))) ||
             (!force && mechanisms.BrokenControls.Contains(MohawkControlGroup.Ramp)) ||
             (deployed && !force && !CanDeploy(ship)) ||
-            !TryComp<MultiDeckDropshipComponent>(ship, out var decks) || !decks.Initialized)
+            !TryComp<MultiDeckDropshipComponent>(ship, out var decks) || !decks.DecksInitialized)
             return false;
 
         foreach (var uid in GetShipEntities(ship))

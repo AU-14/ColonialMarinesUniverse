@@ -22,13 +22,15 @@ public sealed partial class RMCTuringDispenserComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan RechargeEvery = TimeSpan.FromSeconds(38.5);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    // CMU14: server-only tick deadline, no client reader
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextRecharge;
 
     [DataField, AutoNetworkedField]
     public TimeSpan ProcessEvery = TimeSpan.FromSeconds(3.5);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    // CMU14: server-only tick deadline, no client reader
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextProcess;
 
     [DataField, AutoNetworkedField]
@@ -79,7 +81,8 @@ public sealed partial class RMCTuringDispenserComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan StuckRetryDelay = TimeSpan.FromSeconds(14);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    // CMU14: server-only tick deadline, no client reader
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextStuckRetry;
 
     [DataField, AutoNetworkedField]

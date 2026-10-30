@@ -109,11 +109,6 @@
     whitelist:
       components:
       - MobState
-    multipliers:
-    - multiplier: 0
-      whitelist:
-        components:
-        - Xeno
   - type: GasMaskFilterDamage
     damage: 5
     neurotoxin: false

@@ -73,6 +73,14 @@ public sealed partial class CMSoundSystem : EntitySystem
 
         ent.Comp.Entity = _audio.PlayPvs(ent.Comp.Sound, ent)?.Entity;
         Dirty(ent);
+        // CMU14 Begin: let audio termination clear the owning mob's reference.
+        if (ent.Comp.Entity is { } sound)
+        {
+            var soundComp = EnsureComp<SoundOnDeathSoundComponent>(sound);
+            soundComp.Parent = ent.Owner;
+            Dirty(sound, soundComp);
+        }
+        // CMU14 End
     }
 
     private void OnDeathMobTerminating(Entity<SoundOnDeathComponent> ent, ref EntityTerminatingEvent args)
@@ -88,6 +96,13 @@ public sealed partial class CMSoundSystem : EntitySystem
             return;
 
         _transform.SetCoordinates(ent.Comp.Entity.Value, coordinates);
+        // CMU14 Begin: detached death audio no longer belongs to the deleted mob.
+        if (TryComp(ent.Comp.Entity.Value, out SoundOnDeathSoundComponent? soundComp))
+        {
+            soundComp.Parent = null;
+            Dirty(ent.Comp.Entity.Value, soundComp);
+        }
+        // CMU14 End
         ent.Comp.Entity = null;
     }
 
@@ -96,7 +111,7 @@ public sealed partial class CMSoundSystem : EntitySystem
         var parent = ent.Comp.Parent;
         ent.Comp.Parent = null;
 
-        if (!TryComp(parent, out SoundOnDeathComponent? death))
+        if (!TryComp(parent, out SoundOnDeathComponent? death) || death.Entity != ent.Owner) // CMU14: an older sound must not clear a newer one.
             return;
 
         death.Entity = null;
