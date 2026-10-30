@@ -110,6 +110,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
     [Dependency] private YautjaMarkSystem _marks = default!;
     [Dependency] private YautjaRitualSystem _ritual = default!;
+    [Dependency] private CMUYautjaEffectsSystem _effects = default!;
 
     public override void Initialize()
     {
@@ -310,7 +311,9 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     public bool TryOpenButcherDialog(EntityUid hunter)
     {
-        if (!HasComp<YautjaComponent>(hunter) && !HoldsBlade(hunter))
+        if (!HasComp<YautjaComponent>(hunter) &&
+            (!TryComp(hunter, out YautjaButcherAbilityComponent? ability) || ability.RequiresBlade) &&
+            !HoldsBlade(hunter))
         {
             _popup.PopupEntity(Loc.GetString("cmu-butcher-need-blade"), hunter, hunter, PopupType.SmallCaution);
             return false;
@@ -486,12 +489,12 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             DuplicateCondition = DuplicateConditions.SameTarget | DuplicateConditions.SameEvent,
             DistanceThreshold = 1.5f,
             ForceVisible = true,
-            TargetEffect = "RMCEffectXenoTelegraphRedEmpower",
         };
 
         if (!_doAfter.TryStartDoAfter(doAfter))
             return false;
 
+        _effects.StartButcher(target, hunter, procedure, stage, kind == YautjaButcherKind.Xeno, delay);
         if (procedure == YautjaButcherProcedure.Skin && source.ButcheryProgress == 0)
         {
             source.ButcheryProgress = 1;
@@ -527,27 +530,19 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private void OnButcherDoAfter(Entity<YautjaTrophySourceComponent> target, ref YautjaButcherDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled)
+        if (args.Handled)
             return;
 
         args.Handled = true;
-        if (args.Procedure == YautjaButcherProcedure.Skin)
-        {
-            if (!TryCompleteButcherStage(args.User, target, args.Stage))
-                return;
+        var completed = !args.Cancelled && (args.Procedure == YautjaButcherProcedure.Skin
+            ? TryCompleteButcherStage(args.User, target, args.Stage)
+            : TryCompleteButcherLimb(args.User, target.Owner, args.Procedure));
+        _effects.EndButcher(target, args.User, args.DoAfter.StartTime, completed, args.Stage);
 
-            // CMU14: chain the four skinning stages, so one Skin selection runs the whole pelt instead of making
-            // the player reopen the action three more times. Each stage starts only after the previous one
-            // completes successfully - a cancelled do-after returns above, so the chain simply stops there, and
-            // BreakOnMove on the do-after is what cancels it. ButcheryProgress is advanced by the completion above,
-            // so the next stage passes its own progress validation and no stage can run twice.
-            if (args.Stage < 4)
-                TryStartButcher(args.User, target.Owner, YautjaButcherProcedure.Skin);
-        }
-        else
-        {
-            TryCompleteButcherLimb(args.User, target.Owner, args.Procedure);
-        }
+        // Finish the previous visual before starting the next stage. Cancellation preserves
+        // completed wounds and stops the chain; a successful Skin selection runs all four stages.
+        if (completed && args.Procedure == YautjaButcherProcedure.Skin && args.Stage < 4)
+            TryStartButcher(args.User, target.Owner, YautjaButcherProcedure.Skin);
     }
 
     public bool TryHarvestTrophy(EntityUid hunter, EntityUid target, YautjaTrophyKind kind, out EntityUid trophy)
@@ -971,7 +966,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         if (HasComp<YautjaComponent>(hunter))
             return true;
 
-        return HasComp<YautjaButcherAbilityComponent>(hunter) && HoldsBlade(hunter);
+        return TryComp(hunter, out YautjaButcherAbilityComponent? ability) &&
+               (!ability.RequiresBlade || HoldsBlade(hunter));
     }
 
     private bool HoldsBlade(EntityUid user)
@@ -1632,8 +1628,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             !TryComp<MobStateComponent>(target, out var mobState) ||
             !_mobState.IsDead(target, mobState) ||
             !IsAdjacent(hunter, target) ||
-            IsBlockedButcherTarget(target) ||
-            HasComp<YautjaComponent>(target))
+            IsBlockedButcherTarget(target))
         {
             return false;
         }
