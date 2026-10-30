@@ -417,6 +417,7 @@
   # The platoon's own satchel in place of the standard one.
   startingGearOverrides:
     CMSatchelMarine: RuMCUPPNavalInfantrySatchel
+  showInVote: false
   lorePrimer: RuMCPrimerPlatoonBEAR
   Allegiance: UPP
   languages:

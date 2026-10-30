@@ -197,6 +197,16 @@ public sealed partial class BlockingSystem : EntitySystem
             }
         }
 
+        // CMU14 Begin: remember the body being anchored, not temporary physics from item pickup.
+        // A shield can be picked up in a fighter seat and raised after the user has disembarked.
+        if (TryComp<BlockingUserComponent>(user, out var blockingUser) &&
+            TryComp<PhysicsComponent>(user, out var originalPhysics))
+        {
+            blockingUser.OriginalBodyType = originalPhysics.BodyType;
+            DirtyField(user, blockingUser, nameof(BlockingUserComponent.OriginalBodyType));
+        }
+        // CMU14 End
+
         //Don't allow someone to block if they're somehow not anchored.
         _transformSystem.AnchorEntity(user, xform);
         if (!xform.Anchored)

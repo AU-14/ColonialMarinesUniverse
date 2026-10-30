@@ -33,11 +33,9 @@ public sealed partial class AnchoredTileCacheSystem : EntitySystem
 
     public override void Initialize()
     {
-        // Anchor events can precede installation of the destination transform.
-        // Other invalidations have a known grid/tile and can preserve unrelated entries.
+        // Grid transfers now raise normal unanchor/move/anchor events.
         _transform.OnGlobalMoveEvent += OnMove;
         SubscribeLocalEvent<TransformComponent, AnchorStateChangedEvent>(OnAnchor);
-        SubscribeLocalEvent<TransformComponent, ReAnchorEvent>(OnReanchor);
         SubscribeLocalEvent<TransformComponent, ComponentShutdown>(OnShutdown);
         // Transform startup raises AnchorStateChangedEvent for initially anchored entities too.
         // MapInit does not need a second invalidation or an additional lifecycle subscription.
@@ -86,9 +84,7 @@ public sealed partial class AnchoredTileCacheSystem : EntitySystem
     {
         if (args.Anchored)
         {
-            // The usual path has already installed membership at the current position.
-            // Direct anchoring to another grid raises this event before installing its
-            // destination transform; only that ambiguous case needs the global fallback.
+            // Preserve the conservative fallback for incomplete client state application.
             if (ent.Comp.GridUid is { } gridUid && TryComp(gridUid, out MapGridComponent? grid))
             {
                 var tile = _map.CoordinatesToTile(gridUid, grid, ent.Comp.Coordinates);
@@ -104,12 +100,6 @@ public sealed partial class AnchoredTileCacheSystem : EntitySystem
             return;
         }
         InvalidatePosition(ent.Comp);
-    }
-
-    private void OnReanchor(Entity<TransformComponent> ent, ref ReAnchorEvent args)
-    {
-        InvalidateGrid(args.OldGrid);
-        InvalidateGrid(args.Grid);
     }
 
     private void OnShutdown(Entity<TransformComponent> ent, ref ComponentShutdown args)

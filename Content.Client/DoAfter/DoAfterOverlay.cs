@@ -147,7 +147,9 @@ public sealed class DoAfterOverlay : Overlay
                 }
 
                 // RMC14
-                if (!doAfter.Args.ForceVisible)
+                // CMU14: cloaking hides progress from observers, not from the actor using the tool.
+                // if (!doAfter.Args.ForceVisible)
+                if (!doAfter.Args.ForceVisible && uid != localEnt)
                 {
                     // Don't show the doafter bar to other clients if the entity's sprite isn't visible.
                     if (!sprite.Visible && uid != localEnt)

@@ -1,7 +1,7 @@
 cmu-medical-heal-organ-guidebook            = Heals { $amount } HP per cycle on the patient's { $organ }.
 cmu-medical-pain-suppression-guidebook       = Suppresses { $percent }% of pain accumulation, masks { $tiers } pain tier(s), and adds { $decay } pain/sec decay for { $seconds } seconds per unit. Effect weakens by { $decrease } per max-pain fraction; non-additive profiles keep the strongest active profile.
 cmu-medical-bone-regen-boost-guidebook       = Multiplies bone healing rate by { $multiplier } while active.
-cmu-medical-restart-heart-guidebook          = { $chance }% chance per cycle to restart a stopped heart (only on hearts that are not yet at the Dead stage).
+cmu-medical-restart-heart-guidebook          = { $chance }% chance per cycle to restart a viable stopped heart in a living patient. Does not metabolize in dead patients or replace defibrillation. Dead-stage hearts require a transplant.
 cmu-medical-regenerate-limb-guidebook        = Regenerates one missing native limb per 5 units metabolized at 213K or colder.
 cmu-medical-reverse-revival-timer-guidebook   = Reverses { $seconds } seconds of an active revival countdown per unit metabolized. Cannot reverse permanent death or an expired countdown.
 cmu-medical-cryo-bone-blood-guidebook         = Gradually mends all fractures by { $bone } bone integrity per unit and restores { $blood }% blood per second during metabolism.
@@ -25,7 +25,7 @@ reagent-desc-cmu-pulmovine                   = An aerosolized agent for lung tis
 reagent-name-cmu-nephronate                  = Nephronate
 reagent-desc-cmu-nephronate                  = A renal-targeting compound for kidney tissue repair.
 reagent-name-cmu-cardiocaine                 = Cardiocaine
-reagent-desc-cmu-cardiocaine                 = A cardiac-targeting compound; attempts to restart a stopped heart.
+reagent-desc-cmu-cardiocaine                 = Repairs heart damage and helps restart a viable stopped heart in a living patient. Does not metabolize after death; revive the patient with a defibrillator.
 reagent-name-cmu-alkysine                    = Alkysine
 reagent-desc-cmu-alkysine                    = A neural-targeting compound; for brain tissue repair.
 reagent-name-cmu-osteocalc                   = Osteocalc

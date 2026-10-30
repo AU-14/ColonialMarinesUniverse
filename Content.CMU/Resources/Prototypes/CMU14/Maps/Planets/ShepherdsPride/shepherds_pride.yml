@@ -7,7 +7,7 @@
     mapId: Sheperds
     lorePrimer: AU14PrimerPlanetShepherdsPride
     allegiance: UA
-    camouflage: Desert
+    camouflage: Jungle
     announcement: "The wildlife reserve of Shepherds' Pride on the fringe of the Neroid Sector has gone silent. A response force has been dispatched to investigate."
     platoonsGovfor:
     - LACN
@@ -130,6 +130,7 @@
             AU14JobCivilianCorporateAssistant: [1, 1]
 
             AU14JobCivilianScientist: [4, 4]
+            AU14JobCorporateSynthetic: [1, 1]
             AU14JobWYGuard: [3, 3]
 
             # Security/LEO

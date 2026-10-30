@@ -17,10 +17,14 @@
   - type: Corrodible
     isCorrodible: false
   - type: YautjaTechItem
+  # cmss13 soldier bracer: no caster, cloak or smart-disc, but thwei, capsule, translator and self-destruct stay.
+  # thwei and the capsule live in the bracer menu here, same as the hunter bracer
   - type: YautjaBracer
     autoSelfDestructOnUserDeath: true
     actionWhitelist:
-    - CMUActionYautjaCreateHealingCapsule
+    - CMUActionYautjaOpenBracerMenu
+    - CMUActionYautjaSelfDestruct
+    - CMUActionYautjaTranslator
   - type: YautjaGearContainer
     actionWhitelist:
     - WristBlades
@@ -88,6 +92,26 @@
     - id: CMUYautjaAdvancedOintment
       amount: 2
 
+# cmss13 /obj/item/restraint/legcuffs/xeno_restraints/strong (legcuffs.dm): only fits xenos, stops them slashing,
+# three minute breakout. The hunter ship already maps one, this is the same item without the map placement
+- type: entity
+  parent: CMUHunterShipPlacedZiptiesLegcuffSouthOffset0x4
+  id: CMUYautjaStrongXenoRestraints
+  name: strong xeno restraints
+  description: Use this to hold xenomorphic creatures safely.
+  suffix: Yautja, Military Caste
+  components:
+  - type: Handcuff
+    breakoutTime: 180
+  - type: Sprite
+    sprite: CMU14/HunterShip/obj/items/security.rsi
+    drawdepth: Items
+    offset: 0,0
+    enableOverrideDir: false
+    layers:
+    - state: "legcuff"
+      color: "#ff0000"
+
 - type: entity
   parent: CMUYautjaArmorBase
   id: CMUYautjaPoweredArmor
@@ -142,8 +166,9 @@
       - sprite: CMU14/Yautja/mcaste_gear_worn.rsi
         state: fullarmor_soldier_lead
 
+# cmss13 shoes/yautja/hunter/knife/powered, so the greaves carry a dagger like the clan greaves
 - type: entity
-  parent: CMUYautjaGreavesBase
+  parent: [CMUYautjaGreavesBase, CMUYautjaKnifeGreavesSlot]
   id: CMUYautjaPoweredGreaves
   name: Nracha-Dte armored greaves
   description: The lower half of the M'talt-Type powered armor suit, used exclusively in battle against the most disdainful of dishonorable targets. Like the upper suit, there is very little damage it cannot shrug off.
@@ -204,6 +229,11 @@
     maxCount: 100
   # fully enclosed, so it seals out spores like the clan masks do
   - type: MycotoxinProtection
+  # cmss13 TRAIT_EAR_PROTECTION and EYE_PROTECTION_WELDING on the helmet
+  - type: RMCEarProtection
+  - type: EyeProtection
+    protectionTime: 20
+  - type: GasBlock
   - type: YautjaMask
     requiresYautjaWearer: false
     preserveVisorOnUnequip: true
@@ -237,8 +267,8 @@
   - type: YautjaTechItem
     blockPickup: false
     blockUse: true
-    blockMelee: true
-    blockThrow: true
+    blockMelee: false # CMU14: CM-SS13 only gates the yautja comms channel (yaut_items.dm headset), not melee
+    blockThrow: false # CMU14: ITEM_PREDATOR never restricted throwing (items.dm)
     blockShoot: true
   - type: Corrodible
     isCorrodible: false

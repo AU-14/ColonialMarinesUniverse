@@ -3,6 +3,7 @@ using Content.Shared._RMC14.CombatMode;
 using Content.Shared._RMC14.Humanoid.Markings;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Heal;
@@ -30,6 +31,7 @@ public sealed partial class XenoFlingSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
     [Dependency] private RMCSlowSystem _rmcSlow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
@@ -121,7 +123,8 @@ public sealed partial class XenoFlingSystem : EntitySystem
         if (!_net.IsServer)
             return true;
 
-        _rmcSlow.TrySlowdown(target, xeno.Comp.SlowTime);
+        if (!_yautjaSlow.TryApply(target, xeno.Comp.YautjaSlow)) // CMU14
+            _rmcSlow.TrySlowdown(target, xeno.Comp.SlowTime);
         _stun.TryParalyze(target, _xeno.TryApplyXenoDebuffMultiplier(target, xeno.Comp.ParalyzeTime), true);
 
         if (daze)

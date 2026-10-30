@@ -11,6 +11,8 @@
         crate: RMCCrateEmptySandbags
       - cost: 500
         crate: RMCCrateSandbagsConstructionKit
+      - cost: 1200
+        crate: CMUCrateHESCO
       - cost: 600
         crate: AU14CrateConcreteBags
       - cost: 700
@@ -349,6 +351,10 @@
         crate: CMUCrateVehiclePartAPCFrontCannon
         maxStock: 2
         stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartAPCDualCannon
+        maxStock: 2
+        stockReplenishDelay: 300
 
     - name: Vehicle Main Modules
       entries:
@@ -438,6 +444,10 @@
 
     - name: Weapons
       entries:
+      - cost: 2500
+        crate: CMUCrateKramerAutocannon
+        maxStock: 1
+        stockReplenishDelay: 1200
       - cost: 850
         crate: RMCCrateXM51
       - cost: 250
@@ -472,6 +482,10 @@
         stockReplenishDelay: 1200
     - name: Ammo
       entries:
+      - cost: 1200
+        crate: CMUCrateKramer30mmHE
+      - cost: 1600
+        crate: CMUCrateKramer30mmHEAP
       - cost: 400
         crate: RMCCrateBoxShellsShotgunBreaching
       - cost: 650

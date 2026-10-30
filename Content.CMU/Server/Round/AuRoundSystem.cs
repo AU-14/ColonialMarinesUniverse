@@ -128,6 +128,10 @@ namespace Content.Server.CMU14.Round
             set => _state.SelectedOpforShip = value;
         }
 
+        // Grids keyed by prototype id. Round setup tags the voted ship's faction
+        // once the votes have concluded.
+        private readonly Dictionary<string, IReadOnlyList<EntityUid>> _loadedGameMapGrids = new();
+
         public void SetOpforShip(string shipId)
         {
             _selectedOpforShip = shipId;
@@ -173,6 +177,8 @@ namespace Content.Server.CMU14.Round
         {
 
             base.Initialize();
+            SubscribeLocalEvent<LoadingMapsEvent>(OnLoadingMaps);
+            SubscribeLocalEvent<PostGameMapLoad>(OnPostGameMapLoad);
             _voteSequence.Reset();
             _state.Reset();
             SelectedPlanetMap = null;
@@ -300,15 +306,12 @@ namespace Content.Server.CMU14.Round
                     }
                 }
 
-                // Filter planets by their MinPlayers/MaxPlayers so planets intended for
-                // specific player counts cannot be voted for when out of range.
+                // Planets intended for specific player counts cannot be voted for when out of range.
                 var playerCount = _playerManager.PlayerCount;
-                planetProtos.RemoveAll(p =>
-                    // If MinPlayers is set (>0) and current players are fewer, exclude.
-                    (p.Planet.MinPlayers > 0 && playerCount < p.Planet.MinPlayers) ||
-                    // If MaxPlayers is set (>0) and current players exceed it, exclude.
-                    (p.Planet.MaxPlayers > 0 && playerCount > p.Planet.MaxPlayers)
-                );
+                planetProtos.RemoveAll(p => !AuRoundSelectionRules.IsPlanetInPopulationRange(
+                    p.Planet,
+                    _prototypeManager.TryIndex<GameMapPrototype>(p.Planet.MapId, out var map) ? map : null,
+                    playerCount));
 
                 if (planetProtos.Count == 0)
                 {
@@ -981,17 +984,23 @@ namespace Content.Server.CMU14.Round
                 };
             }
 
-
-
-            if (presetProto.RequiresGovforVote && govforPlatoons.Count > 0)
+            List<(string text, object data)> BuildVoteOptions(List<ProtoId<PlatoonPrototype>> platoons)
             {
-                var optionsplatoons = new List<(string text, object data)>();
-                foreach (var platoonId in govforPlatoons)
+                var options = new List<(string text, object data)>();
+                foreach (var platoonId in platoons)
                 {
                     var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    optionsplatoons.Add((Loc.GetString(platoon.Name), platoon));
+                    if (!platoon.ShowInVote)
+                        continue;
+                    options.Add((Loc.GetString(platoon.Name), platoon));
                 }
 
+                return options;
+            }
+
+            var optionsplatoons = BuildVoteOptions(govforPlatoons);
+            if (presetProto.RequiresGovforVote && optionsplatoons.Count > 0)
+            {
                 var voteopt = new VoteOptions
                 {
                     Title = Loc.GetString("au14-vote-title-govfor"),
@@ -1043,15 +1052,9 @@ namespace Content.Server.CMU14.Round
                 };
             }
 
-            if (presetProto.RequiresOpforVote && opforPlatoons.Count > 0)
+            optionsplatoons = BuildVoteOptions(opforPlatoons);
+            if (presetProto.RequiresOpforVote && optionsplatoons.Count > 0)
             {
-                var optionsplatoons = new List<(string text, object data)>();
-                foreach (var platoonId in opforPlatoons)
-                {
-                    var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    optionsplatoons.Add((Loc.GetString(platoon.Name), platoon));
-                }
-
                 var voteopt = new VoteOptions
                 {
                     Title = Loc.GetString("au14-vote-title-opfor"),
@@ -1154,6 +1157,15 @@ namespace Content.Server.CMU14.Round
             return platoon?.PossibleShips.FirstOrDefault();
         }
 
+        private void OnPostGameMapLoad(PostGameMapLoad ev)
+        {
+            _loadedGameMapGrids[ev.GameMap.ID] = ev.Grids;
+        }
+
+        /// <summary>The grids the given game map loaded with this round, if it has loaded.</summary>
+        public bool TryGetLoadedShipGrids(string gameMapId, out IReadOnlyList<EntityUid> grids)
+            => _loadedGameMapGrids.TryGetValue(gameMapId, out grids!);
+
         public bool IsVoteSequenceRunning()
         {
             return _voteSequenceRunning;
@@ -1245,6 +1257,15 @@ namespace Content.Server.CMU14.Round
             }
 
             return false;
+        }
+
+        // Camo follows the planet actually being loaded; the lobby vote timer can miss it and leave the last round's camo
+        private void OnLoadingMaps(LoadingMapsEvent ev)
+        {
+            if (_selectedPlanet is { } planet && ev.Maps.Any(map => map.ID == planet.MapId))
+                SetCamoType(planet.Camouflage);
+            else
+                SetCamoType(CamouflageType.Jungle);
         }
 
         public void SetCamoType(CamouflageType? ct = null)

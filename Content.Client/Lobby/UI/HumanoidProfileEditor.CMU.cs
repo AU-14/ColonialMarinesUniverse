@@ -679,10 +679,15 @@ public sealed partial class HumanoidProfileEditor
         SetDirty();
     }
 
+    // CMU14 method: keep the Character Records build and visible body in sync.
     private void SetBuild(BuildType value)
     {
-        Profile = Profile?.WithBuild(value);
-        SetDirty();
+        if (Profile is null)
+            return;
+
+        Profile = Profile.WithBuild(value);
+        _markingsModel.Markings = Profile.Appearance.Markings;
+        ReloadPreview();
     }
 
     private void SetHideMetaInformation(bool value)

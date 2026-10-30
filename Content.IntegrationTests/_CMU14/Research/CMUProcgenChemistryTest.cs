@@ -103,9 +103,8 @@ public sealed class CMUProcgenChemistryTest : GameTest
     }
 
     /// <summary>
-    /// Contract reactants must be obtainable. Drinks only a platoon's mess AutoDrink pours (anything on a
-    /// <see cref="CMUAutoDrinkComponent"/> menu but not the default NutriCo menu) inherit coffee/tea classes,
-    /// and nutrient plasma has no source at all; none of them may sit in a generation pool.
+    /// Contract pools exclude unavailable reagents and food or drink ingredients, even when a standard
+    /// or platoon mess dispenser provides them. Water and sugar remain useful synthesis ingredients.
     /// </summary>
     [Test]
     public async Task ContractPoolsExcludeUnobtainableReagents()
@@ -135,7 +134,9 @@ public sealed class CMUProcgenChemistryTest : GameTest
                 foreach (var reagent in platoonOnly)
                     Assert.That(pooled, Does.Not.Contain(reagent), $"{reagent} is only poured by a platoon mess AutoDrink");
                 Assert.That(pooled, Does.Not.Contain("CMUXenoPlasmaNutrient"), "nothing produces nutrient plasma");
-                Assert.That(gen.ChemicalGenClassesList["C3"], Does.Contain("RMCCoffee"), "standard-menu coffee stays obtainable");
+                Assert.That(pooled, Does.Not.Contain("RMCCoffee"), "obtainable drinks are still excluded from contract generation");
+                Assert.That(pooled, Does.Contain("Water"), "water remains eligible for synthesis");
+                Assert.That(pooled, Does.Contain("RMCSugar"), "sugar remains eligible despite being a food reagent");
             });
         });
     }

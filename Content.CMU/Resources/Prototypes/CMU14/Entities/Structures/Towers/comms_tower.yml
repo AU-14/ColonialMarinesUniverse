@@ -52,6 +52,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - CMURadioGovforMedical
     - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
@@ -60,6 +61,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - CMURadioOpforMedical
     - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
@@ -88,6 +90,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - CMURadioGovforMedical
     - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
@@ -106,6 +109,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - CMURadioOpforMedical
     - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP

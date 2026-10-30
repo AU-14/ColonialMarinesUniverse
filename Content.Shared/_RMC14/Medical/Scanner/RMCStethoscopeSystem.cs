@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Parasite; // CMU14
 using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -35,6 +36,7 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedXenoParasiteSystem _parasite = default!; // CMU14
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
     private const string NeckSlot = "neck";
@@ -212,6 +214,12 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
             : Loc.GetString(totalHealth, ("target", target));
 
         msg.AddMarkupOrThrow(locString);
+        // CMU14: neomorph-only breathing clue, including the legacy diagnostics route.
+        if (_parasite.HasNeomorphBreathingSymptoms(target))
+        {
+            msg.PushNewline();
+            msg.AddText(Loc.GetString("cmu-medical-stethoscope-raspy-breathing"));
+        }
         return msg;
     }
 

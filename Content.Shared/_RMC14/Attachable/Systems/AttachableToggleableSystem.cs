@@ -25,7 +25,9 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
 using Content.Shared.Wieldable.Components;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers; // CMU14
 using Robust.Shared.Map;
+using Robust.Shared.Network; // CMU14
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
@@ -47,6 +49,8 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private UseDelaySystem _useDelaySystem = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private INetManager _net = default!; // CMU14
+    [Dependency] private SharedContainerSystem _containers = default!; // CMU14
 
     private const string AttachableToggleUseDelayId = "RMCAttachableToggle";
 
@@ -766,6 +770,19 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         }
 
         var exists = ent.Comp.Action != null;
+        // CMU14 Begin: a stale action reference must be repaired by the server.
+        if (ent.Comp.Action is { } pending && Exists(pending) &&
+            (!_containers.TryGetContainingContainer(pending, out var container) ||
+                container != actionsContainerComponent.Container))
+        {
+            if (_net.IsServer)
+            {
+                ent.Comp.Action = null;
+                Dirty(ent);
+            }
+            return;
+        }
+        // CMU14 End
         _actionContainerSystem.EnsureAction(ent, ref ent.Comp.Action, ent.Comp.ActionId, actionsContainerComponent);
 
         if (ent.Comp.Action is not { } actionId)

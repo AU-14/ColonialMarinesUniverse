@@ -6,6 +6,7 @@ using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server._RMC14.Dropship;
+using Content.Shared.CMU14.Dropship.GunshipControls;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
@@ -299,7 +300,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         var footprint = console is { } c ? GetFootprint(c, dropship) : dropship.TacticalLandFootprint;
 
         _audio.PlayPvs(WarningSound, destCoords, AudioParams.Default.WithVolume(2f));
-        SpawnWarningBorder(destCoords, footprint, xform.LocalRotation, lifetime);
+        if (!TrySpawnMohawkApproachShadows(destination, dropshipGrid, lifetime, ftl.StateTime.End))
+            SpawnWarningBorder(destCoords, footprint, xform.LocalRotation, lifetime);
 
         EnsureComp<DropshipLandingMarkersSpawnedComponent>(destination);
     }
@@ -1083,7 +1085,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         var canMoveUp = CanMoveTacticalEye(eye, TacticalHoverMapOffset);
         var canMoveDown = CanMoveTacticalEye(eye, -TacticalHoverMapOffset);
         var rotationDegrees = pilotEye?.RotationQuarterTurns * 90 ?? 0;
-        var state = new DropshipNavigationTacticalLandBuiState(GetNetEntity(eye), clearForLanding, tacticalHover, canMoveUp, canMoveDown, rotationDegrees, doorLocks, false);
+        TryComp(ent, out GunshipControlsComponent? gunshipControls);
+        var state = new DropshipNavigationTacticalLandBuiState(GetNetEntity(eye), clearForLanding, tacticalHover, canMoveUp, canMoveDown, rotationDegrees, doorLocks, false, gunshipControls != null, gunshipControls?.Armed ?? false);
         _ui.SetUiState(ent.Owner, DropshipNavigationUiKey.Key, state);
     }
 
