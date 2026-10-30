@@ -31,7 +31,7 @@
       - ReagentId: CMUPathogenSporoplasmChitin  
         Quantity: 300  
   - type: SolutionRegeneration  
-  generated:  
+    generated:  
     reagents:  
     - ReagentId: CMUPathogenMycohemolymph  
       Quantity: 1  
