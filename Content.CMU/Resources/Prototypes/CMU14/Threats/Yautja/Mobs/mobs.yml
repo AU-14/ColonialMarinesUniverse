@@ -21,6 +21,8 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
+  # cmss13 /datum/pain/yautja ignores a hostile xeno dragging them in crit
+  - type: CMUNoDragSuffocation
   # cmss13 YAUTJA_SLOWED_AMOUNT / YAUTJA_SUPERSLOWED_AMOUNT take most of the human slow off preds (+0.75 / +1 move
   # delay instead of +2 / +4). without this they got the full marine slow from CMMobHuman
   - type: RMCSpeciesSlowdownModifier
@@ -326,6 +328,7 @@
   name: Yautja Youngblood
   suffix: Yautja, Youngblood, Event
   components:
+  - type: CMUNoDragSuffocation
   # Why: without a VisualBodyComponent, SharedVisualBodySystem.ApplyProfileTo resolves nothing and returns silently, so
   # the applied profile never reaches the body organs. Hunters inherit it from CMUMobYautja; youngbloods parent the human
   # base and must declare it.

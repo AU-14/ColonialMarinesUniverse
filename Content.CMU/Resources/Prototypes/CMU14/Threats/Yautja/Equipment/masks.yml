@@ -2066,6 +2066,7 @@
     isCorrodible: false
   - type: YautjaMask
     requiresYautjaWearer: false
+    allowAnyWearer: false
     drain: 3
     drainEvery: 2
     zoomLevel: 1.6

@@ -305,7 +305,7 @@
     heldPrefix: combistick
     size: Large
   - type: MeleeWeapon
-    attackRate: 0.95
+    attackRate: 1
     damage:
       types:
         Piercing: 10
@@ -1025,11 +1025,6 @@
     count: 12
   - type: Wieldable
     wieldedInhandPrefix: spikelauncher_w
-  - type: WieldableSpeedModifiers
-    base: 0.75
-    light: 0.9
-    medium: 0.85
-    heavy: 0.85
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/rifle_mouse.rsi
@@ -1095,13 +1090,8 @@
     startingCharge: 100
   - type: Wieldable
     wieldedInhandPrefix: plasmarifle_w
+  # cmss13 pred guns keep the default wield delay and have no aim slowdown
   - type: WieldDelay
-    baseDelay: 0.6
-  - type: WieldableSpeedModifiers
-    base: 0.72
-    light: 0.9
-    medium: 0.84
-    heavy: 0.84
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/rifle_mouse.rsi
@@ -1255,23 +1245,26 @@
   - type: AmmoCounter
   - type: Gun
     projectileSpeed: 30
-    fireRate: 1.111111
+    # cmss13 FIRE_DELAY_TIER_9, 2-round burst at FIRE_DELAY_TIER_11
+    fireRate: 2.857143
     minAngle: 10
     maxAngle: 10
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
     - Burst
-    burstFireRate: 0.909091
+    shotsPerBurst: 2
+    burstFireRate: 4
     soundGunshot:
       path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
     - Burst
-    scatterWielded: 15
+    scatterWielded: 4
     scatterUnwielded: 10
-    baseFireRate: 1.111111
+    baseFireRate: 2.857143
+    burstFireRateMultiplier: 1.4
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.5
     accuracyMultiplierUnwielded: 1.4
@@ -1283,7 +1276,7 @@
     fireModes:
     - proto: CMUYautjaPlasmaRifleBolt
       fireCost: 1
-      fireRate: 1.25
+      fireRate: 2.5
       popupText: plasma carbine will now fire incendiary plasma bolts.
     - proto: CMUYautjaCasterLethalBolt
       fireCost: 2
@@ -1296,12 +1289,6 @@
   - type: Wieldable
     wieldedInhandPrefix: plasmacarbine_w
   - type: WieldDelay
-    baseDelay: 0.6
-  - type: WieldableSpeedModifiers
-    base: 0.72
-    light: 0.9
-    medium: 0.84
-    heavy: 0.84
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/rifle_mouse.rsi
@@ -1473,7 +1460,7 @@
   - type: Gun
     minAngle: 0
     maxAngle: 0
-    fireRate: 1.428571
+    fireRate: 2
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
