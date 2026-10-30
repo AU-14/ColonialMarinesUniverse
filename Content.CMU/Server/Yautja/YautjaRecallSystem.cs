@@ -30,11 +30,12 @@ public sealed partial class YautjaRecallSystem : EntitySystem
     private void OnRecallableUsed(Entity<YautjaRecallableComponent> ent, ref UseInHandEvent args)
     {
         if (args.Handled ||
-            !HasComp<YautjaComponent>(args.User) ||
+            !(HasComp<YautjaComponent>(args.User) || HasComp<CMUYautjaResearchOperatorComponent>(args.User)) ||
             HasComp<YautjaBadBloodComponent>(args.User))
             return;
 
-        if (ent.Comp.YautjaOwner is { } owner && !TerminatingOrDeleted(owner))
+        if (ent.Comp.YautjaOwner is { } owner && !TerminatingOrDeleted(owner) &&
+            (owner == args.User || !HasComp<CMUYautjaResearchOperatorComponent>(args.User)))
             return;
 
         ent.Comp.YautjaOwner = args.User;
@@ -121,10 +122,16 @@ public sealed partial class YautjaRecallSystem : EntitySystem
 
         foreach (var (_, item) in candidates)
         {
+            var origin = _transform.GetMapCoordinates(item);
+            CMUYautjaEffect? effect = HasComp<YautjaSmartDiscComponent>(item) ? CMUYautjaEffect.DiscReturn :
+                HasComp<YautjaCombistickComponent>(item) ? CMUYautjaEffect.CombiReturn : null;
             if (!_hands.CanPickupAnyHand(args.Performer, item, checkActionBlocker: false) ||
-                !_hands.TryPickupAnyHand(args.Performer, item, checkActionBlocker: false))
+                !_hands.TryPickupAnyHand(args.Performer, item, checkActionBlocker: false, animate: effect == null))
                 continue;
 
+            // This is the recall action granted by the bracer. Preserve the launch position before pickup.
+            if (effect is { } kind)
+                EntityManager.System<CMUYautjaEffectsSystem>().Recall(kind, item, args.Performer, origin);
             _power.TryRemovePower(args.Performer, 70);
             _audio.PlayPredicted(ent.Comp.RecallSound, item, args.Performer);
             _popup.PopupEntity(Loc.GetString("cmu-yautja-recall-success", ("item", item)), args.Performer, args.Performer);
@@ -145,6 +152,7 @@ public sealed partial class YautjaRecallSystem : EntitySystem
     private bool CanUseYautjaRecall(EntityUid user)
     {
         return HasComp<YautjaComponent>(user) ||
+               HasComp<CMUYautjaResearchOperatorComponent>(user) ||
                (TryComp(user, out YautjaThrallComponent? thrall) && thrall.Blooded && thrall.TechAuthorized);
     }
 }

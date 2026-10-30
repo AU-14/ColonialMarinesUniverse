@@ -1266,6 +1266,8 @@ public sealed partial class YautjaItemSystem : EntitySystem
         _actions.AddAction(user, ref controller.RecallAction, controller.RecallActionId);
 
         _transform.AttachToGridOrMap(deployed);
+        EntityManager.System<CMUYautjaEffectsSystem>().Motion(deployed, CMUYautjaEffect.FalconDeploy,
+            CMUYautjaPresentation.FalconDuration, user);
         EnsureComp<InputMoverComponent>(deployed);
         _mover.SetRelay(user, deployed);
         var interactionRelay = EnsureComp<InteractionRelayComponent>(user);
@@ -1301,6 +1303,7 @@ public sealed partial class YautjaItemSystem : EntitySystem
             return;
 
         args.Handled = true;
+        EntityManager.System<CMUYautjaEffectsSystem>().Recall(CMUYautjaEffect.FalconRecall, ent.Comp.Drone, ent);
         CleanupFalconController(ent.Owner, ent.Comp, deleteDrone: true, restoreEye: true);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-falcon-drone-recalled"), args.Performer, args.Performer);
     }

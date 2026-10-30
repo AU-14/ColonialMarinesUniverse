@@ -3,6 +3,7 @@ using Content.Shared.Ghost;
 using Content.Shared.Ghost.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Yautja;
 
@@ -10,6 +11,7 @@ public sealed partial class YautjaFalconVisibilitySystem : EntitySystem
 {
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Update(float frameTime)
     {
@@ -24,7 +26,9 @@ public sealed partial class YautjaFalconVisibilitySystem : EntitySystem
             if (!_sprite.LayerMapTryGet((uid, sprite), YautjaFalconVisualLayers.Base, out var layer, true))
                 continue;
 
-            _sprite.LayerSetVisible((uid, sprite), layer, visible);
+            var deploying = TryComp<CMUYautjaMotionComponent>(uid, out var motion) &&
+                            motion.Kind == CMUYautjaEffect.FalconDeploy && _timing.CurTime < motion.EndsAt;
+            _sprite.LayerSetVisible((uid, sprite), layer, visible && !deploying);
         }
     }
 }

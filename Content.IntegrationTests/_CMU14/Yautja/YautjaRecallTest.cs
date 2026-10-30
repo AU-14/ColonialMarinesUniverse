@@ -1,5 +1,7 @@
 using System.Numerics;
+using System.Linq; // CMU14
 using Content.Shared._RMC14.Xenonids.Acid;
+using Content.Shared._RMC14.Actions; // CMU14
 using Content.Shared.Actions.Components;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Hands.EntitySystems;
@@ -188,6 +190,7 @@ public sealed class YautjaRecallTest
             entities.GetComponent<YautjaRecallableComponent>(first).YautjaOwner = hunter;
             var second = entities.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(40, 0)));
             entities.GetComponent<YautjaRecallableComponent>(second).YautjaOwner = hunter;
+            var start = entities.System<SharedTransformSystem>().GetMapCoordinates(second); // CMU14
 
             RaiseRecall(entities, hunter, bracer);
             RaiseRecall(entities, hunter, bracer);
@@ -198,6 +201,11 @@ public sealed class YautjaRecallTest
                 Assert.That(hands.IsHolding(hunter, first), Is.True);
                 Assert.That(hands.IsHolding(hunter, second), Is.True);
             });
+            // CMU14: the player-granted recall must retain the remote disc's presentation origin.
+            var effect = entities.EntityQuery<CMUYautjaEffectComponent>()
+                .Single(fx => fx.Kind == CMUYautjaEffect.DiscReturn && fx.Item == second);
+            Assert.That(effect.Destination, Is.EqualTo(start.Position), "Recall must animate from the discarded disc, not its new hand position.");
+            Assert.That(effect.Target, Is.EqualTo(hunter));
         });
 
         await pair.CleanReturnAsync();
@@ -219,15 +227,14 @@ public sealed class YautjaRecallTest
 
     private static void RaiseRecall(IEntityManager entities, EntityUid hunter, EntityUid bracer)
     {
-        var action = entities.SpawnEntity("CMUActionYautjaRecall", MapCoordinates.Nullspace);
-        var actionComp = entities.GetComponent<ActionComponent>(action);
+        // CMU14: exercise the action actually granted to this hunter.
+        var action = entities.System<SharedRMCActionsSystem>().GetActionsWithEvent<YautjaRecallActionEvent>(hunter).Single();
         var recall = new YautjaRecallActionEvent
         {
             Performer = hunter,
-            Action = (action, actionComp),
+            Action = action,
         };
         entities.EventBus.RaiseLocalEvent(bracer, recall);
         Assert.That(recall.Handled, Is.True);
-        entities.DeleteEntity(action);
     }
 }

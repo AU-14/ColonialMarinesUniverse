@@ -352,12 +352,15 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
             return false;
         }
 
+        var animateCombi = HasComp<YautjaCombistickComponent>(ent);
+        if (animateCombi)
+            EntityManager.System<CMUYautjaEffectsSystem>().Recall(CMUYautjaEffect.CombiReturn, ent, user);
         _transform.SetCoordinates(ent.Owner, Transform(user).Coordinates);
 
         ent.Comp.Recalling = true;
         try
         {
-            _hands.TryPickupAnyHand(user, ent.Owner, checkActionBlocker: false);
+            _hands.TryPickupAnyHand(user, ent.Owner, checkActionBlocker: false, animate: !animateCombi);
         }
         finally
         {

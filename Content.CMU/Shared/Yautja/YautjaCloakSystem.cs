@@ -71,10 +71,15 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         SubscribeLocalEvent<YautjaBracerComponent, EntGotInsertedIntoContainerMessage>(OnBracerInsertedIntoContainer);
 
         SubscribeLocalEvent<YautjaComponent, VaporHitEvent>(OnVaporHit);
+        SubscribeLocalEvent<CMUYautjaResearchOperatorComponent, VaporHitEvent>(OnVaporHit);
         SubscribeLocalEvent<YautjaComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CMUYautjaResearchOperatorComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<YautjaComponent, XenoDevouredEvent>(OnDevour);
+        SubscribeLocalEvent<CMUYautjaResearchOperatorComponent, XenoDevouredEvent>(OnDevour);
         SubscribeLocalEvent<YautjaComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
+        SubscribeLocalEvent<CMUYautjaResearchOperatorComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
         SubscribeLocalEvent<YautjaComponent, ExamineAttemptEvent>(OnExamineAttempt);
+        SubscribeLocalEvent<CMUYautjaResearchOperatorComponent, ExamineAttemptEvent>(OnExamineAttempt);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnAnyDamageChanged);
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
     }
@@ -262,6 +267,9 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             if (HasComp<EntityActiveInvisibleComponent>(user))
                 return false;
 
+            var optical = EnsureComp<CMUYautjaOpticalCloakComponent>(user);
+            optical.Preset = bracer.Comp.InvisibilitySound;
+            Dirty(user, optical);
             var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
             turnInvisible.RestrictWeapons = bracer.Comp.CloakRestrictWeapons;
             turnInvisible.UncloakWeaponLock = bracer.Comp.CloakUncloakWeaponLock;
@@ -290,7 +298,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
             ToggleLayers(user, bracer.Comp.CloakedHideLayers, false);
             HideFromContextMenu(user);
-            SpawnCloakEffects(user, bracer.Comp.CloakEffect);
+            // The optical post-shader draws the activation seam on the actual body silhouette.
 
             var popupOthers = Loc.GetString("rmc-cloak-activate-others", ("user", YautjaDisplayName(user)));
             _popup.PopupEntity(Loc.GetString("rmc-cloak-activate-self"), popupOthers, user, user, PopupType.Medium);
@@ -324,7 +332,6 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
             ToggleLayers(user, bracer.Comp.CloakedHideLayers, true);
             RestoreContextMenu(user);
-            SpawnCloakEffects(user, bracer.Comp.UncloakEffect);
 
             if (bracer.Comp.CloakHideNightVision)
                 EnsureComp<RMCNightVisionVisibleComponent>(user);
@@ -402,12 +409,12 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             args.Damage = new DamageSpecifier();
     }
 
-    private void OnVaporHit(Entity<YautjaComponent> ent, ref VaporHitEvent args)
+    private void OnVaporHit<T>(Entity<T> ent, ref VaporHitEvent args) where T : Component
     {
         ForceDecloak(ent.Owner);
     }
 
-    private void OnMobStateChanged(Entity<YautjaComponent> ent, ref MobStateChangedEvent args)
+    private void OnMobStateChanged<T>(Entity<T> ent, ref MobStateChangedEvent args) where T : Component
     {
         if (args.NewMobState != MobState.Dead)
             return;
@@ -415,17 +422,17 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         ForceDecloak(ent.Owner);
     }
 
-    private void OnDevour(Entity<YautjaComponent> ent, ref XenoDevouredEvent args)
+    private void OnDevour<T>(Entity<T> ent, ref XenoDevouredEvent args) where T : Component
     {
         ForceDecloak(ent.Owner);
     }
 
-    private void OnParasiteInfect(Entity<YautjaComponent> ent, ref XenoParasiteInfectEvent args)
+    private void OnParasiteInfect<T>(Entity<T> ent, ref XenoParasiteInfectEvent args) where T : Component
     {
         ForceDecloak(ent.Owner);
     }
 
-    private void OnExamineAttempt(Entity<YautjaComponent> ent, ref ExamineAttemptEvent args)
+    private void OnExamineAttempt<T>(Entity<T> ent, ref ExamineAttemptEvent args) where T : Component
     {
         if (args.Cancelled ||
             !TryComp(ent, out EntityTurnInvisibleComponent? cloak) ||
@@ -571,6 +578,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     private bool CanUseYautjaCloak(EntityUid user)
     {
         return HasComp<YautjaComponent>(user) ||
+               HasComp<CMUYautjaResearchOperatorComponent>(user) ||
                (TryComp(user, out YautjaThrallComponent? thrall) && thrall.Blooded && thrall.TechAuthorized);
     }
 

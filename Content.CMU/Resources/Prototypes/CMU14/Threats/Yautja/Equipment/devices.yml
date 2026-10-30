@@ -12,6 +12,12 @@
   - type: Clothing
     sprite: CMU14/Yautja/bracer.rsi
   - type: YautjaTechItem
+  - type: CMUYautjaExperiment
+  - type: SolutionContainerManager
+    solutions:
+      cmuExperiment:
+        maxVol: 30
+  - type: Speech
   - type: YautjaBracer
     cloakOpacity: 0
     cloakMovingOpacity: 0.035
@@ -31,6 +37,8 @@
   - type: YautjaGearContainer
   - type: UserInterface
     interfaces:
+      enum.CMUYautjaExperimentUiKey.Key:
+        type: CMUYautjaExperimentBui
       enum.YautjaBracerUIKey.Key:
         type: YautjaBracerBui
       enum.YautjaMarkUIKey.Key:

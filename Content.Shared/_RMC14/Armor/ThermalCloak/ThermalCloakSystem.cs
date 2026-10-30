@@ -75,14 +75,11 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         {
             var isMoving = physics.LinearVelocity.LengthSquared() > 0.01f;
             var target = isMoving ? cloakUser.MovingOpacity : cloakUser.Opacity;
-            // CMU14: rain malfunction flicker. Malfunction is set by YautjaCloakSystem on rain-exposed tiles.
-            // Target opacity spikes toward visible and the lerp runs faster so it reads as static.
+            // CMU14: rain leaves a faint silhouette; sparse interference is rendered on the client.
             var lerpSpeed = cloakUser.LerpSpeed;
             if (cloakUser.Malfunction)
             {
-                if (_random.Prob(0.35f))
-                    target = _random.NextFloat(0.4f, 1.0f);
-                lerpSpeed = 4f;
+                target = MathF.Max(target, .035f);
             }
 
             var delta = MathF.Min(lerpSpeed * frameTime, MathF.Abs(target - cloakUser.CurrentOpacity)); // CMU14: lerpSpeed covers the flicker rate

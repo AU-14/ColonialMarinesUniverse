@@ -160,7 +160,8 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
     public bool TryOpenSelfDestructDialog(Entity<YautjaBracerComponent> bracer, EntityUid user)
     {
-        if (!HasComp<YautjaComponent>(user) && bracer.Comp.User == user)
+        if (!HasComp<YautjaComponent>(user) && !HasComp<CMUYautjaResearchOperatorComponent>(user) &&
+            bracer.Comp.User == user)
             return TryStartNonTechMisuse?.Invoke(bracer, user) ?? false;
 
         if (bracer.Comp.SelfDestructArmed
@@ -492,7 +493,8 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
     private bool CanUseSelfDestructCommon(Entity<YautjaBracerComponent> bracer, EntityUid user)
     {
-        if (!HasComp<YautjaComponent>(user) || bracer.Comp.User != user)
+        if (!(HasComp<YautjaComponent>(user) || HasComp<CMUYautjaResearchOperatorComponent>(user)) ||
+            bracer.Comp.User != user)
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
             return false;

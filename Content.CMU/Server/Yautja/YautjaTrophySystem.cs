@@ -104,6 +104,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
     [Dependency] private YautjaMarkSystem _marks = default!;
     [Dependency] private YautjaRitualSystem _ritual = default!;
+    [Dependency] private CMUYautjaEffectsSystem _effects = default!;
 
     public override void Initialize()
     {
@@ -429,12 +430,12 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             DuplicateCondition = DuplicateConditions.SameTarget | DuplicateConditions.SameEvent,
             DistanceThreshold = 1.5f,
             ForceVisible = true,
-            TargetEffect = "RMCEffectXenoTelegraphRedEmpower",
         };
 
         if (!_doAfter.TryStartDoAfter(doAfter))
             return false;
 
+        _effects.StartButcher(target, hunter, procedure, stage, kind == YautjaButcherKind.Xeno, delay);
         if (procedure == YautjaButcherProcedure.Skin && source.ButcheryProgress == 0)
         {
             source.ButcheryProgress = 1;
@@ -470,14 +471,14 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private void OnButcherDoAfter(Entity<YautjaTrophySourceComponent> target, ref YautjaButcherDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled)
+        if (args.Handled)
             return;
 
         args.Handled = true;
-        if (args.Procedure == YautjaButcherProcedure.Skin)
-            TryCompleteButcherStage(args.User, target, args.Stage);
-        else
-            TryCompleteButcherLimb(args.User, target.Owner, args.Procedure);
+        var completed = !args.Cancelled && (args.Procedure == YautjaButcherProcedure.Skin
+            ? TryCompleteButcherStage(args.User, target, args.Stage)
+            : TryCompleteButcherLimb(args.User, target.Owner, args.Procedure));
+        _effects.EndButcher(target, args.User, args.DoAfter.StartTime, completed, args.Stage);
     }
 
     public bool TryHarvestTrophy(EntityUid hunter, EntityUid target, YautjaTrophyKind kind, out EntityUid trophy)
