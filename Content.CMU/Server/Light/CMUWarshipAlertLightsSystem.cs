@@ -265,7 +265,7 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
         if (_pendingLightChanges.Count > 0)
         {
             var processed = Math.Min(LightWavePerTick, _pendingLightChanges.Count);
-            for (var i = 0; i < processed; i++)
+            for (var i = 0; i < processedBeacons; i++)
             {
                 var (uid, level, _, _) = _pendingLightChanges[i];
                 if (TerminatingOrDeleted(uid))
@@ -318,8 +318,8 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
         if (_pendingBeacons.Count == 0)
             return;
 
-        var processed = Math.Min(BeaconsPerTick, _pendingBeacons.Count);
-        for (var i = 0; i < processed; i++)
+        var processedBeacons = Math.Min(BeaconsPerTick, _pendingBeacons.Count);
+        for (var i = 0; i < processedBeacons; i++)
         {
             var (uid, proto, level) = _pendingBeacons[i];
             if (!TryComp<CMUWarshipAlertLightComponent>(uid, out var marker)
@@ -331,7 +331,7 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
             marker.BeaconLevel = level;
         }
 
-        _pendingBeacons.RemoveRange(0, processed);
+        _pendingBeacons.RemoveRange(0, processedBeacons);
     }
 
     private void RemoveBeacon(CMUWarshipAlertLightComponent marker)
