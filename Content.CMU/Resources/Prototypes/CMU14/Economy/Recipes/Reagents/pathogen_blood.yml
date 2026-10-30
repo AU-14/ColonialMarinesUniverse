@@ -216,6 +216,7 @@
         potency: 4
       - !type:Antiparasitic
         potency: 1
+      - !type:Mycotoxigenic
       - !type:Hallucinogenic
         potency: 4
       - !type:Encrypted
