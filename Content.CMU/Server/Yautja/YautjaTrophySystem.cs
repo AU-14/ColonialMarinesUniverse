@@ -310,7 +310,9 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     public bool TryOpenButcherDialog(EntityUid hunter)
     {
-        if (!HasComp<YautjaComponent>(hunter) && !HoldsBlade(hunter))
+        if (!HasComp<YautjaComponent>(hunter) &&
+            (!TryComp(hunter, out YautjaButcherAbilityComponent? ability) || ability.RequiresBlade) &&
+            !HoldsBlade(hunter))
         {
             _popup.PopupEntity(Loc.GetString("cmu-butcher-need-blade"), hunter, hunter, PopupType.SmallCaution);
             return false;
@@ -971,7 +973,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         if (HasComp<YautjaComponent>(hunter))
             return true;
 
-        return HasComp<YautjaButcherAbilityComponent>(hunter) && HoldsBlade(hunter);
+        return TryComp(hunter, out YautjaButcherAbilityComponent? ability) &&
+               (!ability.RequiresBlade || HoldsBlade(hunter));
     }
 
     private bool HoldsBlade(EntityUid user)
@@ -1632,8 +1635,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             !TryComp<MobStateComponent>(target, out var mobState) ||
             !_mobState.IsDead(target, mobState) ||
             !IsAdjacent(hunter, target) ||
-            IsBlockedButcherTarget(target) ||
-            HasComp<YautjaComponent>(target))
+            IsBlockedButcherTarget(target))
         {
             return false;
         }

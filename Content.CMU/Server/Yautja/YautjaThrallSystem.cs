@@ -97,6 +97,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private YautjaMarkSystem _marks = default!;
+    [Dependency] private YautjaThrallHeroSystem _thrallHero = default!;
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
@@ -1016,6 +1017,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         thrall.Comp.ThrallBracer = thrallBracer.Owner;
         Dirty(thrall);
         InitializeThrallVendorCategories(thrall);
+        // cmss13 sets the Thrall species right here, in link_bracer
+        _thrallHero.Apply(thrall.Owner);
 
         thrallBracer.Comp.Master = master;
         thrallBracer.Comp.MasterBracer = masterBracer.Owner;
@@ -1046,6 +1049,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         thrall.BracerLinked = false;
         thrall.MasterBracer = null;
         thrall.ThrallBracer = null;
+        _thrallHero.Remove(target);
         thrall.Blooded = false;
         thrall.BloodedBy = null;
         thrall.BloodingReason = string.Empty;
@@ -1078,6 +1082,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         thrall.MasterBracer = null;
         thrall.ThrallBracer = null;
         Dirty(thrallUid, thrall);
+        _thrallHero.Remove(thrallUid);
     }
 
     private void CaptureHivebreakOriginalState(EntityUid target, YautjaThrallComponent thrall)
