@@ -119,8 +119,8 @@
       Classic: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/scout/urban.rsi
       Urban: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/scout/urban.rsi
   - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
+    walkModifier: 0.8
+    sprintModifier: 0.8
 
 # The scout's M68 thermal cloak: same shell, same sounds, same armour requirement, but dialled to full invisibility.
 # Built on the satchel base rather than parenting RMCBackpackScout so it does not inherit that prototype's
