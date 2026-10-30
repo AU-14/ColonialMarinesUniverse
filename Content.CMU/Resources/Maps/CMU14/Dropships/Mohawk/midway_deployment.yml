@@ -1,4 +1,3 @@
-# Source: https://github.com/cmss13-devs/cmss13/pull/12866
 meta:
   format: 7
   category: Map
@@ -161,7 +160,12 @@ entities:
       landingShadow: CMUMohawkMidwayApproachShadow
       rampPreviewFullDeck: true
       keepRampThreshold: true
-- proto: CMUAirFillerVent
+  - uid: 288
+    components:
+    - type: Map
+    - type: Transform
+      parent: invalid
+- proto: CMULifeSupportVent
   entities:
   - uid: 908
     components:
@@ -390,6 +394,11 @@ entities:
     - type: Transform
       parent: 1
       pos: -3.5,6.5
+  - uid: 55
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,7.5
 - proto: CMUMohawkMidwayWallMid405b75a93d0d
   entities:
   - uid: 35
@@ -446,6 +455,21 @@ entities:
     - type: Transform
       parent: 1
       pos: -3.5,1.5
+  - uid: 64
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-1.5
+  - uid: 114
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,5.5
+  - uid: 247
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,1.5
 - proto: CMUMohawkMidwayWall900612f4bca3
   entities:
   - uid: 44
@@ -523,13 +547,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,7.5
-- proto: CMUMohawkMidwayWeaponHardpointLeftae395dc899
-  entities:
-  - uid: 55
-    components:
-    - type: Transform
-      parent: 1
-      pos: -2.5,7.5
 - proto: CMUMohawkMidwayWallMid50f97eca9c6f
   entities:
   - uid: 56
@@ -551,6 +568,11 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,4.5
+  - uid: 246
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,1.5
 - proto: CMUMohawkMidwayMidwayaed5026d44
   entities:
   - uid: 59
@@ -587,13 +609,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,-0.5
-- proto: CMUMohawkMidwayMidwayf72a240418
-  entities:
-  - uid: 64
-    components:
-    - type: Transform
-      parent: 1
-      pos: -2.5,-1.5
 - proto: CMUMohawkMidwayOmahaPassenger934fe6b701
   entities:
   - uid: 65
@@ -601,6 +616,21 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,-1.5
+  - uid: 73
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-5.5
+  - uid: 219
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-1.5
+  - uid: 227
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-5.5
 - proto: CMUMohawkMidwayOmahaPassengerbae5a3aea5
   entities:
   - uid: 66
@@ -608,6 +638,21 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,-1.5
+  - uid: 74
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-5.5
+  - uid: 220
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-1.5
+  - uid: 228
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-5.5
 - proto: CMUMohawkMidwayOmahaPassenger7794d520d1
   entities:
   - uid: 67
@@ -615,6 +660,24 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,-2.5
+      rot: 3.141592653589793 rad
+  - uid: 75
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-6.5
+      rot: 3.141592653589793 rad
+  - uid: 221
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-2.5
+      rot: 3.141592653589793 rad
+  - uid: 229
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-6.5
       rot: 3.141592653589793 rad
 - proto: CMUMohawkMidwayOmahaPassenger78043b1378
   entities:
@@ -624,6 +687,24 @@ entities:
       parent: 1
       pos: -2.5,-2.5
       rot: 3.141592653589793 rad
+  - uid: 76
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-6.5
+      rot: 3.141592653589793 rad
+  - uid: 222
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-2.5
+      rot: 3.141592653589793 rad
+  - uid: 230
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-6.5
+      rot: 3.141592653589793 rad
 - proto: CMUMohawkMidwayPanelHalf713dfbb10a
   entities:
   - uid: 70
@@ -631,6 +712,11 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,-3.5
+  - uid: 224
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-3.5
 - proto: CMUMohawkInternalModulePort
   entities:
   - uid: 71
@@ -646,35 +732,11 @@ entities:
       parent: 1
       pos: -2.5,-4.5
       rot: 3.141592653589793 rad
-- proto: CMUMohawkMidwayOmahaPassenger934fe6b701
-  entities:
-  - uid: 73
+  - uid: 226
     components:
     - type: Transform
       parent: 1
-      pos: -2.5,-5.5
-- proto: CMUMohawkMidwayOmahaPassengerbae5a3aea5
-  entities:
-  - uid: 74
-    components:
-    - type: Transform
-      parent: 1
-      pos: -2.5,-5.5
-- proto: CMUMohawkMidwayOmahaPassenger7794d520d1
-  entities:
-  - uid: 75
-    components:
-    - type: Transform
-      parent: 1
-      pos: -2.5,-6.5
-      rot: 3.141592653589793 rad
-- proto: CMUMohawkMidwayOmahaPassenger78043b1378
-  entities:
-  - uid: 76
-    components:
-    - type: Transform
-      parent: 1
-      pos: -2.5,-6.5
+      pos: 3.5,-4.5
       rot: 3.141592653589793 rad
 - proto: CMUMohawkMidwayWall21296e3a675d
   entities:
@@ -756,13 +818,23 @@ entities:
       parent: 1
       pos: -1.5,4.5
       rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayPanelHalf54ae2575da
-  entities:
   - uid: 88
     components:
     - type: Transform
       parent: 1
       pos: -1.5,3.5
+      rot: 1.5707963267948966 rad
+  - uid: 198
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-5.5
+      rot: 1.5707963267948966 rad
+  - uid: 200
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-6.5
       rot: 1.5707963267948966 rad
 - proto: CMUMohawkMidwayWallMid019664b3bf3b
   entities:
@@ -794,29 +866,35 @@ entities:
       parent: 1
       pos: -1.5,-1.5
       rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayPlatformDecal557c3e5955
-  entities:
   - uid: 93
     components:
     - type: Transform
       parent: 1
       pos: -1.5,-2.5
       rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayPlatformDecal557c3e5955
-  entities:
   - uid: 94
     components:
     - type: Transform
       parent: 1
       pos: -1.5,-3.5
       rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayPlatformDecal557c3e5955
-  entities:
   - uid: 95
     components:
     - type: Transform
       parent: 1
       pos: -1.5,-4.5
+      rot: 1.5707963267948966 rad
+  - uid: 97
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-5.5
+      rot: 1.5707963267948966 rad
+  - uid: 99
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-6.5
       rot: 1.5707963267948966 rad
 - proto: CMUMohawkMidwayPanelHalf7011e9cd50
   entities:
@@ -826,30 +904,24 @@ entities:
       parent: 1
       pos: -1.5,-5.5
       rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayPlatformDecal557c3e5955
-  entities:
-  - uid: 97
-    components:
-    - type: Transform
-      parent: 1
-      pos: -1.5,-5.5
-      rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayPanelHalf7011e9cd50
-  entities:
   - uid: 98
     components:
     - type: Transform
       parent: 1
       pos: -1.5,-6.5
       rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayPlatformDecal557c3e5955
-  entities:
-  - uid: 99
+  - uid: 187
     components:
     - type: Transform
       parent: 1
-      pos: -1.5,-6.5
-      rot: 1.5707963267948966 rad
+      pos: 2.5,4.5
+      rot: -1.5707963267948966 rad
+  - uid: 188
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,3.5
+      rot: -1.5707963267948966 rad
 - proto: CMUMohawkMidwayWall224fcbada172
   entities:
   - uid: 100
@@ -901,6 +973,26 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.5,9.5
+  - uid: 108
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,8.5
+  - uid: 156
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,9.5
+  - uid: 158
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,8.5
+  - uid: 935
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-8.5
 - proto: CMUMohawkMidwayMidwayd883d96d87
   entities:
   - uid: 107
@@ -908,13 +1000,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.5,9.5
-- proto: CMUMohawkMidwayPanelFull88f7898504
-  entities:
-  - uid: 108
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,8.5
 - proto: CMUMohawkMidwayPlatformc4c43c8117
   entities:
   - uid: 109
@@ -923,6 +1008,12 @@ entities:
       parent: 1
       pos: -0.5,8.5
       rot: 3.141592653589793 rad
+  - uid: 159
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,8.5
+      rot: 3.141592653589793 rad
 - proto: CMUMohawkMidwayDecal74a5ad69ce
   entities:
   - uid: 110
@@ -930,6 +1021,31 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.5,7.5
+  - uid: 113
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,5.5
+  - uid: 132
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,7.5
+  - uid: 134
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,5.5
+  - uid: 161
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,7.5
+  - uid: 166
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,5.5
 - proto: CMUMohawkMidwayDropshipMidway8f46dd790a
   entities:
   - uid: 111
@@ -944,20 +1060,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.5,6.5
-- proto: CMUMohawkMidwayDecal74a5ad69ce
-  entities:
-  - uid: 113
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,5.5
-- proto: CMUMohawkMidwayMidwayf72a240418
-  entities:
-  - uid: 114
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,5.5
 - proto: CMUMohawkMidwayStairsDecalTop05fa3fe355
   entities:
   - uid: 115
@@ -965,6 +1067,11 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.5,1.5
+  - uid: 168
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,1.5
 - proto: CMUMohawkMidwayStairsDecalBot50510faa18
   entities:
   - uid: 116
@@ -972,6 +1079,16 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.5,-0.5
+  - uid: 141
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-0.5
+  - uid: 169
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-0.5
 - proto: CMUMohawkRampMarker
   entities:
   - uid: 117
@@ -981,8 +1098,6 @@ entities:
       pos: -0.5,-1.5
     - type: MohawkRampSegment
       stage: 4
-- proto: CMUMohawkRampMarker
-  entities:
   - uid: 119
     components:
     - type: Transform
@@ -990,15 +1105,6 @@ entities:
       pos: -0.5,-2.5
     - type: MohawkRampSegment
       stage: 3
-- proto: CMUMohawkMidwayBorder206b6a20fc75
-  entities:
-  - uid: 120
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,-3.5
-- proto: CMUMohawkRampMarker
-  entities:
   - uid: 121
     components:
     - type: Transform
@@ -1006,15 +1112,6 @@ entities:
       pos: -0.5,-3.5
     - type: MohawkRampSegment
       stage: 2
-- proto: CMUMohawkMidwayBorder10cbab552b8b
-  entities:
-  - uid: 122
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,-4.5
-- proto: CMUMohawkRampMarker
-  entities:
   - uid: 123
     components:
     - type: Transform
@@ -1022,15 +1119,6 @@ entities:
       pos: -0.5,-4.5
     - type: MohawkRampSegment
       stage: 1
-- proto: CMUMohawkMidwayBorder00cd100a7080
-  entities:
-  - uid: 124
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,-5.5
-- proto: CMUMohawkRampMarker
-  entities:
   - uid: 125
     components:
     - type: Transform
@@ -1038,6 +1126,97 @@ entities:
       pos: -0.5,-5.5
     - type: MohawkRampSegment
       stage: 0
+  - uid: 142
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-1.5
+    - type: MohawkRampSegment
+      stage: 4
+  - uid: 144
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-2.5
+    - type: MohawkRampSegment
+      stage: 3
+  - uid: 145
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-3.5
+    - type: MohawkRampSegment
+      stage: 2
+  - uid: 146
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-4.5
+    - type: MohawkRampSegment
+      stage: 1
+  - uid: 148
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-5.5
+    - type: MohawkRampSegment
+      stage: 0
+  - uid: 170
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-1.5
+    - type: MohawkRampSegment
+      stage: 4
+  - uid: 172
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-2.5
+    - type: MohawkRampSegment
+      stage: 3
+  - uid: 174
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-3.5
+    - type: MohawkRampSegment
+      stage: 2
+  - uid: 176
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-4.5
+    - type: MohawkRampSegment
+      stage: 1
+  - uid: 178
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-5.5
+    - type: MohawkRampSegment
+      stage: 0
+- proto: CMUMohawkMidwayBorder206b6a20fc75
+  entities:
+  - uid: 120
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-3.5
+- proto: CMUMohawkMidwayBorder10cbab552b8b
+  entities:
+  - uid: 122
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-4.5
+- proto: CMUMohawkMidwayBorder00cd100a7080
+  entities:
+  - uid: 124
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-5.5
 - proto: CMUMohawkMidwayWall02f50f0f0f44
   entities:
   - uid: 126
@@ -1075,13 +1254,6 @@ entities:
       parent: 1
       pos: 0.5,8.5
       rot: 3.141592653589793 rad
-- proto: CMUMohawkMidwayDecal74a5ad69ce
-  entities:
-  - uid: 132
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,7.5
 - proto: CMUMohawkMidwayMidway3d7bfd7b2b
   entities:
   - uid: 133
@@ -1090,13 +1262,6 @@ entities:
       parent: 1
       pos: 0.5,6.5
       rot: 3.141592653589793 rad
-- proto: CMUMohawkMidwayDecal74a5ad69ce
-  entities:
-  - uid: 134
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,5.5
 - proto: CMUMohawkMidwayGunneryea0f8d621b
   entities:
   - uid: 135
@@ -1133,49 +1298,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 0.5,0.5
-- proto: CMUMohawkMidwayStairsDecalBot50510faa18
-  entities:
-  - uid: 141
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-0.5
-- proto: CMUMohawkRampMarker
-  entities:
-  - uid: 142
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-1.5
-    - type: MohawkRampSegment
-      stage: 4
-- proto: CMUMohawkRampMarker
-  entities:
-  - uid: 144
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-2.5
-    - type: MohawkRampSegment
-      stage: 3
-- proto: CMUMohawkRampMarker
-  entities:
-  - uid: 145
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-3.5
-    - type: MohawkRampSegment
-      stage: 2
-- proto: CMUMohawkRampMarker
-  entities:
-  - uid: 146
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-4.5
-    - type: MohawkRampSegment
-      stage: 1
 - proto: CMUMohawkMidwayBorder01c320197fca
   entities:
   - uid: 147
@@ -1183,15 +1305,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 0.5,-5.5
-- proto: CMUMohawkRampMarker
-  entities:
-  - uid: 148
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-5.5
-    - type: MohawkRampSegment
-      stage: 0
 - proto: CMUMohawkInternalModuleAft
   entities:
   - uid: 149
@@ -1236,13 +1349,6 @@ entities:
       parent: 1
       pos: 1.5,9.5
       rot: 3.141592653589793 rad
-- proto: CMUMohawkMidwayPanelFull88f7898504
-  entities:
-  - uid: 156
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,9.5
 - proto: CMUMohawkMidwayDropshipMidway4eef289d79
   entities:
   - uid: 157
@@ -1250,21 +1356,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,9.5
-- proto: CMUMohawkMidwayPanelFull88f7898504
-  entities:
-  - uid: 158
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,8.5
-- proto: CMUMohawkMidwayPlatformc4c43c8117
-  entities:
-  - uid: 159
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,8.5
-      rot: 3.141592653589793 rad
 - proto: CMUMohawkMidwayMidwayd518401c98
   entities:
   - uid: 160
@@ -1272,13 +1363,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,8.5
-- proto: CMUMohawkMidwayDecal74a5ad69ce
-  entities:
-  - uid: 161
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,7.5
 - proto: CMUMohawkMidwayMidwayc4cd0257cf
   entities:
   - uid: 162
@@ -1301,13 +1385,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,6.5
-- proto: CMUMohawkMidwayDecal74a5ad69ce
-  entities:
-  - uid: 166
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,5.5
 - proto: CMUMohawkMidwayWallMede96e054ca8
   entities:
   - uid: 167
@@ -1315,38 +1392,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,5.5
-- proto: CMUMohawkMidwayStairsDecalTop05fa3fe355
-  entities:
-  - uid: 168
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,1.5
-- proto: CMUMohawkMidwayStairsDecalBot50510faa18
-  entities:
-  - uid: 169
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,-0.5
-- proto: CMUMohawkRampMarker
-  entities:
-  - uid: 170
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,-1.5
-    - type: MohawkRampSegment
-      stage: 4
-- proto: CMUMohawkRampMarker
-  entities:
-  - uid: 172
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,-2.5
-    - type: MohawkRampSegment
-      stage: 3
 - proto: CMUMohawkMidwayBorder21fa13a6ed7d
   entities:
   - uid: 173
@@ -1354,15 +1399,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,-3.5
-- proto: CMUMohawkRampMarker
-  entities:
-  - uid: 174
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,-3.5
-    - type: MohawkRampSegment
-      stage: 2
 - proto: CMUMohawkMidwayBorder1182a4c68801
   entities:
   - uid: 175
@@ -1370,15 +1406,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,-4.5
-- proto: CMUMohawkRampMarker
-  entities:
-  - uid: 176
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,-4.5
-    - type: MohawkRampSegment
-      stage: 1
 - proto: CMUMohawkMidwayBorder025f39505247
   entities:
   - uid: 177
@@ -1386,15 +1413,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,-5.5
-- proto: CMUMohawkRampMarker
-  entities:
-  - uid: 178
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,-5.5
-    - type: MohawkRampSegment
-      stage: 0
 - proto: CMUMohawkMidwayWall047e3a09de0c
   entities:
   - uid: 179
@@ -1453,22 +1471,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 2.5,6.5
-- proto: CMUMohawkMidwayPanelHalf7011e9cd50
-  entities:
-  - uid: 187
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,4.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayPanelHalf7011e9cd50
-  entities:
-  - uid: 188
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,3.5
-      rot: -1.5707963267948966 rad
 - proto: CMUMohawkMidwayWallMid03a9636f6cf2
   entities:
   - uid: 189
@@ -1499,6 +1501,42 @@ entities:
       parent: 1
       pos: 2.5,-1.5
       rot: -1.5707963267948966 rad
+  - uid: 194
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-2.5
+      rot: -1.5707963267948966 rad
+  - uid: 195
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-2.5
+      rot: -1.5707963267948966 rad
+  - uid: 196
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-3.5
+      rot: -1.5707963267948966 rad
+  - uid: 197
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-4.5
+      rot: -1.5707963267948966 rad
+  - uid: 199
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-5.5
+      rot: -1.5707963267948966 rad
+  - uid: 201
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-6.5
+      rot: -1.5707963267948966 rad
 - proto: CMUMohawkMidwayDropshipMidway695cc2bf5d
   entities:
   - uid: 193
@@ -1506,70 +1544,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 2.5,-1.5
-- proto: CMUMohawkMidwayPlatformDecal853a2b8886
-  entities:
-  - uid: 194
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-2.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayPlatformDecal853a2b8886
-  entities:
-  - uid: 195
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-2.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayPlatformDecal853a2b8886
-  entities:
-  - uid: 196
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-3.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayPlatformDecal853a2b8886
-  entities:
-  - uid: 197
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-4.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayPanelHalf54ae2575da
-  entities:
-  - uid: 198
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-5.5
-      rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayPlatformDecal853a2b8886
-  entities:
-  - uid: 199
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-5.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayPanelHalf54ae2575da
-  entities:
-  - uid: 200
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-6.5
-      rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayPlatformDecal853a2b8886
-  entities:
-  - uid: 201
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-6.5
-      rot: -1.5707963267948966 rad
 - proto: CMUMohawkMidwayWall23f2986dbe1c
   entities:
   - uid: 202
@@ -1619,6 +1593,11 @@ entities:
     - type: Transform
       parent: 1
       pos: 3.5,7.5
+  - uid: 239
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,6.5
 - proto: CMUMohawkMidwayWallMid55c4dbaa00ef
   entities:
   - uid: 209
@@ -1692,43 +1671,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 3.5,-0.5
-- proto: CMUMohawkMidwayOmahaPassenger934fe6b701
-  entities:
-  - uid: 219
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,-1.5
-- proto: CMUMohawkMidwayOmahaPassengerbae5a3aea5
-  entities:
-  - uid: 220
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,-1.5
-- proto: CMUMohawkMidwayOmahaPassenger7794d520d1
-  entities:
-  - uid: 221
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,-2.5
-      rot: 3.141592653589793 rad
-- proto: CMUMohawkMidwayOmahaPassenger78043b1378
-  entities:
-  - uid: 222
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,-2.5
-      rot: 3.141592653589793 rad
-- proto: CMUMohawkMidwayPanelHalf713dfbb10a
-  entities:
-  - uid: 224
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,-3.5
 - proto: CMUMohawkInternalModuleStarboard
   entities:
   - uid: 225
@@ -1736,44 +1678,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 3.5,-4.5
-- proto: CMUMohawkMidwayPanelHalff6c1b5970c
-  entities:
-  - uid: 226
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,-4.5
-      rot: 3.141592653589793 rad
-- proto: CMUMohawkMidwayOmahaPassenger934fe6b701
-  entities:
-  - uid: 227
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,-5.5
-- proto: CMUMohawkMidwayOmahaPassengerbae5a3aea5
-  entities:
-  - uid: 228
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,-5.5
-- proto: CMUMohawkMidwayOmahaPassenger7794d520d1
-  entities:
-  - uid: 229
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,-6.5
-      rot: 3.141592653589793 rad
-- proto: CMUMohawkMidwayOmahaPassenger78043b1378
-  entities:
-  - uid: 230
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,-6.5
-      rot: 3.141592653589793 rad
 - proto: CMUMohawkMidwayWall24abfa15664f
   entities:
   - uid: 231
@@ -1830,13 +1734,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 4.5,6.5
-- proto: CMUMohawkMidwayWeaponHardpointRight9e7cacfb7e
-  entities:
-  - uid: 239
-    components:
-    - type: Transform
-      parent: 1
-      pos: 4.5,6.5
 - proto: CMUMohawkMidwayWallMid43d456e02b57
   entities:
   - uid: 240
@@ -1879,20 +1776,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 4.5,2.5
-- proto: CMUMohawkMidwayDropshipMidway1ed63c452c
-  entities:
-  - uid: 246
-    components:
-    - type: Transform
-      parent: 1
-      pos: 4.5,1.5
-- proto: CMUMohawkMidwayMidwayf72a240418
-  entities:
-  - uid: 247
-    components:
-    - type: Transform
-      parent: 1
-      pos: 4.5,1.5
 - proto: CMUMohawkMidwayWall95e458a59c73
   entities:
   - uid: 249
@@ -2103,13 +1986,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 7.5,3.5
-- proto: ''
-  entities:
-  - uid: 288
-    components:
-    - type: Map
-    - type: Transform
-      parent: invalid
 - proto: AU14VehicleRadioSet
   entities:
   - uid: 900
@@ -2152,6 +2028,16 @@ entities:
     - type: Transform
       parent: 1
       pos: -3.5,0.5
+  - uid: 934
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-8.5
+  - uid: 949
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,0.5
 - proto: CMUMohawkMidwayBody208803cda2e3
   entities:
   - uid: 914
@@ -2180,8 +2066,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,4.5
-- proto: CMUMohawkMidwayBlue8b06850b54
-  entities:
   - uid: 918
     components:
     - type: Transform
@@ -2195,16 +2079,6 @@ entities:
       parent: 1
       pos: -1.5,5.5
       rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayAdjustableLayer91a71b7f04
-  entities:
-  - uid: 920
-    components:
-    - type: Transform
-      parent: 1
-      pos: -1.5,5.5
-      rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayAdjustableLayerfae113eec8
-  entities:
   - uid: 921
     components:
     - type: Transform
@@ -2213,6 +2087,12 @@ entities:
       rot: 1.5707963267948966 rad
 - proto: CMUMohawkMidwayAdjustableLayer91a71b7f04
   entities:
+  - uid: 920
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,5.5
+      rot: 1.5707963267948966 rad
   - uid: 922
     components:
     - type: Transform
@@ -2227,30 +2107,63 @@ entities:
       parent: 1
       pos: -1.5,-2.5
       rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayRampRailing
-  entities:
   - uid: 924
     components:
     - type: Transform
       parent: 1
       pos: -1.5,-3.5
       rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayRampRailing
-  entities:
   - uid: 925
     components:
     - type: Transform
       parent: 1
       pos: -1.5,-4.5
       rot: 1.5707963267948966 rad
-- proto: CMUMohawkMidwayRampRailing
-  entities:
   - uid: 926
     components:
     - type: Transform
       parent: 1
       pos: -1.5,-5.5
       rot: 1.5707963267948966 rad
+  - uid: 930
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-6.5
+  - uid: 933
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-6.5
+  - uid: 938
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-6.5
+  - uid: 943
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-2.5
+      rot: -1.5707963267948966 rad
+  - uid: 944
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-3.5
+      rot: -1.5707963267948966 rad
+  - uid: 945
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-4.5
+      rot: -1.5707963267948966 rad
+  - uid: 946
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-5.5
+      rot: -1.5707963267948966 rad
 - proto: CMUMohawkMidwayOmahaPilot00f0878681
   entities:
   - uid: 927
@@ -2258,6 +2171,12 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.5,9.5
+      rot: 3.141592653589793 rad
+  - uid: 936
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,9.5
       rot: 3.141592653589793 rad
 - proto: CMUMohawkMidwayBluef3d77a47c4
   entities:
@@ -2273,13 +2192,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.5,-1.5
-- proto: CMUMohawkMidwayRampRailing
-  entities:
-  - uid: 930
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,-6.5
 - proto: CMUMohawkMidwayMidway6a168ad015
   entities:
   - uid: 931
@@ -2294,35 +2206,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 0.5,-1.5
-- proto: CMUMohawkMidwayRampRailing
-  entities:
-  - uid: 933
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-6.5
-- proto: CMUMohawkMidwayBluef4dcea5589
-  entities:
-  - uid: 934
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-8.5
-- proto: CMUMohawkMidwayPanelFull88f7898504
-  entities:
-  - uid: 935
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-8.5
-- proto: CMUMohawkMidwayOmahaPilot00f0878681
-  entities:
-  - uid: 936
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,9.5
-      rot: 3.141592653589793 rad
 - proto: CMUMohawkMidwayBorder32d4000d1359
   entities:
   - uid: 937
@@ -2330,13 +2213,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,-1.5
-- proto: CMUMohawkMidwayRampRailing
-  entities:
-  - uid: 938
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,-6.5
 - proto: CMUMohawkMidwayAdjustableLayer7d1bd1f6c5
   entities:
   - uid: 939
@@ -2344,6 +2220,12 @@ entities:
     - type: Transform
       parent: 1
       pos: 2.5,5.5
+      rot: -1.5707963267948966 rad
+  - uid: 941
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,2.5
       rot: -1.5707963267948966 rad
 - proto: CMUMohawkMidwayAdjustableLayerf84e8b9774
   entities:
@@ -2353,53 +2235,11 @@ entities:
       parent: 1
       pos: 2.5,5.5
       rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayAdjustableLayer7d1bd1f6c5
-  entities:
-  - uid: 941
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,2.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayAdjustableLayerf84e8b9774
-  entities:
   - uid: 942
     components:
     - type: Transform
       parent: 1
       pos: 2.5,2.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayRampRailing
-  entities:
-  - uid: 943
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-2.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayRampRailing
-  entities:
-  - uid: 944
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-3.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayRampRailing
-  entities:
-  - uid: 945
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-4.5
-      rot: -1.5707963267948966 rad
-- proto: CMUMohawkMidwayRampRailing
-  entities:
-  - uid: 946
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-5.5
       rot: -1.5707963267948966 rad
 - proto: CMUMohawkMidwayBlue28c4a8e6d5
   entities:
@@ -2408,20 +2248,11 @@ entities:
     - type: Transform
       parent: 1
       pos: 3.5,4.5
-- proto: CMUMohawkMidwayBlue28c4a8e6d5
-  entities:
   - uid: 948
     components:
     - type: Transform
       parent: 1
       pos: 3.5,-3.5
-- proto: CMUMohawkMidwayBluef4dcea5589
-  entities:
-  - uid: 949
-    components:
-    - type: Transform
-      parent: 1
-      pos: 4.5,0.5
 - proto: CMUMohawkMidwayBody213a7555a090
   entities:
   - uid: 950
@@ -2471,3 +2302,4 @@ entities:
     - type: Transform
       parent: 1
       pos: 7.5,3.5
+...

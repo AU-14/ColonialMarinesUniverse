@@ -938,7 +938,8 @@ entities:
       pos: 7.5,3.5
       parent: 1
 # cmu edit start: keeps the craft's air breathable
-- proto: CMUAirFillerVent
+# CMU14
+- proto: CMULifeSupportVent
   entities:
   - uid: 131
     components:

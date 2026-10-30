@@ -1,0 +1,11 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Free Company Raiders get better armor, rifle lights, flares, a real medical
+    pouch, a stocked pack and ex-MARSOC skills so they stand a chance on distress
+    calls against xenos.
+  type: Tweak
+- message: The raider leader's XM40 no longer accepts HEAP magazines.
+  type: Tweak
+time: '2026-10-30T11:04:47.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2375

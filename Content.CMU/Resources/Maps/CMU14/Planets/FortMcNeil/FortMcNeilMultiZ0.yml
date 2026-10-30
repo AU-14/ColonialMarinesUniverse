@@ -163,7 +163,7 @@ tilemap:
   79: RMCPlanetSnow3
   8: RMCPlanetSnow4
 entities:
-- proto: ""
+- proto: ''
   entities:
   - uid: 1
     components:
