@@ -121,7 +121,8 @@ public sealed class FarmingSystem : SharedFarmingSystem
 
         args.Handled = true;
 
-        var coords = Transform(planter).Coordinates;
+        var planterXform = Transform(planter);
+        var coords = planterXform.Coordinates;
 
         // A planter with something growing in it keeps its soil.
         if (planter.Comp.Filled && TryComp<PlantTrayComponent>(planter, out var tray) && tray.PlantEntity != null)
@@ -132,8 +133,14 @@ public sealed class FarmingSystem : SharedFarmingSystem
 
         var swapped = Spawn(planter.Comp.Swap, coords);
         var xform = Transform(swapped);
-        xform.LocalRotation = Transform(planter).LocalRotation;
-        xform.Anchored = Transform(planter).Anchored;
+        _transform.SetLocalRotation(swapped, planterXform.LocalRotation, xform);
+
+        // Preserve the original planter's anchoring without writing to the read-only transform property.
+        if (planterXform.Anchored && !xform.Anchored)
+            _transform.AnchorEntity(swapped, xform);
+        else if (!planterXform.Anchored && xform.Anchored)
+            _transform.Unanchor(swapped, xform);
+
         _popups.PopupEntity(Loc.GetString(planter.Comp.Filled ? "au14-farming-planter-emptied" : "au14-farming-planter-filled"), swapped, args.User);
         QueueDel(planter);
     }
