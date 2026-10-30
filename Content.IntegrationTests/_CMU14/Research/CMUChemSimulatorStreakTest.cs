@@ -21,9 +21,19 @@ public sealed class CMUChemSimulatorStreakTest : GameTest
 
     private const string Root = "CMUTestStreakRoot";
 
-    // STATE-02 / STATE-03: repeats cost exponentially more, and the displayed cost is the charged cost
+    // FLOW-41: the repeat price is a stretched doubling, so six of the same operation in a row cost x1, 1, 2, 3, 3, 5
     [Test]
-    public async Task RepeatedOperationsDoubleAndChargeMatchesDisplayedCost()
+    public void StreakMultiplierIsAStretchedDoubling()
+    {
+        var sequence = Enumerable.Range(0, 6).Select(SharedChemicalSimulatorSystem.StreakMultiplier);
+        Assert.That(sequence, Is.EqualTo(new[] { 1, 1, 2, 3, 3, 5 }));
+        Assert.That(SharedChemicalSimulatorSystem.StreakMultiplier(9), Is.EqualTo(16), "doubles every 2.25 repeats");
+        Assert.That(SharedChemicalSimulatorSystem.StreakMultiplier(100), Is.EqualTo(64), "capped at x64");
+    }
+
+    // STATE-02 / STATE-03: repeats cost progressively more, and the displayed cost is the charged cost
+    [Test]
+    public async Task RepeatedOperationsScaleAndChargeMatchesDisplayedCost()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -59,30 +69,37 @@ public sealed class CMUChemSimulatorStreakTest : GameTest
                     "base cost must be above 1 for the rare discount to be visible");
                 Assert.That(system.GetOperationKey(sim), Is.EqualTo(Root + ":" + ChemSimulatorMode.Amplify));
 
-                // first run pays the base price, then the price doubles
+                // first run pays the base price, and the first repeat is still base price
+                ChargeAndCheck(amplifyBase["Antitoxic"]);
+                AssertCosts(amplifyBase, 1);
+
+                // second run in a row pays base, then the price doubles
                 ChargeAndCheck(amplifyBase["Antitoxic"]);
                 AssertCosts(amplifyBase, 2);
-
-                // second run in a row pays double, then the price quadruples
-                ChargeAndCheck(amplifyBase["Antitoxic"] * 2);
-                AssertCosts(amplifyBase, 4);
 
                 // a simulated child of the same chemical is the same lineage, so the streak carries
                 containers.Remove(target, containers.GetContainer(simulator, "target"));
                 var child = Report("TAU-0-CMUTestStreakRoot-ab", Root);
                 containers.Insert(child, containers.GetContainer(simulator, "target"));
                 system.RefreshCosts(sim);
-                AssertCosts(amplifyBase, 4);
+                AssertCosts(amplifyBase, 2);
 
                 // a Rare recipe pick knocks one off before the multiplier, and that is what gets charged
                 component.PickedRecipeChem = "CMUTestStreakRareReagent";
                 system.RefreshCosts(sim);
-                var discounted = Math.Max(1, amplifyBase["Antitoxic"] - 1) * 4;
+                var discounted = Math.Max(1, amplifyBase["Antitoxic"] - 1) * 2;
                 Assert.That(component.PropertyCosts["Antitoxic"], Is.EqualTo(discounted));
                 ChargeAndCheck(discounted);
                 component.PickedRecipeChem = null;
                 system.RefreshCosts(sim);
-                AssertCosts(amplifyBase, 8);
+                AssertCosts(amplifyBase, 3);
+
+                // the next three runs in a row are charged x3, x3, x5
+                foreach (var multiplier in new[] { 3, 3, 5 })
+                {
+                    ChargeAndCheck(amplifyBase["Antitoxic"] * multiplier);
+                }
+                AssertCosts(amplifyBase, 6);
 
                 // another mode is a different operation and starts unrepeated
                 component.Mode = ChemSimulatorMode.Suppress;

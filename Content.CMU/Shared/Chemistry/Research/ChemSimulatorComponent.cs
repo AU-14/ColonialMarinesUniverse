@@ -36,7 +36,7 @@ public sealed partial class ChemSimulatorComponent : Component
     [AutoNetworkedField, ViewVariables(VVAccess.ReadOnly)]
     public int? SimulationCost = null;
     /// <summary>
-    /// The last paid operation, as root chemical ID + ":" + mode. Repeating it doubles the cost per repeat.
+    /// The last paid operation, as root chemical ID + ":" + mode. Repeating it raises the cost on a stretched doubling curve (SharedChemicalSimulatorSystem.StreakMultiplier).
     /// </summary>
     [AutoNetworkedField, ViewVariables(VVAccess.ReadOnly)]
     public string? LastOperation;

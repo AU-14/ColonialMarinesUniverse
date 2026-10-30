@@ -37,8 +37,10 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
     private readonly int AddValue = 3;
     private readonly int MultAnomalous = 5;
     private readonly int MultRare = 3;
-    // 2^6 = x64 is as expensive as a repeat streak gets
-    private readonly int MaxStreakExponent = 6;
+    // x64 is as expensive as a repeat streak gets
+    private const int MaxStreakMultiplier = 64;
+    // the price doubles every 2.25 repeats: x1, 1, 2, 3, 3, 5, 6, 9, 12, 16...
+    private const double StreakDoublingRepeats = 2.25;
     public override void Initialize()
     {
         base.Initialize();
@@ -466,7 +468,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
     /// <summary>
     /// Final cost adjustments, so the displayed cost is exactly what the server charges:
     /// a Rare-or-better recipe pick takes one off (never free), then repeating the last paid
-    /// operation doubles the price for every repeat in a row.
+    /// operation multiplies the price by <see cref="StreakMultiplier"/>.
     /// </summary>
     private void ApplyRecipeDiscountAndStreak(Entity<ChemSimulatorComponent> ent)
     {
@@ -474,19 +476,31 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             _protoman.GetInstances<ReagentPrototype>().TryGetValue(ent.Comp.PickedRecipeChem, out var picked) &&
             picked.Class >= ReagentClass.Rare;
         var key = GetOperationKey(ent);
-        var exponent = key is not null && key == ent.Comp.LastOperation
-            ? Math.Clamp(ent.Comp.OperationStreak, 0, MaxStreakExponent)
-            : 0;
-        if (!discount && exponent == 0)
+        var multiplier = key is not null && key == ent.Comp.LastOperation
+            ? StreakMultiplier(ent.Comp.OperationStreak)
+            : 1;
+        if (!discount && multiplier == 1)
             return;
         foreach (var prop in new List<string>(ent.Comp.PropertyCosts.Keys))
         {
             long cost = ent.Comp.PropertyCosts[prop];
             if (discount)
                 cost = Math.Max(1, cost - 1); // never free: see ServerResearchDataTerminalSystem.SampleDataForSimulated
-            cost <<= exponent;
+            cost *= multiplier;
             ent.Comp.PropertyCosts[prop] = (int)Math.Min(cost, int.MaxValue);
         }
+    }
+
+    /// <summary>
+    /// The price multiplier after <paramref name="repeats"/> paid runs of the same operation in a row:
+    /// a stretched doubling, so six runs in a row cost x1, 1, 2, 3, 3, 5, capped at <see cref="MaxStreakMultiplier"/>.
+    /// </summary>
+    public static int StreakMultiplier(int repeats)
+    {
+        if (repeats <= 0)
+            return 1;
+        var multiplier = Math.Round(Math.Pow(2, repeats / StreakDoublingRepeats));
+        return (int) Math.Min(multiplier, MaxStreakMultiplier);
     }
 
     /// <summary>
