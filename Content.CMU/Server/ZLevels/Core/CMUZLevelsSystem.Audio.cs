@@ -1,4 +1,5 @@
 using Content.Server._RMC14.Vehicle;
+using Content.Shared.CMU14.Audio;
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels;
 using Content.Shared.CMU14.ZLevels.Core.Components;
@@ -18,6 +19,7 @@ public sealed partial class CMUZLevelsSystem
 
     [Dependency] private VehicleAudioRelaySystem _vehicleAudio = default!;
     [Dependency] private SharedAudioSystem _audioSystem = default!;
+    [Dependency] private CMUSharedAudioBudgetSystem _audioBudget = default!;
 
     private readonly HashSet<EntityUid> _pendingZLevelAudio = new();
     private readonly Dictionary<EntityUid, ZLevelAudioSource> _zLevelAudioSources = new();
@@ -315,15 +317,19 @@ public sealed partial class CMUZLevelsSystem
         var xform = Transform(source);
         if (xform.MapUid is not { } map)
             return;
+        if (!audioParams.Loop)
+            _vehicleAudio.RelayCMUTransientSound(sound, audioParams, source, excludedEntity);
         // Cross-floor PVS can include the original as well as a projection. Muting the
         // original on the client still allocates an audio source, so restrict it before replication.
         var filter = BuildCrossZAudioFilter(audioParams, excludedEntity, map, _transform.GetWorldPosition(xform));
+        filter = _audioBudget.LimitAudience(sound, filter, audioParams);
         if (filter.Count == 0)
             return;
         var original = _audioSystem.PlayEntity(sound, filter, source, false, audioParams);
         if (original is not { } played)
             return;
         _manualZLevelAudioSources.Add(played.Entity);
+        _audioBudget.Track(played.Component, filter);
     }
 
     private void ProjectCrossZAudioDirection(
@@ -480,6 +486,10 @@ public sealed partial class CMUZLevelsSystem
         EntityUid targetMap,
         Vector2 sourcePosition)
     {
+        filter = _audioBudget.LimitAudience(specifier, filter, audioParams);
+        if (filter.Count == 0)
+            return null;
+
         _creatingZLevelAudioProjection = true;
 
         try
@@ -495,6 +505,7 @@ public sealed partial class CMUZLevelsSystem
                 return null;
 
             _zLevelAudioProjections.Add(projected.Entity);
+            _audioBudget.Track(projected.Component, filter);
             projected.Component.Flags = flags & ~AudioFlags.GridAudio;
 
             Dirty(projected.Entity, projected.Component);
