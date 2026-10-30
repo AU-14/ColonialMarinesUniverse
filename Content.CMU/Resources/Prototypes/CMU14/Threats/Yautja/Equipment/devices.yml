@@ -336,7 +336,8 @@
   description: A beautifully designed metallic face mask, both ornate and functional.
   components:
   - type: YautjaMask
-    requiresYautjaWearer: true
+    # humans can run the visor too, still off a worn bracer
+    allowAnyWearer: true
     drain: 3
     drainEvery: 2
     zoomLevel: 1.6

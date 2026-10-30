@@ -15915,5 +15915,135 @@
   id: 926
   time: '2026-10-30T14:05:14.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2377
+- author: maertayn
+  changes:
+  - message: Force on Force gains a colony roster with limited colony roles (`game_rules.yml`),
+      their own store, a colonist rule, faction job selection in the character editor
+      and a round time limit (75min + 20min overtime, perhaps too low, needs tweaking)
+    type: Add
+  - message: New Hotspot objectives with game preset support, ties into the round
+      time limit and enables sudden-death mode during overtime. During overtime the
+      loser gets extra points when holding the hotspot.
+    type: Add
+  - message: Distress Signal can now roll Runaway Synth and Replicant antagonists.
+    type: Add
+  - message: 'Ships and planets get a life support atmos layer: breathing vents, day/night
+      air cycles, spreading fires and sealed Z-level openings.'
+    type: Add
+  - message: Ship fire alarm, built into the shuttle console and separate prototypes
+      (`CMUShipFireAlarm`). Enables siphoning of bad gases in the life support vent
+      and stops feeding oxygen.
+    type: Add
+  - message: Gunship master arm toggle, weapons will not function on safe
+    type: Add
+  - message: Antagonist rolls now use pity weighting. Every consecutive round you
+      go unselected raises your draw weight by a step, up to a cap, and getting an
+      antag resets it.
+    type: Tweak
+  - message: 'Colony antagonist spawn chances now rise with demand: the more ready
+      players who specifically want an antag, the higher its roll, up to a cap. Players
+      with fewer antag selections influence the antag roll more than someone who selected
+      all antags.'
+    type: Tweak
+  - message: Alert levels are now tracked per warship instead of globally.
+    type: Tweak
+  - message: Yautja consoles are gated by rank (leader/ancient/elder), and youngbloods
+      hatch speaking Yautja.
+    type: Tweak
+  - message: Ship-launched gas weapons now hurt xenomorphs too.
+    type: Tweak
+  - message: Gas canister resale pays 1.75x more per mol, and can no longer sell above
+      catalog cost.
+    type: Tweak
+  - message: Food vendors stock twice as many prepared meals.
+    type: Tweak
+  - message: Helmets can take a tucked-in and enabled regular flashlight.
+    type: Tweak
+  - message: Ship MREs stay locked until round setup completes, with an admin override.
+    type: Tweak
+  - message: Incompatible vehicle hardpoints refuse with a popup explaining why (BUG-1173).
+    type: Fix
+  - message: Surgeons can clamp internal bleeds that drugs are holding shut (BUG-1174).
+    type: Fix
+  - message: Civilians can open the facility medical vendor (BUG-1168).
+    type: Fix
+  - message: Pathogen spore sacs are breakable (BUG-1176).
+    type: Fix
+  - message: Cutting a door's power wires now lets you hack it open.
+    type: Fix
+  - message: Hive leader popups say Xenomorph instead of Xenonid (BUG-1164).
+    type: Fix
+  - message: The ASRS guide button now opens the requisitions guide instead of the
+      generic cargo guide (BUG-1165).
+    type: Fix
+  - message: Cancelling a dropship landing no longer skips its refuel cooldown (BUG-1170).
+    type: Fix
+  - message: WeYu IPIE roles now use the WeYu faction instead of government forces
+      (BUG-1169).
+    type: Fix
+  - message: The AK-4047 stock now starts collapsed (BUG-1166).
+    type: Fix
+  - message: Threat member job previews show a larva instead of a queen (BUG-1073).
+    type: Fix
+  - message: Xeno chevrons in playtime stats now use xeno rank time thresholds (BUG-1072).
+    type: Fix
+  - message: Rider whisper text uses the right font again, and is muted when global
+      ghost chat is disabled.
+    type: Fix
+  - message: ahelp, mhelp and bug reports relay to Discord, with a reworked mentor
+      help window and a new in-game bug report window. Early prototype.
+    type: Admin
+  - message: 'Lobby voting hardened: round and gamemode commands require confirmation,
+      vote locks persist across restarts, platoons are out of the vote.'
+    type: Admin
+  - message: 'New tools: instant third-party deployment (force interest), a life support
+      command (adds the full pressure/breathing/heat medical set, which is disabled
+      during playtest, to a player), commendation print lock and a debug cigar that
+      never burns out.'
+    type: Admin
+  - message: Updates to the Mohawk dropship, Fort McNeil, Fiorina and the hunter ship.
+    type: Map
+  - message: Salamander pressure-suit only seals when wearing the new Salamander pressure
+      helmet, and fire resistance is fixed for the fire-suits.
+    type: Tweak
+  - message: Small 1x1 copy of the 2x2 StationAnchorIndestructible (`CMUAnchorIndestructible`)
+    type: Add
+  - message: '`showadmins` shell command now shows admins who are playing as [IC]
+      when adminned (deadminned implies it)'
+    type: Admin
+  - message: Fire stops spreading through closed double-doors (any door larger than
+      1x1)
+    type: Fix
+  - message: Initial Discord linking - post the single-use coupling code into the
+      configured channel
+    type: Add
+  - message: 'Leadership sleeper advisory fax is sent to all grouped faxes: `military-command`,
+      `marshal-bureau`, `colony-command`, `warship-command`'
+    type: Tweak
+  - message: Periodic cleanup of trash and loose items
+    type: Admin
+  id: 927
+  time: '2026-10-30T17:03:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2363
+- author: rokudara-sen
+  changes:
+  - message: Humans can turn on the clan mask visor while wearing yautja bracers.
+    type: Add
+  - message: 'Linked thralls become the cmss13 Thrall species: more health, half brute
+      and burn, stun resistance, no bleeding or broken bones, stronger punches, dark
+      vision, butchering, prey marking and dagger flaying.'
+    type: Add
+  - message: Yautja and thralls can hang corpses from the ceiling with the strange
+      rope, found on the hunter ship.
+    type: Add
+  - message: Yautja can butcher fallen yautja.
+    type: Add
+  - message: Dathwei and thwei restore blood on humans and mend shattered bones.
+    type: Tweak
+  - message: Yautja and linked thralls no longer choke when a xeno drags them in crit.
+    type: Tweak
+  id: 928
+  time: '2026-10-30T18:55:08.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2380
 Name: CMU
 Order: -1

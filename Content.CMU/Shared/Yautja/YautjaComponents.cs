@@ -993,6 +993,10 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
     [DataField]
     public bool RequiresYautjaWearer;
 
+    // CMU14: cmss13 keeps the clan mask visor yautja-only, CMU lets any human run it off a worn bracer
+    [DataField]
+    public bool AllowAnyWearer;
+
     [DataField]
     public float ZoomLevel = 0.45f;
 
