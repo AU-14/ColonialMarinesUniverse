@@ -61,6 +61,9 @@ public sealed partial class YautjaThrallHeroComponent : Component
     public bool AddedNoPermanentDamage;
 
     [ViewVariables]
+    public bool AddedNoDragSuffocation;
+
+    [ViewVariables]
     public bool AddedNightVision;
 
     [ViewVariables]

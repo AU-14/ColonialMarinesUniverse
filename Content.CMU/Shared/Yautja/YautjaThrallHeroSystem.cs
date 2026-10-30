@@ -84,6 +84,7 @@ public sealed partial class YautjaThrallHeroSystem : EntitySystem
         }
 
         hero.AddedNoPermanentDamage = !EnsureComp<CMUNoPermanentDamageComponent>(thrall, out _);
+        hero.AddedNoDragSuffocation = !EnsureComp<CMUNoDragSuffocationComponent>(thrall, out _);
 
         if (_prototypes.TryIndex(hero.SpeciesPrototype, out var species))
         {
@@ -138,6 +139,9 @@ public sealed partial class YautjaThrallHeroSystem : EntitySystem
 
         if (hero.AddedNoPermanentDamage)
             RemComp<CMUNoPermanentDamageComponent>(thrall);
+
+        if (hero.AddedNoDragSuffocation)
+            RemComp<CMUNoDragSuffocationComponent>(thrall);
 
         if (hero.AddedNightVision)
             RemComp<NightVisionComponent>(thrall);
