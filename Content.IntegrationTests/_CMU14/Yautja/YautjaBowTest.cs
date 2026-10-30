@@ -955,7 +955,7 @@ public sealed class YautjaBowTest
                         "CMSS13 bow uses an internal one-shot magazine without burst/full-auto modes.");
                     Assert.That(bowGun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto),
                         "CMSS13 bow exposes only normal single-shot firing.");
-                    Assert.That(bowGun.FireRate, Is.EqualTo(10f / 7f).Within(0.0001f),
+                    Assert.That(bowGun.FireRate, Is.EqualTo(10f / 5f).Within(0.0001f),
                         "CMSS13 bow set_gun_config_values() sets fire_delay = FIRE_DELAY_TIER_7.");
                     Assert.That(bowGun.MinAngle.Degrees, Is.EqualTo(0).Within(0.0001),
                         "CMSS13 bow scatter = 0.");

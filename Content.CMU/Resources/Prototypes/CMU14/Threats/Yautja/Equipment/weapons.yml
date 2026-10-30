@@ -1460,7 +1460,7 @@
   - type: Gun
     minAngle: 0
     maxAngle: 0
-    fireRate: 1.428571
+    fireRate: 2
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
