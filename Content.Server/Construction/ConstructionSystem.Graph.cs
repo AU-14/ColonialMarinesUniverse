@@ -365,9 +365,7 @@ namespace Content.Server.Construction
             // Transform transferring.
             var newTransform = Transform(newUid);
             TransformSystem.AttachToGridOrMap(newUid, newTransform); // in case in hands or a container
-#pragma warning disable CS0618 // Setting anchored state directly, AnchorEntity/Unanchor requires an initialized entity.
-            newTransform.Anchored = transform.Anchored;
-#pragma warning restore CS0618
+            TransformSystem.TryAnchor((newUid, newTransform, null), transform.Anchored);
 
             // Container transferring.
             if (containerManager != null)

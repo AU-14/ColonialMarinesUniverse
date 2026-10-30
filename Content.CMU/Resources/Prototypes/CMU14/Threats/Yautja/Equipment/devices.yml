@@ -305,6 +305,8 @@
     maxCount: 12
   # sealed like any gas mask, so neomorph spores and popper infections get the same block chance
   - type: MycotoxinProtection
+  # cmss13 yaut_mask.dm has BLOCKGASEFFECT, chem smoke and nerve gas don't get through
+  - type: GasBlock
   - type: EyeProtection
     protectionTime: 20
   - type: PressureProtection
@@ -674,6 +676,7 @@
       penetration: Low
   - type: DisarmMalus
     malus: 0.225
+  - type: YautjaHumanMelee
   - type: YautjaStoredGear
     kind: WristBlades
 
@@ -723,6 +726,7 @@
       penetration: Low
   - type: DisarmMalus
     malus: 0.45
+  - type: YautjaHumanMelee
   - type: YautjaStoredGear
     kind: Scimitar
 
@@ -760,6 +764,8 @@
       energy: Medium
   - type: DisarmMalus
     malus: 0.2
+  # still sharp + edged in cm, chain_gauntlets never overrides what it gets from the wristblade base
+  - type: YautjaHumanMelee
   - type: YautjaStoredGear
     kind: ChainGauntlet
 
@@ -1628,6 +1634,9 @@
     overlay: true
     blockScopes: true
     ignoreUserOnlyHalf: true
+    # the client reapplies night vision on every parent change (buckling to a chair is one) and without this it
+    # switched FOV back on over the visor, so you lost the view until you cycled the mask
+    experimentalMesonFov: true
   - type: YautjaMaskVisorGlasses
   - type: Unremoveable
 
@@ -2204,7 +2213,6 @@
     bundle:
     - CMUYautjaClanArmor
     - CMUYautjaMask
-    - CMUYautjaMaskAccessory01Ebony
     - CMUYautjaClanGreaves
 
 - type: entity

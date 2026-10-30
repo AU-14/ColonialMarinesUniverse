@@ -58,6 +58,9 @@
       types:
         Blunt: 27.5
   - type: XenoFling
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      ticks: 2
   - type: XenoLunge
   - type: XenoPlasma
     plasma: 0

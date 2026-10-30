@@ -17,6 +17,14 @@ public sealed partial class EndRoundCommand : LocalizedEntityCommands
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
+        // CMU14: endround ends the round for everyone; require an explicit confirm argument
+        if (args.Length == 0
+            || !args[0].Equals("confirm", StringComparison.OrdinalIgnoreCase))
+        {
+            shell.WriteLine(Loc.GetString("cmu-cmd-endround-needs-confirm"));
+            return;
+        }
+
         if (_gameTicker.RunLevel != GameRunLevel.InRound)
         {
             shell.WriteLine(Loc.GetString("shell-can-only-run-while-round-is-active"));

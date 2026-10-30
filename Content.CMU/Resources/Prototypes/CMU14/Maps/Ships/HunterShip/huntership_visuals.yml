@@ -578,7 +578,7 @@
 
 - type: entity
   parent: CMUHunterShipYautjaCloset
-  id: CMUHunterShipMeatLockerBoxCardboardx5Offset0x1
+  id: CMUHunterShipMeatLockerThrallGearBoxx5Offset0x1
   name: "Alien closet"
   description: "A suspicious dark metal alien closet, what horrors can be stored inside?"
   suffix: Hunter Ship exact storage
@@ -624,7 +624,7 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: BoxCardboard
+    - id: CMUYautjaThrallGearBox
       amount: 5
   - type: Clickable
   - type: InteractionOutline
@@ -645,7 +645,7 @@
 
 - type: entity
   parent: CMUHunterShipYautjaCloset
-  id: CMUHunterShipMeatLockerBoxCardboardx5Offset1x1
+  id: CMUHunterShipMeatLockerThrallGearBoxx5Offset1x1
   name: "Alien closet"
   description: "A suspicious dark metal alien closet, what horrors can be stored inside?"
   suffix: Hunter Ship exact storage
@@ -691,7 +691,7 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: BoxCardboard
+    - id: CMUYautjaThrallGearBox
       amount: 5
   - type: Clickable
   - type: InteractionOutline

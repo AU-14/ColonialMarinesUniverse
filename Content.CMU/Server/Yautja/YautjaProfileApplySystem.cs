@@ -229,9 +229,15 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
                 return;
             case "CMUYautjaMask":
                 ReplaceVended(ent, slot, profile.MaskPrototype, args.Item);
+                if (_inventory.TryGetSlotEntity(ent, slot, out var wornMask))
+                    ApplyMaskAccessory(wornMask.Value, profile);
+
                 return;
             case "CMUYautjaMaskScalable":
                 ApplyVendedProfileVisuals(ent, slot, profile.MaskPrototype, args.Item);
+                if (_inventory.TryGetSlotEntity(ent, slot, out var wornScalableMask))
+                    ApplyMaskAccessory(wornScalableMask.Value, profile);
+
                 return;
             case "CMUYautjaClanGreaves":
                 ReplaceVended(ent, slot, profile.GreavesPrototype, args.Item);

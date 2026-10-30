@@ -143,15 +143,8 @@ research-sim-ui-add-tooltip = Use the property in the reference chemical to add 
 
 research-sim-ui-no-data = No data inserted!
 
-research-sim-ui-target-data = [head=3]Target Data[/head]
-research-sim-ui-reference-data = [head=3]Reference Data[/head]
 research-sim-ui-price = Price of the operation: {$COST}
-research-sim-ui-sim-cost = ESTIMATED SIMULATING COST: {$NUM}
 research-sim-ui-selected-ref-conflict = Conflicts with the selected reference property.
 research-sim-ui-selected-targ-conflict = Conflicts with the selected target property.
-
-research-sim-status-conflict-cancel = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - BOTH WILL CANCEL OUT
-research-sim-status-conflict-target-survives = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - {$REFERENCE} WILL NOT BE ADDED, {$TARGET} DROPS TO LEVEL {$LEVEL}
-research-sim-status-conflict-reference-survives = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - {$TARGET} WILL BE REMOVED, {$REFERENCE} ADDED AT LEVEL {$LEVEL}
 
 cmu-research-reduce-cooldown = [color=#ffbf00][head=3]-60s 1CR[/head][/color]

@@ -450,7 +450,7 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
     {
         var data = CMUOpenVehicleSystem.PartData(jeep, part.Part);
         var raised = data?.RaisedLayer is { } raisedLayer && CMUOpenVehicleSystem.GetPanelFlag(jeep, part.Part) ? raisedLayer : null;
-        var count = vehicleSprite.AllLayers.Count();
+        var count = vehicleSprite.LayerData.Count;
         if (OverRiders(vehicle, data, part.Part).Contains(direction) &&
             TryComp(vehicle, out CMUVehicleOverlayComponent? overlay) &&
             TryComp(overlay.Overlay, out SpriteComponent? overlaySprite) &&
@@ -575,7 +575,7 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
         _sprite.SetGranularLayersRendering(ent.AsNullable(), false);
 
         var toJeep = eyeRotation.RotateVec(-worldRotation.RotateVec(xform.LocalPosition));
-        for (var i = 0; i < sprite.AllLayers.Count(); i++)
+        for (var i = 0; i < sprite.LayerData.Count; i++)
         {
             _sprite.LayerSetRotation(ent.AsNullable(), i, leftover);
             _sprite.LayerSetOffset(ent.AsNullable(), i, toJeep);

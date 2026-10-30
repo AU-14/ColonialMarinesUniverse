@@ -16,6 +16,8 @@ public static class YautjaClanHallPolicy
 {
     public const int MaxNameLength = 48;
     public const int MaxTextLength = 1500;
+    public const int MaxSects = 8;
+    public const int MaxSectDescriptionLength = 300;
 
     // council = Ancient rank or the council permission set, works on any clan
     public static bool IsCouncil(YautjaClanHallActor actor)
@@ -72,6 +74,12 @@ public static class YautjaClanHallPolicy
     public static bool CanEditPresentation(YautjaClanHallActor actor, int clanId)
     {
         return IsCouncil(actor) || InClan(actor, clanId) && actor.Rank >= YautjaRank.Leader;
+    }
+
+    // sects are the leader's call, same as the rest of how the clan presents itself
+    public static bool CanManageSects(YautjaClanHallActor actor, int clanId)
+    {
+        return CanEditPresentation(actor, clanId);
     }
 
     public static bool CanRename(YautjaClanHallActor actor)

@@ -270,7 +270,7 @@ public sealed partial class YautjaClanHallWindow : BaseWindow
     }
 
     // a hunter on a list: rank icon, name, clan if asked, honor, lit dot when online. click opens them
-    private Control HunterRow(YautjaClanHallHunterRow hunter, string? prefix = null, bool showClan = false, bool compact = false)
+    private Control HunterRow(YautjaClanHallHunterRow hunter, string? prefix = null, bool showClan = false, bool compact = false, string? sectTag = null)
     {
         var row = new HudRow { Selected = hunter.PlayerId == _selectedHunter };
         var line = HBox(8);
@@ -288,6 +288,8 @@ public sealed partial class YautjaClanHallWindow : BaseWindow
         name.HorizontalExpand = true;
         name.VerticalAlignment = VAlignment.Center;
         line.AddChild(name);
+        if (sectTag != null)
+            line.AddChild(new HudTag(sectTag, _small) { Fill = Hud.Label, Outline = true });
         if (showClan)
         {
             var clan = Hud.Write(ClanName(hunter.ClanId), _body, Hud.Muted, clip: true);

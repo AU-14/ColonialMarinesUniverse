@@ -16,6 +16,7 @@
     - AU14JobCivilianCorporateAssistant
     - AU14JobWYGuard
     - AU14JobCivilianScientist
+    - AU14JobCorporateSynthetic
 
 - type: antagJobBlacklist
   id: AllColonyDepartmentHeadJobs
@@ -75,6 +76,7 @@
 - type: antagJobBlacklist
   id: AllSynthJobs
   jobs:
+    - AU14JobCorporateSynthetic
     - AU14JobColonyWorkingJoe
     - AU14JobCivilianColonySynthetic
     - AU14JobGOVFORAuxSupportSynth

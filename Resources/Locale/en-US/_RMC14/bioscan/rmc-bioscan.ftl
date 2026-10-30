@@ -1,4 +1,5 @@
-rmc-bioscan-ares-announcement = [color=white][font size=16][bold]APOLLO MK.II - Bioscan Status[/bold][/font][/color][color=red][font size=14][bold]
+# CMU14
+rmc-bioscan-ares-announcement = [color=#CECECE][font size=16][bold]APOLLO MK.II - Bioscan Status[/bold][/font][/color][color=#FFB454][font size=14][bold]
     {$message}[/bold][/font][/color]
 
 rmc-bioscan-ares = Bioscan complete.

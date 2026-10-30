@@ -145,6 +145,82 @@ public sealed class YautjaClanHallTest
     }
 
     [Test]
+    public async Task LeaderSetsUpSectsAndPutsHuntersInThem()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var server = pair.Server;
+        var session = pair.Player!;
+        var db = server.ResolveDependency<IServerDbManager>();
+        var clans = server.ResolveDependency<YautjaClanManager>();
+
+        try
+        {
+            await AsPlainHunter(pair, session);
+            var clanId = await db.CreateYautjaClanAsync("Hall Sects", "Sect test", 0, "#aa5533");
+            var otherClanId = await db.CreateYautjaClanAsync("Hall Sects Other", "Sect test", 0, "#33aa55");
+            await Join(pair, session.UserId, clanId, YautjaRank.Leader);
+            var hunter = await MakePlayer(db, "SectHunter");
+            await Join(pair, hunter, clanId, YautjaRank.Elite);
+            var outsider = await MakePlayer(db, "SectOutsider");
+            await Join(pair, outsider, otherClanId, YautjaRank.Blooded);
+
+            var hall = await Open(pair, session);
+            var state = await WaitForState(pair, hall, s => s.Clan?.Id == clanId);
+            Assert.That(state.Clan!.CanManageSects, Is.True);
+            Assert.That(state.Clan.Sects, Is.Empty);
+
+            state = await Send(pair, hall, state, new YautjaClanHallEditSectMessage(clanId, null, "Engineer Seekers", "Track the Space Jockeys down"));
+            Assert.That(state.StatusIsError, Is.False, state.Status);
+            var sect = state.Clan!.Sects.Single();
+            Assert.That(sect.Name, Is.EqualTo("Engineer Seekers"));
+
+            state = await Send(pair, hall, state, new YautjaClanHallSetSectMessage(clanId, hunter, sect.Id));
+            Assert.That(state.StatusIsError, Is.False, state.Status);
+            Assert.That(state.Clan!.Members.Single(m => m.PlayerId == hunter).SectId, Is.EqualTo(sect.Id));
+
+            // a hunter from another clan can't be put in this clan's sect
+            state = await Send(pair, hall, state, new YautjaClanHallSetSectMessage(clanId, outsider, sect.Id));
+            Assert.That(state.StatusIsError, Is.True);
+
+            state = await Send(pair, hall, state, new YautjaClanHallEditSectMessage(clanId, sect.Id, "House of the Seekers", "Same job, new name"));
+            Assert.That(state.Clan!.Sects.Single().Name, Is.EqualTo("House of the Seekers"));
+
+            // sects are the leader's call, an elite can't make one
+            clans.InvalidateCache(hunter);
+            var elite = await clans.ResolveActor(hunter, false, false);
+            Assert.That((await clans.HallEditSect(elite, clanId, null, "Rogue Sect", string.Empty)).Succeeded, Is.False);
+
+            for (var i = 1; i < YautjaClanHallPolicy.MaxSects; i++)
+                Assert.That((await db.CreateYautjaClanSectAsync(clanId, $"Filler {i}", string.Empty, YautjaClanHallPolicy.MaxSects)).HasValue, Is.True);
+            state = await Send(pair, hall, state, new YautjaClanHallEditSectMessage(clanId, null, "One Too Many", string.Empty));
+            Assert.That(state.StatusIsError, Is.True);
+            Assert.That(state.Clan!.Sects, Has.Count.EqualTo(YautjaClanHallPolicy.MaxSects));
+
+            // deleting the sect takes everyone out of it
+            state = await Send(pair, hall, state, new YautjaClanHallDeleteSectMessage(clanId, sect.Id));
+            Assert.That(state.StatusIsError, Is.False, state.Status);
+            Assert.That(state.Clan!.Sects.Any(s => s.Id == sect.Id), Is.False);
+            Assert.That(state.Clan.Members.Single(m => m.PlayerId == hunter).SectId, Is.Null);
+
+            // and moving clans leaves your sect behind
+            var filler = state.Clan.Sects.First();
+            state = await Send(pair, hall, state, new YautjaClanHallSetSectMessage(clanId, hunter, filler.Id));
+            Assert.That(state.Clan!.Members.Single(m => m.PlayerId == hunter).SectId, Is.EqualTo(filler.Id));
+            await Join(pair, hunter, otherClanId, YautjaRank.Elite);
+            Assert.That((await db.GetYautjaHunterBoardAsync()).Single(row => row.PlayerUserId == hunter.UserId).SectId, Is.Null);
+
+            await server.WaitPost(() => hall.Close());
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+                server.CfgMan.SetCVar(CCVars.ConsoleLoginLocal, CCVars.ConsoleLoginLocal.DefaultValue));
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task RoundHonorBanksIntoHunterAndClan()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });

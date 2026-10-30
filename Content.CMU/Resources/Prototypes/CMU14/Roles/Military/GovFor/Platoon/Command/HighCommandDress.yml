@@ -55,7 +55,7 @@
     shoes: RMCShoesLaceup
     head: CMHeadCapPeakedService
     id: CMUIDCardGOVFORAdjutantDress
-    ears: CMHeadsetHighCommand
+    ears: CMUHeadsetGovforHighCommand
     eyes: RMCSunglasses
     back: CMSatchel
     belt: RMCMK80BeltFilled
@@ -137,7 +137,7 @@
     shoes: RMCBootsCBRN
     head: RMCHeadCapGeneral
     id: CMUIDCardGOVFORBrigadierGeneral
-    ears: CMHeadsetHighCommand
+    ears: CMUHeadsetGovforHighCommand
     eyes: RMCSunglasses
     gloves: RMCHandsVeteranCBRN
     back: RMCSatchelLightpackFilledHighCommand
@@ -286,7 +286,7 @@
     shoes: RMCShoesLaceup
     head: CMHeadCapPeakedService
     id: CMUIDCardOPFORAdjutantDress
-    ears: CMHeadsetHighCommand
+    ears: CMUHeadsetOpforHighCommand
     eyes: RMCSunglasses
     back: CMSatchel
     belt: RMCMK80BeltFilled
@@ -366,7 +366,7 @@
     shoes: RMCBootsCBRN
     head: RMCHeadCapGeneral
     id: CMUIDCardOPFORBrigadierGeneral
-    ears: CMHeadsetHighCommand
+    ears: CMUHeadsetOpforHighCommand
     eyes: RMCSunglasses
     gloves: RMCHandsVeteranCBRN
     back: RMCSatchelLightpackFilledHighCommand

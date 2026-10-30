@@ -270,6 +270,30 @@ public sealed partial class YautjaClanHallEui : BaseEui
                 return;
             }
 
+            case YautjaClanHallEditSectMessage editSect:
+            {
+                var result = await _clans.HallEditSect(actor, editSect.ClanId, editSect.SectId, editSect.Name, editSect.Description);
+                Log(result, LogImpact.Low, $"{(editSect.SectId == null ? "created" : "edited")} a sect of Yautja clan {editSect.ClanId} ({editSect.Name})");
+                Report(result, "cmu-yautja-hall-done-saved");
+                return;
+            }
+
+            case YautjaClanHallDeleteSectMessage deleteSect:
+            {
+                var result = await _clans.HallDeleteSect(actor, deleteSect.ClanId, deleteSect.SectId);
+                Log(result, LogImpact.Low, $"deleted sect {deleteSect.SectId} of Yautja clan {deleteSect.ClanId}");
+                Report(result, "cmu-yautja-hall-done-sect-deleted");
+                return;
+            }
+
+            case YautjaClanHallSetSectMessage setSect:
+            {
+                var result = await _clans.HallSetSect(actor, setSect.ClanId, setSect.Target, setSect.SectId);
+                Log(result, LogImpact.Low, $"put Yautja {setSect.Target} in sect {setSect.SectId?.ToString() ?? "none"} of clan {setSect.ClanId}");
+                Report(result, "cmu-yautja-hall-done-saved");
+                return;
+            }
+
             case YautjaClanHallSetHonorMessage honor:
             {
                 var result = await _clans.HallSetHonor(actor, honor.ClanId, honor.Honor);
@@ -380,7 +404,8 @@ public sealed partial class YautjaClanHallEui : BaseEui
 
     private void RoundAction(RoundTry action)
     {
-        if (!IsHost)
+        // clan staff run the hunt, it shouldn't need a server host
+        if (!IsStaff)
         {
             Report(false, "cmu-yautja-hall-denied-round");
             return;
@@ -496,7 +521,7 @@ public sealed partial class YautjaClanHallEui : BaseEui
             snapshots[new NetUserId(row.PlayerUserId)] = (YautjaClanManager.FromBoard(row), row);
 
         var hunters = snapshots.Values
-            .Select(entry => Row(entry.Snapshot, entry.Row.Name))
+            .Select(entry => Row(entry.Snapshot, entry.Row.Name, entry.Row.SectId))
             .OrderByDescending(row => row.Honor)
             .ThenByDescending(row => row.Rank)
             .ThenBy(row => row.Name, StringComparer.OrdinalIgnoreCase)
@@ -563,6 +588,9 @@ public sealed partial class YautjaClanHallEui : BaseEui
         {
             _clanId = shownClanId;
             state.Clan = ClanPage(actor, shown, standings[shown.Id], hunters, petitions, snapshots);
+            state.Clan.Sects = (await _db.GetYautjaClanSectsAsync(shown.Id))
+                .Select(sect => new YautjaClanHallSectRow { Id = sect.Id, Name = sect.Name, Description = sect.Description })
+                .ToList();
         }
         else
         {
@@ -591,13 +619,13 @@ public sealed partial class YautjaClanHallEui : BaseEui
                 .ToList();
         }
 
-        if (actor.Host)
+        if (actor.Staff)
             state.Round = RoundState();
 
         return state;
     }
 
-    private YautjaClanHallHunterRow Row(YautjaClanMemberSnapshot snapshot, string name)
+    private YautjaClanHallHunterRow Row(YautjaClanMemberSnapshot snapshot, string name, int? sectId = null)
     {
         return new YautjaClanHallHunterRow
         {
@@ -607,6 +635,7 @@ public sealed partial class YautjaClanHallEui : BaseEui
             Rank = snapshot.Rank,
             Honor = snapshot.Honor,
             Online = _players.TryGetSessionById(snapshot.PlayerId, out _),
+            SectId = sectId,
         };
     }
 
@@ -638,6 +667,7 @@ public sealed partial class YautjaClanHallEui : BaseEui
             CanEditNotice = YautjaClanHallPolicy.CanEditNotice(actor, clan.Id),
             CanEditEliteNotes = YautjaClanHallPolicy.CanEditEliteNotes(actor, clan.Id),
             CanEditPresentation = YautjaClanHallPolicy.CanEditPresentation(actor, clan.Id),
+            CanManageSects = YautjaClanHallPolicy.CanManageSects(actor, clan.Id),
             CanRename = YautjaClanHallPolicy.CanRename(actor),
             CanSetHonor = YautjaClanHallPolicy.CanSetHonor(actor),
             CanDisband = YautjaClanHallPolicy.CanFoundOrDisband(actor),

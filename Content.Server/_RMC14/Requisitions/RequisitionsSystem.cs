@@ -127,6 +127,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         // Also apply platoon catalog in case the console needs a custom catalog based on current round
         ApplyPlatoonCatalogToComputer(uid, comp);
+        AppendFactionVendorGear(uid, comp); // CMU14: use the ReqVend/ReqEquipment vmarker mapping for ASRS stock.
         AddXRFToCatalog(uid, comp);
         var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
         ResetStock((uid, comp));
@@ -1225,6 +1226,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         while (computers.MoveNext(out var uid, out var comp))
         {
             ApplyPlatoonCatalogToComputer(uid, comp);
+            AppendFactionVendorGear(uid, comp); // CMU14: keep selected platoon vendor stock after round-start catalog refreshes.
             AddResearchTerminalToCatalog(uid, comp); // CMU14
             var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
             ResetStock((uid, comp));

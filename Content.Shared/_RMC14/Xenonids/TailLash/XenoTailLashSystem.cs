@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Sweep;
@@ -34,6 +35,7 @@ public sealed partial class XenoTailLashSystem : EntitySystem
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private RMCPullingSystem _pulling = default!;
 
@@ -138,7 +140,8 @@ public sealed partial class XenoTailLashSystem : EntitySystem
                 continue;
 
             _stun.TryParalyze(ent, _xeno.TryApplyXenoDebuffMultiplier(ent, xeno.Comp.StunTime), true);
-            _slow.TrySlowdown(ent, _xeno.TryApplyXenoDebuffMultiplier(ent, xeno.Comp.SlowTime));
+            if (!_yautjaSlow.TryApply(ent, xeno.Comp.YautjaSlow)) // CMU14
+                _slow.TrySlowdown(ent, _xeno.TryApplyXenoDebuffMultiplier(ent, xeno.Comp.SlowTime));
 
             _pulling.TryStopAllPullsFromAndOn(ent);
 
