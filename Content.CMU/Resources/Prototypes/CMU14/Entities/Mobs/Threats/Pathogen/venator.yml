@@ -27,9 +27,9 @@
       maxVol: 600
       reagents:  
       - ReagentId: CMUPathogenMycohemolymph  
-      Quantity: 300
+        Quantity: 300
       - ReagentId: CMUPathogenSporoplasmCatecholamine  
-      Quantity: 300
+        Quantity: 300
   - type: SolutionRegeneration  
     generated:  
       reagents:  
