@@ -84,10 +84,17 @@ public sealed class YautjaPreserveConsoleTest
             await server.WaitPost(() =>
             {
                 var entMan = server.EntMan;
-                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-                prey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2, 0)));
-                hunterEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(1, 0)));
-                preyEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(3, 0)));
+                var mapSystem = entMan.System<SharedMapSystem>();
+                // edges only anchor on real tiles, and mobs sit on tile centres so the prey
+                // isn't wedged between two edges, which shoves it and breaks the escape doafter
+                for (var x = 1; x <= 3; x++)
+                    mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, 0), map.Tile.Tile);
+
+                var start = map.GridCoords.Offset(new Vector2(0.5f, 0.5f));
+                hunter = entMan.SpawnEntity("CMMobHuman", start);
+                prey = entMan.SpawnEntity("CMMobHuman", start.Offset(new Vector2(2, 0)));
+                hunterEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", start.Offset(new Vector2(1, 0)));
+                preyEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", start.Offset(new Vector2(3, 0)));
                 entMan.EnsureComponent<YautjaComponent>(hunter);
 
                 entMan.EventBus.RaiseLocalEvent(hunterEdge, new InteractHandEvent(hunter, hunterEdge));

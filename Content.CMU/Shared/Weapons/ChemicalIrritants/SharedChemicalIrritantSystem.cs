@@ -134,7 +134,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         if (IsImmuneToIrritants(victim))
             return;
 
-        if (_mask.IsBreathingInternals(victim))
+        if (_mask.IsBreathingInternals(victim) || _mask.IsGasBlocked(victim))
             return;
 
         if (TryGetFilterFromMask(victim, out var filterId, out var filter))
@@ -366,7 +366,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         if (IsImmuneToIrritants(victim))
             return;
 
-        if (_mask.IsBreathingInternals(victim) || TryGetFilterFromMask(victim, out _, out _))
+        if (_mask.IsBreathingInternals(victim) || _mask.IsGasBlocked(victim) || TryGetFilterFromMask(victim, out _, out _))
             return;
 
         var alreadyExposed = EnsureComp<ChemicalIrritantComponent>(victim, out var chem);

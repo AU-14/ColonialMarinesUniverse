@@ -130,8 +130,12 @@ public sealed class CMUInteractionRangeTest : GameTest
             var transform = Server.System<SharedTransformSystem>();
             var system = Server.System<SharedInteractionSystem>();
             var maps = Server.System<SharedMapSystem>();
-            maps.SetTile(map.Grid.Owner, map.Grid.Comp, map.GridCoords.Offset(new Vector2(2, 0)), map.Tile.Tile);
-            maps.SetTile(map.Grid.Owner, map.Grid.Comp, map.GridCoords.Offset(new Vector2(2, 2)), map.Tile.Tile);
+            // one connected floor, loose tiles split off into their own grids and unanchor the walls
+            for (var x = 0; x <= 2; x++)
+            {
+                for (var y = 0; y <= 2; y++)
+                    maps.SetTile(map.Grid.Owner, map.Grid.Comp, map.GridCoords.Offset(new Vector2(x, y)), map.Tile.Tile);
+            }
             user = SEntMan.SpawnEntity(null, map.GridCoords);
             var wall = SEntMan.SpawnEntity("CMURangeWall", map.GridCoords.Offset(new Vector2(2, 0)));
             var wallPosition = transform.GetMapCoordinates(wall);

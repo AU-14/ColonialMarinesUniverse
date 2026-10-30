@@ -1669,7 +1669,6 @@ public sealed class YautjaYoungbloodTest
                 {
                     "CMUYautjaClanArmor",
                     "CMUYautjaMask",
-                    "CMUYautjaMaskAccessory01Ebony",
                     "CMUYautjaClanGreaves",
                 });
 
