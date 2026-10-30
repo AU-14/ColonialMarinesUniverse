@@ -1,6 +1,15 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server.CMU14.Medical.Blood;
 using Content.Server.CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared._RMC14.NightVision;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.DoAfter;
+using Content.Shared.Interaction;
+using Content.Shared.Stacks;
+using Content.Shared.Temperature.Components;
+using Content.Shared.Weapons.Melee;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
@@ -9,6 +18,7 @@ using Content.Shared.CMU14.Pulling;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Body;
+using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.StatusEffect;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -126,30 +136,6 @@ public sealed class YautjaThrallHeroTest
     }
 
     [Test]
-    public async Task YautjaCanButcherAYautjaCorpse()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
-            var badBlood = entMan.SpawnEntity("CMUMobYautja", map.GridCoords.Offset(new Vector2(1, 0)));
-            entMan.System<MobStateSystem>().ChangeMobState(badBlood, MobState.Dead);
-
-            Assert.That(entMan.System<YautjaTrophySystem>().TryStartButcher(hunter, badBlood, YautjaButcherProcedure.Skin), Is.True,
-                "cmss13 PR 11542 lets yautja butcher fellow yautja");
-
-            entMan.DeleteEntity(hunter);
-            entMan.DeleteEntity(badBlood);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task DathweiRestoresAHumansBlood()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -218,6 +204,171 @@ public sealed class YautjaThrallHeroTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LinkedThrallGetsTheHeroExtrasAndLosesThemOnUnlink()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var melee = entMan.System<SharedMeleeWeaponSystem>();
+            var control = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 2)));
+            SpawnLinkedThrall(entMan, map.GridCoords, out var master, out _, out var thrall, out _);
+
+            var arm = Arm(entMan, thrall);
+            var sever = new BodyPartSeverAttemptEvent(thrall, arm, BodyPartType.Arm);
+            entMan.EventBus.RaiseLocalEvent(arm, ref sever);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<CMUNoPermanentDamageComponent>(thrall), Is.True);
+                Assert.That(entMan.System<CMUBloodSystem>().GetBleedMultiplier(thrall), Is.Zero, "hero bodies don't bleed");
+                Assert.That(entMan.System<SharedBoneSystem>().SeedFracture(arm, FractureSeverity.Simple), Is.False,
+                    "the limb withstands the blow");
+                Assert.That(sever.Cancelled, Is.True, "no limb loss while alive");
+                Assert.That(melee.GetDamage(thrall, thrall).GetTotal(), Is.EqualTo(melee.GetDamage(control, control).GetTotal() * 2),
+                    "punch/strong hits twice as hard");
+                Assert.That(entMan.GetComponent<NightVisionComponent>(thrall).Innate, Is.True, "hero darksight");
+                Assert.That(entMan.GetComponent<NightVisionComponent>(thrall).State, Is.EqualTo(NightVisionState.Half));
+                Assert.That(entMan.GetComponent<TemperatureSpeedComponent>(thrall).Thresholds.Keys.Max(), Is.EqualTo(233f),
+                    "cold slowdown starts 40 K later");
+            });
+
+            entMan.RemoveComponent<YautjaThrallComponent>(thrall);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<CMUNoPermanentDamageComponent>(thrall), Is.False);
+                Assert.That(entMan.HasComponent<NightVisionComponent>(thrall), Is.False);
+                Assert.That(entMan.GetComponent<TemperatureSpeedComponent>(thrall).Thresholds.Keys.Max(),
+                    Is.EqualTo(entMan.GetComponent<TemperatureSpeedComponent>(control).Thresholds.Keys.Max()));
+                Assert.That(melee.GetDamage(thrall, thrall).GetTotal(), Is.EqualTo(melee.GetDamage(control, control).GetTotal()));
+                Assert.That(entMan.System<SharedBoneSystem>().SeedFracture(arm, FractureSeverity.Simple), Is.True);
+            });
+
+            entMan.DeleteEntity(master);
+            entMan.DeleteEntity(thrall);
+            entMan.DeleteEntity(control);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task YautjaHangsACorpseAndAKnifeCutsItDown()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid hunter = default, marine = default, victim = default, rope = default, knife = default, cutter = default;
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var hands = entMan.System<SharedHandsSystem>();
+            var interaction = entMan.System<SharedInteractionSystem>();
+            hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            marine = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 1)));
+            // the test grid is one tile, off it there's no ceiling to hang from
+            victim = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            entMan.System<MobStateSystem>().ChangeMobState(victim, MobState.Dead);
+
+            var marineRope = entMan.SpawnEntity("CMUYautjaRope", map.GridCoords);
+            Assert.That(hands.TryPickup(marine, marineRope), Is.True);
+            interaction.InteractUsing(marine, marineRope, victim, entMan.GetComponent<TransformComponent>(victim).Coordinates);
+
+            rope = entMan.SpawnEntity("CMUYautjaRope", map.GridCoords);
+            Assert.That(hands.TryPickup(hunter, rope), Is.True);
+            interaction.InteractUsing(hunter, rope, victim, entMan.GetComponent<TransformComponent>(victim).Coordinates);
+            Assert.That(entMan.TryGetComponent(hunter, out DoAfterComponent? doAfters) && doAfters.DoAfters.Count > 0, Is.True,
+                "the yautja starts tying the rope");
+            Assert.That(entMan.TryGetComponent(marine, out DoAfterComponent? marineDoAfters) && marineDoAfters.DoAfters.Count > 0, Is.False,
+                "a marine isn't strong enough");
+        });
+
+        await pair.RunTicksSync(pair.SecondsToTicks(11));
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<YautjaHungComponent>(victim), Is.True, "two do-afters, then the body hangs");
+                Assert.That(entMan.GetComponent<TransformComponent>(victim).Anchored, Is.True);
+                Assert.That(entMan.GetComponent<StackComponent>(rope).Count, Is.EqualTo(7), "one meter of rope used");
+            });
+
+            // the marine's hand still has their useless rope in it, so a fresh bystander does the cutting
+            cutter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            knife = entMan.SpawnEntity("RMCKitchenKnife", map.GridCoords);
+            Assert.That(entMan.System<SharedHandsSystem>().TryPickup(cutter, knife), Is.True);
+            entMan.System<SharedInteractionSystem>().InteractUsing(cutter, knife, victim,
+                entMan.GetComponent<TransformComponent>(victim).Coordinates);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            Assert.That(entMan.HasComponent<YautjaHungComponent>(victim), Is.False, "anyone can cut a body down");
+            Assert.That(entMan.GetComponent<TransformComponent>(victim).Anchored, Is.False);
+            foreach (var uid in new[] { hunter, marine, victim, rope, knife, cutter })
+                entMan.DeleteEntity(uid);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task YautjaAndLinkedThrallsDontChokeWhenXenosDragThemInCrit()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid human = default, yautja = default, master = default, thrall = default;
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var mobState = entMan.System<MobStateSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            yautja = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            SpawnLinkedThrall(entMan, map.GridCoords, out master, out _, out thrall, out _);
+            foreach (var uid in new[] { human, yautja, thrall })
+                mobState.ChangeMobState(uid, MobState.Critical);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<ActiveDamageOnPulledWhileCritComponent>(human), Is.True,
+                    "control, a downed human still chokes when a xeno drags them");
+                Assert.That(entMan.HasComponent<ActiveDamageOnPulledWhileCritComponent>(yautja), Is.False);
+                Assert.That(entMan.HasComponent<ActiveDamageOnPulledWhileCritComponent>(thrall), Is.False);
+            });
+
+            foreach (var uid in new[] { human, yautja, master, thrall })
+                entMan.DeleteEntity(uid);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static EntityUid Arm(IEntityManager entMan, EntityUid body)
+    {
+        Assert.That(entMan.System<CMUMedicalBodyIndexSystem>().TryGetBodyPart(body,
+            new CMUMedicalBodyPartKey(BodyPartType.Arm, BodyPartSymmetry.Left), out var arm), Is.True);
+        return arm;
     }
 
     private static FixedPoint2 Brute(IEntityManager entMan, IPrototypeManager prototypes, EntityUid uid)
