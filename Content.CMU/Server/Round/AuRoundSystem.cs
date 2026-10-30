@@ -128,6 +128,10 @@ namespace Content.Server.CMU14.Round
             set => _state.SelectedOpforShip = value;
         }
 
+        // Grids keyed by prototype id. Round setup tags the voted ship's faction
+        // once the votes have concluded.
+        private readonly Dictionary<string, IReadOnlyList<EntityUid>> _loadedGameMapGrids = new();
+
         public void SetOpforShip(string shipId)
         {
             _selectedOpforShip = shipId;
@@ -174,6 +178,7 @@ namespace Content.Server.CMU14.Round
 
             base.Initialize();
             SubscribeLocalEvent<LoadingMapsEvent>(OnLoadingMaps);
+            SubscribeLocalEvent<PostGameMapLoad>(OnPostGameMapLoad);
             _voteSequence.Reset();
             _state.Reset();
             SelectedPlanetMap = null;
@@ -1151,6 +1156,15 @@ namespace Content.Server.CMU14.Round
 
             return platoon?.PossibleShips.FirstOrDefault();
         }
+
+        private void OnPostGameMapLoad(PostGameMapLoad ev)
+        {
+            _loadedGameMapGrids[ev.GameMap.ID] = ev.Grids;
+        }
+
+        /// <summary>The grids the given game map loaded with this round, if it has loaded.</summary>
+        public bool TryGetLoadedShipGrids(string gameMapId, out IReadOnlyList<EntityUid> grids)
+            => _loadedGameMapGrids.TryGetValue(gameMapId, out grids!);
 
         public bool IsVoteSequenceRunning()
         {
