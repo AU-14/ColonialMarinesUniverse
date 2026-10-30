@@ -12283,12 +12283,8 @@ public sealed class YautjaSmokeTest
             var itemPosition = transform.GetMapCoordinates(item).Position;
             var wallPosition = transform.GetMapCoordinates(wall).Position;
 
-            // temp diag: end state rides the assert message until the pass-through cause is named
-            var itemBody = entMan.GetComponent<PhysicsComponent>(item);
-            var diag = $"[throw-diag] itemPos={itemPosition} wallPos={wallPosition} itemCanCollide={itemBody.CanCollide} itemBody={itemBody.BodyType}";
-
             Assert.That(itemPosition.X, Is.LessThan(wallPosition.X + 0.5f),
-                $"The thrown item must not finish on the far side of the hunter-ship wall. {diag}");
+                "The thrown item must not finish on the far side of the hunter-ship wall.");
 
             if (!entMan.Deleted(hunter))
                 entMan.DeleteEntity(hunter);

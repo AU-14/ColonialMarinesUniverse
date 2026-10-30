@@ -79,8 +79,6 @@ public sealed class YautjaPreserveConsoleTest
         EntityUid prey = default;
         EntityUid hunterEdge = default;
         EntityUid preyEdge = default;
-        Vector2 preyStart = Vector2.Zero;
-        string diag = "";
 
         try
         {
@@ -97,7 +95,6 @@ public sealed class YautjaPreserveConsoleTest
                 prey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
                 hunterEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(1.5f, 0.5f)));
                 preyEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(3.5f, 0.5f)));
-                preyStart = entMan.GetComponent<TransformComponent>(prey).WorldPosition;
                 entMan.EnsureComponent<YautjaComponent>(hunter);
 
                 entMan.EventBus.RaiseLocalEvent(hunterEdge, new InteractHandEvent(hunter, hunterEdge));
@@ -119,25 +116,10 @@ public sealed class YautjaPreserveConsoleTest
                         active.Args.Event is YautjaPreserveEscapeDoAfterEvent));
             });
 
-            // Capture the doafter just before the 5s delay completes: cleanup drops
-            // finished doafters after delay+excess, so a later dump can't tell
-            // cancelled from completed.
-            await pair.RunTicksSync(pair.SecondsToTicks(4.9f));
+            await pair.RunTicksSync(pair.SecondsToTicks(5.5f));
 
             await server.WaitAssertion(() =>
-            {
-                var entMan = server.EntMan;
-                diag = $"preyPaused={entMan.GetComponent<MetaDataComponent>(prey).EntityPaused} preyPos={entMan.GetComponent<TransformComponent>(prey).WorldPosition} preyStart={preyStart}";
-                foreach (var da in entMan.GetComponent<DoAfterComponent>(prey).DoAfters.Values)
-                    diag += $" | idx={da.Index} cancelled={da.Cancelled} cancelledAt={da.CancelledTime} completed={da.Completed} breakOnWeightlessMove={da.Args.BreakOnWeightlessMove}";
-                if (!diag.Contains("idx="))
-                    diag += " | no doafters present";
-            });
-
-            await pair.RunTicksSync(pair.SecondsToTicks(0.6f));
-
-            await server.WaitAssertion(() =>
-                Assert.That(server.EntMan.GetComponent<TransformComponent>(prey).MapID, Is.EqualTo(MapId.Nullspace), $"[preserve-diag] {diag}"));
+                Assert.That(server.EntMan.GetComponent<TransformComponent>(prey).MapID, Is.EqualTo(MapId.Nullspace)));
         }
         finally
         {

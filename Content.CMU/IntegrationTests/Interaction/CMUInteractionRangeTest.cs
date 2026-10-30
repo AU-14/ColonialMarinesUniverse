@@ -30,12 +30,6 @@ public sealed class CMUInteractionRangeTest : GameTest
         - Impassable
 
 - type: entity
-  id: CMURangeBareWall
-  components:
-  - type: Transform
-    anchored: true
-
-- type: entity
   id: CMURangeWall
   components:
   # Transform must resolve before Physics: the anchor at spawn has to run before the body
@@ -155,16 +149,7 @@ public sealed class CMUInteractionRangeTest : GameTest
             wall = SEntMan.SpawnEntity("CMURangeWall", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
             // Walls must spawn anchored over a plated tile; a failed anchor silently leaves
             // a Dynamic body the exemption lookups never see.
-            // temp diag: names the broken anchor link in one run.
-            var wallXform = SEntMan.GetComponent<TransformComponent>(wall);
-            var indices = maps.TileIndicesFor(map.Grid.Owner, map.Grid.Comp, wallXform.Coordinates);
-            var tile = maps.GetTileRef(map.Grid.Owner, map.Grid.Comp, indices);
-            var bare = SEntMan.SpawnEntity("CMURangeBareWall", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
-            var diag = $"[anchor-diag] indices={indices} tileEmpty={tile.Tile.IsEmpty} " +
-                       $"parentIsGrid={wallXform.ParentUid == map.Grid.Owner} gridUidIsGrid={wallXform.GridUid == map.Grid.Owner} " +
-                       $"coords={wallXform.Coordinates} mapPaused={SEntMan.GetComponent<MetaDataComponent>(map.MapUid).EntityPaused} " +
-                       $"bareAnchored={SEntMan.GetComponent<TransformComponent>(bare).Anchored}";
-            Assert.That(wallXform.Anchored, Is.True, diag);
+            Assert.That(SEntMan.GetComponent<TransformComponent>(wall).Anchored, Is.True);
             wallPosition = transform.GetMapCoordinates(wall);
             item = SEntMan.SpawnEntity("CMURangeItem", SEntMan.GetComponent<TransformComponent>(wall).Coordinates);
             transform.SetCoordinates(user, transform.ToCoordinates(map.Grid.Owner, wallPosition.Offset(new Vector2(-2, 0))));
