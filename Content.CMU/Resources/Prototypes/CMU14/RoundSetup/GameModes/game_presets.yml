@@ -43,6 +43,7 @@
   - AuPlanetShivasSnowball
 # - AuPlanetChances # temporarily removed
   - CMUPlanetLV624
+  - CMUPlanetVaradero
   rules:
   - AuVoteRule
   - PlatoonSpawn
