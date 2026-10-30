@@ -225,8 +225,8 @@
 - type: reagent  
   parent: CMReagent  
   id: TestBloodbursting  
-  name: test-bloodbursting-chem  
-  desc: test chem for bloodburster infection  
+  name: reagent-name-test-bloodbursting-chem  
+  desc: reagent-desc-test-mycotoxigenic-chem 
   physicalDesc: reagent-physical-desc-unidentifiable  
   class: Special  
   color: "#bed700"  
@@ -245,8 +245,8 @@
 - type: reagent  
   parent: CMReagent  
   id: TestMycotoxigenic  
-  name: test-mycotoxigenic-chem  
-  desc: test chem for walker conversion  
+  name:  reagent-name-test-mycotoxigenic-chem  
+  desc:  reagent-desc-test-mycotoxigenic-chem  
   physicalDesc: reagent-physical-desc-unidentifiable  
   class: Special  
   color: "#5a8a3c"  
