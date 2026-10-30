@@ -376,6 +376,12 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         if (!IsLocked(ent))
             return;
 
+        // Target-less checks are the action system validating a button press (and the UI gates). Blocking those
+        // would also block the cloak's own toggle, which is the only way back out. Everything with a real target
+        // is refused, and use / drop / pickup / attack / throw / shooting / storage each have their own gate.
+        if (args.Target == null)
+            return;
+
         args.Cancelled = true;
         DenyPopup(ent);
     }
