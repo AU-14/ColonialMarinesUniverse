@@ -1,0 +1,45 @@
+- type: partySpawn
+  id: UPPGROMRRUSquadSpawn
+  leadersToSpawn:
+    AU14UPPGROMRRUSquadleader: 1
+  gruntsToSpawn:
+    AU14UPPGROMRRURifleman: 3 
+    AU14UPPGROMRRUSupportTech: 1
+    AU14UPPGROMRRUMachinegunner: 1
+    AU14UPPGROMRRUMarksman: 1
+    AU14UPPGROMRRUPointman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: UPPGROMRRUSquad
+  displayName: GROM Rapid-Response-Unit Squad
+  partyspawn: UPPGROMRRUSquadSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+
+- type: partySpawn
+  id: UPPGROMRRUTeamSpawn
+  leadersToSpawn:
+    AU14UPPGROMRRUSquadleader: 1
+  gruntsToSpawn:
+    AU14UPPGROMRRURifleman: 2 
+    AU14UPPGROMRRUSupportTech: 1
+    AU14UPPGROMRRUMachinegunner: 0
+    AU14UPPGROMRRUMarksman: 0
+    AU14UPPGROMRRUPointman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: UPPGROMRRUTeam
+  displayName: GROM Rapid-Response-Unit Team
+  partyspawn: UPPGROMRRUTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 20
+  minplayers: 0
+  maxplayers: 400

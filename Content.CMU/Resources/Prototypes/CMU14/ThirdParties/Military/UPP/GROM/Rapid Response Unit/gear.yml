@@ -1,19 +1,5 @@
 
-- type: entity
-  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
-  id: AU14FatiguesUPPGROMClean
-  suffix: AU14, GROM, RRU
-  name: UPP naval infantry fatigues
-  description: A standard set of Union of Progressive Peoples Fatigues. It has shards of light Kevlar to help protect against shrapnel.
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/UPP/jumpsuits/uppfatigues.rsi
-  - type: WebbingClothing
-    startingWebbing: AU14WebbingDropPouchUPPFull
-  - type: UniformAccessoryHolder
-    startingAccessories:
-    - AU14PatchUPP
-    - AU14GROMPatch
+
 
 - type: entity
   parent: AU14BeltHolsterPistolUPP
@@ -28,13 +14,13 @@
 
 - type: entity
   parent: RMCSatchelSPP
-  id: RMCSatchelUPPRRUFullMarksman
+  id: AU14UPPRRUMarksmanSatchel
   suffix: GROM, RRU
   components:
   - type: StorageFill
     contents:
     - id: RMCRadioHandheldColony
-    - id: RMCMagazineSniperType99
+    - id: RMCMagazineSniperType88
       amount: 4
 
 - type: entity
@@ -44,7 +30,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineSniperType99
+    - id: RMCMagazineSniperType88
       amount: 4
 
 - type: entity
@@ -59,7 +45,7 @@
       amount: 2
 
 - type: entity
-  parent: AU14ShotgunShellLoadingRigUPPRRU
+  parent: AU14ShotgunShellLoadingRigUPP
   id: AU14ShotgunShellLoadingRigUPPRRU
   suffix: GROM, RRU
   components:

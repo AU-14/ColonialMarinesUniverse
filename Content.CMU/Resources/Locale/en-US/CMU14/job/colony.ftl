@@ -171,6 +171,8 @@ au14-job-name-civilianpapofficer = PAP Officer
 au14-job-description-civilianpapofficer = You're an Officer of the UPP People's Armed Police. Provide the colony with rule of law and execute arrests and warrants.
 au14-job-prefix-civilianpapofficer = PAP
 
+au14-job-description-informalmsscollaborator = You're an informal collaborator for the Ministry of Space Security. Secretly monitor the colony, report subversive activity, and assist your handler with denunciations.
+
 au14-job-name-civilianheadofservice = Head of Service
 au14-job-description-civilianheadofservice = Ensure stores and services are stocked, kitchens are manned and the colony stays clean. Coordinate with your department and the foreman to ensure the colony's needs are met.
 au14-job-prefix-headofservice = HOS

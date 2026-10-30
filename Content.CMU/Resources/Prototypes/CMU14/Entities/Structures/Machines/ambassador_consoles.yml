@@ -58,9 +58,8 @@
     replenishAmount: 10
     replenishInterval: 60
     callableParties:
-      UPPGROM: 7500
-      UPPGROMAlt: 6000
-      UPPGROMAlt2: 4500
+      UPPGROMRRUSquad: 7000
+      UPPGROMRRUTeam: 5000
       CHTORM_PMC_BEAR: 7500
       GROZA_PMC_BEAR: 6000
       SKALA_PMC_BEAR: 4500
