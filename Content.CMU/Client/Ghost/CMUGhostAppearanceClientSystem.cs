@@ -102,10 +102,16 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
             _applied.Add(uid);
             _waitingSince.Remove(uid);
 
+            // Damage variants only apply to the default ghost sprite, not the body's copied layers.
+            RemComp<GenericVisualizerComponent>(uid);
+
             var drawDepth = sprite.DrawDepth;
             var visible = sprite.Visible;
             var color = sprite.Color;
             var noRotation = sprite.NoRotation;
+            // Its original visualizer targets ghostVariant and ghost_* states. Those layers no longer exist
+            // after copying a body; a later appearance update would recreate them against the body's RSI.
+            RemComp<GenericVisualizerComponent>(uid);
             _sprite.CopySprite((source, sourceSprite), (uid, sprite));
             _sprite.SetDrawDepth((uid, sprite), drawDepth);
             _sprite.SetVisible((uid, sprite), visible);
@@ -126,7 +132,7 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
     /// </summary>
     private void FadeBody(Entity<SpriteComponent> ghost, Entity<SpriteComponent> source)
     {
-        var layers = ghost.Comp.AllLayers.ToList();
+        var layers = ghost.Comp.LayerData;
         foreach (var key in FaintLayers)
         {
             if (!_sprite.LayerMapTryGet(source.AsNullable(), key, out var index, false) || index >= layers.Count)
@@ -176,7 +182,7 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
     private void ShowAlive(Entity<SpriteComponent> ghost, Entity<SpriteComponent> source)
     {
         if (!_sprite.LayerMapTryGet(source.AsNullable(), XenoVisualLayers.Base, out var layer, false) ||
-            layer >= ghost.Comp.AllLayers.Count() ||
+            layer >= ghost.Comp.LayerData.Count ||
             _sprite.LayerGetEffectiveRsi(ghost.AsNullable(), layer) is not { } rsi ||
             !rsi.TryGetState("alive", out _))
         {

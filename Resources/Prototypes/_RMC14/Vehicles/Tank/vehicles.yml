@@ -11,6 +11,7 @@
     movementKind: Grid
     transferDamage: false
   - type: VehicleOperatorDamage
+    ignoreOwnProjectiles: true
   - type: VehicleMaintenance
   - type: Clickable
   - type: Tag

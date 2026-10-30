@@ -590,7 +590,7 @@ public sealed partial class ANPRCRadioSystem
                 ent.Comp.SweepPosition,
                 BuildSweepContacts(ent.Comp),
                 BuildPanelInfo(ent, linkQuality),
-                BuildExpertState(ent)));
+                BuildExpertState(ent)) { Revision = ++ent.Comp.PanelRevision });
     }
 
     // the client only ever learns the operator's own nets, the unfactioned ones, and

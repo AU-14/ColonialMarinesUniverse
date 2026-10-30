@@ -98,9 +98,20 @@ public sealed class YautjaWeaponAudioTest
             var nonMono = new List<string>();
             var unreadable = new List<string>();
 
+            // CM-SS13 ships these two leap sounds as stereo, and this workspace has no Ogg encoder to downmix them
+            // (positional audio plays them centred). Everything else under the Yautja audio tree must be mono.
+            var importedStereo = new HashSet<string>
+            {
+                "/Audio/CMU14/Yautja/Effects/pred_leap1.ogg",
+                "/Audio/CMU14/Yautja/Effects/pred_leap2.ogg",
+            };
+
             foreach (var file in resources.ContentFindFiles(audioRoot)
                          .Where(path => path.Extension is "wav" or "ogg"))
             {
+                if (importedStereo.Contains(file.ToString()))
+                    continue;
+
                 using var stream = resources.ContentFileRead(file);
                 var channels = ReadChannelCount(stream, file.Extension);
                 if (channels is null)

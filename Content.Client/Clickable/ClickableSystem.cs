@@ -92,7 +92,7 @@ public sealed partial class ClickableSystem : EntitySystem
             return true;
 
         // Next check each individual sprite layer using automatically computed click maps.
-        foreach (var spriteLayer in sprite.AllLayers)
+        foreach (var spriteLayer in new CMUSpriteLayers(sprite.AllLayers)) // CMU14: avoid per-candidate enumerator allocation.
         {
             if (spriteLayer is not SpriteComponent.Layer layer || !_sprites.IsVisible(layer))
             {

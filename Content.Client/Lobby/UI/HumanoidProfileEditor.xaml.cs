@@ -359,7 +359,6 @@ namespace Content.Client.Lobby.UI
 
             UpdateSpeciesGuidebookIcon();
             IsDirty = false;
-            InitializeWorkspace(); // CMU14: native dossier, appearance stage and deployment workspace.
         }
 
         private void SetDirty()
@@ -415,7 +414,7 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         public void SetProfile(HumanoidCharacterProfile? profile, int? slot)
         {
-            Profile = profile?.Clone();
+            Profile = profile is null ? null : profile.WithBuild(profile.Build); // CMU14: sync older saved appearances with records Build.
             CharacterSlot = slot;
             IsDirty = false;
             JobOverride = null;
@@ -464,8 +463,6 @@ namespace Content.Client.Lobby.UI
         protected override void Dispose(bool disposing)
         {
             _requirements.Updated -= RefreshYautjaTab;
-            _requirements.Updated -= RefreshWorkspaceDetails; // CMU14
-            CloseWorkspaceChoice(); // CMU14: restore the owned option surface before release.
             base.Dispose(disposing);
             if (!disposing)
                 return;

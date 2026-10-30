@@ -51,7 +51,8 @@ public sealed partial class XenoDespoilerLingeringAcidSystem : EntitySystem
         if (!comp.Damaged.Add(target))
             return; // CMU14
 
-        Dirty(uid, comp);
+        // CMU14: collision history is server-only.
+        // Dirty(uid, comp);
 
         var dmg = new DamageSpecifier();
         dmg.DamageDict["Heat"] = FixedPoint2.New(comp.CrossBurnDamage);
@@ -60,8 +61,7 @@ public sealed partial class XenoDespoilerLingeringAcidSystem : EntitySystem
 
     private void OnEndCollide(EntityUid uid, XenoDespoilerLingeringAcidComponent comp, ref EndCollideEvent args) // CMU14
     {
-        if(comp.Damaged.Remove(args.OtherEntity))
-            Dirty(uid, comp);
+        comp.Damaged.Remove(args.OtherEntity);
     }
     
 }

@@ -233,8 +233,15 @@ public sealed partial class MetabolizerSystem : EntitySystem
 
         // randomize the reagent list so we don't have any weird quirks
         // like alphabetical order or insertion order mattering for processing
-        var rand = SharedRandomExtensions.PredictedRandom(_gameTiming, GetNetEntity(ent), GetNetEntity(solutionOwner));
-        rand.Shuffle(list);
+        // CMU14: a single excluded reagent needs neither a shuffle nor random effects.
+        // var rand = SharedRandomExtensions.PredictedRandom(_gameTiming, GetNetEntity(ent), GetNetEntity(solutionOwner));
+        // rand.Shuffle(list);
+        Robust.Shared.Random.IRobustRandom? rand = null;
+        if (list.Count > 1)
+        {
+            rand = SharedRandomExtensions.PredictedRandom(_gameTiming, GetNetEntity(ent), GetNetEntity(solutionOwner));
+            rand.Shuffle(list);
+        }
 
         var isDead = _mobStateSystem.IsDead(solutionOwner.Value);
 
@@ -314,6 +321,8 @@ public sealed partial class MetabolizerSystem : EntitySystem
                 if (scale < effect.MinScale)
                     continue;
 
+                // CMU14: initialize at the first draw without changing its seed or sequence.
+                rand ??= SharedRandomExtensions.PredictedRandom(_gameTiming, GetNetEntity(ent), GetNetEntity(solutionOwner));
                 if (rand.NextFloat() >= effect.Probability)
                     continue;
 

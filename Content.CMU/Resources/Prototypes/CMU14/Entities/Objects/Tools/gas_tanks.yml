@@ -70,3 +70,16 @@
     air:
       volume: 10
       temperature: 293.15
+
+- type: entity
+  parent: CMUFieldOxygenTankHAZOPS
+  id: CMUFieldOxygenTankHAZOPSFilled
+  suffix: Filled
+  components:
+  - type: GasTank
+    releasePressure: 21.3
+    air:
+      volume: 10
+      moles:
+      - 5.73488662 # oxygen, same fill pressure as the 4 L field tank
+      temperature: 293.15

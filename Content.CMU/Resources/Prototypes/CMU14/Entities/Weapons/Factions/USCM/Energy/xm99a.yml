@@ -89,6 +89,7 @@
   id: AU14PlasmaShot
   categories: [ HideSpawnMenu ]
   components:
+  - type: CMUFixtureHitscan
   - type: HitscanBasicDamage
     damage:
       types:

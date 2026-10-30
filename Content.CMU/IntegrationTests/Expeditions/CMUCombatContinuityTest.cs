@@ -374,6 +374,46 @@ public sealed class CMUCombatContinuityTest : GameTest
         });
     }
 
+    [Test]
+    public async Task FlankCompletesAtItsAcceptedStanceWithoutAnotherMovementStep()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            Floor(map.Grid, map.Tile.Tile);
+            var destination = new EntityCoordinates(map.Grid, 7.5f, 6.5f);
+            var guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", destination.Offset(new Vector2(-0.6f, 0)));
+            var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
+            var system = Server.System<CMUExpeditionAgentSystem>();
+            agent.State = CMUExpeditionAgentState.PlanMove;
+            agent.Action = CMUTacticalAction.Flank;
+            agent.ActionStarted = SGameTiming.CurTime;
+            agent.ActionUntil = agent.MoveUntil = SGameTiming.CurTime + TimeSpan.FromSeconds(10);
+            agent.ActiveMoveDestination = agent.CoverDestination = destination;
+            // Keep the completed stance at home so idle orders do not start a separate return leg.
+            agent.Home = destination.Offset(new Vector2(-0.3f, 0));
+            agent.NextPlan = TimeSpan.MaxValue;
+            agent.NextThink = SGameTiming.CurTime;
+            Server.System<NPCSteeringSystem>().Register(guard, destination);
+
+            system.Update(0);
+            Assert.That(agent.Flanks, Is.Zero, "A flank still outside its accepted stance must keep moving.");
+            Assert.That(agent.Action, Is.EqualTo(CMUTacticalAction.Flank));
+
+            // Steering can leave the body between the generic travel radius and the action's arrival radius.
+            Server.System<SharedTransformSystem>().SetCoordinates(guard, destination.Offset(new Vector2(-0.3f, 0)));
+            agent.NextThink = SGameTiming.CurTime;
+            system.Update(0);
+
+            Assert.That(agent.Flanks, Is.EqualTo(1), "Reaching the action's stance must complete the flank before it times out.");
+            Assert.That(agent.Action, Is.Null);
+            Assert.That(agent.CoverDestination, Is.Null);
+            Assert.That(SEntMan.HasComponent<Content.Server.NPC.Components.NPCSteeringComponent>(guard), Is.False,
+                "A completed flank must release native steering.");
+            SEntMan.DeleteEntity(guard);
+        });
+    }
+
     private void Floor(EntityUid grid, Tile tile)
     {
         var tiles = new List<(Vector2i, Tile)>();

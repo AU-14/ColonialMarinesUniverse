@@ -411,6 +411,8 @@
   name: "Lemon Drop candy"
   description: "A sugar coated, lemon flavored sweet and sour hard candy popular in TWE, with candy itself originating in England."
   components:
+  - type: Item
+    size: Tiny
   - type: Sprite
     sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
     state: lemondrop

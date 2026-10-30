@@ -47,9 +47,9 @@ public sealed class CMUSatiationDeadlineTest : GameTest
                 var component = SEntMan.GetComponent<SatiationComponent>(uid);
                 SEntMan.System<SatiationSystem>().SetValue((uid, component), SatiationSystem.Hunger, 20.5f);
                 var hunger = component.GetOrNull(SatiationSystem.Hunger)!;
-                Assert.That(hunger.ActualChangeRate, Is.EqualTo(-1));
+                Assert.That(hunger.ActualChangeRate, Is.EqualTo(-2f / 3f).Within(0.0001f));
                 Assert.That(hunger.NextChangeRateModUpdateTime,
-                    Is.EqualTo(SGameTiming.CurTime + TimeSpan.FromSeconds(0.5)));
+                    Is.EqualTo(SGameTiming.CurTime + TimeSpan.FromSeconds(0.75)).Within(TimeSpan.FromMilliseconds(1)));
                 Assert.That(hunger.NextAlertUpdateTime, Is.Null);
                 version = component.LastModifiedTick;
             });
@@ -58,14 +58,16 @@ public sealed class CMUSatiationDeadlineTest : GameTest
             {
                 var component = SEntMan.GetComponent<SatiationComponent>(uid);
                 Assert.That(component.LastModifiedTick, Is.EqualTo(version));
-                Assert.That(component.GetOrNull(SatiationSystem.Hunger)!.ActualChangeRate, Is.EqualTo(-1));
+                Assert.That(component.GetOrNull(SatiationSystem.Hunger)!.ActualChangeRate,
+                    Is.EqualTo(-2f / 3f).Within(0.0001f));
             });
-            await Pair.RunTicksSync(Pair.SecondsToTicks(0.4f));
+            await Pair.RunTicksSync(Pair.SecondsToTicks(0.5f));
             await Server.WaitAssertion(() =>
             {
                 var component = SEntMan.GetComponent<SatiationComponent>(uid);
                 Assert.That(component.LastModifiedTick, Is.GreaterThan(version));
-                Assert.That(component.GetOrNull(SatiationSystem.Hunger)!.ActualChangeRate, Is.EqualTo(-0.5f));
+                Assert.That(component.GetOrNull(SatiationSystem.Hunger)!.ActualChangeRate,
+                    Is.EqualTo(-1f / 3f).Within(0.0001f));
                 SEntMan.System<SatiationSystem>().SetValue((uid, component), SatiationSystem.Hunger, 0f);
                 var hunger = component.GetOrNull(SatiationSystem.Hunger)!;
                 Assert.That(hunger.NextChangeRateModUpdateTime, Is.Null);

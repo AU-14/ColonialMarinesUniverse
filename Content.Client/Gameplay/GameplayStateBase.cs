@@ -133,8 +133,10 @@ namespace Content.Client.Gameplay
             if (eye == null)
                 return null;
 
-            var first = GetClickableEntities(coordinates, eye).FirstOrDefault();
-            return first.IsValid() ? first : null;
+            // CMU14: hover needs only the topmost hit, without allocating and sorting a complete result list.
+            // var first = GetClickableEntities(coordinates, eye).FirstOrDefault();
+            // return first.IsValid() ? first : null;
+            return CMUGetTopmostClickable(coordinates, eye);
         }
 
         public IEnumerable<EntityUid> GetClickableEntities(EntityCoordinates coordinates, bool excludeFaded = true)

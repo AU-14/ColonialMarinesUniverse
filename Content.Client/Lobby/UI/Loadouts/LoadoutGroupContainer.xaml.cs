@@ -73,9 +73,7 @@ public sealed partial class LoadoutGroupContainer : BoxContainer
             });
         }
 
-        // CMU14: gallery items own preview entities and must release them when refreshed.
-        if (_cmuGallery) LoadoutsContainer.ReleaseChildren();
-        else LoadoutsContainer.RemoveAllChildren();
+        LoadoutsContainer.RemoveAllChildren();
 
         // Get all loadout prototypes for this group. Invalid content should not crash the menu.
         var validProtos = new List<LoadoutPrototype>();
@@ -163,7 +161,6 @@ public sealed partial class LoadoutGroupContainer : BoxContainer
                 );
             }
         }
-        ApplyCmuGallery(); // CMU14: show variants as equipment cards inside the native dock.
     }
 
     private ToggleLoadoutButton CreateToggleButton(KeyValuePair<string, List<LoadoutPrototype>> kvp, LoadoutContainer firstElement, SubLoadoutContainer subContainer)

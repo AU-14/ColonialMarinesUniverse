@@ -212,7 +212,6 @@ cmu-yautja-thrall-bracer-unlocked-now = Вы разблокируете нару
 cmu-yautja-thrall-self-destruct-armed = Вы запустили таймер. Он подвёл вас.
 cmu-yautja-thrall-self-destruct-target = Ваш наруч раба начинает смертельный отсчёт!
 cmu-yautja-thrall-self-destruct-warning = Самоуничтожение наруча раба: {$seconds} секунд.
-cmu-yautja-thrall-self-destruct-cancelled = Вы отменяете самоуничтожение наруча раба {$target}.
 
 cmu-yautja-bracer-menu-title = Охотничий наруч
 cmu-yautja-bracer-menu-header = // ОХОТНИЧИЙ НАРУЧ //
@@ -360,6 +359,9 @@ cmu-yautja-trophy-harvest-finished-others = {$hunter} вырывает {$trophy}
 cmu-yautja-polish-denied = Вы не понимаете этот ритуальный инструмент.
 cmu-yautja-polish-already = Этот трофей уже отполирован.
 cmu-yautja-polish-finished = Вы полируете {$trophy}.
+cmu-yautja-polish-not-bone = На {$trophy} нет кости, которую можно отполировать.
+cmu-yautja-rag-wipe-start = Вы начинаете стирать кровь с {$target}.
+cmu-yautja-rag-wiped = Вы начисто вытираете {$target}.
 cmu-yautja-trophy-source-unknown = неизвестная добыча
 cmu-yautja-trophy-polished-yes = отполирован
 cmu-yautja-trophy-polished-no = не отполирован
@@ -389,8 +391,8 @@ cmu-yautja-ritual-examine-captive = Заявлен как ритуальная �
 cmu-yautja-ritual-examine-duel = Связан активной ритуальной дуэлью с {$hunter}.
 cmu-yautja-self-destruct-armed = Таймер запущен. Пусть путь в великие охотничьи угодья будет быстрым.
 cmu-yautja-self-destruct-warning = Самоуничтожение наруча: {$seconds} секунд.
-cmu-yautja-self-destruct-cancelled = Самоуничтожение наруча отменено.
 cmu-yautja-self-destruct-dead = Наруч не отвечает мёртвому охотнику.
+cmu-yautja-vitals-failing = Жизненные показатели падают, вы недолго продержитесь на ногах!
 cmu-yautja-trap-arm-failed = Здесь нельзя установить ловушку.
 cmu-yautja-trap-armed = Вы взводите охотничью ловушку.
 cmu-yautja-trap-disarmed = {$trap} обезврежена.
@@ -527,9 +529,6 @@ ent-CMUActionYautjaStunThrall = Оглушить Тралла
 ent-CMUActionYautjaSelfDestructThrall = Тралл Самоуничтожение
     .desc = Активируйте или отмените самоуничтожение связанного с вами наруча раба.
 
-ent-CMUActionYautjaRecall = Вызов диска
-    .desc = Вспомните ближайший смарт-диск под рукой.
-
 ent-CMUActionYautjaSelfDestruct = Наруч самоуничтожения
     .desc = Активируйте или отмените отложенный заряд самоуничтожения наручей.
 
@@ -598,3 +597,6 @@ cmu-yautja-hunt-call-elite-mixed-larger = Элитные смешанные фр
 cmu-yautja-power-examine-charge = Текущий заряд: [bold]{$charge}/{$max}[/bold].
 cmu-yautja-spike-launcher-examine-spikes = Текущий боезапас: [bold]{$count}/{$capacity}[/bold] шипов.
 cmu-yautja-plasma-weapon-examine-charge = Текущий заряд: [bold]{$charge}/{$max}[/bold].
+
+ent-CMUActionYautjaLeap = прыжок
+    .desc = Быстро прыгнуть в ближайшее место.

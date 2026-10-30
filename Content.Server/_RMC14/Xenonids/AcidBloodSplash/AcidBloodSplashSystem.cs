@@ -105,6 +105,11 @@ public sealed partial class AcidBloodSplashSystem : EntitySystem
                 continue;
 
             ent.Comp.NextSplashAvailable = _timing.CurTime + ent.Comp.SplashCooldown;
+            // CMU14: xenos are immune to acid blood. CM-SS13 only lets the splatter hurt non-Xenos, so a Xeno
+            // attacking another Xeno never takes splash damage from the victim's blood.
+            if (HasComp<XenoComponent>(target))
+                continue;
+
             _damageable.TryChangeDamage(target, _xeno.TryApplyXenoAcidDamageMultiplier(target, ent.Comp.Damage), origin: ent.Owner);
             CMUStainTarget(ent, target); // CMU14
             i++;

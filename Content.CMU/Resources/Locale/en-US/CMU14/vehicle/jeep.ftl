@@ -112,6 +112,10 @@ cmu-vehicle-crate-landing = It's still settling after the drop.
 cmu-vehicle-crate-unlatching = You start unlatching {THE($crate)}.
 cmu-vehicle-drop-flare-covered = The flare's beacon can't be seen from the sky here.
 cmu-vehicle-drop-flare-called = The flare's beacon chirps: a crate is on its way down.
+cmu-vehicle-drop-flare-cooldown = The beacon is waiting for jeep support. Another delivery is available in {$minutes} minutes; leave the flare burning on open ground.
+cmu-vehicle-drop-flare-limit = No more jeep support is available this round. Drop flares and intel call-ins share the same limit.
+ent-CMUFlareJeepDropCLF = jeep drop flare
+    .desc = A signal flare wired to a smuggler's beacon. Light it and leave it on open ground to call a gun jeep crate. CLF can call two jeeps per round, thirty minutes apart, shared with intel jeep crews. An early signal waits for support.
 
 cmu-vehicle-tyre-offroad = [color=yellow]Off-road tyres[/color]: the same on any ground.
 cmu-vehicle-tyre-road = [color=yellow]Road tyres[/color]: quicker on paving, slower on dirt and sand, and they bog down in water.

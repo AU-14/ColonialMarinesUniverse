@@ -13,16 +13,95 @@ permissions:
   pull-requests: read
 
 concurrency:
-  # CMU14: only PR pushes supersede each other. every branch push and merge-queue run
-  # finishes, otherwise the next merge cancels it and nobody knows which merge broke master
-  group: ${{ github.event_name == 'pull_request' && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id) }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  # CMU14: PR and master runs supersede their predecessors. Runners are too few to let each
+  # queued run finish. staging/stable pushes and merge queue runs still finish
+  group: ${{ (github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')) && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master') }}
 
 env:
   DOTNET_VERSION: 10.0.x
   CONFIGURATION: DebugOpt
 
 jobs:
+  source-guards:
+    name: Source Guards
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: "3.13"
+
+      - name: Check CRLF
+        run: python3 Tools/check_crlf.py
+
+      # CMU14: org owners, maintainers, senior contributors and allowlisted users may update the
+      # engine submodule in PRs. The default Actions token has no read:org scope, so the team and
+      # owner checks below 403/404 for everyone and the allowlist is the only exemption path.
+      - name: Reject RobustToolbox submodule updates in PRs
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v9.0.0
+        env:
+          SUBMODULE_EXEMPT_USERS: "maertayn"
+        with:
+          script: |
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+
+            if (!files.some(file => file.filename === 'RobustToolbox')) {
+              return;
+            }
+
+            const author = context.payload.pull_request.user.login;
+
+            const isActiveTeamMember = async (team) => {
+              try {
+                const res = await github.rest.teams.getMembershipForUserInOrg({
+                  org: context.repo.owner,
+                  team_slug: team,
+                  username: author,
+                });
+                return res.data.state === 'active';
+              } catch {
+                return false;
+              }
+            };
+
+            const isOrgOwner = await github.rest.orgs.getMembershipForUser({
+              org: context.repo.owner,
+              username: author,
+            }).then(res => res.data.role === 'admin' && res.data.state === 'active').catch(() => false);
+
+            const allowlist = (process.env.SUBMODULE_EXEMPT_USERS ?? '')
+                .split(',')
+                .map(name => name.trim())
+                .filter(name => name.length > 0);
+
+            const exempt = allowlist.includes(author)
+                || isOrgOwner
+                || (await isActiveTeamMember('maintainer'))
+                || (await isActiveTeamMember('senior-contributor'));
+
+            if (!exempt) {
+              core.setFailed('Do not update the RobustToolbox submodule in pull requests.');
+            }
+
+      # engine must sit on an upstream release tag, never a master commit
+      - name: Verify RobustToolbox submodule points at a release tag
+        run: |
+          SHA=$(git ls-tree HEAD RobustToolbox | awk '{print $3}')
+          if ! git ls-remote --tags https://github.com/space-wizards/RobustToolbox.git | awk '{print $1}' | grep -qx "$SHA"; then
+            echo "::error::RobustToolbox ${SHA} is not an upstream release tag. Pin a v* tag, not a master commit."
+            exit 1
+          fi
+
   build:
     name: Build
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
@@ -613,6 +692,8 @@ jobs:
             proto_lint_serial) workers=2 ;;
             # CMU14: every procgen research test builds its own pair, four at once ran out of memory and hung
             cmu_chemistry) workers=2 ;;
+            # CMU14: bound simultaneous round-start/map pairs and replacement pairs after failures.
+            mapping_station_shuttle_round) workers=2 ;;
           esac
 
           if [[ "$shard" == root ]]; then

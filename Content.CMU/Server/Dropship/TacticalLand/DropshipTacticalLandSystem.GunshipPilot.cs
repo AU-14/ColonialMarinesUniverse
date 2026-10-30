@@ -18,6 +18,7 @@ using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Actions;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -41,12 +42,15 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Physics;
 using Robust.Server.GameObjects;
+using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Dropship.TacticalLand;
 
 public sealed partial class DropshipTacticalLandSystem
 {
     [Dependency] private AccessReaderSystem _access = default!;
+    [Dependency] private ActionBlockerSystem _gunshipActionBlocker = default!;
+    [Dependency] private IRobustRandom _gunshipRandom = default!;
     [Dependency] private InventorySystem _pilotInventory = default!;
     [Dependency] private SharedNightVisionSystem _nightVision = default!;
     [Dependency] private SharedContainerSystem _gunshipContainers = default!;
@@ -61,9 +65,14 @@ public sealed partial class DropshipTacticalLandSystem
     private static readonly TimeSpan GunshipHudUpdateInterval = TimeSpan.FromMilliseconds(100);
     private static readonly TimeSpan GunshipCameraUpdateInterval = TimeSpan.FromMilliseconds(100);
     private static readonly TimeSpan StationaryProximityRefreshInterval = TimeSpan.FromSeconds(1);
-    private static readonly AudioParams GunshipAlarmAudioParams = AudioParams.Default
+    private static readonly AudioParams ProximityAlarmAudioParams = AudioParams.Default
         .WithLoop(true)
-        .WithMaxDistance(24f);
+        .WithMaxDistance(24f)
+        .WithVolume(-10f); // proximity and integrity alarms get distinct volumes
+    private static readonly AudioParams LowIntegrityAlarmAudioParams = AudioParams.Default
+        .WithLoop(true)
+        .WithMaxDistance(24f)
+        .WithVolume(-17f);
     private static readonly Vector2i[] GunshipProximityOffsets =
     [
         new(-1, -1), new(0, -1), new(1, -1),
@@ -760,7 +769,8 @@ public sealed partial class DropshipTacticalLandSystem
         if (!TryComp(pilot, out BuckleComponent? buckle) ||
             buckle.BuckledTo is not { } seatUid ||
             !TryComp(seatUid, out GunshipPilotSeatComponent? seatComp) ||
-            seatComp.Pilot != pilot)
+            seatComp.Pilot != pilot ||
+            !_gunshipActionBlocker.CanConsciouslyPerformAction(pilot))
         {
             return false;
         }
@@ -793,6 +803,32 @@ public sealed partial class DropshipTacticalLandSystem
             {
                 StopGunshipControl((seatUid, seat), restorePilot: true);
                 continue;
+            }
+
+            if (!_gunshipActionBlocker.CanConsciouslyPerformAction(pilot))
+            {
+                seat.HeldInputs = GunshipControlInput.None;
+                seat.PressedActions = 0;
+                if (seat.UncontrolledInputs == GunshipControlInput.None || _timing.CurTime >= seat.NextUncontrolledDirection)
+                {
+                    var previous = seat.UncontrolledInputs;
+                    do
+                    {
+                        seat.UncontrolledInputs = _gunshipRandom.Next(4) switch
+                        {
+                            0 => GunshipControlInput.Forward,
+                            1 => GunshipControlInput.Back,
+                            2 => GunshipControlInput.Left,
+                            _ => GunshipControlInput.Right,
+                        };
+                    } while (seat.UncontrolledInputs == previous);
+                    seat.NextUncontrolledDirection = _timing.CurTime + TimeSpan.FromSeconds(10);
+                }
+            }
+            else
+            {
+                seat.UncontrolledInputs = GunshipControlInput.None;
+                seat.NextUncontrolledDirection = TimeSpan.Zero;
             }
 
             if (Transform(seatUid).GridUid is not { } grid ||
@@ -894,7 +930,9 @@ public sealed partial class DropshipTacticalLandSystem
         var maneuveringAccelerationMultiplier = maneuveringFault ? 0.45f : 1f;
         var maximumTurnSpeedMultiplier = maneuveringFault ? 0.60f : 1f;
         var controls = seat?.Comp;
-        var thrustMultiplier = controls != null
+        var uncontrolled = controls != null && controls.UncontrolledInputs != GunshipControlInput.None;
+        var inputs = uncontrolled ? controls!.UncontrolledInputs : controls?.HeldInputs ?? GunshipControlInput.None;
+        var thrustMultiplier = uncontrolled ? 1f : controls != null
             ? Math.Clamp(controls.ThrustPercent / 100f, 0f, 1f)
             : 0f;
 
@@ -929,9 +967,9 @@ public sealed partial class DropshipTacticalLandSystem
         }
 
         var turn = 0f;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.RotateLeft) == true)
+        if (inputs.HasFlag(GunshipControlInput.RotateLeft))
             turn += 1f;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.RotateRight) == true)
+        if (inputs.HasFlag(GunshipControlInput.RotateRight))
             turn -= 1f;
 
         hover.Comp.GunshipVisualTurn = turn * maneuveringAccelerationMultiplier * thrustMultiplier;
@@ -952,13 +990,13 @@ public sealed partial class DropshipTacticalLandSystem
         }
 
         var localMovement = Vector2.Zero;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.Forward) == true)
+        if (inputs.HasFlag(GunshipControlInput.Forward))
             localMovement += Vector2.UnitY;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.Back) == true)
+        if (inputs.HasFlag(GunshipControlInput.Back))
             localMovement -= Vector2.UnitY;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.Right) == true)
+        if (inputs.HasFlag(GunshipControlInput.Right))
             localMovement += Vector2.UnitX;
-        if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.Left) == true)
+        if (inputs.HasFlag(GunshipControlInput.Left))
             localMovement -= Vector2.UnitX;
 
         if (localMovement != Vector2.Zero)
@@ -2192,6 +2230,10 @@ public sealed partial class DropshipTacticalLandSystem
 
     private void StopGunshipControl(Entity<GunshipPilotSeatComponent> seat, bool restorePilot)
     {
+        seat.Comp.HeldInputs = GunshipControlInput.None;
+        seat.Comp.PressedActions = 0;
+        seat.Comp.UncontrolledInputs = GunshipControlInput.None;
+        seat.Comp.NextUncontrolledDirection = TimeSpan.Zero;
         if (seat.Comp.Pilot is { } pilot)
         {
             DisablePilotHudActions(pilot, seat);
@@ -2295,7 +2337,8 @@ public sealed partial class DropshipTacticalLandSystem
                     lowIntegrityAlarm = dropshipIntegrity.LowIntegrityAlarmActive;
                 }
 
-                hasDirectFireWeapon = TryGetDirectFireMount(grid, out _, out var foundWeapon, out _, out _, out var directAmmo);
+                hasDirectFireWeapon = TryGetDirectFireMount(grid, out _, out var foundWeapon, out _, out _, out var directAmmo)
+                    && IsGunshipFirearmArmed(grid); // fire-control toggle gates auto-selection
                 if (hasDirectFireWeapon)
                 {
                     directFireWeapon = foundWeapon;
@@ -2415,6 +2458,19 @@ public sealed partial class DropshipTacticalLandSystem
         remote.Platform = dropship;
         remote.SelectedWeapon = weapon;
         Dirty(pilot, remote);
+    }
+
+    // The ship's direct-fire weapon only auto-selects while every console arms fire-control.
+    private bool IsGunshipFirearmArmed(EntityUid grid)
+    {
+        var children = Transform(grid).ChildEnumerator;
+        while (children.MoveNext(out var child))
+        {
+            if (TryComp(child, out GunshipControlsComponent? controls) && !controls.Armed)
+                return false;
+        }
+
+        return true;
     }
 
     private void UpdateGunshipStaticZoom(Entity<GunshipPilotHudComponent> wearer, bool linked)
@@ -2559,15 +2615,18 @@ public sealed partial class DropshipTacticalLandSystem
         return hazards.Count > 0;
     }
 
-    private void UpdateGunshipAlarmAudio(Entity<DropshipIntegrityComponent> dropship)
+    // Made public so the nav console master alarm toggle can refresh streams.
+    public void UpdateGunshipAlarmAudio(Entity<DropshipIntegrityComponent> dropship)
     {
         UpdateGunshipAlarmStream(dropship.Owner,
             dropship.Comp.ProximityAlarmActive && !dropship.Comp.MasterAlarmSilenced,
             dropship.Comp.ProximityAlarmSound,
+            ProximityAlarmAudioParams,
             ref dropship.Comp.ProximityAlarmStream);
         UpdateGunshipAlarmStream(dropship.Owner,
             dropship.Comp.LowIntegrityAlarmActive && !dropship.Comp.MasterAlarmSilenced,
             dropship.Comp.LowIntegrityAlarmSound,
+            LowIntegrityAlarmAudioParams,
             ref dropship.Comp.LowIntegrityAlarmStream);
     }
 
@@ -2575,6 +2634,7 @@ public sealed partial class DropshipTacticalLandSystem
         EntityUid dropship,
         bool active,
         SoundSpecifier sound,
+        AudioParams audioParams,
         ref EntityUid? stream)
     {
         if (!active)
@@ -2586,7 +2646,7 @@ public sealed partial class DropshipTacticalLandSystem
         if (stream is { } playing && !TerminatingOrDeleted(playing))
             return;
 
-        stream = _audio.PlayPvs(sound, dropship, GunshipAlarmAudioParams)?.Entity;
+        stream = _audio.PlayPvs(sound, dropship, audioParams)?.Entity;
     }
 
     private void OnDropshipIntegrityShutdown(Entity<DropshipIntegrityComponent> ent, ref ComponentShutdown args)

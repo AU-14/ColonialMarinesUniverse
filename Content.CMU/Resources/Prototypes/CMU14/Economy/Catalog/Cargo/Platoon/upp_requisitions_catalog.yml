@@ -11,6 +11,8 @@
         crate: RMCCrateEmptySandbags
       - cost: 500
         crate: RMCCrateSandbagsConstructionKit
+      - cost: 1200
+        crate: CMUCrateHESCO
       - cost: 600
         crate: AU14CrateConcreteBags
       - cost: 700
@@ -386,6 +388,8 @@
 
     - name: Weapons
       entries:
+      - cost: 600
+        crate: CMUCrateZHNK72
       - cost: 850
         crate: RMCCrateXM51
       - cost: 250
@@ -433,6 +437,8 @@
         crate: RuMCCrateUTES-C
     - name: Ammo
       entries:
+      - cost: 400
+        crate: CMUCrateZHNK72Speedloaders
       - cost: 450
         crate: RuMCCrateUTES-CMagazine
       - cost: 200
@@ -511,6 +517,12 @@
         crate: RMCCrateMagazineBGel
     - name: Specialist Ammo
       entries:
+      - cost: 1500
+        crate: CMUCrateMagazineSVAROGIncen
+      - cost: 1000
+        crate: CMUCrateMagazineSVAROG
+      - cost: 1500
+        crate: CMUCrateMagazineSVAROGFlak
       - cost: 400
         crate: RuMCCrateAH12Magazine
       - cost: 400

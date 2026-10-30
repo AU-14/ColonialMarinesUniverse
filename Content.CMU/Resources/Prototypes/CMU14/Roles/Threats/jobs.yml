@@ -40,7 +40,7 @@
   playTimeTracker: AUJobThreatMember
   supervisors: cm-job-supervisors-nobody
   icon: "AU14JobIconThreatMember"
-  jobPreviewEntity: RMCPlayerXenoQueenPreview
+  jobPreviewEntity: RMCPlayerXenoLarvaPreview
   accessGroups:
   - CMAccessXeno
   - CMAccessXenoQueen

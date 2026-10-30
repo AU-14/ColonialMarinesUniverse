@@ -44,6 +44,10 @@ public sealed class CMUAmmoHudOverlay : Overlay
     // Which icon a gun prototype gets never changes, so work it out once.
     private readonly Dictionary<string, string> _typeCache = new();
 
+    private readonly List<SpriteSpecifier.Rsi> _layers = new(5);
+    private int _lastRounds = -1;
+    private string? _lastType;
+
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
 
     public CMUAmmoHudOverlay()
@@ -83,31 +87,46 @@ public sealed class CMUAmmoHudOverlay : Overlay
         _entity.EventBus.RaiseLocalEvent(held, ref ev);
         var rounds = Math.Clamp(ev.Count, 0, 999);
 
-        var type = GetAmmoType(held);
-        var layers = new List<string> { "ammo" };
+        UpdateLayers(rounds, GetAmmoType(held));
+        var box = GetBox(args.ViewportBounds);
+
+        // Keep sampling animated states every frame, even when the layer selection is unchanged.
+        var time = _timing.CurTime;
+        foreach (var layer in _layers)
+        {
+            var texture = _sprite.GetFrame(layer, time);
+            args.ScreenHandle.DrawTextureRect(texture, box);
+        }
+    }
+
+    private void UpdateLayers(int rounds, string type)
+    {
+        if (_lastRounds == rounds && _lastType == type)
+            return;
+
+        _lastRounds = rounds;
+        _lastType = type;
+        _layers.Clear();
+        AddLayer("ammo");
         if (rounds == 0)
         {
-            layers.Add(EmptyState(type));
-            layers.Add("o0_flash");
+            AddLayer(EmptyState(type));
+            AddLayer("o0_flash");
         }
         else
         {
-            layers.Add(type);
-            layers.Add("o" + (rounds % 10));
+            AddLayer(type);
+            AddLayer("o" + (rounds % 10));
             if (rounds >= 10)
-                layers.Add("t" + (rounds / 10 % 10));
+                AddLayer("t" + (rounds / 10 % 10));
             if (rounds >= 100)
-                layers.Add("h" + (rounds / 100));
+                AddLayer("h" + (rounds / 100));
         }
+    }
 
-        var box = GetBox(args.ViewportBounds);
-
-        var time = _timing.CurTime;
-        foreach (var state in layers)
-        {
-            var texture = _sprite.GetFrame(new SpriteSpecifier.Rsi(Rsi, state), time);
-            args.ScreenHandle.DrawTextureRect(texture, box);
-        }
+    private void AddLayer(string state)
+    {
+        _layers.Add(new SpriteSpecifier.Rsi(Rsi, state));
     }
 
     /// <summary>

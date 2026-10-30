@@ -26,6 +26,7 @@ public sealed partial class CMURoundStatisticsWindow
     private readonly Label _summary;
     private readonly Label _status;
     private readonly Button _refresh;
+    private readonly OptionButton _period;
     private readonly BoxContainer _modeTabs;
     private CMURoundStatisticsDashboard? _dashboard;
     private CMURoundStatisticsDashboard? _browseDashboard;
@@ -59,6 +60,24 @@ public sealed partial class CMURoundStatisticsWindow
         var header = new BoxContainer { HorizontalExpand = true, SeparationOverride = 12 };
         _summary = Hint(Loc.GetString("cmu-round-stats-loading"));
         header.AddChild(_summary);
+        _period = new OptionButton { MinSize = new Vector2(130, 32) };
+        _period.AddItem(Loc.GetString("cmu-round-stats-one-week"), (int) CMURoundStatisticsPeriod.OneWeek);
+        _period.AddItem(Loc.GetString("cmu-round-stats-two-weeks"), (int) CMURoundStatisticsPeriod.TwoWeeks);
+        _period.AddItem(Loc.GetString("cmu-round-stats-one-month"), (int) CMURoundStatisticsPeriod.OneMonth);
+        _period.AddItem(Loc.GetString("cmu-round-stats-three-months"), (int) CMURoundStatisticsPeriod.ThreeMonths);
+        _period.AddItem(Loc.GetString("cmu-round-stats-six-months"), (int) CMURoundStatisticsPeriod.SixMonths);
+        _period.AddItem(Loc.GetString("cmu-round-stats-one-year"), (int) CMURoundStatisticsPeriod.OneYear);
+        _period.AddItem(Loc.GetString("cmu-round-stats-all-time"), (int) CMURoundStatisticsPeriod.AllTime);
+        _period.SelectId((int) _query.Period);
+        _period.OnItemSelected += args =>
+        {
+            _period.SelectId(args.Id);
+            ClearDetail();
+            Query(new CMURoundStatisticsQuery(_query.Preset, search: _query.Search,
+                period: (CMURoundStatisticsPeriod) args.Id));
+        };
+        header.AddChild(new Label { Text = Loc.GetString("cmu-round-stats-period"), FontColorOverride = Muted });
+        header.AddChild(_period);
         _refresh = ActionButton("refresh", () => OnRefresh?.Invoke());
         header.AddChild(_refresh);
         root.AddChild(header);
@@ -70,7 +89,7 @@ public sealed partial class CMURoundStatisticsWindow
             {
                 ClearDetail();
                 _againstThreat = preset is CMURoundStatisticsPreset.DistressSignal or CMURoundStatisticsPreset.ColonyFall;
-                Query(new CMURoundStatisticsQuery(preset));
+                Query(new CMURoundStatisticsQuery(preset, period: _query.Period));
             });
             button.ToggleMode = true;
             button.HorizontalExpand = true;
@@ -99,7 +118,7 @@ public sealed partial class CMURoundStatisticsWindow
                 ClearDetail();
                 _view = view;
                 if (scoped)
-                    Query(new CMURoundStatisticsQuery(_query.Preset));
+                    Query(new CMURoundStatisticsQuery(_query.Preset, period: _query.Period));
                 else
                     Render(Vector2.Zero);
             });
@@ -136,6 +155,7 @@ public sealed partial class CMURoundStatisticsWindow
     {
         _loading = loading;
         _refresh.Disabled = loading;
+        _period.Disabled = loading;
         foreach (var child in _modeTabs.Children.Concat(_navigation.Children))
             ((Button) child).Disabled = loading;
         _status.Visible = loading || failed;
@@ -146,6 +166,7 @@ public sealed partial class CMURoundStatisticsWindow
 
         _dashboard = dashboard;
         _query = dashboard.Query;
+        _period.SelectId((int) _query.Period);
         _summary.Text = Loc.GetString("cmu-round-stats-history",
             ("count", dashboard.TotalRecords), ("round", dashboard.LatestRoundId),
             ("date", dashboard.FirstRecordedAt?.ToString("yyyy-MM-dd") ?? "—"));

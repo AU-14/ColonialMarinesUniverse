@@ -41,7 +41,7 @@ cmu-yautja-translator-speaker = translator
 cmu-yautja-translator-verb = broadcasts
 cmu-yautja-translator-popup = The translator emits: "{$message}"
 cmu-yautja-translator-chat = [color=#ff4d4d]The translator emits:[/color] "{$message}"
-cmu-yautja-bracer-menu-command-unavailable = That bracer function is unavailable.
+cmu-yautja-bracer-menu-command-unavailable = These bracers lack this function.
 cmu-yautja-bracer-menu-command-cooldown = That bracer function is still cycling.
 cmu-yautja-bracer-unlock-dead-verb = Unlock dead hunter bracer
 cmu-yautja-bracer-lock-dead-verb = Lock dead hunter bracer
@@ -66,7 +66,7 @@ cmu-yautja-apc-siphon-cooldown = This APC's power cells have already been draine
 cmu-yautja-apc-siphon-no-bracer = You need a hunting bracer to siphon power.
 cmu-yautja-bracer-id-deployed = The embedded ID chip slides into place.
 cmu-yautja-bracer-id-retracted = The embedded ID chip retracts into the bracer.
-cmu-yautja-bracer-id-slot-blocked = Your ID slot is blocked.
+cmu-yautja-bracer-id-slot-blocked = Something is obstructing the deployment of your ID chip!
 cmu-yautja-bracer-id-failed = The embedded ID chip fails to deploy.
 cmu-yautja-bracer-fabricator-cooldown = The bracer fabricator is still recharging.
 cmu-yautja-tech-random-works = You accidentally trigger a bracer function.
@@ -74,6 +74,13 @@ cmu-yautja-tech-random-function = The alien controls misread your touch.
 cmu-yautja-tech-shock = The {$bracer} beeps and sends a shock through your body!
 cmu-yautja-tech-delimbs = The bracer overload tears your arms apart!
 cmu-yautja-mask-ornament-denied = You do not know how to fit this ornament.
+cmu-yautja-thwei-no-idea = You have no idea where to inject {$item}.
+cmu-yautja-idchip-denied = You have no idea how to use this...
+cmu-yautja-lock-no-idea = You have no idea how to use this...
+cmu-yautja-comms-denied = You try to talk into the headset, but just get a horrible shrieking in your ears!
+cmu-yautja-button-not-for-you = This button is not for you.
+cmu-yautja-thrall-feature-blocked = The device is preventing you access of this feature as it detects you being a thrall.
+cmu-yautja-attach-no-idea = You do not know how to attach {$item} to {$bracer}.
 cmu-yautja-mask-ornament-occupied = The mask already has an ornament installed.
 cmu-yautja-mask-ornament-attached = You attach {$item} to the mask.
 cmu-yautja-mask-ornament-remove = Remove mask ornament
@@ -155,7 +162,6 @@ cmu-yautja-thrall-bracer-unlocked-now = You unlock the thrall bracer.
 cmu-yautja-thrall-self-destruct-armed = You set the timer. They have failed you.
 cmu-yautja-thrall-self-destruct-target = Your thrall bracer begins a fatal countdown!
 cmu-yautja-thrall-self-destruct-warning = Thrall bracer self-destruct: {$seconds} seconds.
-cmu-yautja-thrall-self-destruct-cancelled = You cancel {$target}'s thrall bracer self-destruct.
 
 cmu-yautja-bracer-menu-title = Hunting Bracer
 cmu-yautja-bracer-menu-header = // HUNTING BRACER //
@@ -286,6 +292,9 @@ cmu-yautja-trophy-verb-generic = Take trophy
 cmu-yautja-butcher-verb = Butcher corpse
 cmu-yautja-butcher-start-self = You begin ritual butchery on {$target}.
 cmu-yautja-butcher-start-others = {$hunter} begins ritual butchery on {$target}!
+cmu-butcher-start-self = You start carving up {$target}.
+cmu-butcher-start-others = {$hunter} starts carving up {$target}!
+cmu-butcher-need-blade = You need a knife or something sharp in your hand.
 cmu-yautja-butcher-stage-complete = You complete butchery stage {$stage} on {$target}.
 cmu-yautja-butcher-finished = You finish butchering {$target}.
 cmu-yautja-butcher-already-finished = The corpse has already been butchered.
@@ -300,6 +309,9 @@ cmu-yautja-trophy-harvest-finished-others = {$hunter} tears {$trophy} free from 
 cmu-yautja-polish-denied = You do not understand this ritual tool.
 cmu-yautja-polish-already = That trophy is already polished.
 cmu-yautja-polish-finished = You polish {$trophy}.
+cmu-yautja-polish-not-bone = There is no bone on {$trophy} to polish.
+cmu-yautja-rag-wipe-start = You start wiping the blood off {$target}.
+cmu-yautja-rag-wiped = You wipe {$target} clean.
 cmu-yautja-trophy-source-unknown = unknown prey
 cmu-yautja-trophy-polished-yes = polished
 cmu-yautja-trophy-polished-no = unpolished
@@ -327,11 +339,19 @@ cmu-yautja-ritual-released = You release {$target} from the ritual.
 cmu-yautja-ritual-release-others = {$hunter} releases {$target} from the ritual.
 cmu-yautja-ritual-examine-captive = Claimed as ritual prey by {$hunter}.
 cmu-yautja-ritual-examine-duel = Bound in an active ritual duel with {$hunter}.
+cmu-yautja-honor-duel-challenge-verb = Challenge to an honor duel
+cmu-yautja-honor-duel-call-off-verb = Call off the honor duel
+cmu-yautja-honor-duel-challenge-title = Honor duel
+cmu-yautja-honor-duel-challenge-message = {$hunter} challenges you to an honor duel, to the death. Accept?
+cmu-yautja-honor-duel-challenge-sent = You challenge {$target} to an honor duel.
+cmu-yautja-honor-duel-accepted = You accept the honor duel. Only one of you leaves.
+cmu-yautja-honor-duel-unavailable = The honor duel can't happen anymore.
+cmu-yautja-honor-duel-others = Two hunters face each other in an honor duel!
 cmu-yautja-self-destruct-armed = You set the timer. May your journey to the great hunting grounds be swift.
 cmu-yautja-self-destruct-warning = Bracer self-destruct: {$seconds} seconds.
-cmu-yautja-self-destruct-cancelled = Your bracers stop beeping.
 cmu-yautja-self-destruct-critical = As you fall into unconsciousness you fail to activate your self-destruct device before you collapse.
 cmu-yautja-self-destruct-dead = Little too late for that now!
+cmu-yautja-vitals-failing = Your vitals are failing, you won't stay standing much longer!
 cmu-yautja-trap-arm-failed = You cannot set the trap here.
 cmu-yautja-trap-armed = hunting trap is now armed.
 cmu-yautja-trap-disarmed = {$trap} is now disarmed.
@@ -385,7 +405,7 @@ cmu-yautja-emote-msg-pain = snarls in pain.
 cmu-yautja-emote-name-distract = Distract
 cmu-yautja-emote-msg-distract = makes a strange, alluring sound.
 cmu-yautja-emote-name-death-cry = Death Cry
-cmu-yautja-emote-msg-death-cry = releases a dying cry.
+cmu-yautja-emote-msg-death-cry = lets out a final bellowing cry, falling motionless and lifeless soon after...
 cmu-yautja-emote-name-death-laugh = Death Laugh
 cmu-yautja-emote-msg-death-laugh = gives a final, chilling laugh.
 cmu-xeno-predalien-larva-name = Predalien Larva
@@ -436,8 +456,6 @@ ent-CMUActionYautjaStunThrall = Stun Thrall
     .desc = Punish your linked thrall with a remote bracer shock.
 ent-CMUActionYautjaSelfDestructThrall = Thrall Self-Destruct
     .desc = Arm or cancel your linked thrall bracer's self-destruct.
-ent-CMUActionYautjaRecall = Recall Gear
-    .desc = Recall your nearby deployed hunting gear to hand.
 ent-CMUActionYautjaSelfDestruct = Bracer Self-Destruct
     .desc = Arm or cancel the bracer's delayed self-destruct charge.
 ent-CMUActionYautjaToggleCaster = Deploy Caster
@@ -511,6 +529,25 @@ cmu-yautja-job-name-military-soldier = Yautja Military Caste Soldier
 cmu-yautja-job-description-military-soldier = An event-only military caste Yautja soldier deployed as part of a Predator Deathsquad.
 cmu-yautja-job-name-military-enforcer = Yautja Military Caste Enforcer
 cmu-yautja-job-description-military-enforcer = An event-only military caste Yautja enforcer leading a Predator Deathsquad.
+cmu-job-supervisors-yautja-military = the Ancients and the Elder Overseer
+
+# Military Caste ERT, cmss13 /datum/emergency_call/yautja_mcaste
+cmu-yautja-mcaste-party-name = Yautja Military Caste Soldiers (Deathsquad)
+cmu-yautja-mcaste-low-threat-party-name = Yautja Military Caste Soldiers
+cmu-yautja-mcaste-arrival = 'Des#<oy *&l th!^ @he Anci#*$!>- d=!#?ee unwor%*y o# *xist?n&*.'
+cmu-yautja-mcaste-soldier-ghost-name = Yautja Military Caste Soldier
+cmu-yautja-mcaste-soldier-ghost-description = One of few Yautja equipped for full-scale warfare, sent by the Ancients to wipe out a threat to your species.
+cmu-yautja-mcaste-enforcer-ghost-name = Yautja Military Caste Enforcer
+cmu-yautja-mcaste-enforcer-ghost-description = Lead a team of military caste soldiers against a threat to your species.
+cmu-yautja-mcaste-ghost-rules = You are a Yautja deathsquad. You answer only to the Ancients and the Elder Overseer and are not bound by the Honor Code. You are hostile to everyone who is not Yautja.
+cmu-yautja-mcaste-enforcer-name = Enforcer {$name}
+cmu-yautja-mcaste-elite-name = Elite {$name}
+cmu-yautja-mcaste-high-name = High {$name}
+cmu-yautja-mcaste-briefing-soldier = [bold][font size=16][color=#ff5555]You are a Military Caste Soldier, one of few Yautja equipped for full-scale warfare.[/color][/font][/bold]
+cmu-yautja-mcaste-briefing-enforcer = [bold][font size=16][color=#ff5555]You are a Military Caste Enforcer, tasked with leading a team of soldiers against threats to your species.[/color][/font][/bold]
+cmu-yautja-mcaste-briefing-answer = [bold]You answer only to the Ancients and the Elder Overseer, and are not required to follow the Honor Code.[/bold]
+cmu-yautja-mcaste-briefing-prejudice = [bold]Execute your mission with extreme prejudice.[/bold]
+cmu-yautja-mcaste-briefing-hostile = [bold][font size=20][color=#ff5555]YOU ARE HOSTILE to everyone who is not Yautja.[/color][/font][/bold]
 
 cmu-job-supervisors-yautja-youngblood = the Blooded and higher ranks
 cmu-job-supervisors-yautja-hellhound = your bonded master, then the Blooded and higher ranks
@@ -768,6 +805,7 @@ cmu-yautja-badblood-no-honor = You have no honor. You cannot do this.
 
 cmu-yautja-disc-fiddle = You fiddle with the disc, but nothing happens. Try again maybe?
 cmu-yautja-disc-catch-self = You catch {$disc} easily.
+cmu-yautja-disc-catch-others = {$user} expertly catches {$disc} out of the air.
 cmu-yautja-shuttle-console-denied = You do not understand how to use this terminal.
 cmu-yautja-butcher-target-title = What do you wish to butcher?
 cmu-yautja-butcher-target-message = Choose a dead adjacent target.
@@ -797,7 +835,6 @@ cmu-yautja-scalp-non-yautja-examine = Scalp-collecting is supposed to be a <i>jo
 cmu-yautja-honor-worth-examine = {$target} is worth {$honor} honor.
 cmu-yautja-self-destruct-broadcast-armed = {$hunter} has triggered their bracer's self-destruction sequence.
 cmu-yautja-self-destruct-broadcast-remote-armed = {$hunter} has triggered {$victim}'s bracer's self-destruction sequence.
-cmu-yautja-self-destruct-broadcast-cancelled = {$hunter} has cancelled their bracer's self-destruction sequence.
 cmu-yautja-self-destruct-admin-alert-self = ALERT: {$hunter} triggered their predator self-destruct sequence in {$area}.
 cmu-yautja-self-destruct-admin-alert-remote = ALERT: {$hunter} triggered the predator self-destruct sequence of {$victim} in {$area}.
 cmu-yautja-self-destruct-admin-cancel-link = CLICK TO CANCEL THIS PRED SD (bracer={$bracer}; victim={$victim})
@@ -1185,7 +1222,6 @@ cmu-yautja-lobby-age = Age
 cmu-yautja-lobby-sex = Sex
 cmu-yautja-lobby-gender = Gender
 cmu-yautja-lobby-skin = Skin color
-cmu-yautja-lobby-eyes = Eye color
 cmu-yautja-lobby-hair = Dreadlock color
 cmu-yautja-lobby-preview-without-gear = Preview without gear
 cmu-yautja-lobby-summary-set = Set: { $value }
@@ -1248,3 +1284,44 @@ cmu-yautja-lobby-invisibility-help-retro = Old retro cloak activation and deacti
 
 cmu-yautja-medicomp-empty-gun = The healing gun is empty.
 cmu-yautja-medicomp-stabilized = You stabilize the wounds.
+cmu-yautja-medicomp-treated = You treat the wounds. Use the wound clamp to finish treatment and restore normal movement.
+
+ent-CMUActionYautjaLeap = Leap
+    .desc = Leap quickly toward a nearby location.
+
+cmu-yautja-entry-1 = You are [bold]Yautja[/bold], a great and noble hunter!
+cmu-yautja-entry-2 = Follow the guidance of your elders and experienced hunters.
+cmu-yautja-entry-3 = Hunt at your discretion, yet be observant rather than violent.
+cmu-yautja-entry-4 = Most importantly, remember that dying in battle is the highest honor a Yautja could ask for.
+
+cmu-yautja-mask-knockoff-others = { $xeno } smashes off { $target }'s { $mask }!
+cmu-yautja-mask-knockoff-self = We smash off { $target }'s { $mask }!
+
+cmu-yautja-combistick-wield-folded = {CAPITALIZE(THE($item))} must be extended before you can wield it.
+
+cmu-yautja-emote-name-loudroar = Loud Roar
+cmu-yautja-emote-msg-loudroar = {THE($entity)} roars loudly!
+
+# lodge floors
+tiles-cmu-yautja-temple-floor = sandstone temple floor
+tiles-cmu-yautja-temple-deco-square-vertical = temple floor, square deco
+tiles-cmu-yautja-temple-deco-square-horizontal = temple floor, square deco
+tiles-cmu-yautja-temple-deco-diamond = temple floor, diamond deco
+tiles-cmu-yautja-temple-deco-pattern-vertical = temple floor, patterned deco
+tiles-cmu-yautja-temple-deco-pattern-horizontal = temple floor, patterned deco
+tiles-cmu-yautja-temple-dark-deco-square-vertical = dark temple floor, square deco
+tiles-cmu-yautja-temple-dark-deco-square-horizontal = dark temple floor, square deco
+tiles-cmu-yautja-temple-dark-deco-diamond = dark temple floor, diamond deco
+tiles-cmu-yautja-temple-dark-deco-pattern-vertical = dark temple floor, patterned deco
+tiles-cmu-yautja-temple-dark-deco-pattern-horizontal = dark temple floor, patterned deco
+tiles-cmu-yautja-temple-engraved = engraved floor
+
+# lodge
+cmu-yautja-temple-door-locked = The stone bolts hold it fast.
+cmu-yautja-temple-door-examine-locked = Heavy stone bolts hold it in place.
+cmu-yautja-temple-door-verb-lock = Lock door
+cmu-yautja-temple-door-verb-unlock = Unlock door
+cmu-yautja-temple-door-lock = You rotate your wristblades and heavy stone bolts grind into place.
+cmu-yautja-temple-door-unlock = You rotate your wristblades and the stone bolts slide free.
+cmu-yautja-wall-torch-placed = You place the torch on the wall.
+cmu-yautja-wall-torch-no-room = There's no room on that side of the wall.

@@ -20,10 +20,13 @@ namespace Content.Server.Construction.Completions
             if (Condition == null || Action == null)
                 return;
 
-            if (Condition.Condition(PassUser && userUid != null ? userUid.Value : uid, entityManager))
-                Action.PerformAction(uid, userUid, entityManager);
-            else
-                Else?.PerformAction(uid, userUid, entityManager);
+            // CMU14 Begin: selected nested refunds must pass through transaction adjustments.
+            var selected = Condition.Condition(PassUser && userUid != null ? userUid.Value : uid, entityManager)
+                ? Action
+                : Else;
+            if (selected != null)
+                entityManager.EntitySysManager.GetEntitySystem<ConstructionSystem>().PerformActions(uid, userUid, [selected]);
+            // CMU14 End
         }
     }
 }

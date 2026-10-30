@@ -12,11 +12,11 @@ public sealed partial class HumanoidProfileEditor
 {
     private static readonly ProtoId<TraitCategoryPrototype> SpeechTraitsCategory = "SpeechTraits";
 
-    /// <summary>
-    /// Refreshes traits selector
-    /// </summary>
-    public void RefreshTraits()
+    // CMU14 method: build on demand and retain selectors for selection-only updates.
+    private void RebuildTraitSelectors()
     {
+        _traitsNeedRefresh = false;
+        _traitSelectionGroups.Clear();
         TraitsList.ReleaseChildren();
 
         var traits = _prototypeManager.EnumeratePrototypes<TraitPrototype>().OrderBy(t => Loc.GetString(t.Name)).ToList();
@@ -69,7 +69,7 @@ public sealed partial class HumanoidProfileEditor
                 });
             }
 
-            var selectors = new List<(TraitPreferenceSelector Selector, bool IsLanguageTrait)>();
+            var selectors = new List<(TraitPreferenceSelector Selector, bool IsLanguageTrait, string Id)>();
             var selectionCount = 0;
 
             foreach (var traitProto in categoryTraits)
@@ -93,20 +93,25 @@ public sealed partial class HumanoidProfileEditor
                     }
 
                     SetDirty();
-                    RefreshTraits(); // If too many traits are selected, they will be reset to the real value.
+                    // Restore rejected selections and counters without rebuilding the control tree.
+                    RefreshTraitSelections();
                 };
-                selectors.Add((selector, trait.Language != null));
+                selectors.Add((selector, trait.Language != null, trait.ID));
             }
 
             // Selection counter
+            // Retain the counter alongside its selectors for selection-only updates.
+            Label? counter = null;
             if (category is { MaxTraitPoints: >= 0 })
             {
-                TraitsList.AddChild(new Label
+                counter = new Label
                 {
                     Text = Loc.GetString("humanoid-profile-editor-trait-count-hint", ("current", selectionCount), ("max", category.MaxTraitPoints)),
                     FontColorOverride = Color.Gray
-                });
+                };
+                TraitsList.AddChild(counter);
             }
+            _traitSelectionGroups.Add((category, selectors, counter));
 
             if (categoryId == SpeechTraitsCategory)
             {
@@ -146,9 +151,6 @@ public sealed partial class HumanoidProfileEditor
                 });
             }
 
-            // CMU14: a readable grid keeps native costs, conflicts and selection callbacks intact.
-            var grid = new Content.Client.CMU14.Lobby.CmuAdaptiveGrid(290) { HorizontalExpand = true };
-            TraitsList.AddChild(grid);
             foreach (var selector in selectors)
             {
                 if (category is { MaxTraitPoints: >= 0 } &&
@@ -157,15 +159,7 @@ public sealed partial class HumanoidProfileEditor
                     selector.Checkbox.Label.FontColorOverride = Color.Red;
                 }
 
-                // CMU14: compact trait cards instead of one long checkbox column.
-                selector.Margin = new Thickness(10);
-                grid.AddChild(new PanelContainer
-                {
-                    PanelOverride = Content.Client.CMU14.Lobby.CmuLobbyPresentation.Box(padding: 2),
-                    MinWidth = 280,
-                    Margin = new Thickness(3),
-                    Children = { selector },
-                });
+                TraitsList.AddChild(selector);
             }
         }
     }
