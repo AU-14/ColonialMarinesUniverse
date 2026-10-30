@@ -1,0 +1,7 @@
+author: Vixting
+category: CMU
+changes:
+- message: Added new compact health analyzer UI based of cm13s
+  type: Add
+time: '2026-10-18T12:49:17.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2217

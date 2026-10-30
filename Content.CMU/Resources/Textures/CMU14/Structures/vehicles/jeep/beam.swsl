@@ -1,0 +1,14 @@
+// The faint haze of a jeep's headlight beam on the road. It shows only where the beam's own light
+// lands: the light map's brightness above the map's ambient light. Walls cut it off with the light,
+// and in daylight there is nothing left over to show.
+
+uniform highp vec3 ambient;
+uniform highp float strength;
+
+void fragment() {
+    highp vec4 texel = zTexture(UV);
+    highp float added = max(0.0, zGrayscale(lightSample) - zGrayscale(ambient));
+    COLOR = vec4(texel.rgb, texel.a * strength * clamp(added * 1.5, 0.0, 1.0));
+    // The haze is light itself; the light map must not darken it again.
+    lightSample = vec3(1.0);
+}

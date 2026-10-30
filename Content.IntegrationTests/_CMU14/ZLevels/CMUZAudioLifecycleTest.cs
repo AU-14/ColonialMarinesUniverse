@@ -1,6 +1,7 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CCVar;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Components;
@@ -141,6 +142,78 @@ public sealed class CMUZAudioLifecycleTest : GameTest
             var projected = CEntMan.GetEntity(projection);
             Assert.That(CComp<AudioComponent>(projected).Flags, Is.EqualTo(AudioFlags.NoOcclusion),
                 "The replicated projection must remain positional on subsequent refreshes.");
+        });
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task DirectSoundOnlyAllocatesOnTheListenersFloor(bool predicted)
+    {
+        foreach (var listenerMap in new[] { _lower, _upper })
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SEntMan.System<SharedTransformSystem>().SetCoordinates(_listener,
+                    new EntityCoordinates(listenerMap, new Vector2(0.5f)));
+                var z = SEntMan.System<CMUZLevelsSystem>();
+                var sound = new SoundPathSpecifier(SoundPath, LoopParameters);
+                if (predicted)
+                    Assert.That(z.PlayPredictedDirectlyAcrossZ(sound, _emitter, null), Is.True);
+                else
+                    z.PlayPvsDirectlyAcrossZ(sound, _emitter);
+
+                Assert.That(AudioOn(listenerMap), Has.Count.EqualTo(1));
+                Assert.That(AudioOn(listenerMap == _lower ? _upper : _lower), Is.Empty,
+                    "Cross-floor visibility must not allocate a second, inaudible copy of the same sound.");
+                _sources.AddRange(AudioOn(listenerMap));
+            });
+            await Pair.RunUntilSynced();
+            await Client.WaitAssertion(() =>
+            {
+                var sounds = CEntMan.EntityQuery<AudioComponent>().Count(audio => audio.FileName == SoundPath);
+                Assert.That(sounds, Is.EqualTo(1), "The listener must receive the audible original or projection.");
+            });
+            await Server.WaitPost(() =>
+            {
+                foreach (var source in _sources)
+                    _audio.Stop(source);
+                _sources.Clear();
+            });
+            await Pair.RunTicksSync(2);
+            await Pair.RunUntilSynced();
+        }
+    }
+
+    [Test]
+    public async Task DirectPredictedSoundDoesNotAllocateForItsOnlyExcludedListener()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.System<CMUZLevelsSystem>().PlayPredictedDirectlyAcrossZ(
+                new SoundPathSpecifier(SoundPath, LoopParameters), _emitter, _listener), Is.True);
+            Assert.That(AudioOn(_lower), Is.Empty);
+            Assert.That(AudioOn(_upper), Is.Empty);
+        });
+    }
+
+    [Test]
+    public async Task DirectSoundFollowsRemoteEyeInsteadOfTheBody()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.System<SharedEyeSystem>().SetTarget(_listener, _emitter);
+            SEntMan.System<CMUZLevelsSystem>().PlayPredictedDirectlyAcrossZ(
+                new SoundPathSpecifier(SoundPath, LoopParameters), _emitter, null);
+            Assert.That(AudioOn(_lower), Is.Empty, "The body floor is inaudible while viewing through a remote eye.");
+            var original = AudioOn(_upper).Single();
+            _sources.Add(original);
+            Assert.That(SComp<AudioComponent>(original).IncludedEntities, Does.Contain(_listener));
+        });
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var sounds = CEntMan.EntityQuery<AudioComponent>().Count(audio => audio.FileName == SoundPath);
+            Assert.That(sounds, Is.EqualTo(1));
         });
     }
 
@@ -322,6 +395,94 @@ public sealed class CMUZAudioLifecycleTest : GameTest
         });
         await Pair.RunTicksSync(3);
         await Server.WaitAssertion(() => Assert.That(AudioOn(_lower), Is.Empty));
+    }
+
+    [TestCase(true, false, 1)]
+    [TestCase(false, false, 0)]
+    [TestCase(true, true, 0)]
+    public async Task TransientSoundsRequireOpeningsAndRespectPredictedExclusion(bool opening, bool excluded, int expected)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            SetUpperOpening(Vector2i.Zero, opening);
+            Assert.That(SEntMan.System<CMUZLevelsSystem>().PlayPredictedThroughOpenings(
+                new SoundPathSpecifier(SoundPath), _emitter, excluded ? _listener : null), Is.True);
+            Assert.That(AudioOn(_lower), Has.Count.EqualTo(expected));
+            Assert.That(AudioOn(_upper), Is.Empty, "An inaudible original must not be allocated for a lower-floor listener");
+        });
+    }
+
+    [Test]
+    public async Task TransientBudgetRejectsWithoutReleasingAnActiveSoundAndRecoversAfterDeletion()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var previous = _configuration.GetCVar(CCVars.CMUTransientAudioPerFile);
+            try
+            {
+                _configuration.SetCVar(CCVars.CMUTransientAudioPerFile, 1);
+                var z = SEntMan.System<CMUZLevelsSystem>();
+                var sound = new SoundPathSpecifier(SoundPath);
+                z.PlayPredictedThroughOpenings(sound, _emitter, null);
+                var first = AudioOn(_lower).Single();
+                for (var i = 0; i < 3; i++)
+                    z.PlayPredictedThroughOpenings(sound, _emitter, null);
+                Assert.That(AudioOn(_lower), Is.EqualTo(new[] { first }));
+                SEntMan.DeleteEntity(first);
+                z.PlayPredictedThroughOpenings(sound, _emitter, null);
+                Assert.That(AudioOn(_lower), Has.Count.EqualTo(1));
+                Assert.That(AudioOn(_lower).Single(), Is.Not.EqualTo(first));
+            }
+            finally
+            {
+                _configuration.SetCVar(CCVars.CMUTransientAudioPerFile, previous);
+            }
+        });
+    }
+
+    [TestCase(false, false)]
+    [TestCase(true, false)]
+    [TestCase(false, true)]
+    public async Task AdmittedPublicSoundStillReachesVehicleOccupants(bool direct, bool excluded)
+    {
+        EntityUid interiorMap = default;
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                interiorMap = _maps.CreateMap(runMapInit: true);
+                SEntMan.System<SharedTransformSystem>().SetCoordinates(_listener, new EntityCoordinates(interiorMap, Vector2.Zero));
+                var vehicle = SEntMan.SpawnEntity(null, SComp<TransformComponent>(_emitter).Coordinates);
+#pragma warning disable RA0002
+                SEntMan.EnsureComponent<Content.Shared._RMC14.Vehicle.VehicleInteriorComponent>(vehicle).Passengers.Add(_listener);
+                SEntMan.EnsureComponent<Content.Shared._RMC14.Vehicle.VehicleInteriorLinkComponent>(interiorMap).Vehicle = vehicle;
+#pragma warning restore RA0002
+                var z = SEntMan.System<CMUZLevelsSystem>();
+                var sound = new SoundPathSpecifier(SoundPath);
+                if (direct)
+                    z.PlayPredictedDirectlyAcrossZ(sound, _emitter, excluded ? _listener : null);
+                else
+                    z.PlayPredictedThroughOpenings(sound, _emitter, excluded ? _listener : null);
+                var relays = SEntMan.EntityQuery<AudioComponent>().Where(c => c.FileName == SoundPath && c.Global).ToArray();
+                foreach (var relay in relays)
+                    _sources.Add(relay.Owner);
+                Assert.That(relays, Has.Length.EqualTo(excluded ? 0 : 1));
+                if (!excluded)
+                {
+                    Assert.That(relays[0].Params.Volume, Is.LessThan(sound.Params.Volume));
+                    Assert.That(relays[0].IncludedEntities, Does.Contain(_listener));
+                }
+                Assert.That(AudioOn(_upper), Is.Empty);
+            });
+        }
+        finally
+        {
+            if (interiorMap.IsValid())
+            {
+                await Server.WaitPost(() => SEntMan.System<SharedTransformSystem>().SetCoordinates(_listener, new EntityCoordinates(_lower, Vector2.Zero)));
+                await Pair.DeleteEntityTreeLeafFirst(interiorMap);
+            }
+        }
     }
 
     private EntityUid PlayLoop()

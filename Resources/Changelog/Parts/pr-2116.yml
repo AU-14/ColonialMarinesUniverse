@@ -1,0 +1,69 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Squad members are now automatically put into fireteams when they join a
+    squad. A new fireteam opens for every 10 people in the squad, up to 3.
+  type: Add
+- message: Fireteam Leaders who join a squad take command of a fireteam that isn't
+    already led by a Fireteam Leader. Fireteams without one are led by their highest
+    ranking member.
+  type: Add
+- message: Squads without a living Squad Leader for 10 minutes now promote their highest
+    ranking member to Squad Leader.
+  type: Add
+- message: Fireteams without a living Fireteam Leader for 7 minutes now promote their
+    highest ranking member to Fireteam Leader.
+  type: Add
+- message: Squad and Fireteam Leaders who were replaced while dead get their position
+    back once they're revived and back in control of their character.
+  type: Add
+- message: GOVFOR and OPFOR squad members now have two trackers, one that always points
+    at the Squad Leader and one below it that points at your Fireteam Leader and can
+    be changed in the fireteam menu like normal.
+  type: Add
+- message: Characters who spawn with regulation tied-back hair can now re-tie it into
+    the other regulation tied-back styles, or untie it into a bob.
+  type: Add
+- message: The High Command Executive Officer now spawns with a command tablet.
+  type: Add
+- message: Players who are SSD, AFK, asleep, unconscious or dead are never automatically
+    made Squad or Fireteam Leader.
+  type: Tweak
+- message: Squad Leaders are now spread so each squad gets one and always take command
+    of the squad they join.
+  type: Tweak
+- message: Special roles like corpsmen and Fireteam Leaders are now spread evenly
+    across squads and riflemen fill whichever squad has the fewest people.
+  type: Tweak
+- message: Squad preference no longer affects which squad you join or where you appear
+    in the lobby lineup.
+  type: Tweak
+- message: The Commander is now called the Commanding Officer.
+  type: Tweak
+- message: Playtime medals now need 8, 20, 30 and 40 hours in a role for Bronze, Silver,
+    Gold and Platinum. The playtime stats window now shows the medal you'll actually
+    get.
+  type: Tweak
+- message: Removed the Ruby, Amethyst, Emerald and Prismatic playtime medals.
+  type: Remove
+- message: Fireteam Leaders now have the auxiliary channel.
+  type: Tweak
+- message: Platoon Corpsmen and Engineering Techs now have the auxiliary channel.
+  type: Tweak
+- message: Drone Operators now have the JTAC and auxiliary channels.
+  type: Tweak
+- message: The Combat Correspondent now spawns with the command headset.
+  type: Tweak
+- message: Prosthetic limb traits now cost 2 points.
+  type: Tweak
+- message: Removed "Platoon" from the Commander and Advisor job names.
+  type: Tweak
+- message: The Commanding Officer, Executive Officer, Advisor, staff officers, Medical
+    Officer, Chief MP, Military Doctors, Military Police and all aircrew now join
+    the Auxiliary squad instead of having no squad.
+  type: Tweak
+- message: Auxiliary squads no longer add their squad name to your ID, don't use fireteams
+    and their Squad Leader keeps their normal job icon.
+  type: Tweak
+time: '2026-10-09T23:07:14.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2116

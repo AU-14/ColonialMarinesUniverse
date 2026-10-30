@@ -14,6 +14,12 @@
     - CMUAlcoholic
     - CMUDrugAddict
     - CMUBadLeg
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
   roundSide: Indfor
   roundProfiles:
   - AU14RoundJobProfileThirdParty

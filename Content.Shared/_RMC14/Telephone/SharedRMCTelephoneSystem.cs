@@ -264,6 +264,13 @@ public abstract partial class SharedRMCTelephoneSystem : EntitySystem
             }
         }
 
+        // cmu edit start: lets a phone refuse the call, like a payphone the caller can't pay
+        var cmuAttempt = new Content.Shared.CMU14.Telephone.CMUPhoneCallAttemptEvent(user, target);
+        RaiseLocalEvent(ent, ref cmuAttempt);
+        if (cmuAttempt.Cancelled)
+            return;
+        // cmu edit end
+
         // Emit the popup on a successful call.
         // Check for the marine component because we don't want walls calling phones.
         if (HasComp<MarineComponent>(user) &&

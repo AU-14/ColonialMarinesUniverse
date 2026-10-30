@@ -7,24 +7,15 @@
   - type: GuideHelp
     guides:
     - RMCGuideRoleSpecGrenadier
+#cmu edit start: pre-resprite per-camo sprites (reverts RMC-14#6005)
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/GrenadeLaunchers/m83_inhands.rsi
+    sprite: CMU14/Weapons/GrenadeLaunchers/m83_old/desert.rsi
     layers:
-    - state: base
-      sprite: _RMC14/Objects/Weapons/Guns/GrenadeLaunchers/m83_main.rsi
-    - state: camo
-      sprite: _RMC14/Objects/Weapons/Guns/GrenadeLaunchers/m83_main.rsi
-      map: [ "enum.ItemCamouflageLayers.Layer" ]
-    - state: mag-0
-      sprite: _RMC14/Objects/Weapons/Guns/GrenadeLaunchers/m83_main.rsi
-      map: [ "enum.GunVisualLayers.Mag" ]
-  - type: MagazineVisuals
-    magState: mag
-    steps: 2
-    zeroVisible: true
-    zeroOnlyOnEmpty: true
-  #- type: Clothing
-  #  sprite: _RMC14/Objects/Weapons/Guns/GrenadeLaunchers/m83inhands.rsi
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Clothing
+    sprite: CMU14/Weapons/GrenadeLaunchers/m83_old/desert.rsi
+#cmu edit end
   - type: RMCSelectiveFire
     baseFireRate: 0.3125
   - type: GunUserWhitelist
@@ -47,10 +38,12 @@
   - type: AttachableHolderVisuals
     offsets:
       rmc-aslot-rail: 0.0, 0.185
+#cmu edit start: pre-resprite per-camo sprites (reverts RMC-14#6005)
   - type: ItemCamouflage
-    colors:
-      Jungle: "#ccd08d"
-      Desert: "#ffd2a6"
-      Snow: "#ddcbc9"
-      Classic: "#c7e7d9"
-      Urban: "#acb8c7"
+    camouflageVariations:
+      Jungle: CMU14/Weapons/GrenadeLaunchers/m83_old/jungle.rsi
+      Desert: CMU14/Weapons/GrenadeLaunchers/m83_old/desert.rsi
+      Snow: CMU14/Weapons/GrenadeLaunchers/m83_old/snow.rsi
+      Classic: CMU14/Weapons/GrenadeLaunchers/m83_old/classic.rsi
+      Urban: CMU14/Weapons/GrenadeLaunchers/m83_old/urban.rsi
+#cmu edit end

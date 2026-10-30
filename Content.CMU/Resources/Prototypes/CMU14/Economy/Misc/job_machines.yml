@@ -474,6 +474,9 @@
     departmentId: AU14DepartmentColonyMedical
     departmentAccessLevel: CMAccessColonyMedbay
     defaultSalary: 50
+    supplies:
+    - item: CMUMedicalJeepBeacon
+      cost: 15000
   - type: AccessReader
     access: [["AU14AccessColonyHeadPhysician"]]
 

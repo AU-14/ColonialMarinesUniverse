@@ -1,0 +1,28 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Coat racks no longer block interactions
+  type: Fix
+- message: Defibrillators no longer fit in the medical pouch
+  type: Fix
+- message: Internals switch to a tank that still has air
+  type: Fix
+- message: Call-ins on maps without breathable air arrive with a gas mask and oxygen
+  type: Add
+- message: Flare guns and underbarrel flares drop their flare at max range
+  type: Fix
+- message: Launched grenades no longer vanish after bouncing off a wall
+  type: Fix
+- message: Grenade launchers can fire up a level
+  type: Fix
+- message: Unholster secondary no longer grabs flashlights and picks the next weapon
+  type: Fix
+- message: The regulation tape box only holds tapes
+  type: Fix
+- message: The cross-level shooting message tells you how close to an edge you need
+    to be
+  type: Tweak
+- message: LACN can take the IMP ammo rack
+  type: Fix
+time: '2026-10-19T14:44:59.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2229

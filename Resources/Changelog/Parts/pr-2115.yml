@@ -1,0 +1,11 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Shift+Middle-click an item in your hand on the hotbar to hold it up for
+    everyone nearby to see, just like in CM13.
+  type: Add
+- message: Added tan and green boonie hats, work caps and sun caps to the civilian
+    clothing wardrobes.
+  type: Add
+time: '2026-10-09T02:53:18.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2115

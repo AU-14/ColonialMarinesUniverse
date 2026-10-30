@@ -50,6 +50,7 @@
   - AUPrisonStaff
   access:
   - AU14AccessColonyAmbassador
+  - AU14AccessAmbassadorCCA
   roleWeight: 0.25
 
 - type: startingGear
@@ -62,6 +63,7 @@
     ears: AU14AmbassadorCCAHeadset
     ears2: AU14TranslatorDevice
     pocket1: AU14StampCCAA
+    pocket2: CMUPepperSpray
   inhand:
   - AU14PortableVendorCCA
   - CMUMobilePhone
@@ -148,6 +150,7 @@
   - AUPrisonStaff
   access:
   - AU14AccessColonyAmbassador
+  - AU14AccessAmbassadorICSC
   roleWeight: 0.25
 
 - type: startingGear
@@ -160,6 +163,7 @@
     ears: AU14AmbassadorICSCHeadset
     ears2: AU14TranslatorDevice
     pocket1: AU14StampICSCA
+    pocket2: CMUPepperSpray
   inhand:
   - AU14PortableVendorICSC
   - CMUMobilePhone
@@ -246,6 +250,7 @@
   - AUPrisonStaff
   access:
   - AU14AccessColonyAmbassador
+  - AU14AccessAmbassadorTWE
   roleWeight: 0.25
 
 - type: startingGear
@@ -258,6 +263,7 @@
     ears: AU14ColonyAmbassadorTWEHeadset
     ears2: AU14TranslatorDevice
     pocket1: AU14StampTWEA
+    pocket2: CMUPepperSpray
   inhand:
   - AU14PortableVendorTWE
   - CMUMobilePhone
@@ -343,6 +349,7 @@
   - AUPrisonStaff
   access:
   - AU14AccessColonyAmbassador
+  - AU14AccessAmbassadorUA
   roleWeight: 0.25
 
 - type: startingGear
@@ -355,6 +362,7 @@
     ears: AU14AmbassadorUAHeadset
     ears2: AU14TranslatorDevice
     pocket1: AU14StampUAA
+    pocket2: CMUPepperSpray
   inhand:
   - AU14PortableVendorUA
   - CMUMobilePhone
@@ -439,6 +447,7 @@
   - AUPrisonStaff
   access:
   - AU14AccessColonyAmbassador
+  - AU14AccessAmbassadorUPP
   roleWeight: 0.25
 
 - type: startingGear
@@ -451,6 +460,7 @@
     ears: AU14AmbassadorUPPHeadset
     ears2: AU14TranslatorDevice
     pocket1: AU14StampUPPA
+    pocket2: CMUPepperSpray
   inhand:
   - AU14PortableVendorUPP
   - CMUMobilePhone

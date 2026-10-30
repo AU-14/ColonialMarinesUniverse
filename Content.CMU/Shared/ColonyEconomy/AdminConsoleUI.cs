@@ -46,6 +46,12 @@ public sealed class AdminConsoleThirdPartyBuiState : BoundUserInterfaceState
     public Dictionary<string, (string DisplayName, float Cost)> CallableParties { get; }
     public HashSet<string> CalledParties { get; }
 
+    /// <summary>How many more third parties can be called in this round.</summary>
+    public int CallsLeft { get; init; }
+
+    /// <summary>When the next one can be called in.</summary>
+    public TimeSpan NextCallInAt { get; init; }
+
     public AdminConsoleThirdPartyBuiState(float budget, Dictionary<string, (string DisplayName, float Cost)> callableParties, HashSet<string> calledParties)
     {
         Budget = budget;

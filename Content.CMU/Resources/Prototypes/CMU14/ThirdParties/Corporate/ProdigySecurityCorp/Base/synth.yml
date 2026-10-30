@@ -4,6 +4,9 @@
   abstract: true
   suffix: AU14, Prodigy
   components:
+  - type: NpcFactionMember
+    factions:
+    - CMUProdigy
   - type: GhostTakeoverAvailable
   - type: RMCSetGenderOnMapInit
     gender: female

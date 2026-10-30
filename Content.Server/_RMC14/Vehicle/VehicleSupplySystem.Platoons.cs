@@ -18,7 +18,7 @@ public sealed partial class VehicleSupplySystem
     [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
     [Dependency] private SharedDropshipSystem _dropships = default!;
 
-    private readonly record struct IssuedVehicle(EntProtoId Prototype, string? Group);
+    private readonly record struct IssuedVehicle( EntProtoId Prototype, string? Group, EntityUid Entity);
     private readonly Dictionary<string, List<IssuedVehicle>> _issuedVehicles = new();
 
     private void OnSupplyRoundRestart(RoundRestartCleanupEvent args) => _issuedVehicles.Clear();
@@ -82,8 +82,10 @@ public sealed partial class VehicleSupplySystem
 
         var issued = GetIssued(side);
         var count = issued.Count;
-        var group = GetEntryGroupKey(entry);
-        var groupCount = issued.Count(vehicle => vehicle.Group == group);
+        // cmu edit start: limits are per vehicle category, not per group
+        var category = GetSupplyCategory(GetEntryGroupKey(entry));
+        var categoryCount = issued.Count(vehicle => GetSupplyCategory(vehicle.Group) == category);
+        // cmu edit end
         var query = EntityQueryEnumerator<VehicleSupplyLiftComponent>();
         while (query.MoveNext(out var uid, out var lift))
         {
@@ -91,14 +93,31 @@ public sealed partial class VehicleSupplySystem
                 string.IsNullOrEmpty(lift.PendingVehicle) || lift.PendingVehicleEntity != null)
                 continue;
             count++;
-            if (lift.PendingVehicleGroup == group)
-                groupCount++;
+            // cmu edit start
+            if (GetSupplyCategory(lift.PendingVehicleGroup) == category)
+                categoryCount++;
+            // cmu edit end
         }
+        // cmu edit start
         return count < platoon.MaxSuppliedVehicles &&
-            (group != "vehicle-tank" || groupCount < platoon.MaxSuppliedTanks) &&
-            (group != "vehicle-vtol" || groupCount < platoon.MaxSuppliedVtols) &&
-            (group != "vehicle-fighter" || groupCount < platoon.MaxSuppliedFighters);
+            (category == null || categoryCount < platoon.MaxSuppliedPerCategory);
+        // cmu edit end
     }
+
+    // cmu edit start
+    /// <summary>
+    ///     The four kinds of vehicle a side can pull up, one of each: a tank; a VTOL, APC or armed light vehicle;
+    ///     an unarmed support vehicle; and the fighter.
+    /// </summary>
+    private static string? GetSupplyCategory(string? group) => group switch
+    {
+        "vehicle-tank" => "tank",
+        "vehicle-vtol" or "vehicle-apc" or "vehicle-armed" => "vtol-apc",
+        "vehicle-support" or "vehicle-civ" => "support",
+        "vehicle-fighter" => "fighter",
+        _ => null,
+    };
+    // cmu edit end
 
     private bool CanSelectVehicle(Entity<VehicleSupplyLiftComponent> lift, VehicleSupplyEntry entry, string? side)
     {

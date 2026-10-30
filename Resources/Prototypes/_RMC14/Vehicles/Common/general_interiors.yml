@@ -406,7 +406,7 @@
         amount: 4
     - name: Medical utilities
       entries:
-      - id: CMDefibrillator
+      - id: AU14CMDefibrillator # cmu edit: was CMDefibrillator
         amount: 3
       - id: CMSurgicalLine
         amount: 2

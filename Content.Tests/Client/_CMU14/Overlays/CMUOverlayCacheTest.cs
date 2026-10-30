@@ -78,14 +78,23 @@ public sealed class CMUOverlayCacheTest
             cache.TryGetValue(i, out _);
         }
 
-        var before = GC.GetAllocatedBytesForCurrentThread();
-        for (var i = 5000; i < 15000; i++)
+        // The counter also sees one-time runtime work on this thread (tiered JIT, on-stack replacement), which can
+        // land inside a window depending on runner timing. Bookkeeping allocations would repeat in every window
+        // (10000 replacements is ~480 KB of nodes), so one allocation-free window out of three proves reuse.
+        var allocated = long.MaxValue;
+        var next = 5000;
+        for (var window = 0; window < 3 && allocated != 0; window++)
         {
-            cache.Set(i, i);
-            cache.TryGetValue(i, out _);
+            var before = GC.GetAllocatedBytesForCurrentThread();
+            for (var end = next + 10000; next < end; next++)
+            {
+                cache.Set(next, next);
+                cache.TryGetValue(next, out _);
+            }
+            allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            TestContext.Progress.WriteLine($"CMU_OVERLAY_CACHE window={window} replacements=10000 allocated={allocated}");
         }
-        var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-        TestContext.Progress.WriteLine($"CMU_OVERLAY_CACHE replacements=10000 allocated={allocated}");
+
         Assert.That(allocated, Is.Zero);
         Assert.That(cache.Count, Is.EqualTo(32));
     }

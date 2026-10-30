@@ -3,16 +3,43 @@
   id: RMCCoffeeMachine
   name: coffee machine
   description: A coffee machine
-  components: #TODO: Make the coffee machine actually function
+  components:
+  # cmu edit start: takes a cup or mug, brews coffee into it, then gives it back
+  - type: CMUCoffeeMachine
+    cupStates:
+      RMCCoffeeCup: coffee_mug
+      RMCCoffeeCupFilled: coffee_mug
+      RMCSocialistPPCup: coffee_mug
+      RMCUnitedNationsCup: coffee_mug
+      RMCThreeSunEmpireCup: coffee_mug
+      RMCColonyLiberationFrontCup: coffee_mug
+      RMCMarineCorpsCup: coffee_mug_uscm
+      RMCWestonYamadaCup: coffee_mug_wy
+      RMCDrinkCoffee: coffee_cup
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUCoffeeMachineVisuals.State:
+        enum.CMUCoffeeMachineVisuals.State:
+          coffee_empty_on: { state: coffee_empty_on }
+          coffee_cup: { state: coffee_cup }
+          coffee_cup_generic: { state: coffee_cup_generic }
+          coffee_mug: { state: coffee_mug }
+          coffee_mug_wy: { state: coffee_mug_wy }
+          coffee_mug_uscm: { state: coffee_mug_uscm }
+  # cmu edit end
   - type: Transform
     noRot: true
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _RMC14/Structures/Furniture/coffee_machine.rsi
+    sprite: CMU14/Structures/Furniture/coffee_machine.rsi # cmu edit: was _RMC14/Structures/Furniture/coffee_machine.rsi
     drawdepth: SmallObjects
-    state: coffee_empty_on
     noRot: true
+    # cmu edit start: the cup in the machine
+    layers:
+    - state: coffee_empty_on
+      map: [ "enum.CMUCoffeeMachineVisuals.State" ]
+    # cmu edit end
   - type: InteractionOutline
   - type: Fixtures
     fixtures:
@@ -35,6 +62,7 @@
         !type:DamageTrigger
         damage: 50
       behaviors:
+      - !type:EmptyAllContainersBehaviour # cmu edit: drops the cup in it
       - !type:DoActsBehavior
         acts: ["Destruction"]
   - type: Appearance

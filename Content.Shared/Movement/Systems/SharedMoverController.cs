@@ -14,6 +14,7 @@ using Content.Shared.Shuttles.Components;
 using Content.Shared.Tag;
 using Content.Shared.Vehicle.Components;
 using Content.Shared.CMU14.TileMovement;
+using Content.Shared.CMU14.Movement; // CMU14
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -278,7 +279,10 @@ public abstract partial class SharedMoverController : VirtualController
         // Try doing tile movement instead of the usual analog movement, if this entity has it enabled.
         if (TileMovementQuery.TryComp(uid, out var tileMovement) // CMU14: ghosts and contained mobs never slide
             && !GhostQuery.HasComponent(uid)
-            && !_container.IsEntityInContainer(uid))
+            && !_container.IsEntityInContainer(uid)
+            // cmu edit start: walk-only tile movement leaves running to normal movement, once any slide has finished
+            && !(tileMovement.WalkOnly && mover.Sprinting && !tileMovement.SlideActive))
+            // cmu edit end
         {
             if (!weightless && !inAirHelpless)
             {
@@ -311,12 +315,25 @@ public abstract partial class SharedMoverController : VirtualController
             var walkSpeed = moveSpeedComponent?.WeightlessWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
             var sprintSpeed = moveSpeedComponent?.WeightlessSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed;
 
+            // cmu edit start: zero-g ships. Adrift over open space there's nothing to push off and no drag.
+            var cmuZeroG = new Content.Shared.CMU14.Ship.CMUZeroGMovementEvent();
+            RaiseLocalEvent(uid, ref cmuZeroG);
+
+            // Crawling and the like still slow you down while weightless.
+            walkSpeed *= cmuZeroG.SpeedMultiplier;
+            sprintSpeed *= cmuZeroG.SpeedMultiplier;
+            // cmu edit end
+
             wishDir = AssertValidWish(mover, walkSpeed, sprintSpeed);
 
             var ev = new CanWeightlessMoveEvent(uid);
             RaiseLocalEvent(uid, ref ev, true);
 
             touching = ev.CanMove || xform.GridUid != null || MapGridQuery.HasComp(xform.GridUid);
+            // cmu edit start: the open space around a zero-g ship is still part of its grid, but there's nothing there
+            if (cmuZeroG.Adrift && !ev.CanMove)
+                touching = false;
+            // cmu edit end
 
             // If we're not on a grid, and not able to move in space check if we're close enough to a grid to touch.
             if (!touching && MobMoverQuery.TryComp(uid, out var mobMover))
@@ -335,9 +352,17 @@ public abstract partial class SharedMoverController : VirtualController
             else
             {
                 friction = moveSpeedComponent?.OffGridFriction ?? _offGridDamping;
+                // cmu edit start: drifting through open space never slows down by itself
+                if (cmuZeroG.Adrift)
+                    friction = 0f;
+                // cmu edit end
             }
 
             accel = moveSpeedComponent?.WeightlessAcceleration ?? MovementSpeedModifierComponent.DefaultWeightlessAcceleration;
+            // cmu edit start
+            accel *= cmuZeroG.AccelerationMultiplier;
+            // cmu edit end
+
         }
         else
         {
@@ -438,6 +463,10 @@ public abstract partial class SharedMoverController : VirtualController
                 TryGetSound(weightless, uid, mover, mobMover, xform, out var sound, tileDef: tileDef))
             {
                 var soundModifier = mover.Sprinting ? InputMoverComponent.SprintingSoundModifier : InputMoverComponent.WalkingSoundModifier;
+                // CMU14
+                var volumeEv = new GetMobFootstepVolumeEvent();
+                RaiseLocalEvent(uid, ref volumeEv);
+                soundModifier += volumeEv.Modifier;
 
                 var audioParams = sound.Params
                     .AddVolume(sound.Params.Volume + soundModifier)
@@ -446,11 +475,15 @@ public abstract partial class SharedMoverController : VirtualController
                 // If we're a relay target then predict the sound for all relays.
                 if (relaySource != null)
                 {
-                    _audio.PlayPredicted(sound, uid, relaySource.Value, audioParams);
+                    // CMU14: bound sources before allocation and filter their original floor.
+                    // _audio.PlayPredicted(sound, uid, relaySource.Value, audioParams);
+                    PlayCMUFootstepSound(sound, uid, relaySource.Value, audioParams);
                 }
                 else
                 {
-                    _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    // CMU14
+                    // _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    PlayCMUFootstepSound(sound, uid, uid, audioParams);
                 }
             }
         }
@@ -831,6 +864,10 @@ public abstract partial class SharedMoverController : VirtualController
                 TryGetSound(false, uid, inputMover, mobMover, targetTransform, out var sound, tileDef: tileDef))
             {
                 var soundModifier = inputMover.Sprinting ? 3.5f : 1.5f;
+                // CMU14
+                var volumeEv = new GetMobFootstepVolumeEvent();
+                RaiseLocalEvent(uid, ref volumeEv);
+                soundModifier += volumeEv.Modifier;
                 var volume = sound.Params.Volume + soundModifier;
 
                 var audioParams = sound.Params
@@ -840,11 +877,15 @@ public abstract partial class SharedMoverController : VirtualController
                 // If we're a relay target then predict the sound for all relays.
                 if (relayTarget != null)
                 {
-                    _audio.PlayPredicted(sound, uid, relayTarget.Source, audioParams);
+                    // CMU14
+                    // _audio.PlayPredicted(sound, uid, relayTarget.Source, audioParams);
+                    PlayCMUFootstepSound(sound, uid, relayTarget.Source, audioParams);
                 }
                 else
                 {
-                    _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    // CMU14
+                    // _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    PlayCMUFootstepSound(sound, uid, uid, audioParams);
                 }
             }
 

@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.ZLevels.Core;
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Maps;
@@ -101,7 +102,7 @@ public sealed partial class CMUZLevelsSystem
         if (!_turf.TryGetTileRef(_transform.ToCoordinates(coordinates), out var tileRef))
             return false;
 
-        return !tileRef.Value.Tile.IsEmpty &&
+        return !CMUZLevelOpeningCache.IsFallThroughTile(tileRef.Value.Tile, TilDefMan) &&
                !_turf.IsTileBlocked(tileRef.Value, CollisionGroup.MobMask);
     }
 }

@@ -1,0 +1,16 @@
+author: Vencallium
+category: CMU
+changes:
+- message: Added cryopod medicines for gradual damage, wound, fracture, organ, and
+    limb treatment, with recipes and prefilled large beakers.
+  type: Add
+- message: Opporozidone preserves an active revival deadline but cannot reverse permanent
+    death.
+  type: Tweak
+- message: Cryopods use CMU glass and RMC cable for construction.
+  type: Tweak
+- message: Added cryogenic medicine, recipe, and precursor instructions to the medical
+    guidebook.
+  type: Add
+time: '2026-10-14T08:38:51.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2170

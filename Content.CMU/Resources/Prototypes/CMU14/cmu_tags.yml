@@ -14,6 +14,9 @@
   id: CMUYautjaMedicompItem
 
 - type: Tag
+  id: CMUYautjaCeremonialDagger
+
+- type: Tag
   id: CMUYautjaDuellingKnife
 
 - type: Tag
@@ -93,3 +96,12 @@
 
 - type: Tag
   id: MaintenanceJack
+
+- type: Tag
+  id: CMUEvidenceMarker
+
+- type: Tag
+  id: CMUCassettePouch
+
+- type: Tag
+  id: CMUCanOpener

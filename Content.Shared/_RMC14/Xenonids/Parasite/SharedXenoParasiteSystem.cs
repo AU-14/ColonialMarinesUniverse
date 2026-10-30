@@ -813,6 +813,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         var paraQuery = EntityQueryEnumerator<XenoParasiteComponent>();
         while (paraQuery.MoveNext(out var uid, out var para))
         {
+            CMUUpdateNestedHugTime((uid, para)); // CMU14: nesting also shortens an attachment already in progress.
             if (para.FallOffAt < time && !para.FellOff && para.InfectedVictim != null)
             {
                 var infectedVictim = para.InfectedVictim.Value;
@@ -826,6 +827,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
                 _inventory.TryUnequip(infectedVictim, "mask", true, true, true);
 
                 var victimComp = EnsureComp<VictimInfectedComponent>(infectedVictim);
+                RefreshIncubationMultipliers((infectedVictim, victimComp)); // CMU14: apply the nest bonus to newly completed infections.
                 victimComp.InfectorUser = para.InfectorUser;
                 victimComp.InfectorParasite = GetNetEntity(uid); // CMU14: a late dialog reply must survive parasite cleanup.
                 victimComp.InfectorWantsLarva = para.InfectorWantsLarva;

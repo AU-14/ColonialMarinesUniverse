@@ -1,8 +1,10 @@
 ghost-gui-return-to-body-button = Return to body
 ghost-gui-ghost-warp-button = Ghost Warp
 ghost-gui-ghost-roles-button = Ghost Roles ({$count})
-ghost-gui-toggle-ghost-visibility-popup-on = Enabled visibility of ghosts.
-ghost-gui-toggle-ghost-visibility-popup-off = Disabled visibility of ghosts.
+# cmu edit start: these toggle only other ghosts now that you can toggle your own
+ghost-gui-toggle-ghost-visibility-popup-on = Enabled visibility of other ghosts.
+ghost-gui-toggle-ghost-visibility-popup-off = Disabled visibility of other ghosts.
+# cmu edit end
 ghost-gui-toggle-lighting-manager-popup-normal = Lighting normal.
 ghost-gui-toggle-lighting-manager-popup-personal-light = Enabled personal light.
 ghost-gui-toggle-lighting-manager-popup-fullbright = Fullbright mode.
@@ -32,8 +34,10 @@ ghost-target-window-tab-third-party = Third Party
 ghost-target-window-tab-survivors = Civilians
 ghost-target-window-tab-weya-pmc = WeYu/PMC
 ghost-target-window-tab-clf = CLF
-ghost-target-window-tab-spp = SPP
-ghost-target-window-tab-tse-royal = TSE/Royal
+# cmu edit start: lore names
+ghost-target-window-tab-spp = UPP
+ghost-target-window-tab-tse-royal = TWE/Royal
+# cmu edit end
 ghost-target-window-tab-cmb-provost = CMB/Provost
 ghost-target-window-tab-threat = Threat
 ghost-target-window-tab-cursed = Cursed

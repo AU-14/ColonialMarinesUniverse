@@ -1,4 +1,9 @@
 cmu-clf-name-engineer = CLF Engineer
+ent-CMUCLFJeepCrew = CLF jeep crew
+    .desc = A civilian CLF fighter sent to crew an HMG jeep.
+cmu-clf-jeep-crew-name = CLF Jeep Crew
+cmu-clf-jeep-party-name = CLF HMG Jeep Crew
+cmu-clf-jeep-crew-description = You and another civilian CLF fighter have been sent with an HMG jeep to support the local cell. Pilot your dropship to the colony, unload the jeep, and report to the cell leader for orders.
 cmu-clf-name-specialist = CLF Specialist
 cmu-clf-description = A trained fighter of the Colonial Liberation Front, sent to aid the uprising with specialist skills.
 cmu-clf-description-reinforcement = You have been sent from a neighboring insurgent cell to aid the uprising in this area. Report to the local cell leader for orders.

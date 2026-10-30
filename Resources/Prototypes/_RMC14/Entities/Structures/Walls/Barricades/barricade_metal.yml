@@ -232,6 +232,9 @@
   name: handrail
   description: A railing, for your hands. Woooow.
   components:
+    # cmu edit start: a railing, so walking into it vaults it, unlike other barricades
+    - type: CMUVaultOnBumpRailing
+    # cmu edit end
     - type: VehicleSmashable
     - type: Transform
       gridTraversal: false

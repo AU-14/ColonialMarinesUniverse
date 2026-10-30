@@ -232,12 +232,8 @@ public sealed class CMUWolfpackTest : GameTest
             {
                 Assert.That(entry.Group, Is.EqualTo("vehicle-apc"));
                 Assert.That(entry.Hardpoints.Select(h => h.Id), Is.EquivalentTo(ExpectedHardpoints));
-                Assert.That(entry.LoadoutCategories.Select(c => c.Id),
-                    Is.EquivalentTo(new[] { "primary", "secondary", "wheels", "support" }));
-                AssertOption(entry, "primary", AutocannonId, "primary::turret-cannon");
-                AssertOption(entry, "secondary", FrontCannonId, "secondary");
-                AssertOption(entry, "wheels", WheelId, "wheel-1");
-                AssertOption(entry, "support", FlareLauncherId, "support");
+                Assert.That(entry.LoadoutCategories, Is.Empty,
+                    "The Wolfpack should not expose selectable loadout options.");
             });
 
             Assert.Multiple(() =>
@@ -330,15 +326,6 @@ public sealed class CMUWolfpackTest : GameTest
         Assert.That(SProtoMan.Index<EntityPrototype>(prototype)
             .TryComp<HardpointItemComponent>(out var item, SEntMan.ComponentFactory), Is.True, prototype);
         return item!;
-    }
-
-    private static void AssertOption(VehicleSupplyEntry entry, string categoryId, string optionId, string slotId)
-    {
-        var category = entry.LoadoutCategories.Single(c => c.Id == categoryId);
-        var option = category.Options.SingleOrDefault(o => o.Id == optionId);
-        Assert.That(option, Is.Not.Null, $"{categoryId} {optionId}");
-        Assert.That(option!.Item.Id, Is.EqualTo(optionId), $"{categoryId} {optionId}");
-        Assert.That(option.Slot, Is.EqualTo(slotId), $"{categoryId} {optionId}");
     }
 
     private static void AssertState(Robust.Client.Graphics.RSI rsi, string state, string context)

@@ -23,13 +23,13 @@
   languages:
     - English
   CompatibleDropships:
-  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
-    - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
+    - /Maps/CMU14/Dropships/ud_6.yml
   possibleships:
       - USSBushRedux
-  techTree: CMUIntelTechTree_GOVFOR # CMUIntelTechTree_UA (TODO)
+  techTree: CMUIntelTechTree_UA
 
 - type: platoon
   id: LACN
@@ -52,6 +52,48 @@
     - Portuguese
   reqlist: LACNCargoCatalog
   vendorSet: LACN
+  rations: CMUMRELACN
+  # LACN versions of the standard satchels and the uniforms support roles spawn in.
+  startingGearOverrides:
+    CMSatchelMarine: CMULACNSatchel
+    CMSatchelMarineTech: CMULACNSatchelEngineer
+    CMJumpsuitMaintTech: CMULACNRequisitionsFieldUniform # the aux (logistics) tech's loadout jumpsuit; engineers get theirs from their own set
+    CMJumpsuitOrdnanceTech: CMULACNEngineerFieldUniform
+    RMCScrubsOliveNurse: CMULACNMedicalScrubs
+    RMCScrubsOlive: CMULACNSurgicalScrubs
+    AU14ScrubsGreenDoctorSurgical: CMULACNSurgicalScrubs
+  # Support roles spawn in the full LACN set their equipment racks hand out (see lacn_starting_gear.yml).
+  startingGearJobOverrides:
+    AU14JobGOVFOREngineeringTech: CMUGearLACNGOVFOREngineeringTech
+    AU14JobOPFOREngineeringTech: CMUGearLACNOPFOREngineeringTech
+    AU14JobGOVFORAuxTech: CMUGearLACNGOVFORAuxTech
+    AU14JobOPFORAuxTech: CMUGearLACNOPFORAuxTech
+    AU14JobGOVFOROfficerEngi: CMUGearLACNGOVFOROfficerEngi
+    AU14JobOPFOROfficerEngi: CMUGearLACNOPFOROfficerEngi
+    AU14JobGOVFOROfficerLogistics: CMUGearLACNGOVFOROfficerLogistics
+    AU14JobOPFOROfficerLogistics: CMUGearLACNOPFOROfficerLogistics
+    AU14JobGOVFORNurse: CMUGearLACNGOVFORNurse
+    AU14JobOPFORNurse: CMUGearLACNOPFORNurse
+    AU14JobGOVFORMilitaryDoctor: CMUGearLACNGOVFORMilitaryDoctor
+    AU14JobOPFORMilitaryDoctor: CMUGearLACNOPFORMilitaryDoctor
+    AU14JobGOVFORDSPilot: CMUGearLACNGOVFORDSPilot
+    AU14JobGOVFORDCC: CMUGearLACNGOVFORDCC
+    AU14JobGOVFORGunshipPilot: CMUGearLACNGOVFORGunshipPilot
+    AU14JobGOVFOROfficerMedical: CMUGearLACNGOVFOROfficerMedical
+    AU14JobGOVFORPlatCo: CMUGearLACNGOVFORPlatCo
+    AU14JobGOVFORAdjutant: CMUGearLACNGOVFORAdjutant
+    AU14JobGOVFORadvisor: CMUGearLACNGOVFORadvisor
+    AU14JobGOVFOROfficerIntel: CMUGearLACNGOVFOROfficerIntel
+    AU14JobGOVFOROfficerMP: CMUGearLACNGOVFOROfficerMP
+    AU14JobOPFORDSPilot: CMUGearLACNOPFORDSPilot
+    AU14JobOPFORDCC: CMUGearLACNOPFORDCC
+    AU14JobOPFORGunshipPilot: CMUGearLACNOPFORGunshipPilot
+    AU14JobOPFOROfficerMedical: CMUGearLACNOPFOROfficerMedical
+    AU14JobOPFORPlatCo: CMUGearLACNOPFORPlatCo
+    AU14JobOPFORAdjutant: CMUGearLACNOPFORAdjutant
+    AU14JobOPFORadvisor: CMUGearLACNOPFORadvisor
+    AU14JobOPFOROfficerIntel: CMUGearLACNOPFOROfficerIntel
+    AU14JobOPFOROfficerMP: CMUGearLACNOPFOROfficerMP
   platoonPatch: /Textures/CMU14/Clothing/Patches/brazilunit_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
@@ -356,9 +398,9 @@
     - USSBushRedux
   #platoonflag: uaflag
   CompatibleDropships:
-  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
-  techTree: CMUIntelTechTree_GOVFOR
+  techTree: CMUIntelTechTree_UA
 
 - type: platoon
   id: BEAR
@@ -372,6 +414,9 @@
   - VehicleSPPVanLogistics
   - VehicleSPPVanPrisoner
   name: cmu-platoon-bear-name
+  # The platoon's own satchel in place of the standard one.
+  startingGearOverrides:
+    CMSatchelMarine: RuMCUPPNavalInfantrySatchel
   lorePrimer: RuMCPrimerPlatoonBEAR
   Allegiance: UPP
   languages:
@@ -383,6 +428,7 @@
     - TacticalSignLanguage
   reqlist: BEARCargoCatalog
   vendorSet: BEAR
+  rations: AU14MREUPP
   platoonPatch: /Textures/_RuMC14/Clothing/Patches/BEAR.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
@@ -693,9 +739,9 @@
   #   DCC: AU14JobGOVFORDCCUPP
   #   SupportSynth: AU14JobGOVFORAuxSupportSynthUPP
   CompatibleDropships:
-  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
-  techTree: CMUIntelTechTree_GOVFOR
+  techTree: CMUIntelTechTree_UPP
 
 - type: platoon
   id: UPP
@@ -709,6 +755,9 @@
   - VehicleSPPVanLogistics
   - VehicleSPPVanPrisoner
   name: cmu-platoon-upp-name
+  # The platoon's own satchel in place of the standard one.
+  startingGearOverrides:
+    CMSatchelMarine: RuMCUPPNavalInfantrySatchel
   lorePrimer: AU14PrimerPlatoonUPP
   Allegiance: UPP
   languages:
@@ -718,6 +767,7 @@
     - Spanish
   reqlist: UPPCargoCatalog
   vendorSet: UPP
+  rations: AU14MREUPP
   platoonPatch: /Textures/CMU14/Clothing/Patches/naval_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
@@ -1028,9 +1078,9 @@
   #   DCC: AU14JobGOVFORDCCUPP
   #   SupportSynth: AU14JobGOVFORAuxSupportSynthUPP
   CompatibleDropships:
-  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
-  techTree: CMUIntelTechTree_GOVFOR
+  techTree: CMUIntelTechTree_UPP
 
 - type: platoon
   id: WEYU
@@ -1044,9 +1094,13 @@
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
   name: cmu-platoon-weyu-name
+  # The platoon's own satchel in place of the standard one.
+  startingGearOverrides:
+    CMSatchelMarine: RMCSatchelLightpackWeYa
   lorePrimer: AU14PrimerPlatoonWEYU
   reqlist: WYPMCCargoCatalog
   vendorSet: WYPMC
+  rations: RMCMREWeYaPMC
   platoonPatch: /Textures/CMU14/Clothing/Patches/wy_white_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
@@ -1352,14 +1406,14 @@
   #   DCC: AU14JobGOVFORDCCWYPMC
     # Synth
   CompatibleDropships:
-  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   possibleships:
       - USSBushRedux
   compatibleFighters:
-  - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
-  - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
-  techTree: CMUIntelTechTree_GOVFOR
+  - /Maps/CMU14/Dropships/f84owl.yml
+  - /Maps/CMU14/Dropships/ud_6.yml
+  techTree: CMUIntelTechTree_TWE
 
 - type: platoon
   id: CMBCIU
@@ -1378,6 +1432,9 @@
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   name: cmu-platoon-cmbciu-name
+  # The platoon's own satchel in place of the standard one.
+  startingGearOverrides:
+    CMSatchelMarine: RMCSatchelTSEPA
   lorePrimer: AU14PrimerPlatoonCMBCIU
   Allegiance: UA
   languages:
@@ -1586,11 +1643,11 @@
   possibleships:
       - USSBushRedux
   CompatibleDropships:
-  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
-    - /Maps/CMU14/Vehicles/Dropships/cmbsquadcar.yml
-  techTree: CMUIntelTechTree_GOVFOR
+    - /Maps/CMU14/Dropships/cmbsquadcar.yml
+  techTree: CMUIntelTechTree_UA
 
 - type: platoon
   id: HAZOPS
@@ -1616,12 +1673,12 @@
   possibleships:
       - USSBushRedux
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/osprey.yml
-  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/CMU14/Dropships/osprey.yml
+  - /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
   compatibleFighters:
-  - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
-  - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
-  techTree: CMUIntelTechTree_GOVFOR
+  - /Maps/CMU14/Dropships/f84owl.yml
+  - /Maps/CMU14/Dropships/ud_6.yml
+  techTree: CMUIntelTechTree_UA
 
 - type: platoon
   id: ProdigySF
@@ -1636,11 +1693,15 @@
   - AU14VehicleCivEMSAmbulance
   - VehicleAev
   name: cmu-platoon-prodigysf-name
+  # The platoon's own satchel in place of the standard one.
+  startingGearOverrides:
+    CMSatchelMarine: RMCSatchelLightpackBlack
   lorePrimer: AU14PrimerPlatoonProdigySF
   reqlist: ProdigyCargoCatalog
   languages:
     - English
   vendorSet: ProdigySF
+  rations: CMUMREFSR
   platoonPatch: /Textures/CMU14/Clothing/Patches/merc_red_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
@@ -1904,14 +1965,14 @@
 
   #platoonflag:  uaflag
   CompatibleDropships:
-  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/CMU14/Dropships/Mohawk/midway_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
-    - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
-    - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
+    - /Maps/CMU14/Dropships/f84owl.yml
+    - /Maps/CMU14/Dropships/ud_6.yml
   possibleships:
       - USSBushRedux
-  techTree: CMUIntelTechTree_GOVFOR
+  techTree: CMUIntelTechTree_Other
 
 - type: platoon
   id: VAIPO
@@ -1934,6 +1995,7 @@
     - English
     - TacticalSignLanguage
   vendorSet: VAIPO
+  rations: CMUMREFSR
   platoonPatch: /Textures/CMU14/Clothing/Patches/merc_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
@@ -2097,14 +2159,14 @@
         requirements: []
 
   CompatibleDropships:
-  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
-    - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
-    - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
+    - /Maps/CMU14/Dropships/f84owl.yml
+    - /Maps/CMU14/Dropships/ud_6.yml
   possibleships:
       - USSBushRedux
-  techTree: CMUIntelTechTree_GOVFOR
+  techTree: CMUIntelTechTree_UA
 
 - type: platoon
   id: RMC
@@ -2122,6 +2184,7 @@
     - English
   reqlist: RMCCargoCatalog
   vendorSet: RMC
+  rations: AU14MRETWERMC
   platoonPatch: /Textures/CMU14/Clothing/Patches/rmc_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
@@ -2424,14 +2487,14 @@
   #   DCC: AU14JobGOVFORDCCRMC
   #   SupportSynth: AU14JobGOVFORAuxSupportSynthRMC
   CompatibleDropships:
-  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters: #TODO: RMC Fighters
-    - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
-    - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
+    - /Maps/CMU14/Dropships/f84owl.yml
+    - /Maps/CMU14/Dropships/ud_6.yml
   possibleships: #TODO: RMC Ship
       - USSBushRedux
-  techTree: CMUIntelTechTree_GOVFOR
+  techTree: CMUIntelTechTree_TWE
 
 # Add more platoons as needed
 

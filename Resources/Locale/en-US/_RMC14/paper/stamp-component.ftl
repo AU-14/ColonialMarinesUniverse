@@ -1,6 +1,8 @@
 stamp-component-stamped-name-cm-default = Stamped
 
-stamp-component-stamped-name-cm-we-ya = We-Ya
+# cmu edit start: lore names
+stamp-component-stamped-name-cm-we-ya = We-Yu
+# cmu edit end
 stamp-component-stamped-name-cm-marine = Marine High Command
 stamp-component-stamped-name-cm-cmb = Colony Marshal Bureau
 stamp-component-stamped-name-cm-provost = Provost Marshal Office

@@ -120,8 +120,9 @@ public sealed partial class FoldableSystem : EntitySystem
         if (_container.IsEntityInContainer(uid) && !fold.CanFoldInsideContainer)
             return false;
 
+        // CMU14: an empty deployed object must remain recoverable if its tile becomes obstructed.
         if (!TryComp(uid, out PhysicsComponent? body) ||
-            !_anchorable.TileFree(Transform(uid).Coordinates, body, uid)) //RMC14
+            (fold.IsFolded && !_anchorable.TileFree(Transform(uid).Coordinates, body, uid)))
             return false;
 
         // RMC14

@@ -1,0 +1,13 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Scavengers retain weapon readiness and finish volleys more consistently
+    around foliage and groups.
+  type: Fix
+- message: Spawn scavenger squads at your position on ordinary maps and expeditions,
+    with movement, guarding and patrol orders.
+  type: Admin
+- message: Added poor scrappers, rich salvage barons and trail scout scavenger variants.
+  type: Add
+time: '2026-10-08T21:05:02.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2108

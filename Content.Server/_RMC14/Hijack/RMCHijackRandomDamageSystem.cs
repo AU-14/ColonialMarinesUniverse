@@ -35,7 +35,12 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
     private static readonly EntProtoId BrokenPipe = "GasPipeBroken";
     private static readonly EntProtoId PipeFire = "RMCHijackPipeFire";
     private static readonly EntProtoId PipeExplosionWarning = "RMCHijackPipeExplosionWarning";
-    private static readonly ProtoId<ExplosionPrototype> Explosion = "RMC";
+    // cmu edit start: same as "RMC", under its own name so hull windows can resist it
+    private static readonly ProtoId<ExplosionPrototype> Explosion = "CMUHijackPipe";
+    // Once the ship has been coming apart long enough, the pipes burst with the plain explosion, which hull windows
+    // don't resist.
+    private static readonly ProtoId<ExplosionPrototype> CMUHullBreakingExplosion = "RMC";
+    // cmu edit end
 
     // These ranges intentionally select a small random subset of existing map targets instead of wiping categories.
     private const float WallMinPercent = 0.03f;
@@ -277,7 +282,7 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
 
         _rmcExplosion.QueueExplosion(
             mapCoordinates,
-            Explosion,
+            HasComp<Content.Shared.CMU14.Ship.CMUHijackPipesBreakHullComponent>(xform.MapUid) ? CMUHullBreakingExplosion : Explosion, // cmu edit
             PipeExplosionTotal,
             PipeExplosionSlope,
             PipeExplosionMax,

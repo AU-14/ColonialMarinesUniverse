@@ -10,6 +10,11 @@
   - type: Item
     sprite: Objects/Specific/Detective/evidence_marker.rsi
     size: Tiny
+  # cmu edit start: only evidence markers go in an evidence marker box
+  - type: Tag
+    tags:
+    - CMUEvidenceMarker
+  # cmu edit end
 
 - type: entity
   parent: EvidenceMarker
@@ -81,8 +86,20 @@
   description: A pack of numbered yellow markers, useful for labeling evidence on a crime scene.
   components:
   - type: Item
+    # cmu edit start: small enough for a satchel
+    size: Small
     shape:
-    - 0,0,1,1
+    - 0,0,1,0
+    # cmu edit end
+  # cmu edit start: only evidence markers go in an evidence marker box
+  - type: Storage
+    maxItemSize: Tiny
+    grid:
+    - 0,0,2,2
+    whitelist:
+      tags:
+      - CMUEvidenceMarker
+  # cmu edit end
   - type: EntityTableContainerFill
     containers:
       storagebase: !type:AllSelector

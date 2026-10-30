@@ -1,0 +1,15 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Synthetic blood packs, stocked in every faction's corpsman vendor, the
+    colony synth vendor, blood dispensers and the medilathe
+  type: Add
+- message: Synthetic blood can be brewed in chemistry from dispenser chemicals
+  type: Add
+- message: Welding a synth with no dents left now repairs damaged internal components,
+    so a damaged synth brain no longer leaves them permanently woozy
+  type: Fix
+- message: Severed limbs no longer bleed synthetics dry
+  type: Fix
+time: '2026-10-08T22:15:22.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2104

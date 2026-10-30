@@ -5,3 +5,5 @@ cmu-synth-organ-repair-finish-others = {CAPITALIZE(THE($user))} welds some of th
 
 cmu-synth-blood-pack-incompatible = {CAPITALIZE(THE($pack))} won't take with {THE($target)}, wrong kind of blood.
 
+
+cmu-synth-reset-key-no-response = Warning: no synthetic operating system detected on target. Reset aborted.

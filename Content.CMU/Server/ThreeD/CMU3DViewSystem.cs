@@ -38,6 +38,9 @@ public sealed partial class CMU3DViewSystem : EntitySystem
 
     private readonly Dictionary<ICommonSession, ViewState> _views = [];
     private readonly HashSet<EntityUid> _wanted = [];
+    private readonly List<KeyValuePair<ICommonSession, ViewState>> _viewSnapshot = [];
+    private readonly List<KeyValuePair<EntityUid, EntityUid>> _probeSnapshot = [];
+    private readonly Dictionary<EntityUid, List<EntityUid>> _networkMaps = [];
 
     public override void Initialize()
     {
@@ -66,7 +69,10 @@ public sealed partial class CMU3DViewSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        foreach (var (session, state) in _views.ToArray())
+        _networkMaps.Clear();
+        _viewSnapshot.Clear();
+        _viewSnapshot.AddRange(_views);
+        foreach (var (session, state) in _viewSnapshot)
         {
             if (session.Status != SessionStatus.InGame || !CanUseView(session) ||
                 session.AttachedEntity is not { } actor || TerminatingOrDeleted(actor) ||
@@ -79,13 +85,19 @@ public sealed partial class CMU3DViewSystem : EntitySystem
             var position = _transform.GetWorldPosition(actorTransform);
             var depth = Depth(actorMap);
             _wanted.Clear();
-            foreach (var map in _zLevels.GetAllNetworkMaps(actorMap))
+            var network = _zLevels.TryGetZNetwork(actorMap, out var zNetwork) ? zNetwork.Value.Owner : actorMap;
+            if (!_networkMaps.TryGetValue(network, out var maps))
+                _networkMaps[network] = maps = _zLevels.GetAllNetworkMaps(actorMap);
+            foreach (var map in maps)
             {
-                if (Math.Abs((long) Depth(map) - depth) <= CMU3DViewRequest.MaximumDepth &&
+                if (!TerminatingOrDeleted(map) && _zLevels.IsSameZNetwork(map, actorMap) &&
+                    Math.Abs((long) Depth(map) - depth) <= CMU3DViewRequest.MaximumDepth &&
                     (_admins.HasAdminFlag(session, AdminFlags.Debug) || HasComp<CMU3DMapComponent>(map)))
                     _wanted.Add(map);
             }
-            foreach (var (map, probe) in state.Probes.ToArray())
+            _probeSnapshot.Clear();
+            _probeSnapshot.AddRange(state.Probes);
+            foreach (var (map, probe) in _probeSnapshot)
             {
                 if (_wanted.Contains(map) && !TerminatingOrDeleted(probe))
                     continue;

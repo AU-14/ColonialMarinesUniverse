@@ -61,6 +61,48 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/food.rsi
     offset: 0, 0.5
+  # cmu edit start: NutriCo's own menu display, and a mess hall menu without field rations or flasks
+  - type: CMUVendOntoMachine
+  - type: CMAutomatedVendor
+    hackable: true
+    sections:
+    - name: Holiday Meals
+      holidays:
+      - FestiveSeason
+      entries:
+      - id: RMCMarinePreparedMealCookies
+        amount: 25
+      - id: RMCMarinePreparedMealGingerbread
+        amount: 25
+      - id: RMCMarinePreparedMealFruitcake
+        amount: 25
+    - name: Prepared Meals
+      entries:
+      - id: CMMarinePreparedMealChicken
+        amount: 20
+      - id: CMMarinePreparedMealCornbread
+        amount: 20
+      - id: CMMarinePreparedMealPasta
+        amount: 20
+      - id: CMMarinePreparedMealPizza
+        amount: 20
+      - id: CMMarinePreparedMealPork
+        amount: 20
+    - name: Utensils
+      entries:
+      - id: RMCForkPlastic
+        amount: 50
+      - id: RMCSpoonPlastic
+        amount: 50
+      - id: RMCKitchenKnifePlastic
+        amount: 50
+  - type: UserInterface
+    interfaces:
+      enum.CMAutomatedVendorUI.Key:
+        type: CMUNutriCoFoodBui
+        interactionRange: 2.5
+  - type: CMUFoodlineVendor
+  # cmu edit end
 
 - type: entity
   parent: RMCNutriCoVendor

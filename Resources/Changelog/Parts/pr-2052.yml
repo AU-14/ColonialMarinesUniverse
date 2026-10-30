@@ -1,0 +1,10 @@
+author: ILoveDespoiler
+category: CMU
+changes:
+- message: Adjusted stats of Despoilers Acid Barrage to make it harder to use mid-combat
+    and better as an area denial/poke tool. Increased Charge Time, Scatter, Projectile
+    Count, Acid Chance, Plasma Cost, and Cooldown. Decreased Damage, Decreased Movement
+    Speed while Charging.
+  type: Tweak
+time: '2026-10-09T13:56:21.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2052

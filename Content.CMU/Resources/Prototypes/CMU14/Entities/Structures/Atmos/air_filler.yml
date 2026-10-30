@@ -1,0 +1,32 @@
+# A standalone vent that keeps its room at one atmosphere of breathable air (see CMUAirFillerSystem). It needs no pipes
+# or power: it fills while the room is below pressure, stops once it gets there, and starts again if the air drops.
+- type: entity
+  parent: BaseStructure
+  id: CMUAirFillerVent
+  name: AV-1 air vent
+  description: A floor grate wired into the ship's life support. Pushes breathable air in whenever the room runs thin.
+  suffix: CMU, Self-filling
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _RMC14/Structures/Piping/Atmospherics/vent_pump.rsi
+    layers:
+    - state: off
+      map: [ "enabled" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.VentPumpVisuals.State:
+        enabled:
+          Off: { state: off }
+          Out: { state: on }
+  - type: InteractionOutline
+  - type: Clickable
+  - type: CMUAirFiller

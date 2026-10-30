@@ -432,6 +432,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
 
         var scaling = treater.Comp.ScalingDoAfter;
         scaling *= _skills.GetSkillDelayMultiplier(user, treater.Comp.DoAfterSkill, treater.Comp.DoAfterSkillMultipliers);
+        scaling *= Content.Shared.CMU14.Traits.Conditions.CMUFearOfBloodComponent.GetTreatmentMultiplier(EntityManager, user); // cmu edit: fear of blood
         if (user == target)
             scaling *= treater.Comp.SelfTargetDoAfterMultiplier;
 

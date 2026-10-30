@@ -86,6 +86,12 @@ public sealed class AmbassadorThirdPartyBuiState : BoundUserInterfaceState
     public Dictionary<string, (string DisplayName, float Cost)> CallableParties { get; }
     public HashSet<string> CalledParties { get; }
 
+    /// <summary>How many more third parties the faction can call in this round.</summary>
+    public int CallsLeft { get; init; }
+
+    /// <summary>When the faction can next call one in.</summary>
+    public TimeSpan NextCallInAt { get; init; }
+
     public AmbassadorThirdPartyBuiState(float budget, Dictionary<string, (string DisplayName, float Cost)> callableParties, HashSet<string> calledParties)
     {
         Budget = budget;

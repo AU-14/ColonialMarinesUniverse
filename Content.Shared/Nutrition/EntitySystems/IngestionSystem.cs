@@ -291,6 +291,11 @@ public sealed partial class IngestionSystem : EntitySystem
         if (!HasComp<PillComponent>(food))
             delay *= CMUIngestionDelayMultiplier;
 
+        // cmu edit start: eating your own food with a fork or spoon in hand is instant
+        if (!forceFed && TryGetUtensils(args.User, food, out var cmuUtensils) && cmuUtensils.Count > 0)
+            delay = TimeSpan.Zero;
+        // cmu edit end
+
         if (!_doAfter.TryStartDoAfter(GetEdibleDoAfterArgs(args.User, entity, food, delay)))
             return;
 

@@ -13,7 +13,9 @@ public sealed partial class FaxBoundUi : BoundUserInterface
     [Dependency] private IFileDialogManager _fileDialogManager = default!;
 
     [ViewVariables]
-    private FaxWindow? _window;
+    // cmu edit start
+    private Content.Client.CMU14.Fax.CMUFaxWindow? _window;
+    // cmu edit end
 
     private bool _dialogIsOpen = false;
 
@@ -25,7 +27,9 @@ public sealed partial class FaxBoundUi : BoundUserInterface
     {
         base.Open();
 
-        _window = this.CreateWindow<FaxWindow>();
+        // cmu edit start
+        _window = this.CreateWindow<Content.Client.CMU14.Fax.CMUFaxWindow>();
+        // cmu edit end
         _window.FileButtonPressed += OnFileButtonPressed;
         _window.CopyButtonPressed += OnCopyButtonPressed;
         _window.SendButtonPressed += OnSendButtonPressed;

@@ -1,0 +1,30 @@
+author: sunzu432
+category: CMU
+changes:
+- message: 'Hope''s Retreat: Preliminary work for expanded Octanis Complex (2F) and
+    underground/basement areas.'
+  type: Add
+- message: 'Hope''s Retreat: Payphones, increased number of ATMs and Jukeboxes.'
+  type: Add
+- message: 'Hope''s Retreat: Placed vehicles around the Colony and Octanis Complex;
+    Hope''s Retreat should now have a single cargo truck and the Octanis Complex access
+    to both a small and large utility truck as well as an ambulance and police cruiser.'
+  type: Add
+- message: 'Hope''s Retreat: In a freak trans-dimensional teleportation accident,
+    Fort Beauregard has been lost with all hands. (GOVFOR will now spawn ship-side)'
+  type: Remove
+- message: 'Hope''s Retreat: Old, easily-meta-able CLF cave bases have been removed,
+    pending expanded secondary areas that one can set up their cell in.'
+  type: Remove
+- message: 'Hope''s Retreat: CLF spawns have been altered.'
+  type: Tweak
+- message: 'Hope''s Retreat: Substantial alterations to all cave networks, including
+    multiple new bypasses and alternative routes.'
+  type: Tweak
+- message: 'Hope''s Retreat: The improperly placed grate entities should be replaced
+    with tiles, meaning players should no longer fall down after climbing up ladders.'
+  type: Fix
+- message: 'Hope''s Retreat: Fixed placement of some areas.'
+  type: Fix
+time: '2026-10-18T15:42:17.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2213

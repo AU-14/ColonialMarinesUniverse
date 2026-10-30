@@ -22,6 +22,7 @@ public sealed partial class CMUSquadVisorSystem
         SubscribeLocalEvent<CMUSquadVisorWearerComponent, CMUToggleSquadVisorIFFActionEvent>(OnToggleIff);
         SubscribeLocalEvent<CMUSquadVisorWearerComponent, CMUToggleSquadVisorGrenadeWarningsActionEvent>(OnToggleGrenadeWarnings);
         SubscribeLocalEvent<CMUSquadVisorWearerComponent, CMUToggleSquadVisorMotionLinkActionEvent>(OnToggleMotionLink);
+        SubscribeLocalEvent<CMUSquadVisorWearerComponent, CMUToggleSquadVisorAmmoHudActionEvent>(OnToggleAmmoHud);
         SubscribeLocalEvent<CMUSquadVisorWearerComponent, DidEquipHandEvent>(OnWearerPickedUp);
 
         SubscribeLocalEvent<CMUSquadVisorIFFGunComponent, GotUnequippedHandEvent>(OnGunDropped);
@@ -38,9 +39,11 @@ public sealed partial class CMUSquadVisorSystem
         _actions.AddAction(wearer, ref marker.IffAction, marker.IffActionId);
         _actions.AddAction(wearer, ref marker.GrenadeAction, marker.GrenadeActionId);
         _actions.AddAction(wearer, ref marker.MotionLinkAction, marker.MotionLinkActionId);
+        _actions.AddAction(wearer, ref marker.AmmoHudAction, marker.AmmoHudActionId);
         _actions.SetToggled(marker.IffAction, marker.IffEnabled);
         _actions.SetToggled(marker.GrenadeAction, marker.GrenadeWarningsEnabled);
         _actions.SetToggled(marker.MotionLinkAction, marker.MotionLinkEnabled);
+        _actions.SetToggled(marker.AmmoHudAction, marker.AmmoHudEnabled);
         Dirty(wearer, marker);
     }
 
@@ -49,7 +52,7 @@ public sealed partial class CMUSquadVisorSystem
         if (_net.IsClient)
             return;
 
-        foreach (var action in new[] { marker.IffAction, marker.GrenadeAction, marker.MotionLinkAction })
+        foreach (var action in new[] { marker.IffAction, marker.GrenadeAction, marker.MotionLinkAction, marker.AmmoHudAction })
         {
             if (action is not { } uid)
                 continue;
@@ -61,6 +64,7 @@ public sealed partial class CMUSquadVisorSystem
         marker.IffAction = null;
         marker.GrenadeAction = null;
         marker.MotionLinkAction = null;
+        marker.AmmoHudAction = null;
     }
 
     private void OnToggleIff(Entity<CMUSquadVisorWearerComponent> ent, ref CMUToggleSquadVisorIFFActionEvent args)
@@ -108,6 +112,22 @@ public sealed partial class CMUSquadVisorSystem
         _popup.PopupClient(Loc.GetString(ent.Comp.MotionLinkEnabled
                 ? "cmu-squad-visor-motion-link-on"
                 : "cmu-squad-visor-motion-link-off"),
+            ent, ent, PopupType.Small);
+    }
+
+    private void OnToggleAmmoHud(Entity<CMUSquadVisorWearerComponent> ent, ref CMUToggleSquadVisorAmmoHudActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+        ent.Comp.AmmoHudEnabled = !ent.Comp.AmmoHudEnabled;
+        Dirty(ent);
+
+        _actions.SetToggled(ent.Comp.AmmoHudAction, ent.Comp.AmmoHudEnabled);
+        _popup.PopupClient(Loc.GetString(ent.Comp.AmmoHudEnabled
+                ? "cmu-squad-visor-ammo-hud-on"
+                : "cmu-squad-visor-ammo-hud-off"),
             ent, ent, PopupType.Small);
     }
 

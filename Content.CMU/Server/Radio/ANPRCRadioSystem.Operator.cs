@@ -260,17 +260,23 @@ public sealed partial class ANPRCRadioSystem
                 continue;
 
             var ent = new Entity<ANPRCRadioComponent>(uid, radio);
-            var battery = _powerCell.TryGetBatteryFromSlot(uid, out var cell)
+            var hasBattery = _powerCell.TryGetBatteryFromSlot(uid, out var cell);
+            var battery = hasBattery
                 ? _battery.GetChargeLevel(cell!.Value.AsNullable())
                 : 0f;
 
-            if (!Drifted(radio.PanelLinkQuality, GetLinkQuality(ent)) &&
+            var link = GetLinkQuality(ent);
+            if (!Drifted(radio.PanelLinkQuality, link) &&
                 !Drifted(radio.PanelBatteryFraction, battery))
             {
                 continue;
             }
 
-            UpdateBuiState(ent);
+            radio.PanelLinkQuality = link;
+            radio.PanelBatteryFraction = battery;
+            _ui.ServerSendUiMessage(uid, ANPRCRadioUI.Key,
+                new ANPRCRadioTelemetryMsg(radio.PanelRevision, battery, hasBattery, GetWearerCallsign(uid),
+                    _crypto.IsFillStale(uid), BuildPanelInfo(ent, link), BuildExpertState(ent)));
         }
     }
 

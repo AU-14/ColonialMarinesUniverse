@@ -335,7 +335,7 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         if (blooding)
         {
             if (!TryGetDestination(destinationKind, ent.Comp.DestinationId, out var deployDestination) ||
-                !TryGetSpawnCoordinates(spawnKind, destinationKind, ent.Comp.DestinationId, out coordinates, out _, false))
+                !TryGetSpawnCoordinates(spawnKind, destinationKind, ent.Comp.DestinationId, out coordinates, out _, true))
             {
                 var unavailable = blooding
                     ? "cmu-yautja-hunt-console-blooding-unavailable"
@@ -689,6 +689,40 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
                component.DoAfters.Values.Any(active => !active.Cancelled && !active.Completed);
     }
 
+    private readonly List<EntityUid> _spawnCandidates = new();
+    private readonly List<EntityUid> _unusedSpawnCandidates = new();
+    private readonly List<KeyValuePair<EntityUid, TimeSpan>> _recentlyUsedSpawnPoints = new();
+
+    private static readonly TimeSpan SpawnPointReuseDelay = TimeSpan.FromSeconds(5);
+
+
+    private bool TryPickSpawnCandidate(out MapCoordinates coordinates)
+    {
+        if (_spawnCandidates.Count == 0)
+        {
+            coordinates = default;
+            return false;
+        }
+
+        var now = _timing.CurTime;
+        _recentlyUsedSpawnPoints.RemoveAll(entry => now - entry.Value >= SpawnPointReuseDelay);
+
+        _unusedSpawnCandidates.Clear();
+        foreach (var candidate in _spawnCandidates)
+        {
+            if (!_recentlyUsedSpawnPoints.Any(entry => entry.Key == candidate))
+                _unusedSpawnCandidates.Add(candidate);
+        }
+
+        var chosen = _random.Pick(_unusedSpawnCandidates.Count > 0 ? _unusedSpawnCandidates : _spawnCandidates);
+        _recentlyUsedSpawnPoints.Add(new KeyValuePair<EntityUid, TimeSpan>(chosen, now));
+        _spawnCandidates.Clear();
+        _unusedSpawnCandidates.Clear();
+
+        coordinates = _transform.GetMapCoordinates(chosen);
+        return true;
+    }
+
     private bool TryGetSpawnCoordinates(
         YautjaHuntSpawnKind spawnKind,
         YautjaHuntTeleporterKind destinationKind,
@@ -697,17 +731,48 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         out EntityUid? destination,
         bool allowDestinationFallback = true)
     {
+        // CMU14: spawn points that do not name a destination used to match *any* request, and the loop returned the
+        // first hit - so on a map that also places an untagged youngblood point at its hunting ground (jungle_moon,
+        // desert_moon_caves), blooding youngbloods spawned at the preserve instead of aboard the ship, depending on
+        // entity order. Look for an exact destination match first and only accept untagged points afterwards, which
+        // keeps this working for every map without naming coordinates.
+        _spawnCandidates.Clear();
         var query = EntityQueryEnumerator<YautjaHuntSpawnPointComponent>();
         while (query.MoveNext(out var uid, out var component))
         {
             if (Deleted(uid) ||
                 component.Kind != spawnKind ||
+                component.DestinationId == null ||
                 !SpawnDestinationMatches(component.DestinationId, destinationId))
             {
                 continue;
             }
 
-            coordinates = _transform.GetMapCoordinates(uid);
+            _spawnCandidates.Add(uid);
+        }
+
+        if (TryPickSpawnCandidate(out coordinates))
+        {
+            destination = null;
+            return true;
+        }
+
+        _spawnCandidates.Clear();
+        var fallbackQuery = EntityQueryEnumerator<YautjaHuntSpawnPointComponent>();
+        while (fallbackQuery.MoveNext(out var uid, out var component))
+        {
+            if (Deleted(uid) ||
+                component.Kind != spawnKind ||
+                component.DestinationId != null)
+            {
+                continue;
+            }
+
+            _spawnCandidates.Add(uid);
+        }
+
+        if (TryPickSpawnCandidate(out coordinates))
+        {
             destination = null;
             return true;
         }

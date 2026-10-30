@@ -1,10 +1,44 @@
 using Content.Shared._RMC14.NightVision;
+using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.CMU14.Diagnostics;
 
 [TestFixture]
 public sealed class InnateNightVisionRestoreTest
 {
+    [Test]
+    public async Task ScopeDoesNotRestoreVisorPendingRemoval()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid wearer = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var nightVision = server.System<SharedNightVisionSystem>();
+            wearer = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            var visor = entities.SpawnEntity("CMGlassesM42ScoutSight", map.GridCoords);
+            var visorItem = entities.GetComponent<NightVisionItemComponent>(visor);
+            var scope = entities.SpawnEntity("RMCM96SIntegratedScope", map.GridCoords);
+            var scopeItem = entities.GetComponent<NightVisionItemComponent>(scope);
+
+            nightVision.EnableNightVisionItem((visor, visorItem), wearer);
+            nightVision.DisableNightVisionItem((visor, visorItem), wearer);
+            // Scoping disables the visor and enables the scope in the same tick.
+            nightVision.EnableNightVisionItem((scope, scopeItem), wearer);
+            Assert.That(entities.GetComponent<NightVisionComponent>(wearer).State, Is.EqualTo(NightVisionState.Full));
+            nightVision.DisableNightVisionItem((scope, scopeItem), wearer);
+        });
+
+        await pair.RunTicksSync(2);
+        await server.WaitAssertion(() =>
+            Assert.That(server.EntMan.HasComponent<NightVisionComponent>(wearer), Is.False,
+                "Turning off both sources must not leave ownerless night vision."));
+        await pair.CleanReturnAsync();
+    }
+
     // the visor used to leave its green filter stuck on a synth's own NV after being turned off
     [Test]
     public async Task VisorNightVisionHandsInnateNightVisionBackUntouched()

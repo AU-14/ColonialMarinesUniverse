@@ -1,5 +1,6 @@
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
+using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Robust.Shared;
 using Robust.Shared.Configuration;
@@ -23,6 +24,9 @@ public sealed partial class CMUHostnameSystem : EntitySystem
 
     private void OnRoundStarting(RoundStartingEvent ev)
     {
+        if (!_cfg.GetCVar(CCVars.CMUHostnameRoundSuffix))
+            return;
+
         if ((_gameTicker.CurrentPreset ?? _gameTicker.Preset) is not { } preset)
             return;
 

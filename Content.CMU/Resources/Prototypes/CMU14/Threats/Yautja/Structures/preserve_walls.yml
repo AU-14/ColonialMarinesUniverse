@@ -1,0 +1,41 @@
+# hunting-ground terrain. looks like the stock rock and temple walls, but prey can't
+# shoot or dig a way through to the edge fog and walk out of the preserve
+
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUYautjaPreserveRock
+  name: rock
+  description: Solid, ancient bedrock. There's no getting through this.
+  suffix: Yautja, Hunting Grounds
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    sprite: Structures/Walls/stone-dirt.rsi
+    state: full
+  - type: Icon
+    sprite: Structures/Walls/stone-dirt.rsi
+    state: full
+  - type: IconSmooth
+    key: stone
+    base: stone
+
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUYautjaPreserveSandstoneTemple
+  name: sandstone temple wall
+  description: A heavy wall of sandstone.
+  suffix: Yautja, Hunting Grounds
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Walls/stone.rsi
+    state: stone
+    color: "#b29082"
+  - type: Icon
+    sprite: _RMC14/Structures/Walls/stone.rsi
+    state: stone
+  - type: IconSmooth
+    key: walls
+    additionalKeys:
+    - windows
+    base: stone

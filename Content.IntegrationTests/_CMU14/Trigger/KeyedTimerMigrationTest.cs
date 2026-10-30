@@ -169,7 +169,7 @@ public sealed class KeyedTimerMigrationTest
         await server.WaitAssertion(() =>
         {
             var resources = server.ResolveDependency<IResourceManager>();
-            using var file = resources.ContentFileRead(new ResPath("/Maps/CMU14/Legacy/gixenscaverns.yml"));
+            using var file = resources.ContentFileRead(new ResPath("/Maps/CMU14/Planets/Legacy/gixenscaverns.yml"));
             using var reader = new StreamReader(file);
             var yaml = new YamlStream();
             yaml.Load(reader);

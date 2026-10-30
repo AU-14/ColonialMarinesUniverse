@@ -24,6 +24,22 @@ public sealed class LogTargetLifetimeTest : GameTest
     }
 
     [Test]
+    public async Task TrapFeedbackToleratesAVictimDeletedByAnotherTriggerHandler()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var trap = SEntMan.SpawnEntity(null, MapCoordinates.Nullspace);
+            SEntMan.AddComponent<SapperTrapComponent>(trap).Deployed = true;
+            var victim = SEntMan.SpawnEntity(null, MapCoordinates.Nullspace);
+            SEntMan.DeleteEntity(victim);
+            var trigger = new TriggerEvent(victim);
+            // Other payload handlers can delete a victim before the feedback handler runs.
+            Assert.DoesNotThrow(() => SEntMan.EventBus.RaiseLocalEvent(trap, ref trigger));
+            SEntMan.DeleteEntity(trap);
+        });
+    }
+
+    [Test]
     public async Task TriggerFromAnObjectDoesNotStartASnareStruggle()
     {
         await Server.WaitAssertion(() =>

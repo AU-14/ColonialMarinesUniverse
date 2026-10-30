@@ -151,6 +151,9 @@
     size: Small
   - type: MycotoxinProtection
     fullProtection: false
+  # cmu edit start: connects to internals
+  - type: BreathMask
+  # cmu edit end
 
 - type: entity
   parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]

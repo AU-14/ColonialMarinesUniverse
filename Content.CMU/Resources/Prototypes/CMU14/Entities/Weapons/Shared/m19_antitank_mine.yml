@@ -1,0 +1,63 @@
+# Ported from cmss13 PR 3615.
+- type: entity
+  parent: RMCExplosiveClaymoreMine
+  id: CMUExplosiveAntitankMineM19
+  name: M19 anti-tank mine
+  description: This older anti-tank mine design from the 21st century was rolled back into service simply due to the currently-used M307 EMP anti-tank mines being unable to trigger against the minimally armored vehicles commonly used by CLF. Featuring a 250 pound minimum detonation threshold, it can be employed against all but the lightest of vehicles. Despite being outdated, it can still pack a punch against APCs and lighter vehicles, while its plastic construction prevents detection by simple methods.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Mines/m19_antitank.rsi
+    drawdepth: BelowMobs
+    layers:
+    - state: icon
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Item
+    size: Large
+  - type: Fixtures
+    fixtures:
+      trigger:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        hard: false
+        layer:
+        - Opaque
+        mask:
+        - MobLayer
+        - LargeMobLayer
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: RMCLandmine
+    placementDelay: 4
+  - type: CMUBuryableMine
+  - type: Explosive
+    explosionType: CMUAntiVehicleHE
+    maxIntensity: 30
+    intensitySlope: 10
+    totalIntensity: 290
+    maxTileBreak: 0
+    canCreateVacuum: false
+  - type: ProjectileGrenade
+    evenSpread: true
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    fillPrototype: RMCShrapnel
+    capacity: 12
+    spreadAngle: 360
+  - type: VehicleDamageMultiplier
+    multiplier: 8
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+  - type: Tag
+    tags:
+    - CMUExplosiveAntitankMineM19
+
+- type: Tag
+  id: CMUExplosiveAntitankMineM19

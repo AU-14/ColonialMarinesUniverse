@@ -8,6 +8,7 @@ using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Wounds;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
@@ -148,7 +149,9 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
             FlingPartFromBody(args.Body, detachedBody);
 
             // Losing a robotic part, or anything off a robotic limb, leaves no flesh to bleed from.
-            var roboticStump = HasComp<CMURoboticLimbComponent>(args.Part) ||
+            // A synth is all machine, and nothing on one can cauterize a stump shut.
+            var roboticStump = HasComp<SynthComponent>(args.Body) ||
+                               HasComp<CMURoboticLimbComponent>(args.Part) ||
                                stumpParent is { } stumpOwner && HasComp<CMURoboticLimbComponent>(stumpOwner);
             if (!roboticStump)
             {

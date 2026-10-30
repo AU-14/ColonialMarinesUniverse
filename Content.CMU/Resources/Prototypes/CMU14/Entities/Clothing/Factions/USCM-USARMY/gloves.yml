@@ -24,6 +24,10 @@
     sprite: CMU14/Clothing/Hands/black-fingerless.rsi
   - type: Clothing
     sprite: CMU14/Clothing/Hands/black-fingerless.rsi
+  - type: CMUFingerlessGloves
+    from:
+    - CMHandsBlackMarine
+    - AU14PVEHandsInsulatedBlackMarine
 
 - type: entity
   parent: AU14GlovesBase
@@ -35,3 +39,7 @@
     sprite: CMU14/Clothing/Hands/brown-fingerless.rsi
   - type: Clothing
     sprite: CMU14/Clothing/Hands/brown-fingerless.rsi
+  - type: CMUFingerlessGloves
+    from:
+    - CMHandsBrown
+    - RMCHandsBrownMarine

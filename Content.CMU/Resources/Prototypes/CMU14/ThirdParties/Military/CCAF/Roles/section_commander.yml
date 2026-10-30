@@ -1,0 +1,96 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobCCAFSectionCommander
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: CMUCCAF
+  roundRole: CMUJobCCAFSectionCommander
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_teamleader
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: JobPrefix
+    prefix: cmu-job-prefix-ccaf-section-commander
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - French
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - French
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: cmu-job-name-ccaf-section-commander-title
+  description: cmu-job-description-ccaf
+  playTimeTracker: CMUJobCCAFSectionCommander
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMURankCCAFSergeant:
+      entity: CMUChevronCCAFSergeant
+      requirements: []
+  spawnMenuRoleName: CCAF Section Commander (CMU, Fire Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearCCAFSectionCommander
+  greeting: cmu-job-greeting-ccaf
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  hidden: true
+
+- type: entity
+  parent: CMUBaseMobSpeciesCCAF
+  suffix: CMU, CCAF, Fire Team
+  id: CMUJobCCAFSectionCommander
+  name: CCAF Section Commander (Fire Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadCCAF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-ccaf-section-commander
+    description: cmu-job-description-ccaf
+    reregister: false
+    job: CMUJobCCAFSectionCommander
+    raffle:
+      settings: short
+    rules: cmu-job-rules-ccaf
+
+- type: startingGear
+  id: CMUGearCCAFSectionCommander
+  equipment:
+    id: CMUIDCardCCAFSectionCommander
+    jumpsuit: AU14CCAFUniform
+    outerClothing: AU14CCAFArmor
+    head: AU14CCAFHelmetISACV
+    shoes: CMBootsBlackFilled
+    gloves: CMHandsBlackMarine
+    ears: CMUHeadsetCCAF
+    pocket2: AU14PouchIFAKFill
+    belt: CMBeltMarine
+    pocket1: RMCPouchMagazineLarge
+    back: CMBackpackSniper
+    suitstorage: CMUWeaponRifleC10A6BRLoaded
+  storage:
+    belt:
+    - AU14MagazineRifleC10A6BR
+    - AU14MagazineRifleC10A6BR
+    - AU14MagazineRifleC10A6BR
+    - AU14MagazineRifleC10A6BR
+    - AU14MagazineRifleC10A6BR
+    pocket1:
+    - AU14MagazineRifleC10A6BR
+    - AU14MagazineRifleC10A6BR
+    - AU14MagazineRifleC10A6BR
+    back:
+    - RMCBinoculars
+    - RMCExplosiveBreachingCharge

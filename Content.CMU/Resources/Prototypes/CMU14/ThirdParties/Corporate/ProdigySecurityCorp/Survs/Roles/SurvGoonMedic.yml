@@ -1,6 +1,10 @@
 - type: job
   parent: CMU14JobCivilianProdigyGuardBase
   id: CMU14JobCivilianProdigyGuardMedicSurv
+  chevrons:
+    AU14RankPrDEnforcer:
+      entity: AU14ChevronPrDEnforcer
+      requirements: []
   roundSide: Civilian
   roundForce: PSC
   roundRole: CivilianProdigyGuardMedicSurv
@@ -66,6 +70,11 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   spawnMenuRoleName: cmu-spawn-role-prodigy-corporate-combat-medic-cmu-surv
@@ -100,7 +109,7 @@
     - CMU14StandardAidKitFilledBurn
     - CMU14StandardAidKitFilledBrute
     back:
-    - CMMRE #TODO prodigy one
+    - CMUMREFSR
     - CMCanteen
     - RMCRadioHandheldColony
     - CMSurgicalCaseFilled

@@ -101,6 +101,9 @@
     sprite: _RMC14/Objects/Clothing/Shoes/Misc/stompers.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Shoes/Misc/stompers.rsi
+  # cmu edit start: anti-slip soles, as in cmss13 PR 6973
+  - type: NoSlip
+  # cmu edit end
 
 # Sandals
 - type: entity

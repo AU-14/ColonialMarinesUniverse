@@ -43,6 +43,14 @@
     - Unanchorable
   - type: Item
     size: Huge
+#cmu edit start: carried on the back or in suit storage, whatever the armour allows there
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: CMUAllowAnySuitStorage
+#cmu edit end
   - type: Corrodible
     isCorrodible: false
   - type: Mortar

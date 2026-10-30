@@ -15,6 +15,8 @@
   id: NoLanguageLearning
   name: au14-trait-no-language-learning-name
   description: au14-trait-no-language-learning-desc
+  category: LanguageTraits
+  cost: -1
   components:
   - type: NoLanguageLearning
 

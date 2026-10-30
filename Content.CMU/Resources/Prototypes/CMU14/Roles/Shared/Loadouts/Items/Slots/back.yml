@@ -1,4 +1,9 @@
 - type: loadout
+  id: PressBackpackAU14
+  equipment:
+    back: CMUPressBackpack
+
+- type: loadout
   id: SlingSatchelBlueAU14
   equipment:
     back: AU14SlingSatchelBlue

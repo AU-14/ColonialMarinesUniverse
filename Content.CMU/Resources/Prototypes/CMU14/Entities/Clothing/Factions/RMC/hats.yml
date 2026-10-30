@@ -46,7 +46,7 @@
     sprite: CMU14/Clothing/RMC/hats/beret_tl.rsi
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14HeadCapOfficerRMC
   name: royal marine officer peaked cap
   suffix: AU14

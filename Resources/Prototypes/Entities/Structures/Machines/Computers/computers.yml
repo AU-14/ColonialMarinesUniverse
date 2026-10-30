@@ -376,7 +376,9 @@
   - type: UserInterface
     interfaces:
       enum.CriminalRecordsConsoleKey.Key:
-        type: CriminalRecordsConsoleBoundUserInterface
+        # cmu edit start: CRT-styled criminal records
+        type: CMUCriminalRecordsConsoleBui
+        # cmu edit end
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
   - type: ActivatableUI

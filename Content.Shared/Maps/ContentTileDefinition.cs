@@ -132,6 +132,20 @@ public sealed partial class ContentTileDefinition : IPrototype, IInheritingProto
     /// </summary>
     [DataField] public bool Transparent = false;
 
+    // cmu edit start
+    /// <summary>
+    /// Stops people below from looking up through this tile even though it's <see cref="Transparent"/>, e.g. roofs.
+    /// Grates leave this off so you can see up through them.
+    /// </summary>
+    [DataField("cmuBlocksLookUp")] public bool CMUBlocksLookUp = false;
+
+    /// <summary>
+    /// Z-levels treat this tile as empty space: things fall through it and it isn't a floor, ceiling or roof.
+    /// Unlike a real empty tile it still holds air, so open air inside a hull doesn't vent.
+    /// </summary>
+    [DataField("cmuFallThrough")] public bool CMUFallThrough = false;
+    // cmu edit end
+
     /// <summary>
     /// Hide this tile in the tile placement editor.
     /// </summary>

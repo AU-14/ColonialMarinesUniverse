@@ -55,6 +55,11 @@ public sealed partial class TraitsRequirement : JobRequirement
         {
             reason = FormattedMessage.FromMarkupPermissive($"{Loc.GetString("role-timer-blacklisted-traits")}\n{sb}");
 
+            // cmu edit start: blocked traits are left off instead of keeping the character out
+            if (Content.Shared.CMU14.Traits.AutoIgnore.CMUAutoIgnoreTraitsSystem.HasAutoIgnore(profile))
+                return true;
+            // cmu edit end
+
             foreach (var trait in Traits)
             {
                 if (profile.TraitPreferences.Contains(trait))

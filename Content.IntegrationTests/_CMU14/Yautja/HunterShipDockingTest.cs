@@ -50,7 +50,7 @@ public sealed class HunterShipDockingTest
                 Assert.That(marker.TryComp<AirlockComponent>(out _, factory), Is.False,
                     "The landing-pad docking marker must not be an airlock.");
                 Assert.That(landingPad.TryComp<GridSpawnerComponent>(out var spawner, factory), Is.True);
-                Assert.That(spawner!.Spawn, Is.EqualTo(new ResPath("/Maps/CMU14/Shuttles/hunter_shuttle.yml")));
+                Assert.That(spawner!.Spawn, Is.EqualTo(new ResPath("/Maps/CMU14/Dropships/hunter_shuttle.yml")));
             });
         });
 
@@ -233,7 +233,7 @@ public sealed class HunterShipDockingTest
             var loader = entMan.System<MapLoaderSystem>();
             var tiles = server.ResolveDependency<ITileDefinitionManager>();
 
-            Assert.That(loader.TryLoadGrid(map.MapId, new ResPath("/Maps/CMU14/Shuttles/hunter_shuttle.yml"), out var grid), Is.True);
+            Assert.That(loader.TryLoadGrid(map.MapId, new ResPath("/Maps/CMU14/Dropships/hunter_shuttle.yml"), out var grid), Is.True);
             Assert.That(grid, Is.Not.Null);
             var shuttle = grid!.Value.Owner;
 

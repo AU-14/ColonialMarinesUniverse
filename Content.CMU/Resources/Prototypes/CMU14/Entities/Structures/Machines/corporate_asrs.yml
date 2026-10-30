@@ -4,7 +4,7 @@
 
 # Corporate ASRS Console
 - type: entity
-  parent: [ CMASRSConsole, CMUASRSCorporateGoodies ]
+  parent: [ CMASRSConsole, CMUASRSCorporateGoodies, CMUASRSVehicleGoodies ]
   id: AU14CorporateASRSConsole
   name: corporate supply console
   description: A Weyland-Yutani corporate supply management terminal. Orders placed here are subject to the current sales tax rate.

@@ -9,6 +9,7 @@
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNglovesbrown.rsi
   - type: Clothing
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNglovesbrown.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNglovesbrown.rsi

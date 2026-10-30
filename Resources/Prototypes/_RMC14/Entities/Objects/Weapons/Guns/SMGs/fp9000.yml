@@ -5,6 +5,9 @@
   description: An old design, but one that's stood the test of time. A leaked and unencrypted 3D-printing pattern alongside an extremely robust and reasonably cheap to manufacture frame have ensured this weapon be a mainstay of rim colonies and private security firms for over a century.
   suffix: Filled
   components:
+  # cmu edit start: built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SMGs/fp9000.rsi
     layers:

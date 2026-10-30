@@ -6,6 +6,7 @@
   components:
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNstandarduniform.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNstandarduniform.rsi
@@ -49,6 +50,7 @@
   components:
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNmixedjungleuniform.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNmixedjungleuniform.rsi

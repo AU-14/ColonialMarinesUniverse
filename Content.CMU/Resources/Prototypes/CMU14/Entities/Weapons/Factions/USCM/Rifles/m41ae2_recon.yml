@@ -48,3 +48,10 @@
           - RMCAttachmentVerticalGrip
   - type: ItemCamouflage
     camouflageVariations: { }
+  # Its own sprite, so it keeps the offsets the base HPR had before its resprite.
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.75, 0.03
+      rmc-aslot-rail: -0.07, 0.18
+      rmc-aslot-stock: -0.843, -0.005
+      rmc-aslot-underbarrel: 0.37, -0.3125

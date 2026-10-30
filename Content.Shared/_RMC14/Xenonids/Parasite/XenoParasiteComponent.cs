@@ -25,6 +25,7 @@ public sealed partial class XenoParasiteComponent : Component
 
     /// <summary>
     ///     How long it takes for the parasite to fall off the victim's mask, finishing the infecting process.
+    ///     CMU14: used for nested hosts; other hosts use CMUMinHugTime through CMUMaxHugTime.
     /// </summary>
     [DataField]
     public TimeSpan FallOffDelay = TimeSpan.FromSeconds(15);

@@ -1,0 +1,16 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Expedition squads handle crowded corridors, incoming fire, assault follow-through,
+    reloads, dropped weapons and glass doors more reliably.
+  type: Fix
+- message: AI scavengers no longer fall asleep from the disconnected-player timer.
+  type: Fix
+- message: Expedition kits now include HE and smoke throughout all factions and groups,
+    with loaded starting primaries.
+  type: Tweak
+- message: Expedition AI defaults to 65% aim skill and one tile less sight range,
+    and uses bipods and longer suppressive volleys.
+  type: Tweak
+time: '2026-10-11T13:40:48.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2154

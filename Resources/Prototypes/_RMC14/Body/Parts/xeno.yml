@@ -22,3 +22,4 @@
   - type: Tag
     tags:
       - Head
+  - type: CMUDeleteOnBodyGib # CMU14: gibbed xenos were leaving their head behind as a giblet

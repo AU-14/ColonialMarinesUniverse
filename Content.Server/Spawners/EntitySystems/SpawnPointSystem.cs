@@ -171,7 +171,8 @@ public sealed partial class SpawnPointSystem : EntitySystem
                 possiblePositions.Add(xform.Coordinates);
             }
             else if (spawnPoint.SpawnType == SpawnPointType.Job &&
-                     (args.Job == null || spawnPoint.Job == null || spawnPoint.Job == args.Job))
+                     (args.Job == null || spawnPoint.Job == null || spawnPoint.Job == args.Job ||
+                      CMUTakesJob(uid, args.Job))) // cmu edit: spawn points that take extra jobs
             {
                 if (isLateJoin)
                     preferredPositions.Add(xform.Coordinates);
@@ -187,9 +188,10 @@ public sealed partial class SpawnPointSystem : EntitySystem
             preferredPositions.Count == 0 && possiblePositions.Count == 0)
         {
             var civilianPoints = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
-            while (civilianPoints.MoveNext(out _, out var spawnPoint, out var xform))
+            while (civilianPoints.MoveNext(out var civilianUid, out var spawnPoint, out var xform)) // cmu edit: named uid
             {
-                if (spawnPoint.SpawnType == SpawnPointType.Job && spawnPoint.Job == args.Job &&
+                if (spawnPoint.SpawnType == SpawnPointType.Job &&
+                    (spawnPoint.Job == args.Job || CMUTakesJob(civilianUid, args.Job)) && // cmu edit: extra jobs
                     xform.MapID != MapId.Nullspace)
                     possiblePositions.Add(xform.Coordinates);
             }
@@ -228,6 +230,15 @@ public sealed partial class SpawnPointSystem : EntitySystem
         args.SpawnResult = _stationSpawning.SpawnPlayerMob(
             spawnLoc, args.Job, args.HumanoidCharacterProfile, args.Station);
     }
+
+    // cmu edit start: a spawn point can take jobs besides its own, like detectives at the deputy spawns
+    private bool CMUTakesJob(EntityUid spawnPoint, Robust.Shared.Prototypes.ProtoId<Content.Shared.Roles.JobPrototype>? job)
+    {
+        return job != null &&
+               TryComp(spawnPoint, out Content.Shared.CMU14.Spawners.CMUSpawnPointExtraJobsComponent? extra) &&
+               extra.Jobs.Contains(job.Value);
+    }
+    // cmu edit end
 
     // CMU14 method: last ditch spawn for stations with no spawn points. Walks outward from
     // the middle of the largest grid's bounding box to the first tile nothing blocks.

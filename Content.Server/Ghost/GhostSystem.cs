@@ -8,6 +8,7 @@ using Content.Server.Roles.Jobs;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared._RMC14.Ghost;
+using Content.Shared._RMC14.Mentor.ImaginaryFriend; // CMU14
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Actions;
@@ -58,6 +59,9 @@ namespace Content.Server.Ghost
     /// </summary>
     public sealed partial class GhostSystem : SharedGhostSystem
     {
+        // cmu edit start
+        [Dependency] private Content.Shared.CMU14.Ghost.CMUGhostAppearanceSystem _cmuGhostAppearance = default!;
+        // cmu edit end
         [Dependency] private SharedActionsSystem _actions = default!;
         [Dependency] private IAdminLogManager _adminLog = default!;
         [Dependency] private SharedEyeSystem _eye = default!;
@@ -163,6 +167,11 @@ namespace Content.Server.Ghost
 
         private void OnRelayMoveInput(EntityUid uid, GhostOnMoveComponent component, ref MoveInputEvent args)
         {
+            // CMU14 start: humanoid friends inherit a brain's GhostOnMove but must keep their mentor's mind.
+            if (HasComp<ImaginaryFriendComponent>(uid))
+                return;
+            // CMU14 end
+
             // If they haven't actually moved then ignore it.
             if ((args.Entity.Comp.HeldMoveButtons &
                  (MoveButtons.Down | MoveButtons.Left | MoveButtons.Up | MoveButtons.Right)) == 0x0)
@@ -509,7 +518,8 @@ namespace Content.Server.Ghost
                 TryComp<XenoComponent>(attached, out var xeno);
 
                 _jobs.MindTryGetJob(mind?.Mind, out var job);
-                if (xeno != null && ProtoMan.TryIndex(xeno.Role, out JobPrototype? xenoJob))
+                if (xeno != null && !string.IsNullOrEmpty(xeno.Role.Id) && // CMU14: incomplete xeno setup must not break the entire warp list.
+                    ProtoMan.TryIndex(xeno.Role, out JobPrototype? xenoJob))
                     job = xenoJob;
 
                 var department = GetDepartment(job);
@@ -670,6 +680,9 @@ namespace Content.Server.Ghost
 
             var ghost = SpawnAtPosition(GameTicker.ObserverPrototypeName, spawnPosition.Value);
             var ghostComponent = Comp<GhostComponent>(ghost);
+            // cmu edit start: the ghost looks like the body it left (RMC-14 PR 10355)
+            _cmuGhostAppearance.SetSource(ghost, mind.Comp.OwnedEntity);
+            // cmu edit end
 
             if (TryComp<GhostSpriteStateComponent>(ghost, out var state))  // If more TryComps are added this should be turned into an event
             {

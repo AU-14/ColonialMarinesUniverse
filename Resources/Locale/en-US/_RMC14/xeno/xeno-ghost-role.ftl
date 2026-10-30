@@ -1,4 +1,6 @@
-﻿cm-xeno-name = Xenonid
+﻿# cmu edit start: lore names
+cm-xeno-name = Xenomorph
+# cmu edit end
 cm-xeno-description = You are a Xenomorph, co-operate with your hive to thrive!
 cm-xeno-rules = You are a Xenomorph, smack, slash, and wack!
 

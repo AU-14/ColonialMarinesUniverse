@@ -1,0 +1,26 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Yautja plasma weapons no longer explode next to the shooter on their screen
+  type: Fix
+- message: Aggressive grabs can't be escaped with one click anymore
+  type: Fix
+- message: Predators pull at full speed, only feel pain near death, can throw who
+    they carry and can put weapons in suit storage
+  type: Fix
+- message: Thwei mends predator fractures without a splint
+  type: Fix
+- message: The Yautja mask visor turns back on when the bracer is put back on
+  type: Fix
+- message: Fully geared predators take explosion and fire damage again instead of
+    being nearly immune
+  type: Tweak
+- message: Poppers can no longer plant spore sacs through walls, windows, barricades
+    or into space
+  type: Fix
+- message: Neomorph walkers made from planetside bodies can use guns
+  type: Fix
+- message: The King's Destroy leap works on the USS Bush
+  type: Fix
+time: '2026-10-09T13:14:55.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2119

@@ -93,6 +93,7 @@ public sealed partial class GunSystem : SharedGunSystem
         {
             if (throwItems && ent != null)
             {
+                MoveToShotLevel(ent.Value); // CMU14
                 ShootOrThrow(ent.Value, mapDirection, gunVelocity, gun, user);
                 continue;
             }
@@ -101,6 +102,7 @@ public sealed partial class GunSystem : SharedGunSystem
             {
                 case CartridgeAmmoComponent cartridge:
                     var cartridgeUid = ent!.Value;
+                    var caseless = cartridge.DeleteOnSpawn || HasComp<Content.Shared.CMU14.Weapons.Caseless.CMUCaselessGunComponent>(gun); // cmu edit
                     if (!cartridge.Spent)
                     {
                         var projectile = Spawn(cartridge.Prototype, fromEnt);
@@ -113,7 +115,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
                         SetCartridgeSpent(cartridgeUid, cartridge, true);
 
-                        if (cartridge.DeleteOnSpawn)
+                        if (caseless) // cmu edit
                             Del(cartridgeUid);
                     }
                     else
@@ -122,7 +124,7 @@ public sealed partial class GunSystem : SharedGunSystem
                         Audio.PlayPredicted(gun.Comp.SoundEmpty, gun, user);
                     }
 
-                    if (!cartridge.DeleteOnSpawn &&
+                    if (!caseless && // cmu edit
                         !Containers.IsEntityInContainer(cartridgeUid))
                     {
                         EjectCartridge(cartridgeUid, angle, ejectCoordinates: Transform(gun).Coordinates); // CMU14
@@ -132,7 +134,10 @@ public sealed partial class GunSystem : SharedGunSystem
                     break;
                 case AmmoComponent newAmmo:
                     if (ent != null)
+                    {
+                        MoveToShotLevel(ent.Value); // CMU14
                         CreateAndFireProjectiles(ent.Value, newAmmo);
+                    }
                     break;
                 case HitscanAmmoComponent:
                     if (ent == null)
@@ -173,6 +178,16 @@ public sealed partial class GunSystem : SharedGunSystem
             $"{ToPrettyString(user)} shot {ToPrettyString(gun)} with {shotProjectiles.Count} projectiles aiming at {TransformSystem.ToMapCoordinates(toCoordinates)}.");
 
         return shotProjectiles;
+
+        // CMU14 Begin
+        // grenades come out of the gun's container on the shooter's level, but a cross-z shot starts at the
+        // opening on the other level. thrown from where they were, launchers just lobbed on your own floor
+        void MoveToShotLevel(EntityUid ammoEnt)
+        {
+            if (Transform(ammoEnt).MapID != fromMap.MapId)
+                TransformSystem.SetCoordinates(ammoEnt, fromEnt);
+        }
+        // CMU14 End
 
         void CreateAndFireProjectiles(EntityUid ammoEnt, AmmoComponent ammoComp)
         {
@@ -312,7 +327,9 @@ public sealed partial class GunSystem : SharedGunSystem
                 rangedSound.SoundTypes?.TryGetValue(type, out var damageSoundType) == true)
             {
                 var soundParams = damageSoundType?.Params ?? AudioParams.Default;
-                Audio.PlayPvs(
+                // CMU14: audience and budget admission before creating impact audio.
+                // Audio.PlayPvs(
+                PlayCMUTransientSound(
                     damageSoundType,
                     otherEntity,
                     soundParams.WithVariation(DamagePitchVariation));
@@ -322,7 +339,9 @@ public sealed partial class GunSystem : SharedGunSystem
                      rangedSound.SoundGroups?.TryGetValue(type, out var damageSoundGroup) == true)
             {
                 var soundParams = damageSoundGroup?.Params ?? AudioParams.Default;
-                Audio.PlayPvs(
+                // CMU14
+                // Audio.PlayPvs(
+                PlayCMUTransientSound(
                     damageSoundGroup,
                     otherEntity,
                     soundParams.WithVariation(DamagePitchVariation));
@@ -331,6 +350,7 @@ public sealed partial class GunSystem : SharedGunSystem
         }
 
         if (!playedSound && weaponSound != null)
-            Audio.PlayPvs(weaponSound, otherEntity);
+            // CMU14: Audio.PlayPvs(weaponSound, otherEntity);
+            PlayCMUTransientSound(weaponSound, otherEntity);
     }
 }

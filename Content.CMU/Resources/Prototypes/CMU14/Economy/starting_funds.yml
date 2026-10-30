@@ -9,6 +9,7 @@
   priority: 60
   jobs:
   - AU14JobCivilianColonySynthetic
+  - AU14JobCorporateSynthetic
   - AU14JobColonyWorkingJoe
   - AU14JobGOVFORAuxSupportSynth
   - AU14JobGOVFORWorkingJoe

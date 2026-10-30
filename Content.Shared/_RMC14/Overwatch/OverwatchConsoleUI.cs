@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+using System.Numerics;
+using Content.Shared._RMC14.AntiAir;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared.Mobs;
@@ -29,12 +30,14 @@ public sealed class OverwatchConsoleBuiState(
     List<OverwatchSquad> squads,
     Dictionary<NetEntity, List<OverwatchMarine>> marines,
     Dictionary<NetEntity, Content.Shared._RMC14.Tracker.SquadLeader.FireteamData> fireteams,
-    Dictionary<NetEntity, List<OverwatchTripodCamera>> cameras) : BoundUserInterfaceState
+    Dictionary<NetEntity, List<OverwatchTripodCamera>> cameras,
+    RMCShipAntiAirStatus antiAir) : BoundUserInterfaceState
 {
     public readonly List<OverwatchSquad> Squads = squads;
     public readonly Dictionary<NetEntity, List<OverwatchMarine>> Marines = marines;
     public readonly Dictionary<NetEntity, Content.Shared._RMC14.Tracker.SquadLeader.FireteamData> Fireteams = fireteams;
     public readonly Dictionary<NetEntity, List<OverwatchTripodCamera>> Cameras = cameras;
+    public readonly RMCShipAntiAirStatus AntiAir = antiAir;
 }
 
 [Serializable, NetSerializable]

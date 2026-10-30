@@ -35,4 +35,13 @@ public sealed partial class RMCIgniteOnCollideComponent : Component
 
     [DataField, AutoNetworkedField]
     public Color BurnColor = Color.Orange;
+
+    // CMU14 start - Firepenetrating fuel
+    /// <summary>
+    /// Fire damage from this entity ignores the target's damage modifier set (synthetic and Yautja heat
+    /// resistance included). Set by the flamer chain from the blended fuel profile.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool FirePenetrating;
+    // CMU14 end
 }

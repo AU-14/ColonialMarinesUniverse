@@ -58,7 +58,7 @@ public sealed class HunterShipDropshipLandingTest
             var loader = entMan.System<MapLoaderSystem>();
 
             Assert.That(loader.TryLoadMap(
-                new ResPath("/Maps/CMU14/huntership_upper.yml"),
+                new ResPath("/Maps/CMU14/Ships/HunterShip/huntership_upper.yml"),
                 out var hunterMap,
                 out var hunterGrids,
                 DeserializationOptions.Default with { InitializeMaps = true }), Is.True);
@@ -85,7 +85,7 @@ public sealed class HunterShipDropshipLandingTest
             {
                 Assert.That(loader.TryLoadGrid(
                     departure.MapId,
-                    new ResPath("/Maps/CMU14/Shuttles/hunter_shuttle.yml"),
+                    new ResPath("/Maps/CMU14/Dropships/hunter_shuttle.yml"),
                     out var shuttleGrid), Is.True);
                 Assert.That(shuttleGrid, Is.Not.Null);
 
@@ -207,7 +207,7 @@ public sealed class HunterShipDropshipLandingTest
             var transform = entMan.System<SharedTransformSystem>();
 
             Assert.That(loader.TryLoadMap(
-                new ResPath("/Maps/CMU14/huntership_upper.yml"),
+                new ResPath("/Maps/CMU14/Ships/HunterShip/huntership_upper.yml"),
                 out _,
                 out _,
                 DeserializationOptions.Default with { InitializeMaps = true }), Is.True);

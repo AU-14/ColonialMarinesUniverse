@@ -1,0 +1,9 @@
+author: johnnny34y
+category: CMU
+changes:
+- message: HAZOPS now has a specialized equipment vendor with enhanced CBRN equipment.
+  type: Add
+- message: Added a guidebook lore page for HAZOPS.
+  type: Add
+time: '2026-10-17T16:38:57.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2202

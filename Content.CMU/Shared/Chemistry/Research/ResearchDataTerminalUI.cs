@@ -16,6 +16,7 @@ public sealed class ResearchDataTerminalBuiState(
     TimeSpan nextUpdate,
     TimeSpan lastTime,
     int credits,
+    int sampleData,
     int clearance,
     int upgradecost,
     TimeSpan? xLockedUntil,
@@ -26,6 +27,7 @@ public sealed class ResearchDataTerminalBuiState(
     public readonly TimeSpan NextUpdate = nextUpdate;
     public readonly TimeSpan LastTime = lastTime;
     public readonly int Credits = credits;
+    public readonly int SampleData = sampleData;
     public readonly int Clearance = clearance;
     public readonly int UpgradeCost = upgradecost;
     public readonly TimeSpan? XLockedUntil = xLockedUntil;

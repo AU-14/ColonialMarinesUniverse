@@ -41,6 +41,11 @@
     antagPrototype: CLFSaboteurRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-clf-saboteur
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: clf_engi
 
 - type: antag
   parent: CMUAntagColonyBase

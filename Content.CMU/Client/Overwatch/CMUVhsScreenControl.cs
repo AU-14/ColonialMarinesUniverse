@@ -6,11 +6,11 @@ using Robust.Shared.Prototypes;
 namespace Content.Client.CMU14.Overwatch;
 
 /// <summary>
-/// Draws <see cref="Source"/> through the VHS shader. Same technique as
+/// Draws <see cref="Source"/> through the camera feed shader: film grain, a little chroma bleed and
+/// a vignette, with no scanlines. Same technique as
 /// <see cref="Content.Client.CMU14.Interface.CrtScreenControl"/>: the source is rendered into a
-/// texture first so the shader can move pixels (wobble, tracking band, chroma bleed), which an
-/// overlay cannot. Unlike that control it does not follow the CRT UI theme: a camera feed is tape
-/// whatever the menus look like.
+/// texture first so the shader can sample it at an offset, which an overlay cannot. Unlike that
+/// control it does not follow the CRT UI theme: a camera feed looks the same whatever the menus do.
 /// </summary>
 /// <remarks>
 /// Must come after <see cref="Source"/> in the tree; the source draws normally first and the shaded,
@@ -30,6 +30,9 @@ public sealed class CMUVhsScreenControl : Control
     private bool _failed;
 
     public Control? Source { get; set; }
+
+    /// <summary>Show the feed in night-vision green.</summary>
+    public bool NightVision { get; set; }
 
     public CMUVhsScreenControl()
     {
@@ -79,6 +82,7 @@ public sealed class CMUVhsScreenControl : Control
         }
 
         _shader.SetParameter("aspect", size.X / (float) size.Y);
+        _shader.SetParameter("nightVision", NightVision ? 1f : 0f);
         handle.UseShader(_shader);
         handle.DrawTextureRect(_target.Texture, PixelSizeBox);
         handle.UseShader(null);

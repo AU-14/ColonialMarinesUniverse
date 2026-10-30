@@ -82,7 +82,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     }
 
     private void OnPlayerAttached(Entity<CMUExpeditionAgentComponent> ent, ref PlayerAttachedEvent args) => Stop(ent);
-    private void OnShutdown(Entity<CMUExpeditionAgentComponent> ent, ref ComponentShutdown args) => Stop(ent);
+    private void OnShutdown(Entity<CMUExpeditionAgentComponent> ent, ref ComponentShutdown args)
+    {
+        Stop(ent);
+        RemoveFromSquadPlan(ent);
+    }
 
     private void Stop(Entity<CMUExpeditionAgentComponent> ent)
     {
@@ -112,6 +116,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         RemComp<ActiveNPCComponent>(ent);
         ent.Comp.Target = null;
         ent.Comp.LastSeen = null;
+        ent.Comp.ContactRecognition.Clear();
         ClearThreatAssessment(ent.Comp);
         ent.Comp.State = CMUExpeditionAgentState.Disabled;
     }
@@ -120,6 +125,9 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
+        if (EntityManager.Count<CMUExpeditionAgentComponent>() == 0)
+            return;
+
         var now = _timing.CurTime;
         _dueThinks.Clear();
         _orderRouteSearched = false;
@@ -128,8 +136,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         _doorPassageCache.Clear();
         _windowSightCache.Clear();
         _groundCache.Clear();
-        RefreshAcidTiles();
-        RefreshFireRegions();
+        _fireSnapshotTick = null;
+        _acidSnapshotTick = null;
         _smokeTiles.Clear();
         _smokeScreens.RemoveAll(screen => screen.Until <= now);
         _grenadeHazards.RemoveAll(hazard => hazard.Until <= now);
@@ -476,31 +484,27 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
                 {
                     agent.State = CMUExpeditionAgentState.Watch;
                     _steering.Unregister(uid);
+                    return;
                 }
-                else
+                if (agent.SquadPhase == "anti-rush" && agent.Duty != CMUSquadDuty.Advance)
                 {
-                    if (agent.RecoveryUntil > now || agent.Duty == CMUSquadDuty.RearGuard ||
-                        agent.SquadPhase == "anti-rush" && agent.Duty != CMUSquadDuty.Advance)
-                    {
-                        agent.State = CMUExpeditionAgentState.Watch;
-                        _steering.Unregister(uid);
-                    }
-                    else
-                        InvestigateContact(uid, agent, lastSeen, now);
+                    agent.State = CMUExpeditionAgentState.Watch;
+                    _steering.Unregister(uid);
+                    return;
                 }
+                if (SearchContact(uid, agent, lastSeen, agent.LastContact, now))
+                    return;
             }
-            else
-            {
-                if (agent.ContactFromRadio)
-                    agent.RadioDecision = "report-expired";
-                agent.ContactFromRadio = false;
-                agent.Target = null;
-                agent.LastSeen = null;
-                ClearCover(agent);
-                agent.State = CMUExpeditionAgentState.Guard;
-                if (!FollowOrders(uid, agent, now) && !TryFortify(uid, agent, now))
-                    Move(uid, home);
-            }
+            ResetContactSearch(agent);
+            if (agent.ContactFromRadio)
+                agent.RadioDecision = "report-checked-or-expired";
+            agent.ContactFromRadio = false;
+            agent.Target = null;
+            agent.LastSeen = null;
+            ClearCover(agent);
+            agent.State = CMUExpeditionAgentState.Guard;
+            if (!FollowOrders(uid, agent, now) && !TryFortify(uid, agent, now))
+                Move(uid, home);
             return;
         }
 
@@ -559,7 +563,9 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     private EntityUid? Observe(EntityUid uid, CMUExpeditionAgentComponent agent, TransformComponent transform, TimeSpan now)
     {
         EntityUid? seen = null;
-        var candidates = new List<(EntityUid Target, float Distance)>();
+        var candidates = _observationCandidates;
+        candidates.Clear();
+        ExpireRecognition(agent, now);
         agent.VisibleThreats.Clear();
         agent.MeleeThreats.Clear();
         agent.RushTarget = null;
@@ -568,14 +574,19 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         foreach (var hostile in ExpeditionHostiles(uid, agent))
         {
             if (!CombatTargetAlive(hostile) || !TryComp(hostile, out TransformComponent? targetTransform) ||
-                targetTransform.MapID != transform.MapID || !Visible(uid, hostile, agent.DetectionRange))
+                targetTransform.MapID != transform.MapID)
                 continue;
-            agent.VisibleThreats.Add(targetTransform.Coordinates);
             var distance = Vector2.Distance(_transform.GetWorldPosition(transform), _transform.GetWorldPosition(targetTransform));
-            candidates.Add((hostile, distance));
+            if (distance <= agent.DetectionRange)
+                candidates.Add((hostile, distance));
         }
         // Include representatives of other attack directions, not only the nearest crowd.
-        candidates.Sort((a, b) => a.Distance.CompareTo(b.Distance));
+        candidates.Sort(static (a, b) =>
+        {
+            var distance = a.Distance.CompareTo(b.Distance);
+            return distance != 0 ? distance : a.Target.CompareTo(b.Target);
+        });
+        candidates = RecognizeCandidates(uid, agent, now);
         UpdateThreatSectors(uid, agent, candidates, now);
         var nearestRush = agent.MeleeStandoffRange;
         var rememberedMelee = 0;
@@ -608,9 +619,10 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         var stance = agent.State == CMUExpeditionAgentState.Recover && agent.PeekPosition is { } peek
             ? peek : transform.Coordinates;
         var armed = _guns.TryGetGun(uid, out var rifle);
-        var shotNeighbors = new HashSet<EntityUid>();
-        if (armed)
-            _lookup.GetEntitiesInRange(uid, agent.FireRange + 3, shotNeighbors);
+        var shotNeighbors = _observationShotNeighbors;
+        shotNeighbors.Clear();
+        if (armed && candidates.Count > 0)
+            CollectShotNeighbors(uid, agent, shotNeighbors);
         var currentVisible = false;
         var currentUsable = false;
         EntityUid? flankTarget = null;
@@ -697,6 +709,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         }
         if (seen is { } target)
         {
+            ResetContactSearch(agent);
             if (agent.LastSeen == null || now - agent.LastContact > TimeSpan.FromSeconds(30))
                 agent.FirstContact = now;
             if (agent.Target != target)

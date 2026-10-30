@@ -22,6 +22,7 @@
     carrierWhitelist:
       components:
       - Synth
+      - Yautja # CMU14: Yautja may carry this caste too - CM-SS13's grab gate reaches MOB_SIZE_XENO (mob_grab.dm:82-89).
   - type: MobState
     allowedStates:
     - Alive
@@ -80,6 +81,10 @@
     # - RMCDecalSpawnerGibsParasite # TODO
     - RMCGibEffectXenoSmall
   - type: XenoParasite
+    # CMU14: attachment timing is balance data, not a test or system constant.
+    fallOffDelay: 15
+    cmuMinHugTime: 120
+    cmuMaxHugTime: 300
   - type: InfectOnPullAttempt
   - type: Item
     size: Invalid

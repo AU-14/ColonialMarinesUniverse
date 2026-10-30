@@ -245,7 +245,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (!_vehicleSystem.TryGetVehicleFromInterior(ent.Owner, out var vehicle) || vehicle == null)
+        if (!CMUTryGetSeatVehicle(ent.Owner, out var vehicle) || vehicle == null) // CMU14: open-vehicle seats
         {
             return;
         }
@@ -301,7 +301,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
 
         _viewToggle.DisableViewToggle(args.Buckle.Owner, ent.Owner);
 
-        if (!_vehicleSystem.TryGetVehicleFromInterior(ent.Owner, out var vehicle) || vehicle == null)
+        if (!CMUTryGetSeatVehicle(ent.Owner, out var vehicle) || vehicle == null) // CMU14: open-vehicle seats
             return;
 
         var vehicleUid = vehicle.Value;
@@ -411,7 +411,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         if (_net.IsClient)
             return false;
 
-        if (!_vehicleSystem.TryGetVehicleFromInterior(seat, out var vehicle) || vehicle == null)
+        if (!CMUTryGetSeatVehicle(seat, out var vehicle) || vehicle == null) // CMU14: open-vehicle seats
             return false;
 
         var vehicleUid = vehicle.Value;

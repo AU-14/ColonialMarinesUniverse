@@ -140,8 +140,13 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                 var equipmentStr = startingGear.GetGear(slot.Name);
                 if (!string.IsNullOrEmpty(equipmentStr))
                 {
-                    var equipmentEntity = Spawn(equipmentStr, xform.Coordinates);
-                    InventorySystem.TryEquip(entity, equipmentEntity, slot.Name, silent: true, force: true);
+                    // cmu edit start: platoon equipment swaps
+                    var equipmentEntity = Spawn(CMUOverrideGear(equipmentStr), xform.Coordinates);
+                    // cmu edit end
+                    // cmu edit start: the loadout already filled this slot and keeps it, so don't leave a spare on the floor
+                    if (!InventorySystem.TryEquip(entity, equipmentEntity, slot.Name, silent: true, force: true))
+                        Del(equipmentEntity);
+                    // cmu edit end
                 }
             }
         }
@@ -152,7 +157,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
             var coords = xform.Coordinates;
             foreach (var prototype in inhand)
             {
-                var inhandEntity = Spawn(prototype, coords);
+                var inhandEntity = Spawn(CMUOverrideGear(prototype), coords); // cmu edit: platoon equipment swaps
 
                 if (_handsSystem.TryGetEmptyHand((entity, handsComponent), out var emptyHand))
                 {
@@ -189,7 +194,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                     if (slotEnt == null || storage == null)
                         continue;
 
-                    var spawnedEntity = Spawn(entProto, coords); // CMU14
+                    var spawnedEntity = Spawn(CMUOverrideGear(entProto), coords); // CMU14 (platoon equipment swaps)
                     if (TryComp(spawnedEntity, out ItemComponent? item))
                     {
                         var ev = new CMStorageItemFillEvent((spawnedEntity, item), storage);
@@ -208,6 +213,17 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
             RaiseLocalEvent(entity, ref ev);
         }
     }
+
+    // cmu edit start
+    /// <summary>
+    ///     Lets the server swap a piece of starting gear or loadout equipment for another as it's spawned, e.g. a
+    ///     platoon's own version of a uniform or satchel.
+    /// </summary>
+    protected virtual EntProtoId CMUOverrideGear(EntProtoId proto)
+    {
+        return proto;
+    }
+    // cmu edit end
 
     /// <summary>
     ///     Gets all the gear for a given slot when passed a loadout.

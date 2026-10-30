@@ -1,0 +1,8 @@
+author: johnnny34y
+category: CMU
+changes:
+- message: New sprites for a portion of HAZOPS' gear, along with new cosmetic PVS-71
+    night vision goggles and HAZOPS oxygen tank with 10 L of air.
+  type: Add
+time: '2026-10-15T01:30:46.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2169

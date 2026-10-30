@@ -54,6 +54,8 @@ public sealed class BloodTypeTest
     [Test]
     public void StableDefaultDoesNotChange()
     {
-        Assert.That(CMUBloodTypes.StableDefault("John Doe"), Is.EqualTo(CMUBloodTypes.StableDefault("John Doe")));
+        var first = CMUBloodTypes.StableDefault("John Doe");
+        var second = CMUBloodTypes.StableDefault("John Doe");
+        Assert.That(second, Is.EqualTo(first));
     }
 }

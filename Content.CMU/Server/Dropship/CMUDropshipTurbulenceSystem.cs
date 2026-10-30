@@ -2,6 +2,7 @@ using Content.Server._RMC14.Dropship;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Camera;
@@ -81,6 +82,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
     [Dependency] private RMCObstacleSlammingSystem _obstacleSlamming = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedStunSystem _stun = default!;
@@ -256,9 +258,14 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
         };
     }
 
-    /// <summary>Aircrew, and synthetics, who are never thrown off balance by flight.</summary>
+    /// <summary>
+    ///     Aircrew and synthetics, who are never thrown off balance by flight, and xenos too big to be thrown about.
+    /// </summary>
     private bool IsAircrew(EntityUid mob)
     {
+        if (_sizeStun.TryGetSize(mob, out var size) && size >= RMCSizes.Xeno)
+            return true;
+
         return HasComp<SynthComponent>(mob) || _skills.HasSkill(mob, AircrewSkill, 1);
     }
 

@@ -80,6 +80,16 @@ public sealed partial class CMUSuffocationMessageSystem : EntitySystem
             args.State.Advice.CMUShowInternals = true;
     }
 
+    /// <summary>
+    ///     Whether a can't-breathe message popped up for this mob within <paramref name="window"/>, so other status
+    ///     messages can wait their turn instead of stacking on top of it.
+    /// </summary>
+    public bool ShowedMessageWithin(EntityUid uid, TimeSpan window)
+    {
+        return _nextMessage.TryGetValue(uid, out var next) &&
+               _timing.CurTime - (next - MessageCooldown) < window;
+    }
+
     /// <summary>Whether the mob is alive and has run out of breath within the last few breath cycles.</summary>
     public bool IsSuffocating(EntityUid uid)
     {

@@ -1,0 +1,24 @@
+
+- type: entity
+  parent: CMPacketBase
+  id: CMUM433HEDPPacket
+  name: M433 40mm HEDP grenade packet
+  description: It contains six High Explosive, Dual Purpose 40mm grenades.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Storage/grenade_packets.rsi
+    layers:
+    - state: M433HEDP_packet
+      map: [ "closedLayer" ]
+    - state: M433HEDP_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+
+- type: entity
+  parent: CMUM433HEDPPacket
+  id: CMUM433HEDPPacketFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMU40mmM433HEDP
+      amount: 6

@@ -23,3 +23,4 @@ cmu-access-opfor-pilot = Opfor Pilot
 cmu-access-opfor-requisitions = Opfor Requisitions
 cmu-access-opfor-vehicle-crew = Opfor Vehicle Crew
 cmu-access-staff-officer = Staff Officer
+cmu-access-kitchen = Kitchen

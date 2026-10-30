@@ -97,6 +97,9 @@
   name: UPP APC minigun
   description: A minigun fitted to an UPP APC turret.
   components:
+  # cmu edit start: caseless
+  - type: CMUCaselessGun
+  # cmu edit end
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container

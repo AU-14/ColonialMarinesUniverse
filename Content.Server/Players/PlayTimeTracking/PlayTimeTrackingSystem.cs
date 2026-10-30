@@ -73,7 +73,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
         if (_afk.IsAfk(player))
             return;
 
-        if (_adminManager.IsAdmin(player))
+        if (_adminManager.HasAdminFlag(player, Content.Shared.Administration.AdminFlags.Staff)) // cmu edit
         {
             trackers.Add(PlayTimeTrackingShared.TrackerAdmin);
             trackers.Add(PlayTimeTrackingShared.TrackerOverall);

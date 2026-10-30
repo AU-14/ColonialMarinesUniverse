@@ -28,4 +28,21 @@ public sealed partial class AdminConsoleComponent : Component
     public Dictionary<string, float> CallableParties = new();
 
     public HashSet<string> CalledParties = new();
+
+    /// <summary>
+    ///     How many third parties can be called in per round, across every console of this kind.
+    /// </summary>
+    [DataField("maxCallIns")]
+    public int MaxCallIns = 3;
+
+    /// <summary>
+    ///     How long after one call-in before the next can be made.
+    /// </summary>
+    [DataField("callInCooldown")]
+    public TimeSpan CallInCooldown = TimeSpan.FromMinutes(20);
+
+    /// <summary>
+    ///     When the next call-in can be made. Shared by every console of this kind.
+    /// </summary>
+    public TimeSpan NextCallInAt;
 }

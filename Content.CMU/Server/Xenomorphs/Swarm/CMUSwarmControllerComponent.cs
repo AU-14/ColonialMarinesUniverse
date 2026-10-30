@@ -22,4 +22,9 @@ public sealed partial class CMUSwarmControllerComponent : Component
     public EntityUid? Marker;
     public readonly List<EntityUid> Members = new();
     public readonly Dictionary<EntityUid, TimeSpan> Sightings = new();
+    public readonly List<EntityUid> Flags = new();
+    public readonly Dictionary<EntityUid, int> AssignedTargets = new();
+    public int Cursor;
+    public int NextNumber;
+    public TimeSpan NextMaintenance;
 }

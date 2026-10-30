@@ -17,13 +17,15 @@ public sealed class AU14CashVendorItemState
     public string Name { get; }
     public int EffectivePrice { get; }
     public EntProtoId ItemProtoId { get; }
+    public string? Section { get; }
 
-    public AU14CashVendorItemState(int index, string name, int effectivePrice, EntProtoId itemProtoId)
+    public AU14CashVendorItemState(int index, string name, int effectivePrice, EntProtoId itemProtoId, string? section = null)
     {
         Index = index;
         Name = name;
         EffectivePrice = effectivePrice;
         ItemProtoId = itemProtoId;
+        Section = section;
     }
 }
 

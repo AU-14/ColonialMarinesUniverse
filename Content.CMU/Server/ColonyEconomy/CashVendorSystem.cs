@@ -181,7 +181,7 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
             var name = entry.Name
                        ?? (_proto.TryIndex<EntityPrototype>(entry.ItemId, out var ep) ? ep.Name : entry.ItemId.Id);
             var effectivePrice = (int) Math.Ceiling(entry.BasePrice * (1f + tax));
-            return new AU14CashVendorItemState(idx, name, effectivePrice, entry.ItemId);
+            return new AU14CashVendorItemState(idx, name, effectivePrice, entry.ItemId, entry.Section);
         }).ToList();
 
         bool hasDeptMode = false;

@@ -42,8 +42,8 @@ public sealed class ShuttleAuthoredAtmosphereTest
                          "/Maps/_RMC14/Shuttles/escape_pod_east_liaison.yml",
                          "/Maps/_RMC14/Shuttles/escape_pod_west.yml",
                          "/Maps/_RMC14/Shuttles/lifeboat.yml",
-                         "/Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml",
-                         "/Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml",
+                         "/Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml",
+                         "/Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml",
                      })
             {
                 var map = maps.CreateMap(out var mapId);

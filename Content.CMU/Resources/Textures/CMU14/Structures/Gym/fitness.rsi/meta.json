@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/pull/11493 (commit b9afd9116ab5355ccac298aa6f9d8480ac7a1177), gym equipment from cmss13 PR 7753 by Zenith, tsurupeta and carlarc. Ported by troy.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "punchingbag"
+    },
+    {
+      "name": "punchingbag2",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "fitnesslifter"
+    },
+    {
+      "name": "fitnesslifter2",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "fitnessweight"
+    },
+    {
+      "name": "fitnessweight-w",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "fitnessweight-c"
+    }
+  ]
+}

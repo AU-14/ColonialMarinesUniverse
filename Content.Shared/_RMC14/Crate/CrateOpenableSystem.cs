@@ -44,7 +44,11 @@ public sealed partial class CrateOpenableSystem : EntitySystem
         var spawns = EntitySpawnCollection.GetSpawns(ent.Comp.Spawn, _random);
         foreach (var spawn in spawns)
         {
-            TrySpawnNextTo(spawn, ent, out _);
+            // cmu edit start: let the server swap what the crate holds, e.g. for the ship's platoon rations
+            var ev = new Content.Shared.CMU14.Crate.CMUCrateOpenableSpawnEvent(spawn);
+            RaiseLocalEvent(ent, ref ev);
+            TrySpawnNextTo(ev.Prototype, ent, out _);
+            // cmu edit end
         }
     }
 }

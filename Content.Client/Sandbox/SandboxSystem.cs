@@ -1,3 +1,4 @@
+using Content.Shared.Administration; // cmu edit
 using Content.Client.Administration.Managers;
 using Content.Client.Movement.Systems;
 using Content.Shared.Sandbox;
@@ -31,7 +32,9 @@ namespace Content.Client.Sandbox
 
         private void CheckStatus()
         {
-            var currentStatus = _sandboxEnabled || _adminManager.IsActive();
+            // cmu edit start: the sandbox tools need spawn permission, not just a place on the admin list
+            var currentStatus = _sandboxEnabled || _adminManager.HasFlag(AdminFlags.Spawn);
+            // cmu edit end
             if (currentStatus == SandboxAllowed)
                 return;
             SandboxAllowed = currentStatus;

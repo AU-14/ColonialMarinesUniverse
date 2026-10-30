@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Content.Server.Chat.Systems;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
@@ -46,6 +47,8 @@ public sealed partial class VehicleSupplySystem : EntitySystem
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedCMAutomatedVendorSystem _vendor = default!;
     [Dependency] private VehicleSystem _rmcVehicles = default!;
+
+    [Dependency] private ChatSystem _chat = default!;
 
     private readonly Dictionary<string, List<HardpointItemInfo>> _hardpointItemsByType = new();
     private readonly Dictionary<string, string> _hardpointTypeByProto = new();
@@ -369,7 +372,13 @@ public sealed partial class VehicleSupplySystem : EntitySystem
     private void OnVehicleSelected(Entity<VehicleSupplyConsoleComponent> ent, ref VehicleSupplySelectMsg args)
     {
         if (string.IsNullOrWhiteSpace(args.VehicleId))
+        {
+            ent.Comp.SelectedVehicle = string.Empty;
+            ent.Comp.SelectedVehicleCopyIndex = 0;
+            ent.Comp.SelectedLoadouts.Clear();
+            SendConsoleStateAll();
             return;
+        }
 
         if (!TryGetLift(ent.Owner, ent.Comp, out var lift))
             return;
@@ -498,9 +507,6 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             if (comp.Mode == VehicleSupplyLiftMode.Lowered)
                 return;
 
-            if (comp.ActiveVehicle == null)
-                TryAdoptVehicleOnLift(lift);
-
             if (IsLoweringBlocked(lift))
                 return;
         }
@@ -510,46 +516,30 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         SetMode(lift, VehicleSupplyLiftMode.Preparing, raise ? VehicleSupplyLiftMode.Raising : VehicleSupplyLiftMode.Lowering);
     }
 
-    private void TryAdoptVehicleOnLift(Entity<VehicleSupplyLiftComponent> lift)
-    {
-        var comp = lift.Comp;
-        var coords = _transform.GetMapCoordinates(lift);
-        // CMU14: fighter supply storage and faction ownership.
-        foreach (var candidateUid in _lookup.GetEntitiesInRange(coords, comp.Radius))
-        {
-            if (!HasComp<VehicleComponent>(candidateUid) && !HasComp<VehicleSupplyStorageComponent>(candidateUid))
-                continue;
-            var candidate = new Entity<TransformComponent>(candidateUid, Transform(candidateUid));
-            if (Deleted(candidate.Owner) || candidate.Owner == comp.ActiveVehicle)
-                continue;
-
-            if (!TryComp(candidate.Owner, out MetaDataComponent? meta) || meta.EntityPrototype is not { } prototype)
-                continue;
-
-            comp.ActiveVehicle = candidate.Owner;
-            comp.ActiveVehicleId = prototype.ID;
-            return;
-        }
-    }
-
     private bool IsLoweringBlocked(Entity<VehicleSupplyLiftComponent> lift)
     {
-        // CMU14: fighter supply storage and faction ownership.
-        if (lift.Comp.ActiveVehicle is { } supplied && IsOnLift(lift, supplied))
+        var side = GetSupplySide(lift.Owner);
+        if (side != null)
         {
-            var attempt = new VehicleSupplyStorageAttemptEvent();
-            RaiseLocalEvent(supplied, ref attempt);
-            if (attempt.Cancelled) return true;
-        }
-        if (lift.Comp.ActiveVehicle is { } active &&
-            IsOnLift(lift, active) &&
-            _rmcVehicles.TryGetInteriorMapId(active, out var interiorMap))
-        {
-            var actorQuery = EntityQueryEnumerator<ActorComponent, TransformComponent>();
-            while (actorQuery.MoveNext(out _, out _, out var xform))
+            foreach (var issued in GetIssued(side))
             {
-                if (xform.MapID == interiorMap)
+                if (!Exists(issued.Entity) || !IsOnLift(lift, issued.Entity))
+                    continue;
+
+                var attempt = new VehicleSupplyStorageAttemptEvent();
+                RaiseLocalEvent(issued.Entity, ref attempt);
+                if (attempt.Cancelled)
                     return true;
+
+                if (!_rmcVehicles.TryGetInteriorMapId(issued.Entity, out var interiorMap))
+                    continue;
+
+                var actorQuery = EntityQueryEnumerator<ActorComponent, TransformComponent>();
+                while (actorQuery.MoveNext(out _, out _, out var xform))
+                {
+                    if (xform.MapID == interiorMap)
+                        return true;
+                }
             }
         }
 
@@ -622,35 +612,12 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         var liftQuery = EntityQueryEnumerator<VehicleSupplyLiftComponent>();
         while (liftQuery.MoveNext(out var uid, out var lift))
         {
-            if (CleanupDestroyedActive((uid, lift)))
-                updateUi = true;
-
             if (ProcessLift((uid, lift)))
                 updateUi = true;
         }
 
         if (updateUi)
             SendConsoleStateAll();
-    }
-
-    private bool CleanupDestroyedActive(Entity<VehicleSupplyLiftComponent> lift)
-    {
-        var comp = lift.Comp;
-        if (comp.ActiveVehicle == null)
-            return false;
-
-        var active = comp.ActiveVehicle.Value;
-        if (Deleted(active))
-        {
-            if (!string.IsNullOrWhiteSpace(comp.ActiveVehicleId))
-                comp.Deployed.Remove(Normalize(comp.ActiveVehicleId));
-
-            comp.ActiveVehicle = null;
-            comp.ActiveVehicleId = string.Empty;
-            return true;
-        }
-
-        return false;
     }
 
     private bool ProcessLift(Entity<VehicleSupplyLiftComponent> lift)
@@ -691,8 +658,13 @@ public sealed partial class VehicleSupplySystem : EntitySystem
                 ? VehicleSupplyLiftMode.Raised
                 : VehicleSupplyLiftMode.Lowered;
 
+            var side = GetSupplySide(lift);
+            var platoon = GetSupplyPlatoon(side);
+            var vehicleLimit = platoon?.MaxSuppliedVehicles ?? 2;
+            var issuedCount = side == null ? 0 : GetIssued(side).Count;
+
             SetMode(lift, mode, comp.NextMode);
-            if (mode == VehicleSupplyLiftMode.Raised)
+            if (mode == VehicleSupplyLiftMode.Raised && issuedCount < vehicleLimit)
                 SpawnVehicle(lift);
             else
                 StoreVehicle(lift);
@@ -730,6 +702,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             var mapCoords = _transform.ToMapCoordinates(moverCoords);
             _transform.SetMapCoordinates(pendingEntity, mapCoords);
 
+            GetIssued(comp.PendingSupplySide!).Add(new IssuedVehicle(entry.Vehicle, GetEntryGroupKey(entry), pendingEntity));
             FinishRaisedVehicle(lift, pendingEntity, pending, key);
             return;
         }
@@ -748,7 +721,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
 
         var spawnCoords = _transform.GetMoverCoordinates(lift);
         var vehicle = SpawnAtPosition(pending, spawnCoords);
-        GetIssued(comp.PendingSupplySide!).Add(new IssuedVehicle(entry.Vehicle, GetEntryGroupKey(entry)));
+        GetIssued(comp.PendingSupplySide!).Add(new IssuedVehicle(entry.Vehicle, GetEntryGroupKey(entry), vehicle));
 
         FinishRaisedVehicle(lift, vehicle, pending, key);
     }
@@ -758,8 +731,6 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         // CMU14: fighter supply storage and faction ownership.
         var delivered = new VehicleSupplyDeliveredEvent(lift, lift.Comp.PendingRequester);
         RaiseLocalEvent(vehicle, ref delivered);
-        lift.Comp.ActiveVehicle = vehicle;
-        lift.Comp.ActiveVehicleId = vehicleId;
         ClaimOrderedEntry(lift.Comp, key, lift.Comp.PendingVehicleGroup);
         lift.Comp.PendingVehicle = string.Empty;
         lift.Comp.PendingVehicleEntity = null;
@@ -767,7 +738,6 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         lift.Comp.PendingSupplySide = null;
         lift.Comp.PendingSupplyConsole = null;
         lift.Comp.Deployed.Add(key);
-
         ApplyPendingLoadout(vehicle, lift.Comp);
         SpawnPendingBundle(lift);
         ClearPendingLoadout(lift.Comp);
@@ -915,29 +885,43 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         slot = itemSlot;
         return true;
     }
-
     private void StoreVehicle(Entity<VehicleSupplyLiftComponent> lift)
     {
-        var comp = lift.Comp;
-        if (comp.ActiveVehicle == null)
-            return;
-
-        var active = comp.ActiveVehicle.Value;
-        if (!IsOnLift(lift, active))
-            return;
-
-        if (!string.IsNullOrWhiteSpace(comp.ActiveVehicleId))
+        var side = GetSupplySide(lift.Owner);
+        if (!string.IsNullOrEmpty(side))
         {
-            var key = Normalize(comp.ActiveVehicleId);
-            comp.Deployed.Remove(key);
-            AddStored(comp, key);
-            AddStoredEntity(comp, key, active);
-        }
+            var current_stock = GetIssued(side);
+            var comp = lift.Comp;
+            var entities = _lookup.GetEntitiesIntersecting(lift);
+            foreach (var obj in entities)
+            {
+                if (obj == lift.Comp.Audio)
+                    continue;
 
-        _transform.SetParent(active, EntityUid.Invalid);
-        comp.ActiveVehicle = null;
-        comp.ActiveVehicleId = string.Empty;
-        UpdateVendorSectionsAll();
+                if (HasComp<VehicleComponent>(obj))
+                {
+                    var issued_vehicle = current_stock.FirstOrDefault(issued => issued.Entity == obj);
+                    if (issued_vehicle != default)
+                    {
+                        var key = Normalize(issued_vehicle.Prototype.Id);
+                        comp.Deployed.Remove(key);
+                        AddStored(comp, key);
+                        AddStoredEntity(comp, key, issued_vehicle.Entity);
+                        _transform.SetParent(obj, EntityUid.Invalid);
+                        current_stock.RemoveAll(issued => issued.Entity == obj);
+                        UpdateVendorSectionsAll();
+                    }
+                    else
+                    {
+                        QueueDel(obj);
+                    }
+                }
+                else
+                {
+                    QueueDel(obj);
+                }
+            }
+        }
     }
 
     private bool IsOnLift(Entity<VehicleSupplyLiftComponent> lift, EntityUid entity)
@@ -976,7 +960,6 @@ public sealed partial class VehicleSupplySystem : EntitySystem
 
         VehicleSupplyLiftMode? mode = null;
         var busy = false;
-        string? activeId = null;
         string? selectedId = string.IsNullOrWhiteSpace(console.SelectedVehicle) ? null : console.SelectedVehicle;
         var selectedCopyIndex = console.SelectedVehicleCopyIndex;
         VehicleSupplyPreviewState? preview = null;
@@ -986,7 +969,6 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         {
             mode = lift.Comp.Mode;
             busy = lift.Comp.Busy;
-            activeId = string.IsNullOrWhiteSpace(lift.Comp.ActiveVehicleId) ? null : GetPrototypeName(lift.Comp.ActiveVehicleId); // CMU14: Hardcode localization
 
             if (!string.IsNullOrWhiteSpace(selectedId))
             {
@@ -1028,7 +1010,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         }
 
         var loadouts = BuildLoadoutStates(uid, console, selectedId);
-        var state = new VehicleSupplyBuiState(mode, busy, activeId, selectedId, selectedCopyIndex, preview, available, loadouts);
+        var state = new VehicleSupplyBuiState(mode, busy, selectedId, selectedCopyIndex, preview, available, loadouts);
         var side = GetSupplySide(uid);
         var platoon = GetSupplyPlatoon(side);
         state.PlatoonName = platoon?.Name;

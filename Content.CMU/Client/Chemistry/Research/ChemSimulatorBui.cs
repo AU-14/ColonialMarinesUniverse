@@ -54,11 +54,11 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
         if (_window is not { IsOpen: true })
             return;
 
-        _window.CreditsLabel.Text = Loc.GetString("research-sim-ui-credits", ("NUM", state.Credits));
-        _window.CreditsBar.Value = Math.Clamp(state.Credits, 0, 100);
+        _window.CreditsLabel.Text = Loc.GetString("research-sim-ui-credits", ("NUM", state.SampleData));
+        _window.CreditsBar.Value = Math.Clamp(state.SampleData, 0, 100);
         _window.CreditsBar.ForegroundStyleBoxOverride = new StyleBoxFlat
         {
-            BackgroundColor = state.Credits >= 60 ? CreditsGood : state.Credits >= 15 ? CreditsAverage : CreditsBad,
+            BackgroundColor = state.SampleData >= 60 ? CreditsGood : state.SampleData >= 15 ? CreditsAverage : CreditsBad,
         };
 
         var locked = state.Stage != ChemSimulatorStage.Off;

@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Telephone;
@@ -13,4 +14,10 @@ public sealed partial class CMUMobilePhoneComponent : Component
 
     [DataField]
     public int MaxNameLength = 32;
+
+    [DataField]
+    public float PrankRingtoneChance = 0.05f;
+
+    [DataField]
+    public SoundSpecifier PrankRingtone = new SoundPathSpecifier("/Audio/CMU14/IED/detonate.ogg");
 }
