@@ -5057,6 +5057,10 @@
       sprite: CMU14/Yautja/Structures/yautja_machines.rsi
       state: "console_shuttle"
     - type: YautjaShuttleConsole
+    - type: AccessReader
+      access:
+        - [ "CMUAccessYautjaLeader" ]
+        - [ "CMUAccessYautjaAncient" ]
     - type: WhitelistedShuttle
       faction: yautja
       ShuttleType: Dropship

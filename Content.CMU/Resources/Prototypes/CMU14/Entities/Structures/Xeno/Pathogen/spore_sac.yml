@@ -27,6 +27,10 @@
         - MobMask
         layer:
         - MobLayer
+  - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralXeno
+  - type: RequireProjectileTarget
   - type: CMUPathogenSporeSac
   - type: MycotoxinInjector
     mycotoxinPerSecond: 8

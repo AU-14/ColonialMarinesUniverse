@@ -1,4 +1,5 @@
 using Content.Server.Atmos.Components;
+using Content.Server.CMU14.Atmos; // CMU14: deck opening seal check
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
@@ -205,6 +206,32 @@ namespace Content.Server.Atmos.EntitySystems
 
             if (mapAtmosphere)
             {
+                // CMU14 Begin: an in-grid opening sealed by the deck above or below
+                // (interior stairwells, dropship pads) holds a normal mutable
+                // mixture instead of coupling to the map reservoir. Missing tiles
+                // (NoGridTile) stay space: only isSpace floor tiles count as
+                // mapped deck openings.
+                if (!tile.NoGridTile)
+                {
+                    var seal = new CMUZOpeningSealCheckEvent(ent.Owner, idx);
+                    RaiseLocalEvent(ref seal);
+
+                    if (seal.Sealed)
+                    {
+                        if (tile.MapAtmosphere)
+                            RemoveMapAtmos(ent.Comp1, tile);
+
+                        if (tile.Air == null && seal.Seed is { Immutable: false } seed)
+                        {
+                            tile.Air = seed;
+                            NotifyDeviceTileChanged((ent.Owner, ent.Comp1, ent.Comp3), tile.GridIndices);
+                        }
+
+                        return;
+                    }
+                }
+                // CMU14 End
+
                 if (!tile.MapAtmosphere)
                 {
                     (tile.Air, tile.Space) = GetDefaultMapAtmosphere(mapAtmos);
