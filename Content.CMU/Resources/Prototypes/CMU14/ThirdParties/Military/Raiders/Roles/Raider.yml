@@ -11,9 +11,14 @@
       state: spp_pvt
   - type: Skills
     skills:
-      RMCSkillEndurance: 3
+      RMCSkillEndurance: 4
       RMCSkillFirearms: 3
-      RMCSkillCqc: 2
+      RMCSkillCqc: 3
+      RMCSkillFireman: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+      RMCSkillMedical: 2
+      RMCSkillMeleeWeapons: 1
       RMCSkillPolice: 1
   - type: JobPrefix
     prefix: cmu-raider-prefix
