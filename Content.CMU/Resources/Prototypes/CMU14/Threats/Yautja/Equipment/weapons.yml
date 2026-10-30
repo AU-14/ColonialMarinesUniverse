@@ -1025,11 +1025,6 @@
     count: 12
   - type: Wieldable
     wieldedInhandPrefix: spikelauncher_w
-  - type: WieldableSpeedModifiers
-    base: 0.75
-    light: 0.9
-    medium: 0.85
-    heavy: 0.85
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/rifle_mouse.rsi
@@ -1095,13 +1090,8 @@
     startingCharge: 100
   - type: Wieldable
     wieldedInhandPrefix: plasmarifle_w
+  # cmss13 pred guns keep the default wield delay and have no aim slowdown
   - type: WieldDelay
-    baseDelay: 0.6
-  - type: WieldableSpeedModifiers
-    base: 0.72
-    light: 0.9
-    medium: 0.84
-    heavy: 0.84
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/rifle_mouse.rsi
@@ -1299,12 +1289,6 @@
   - type: Wieldable
     wieldedInhandPrefix: plasmacarbine_w
   - type: WieldDelay
-    baseDelay: 0.6
-  - type: WieldableSpeedModifiers
-    base: 0.72
-    light: 0.9
-    medium: 0.84
-    heavy: 0.84
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/rifle_mouse.rsi
