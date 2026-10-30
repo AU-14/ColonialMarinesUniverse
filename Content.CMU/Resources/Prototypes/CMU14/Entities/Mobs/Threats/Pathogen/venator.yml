@@ -20,7 +20,7 @@
       Dead: XenoDead
     displayDamageInAlert: true
   - type: DrawableSolution  
-  solution: blood  
+    solution: blood  
   - type: Solution
     id: blood  
     solution:  
