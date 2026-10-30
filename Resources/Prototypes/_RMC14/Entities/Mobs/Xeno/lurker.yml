@@ -80,6 +80,9 @@
     - CMXenoRavager
   - type: XenoMeleeSlow
     requiresKnockDown: true
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      effect: 3.5
     higherOnXenos: true
   - type: XenoClaws
     clawType: Sharp
@@ -148,6 +151,10 @@
   - type: XenoTurnInvisible
   - type: XenoCripplingStrike
     removeOnHit: true
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      super: true
+      ticks: 3
     preventTackle: true
     resetMeleeCooldown: true
   - type: XenoTailStab
@@ -206,6 +213,9 @@
         Piercing: 13.34
   - type: XenoTailJab
     attackEffect: RMCEffectTailHit
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      ticks: 0.5
     damage:
       types:
         Blunt: 16.66

@@ -184,6 +184,11 @@ namespace Content.Server.Database
         Task<YautjaClanDeleteResult> DeactivateYautjaClanAsync(int clanId);
         Task<bool> UpsertYautjaClanMemberAsync(YautjaClanMemberRecord member);
         Task<bool> DeleteYautjaClanMemberAsync(Guid userId);
+        // CMU14: round-start antag pity persistence
+        Task<List<CmuAntagPityEntry>> GetCmuAntagPityAsync(long pruneBefore);
+        Task SaveCmuAntagPityAsync(CmuAntagPityEntry entry);
+        // CMU14: round-end flush writes every entry in one transaction
+        Task SaveCmuAntagPityBatchAsync(IReadOnlyList<CmuAntagPityEntry> entries);
         Task<int> GetYautjaWhitelistFlagsAsync(Guid userId);
         Task SetYautjaWhitelistFlagsAsync(Guid userId, int flags);
         // CMU14 Clan Hall Begin
@@ -384,6 +389,12 @@ namespace Content.Server.Database
         Task SetLinkingCode(Guid player, Guid code);
 
         Task<bool> HasLinkedAccount(Guid player, CancellationToken cancel);
+
+        // CMU14 method
+        Task<ulong?> GetLinkedDiscordId(Guid player, CancellationToken cancel);
+
+        // CMU14 method
+        Task<DiscordLinkResult> LinkDiscordAccountByCode(Guid code, ulong discordId);
 
         Task<RMCPatron?> GetPatron(Guid player, CancellationToken cancel);
 
@@ -812,6 +823,26 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetYautjaClanAsync(clanId));
+        }
+
+        // CMU14
+        public Task<List<CmuAntagPityEntry>> GetCmuAntagPityAsync(long pruneBefore)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetCmuAntagPityAsync(pruneBefore));
+        }
+
+        public Task SaveCmuAntagPityAsync(CmuAntagPityEntry entry)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SaveCmuAntagPityAsync(entry));
+        }
+
+        // CMU14
+        public Task SaveCmuAntagPityBatchAsync(IReadOnlyList<CmuAntagPityEntry> entries)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SaveCmuAntagPityBatchAsync(entries));
         }
 
         public Task<List<YautjaClanRecord>> GetYautjaClansAsync()
@@ -1484,6 +1515,20 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.HasLinkedAccount(player, cancel));
+        }
+
+        // CMU14 method
+        public Task<ulong?> GetLinkedDiscordId(Guid player, CancellationToken cancel)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetLinkedDiscordId(player, cancel));
+        }
+
+        // CMU14 method
+        public Task<DiscordLinkResult> LinkDiscordAccountByCode(Guid code, ulong discordId)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.LinkDiscordAccountByCode(code, discordId));
         }
 
         public Task<RMCPatron?> GetPatron(Guid player, CancellationToken cancel)

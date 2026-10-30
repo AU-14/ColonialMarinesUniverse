@@ -1,3 +1,5 @@
+# Colony antag rules roll server side in ColonyAntagsRuleSystem: each rule flips its own coin
+# once per round, and the chance rises with the ready players who enabled that antag, pity weighted.
 # Shared abstract base for all colony antag prototypes.
 - type: antag
   abstract: true

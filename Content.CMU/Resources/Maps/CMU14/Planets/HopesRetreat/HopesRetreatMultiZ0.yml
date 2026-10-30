@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 10/26/2026 02:52:49
-  entityCount: 40196
+  entityCount: 40197
 maps:
 - 1
 grids:
@@ -126287,6 +126287,13 @@ entities:
     - type: Transform
       parent: 1
       pos: 52.5,-20.5
+- proto: AU14SpawnPointCorporateSynthetic
+  entities:
+  - uid: 1000000002
+    components:
+    - type: Transform
+      parent: 1
+      pos: -40.5,-48.5
 - proto: AU14SpawnPointWYGuard
   entities:
   - uid: 7796

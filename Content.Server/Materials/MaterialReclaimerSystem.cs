@@ -148,6 +148,9 @@ public sealed partial class MaterialReclaimerSystem : SharedMaterialReclaimerSys
         float completion = 1f,
         MaterialReclaimerComponent? component = null)
     {
+        if (EntityManager.IsQueuedForDeletion(item)) // CMU14: do not yield materials twice before deletion.
+            return;
+
         if (!Resolve(uid, ref component))
             return;
 
