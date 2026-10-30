@@ -13,8 +13,15 @@ public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleepe
 {
     // matches IntelConsoleClaimSystem's group naming; "govfor" never had a fax machine
     private const string ClfFaxGroup = "clf";
-    private const string MilitaryFaxGroup = "military-command";
     private const string ClfPaperPrototype = "CMUPaperCLF";
+    // The advisory fans out to every command surface so burning one copy cannot bury it.
+    private static readonly string[] AdvisoryFaxGroups =
+    {
+        "military-command",
+        "marshal-bureau",
+        "colony-command",
+        "warship-command",
+    };
 
     [Dependency] private WantedSystem _wantedSystem = default!;
     [Dependency] private PlatoonSpawnRuleSystem _platoonSpawn = default!;
@@ -40,15 +47,18 @@ public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleepe
         // Platoon voting means govfor is not always USCM; the advisory must wear
         // the deployed platoon's own letterhead and intelligence branch.
         var sender = AdvisorySender(_platoonSpawn.SelectedGovforPlatoon);
-        _wantedSystem.SendFaxToGroup(
-            MilitaryFaxGroup,
-            "Security Advisory",
-            BuildGovforFax(sender.Branch),
-            "paper_stamp-centcom",
-            new List<StampDisplayInfo>
-            {
-                new() { StampedColor = Color.FromHex("#1a3a6e"), StampedName = "INTEL" }
-            }, sender.Paper);
+        foreach (var group in AdvisoryFaxGroups)
+        {
+            _wantedSystem.SendFaxToGroup(
+                group,
+                "Security Advisory",
+                BuildGovforFax(sender.Branch),
+                "paper_stamp-centcom",
+                new List<StampDisplayInfo>
+                {
+                    new() { StampedColor = Color.FromHex("#1a3a6e"), StampedName = "INTEL" }
+                }, sender.Paper);
+        }
     }
 
     private static string BuildClfFax()

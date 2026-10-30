@@ -140,10 +140,19 @@
   id: ColonyAntags
   parent: BaseGameRule
   name: Colony Antags
-  description: Randomly rolls for each colony antag to be present this round.
+  description: Rolls for each colony antag to be present this round, weighted by how many ready players enabled it.
   components:
   - type: GameRule
   - type: ColonyAntagsRule
+
+- type: entity
+  id: DistressAntags
+  parent: BaseGameRule
+  name: Distress Signal Antags
+  description: Randomly rolls for each distress signal antag to be present this round.
+  components:
+  - type: GameRule
+  - type: DistressAntagsRule
 
 - type: entity
   id: AuVoteRule
@@ -161,3 +170,39 @@
   description: Removes all jobs on the planet's main station prior to round start. Optionally removes jobs on ship stations.
   components:
   - type: RemoveJobsRule
+
+- type: entity
+  parent: BaseGameRule
+  id: AddColonist
+  name: Add Colonists
+  description: Restores a small fixed colonist roster on the planet after RemoveAllJobs. One ambassador allegiance is picked at random from the jobs the planet declares.
+  components:
+  - type: AddColonistRule
+    jobs:
+      AU14JobCivilianColonyAdminAssistant: 1
+      AU14JobCivilianHeadPhysician: 1
+      AU14JobCivilianPhysician: 4
+      AU14JobCivilianNurse: 2
+      AU14JobCivilianEmergencyResponseOfficer: 3
+      AU14JobCivilianColonySynthetic: 2
+      AU14JobCivilianColonist: 5
+      AU14JobCivilianCMBMarshal: 1
+      AU14JobCivilianCMBDeputy: 2
+      AU14JobCivilianPrisoner: 2
+    randomJobs:
+    - AU14JobCivilianAmbassadorCCA
+    - AU14JobCivilianAmbassadorICSC
+    - AU14JobCivilianAmbassadorTWE
+    - AU14JobCivilianAmbassadorUA
+    - AU14JobCivilianAmbassadorUPP
+
+- type: entity
+  id: FoFTimeLimitRule
+  parent: BaseGameRule
+  name: Force on Force Time Limit
+  description: Ends Force on Force at the time limit with the hotspot score leader winning.
+  components:
+  - type: FoFTimeLimitRule
+    timeLimit: "75m"
+    scoreAnnounceInterval: "10m"
+    overtime: "20m"
