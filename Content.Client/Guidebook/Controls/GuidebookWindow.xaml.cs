@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics; // CMU14
 using Content.Client.Guidebook.RichText;
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
@@ -30,6 +31,13 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
     private Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry> _entries = [];
 
+    // CMU14 Begin: navigation state belongs to this guidebook window.
+    private readonly Dictionary<ProtoId<GuideEntryPrototype>, (string Search, Vector2 Scroll)> _guideStates = [];
+    private readonly List<ProtoId<GuideEntryPrototype>> _history = [];
+    private int _historyIndex = -1;
+    private GuideEntryPrototype CoreRuleEntry => UserInterfaceManager.GetUIController<InfoUIController>().GetCoreRuleEntry();
+    // CMU14 End
+
     private readonly ISawmill _sawmill;
     private bool _subscribedToCvars;
 
@@ -54,6 +62,16 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
         _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
         _subscribedToCvars = true;
+
+        // CMU14 Begin: install navigation handlers once, not on every page selection.
+        HomeButton.OnPressed += _ =>
+        {
+            if (_entries.TryGetValue(CoreRuleEntry.Id, out var core))
+                SelectGuide(core);
+        };
+        BackButton.OnPressed += _ => NavigateHistory(_historyIndex - 1);
+        ForwardButton.OnPressed += _ => NavigateHistory(_historyIndex + 1);
+        // CMU14 End
     }
 
     [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
@@ -94,18 +112,28 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         CrtLobbyTheme.Apply(this, useCrtTypography: false);
     }
 
+    // CMU14 method: links share the tree and history navigation path.
     public void HandleClick(string link)
     {
         if (!_entries.TryGetValue(link, out var entry))
             return;
 
-        if (Tree.TryGetIndexFromMetadata(entry, out var index))
-        {
-            Tree.ExpandParentEntries(index.Value);
-            Tree.SetSelectedIndex(index);
-        }
-        else
+        SelectGuide(entry); // CMU14
+    }
+
+    // CMU14 method: history navigation must not recursively record tree-selection events.
+    private void SelectGuide(GuideEntry entry, bool recordHistory = true)
+    {
+        Tree.TryGetIndexFromMetadata(entry, out var index);
+        if (index is { } idx && Tree.SelectedIndex != idx)
+            Tree.ExpandParentEntries(idx);
+
+        Tree.SetSelectedIndex(index, invokeEvent: false);
+        if (entry.Id != Selected)
             ShowGuide(entry);
+
+        if (recordHistory)
+            AddToHistory(entry.Id);
     }
 
     public void HandleAnchor(IPrototypeLinkControl prototypeLinkControl)
@@ -140,20 +168,11 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         }
     }
 
+    // CMU14 method: route all page changes through the same navigation path.
     private void OnSelectionChanged(TreeItem? item)
     {
-        if (item != null && item.Metadata is GuideEntry entry)
-        {
-            // do nothing if the guide is the same as the currently selected one
-            if (entry.Id == Selected)
-                return;
-
-            ShowGuide(entry);
-
-            var isRulesEntry = entry.RuleEntry;
-            ReturnContainer.Visible = isRulesEntry;
-            HomeButton.OnPressed += _ => ShowGuide(entry);
-        }
+        if (item?.Metadata is GuideEntry entry)
+            SelectGuide(entry);
         else
             ClearSelectedGuide();
     }
@@ -175,6 +194,12 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
     public void ClearSelectedGuide()
     {
+        // CMU14 Begin
+        SaveGuideState();
+        Tree.SetSelectedIndex(null, invokeEvent: false);
+        TableOfContents.Clear();
+        ReturnContainer.Visible = false;
+        // CMU14 End
         Placeholder.Visible = true;
         EntryContainer.Visible = false;
         SearchContainer.Visible = false;
@@ -185,6 +210,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
     private void ShowGuide(GuideEntry entry)
     {
+        SaveGuideState(); // CMU14
         Scroll.SetScrollValue(default);
         Placeholder.Visible = false;
         EntryContainer.Visible = true;
@@ -193,6 +219,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         using var file = _resourceManager.ContentFileReadText(entry.Text);
 
         SearchContainer.Visible = entry.FilterEnabled;
+        ReturnContainer.Visible = entry.RuleEntry && entry.Id != CoreRuleEntry.Id; // CMU14
 
         if (!_parsingMan.TryAddMarkup(EntryContainer, file.ReadToEnd()))
         {
@@ -223,7 +250,63 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         }
 
         RepopulateTableOfContents();
+        RestoreGuideState(entry); // CMU14
     }
+
+    // CMU14 Begin: preserve page state and browser-style navigation history.
+    private void AddToHistory(ProtoId<GuideEntryPrototype> id)
+    {
+        if (_historyIndex >= 0 && _history[_historyIndex] == id)
+            return;
+
+        _history.RemoveRange(_historyIndex + 1, _history.Count - _historyIndex - 1);
+        _history.Add(id);
+        _historyIndex = _history.Count - 1;
+        UpdateHistoryButtons();
+    }
+
+    private void NavigateHistory(int index)
+    {
+        if (index < 0 || index >= _history.Count)
+            return;
+
+        _historyIndex = index;
+        SelectGuide(_entries[_history[index]], recordHistory: false);
+        UpdateHistoryButtons();
+    }
+
+    private void UpdateHistoryButtons()
+    {
+        BackButton.Disabled = _historyIndex <= 0;
+        ForwardButton.Disabled = _historyIndex >= _history.Count - 1;
+    }
+
+    private void SaveGuideState()
+    {
+        if (Selected is { } selected)
+            _guideStates[selected] = (SearchBar.Text, Scroll.GetScrollValue());
+    }
+
+    private void RestoreGuideState(GuideEntry entry)
+    {
+        if (!_guideStates.TryGetValue(entry.Id, out var state))
+            return;
+
+        if (entry.FilterEnabled)
+        {
+            SearchBar.Text = state.Search;
+            HandleFilter();
+        }
+
+        // The old page's scroll range remains until layout, particularly after a shorter entry.
+        for (Control? control = EntryContainer; control != null && control != Scroll; control = control.Parent)
+            control.InvalidateMeasure();
+        Scroll.InvalidateMeasure();
+        Scroll.Measure(Scroll.Size);
+        Scroll.Arrange(UIBox2.FromDimensions(Scroll.Position, Scroll.Size));
+        Scroll.SetScrollValue(state.Scroll);
+    }
+    // CMU14 End
 
     private int? HeadingDepth(Label control)
     {
@@ -288,6 +371,11 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         {
             _entries = entries;
             RepopulateTree(rootEntries, forceRoot);
+            // CMU14 Begin: history cannot point into a replaced guide set.
+            _history.Clear();
+            _historyIndex = -1;
+            UpdateHistoryButtons();
+            // CMU14 End
             Split.State = SplitContainer.SplitState.Auto;
             if (entries.Count == 1)
             {
@@ -302,13 +390,12 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             }
         }
 
-        if (selected == null)
-            ClearSelectedGuide();
+        // CMU14 Begin: linked rule pages may not have a tree item.
+        if (selected is { } id && _entries.TryGetValue(id, out var entry))
+            SelectGuide(entry);
         else
-        {
-            var item = Tree.Items.FirstOrDefault(x => x.Metadata is GuideEntry entry && entry.Id == selected);
-            Tree.SetSelectedIndex(item?.Index);
-        }
+            ClearSelectedGuide();
+        // CMU14 End
 
         return sameAsLastUpdate;
     }
@@ -392,7 +479,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
     private void HandleFilter()
     {
-        if (Tree.SelectedItem != null && Tree.SelectedItem.Metadata is GuideEntry entry && entry.FilterEnabled)
+        if (Selected is { } selected && _entries.TryGetValue(selected, out var entry) && entry.FilterEnabled) // CMU14
         {
             var foundElements = EntryContainer.GetSearchableControls();
 

@@ -81,7 +81,7 @@
   description: cmu-yautja-job-description-military-soldier
   playTimeTracker: CMUYautjaMilitaryCasteSoldier
   icon: CMJobIconEmpty
-  supervisors: cm-job-supervisors-nobody
+  supervisors: cmu-job-supervisors-yautja-military
   joinNotifyCrew: false
   hidden: true
   canBeAntag: false
@@ -99,17 +99,23 @@
   description: cmu-yautja-job-description-military-enforcer
   playTimeTracker: CMUYautjaMilitaryCasteEnforcer
   icon: CMJobIconEmpty
-  supervisors: cm-job-supervisors-nobody
+  supervisors: cmu-job-supervisors-yautja-military
   joinNotifyCrew: false
   hidden: true
   canBeAntag: false
   whitelisted: false
+  # cmss13 only hands the Enforcer slot to someone who passes the squad leader timelock (5 hours)
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORSquadSergeant
+    time: 18000
   jobEntity: CMUMobYautjaMilitaryCasteEnforcer
   jobPreviewEntity: CMUMobYautjaMilitaryCasteEnforcer
   startingGear: CMUYautjaMilitaryCasteEnforcerGear
   usePlayerProfile: false
   applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
 
+# cmss13 code/modules/gear_presets/yautja.dm /datum/equipment_preset/yautja/soldier and its enforcer/low_threat kids
 - type: startingGear
   id: CMUYautjaMilitaryCasteSoldierGear
   equipment:
@@ -118,12 +124,15 @@
     gloves: CMUYautjaSoldierBracers
     back: CMUYautjaHeavyGelDefoliatorDeathsquad
     outerClothing: CMUYautjaPoweredArmor
+    suitstorage: CMUYautjaPlasmaCarbine
     jumpsuit: CMUYautjaBodyMesh
     shoes: CMUYautjaPoweredGreaves
     belt: CMUYautjaHuntingPouch
+    pocket1: CMUYautjaMcasteHerbContainerFilled
     pocket2: CMUYautjaMedicompFull
   storage:
     belt:
+    - CMUMREFoodCLFWrappedMeatPie
     - CMUYautjaWristBladesAttachment
     - CMUYautjaWristBladesAttachment
     - CMUYautjaCleanserGelVial
@@ -132,16 +141,54 @@
     - CMUYautjaDefoliatorFuelTankDeathsquad
     - CMUYautjaDefoliatorFuelTankDeathsquad
     - CMUYautjaDefoliatorFuelTankDeathsquad
-    - CMUYautjaMcasteHerbContainerFilled
+    - CMUYautjaStrongXenoRestraints
     - RMCHandcuffs
-    - RMCZipties
 
+# the cannon pack takes the back, so no defoliator and no tanks
 - type: startingGear
   parent: CMUYautjaMilitaryCasteSoldierGear
   id: CMUYautjaMilitaryCasteEnforcerGear
   equipment:
     back: CMUYautjaCannonPack
     outerClothing: CMUYautjaPoweredArmorEnforcer
+  storage:
+    belt:
+    - CMUMREFoodCLFWrappedMeatPie
+    - CMUYautjaWristBladesAttachment
+    - CMUYautjaWristBladesAttachment
+    - CMUYautjaCleanserGelVial
+    - CMUYautjaPlasmaPistol
+    - CMUYautjaSpikeLauncher
+    - CMUYautjaStrongXenoRestraints
+    - RMCHandcuffs
+
+- type: startingGear
+  parent: CMUYautjaMilitaryCasteSoldierGear
+  id: CMUYautjaMilitaryCasteSoldierLowThreatGear
+  equipment:
+    back: CMUYautjaHeavyGelDefoliator
+    suitstorage: CMUYautjaPlasmaRifle
+  storage:
+    belt:
+    - CMUMREFoodCLFWrappedMeatPie
+    - CMUYautjaWristBladesAttachment
+    - CMUYautjaWristBladesAttachment
+    - CMUYautjaCleanserGelVial
+    - CMUYautjaPlasmaPistol
+    - CMUYautjaSpikeLauncher
+    - CMUYautjaDefoliatorFuelTank
+    - CMUYautjaDefoliatorFuelTank
+    - CMUYautjaDefoliatorFuelTank
+    - CMUYautjaStrongXenoRestraints
+    - RMCHandcuffs
+
+# cmss13's weaker enforcer wears the plain powered armor, only the cannon pack marks them
+- type: startingGear
+  parent: CMUYautjaMilitaryCasteEnforcerGear
+  id: CMUYautjaMilitaryCasteEnforcerLowThreatGear
+  equipment:
+    outerClothing: CMUYautjaPoweredArmor
+    suitstorage: CMUYautjaPlasmaRifle
 
 - type: startingGear
   id: CMUYautjaHunterSpawnGear

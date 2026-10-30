@@ -378,7 +378,8 @@ public sealed partial class XenoSpitSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (spit.Comp.Slow > TimeSpan.Zero)
+        if (spit.Comp.Slow > TimeSpan.Zero &&
+            (spit.Comp.SlowsYautja || !HasComp<YautjaComponent>(target))) // CMU14
         {
             if (spit.Comp.SuperSlow)
                 _slow.TrySuperSlowdown(target, spit.Comp.Slow);

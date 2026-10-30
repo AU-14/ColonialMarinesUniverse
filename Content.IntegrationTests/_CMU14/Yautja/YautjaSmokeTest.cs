@@ -8908,7 +8908,7 @@ public sealed class YautjaSmokeTest
                     Assert.That(snareArrowMeta.EntityName, Is.EqualTo("snare arrow"));
                     Assert.That(snareArrowMeta.EntityDescription, Is.EqualTo("A bow launched snare."));
                     Assert.That(quiverMeta.EntityName, Is.EqualTo("quiver strap"));
-                    Assert.That(quiverMeta.EntityDescription, Is.EqualTo("A strap that can hold a bow with a quiver for arrows."));
+                    Assert.That(quiverMeta.EntityDescription, Is.EqualTo("A strap that holds up to eight bows and arrows in total, with room for one hunting bow and seven arrows."));
                 });
             }
             finally
@@ -10275,7 +10275,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerSelfDestructCanBeArmedWhileCritical()
+    public async Task BracerSelfDestructCanBeArmedAfterRecoveringFromCritical()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -10298,6 +10298,10 @@ public sealed class YautjaSmokeTest
                 mobState.ChangeMobState(hunter, MobState.Critical);
 
                 var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
+                Assert.That(selfDestruct.TryArmSelfDestruct((bracer, bracerComp), hunter, TimeSpan.FromSeconds(30)), Is.False);
+                Assert.That(bracerComp.SelfDestructArmed, Is.False);
+
+                mobState.ChangeMobState(hunter, MobState.Alive);
                 Assert.That(selfDestruct.TryArmSelfDestruct((bracer, bracerComp), hunter, TimeSpan.FromSeconds(30)), Is.True);
                 Assert.That(bracerComp.SelfDestructArmed, Is.True);
             }
@@ -10504,11 +10508,15 @@ public sealed class YautjaSmokeTest
                 mobState.ChangeMobState(criticalHunter, MobState.Critical);
                 Assert.That(selfDestruct.TryArmSelfDestruct(
                     (criticalBracer, entMan.GetComponent<YautjaBracerComponent>(criticalBracer)),
-                    criticalHunter), Is.True);
-                Assert.That(selfDestruct.TryCancelSelfDestruct(
-                    (criticalBracer, entMan.GetComponent<YautjaBracerComponent>(criticalBracer)),
-                    criticalHunter), Is.True);
+                    criticalHunter), Is.False);
+                Assert.That(entMan.GetComponent<YautjaBracerComponent>(criticalBracer).SelfDestructArmed, Is.False);
             });
+
+            await pair.ReallyBeIdle(10);
+            await AssertClientHasPopup(
+                client,
+                "As you fall into unconsciousness you fail to activate your self-destruct device before you collapse.",
+                "The bracer does not answer an unconscious hunter.");
 
             await server.WaitPost(() =>
             {
@@ -12237,15 +12245,22 @@ public sealed class YautjaSmokeTest
             var entMan = server.EntMan;
             var hands = entMan.System<SharedHandsSystem>();
             var serverHands = entMan.System<HandsSystem>();
+            var mapSystem = entMan.System<SharedMapSystem>();
 
-            hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            wall = entMan.SpawnEntity("CMUHunterShipWallTurfClosedWallHuntershipHunterBase", map.GridCoords.Offset(new Vector2(1, 0)));
-            item = entMan.SpawnEntity(itemPrototype, map.GridCoords);
+            // the wall only anchors on a real tile, off-grid it's loose and the throw just shoves it
+            for (var x = 1; x <= 3; x++)
+                mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, 0), map.Tile.Tile);
+
+            // throw down the middle of the tile row, along y = 0 it only grazes the wall's corner and slides past
+            var start = map.GridCoords.Offset(new Vector2(0.5f, 0.5f));
+            hunter = entMan.SpawnEntity("CMMobHuman", start);
+            wall = entMan.SpawnEntity("CMUHunterShipWallTurfClosedWallHuntershipHunterBase", start.Offset(new Vector2(1, 0)));
+            item = entMan.SpawnEntity(itemPrototype, start);
 
             entMan.EnsureComponent<YautjaComponent>(hunter);
             Assert.That(hands.TryPickupAnyHand(hunter, item), Is.True);
 
-            var behindWall = map.GridCoords.Offset(new Vector2(3, 0));
+            var behindWall = start.Offset(new Vector2(3, 0));
             Assert.That(serverHands.ThrowHeldItem(hunter, behindWall), Is.True,
                 "HandsSystem accepts a legal throw; hunter-ship walls stop it through hard thrown-item collision.");
             Assert.That(entMan.HasComponent<ThrownItemComponent>(item), Is.True);

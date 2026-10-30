@@ -1,4 +1,6 @@
 # Rules
+cmu-guidebook-history-back = Back
+cmu-guidebook-history-forward = Forward
 cmu-guide-entry-ship-weapons = Ship Orbital Support Weapons
 cmu-guide-entry-rules-overview = Rules Overview
 cmu-guide-entry-rules-zero-tolerance = Zero Tolerance Rules

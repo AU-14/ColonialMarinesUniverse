@@ -155,7 +155,7 @@ public sealed class YautjaEdgeCaseRegressionTest
             var soldier = entMan.SpawnEntity("CMUMobYautja", map.GridCoords.Offset(new Vector2(0, 2)));
             entMan.System<MobStateSystem>().ChangeMobState(fallen, MobState.Dead);
 
-            // military bracers are auto-sd only, so their whitelist keeps the hotkey off
+            // Military bracers retain manual self-destruct alongside automatic detonation.
             if (inventory.TryUnequip(soldier, "gloves", out var oldBracer, silent: true, force: true))
                 entMan.DeleteEntity(oldBracer.Value);
             var soldierBracer = entMan.SpawnEntity("CMUYautjaSoldierBracers", map.GridCoords);
@@ -165,7 +165,7 @@ public sealed class YautjaEdgeCaseRegressionTest
             Assert.Multiple(() =>
             {
                 Assert.That(granted, Has.Count.EqualTo(1), "The bracer must grant a bindable self-destruct action.");
-                Assert.That(actions.GetActionsWithEvent<YautjaSelfDestructActionEvent>(soldier), Is.Empty);
+                Assert.That(actions.GetActionsWithEvent<YautjaSelfDestructActionEvent>(soldier).ToList(), Has.Count.EqualTo(1));
             });
 
             Assert.That(entMan.System<PullingSystem>().TryStartPull(hunter, fallen), Is.True);
