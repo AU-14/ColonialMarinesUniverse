@@ -265,7 +265,7 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
         if (_pendingLightChanges.Count > 0)
         {
             var processed = Math.Min(LightWavePerTick, _pendingLightChanges.Count);
-            for (var i = 0; i < processedBeacons; i++)
+            for (var i = 0; i < processed; i++)
             {
                 var (uid, level, _, _) = _pendingLightChanges[i];
                 if (TerminatingOrDeleted(uid))
