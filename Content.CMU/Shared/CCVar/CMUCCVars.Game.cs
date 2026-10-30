@@ -46,6 +46,21 @@ public sealed partial class CCVars
     public static readonly CVarDef<float> SpentCasingDespawnTime =
         CVarDef.Create("cmu.game.spent_casing_despawn_time", 300f, CVar.SERVERONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// Seconds a loose, empty, detachable magazine lies on the ground before the loose sweep
+    /// despawns it. Long fuse on purpose: rounds run 2h+ and spent mags are battlefield texture;
+    /// the sweep only fights entity bloat late-round. Zero disables. Loaded magazines are never touched.
+    /// </summary>
+    public static readonly CVarDef<float> LooseMagazineDespawnTime =
+        CVarDef.Create("cmu.game.loose_magazine_despawn_time", 1800f, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Seconds a loose trash-tagged entity lies on the ground before the loose sweep despawns
+    /// it. Zero disables the trash sweep. Papers are excluded, matching nuke:trash.
+    /// </summary>
+    public static readonly CVarDef<float> TrashDespawnTime =
+        CVarDef.Create("cmu.game.trash_despawn_time", 3600f, CVar.SERVERONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> HoldRoundEnd =
         CVarDef.Create("cmu.game.hold_round_end", false, CVar.SERVERONLY);
 
