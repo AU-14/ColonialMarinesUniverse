@@ -1,10 +1,6 @@
 using System.Linq;
 using Content.Server.Administration;
 using Content.Shared.Administration;
-using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.FixedPoint;
-using Content.Shared.Fluids.Components;
-using Content.Shared.Tag;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Console;
 using Robust.Shared.Containers;
@@ -125,6 +121,8 @@ public sealed partial class NukeCartridgesCommand : NukeEntitiesCommand
 [AdminCommand(AdminFlags.Fun)]
 public sealed partial class NukeMagazinesCommand : NukeEntitiesCommand
 {
+    [Dependency] private CMULooseSweepSystem _loose = default!;
+
     public override string Command => "nuke:magazines";
     public override string Help =>
         "nuke:magazines [all (true/false, default: false)] [magazineId...] - Deletes loose, detachable magazine entities (BallisticAmmoProvider with mayTransfer) from the world.\n" +
@@ -138,21 +136,7 @@ public sealed partial class NukeMagazinesCommand : NukeEntitiesCommand
         var (all, ids) = ParseBoolAndIds(args);
 
         var toDelete = new List<EntityUid>();
-        var query = EntityManager.EntityQueryEnumerator<BallisticAmmoProviderComponent, MetaDataComponent>();
-        while (query.MoveNext(out var uid, out var provider, out var meta))
-        {
-            if (!provider.MayTransfer)
-                continue; // fixed ammo wells built into guns and turrets
-
-            if (_container.IsEntityInContainer(uid))
-                continue; // loaded into a gun, held, worn, or stored
-
-            if (!MatchesIds(meta, ids)
-                || (!all && provider.Entities.Count + provider.UnspawnedCount > 0))
-                continue;
-
-            toDelete.Add(uid);
-        }
+        _loose.CollectLooseMagazines(toDelete, ids, all);
 
         ReportRemoved(shell, DeleteAll(toDelete), "loose magazines", ids,
             all ? "(all magazines)" : "(empty only)");
@@ -161,17 +145,14 @@ public sealed partial class NukeMagazinesCommand : NukeEntitiesCommand
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args) =>
         BoolOrIdsCompletion(args, "[all (default: false)] or [magazineId]", "[magazineId...]");
 
-    protected override bool IncludeProto(EntityPrototype proto) =>
-        proto.Components.TryGetValue("BallisticAmmoProvider", out var reg)
-            && reg.Component is BallisticAmmoProviderComponent { MayTransfer: true };
+    protected override bool IncludeProto(EntityPrototype proto)
+        => _loose.IsMagazinePrototype(proto);
 }
 
 [AdminCommand(AdminFlags.Fun)]
 public sealed partial class NukePuddlesCommand : NukeEntitiesCommand
 {
-    [Dependency] private SharedSolutionContainerSystem _solution = default!;
-
-    private static readonly FixedPoint2 SmallVolumeThreshold = FixedPoint2.New(5);
+    [Dependency] private CMULooseSweepSystem _loose = default!;
 
     public override string Command => "nuke:puddles";
     public override string Help =>
@@ -186,20 +167,7 @@ public sealed partial class NukePuddlesCommand : NukeEntitiesCommand
         var (all, ids) = ParseBoolAndIds(args);
 
         var toDelete = new List<EntityUid>();
-        var query = EntityManager.EntityQueryEnumerator<PuddleComponent, MetaDataComponent>();
-        while (query.MoveNext(out var uid, out var puddle, out var meta))
-        {
-            if (_container.IsEntityInContainer(uid)
-                || !MatchesIds(meta, ids))
-                continue;
-
-            if (!all
-                && (!_solution.TryGetSolution(uid, puddle.SolutionName, out _, out var solution)
-                    || solution.Volume > SmallVolumeThreshold))
-                continue;
-
-            toDelete.Add(uid);
-        }
+        _loose.CollectLoosePuddles(toDelete, ids, all);
 
         ReportRemoved(shell, DeleteAll(toDelete), "puddles", ids,
             all ? "(all puddles)" : "(small only)");
@@ -208,26 +176,19 @@ public sealed partial class NukePuddlesCommand : NukeEntitiesCommand
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args) =>
         BoolOrIdsCompletion(args, "[all (default: false)] or [puddleId]", "[puddleId...]");
 
-    protected override bool IncludeProto(EntityPrototype proto) =>
-        proto.Components.ContainsKey("Puddle");
+    protected override bool IncludeProto(EntityPrototype proto)
+        => _loose.IsPuddlePrototype(proto);
 }
 
 [AdminCommand(AdminFlags.Fun)]
 public sealed partial class NukeTrashCommand : NukeEntitiesCommand
 {
-    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> TrashTag = "Trash";
-
-    [Dependency] private TagSystem _tag = default!;
-
-    private static readonly string[] AdditionalTrashTags = { };
-    private static readonly string[] AdditionalTrashPrototypes = { };
-
-    private static readonly string[] ExcludedTrashComponents = { "Paper" };
+    [Dependency] private CMULooseSweepSystem _loose = default!;
 
     public override string Command => "nuke:trash";
     public override string Help =>
         "nuke:trash [trashId...] - Deletes loose trash entities from the world.\n" +
-        " Trash is anything tagged 'Trash', plus the curated AdditionalTrashTags and AdditionalTrashPrototypes lists in this command's source.\n" +
+        " Trash is anything tagged 'Trash', plus the curated AdditionalTrashTags and AdditionalTrashPrototypes lists in CMULooseSweepSystem.\n" +
         " Prototypes carrying a component from ExcludedTrashComponents (papers and friends) are always spared.\n" +
         " Trash that is held, worn, or otherwise inside a container is left alone.\n" +
         " Optionally list prototype ids to restrict the nuke to those types.";
@@ -237,19 +198,7 @@ public sealed partial class NukeTrashCommand : NukeEntitiesCommand
         var ids = args.Length > 0 ? new HashSet<string>(args) : null;
 
         var toDelete = new List<EntityUid>();
-        // MetaDataComponent-only query: curated prototypes may carry no TagComponent
-        var query = EntityManager.EntityQueryEnumerator<MetaDataComponent>();
-        while (query.MoveNext(out var uid, out var meta))
-        {
-            if (_container.IsEntityInContainer(uid) // held/worn/stored
-                || !MatchesIds(meta, ids)
-                || !IsTrash(uid, meta))
-            {
-                continue;
-            }
-
-            toDelete.Add(uid);
-        }
+        _loose.CollectLooseTrash(toDelete, ids);
 
         ReportRemoved(shell, DeleteAll(toDelete), "loose trash items", ids, null);
     }
@@ -257,36 +206,6 @@ public sealed partial class NukeTrashCommand : NukeEntitiesCommand
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args) =>
         IdsCompletion(args, "[trashId...]");
 
-    private bool IsTrash(EntityUid uid, MetaDataComponent meta)
-    {
-        if (meta.EntityPrototype is { } proto)
-        {
-            if (ExcludedTrashComponents.Any(c => proto.Components.ContainsKey(c)))
-                return false;
-
-            if (AdditionalTrashPrototypes.Contains(proto.ID))
-                return true;
-        }
-
-        if (!EntityManager.TryGetComponent<TagComponent>(uid, out var tags))
-            return false;
-
-        if (_tag.HasTag(tags, TrashTag))
-            return true;
-
-        foreach (var tag in AdditionalTrashTags)
-        {
-            if (_tag.HasTag(tags, tag))
-                return true;
-        }
-
-        return false;
-    }
-
-    protected override bool IncludeProto(EntityPrototype proto) =>
-        !ExcludedTrashComponents.Any(c => proto.Components.ContainsKey(c))
-        && (AdditionalTrashPrototypes.Contains(proto.ID)
-            || (proto.Components.TryGetValue("Tag", out var reg)
-                && reg.Component is TagComponent tag
-                && (_tag.HasTag(tag, TrashTag) || AdditionalTrashTags.Any(t => _tag.HasTag(tag, t))))); // CMU14: analyzer-safe tag access
+    protected override bool IncludeProto(EntityPrototype proto)
+        => _loose.IsTrashPrototype(proto);
 }
