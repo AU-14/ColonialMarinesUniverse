@@ -1,0 +1,638 @@
+# LACN commando fireteam, called in through the UA intel list: a team leader, a breaching pointman, a scout,
+# an automatic rifleman and a rifleman, in LACN commando gear with Kramer rifles.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNCommandoTeamLeader
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNCommandoTeamLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: leader
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillJtac: 3
+      RMCSkillLeadership: 2
+      RMCSkillMedical: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-lacn-commando-team-leader
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-name-lacn-commando-team-leader-title
+  description: cmu-job-description-lacn-commando-team
+  playTimeTracker: CMUJobLACNCommandoTeamLeader
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNSecondClassSergeant:
+      entity: CMU14ChevronLACNSecondClassSergeant
+      requirements: []
+  spawnMenuRoleName: LACN Commando Team Leader (Commando Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNCommandoTeamLeader
+  greeting: cmu-job-greeting-lacn-commando-team
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, Commando Team
+  id: CMUJobLACNCommandoTeamLeader
+  name: LACN Commando Team Leader (Commando Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadLACNCommando
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-lacn-commando-team-leader
+    description: cmu-job-description-lacn-commando-team
+    reregister: false
+    job: CMUJobLACNCommandoTeamLeader
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-commando-team
+
+- type: startingGear
+  id: CMUGearLACNCommandoTeamLeader
+  equipment:
+    id: CMUIDCardLACNCommandoTeamLeader
+    outerClothing: AU14LACNCommandoArmorStandard
+    jumpsuit: CMULACNCommandoUniform
+    shoes: AU14LACNBoots
+    mask: RMCMaskScarfTanDown
+    head: CMULACNCommandoHeadsetBeret
+    gloves: AU14LACNGloves
+    belt: CMULACNBeltMagazine
+    pocket1: RMCPouchMagazineLarge
+    pocket2: AU14PouchIFAKFill
+    back: AU14LACNBackpack
+    ears: AU14HeadsetGovforMarine
+    suitstorage: AU14WeaponRifleKramerAR
+  storage:
+    pocket1:
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    belt:
+    - AU14WeaponRifleKramerMagazineAP
+    - AU14WeaponRifleKramerMagazineAP
+    - AU14WeaponRifleKramerMagazineAP
+    - AU14WeaponRifleKramerMagazineAP
+    - AU14WeaponRifleKramerMagazineAP
+    back:
+    - RMCBinocularsPVE
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNCommandoTeamLeader
+  name: LACN commando team leader ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNCommandoTeamLeader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNCommandoTeamLeader
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNCommandoPointman
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNCommandoPointman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_breacher
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillJtac: 1
+      RMCSkillLeadership: 0
+      RMCSkillMedical: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-lacn-commando-pointman
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-name-lacn-commando-pointman-title
+  description: cmu-job-description-lacn-commando-team
+  playTimeTracker: CMUJobLACNCommandoPointman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNFirstClassCorporal:
+      entity: CMU14ChevronLACNFirstClassCorporal
+      requirements: []
+  spawnMenuRoleName: LACN Commando Pointman (Commando Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNCommandoPointman
+  greeting: cmu-job-greeting-lacn-commando-team
+  joinNotifyCrew: false
+  supervisors: cmu-job-name-lacn-commando-team-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, Commando Team
+  id: CMUJobLACNCommandoPointman
+  name: LACN Commando Pointman (Commando Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadLACNCommando
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-lacn-commando-pointman
+    description: cmu-job-description-lacn-commando-team
+    reregister: false
+    job: CMUJobLACNCommandoPointman
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-commando-team
+
+- type: startingGear
+  id: CMUGearLACNCommandoPointman
+  equipment:
+    id: CMUIDCardLACNCommandoPointman
+    outerClothing: AU14LACNCommandoArmorPointman
+    jumpsuit: CMULACNCommandoUniform
+    shoes: AU14LACNBoots
+    mask: RMCMaskScarfTanDown
+    head: AU14LACNCommandoBeanie
+    gloves: AU14LACNGloves
+    belt: CMULACNBeltShotgun
+    pocket1: RMCPouchShotgunLarge
+    pocket2: AU14PouchIFAKFill
+    back: AU14LACNBackpack
+    ears: AU14HeadsetGovforMarine
+    suitstorage: CMUWeaponShotgunLACNBreacher
+  storage:
+    pocket1:
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    belt:
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    back:
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNCommandoPointman
+  name: LACN commando pointman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNCommandoPointman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNCommandoPointman
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNCommandoScout
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNCommandoScout
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_marksman
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillJtac: 1
+      RMCSkillLeadership: 0
+      RMCSkillMedical: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-lacn-commando-scout
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-name-lacn-commando-scout-title
+  description: cmu-job-description-lacn-commando-team
+  playTimeTracker: CMUJobLACNCommandoScout
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNFirstClassCorporal:
+      entity: CMU14ChevronLACNFirstClassCorporal
+      requirements: []
+  spawnMenuRoleName: LACN Commando Scout (Commando Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNCommandoScout
+  greeting: cmu-job-greeting-lacn-commando-team
+  joinNotifyCrew: false
+  supervisors: cmu-job-name-lacn-commando-team-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, Commando Team
+  id: CMUJobLACNCommandoScout
+  name: LACN Commando Scout (Commando Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadLACNCommando
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-lacn-commando-scout
+    description: cmu-job-description-lacn-commando-team
+    reregister: false
+    job: CMUJobLACNCommandoScout
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-commando-team
+
+- type: startingGear
+  id: CMUGearLACNCommandoScout
+  equipment:
+    id: CMUIDCardLACNCommandoScout
+    outerClothing: AU14LACNCommandoArmorScout
+    jumpsuit: CMULACNCommandoUniform
+    shoes: AU14LACNBoots
+    mask: RMCMaskScarfTanDown
+    head: AU14LACNCommandoBeanie
+    gloves: AU14LACNGloves
+    belt: CMULACNBeltMagazine
+    pocket1: RMCPouchMagazineLarge
+    pocket2: AU14PouchIFAKFill
+    back: AU14LACNBackpack
+    ears: AU14HeadsetGovforMarine
+    suitstorage: AU14WeaponRifleKramerAR
+  storage:
+    pocket1:
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    belt:
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    back:
+    - RMCBinocularsPVE
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNCommandoScout
+  name: LACN commando scout ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNCommandoScout
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNCommandoScout
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNCommandoAutomaticRifleman
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNCommandoAutomaticRifleman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_sg
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillJtac: 1
+      RMCSkillLeadership: 0
+      RMCSkillMedical: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-lacn-commando-automatic-rifleman
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-name-lacn-commando-automatic-rifleman-title
+  description: cmu-job-description-lacn-commando-team
+  playTimeTracker: CMUJobLACNCommandoAutomaticRifleman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNFirstClassCorporal:
+      entity: CMU14ChevronLACNFirstClassCorporal
+      requirements: []
+  spawnMenuRoleName: LACN Commando Automatic Rifleman (Commando Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNCommandoAutomaticRifleman
+  greeting: cmu-job-greeting-lacn-commando-team
+  joinNotifyCrew: false
+  supervisors: cmu-job-name-lacn-commando-team-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, Commando Team
+  id: CMUJobLACNCommandoAutomaticRifleman
+  name: LACN Commando Automatic Rifleman (Commando Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadLACNCommando
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-lacn-commando-automatic-rifleman
+    description: cmu-job-description-lacn-commando-team
+    reregister: false
+    job: CMUJobLACNCommandoAutomaticRifleman
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-commando-team
+
+- type: startingGear
+  id: CMUGearLACNCommandoAutomaticRifleman
+  equipment:
+    id: CMUIDCardLACNCommandoAutomaticRifleman
+    outerClothing: AU14LACNCommandoArmorStandard
+    jumpsuit: CMULACNCommandoUniform
+    shoes: AU14LACNBoots
+    mask: RMCMaskScarfTanDown
+    head: AU14LACNCommandoBeanie
+    gloves: AU14LACNGloves
+    belt: CMULACNBeltMagazine
+    pocket1: RMCPouchMagazineLarge
+    pocket2: AU14PouchIFAKFill
+    back: AU14LACNBackpack
+    ears: AU14HeadsetGovforMarine
+    suitstorage: AU14WeaponRifleKramerLSW
+  storage:
+    pocket1:
+    - AU14WeaponRifleKramerMagazineLSWStandard
+    - AU14WeaponRifleKramerMagazineLSWStandard
+    back:
+    - AU14WeaponRifleKramerMagazineLSWStandard
+    - AU14WeaponRifleKramerMagazineLSWStandard
+    - AU14WeaponRifleKramerMagazineLSWStandard
+    - AU14WeaponRifleKramerMagazineLSWStandard
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNCommandoAutomaticRifleman
+  name: LACN commando automatic rifleman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNCommandoAutomaticRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNCommandoAutomaticRifleman
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNCommandoRifleman
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNCommandoRifleman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_rifleman
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillJtac: 1
+      RMCSkillLeadership: 0
+      RMCSkillMedical: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-lacn-commando-rifleman
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-name-lacn-commando-rifleman-title
+  description: cmu-job-description-lacn-commando-team
+  playTimeTracker: CMUJobLACNCommandoRifleman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNSecondClassCorporal:
+      entity: CMU14ChevronLACNSecondClassCorporal
+      requirements: []
+  spawnMenuRoleName: LACN Commando Rifleman (Commando Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNCommandoRifleman
+  greeting: cmu-job-greeting-lacn-commando-team
+  joinNotifyCrew: false
+  supervisors: cmu-job-name-lacn-commando-team-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, Commando Team
+  id: CMUJobLACNCommandoRifleman
+  name: LACN Commando Rifleman (Commando Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadLACNCommando
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-lacn-commando-rifleman
+    description: cmu-job-description-lacn-commando-team
+    reregister: false
+    job: CMUJobLACNCommandoRifleman
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-commando-team
+
+- type: startingGear
+  id: CMUGearLACNCommandoRifleman
+  equipment:
+    id: CMUIDCardLACNCommandoRifleman
+    outerClothing: AU14LACNCommandoArmorStandard
+    jumpsuit: CMULACNCommandoUniform
+    shoes: AU14LACNBoots
+    mask: RMCMaskScarfTanDown
+    head: AU14LACNCommandoBeanie
+    gloves: AU14LACNGloves
+    belt: CMULACNBeltMagazine
+    pocket1: RMCPouchMagazineLarge
+    pocket2: AU14PouchIFAKFill
+    back: AU14LACNBackpack
+    ears: AU14HeadsetGovforMarine
+    suitstorage: AU14WeaponRifleKramerAR
+  storage:
+    pocket1:
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    belt:
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    back:
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNCommandoRifleman
+  name: LACN commando rifleman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNCommandoRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNCommandoRifleman
+
+- type: partySpawn
+  id: CMULACNCommandoTeamSpawn
+  leadersToSpawn:
+    CMUJobLACNCommandoTeamLeader: 1
+  gruntsToSpawn:
+    CMUJobLACNCommandoPointman: 1
+    CMUJobLACNCommandoScout: 1
+    CMUJobLACNCommandoAutomaticRifleman: 1
+    CMUJobLACNCommandoRifleman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMULACNCommandoTeam
+  displayName: LACN Commando Fireteam
+  partyspawn: CMULACNCommandoTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 5
+  roundstart: false

@@ -32,6 +32,7 @@
     inverted: true
     traits:
     - NonResuscitable
+    - CMUFearOfBlood
   ranks:
     RMCRankCivilianDoctor: []
   icon: "CMJobIconEmpty"

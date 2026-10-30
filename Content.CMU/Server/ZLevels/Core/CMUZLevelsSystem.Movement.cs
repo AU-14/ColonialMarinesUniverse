@@ -78,6 +78,13 @@ public sealed partial class CMUZLevelsSystem
             return;
         }
 
+        // Hovering bodies are held in the air by UpdateZHover and must never be put to sleep.
+        if (IsZHovering(ent.Owner))
+        {
+            EnsureComp<CMUZFallingComponent>(ent.Owner);
+            return;
+        }
+
         float distance;
         bool stickyGround;
         if (unchangedGround is { } ground)

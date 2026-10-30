@@ -14,6 +14,12 @@ namespace Content.Shared.CMU14.TileMovement;
 public sealed partial class CMUTileMovementComponent : Component
 {
     /// <summary>
+    /// Only move tile by tile while walking: running uses normal movement.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool WalkOnly;
+
+    /// <summary>
     /// Whether a tile movement slide is currently in progress.
     /// </summary>
     [AutoNetworkedField]

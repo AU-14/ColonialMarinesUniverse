@@ -17,6 +17,7 @@ public sealed partial class FighterSystem
         SubscribeLocalEvent<FighterIFFComponent, MapInitEvent>(OnIFFInit);
         SubscribeLocalEvent<FighterIFFComponent, VehicleSupplyDeliveredEvent>(OnSupplyDelivered);
         SubscribeLocalEvent<FighterIFFComponent, BlackfootSupportDeployedEvent>(OnPadDeployed);
+        SubscribeLocalEvent<FighterIFFComponent, BlackfootSupportPackedEvent>(OnPadPacked);
         SubscribeLocalEvent<FighterIFFComponent, ExaminedEvent>(OnIFFExamined);
         SubscribeLocalEvent<FighterIFFComponent, VehicleSupplyVendedEvent>(OnFighterEquipmentVended);
     }
@@ -35,6 +36,13 @@ public sealed partial class FighterSystem
     {
         if (TryComp(args.Deployed, out FighterIFFComponent? pad))
             SetEquipmentFaction((args.Deployed, pad), kit.Comp.Faction ?? _iff.GetOperatorFaction(args.User));
+    }
+
+    // the folded kit only gets a side from where it spawns, so copy the pad's or it comes back unowned
+    private void OnPadPacked(Entity<FighterIFFComponent> pad, ref BlackfootSupportPackedEvent args)
+    {
+        if (TryComp(args.Packed, out FighterIFFComponent? kit))
+            SetEquipmentFaction((args.Packed, kit), pad.Comp.Faction);
     }
 
     private void SetEquipmentFaction(Entity<FighterIFFComponent> ent, string? faction)

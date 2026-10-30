@@ -20,9 +20,13 @@ public abstract partial class SharedResearchDataTerminalSystem : EntitySystem
 
     private readonly Dictionary<string, int> _credits = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, int> _clearance = new(StringComparer.OrdinalIgnoreCase);
+    // Sample data is the synthesis simulator's own currency. It is earned by XRF scans alongside research
+    // credits so that editing chemicals no longer competes with buying clearance.
+    private readonly Dictionary<string, int> _sampleData = new(StringComparer.OrdinalIgnoreCase);
 
     public int GetCredits(string faction) => _credits.GetValueOrDefault(faction);
     public int GetClearance(string faction) => _clearance.GetValueOrDefault(faction, 1);
+    public int GetSampleData(string faction) => _sampleData.GetValueOrDefault(faction);
 
     /// <summary>Unassigned synthesis machines use their nearest research terminal on the same map.</summary>
     public string GetFaction(EntityUid machine)
@@ -67,16 +71,25 @@ public abstract partial class SharedResearchDataTerminalSystem : EntitySystem
     {
         _credits.Clear();
         _clearance.Clear();
+        _sampleData.Clear();
     }
 
     protected virtual void OnResearchBalanceChanged(string faction) { }
 
-    public void UpdateClearance(int points, int clearance, string faction = "corporate")
+    /// <summary>
+    /// Sets a faction's research balances. <paramref name="points"/> is absolute; <paramref name="clearance"/>
+    /// and <paramref name="sampleData"/> are left unchanged when -1.
+    /// </summary>
+    public void UpdateClearance(int points, int clearance, string faction = "corporate", int sampleData = -1)
     {
-        var ev = new UpdateDataTerminalClearanceEvent(clearance, points, faction);
+        var ev = new UpdateDataTerminalClearanceEvent(clearance, points, faction, sampleData);
         RaiseLocalEvent(ev);
         RaiseNetworkEvent(ev);
     }
+
+    /// <summary>Sets a faction's sample data without touching credits or clearance.</summary>
+    public void UpdateSampleData(int sampleData, string faction)
+        => UpdateClearance(GetCredits(faction), -1, faction, Math.Max(0, sampleData));
 
 
     private void OnUpdateClearance(UpdateDataTerminalClearanceEvent args)
@@ -85,6 +98,10 @@ public abstract partial class SharedResearchDataTerminalSystem : EntitySystem
         if(args.Clearance != -1)
         {
             _clearance[args.Faction] = args.Clearance;
+        }
+        if (args.SampleData != -1)
+        {
+            _sampleData[args.Faction] = args.SampleData;
         }
         _credits[args.Faction] = args.Credits;
         OnResearchBalanceChanged(args.Faction);

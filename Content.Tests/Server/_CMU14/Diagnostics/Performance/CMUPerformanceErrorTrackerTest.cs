@@ -51,4 +51,25 @@ public sealed class CMUPerformanceErrorTrackerTest
     private static LogEvent Message(LogEventLevel level) => new(DateTimeOffset.UtcNow, level,
         new InvalidOperationException("network state failed"), new MessageTemplateParser().Parse("state failure"),
         Array.Empty<LogEventProperty>());
+
+    [Test]
+    public void ErrorSampleKeepsExceptionDetailsWhenFilteringSingleLineTelemetry()
+    {
+        var tracker = new CMUPerformanceErrorTracker();
+        try
+        {
+            throw new InvalidOperationException("missing entity\r\nwhile dispatching");
+        }
+        catch (InvalidOperationException exception)
+        {
+            tracker.Log("runtime", new LogEvent(DateTimeOffset.UtcNow, LogEventLevel.Error, exception,
+                new MessageTemplateParser().Parse("Caught exception in dispatch"), Array.Empty<LogEventProperty>()));
+        }
+
+        var sample = CMUPerformanceErrorTracker.FormatSample(tracker.Drain().Sources.Single());
+        Assert.That(sample.Split('\n'), Has.Length.EqualTo(1));
+        Assert.That(sample, Does.Not.Contain("\r"));
+        Assert.That(sample, Does.Contain("InvalidOperationException: missing entity\\r\\nwhile dispatching"));
+        Assert.That(sample, Does.Contain(nameof(ErrorSampleKeepsExceptionDetailsWhenFilteringSingleLineTelemetry)));
+    }
 }

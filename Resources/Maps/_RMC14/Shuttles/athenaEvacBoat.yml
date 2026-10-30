@@ -81,10 +81,72 @@ entities:
       chunkCollection:
         version: 2
         nodes: []
+# cmu edit start: atmosphere rebuilt so the craft starts with breathable air
     - type: GridAtmosphere
       version: 2
       data:
+        uniqueMixes:
+        - temperature: 293.15
+          volume: 2500
+          moles:
+            Oxygen: 21.824879
+            Nitrogen: 82.10312
+        - temperature: 2.725
+          volume: 2500
+          moles: {}
+          immutable: True
+        - temperature: 293.15
+          volume: 2500
+          moles: {}
+        tiles:
+          -3,-1:
+            0: 49152
+          -3,0:
+            0: 52428
+          -2,-1:
+            0: 65024
+          -2,0:
+            0: 65535
+          -2,1:
+            0: 14
+          -1,-1:
+            0: 63488
+          -1,0:
+            0: 65535
+          -1,1:
+            0: 8
+          0,-1:
+            0: 62208
+          0,0:
+            0: 65535
+          0,1:
+            0: 3
+          1,-1:
+            0: 59392
+          1,0:
+            0: 61166
+          1,1:
+            0: 8
+          2,-1:
+            0: 62208
+          2,0:
+            0: 65535
+          2,1:
+            0: 3
+          3,-1:
+            0: 4096
+          3,0:
+            0: 4369
+          3,1:
+            1: 1152
+            2: 72
+          4,0:
+            1: 8720
+            2: 4352
+          4,1:
+            1: 1
         chunkSize: 4
+# cmu edit end
     - type: GasTileOverlay
     - type: RadiationGridResistance
     - type: RMCSpawnEntityOnFTLStart
@@ -1304,4 +1366,13 @@ entities:
     - type: Transform
       pos: 1.5,5.5
       parent: 1
+# cmu edit start: keeps the craft's air breathable
+- proto: CMUAirFillerVent
+  entities:
+  - uid: 204
+    components:
+    - type: Transform
+      pos: 11.5,1.5
+      parent: 1
+# cmu edit end
 ...

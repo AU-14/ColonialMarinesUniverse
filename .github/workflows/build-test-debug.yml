@@ -1,7 +1,7 @@
 name: Build & Test Debug
 
 on:
-  # Optional full suite, including bulk entity sweeps and upstream policy tests.
+  # The tests PR CI leaves out: bulk entity sweeps, upstream policy tests and SS14-only content.
   workflow_dispatch:
   # CMU14: nightly on master so the tests left out of PR CI still get run
   schedule:
@@ -14,68 +14,78 @@ concurrency:
   group: full-tests-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  DOTNET_VERSION: 10.0.x
+  CONFIGURATION: DebugOpt
+
 jobs:
   build:
-    name: Debug / ${{ matrix.suite.name }}
+    name: Debug / left out of CI
     if: github.actor != 'PJBot'
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        suite:
-          - name: content
-            filter: FullyQualifiedName!~Content.IntegrationTests.Tests.
-          - name: maps_prototypes
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.
-              & (FullyQualifiedName~Map | FullyQualifiedName~Prototype | FullyQualifiedName~EntityTest)
-          - name: gameplay
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.
-              & FullyQualifiedName!~Map & FullyQualifiedName!~Prototype & FullyQualifiedName!~EntityTest
-
-    runs-on: ${{ matrix.os }}
-    # Leave room for map-heavy groups on slower runners.
+    runs-on: ubuntu-latest
     timeout-minutes: 90
 
     steps:
-    - name: Checkout Master
-      uses: actions/checkout@v7
-
-    - name: Setup Submodule
-      run: |
-        git submodule update --init --recursive
-
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v6.0.0
+    - uses: actions/checkout@v7
       with:
-        dotnet-version: 10.0.x
+        submodules: recursive
 
-    - name: Install dependencies
-      run: dotnet restore
+    - uses: actions/setup-dotnet@v6.0.0
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Build Project
-      run: dotnet build --configuration DebugOpt --no-restore /m
+    - name: Build
+      run: dotnet build Content.IntegrationTests/Content.IntegrationTests.csproj --configuration ${{ env.CONFIGURATION }} --property:WarningLevel=0 /m
 
-    - name: Run Content.Tests
-      if: matrix.suite.name == 'content'
-      shell: pwsh
-      run: dotnet test --no-build --configuration DebugOpt Content.Tests/Content.Tests.csproj -- NUnit.ConsoleOut=0 NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
-
-    - name: Run Content.IntegrationTests
-      shell: pwsh
-      env:
-        CMU_TEST_FILTER: ${{ matrix.suite.filter }}
+    # CMU14: same as the ci.yml shards. the old full-suite groups ran without these and the runner
+    # ran out of memory every night ("received a shutdown signal", "lost communication with the server")
+    - name: Add swap
+      shell: bash
       run: |
-        $env:DOTNET_gcServer=1
-        # NUnit otherwise drops the execution filter when a group exceeds 2,000 tests.
-        dotnet test --no-build --configuration DebugOpt --verbosity normal --filter "$env:CMU_TEST_FILTER" Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000 NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
+        dir=/mnt
+        if ! mountpoint -q /mnt || (( $(df --output=avail -BG /mnt | tail -1 | tr -dc 0-9) < 20 )); then
+          dir=/
+        fi
+        size=16
+        if (( $(df --output=avail -BG "$dir" | tail -1 | tr -dc 0-9) < size + 4 )); then
+          echo "::warning::not enough disk for ${size}G swap on $dir, keeping the image's swap"
+          exit 0
+        fi
+        sudo swapoff -a || true
+        sudo rm -f /mnt/swapfile /swapfile
+        sudo fallocate -l ${size}G "$dir/ci-swap"
+        sudo chmod 600 "$dir/ci-swap"
+        sudo mkswap "$dir/ci-swap"
+        sudo swapon "$dir/ci-swap"
+        swapon --show; free -h
 
-    - name: Archive NUnit3 test results.
+    - name: Run left-out tests
+      shell: bash
+      env:
+        # see ci.yml, RT v290's parallel YAML loader loses prototypes with more than one PLINQ worker
+        DOTNET_PROCESSOR_COUNT: "1"
+        DOTNET_gcServer: "1"
+        DOTNET_GCHeapHardLimitPercent: "0x50"
+      run: |
+        # CMU14: everything else already runs on every PR and merge. keep this in sync with the
+        # exclusions in ci.yml (the global filter and the root shard's EntityTest skip)
+        FILTER="FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest."
+        FILTER="$FILTER | FullyQualifiedName~.Localization. | FullyQualifiedName~.WizdenContentFreeze."
+        FILTER="$FILTER | FullyQualifiedName~.GameRules.AntagGhostRoleTest. | FullyQualifiedName~.Power.StationPowerTests."
+        echo "$FILTER"
+        dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-build --configuration ${{ env.CONFIGURATION }} \
+          --verbosity normal --filter "$FILTER" \
+          --blame-hang-timeout 20m --blame-hang-dump-type none \
+          --logger "trx;LogFileName=nightly.trx" --results-directory test_results \
+          -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.NumberOfTestWorkers=2
+
+    - name: Archive test results
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: nunit3-results-${{ matrix.os }}-${{ matrix.suite.name }}
-        path: test_results/*
+        name: nightly-test-results
+        path: |
+          test_results/
+          !test_results/**/*.dmp
+        if-no-files-found: ignore
         retention-days: 7
-        compression-level: 9

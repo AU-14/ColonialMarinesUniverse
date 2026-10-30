@@ -1,0 +1,21 @@
+author: HubaBub
+category: CMU
+changes:
+- message: New PMC "BEAR" - GOVFOR (UPP special forces, the prototype of the Iron
+    Bear)
+  type: Add
+- message: Various equipment and weapons have been added for UPP and BEAR, including
+    the IRP Marine of Socialism!
+  type: Add
+- message: A sprite of some UPP items, pouches, and belts.
+  type: Add
+- message: Corrected cargo UPP, new boxes with cartridges and magazines.
+  type: Add
+- message: The Liquidators squad has been added (an anti‑biological group of flamethrower
+    operators, summoned by the UPP ambassador).
+  type: Add
+- message: A UPP migrant unit has been added (they are ordered through the UPP ambassador,
+    they cannot speak English, and they have a variety of equipment and skills).
+  type: Add
+time: '2026-10-10T10:26:21.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2058

@@ -88,7 +88,8 @@ public sealed partial class CMUQueenSwarmSystem
             return true;
         }
 
-        if (!traversal.Crossing && (from == selected.ToMap || Vector2.Distance(position, selected.Approach) < 0.3f))
+        if (!traversal.Crossing && (from == selected.ToMap || Vector2.Distance(position, selected.Approach) < 0.3f ||
+                                    OnStairLane(position, selected)))
         {
             traversal.Crossing = true;
             _steering.Unregister(member);
@@ -115,6 +116,16 @@ public sealed partial class CMUQueenSwarmSystem
             steering.RepathRange = Vector2.Distance(position, destination) + 1;
         }
         return true;
+    }
+
+    // Already standing on the ramp, the navmesh has no path back down to the approach.
+    private static bool OnStairLane(Vector2 position, CMUSwarmStairRoute route)
+    {
+        var lane = route.Exit - route.Approach;
+        var along = Vector2.Dot(position - route.Approach, lane) / lane.LengthSquared();
+        if (along <= 0f || along >= 1f)
+            return false;
+        return Vector2.Distance(position, route.Approach + lane * along) < 0.5f;
     }
 
     private void ClearTraversal(EntityUid member, CMUSwarmTraversalComponent traversal)

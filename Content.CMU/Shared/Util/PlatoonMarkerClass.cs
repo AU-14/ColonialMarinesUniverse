@@ -39,6 +39,8 @@ namespace Content.Shared.CMU14.util
         ReqEquipment,
         EngiEquipment,
         ResearchTerminal,
-        HospitalEmergencyComputer
+        HospitalEmergencyComputer,
+        MessFood,
+        MessDrink
     }
 }

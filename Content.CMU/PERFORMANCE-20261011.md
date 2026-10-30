@@ -86,7 +86,7 @@ The unchanged base master's [CI run 38158328235](https://github.com/AU-14/Coloni
 already fails two map-related groups:
 
 - `cmu_yautja_maps`: `PlayablePlanetMapsHaveGroundRelayMarkers` reports
-  `/Maps/CMU14/FortMcNeilMultiZ/FortMcNeilMultiZ0.yml` missing a ground relay.
+  `/Maps/CMU14/Planets/FortMcNeil/FortMcNeilMultiZ0.yml` missing a ground relay.
 - `map_loading`: `PlanetLoadsWithoutErrorsTest` reports the Fort McNeil brown
   cargo truck using `Dynamic` where its movement handler expects
   `KinematicController`, plus an invalid entity reference in `UserInterface`.

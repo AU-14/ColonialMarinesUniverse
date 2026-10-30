@@ -66,6 +66,11 @@ public sealed partial class MagicMirrorSystem : EntitySystem
             return;
         }
 
+        // cmu edit start: regulation-only scissors
+        if (!CMUAllowedCut(ent, args.Actor, args.Markings))
+            return;
+        // cmu edit end
+
         if (ent.Comp.DoAfter.HasValue)
         {
             _doAfter.Cancel(args.Actor, ent.Comp.DoAfter.Value);
@@ -130,6 +135,13 @@ public sealed partial class MagicMirrorSystem : EntitySystem
                     markings.Remove(layer);
             }
         }
+
+        // cmu edit start: regulation-only scissors
+        if (!CMUAllowedCut(ent, args.User, args.Markings))
+            return;
+
+        CMUSnapToRegulationColors(ent, args.Markings);
+        // cmu edit end
 
         _visualBody.ApplyMarkings(args.Target.Value, args.Markings);
     }

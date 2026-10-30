@@ -1,119 +1,119 @@
 # Smokables
 - type: loadout
   id: LuckySlothsPackRMC
-  cost: 1
+  cost: 0
   storage:
     back:
     - RMCCigarettePackLuckySloths
 
 - type: loadout
   id: ArcturianAcePackRMC
-  cost: 1
+  cost: 0
   storage:
     back:
     - RMCCigarettePackArcturianAce
 
 - type: loadout
   id: LadyFingersPackRMC
-  cost: 1
+  cost: 0
   storage:
     back:
     - RMCCigarettePackLadyFingers
 
 - type: loadout
   id: EmeraldGreensPackRMC
-  cost: 1
+  cost: 0
   storage:
     back:
     - RMCCigarettePackEmeraldGreens
 
 - type: loadout
   id: ElectroGoldsPackRMC
-  cost: 2
+  cost: 0
   storage:
     back:
     - RMCCigarettePackElectroGolds
 
 - type: loadout
   id: TurquoiseSolRedsPackRMC
-  cost: 1
+  cost: 0
   storage:
     back:
     - RMCCigarettePackSolRedsTurquoise
 
 - type: loadout
   id: YellowSolRedsPackRMC
-  cost: 1
+  cost: 0
   storage:
     back:
     - RMCCigarettePackSolRedsYellow
 
 - type: loadout
   id: WeYaGoldPackRMC
-  cost: 1
+  cost: 0
   storage:
     back:
     - RMCCigarettePackWeYaGold
 
 - type: loadout
   id: ExecutiveSelectPackRMC
-  cost: 1
+  cost: 0
   storage:
     back:
     - RMCCigarettePackExecutiveSelect
 
 - type: loadout
   id: TarbackTubeRMC
-  cost: 2
+  cost: 0
   storage:
     back:
     - RMCTarbackTube
 
 - type: loadout
   id: TarbacksCaseRMC
-  cost: 6
+  cost: 0
   storage:
     back:
     - RMCTarbackCase
 
 - type: loadout
   id: ShioRoyalsTubeRMC
-  cost: 2
+  cost: 0
   storage:
     back:
     - RMCShioRoyalsTube
 
 - type: loadout
   id: ShioRoyalsCaseRMC
-  cost: 6
+  cost: 0
   storage:
     back:
     - RMCShioRoyalsCase
 
 - type: loadout
   id: PremiumCigarRMC
-  cost: 2
+  cost: 0
   storage:
     back:
     - Cigar
 
 - type: loadout
   id: ZippoRMC
-  cost: 1
+  cost: 0
   storage:
     back:
     - RMCZippo
 
 - type: loadout
   id: ZippoExecRMC
-  cost: 3
+  cost: 0
   storage:
     back:
     - RMCZippoExec
 
 - type: loadout
   id: ZippoGoldRMC
-  cost: 3
+  cost: 0
   storage:
     back:
     - RMCZippoGold
@@ -127,7 +127,7 @@
 
 - type: loadout
   id: MatchboxRMC
-  cost: 1
+  cost: 0
   storage:
     back:
     - RMCMatchboxFull

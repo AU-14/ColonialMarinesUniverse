@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/pull/5784 (icons/obj/structures/machinery/library.dmi and icons/mob/humans/onmob/back.dmi, commit d7402775676b30d72cfad1df5e0cd634644c6d5d)",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "icon",
+            "delays": [
+                [ 0.8, 0.8, 0.8, 0.8 ]
+            ]
+        },
+        {
+            "name": "printing",
+            "delays": [
+                [ 0.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.1 ]
+            ]
+        },
+        {
+            "name": "equipped-BACK",
+            "directions": 4,
+            "delays": [
+                [ 0.8, 0.8, 0.8, 0.8 ],
+                [ 0.8, 0.8, 0.8, 0.8 ],
+                [ 0.8, 0.8, 0.8, 0.8 ],
+                [ 0.8, 0.8, 0.8, 0.8 ]
+            ]
+        }
+    ]
+}

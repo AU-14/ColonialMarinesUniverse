@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Traits.AutoIgnore; // cmu edit
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -11,6 +12,7 @@ namespace Content.Server.Traits;
 public sealed partial class TraitSystem : EntitySystem
 {
     [Dependency] private SharedHandsSystem _sharedHandsSystem = default!;
+    [Dependency] private CMUAutoIgnoreTraitsSystem _cmuAutoIgnore = default!; // cmu edit
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
     public override void Initialize()
@@ -42,6 +44,11 @@ public sealed partial class TraitSystem : EntitySystem
             if (_whitelistSystem.IsWhitelistFail(traitPrototype.Whitelist, args.Mob) ||
                 _whitelistSystem.IsWhitelistPass(traitPrototype.Blacklist, args.Mob))
                 continue;
+
+            // cmu edit start: traits this job doesn't allow are left off for auto-ignoring characters
+            if (_cmuAutoIgnore.IsIgnored(args.Profile, args.JobId, traitId))
+                continue;
+            // cmu edit end
 
             // Add all components required by the prototype
             if (traitPrototype.Components.Count > 0)

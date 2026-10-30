@@ -7,6 +7,7 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.CMU14.Medical.Blood;
 using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Traits.Conditions;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
@@ -347,9 +348,15 @@ public sealed class CMUBloodSystem : EntitySystem
     /// <summary>How much of a body's bleeding gets through, slowed by a recent plasma transfusion.</summary>
     public float GetBleedMultiplier(EntityUid body)
     {
-        return TryComp<CMUPlasmaClottingComponent>(body, out var clotting) && _timing.CurTime < clotting.Until
+        var multiplier = TryComp<CMUPlasmaClottingComponent>(body, out var clotting) && _timing.CurTime < clotting.Until
             ? clotting.BleedMultiplier
             : 1f;
+
+        // Hemophiliacs bleed faster from everything.
+        if (TryComp<CMUHemophiliaComponent>(body, out var hemophilia))
+            multiplier *= hemophilia.BleedMultiplier;
+
+        return multiplier;
     }
 
     #endregion

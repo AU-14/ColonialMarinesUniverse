@@ -1,0 +1,7 @@
+author: Vixting
+category: CMU
+changes:
+- message: APC & rotary using incorrect ammo type & 1 shotting reisn
+  type: Fix
+time: '2026-10-23T20:18:11.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2264

@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Traits.MotionSick;
+using Content.Shared.Gravity;
 using Content.Shared.Medical;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -21,8 +22,10 @@ public sealed class CMUMotionSickSystem : EntitySystem
 
     private const int QueasyMessages = 6;
     private const int WorseMessages = 4;
+    private const int ZeroGMessages = 4;
 
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
@@ -40,7 +43,8 @@ public sealed class CMUMotionSickSystem : EntitySystem
 
             sick.NextCheck = now + sick.CheckInterval;
 
-            if (!_mobState.IsAlive(uid) || !InMotion(uid))
+            var floating = FloatingTooLong(uid, sick, now);
+            if (!_mobState.IsAlive(uid) || !floating && !InMotion(uid))
             {
                 if (sick.Pukes > 0 && now > sick.LastInMotion + sick.RecoveryTime)
                     sick.Pukes = 0;
@@ -66,7 +70,9 @@ public sealed class CMUMotionSickSystem : EntitySystem
 
             if (_random.Prob(sick.MessageChance))
             {
-                var queasy = Loc.GetString($"cmu-motion-sick-queasy-{_random.Next(1, QueasyMessages + 1)}");
+                var queasy = floating
+                    ? Loc.GetString($"cmu-motion-sick-zero-g-{_random.Next(1, ZeroGMessages + 1)}")
+                    : Loc.GetString($"cmu-motion-sick-queasy-{_random.Next(1, QueasyMessages + 1)}");
                 _popup.PopupEntity(queasy, uid, uid, PopupType.SmallCaution);
             }
         }
@@ -89,6 +95,21 @@ public sealed class CMUMotionSickSystem : EntitySystem
             duration = sick.MaxDizziness;
 
         _status.TryUpdateStatusEffectDuration(uid, Woozy, duration);
+    }
+
+    /// <summary>
+    ///     Weightless for longer than <see cref="CMUMotionSickComponent.ZeroGGrace"/>. Touching down resets the clock.
+    /// </summary>
+    private bool FloatingTooLong(EntityUid uid, CMUMotionSickComponent sick, TimeSpan now)
+    {
+        if (!_gravity.IsWeightless(uid))
+        {
+            sick.WeightlessSince = null;
+            return false;
+        }
+
+        sick.WeightlessSince ??= now;
+        return now - sick.WeightlessSince.Value >= sick.ZeroGGrace;
     }
 
     /// <summary>

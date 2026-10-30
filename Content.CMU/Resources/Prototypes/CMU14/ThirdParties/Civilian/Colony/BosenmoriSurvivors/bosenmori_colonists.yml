@@ -434,6 +434,7 @@
 
 - type: thirdParty
   id: CMUBosenmoriColonists
+  announceAsSurvivors: true
   displayName: Stranded Colonists (Bosenmori)
   partyspawn: CMUBosenmoriColonistsSpawn
   blacklistedGamemodes:

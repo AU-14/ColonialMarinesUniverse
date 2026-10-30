@@ -139,7 +139,7 @@
   - type: RMCMesonsNonviewable
 
 - type: entity
-  parent: CMASRSConsole
+  parent: [ CMASRSConsole, CMUASRSVehicleGoodies ] # cmu edit: vehicle tabs, which the colony ASRS doesn't get
   id: CMASRSConsolePowered
   suffix: Powered
   components:
@@ -256,7 +256,7 @@
   - type: CargoSellBlacklist
 
 - type: entity
-  parent: [ CMASRSConsole ]
+  parent: [ CMASRSConsole, CMUASRSVehicleGoodies ] # cmu edit: vehicle tabs, which the colony ASRS doesn't get
   id: CMASRSConsoleGovfor
   name: ASRS console (Govfor)
   components:
@@ -276,7 +276,7 @@
     faction: govfor
 
 - type: entity
-  parent: [ CMASRSConsole ]
+  parent: [ CMASRSConsole, CMUASRSVehicleGoodies ] # cmu edit: vehicle tabs, which the colony ASRS doesn't get
   id: CMASRSConsoleOpfor
   name: ASRS console (Opfor)
   components:
@@ -312,7 +312,7 @@
     faction: opfor
 
 - type: entity
-  parent: [ CMASRSConsole ]
+  parent: [ CMASRSConsole, CMUASRSColonyJeepKits ] # CMU14: colony jeep kits
   id: CMASRSConsoleColony
   name: ASRS console (Colony)
   components:

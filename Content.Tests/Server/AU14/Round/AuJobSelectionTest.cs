@@ -149,6 +149,39 @@ public sealed class AuJobSelectionTest : ContentUnitTest
         }));
     }
 
+    // BUG-1061: a volunteer without the queen's playtime took her slot, then the force wouldn't let them in
+    [Test]
+    public void ThreatVoteHeldAssignmentsSkipPlayersWhoCannotPlayTheJob()
+    {
+        var unqualified = new NetUserId(new Guid("00000000-0000-0000-0000-000000000001"));
+        var qualified = new NetUserId(new Guid("00000000-0000-0000-0000-000000000002"));
+        var candidateThreats = new List<ProtoId<ThreatPrototype>> { new("XenoThreat") };
+        var leaderAndMember = HumanoidCharacterProfile.DefaultWithSpecies()
+            .WithGamemodeJobPriority("DistressSignal", ThreatVoteSelection.ThreatLeaderJobId, JobPriority.High)
+            .WithGamemodeJobPriority("DistressSignal", ThreatVoteSelection.ThreatMemberJobId, JobPriority.Medium);
+        var profiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+        {
+            [unqualified] = leaderAndMember,
+            [qualified] = leaderAndMember,
+        };
+
+        var assignments = ThreatVoteSelection.BuildHeldAssignments(
+            new List<NetUserId> { unqualified, qualified },
+            profiles,
+            candidateThreats,
+            leaderSlots: 1,
+            memberSlots: 1,
+            presetId: "DistressSignal",
+            canPlayJob: (player, job) => player != unqualified || job != ThreatVoteSelection.ThreatLeaderJobId);
+
+        // the unqualified one still gets a larva slot, the queen goes to someone who can take her
+        Assert.That(assignments, Is.EqualTo(new List<ThreatVoteAssignment>
+        {
+            new(qualified, ThreatVoteSelection.ThreatLeaderJobId),
+            new(unqualified, ThreatVoteSelection.ThreatMemberJobId),
+        }));
+    }
+
     [TestCase(0, 0)]
     [TestCase(1, 1)]
     [TestCase(10, 3)]
@@ -508,6 +541,42 @@ public sealed class AuJobSelectionTest : ContentUnitTest
             .SetValue(planet, voteName);
         return planet;
     }
+
+    // cmu edit start
+    [Test]
+    public void DistressSignalOnlyAllowsMultipleSurvivorGroupsAboveThePopulationThreshold()
+    {
+        Assert.That(AuRoundSystem.GetDistressSignalSurvivorGroupLimit(100, 4), Is.EqualTo(1));
+        Assert.That(AuRoundSystem.GetDistressSignalSurvivorGroupLimit(101, 4), Is.EqualTo(4));
+        Assert.That(AuRoundSystem.GetDistressSignalSurvivorGroupLimit(30, 0), Is.EqualTo(0));
+    }
+
+    [Test]
+    public void DistressSignalLeavesItsLeftoverCapacityToCallIns()
+    {
+        var locked = CreateThirdPartyPrototype("Locked");
+        var candidates = Enumerable.Range(0, 6).Select(i => CreateThirdPartyPrototype($"Random{i}")).ToList();
+
+        var additional = AuRoundSystem.SelectAdditionalDistressSignalThirdParties(
+            candidates,
+            [locked],
+            maxThirdParties: 5,
+            bodyBudget: 20,
+            PickFirst,
+            _ => 1,
+            out _,
+            out var additionalBodies,
+            AuRoundSystem.DistressSignalRandomThirdPartyShare);
+
+        // Four slots are left after the locked party; Distress Signal leaves them for call-ins.
+        Assert.That(additional, Is.Empty);
+        Assert.That(additionalBodies, Is.EqualTo(0));
+        return;
+
+        static ThirdPartyPrototype PickFirst(IReadOnlyList<ThirdPartyPrototype> candidates)
+            => candidates[0];
+    }
+    // cmu edit end
 
     private static ThirdPartyPrototype CreateThirdPartyPrototype(
         string id = "TestThirdParty",

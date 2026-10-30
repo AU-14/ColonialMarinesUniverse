@@ -5,6 +5,9 @@ using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Shuttles;
 using Content.Shared.Coordinates;
+// cmu edit start
+using Content.Shared.Doors.Systems;
+// cmu edit end
 using Robust.Shared.Audio;
 using Robust.Shared.Random;
 
@@ -16,6 +19,7 @@ public sealed partial class EvacuationSystem : SharedEvacuationSystem
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ShuttleSystem _shuttle = default!;
+    [Dependency] private SharedDoorSystem _cmuDoor = default!; // cmu edit
 
     private EntityQuery<EvacuationDoorComponent> _evacuationDoorQuery;
 
@@ -57,6 +61,9 @@ public sealed partial class EvacuationSystem : SharedEvacuationSystem
                 {
                     nearbyDoor.Comp.Locked = true;
                     Dirty(nearbyDoor);
+                    // cmu edit start: shut the ship's hatch behind the launching lifeboat so the ship doesn't vent into the empty dock
+                    _cmuDoor.TryClose(nearbyDoor);
+                    // cmu edit end
                 }
             }
         }

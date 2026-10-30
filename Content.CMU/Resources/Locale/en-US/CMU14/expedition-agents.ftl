@@ -33,11 +33,12 @@ ent-CMUExpeditionScavengerCautious = scavenger sentry
 cmu-expedition-raider-identity = scavenger raider
 cmu-expedition-sentry-identity = scavenger sentry
 cmu-expedition-contact-report = Contact at my last observed position. Cover the approach.
-cmu-expedition-hint-outfit = Clothing: scavenger, uscm, rmc (TWE), upp (SPP), pmc, clf, cmb, lacn, ccaf, uacg or prodigy
+cmu-expedition-hint-outfit = Clothing: scavenger, uscm, rmc (TWE), upp (UPP), pmc, clf, cmb, lacn, ccaf, uacg or prodigy
 cmu-expedition-outfit-applied = Requested {$outfit} clothing. Team and IFF remain unchanged; set friendlies and targets with cmu-expedition-orders. Check ai-status for each member's fitted outfit.
 cmu-expedition-sniper-identity = scavenger sniper
 cmu-expedition-variant-sniper = Sniper with an M42A, native aimed shots and a backup pistol
 cmu-expedition-ai-vision-status = Sight={ $sight } flares={ $flares } flashShots={ $flashShots } bipodAttempts={ $bipods }
+cmu-expedition-ai-perception-status = Perception: sight checks { $checks }/{ $limit }, contact records { $contacts }, searching { $searching }, search remaining { $remaining }s
 cmu-expedition-ai-logistics-status = Outfit={ $outfit } supplies={ $decision } shared={ $shared } received={ $received } cratesOpened={ $crates }
 cmu-expedition-contact-steady-1 = Contact. Stay spread out and watch your lanes.
 cmu-expedition-contact-steady-2 = Eyes on a hostile. Keep it controlled.

@@ -102,7 +102,7 @@
     - RMCMagazineSMGMAC15
     - RMCMagazineSMGMAC15
     belt:
-    - CMDefibrillator
+    - AU14CMDefibrillator # cmu edit: was CMDefibrillator
     - CMHealthAnalyzer
     - CMRollerBedSpawnFolded
     outerClothing:

@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/70065a462e509b8a3c93c7f3995c47683050de39/icons/obj/items/storage/boxes.dmi (cmss13 PR 6973). Ported by troy.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "box-0"
+    },
+    {
+      "name": "box-1"
+    }
+  ]
+}

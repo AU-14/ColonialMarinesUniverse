@@ -12,41 +12,15 @@ public sealed class DepartmentConsoleBui(EntityUid owner, Enum uiKey) : BoundUse
         base.Open();
         _window = this.CreateWindow<DepartmentConsoleWindow>();
 
-
-        _window.WithdrawButton.OnPressed += _ =>
-        {
-            if (_window.WithdrawAmountInput.Text is { } text && float.TryParse(text, out var amount) && amount > 0)
-            {
-                SendPredictedMessage(new DepartmentConsoleWithdrawBuiMsg(amount));
-                _window.WithdrawAmountInput.Text = string.Empty;
-            }
-        };
-
-        _window.SetDefaultSalaryButton.OnPressed += _ =>
-        {
-            if (_window.DefaultSalaryInput.Text is { } text && int.TryParse(text, out var salary))
-                SendPredictedMessage(new DepartmentConsoleSetDefaultSalaryBuiMsg(salary));
-        };
-
-        _window.SendAnnouncementButton.OnPressed += _ =>
-        {
-            var message = _window.AnnouncementInput.Text;
-            if (!string.IsNullOrWhiteSpace(message))
-            {
-                SendPredictedMessage(new DepartmentConsoleAnnounceBuiMsg(message));
-                _window.AnnouncementInput.Text = string.Empty;
-            }
-        };
-
+        _window.OnWithdraw += amount => SendPredictedMessage(new DepartmentConsoleWithdrawBuiMsg(amount));
+        _window.OnSetDefaultSalary += salary => SendPredictedMessage(new DepartmentConsoleSetDefaultSalaryBuiMsg(salary));
+        _window.OnAnnounce += message => SendPredictedMessage(new DepartmentConsoleAnnounceBuiMsg(message));
         _window.OnFirePressed += netEntity =>
             SendPredictedMessage(new DepartmentConsoleFireBuiMsg(netEntity));
-
         _window.OnSetIndividualSalaryPressed += (netEntity, salary) =>
             SendPredictedMessage(new DepartmentConsoleSetIndividualSalaryBuiMsg(netEntity, salary));
-
         _window.OnRemoveOverridePressed += netEntity =>
             SendPredictedMessage(new DepartmentConsoleRemoveOverrideBuiMsg(netEntity));
-
         _window.OnOrderPressed += (catIdx, entIdx, reason, deliverTo) =>
             SendPredictedMessage(new DepartmentConsoleOrderBuiMsg(catIdx, entIdx, reason, deliverTo));
     }

@@ -1,0 +1,16 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Expedition AllHostile orders target enemies and armed non-friendlies while
+    sparing unarmed neutrals and protecting allies.
+  type: Fix
+- message: Expedition NPCs reload from uniform webbing and retain danger awareness
+    when approaching casualties.
+  type: Fix
+- message: Expedition NPCs preserve medical retreats and coordinate cover departures
+    through weapon readiness delays.
+  type: Fix
+- message: Expedition gunfire observations follow the actual shot destination.
+  type: Fix
+time: '2026-10-11T10:21:19.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2148

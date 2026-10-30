@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.CMU14.ZLevels.Lighting;
+using Content.Server.CMU14.ZLevels.Weather;
 using Content.Server.Station.Systems;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
@@ -23,6 +24,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
     [Dependency] private StationSystem _station = default!;
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private CMUZLevelAmbientLightSystem _ambientLight = default!;
+    [Dependency] private CMUZLevelWeatherSystem _weather = default!;
 
     public CMUZLevelOpeningCache OpeningCache => _zOpeningCache;
 
@@ -143,11 +145,13 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         if (!TryAddMapsIntoZNetwork(stationNetwork, dict))
             return;
 
+        _ambientLight.ApplyPlanetDayCycle(mainMap, ev.GameMap.ID, dict.Keys);
         foreach (var (map, mapDepth) in dict)
         {
             if (mapDepth != 0)
             {
                 _ambientLight.FollowMap(map, mainMap);
+                _weather.FollowMap(map, mainMap);
                 _map.InitializeMap(Comp<MapComponent>(map).MapId);
             }
         }

@@ -44,7 +44,7 @@ public sealed class MohawkDropshipTest
             var entities = pair.Server.EntMan;
             var map = entities.System<SharedMapSystem>().CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             var air = entities.System<AtmosphereSystem>().GetTileMixture(loaded!.Value.Owner, map, Vector2i.Zero);
             Assert.That(air, Is.Not.Null);
             Assert.That(air!.Pressure, Is.InRange(90f, 110f), "Cabin air must not depend on the landing map's atmosphere.");
@@ -66,7 +66,7 @@ public sealed class MohawkDropshipTest
             var maps = entities.System<SharedMapSystem>();
             var map = maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             var ship = loaded!.Value;
             var transform = entities.System<SharedTransformSystem>();
             transform.SetWorldRotation(ship, Angle.FromDegrees(degrees));
@@ -93,8 +93,8 @@ public sealed class MohawkDropshipTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             var loader = entities.System<MapLoaderSystem>();
-            Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/omaha.yml"), out var omaha), Is.True);
-            Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/midway.yml"), out var midway), Is.True);
+            Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/Dropships/Mohawk/omaha.yml"), out var omaha), Is.True);
+            Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/Dropships/Mohawk/midway.yml"), out var midway), Is.True);
             var ground = maps.CreateMap();
             var markerCoordinates = new EntityCoordinates(ground, -9.5f, 15.5f);
             var reserved = entities.SpawnEntity("CMUMohawkTestOffsetDestination", markerCoordinates);
@@ -160,7 +160,7 @@ public sealed class MohawkDropshipTest
             var maps = entities.System<SharedMapSystem>();
             cabinMap = maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
             lower = assembly.Decks[-1];
@@ -287,7 +287,7 @@ public sealed class MohawkDropshipTest
             var maps = entities.System<SharedMapSystem>();
             cabinMap = maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
             lower = assembly.Decks[-1];
@@ -360,7 +360,7 @@ public sealed class MohawkDropshipTest
             var zLevels = entities.System<CMUZLevelsSystem>();
             var dropships = entities.System<SharedDropshipSystem>();
             var mechanisms = entities.System<MohawkSystem>();
-            Assert.That(loader.TryLoadMap(new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}_deployment.yml"),
+            Assert.That(loader.TryLoadMap(new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}_deployment.yml"),
                 out var deploymentMap, out var grids, DeserializationOptions.Default with { InitializeMaps = true }), Is.True);
             var map = deploymentMap!.Value.Owner;
             var loaded = grids!.Single();

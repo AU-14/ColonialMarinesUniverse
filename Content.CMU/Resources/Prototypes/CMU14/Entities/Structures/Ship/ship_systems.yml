@@ -1,0 +1,159 @@
+# Ship systems for the USS Bush: the gravity generator and what a hijack crash does to the hull.
+
+- type: entity
+  id: CMUShipGravityGenerator
+  name: gravity generator
+  description: Keeps the whole ship's gravity on, every deck of it. If it loses power, everyone aboard starts floating.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.5,-1.5,1.5,1.5"
+        density: 50
+        mask:
+        - LargeMobMask
+        layer:
+        - WallLayer
+  - type: Sprite
+    sprite: Structures/Machines/gravity_generator.rsi
+    noRot: true
+    layers:
+    - state: on
+      map: ["base"]
+    - sprite: Structures/Machines/gravity_generator_core.rsi
+      state: activated
+      shader: unshaded
+      map: ["core"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        base:
+          True: { state: on }
+          False: { state: off }
+        core:
+          True: { visible: true }
+          False: { visible: false }
+  - type: PointLight
+    radius: 2.5
+    energy: 0.5
+    castShadows: false
+    color: "#a8ffd9"
+  - type: AmbientSound
+    range: 4
+    volume: -8
+    sound:
+      path: /Audio/Ambience/Objects/gravity_gen_hum.ogg
+  - type: ApcPowerReceiver
+    powerLoad: 500
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 10
+    activeLoad: 20
+    channel: Equipment
+  - type: CMUShipGravityGenerator
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: Clickable
+
+# Added to each hull window once a hijacked dropship crashes into the ship: from then on it's as strong as a normal
+# reinforced window (CMWindowReinforcedAlmayer). Hull windows have no construction graph, so where that window drops to
+# its frame node, this spawns the frame. Acid still can't melt it, xenos can't damage it, and the hijack's own pipe
+# explosions leave it alone.
+- type: entity
+  id: CMUCrashBreakableHullTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Corrodible
+    isCorrodible: false
+  - type: Damageable
+    damageModifierSet: CMUCrashBreakableHull
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        collection: GlassSmack
+  - type: VehicleSmashable
+    deleteOnHit: false
+    damageOnHit: 100
+  - type: CMUXenoProof
+  # The hijack's own pipe explosions don't punch through the hull.
+  - type: ExplosionResistance
+    modifiers:
+      CMUHijackPipe: 0
+  - type: RMCBruteStructureDamageMultiplier
+    multiplier: 10
+  - type: ImmuneToUnarmed
+  - type: RMCWallExplosionDeletable
+  - type: DestroyedByExplosionType
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600 # excessive damage destroys window and frame
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WindowShatter
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WindowShatter
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMShardGlass:
+            min: 1
+            max: 1
+          CMRodMetal:
+            min: 1
+            max: 1
+          RMCWindowFrameAlmayer:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# The hijack pipe explosions: exactly RMC's standard explosion, under its own name so the hull windows can shrug them
+# off while everything else takes them as before.
+- type: explosion
+  id: CMUHijackPipe
+  damagePerIntensity:
+    types:
+      Blunt: 5
+      Heat: 5
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
+# Bullets barely scratch a hull window: it takes dozens of rounds to break one. Explosions do Blunt and Heat, so they
+# still shatter it as easily as a normal reinforced window.
+- type: damageModifierSet
+  id: CMUCrashBreakableHull
+  coefficients:
+    Piercing: 0.05

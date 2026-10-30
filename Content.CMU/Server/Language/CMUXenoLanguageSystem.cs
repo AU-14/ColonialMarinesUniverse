@@ -95,8 +95,7 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
     private bool ShouldUseEnglish(EntityUid uid)
     {
         return IsHivebrokenXeno(uid) ||
-               _hive.GetHive(uid) is { Comp.Corrupted: true } ||
-               HasComp<CMUWendigoLabMadeComponent>(uid); // Lab Wendigos keep their human speech.
+               _hive.GetHive(uid) is { Comp.Corrupted: true };
     }
 
     private bool IsHivebrokenXeno(EntityUid uid)

@@ -55,7 +55,7 @@ public sealed partial class ChatSystem
         if (HasComp<YautjaComponent>(source)
             && TryComp<GhostComponent>(listener.Value, out var listenerGhost)
             && listenerGhost.CanGhostInteract
-            && _adminManager.IsAdmin(listener.Value))
+            && _adminManager.HasAdminFlag(listener.Value, Content.Shared.Administration.AdminFlags.GhostSenses)) // cmu edit
             return MetaData(source).EntityName;
 
         if (TryComp<FixedIdentityComponent>(source, out var fixedIdentity) &&
@@ -556,6 +556,10 @@ public sealed partial class ChatSystem
             var listenerMessage = listener == source
                 ? speakerMessage
                 : _language.ObfuscateMessageForListener(listener, speakerMessage, language, source);
+            // cmu edit start: hard of hearing
+            if (listener != source)
+                listenerMessage = CMUApplyHearingLoss(listener, data.Range, listenerMessage);
+            // cmu edit end
             var useEmoteSpeechBubble = visibleLanguage && !canUnderstand;
             var listenerName = FormattedMessage.EscapeText(GetSpeakerNameForListener(
                 source,

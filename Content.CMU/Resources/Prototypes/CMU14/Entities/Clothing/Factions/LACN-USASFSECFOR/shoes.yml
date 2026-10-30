@@ -10,6 +10,7 @@
     - state: icon
   - type: Clothing
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNbootsbrown.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNbootsbrown.rsi

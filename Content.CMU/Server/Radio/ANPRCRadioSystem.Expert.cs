@@ -305,8 +305,6 @@ public sealed partial class ANPRCRadioSystem
 
             // source is the set itself, OnRadioSpeakerName swaps in its callsign
             _radio.SendRadioMessage(pack, message, channel, pack, language);
-
-            TryDirectionFind(pack, radio, channel, false);
             radio.LastTransmit = _timing.CurTime;
         }
     }
@@ -380,14 +378,6 @@ public sealed partial class ANPRCRadioSystem
                         wearer, wearer, PopupType.Medium);
                 }
             }
-        }
-
-        // a key push is a long transmission. it rides the side's own net for the DF chance
-        if (TryComp(ent, out ANPRCPhoneComponent? phone) &&
-            phone.CoverageChannels.TryGetValue(faction, out var net) &&
-            _prototype.TryIndex(net, out RadioChannelPrototype? netProto))
-        {
-            TryDirectionFind(ent.Owner, radio, netProto, false);
         }
 
         _anprcChat.Notice(Loc.GetString("anprc-otar-sent", ("count", targets.Count)), args.Actor, ANPRCNotice.Good);
@@ -662,7 +652,6 @@ public sealed partial class ANPRCRadioSystem
             RetransSlotB = radio.RetransSlotB,
             AntennaPeaked = radio.AntennaPeaked,
             OffAuto = IsOffAuto(radio),
-            Jammed = radio.Enabled && _garble.GetJamIntensity(ent.Owner) != RadioJamIntensity.None,
             JammerBaselineNeeded = radio.JammerFixBaseline,
             DrawPerSecond = GetDrawPerSecond(ent),
             KeyAnalyses = _crypto.BuildAnalysisStates(ent.Owner, radio),
@@ -694,6 +683,7 @@ public sealed partial class ANPRCRadioSystem
             if (_garble.TryGetNearestJammer(ent.Owner, out var jammer, out var jammerPosition) && jammer == target)
                 state.JammerBearingDegrees = CompassBearing(_transform.GetWorldPosition(ent.Owner), jammerPosition);
         }
+        state.Jammed = radio.Enabled && _garble.GetJamIntensity(ent.Owner) != RadioJamIntensity.None;
 
         if (TryGetCarrier(ent, out var carrier, out var distance, out var bearing))
         {

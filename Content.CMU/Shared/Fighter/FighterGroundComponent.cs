@@ -42,6 +42,10 @@ public sealed partial class FighterGroundComponent : Component
     [DataField, AutoNetworkedField] public EntityUid? TaxiPad;
     [DataField, AutoNetworkedField] public FighterInput TaxiInput;
     [DataField] public float PadSearchRange = 12;
+    /// <summary>A recovery site blocked this long (a dropship parked on it, say) is given up for the nearest clear spot.</summary>
+    [DataField] public TimeSpan LandingDivertDelay = TimeSpan.FromSeconds(20);
+    [DataField] public int LandingDivertRange = 10;
+    public TimeSpan? LandingBlockedSince;
     public EntityUid? TransitionAudio;
     public EntityUid? CockpitTransitionAudio;
     public EntityUid? VtolVisual;

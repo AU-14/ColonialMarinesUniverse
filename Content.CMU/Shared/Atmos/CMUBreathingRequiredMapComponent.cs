@@ -1,3 +1,5 @@
+using Robust.Shared.Prototypes;
+
 namespace Content.Shared.CMU14.Atmos;
 
 /// <summary>
@@ -6,4 +8,13 @@ namespace Content.Shared.CMU14.Atmos;
 /// becomes dangerous without internals. Leaving the map turns breathing back off.
 /// </summary>
 [RegisterComponent]
-public sealed partial class CMUBreathingRequiredMapComponent : Component;
+public sealed partial class CMUBreathingRequiredMapComponent : Component
+{
+    // ghost roles / call-ins that show up here without a mask or a tank with air get these topped up,
+    // most of their loadouts were written for maps you can breathe on
+    [DataField]
+    public EntProtoId? CallInMask = "CMMaskGas";
+
+    [DataField]
+    public EntProtoId? CallInTank = "CMUFieldOxygenTankFilled";
+}

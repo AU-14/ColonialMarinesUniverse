@@ -14,7 +14,6 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Weapons.ATGM;
 
@@ -28,7 +27,6 @@ public sealed class CMUATGMTankCookOffTest : GameTest
 {
     private const string ProjectileId = "CMUProjectileATGM";
     private const string RocketId = "RMCProjectileRocket84mmAntiArmor";
-    private const string ConsoleId = "VehicleSupplyConsole";
     private const string Loaded = "VehicleTankLoaded";
 
     // A combat-loaded tank: every slot the supply console can fill on a VehicleTank.
@@ -97,9 +95,7 @@ public sealed class CMUATGMTankCookOffTest : GameTest
         {
             if (loaded)
             {
-                Assert.That(SProtoMan.Index<EntityPrototype>(ConsoleId)
-                    .TryComp<VehicleSupplyConsoleComponent>(out var console, SEntMan.ComponentFactory), Is.True);
-                var entry = console!.Vehicles.Single(v => v.Vehicle.Id == protoId);
+                var entry = CreateTankLoadoutEntry(protoId);
                 Assert.That(Server.System<VehicleSupplySystem>().DebugApplyLoadoutForTest(vehicle, entry, TankLoadout),
                     Is.True);
             }
@@ -186,6 +182,40 @@ public sealed class CMUATGMTankCookOffTest : GameTest
         }
 
         return result;
+    }
+
+    private static VehicleSupplyEntry CreateTankLoadoutEntry(string vehicleId)
+    {
+        return new VehicleSupplyEntry
+        {
+            Vehicle = vehicleId,
+            LoadoutCategories = new List<VehicleSupplyLoadoutCategory>
+            {
+                CreateTankLoadoutCategory("primary", "primary::turret-cannon"),
+                CreateTankLoadoutCategory("secondary", "primary::turret-launcher"),
+                CreateTankLoadoutCategory("standardtreads", "wheel-1"),
+                CreateTankLoadoutCategory("armor", "armor"),
+                CreateTankLoadoutCategory("support", "support"),
+            },
+        };
+    }
+
+    private static VehicleSupplyLoadoutCategory CreateTankLoadoutCategory(string categoryId, string slot)
+    {
+        var item = TankLoadout[categoryId];
+        return new VehicleSupplyLoadoutCategory
+        {
+            Id = categoryId,
+            Options = new List<VehicleSupplyLoadoutOption>
+            {
+                new()
+                {
+                    Id = item,
+                    Item = item,
+                    Slot = slot,
+                },
+            },
+        };
     }
 
     /// <summary>

@@ -1,0 +1,247 @@
+# USCM plasma weapons team, an expensive call-in on the UA intel list: a gunner with the XM99A phased plasma pulse
+# rifle and an assistant gunner covering them with an M41A. The XM99A recharges itself, so the assistant carries
+# support gear rather than ammunition for it.
+
+- type: entity
+  parent: SquadBase
+  id: CMUSquadUSCMWeaponsTeam
+  name: USCM
+  components:
+  - type: SquadTeam
+    color: "#3c6e9e"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: CMUUSCMWeaponsTeam
+  - type: Tag
+    tags:
+    - CMUSquadUSCMWeaponsTeam
+
+- type: Tag
+  id: CMUSquadUSCMWeaponsTeam
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUSCMPlasmaGunner
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: USCM
+  roundRole: CMUJobUSCMPlasmaGunner
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spec
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  name: cmu-job-title-uscm-plasma-gunner
+  description: cmu-job-description-uscm-plasma
+  playTimeTracker: CMUJobUSCMPlasmaGunner
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
+  spawnMenuRoleName: USCM Plasma Gunner (Weapons Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUSCMPlasmaGunner
+  greeting: cmu-job-greeting-uscm-plasma
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-uscm-plasma
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  suffix: CMU, USCM, Plasma Team
+  id: CMUJobUSCMPlasmaGunner
+  name: USCM Plasma Gunner (Weapons Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUSCMWeaponsTeam
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-uscm-plasma-gunner
+    description: cmu-job-description-uscm-plasma
+    reregister: false
+    job: CMUJobUSCMPlasmaGunner
+    raffle:
+      settings: short
+    rules: cmu-job-rules-uscm-plasma
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUSCMPlasmaGunner
+  name: USCM weapons team ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUSCMPlasmaGunner
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobUSCMPlasmaGunner
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUSCMPlasmaAssistant
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: USCM
+  roundRole: CMUJobUSCMPlasmaAssistant
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: private
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  name: cmu-job-title-uscm-plasma-assistant
+  description: cmu-job-description-uscm-plasma
+  playTimeTracker: CMUJobUSCMPlasmaAssistant
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements: []
+  spawnMenuRoleName: USCM Assistant Gunner (Weapons Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUSCMPlasmaAssistant
+  greeting: cmu-job-greeting-uscm-plasma
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-uscm-plasma
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  suffix: CMU, USCM, Plasma Team
+  id: CMUJobUSCMPlasmaAssistant
+  name: USCM Assistant Gunner (Weapons Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUSCMWeaponsTeam
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-uscm-plasma-assistant
+    description: cmu-job-description-uscm-plasma
+    reregister: false
+    job: CMUJobUSCMPlasmaAssistant
+    raffle:
+      settings: short
+    rules: cmu-job-rules-uscm-plasma
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUSCMPlasmaAssistant
+  name: USCM weapons team ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUSCMPlasmaAssistant
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobUSCMPlasmaAssistant
+
+- type: startingGear
+  id: CMUGearUSCMPlasmaBase
+  equipment:
+    jumpsuit: AU14CamoUSCMFatigues
+    outerClothing: AU14CamoArmorM3Smooth
+    head: AU14CamoM10Helmet
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: CMBootsBlackFilled
+    ears: AU14HeadsetGovforMarine
+    pocket1: AU14PouchIFAKFill
+    back: CMBackpackMarine
+
+- type: startingGear
+  parent: CMUGearUSCMPlasmaBase
+  id: CMUGearUSCMPlasmaGunner
+  equipment:
+    id: CMUIDCardUSCMPlasmaGunner
+    suitstorage: AU14WeaponXM99A
+    belt: RMCBeltHolsterPistol
+  storage:
+    belt:
+    - CMWeaponPistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    back:
+    - CMMRE
+    - CMCanteen
+
+- type: startingGear
+  parent: CMUGearUSCMPlasmaBase
+  id: CMUGearUSCMPlasmaAssistant
+  equipment:
+    id: CMUIDCardUSCMPlasmaAssistant
+    suitstorage: RMCWeaponRifleM54CFilled
+    belt: CMBeltMarine
+    pocket2: RMCPouchMagazineLarge
+  storage:
+    belt:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    pocket2:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    back:
+    - RMCBinoculars
+    - RMCRangefinder
+    - RMCPacketGrenadeMetalFoamFilled
+    - CMUPacketGrenadeElectroshockFilled
+    - CMTraumaKit10
+    - CMBurnKit10
+    - CMMRE
+    - CMCanteen
+
+- type: partySpawn
+  id: CMUUSCMPlasmaTeamSpawn
+  leadersToSpawn:
+    CMUJobUSCMPlasmaGunner: 1
+  gruntsToSpawn:
+    CMUJobUSCMPlasmaAssistant: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUSCMPlasmaTeam
+  displayName: USCM Plasma Weapons Team
+  partyspawn: CMUUSCMPlasmaTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 2
+  roundstart: false

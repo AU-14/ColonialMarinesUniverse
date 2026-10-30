@@ -1,0 +1,7 @@
+author: deepdarkdepths
+category: CMU
+changes:
+- message: Fixed Despoiler's Caustic Embrace to be a proper leap instead of teleport.
+  type: Fix
+time: '2026-10-06T21:18:55.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2018

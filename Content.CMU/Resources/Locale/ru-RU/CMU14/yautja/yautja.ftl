@@ -31,39 +31,6 @@ cmu-yautja-lobby-status = Статус
 cmu-yautja-lobby-status-normal = Обычный
 cmu-yautja-lobby-status-council = Совет
 cmu-yautja-lobby-status-leader = Лидер
-cmu-yautja-clan-admin-whitelist-legacy = Legacy
-cmu-yautja-clan-admin-whitelist-council-legacy = Council legacy
-
-cmu-yautja-clan-info-verb = Информация о клане
-cmu-yautja-clan-info-title = Информация о клане
-cmu-yautja-clan-info-initialize = Инициализировать
-cmu-yautja-clan-info-refresh = Обновить
-cmu-yautja-clan-info-members = Члены клана
-cmu-yautja-clan-info-no-clan = Клан не назначен
-cmu-yautja-clan-info-no-description = Описание клана отсутствует.
-cmu-yautja-clan-info-clan = Клан: {$clan} | Честь: {$honor}
-cmu-yautja-clan-info-viewer = Ваш ранг: {$rank} | Права: {$permissions}
-cmu-yautja-clan-info-member = {$name} — {$rank} | Честь: {$honor} | {$online}
-cmu-yautja-clan-info-apply-rank = Назначить ранг
-cmu-yautja-clan-info-make-ancient = Сделать Древним
-cmu-yautja-clan-info-demote-ancient = Снять статус Древнего
-cmu-yautja-clan-info-rank-updated = Ранг клана обновлён.
-cmu-yautja-clan-info-ancient-updated = Статус Древнего обновлён.
-cmu-yautja-clan-info-action-denied = Действие клана запрещено.
-cmu-yautja-clan-info-remove-member = Исключить из клана
-cmu-yautja-clan-info-member-moved = Членство в клане обновлено.
-cmu-yautja-clan-info-save-description = Сохранить описание
-cmu-yautja-clan-info-save-appearance = Сохранить имя/цвет
-cmu-yautja-clan-info-save-honor = Сохранить честь
-cmu-yautja-clan-info-delete-clan = Удалить клан
-cmu-yautja-clan-info-move-member = Переместить
-cmu-yautja-clan-info-purge-member = Очистить профиль
-cmu-yautja-clan-info-description-updated = Описание клана обновлено.
-cmu-yautja-clan-info-appearance-updated = Имя и цвет клана обновлены.
-cmu-yautja-clan-info-honor-updated = Честь клана обновлена.
-cmu-yautja-clan-info-member-purged = Профиль охотника очищен.
-cmu-yautja-clan-info-clan-deleted = Клан деактивирован.
-
 cmu-yautja-rank-badblood = Отступник
 cmu-yautja-crew-monitor-area-unknown = Неизвестная зона
 
@@ -245,7 +212,6 @@ cmu-yautja-thrall-bracer-unlocked-now = Вы разблокируете нару
 cmu-yautja-thrall-self-destruct-armed = Вы запустили таймер. Он подвёл вас.
 cmu-yautja-thrall-self-destruct-target = Ваш наруч раба начинает смертельный отсчёт!
 cmu-yautja-thrall-self-destruct-warning = Самоуничтожение наруча раба: {$seconds} секунд.
-cmu-yautja-thrall-self-destruct-cancelled = Вы отменяете самоуничтожение наруча раба {$target}.
 
 cmu-yautja-bracer-menu-title = Охотничий наруч
 cmu-yautja-bracer-menu-header = // ОХОТНИЧИЙ НАРУЧ //
@@ -393,6 +359,9 @@ cmu-yautja-trophy-harvest-finished-others = {$hunter} вырывает {$trophy}
 cmu-yautja-polish-denied = Вы не понимаете этот ритуальный инструмент.
 cmu-yautja-polish-already = Этот трофей уже отполирован.
 cmu-yautja-polish-finished = Вы полируете {$trophy}.
+cmu-yautja-polish-not-bone = На {$trophy} нет кости, которую можно отполировать.
+cmu-yautja-rag-wipe-start = Вы начинаете стирать кровь с {$target}.
+cmu-yautja-rag-wiped = Вы начисто вытираете {$target}.
 cmu-yautja-trophy-source-unknown = неизвестная добыча
 cmu-yautja-trophy-polished-yes = отполирован
 cmu-yautja-trophy-polished-no = не отполирован
@@ -422,8 +391,8 @@ cmu-yautja-ritual-examine-captive = Заявлен как ритуальная �
 cmu-yautja-ritual-examine-duel = Связан активной ритуальной дуэлью с {$hunter}.
 cmu-yautja-self-destruct-armed = Таймер запущен. Пусть путь в великие охотничьи угодья будет быстрым.
 cmu-yautja-self-destruct-warning = Самоуничтожение наруча: {$seconds} секунд.
-cmu-yautja-self-destruct-cancelled = Самоуничтожение наруча отменено.
 cmu-yautja-self-destruct-dead = Наруч не отвечает мёртвому охотнику.
+cmu-yautja-vitals-failing = Жизненные показатели падают, вы недолго продержитесь на ногах!
 cmu-yautja-trap-arm-failed = Здесь нельзя установить ловушку.
 cmu-yautja-trap-armed = Вы взводите охотничью ловушку.
 cmu-yautja-trap-disarmed = {$trap} обезврежена.
@@ -560,9 +529,6 @@ ent-CMUActionYautjaStunThrall = Оглушить Тралла
 ent-CMUActionYautjaSelfDestructThrall = Тралл Самоуничтожение
     .desc = Активируйте или отмените самоуничтожение связанного с вами наруча раба.
 
-ent-CMUActionYautjaRecall = Вызов диска
-    .desc = Вспомните ближайший смарт-диск под рукой.
-
 ent-CMUActionYautjaSelfDestruct = Наруч самоуничтожения
     .desc = Активируйте или отмените отложенный заряд самоуничтожения наручей.
 
@@ -631,3 +597,6 @@ cmu-yautja-hunt-call-elite-mixed-larger = Элитные смешанные фр
 cmu-yautja-power-examine-charge = Текущий заряд: [bold]{$charge}/{$max}[/bold].
 cmu-yautja-spike-launcher-examine-spikes = Текущий боезапас: [bold]{$count}/{$capacity}[/bold] шипов.
 cmu-yautja-plasma-weapon-examine-charge = Текущий заряд: [bold]{$charge}/{$max}[/bold].
+
+ent-CMUActionYautjaLeap = прыжок
+    .desc = Быстро прыгнуть в ближайшее место.

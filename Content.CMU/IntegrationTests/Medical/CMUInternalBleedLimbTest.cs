@@ -1,4 +1,10 @@
+using System.Linq;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared.Chemistry;
+using Content.Shared.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Effects.Positive;
+using Content.Shared.EntityEffects;
+using Content.Shared.FixedPoint;
 using Content.Shared.Body.Part;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Content.Shared.CMU14.Medical.Core;
@@ -12,6 +18,73 @@ namespace Content.IntegrationTests.CMU14.Medical;
 [TestOf(typeof(SharedCMUWoundsSystem))]
 public sealed class CMUInternalBleedLimbTest : GameTest
 {
+    [Test]
+    public async Task TranexamicSuppressesPersistentBleedingUntilItWearsOff()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid patient = default;
+        EntityUid arm = default;
+        await Server.WaitAssertion(() =>
+        {
+            patient = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            Assert.That(Server.System<CMUMedicalBodyIndexSystem>().TryGetBodyPart(patient,
+                new(BodyPartType.Arm, BodyPartSymmetry.Left), out arm), Is.True);
+            var wounds = Server.System<SharedCMUWoundsSystem>();
+            wounds.SeedInternalBleed(arm, "vascular:test", 0.3f);
+            ApplyTranexamic(patient);
+            wounds.RecomputeInternalBleed(arm);
+            Assert.That(SEntMan.HasComponent<InternalBleedingComponent>(arm), Is.False,
+                "recomputing while medicated must keep the untreated bleed suppressed");
+        });
+
+        await Server.WaitRunTicks(420);
+        await Server.WaitAssertion(() =>
+        {
+            var bleed = SEntMan.GetComponent<InternalBleedingComponent>(arm);
+            Assert.That(bleed.Source, Is.EqualTo("vascular:test"));
+            Assert.That(bleed.BloodlossPerSecond, Is.EqualTo(0.3f).Within(0.001f));
+            SEntMan.DeleteEntity(patient);
+        });
+    }
+
+    [Test]
+    public async Task ClampingWhileMedicatedPreventsBleedingFromReturning()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid patient = default;
+        EntityUid arm = default;
+        await Server.WaitAssertion(() =>
+        {
+            patient = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            Assert.That(Server.System<CMUMedicalBodyIndexSystem>().TryGetBodyPart(patient,
+                new(BodyPartType.Arm, BodyPartSymmetry.Left), out arm), Is.True);
+            var wounds = Server.System<SharedCMUWoundsSystem>();
+            wounds.SeedInternalBleed(arm, "blunt", 0.3f);
+            ApplyTranexamic(patient);
+            wounds.SuppressInternalBleed(arm);
+        });
+
+        await Server.WaitRunTicks(420);
+        await Server.WaitAssertion(() =>
+        {
+            Server.System<SharedCMUWoundsSystem>().RecomputeInternalBleed(arm);
+            Assert.That(SEntMan.HasComponent<InternalBleedingComponent>(arm), Is.False,
+                "the drug wearing off must not undo definitive surgical treatment");
+            SEntMan.DeleteEntity(patient);
+        });
+    }
+
+    private void ApplyTranexamic(EntityUid patient)
+    {
+        var reagent = SProtoMan.Index<ReagentPrototype>("CMUTranexamicAcid");
+        var effect = reagent.Metabolisms!.Metabolisms["Bloodstream"].Effects.OfType<Hemostatic>().Single();
+        var context = new ReagentEffectContext(reagent, null, null, null,
+            new ReagentQuantity(reagent.ID, FixedPoint2.New(1)), "Bloodstream", null,
+            ReagentEffectOrigin.Metabolism);
+        Assert.That(Server.System<SharedEntityEffectsSystem>().TryApplyEffect(patient, effect,
+            reagentContext: context), Is.True);
+    }
+
     [Test]
     public async Task ALimbCarriesOneInternalBleed()
     {

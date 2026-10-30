@@ -1,0 +1,9 @@
+author: maertayn
+category: CMU
+changes:
+- message: The medical storage rig can now hold magazines and documents, an option
+    for the combat-medic, the lifesaver still holds more capacity for the platoon
+    medics.
+  type: Add
+time: '2026-10-10T10:17:25.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2137

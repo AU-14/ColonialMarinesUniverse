@@ -17,31 +17,15 @@ public sealed class AmbassadorConsoleBui : BoundUserInterface
         base.Open();
         _window = this.CreateWindow<AmbassadorConsoleWindow>();
 
-        _window.Withdraw100.OnPressed += _ => SendPredictedMessage(new AmbassadorWithdrawBuiMsg(100));
-        _window.Withdraw250.OnPressed += _ => SendPredictedMessage(new AmbassadorWithdrawBuiMsg(250));
-        _window.Withdraw500.OnPressed += _ => SendPredictedMessage(new AmbassadorWithdrawBuiMsg(500));
-        _window.ToggleEmbargo.OnPressed += _ => SendPredictedMessage(new AmbassadorToggleEmbargoBuiMsg());
-        _window.ToggleTradePact.OnPressed += _ => SendPredictedMessage(new AmbassadorToggleTradePactBuiMsg());
-        _window.ToggleCommsJam.OnPressed += _ => SendPredictedMessage(new AmbassadorToggleCommsJamBuiMsg());
-        _window.ToggleSignalBoost.OnPressed += _ => SendPredictedMessage(new AmbassadorToggleSignalBoostBuiMsg());
-        _window.ToggleSignalJam.OnPressed += _ => SendPredictedMessage(new AmbassadorToggleSignalJamBuiMsg());
-        _window.SendBroadcast.OnPressed += _ =>
-        {
-            var msg = _window.BroadcastInput.Text;
-            if (!string.IsNullOrWhiteSpace(msg))
-            {
-                SendPredictedMessage(new AmbassadorBroadcastBuiMsg(msg));
-                _window.BroadcastInput.Text = "";
-            }
-        };
-        _window.OpenThirdPartyBtn.OnPressed += _ =>
-        {
-            SendPredictedMessage(new AmbassadorOpenThirdPartyBuiMsg());
-        };
-        _window.ScanRadarBtn.OnPressed += _ =>
-        {
-            SendPredictedMessage(new AmbassadorScanRadarBuiMsg());
-        };
+        _window.OnWithdraw += amount => SendPredictedMessage(new AmbassadorWithdrawBuiMsg(amount));
+        _window.OnToggleEmbargo += () => SendPredictedMessage(new AmbassadorToggleEmbargoBuiMsg());
+        _window.OnToggleTradePact += () => SendPredictedMessage(new AmbassadorToggleTradePactBuiMsg());
+        _window.OnToggleCommsJam += () => SendPredictedMessage(new AmbassadorToggleCommsJamBuiMsg());
+        _window.OnToggleSignalBoost += () => SendPredictedMessage(new AmbassadorToggleSignalBoostBuiMsg());
+        _window.OnToggleSignalJam += () => SendPredictedMessage(new AmbassadorToggleSignalJamBuiMsg());
+        _window.OnBroadcast += msg => SendPredictedMessage(new AmbassadorBroadcastBuiMsg(msg));
+        _window.OnOpenThirdParty += () => SendPredictedMessage(new AmbassadorOpenThirdPartyBuiMsg());
+        _window.OnScanRadar += () => SendPredictedMessage(new AmbassadorScanRadarBuiMsg());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -52,4 +36,3 @@ public sealed class AmbassadorConsoleBui : BoundUserInterface
         _window.UpdateState(s);
     }
 }
-

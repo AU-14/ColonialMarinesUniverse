@@ -99,6 +99,7 @@
     ears: AU14ColonyWeylandHeadset
     ears2: RMCM5CameraGear
     pocket1: AU14StampLiaison
+    pocket2: CMUPepperSpray
   inhand:
   - RMCPortableVendorCorporate
   - CMUMobilePhone

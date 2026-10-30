@@ -567,7 +567,9 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
         {
             var originPos = _transform.GetMoverCoordinates(spreadOrigin).Position;
             var direction = (tile - originPos).Normalized();
-            if (_directionBlocker.IsDirectionBlocked(spreadOrigin, direction))
+            // CMU14: barricades only, like natural spreading. the default mask also hit a closed
+            // resin door standing on the origin weeds, so nothing could be expanded out of a door tile
+            if (_directionBlocker.IsDirectionBlocked(spreadOrigin, direction, collisionGroup: CollisionGroup.BarricadeImpassable))
                 return false;
         }
 

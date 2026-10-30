@@ -66,7 +66,9 @@ command-description-xenomature = Instantly matures a xeno. Applicable to the Que
 
 command-description-weedkiller = Runs weed killer on the current location's area. This kills all weeds and resin structures nearby.
 
-command-description-withxenotier = Filters entities or entity prototypes to those of a specific xenonid tier.
+# cmu edit start: lore names
+command-description-withxenotier = Filters entities or entity prototypes to those of a specific xenomorph tier.
+# cmu edit end
 
 command-description-spawnallmapinserts = Spawns all map inserts, with forced guaranteed spawn probability.
 

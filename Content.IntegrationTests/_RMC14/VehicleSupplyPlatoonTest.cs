@@ -16,6 +16,7 @@ using Content.Shared.CMU14.util;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.GameTicking;
 using Content.Shared.UserInterface;
+using Content.Shared.Vehicle.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -65,12 +66,14 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             // A stale or forged client choice must also be rejected server-side.
             Queue(depot, excluded);
             Assert.That(depot.Lift.Comp.PendingVehicle, Is.Empty);
-            Assert.That(depot.Lift.Comp.ActiveVehicle, Is.Null);
+            Assert.That(State(depot).IssuedVehicles, Is.Empty);
         });
     }
 
     [Test]
-    public async Task ConcurrentLiftsShareTwoReservationsButOpposingSidesDoNot()
+    // cmu edit start: one vehicle of each category, shared across depots
+    public async Task ConcurrentLiftsShareCategoryReservationsButOpposingSidesDoNot()
+    // cmu edit end
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -91,7 +94,14 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Complete(a);
             Complete(b);
             Assert.That(State(c).IssuedVehicles, Has.Count.EqualTo(2));
-            Assert.That(State(c).Available, Is.Empty);
+            // cmu edit start: the armed humvee used the VTOL/APC slot and the transport the support slot
+            var available = State(c).Available.Select(entry => entry.Id).ToList();
+            Assert.That(available, Does.Not.Contain("VehicleAPC"));
+            Assert.That(available, Does.Not.Contain("VehicleBlackfootTransport"));
+            Assert.That(available, Does.Not.Contain("VehicleHumveeMedical"));
+            Assert.That(available, Does.Contain("VehicleTank"));
+            Assert.That(available, Does.Contain("CMUFighterGround"));
+            // cmu edit end
             Assert.That(State(enemy).IssuedVehicles, Is.Empty);
         });
     }
@@ -116,10 +126,12 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Queue(b, second);
             Assert.That(b.Lift.Comp.PendingVehicle, Is.Empty, "Issued vehicles also consume their category limit");
             ResetLift(b);
-            Queue(b, "VehicleHumvee");
-            Assert.That(b.Lift.Comp.PendingVehicle, Is.EqualTo("VehicleHumvee"));
+            // cmu edit start: a support vehicle is its own category
+            Queue(b, "VehicleHumveeTransport");
+            Assert.That(b.Lift.Comp.PendingVehicle, Is.EqualTo("VehicleHumveeTransport"));
+            // cmu edit end
             if (first == "CMUFighterGround")
-                SEntMan.DeleteEntity(a.Lift.Comp.ActiveVehicle!.Value);
+                SEntMan.DeleteEntity(GetVehicleOnLift(a));
         });
     }
 
@@ -146,7 +158,7 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Assert.That(second.Lift.Comp.PendingVehicle, Is.Empty);
             // Delete the aircraft while its landing map still exists, so its
             // cockpit is cleaned up before GameTest removes the map.
-            SEntMan.DeleteEntity(first.Lift.Comp.ActiveVehicle!.Value);
+            SEntMan.DeleteEntity(GetVehicleOnLift(first));
         });
     }
 
@@ -159,14 +171,15 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Configure(map.GridCoords);
             var depot = CreateDepot(map.GridCoords);
             var vendor = SEntMan.SpawnEntity("VehicleHardpointVendor", map.GridCoords.Offset(new Vector2(3, 0)));
-            for (var i = 0; i < 2; i++)
+            // cmu edit start: one vehicle from each of two categories
+            foreach (var vehicle in new[] { "VehicleHumvee", "VehicleHumveeTransport" })
             {
                 ResetLift(depot);
                 State(depot);
-                Queue(depot, "VehicleHumvee");
+                Queue(depot, vehicle);
+            // cmu edit end
                 Complete(depot);
-                Assert.That(depot.Lift.Comp.ActiveVehicle, Is.Not.Null);
-                SEntMan.DeleteEntity(depot.Lift.Comp.ActiveVehicle!.Value);
+                SEntMan.DeleteEntity(GetVehicleOnLift(depot));
             }
 
             SEntMan.EventBus.RaiseEvent(EventSource.Local, new TechUnlockVehicleEvent("VehicleHumvee") { Additional = true });
@@ -176,7 +189,10 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             var replacement = CreateDepot(map.GridCoords);
             var state = State(replacement);
             Assert.That(state.IssuedVehicles, Has.Count.EqualTo(2));
-            Assert.That(state.Available, Is.Empty);
+            // cmu edit start: those two categories stay used up
+            Assert.That(state.Available.Select(entry => entry.Id), Does.Not.Contain("VehicleHumvee"));
+            Assert.That(state.Available.Select(entry => entry.Id), Does.Not.Contain("VehicleHumveeTransport"));
+            // cmu edit end
             Assert.That(Parts(vendor), Does.Contain("VehicleHumveeWheel"));
             Assert.That(Parts(vendor), Does.Not.Contain("VehicleHumveeARCCannon"));
             Queue(replacement, "VehicleHumvee");
@@ -199,7 +215,7 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             var second = CreateDepot(map.GridCoords.Offset(new Vector2(30, 0)));
             Queue(depot, "VehicleBlackfootTransport");
             Complete(depot);
-            var vehicle = depot.Lift.Comp.ActiveVehicle!.Value;
+            var vehicle = GetVehicleOnLift(depot);
             var integrity = SEntMan.GetComponent<HardpointIntegrityComponent>(vehicle);
             integrity.Integrity = 42;
             var slots = Server.System<ItemSlotsSystem>();
@@ -209,7 +225,9 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             var count = BundleCount();
             Assert.That(count, Is.EqualTo(4));
 
-            Queue(second, "VehicleHumvee");
+            // cmu edit start: the armed Humvee shares the Blackfoot's VTOL/APC slot, so use a support vehicle
+            Queue(second, "VehicleHumveeTransport");
+            // cmu edit end
             Complete(second);
             Invoke("StoreVehicle", depot.Lift);
             ResetLift(depot);
@@ -220,7 +238,7 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Assert.That(depot.Lift.Comp.PendingLoadouts, Is.Empty);
             Assert.That(depot.Lift.Comp.PendingBundle, Is.Empty);
             Complete(depot);
-            Assert.That(depot.Lift.Comp.ActiveVehicle, Is.EqualTo(vehicle));
+            Assert.That(GetVehicleOnLift(depot), Is.EqualTo(vehicle));
             Assert.That(integrity.Integrity, Is.EqualTo(42));
             Assert.That(launcher.Item, Is.EqualTo(originalLauncher));
             Assert.That(BundleCount(), Is.EqualTo(count));
@@ -240,18 +258,26 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Queue(depot, "VehicleHumvee");
             Complete(depot);
             State(depot); // A second new Humvee is still available at this point.
-            var vehicle = depot.Lift.Comp.ActiveVehicle!.Value;
             Invoke("StoreVehicle", depot.Lift);
             ResetLift(depot);
-            Queue(second, "VehicleAPC");
-            Complete(second);
+            // Fill all four allowance categories after storing the Humvee.
+            EntityUid fighter = default;
+            foreach (var other in new[] { "VehicleTank", "VehicleAPC", "VehicleHumveeTransport", "CMUFighterGround" })
+            {
+                ResetLift(second);
+                Queue(second, other);
+                Complete(second);
+                if (other == "CMUFighterGround")
+                    fighter = GetVehicleOnLift(second, other);
+            }
+
             var available = State(depot).Available.Single();
             Assert.That(available.Id, Is.EqualTo("VehicleHumvee"));
             Assert.That(available.Count, Is.EqualTo(1));
-            Queue(depot, "VehicleHumvee");
-            Complete(depot);
-            Assert.That(depot.Lift.Comp.ActiveVehicle, Is.EqualTo(vehicle));
-            Assert.That(State(depot).IssuedVehicles, Has.Count.EqualTo(2));
+            Assert.That(State(depot).IssuedVehicles, Has.Count.EqualTo(4));
+            // Delete the aircraft while its landing map still exists.
+            Assert.That(fighter.Valid, Is.True);
+            SEntMan.DeleteEntity(fighter);
         });
     }
 
@@ -269,7 +295,6 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Queue(depot, "VehicleTank");
             Server.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(CMBCIUPrototype);
             Complete(depot);
-            Assert.That(depot.Lift.Comp.ActiveVehicle, Is.Null);
             Assert.That(State(depot).IssuedVehicles, Is.Empty);
             Assert.That(State(depot).Available.Select(entry => entry.Id), Does.Not.Contain("VehicleTank"));
         });
@@ -367,6 +392,24 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
                 count++;
         }
         return count;
+    }
+
+    private EntityUid GetVehicleOnLift(Depot depot, string? prototypeId = null)
+    {
+        foreach (var entity in Server.System<EntityLookupSystem>().GetEntitiesIntersecting(depot.Lift))
+        {
+            if (!SEntMan.HasComponent<VehicleComponent>(entity))
+                continue;
+
+            if (prototypeId == null ||
+                SEntMan.GetComponent<MetaDataComponent>(entity).EntityPrototype?.ID == prototypeId)
+                return entity;
+        }
+
+        Assert.Fail(prototypeId == null
+            ? "Expected a vehicle on the supply lift."
+            : $"Expected vehicle prototype {prototypeId} on the supply lift.");
+        return default;
     }
 
     private void Invoke(string method, params object[] args) =>

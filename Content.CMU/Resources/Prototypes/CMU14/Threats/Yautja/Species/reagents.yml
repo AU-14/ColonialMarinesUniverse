@@ -63,11 +63,11 @@
       effects:
       - !type:Crossmetabolizing
         potency: 1
+      - !type:Painkilling
+        potency: 4
       - !type:Antitoxic
         potency: 1
       - !type:Yautjahemogenic
-        potency: 9
-      - !type:YautjaWoundHealing
         potency: 9
       - !type:Oxygenating
         potency: 6
@@ -109,8 +109,6 @@
       - !type:Antitoxic
         potency: 1
       - !type:Yautjahemogenic
-        potency: 3
-      - !type:YautjaWoundHealing
         potency: 3
       - !type:Oxygenating
         potency: 6

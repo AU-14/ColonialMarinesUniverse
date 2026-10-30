@@ -1,0 +1,12 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Rocketeers now spawn with their loaded disposable rocket launcher.
+  type: Fix
+- message: Expedition AI can correctly stow and retrieve weapons from suit storage.
+  type: Fix
+- message: Expedition gunfire observation no longer changes unused gun prototypes
+    during map initialization.
+  type: Fix
+time: '2026-10-09T16:25:00.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2125

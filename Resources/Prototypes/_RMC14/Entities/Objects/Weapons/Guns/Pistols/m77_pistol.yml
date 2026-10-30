@@ -4,6 +4,12 @@
   name: Mod 88 combat pistol # TODO RMC14 sounds
   description: Standard issue Marine firearm. Also found in the hands of We-Yu PMC teams. Fires 9mm armor shredding rounds and is capable of 3-round burst.
   components:
+  # cmu edit start: built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
+  # cmu edit start: 9mm caseless
+  - type: CMUCaselessGun
+  # cmu edit end
   - type: Tag
     tags:
     - Sidearm

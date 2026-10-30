@@ -12,6 +12,13 @@ namespace Content.Shared.CMU14.Visor;
 public sealed partial class CMUSquadVisorActiveComponent : Component;
 
 /// <summary>
+/// Eyewear that shows the squad optic's ammo HUD while worn, without any of the optic's other effects. Used by the
+/// smartgun's head mounted sight, which can't be worn with a squad optic down.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUAmmoHudSightComponent : Component;
+
+/// <summary>
 /// A squad optic. It can't be switched down while its wearer holds or wears a smartgun.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
@@ -39,6 +46,10 @@ public sealed partial class CMUSquadVisorWearerComponent : Component
     [DataField, AutoNetworkedField]
     public bool MotionLinkEnabled = true;
 
+    /// <summary>Whether the optic shows the held gun's ammo count under the status alerts.</summary>
+    [DataField, AutoNetworkedField]
+    public bool AmmoHudEnabled = true;
+
     [DataField]
     public EntProtoId IffActionId = "CMUActionSquadVisorIFF";
 
@@ -48,6 +59,9 @@ public sealed partial class CMUSquadVisorWearerComponent : Component
     [DataField]
     public EntProtoId MotionLinkActionId = "CMUActionSquadVisorMotionLink";
 
+    [DataField]
+    public EntProtoId AmmoHudActionId = "CMUActionSquadVisorAmmoHud";
+
     [DataField, AutoNetworkedField]
     public EntityUid? IffAction;
 
@@ -56,6 +70,9 @@ public sealed partial class CMUSquadVisorWearerComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityUid? MotionLinkAction;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? AmmoHudAction;
 }
 
 /// <summary>
@@ -80,6 +97,8 @@ public sealed partial class CMUToggleSquadVisorIFFActionEvent : InstantActionEve
 public sealed partial class CMUToggleSquadVisorGrenadeWarningsActionEvent : InstantActionEvent;
 
 public sealed partial class CMUToggleSquadVisorMotionLinkActionEvent : InstantActionEvent;
+
+public sealed partial class CMUToggleSquadVisorAmmoHudActionEvent : InstantActionEvent;
 
 /// <summary>
 /// A grenade with a smart fuse that a squad optic can pick out. Squad optic wearers see a ring around friendly ones

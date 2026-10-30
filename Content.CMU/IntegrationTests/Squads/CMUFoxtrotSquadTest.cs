@@ -72,7 +72,7 @@ public sealed class CMUFoxtrotSquadTest : GameTest
                 Assert.That(govfor[GovforCombatTech], Is.EqualTo(8));
                 Assert.That(govfor[GovforSquadLeader], Is.EqualTo(4));
                 Assert.That(govfor[GovforRto], Is.EqualTo(4));
-                Assert.That(govfor[GovforRifleman], Is.EqualTo(75), "riflemen have no Foxtrot slot");
+                Assert.That(govfor[GovforRifleman], Is.EqualTo(77));
                 Assert.That(govfor[GovforCorpsman], Is.EqualTo(7));
                 Assert.That(govfor[OpforCombatTech], Is.EqualTo(6));
 
@@ -187,7 +187,8 @@ public sealed class CMUFoxtrotSquadTest : GameTest
                 Assert.That(skills.GetSkill(corpsman, "RMCSkillEngineer"), Is.EqualTo(3));
                 Assert.That(skills.GetSkill(tech, "RMCSkillConstruction"), Is.EqualTo(0), "combat technicians keep their own skills");
                 Assert.That(SEntMan.GetComponent<CMVendorUserComponent>(tech).Points, Is.EqualTo(65));
-                Assert.That(skills.GetSkill(rifleman, "RMCSkillConstruction"), Is.EqualTo(0));
+                Assert.That(skills.GetSkill(rifleman, "RMCSkillConstruction"), Is.EqualTo(3));
+                Assert.That(skills.GetSkill(rifleman, "RMCSkillEngineer"), Is.EqualTo(3));
             });
         });
     }

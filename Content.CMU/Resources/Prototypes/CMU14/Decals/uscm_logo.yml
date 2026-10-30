@@ -1,0 +1,21 @@
+# Ported from cmss13 (cmss13-devs/cmss13 PR 11493).
+- type: decal
+  id: CMUDecalUSCMLogoClean
+  parent: RMCDecalAlmayerBase
+  sprite:
+    sprite: CMU14/Decals/uscm_logo.rsi
+    state: small_uscm_clean
+
+- type: decal
+  id: CMUDecalUSCMLogoDesaturated
+  parent: RMCDecalAlmayerBase
+  sprite:
+    sprite: CMU14/Decals/uscm_logo.rsi
+    state: small_uscm_desat
+
+- type: decal
+  id: CMUDecalUSCMLogoDirty
+  parent: RMCDecalAlmayerBase
+  sprite:
+    sprite: CMU14/Decals/uscm_logo.rsi
+    state: small_uscm_dirty

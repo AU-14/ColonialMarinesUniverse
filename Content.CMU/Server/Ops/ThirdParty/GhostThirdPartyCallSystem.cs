@@ -3,6 +3,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
+using Content.Shared._RMC14.Rules;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.Database;
@@ -42,10 +43,10 @@ public sealed partial class GhostThirdPartyCallSystem : EntitySystem
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
         => _calledParties.Clear();
 
-    /// <summary>Snapshot for the ghost role menu, or null when the feature is disabled by cvar.</summary>
+    /// <summary>Snapshot for the ghost role menu, or null when the feature is off (by cvar, or in Distress Signal).</summary>
     public GhostThirdPartyCallState? GetState()
     {
-        if (!_cfg.GetCVar(CCVars.GhostThirdPartyCallEnabled))
+        if (!IsEnabled())
             return null;
 
         var ratio = _cfg.GetCVar(CCVars.GhostThirdPartyCallDeadRatio);
@@ -61,7 +62,7 @@ public sealed partial class GhostThirdPartyCallSystem : EntitySystem
     /// <summary>Validates the call gates, then queues a weighted random ghost-callable party for the caller.</summary>
     public void RequestCall(ICommonSession caller)
     {
-        if (!_cfg.GetCVar(CCVars.GhostThirdPartyCallEnabled))
+        if (!IsEnabled())
             return;
 
         if (caller.AttachedEntity is not { } entity || !HasComp<GhostComponent>(entity))
@@ -106,6 +107,18 @@ public sealed partial class GhostThirdPartyCallSystem : EntitySystem
             $"{caller.Name} ({caller.UserId}) ghost-interest third party {pick.ID}");
         // _chat.DispatchServerMessage(caller,
         //    Loc.GetString("cmu-ghost-call-sent", ("party", pick.DisplayName ?? pick.ID)));
+    }
+
+    /// <summary>
+    ///     Ghosts can't amplify the signal in Distress Signal; that mode schedules its own arrivals.
+    /// </summary>
+    private bool IsEnabled()
+    {
+        if (!_cfg.GetCVar(CCVars.GhostThirdPartyCallEnabled))
+            return false;
+
+        var distressSignal = EntityQueryEnumerator<CMDistressSignalRuleComponent>();
+        return !distressSignal.MoveNext(out _, out _);
     }
 
     private void Deny(ICommonSession caller, string reason, params (string, object)[] args)

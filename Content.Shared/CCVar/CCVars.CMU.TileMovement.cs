@@ -23,5 +23,11 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> CMUTileMovementPreferred =
         CVarDef.Create("cmu.tile_movement.preferred", false, CVar.CLIENT | CVar.ARCHIVE | CVar.REPLICATED);
+
+    /// <summary>
+    /// Move from tile to tile only while walking; running uses normal movement.
+    /// </summary>
+    public static readonly CVarDef<bool> CMUTileMovementWalkOnly =
+        CVarDef.Create("cmu.tile_movement.walk_only", false, CVar.CLIENT | CVar.ARCHIVE | CVar.REPLICATED);
     // cmu edit end
 }

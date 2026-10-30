@@ -183,6 +183,7 @@ namespace Content.Client.Entry
             {
                 if (args.NewLevel == ClientRunLevel.Initialize)
                 {
+                    ClearDisconnectedServerState(); // CMU14: release the previous connection's prediction state.
                     SwitchToDefaultState(args.OldLevel == ClientRunLevel.Connected ||
                                          args.OldLevel == ClientRunLevel.InGame);
                 }

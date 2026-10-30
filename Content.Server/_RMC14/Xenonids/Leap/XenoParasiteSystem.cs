@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components; // CMU14
 using Content.Shared.Popups;
 using Robust.Shared.Player;
 using Content.Server.NPC.HTN;
@@ -134,6 +135,17 @@ public sealed partial class XenoParasiteSystem : SharedXenoParasiteSystem
     private bool TryClaimLarva(Entity<VictimInfectedComponent> victim, EntityUid spawned)
     {
         if (!TryGetLarvaClaimUser(victim, out var userId))
+            return false;
+
+        // CMU14: the queue got there first. without this the per-tick retry kicked the queued player back out
+        // of the larva as soon as the infector ghosted
+        if (TryComp(spawned, out MindContainerComponent? larvaMind) && larvaMind.HasMind)
+        {
+            ClearInfectorUser(victim);
+            return false;
+        }
+
+        if (_larvaQueue.IsOfferedToQueue(spawned))
             return false;
 
         if (!_player.TryGetSessionById(userId, out var session))

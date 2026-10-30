@@ -1,0 +1,27 @@
+author: HotdogMan52
+category: CMU
+changes:
+- message: new AR10 sprites by nzzy
+  type: Add
+- message: new 7.62x51 bullet which deals 35 piercing and has 25 armor piercing
+  type: Add
+- message: AR15 Sporter added to colony ASRS, a civilian semi-automatic M16 pattern-rifle
+    with 5-round mags
+  type: Add
+- message: AR10 now feeds 7.62x51mm, using both CMU and RMC AR10 mags
+  type: Tweak
+- message: AR10 rate of fire lowered to 3.0 rounds per second in exchange for using
+    a bigger, beefier bullet
+  type: Tweak
+- message: AR10 is now 1850 per rifle in ASRS and costs 185 per mag
+  type: Tweak
+- message: AR15 Sporter is now 1445 per rifle and costs 65 per mag
+  type: Tweak
+- message: 5.56 Green Tip damage adjusted from 28 to 31
+  type: Tweak
+- message: 5.56 Green Tip AP value lowered from 50 to 25
+  type: Tweak
+- message: fixed CLF Commando M16 not feeding AP magazines
+  type: Fix
+time: '2026-10-22T13:47:26.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2220

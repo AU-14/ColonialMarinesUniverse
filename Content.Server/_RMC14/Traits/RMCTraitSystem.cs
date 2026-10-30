@@ -35,6 +35,14 @@ public sealed partial class RMCTraitSystem : EntitySystem
                 continue;
             }
 
+            // cmu edit start: traits this job doesn't allow are left off for auto-ignoring characters
+            if (EntityManager.System<Content.Shared.CMU14.Traits.AutoIgnore.CMUAutoIgnoreTraitsSystem>()
+                .IsIgnored(args.Profile, args.JobId, traitId))
+            {
+                continue;
+            }
+            // cmu edit end
+
             _language.AddLanguage(args.Mob, trait.Language.Value);
         }
     }

@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.RoundStatistics;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
@@ -32,6 +33,7 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
         base.Initialize();
 
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CMUAdriftChangedEvent>(OnAdriftChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
     }
 
@@ -53,6 +55,8 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
         => _gameTicker.IsGameRuleActive<KillAllColonistRuleComponent>()
             && TryComp(uid, out NpcFactionMemberComponent? faction)
             && ThreatRuleHelper.HasFaction(faction, "aucolonist");
+
+    private void OnAdriftChanged(ref CMUAdriftChangedEvent ev) => CheckVictoryCondition();
 
     private void CheckVictoryCondition()
     {

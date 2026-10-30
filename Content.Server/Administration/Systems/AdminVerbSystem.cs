@@ -286,7 +286,16 @@ namespace Content.Server.Administration.Systems
 
                 // Player Admin Logs. this is distinct from entity logs above as it will get the logs of the _player_
                 // that last owned the mind of the entity you are right-clicking on. words.
-                if (_mindSystem.TryGetLastMindOwner(args.Target, out var lastOwner))
+                // CMU14 View Logs Begin: needs the Logs flag; falls back to the attached session without mind history
+                // if (_mindSystem.TryGetLastMindOwner(args.Target, out var lastOwner))
+                Guid? lastOwner = null;
+                if (_mindSystem.TryGetLastMindOwner(args.Target, out var lastMindOwner))
+                    lastOwner = lastMindOwner.Value.UserId;
+                else if (_playerManager.TryGetSessionByEntity(args.Target, out var targetSession))
+                    lastOwner = targetSession.UserId.UserId;
+
+                if (lastOwner != null && _adminManager.HasAdminFlag(player, AdminFlags.Logs))
+                // CMU14 End
                 {
                     args.Verbs.Add(new Verb()
                     {

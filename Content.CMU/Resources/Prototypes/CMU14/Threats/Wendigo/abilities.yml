@@ -1,0 +1,40 @@
+# Wendigo ability actions, granted (ActionGrant) to the natural AU14Wendigo and the
+# lab-made CMUWendigoLab / CMUWendigoLesser. Systems: Content.CMU/Shared/Threats/Mobs/Wendigo/Abilities.
+
+- type: entity
+  id: ActionCMUWendigoPunchSwing
+  parent: ActionXenoBase
+  name: Punch Swing
+  description: Toggle. While on, a wide swing that connects also punches every enemy it hits, and puts Punch on cooldown. Only works while Punch is ready.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: punch
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUWendigoPunchSwingActionEvent
+
+- type: entity
+  id: ActionCMUWendigoClawedSweep
+  parent: ActionXenoBase
+  name: Clawed Sweep
+  description: Rake the ground in a wide cone in front of you. After a short wind-up, every enemy caught is torn open, knocked down and disarmed.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 20
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: spin_slash
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 15
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:CMUClawedSweepActionEvent
+  - type: ActionBlockIfResting

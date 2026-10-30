@@ -29,8 +29,8 @@ from layout import resolve_layout
 
 ROOT = Path(__file__).resolve().parents[2]
 MAP_DEFINITIONS = {
-    "classic": ("stable_garrison.yml", "stablegarrison"),
-    "redux": ("stable_garrison_redux.yml", "StableGarrisonRedux"),
+    "classic": ("Legacy/stable_garrison.yml", "stablegarrison"),
+    "redux": ("StableGarrison/stable_garrison_redux.yml", "StableGarrisonRedux"),
 }
 STATE_COMPONENTS = {"Appearance", "Door", "Foldable", "RandomSprite", "Storage", "EntityStorage", "ItemCabinet",
                     "WallMount", "Rotatable", "LightToggle", "ItemToggle", "PowerCellSlot", "Charger",
@@ -72,7 +72,7 @@ def select_map(definition: dict, level: int) -> str:
 
 def configured_map(root: Path, variant: str, level: int) -> tuple[Path, dict]:
     filename, prototype_id = MAP_DEFINITIONS[variant]
-    path = root / "Content.CMU/Resources/Prototypes/CMU14/Maps/Planets/ua" / filename
+    path = root / "Content.CMU/Resources/Prototypes/CMU14/Maps/Planets" / filename
     definitions = art_inventory.load_yaml(path.read_text(encoding="utf-8-sig"))
     definition = next(entry for entry in definitions if entry.get("type") == "gameMap" and entry.get("id") == prototype_id)
     reference = select_map(definition, level)

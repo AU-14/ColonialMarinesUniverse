@@ -756,6 +756,23 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         UpdateTier(body, pain, true);
     }
 
+    /// <summary>
+    ///     Takes away up to <paramref name="amount"/> of raw pain, e.g. pain a specific source caused and that has
+    ///     since been treated. Pain from injuries builds back up to their level as usual.
+    /// </summary>
+    public void RemovePain(EntityUid body, FixedPoint2 amount)
+    {
+        if (Net.IsClient || amount <= FixedPoint2.Zero)
+            return;
+        if (!TryComp<PainShockComponent>(body, out var pain))
+            return;
+
+        SettlePainBeforeModifierChange(body);
+        pain.Pain = FixedPoint2.Max(FixedPoint2.Zero, pain.Pain - amount);
+        pain.NextUpdate = TimeSpan.Zero;
+        UpdateTier(body, pain, true);
+    }
+
     private void AddPainSuppressionProfile(
         EntityUid body,
         float accumulationSuppression,

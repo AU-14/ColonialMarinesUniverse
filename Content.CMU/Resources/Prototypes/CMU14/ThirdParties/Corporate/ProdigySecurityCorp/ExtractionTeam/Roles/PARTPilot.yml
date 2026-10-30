@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobPARTSPartyContractorBase
   id: AU14JobPARTPilot
+  chevrons:
+    AU14RankPrDPilot:
+      entity: AU14ChevronPrDPilot
+      requirements: []
   roundSide: ThirdParty
   roundForce: PSC
   roundRole: PARTPilot
@@ -25,7 +29,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: Prodigy Extraction Pilot
+  name: Pilot
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobPARTPilotTracker
   ranks:
@@ -80,7 +84,7 @@
   storage:
     back:
     - RMCGrenadeBlastM12
-    - CMMRE
+    - CMUMREFSR
     - RMCBinocularsPVE
     - AU14CMDefibrillator
     - CMPortableSurgicalBedSpawnFolded

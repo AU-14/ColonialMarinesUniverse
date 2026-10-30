@@ -39,7 +39,7 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
     /// </summary>
     private void OnScatteringTrigger(Entity<ScatteringGrenadeComponent> entity, ref TriggerEvent args)
     {
-        if (args.Key != entity.Comp.TriggerKey)
+        if (args.Key != null && args.Key != entity.Comp.TriggerKey) // CMU14: null triggers fire every payload, max-range flare rounds send one and just vanished
             return;
 
         entity.Comp.IsTriggered = true;

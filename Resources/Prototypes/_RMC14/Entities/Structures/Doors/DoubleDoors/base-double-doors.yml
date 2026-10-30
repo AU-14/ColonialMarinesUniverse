@@ -45,6 +45,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/almayer_glass.rsi
+  # cmu edit start: bolts itself while the air beside it is unsafe
+  - type: CMUAtmosBolt
+  # cmu edit end
 
 - type: entity
   parent: RMCDoubleDoorSolidBase

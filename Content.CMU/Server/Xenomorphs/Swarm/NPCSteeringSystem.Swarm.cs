@@ -14,7 +14,8 @@ public sealed partial class NPCSteeringSystem
         if (uid == other || !IsSwarmLesser(uid) || !IsSwarmLesser(other))
             return false;
 
-        if (TryComp<CMUSwarmTraversalComponent>(uid, out var traversal) && traversal.Crossing)
+        // Stair queues converge on one approach point, spacing would keep them off it forever.
+        if (TryComp<CMUSwarmTraversalComponent>(uid, out var traversal) && traversal.Route != null)
             return true;
 
         const float spacing = 0.9f;

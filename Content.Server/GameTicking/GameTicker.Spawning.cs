@@ -974,6 +974,11 @@ namespace Content.Server.GameTicking
             if (makeObserver)
                 _roles.MindAddRole(mind.Value, "MindRoleObserver");
 
+            // cmu edit start: a lobby observer's ghost looks like their selected character
+            if (ghost != null)
+                EntityManager.System<Content.Server.CMU14.Ghost.CMUGhostProfileAppearanceSystem>().DressAsSelectedCharacter(ghost.Value, player);
+            // cmu edit end
+
             _adminLogger.Add(LogType.LateJoin,
                 LogImpact.Low,
                 $"{player.Name} late joined the round as an Observer with {ToPrettyString(ghost):entity}.");

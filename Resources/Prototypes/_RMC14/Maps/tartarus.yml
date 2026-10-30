@@ -1,7 +1,7 @@
 - type: gameMap
   id: tartarusprison
   mapName: Tartarus Prison (Jailbreak
-  mapPath: /Maps/CMU14/Legacy/TartarusPrison.yml
+  mapPath: /Maps/CMU14/Planets/Legacy/TartarusPrison.yml # cmu edit: CMU14 maps are sorted into Planets and Ships
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

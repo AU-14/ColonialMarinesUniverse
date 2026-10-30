@@ -96,7 +96,7 @@ public sealed partial class MultiServerKickManager
         if (notification.ServerId == (await _serverDbEntry.ServerEntity).Id)
             return;
 
-        if (_adminManager.IsAdmin(player, includeDeAdmin: true))
+        if (_adminManager.HasAdminFlag(player, Content.Shared.Administration.AdminFlags.Staff, includeDeAdmin: true)) // cmu edit
             return;
 
         _sawmill.Info($"Kicking {player} for connecting to another server. Multi-server play is not allowed.");

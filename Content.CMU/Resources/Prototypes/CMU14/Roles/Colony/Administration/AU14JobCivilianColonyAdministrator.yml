@@ -81,6 +81,9 @@
   inhand:
   - RMCRadioHandheldColonyOff
   - CMUMobilePhone
+  storage:
+    outerClothing:
+    - CMUPepperSpray
 
 - type: entity
   parent: CMSpawnPointJobBase

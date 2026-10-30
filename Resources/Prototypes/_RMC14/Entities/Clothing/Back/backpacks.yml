@@ -505,5 +505,5 @@
         - id: RMCRadioHandheldColony
         - id: RMCHeadRoyalL1HelmetBallistic
         - id: CMFireExtinguisherPortable
-        - id: CMDefibrillator
+        - id: AU14CMDefibrillator # cmu edit: was CMDefibrillator
         - id: CMHealthAnalyzer

@@ -1,0 +1,35 @@
+author: troytroy400
+category: CMU
+changes:
+- message: On Force v Force and Distress Signal GOVFOR/OPFOR req now get a free Bison
+    Cargo Carrier from the ASRS at round start.
+  type: Add
+- message: Food, drink, cigarette, recreation and non-department clothing vendors
+    on the colony now automatically convert to cash vendors.
+  type: Add
+- message: Added the Alcoholic and Drug Addict disability traits.
+  type: Add
+- message: You can now take at most four disability traits.
+  type: Tweak
+- message: Moved the area echo settings to the CMU settings tab.
+  type: Tweak
+- message: Added an option in the CMU settings tab to hide your username on the round-end
+    screen for those that would like to hide what character(s) they play.
+  type: Add
+- message: Removed upstream voiceline and emote settings for species other than humans.
+  type: Tweak
+- message: Cash vendors now charge the rest of the price to the ID card you're carrying
+    when the inserted cash doesn't cover it.
+  type: Add
+- message: Added the universal paper tool to the Rec-Vend for $35.
+  type: Add
+- message: Military roles now have height, weight-for-height and age standards.
+  type: Add
+- message: Hovering over a locked role now lists everything you need to change, one
+    per line, instead of listing only one at a time.
+  type: Add
+- message: Added a Physical Standards page with grooming rules to the Military SOP,
+    under Equipment and Personnel.
+  type: Add
+time: '2026-10-07T06:07:35.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2093

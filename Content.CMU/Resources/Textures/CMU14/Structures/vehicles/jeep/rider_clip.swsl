@@ -1,0 +1,13 @@
+// Hides the part of a seated rider below their seat line, so legs never show through the seats.
+// The rider reaches this pass already lit, so it must not be lit again.
+light_mode unshaded;
+
+uniform bool clip_enabled;
+uniform highp vec2 line_origin;
+uniform highp vec2 line_normal;
+
+void fragment() {
+    highp vec4 source = zTexture(UV);
+    highp float keep = step(0.0, dot(SCREEN_UV - line_origin, line_normal));
+    COLOR = source * (clip_enabled ? keep : 1.0);
+}
