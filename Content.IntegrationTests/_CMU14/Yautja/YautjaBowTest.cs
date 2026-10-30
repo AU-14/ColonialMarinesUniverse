@@ -8716,7 +8716,7 @@ public sealed class YautjaBowTest
                 "CMUYautjaLoadoutVendor",
                 "CMUYautjaArmorBundle",
                 "CMUYautjaArmor",
-                ["CMUYautjaClanArmor", "CMUYautjaMask", "CMUYautjaMaskAccessory01Ebony", "CMUYautjaClanGreaves"]),
+                ["CMUYautjaClanArmor", "CMUYautjaMask", "CMUYautjaClanGreaves"]),
             new MandatoryBundleRow(
                 "CMUYautjaYoungbloodLoadoutVendor",
                 "CMUYautjaYoungbloodHuntingEquipmentBundle",
@@ -8726,7 +8726,7 @@ public sealed class YautjaBowTest
                 "CMUYautjaYoungbloodLoadoutVendor",
                 "CMUYautjaArmorBundle",
                 "CMUYautjaArmor",
-                ["CMUYautjaClanArmor", "CMUYautjaMask", "CMUYautjaMaskAccessory01Ebony", "CMUYautjaClanGreaves"]),
+                ["CMUYautjaClanArmor", "CMUYautjaMask", "CMUYautjaClanGreaves"]),
             new MandatoryBundleRow(
                 "CMUYautjaStrandedLoadoutVendor",
                 "CMUYautjaStrandedHuntingEquipmentBundle",
@@ -15094,7 +15094,6 @@ public sealed class YautjaBowTest
                 {
                     "CMUYautjaClanArmor",
                     "CMUYautjaMask",
-                    "CMUYautjaMaskAccessory01Ebony",
                     "CMUYautjaClanGreaves",
                 }));
             }
