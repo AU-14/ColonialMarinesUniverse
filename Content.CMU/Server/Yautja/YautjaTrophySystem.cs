@@ -1632,8 +1632,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             !TryComp<MobStateComponent>(target, out var mobState) ||
             !_mobState.IsDead(target, mobState) ||
             !IsAdjacent(hunter, target) ||
-            IsBlockedButcherTarget(target) ||
-            HasComp<YautjaComponent>(target))
+            IsBlockedButcherTarget(target))
         {
             return false;
         }
