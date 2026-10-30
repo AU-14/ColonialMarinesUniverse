@@ -16,7 +16,7 @@
   displayName: GROM Rapid-Response-Unit Squad
   partyspawn: UPPGROMRRUSquadSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml
   weight: 20
   minplayers: 0
   maxplayers: 400
@@ -39,7 +39,7 @@
   displayName: GROM Rapid-Response-Unit Team
   partyspawn: UPPGROMRRUTeamSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml
   weight: 20
   minplayers: 0
   maxplayers: 400

@@ -11,7 +11,7 @@
   announcearrival: '' 
   partyspawn: MSSOperationalGroupSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/genericthirdpartyshuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
   weight: 10
   minplayers: 0
   maxplayers: 400

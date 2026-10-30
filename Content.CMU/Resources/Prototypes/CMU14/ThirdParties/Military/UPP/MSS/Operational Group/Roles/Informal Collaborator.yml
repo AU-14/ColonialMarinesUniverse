@@ -46,7 +46,7 @@
   greeting: au14-mssthirdparty-greeting
   icon: "CMJobIconEmpty"
   joinNotifyCrew: false
-  supervisors: au-14-job-name-mssthirdparty-case-officer
+  supervisors: au14-job-name-civilianambassadorupp
   accessGroups:
   - Colonist
   hidden: true
