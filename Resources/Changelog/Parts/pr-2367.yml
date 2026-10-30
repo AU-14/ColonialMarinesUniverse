@@ -1,0 +1,16 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Yautja clan masks, thrall masks and the council helmet block chem smoke
+    and nerve gas, like in cmss13.
+  type: Fix
+- message: The warrior punch, bone chips and hedgehog spikes no longer slow yautja.
+  type: Fix
+- message: Yautja communicators keep working when the colony comms tower is down.
+  type: Fix
+- message: Yautja get a warning just before they hit crit.
+  type: Add
+- message: Yautja can't self-destruct while in crit, like in cmss13.
+  type: Fix
+time: '2026-10-30T11:07:48.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2367
