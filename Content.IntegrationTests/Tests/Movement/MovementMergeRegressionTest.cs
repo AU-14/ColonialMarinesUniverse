@@ -177,8 +177,9 @@ public sealed class MovementMergeRegressionTest : MovementTest
         {
             Assert.Multiple(() =>
             {
-                Assert.That(SEntMan.HasComponent<ActiveInputMoverComponent>(source), Is.False);
-                Assert.That(SEntMan.HasComponent<ActiveInputMoverComponent>(target), Is.False);
+                // CMU14: blocked movers must still receive relative/camera rotation updates (SS14 45953).
+                Assert.That(SEntMan.HasComponent<ActiveInputMoverComponent>(source), Is.True);
+                Assert.That(SEntMan.HasComponent<ActiveInputMoverComponent>(target), Is.True);
                 Assert.That(SEntMan.GetComponent<InputMoverComponent>(target).HeldMoveButtons, Is.EqualTo(MoveButtons.None));
             });
 

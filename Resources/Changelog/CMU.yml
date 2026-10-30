@@ -15821,5 +15821,99 @@
   id: 918
   time: '2026-10-29T10:44:05.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2366
+- author: rokudara-sen
+  changes:
+  - message: Free Company Raiders get better armor, rifle lights, flares, a real medical
+      pouch, a stocked pack and ex-MARSOC skills so they stand a chance on distress
+      calls against xenos.
+    type: Tweak
+  - message: The raider leader's XM40 no longer accepts HEAP magazines.
+    type: Tweak
+  id: 919
+  time: '2026-10-30T11:04:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2375
+- author: ILoveDespoiler
+  changes:
+  - message: Added 100 AP to King.
+    type: Add
+  - message: Adjusted some stats of King so it can fulfill its role as the Tie Breaker
+      that ends the game.
+    type: Tweak
+  id: 920
+  time: '2026-10-30T11:05:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2371
+- author: Mary-Marilyn
+  changes:
+  - message: Added a WY Corporate Synthetic for insurgency
+    type: Add
+  id: 921
+  time: '2026-10-30T11:06:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2372
+- author: rokudara-sen
+  changes:
+  - message: Yautja clan masks, thrall masks and the council helmet block chem smoke
+      and nerve gas, like in cmss13.
+    type: Fix
+  - message: The warrior punch, bone chips and hedgehog spikes no longer slow yautja.
+    type: Fix
+  - message: Yautja communicators keep working when the colony comms tower is down.
+    type: Fix
+  - message: Yautja get a warning just before they hit crit.
+    type: Add
+  - message: Yautja can't self-destruct while in crit, like in cmss13.
+    type: Fix
+  id: 922
+  time: '2026-10-30T11:07:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2367
+- author: rokudara-sen
+  changes:
+  - message: Admins can call the Yautja Military Caste as an ERT. They arrive on their
+      own shuttle with an Enforcer leading Soldiers.
+    type: Admin
+  - message: Military Caste bracers have their bracer menu, self-destruct and translator
+      again.
+    type: Fix
+  - message: Military Caste kits match CM13, with a plasma carbine, strong xeno restraints
+      and knife greaves.
+    type: Tweak
+  id: 923
+  time: '2026-10-30T11:08:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2370
+- author: rokudara-sen
+  changes:
+  - message: Serial killers can butcher human corpses with a knife or anything sharp
+      in hand, like preds do.
+    type: Add
+  id: 924
+  time: '2026-10-30T11:10:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2376
+- author: rokudara-sen
+  changes:
+  - message: Colony jeep kits only show up once, and only on the colony ASRS console.
+    type: Fix
+  id: 925
+  time: '2026-10-30T11:10:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2364
+- author: TheHellFireo
+  changes:
+  - message: Fixed several movement, ammunition, recycling, lathe, shuttle and sentry-camera
+      issues.
+    type: Fix
+  - message: Fixed gas loss and duplication when blocking and reopening tiles.
+    type: Fix
+  - message: Rockets now trigger at their aimed stopping point, and hijack pipe warnings
+      remain until their burst.
+    type: Fix
+  - message: Added guidebook Back/Forward navigation with remembered page searches
+      and scroll positions.
+    type: Add
+  - message: Ordinary handheld radios now support a receive-only mode.
+    type: Add
+  - message: Health scanners distinguish critical overdoses, and options refresh when
+      settings change.
+    type: Tweak
+  id: 926
+  time: '2026-10-30T14:05:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2377
 Name: CMU
 Order: -1

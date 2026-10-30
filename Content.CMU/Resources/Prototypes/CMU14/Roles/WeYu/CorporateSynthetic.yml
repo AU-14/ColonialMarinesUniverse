@@ -1,0 +1,106 @@
+- type: job
+  parent: AU14JobCivilianColonySynthetic
+  id: AU14JobCorporateSynthetic
+  name: au14-job-name-civiliancorporatesynthetic
+  description: au14-job-description-civiliancorporatesynthetic
+  playTimeTracker: CMUJobCorporateSynthetic
+  roundForce: WY
+  roundRole: CorporateSynthetic
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancorporatesynthetic
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+  ranks:
+    AU14RankCorporateSyntheticGrade5:
+    - !type:RoleTimeRequirement
+      role: CMUJobCorporateSynthetic
+      time: 252000 # 70 hours
+    AU14RankCorporateSyntheticGrade4:
+    - !type:RoleTimeRequirement
+      role: CMUJobCorporateSynthetic
+      time: 180000 # 50 hours
+    AU14RankCorporateSyntheticGrade3:
+    - !type:RoleTimeRequirement
+      role: CMUJobCorporateSynthetic
+      time: 36000 # 10 hours
+    AU14RankCorporateSyntheticGrade2:
+    - !type:RoleTimeRequirement
+      role: CMUJobCorporateSynthetic
+      time: 18000 # 5 hours
+    AU14RankCorporateSyntheticGrade1: []
+  startingGear: AU14GearCorporateSynthetic
+  icon: RMCJobIconSynth
+  supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: au14-spawn-role-name-wy-corporate-synthetic
+  accessGroups:
+  - Colonist
+  - auwy
+  - aumed
+  - auengi
+  access:
+  - AU14AccessCorporateWEYULiaison
+
+- type: startingGear
+  id: AU14GearCorporateSynthetic
+  equipment:
+    id: AU14IDCardCorporateSynthetic
+    shoes: RMCBootsCorporate
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardCorporateSynthetic
+  components:
+  - type: PresetIdCard
+    job: AU14JobCorporateSynthetic
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCorporateSynthetic
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCorporateSynthetic
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobCorporateSynthetic
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCorporateSynthetic
+  points: 45
+  groups:
+  - SynthBackpackAU14
+  - WYCLJumpsuitAU14
+  - ColonySynthSuitAU14
+  - ColonySynthHeadwearAU14
+  - ColonySynthPouchesLeftAU14
+  - ColonySynthPouchesRightAU14
+  - ColonySynthSuitSpecialAU14
+  - ColonySynthBeltAU14
+  - SynthGlovesAU14
+  - SynthEquipmentAU14
+  - SynthAccesoriesSpecialAU14
+  - SynthGlassesAU14
+  - SynthMasksAU14
+  - ForceSynthResetKeyAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
