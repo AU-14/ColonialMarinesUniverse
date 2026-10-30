@@ -245,10 +245,14 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
     /// <returns>Returns true if all requirements were met or there were no requirements.</returns>
     public bool IsAllowed(ICommonSession player, ProtoId<JobPrototype> job)
     {
+        // CMU14: a loading player's missing profile must not bypass character requirements.
+        if (_preferencesManager.GetPreferencesOrNull(player.UserId)?.SelectedCharacter is not HumanoidCharacterProfile profile)
+            return false;
+
         // cmu edit start: military physical standards apply even without role timers
         if (ProtoMan.TryIndex(job, out var jobProto) &&
             !Content.Shared.CMU14.Roles.CMUMilitaryHeightRequirement.Check(jobProto, EntityManager.ComponentFactory,
-                (HumanoidCharacterProfile?) _preferencesManager.GetPreferences(player.UserId).SelectedCharacter, out _))
+                profile, out _))
         {
             return false;
         }
@@ -273,8 +277,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
             out _,
             EntityManager,
             ProtoMan,
-            (HumanoidCharacterProfile?)
-            _preferencesManager.GetPreferences(player.UserId).SelectedCharacter);
+            profile);
     }
 
     /// <summary>
@@ -285,6 +288,10 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
     /// <returns>Returns true if all requirements were met or there were no requirements.</returns>
     public bool IsAllowed(ICommonSession player, ProtoId<AntagPrototype> antag)
     {
+        // CMU14: a loading player's missing profile must not bypass character requirements.
+        if (_preferencesManager.GetPreferencesOrNull(player.UserId)?.SelectedCharacter is not HumanoidCharacterProfile profile)
+            return false;
+
         if (!_cfg.GetCVar(CCVars.GameRoleTimers))
             return true;
 
@@ -301,8 +308,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
             out _,
             EntityManager,
             ProtoMan,
-            (HumanoidCharacterProfile?)
-            _preferencesManager.GetPreferences(player.UserId).SelectedCharacter);
+            profile);
     }
 
     /// <summary>
@@ -310,6 +316,10 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
     /// </summary>
     public bool IsAllowed(ICommonSession player, HashSet<JobRequirement>? requirements)
     {
+        // CMU14: a loading player's missing profile must not bypass character requirements.
+        if (_preferencesManager.GetPreferencesOrNull(player.UserId)?.SelectedCharacter is not HumanoidCharacterProfile profile)
+            return false;
+
         if (!_cfg.GetCVar(CCVars.GameRoleTimers))
             return true;
 
@@ -325,13 +335,21 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
             out _,
             EntityManager,
             ProtoMan,
-            (HumanoidCharacterProfile?)
-            _preferencesManager.GetPreferences(player.UserId).SelectedCharacter);
+            profile);
     }
 
     public HashSet<ProtoId<JobPrototype>> GetDisallowedJobs(ICommonSession player)
     {
         var roles = new HashSet<ProtoId<JobPrototype>>();
+        // CMU14: fail closed until preferences are available, including timer-excluded roles.
+        var profile = _preferencesManager.GetPreferencesOrNull(player.UserId)?.SelectedCharacter as HumanoidCharacterProfile;
+        if (profile == null)
+        {
+            foreach (var job in ProtoMan.EnumeratePrototypes<JobPrototype>())
+                roles.Add(job.ID);
+            return roles;
+        }
+
         if (!_cfg.GetCVar(CCVars.GameRoleTimers))
             return roles;
 
@@ -343,7 +361,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
 
         foreach (var job in ProtoMan.EnumeratePrototypes<JobPrototype>())
         {
-            if (!JobRequirements.TryRequirementsMet(job, playTimes, out _, EntityManager, ProtoMan, (HumanoidCharacterProfile?) _preferencesManager.GetPreferences(player.UserId).SelectedCharacter))
+            if (!JobRequirements.TryRequirementsMet(job, playTimes, out _, EntityManager, ProtoMan, profile))
                 roles.Add(job.ID);
         }
 
@@ -353,6 +371,13 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
 
     public void RemoveDisallowedJobs(NetUserId userId, List<ProtoId<JobPrototype>> jobs)
     {
+        // CMU14: avoid admission based on a null character while preferences are loading.
+        if (_preferencesManager.GetPreferencesOrNull(userId)?.SelectedCharacter is not HumanoidCharacterProfile profile)
+        {
+            jobs.Clear();
+            return;
+        }
+
         if (!_cfg.GetCVar(CCVars.GameRoleTimers))
             return;
 
@@ -368,7 +393,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
         for (var i = 0; i < jobs.Count; i++)
         {
             if (ProtoMan.Resolve(jobs[i], out var job)
-                && JobRequirements.TryRequirementsMet(job, playTimes, out _, EntityManager, ProtoMan, (HumanoidCharacterProfile?) _preferencesManager.GetPreferences(userId).SelectedCharacter))
+                && JobRequirements.TryRequirementsMet(job, playTimes, out _, EntityManager, ProtoMan, profile))
             {
                 continue;
             }
