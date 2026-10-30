@@ -475,11 +475,15 @@ public abstract partial class SharedMoverController : VirtualController
                 // If we're a relay target then predict the sound for all relays.
                 if (relaySource != null)
                 {
-                    _audio.PlayPredicted(sound, uid, relaySource.Value, audioParams);
+                    // CMU14: bound sources before allocation and filter their original floor.
+                    // _audio.PlayPredicted(sound, uid, relaySource.Value, audioParams);
+                    PlayCMUFootstepSound(sound, uid, relaySource.Value, audioParams);
                 }
                 else
                 {
-                    _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    // CMU14
+                    // _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    PlayCMUFootstepSound(sound, uid, uid, audioParams);
                 }
             }
         }
@@ -873,11 +877,15 @@ public abstract partial class SharedMoverController : VirtualController
                 // If we're a relay target then predict the sound for all relays.
                 if (relayTarget != null)
                 {
-                    _audio.PlayPredicted(sound, uid, relayTarget.Source, audioParams);
+                    // CMU14
+                    // _audio.PlayPredicted(sound, uid, relayTarget.Source, audioParams);
+                    PlayCMUFootstepSound(sound, uid, relayTarget.Source, audioParams);
                 }
                 else
                 {
-                    _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    // CMU14
+                    // _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    PlayCMUFootstepSound(sound, uid, uid, audioParams);
                 }
             }
 

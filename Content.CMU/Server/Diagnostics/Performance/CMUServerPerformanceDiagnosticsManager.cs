@@ -537,20 +537,21 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
 
     private void HandleHeartbeatAndBaseline(in CMUServerPerformanceObservation observation)
     {
-        if (_detector.Active)
-            return;
-
         double heartbeatSeconds = Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceHeartbeatInterval));
         if (heartbeatSeconds > 0 && observation.RealTime >= _nextHeartbeatTime)
         {
             _sawmill.Info(BuildObservationLine(
                 "heartbeat",
                 observation,
-                0,
-                CMUPerformanceIncidentReason.None,
-                observation.SuppressRateTriggers ? "warmup" : "healthy"));
+                _detector.Active ? _activeIncidentId : 0,
+                _detector.Active ? _detector.ActiveReasons : CMUPerformanceIncidentReason.None,
+                _detector.Active ? _incidentSeverity : observation.SuppressRateTriggers ? "warmup" : "healthy"));
             _nextHeartbeatTime = observation.RealTime + TimeSpan.FromSeconds(heartbeatSeconds);
         }
+
+        // Keep the pre-incident comparison baseline, while sampling heartbeats on the same cadence during lag.
+        if (_detector.Active)
+            return;
 
         double baselineSeconds = Math.Max(5, _config.GetCVar(CCVars.CMUServerPerformanceBaselineInterval));
         if (observation.RealTime < _nextBaselineTime || observation.SuppressRateTriggers)
@@ -712,9 +713,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             $"overflowErrors={errors.Overflow} correlationOnly=true"));
         foreach (var source in errors.Sources.OrderByDescending(source => source.Count).Take(4))
         {
-            string sample = CMURecentServerErrors.Format(new(0, source.Sawmill, source.Last));
-            if (sample.Length > 2048)
-                sample = sample[..2048] + " [truncated; see original error]";
+            var sample = CMUPerformanceErrorTracker.FormatSample(source);
             _sawmill.Warning(Invariant(
                 $"[CMU-PERF] error-source incidentId={_activeIncidentId} source={SanitizeName(source.Sawmill)} ",
                 $"count={source.Count} firstAt={source.FirstAt:O} lastAt={source.Last.Timestamp:O} ",

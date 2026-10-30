@@ -103,7 +103,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/venator.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Venator/venator.rsi
     state: venator_gib
   - type: TimedDespawn
     lifetime: 0.8

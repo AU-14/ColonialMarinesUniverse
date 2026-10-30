@@ -42,6 +42,7 @@ public sealed partial class AU14NetSpliceSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private ANPRCRangeSystem _range = default!;
 
     // all played at the mast rather than to the operator: someone standing next to a junction being worked
     // should be able to hear it happening
@@ -357,6 +358,7 @@ public sealed partial class AU14NetSpliceSystem : EntitySystem
             if (anchor.Channels.Add(channel))
                 grafted.Add(channel);
         }
+        _range.RefreshAnchorChannels((ent.Owner, anchor));
 
         var tap = Spawn(ent.Comp.TapPrototype, Transform(ent.Owner).Coordinates);
 
@@ -517,6 +519,7 @@ public sealed partial class AU14NetSpliceSystem : EntitySystem
         {
             foreach (var channel in spliced.Grafted)
                 anchor.Channels.Remove(channel);
+            _range.RefreshAnchorChannels((target, anchor));
         }
 
         RemComp<AU14NetSplicedComponent>(target);
