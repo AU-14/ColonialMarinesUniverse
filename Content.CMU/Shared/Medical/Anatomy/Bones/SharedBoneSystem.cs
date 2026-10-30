@@ -86,6 +86,15 @@ public abstract partial class SharedBoneSystem : EntitySystem
 
     private void OnBoneFractureAttempt(Entity<BoneComponent> ent, ref BoneFractureAttemptEvent args)
     {
+        // cmss13 NO_PERMANENT_DAMAGE: "your limb withstands the blow", the bone just doesn't break
+        if (TryComp<BodyPartComponent>(ent, out var part) &&
+            part.Body is { } owner &&
+            HasComp<CMUNoPermanentDamageComponent>(owner))
+        {
+            args.Cancelled = true;
+            return;
+        }
+
         if (!PartBelongsToSynth(ent.Owner))
             return;
 

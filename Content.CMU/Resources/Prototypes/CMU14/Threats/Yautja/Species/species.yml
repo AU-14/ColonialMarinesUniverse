@@ -66,3 +66,21 @@
   - type: HumanoidProfile
     species: Yautja
     voice: CMUMaleYautja
+
+# the bits of the cmss13 Thrall species that live on components locked to their own systems.
+# YautjaThrallHeroSystem copies them onto a thrall when the bracer links and puts the originals back after
+- type: entity
+  id: CMUYautjaThrallSpecies
+  categories: [HideSpawnMenu]
+  components:
+  # hero darksight 5, always on like a xeno's half night vision
+  - type: NightVision
+    state: Half
+    innate: true
+    onlyHalf: true
+  # hero cold_level_1 is 220 against the human 260, so the cold slowdowns start 40 K later
+  - type: TemperatureSpeed
+    thresholds:
+      233: 1.0
+      183: 0.95
+      133: 0.85

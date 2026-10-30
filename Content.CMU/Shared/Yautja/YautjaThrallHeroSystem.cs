@@ -1,4 +1,8 @@
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Pulling;
+using Content.Shared._RMC14.NightVision;
+using Content.Shared.Temperature.Components;
+using Content.Shared.Weapons.Melee.Events;
 using Content.Shared._RMC14.StatusEffect;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
@@ -19,6 +23,8 @@ public sealed partial class YautjaThrallHeroSystem : EntitySystem
 {
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
+    private const string NightVisionName = "NightVision";
+    private const string TemperatureSpeedName = "TemperatureSpeed";
 
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private YautjaMarkSystem _marks = default!;
@@ -32,11 +38,10 @@ public sealed partial class YautjaThrallHeroSystem : EntitySystem
     {
         SubscribeLocalEvent<YautjaThrallHeroComponent, DamageModifyEvent>(OnDamageModify);
         SubscribeLocalEvent<YautjaThrallHeroComponent, YautjaMarkForHuntActionEvent>(OnMarkForHunt);
+        SubscribeLocalEvent<YautjaThrallHeroComponent, GetMeleeDamageEvent>(OnGetMeleeDamage);
     }
 
-    /// <summary>
-    /// Turns a linked thrall into the cmss13 Thrall species. Server only, the component carries the result.
-    /// </summary>
+    // server only, the components it hands out carry the result to the client
     public void Apply(EntityUid thrall)
     {
         if (_net.IsClient ||
@@ -78,6 +83,25 @@ public sealed partial class YautjaThrallHeroSystem : EntitySystem
             hero.AddedButcher = true;
         }
 
+        hero.AddedNoPermanentDamage = !EnsureComp<CMUNoPermanentDamageComponent>(thrall, out _);
+
+        if (_prototypes.TryIndex(hero.SpeciesPrototype, out var species))
+        {
+            // the NightVision registry comes from yaml, the component is locked to its own system in code.
+            // innate, so goggles and the mask visor hand it back when they come off
+            if (!HasComp<NightVisionComponent>(thrall) && TryGetRegistry(species, NightVisionName, out var nightVision))
+            {
+                EntityManager.AddComponents(thrall, nightVision, removeExisting: false);
+                hero.AddedNightVision = true;
+            }
+
+            if (HasComp<TemperatureSpeedComponent>(thrall) && TryGetRegistry(species, TemperatureSpeedName, out var temperature))
+            {
+                EntityManager.AddComponents(thrall, temperature, removeExisting: true);
+                hero.ReplacedTemperatureSpeed = true;
+            }
+        }
+
         _actions.AddAction(thrall, ref hero.MarkForHuntAction, hero.MarkForHuntActionId);
         _movement.RefreshMovementSpeedModifiers(thrall);
     }
@@ -112,6 +136,21 @@ public sealed partial class YautjaThrallHeroSystem : EntitySystem
         if (hero.AddedButcher)
             RemComp<YautjaButcherAbilityComponent>(thrall);
 
+        if (hero.AddedNoPermanentDamage)
+            RemComp<CMUNoPermanentDamageComponent>(thrall);
+
+        if (hero.AddedNightVision)
+            RemComp<NightVisionComponent>(thrall);
+
+        // back to whatever the mob's own prototype gives it
+        if (hero.ReplacedTemperatureSpeed)
+        {
+            if (MetaData(thrall).EntityPrototype is { } own && TryGetRegistry(own, TemperatureSpeedName, out var temperature))
+                EntityManager.AddComponents(thrall, temperature, removeExisting: true);
+            else
+                RemComp<TemperatureSpeedComponent>(thrall);
+        }
+
         _actions.RemoveAction(thrall, hero.MarkForHuntAction);
         _marks.ClearPreyMarks(thrall);
         RemComp<YautjaThrallHeroComponent>(thrall);
@@ -143,6 +182,25 @@ public sealed partial class YautjaThrallHeroSystem : EntitySystem
 
         if (modified != null)
             args.Damage = modified;
+    }
+
+    private void OnGetMeleeDamage(Entity<YautjaThrallHeroComponent> ent, ref GetMeleeDamageEvent args)
+    {
+        // only the fists, the weapon is the thrall itself when unarmed
+        if (args.Weapon != ent.Owner)
+            return;
+
+        args.Damage *= ent.Comp.UnarmedMultiplier;
+    }
+
+    private static bool TryGetRegistry(EntityPrototype prototype, string name, out ComponentRegistry registry)
+    {
+        registry = new ComponentRegistry();
+        if (!prototype.Components.TryGetValue(name, out var entry))
+            return false;
+
+        registry[name] = entry;
+        return true;
     }
 
     private void OnMarkForHunt(Entity<YautjaThrallHeroComponent> ent, ref YautjaMarkForHuntActionEvent args)

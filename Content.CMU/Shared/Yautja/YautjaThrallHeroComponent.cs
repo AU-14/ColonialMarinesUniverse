@@ -4,11 +4,8 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Yautja;
 
-/// <summary>
-/// cmss13 turns a thrall into the "Thrall" species the moment the master links their bracer (thrall_procs.dm
-/// link_bracer). That species is the human hero baseline plus the thrall changes from cmss13 PR 11542. This is
-/// that species: added on link, removed on unlink, and it only takes back what it gave.
-/// </summary>
+// cmss13 makes a thrall the "Thrall" species the moment the master links their bracer (link_bracer). that's the
+// hero human baseline plus the PR 11542 thrall changes. added on link, removed on unlink, only takes back what it gave
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(YautjaThrallHeroSystem))]
 public sealed partial class YautjaThrallHeroComponent : Component
@@ -27,6 +24,14 @@ public sealed partial class YautjaThrallHeroComponent : Component
     // thrall total_health 150 instead of 100, crit and death both come 50 damage later
     [DataField]
     public FixedPoint2 ExtraHealth = 50;
+
+    // hero punch/strong does 10 against the normal 5
+    [DataField]
+    public float UnarmedMultiplier = 2f;
+
+    // darksight and the colder cold_level_1, swapped onto the thrall from this prototype
+    [DataField]
+    public EntProtoId SpeciesPrototype = "CMUYautjaThrallSpecies";
 
     [DataField]
     public EntProtoId MarkForHuntActionId = "CMUActionYautjaMarkForHunt";
@@ -51,4 +56,13 @@ public sealed partial class YautjaThrallHeroComponent : Component
 
     [ViewVariables]
     public bool AddedButcher;
+
+    [ViewVariables]
+    public bool AddedNoPermanentDamage;
+
+    [ViewVariables]
+    public bool AddedNightVision;
+
+    [ViewVariables]
+    public bool ReplacedTemperatureSpeed;
 }
