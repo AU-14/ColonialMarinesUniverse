@@ -20,16 +20,16 @@
       Dead: XenoDead
     displayDamageInAlert: true
   - type: DrawableSolution  
-  solution: blood  
+    solution: blood  
   - type: Solution  
-  id: blood  
-  solution:  
-    maxVol: 600  
-    reagents:  
-    - ReagentId: CMUPathogenMycohemolymph  
-      Quantity: 300  
-    - ReagentId: CMUPathogenSporoplasmChitin  
-      Quantity: 300  
+    id: blood  
+    solution:  
+      maxVol: 600  
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 300  
+      - ReagentId: CMUPathogenSporoplasmChitin  
+        Quantity: 300  
   - type: SolutionRegeneration  
   generated:  
     reagents:  
