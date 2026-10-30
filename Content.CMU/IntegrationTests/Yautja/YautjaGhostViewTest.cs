@@ -1,3 +1,4 @@
+using Content.Client.Verbs;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.IdentityManagement;
@@ -7,6 +8,7 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 [TestOf(typeof(YautjaVisibilitySystem))]
+[TestOf(typeof(VerbSystem))]
 public sealed class YautjaGhostViewTest : GameTest
 {
     [Test]
@@ -32,6 +34,30 @@ public sealed class YautjaGhostViewTest : GameTest
             SEntMan.DeleteEntity(pred);
             SEntMan.DeleteEntity(ghost);
             SEntMan.DeleteEntity(human);
+        });
+    }
+
+    [Test]
+    public async Task OnlyGhostsGetCloakedYautjaInRightClickMenu()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var verbs = CEntMan.System<VerbSystem>();
+            var pred = CEntMan.Spawn("CMUMobYautja");
+            var ghost = CEntMan.Spawn("MobObserver");
+            var human = CEntMan.Spawn("MobHuman");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(verbs.CMUShowHiddenInMenu(ghost, pred), Is.True);
+                Assert.That(verbs.CMUShowHiddenInMenu(human, pred), Is.False);
+                Assert.That(verbs.CMUShowHiddenInMenu(pred, pred), Is.False);
+                Assert.That(verbs.CMUShowHiddenInMenu(ghost, human), Is.False);
+            });
+
+            CEntMan.DeleteEntity(pred);
+            CEntMan.DeleteEntity(ghost);
+            CEntMan.DeleteEntity(human);
         });
     }
 }
