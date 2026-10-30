@@ -33,7 +33,10 @@ using Content.Shared.Standing;
 using Content.Shared.Storage;
 using Content.Shared.Tag;
 using Content.Shared.Traits.Assorted;
+using Content.Shared.Tools;
+using Content.Shared.Tools.Systems;
 using Content.Shared.Verbs;
+using Content.Shared.Weapons.Melee;
 using Content.Shared._RMC14.UniformAccessories;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -69,6 +72,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     private static readonly EntProtoId HumanRemainsPrototype = "CMUYautjaHumanButcheredRemains";
     private static readonly EntProtoId XenoRemainsPrototype = "CMUYautjaXenoButcheredRemains";
     private static readonly ProtoId<TagPrototype> XenoLarvaTag = "RMCXenoLarva";
+    private static readonly ProtoId<TagPrototype> KnifeTag = "Knife";
+    private static readonly ProtoId<ToolQualityPrototype> SlicingQuality = "Slicing";
     private static readonly (YautjaButcherProcedure Procedure, string LocId)[] HumanButcherProcedures =
     [
         (YautjaButcherProcedure.Skin, "cmu-yautja-butcher-procedure-skin"),
@@ -99,6 +104,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private TagSystem _tags = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
@@ -112,6 +118,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         SubscribeLocalEvent<YautjaTrophySourceComponent, YautjaButcherDoAfterEvent>(OnButcherDoAfter);
         SubscribeLocalEvent<YautjaComponent, YautjaButcherTargetSelectedEvent>(OnButcherTargetSelected);
         SubscribeLocalEvent<YautjaComponent, YautjaButcherProcedureSelectedEvent>(OnButcherProcedureSelected);
+        SubscribeLocalEvent<YautjaButcherAbilityComponent, YautjaButcherTargetSelectedEvent>(OnAbilityButcherTargetSelected);
+        SubscribeLocalEvent<YautjaButcherAbilityComponent, YautjaButcherProcedureSelectedEvent>(OnAbilityButcherProcedureSelected);
         SubscribeLocalEvent<YautjaTrophyComponent, ExaminedEvent>(OnTrophyExamined);
         SubscribeLocalEvent<YautjaTrophyComponent, InteractUsingEvent>(OnTrophyInteractUsing);
         SubscribeLocalEvent<YautjaTrophyComponent, UniformAccessoryInsertAttemptEvent>(OnTrophyUniformAccessoryInsertAttempt);
@@ -302,6 +310,12 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     public bool TryOpenButcherDialog(EntityUid hunter)
     {
+        if (!HasComp<YautjaComponent>(hunter) && !HoldsBlade(hunter))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-butcher-need-blade"), hunter, hunter, PopupType.SmallCaution);
+            return false;
+        }
+
         if (!CanStartButcher(hunter))
             return false;
 
@@ -340,15 +354,29 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private void OnButcherTargetSelected(Entity<YautjaComponent> hunter, ref YautjaButcherTargetSelectedEvent args)
     {
+        ButcherTargetSelected(hunter.Owner, args);
+    }
+
+    private void OnAbilityButcherTargetSelected(Entity<YautjaButcherAbilityComponent> ent, ref YautjaButcherTargetSelectedEvent args)
+    {
+        // a yautja with the ability too already got this through YautjaComponent
+        if (HasComp<YautjaComponent>(ent))
+            return;
+
+        ButcherTargetSelected(ent.Owner, args);
+    }
+
+    private void ButcherTargetSelected(EntityUid hunter, YautjaButcherTargetSelectedEvent args)
+    {
         if (!TryGetEntity(args.User, out var user) ||
             !TryGetEntity(args.Target, out var target) ||
-            user != hunter.Owner)
+            user != hunter)
         {
             return;
         }
 
-        if (!CanStartButcher(hunter.Owner) ||
-            !CanButcher(hunter.Owner, target.Value, out var kind))
+        if (!CanStartButcher(hunter) ||
+            !CanButcher(hunter, target.Value, out var kind))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-trophy-invalid"), hunter, hunter, PopupType.SmallCaution);
             return;
@@ -360,7 +388,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             options.Add(new DialogOption(
                 Loc.GetString("cmu-yautja-butcher-procedure-skin"),
                 new YautjaButcherProcedureSelectedEvent(
-                    GetNetEntity(hunter.Owner),
+                    GetNetEntity(hunter),
                     GetNetEntity(target.Value),
                     YautjaButcherProcedure.Skin)));
         }
@@ -371,15 +399,15 @@ public sealed partial class YautjaTrophySystem : EntitySystem
                 options.Add(new DialogOption(
                     Loc.GetString(locId),
                     new YautjaButcherProcedureSelectedEvent(
-                        GetNetEntity(hunter.Owner),
+                        GetNetEntity(hunter),
                         GetNetEntity(target.Value),
                         procedure)));
             }
         }
 
         _dialog.OpenOptions(
-            hunter.Owner,
-            hunter.Owner,
+            hunter,
+            hunter,
             Loc.GetString("cmu-yautja-butcher-procedure-title"),
             options,
             Loc.GetString("cmu-yautja-butcher-procedure-message"));
@@ -387,14 +415,27 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private void OnButcherProcedureSelected(Entity<YautjaComponent> hunter, ref YautjaButcherProcedureSelectedEvent args)
     {
+        ButcherProcedureSelected(hunter.Owner, args);
+    }
+
+    private void OnAbilityButcherProcedureSelected(Entity<YautjaButcherAbilityComponent> ent, ref YautjaButcherProcedureSelectedEvent args)
+    {
+        if (HasComp<YautjaComponent>(ent))
+            return;
+
+        ButcherProcedureSelected(ent.Owner, args);
+    }
+
+    private void ButcherProcedureSelected(EntityUid hunter, YautjaButcherProcedureSelectedEvent args)
+    {
         if (!TryGetEntity(args.User, out var user) ||
             !TryGetEntity(args.Target, out var target) ||
-            user != hunter.Owner)
+            user != hunter)
         {
             return;
         }
 
-        TryStartButcher(hunter.Owner, target.Value, args.Procedure);
+        TryStartButcher(hunter, target.Value, args.Procedure);
     }
 
     public bool TryStartButcher(EntityUid hunter, EntityUid target, YautjaButcherProcedure procedure)
@@ -458,7 +499,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         _audio.PlayPvs(source.ButcherStartSound, target);
         _popup.PopupEntity(
-            Loc.GetString("cmu-yautja-butcher-start-self", ("target", target)),
+            Loc.GetString(HasComp<YautjaComponent>(hunter) ? "cmu-yautja-butcher-start-self" : "cmu-butcher-start-self", ("target", target)),
             target,
             hunter,
             PopupType.LargeCaution);
@@ -466,7 +507,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         var filter = Filter.Pvs(target, entityManager: EntityManager)
             .RemoveWhereAttachedEntity(attached => attached == hunter);
         _popup.PopupEntity(
-            Loc.GetString("cmu-yautja-butcher-start-others", ("hunter", HunterDisplayName(hunter)), ("target", target)),
+            Loc.GetString(HasComp<YautjaComponent>(hunter) ? "cmu-yautja-butcher-start-others" : "cmu-butcher-start-others", ("hunter", HunterDisplayName(hunter)), ("target", target)),
             target,
             filter,
             true,
@@ -918,10 +959,31 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     private bool CanStartButcher(EntityUid hunter)
     {
         return !Deleted(hunter) &&
-               HasComp<YautjaComponent>(hunter) &&
+               CanUseButcherAbility(hunter) &&
                !_mobState.IsIncapacitated(hunter) &&
                !_standing.IsDown(hunter) &&
                !_buckle.IsBuckled(hunter);
+    }
+
+    // preds use their wristblades, everyone else needs a knife or something sharp in hand
+    private bool CanUseButcherAbility(EntityUid hunter)
+    {
+        if (HasComp<YautjaComponent>(hunter))
+            return true;
+
+        return HasComp<YautjaButcherAbilityComponent>(hunter) && HoldsBlade(hunter);
+    }
+
+    private bool HoldsBlade(EntityUid user)
+    {
+        if (_hands.GetActiveItem(user) is not { } held)
+            return false;
+
+        return _tags.HasTag(held, KnifeTag) ||
+               _tool.HasQuality(held, SlicingQuality) ||
+               TryComp(held, out MeleeWeaponComponent? melee) &&
+               melee.Damage.DamageDict.TryGetValue("Slash", out var slash) &&
+               slash > 0;
     }
 
     private bool IsPotentialButcherTarget(EntityUid target)
@@ -1566,7 +1628,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         if (Deleted(hunter) ||
             Deleted(target) ||
             hunter == target ||
-            !HasComp<YautjaComponent>(hunter) ||
+            !CanUseButcherAbility(hunter) ||
             !TryComp<MobStateComponent>(target, out var mobState) ||
             !_mobState.IsDead(target, mobState) ||
             !IsAdjacent(hunter, target) ||
@@ -1578,6 +1640,10 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         if (IsXenoTrophyTarget(target))
         {
+            // only preds take xeno trophies
+            if (!HasComp<YautjaComponent>(hunter))
+                return false;
+
             kind = YautjaButcherKind.Xeno;
             return true;
         }
