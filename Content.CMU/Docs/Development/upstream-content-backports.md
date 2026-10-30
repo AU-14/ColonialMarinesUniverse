@@ -68,3 +68,23 @@ git diff --check
 ```
 
 No live high-latency multiplayer reproduction, graphical scroll-layout inspection, or before/after server-tick/allocation benchmark was performed. The changes address identified source defects; they do not establish that all earlier rubberbanding or freezes are resolved. Gas displacement into open space, fully sealed volumes with no recipients, and CMU's multi-deck atmos behavior are outside the conservation test's closed-grid scenario. Full-state action reconciliation and stale death-audio ownership were reviewed in source and built, without a dedicated live reproduction.
+
+## CI integration fixes
+
+Verification against merged head `3dbf17744a6334be76d7e07c325902117d8c96df` exposed two content defects and stale expectations from the merged gameplay changes:
+
+- Round-start job requirements now receive the same character profile snapshot used to build the assignment candidates. This preserves Force-on-Force role mapping when a profile is supplied directly, while still rejecting admission when neither a supplied nor cached profile exists.
+- Planned NPC movement now uses the action's existing 0.4-metre arrival tolerance. Previously movement required 0.25 metres even though the action accepted 0.4, allowing a guard already at its flank stance to time out. Cover safety and support checks remain in place.
+- The lung conservation test measures its baseline after atmosphere initialization and gas displacement. It no longer assumes initialization deletes gas down to 100 moles.
+- Existing Yautja tests now follow the merged rules: critical hunters cannot arm self-destruct, recovered hunters can, and military bracers grant their menu, translator and manual self-destruct actions alongside wrist blades.
+- The mapping/station/shuttle/round CI shard runs two concurrent workers to reduce memory pressure. Its test selection and inactivity timeout are unchanged. The CI stall did not reproduce locally; the lower concurrency is a mitigation, not proof of its cause.
+
+Local verification covered 33 distinct passing cases across focused runs: 19 station/lung/Yautja cases, 13 combat-continuity/squad/round-start/job-admission cases, and the new `FlankCompletesAtItsAcceptedStanceWithoutAnotherMovementStep` regression. The new regression failed on the original movement code and passed after the fix and fixture isolation from idle home-return orders. It checks ongoing travel, completion at the accepted stance, and steering cleanup through the real system update. Both six-guard coordination variants, `PrimaryDepartmentsTest`, and the `CMDistressSignal` round-start case passed.
+
+The final isolated arrival check used:
+
+```powershell
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~FlankCompletesAtItsAcceptedStanceWithoutAnotherMovementStep'
+```
+
+It passed 1/1 with no skips. `actionlint` 1.7.7 passed for the changed CI workflow; the complete workflow set also passed with its existing Blacksmith runner labels registered in a temporary local configuration. `git diff --check` passed. RobustToolbox, RSI.NET and dependency pins remain unchanged.

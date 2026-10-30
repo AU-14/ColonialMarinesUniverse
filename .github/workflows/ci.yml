@@ -613,6 +613,8 @@ jobs:
             proto_lint_serial) workers=2 ;;
             # CMU14: every procgen research test builds its own pair, four at once ran out of memory and hung
             cmu_chemistry) workers=2 ;;
+            # CMU14: bound simultaneous round-start/map pairs and replacement pairs after failures.
+            mapping_station_shuttle_round) workers=2 ;;
           esac
 
           if [[ "$shard" == root ]]; then

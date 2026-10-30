@@ -179,7 +179,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
 
     private void OnStationJobsGetCandidates(ref StationJobsGetCandidatesEvent ev)
     {
-        RemoveDisallowedJobs(ev.Player, ev.Jobs);
+        RemoveDisallowedJobs(ev.Player, ev.Jobs, ev.Profile); // CMU14
     }
 
     private void OnIsRoleAllowed(ref IsRoleAllowedEvent ev)
@@ -369,10 +369,11 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
         return roles;
     }
 
-    public void RemoveDisallowedJobs(NetUserId userId, List<ProtoId<JobPrototype>> jobs)
+    public void RemoveDisallowedJobs(NetUserId userId, List<ProtoId<JobPrototype>> jobs, HumanoidCharacterProfile? profile = null) // CMU14
     {
-        // CMU14: avoid admission based on a null character while preferences are loading.
-        if (_preferencesManager.GetPreferencesOrNull(userId)?.SelectedCharacter is not HumanoidCharacterProfile profile)
+        // CMU14: use the assignment's profile snapshot; fail closed if neither it nor cached preferences are available.
+        profile ??= _preferencesManager.GetPreferencesOrNull(userId)?.SelectedCharacter as HumanoidCharacterProfile;
+        if (profile == null)
         {
             jobs.Clear();
             return;
