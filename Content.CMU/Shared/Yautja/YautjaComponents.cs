@@ -993,6 +993,10 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
     [DataField]
     public bool RequiresYautjaWearer;
 
+    // CMU14: cmss13 keeps the clan mask visor yautja-only, CMU lets any human run it off a worn bracer
+    [DataField]
+    public bool AllowAnyWearer;
+
     [DataField]
     public float ZoomLevel = 0.45f;
 
@@ -3464,6 +3468,10 @@ public sealed partial class YautjaPlasmaRifleBoltComponent : Component
 
     [DataField]
     public float XenoExtraDamageMultiplier = 0.75f;
+
+    // cmss13 debilitate weaken 2 (x20 ds), humans only, yautja and synths shrug it off
+    [DataField]
+    public TimeSpan HumanKnockdownTime = TimeSpan.FromSeconds(4);
 }
 
 [RegisterComponent]

@@ -16,19 +16,17 @@ public abstract partial class ServerDbBase
         await using var db = await GetDb();
 
         // Entries idle since before the cutoff are dead weight; drop them on load.
-        await db.DbContext.Database.ExecuteSqlRawAsync(
+        await db.DbContext.Database.ExecuteSqlAsync(
             $"DELETE FROM cmu_antag_pity WHERE last_seen < {pruneBefore}");
 
         var entries = await db.DbContext.Database
             .SqlQueryRaw<CmuAntagPityRow>(
-                "SELECT player_user_id AS PlayerUserId, missed AS Missed, last_seen AS LastSeen FROM cmu_antag_pity")
+                "SELECT player_user_id AS \"PlayerUserId\", missed AS \"Missed\", " +
+                "last_seen AS \"LastSeen\" FROM cmu_antag_pity")
             .ToListAsync();
 
         return entries.Select(row => new CmuAntagPityEntry(row.PlayerUserId, row.Missed, row.LastSeen)).ToList();
     }
-
-    public Task SaveCmuAntagPityAsync(CmuAntagPityEntry entry)
-        => SaveCmuAntagPityBatchAsync([entry]);
 
     // One transaction for the whole round-end flush so a restart cannot leave it half-written.
     public async Task SaveCmuAntagPityBatchAsync(IReadOnlyList<CmuAntagPityEntry> entries)
@@ -38,10 +36,12 @@ public abstract partial class ServerDbBase
 
         foreach (var entry in entries)
         {
-            await db.DbContext.Database.ExecuteSqlRawAsync(
-                $"INSERT INTO cmu_antag_pity (player_user_id, missed, last_seen) " +
-                $"VALUES ({entry.PlayerUserId}, {entry.Missed}, {entry.LastSeen}) " +
-                "ON CONFLICT (player_user_id) DO UPDATE SET missed = EXCLUDED.missed, last_seen = EXCLUDED.last_seen");
+            await db.DbContext.Database.ExecuteSqlAsync($"""
+INSERT INTO cmu_antag_pity (player_user_id, missed, last_seen)
+VALUES ({entry.PlayerUserId}, {entry.Missed}, {entry.LastSeen})
+ON CONFLICT (player_user_id) DO UPDATE
+SET missed = EXCLUDED.missed, last_seen = EXCLUDED.last_seen
+""");
         }
 
         await tx.CommitAsync();

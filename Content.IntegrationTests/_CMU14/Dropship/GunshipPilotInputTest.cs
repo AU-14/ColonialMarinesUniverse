@@ -4,6 +4,8 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared.Buckle;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.Input;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.GameObjects;
@@ -32,7 +34,17 @@ public sealed class GunshipPilotInputTest : InteractionTest
         await RunTicks(10);
         await SetKey(CMUKeyFunctions.CMUGunshipForward, BoundKeyState.Down);
         await RunTicks(5);
-        await Server.WaitAssertion(() => Server.System<MobStateSystem>().ChangeMobState(SPlayer, state));
+        DamageSpecifier critDamage = default!;
+        await Server.WaitAssertion(() =>
+        {
+            // Damage past the threshold instead of force-setting the state: a healthy mob
+            // in an artificial crit flips back to Alive on the next damage event.
+            Assert.That(Server.System<MobThresholdSystem>().TryGetThresholdForState(SPlayer, state, out var threshold), Is.True);
+            critDamage = new DamageSpecifier();
+            critDamage.DamageDict["Blunt"] = threshold!.Value + 5;
+            Server.System<DamageableSystem>().TryChangeDamage(SPlayer, critDamage, ignoreResistances: true);
+            Assert.That(Server.System<MobStateSystem>().IsIncapacitated(SPlayer), Is.True);
+        });
         await RunTicks(5);
         var initialDirection = GunshipControlInput.None;
         await Server.WaitAssertion(() =>
@@ -55,6 +67,7 @@ public sealed class GunshipPilotInputTest : InteractionTest
         {
             Assert.That(SEntMan.GetComponent<GunshipPilotSeatComponent>(seat).UncontrolledInputs,
                 Is.Not.EqualTo(initialDirection));
+            Server.System<DamageableSystem>().TryChangeDamage(SPlayer, critDamage * -1, ignoreResistances: true);
             Server.System<MobStateSystem>().ChangeMobState(SPlayer, MobState.Alive);
         });
         await RunTicks(5);
