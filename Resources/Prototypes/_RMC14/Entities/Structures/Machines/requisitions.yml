@@ -312,7 +312,7 @@
     faction: opfor
 
 - type: entity
-  parent: CMASRSConsole # CMU14: colony jeep kits arrive through CMCargoCatalog; a second direct parent doubled them
+  parent: [ CMASRSConsole, CMUASRSColonyJeepKits ]
   id: CMASRSConsoleColony
   name: ASRS console (Colony)
   components:
