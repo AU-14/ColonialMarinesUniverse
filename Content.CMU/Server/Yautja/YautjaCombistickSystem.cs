@@ -10,8 +10,13 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
+using Content.Shared._RMC14.Weapons.Common;
+using Content.Shared.Verbs;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
+using Content.Shared.Wieldable;
+using Content.Shared.Wieldable.Components;
+using Content.Shared.Inventory;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Mobs.Systems;
@@ -35,6 +40,7 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedWieldableSystem _wieldable = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
@@ -45,10 +51,17 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaCombistickComponent, GetItemActionsEvent>(OnGetItemActions);
+        SubscribeLocalEvent<YautjaCombistickComponent, UniqueActionEvent>(OnUniqueAction);
+        SubscribeLocalEvent<YautjaCombistickComponent, ActivateInWorldEvent>(OnActivateInWorld,
+            before: new[] { typeof(ItemToggleSystem) });
         SubscribeLocalEvent<YautjaCombistickComponent, YautjaFoldCombistickActionEvent>(OnFoldAction);
         SubscribeLocalEvent<YautjaCombistickComponent, ItemToggleActivateAttemptEvent>(OnActivateAttempt);
         SubscribeLocalEvent<YautjaCombistickComponent, ItemToggleDeactivateAttemptEvent>(OnDeactivateAttempt);
         SubscribeLocalEvent<YautjaCombistickComponent, ItemToggledEvent>(OnToggled);
+        SubscribeLocalEvent<YautjaCombistickComponent, ItemWieldedEvent>(OnWieldedEnforceExtended);
+        SubscribeLocalEvent<YautjaCombistickComponent, WieldAttemptEvent>(OnWieldAttempt);
+        SubscribeLocalEvent<YautjaCombistickComponent, HeldRelayedEvent<WieldAttemptEvent>>(OnWieldAttemptRelayed);
+        SubscribeLocalEvent<YautjaCombistickComponent, InventoryRelayedEvent<WieldAttemptEvent>>(OnWieldAttemptRelayed);
         SubscribeLocalEvent<YautjaChainedWeaponComponent, DroppedEvent>(OnDropped);
         SubscribeLocalEvent<YautjaChainedWeaponComponent, GotEquippedHandEvent>(OnGotEquippedHand);
         SubscribeLocalEvent<YautjaChainedWeaponComponent, InteractHandEvent>(OnInteractHand);
@@ -90,19 +103,85 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
 
     private void OnGetItemActions(Entity<YautjaCombistickComponent> ent, ref GetItemActionsEvent args)
     {
-        if (!args.InHands || !HasComp<YautjaComponent>(args.User))
+        // CMU14: yaut_weapons.dm:724 gates the chain's attack_hand on
+        // "!HAS_TRAIT(user, TRAIT_YAUTJA_TECH) && !isthrall(user)", so authorized users (which include
+        // thralls) get the fold action too.
+        if (!args.InHands || !CanUseChainedWeapon(args.User))
             return;
 
         args.AddAction(ref ent.Comp.FoldAction, ent.Comp.FoldActionId);
     }
 
-    private void OnFoldAction(Entity<YautjaCombistickComponent> ent, ref YautjaFoldCombistickActionEvent args)
+
+    /// <summary>
+    /// CMU14: extending and collapsing is the combistick's Unique Action, so it follows the player's Unique Action
+    /// keybind instead of riding on in-hand activation. CM-SS13 binds it the same way (yaut_weapons.dm:615-627
+    /// toggles the stick from a verb rather than from attack_self).
+    /// </summary>
+
+    private void OnActivateInWorld(Entity<YautjaCombistickComponent> ent, ref ActivateInWorldEvent args)
     {
-        if (args.Handled || !_rmcActions.TryUseAction(args))
+        // Extension/collapse is the Unique Action; a plain activate must not toggle it.
+        args.Handled = true;
+    }
+
+
+
+
+    private void OnUniqueAction(Entity<YautjaCombistickComponent> ent, ref UniqueActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!TryToggleExtension(ent, args.UserUid))
             return;
 
         args.Handled = true;
-        _toggle.Toggle((ent.Owner, null), args.Performer, predicted: false);
+    }
+
+    private void OnFoldAction(Entity<YautjaCombistickComponent> ent, ref YautjaFoldCombistickActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!TryToggleExtension(ent, args.Performer))
+            return;
+
+        args.Handled = true;
+    }
+
+    /// <summary>
+    /// CMU14: the single extension/collapse path, shared by the Unique Action and the fold button. The fold action used
+    /// to require _rmcActions.TryUseAction even though the action carries no power cost, so invoking it could fail and
+    /// report the generic "the alien technology refuses to respond" denial instead of folding the stick.
+    /// </summary>
+    private bool TryToggleExtension(Entity<YautjaCombistickComponent> ent, EntityUid user)
+    {
+        if (!CanUseChainedWeapon(user))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        if (_hands.GetActiveItem(user) != ent.Owner)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-combistick-active-hand", ("item", ent.Owner)),
+                user, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        // Only this path may change the extension: ItemToggle also toggles on wield/unwield, which must not extend it.
+        ent.Comp.AllowToggle = true;
+        try
+        {
+            _toggle.Toggle((ent.Owner, null), user, predicted: false);
+        }
+        finally
+        {
+            ent.Comp.AllowToggle = false;
+        }
+
+        return true;
     }
 
     private void OnActivateAttempt(Entity<YautjaCombistickComponent> ent, ref ItemToggleActivateAttemptEvent args)
@@ -123,6 +202,14 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
 
     private void TryCancelInvalidToggle(Entity<YautjaCombistickComponent> ent, EntityUid user, ref bool cancelled, ref string? popup)
     {
+        // Wielding/unwielding raises these attempts too (ItemToggleSystem.TurnOnOnWielded/TurnOffOnUnwielded); extension
+        // belongs to the actions, so anything that is not the action path is refused silently.
+        if (!ent.Comp.AllowToggle)
+        {
+            cancelled = true;
+            return;
+        }
+
         if (_hands.GetActiveItem(user) == ent.Owner)
             return;
 
@@ -130,8 +217,58 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
         popup = Loc.GetString("cmu-yautja-combistick-active-hand", ("item", ent.Owner));
     }
 
+    private void OnWieldedEnforceExtended(Entity<YautjaCombistickComponent> ent, ref ItemWieldedEvent args)
+    {
+        if (!TryComp(ent.Owner, out ItemToggleComponent? toggle) || toggle.Activated)
+            return;
+
+        if (_wieldable.TryUnwield((ent.Owner, null), args.User, force: true))
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-combistick-wield-folded", ("item", ent.Owner)),
+                args.User, args.User, PopupType.SmallCaution);
+    }
+
+    private void OnWieldAttempt(Entity<YautjaCombistickComponent> ent, ref WieldAttemptEvent args)
+    {
+        // A folded stick cannot be wielded; the extension state is the authority, not the UI.
+        if (TryComp(ent.Owner, out ItemToggleComponent? toggle) && toggle.Activated)
+            return;
+
+        args.Cancelled = true;
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-combistick-wield-folded", ("item", ent.Owner)),
+            args.User, args.User, PopupType.SmallCaution);
+    }
+
+    private void OnWieldAttemptRelayed(Entity<YautjaCombistickComponent> ent, ref HeldRelayedEvent<WieldAttemptEvent> args)
+    {
+        OnWieldAttempt(ent, ref args.Args);
+    }
+
+    private void OnWieldAttemptRelayed(Entity<YautjaCombistickComponent> ent, ref InventoryRelayedEvent<WieldAttemptEvent> args)
+    {
+        OnWieldAttempt(ent, ref args.Args);
+    }
+
     private void OnToggled(Entity<YautjaCombistickComponent> ent, ref ItemToggledEvent args)
     {
+        // Collapsing while wielded must not leave a wielded folded stick. This runs before any user check because
+        // ItemToggledEvent legitimately carries a null user (ItemToggleSystem.OneTimeUpgrade and programmatic toggles), and
+        // the invariant must hold for those too. Re-extending deliberately does not re-wield.
+        // Blocked while folded: WieldingBlocker is consulted inside TryWield, before SetWielded, so a folded stick never
+        // enters the wielded state at all (no visual flash, no wielded-only effects).
+        if (TryComp(ent.Owner, out WieldingBlockerComponent? blocker) && blocker.BlockInHand != !args.Activated)
+        {
+            blocker.BlockInHand = !args.Activated;
+            Dirty(ent.Owner, blocker);
+        }
+
+        if (!args.Activated && TryComp(ent.Owner, out WieldableComponent? wieldable) && wieldable.Wielded)
+        {
+            // Wielded items are parented to their wielder, so the holder can be recovered when no user was supplied.
+            var wielder = args.User ?? (Transform(ent.Owner).ParentUid is { Valid: true } parent ? parent : ent.Owner);
+            if (wielder != ent.Owner)
+                _wieldable.TryUnwield((ent.Owner, wieldable), wielder, force: true);
+        }
+
         if (args.User is not { } user)
             return;
 

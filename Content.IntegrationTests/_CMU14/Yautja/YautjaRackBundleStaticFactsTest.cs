@@ -289,7 +289,6 @@ public sealed class YautjaRackBundleStaticFactsTest
             [
                 "CMUYautjaClanArmor",
                 "CMUYautjaMask",
-                "CMUYautjaMaskAccessory01Ebony",
                 "CMUYautjaClanGreaves",
             ]);
 

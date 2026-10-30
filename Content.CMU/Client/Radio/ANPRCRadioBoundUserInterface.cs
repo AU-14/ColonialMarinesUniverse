@@ -8,6 +8,8 @@ public sealed class ANPRCRadioBoundUserInterface : BoundUserInterface
 {
     [ViewVariables]
     private ANPRCRadioWindow? _window;
+    private ANPRCRadioState? _state;
+    private ANPRCRadioTelemetryMsg? _pendingTelemetry;
 
     public ANPRCRadioBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) { }
 
@@ -58,6 +60,31 @@ public sealed class ANPRCRadioBoundUserInterface : BoundUserInterface
         if (state is not ANPRCRadioState s)
             return;
 
-        _window?.UpdateState(s);
+        _state = s;
+        if (_pendingTelemetry is { } telemetry && telemetry.Revision == s.Revision)
+            _state = s.WithTelemetry(telemetry);
+        if (_pendingTelemetry?.Revision < s.Revision)
+            _pendingTelemetry = null;
+        _window?.UpdateState(_state);
+    }
+
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        if (message is not ANPRCRadioTelemetryMsg telemetry)
+            return;
+        if (_pendingTelemetry?.Revision > telemetry.Revision)
+            return;
+        // BUI state replication and messages can arrive separately. Never apply a reading to
+        // a different configuration, including a panel that has just reopened.
+        if (_state == null || telemetry.Revision > _state.Revision)
+        {
+            _pendingTelemetry = telemetry;
+            return;
+        }
+        if (telemetry.Revision != _state.Revision)
+            return;
+        _pendingTelemetry = telemetry;
+        _state = _state.WithTelemetry(telemetry);
+        _window?.UpdateState(_state);
     }
 }

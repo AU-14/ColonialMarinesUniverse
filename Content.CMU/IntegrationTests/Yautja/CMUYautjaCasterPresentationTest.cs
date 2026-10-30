@@ -27,12 +27,14 @@ public sealed class CMUYautjaCasterPresentationTest
         var map = await pair.CreateTestMap();
         EntityUid hunter = default;
         EntityUid caster = default;
+        EntityUid observer = default;
         NetEntity hunterNet = default;
         NetEntity casterNet = default;
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
             hunter = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            observer = entities.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 1)));
             entities.EnsureComponent<YautjaComponent>(hunter);
             var bracer = entities.SpawnEntity("CMUYautjaBracer", map.GridCoords);
             Assert.That(entities.System<InventorySystem>().TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
@@ -77,9 +79,20 @@ public sealed class CMUYautjaCasterPresentationTest
             });
             await server.WaitAssertion(() =>
             {
-                ShootAndAssert(server.EntMan, hunter, caster, expected, sound);
-                Assert.That(server.EntMan.EntityQuery<CMUYautjaEffectComponent>()
-                    .Any(effect => effect.Kind == CMUYautjaEffect.PlasmaMuzzle && effect.Target == hunter && effect.PlasmaMode == expected), Is.True);
+                // The shooter already hears predicted audio. Server audio needs another listener
+                // because main's audio admission deliberately avoids allocating an empty audience.
+                var session = server.PlayerMan.Sessions.Single();
+                server.PlayerMan.SetAttachedEntity(session, observer);
+                try
+                {
+                    ShootAndAssert(server.EntMan, hunter, caster, expected, sound);
+                    Assert.That(server.EntMan.EntityQuery<CMUYautjaEffectComponent>()
+                        .Any(effect => effect.Kind == CMUYautjaEffect.PlasmaMuzzle && effect.Target == hunter && effect.PlasmaMode == expected), Is.True);
+                }
+                finally
+                {
+                    server.PlayerMan.SetAttachedEntity(session, hunter);
+                }
             });
         }
         await pair.CleanReturnAsync();

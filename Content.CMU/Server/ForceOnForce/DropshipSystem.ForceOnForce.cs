@@ -1,4 +1,5 @@
 using Content.Server.GameTicking;
+using Content.Server.CMU14.Dropship;
 using Content.Server.CMU14.ForceOnForce;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
@@ -107,6 +108,14 @@ public sealed partial class DropshipSystem
 
     private bool CanLandAt(EntityUid computer, EntityUid destination)
     {
+        if (Transform(computer).GridUid is { } grid)
+        {
+            var permission = new CMUDropshipLandingPermissionEvent(destination);
+            RaiseLocalEvent(grid, ref permission);
+            if (permission.Allowed)
+                return true;
+        }
+
         if (!TryComp<WhitelistedShuttleComponent>(computer, out var shuttle))
             return GetCarrierFaction(destination) == null;
 

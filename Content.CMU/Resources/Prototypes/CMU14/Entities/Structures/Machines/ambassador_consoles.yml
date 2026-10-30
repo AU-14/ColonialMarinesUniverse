@@ -141,3 +141,22 @@
     callableParties:
       Freelancers: 7000
 
+# Central Confederation of Africa Console
+- type: entity
+  id: AU14AmbassadorConsoleCCA
+  parent: AU14AmbassadorConsoleBase
+  name: CCA diplomatic console
+  description: A Central Confederation of Africa diplomatic console.
+  suffix: CCA, PMC
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: AmbassadorConsole
+    factionName: Central Confederation of Africa
+    budget: 500
+    replenishAmount: 10
+    replenishInterval: 60
+    callableParties:
+      Freelancers: 4500
+      

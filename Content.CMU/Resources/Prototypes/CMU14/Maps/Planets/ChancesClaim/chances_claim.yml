@@ -86,7 +86,7 @@
   mapsAbove:
   - /Maps/CMU14/Planets/ChancesClaim/chances_above.yml
   minPlayers: 0
-  maxPlayers: 75
+  maxPlayers: 500
   maxRandomOffset: 0
   randomRotation: false
   stations:

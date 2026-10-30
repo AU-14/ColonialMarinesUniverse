@@ -6,7 +6,7 @@ public sealed partial class GameTicker
 {
     internal static readonly TimeSpan DistressSignalSurvivorAnnouncementLeadTime = TimeSpan.FromMinutes(1);
 
-    private bool _distressSignalSurvivorAnnouncementSent;
+    private int? _announcedDistressSignalSurvivorCount;
 
     private void TryAnnounceDistressSignalSurvivors()
     {
@@ -14,7 +14,7 @@ public sealed partial class GameTicker
                 LobbyEnabled,
                 RunLevel,
                 Paused,
-                _distressSignalSurvivorAnnouncementSent,
+                _announcedDistressSignalSurvivorCount.HasValue,
                 _roundStartTime,
                 _gameTiming.CurTime))
         {
@@ -26,18 +26,18 @@ public sealed partial class GameTicker
 
     private void EnsureDistressSignalSurvivorAnnouncement()
     {
-        if (_distressSignalSurvivorAnnouncementSent)
-            return;
-
-        TryLockAndAnnounceDistressSignalSurvivors();
+        TryLockAndAnnounceDistressSignalSurvivors(revalidate: true);
     }
 
-    private bool TryLockAndAnnounceDistressSignalSurvivors()
+    private bool TryLockAndAnnounceDistressSignalSurvivors(bool revalidate = false)
     {
-        if (!_auRoundSystem.TryLockDistressSignalThirdParties(out var survivorCount))
+        if (!_auRoundSystem.TryLockDistressSignalThirdParties(out var survivorCount, revalidate))
             return false;
 
-        _distressSignalSurvivorAnnouncementSent = true;
+        if (_announcedDistressSignalSurvivorCount == survivorCount)
+            return true;
+
+        _announcedDistressSignalSurvivorCount = survivorCount;
         var message = survivorCount > 0
             ? Loc.GetString("cmu-distress-signal-survivors-spawning", ("count", survivorCount))
             : Loc.GetString("cmu-distress-signal-no-survivors");
@@ -47,7 +47,7 @@ public sealed partial class GameTicker
 
     private void ResetDistressSignalSurvivorAnnouncement()
     {
-        _distressSignalSurvivorAnnouncementSent = false;
+        _announcedDistressSignalSurvivorCount = null;
         _auRoundSystem.ResetLockedDistressSignalThirdParties();
     }
 

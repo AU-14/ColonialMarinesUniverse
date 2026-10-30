@@ -2,6 +2,7 @@
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Content.Shared.FixedPoint;
 
 namespace Content.Shared._RMC14.Xenonids.Impale;
 
@@ -14,6 +15,9 @@ public sealed partial class XenoSecondImpaleComponent : Component
 
     [DataField]
     public DamageSpecifier Damage;
+
+    [DataField]  
+    public FixedPoint2 Bloodloss; // CMU14 Venator Bloodletter. not exactly sure if venator can use the double hit, just adding this in case
 
     [DataField]
     public EntProtoId Animation = "RMCEffectTailHit";

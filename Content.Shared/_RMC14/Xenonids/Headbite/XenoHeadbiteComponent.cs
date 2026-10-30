@@ -3,6 +3,7 @@ using Content.Shared.Damage;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Content.Shared.FixedPoint;
 
 namespace Content.Shared._RMC14.Xenonids.Headbite;
 
@@ -12,6 +13,9 @@ public sealed partial class XenoHeadbiteComponent : Component
 {
     [DataField, AutoNetworkedField]
     public DamageSpecifier Damage = new();
+
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 Bloodloss = FixedPoint2.Zero;
 
     [DataField, AutoNetworkedField]
     public TimeSpan HeadbiteDelay = TimeSpan.FromSeconds(0.8);

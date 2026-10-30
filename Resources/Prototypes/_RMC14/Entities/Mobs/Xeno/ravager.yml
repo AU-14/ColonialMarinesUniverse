@@ -11,6 +11,11 @@
   description: A huge, nasty red alien with enormous scythed claws.
   abstract: true
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GuideHelp
     guides:
     - RMCGuideRoleRavager
@@ -195,6 +200,10 @@
   - type: VehicleDamageMultiplier
     multiplier: 4
   - type: XenoScissorCut
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      super: true
+      effect: 3
     damage:
       types:
         Slash: 75 # CMU14 modified
@@ -243,6 +252,9 @@
     plasmaRegenOnWeeds: 0
   - type: XenoCripplingStrike
     activateText: rmc-xeno-apprehend-activate
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      ticks: 2
     deactivateText: rmc-xeno-apprehend-deactivate
     expireText: rmc-xeno-apprehend-expire
     auraColor: "#522020"

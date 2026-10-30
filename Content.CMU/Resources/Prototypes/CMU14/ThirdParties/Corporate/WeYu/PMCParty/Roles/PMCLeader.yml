@@ -80,7 +80,7 @@
     mask: RMCMaskCoifPMC
     eyes: RMCGlassesMedicalHUDGlasses
     head: ArmorHelmetPMCFieldOfficer
-    gloves: RMCHandsVeteranPMC
+    gloves: CMUHandsVeteranPMC
     belt: RMCMK80BeltPMCFilled
     pocket1: RMCPouchMagazineLargePMC
     pocket2: AU14PouchIFAKFill

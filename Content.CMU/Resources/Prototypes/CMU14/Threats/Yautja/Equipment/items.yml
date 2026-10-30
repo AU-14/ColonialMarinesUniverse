@@ -7,7 +7,6 @@
   longRange: true
 
   radioPrefix: ":"
-  tower: true
   faction: "FactionYautja"
 - type: radioChannel
   id: CMUYautjaOverseer
@@ -18,7 +17,6 @@
   longRange: true
 
   radioPrefix: "#"
-  tower: true
   faction: "FactionYautja"
 - type: radioChannel
   id: CMUYautjaBadBlood
@@ -29,7 +27,6 @@
   longRange: true
 
   radioPrefix: "#"
-  tower: true
   faction: "FactionYautja"
 - type: entity
   parent: EncryptionKey
@@ -288,6 +285,9 @@
     size: Small
     sprite: CMU14/Yautja/yautja_items.rsi
     heldPrefix: wrench
+    storedSprite:
+      sprite: CMU14/Yautja/yautja_items.rsi
+      state: wrench
     storedRotation: 0
 
 - type: entity
@@ -569,7 +569,6 @@
   frequency: 154.4
   color: "#a88762"
   longRange: true
-  tower: true
   faction: "FactionYautja"
 
 - type: radioChannel
@@ -580,7 +579,6 @@
   frequency: 154.5
   color: "#8db7d4"
   longRange: true
-  tower: true
   faction: "FactionYautja"
 
 - type: entity

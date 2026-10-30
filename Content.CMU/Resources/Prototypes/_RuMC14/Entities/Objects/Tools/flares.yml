@@ -105,6 +105,16 @@
       - state: cas_inhand-left
       right:
       - state: cas_inhand-right
+  - type: ToggleableVisuals
+    inhandVisuals:
+      left:
+      - sprite: _RMC14/Objects/Misc/flares.rsi
+        state: inhand-left-flame
+        color: "#FFA7A7"
+      right:
+      - sprite: _RMC14/Objects/Misc/flares.rsi
+        state: inhand-right-flame
+        color: "#FFA7A7"
   - type: PointLight
     color: "#FFCCCC"
   - type: FlareSignal

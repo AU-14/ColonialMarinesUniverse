@@ -1,7 +1,6 @@
 using System.Numerics;
 using JetBrains.Annotations;
 using Content.Shared.CMU14.Yautja;
-using Content.Shared.Ghost.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -185,7 +184,7 @@ public partial class CMUYautjaEffectsOverlay : Overlay
     }
 
     private bool CanSeeDrone() => _player.LocalEntity is { } viewer &&
-        (_entities.HasComponent<YautjaComponent>(viewer) || _entities.HasComponent<GhostComponent>(viewer));
+        _entities.System<YautjaFalconVisibilitySystem>().CanSeeFalcon(viewer);
 
     private void DrawSights(in OverlayDrawArgs args)
     {

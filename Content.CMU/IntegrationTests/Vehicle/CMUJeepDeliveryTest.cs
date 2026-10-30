@@ -129,14 +129,21 @@ public sealed class CMUJeepDeliveryTest : GameTest
         });
     }
 
-    [Test]
-    public async Task RepurchaseWaitsForCooldownAndStopsAtCap()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task FlareAndIntelShareJeepLimitAndCooldown(bool flareFirst)
     {
-        var map = await Pair.CreateTestMap();
+        EntityUid planet = default;
+        EntityCoordinates target = default;
         EntityUid console = default;
         EntityUid buyer = default;
+        EntityUid firstFlare = default;
+        EntityUid secondFlare = default;
+        EntityUid medicalBeacon = default;
         IntelTechTree tree = default!;
         var index = 0;
+        var expectedPoints = flareFirst ? 100 : 90;
+        var expectedFlareDeliveries = flareFirst ? 2 : 1;
         void Purchase()
         {
             var message = new TechPurchaseOptionBuiMsg(1, index)
@@ -150,34 +157,100 @@ public sealed class CMUJeepDeliveryTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            console = SEntMan.SpawnEntity("RMCTechTreeConsoleCLF", map.GridCoords);
-            buyer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var maps = SEntMan.System<SharedMapSystem>();
+            planet = maps.CreateMap(out _, runMapInit: true);
+            var grid = SEntMan.EnsureComponent<MapGridComponent>(planet);
+            var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
+            for (var x = -4; x <= 4; x++)
+            for (var y = -4; y <= 4; y++)
+                maps.SetTile(planet, grid, new Vector2i(x, y), floor);
+
+            target = new EntityCoordinates(planet, .5f, .5f);
+            console = SEntMan.SpawnEntity("RMCTechTreeConsoleCLF", new EntityCoordinates(planet, -2.5f, -2.5f));
+            buyer = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(planet, -2.5f, -1.5f));
             tree = SEntMan.System<IntelSystem>().EnsureTechTree("clf").Comp.Tree;
             tree.Tier = 1;
             tree.Points = 100;
             index = tree.Options[1].FindIndex(option => option.Name == "cmu-tech-clf-jeep");
             tree.Options[1][index] = tree.Options[1][index] with
             {
-                Cost = 10, CurrentCost = 10, PurchaseCooldown = TimeSpan.FromSeconds(1), Events = new(),
+                // Exercise the real purchase path without dispatching a dropship or simulating half an hour.
+                Cost = 10, CurrentCost = 10, PurchaseCooldown = TimeSpan.FromSeconds(8), Events = new(),
             };
-            Purchase();
-            Assert.That(tree.Points.Int(), Is.EqualTo(90));
-            Purchase();
-            Assert.That(tree.Points.Int(), Is.EqualTo(90), "A purchase during cooldown must not charge the team.");
+
+            firstFlare = SEntMan.SpawnEntity("CMUFlareJeepDropCLF", target);
+            secondFlare = SEntMan.SpawnEntity("CMUFlareJeepDropCLF", new EntityCoordinates(planet, 2.5f, .5f));
+            foreach (var flare in new[] { firstFlare, secondFlare })
+                SEntMan.System<ExpendableLightSystem>().TryActivate((flare, SEntMan.GetComponent<ExpendableLightComponent>(flare)));
         });
-        await RunSeconds(1.2f);
+        await RunSeconds(3);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(tree.Options[1][index].TimesPurchased, Is.Zero,
+                "Flares without a valid drop area must not consume the shared allowance.");
+            Assert.That(SEntMan.EntityQuery<BeingSupplyDroppedComponent>().Count(), Is.Zero);
+
+            if (!flareFirst)
+            {
+                Purchase();
+                Assert.That(tree.Points.Int(), Is.EqualTo(90));
+                Purchase();
+                Assert.That(tree.Points.Int(), Is.EqualTo(90), "A purchase during cooldown must not charge the team.");
+            }
+
+            var area = SEntMan.EnsureComponent<AreaGridComponent>(planet);
+            for (var x = -4; x <= 4; x++)
+            for (var y = -4; y <= 4; y++)
+                SEntMan.System<AreaSystem>().ReplaceArea(area, new Vector2i(x, y), "RMCAreaDesertDamExterior");
+        });
+        await RunSeconds(3);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.EntityQuery<BeingSupplyDroppedComponent>().Count(), Is.EqualTo(flareFirst ? 1 : 0),
+                "The first request must put every other flare on cooldown, whichever route supplied it.");
+            Assert.That(tree.Options[1][index].TimesPurchased, Is.EqualTo(1));
+            Purchase();
+            Assert.That(tree.Points.Int(), Is.EqualTo(expectedPoints),
+                "Both flare deliveries and intel purchases must block another intel purchase during cooldown.");
+        });
+        await RunSeconds(6);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.EntityQuery<BeingSupplyDroppedComponent>().Count(), Is.EqualTo(expectedFlareDeliveries),
+                "Only one waiting flare may take the last delivery slot when the cooldown expires.");
+            Assert.That(new[] { firstFlare, secondFlare }
+                .Count(flare => SEntMan.GetComponent<CMUVehicleDropFlareComponent>(flare).Called), Is.EqualTo(expectedFlareDeliveries));
+            Assert.That(tree.Points.Int(), Is.EqualTo(expectedPoints), "An already purchased flare must not charge intel points.");
+            Assert.That(tree.Options[1][index].TimesPurchased, Is.EqualTo(2));
+            Assert.That(SEntMan.GetComponent<TechControlConsoleComponent>(console).Tree.Options[1][index].TimesPurchased,
+                Is.EqualTo(2), "Flare deliveries must update the intel console's displayed allowance.");
+            Purchase();
+            Assert.That(tree.Points.Int(), Is.EqualTo(expectedPoints));
+        });
+        await RunSeconds(13);
         await Server.WaitAssertion(() =>
         {
             Purchase();
-            Assert.That(tree.Points.Int(), Is.EqualTo(80));
+            Assert.That(tree.Points.Int(), Is.EqualTo(expectedPoints), "An expired cooldown must not bypass the shared round cap.");
             Assert.That(tree.Options[1][index].TimesPurchased, Is.EqualTo(2));
+            Assert.That(SEntMan.EntityQuery<CMUVehicleCrateComponent>()
+                .Count(crate => SEntMan.GetComponent<MetaDataComponent>(crate.Owner).EntityPrototype?.ID == "CMUCrateJeepGunner"),
+                Is.EqualTo(expectedFlareDeliveries), "The other flare must not deliver a third jeep after another cooldown.");
+
+            medicalBeacon = SEntMan.SpawnEntity("CMUMedicalJeepBeacon", target);
+            SEntMan.System<ExpendableLightSystem>().TryActivate((medicalBeacon,
+                SEntMan.GetComponent<ExpendableLightComponent>(medicalBeacon)));
         });
-        await RunSeconds(1.2f);
+        await RunSeconds(3);
         await Server.WaitAssertion(() =>
         {
-            Purchase();
-            Assert.That(tree.Points.Int(), Is.EqualTo(80), "An expired cooldown must not bypass the purchase cap.");
-            Assert.That(tree.Options[1][index].TimesPurchased, Is.EqualTo(2));
+            Assert.That(SEntMan.GetComponent<CMUVehicleDropFlareComponent>(medicalBeacon).Called, Is.True,
+                "The CLF allowance must not restrict civilian medical deliveries.");
+            Assert.That(SEntMan.EntityQuery<BeingSupplyDroppedComponent>().Count(), Is.EqualTo(1));
         });
+        await RunSeconds(13);
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.EntityQuery<BeingSupplyDroppedComponent>().Count(), Is.Zero,
+                "Finish the medical delivery before the test map is removed."));
     }
 }

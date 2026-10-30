@@ -23,18 +23,13 @@ public sealed class CMUYautjaButcherVisualTest : InteractionTest
             Assert.That(SEntMan.System<YautjaTrophySystem>().TryStartButcher(
                 SPlayer, STarget.Value, YautjaButcherProcedure.Skin), Is.True);
         });
-        await AwaitDoAfters();
-        await AssertStage(1, 0);
+        await AwaitStage(1, 2);
         await Client.WaitAssertion(() =>
         {
             var visual = CEntMan.GetComponent<CMUYautjaButcherVisualComponent>(CTarget!.Value);
             Assert.That(visual.Xeno, Is.EqualTo(xeno), "Observers must receive the victim-specific treatment.");
         });
 
-        await Server.WaitAssertion(() => Assert.That(SEntMan.System<YautjaTrophySystem>().TryStartButcher(
-            SPlayer, STarget!.Value, YautjaButcherProcedure.Skin), Is.True));
-        await RunTicks(5);
-        await AssertStage(1, 2);
         await Server.WaitPost(() => Transform.SetCoordinates(SPlayer,
             SEntMan.GetCoordinates(PlayerCoords).Offset(new Vector2(4, 0))));
         await RunTicks(10);
@@ -47,19 +42,11 @@ public sealed class CMUYautjaButcherVisualTest : InteractionTest
             Assert.That(SEntMan.System<YautjaTrophySystem>().TryStartButcher(
                 SPlayer, STarget.Value, YautjaButcherProcedure.Skin), Is.True);
         });
-        await AwaitDoAfters();
-        await AssertStage(2, 0);
+        await AwaitStage(2, 3);
         if (!xeno)
             return;
 
-        await Server.WaitAssertion(() => Assert.That(SEntMan.System<YautjaTrophySystem>().TryStartButcher(
-            SPlayer, STarget!.Value, YautjaButcherProcedure.Skin), Is.True));
-        await AwaitDoAfters();
-        await AssertStage(3, 0);
-        await Server.WaitAssertion(() => Assert.That(SEntMan.System<YautjaTrophySystem>().TryStartButcher(
-            SPlayer, STarget!.Value, YautjaButcherProcedure.Skin), Is.True));
-        await RunTicks(5);
-        await AssertStage(3, 4);
+        await AwaitStage(3, 4);
         await AwaitDoAfters();
         await Server.WaitAssertion(() =>
         {
@@ -77,6 +64,22 @@ public sealed class CMUYautjaButcherVisualTest : InteractionTest
             Assert.That(skulls, Is.EqualTo(1), "The visual extraction must correspond to one actual skull trophy.");
             Assert.That(pelts, Is.EqualTo(1));
         });
+    }
+
+    private async Task AwaitStage(int completed, int active)
+    {
+        // Skinning chains automatically; inspect each transition without restarting the action.
+        for (var ticks = 0; ticks < Pair.SecondsToTicks(20); ticks += 10)
+        {
+            var reached = false;
+            await Server.WaitPost(() => reached =
+                SEntMan.GetComponent<CMUYautjaButcherVisualComponent>(STarget!.Value).CompletedStage >= completed);
+            if (reached)
+                break;
+            await RunTicks(10);
+        }
+        await RunTicks(5);
+        await AssertStage(completed, active);
     }
 
     private async Task AssertStage(int completed, int active)

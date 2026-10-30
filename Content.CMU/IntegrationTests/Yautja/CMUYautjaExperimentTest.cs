@@ -180,15 +180,22 @@ public sealed class CMUYautjaExperimentTest
                 "The stolen interface must activate the real worn bracer, not just add an authorization marker.");
             entities.System<YautjaCloakSystem>().ForceDecloak(user);
             var disc = entities.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords);
+            var previousOwner = entities.SpawnEntity("CMUMobYautja", map.GridCoords);
+            entities.GetComponent<YautjaSmartDiscComponent>(disc).YautjaOwner = previousOwner;
             var hands = entities.System<SharedHandsSystem>();
             if (hands.GetActiveItem(user) is { } held)
                 hands.TryDrop(user, held);
             Assert.That(hands.TryPickupAnyHand(user, disc), Is.True);
-            var bind = new Content.Shared.Interaction.Events.UseInHandEvent(user);
-            entities.EventBus.RaiseLocalEvent(disc, bind);
             Assert.That(entities.System<ItemToggleSystem>().TryActivate((disc, null), user), Is.True,
                 "A recovered disc must accept the reconstructed operator instead of entering rogue mode.");
             Assert.That(entities.GetComponent<YautjaSmartDiscComponent>(disc).RogueTarget, Is.Null);
+            Assert.That(entities.GetComponent<YautjaSmartDiscComponent>(disc).YautjaOwner, Is.EqualTo(user),
+                "The recovered disc must return to its reconstructed operator.");
+            Assert.That(entities.System<YautjaSmartDiscSystem>().TryCallDisc((bracer, power), user), Is.True);
+            Assert.That(hands.IsHolding(user, disc), Is.True);
+            Assert.That(entities.EntityQuery<CMUYautjaEffectComponent>().Any(effect =>
+                effect.Kind == CMUYautjaEffect.DiscReturn && effect.Target == user), Is.True,
+                "Call Disc must publish the return effect while recovering the real item.");
         });
         await pair.CleanReturnAsync();
     }

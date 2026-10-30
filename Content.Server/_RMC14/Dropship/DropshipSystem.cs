@@ -2,6 +2,8 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.CMU14.Dropship.TacticalLand;
 using Content.Server.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.CMU14.Dropship.DirectFire; // CMU14
+using Content.Shared.CMU14.Dropship.GunshipControls; // CMU14
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
 using Content.Shared.CMU14.Dropship.Integrity;
 using Content.Server._RMC14.GameStates;
@@ -145,7 +147,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             {
                 subs.Event<DropshipLockdownMsg>(OnDropshipNavigationLockdownMsg);
                 subs.Event<DropshipRemoteControlToggleMsg>(OnDropshipRemoteControlToggleMsg);
+                subs.Event<GunshipFirearmToggleMsg>(OnGunshipFirearmToggleMsg); // CMU14
                 subs.Event<DropshipLaunchAlarmToggleMsg>(OnDropshipLaunchAlarmToggleMsg);
+                subs.Event<DropshipMasterAlarmToggleMsg>(OnDropshipMasterAlarmToggleMsg); // CMU14
                 subs.Event<DropshipWithdrawReturnMsg>(OnDropshipWithdrawReturn);
             });
 
@@ -409,6 +413,31 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         RefreshUI();
     }
 
+    // CMU14 method: gunship pilot firearm fire-control toggle
+    private void OnGunshipFirearmToggleMsg(Entity<DropshipNavigationComputerComponent> ent, ref GunshipFirearmToggleMsg args)
+    {
+        if (!TryComp(ent, out GunshipControlsComponent? gunship))
+            return;
+
+        gunship.Armed = !gunship.Armed;
+        // CMU14: the component carries no auto state, clients read the toggle from the BUI refresh
+        // Dirty(ent, gunship);
+        RefreshUI();
+    }
+
+    // CMU14 method: mute-only toggle for the automatic damage alarms, same flag as the gunship pilot action.
+    private void OnDropshipMasterAlarmToggleMsg(Entity<DropshipNavigationComputerComponent> ent, ref DropshipMasterAlarmToggleMsg args)
+    {
+        if (!TryGetGridDropship(ent, out var dropship)
+            || !TryComp(dropship, out DropshipIntegrityComponent? integrity))
+            return;
+
+        integrity.MasterAlarmSilenced = !integrity.MasterAlarmSilenced;
+        Dirty(dropship, integrity);
+        _tacticalLand.UpdateGunshipAlarmAudio((dropship.Owner, integrity));
+        RefreshUI();
+    }
+
     private void OnNavigationLockout(Entity<DropshipNavigationComputerComponent> ent, ref DropshipLockoutDoAfterEvent args)
     {
         ent.Comp.LockedOutUntil = _timing.CurTime + ent.Comp.LockoutDuration;
@@ -601,7 +630,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         }
 
         var dropshipId = Transform(computer).GridUid;
-        if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp))
+        // CMU14: if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp))
+        if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp) ||
+            HasComp<MapComponent>(dropshipId)) // CMU14: saved terrain can have Shuttle, but cannot fly.
         {
             Log.Warning($"Tried to launch {ToPrettyString(computer)} outside of a shuttle.");
             return false;
@@ -909,6 +940,8 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
         var doorLockStatus = GetDoorLockStatus(grid);
         var tacticalHoverActive = HasComp<DropshipTacticalHoverComponent>(grid);
+        TryComp(computer, out GunshipControlsComponent? gunshipControls); // CMU14: firearm toggle state
+        TryComp(grid, out DropshipIntegrityComponent? shipIntegrity); // CMU14: master alarm mute state
 
         if (tacticalHoverActive ||
             !TryComp(grid, out FTLComponent? ftl) ||
@@ -1004,7 +1037,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                                     (HasComp<RMCPlanetComponent>(gridXform.MapUid.Value) || HasComp<RMCPlanetComponent>(grid));
             }
 
-            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn, tacticalHoverActive);
+            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn, tacticalHoverActive, gunshipControls != null, gunshipControls?.Armed ?? false, shipIntegrity != null, shipIntegrity?.MasterAlarmSilenced ?? false); // CMU14: firearm + alarm state
             _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, state);
             return;
         }
@@ -1022,7 +1055,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 departureName = Name(departureUid);
         }
 
-        var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl, computer.Comp.LaunchAlarmStatus);
+        var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl, computer.Comp.LaunchAlarmStatus, shipIntegrity != null, shipIntegrity?.MasterAlarmSilenced ?? false); // CMU14: alarm state
         _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, travelState);
     }
 
@@ -1125,7 +1158,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
     protected override bool IsShuttle(EntityUid dropship)
     {
-        return HasComp<ShuttleComponent>(dropship);
+        // CMU14: planet maps may retain Shuttle from their saved grid physics.
+        // return HasComp<ShuttleComponent>(dropship);
+        return HasComp<ShuttleComponent>(dropship) && !HasComp<MapComponent>(dropship);
     }
 
     protected override bool IsInFTL(EntityUid dropship)

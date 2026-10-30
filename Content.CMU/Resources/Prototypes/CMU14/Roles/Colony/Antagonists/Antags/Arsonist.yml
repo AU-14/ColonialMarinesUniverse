@@ -55,6 +55,8 @@
   id: ArsonistRole
   name: cmu-antag-arsonist-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: cmu-antag-arsonist-objective
 
 - type: startingGear

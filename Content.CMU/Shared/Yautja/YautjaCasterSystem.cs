@@ -149,6 +149,13 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         if (!_power.HasPowerPopup(sourceBracer, args.User, GetPowerCost(ent.Comp)))
         {
             args.Cancelled = true;
+            // CMU14: the gun has already advanced NextFire by the mode's fire rate (10s on the eradicator) by the
+            // time this attempt is raised, and SharedGunSystem only puts it back when ResetCooldown is set:
+            //   gun.Comp.NextFire = attemptEv.ResetCooldown ? curTime : nextFireBeforeAttempt;
+            // Without this a shot refused for want of bracer charge still started the whole cooldown, so the next
+            // attempt reported "Plasma caster is not ready to fire. 10 seconds remaining." for a shot that never
+            // fired. Clearing it restores exactly the pre-shot state.
+            args.ResetCooldown = true;
         }
     }
 

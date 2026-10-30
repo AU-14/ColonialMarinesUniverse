@@ -3,7 +3,7 @@
   leadersToSpawn:
     AU14DrugSmuggler: 1
   gruntsToSpawn:
-     AU14DrugSmuggler: 1
+    AU14DrugSmuggler: 1
   scalewithpop: false
   spawnTogether: true
 
@@ -16,7 +16,7 @@
   maxplayers: 100
   roundstart: false
   ghostsNeeded: 2
-  ghostsCallable: true
+  ghostsCallable: false
   whitelistedGamemodes:
     - insurgency
     - colonyfall

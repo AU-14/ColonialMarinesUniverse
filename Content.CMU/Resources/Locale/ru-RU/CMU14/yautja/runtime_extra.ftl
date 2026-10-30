@@ -72,7 +72,6 @@ cmu-yautja-self-destruct-admin-alert-self = ТРЕВОГА: {$hunter} запус
 cmu-yautja-self-destruct-admin-cancel-link = НАЖМИТЕ, ЧТОБЫ ОТМЕНИТЬ САМОУНИЧТОЖЕНИЕ (наруч={$bracer}; жертва={$victim})
 cmu-yautja-self-destruct-arm-confirm = Ты уверен, что хочешь активировать процедуру самоуничтожения наруча?
 cmu-yautja-self-destruct-broadcast-armed = {$hunter} запустил процедуру самоуничтожения своего наруча.
-cmu-yautja-self-destruct-broadcast-cancelled = {$hunter} отменил процедуру самоуничтожения своего наруча.
 cmu-yautja-self-destruct-broadcast-remote-armed = {$hunter} запустил процедуру самоуничтожения наруча {$victim}.
 cmu-yautja-self-destruct-cancel-confirm = Ты уверен, что хочешь остановить обратный отсчёт?
 cmu-yautja-self-destruct-confirm-no = Нет
@@ -302,7 +301,6 @@ cmu-yautja-lobby-bracer = Наруч
 cmu-yautja-lobby-bracer-material = Стиль наруча
 cmu-yautja-lobby-cape = Накидка
 cmu-yautja-lobby-caster = Наплечный кастер
-cmu-yautja-lobby-eyes = Цвет глаз
 cmu-yautja-lobby-flavor = Описание персонажа
 cmu-yautja-lobby-flavor-limit = { $count } / { $max } символов максимум
 cmu-yautja-lobby-flavor-limit-tooltip = Максимум { $max } символов.

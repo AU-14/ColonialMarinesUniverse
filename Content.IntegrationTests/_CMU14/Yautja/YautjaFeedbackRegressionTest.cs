@@ -4,6 +4,9 @@ using Content.Server.Database;
 using Content.Server.Station.Systems;
 using Content.Server.CMU14.Yautja;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.Damage;
+using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Medical.Surgery;
@@ -50,6 +53,54 @@ public sealed class YautjaFeedbackRegressionTest
                 var appearance = server.EntMan.GetComponent<HumanoidProfileComponent>(hunter);
                 Assert.That(YautjaTestAppearance.SkinColor(server.EntMan, hunter),
                     Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Red)));
+            });
+        }
+        finally
+        {
+            server.Dispose();
+        }
+    }
+
+    [Test]
+    public async Task SpawnKeepsAnExplicitGreenSkinAndStillRollsUnchosenProfiles()
+    {
+        var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
+        EntityUid explicitGreen = default;
+        EntityUid unchosen = default;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var apply = entMan.System<YautjaProfileApplySystem>();
+
+                explicitGreen = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+                apply.ApplyProfile(explicitGreen,
+                    YautjaCharacterProfile.Default.WithSkinColor(YautjaSkinColor.Green), equipProfileGear: false);
+
+                unchosen = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+                apply.ApplyProfile(unchosen, YautjaCharacterProfile.Default, equipProfileGear: false);
+            });
+
+            await server.WaitRunTicks(2);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var green = entMan.GetComponent<YautjaAppliedProfileComponent>(explicitGreen).Profile;
+                var rolled = entMan.GetComponent<YautjaAppliedProfileComponent>(unchosen).Profile;
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(green.SkinColor, Is.EqualTo(YautjaSkinColor.Green),
+                        "an explicit Green pick is kept instead of being re-rolled");
+                    Assert.That(green.SkinColorSelected, Is.True);
+                    Assert.That(YautjaCharacterProfile.SkinColorOrder[..6], Does.Contain(rolled.SkinColor),
+                        "an unchosen default profile still receives a CM-SS13 tone");
+                    Assert.That(rolled.SkinColorSelected, Is.True,
+                        "the roll marks the profile as having a tone applied");
+                });
             });
         }
         finally
@@ -293,7 +344,7 @@ public sealed class YautjaFeedbackRegressionTest
     }
 
     [Test]
-    public async Task MedicompClampStopsExternalBleeding()
+    public async Task MedicompClampRepairsResidualWoundsWithoutAggregateDamage()
     {
         var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
         EntityUid patient = default;
@@ -316,18 +367,27 @@ public sealed class YautjaFeedbackRegressionTest
                 }
 
                 Assert.That(part, Is.Not.EqualTo(EntityUid.Invalid));
-                var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(part);
+                var partHealth = entMan.System<SharedBodyPartHealthSystem>();
+                Assert.That(partHealth.TryApplyPartDamage(patient, part,
+                    new DamageSpecifier { DamageDict = { ["Slash"] = 12 } }), Is.True);
+                var wounds = entMan.GetComponent<BodyPartWoundComponent>(part);
                 var woundSystem = entMan.System<CMUWoundLedgerSystem>();
+                Assert.That(woundSystem.GetEntries(wounds), Is.Not.Empty);
                 Assert.That(woundSystem.TryUpdateExternalBleeding(part, ExternalBleedTier.Arterial, wounds), Is.True);
 
                 var surgery = entMan.System<SharedCMSurgerySystem>();
+                var valid = new CMSurgeryValidEvent(patient, part);
+                entMan.EventBus.RaiseLocalEvent(surgery.GetSingleton("CMUSurgeryMcompWounds")!.Value, ref valid);
+                Assert.That(valid.Cancelled, Is.False, "Residual local injury must remain treatable after aggregate healing.");
                 var step = surgery.GetSingleton("CMUSurgeryStepMcompClampWound");
                 Assert.That(step, Is.Not.Null);
                 var ev = new CMSurgeryStepEvent(patient, patient, part, new List<EntityUid>());
                 entMan.EventBus.RaiseLocalEvent(step!.Value, ref ev);
 
-                Assert.That(entMan.GetComponent<BodyPartWoundComponent>(part).ExternalBleeding,
-                    Is.EqualTo(ExternalBleedTier.None));
+                Assert.That(entMan.HasComponent<BodyPartWoundComponent>(part), Is.False,
+                    "Closing the medicomp treatment must remove wounds, not only their bleeding.");
+                var health = entMan.GetComponent<BodyPartHealthComponent>(part);
+                Assert.That(health.Current, Is.EqualTo(health.Max));
             });
         }
         finally
@@ -375,8 +435,7 @@ public sealed class YautjaFeedbackRegressionTest
                     Assert.That(entMan.HasComponent<CMBleedersClampedComponent>(part), Is.False);
                     Assert.That(entMan.HasComponent<CMSkinRetractedComponent>(part), Is.False);
                     Assert.That(entMan.HasComponent<CMUSurgicalInternalBleedingComponent>(part), Is.False);
-                    Assert.That(entMan.GetComponent<BodyPartWoundComponent>(part).ExternalBleeding,
-                        Is.EqualTo(ExternalBleedTier.None));
+                    Assert.That(entMan.HasComponent<BodyPartWoundComponent>(part), Is.False);
                 });
             });
         }

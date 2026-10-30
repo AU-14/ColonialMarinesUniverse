@@ -317,6 +317,10 @@ public sealed class YautjaYoungbloodTest
 
         EntityUid nonYautjaTech = default;
         EntityUid nonYautjaTechMask = default;
+        EntityUid humanBracer = default;
+        EntityUid nonThrallUser = default;
+        EntityUid nonThrallMask = default;
+        EntityUid nonThrallBracer = default;
         EntityUid looseMaskUser = default;
         EntityUid looseMask = default;
         EntityUid noBracerUser = default;
@@ -348,6 +352,10 @@ public sealed class YautjaYoungbloodTest
 
                 nonYautjaTech = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
                 nonYautjaTechMask = entMan.SpawnEntity("CMUYautjaMask", map.GridCoords);
+                humanBracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
+                nonThrallUser = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(5, 0)));
+                nonThrallMask = entMan.SpawnEntity("CMUYautjaMaskThrallEbony", map.GridCoords.Offset(new Vector2(5, 0)));
+                nonThrallBracer = entMan.SpawnEntity("CMUYautjaThrallBracer", map.GridCoords.Offset(new Vector2(5, 0)));
                 looseMaskUser = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 1)));
                 looseMask = entMan.SpawnEntity("CMUYautjaMask", map.GridCoords.Offset(new Vector2(0, 1)));
                 noBracerUser = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
@@ -363,10 +371,12 @@ public sealed class YautjaYoungbloodTest
                 thrallMask = entMan.SpawnEntity("CMUYautjaMaskThrallEbony", map.GridCoords.Offset(new Vector2(4, 0)));
                 thrallBracer = entMan.SpawnEntity("CMUYautjaThrallBracer", map.GridCoords.Offset(new Vector2(4, 0)));
 
-                entMan.EnsureComponent<YautjaTechAuthorizedComponent>(nonYautjaTech);
                 entMan.EnsureComponent<YautjaThrallComponent>(thrallUser);
 
                 Assert.That(inventory.TryEquip(nonYautjaTech, nonYautjaTechMask, "mask", silent: true, force: true), Is.True);
+                Assert.That(inventory.TryEquip(nonYautjaTech, humanBracer, "gloves", silent: true, force: true), Is.True);
+                Assert.That(inventory.TryEquip(nonThrallUser, nonThrallMask, "mask", silent: true, force: true), Is.True);
+                Assert.That(inventory.TryEquip(nonThrallUser, nonThrallBracer, "gloves", silent: true, force: true), Is.True);
                 Assert.That(inventory.TryEquip(noBracerUser, noBracerMask, "mask", silent: true, force: true), Is.True);
                 Assert.That(inventory.TryEquip(blockedEyesUser, blockedEyesMask, "mask", silent: true, force: true), Is.True);
                 Assert.That(inventory.TryEquip(blockedEyesUser, blockedEyesBracer, "gloves", silent: true, force: true), Is.True);
@@ -381,15 +391,19 @@ public sealed class YautjaYoungbloodTest
                 entMan.EnsureComponent<YautjaComponent>(blockedEyesUser);
                 entMan.EnsureComponent<YautjaComponent>(techUser);
 
-                Assert.That(entMan.GetComponent<YautjaMaskComponent>(nonYautjaTechMask).RequiresYautjaWearer, Is.True);
+                // CMU lets any human run the clan mask visor, the thrall mask stays for thralls
+                Assert.That(entMan.GetComponent<YautjaMaskComponent>(nonYautjaTechMask).RequiresYautjaWearer, Is.False);
+                Assert.That(entMan.GetComponent<YautjaMaskComponent>(nonYautjaTechMask).AllowAnyWearer, Is.True);
                 Assert.That(entMan.GetComponent<YautjaMaskComponent>(thrallMask).RequiresYautjaWearer, Is.False);
+                Assert.That(entMan.GetComponent<YautjaMaskComponent>(thrallMask).AllowAnyWearer, Is.False);
                 Assert.That(entMan.GetComponent<YautjaMaskComponent>(thrallMask).User, Is.EqualTo(thrallUser));
                 Assert.That(entMan.HasComponent<YautjaThrallBracerComponent>(thrallBracer), Is.True);
                 Assert.That(inventory.TryGetSlotEntity(thrallUser, "gloves", out var equippedThrallBracer), Is.True);
                 Assert.That(equippedThrallBracer, Is.EqualTo(thrallBracer));
             });
 
-            await UseVisorAndAssert(nonYautjaTech, nonYautjaTechMask, "You have no idea how to work this thing!", false);
+            await UseVisorAndAssert(nonThrallUser, nonThrallMask, "You have no idea how to work this thing!", false);
+            await UseVisorAndAssert(nonYautjaTech, nonYautjaTechMask, "Low-light vision module: activated.", true);
             await UseVisorAndAssert(looseMaskUser, looseMask, "You must wear the clan mask!", false);
             await UseVisorAndAssert(noBracerUser, noBracerMask, "You must be wearing your bracers, as they have the power source.", false);
             await UseVisorAndAssert(blockedEyesUser, blockedEyesMask, "You need to remove your glasses first. Why are you even wearing these?", false);
@@ -410,7 +424,8 @@ public sealed class YautjaYoungbloodTest
 
                 foreach (var uid in new[]
                          {
-                             nonYautjaTech, nonYautjaTechMask, looseMaskUser, looseMask, noBracerUser,
+                             nonYautjaTech, nonYautjaTechMask, humanBracer, nonThrallUser, nonThrallMask,
+                             nonThrallBracer, looseMaskUser, looseMask, noBracerUser,
                              noBracerMask, blockedEyesUser, blockedEyesMask, blockedEyesBracer, glasses,
                              techUser, techMask, techBracer, thrallUser, thrallMask, thrallBracer,
                          })
@@ -988,12 +1003,13 @@ public sealed class YautjaYoungbloodTest
                 {
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaOpenBracerMenu"));
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleCloak"));
-                    Assert.That(actionIds, Does.Contain("CMUActionYautjaRecall"));
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaTranslator"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleWristBlades"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleScimitar"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleChainGauntlet"));
-                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaSelfDestruct"));
+                    // CMU14: CM-SS13 grants the self-destruct action to every bracer wearer (equipped()
+                    // hands out bracer_actions wholesale); a youngblood simply cannot arm it.
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaSelfDestruct"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleCaster"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleShield"));
                 });
@@ -1668,7 +1684,6 @@ public sealed class YautjaYoungbloodTest
                 {
                     "CMUYautjaClanArmor",
                     "CMUYautjaMask",
-                    "CMUYautjaMaskAccessory01Ebony",
                     "CMUYautjaClanGreaves",
                 });
 
@@ -2311,7 +2326,7 @@ public sealed class YautjaYoungbloodTest
     }
 
     [Test]
-    public async Task YoungbloodGhostRoleTakeoverEquipsBaseGearForMaskPower()
+    public async Task YoungbloodGhostRoleTakeoverEquipsBaseGearWithoutAClanMask()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
         var server = pair.Server;
@@ -2334,9 +2349,13 @@ public sealed class YautjaYoungbloodTest
 
                 AssertEquippedPrototype(entMan, inventory, youngblood, "gloves", "CMUYautjaBracer");
                 AssertEquippedPrototype(entMan, inventory, youngblood, "ears", "CMUYautjaCommunicator");
-                AssertEquippedPrototype(entMan, inventory, youngblood, "mask", "CMUYautjaMask");
-                Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(youngblood), Is.True,
-                    "The F7 Youngblood must receive the mask HUD used to see Yautja ranks.");
+
+                // A youngblood is unblooded and is not issued a clan mask, so the mask slot stays empty and the rank HUD
+                // that a mask grants does not apply.
+                Assert.That(inventory.TryGetSlotEntity(youngblood, "mask", out _), Is.False,
+                    "The F7 Youngblood must not spawn wearing a clan mask.");
+                Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(youngblood), Is.False,
+                    "Without a mask there is no mask HUD to show Yautja ranks.");
             }
             finally
             {

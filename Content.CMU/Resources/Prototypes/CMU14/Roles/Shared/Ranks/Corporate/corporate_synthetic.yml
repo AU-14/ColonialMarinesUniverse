@@ -1,0 +1,29 @@
+- type: rank
+  id: AU14RankCorporateSyntheticGrade1
+  name: Corporate Synthetic Grade 1
+  prefix: Corp. Syn. G1
+  paygrade: WYS1
+
+- type: rank
+  id: AU14RankCorporateSyntheticGrade2
+  name: Corporate Synthetic Grade 2
+  prefix: Corp. Syn. G2
+  paygrade: WYS2
+
+- type: rank
+  id: AU14RankCorporateSyntheticGrade3
+  name: Corporate Synthetic Grade 3
+  prefix: Corp. Syn. G3
+  paygrade: WYS3
+
+- type: rank
+  id: AU14RankCorporateSyntheticGrade4
+  name: Corporate Synthetic Grade 4
+  prefix: Corp. Syn. G4
+  paygrade: WYS4
+
+- type: rank
+  id: AU14RankCorporateSyntheticGrade5
+  name: Corporate Synthetic Grade 5
+  prefix: Corp. Syn. G5
+  paygrade: WYS5

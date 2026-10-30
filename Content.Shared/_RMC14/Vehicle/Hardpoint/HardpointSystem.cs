@@ -569,8 +569,10 @@ public sealed partial class HardpointSystem : EntitySystem
         frameIntegrity.MaxIntegrity = totalMaxIntegrity;
         // CMU14: fitting or refreshing hardpoints cannot restore a permanently wrecked hull.
         frameIntegrity.Integrity = IsDestroyedBeyondRepair(vehicle) ? 0 : Math.Clamp(totalIntegrity, 0f, totalMaxIntegrity);
+        CMUMarkPermanentWreck(vehicle, frameIntegrity, previous); // CMU14
 
-        if (Math.Abs(previous - frameIntegrity.Integrity) < 0.01f &&
+        if ((previous > 0f) == (frameIntegrity.Integrity > 0f) && // CMU14: always publish reaching zero.
+            Math.Abs(previous - frameIntegrity.Integrity) < 0.01f &&
             Math.Abs(previousMax - frameIntegrity.MaxIntegrity) < 0.01f)
         {
             return false;
@@ -1470,6 +1472,36 @@ public sealed partial class HardpointSystem : EntitySystem
         return slot.Whitelist == null || _whitelist.IsValid(slot.Whitelist, item);
     }
 
+    // CMU14 method
+    internal bool IsShapeValidHardpoint(EntityUid item, HardpointSlotsComponent slots, HardpointSlot slot)
+    {
+        if (!TryComp<HardpointItemComponent>(item, out var hardpoint))
+            return false;
+
+        if (slots.VehicleFamily is not null)
+        {
+            if (hardpoint.VehicleFamily is not { } vehicleFamily)
+                return false;
+
+            if (vehicleFamily != slots.VehicleFamily.Value)
+                return false;
+        }
+
+        if (slot.SlotType is not null)
+        {
+            if (hardpoint.SlotType is not { } slotType)
+                return false;
+
+            if (slotType != slot.SlotType.Value)
+                return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(slot.HardpointType))
+            return true;
+
+        return string.Equals(hardpoint.HardpointType, slot.HardpointType, StringComparison.OrdinalIgnoreCase);
+    }
+
     private bool HasAllRequired(EntityUid uid, HardpointSlotsComponent component, ItemSlotsComponent? itemSlots = null)
     {
         if (component.Slots.Count == 0)
@@ -1714,8 +1746,11 @@ public sealed partial class HardpointSystem : EntitySystem
         var wasFunctional = IsHardpointFunctional(hardpoint, integrity);
         var previous = integrity.Integrity;
         integrity.Integrity = MathF.Max(0f, integrity.Integrity - amount);
+        // CMU14: a stripped hull also needs the same permanent destruction transition.
+        if (hardpoint == vehicle)
+            CMUMarkPermanentWreck(vehicle, integrity, previous);
 
-        if (Math.Abs(previous - integrity.Integrity) < 0.01f)
+        if (integrity.Integrity > 0f && Math.Abs(previous - integrity.Integrity) < 0.01f) // CMU14
             return false;
 
         Dirty(hardpoint, integrity);

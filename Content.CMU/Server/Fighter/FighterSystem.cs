@@ -172,7 +172,11 @@ public sealed partial class FighterSystem : EntitySystem
         ExitGroundSeat(seat, args.Buckle.Owner);
         ClearSeat(seat);
     }
-    private void OnSeatShutdown(Entity<FighterSeatComponent> seat, ref ComponentShutdown args) => ClearSeat(seat);
+    private void OnSeatShutdown(Entity<FighterSeatComponent> seat, ref ComponentShutdown args)
+    {
+        _seatNetworkState.Remove(seat);
+        ClearSeat(seat);
+    }
 
     private void OnPlayerAttached(PlayerAttachedEvent ev)
     {
@@ -446,10 +450,10 @@ public sealed partial class FighterSystem : EntitySystem
                         UpdateLaser((seat, component), (uid, aircraft), weapons);
                         UpdateQueuedFire((seat, component), (uid, aircraft), weapons);
                     }
-                    Dirty(seat, component);
+                    DirtySeatChanges((seat, component));
                 }
             }
-            Dirty(uid, aircraft);
+            DirtyAircraftChanges((uid, aircraft));
         }
         UpdateAirCombat();
         UpdateFighterSpectators();

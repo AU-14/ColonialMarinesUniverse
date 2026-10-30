@@ -27,8 +27,6 @@ namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
 {
-    private const string YautjaInterferenceStatus = "YautjaInterference";
-
     [Dependency] private EntityTableSystem _entityTable = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBodyPartHealthSystem _bodyPartHealth = default!;
@@ -45,7 +43,6 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<YautjaMeleeXenoInterferenceComponent, MeleeHitEvent>(OnMeleeHit);
         SubscribeLocalEvent<YautjaHunterSpearFishingComponent, AfterInteractEvent>(OnHunterSpearAfterInteract);
         SubscribeLocalEvent<YautjaHunterSpearFishingComponent, YautjaHunterSpearFishingDoAfterEvent>(OnHunterSpearFishingDoAfter);
         SubscribeLocalEvent<YautjaCeremonialDaggerComponent, MeleeHitEvent>(OnCeremonialDaggerMeleeHit);
@@ -53,29 +50,6 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
         SubscribeLocalEvent<YautjaCeremonialDaggerComponent, YautjaCeremonialDaggerPrepareFlayDoAfterEvent>(OnCeremonialDaggerPrepareFlayDoAfter);
         SubscribeLocalEvent<YautjaCeremonialDaggerComponent, YautjaCeremonialDaggerFlayDoAfterEvent>(OnCeremonialDaggerFlayDoAfter);
         SubscribeLocalEvent<YautjaCeremonialDaggerComponent, YautjaCeremonialDaggerLimbFlayDoAfterEvent>(OnCeremonialDaggerLimbFlayDoAfter);
-    }
-
-    private void OnMeleeHit(Entity<YautjaMeleeXenoInterferenceComponent> ent, ref MeleeHitEvent args)
-    {
-        if (!args.IsHit ||
-            ent.Comp.Duration <= TimeSpan.Zero ||
-            !CanApplyInterference(args.User))
-        {
-            return;
-        }
-
-        foreach (var target in args.HitEntities)
-        {
-            if (!HasComp<XenoComponent>(target))
-                continue;
-
-            _status.TryAddStatusEffect(target, YautjaInterferenceStatus, ent.Comp.Duration, true);
-        }
-    }
-
-    private bool CanApplyInterference(EntityUid user)
-    {
-        return HasComp<YautjaComponent>(user);
     }
 
     private void OnHunterSpearAfterInteract(Entity<YautjaHunterSpearFishingComponent> spear, ref AfterInteractEvent args)
@@ -195,7 +169,8 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
             return;
         }
 
-        if (!HasComp<YautjaComponent>(args.User))
+        // cmss13 checks TRAIT_SUPER_STRONG here, which linked thralls get too
+        if (!HasComp<YautjaComponent>(args.User) && !HasComp<YautjaThrallHeroComponent>(args.User))
         {
             args.Handled = true;
             _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-not-strong"), args.User, args.User);

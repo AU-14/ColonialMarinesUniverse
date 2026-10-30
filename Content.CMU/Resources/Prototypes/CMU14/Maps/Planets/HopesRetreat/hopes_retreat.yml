@@ -93,7 +93,7 @@
   - /Maps/CMU14/Planets/HopesRetreat/HopesRetreatMultiZ2.yml
   - /Maps/CMU14/Planets/HopesRetreat/HopesRetreatMultiZ3.yml
   minPlayers: 0
-  maxPlayers: 200
+  maxPlayers: 500
   maxRandomOffset: 0
   randomRotation: false
   stations:
@@ -132,6 +132,7 @@
             AU14JobCivilianCorporateAssistant: [1, 1]
 
             AU14JobCivilianScientist: [6, 6]
+            AU14JobCorporateSynthetic: [1, 1]
             AU14JobWYGuard: [5, 5]
 
             # Security/LEO

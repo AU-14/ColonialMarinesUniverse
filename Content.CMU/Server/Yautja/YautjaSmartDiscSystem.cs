@@ -34,6 +34,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Yautja;
 
@@ -261,7 +262,14 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             StopDisc(ent);
 
         if (!TerminatingOrDeleted(ent.Owner) && !TerminatingOrDeleted(target))
+        {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-disc-catch-self", ("disc", ent.Owner)), target, target);
+            _popup.PopupEntity(
+                Loc.GetString("cmu-yautja-disc-catch-others", ("disc", ent.Owner), ("user", target)),
+                target,
+                Filter.PvsExcept(target),
+                true);
+        }
 
         if (TryComp(ent.Owner, out ThrownItemComponent? currentThrown))
             _thrown.StopThrow(ent.Owner, currentThrown);
@@ -622,6 +630,20 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
         if (!TryComp(uid, out ThrownItemComponent? thrown))
         {
+            // CMU14: a disc that a wall stopped has no ThrownItemComponent, and SteerDisc/SteerBoomerangReturn
+            // run every tick, so this used to re-throw it - and spam the engine's throwing message
+            // ("smart-disc throws smart-disc") - on every tick while it was pinned. Only attempt a fresh throw
+            // once the disc has actually moved since the last attempt, so a pinned disc waits; when it can move
+            // again the position differs and the launch goes through exactly as before.
+            var position = _transform.GetMapCoordinates(uid).Position;
+            if (disc.LastThrowAttemptPosition is { } lastAttempt &&
+                (position - lastAttempt).LengthSquared() < 0.01f)
+            {
+                return false;
+            }
+
+            disc.LastThrowAttemptPosition = position;
+
             _throwing.TryThrow(
                 uid,
                 direction,
@@ -935,15 +957,8 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             return true;
         }
 
-        if (TryComp(ent.Owner, out YautjaRecallableComponent? recallable) &&
-            recallable.YautjaOwner is { } recallOwner &&
-            !TerminatingOrDeleted(recallOwner))
-        {
-            owner = recallOwner;
-            ent.Comp.YautjaOwner = recallOwner;
-            return true;
-        }
-
+        // CMU14: the gear-binding component that used to carry the owner is gone, so the disc only
+        // trusts its own field and the rogue-target path above.
         owner = default;
         return false;
     }
@@ -954,15 +969,19 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         if (!CanOperateDisc(user))
             return false;
 
-        if (!TryComp(ent.Owner, out YautjaRecallableComponent? recallable) ||
-            recallable.YautjaOwner is not { } existing ||
-            TerminatingOrDeleted(existing))
-            return false;
+        // A reconstructed interface can claim recovered gear while its operator holds it.
+        // Ownership stays on the disc so autonomous flight and recall use the same owner.
+        var researchClaim = HasComp<CMUYautjaResearchOperatorComponent>(user) &&
+                            TryComp(user, out HandsComponent? hands) &&
+                            _hands.IsHolding((user, hands), ent.Owner, out _);
+        if (ent.Comp.YautjaOwner is not { } existing || TerminatingOrDeleted(existing) || researchClaim)
+        {
+            ent.Comp.YautjaOwner = user;
+            owner = user;
+            return true;
+        }
 
         owner = existing;
-        if (owner == user)
-            ent.Comp.YautjaOwner = user;
-
         return true;
     }
 

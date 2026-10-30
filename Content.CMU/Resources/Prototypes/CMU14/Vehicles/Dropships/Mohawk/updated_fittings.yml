@@ -1,0 +1,2245 @@
+# Source: https://github.com/cmss13-devs/cmss13/pull/12866 at 4b1f9b6bcd3c456b2adca874ff89d0a7fd5ce012
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaLeft30171233ac68
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,17
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaLeft20dc6ebb7367
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,16
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    state: 0,16
+  - type: Occluder
+    enabled: false
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaLeft10f7a36c1cff
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,15
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaLeft21c6d251c31d
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: 0,1
+    layers:
+    - state: 2,20
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaDouble282a0d5617
+  name: dropship light fixture
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    offset: 0,0
+    noRot: false
+  - type: PointLight
+    offset: 0,0.35
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaBody201ad7524384
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,10
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaWall80640eef5d89
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 0,8
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    state: 0,8
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaBody107393baf1f6
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,9
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaBody005b3fc97a0a
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,8
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaDouble56db8e3126
+  name: dropship light fixture
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: -1.5707963267948966 rad
+  - type: Sprite
+    offset: 0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: 0.5,-0.025
+- type: entity
+  parent: CMUMohawkMedicalCabinet
+  id: CMUMohawkOmahaWallMed94002c2c0a
+  name: NanoMed medical cabinet
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    offset: -0.9375,-0.5
+    noRot: false
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaOmahaPassenger934fe6b701
+  name: passenger seat
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0.25,0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0.25,0
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaOmahaPassengerbae5a3aea5
+  name: passenger seat
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0.25,0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0.25,0
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaDoubled59ff2267a
+  name: dropship light fixture
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: -1.5707963267948966 rad
+  - type: Sprite
+    offset: -0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: -0.5,-0.025
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaWall1038e67f3d2e
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 1,1
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    state: 1,1
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMSeatPilot
+  id: CMUMohawkOmahaOmahaPilot00f0878681
+  name: pilot seat
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    rot: 3.141592653589793 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0,0.1875
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0,0.1875
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaDoubleaeadc664f8
+  name: dropship light fixture
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: -1.5707963267948966 rad
+  - type: Sprite
+    offset: -0,-0.375
+    noRot: false
+  - type: PointLight
+    offset: -0,-0.025
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaStairsDecalBotd1d7a78415
+  name: dropship hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/misc.rsi
+    offset: 0,0
+    layers:
+    - state: stairs_decal_bot
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaBorder308ea3e432d9
+  name: boarding ramp edging
+  suffix: Mohawk, Omaha
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 0,3
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaWall23c3f7d3d967
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 6,2
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    state: 6,2
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaAdjustableLayer516d73a893
+  name: passenger seat
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0.25,0.625
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0.25,0.625
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMUMohawkOmahaOmaha79f7093412
+  name: dropship navigation console
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/controls.rsi
+    offset: -0.03125,0.1875
+    layers:
+    - state: console
+  - type: Physics
+    canCollide: true
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaBorder314c37f78953
+  name: boarding ramp edging
+  suffix: Mohawk, Omaha
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 1,3
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaOmahaPassenger3291faaea8
+  name: passenger seat
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0.25,0.625
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0.25,0.625
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaOmahaPassenger788edeae34
+  name: passenger seat
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0.25,0.625
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0.25,0.625
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaBorder32e881ae81a9
+  name: boarding ramp edging
+  suffix: Mohawk, Omaha
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 2,3
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaWall223e90c4b51a
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 2,2
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    state: 2,2
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaAdjustableLayer14e24696d8
+  name: passenger seat
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0.25,0.625
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0.25,0.625
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaDouble10fdc607b4
+  name: dropship light fixture
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 1.5707963267948966 rad
+  - type: Sprite
+    offset: -0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: -0.5,-0.025
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaOmahaPassengerbb55cf175e
+  name: passenger seat
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    rot: 1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0,-0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0,-0
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaOmahaPassengerbd78b670eb
+  name: passenger seat
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    rot: 1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0,-0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0,-0
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkMedicalCabinet
+  id: CMUMohawkOmahaWallMedf289f569bb
+  name: NanoMed medical cabinet
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    offset: 0.9375,-0.5
+    noRot: false
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaDoublef649da2540
+  name: dropship light fixture
+  suffix: Mohawk, Omaha
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 1.5707963267948966 rad
+  - type: Sprite
+    offset: 0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: 0.5,-0.025
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaWall110549a66b44
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 7,1
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    state: 7,1
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaBody218fd07e6480
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,10
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaWall818bdbf5f8d5
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 8,8
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/walls.rsi
+    state: 8,8
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaBody1126b5cdc4f4
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,9
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaBody01006ce95abe
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,8
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaRight24fae8f8f33b
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: 0,1
+    layers:
+    - state: 14,20
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaRight336ed18df3a2
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,17
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaRight237fc647da52
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,16
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaRight14e4ff3f396a
+  name: outer hull plating
+  suffix: Mohawk, Omaha
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,15
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyLeft30171233ac68
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,17
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaNavyLeft20dc6ebb7367
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,16
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    state: 0,16
+  - type: Occluder
+    enabled: false
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyLeft10f7a36c1cff
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,15
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyLeft21c6d251c31d
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 0,1
+    layers:
+    - state: 2,20
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaNavyDouble282a0d5617
+  name: dropship light fixture
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    offset: 0,0
+    noRot: false
+  - type: PointLight
+    offset: 0,0.35
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyBody201ad7524384
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,10
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaNavyWall80640eef5d89
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 0,8
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    state: 0,8
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyBody107393baf1f6
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,9
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyBody005b3fc97a0a
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,8
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaNavyDouble56db8e3126
+  name: dropship light fixture
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: -1.5707963267948966 rad
+  - type: Sprite
+    offset: 0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: 0.5,-0.025
+- type: entity
+  parent: CMUMohawkMedicalCabinet
+  id: CMUMohawkOmahaNavyWallMed94002c2c0a
+  name: NanoMed medical cabinet
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    offset: -0.9375,-0.5
+    noRot: false
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaNavyOmahaPassenger934fe6b701
+  name: passenger seat
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0.25,0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0.25,0
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaNavyOmahaPassengerbae5a3aea5
+  name: passenger seat
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0.25,0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0.25,0
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaNavyDoubled59ff2267a
+  name: dropship light fixture
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: -1.5707963267948966 rad
+  - type: Sprite
+    offset: -0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: -0.5,-0.025
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaNavyWall1038e67f3d2e
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 1,1
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    state: 1,1
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMSeatPilot
+  id: CMUMohawkOmahaNavyOmahaPilot00f0878681
+  name: pilot seat
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 3.141592653589793 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0,0.1875
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0,0.1875
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaNavyDoubleaeadc664f8
+  name: dropship light fixture
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: -1.5707963267948966 rad
+  - type: Sprite
+    offset: -0,-0.375
+    noRot: false
+  - type: PointLight
+    offset: -0,-0.025
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyStairsDecalBotd1d7a78415
+  name: dropship hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/misc.rsi
+    offset: 0,0
+    layers:
+    - state: stairs_decal_bot
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyBorder308ea3e432d9
+  name: boarding ramp edging
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 0,3
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaNavyWall23c3f7d3d967
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 6,2
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    state: 6,2
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaNavyAdjustableLayer516d73a893
+  name: passenger seat
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0.25,0.625
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0.25,0.625
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMUMohawkOmahaNavyOmaha79f7093412
+  name: dropship navigation console
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/controls.rsi
+    offset: -0.03125,0.1875
+    layers:
+    - state: console
+  - type: Physics
+    canCollide: true
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyBorder314c37f78953
+  name: boarding ramp edging
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 1,3
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaNavyOmahaPassenger3291faaea8
+  name: passenger seat
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0.25,0.625
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0.25,0.625
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaNavyOmahaPassenger788edeae34
+  name: passenger seat
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0.25,0.625
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0.25,0.625
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyBorder32e881ae81a9
+  name: boarding ramp edging
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 2,3
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaNavyWall223e90c4b51a
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 2,2
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    state: 2,2
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaNavyAdjustableLayer14e24696d8
+  name: passenger seat
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 0 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0.25,0.625
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0.25,0.625
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaNavyDouble10fdc607b4
+  name: dropship light fixture
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 1.5707963267948966 rad
+  - type: Sprite
+    offset: -0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: -0.5,-0.025
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaNavyOmahaPassengerbb55cf175e
+  name: passenger seat
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0,-0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0,-0
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkOmahaNavyOmahaPassengerbd78b670eb
+  name: passenger seat
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0,-0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0,-0
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkMedicalCabinet
+  id: CMUMohawkOmahaNavyWallMedf289f569bb
+  name: NanoMed medical cabinet
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    offset: 0.9375,-0.5
+    noRot: false
+- type: entity
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkOmahaNavyDoublef649da2540
+  name: dropship light fixture
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 1.5707963267948966 rad
+  - type: Sprite
+    offset: 0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: 0.5,-0.025
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaNavyWall110549a66b44
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 7,1
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    state: 7,1
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyBody218fd07e6480
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,10
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUMohawkOmahaNavyWall818bdbf5f8d5
+  name: dropship bulkhead
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    offset: 0,0
+    layers:
+    - state: 8,8
+  - type: Icon
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/walls.rsi
+    state: 8,8
+  - type: Occluder
+    enabled: true
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyBody1126b5cdc4f4
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,9
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyBody01006ce95abe
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,8
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyRight24fae8f8f33b
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 0,1
+    layers:
+    - state: 14,20
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyRight336ed18df3a2
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,17
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyRight237fc647da52
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,16
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkOmahaNavyRight14e4ff3f396a
+  name: outer hull plating
+  suffix: Mohawk, Omaha, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,15
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayLeft302b3bec370a
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,17
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayLeft209e88aeee14
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,16
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayLeft1084e3359581
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,15
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayLeft21db6c97a5dd
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: 0,1
+    layers:
+    - state: 2,20
+- type: entity
+  parent: CMUMohawkDoubleBlueLight
+  id: CMUMohawkMidwayBluef4dcea5589
+  name: blue dropship light fixture
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    offset: 0,0
+    noRot: false
+  - type: PointLight
+    offset: 0,0.35
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayBody208803cda2e3
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,10
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayBody10b69b440a90
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,9
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayBody003689d9f445
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,8
+- type: entity
+  parent: CMUMohawkDoubleBlueLight
+  id: CMUMohawkMidwayBlue8b06850b54
+  name: blue dropship light fixture
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: -1.5707963267948966 rad
+  - type: Sprite
+    offset: 0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: 0.5,-0.025
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkMidwayAdjustableLayerfae113eec8
+  name: passenger seat
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    rot: 1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0.5,0.25
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0.5,0.25
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkMidwayAdjustableLayer91a71b7f04
+  name: passenger seat
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    rot: 1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0,0.25
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0,0.25
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPilot
+  id: CMUMohawkMidwayOmahaPilot00f0878681
+  name: pilot seat
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    rot: 3.141592653589793 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0,0.1875
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0,0.1875
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDoubleBlueLight
+  id: CMUMohawkMidwayBluef3d77a47c4
+  name: blue dropship light fixture
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: -1.5707963267948966 rad
+  - type: Sprite
+    offset: -0,-0.375
+    noRot: false
+  - type: PointLight
+    offset: -0,-0.025
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayBorder3052669fd8b8
+  name: boarding ramp edging
+  suffix: Mohawk, Midway
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 0,3
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMUMohawkMidwayMidway6a168ad015
+  name: dropship navigation console
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/controls.rsi
+    offset: -0.03125,0.1875
+    layers:
+    - state: console
+  - type: Physics
+    canCollide: true
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayBorder31166e90d462
+  name: boarding ramp edging
+  suffix: Mohawk, Midway
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 1,3
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayBorder32d4000d1359
+  name: boarding ramp edging
+  suffix: Mohawk, Midway
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 2,3
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkMidwayAdjustableLayer7d1bd1f6c5
+  name: passenger seat
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    rot: -1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0.5,0.25
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0.5,0.25
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkMidwayAdjustableLayerf84e8b9774
+  name: passenger seat
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    rot: -1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0,0.25
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0,0.25
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDoubleBlueLight
+  id: CMUMohawkMidwayBlue28c4a8e6d5
+  name: blue dropship light fixture
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 1.5707963267948966 rad
+  - type: Sprite
+    offset: -0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: -0.5,-0.025
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayBody213a7555a090
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,10
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayBody1113abee2a54
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,9
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayBody017cc094e3c8
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,8
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayRight24b9274c8a7b
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: 0,1
+    layers:
+    - state: 14,20
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayRight339c67565b01
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,17
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayRight23b6ae6f1075
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,16
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayRight14207dd81b29
+  name: outer hull plating
+  suffix: Mohawk, Midway
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,15
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyLeft302b3bec370a
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,17
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyLeft209e88aeee14
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,16
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyLeft1084e3359581
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 0,15
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyLeft21db6c97a5dd
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 0,1
+    layers:
+    - state: 2,20
+- type: entity
+  parent: CMUMohawkDoubleBlueLight
+  id: CMUMohawkMidwayNavyBluef4dcea5589
+  name: blue dropship light fixture
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    offset: 0,0
+    noRot: false
+  - type: PointLight
+    offset: 0,0.35
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyBody208803cda2e3
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,10
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyBody10b69b440a90
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,9
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyBody003689d9f445
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: -1,0
+    layers:
+    - state: 3,8
+- type: entity
+  parent: CMUMohawkDoubleBlueLight
+  id: CMUMohawkMidwayNavyBlue8b06850b54
+  name: blue dropship light fixture
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: -1.5707963267948966 rad
+  - type: Sprite
+    offset: 0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: 0.5,-0.025
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkMidwayNavyAdjustableLayerfae113eec8
+  name: passenger seat
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0.5,0.25
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0.5,0.25
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkMidwayNavyAdjustableLayer91a71b7f04
+  name: passenger seat
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: 0,0.25
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: 0,0.25
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPilot
+  id: CMUMohawkMidwayNavyOmahaPilot00f0878681
+  name: pilot seat
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 3.141592653589793 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0,0.1875
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0,0.1875
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDoubleBlueLight
+  id: CMUMohawkMidwayNavyBluef3d77a47c4
+  name: blue dropship light fixture
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: -1.5707963267948966 rad
+  - type: Sprite
+    offset: -0,-0.375
+    noRot: false
+  - type: PointLight
+    offset: -0,-0.025
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyBorder3052669fd8b8
+  name: boarding ramp edging
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 0,3
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMUMohawkMidwayNavyMidway6a168ad015
+  name: dropship navigation console
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 0 rad
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/controls.rsi
+    offset: -0.03125,0.1875
+    layers:
+    - state: console
+  - type: Physics
+    canCollide: true
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyBorder31166e90d462
+  name: boarding ramp edging
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 1,3
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyBorder32d4000d1359
+  name: boarding ramp edging
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: MohawkRampEdging
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/ramp.rsi
+    offset: 0,-1
+    layers:
+    - state: 2,3
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkMidwayNavyAdjustableLayer7d1bd1f6c5
+  name: passenger seat
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: -1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0.5,0.25
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0.5,0.25
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMSeatPassenger
+  id: CMUMohawkMidwayNavyAdjustableLayerf84e8b9774
+  name: passenger seat
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: -1.5707963267948966 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0,0.25
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0,0.25
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
+- type: entity
+  parent: CMUMohawkDoubleBlueLight
+  id: CMUMohawkMidwayNavyBlue28c4a8e6d5
+  name: blue dropship light fixture
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+    rot: 1.5707963267948966 rad
+  - type: Sprite
+    offset: -0.5,-0.375
+    noRot: false
+  - type: PointLight
+    offset: -0.5,-0.025
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyBody213a7555a090
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,10
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyBody1113abee2a54
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,9
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyBody017cc094e3c8
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 13,8
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyRight24b9274c8a7b
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 0,1
+    layers:
+    - state: 14,20
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyRight339c67565b01
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,17
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyRight23b6ae6f1075
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,16
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkMidwayNavyRight14207dd81b29
+  name: outer hull plating
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/mohawk_navy/facade.rsi
+    offset: 1,0
+    layers:
+    - state: 16,15
