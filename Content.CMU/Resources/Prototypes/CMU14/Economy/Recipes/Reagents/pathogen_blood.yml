@@ -14,6 +14,8 @@
       effects:
       - !type:Hemorrhaging
         potency: 3
+      - !type:Allergenic
+        potency: 1
 
 - type: reagent
   parent: CMUPathogenMycohemolymph
@@ -28,6 +30,8 @@
       effects:
       - !type:Hemorrhaging
         potency: 6
+      - !type:Electrogenetic
+        potency: 1
 
 
 - type: reagent
@@ -57,6 +61,8 @@
         potency: 8
       - !type:Nervestimulating
         potency: 2
+      - !type::Psychostimulating
+        potency: 2
   
 - type: reagent
   parent: CMUPathogenSporoplasm
@@ -74,6 +80,10 @@
       metabolismRate: 0.2
       effects:
       - !type:Hyperdensificating
+        potency: 1
+      - !type:Bonemending
+        potency: 1
+      - !type:Viscous
         potency: 1
 
 - type: reagent
@@ -95,6 +105,8 @@
         potency: 2
       - !type:Musclestimulating
         potency: 6
+      - !type:Hypermetabolic
+        potency: 1
 
 - type: reagent
   parent: CMUPathogenSporoplasm
@@ -133,7 +145,7 @@
       cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
-      - !type:Neurotoxic
+      - !type:Hypnotic
         potency: 4
       - !type:Excreting
         potency: 2
@@ -143,8 +155,6 @@
 - type: reagent
   parent: CMUPathogenSporoplasm
   id: CMUPathogenSporoplasmNutrient
-  # Nothing produces this plasma yet; keep it out of research contract pools until something does.
-  flags: NoGeneration
   name: reagent-name-pathogen-nutrient-plasma
   desc: reagent-desc-pathogen-nutrient-plasma
   color: "#2fbe88"
@@ -157,14 +167,14 @@
       cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
-      - !type:Fueling
-        potency: 1
       - !type:Viscous
         potency: 3
       - !type:Addictive
         potency: 4
       - !type:Nutritious
         potency: 3
+      - !type:Euphoric
+        potency: 2
 
 - type: reagent
   parent: CMUPathogenSporoplasm
@@ -181,6 +191,9 @@
       cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
+      - !type:Defibrillating
+        potency: 1
+      - !type:Mycotoxigenic
       - !type:Biocidic
         potency: 2
 
@@ -201,7 +214,7 @@
       effects:
       - !type:Biocidic
         potency: 4
-      - !type:Addictive
+      - !type:Antiparasitic
         potency: 1
       - !type:Hallucinogenic
         potency: 4
