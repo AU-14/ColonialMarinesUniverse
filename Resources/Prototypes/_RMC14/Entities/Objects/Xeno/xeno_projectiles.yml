@@ -229,6 +229,7 @@
     superSlow: false
     slow: 5
     paralyze: 0
+    slowsYautja: false # CMU14: cmss13 bone chips skip preds
   - type: Projectile
     impactEffect: null
     damage:

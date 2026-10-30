@@ -204,6 +204,7 @@
     maxCount: 100
   # fully enclosed, so it seals out spores like the clan masks do
   - type: MycotoxinProtection
+  - type: GasBlock
   - type: YautjaMask
     requiresYautjaWearer: false
     preserveVisorOnUnequip: true
