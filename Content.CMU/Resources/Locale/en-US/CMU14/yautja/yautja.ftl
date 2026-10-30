@@ -348,6 +348,7 @@ cmu-yautja-self-destruct-armed = You set the timer. May your journey to the grea
 cmu-yautja-self-destruct-warning = Bracer self-destruct: {$seconds} seconds.
 cmu-yautja-self-destruct-critical = As you fall into unconsciousness you fail to activate your self-destruct device before you collapse.
 cmu-yautja-self-destruct-dead = Little too late for that now!
+cmu-yautja-vitals-failing = Your vitals are failing, you won't stay standing much longer!
 cmu-yautja-trap-arm-failed = You cannot set the trap here.
 cmu-yautja-trap-armed = hunting trap is now armed.
 cmu-yautja-trap-disarmed = {$trap} is now disarmed.

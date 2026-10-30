@@ -233,6 +233,7 @@
   - type: RMCEarProtection
   - type: EyeProtection
     protectionTime: 20
+  - type: GasBlock
   - type: YautjaMask
     requiresYautjaWearer: false
     preserveVisorOnUnequip: true

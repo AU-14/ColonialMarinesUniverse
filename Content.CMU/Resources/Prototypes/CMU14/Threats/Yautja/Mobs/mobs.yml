@@ -21,6 +21,11 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
+  # cmss13 YAUTJA_SLOWED_AMOUNT / YAUTJA_SUPERSLOWED_AMOUNT take most of the human slow off preds (+0.75 / +1 move
+  # delay instead of +2 / +4). without this they got the full marine slow from CMMobHuman
+  - type: RMCSpeciesSlowdownModifier
+    slowModifier: 0.75
+    superSlowModifier: 1
   # CMU14: Yautja throw further than a human. ThrowHeldItem clamps the throw distance to HandsComponent.ThrowRange
   # (human default 8) or the item's ItemThrowRange, and then throws with compensateFriction, so the object stops on the
   # target
@@ -36,9 +41,8 @@
   # the queen rolls 40% a hit to take a limb, which shredded hunters. a quarter of that here
   - type: XenoMeleeSeverResistance
     chanceMultiplier: 0.25
-  # crossing into crit keeps them up and fighting for a bit before they drop, same thing xenos get
-  - type: CriticalGraceTime
-    graceDuration: 20
+  # no crit grace, cmss13 preds drop the tick they cross crit. this beeps first so they know to SD
+  - type: YautjaVitalsWarning
   - type: TacticalMapTracked
     trackDead: true
   - type: YautjaMapTracked
@@ -333,8 +337,7 @@
   # same queen sever cut as hunters, and youngbloods don't even regrow
   - type: XenoMeleeSeverResistance
     chanceMultiplier: 0.25
-  - type: CriticalGraceTime
-    graceDuration: 20
+  - type: YautjaVitalsWarning
   - type: Language
     spokenLanguages:
     - Yautja
