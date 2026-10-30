@@ -53,6 +53,7 @@ govforveteran-role-greeting = You're an A.W. USCM veteran. You've spent years se
     Nobody in this colony knows who you used to be, and you would like to keep it that way.
     But something has changed. The quiet life you've built no longer feels right. The people around you are not just neighbours any more.
     Your old equipment is still packed away in your bag. You know how to use it.
+    Try your best to not get caught.
 cmu-veteran-cloak-on = The field engages. Nothing on you reads as solid.
 cmu-veteran-cloak-watched = The field will not engage while you are being observed.
 cmu-veteran-cloak-watched-uncloak = The field will not disengage while you are being observed.

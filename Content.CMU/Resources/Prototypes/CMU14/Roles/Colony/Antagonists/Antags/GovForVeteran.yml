@@ -60,10 +60,12 @@
     exclusiveAntag: true
     roleType: SoloAntagonist
     subtype: cmu-role-subtype-govfor-veteran
+  # Same slot the other colony antags use for their role icon (Runaway Synth's synth icon), but with the
+  # Government Forces weapons specialist icon.
   - type: CMUAdminRoleIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
-      state: hudsquad_rifleman
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
+      state: govfor_ws
 
 - type: antag
   parent: CMUAntagColonyBase
