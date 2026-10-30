@@ -81,9 +81,7 @@
   description: A scuffed old case with the markings sanded off and a latch that has been repaired more than once. Something heavy shifts inside when it is moved.
   components:
   - type: Item
-    size: Normal
-  # Roomy on purpose: eight worn pieces plus the machete and the dogtag all have to fit, and StorageFill
-  # deletes anything it cannot place. The case itself stays Normal sized so it fits a colonist's bag.
+    size: Small
   - type: Storage
     maxItemSize: Huge
     grid:

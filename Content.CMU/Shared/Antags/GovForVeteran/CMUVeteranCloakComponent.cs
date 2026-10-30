@@ -38,6 +38,13 @@ public sealed partial class CMUVeteranCloakComponent : Component
     public TimeSpan NextDeniedPopup;
 
     /// <summary>
+    ///     True while the field is up. Tracked here rather than inferred from the invisibility component, which is
+    ///     still attached while its own shutdown runs - that would leave the speed bonus applied after the field drops.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Cloaked;
+
+    /// <summary>
     ///     Walk and sprint speed multiplier applied while the field is up.
     /// </summary>
     [DataField, AutoNetworkedField]

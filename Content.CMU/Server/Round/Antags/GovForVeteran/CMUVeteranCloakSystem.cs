@@ -1,5 +1,6 @@
 using Content.Server.Chat.Managers;
 using Content.Shared._RMC14.Armor.ThermalCloak;
+using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Stealth;
@@ -83,8 +84,9 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         base.Initialize();
 
         // The cloak's own system owns ThermalCloakTurnInvisibleActionEvent, so the gate sits one step earlier:
-        // its action is simply invalid while a watched veteran presses it.
-        SubscribeLocalEvent<ActionValidateEvent>(OnActionValidate);
+        // the action is refused before it is even validated. Keyed on the action's own event type, which is a
+        // reliable handle on the cloak toggle regardless of what the action considers its provider.
+        SubscribeLocalEvent<ActionComponent, ActionAttemptEvent>(OnActionAttempt);
 
         SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentStartup>(OnCloakStarted);
         SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentShutdown>(OnCloakStopped);
@@ -107,38 +109,40 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Only lets the field go up or down while nobody can see him: a watched attempt invalidates the cloak
-    ///     toggle before it runs, with feedback.
+    ///     Only lets the field go up or down while nobody can see him, and refuses the controls entirely without
+    ///     the antagonist skill.
     /// </summary>
-    private void OnActionValidate(ref ActionValidateEvent args)
+    private void OnActionAttempt(Entity<ActionComponent> ent, ref ActionAttemptEvent args)
     {
-        if (args.Invalid)
+        if (args.Cancelled)
             return;
 
-        if (!HasComp<ThermalCloakComponent>(args.Provider))
+        if (!TryComp<InstantActionComponent>(ent.Owner, out var instant) ||
+            instant.Event is not ThermalCloakTurnInvisibleActionEvent)
+        {
             return;
+        }
 
         // Locked behind the antagonist skill: without it the field controls do not respond at all.
         if (_skills.GetSkill(args.User, AntagonistSkill) < 1)
         {
-            args.Invalid = true;
-            _popups.PopupEntity(Loc.GetString("cmu-veteran-cloak-unskilled"), args.User, args.User, PopupType.SmallCaution);
+            args.Cancelled = true;
+            args.Reason = Loc.GetString("cmu-veteran-cloak-unskilled");
             return;
         }
 
         // Past this point only the veteran answers to the watching rule.
-        if (!TryComp<CMUVeteranCloakComponent>(args.User, out var cloak))
+        if (!TryComp<CMUVeteranCloakComponent>(args.User, out var cloak) ||
+            !IsWatched((args.User, cloak)))
+        {
             return;
+        }
 
-        if (!IsWatched((args.User, cloak)))
-            return;
-
-        args.Invalid = true;
-
-        var message = IsCloaked(args.User)
+        args.Cancelled = true;
+        args.Reason = Loc.GetString(cloak.Cloaked
             ? "cmu-veteran-cloak-watched-uncloak"
-            : "cmu-veteran-cloak-watched";
-        _popups.PopupEntity(Loc.GetString(message), args.User, args.User, PopupType.MediumCaution);
+            : "cmu-veteran-cloak-watched");
+        args.Type = PopupType.MediumCaution;
     }
 
     private void OnCloakStarted(Entity<EntityActiveInvisibleComponent> ent, ref ComponentStartup args)
@@ -146,6 +150,7 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         if (!TryComp<CMUVeteranCloakComponent>(ent.Owner, out var cloak))
             return;
 
+        cloak.Cloaked = true;
         MakePhaseable((ent.Owner, cloak));
         HideHeldItems(ent.Owner);
         _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
@@ -156,6 +161,7 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         if (!TryComp<CMUVeteranCloakComponent>(ent.Owner, out var cloak))
             return;
 
+        cloak.Cloaked = false;
         cloak.UncloakLockUntil = _timing.CurTime + cloak.UncloakWeaponLock;
         RestorePhase((ent.Owner, cloak));
         RestoreHeldItems((ent.Owner, cloak));
@@ -169,7 +175,7 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
 
     private void OnMobStateChanged(Entity<CMUVeteranCloakComponent> ent, ref MobStateChangedEvent args)
     {
-        if (!IsCloaked(ent.Owner) || !_mobState.IsIncapacitated(ent.Owner))
+        if (!ent.Comp.Cloaked || !_mobState.IsIncapacitated(ent.Owner))
             return;
 
         // Going down drops the field: never leave an invisible body behind.
@@ -181,7 +187,9 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         ent.Comp.Cleaning = true;
         try
         {
-            if (IsCloaked(ent.Owner) && !TerminatingOrDeleted(ent.Owner))
+            ent.Comp.Cloaked = false;
+
+            if (HasComp<EntityActiveInvisibleComponent>(ent.Owner) && !TerminatingOrDeleted(ent.Owner))
                 RemComp<EntityActiveInvisibleComponent>(ent.Owner);
 
             RestorePhase(ent);
@@ -198,7 +206,7 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
 
     private void OnRefreshSpeed(Entity<CMUVeteranCloakComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
-        if (!IsCloaked(ent.Owner))
+        if (!ent.Comp.Cloaked)
             return;
 
         args.ModifySpeed(ent.Comp.CloakSpeedMultiplier);
@@ -361,14 +369,9 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
 
     #region Interaction gates
 
-    private bool IsCloaked(EntityUid uid)
-    {
-        return HasComp<EntityActiveInvisibleComponent>(uid);
-    }
-
     private bool IsLocked(Entity<CMUVeteranCloakComponent> ent)
     {
-        return IsCloaked(ent.Owner) || _timing.CurTime < ent.Comp.UncloakLockUntil;
+        return ent.Comp.Cloaked || _timing.CurTime < ent.Comp.UncloakLockUntil;
     }
 
     private void OnInteractionAttempt(Entity<CMUVeteranCloakComponent> ent, ref InteractionAttemptEvent args)
