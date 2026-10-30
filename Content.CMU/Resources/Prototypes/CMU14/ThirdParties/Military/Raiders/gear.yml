@@ -33,25 +33,25 @@
   id: CMUArmorRaider
   name: raider plate carrier
   suffix: CMU
-  description: What is left of a suit of marine raider armour. The ceramic inserts were sold off long ago and replaced with scrap plating, so it now stops less than an off-the-rack M3.
+  description: What is left of a suit of marine raider armour. The original ceramic inserts were sold off long ago, but the crew relined it with salvaged plate. It is heavier than it looks and still stops more than an off-the-rack M3.
   components:
   - type: CMArmor
-    melee: 15
-    bullet: 15
-    bio: 10
-    explosionArmor: 15
+    melee: 25
+    bullet: 25
+    bio: 15
+    explosionArmor: 25
 
 - type: entity
   parent: RMCArmorHelmetMARSOC
   id: CMUArmorHelmetRaider
   name: raider helmet
   suffix: CMU
-  description: A scuffed SOF operator helmet with the optics pulled and pawned. The shell is cracked along one side and held together with tape.
+  description: A scuffed SOF operator helmet with the optics pulled and pawned. The shell is cracked along one side, but the liner underneath is still original.
   components:
   - type: CMArmor
-    melee: 15
-    bullet: 15
-    bio: 10
+    melee: 20
+    bullet: 25
+    bio: 20
 
 - type: entity
   parent: RMCSatchelMARSOC
