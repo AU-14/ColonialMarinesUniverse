@@ -12,6 +12,8 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentSystem
 {
+    private const float PlanMoveArrivalRange = 0.4f;
+
     private bool RunPlan(EntityUid uid, CMUExpeditionAgentComponent agent, bool armed, float damage, bool hit, TimeSpan now)
     {
         if (agent.FlareItem != null || agent.UtilityCleanupItem != null || !agent.PlanningEnabled ||
@@ -331,7 +333,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 return true;
             _steering.Unregister(uid);
             if (!approaching && (agent.LastMoveFailed || agent.ActiveMoveDestination is not { } expected ||
-                !_transform.InRange(Transform(uid).Coordinates, expected, 0.4f) ||
+                !_transform.InRange(Transform(uid).Coordinates, expected, PlanMoveArrivalRange) ||
                 agent.Action == A.TakeCover && !TreatmentSafe(uid, agent)))
             {
                 CancelPlan(uid, agent, true);

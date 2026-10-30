@@ -305,6 +305,8 @@
     maxCount: 12
   # sealed like any gas mask, so neomorph spores and popper infections get the same block chance
   - type: MycotoxinProtection
+  # cmss13 yaut_mask.dm has BLOCKGASEFFECT, chem smoke and nerve gas don't get through
+  - type: GasBlock
   - type: EyeProtection
     protectionTime: 20
   - type: PressureProtection
@@ -2211,7 +2213,6 @@
     bundle:
     - CMUYautjaClanArmor
     - CMUYautjaMask
-    - CMUYautjaMaskAccessory01Ebony
     - CMUYautjaClanGreaves
 
 - type: entity
