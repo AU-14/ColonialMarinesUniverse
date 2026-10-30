@@ -149,7 +149,7 @@ public sealed partial class AfkSystem : EntitySystem
             var isAfk = _afkManager.IsAfk(pSession);
 
             // If admin afk timer disabled then ignore them.
-            if (_adminAfkTime == 0f && _admin.IsAdmin(pSession))
+            if (_adminAfkTime == 0f && _admin.HasAdminFlag(pSession, Content.Shared.Administration.AdminFlags.Staff)) // cmu edit
             {
                 isAfk = false;
             }
