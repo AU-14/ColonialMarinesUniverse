@@ -8,6 +8,7 @@
 - type: thirdParty
   id: MSSOperationalGroup
   displayName: MSS Informal Collaborator Group
+  announcearrival: '' 
   partyspawn: MSSOperationalGroupSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Vehicles/Dropships/genericthirdpartyshuttle.yml

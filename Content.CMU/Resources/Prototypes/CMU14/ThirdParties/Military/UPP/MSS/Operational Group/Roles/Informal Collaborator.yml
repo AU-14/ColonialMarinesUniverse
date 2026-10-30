@@ -87,7 +87,6 @@
   - type: EntityPreset
     randomStartingGear:
       jumpsuit:
-      - CMU14TWESASJumpsuit
       - CMU14ProdigySuitBlack
       - CMJumpsuitLiaisonBlack
       - RMCJumpsuitBlackTailored
