@@ -37,7 +37,7 @@
         Quantity: 1
       - ReagentId: CMUPathogenSporoplasmNutrient
         Quantity: 1
-   - type: Xeno
+  - type: Xeno
     role: CMU14JobPathogenRoot
     tier: 3
     hudOffset: -0.15, 0.16
