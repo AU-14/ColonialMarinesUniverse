@@ -3231,7 +3231,10 @@ public sealed class YautjaBowTest
                         Assert.That(actionIds, Is.EquivalentTo(new[]
                         {
                             "CMUActionYautjaToggleWristBlades",
-                        }), "CMSS13 soldier bracer replaces the inherited bracer_actions list instead of keeping normal hunter bracer actions.");
+                            "CMUActionYautjaOpenBracerMenu",
+                            "CMUActionYautjaSelfDestruct",
+                            "CMUActionYautjaTranslator",
+                        }), "Soldier bracers retain utility actions without granting normal hunter combat equipment.");
                     }
 
                     if (prototypes.HasIndex<EntityPrototype>(CMUYautjaPoweredArmorPrototype))

@@ -533,7 +533,7 @@ public sealed partial class StationJobsSystem
         {
             var roleBans = _banManager.GetJobBans(player);
             var profileJobs = profile.JobPriorities.Keys.Select(k => new ProtoId<JobPrototype>(k)).ToList();
-            var ev = new StationJobsGetCandidatesEvent(player, profileJobs);
+            var ev = new StationJobsGetCandidatesEvent(player, profileJobs, profile); // CMU14
             RaiseLocalEvent(ref ev);
 
             // Shouldn't happen but you know :P

@@ -10275,7 +10275,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerSelfDestructCanBeArmedWhileCritical()
+    public async Task BracerSelfDestructCanBeArmedAfterRecoveringFromCritical()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -10298,6 +10298,10 @@ public sealed class YautjaSmokeTest
                 mobState.ChangeMobState(hunter, MobState.Critical);
 
                 var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
+                Assert.That(selfDestruct.TryArmSelfDestruct((bracer, bracerComp), hunter, TimeSpan.FromSeconds(30)), Is.False);
+                Assert.That(bracerComp.SelfDestructArmed, Is.False);
+
+                mobState.ChangeMobState(hunter, MobState.Alive);
                 Assert.That(selfDestruct.TryArmSelfDestruct((bracer, bracerComp), hunter, TimeSpan.FromSeconds(30)), Is.True);
                 Assert.That(bracerComp.SelfDestructArmed, Is.True);
             }
@@ -10504,11 +10508,15 @@ public sealed class YautjaSmokeTest
                 mobState.ChangeMobState(criticalHunter, MobState.Critical);
                 Assert.That(selfDestruct.TryArmSelfDestruct(
                     (criticalBracer, entMan.GetComponent<YautjaBracerComponent>(criticalBracer)),
-                    criticalHunter), Is.True);
-                Assert.That(selfDestruct.TryCancelSelfDestruct(
-                    (criticalBracer, entMan.GetComponent<YautjaBracerComponent>(criticalBracer)),
-                    criticalHunter), Is.True);
+                    criticalHunter), Is.False);
+                Assert.That(entMan.GetComponent<YautjaBracerComponent>(criticalBracer).SelfDestructArmed, Is.False);
             });
+
+            await pair.ReallyBeIdle(10);
+            await AssertClientHasPopup(
+                client,
+                "As you fall into unconsciousness you fail to activate your self-destruct device before you collapse.",
+                "The bracer does not answer an unconscious hunter.");
 
             await server.WaitPost(() =>
             {
