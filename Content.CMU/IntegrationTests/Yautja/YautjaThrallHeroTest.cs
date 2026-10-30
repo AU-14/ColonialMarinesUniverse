@@ -29,6 +29,8 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Nutrition.Components;
+using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Effects.Positive;
 using Robust.Shared.GameObjects;
@@ -149,8 +151,13 @@ public sealed class YautjaThrallHeroTest
             var bloodstream = entMan.System<BloodstreamSystem>();
             treated = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
             control = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2, 0)));
+            // humans spawn with random hunger from 120 up, and dathwei skips a hungry non-yautja below 200
+            var satiation = entMan.System<SatiationSystem>();
             foreach (var human in new[] { treated, control })
+            {
+                satiation.SetValue((human, entMan.GetComponent<SatiationComponent>(human)), SatiationSystem.Hunger, 380f);
                 Assert.That(bloodstream.TryModifyBloodLevel(human, -150), Is.True);
+            }
 
             Assert.That(bloodstream.TryAddToBloodstream(treated, new([new("dathwei", FixedPoint2.New(15))])), Is.True);
         });
