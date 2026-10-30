@@ -955,7 +955,7 @@ public sealed class YautjaBowTest
                         "CMSS13 bow uses an internal one-shot magazine without burst/full-auto modes.");
                     Assert.That(bowGun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto),
                         "CMSS13 bow exposes only normal single-shot firing.");
-                    Assert.That(bowGun.FireRate, Is.EqualTo(10f / 7f).Within(0.0001f),
+                    Assert.That(bowGun.FireRate, Is.EqualTo(10f / 5f).Within(0.0001f),
                         "CMSS13 bow set_gun_config_values() sets fire_delay = FIRE_DELAY_TIER_7.");
                     Assert.That(bowGun.MinAngle.Degrees, Is.EqualTo(0).Within(0.0001),
                         "CMSS13 bow scatter = 0.");
@@ -12254,8 +12254,10 @@ public sealed class YautjaBowTest
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto | SelectiveFire.Burst),
                         "CMSS13 plasma carbine keeps burst fire: set_burst_amount(BURST_AMOUNT_TIER_2) and set_burst_delay(FIRE_DELAY_TIER_11).");
-                    Assert.That(gun.BurstFireRate, Is.EqualTo(10f / 11f).Within(0.0001f),
+                    Assert.That(gun.BurstFireRate, Is.EqualTo(10f / 2.5f).Within(0.0001f),
                         "CMSS13 plasma carbine burst delay is FIRE_DELAY_TIER_11.");
+                    Assert.That(gun.ShotsPerBurst, Is.EqualTo(2),
+                        "CMSS13 plasma carbine set_burst_amount(BURST_AMOUNT_TIER_2).");
                     Assert.That(ammo.Prototype, Is.EqualTo("CMUYautjaPlasmaRifleBolt"));
                     Assert.That(ammo.FireCost, Is.EqualTo(1));
                     Assert.That(battery.MaxCharge, Is.EqualTo(40),
@@ -12308,7 +12310,7 @@ public sealed class YautjaBowTest
                         Assert.That(fireModes.CurrentFireMode, Is.EqualTo(0));
                         Assert.That(ammo.Prototype, Is.EqualTo("CMUYautjaPlasmaRifleBolt"));
                         Assert.That(ammo.FireCost, Is.EqualTo(1));
-                        Assert.That(gun.FireRate, Is.EqualTo(10f / 8f).Within(0.0001f),
+                        Assert.That(gun.FireRate, Is.EqualTo(10f / 4f).Within(0.0001f),
                             "CMSS13 plasma carbine incendiary mode sets fire_delay = FIRE_DELAY_TIER_8.");
                     });
                 }
@@ -12544,12 +12546,12 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(gun.FireRate, Is.EqualTo(10f / 9f).Within(0.0001f),
+                    Assert.That(gun.FireRate, Is.EqualTo(10f / 3.5f).Within(0.0001f),
                         "CMSS13 plasma carbine set_gun_config_values() starts at FIRE_DELAY_TIER_9 before unique-action mode changes.");
                     AssertRangedGunStats(entMan,
                         carbine,
-                        10f / 9f,
-                        15,
+                        10f / 3.5f,
+                        4,
                         10,
                         1.5,
                         1.4,
