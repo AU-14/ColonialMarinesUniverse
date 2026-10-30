@@ -224,34 +224,36 @@
 
 - type: reagent  
   parent: CMReagent  
-  id: TestBloodbursting  
-  name: reagent-name-test-bloodbursting-chem  
-  desc: reagent-desc-test-mycotoxigenic-chem 
-  physicalDesc: reagent-physical-desc-unidentifiable  
-  class: Special  
-  color: "#bed700"  
-  reward: 0  
-  overdose: 10  
-  metabolisms:  
-    Bloodstream:  
-      cmuToxicity: [ Poison ]  
-      metabolismRate: 0.1  
+  id: TestBloodbursting
+  flags: NoGeneration
+  name: reagent-name-test-bloodbursting-chem
+  desc: reagent-desc-test-mycotoxigenic-chem
+  physicalDesc: reagent-physical-desc-unidentifiable
+  class: Special
+  color: "#bed700"
+  reward: 0
+  overdose: 10
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.1
       effects:
-      - !type:Bloodbursting  
-        embryoSpawn: CMU14XenoBloodburster  
-        requiresOverdose: true  
+      - !type:Bloodbursting
+        embryoSpawn: CMU14XenoBloodburster
+        requiresOverdose: true
         burstDelay: 30
 
-- type: reagent  
-  parent: CMReagent  
-  id: TestMycotoxigenic  
-  name:  reagent-name-test-mycotoxigenic-chem  
-  desc:  reagent-desc-test-mycotoxigenic-chem  
-  physicalDesc: reagent-physical-desc-unidentifiable  
-  class: Special  
-  color: "#5a8a3c"  
-  reward: 0  
-  overdose: 10  
+- type: reagent
+  parent: CMReagent
+  id: TestMycotoxigenic
+  flags: NoGeneration
+  name:  reagent-name-test-mycotoxigenic-chem
+  desc:  reagent-desc-test-mycotoxigenic-chem
+  physicalDesc: reagent-physical-desc-unidentifiable
+  class: Special
+  color: "#5a8a3c"
+  reward: 0
+  overdose: 10
   metabolisms:  
     Bloodstream:  
       cmuToxicity: [ Poison ]  
