@@ -28,6 +28,7 @@ public sealed class RmcErtThirdPartyDropshipMapTest
         (new("/Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml"), 4, 8, 3),
         (new("/Maps/CMU14/Dropships/rmc_ert_tse_shuttle.yml"), 4, 8, 3),
         (new("/Maps/CMU14/Dropships/rmc_ert_tsepa_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/Dropships/mcaste_shuttle.yml"), 1, 8, 0),
     };
 
     private static readonly (ResPath Path, int Leaders, int Members, int Entities)[] MapFormatDropshipMaps =
