@@ -77,7 +77,10 @@ reagent-name-pathogen-phero-plasma = Pheromonal Sporoplasm
 reagent-desc-pathogen-phero-plasma = Sporoplasm saturated with signaling compounds. It smells wrong in a way you can't place.  
   
 reagent-name-pathogen-chitin-plasma = Chitinous Sporoplasm  
-reagent-desc-pathogen-chitin-plasma = Sporoplasm heavy with dissolved chitin platelets, used to knit fungal armor.  
+reagent-desc-pathogen-chitin-plasma = Sporoplasm heavy with dissolved chitin platelets, used to knit fungal armor.
+
+reagent-name-pathogen-cat-plasma = Catecholamine Sporoplasm
+reagent-desc-pathogen-cat-plasma = Sporoplasm that still seems to twitch with energy, ready to rip apart the closest living thing.
   
 reagent-name-pathogen-spore-plasma = Sporogenic Sporoplasm  
 reagent-desc-pathogen-spore-plasma = Sporoplasm dense with dormant spore clusters. Handle carefully.  
