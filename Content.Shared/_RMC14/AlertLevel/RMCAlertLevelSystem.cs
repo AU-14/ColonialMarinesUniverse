@@ -38,6 +38,13 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
 
     private EntityQuery<GhostComponent> _ghostQuery;
 
+    // CMU14 Begin: level changes queue their lock/door work; doing hundreds of
+    // unlocks with per-entity sounds in one tick hitches the server at alert changes
+    private readonly List<(EntityUid Uid, bool Unlock)> _deferredAlertLocks = new();
+    private readonly List<(EntityUid Uid, bool Open)> _deferredAlertDoors = new();
+    private const int AlertWorkPerTick = 25;
+    // CMU14 End
+
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabAnnouncementLogs";
 
     public override void Initialize()
@@ -73,7 +80,7 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
         // Set(RMCAlertLevels.Red);
     }
 
-    // CMU14 Per-warship alert levels Begin
+    // CMU14 Begin: Per-warship alert levels
     private bool TryGetAlertLevel(EntityUid? context, out Entity<RMCAlertLevelComponent> alert)
     {
         // A context entity resolves to its own ship's map first
@@ -215,16 +222,21 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
             if (shipMap != null && !_zLevels.IsSameZNetwork(unlockXform.MapUid, shipMap.Value)) // CMU14
                 continue;
 
-            if (unlock.Level <= level)
-            {
-                _lock.Unlock(uid, null, lockComp);
-            }
-            else
-            {
-                if (TryComp<EntityStorageComponent>(uid, out var entityStorageComp))
-                    _entityStorage.CloseStorage((uid, entityStorageComp)); // Close a locker before locking it.
-                _lock.Lock(uid, null, lockComp);
-            }
+            // CMU14 Begin: queued for Update batches so mass alert changes never
+            // unlock/lock everything with per-entity sounds in a single tick
+            _deferredAlertLocks.Add((uid, unlock.Level <= level));
+            // CMU14: removed inline work, deferred above
+            // if (unlock.Level <= level)
+            // {
+            //     _lock.Unlock(uid, null, lockComp);
+            // }
+            // else
+            // {
+            //     if (TryComp<EntityStorageComponent>(uid, out var entityStorageComp))
+            //         _entityStorage.CloseStorage((uid, entityStorageComp)); // Close a locker before locking it.
+            //     _lock.Lock(uid, null, lockComp);
+            // }
+            // CMU14 End
         }
 
         var openQuery = EntityQueryEnumerator<RMCOpenOnAlertLevelComponent, DoorComponent, RMCPodDoorComponent, TransformComponent>();
@@ -236,10 +248,14 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
             if (shipMap != null && !_zLevels.IsSameZNetwork(openXform.MapUid, shipMap.Value)) // CMU14
                 continue;
 
-            if (unlock.Level <= level)
-                _door.TryOpen(uid, door);
-            else
-                _door.TryClose(uid, door);
+            // CMU14 Begin: queued for Update batches, see _deferredAlertLocks
+            _deferredAlertDoors.Add((uid, unlock.Level <= level));
+            // CMU14: removed inline work, deferred above
+            // if (unlock.Level <= level)
+            //     _door.TryOpen(uid, door);
+            // else
+            //     _door.TryClose(uid, door);
+            // CMU14 End
         }
 
         var displays = EntityQueryEnumerator<RMCAlertLevelDisplayComponent, TransformComponent>();
@@ -254,4 +270,48 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
         var ev = new RMCAlertLevelChangedEvent(ent.Comp.Level, shipMap); // CMU14
         RaiseLocalEvent(ent, ref ev, true);
     }
+
+    // CMU14 Begin
+    public override void Update(float frameTime)
+    {
+        if (_deferredAlertLocks.Count == 0 && _deferredAlertDoors.Count == 0)
+            return;
+
+        var processed = Math.Min(AlertWorkPerTick, _deferredAlertLocks.Count);
+        for (var i = 0; i < processed; i++)
+        {
+            var (uid, unlock) = _deferredAlertLocks[i];
+            if (!TryComp<LockComponent>(uid, out var lockComp))
+                continue;
+
+            if (unlock)
+            {
+                _lock.Unlock(uid, null, lockComp);
+            }
+            else
+            {
+                if (TryComp<EntityStorageComponent>(uid, out var storage))
+                    _entityStorage.CloseStorage((uid, storage));
+                _lock.Lock(uid, null, lockComp);
+            }
+        }
+
+        _deferredAlertLocks.RemoveRange(0, processed);
+
+        processed = Math.Min(AlertWorkPerTick, _deferredAlertDoors.Count);
+        for (var i = 0; i < processed; i++)
+        {
+            var (uid, open) = _deferredAlertDoors[i];
+            if (!TryComp<DoorComponent>(uid, out var door))
+                continue;
+
+            if (open)
+                _door.TryOpen(uid, door);
+            else
+                _door.TryClose(uid, door);
+        }
+
+        _deferredAlertDoors.RemoveRange(0, processed);
+    }
+    // CMU14 End
 }

@@ -23,23 +23,23 @@
     - name: Prepared Meals
       entries:
       - id: RMCMarinePreparedMealSPPBanush
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPChowMein
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPCuban
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPFrankfurter
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPJiaozi
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPLuncheon
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPMeatballs
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPShrimp
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealSPPWursts
-        amount: 15
+        amount: 30
     - name: Utensils
       entries:
       - id: RMCForkPlastic
@@ -71,15 +71,15 @@
     - name: Prepared Meals
       entries:
       - id: RMCMarinePreparedMealRCMFish
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealRCMKatsu
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealRCMMeat
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealRCMSausage
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealRCMTikka
-        amount: 15
+        amount: 30
     - name: Utensils
       entries:
       - id: RMCForkPlastic
@@ -113,19 +113,19 @@
     - name: Prepared Meals
       entries:
       - id: RMCMarinePreparedMealPMCAlooGobi
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealPMCBirria
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealPMCBobotie
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealPMCButterChicken
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealPMCFishAndChips
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealPMCIkanBakar
-        amount: 15
+        amount: 30
       - id: RMCMarinePreparedMealPMCSoba
-        amount: 15
+        amount: 30
     - name: Utensils
       entries:
       - id: RMCForkPlastic

@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Chemistry.TuringDispenser;
+using Content.Shared._RMC14.Power; // CMU14: power gating
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Containers.ItemSlots;
@@ -27,6 +28,8 @@ public sealed partial class SharedRMCCentrifugeSystem : EntitySystem
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    // CMU14: gate the centrifuge on power like the turring
+    [Dependency] private SharedRMCPowerSystem _rmcPower = default!;
     [Dependency] private RMCReagentSystem _rmcReagent = default!;
     [Dependency] private SharedSolutionContainerSystem _solution = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -76,7 +79,7 @@ public sealed partial class SharedRMCCentrifugeSystem : EntitySystem
             Dirty(ent);
 
             if (_net.IsServer)
-                _popup.PopupEntity("The centrifuge beeps: Turing Dispenser connected.", ent, PopupType.Medium);
+                _popup.PopupEntity(Loc.GetString("cmu-centrifuge-turing-connected"), ent, PopupType.Medium); // CMU14: fluent
 
             return;
         }
@@ -107,7 +110,7 @@ public sealed partial class SharedRMCCentrifugeSystem : EntitySystem
             Dirty(ent);
 
             if (_net.IsServer)
-                _popup.PopupEntity("The centrifuge beeps: Turing not found within range.", ent, PopupType.Medium);
+                _popup.PopupEntity(Loc.GetString("cmu-centrifuge-turing-out-of-range"), ent, PopupType.Medium); // CMU14: fluent
 
             return false;
         }
@@ -213,6 +216,10 @@ public sealed partial class SharedRMCCentrifugeSystem : EntitySystem
     {
         var comp = ent.Comp;
         if (comp.Processing)
+            return;
+
+        // CMU14: unpowered centrifuges don't start
+        if (!_rmcPower.IsPowered(ent))
             return;
 
         if (!_itemSlots.TryGetSlot(ent.Owner, comp.OutputBoxSlotId, out var outputSlot) ||
@@ -417,16 +424,16 @@ public sealed partial class SharedRMCCentrifugeSystem : EntitySystem
                 continue;
 
             var isAutoInjector = HasComp<HyposprayComponent>(vial);
-            var prefix = isAutoInjector ? "autoinjector" : "vial";
 
+            // CMU14: localized labels
             string name;
             if (ent.Comp.Label is { } label)
-                name = $"{prefix} ({label})";
+                name = Loc.GetString(isAutoInjector ? "cmu-centrifuge-autoinjector-labeled" : "cmu-centrifuge-vial-labeled", ("label", label));
             else if ((isAutoInjector ? solution.Contents.Count > 0 : solution.Contents.Count == 1) &&
                      _rmcReagent.TryIndex(solution.Contents[0].Reagent.Prototype, out var reagent))
-                name = $"{prefix} ({reagent.LocalizedName})";
+                name = Loc.GetString(isAutoInjector ? "cmu-centrifuge-autoinjector-reagent" : "cmu-centrifuge-vial-reagent", ("reagent", reagent.LocalizedName));
             else
-                name = prefix;
+                name = Loc.GetString(isAutoInjector ? "cmu-centrifuge-autoinjector" : "cmu-centrifuge-vial");
 
             _metaData.SetEntityName(vial, name);
         }
@@ -454,6 +461,10 @@ public sealed partial class SharedRMCCentrifugeSystem : EntitySystem
         while (centrifuges.MoveNext(out var uid, out var comp))
         {
             Entity<RMCCentrifugeComponent> ent = (uid, comp);
+
+            // CMU14: unpowered centrifuges don't spin
+            if (!_rmcPower.IsPowered(ent))
+                continue;
 
             if (comp.Spinning)
             {

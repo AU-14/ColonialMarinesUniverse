@@ -3231,7 +3231,10 @@ public sealed class YautjaBowTest
                         Assert.That(actionIds, Is.EquivalentTo(new[]
                         {
                             "CMUActionYautjaToggleWristBlades",
-                        }), "CMSS13 soldier bracer replaces the inherited bracer_actions list instead of keeping normal hunter bracer actions.");
+                            "CMUActionYautjaOpenBracerMenu",
+                            "CMUActionYautjaSelfDestruct",
+                            "CMUActionYautjaTranslator",
+                        }), "Soldier bracers retain utility actions without granting normal hunter combat equipment.");
                     }
 
                     if (prototypes.HasIndex<EntityPrototype>(CMUYautjaPoweredArmorPrototype))
@@ -5181,7 +5184,8 @@ public sealed class YautjaBowTest
                         storageSystem.CanInsert(quiver, extraArrow, out var reason, storage),
                         Is.False,
                         "CMSS13 quiver has storage_slots = 8, so a ninth bow/arrow item must be rejected.");
-                    Assert.That(reason, Is.EqualTo("cmu-quiver-full"));
+                    Assert.That(reason, Is.EqualTo("cmu-quiver-full"),
+                        "The quiver's LimitedStorage limit names its own full-popup, report 1085.");
                     Assert.That(
                         storageSystem.Insert(quiver, extraArrow, out _, storageComp: storage, playSound: false),
                         Is.False);
