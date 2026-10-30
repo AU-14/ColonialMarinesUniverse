@@ -19,7 +19,6 @@
           - CMMagazineRifleM54CAP
           - CMMagazineRifleM54CExt
           - RMCMagazineRifleXM40AP
-          - RMCMagazineRifleXM40HEAP
 
 - type: entity
   parent: RMCJumpsuitMarsoc
