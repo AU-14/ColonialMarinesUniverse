@@ -3,8 +3,29 @@
   id: CMUWeaponRifleXM40Raider
   name: XM40 assault rifle
   suffix: CMU, Raider
-  description: The leader's old service rifle, carried out the door the day they deserted. The proprietary HEAP stock ran out years ago; it is fed standard M41A MK2 magazines now, and the finish is worn down to bare metal.
+  description: The leader's old service rifle, carried out the door the day they deserted. The proprietary HEAP stock ran out years ago; it is fed standard M41A MK2 magazines now, and the finish is worn down to bare metal. A flashlight grip is bolted under the barrel.
   components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: true
+        startingAttachable: RMCAttachmentSuppressorXM40
+        whitelist:
+          tags:
+          - RMCAttachmentSuppressorXM40
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentFlashlightGrip
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -19,6 +40,42 @@
           - CMMagazineRifleM54CAP
           - CMMagazineRifleM54CExt
           - RMCMagazineRifleXM40AP
+
+- type: entity
+  parent: RMCWeaponRifleM54CMK1
+  id: CMUWeaponRifleM54CMK1Raider
+  name: M41A pulse rifle MK1
+  suffix: CMU, Raider
+  description: An old MK1 pulse rifle with the serials ground off. Someone taped a flashlight to the rail and kept the underslung launcher; it has been looked after better than anything else the crew owns.
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentRailFlashlight
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        startingAttachable: RMCAttachmentM54CMK1StockCollapsible
+        whitelist:
+          tags:
+          - RMCAttachmentM54CStockCollapsible
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentMK1GrenadeLauncher
+        whitelist:
+          tags:
+          - RMCAttachmentMK1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentExtinguisher
 
 - type: entity
   parent: RMCJumpsuitMarsoc
@@ -57,20 +114,24 @@
   id: CMUSatchelRaider
   name: raider combat pack
   suffix: CMU
-  description: A streamlined military combat pack with the unit patches burned off. Kept empty on the way in; it leaves full.
+  description: A streamlined military combat pack with the unit patches burned off. Packed light on the way in; it leaves full.
 
 # ├──[ POUCHES ]─────────────────────────────────────────────────────┤
 - type: entity
-  parent: RMCPouchTools
-  id: CMUPouchToolsRaiderFill
+  parent: RMCPouchMedicalSoc
+  id: CMUPouchMedicalRaiderFill
   suffix: CMU, Raider, Filled
   components:
   - type: StorageFill
     contents:
-    - id: CMCrowbar
-    - id: CMScrewdriver
-    - id: CMWirecutter
-    - id: CMMultitool
+    - id: CMTraumaKit10
+      amount: 2
+    - id: CMBurnKit10
+    - id: CMGauze10
+    - id: CMBicaridineAutoInjector
+    - id: CMKelotaneAutoInjector
+    - id: CMEmergencyAutoInjector
+      amount: 2
 
 # ├──[ COMMS ]───────────────────────────────────────────────────────┤
 - type: entity

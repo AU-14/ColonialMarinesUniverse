@@ -66,8 +66,21 @@
     id: CMUIDCardRaiderLeader
     belt: RMCBeltMarineMK2
     back: CMUSatchelRaider
-    pocket1: RMCPouchFirstAidERTFill
-    pocket2: CMUPouchToolsRaiderFill
+    pocket1: CMUPouchMedicalRaiderFill
+    pocket2: RMCPouchFlareFilled
+  storage:
+    back:
+    - CMCrowbar
+    - CMScrewdriver
+    - CMWirecutter
+    - CMMultitool
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMGrenadeHighExplosive
+    - CMGrenadeHighExplosive
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - CMMRE
 
 - type: playTimeTracker
   id: CMUJobRaiderLeader
