@@ -3,7 +3,7 @@
   leadersToSpawn:
     AU14UPPGROMRRUSquadleader: 1
   gruntsToSpawn:
-    AU14UPPGROMRRURifleman: 3 
+    AU14UPPGROMRRURifleman: 3
     AU14UPPGROMRRUSupportTech: 1
     AU14UPPGROMRRUMachinegunner: 1
     AU14UPPGROMRRUMarksman: 1
@@ -26,7 +26,7 @@
   leadersToSpawn:
     AU14UPPGROMRRUSquadleader: 1
   gruntsToSpawn:
-    AU14UPPGROMRRURifleman: 2 
+    AU14UPPGROMRRURifleman: 2
     AU14UPPGROMRRUSupportTech: 1
     AU14UPPGROMRRUMachinegunner: 0
     AU14UPPGROMRRUMarksman: 0
