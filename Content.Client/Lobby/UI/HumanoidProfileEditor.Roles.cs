@@ -592,7 +592,9 @@ public sealed partial class HumanoidProfileEditor
         };
 
         var antagsByCategory = _prototypeManager.EnumerateCM<AntagPrototype>()
-            .Where(antag => antag.SetPreference)
+            // CMU14: an antag blacklisted for this gamemode is hidden from its preference tab.
+            .Where(antag => antag.SetPreference
+                && !antag.BlacklistedGamemodes.Contains(gamemode, StringComparer.OrdinalIgnoreCase))
             .GroupBy(antag => string.IsNullOrEmpty(antag.Category)
                 ? Loc.GetString("humanoid-profile-editor-antag-category-uncategorized")
                 : Loc.GetString(antag.Category))
