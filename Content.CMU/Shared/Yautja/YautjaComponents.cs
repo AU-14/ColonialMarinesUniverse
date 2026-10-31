@@ -311,6 +311,9 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public float HuntingLeapSpeed = 30f;
 
+    [DataField]
+    public TimeSpan HuntingLeapMinimumFlightTime = TimeSpan.FromSeconds(0.6);
+
     private static List<ProtoId<EmotePrototype>> GetDefaultAllowedEmotes()
     {
         var emotes = new List<ProtoId<EmotePrototype>>();
@@ -777,7 +780,7 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     [DataField]
     public SoundSpecifier CloakOffSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/pred_cloakoff_modern.wav");
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public YautjaInvisibilitySound InvisibilitySound = YautjaInvisibilitySound.Modern;
 
     [DataField]
