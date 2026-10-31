@@ -796,15 +796,14 @@
           radius: 0.2
         density: 10
         hard: true
+        # cmss13 falcon is a hologram with PASS_ALL, it drifts through doors and tables without opening them.
+        # walls still stop it
         mask:
-        - MobMask
+        - Impassable
         layer:
         - MobLayer
   - type: Climbing
   - type: ActiveInputMover
-  - type: Tag
-    tags:
-    - DoorBumpOpener
   - type: YautjaFalconDroneDeployed
   - type: CMUZLevelAutoTransition
   - type: YautjaFalconHudIcon

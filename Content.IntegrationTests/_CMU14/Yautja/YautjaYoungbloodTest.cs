@@ -84,7 +84,8 @@ public sealed class YautjaYoungbloodTest
             Assert.That(Loc.GetString(option.DisplayName), Is.EqualTo(localizedName));
             Assert.That(option.SpawnCount, Is.EqualTo(count));
             Assert.That(option.CooldownMultiplier, Is.EqualTo(cooldownMultiplier).Within(0.001f));
-            Assert.That(option.Spawns, Is.Not.Empty);
+            // tiered calls (serpents) roll from Tiers instead of Spawns
+            Assert.That(option.Spawns.Concat(option.Tiers.SelectMany(tier => tier.Spawns)), Is.Not.Empty);
         });
 
         await pair.CleanReturnAsync();
