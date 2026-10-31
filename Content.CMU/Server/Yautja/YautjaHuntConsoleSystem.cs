@@ -16,8 +16,10 @@ using Content.Shared.Ghost.Components;
 using Content.Shared.Ghost.Roles.Raffles;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Inventory;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
+using Content.Shared.Radio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
@@ -39,6 +41,7 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedDoorSystem _door = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
@@ -461,7 +464,9 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
             if (!_prototype.HasIndex<RandomHumanoidSettingsPrototype>(settings))
                 return null;
 
-            return _randomHumanoid.SpawnRandomHumanoid(settings, _transform.ToCoordinates(coordinates), string.Empty);
+            var humanoid = _randomHumanoid.SpawnRandomHumanoid(settings, _transform.ToCoordinates(coordinates), string.Empty);
+            StripHeadset(humanoid);
+            return humanoid;
         }
 
         if (entry.EntityPrototype is { } prototype)
@@ -469,10 +474,20 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
             if (!_prototype.HasIndex<EntityPrototype>(prototype))
                 return null;
 
-            return Spawn(prototype, coordinates);
+            var spawned = Spawn(prototype, coordinates);
+            StripHeadset(spawned);
+            return spawned;
         }
 
         return null;
+    }
+
+    // The preserve is its own game: prey may keep handheld shortwaves but never a worn headset reaching round comms.
+    private void StripHeadset(EntityUid prey)
+    {
+        if (_inventory.TryGetSlotEntity(prey, "ears", out var worn)
+            && HasComp<HeadsetComponent>(worn))
+            Del(worn.Value);
     }
 
     private YautjaHuntSpawnEntry? PickSpawnEntry(List<YautjaHuntSpawnEntry> entries)

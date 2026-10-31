@@ -91,13 +91,7 @@ public sealed partial class StationJobsSystem
 
     private int? GetForceOnForceJobCost(HumanoidCharacterProfile profile, JobPrototype job)
     {
-        var desired = profile.FoFSide switch
-        {
-            ForceOnForceSide.Govfor => RoundJobSide.Govfor,
-            ForceOnForceSide.Opfor => RoundJobSide.Opfor,
-            _ => RoundJobSide.None,
-        };
-        var otherSide = desired != RoundJobSide.None && job.RoundSide != desired;
+        var otherSide = profile.IsForceOnForceOtherSide(job);
         if (otherSide && !profile.FoFFallback.HasFlag(ForceOnForceFallback.OtherSide)) return null;
 
         var priority = profile.GetForceOnForceJobPriority(job, ProtoMan);

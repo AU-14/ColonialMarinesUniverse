@@ -16045,5 +16045,32 @@
   id: 928
   time: '2026-10-30T18:55:08.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2380
+- author: rokudara-sen
+  changes:
+  - message: Wielding the plasma rifle, plasma carbine or spike launcher no longer
+      slows yautja.
+    type: Tweak
+  - message: Plasma rifle and carbine bolts knock humans down for 4 seconds.
+    type: Tweak
+  - message: The plasma carbine and hunting bow fire at their intended speed, and
+      the carbine fires a 2-round burst.
+    type: Fix
+  id: 929
+  time: '2026-10-30T20:17:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2383
+- author: TheHellFireo
+  changes:
+  - message: Scientists can investigate recovered hunting bracers through twenty experiments
+      and decipher five clues to unlock their controls.
+    type: Add
+  - message: Yautja abilities now have distinct cloak, plasma, leap, roar, recall,
+      drone and staged trophy effects.
+    type: Tweak
+  - message: Caster sights and shots follow their firing mode and direction, with
+      firing sounds; Xenomorph victims remain visible during Butcher.
+    type: Fix
+  id: 930
+  time: '2026-10-30T23:42:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2386
 Name: CMU
 Order: -1
