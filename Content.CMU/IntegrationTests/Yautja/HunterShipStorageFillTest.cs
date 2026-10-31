@@ -1,5 +1,7 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared._RMC14.Crate;
+using Content.Shared._RMC14.Projectiles;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Storage;
 using Content.Shared.Storage.Components;
@@ -36,6 +38,33 @@ public sealed class HunterShipStorageFillTest : GameTest
                     var stored = containers.GetContainer(locker, "entity_storage").ContainedEntities.Count;
                     Assert.That(stored, Is.EqualTo(expected), $"{proto.ID} dropped part of its fill");
                     SEntMan.DeleteEntity(locker);
+                }
+            });
+        });
+    }
+
+    // the spare gear crates at the back only ever gave wood planks when pried open
+    [Test]
+    public async Task HunterShipSpareGearCratesCarryCmss13HuntLoot()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var factory = SEntMan.ComponentFactory;
+            var crates = HunterShip(p => p.ID.Contains("Densecrate") && p.TryGetComponent<CrateOpenableComponent>(out _, factory));
+            Assert.That(crates, Has.Count.EqualTo(11));
+
+            Assert.Multiple(() =>
+            {
+                foreach (var proto in crates)
+                {
+                    proto.TryGetComponent<CrateOpenableComponent>(out var openable, factory);
+                    Assert.That(CheckEntries(proto.ID, openable!.Spawn), Is.GreaterThan(1), $"{proto.ID} only holds planks");
+
+                    var crate = SSpawnAtPosition(proto.ID, map.GridCoords);
+                    Assert.That(SEntMan.HasComponent<SpawnOnTerminateComponent>(crate), Is.False,
+                        $"{proto.ID} still rolls random crate loot when it breaks");
+                    SEntMan.DeleteEntity(crate);
                 }
             });
         });

@@ -11361,6 +11361,20 @@
   parent: CMUHunterShipPlacedBaseStructureDensecrateTemplate
   id: CMUHunterShipPlacedBaseStructureDensecrateSouth
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: RMCWeaponPistolHoldout
+    - id: RMCMagazinePistolHoldout
+      amount: 2
+    - id: CMWeaponPistolM1984
+    - id: CMMagazinePistolM1984
+      amount: 2
+    - id: WeaponShotgunDoubleBarreled
+    - id: RMCBoxShellsSlugs
+    - id: RMCWeaponRevolver38Empty
+    - id: RMCSpeedLoader38
+      amount: 3
   - type: Sprite
     overrideDir: South
 
@@ -11371,6 +11385,24 @@
   description: "A hefty wooden crate."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: RMCGlassesMedicalHUDGlasses
+      amount: 2
+    - id: CMHealthAnalyzer
+      amount: 2
+    - id: CMBeltMedicalFilled
+    - id: CMBeltMedicBagFilled
+    - id: CMFirstAidKitFilled
+    - id: CMAdvFirstAidKitFilled
+    - id: CMFirstAidO2KitFilled
+    - id: CMToxinAidKitFilled
+    - id: CMBurnAidKitFilled
+    - id: AU14PillCanisterTramadol
+    - id: CMPillCanisterInaprovaline
+    - id: RMCPouchMedical
+    - id: RMCPouchFirstAid
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/crates.rsi
     drawdepth: SmallObjects
@@ -11400,6 +11432,26 @@
   description: "A hefty wooden crate."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: CMPackFlare
+      amount: 2
+    - id: RMCPouchGeneral
+    - id: RMCFlashlight
+      amount: 2
+    - id: CMCrowbarRed
+      amount: 2
+    - id: RMCPouchFlare
+    - id: CMBackpack
+      amount: 2
+    - id: CMSatchel
+    - id: CMRadioHandheld
+      amount: 2
+    - id: RMCM5Bayonet
+      amount: 2
+    - id: RMCBoxMRE
+      amount: 3
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/crates.rsi
     drawdepth: SmallObjects
@@ -11429,6 +11481,20 @@
   description: "A hefty wooden crate."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: RMCHandsBrownMarine
+      amount: 3
+    - id: ArmorHelmetM10
+      amount: 2
+    - id: ArmorHelmetRiot
+    - id: RMCShoesCombat
+      amount: 3
+    - id: RMCArmorVest
+      amount: 2
+    - id: RMCArmorBulletproof
+    - id: RMCRC6RiotShield
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/crates.rsi
     drawdepth: SmallObjects
@@ -11458,6 +11524,27 @@
   description: "A hefty wooden crate."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: CMSheetMetal50
+    - id: CMSheetGlass30
+    - id: CMSheetPlasteel50
+    - id: RMCPlankWood50
+    - id: CMSandbagEmpty50
+    - id: RMCToolboxMechanicalFilled
+      amount: 2
+    - id: RMCToolboxElectricalFilled
+    - id: CMBeltUtilityFilled
+      amount: 2
+    - id: CMHandsInsulated
+      amount: 2
+    - id: RMCHelmetWelding
+      amount: 2
+    - id: CMAirlockCircuitBoard
+    - id: RMCPowerCellHigh
+      amount: 2
+    - id: RMCPouchToolsFill
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/crates.rsi
     drawdepth: SmallObjects
@@ -11512,6 +11599,16 @@
   parent: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant06Template
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant06
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: RMCMagazinePistolHoldout
+      amount: 3
+    - id: CMMagazinePistolM1984
+      amount: 3
+    - id: RMCBoxShellsSlugs
+    - id: RMCSpeedLoader38
+      amount: 2
   - type: Sprite
     overrideDir: South
 
@@ -11519,6 +11616,27 @@
   parent: CMUHunterShipPlacedBaseStructureDensecrateTemplate
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant07
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: CMWeaponPistolM1984
+    - id: CMMagazinePistolM1984
+      amount: 2
+    - id: WeaponSMGM63
+    - id: CMMagazineSMGM63
+      amount: 2
+    - id: WeaponSMGMAC15
+    - id: RMCMagazineSMGMAC15
+      amount: 2
+    - id: RMCWeaponShotgunHG3712
+    - id: RMCBoxShellsSlugs
+    - id: RMCBoxShellsBuckshot
+    - id: RMCWeaponRevolverM44
+    - id: RMCSpeedLoaderM44
+      amount: 2
+    - id: WeaponRifleM16
+    - id: RMCMagazineRifleM16
+      amount: 2
   - type: Sprite
     overrideDir: South
 
@@ -11526,6 +11644,24 @@
   parent: CMUHunterShipPlacedBaseStructureDensecrateTemplate
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant08
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: RMCWeaponPistolMK45
+    - id: RMCMagazinePistolMK45
+      amount: 2
+    - id: RMCWeaponRifleM54C
+    - id: CMMagazineRifleM54C
+      amount: 2
+    - id: WeaponRifleMAR40
+    - id: RMCMagazineRifleMAR40
+      amount: 2
+    - id: RMCWeaponSMGType64
+    - id: RMCMagazineSMGType64
+      amount: 2
+    - id: RMCWeaponShotgunM37A1
+    - id: RMCBoxShellsSlugs
+    - id: RMCBoxShellsBuckshot
   - type: Sprite
     overrideDir: South
 
@@ -11536,6 +11672,21 @@
   description: "A hefty wooden crate."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: CMCautery
+    - id: CMSurgicalDrill
+    - id: RMCMaskBreath
+    - id: CMAnestheticTankFilled
+    - id: CMUFixOVein
+    - id: CMHemostat
+    - id: CMScalpel
+    - id: CMBoneGel
+    - id: CMRetractor
+    - id: CMBonesetter
+    - id: CMCircularSaw
+    - id: CMSurgicalLine
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/crates.rsi
     drawdepth: SmallObjects
@@ -11562,6 +11713,21 @@
   parent: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant06Template
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant10
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: CMMagazinePistolM1984
+      amount: 2
+    - id: CMMagazineSMGM63
+      amount: 2
+    - id: RMCMagazineSMGMAC15
+      amount: 2
+    - id: RMCBoxShellsSlugs
+    - id: RMCBoxShellsBuckshot
+    - id: RMCSpeedLoaderM44
+      amount: 2
+    - id: RMCMagazineRifleM16
+      amount: 2
   - type: Sprite
     overrideDir: South
 
@@ -11569,6 +11735,19 @@
   parent: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant06Template
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant11
   components:
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood2
+    - id: RMCMagazinePistolMK45
+      amount: 2
+    - id: CMMagazineRifleM54C
+      amount: 2
+    - id: RMCMagazineRifleMAR40
+      amount: 2
+    - id: RMCMagazineSMGType64
+      amount: 2
+    - id: RMCBoxShellsSlugs
+    - id: RMCBoxShellsBuckshot
   - type: Sprite
     overrideDir: South
 
