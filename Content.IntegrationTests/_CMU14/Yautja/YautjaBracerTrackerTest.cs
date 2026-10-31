@@ -1,7 +1,10 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.Actions.Components;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Robust.Shared.Map.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Robust.Shared.GameObjects;
@@ -71,6 +74,70 @@ public sealed class YautjaBracerTrackerTest
                     if (!entMan.Deleted(uid))
                         entMan.DeleteEntity(uid);
                 }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // a stacked colony or ship is one z in cmss13, so gear a floor up still gets a direction
+    [Test]
+    public async Task BracerTrackerPointsAtGearOnAnotherLevelOfTheSameStack()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var inventory = entMan.System<InventorySystem>();
+            var ui = entMan.System<SharedUserInterfaceSystem>();
+            var maps = entMan.System<SharedMapSystem>();
+            var tileDefs = server.ResolveDependency<ITileDefinitionManager>();
+            var plating = new Tile(tileDefs["Plating"].TileId);
+
+            var lower = maps.CreateMap(runMapInit: true);
+            var upper = maps.CreateMap(runMapInit: true);
+            var lowerGrid = entMan.EnsureComponent<MapGridComponent>(lower);
+            var upperGrid = entMan.EnsureComponent<MapGridComponent>(upper);
+            for (var x = -2; x <= 2; x++)
+            for (var y = -2; y <= 7; y++)
+            {
+                maps.SetTile(lower, lowerGrid, new Vector2i(x, y), plating);
+                maps.SetTile(upper, upperGrid, new Vector2i(x, y), plating);
+            }
+
+            var levels = entMan.System<CMUZLevelsSystem>();
+            var network = levels.CreateZNetwork().Owner;
+            Assert.That(levels.TryAddMapsIntoZNetwork(
+                (network, entMan.GetComponent<CMUZLevelsNetworkComponent>(network)),
+                new() { [lower] = 0, [upper] = 1 }), Is.True);
+
+            var hunter = entMan.SpawnEntity("CMMobHuman", new EntityCoordinates(lower, new Vector2(0.5f, 0.5f)));
+            var bracer = entMan.SpawnEntity("CMUYautjaBracer", new EntityCoordinates(lower, new Vector2(0.5f, 0.5f)));
+            var upstairs = entMan.SpawnEntity("CMUYautjaCombistick", new EntityCoordinates(upper, new Vector2(0.5f, 5.5f)));
+            var action = entMan.SpawnEntity("CMUActionYautjaTrackGear", MapCoordinates.Nullspace);
+
+            entMan.EnsureComponent<YautjaComponent>(hunter);
+            Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
+            entMan.EnsureComponent<YautjaTrackedItemComponent>(upstairs);
+
+            var ev = new YautjaTrackGearActionEvent
+            {
+                Performer = hunter,
+                Action = (action, entMan.GetComponent<ActionComponent>(action)),
+            };
+            entMan.EventBus.RaiseLocalEvent(bracer, ev);
+
+            Assert.That(ui.TryGetUiState<YautjaBracerPanelState>(bracer, YautjaBracerUIKey.Key, out var state), Is.True);
+            var entry = state!.TrackedGear.Single();
+            Assert.That(entry.Name, Is.EqualTo(entMan.GetComponent<MetaDataComponent>(upstairs).EntityName));
+            Assert.That(entry.Distance, Is.EqualTo(5));
+
+            foreach (var uid in new[] { hunter, bracer, upstairs, action, lower, upper, network })
+            {
+                if (!entMan.Deleted(uid))
+                    entMan.DeleteEntity(uid);
             }
         });
 
