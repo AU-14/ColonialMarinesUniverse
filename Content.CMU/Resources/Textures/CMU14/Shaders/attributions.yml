@@ -1,0 +1,4 @@
+- files: ["surrender_displacement.swsl", "surrender_displacement_unshaded.swsl"]
+  license: "AGPL-3.0-only"
+  copyright: "CMU14 side-edge extension of the repository displacement.swsl and displacement_unshaded.swsl shaders by Space Station 14 contributors; see the repository license history for the base code."
+  source: "https://github.com/AU-14/ColonialMarinesUniverse/tree/50068ff6e04dd2e625a954a9edcc88faea94ece5/Resources/Textures/Shaders"
