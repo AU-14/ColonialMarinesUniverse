@@ -304,7 +304,13 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
     private void OnPickupAttempt(Entity<YautjaSmartDiscComponent> ent, ref GettingPickedUpAttemptEvent args)
     {
-        if (!ent.Comp.Active)
+        // the boomerang throw and its return leg aren't Active, so anyone could click the disc out of the air.
+        // cmss13 only lets a throw mode catch do that, and there's no throw mode catch here
+        var operatorThrown = TryComp(ent, out ThrownItemComponent? thrown) &&
+                             thrown.Thrower is { } thrower &&
+                             CanOperateDisc(thrower);
+
+        if (!ent.Comp.Active && !operatorThrown)
             return;
 
         if (!CanOperateDisc(args.User))

@@ -9680,6 +9680,40 @@ public sealed class YautjaBowTest
     }
 
     [Test]
+    public async Task HumansCantGrabAYautjaThrownSmartDiscOutOfTheAir()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var hands = entMan.System<SharedHandsSystem>();
+            var hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            var marine = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
+            var disc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(1, 0)));
+
+            var thrown = entMan.EnsureComponent<ThrownItemComponent>(disc);
+            thrown.Thrower = hunter;
+            Assert.That(entMan.GetComponent<YautjaSmartDiscComponent>(disc).Active, Is.False, "the boomerang throw isn't the hunting mode");
+            Assert.That(hands.TryPickupAnyHand(marine, disc), Is.False,
+                "cmss13 only lets a throw mode catch take a flying disc, a plain click shouldn't");
+
+            entMan.RemoveComponent<ThrownItemComponent>(disc);
+            Assert.That(hands.TryPickupAnyHand(marine, disc), Is.True, "a disc lying on the floor is still loot");
+
+            foreach (var uid in new[] { hunter, marine, disc })
+            {
+                if (!entMan.Deleted(uid))
+                    entMan.DeleteEntity(uid);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task ThrownSmartDiscBoomerangClientSpriteShowsTemporaryActiveStateLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
