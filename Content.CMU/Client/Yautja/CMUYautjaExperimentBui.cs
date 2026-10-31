@@ -13,6 +13,8 @@ public sealed class CMUYautjaExperimentBui(EntityUid owner, Enum uiKey) : BoundU
     {
         base.Open();
         _window = this.CreateWindow<CMUYautjaExperimentWindow>();
+        _window.SetBracer(Owner);
+        _window.OnCommand += SendMessage;
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

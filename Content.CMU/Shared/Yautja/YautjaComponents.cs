@@ -835,13 +835,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntProtoId UncloakEffect = "RMCEffectUncloak";
 
     [DataField]
-    public HashSet<HumanoidVisualLayers> CloakedHideLayers = new()
-    {
-        HumanoidVisualLayers.Hair,
-        HumanoidVisualLayers.Eyes,
-    };
-
-    [DataField]
     public SoundSpecifier RecallSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Equipment/pred_attach.wav");
 
     [DataField]

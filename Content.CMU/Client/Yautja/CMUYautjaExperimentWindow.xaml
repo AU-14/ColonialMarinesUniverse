@@ -1,14 +1,33 @@
 <DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:yautja="clr-namespace:Content.Client.CMU14.Yautja"
                Title="{Loc 'cmu-yautja-experiment-guide-title'}"
-               MinSize="460 420" SetSize="570 650">
-    <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
-        <BoxContainer Orientation="Vertical" Margin="12" SeparationOverride="14" HorizontalExpand="True">
-            <RichTextLabel Name="Status" HorizontalExpand="True" />
-            <Label Text="{Loc 'cmu-yautja-experiment-selected-heading'}" StyleClasses="LabelHeading" />
-            <RichTextLabel Name="Procedure" HorizontalExpand="True" />
-            <Label Text="{Loc 'cmu-yautja-experiment-clues-heading'}" StyleClasses="LabelHeading" />
-            <RichTextLabel Name="Clues" HorizontalExpand="True" />
-            <RichTextLabel Name="Steps" HorizontalExpand="True" />
+               MinSize="420 420" SetSize="460 460">
+    <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
+        <BoxContainer SeparationOverride="2">
+            <Button Name="DeviceTab" Text="{Loc 'cmu-yautja-experiment-device-tab'}" HorizontalExpand="True" />
+            <Button Name="ProceduresTab" Text="{Loc 'cmu-yautja-experiment-procedures-tab'}" HorizontalExpand="True" />
+            <Button Name="RecordsTab" Text="{Loc 'cmu-yautja-experiment-records-tab'}" HorizontalExpand="True" />
+            <Button Name="HelpButton" Text="?" ToolTip="{Loc 'cmu-yautja-experiment-help-title'}" />
         </BoxContainer>
-    </ScrollContainer>
+        <PanelContainer Name="DevicePage" VerticalExpand="True">
+            <yautja:CMUYautjaBracerDiagram Name="Diagram" />
+        </PanelContainer>
+        <ScrollContainer Name="ProceduresPage" Visible="False" VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Name="ProcedureList" Orientation="Vertical" SeparationOverride="4" />
+        </ScrollContainer>
+        <ScrollContainer Name="RecordsPage" Visible="False" VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Name="RecordList" Orientation="Vertical" SeparationOverride="4" />
+        </ScrollContainer>
+        <BoxContainer SeparationOverride="8">
+            <Label Name="SealStatus" HorizontalExpand="True" Modulate="#B9C1BC" />
+            <Label Name="StrainStatus" Modulate="#CA9774" />
+        </BoxContainer>
+        <ProgressBar Name="Strain" MinValue="0" MaxValue="8" SetHeight="3" />
+        <Button Name="ProcedureButton" ClipText="True" />
+        <Label Name="WorkStatus" HorizontalAlignment="Center" Modulate="#B9C1BC" />
+        <BoxContainer SeparationOverride="4">
+            <Button Name="SamplesButton" Text="{Loc 'cmu-yautja-experiment-samples-tab'}" HorizontalExpand="True" />
+            <Button Name="AuthorizeButton" Text="{Loc 'cmu-yautja-experiment-authorize'}" Visible="False" HorizontalExpand="True" />
+        </BoxContainer>
+    </BoxContainer>
 </DefaultWindow>
