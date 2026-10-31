@@ -45,7 +45,7 @@ internal static class LobbyHighJobPreview
 
     private static readonly (string Key, string Label)[] Gamemodes =
     {
-        //("ForceOnForce", "FOF"),
+        ("ForceOnForce", "FOF"), // CMU14: FoF joins the preview; its rows read the dealing priority below.
         ("Insurgency", "INS"),
         ("DistressSignal", "DS"),
         ("ColonyFall", "CF"),
@@ -72,13 +72,18 @@ internal static class LobbyHighJobPreview
 
         foreach (var (gamemode, label) in Gamemodes)
         {
-            foreach (var (jobId, priority) in profile.GetJobPrioritiesForGamemode(gamemode))
+            foreach (var (jobId, stored) in profile.GetJobPrioritiesForGamemode(gamemode))
             {
-                if (priority != JobPriority.High ||
-                    !prototypeManager.TryIndex(jobId, out JobPrototype? job))
-                {
+                if (!prototypeManager.TryIndex(jobId, out JobPrototype? job))
                     continue;
-                }
+
+                // CMU14: FoF dealing elevates equivalent roles across sides, so preview the priority it deals.
+                var priority = gamemode == "ForceOnForce"
+                    ? profile.GetForceOnForceJobPriority(job, prototypeManager)
+                    : stored;
+
+                if (priority != JobPriority.High)
+                    continue;
 
                 if (!jobs.ContainsKey(job.ID))
                 {
