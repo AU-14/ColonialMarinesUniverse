@@ -70,31 +70,44 @@ internal static class LobbyHighJobPreview
         var jobs = new Dictionary<string, JobPrototype>();
         var gamemodeLabels = new Dictionary<string, List<string>>();
 
+        void AddHigh(JobPrototype job, string gamemodeLabel)
+        {
+            if (!jobs.ContainsKey(job.ID))
+            {
+                jobOrder.Add(job.ID);
+                jobs[job.ID] = job;
+                gamemodeLabels[job.ID] = new List<string>();
+            }
+
+            var labels = gamemodeLabels[job.ID];
+            if (!labels.Contains(gamemodeLabel))
+                labels.Add(gamemodeLabel);
+        }
+
         foreach (var (gamemode, label) in Gamemodes)
         {
-            foreach (var (jobId, stored) in profile.GetJobPrioritiesForGamemode(gamemode))
+            // CMU14: FoF dealing elevates equivalent roles across sides, so its rows scan every
+            // job through the dealing getter; the stored dict alone misses the elevated twins.
+            if (gamemode == "ForceOnForce")
+            {
+                foreach (var job in prototypeManager.EnumeratePrototypes<JobPrototype>())
+                {
+                    if (profile.GetForceOnForceJobPriority(job, prototypeManager) == JobPriority.High)
+                        AddHigh(job, label);
+                }
+
+                continue;
+            }
+
+            foreach (var (jobId, priority) in profile.GetJobPrioritiesForGamemode(gamemode))
             {
                 if (!prototypeManager.TryIndex(jobId, out JobPrototype? job))
                     continue;
 
-                // CMU14: FoF dealing elevates equivalent roles across sides, so preview the priority it deals.
-                var priority = gamemode == "ForceOnForce"
-                    ? profile.GetForceOnForceJobPriority(job, prototypeManager)
-                    : stored;
-
                 if (priority != JobPriority.High)
                     continue;
 
-                if (!jobs.ContainsKey(job.ID))
-                {
-                    jobOrder.Add(job.ID);
-                    jobs[job.ID] = job;
-                    gamemodeLabels[job.ID] = new List<string>();
-                }
-
-                var labels = gamemodeLabels[job.ID];
-                if (!labels.Contains(label))
-                    labels.Add(label);
+                AddHigh(job, label);
             }
         }
 
