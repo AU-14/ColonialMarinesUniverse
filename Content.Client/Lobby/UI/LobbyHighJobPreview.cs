@@ -92,6 +92,9 @@ internal static class LobbyHighJobPreview
             {
                 foreach (var job in prototypeManager.EnumeratePrototypes<JobPrototype>())
                 {
+                    if (!profile.IsForceOnForceJobReachable(job))
+                        continue;
+
                     if (profile.GetForceOnForceJobPriority(job, prototypeManager) == JobPriority.High)
                         AddHigh(job, label);
                 }
