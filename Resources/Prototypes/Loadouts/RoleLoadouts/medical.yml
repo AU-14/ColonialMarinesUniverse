@@ -3,7 +3,7 @@
 - type: roleLoadout
   id: JobChiefMedicalOfficer
   groups:
-  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
+  # - RMCLoadoutGroupPins # CMU14: moved to CMUGlobalLoadout.
   - GroupTankHarness
   - ChiefMedicalOfficerHead
   - MedicalMask
@@ -22,7 +22,7 @@
 - type: roleLoadout
   id: JobMedicalDoctor
   groups:
-  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
+  # - RMCLoadoutGroupPins # CMU14: moved to CMUGlobalLoadout.
   - GroupTankHarness
   - MedicalDoctorHead
   - MedicalMask
@@ -41,7 +41,7 @@
 - type: roleLoadout
   id: JobMedicalIntern
   groups:
-  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
+  # - RMCLoadoutGroupPins # CMU14: moved to CMUGlobalLoadout.
   - GroupTankHarness
   - MedicalInternJumpsuit
   - MedicalBackpack
@@ -55,7 +55,7 @@
 - type: roleLoadout
   id: JobChemist
   groups:
-  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
+  # - RMCLoadoutGroupPins # CMU14: moved to CMUGlobalLoadout.
   - GroupTankHarness
   - MedicalMask
   - ChemistJumpsuit
@@ -72,7 +72,7 @@
 - type: roleLoadout
   id: JobParamedic
   groups:
-  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
+  # - RMCLoadoutGroupPins # CMU14: moved to CMUGlobalLoadout.
   - GroupTankHarness
   - ParamedicHead
   - MedicalMask

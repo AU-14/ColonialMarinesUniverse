@@ -143,7 +143,6 @@
   id: JobAU14JobGOVFOROfficerIntel
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - MarineBackpack
   - EyewearRMCPVE
   - MasksRMCPVE

@@ -91,7 +91,6 @@
   id: JobAU14JobCivilianScientist
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - MedGlovesAU14
   - MedMaskAU14
   - ScientistPouchAU14

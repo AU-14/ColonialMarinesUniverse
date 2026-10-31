@@ -133,7 +133,6 @@
   id: JobCMU14JobCivilianProdigyGuard
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14

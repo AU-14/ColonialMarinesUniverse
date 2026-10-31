@@ -104,7 +104,6 @@
   id: JobAU14JobColonyPilot
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - PaperworkRMC
   - RecreationalRMC

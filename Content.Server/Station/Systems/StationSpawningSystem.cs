@@ -334,6 +334,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             }
 
             DoJobSpecials(job, jobEntity);
+            EquipGlobalLoadout(jobEntity, profile); // CMU14: apply after the job has equipped its storage.
             if (loadout != null && loadoutProto != null)
                 ApplyRoleLoadoutEffects(jobEntity, loadout, loadoutProto);
 
@@ -470,6 +471,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             SetPdaAndIdCardDataWithSplitJob(entity.Value, metaDataEntity.EntityName, prototype, originalPrototype ?? prototype, station);
 
         DoJobSpecials(job, entity.Value);
+
+        EquipGlobalLoadout(entity.Value, profile); // CMU14: apply once, after job gear and specials.
 
         // Job profiles establish the base skill preset, so loadout upgrades must run afterwards.
         if (loadout != null && loadoutProto != null)

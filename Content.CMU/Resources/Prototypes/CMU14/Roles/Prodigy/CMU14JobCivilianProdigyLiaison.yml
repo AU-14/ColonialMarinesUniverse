@@ -115,7 +115,6 @@
   id: JobCMU14JobCivilianProdigyLiaison
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - PaperworkRMC
   - RecreationalRMC

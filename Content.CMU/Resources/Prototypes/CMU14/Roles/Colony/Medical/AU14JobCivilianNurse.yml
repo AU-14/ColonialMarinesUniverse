@@ -62,7 +62,6 @@
   id: JobAU14JobCivilianNurse
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - MedBackpackAU14
   - MedJumpsuitAU14
   - CivJumpsuitAU14

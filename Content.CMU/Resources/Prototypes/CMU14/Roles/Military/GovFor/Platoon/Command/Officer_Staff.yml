@@ -136,7 +136,6 @@
   id: JobAU14JobGOVFORPlatOp
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - MarineBackpack
   - EyewearRMCPVE
   - MasksRMCPVE

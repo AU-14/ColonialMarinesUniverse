@@ -86,7 +86,6 @@
   id: JobAU14JobCivilianAmbassadorCCA
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CMUCorporateSkirts
   - PaperworkRMC
@@ -189,7 +188,6 @@
   id: JobAU14JobCivilianAmbassadorICSC
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CMUCorporateSkirts
   - PaperworkRMC
@@ -288,7 +286,6 @@
   id: JobAU14JobCivilianAmbassadorTWE
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CMUCorporateSkirts
   - PaperworkRMC
@@ -388,7 +385,6 @@
   id: JobAU14JobCivilianAmbassadorUA
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CMUCorporateSkirts
   - PaperworkRMC
@@ -487,7 +483,6 @@
   id: JobAU14JobCivilianAmbassadorUPP
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CMUCorporateSkirts
   - PaperworkRMC

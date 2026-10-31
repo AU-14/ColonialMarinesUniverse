@@ -94,7 +94,6 @@
   id: JobAU14JobCivilianOrbitalManager
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CMUCorporateSkirts
   - PaperworkRMC

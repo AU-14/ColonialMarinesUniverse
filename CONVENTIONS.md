@@ -75,6 +75,14 @@ New constructs use a marker such as `// CMU14 method`,
 YAML uses `# CMU14`; a whole prototype can mark its `type:` or `id:` line.
 Preserve existing upstream markers and identify new CMU divergence as CMU.
 
+## Global loadouts
+
+Character-wide loadout preferences use the `CMUGlobalLoadout` role loadout
+in the profile's existing loadout dictionary. Pins belong only to this
+global loadout, are free, and are selected once per character (up to 13).
+Legacy per-job pin selections migrate to a deduplicated global selection.
+Apply global gear after job gear so backpack storage is available.
+
 ## Components and data
 
 Components store data; systems own behavior. Avoid behavior in property

@@ -106,7 +106,6 @@
   id: JobAU14JobGOVFORCombatCorrespondent
   points: 7
   groups:
-  - RMCLoadoutGroupPins
   - CMUAuxiliaryStaffRole
   - MarineBackpack
   - EyewearRMCPVE

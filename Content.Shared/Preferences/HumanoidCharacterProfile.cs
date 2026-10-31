@@ -1654,6 +1654,8 @@ namespace Content.Shared.Preferences
             _threatPreferences.UnionWith(threats);
             _gamemodeThreatPreferences = gamemodeThreatPreferences;
 
+            MigrateGlobalLoadout(prototypeManager); // CMU14: migrate pins before job validation removes them.
+
             // Checks prototypes exist for all loadouts and dump / set to default if not.
             var toRemove = new ValueList<string>();
 
@@ -1901,6 +1903,7 @@ namespace Content.Shared.Preferences
         public RoleLoadout GetLoadoutOrDefault(string id, ICommonSession? session, ProtoId<SpeciesPrototype>? species,
             IEntityManager entManager, IPrototypeManager protoManager)
         {
+            MigrateGlobalLoadout(protoManager); // CMU14: also preserve legacy selections before the profile is saved.
             if (_loadouts.TryGetValue(id, out var loadout))
             {
                 TryMigrateLoadout(loadout, id, protoManager, session, this);
