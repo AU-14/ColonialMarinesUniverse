@@ -105,6 +105,14 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public float PoisonClearanceMultiplier = 1.5f;
 
+    // raw prey meat is food for yautja, cmss13 has no food poisoning on them. swapped on the bite instead of an
+    // Animal metabolizer, that one would also make chocolate and onions poison them
+    [DataField]
+    public ProtoId<ReagentPrototype> RawMeatReagent = "UncookedAnimalProteins";
+
+    [DataField]
+    public ProtoId<ReagentPrototype> RawMeatDigestsAs = "Protein";
+
     [DataField]
     public float AlcoholClearanceMultiplier = 2f;
 
