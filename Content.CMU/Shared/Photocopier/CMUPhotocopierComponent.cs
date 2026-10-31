@@ -20,4 +20,10 @@ public sealed partial class CMUPhotocopierComponent : Component
 }
 
 [Serializable, NetSerializable]
+public enum CMUPhotocopierVisuals : byte
+{
+    Copying,
+}
+
+[Serializable, NetSerializable]
 public sealed partial class CMUPhotocopierCopyDoAfterEvent : SimpleDoAfterEvent;
