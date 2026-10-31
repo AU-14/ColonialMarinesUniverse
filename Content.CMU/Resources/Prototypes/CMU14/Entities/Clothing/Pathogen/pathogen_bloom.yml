@@ -10,6 +10,6 @@
   - type: Clothing
     sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
   - type: NightVisionItem
-    slotFLAGS: HEAD
+    slotFlags: HEAD
     defaultState: Full  
     ignoreUserOnlyHalf: true
