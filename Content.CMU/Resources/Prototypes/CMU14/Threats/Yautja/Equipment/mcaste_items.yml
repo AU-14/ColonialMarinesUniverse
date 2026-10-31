@@ -146,6 +146,8 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.75
     sprintModifier: 0.75
+  # cmss13 BLOCK_KNOCKDOWN: a pounce into the front of the armor bounces off
+  - type: RMCGrantLeapProtection
   - type: YautjaTechItem
   - type: Corrodible
     isCorrodible: false
