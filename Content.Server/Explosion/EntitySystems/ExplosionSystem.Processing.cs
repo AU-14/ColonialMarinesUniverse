@@ -276,7 +276,8 @@ public sealed partial class ExplosionSystem
         float? fireStacks,
         float? temperature,
         float currentIntensity,
-        EntityUid? cause)
+        EntityUid? cause,
+        EntityUid? sourceVehicle) // CMU14: preserve projectile attribution through queued processing.
     {
         var size = grid.Comp.TileSize;
         var gridBox = new Box2(tile * size, (tile + 1) * size).Scale(0.9f);
@@ -307,7 +308,7 @@ public sealed partial class ExplosionSystem
             // process those entities
             foreach (var (uid, xform) in list)
             {
-                ProcessEntity(uid, epicenter, damage, throwForce, id, xform, fireStacks, cause);
+                ProcessEntity(uid, epicenter, damage, throwForce, id, xform, fireStacks, cause, sourceVehicle); // CMU14
             }
 
             // heat the atmosphere
@@ -327,7 +328,7 @@ public sealed partial class ExplosionSystem
             foreach (var entity in _anchored)
             {
                 processed.Add(entity);
-                ProcessEntity(entity, epicenter, damage, throwForce, id, null, fireStacks, cause);
+                ProcessEntity(entity, epicenter, damage, throwForce, id, null, fireStacks, cause, sourceVehicle); // CMU14
                 tileBlocked |= IsBlockingTurf(entity);
             }
             _anchored.Clear();
@@ -354,7 +355,7 @@ public sealed partial class ExplosionSystem
             {
                 // Here we only throw, no dealing damage. Containers n such might drop their entities after being destroyed, but
                 // they should handle their own damage pass-through, with their own damage reduction calculation.
-                ProcessEntity(uid, epicenter, null, throwForce, id, xform, null, cause);
+                ProcessEntity(uid, epicenter, null, throwForce, id, xform, null, cause, sourceVehicle); // CMU14
             }
 
             return !tileBlocked;
@@ -397,7 +398,8 @@ public sealed partial class ExplosionSystem
         HashSet<EntityUid> processed,
         string id,
         float? fireStacks,
-        EntityUid? cause)
+        EntityUid? cause,
+        EntityUid? sourceVehicle) // CMU14
     {
         var gridBox = Box2.FromDimensions(tile * DefaultTileSize, new Vector2(DefaultTileSize, DefaultTileSize));
         var worldBox = spaceMatrix.TransformBox(gridBox);
@@ -415,7 +417,7 @@ public sealed partial class ExplosionSystem
             foreach (var (uid, xform) in state.Item1)
             {
                 processed.Add(uid);
-                ProcessEntity(uid, epicenter, damage, throwForce, id, xform, fireStacks, cause);
+                ProcessEntity(uid, epicenter, damage, throwForce, id, xform, fireStacks, cause, sourceVehicle); // CMU14
             }
 
             if (throwForce <= 0)
@@ -429,7 +431,7 @@ public sealed partial class ExplosionSystem
 
             foreach (var (uid, xform) in list)
             {
-                ProcessEntity(uid, epicenter, null, throwForce, id, xform, fireStacks, cause);
+                ProcessEntity(uid, epicenter, null, throwForce, id, xform, fireStacks, cause, sourceVehicle); // CMU14
             }
         }
         finally
@@ -534,7 +536,8 @@ public sealed partial class ExplosionSystem
         string id,
         TransformComponent? xform,
         float? fireStacksOnIgnite,
-        EntityUid? cause)
+        EntityUid? cause,
+        EntityUid? sourceVehicle) // CMU14
     {
         if (_deleteOnExplosionQuery.HasComp(uid))
         {
@@ -561,7 +564,7 @@ public sealed partial class ExplosionSystem
                 var applied = _damageableSystem.TryChangeDamage(entity, preparing.Damage,
                     damageable: damageable, origin: cause, impact: DamageImpact.Explosion, ignoreGlobalModifiers: true);
 
-                var received = new ExplosionReceivedEvent(id, epicenter, applied ?? new DamageSpecifier(), stateBeforeDamage);
+                var received = new ExplosionReceivedEvent(id, epicenter, applied ?? new DamageSpecifier(), stateBeforeDamage, sourceVehicle); // CMU14
                 RaiseLocalEvent(entity, ref received);
 
                 if (_actorQuery.HasComp(entity))
@@ -837,6 +840,7 @@ sealed class Explosion
     public readonly EntityUid VisualEnt;
 
     public readonly EntityUid? Cause;
+    public readonly EntityUid? SourceVehicle; // CMU14: captured before projectile deletion.
 
     /// <summary>
     ///     Initialize a new instance for processing
@@ -855,12 +859,14 @@ sealed class Explosion
         IEntityManager entMan,
         EntityUid visualEnt,
         EntityUid? cause,
+        EntityUid? sourceVehicle, // CMU14
         SharedMapSystem mapSystem,
         DamageableSystem damageable,
         EntityQuery<TileHistoryComponent> historyQuery)
     {
         VisualEnt = visualEnt;
         Cause = cause;
+        SourceVehicle = sourceVehicle; // CMU14
         _system = system;
         _mapSystem = mapSystem;
         ExplosionType = explosionType;
@@ -1027,7 +1033,8 @@ sealed class Explosion
                     ExplosionType.FireStacks,
                     ExplosionType.Temperature,
                     _currentIntensity,
-                    Cause);
+                    Cause,
+                    SourceVehicle); // CMU14
 
                 // If the floor is not blocked by some dense object, damage the floor tiles.
                 if (canDamageFloor)
@@ -1063,7 +1070,8 @@ sealed class Explosion
                     ProcessedEntities,
                     ExplosionType.ID,
                     ExplosionType.FireStacks,
-                    Cause);
+                    Cause,
+                    SourceVehicle); // CMU14
             }
 
             if (!MoveNext())
@@ -1107,4 +1115,5 @@ public sealed partial class QueuedExplosion(ExplosionPrototype proto)
     public int MaxTileBreak;
     public bool CanCreateVacuum;
     public EntityUid? Cause; // The entity that exploded, for logging purposes.
+    public EntityUid? SourceVehicle; // CMU14: immutable firing-vehicle attribution.
 }

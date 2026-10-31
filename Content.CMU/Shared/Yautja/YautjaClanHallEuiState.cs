@@ -36,7 +36,6 @@ public sealed class YautjaClanHallEuiState : EuiStateBase
     public bool Navigate;
     public YautjaClanHallViewer Viewer = new();
     public List<YautjaClanHallClanRow> Clans = [];
-    public List<YautjaClanHallHunterRow> Hunters = [];
     public YautjaClanHallClanPage? Clan;
     public YautjaClanHallDossier? Hunter;
     public List<YautjaClanHallWhitelistRow>? Whitelist;
@@ -85,6 +84,15 @@ public sealed class YautjaClanHallHunterRow
     public YautjaRank Rank;
     public int Honor;
     public bool Online;
+    public int? SectId;
+}
+
+[Serializable, NetSerializable]
+public sealed class YautjaClanHallSectRow
+{
+    public int Id;
+    public string Name = string.Empty;
+    public string Description = string.Empty;
 }
 
 [Serializable, NetSerializable]
@@ -101,6 +109,8 @@ public sealed class YautjaClanHallClanPage
     public int Standing;
     public List<YautjaClanHallHunterRow> Members = [];
     public List<YautjaClanHallHunterRow>? Petitions;
+    public List<YautjaClanHallSectRow> Sects = [];
+    public bool CanManageSects;
     public bool CanEditNotice;
     public bool CanEditEliteNotes;
     public bool CanEditPresentation;
@@ -118,7 +128,6 @@ public sealed class YautjaClanHallDossier
     public int? ClanId;
     public int Honor;
     public bool Online;
-    public int Standing;
     public bool IsSelf;
     public YautjaWhitelistFlags? Whitelist;
     public List<YautjaRank> AssignableRanks = [];
@@ -215,6 +224,32 @@ public sealed class YautjaClanHallEditLookMessage(int clanId, string name, strin
     public readonly string Name = name;
     public readonly string Color = color;
     public readonly string Sigil = sigil;
+}
+
+// sect id null makes a new sect
+[Serializable, NetSerializable]
+public sealed class YautjaClanHallEditSectMessage(int clanId, int? sectId, string name, string description) : EuiMessageBase
+{
+    public readonly int ClanId = clanId;
+    public readonly int? SectId = sectId;
+    public readonly string Name = name;
+    public readonly string Description = description;
+}
+
+[Serializable, NetSerializable]
+public sealed class YautjaClanHallDeleteSectMessage(int clanId, int sectId) : EuiMessageBase
+{
+    public readonly int ClanId = clanId;
+    public readonly int SectId = sectId;
+}
+
+// sect id null takes them out of their sect
+[Serializable, NetSerializable]
+public sealed class YautjaClanHallSetSectMessage(int clanId, NetUserId target, int? sectId) : EuiMessageBase
+{
+    public readonly int ClanId = clanId;
+    public readonly NetUserId Target = target;
+    public readonly int? SectId = sectId;
 }
 
 [Serializable, NetSerializable]

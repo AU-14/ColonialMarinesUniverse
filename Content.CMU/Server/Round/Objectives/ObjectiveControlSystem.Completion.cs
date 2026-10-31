@@ -18,9 +18,7 @@ public sealed partial class ObjectiveControlSystem
 
     public void CompleteObjectiveForFaction(EntityUid uid, CMUObjectiveComponent objective, string completingFaction, bool awardPoints = true, ISawmill? sawmill = null)
     {
-        // Any z-level of the planet counts; objectives placed on an upper or lower level of a
-        // multi-Z planet were otherwise impossible to complete.
-        if (_planetMapId == MapId.Nullspace || !_zLevels.IsSameZNetwork(Transform(uid).MapID, _planetMapId))
+        if (_planetMapId == MapId.Nullspace || !_zLevels.GetAllNetworkMapIds(_planetMapId).Contains(Transform(uid).MapID))
             return;
 
         if (objective.StatusesPerFaction.ContainsValue(CMUObjectiveComponent.ObjectiveStatus.Completed))

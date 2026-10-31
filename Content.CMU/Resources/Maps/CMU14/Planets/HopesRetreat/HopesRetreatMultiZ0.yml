@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 10/26/2026 02:52:49
-  entityCount: 40196
+  entityCount: 40197
 maps:
 - 1
 grids:
@@ -126287,6 +126287,13 @@ entities:
     - type: Transform
       parent: 1
       pos: 52.5,-20.5
+- proto: AU14SpawnPointCorporateSynthetic
+  entities:
+  - uid: 1000000002
+    components:
+    - type: Transform
+      parent: 1
+      pos: -40.5,-48.5
 - proto: AU14SpawnPointWYGuard
   entities:
   - uid: 7796
@@ -169487,7 +169494,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 100.5,-61.5
-- proto: Recycler
+- proto: CMURecycler
   entities:
   - uid: 73018
     components:
@@ -180898,16 +180905,22 @@ entities:
   entities:
   - uid: 51982
     components:
+    - type: AccessReader
+      access: [[CMAccessColonyBrig]]
     - type: Transform
       parent: 1
       pos: 109.5,-11.5
   - uid: 51983
     components:
+    - type: AccessReader
+      access: [[CMAccessColonyBrig]]
     - type: Transform
       parent: 1
       pos: 110.5,-11.5
   - uid: 51987
     components:
+    - type: AccessReader
+      access: [[CMAccessColonyBrig]]
     - type: Transform
       parent: 1
       pos: 110.5,-14.5

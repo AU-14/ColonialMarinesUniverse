@@ -239,4 +239,5 @@ public readonly record struct CMUReconLabel(Vector2i Tile, int Depth, string Tex
 
 [Serializable, NetSerializable]
 public readonly record struct CMUReconOrder(int Id, Vector2i Tile, int Depth, CMUReconOrderKind Kind,
-    Vector2[]? Waypoints = null, CMUReconInk Ink = CMUReconInk.Yellow, float Width = 3, string? Text = null, Color? Color = null);
+    Vector2[]? Waypoints = null, CMUReconInk Ink = CMUReconInk.Yellow, float Width = 3, string? Text = null, Color? Color = null,
+    bool Shared = false);

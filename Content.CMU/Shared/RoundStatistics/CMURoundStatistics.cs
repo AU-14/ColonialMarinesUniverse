@@ -15,6 +15,18 @@ public enum CMURoundStatisticsPreset : byte
 }
 
 [Serializable, NetSerializable]
+public enum CMURoundStatisticsPeriod : byte
+{
+    OneWeek,
+    TwoWeeks,
+    OneMonth,
+    ThreeMonths,
+    SixMonths,
+    OneYear,
+    AllTime,
+}
+
+[Serializable, NetSerializable]
 public enum CMURoundStatisticsWinner : byte
 {
     Xeno,
@@ -44,6 +56,8 @@ public enum CMURoundStatisticsOutcome : byte
     ObjectiveVictory,
     ForceOnForceGovforVictory,
     ForceOnForceOpforVictory,
+    FoFMinorVictory,
+    FoFMajorVictory,
 }
 
 [Serializable, NetSerializable]
@@ -213,7 +227,8 @@ public sealed class CMURoundStatisticsQuery(
     string search = "",
     int page = 0,
     string? threatId = null,
-    string? populationBand = null)
+    string? populationBand = null,
+    CMURoundStatisticsPeriod period = CMURoundStatisticsPeriod.OneMonth)
 {
     public const int PageSize = 12;
     public const int MaxSearchLength = 96;
@@ -223,6 +238,7 @@ public sealed class CMURoundStatisticsQuery(
     public readonly int Page = page;
     public readonly string? ThreatId = threatId;
     public readonly string? PopulationBand = populationBand;
+    public readonly CMURoundStatisticsPeriod Period = period;
 }
 
 [Serializable, NetSerializable]

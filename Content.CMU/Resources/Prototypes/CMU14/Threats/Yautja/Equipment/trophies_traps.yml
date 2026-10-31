@@ -701,7 +701,6 @@
     blocksXenoHeal: true
     forceXenoHelpEmote: true
     forceHumanPainEmote: true
-    xenoInterferenceDuration: 100
     preyTrackingDuration: 300
   - type: StepTrigger
     active: false
@@ -739,3 +738,58 @@
         density: 30
         mask:
         - ItemMask
+
+# cmss13 /obj/item/stack/yautja_rope, hangs a dead human from the ceiling
+- type: stack
+  id: CMUYautjaRope
+  name: strange rope
+  icon: { sprite: _RMC14/Objects/Power/coil.rsi, state: coil3 }
+  spawn: CMUYautjaRope
+  maxCount: 8
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaRope
+  name: strange rope
+  description: This unassuming rope seems to be covered in markings depicting strange humanoid forms.
+  suffix: Yautja
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Power/coil.rsi
+    state: coil3
+    layers:
+    - map: ["base"]
+      state: coil3
+      color: "#D2B48C"
+  # cmss13 draws the rope with the cable coil icon tinted tan, inhands included
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Power/coil.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#D2B48C"
+      right:
+      - state: inhand-right
+        color: "#D2B48C"
+  - type: Stack
+    stackType: CMUYautjaRope
+    count: 8
+    baseLayer: base
+    layerStates:
+    - coil1
+    - coil2
+    - coil3
+  - type: Appearance
+  - type: MeleeWeapon
+    attackRate: 0.7 # cmss13 attack_speed 1.4 SECONDS
+    damage:
+      types:
+        Blunt: 2
+  - type: YautjaRope
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false

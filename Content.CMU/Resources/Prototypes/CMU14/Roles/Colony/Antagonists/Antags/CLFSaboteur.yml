@@ -52,6 +52,8 @@
   id: CLFSaboteurRole
   name: cmu-antag-clf-saboteur-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: cmu-antag-clf-saboteur-objective
 
 - type: startingGear

@@ -15,7 +15,9 @@
 
   - [textlink="Organ and Bone Medications" link="CMUGuideMedsOrgans"]: repairing organs, restarting the heart, and mending bones.
 
-  - [textlink="Other Medications" link="CMUGuideMedsOther"]: cryogenics, body temperature and everything else.
+  - [textlink="Cryogenic Medicines and Recipes" link="CMUGuideMedsCryogenic"]: cold treatments, mixing ratios and precursor recipes.
+
+  - [textlink="Other Medications" link="CMUGuideMedsOther"]: bleeding, body temperature and everything else.
 
   ## General Rules
   - Every medicine has an [bold]overdose[/bold] amount. Go over it and the drug starts hurting the patient instead. Each medicine's card shows its overdose.

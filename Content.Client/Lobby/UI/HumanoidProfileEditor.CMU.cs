@@ -365,6 +365,8 @@ public sealed partial class HumanoidProfileEditor
         DistressSignalTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-government-jobs-tab"));
         DistressSignalTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-threat-roles-tab"));
         DistressSignalTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
+        ForceOnForceTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-military-jobs-tab"));
+        ForceOnForceTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-colony-jobs-tab"));
     }
 
     private void UpdateCmuControls()
@@ -680,10 +682,15 @@ public sealed partial class HumanoidProfileEditor
         SetDirty();
     }
 
+    // CMU14 method: keep the Character Records build and visible body in sync.
     private void SetBuild(BuildType value)
     {
-        Profile = Profile?.WithBuild(value);
-        SetDirty();
+        if (Profile is null)
+            return;
+
+        Profile = Profile.WithBuild(value);
+        _markingsModel.Markings = Profile.Appearance.Markings;
+        ReloadPreview();
     }
 
     private void SetHideMetaInformation(bool value)

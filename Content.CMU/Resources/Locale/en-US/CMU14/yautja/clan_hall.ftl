@@ -70,15 +70,12 @@ cmu-yautja-hall-new-clan-description = No description yet.
 
 # leaderboard tab
 cmu-yautja-hall-board-clans = Clans
-cmu-yautja-hall-board-hunters = Hunters
 cmu-yautja-hall-col-clan = Clan
 cmu-yautja-hall-col-leader = Leader
 cmu-yautja-hall-col-members = Members
 cmu-yautja-hall-col-honor = Honor
-cmu-yautja-hall-filter-all = All clans
 cmu-yautja-hall-clan-locked = Only Blooded hunters can view other clans.
 cmu-yautja-hall-no-clans = There are no clans.
-cmu-yautja-hall-no-hunters = No hunters found.
 cmu-yautja-hall-found = New clan
 
 # hunter tab
@@ -134,6 +131,7 @@ cmu-yautja-hall-done-ancient = Made Ancient.
 cmu-yautja-hall-done-unancient = Ancient removed.
 cmu-yautja-hall-done-purge = Profile deleted.
 cmu-yautja-hall-done-saved = Saved.
+cmu-yautja-hall-done-sect-deleted = Sect deleted.
 cmu-yautja-hall-done-honor = Honor set.
 cmu-yautja-hall-done-found = Clan created.
 cmu-yautja-hall-done-disband = Clan disbanded.
@@ -154,6 +152,8 @@ cmu-yautja-hall-denied-text = Text is empty or too long.
 cmu-yautja-hall-denied-sigil = Invalid mask.
 cmu-yautja-hall-denied-color = Colour must be #RRGGBB.
 cmu-yautja-hall-denied-name = Name is empty or too long.
+cmu-yautja-hall-denied-sect-gone = That sect or hunter isn't in this clan anymore.
+cmu-yautja-hall-denied-sect-limit = This clan already has the most sects it can have.
 cmu-yautja-hall-denied-honor = You can't set honor.
 cmu-yautja-hall-denied-honor-value = Honor can't be negative.
 cmu-yautja-hall-denied-found = You can't create or disband clans.
@@ -165,3 +165,12 @@ cmu-yautja-hall-denied-clan-gone = That clan no longer exists.
 cmu-yautja-hall-denied-whitelist = You can't change whitelists.
 cmu-yautja-hall-denied-whitelist-flags = Invalid whitelist flags.
 cmu-yautja-hall-denied-round = You can't change hunt settings.
+
+# sects
+cmu-yautja-hall-sects = Sects
+cmu-yautja-hall-sects-empty = No sects yet.
+cmu-yautja-hall-sect-new = New sect
+cmu-yautja-hall-sect-delete = Delete
+cmu-yautja-hall-sect-name = Sect name
+cmu-yautja-hall-sect-purpose = What the sect is for
+cmu-yautja-hall-sect-none = No sect

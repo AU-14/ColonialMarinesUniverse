@@ -21,13 +21,30 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
-    xenoTackleSuccessChance: 0.75
-    xenoTackleSuccessesRequired: 3
-    xenoTackleExpireAfter: 10
+  # cmss13 /datum/pain/yautja ignores a hostile xeno dragging them in crit
+  - type: CMUNoDragSuffocation
+  # cmss13 YAUTJA_SLOWED_AMOUNT / YAUTJA_SUPERSLOWED_AMOUNT take most of the human slow off preds (+0.75 / +1 move
+  # delay instead of +2 / +4). without this they got the full marine slow from CMMobHuman
+  - type: RMCSpeciesSlowdownModifier
+    slowModifier: 0.75
+    superSlowModifier: 1
+  # CMU14: Yautja throw further than a human. ThrowHeldItem clamps the throw distance to HandsComponent.ThrowRange
+  # (human default 8) or the item's ItemThrowRange, and then throws with compensateFriction, so the object stops on the
+  # target
+  # Why: ThrowHeldItem clamps the throw distance to HandsComponent.ThrowRange (human default 8) or the item's
+  # ItemThrowRange, then throws with compensateFriction so the object stops on the target - the range is what lets a
+  # distant cursor actually be reached.
+  - type: Hands
+    throwRange: 14
   - type: YautjaLimbRegeneration
     requiredSeverAttempts: 2
     severAttemptWindow: 30
     regrowDelay: 300
+  # the queen rolls 40% a hit to take a limb, which shredded hunters. a quarter of that here
+  - type: XenoMeleeSeverResistance
+    chanceMultiplier: 0.25
+  # no crit grace, cmss13 preds drop the tick they cross crit. this beeps first so they know to SD
+  - type: YautjaVitalsWarning
   - type: TacticalMapTracked
     trackDead: true
   - type: YautjaMapTracked
@@ -72,6 +89,8 @@
     - CMUYautjaDistract
     - CMUYautjaDeathCry
     - CMUYautjaDeathLaugh
+  - type: Vocal
+    emoteAction: null
   - type: MeleeWeapon
     soundHit:
       collection: Punch
@@ -108,8 +127,12 @@
         Bloodloss: -1
     damageBleedModifiers: CMBloodlossHuman
   - type: MovementSpeedModifier
-    baseWalkSpeed: 3.7
-    baseSprintSpeed: 7.1
+    baseWalkSpeed: 4.2
+    baseSprintSpeed: 8.0
+  # preds shrug off cold, without this their open gear lets them cool to room temp and read hypothermic.
+  # heating is left alone so fire still cooks them
+  - type: TemperatureProtection
+    coolingCoefficient: 0.1
   # cmss13 /datum/pain/yautja: nothing until horrible, and horrible only gives the distressing slowdown
   - type: PainShock
     minimumFeltTier: Shock
@@ -127,6 +150,9 @@
     emoteCooldown: 8
     hiddenFromChatWindow: true
   - type: MotionDetectorTracked
+  # a recovered hunter body is worth as much intel as a queen's
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 1.4
 
 - type: entity
   parent: CMUMobYautja
@@ -166,8 +192,6 @@
     - CMUYautjaBadBloodGruntGear19
     - CMUYautjaBadBloodGruntGear20
     - CMUYautjaBadBloodGruntGear21
-  - type: DropshipHijacker
-    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: CMUMobYautja
@@ -202,14 +226,14 @@
     - CMUYautjaBadBloodLeaderGear14
     - CMUYautjaBadBloodLeaderGear15
     - CMUYautjaBadBloodLeaderGear16
-  - type: DropshipHijacker
-    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: AppearanceYautja
   id: CMUMobYautjaDummy
   name: Yautja Dummy
   categories: [HideSpawnMenu]
+# Military Caste ERT bodies, cmss13 /datum/equipment_preset/yautja/soldier. YautjaMilitaryCasteSystem names and
+# briefs them when a player takes one. Spawned by the CMUYautjaMilitaryCaste third parties or the admin spawn menu.
 - type: entity
   parent: CMUMobYautja
   id: CMUMobYautjaMilitaryCasteSoldier
@@ -218,21 +242,64 @@
   components:
   - type: YautjaMilitaryCaste
     caste: Soldier
+  - type: Skills
+    preset: CMUSkillPresetYautjaSoldier
   - type: Loadout
     prototypes:
     - CMUYautjaMilitaryCasteSoldierGear
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-yautja-mcaste-soldier-ghost-name
+    description: cmu-yautja-mcaste-soldier-ghost-description
+    rules: cmu-yautja-mcaste-ghost-rules
+    reregister: false
+    job: CMUYautjaMilitaryCasteSoldier
+    raffle:
+      settings: short
 
 - type: entity
-  parent: CMUMobYautja
+  parent: CMUMobYautjaMilitaryCasteSoldier
   id: CMUMobYautjaMilitaryCasteEnforcer
   name: Yautja Military Caste Enforcer
-  suffix: Yautja, Military Caste, Event
   components:
   - type: YautjaMilitaryCaste
     caste: Enforcer
   - type: Loadout
     prototypes:
     - CMUYautjaMilitaryCasteEnforcerGear
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-yautja-mcaste-enforcer-ghost-name
+    description: cmu-yautja-mcaste-enforcer-ghost-description
+    rules: cmu-yautja-mcaste-ghost-rules
+    reregister: false
+    job: CMUYautjaMilitaryCasteEnforcer
+    raffle:
+      settings: short
+
+# cmss13 /low_threat presets: plasma rifle and the normal defoliator instead of the carbine and deathsquad tanks
+- type: entity
+  parent: CMUMobYautjaMilitaryCasteSoldier
+  id: CMUMobYautjaMilitaryCasteSoldierLowThreat
+  suffix: Yautja, Military Caste, Event, Low Threat
+  components:
+  - type: Loadout
+    prototypes:
+    - CMUYautjaMilitaryCasteSoldierLowThreatGear
+
+- type: entity
+  parent: CMUMobYautjaMilitaryCasteEnforcer
+  id: CMUMobYautjaMilitaryCasteEnforcerLowThreat
+  suffix: Yautja, Military Caste, Event, Low Threat
+  components:
+  - type: Loadout
+    prototypes:
+    - CMUYautjaMilitaryCasteEnforcerLowThreatGear
 
 - type: entity
   parent: CMUMobYautja
@@ -261,6 +328,15 @@
   name: Yautja Youngblood
   suffix: Yautja, Youngblood, Event
   components:
+  - type: CMUNoDragSuffocation
+  # Why: without a VisualBodyComponent, SharedVisualBodySystem.ApplyProfileTo resolves nothing and returns silently, so
+  # the applied profile never reaches the body organs. Hunters inherit it from CMUMobYautja; youngbloods parent the human
+  # base and must declare it.
+  - type: VisualBody
+  # same queen sever cut as hunters, and youngbloods don't even regrow
+  - type: XenoMeleeSeverResistance
+    chanceMultiplier: 0.25
+  - type: YautjaVitalsWarning
   - type: Language
     spokenLanguages:
     - Yautja
@@ -271,7 +347,16 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
+    clanRank: YoungBlood
+  - type: Hands
+    throwRange: 14
   - type: YautjaYoungblood
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: CMUYautjaHunger
+      Thirst:
+        prototype: CMUYautjaThirst
   - type: IgnoreXenoWeedsSlowdown
   - type: SlowOnPull
     multiplier: 1
@@ -297,7 +382,10 @@
     - CMUYautjaPain
     - CMUYautjaDeathCry
     - CMUYautjaDeathLaugh
+  # CMU14: as on CMUMobYautja - the youngblood declares its own Vocal because it does not inherit that mob, and it
+  # must not grant the hotbar Scream action either: emoteAction null means VocalSystem grants no action for it.
   - type: Vocal
+    emoteAction: null
   - type: Body
   - type: MeleeWeapon
     soundHit:
@@ -335,8 +423,10 @@
         Bloodloss: -1
     damageBleedModifiers: CMBloodlossHuman
   - type: MovementSpeedModifier
-    baseWalkSpeed: 4.4
-    baseSprintSpeed: 8.4
+    baseWalkSpeed: 4.2
+    baseSprintSpeed: 8.0
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 1.4
   - type: PainShock
     minimumFeltTier: Shock
     maximumFeltTier: Severe

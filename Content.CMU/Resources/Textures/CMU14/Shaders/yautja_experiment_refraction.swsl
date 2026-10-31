@@ -1,0 +1,18 @@
+light_mode unshaded;
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp float phase;
+uniform highp float strength;
+uniform highp float opacity;
+uniform highp float optical;
+
+void fragment() {
+    highp vec2 q = UV2 * 2.0 - 1.0;
+    highp float mask = 1.0 - smoothstep(0.35, 0.98, length(q));
+    highp vec2 current = vec2(sin(q.y * 14.0 - phase * 3.0) + sin(q.y * 29.0 + phase * 2.0) * 0.3,
+        cos(q.x * 11.0 + phase * 2.4) * 0.4);
+    current = mix(current, q * (1.5 + sin(length(q) * 18.0 - phase * 3.0) * 0.4), optical);
+    highp vec2 sample_uv = clamp(SCREEN_UV + current * SCREEN_PIXEL_SIZE * strength * mask,
+        SCREEN_PIXEL_SIZE * 0.5, vec2(1.0) - SCREEN_PIXEL_SIZE * 0.5);
+    highp vec3 background = zTextureSpec(SCREEN_TEXTURE, sample_uv).rgb;
+    COLOR = vec4(background, mask * opacity);
+}

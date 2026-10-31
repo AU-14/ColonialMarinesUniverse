@@ -1,4 +1,6 @@
 # Rules
+cmu-guidebook-history-back = Back
+cmu-guidebook-history-forward = Forward
 cmu-guide-entry-ship-weapons = Ship Orbital Support Weapons
 cmu-guide-entry-rules-overview = Rules Overview
 cmu-guide-entry-rules-zero-tolerance = Zero Tolerance Rules
@@ -93,7 +95,6 @@ cmu-guide-entry-research-simulator = The Synthesis Simulator
 cmu-guide-entry-research-hydroponics = Hydroponics
 
 # Antagonists
-cmu-guide-entry-antag-rider = The Rider
 cmu-guide-entry-hearing-loss = Hearing Loss
 cmu-guide-entry-cmu = Guidebook
 cmu-guide-entry-mortar = Mortar
@@ -148,6 +149,7 @@ cmu-guide-entry-meds-suffocation = Suffocation Medications
 cmu-guide-entry-meds-pain = Painkillers
 cmu-guide-entry-meds-organs = Organ and Bone Medications
 cmu-guide-entry-meds-other = Other Medications
+cmu-guide-entry-meds-cryogenic = Cryogenic Medicines and Recipes
 
 cmu-guide-entry-cooking = Cooking
 cmu-guide-entry-lore = Lore

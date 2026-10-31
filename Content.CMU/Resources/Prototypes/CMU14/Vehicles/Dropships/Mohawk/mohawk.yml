@@ -438,11 +438,11 @@
   - type: DropshipPointVisuals
     spriteOverrides:
       fuel_enhancer_installed:
-        sprite: CMU14/Dropships/Mohawk/obj/structures/props/dropship/dropship_equipment64.rsi
-        state: fuel_enhancer_omaha
+        sprite: CMU14/Dropships/Mohawk/obj/structures/props/dropship/dropship_equipment.rsi
+        state: fuel_enhancer_mohawk
       cooling_system_installed:
-        sprite: CMU14/Dropships/Mohawk/obj/structures/props/dropship/dropship_equipment64.rsi
-        state: cooling_system_omaha
+        sprite: CMU14/Dropships/Mohawk/obj/structures/props/dropship/dropship_equipment.rsi
+        state: cooling_system_mohawk
   - type: Clickable
     bounds:
       all: '-0.5,-0.5,0.5,0.5'
@@ -552,6 +552,28 @@
 
 - type: cameraNetwork
   id: CMUMohawkMidway
+  name: cmu-mohawk-camera-midway
+  configurable: true
+
+# One Mohawk spawns per side, so these get a Govfor/Opfor variant appended at
+# load; on the shared seeds every ship would see the enemy transport's cameras.
+- type: cameraNetwork
+  id: CMUMohawkOmahaGovfor
+  name: cmu-mohawk-camera-omaha
+  configurable: true
+
+- type: cameraNetwork
+  id: CMUMohawkOmahaOpfor
+  name: cmu-mohawk-camera-omaha
+  configurable: true
+
+- type: cameraNetwork
+  id: CMUMohawkMidwayGovfor
+  name: cmu-mohawk-camera-midway
+  configurable: true
+
+- type: cameraNetwork
+  id: CMUMohawkMidwayOpfor
   name: cmu-mohawk-camera-midway
   configurable: true
 

@@ -339,6 +339,10 @@
     - AU14JobOPFOROfficerMedical
     - AU14JobOPFORAuxSupportSynth
     sections:
+    - name: cmu-vendor-section-pressurized-canisters
+      entries:
+      - id: RMCPouchReagentCanister
+        amount: 1
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
       entries:
@@ -699,7 +703,7 @@
         amount: 5
     - name: Backpack
       entries:
-      - id: RMCBackpackRTOPMC
+      - id: ANPRC117GRadioIssued
         amount: 5
     - name: Pouches
       entries:

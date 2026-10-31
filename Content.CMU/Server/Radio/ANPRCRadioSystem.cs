@@ -514,6 +514,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
             anchor.Channels.Add(channel);
         }
+        _range.RefreshAnchorChannels((ent.Owner, anchor));
     }
 
     public void StartPlant(Entity<ANPRCRadioComponent> ent, EntityUid user)

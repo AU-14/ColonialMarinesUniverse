@@ -106,6 +106,14 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return;
 
         var userId = actor.PlayerSession.UserId;
+        // CMU14: reject stale choices before cancelling another hive's pending offer.
+        // Existing members can still leave the queue after their hive becomes inactive.
+        if (!_hive.CMUIsHiveActive((hiveId, hiveComp)) &&
+            (!TryGetQueue(hiveId, out var existingQueue) || !existingQueue.TryGetUserStatus(userId, out _)))
+        {
+            return;
+        }
+
         var actorEntity = actor.PlayerSession.AttachedEntity ?? ent.Owner;
         var queue = QueueFor(hiveId);
 

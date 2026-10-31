@@ -438,7 +438,9 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
 
         var direction = rotation.GetCardinalDir();
         coordinates = coordinates.Offset(direction.ToVec());
-        if (_rmcMap.IsTileBlocked(coordinates, CollisionGroup.MidImpassable))
+        // CMU14: barricades may share the deployment tile's edges.
+        // if (_rmcMap.IsTileBlocked(coordinates, CollisionGroup.MidImpassable))
+        if (!_rmcMap.CanDeployWeaponOn(coordinates, CollisionGroup.MidImpassable, checkStructures: false))
         {
             var msg = Loc.GetString("rmc-sentry-need-open-area", ("sentry", ent));
             _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);

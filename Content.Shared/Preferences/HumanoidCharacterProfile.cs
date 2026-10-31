@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Xenonids.Name;
 using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
+using Content.Shared.CMU14.Preferences; // CMU14
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CCVar;
@@ -379,7 +380,8 @@ namespace Content.Shared.Preferences
                 "insurgency" => "Insurgency",
                 "colonyfall" => "ColonyFall",
                 "distresssignal" => "DistressSignal",
-                // CMU14: Force on Force roles, hijacking, announcements and identification.
+                // CMU14: Force on Force keeps its own preference store; military and colony
+                // role preferences are edited on the Force on Force tab directly.
                 "forceonforce" => "ForceOnForce",
                 _ => gamemode.Trim()
             };
@@ -747,7 +749,9 @@ namespace Content.Shared.Preferences
 
         public HumanoidCharacterProfile WithSex(Sex sex)
         {
-            return new(this) { Sex = sex };
+            var profile = new HumanoidCharacterProfile(this) { Sex = sex }; // CMU14: keep the record build's overlay matched to sex.
+            profile.Appearance = CMUHumanBodyType.Apply(profile.Appearance, profile.Species, sex, profile.Build); // CMU14
+            return profile;
         }
 
         public HumanoidCharacterProfile WithVoice(ProtoId<EmoteSoundsPrototype> voice)
@@ -762,13 +766,17 @@ namespace Content.Shared.Preferences
 
         public HumanoidCharacterProfile WithSpecies(string species)
         {
-            return new(this) { Species = species };
+            var profile = new HumanoidCharacterProfile(this) { Species = species }; // CMU14: remove or restore the human build overlay when species changes.
+            profile.Appearance = CMUHumanBodyType.Apply(profile.Appearance, profile.Species, profile.Sex, profile.Build); // CMU14
+            return profile;
         }
 
 
         public HumanoidCharacterProfile WithCharacterAppearance(HumanoidCharacterAppearance appearance)
         {
-            return new(this) { Appearance = appearance };
+            var profile = new HumanoidCharacterProfile(this); // CMU14: Build controls the human body overlay even when other markings change.
+            profile.Appearance = CMUHumanBodyType.Apply(appearance, profile.Species, profile.Sex, profile.Build); // CMU14
+            return profile;
         }
 
         public HumanoidCharacterProfile WithSpawnPriorityPreference(SpawnPriorityPreference spawnPriority)
@@ -940,7 +948,9 @@ namespace Content.Shared.Preferences
 
         public HumanoidCharacterProfile WithBuild(BuildType build)
         {
-            return new(this) { Build = build };
+            var profile = new HumanoidCharacterProfile(this) { Build = build }; // CMU14: records Build is the source of the human body overlay.
+            profile.Appearance = CMUHumanBodyType.Apply(profile.Appearance, profile.Species, profile.Sex, build); // CMU14
+            return profile;
         }
 
         public HumanoidCharacterProfile WithHideMetaInformation(bool hideMetaInformation)
@@ -1043,11 +1053,12 @@ namespace Content.Shared.Preferences
         public IReadOnlyDictionary<ProtoId<JobPrototype>, JobPriority> GetJobPrioritiesForGamemode(string? gamemode)
         {
             var key = NormalizePreferenceGamemode(gamemode);
-            if (string.IsNullOrEmpty(key) ||
-                !_gamemodeJobPriorities.TryGetValue(key, out var priorities))
-            {
+            // CMU14
+            if (string.IsNullOrEmpty(key))
                 return _jobPriorities;
-            }
+
+            if (!_gamemodeJobPriorities.TryGetValue(key, out var priorities))
+                return _jobPriorities;
 
             return NormalizeJobPriorities(priorities);
         }
@@ -1501,7 +1512,8 @@ namespace Content.Shared.Preferences
                 _ => BuildType.Average // Invalid enum values.
             };
 
-            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex);
+            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, sex); // CMU14: validate markings against the normalized sex.
+            appearance = CMUHumanBodyType.Apply(appearance, Species, sex, build); // CMU14: migrate and validate saved character builds.
 
             var prefsUnavailableMode = PreferenceUnavailable switch
             {

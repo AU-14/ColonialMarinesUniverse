@@ -47,6 +47,7 @@ public sealed partial class YautjaClanHallWindow
         _editMetal.OnItemSelected += args => _editMetal.SelectId(args.Id);
         _editHonor = Hud.LineEdit();
         _editHonor.MinWidth = 100;
+        BuildSectEditors();
 
         return _clanPage;
     }
@@ -57,6 +58,8 @@ public sealed partial class YautjaClanHallWindow
         foreach (var edit in _textEdits.Values)
             edit.Orphan();
         foreach (var control in new Control[] { _editName, _editColor, _editMask, _editMetal, _editHonor })
+            control.Orphan();
+        foreach (var control in SectEditors())
             control.Orphan();
 
         if (state.Clan is not { } clan)
@@ -137,6 +140,8 @@ public sealed partial class YautjaClanHallWindow
         left.AddChild(TextBlock(clan, YautjaClanHallText.Description, "cmu-yautja-hall-description", clan.Description, null, clan.CanEditPresentation));
         if (clan.EliteNotes != null)
             left.AddChild(TextBlock(clan, YautjaClanHallText.EliteNotes, "cmu-yautja-hall-elite-notes", clan.EliteNotes, "cmu-yautja-hall-notes-empty", clan.CanEditEliteNotes));
+        if (SectsBlock(clan) is { } sects)
+            left.AddChild(sects);
 
         var right = VBox(10);
         if (clan.Petitions is { Count: > 0 } petitions)
@@ -164,7 +169,7 @@ public sealed partial class YautjaClanHallWindow
             rank.Margin = new Thickness(0, 4, 0, 0);
             members.Body.AddChild(rank);
             foreach (var member in group)
-                members.Body.AddChild(HunterRow(member));
+                members.Body.AddChild(MemberRow(clan, member));
         }
 
         if (clan.Members.Count == 0)

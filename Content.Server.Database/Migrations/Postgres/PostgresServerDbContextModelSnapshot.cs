@@ -2543,6 +2543,37 @@ namespace Content.Server.Database.Migrations.Postgres
 
                     b.ToTable("yautja_clan_petition", (string)null);
                 });
+            modelBuilder.Entity("Content.Server.Database.YautjaClanSect", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("yautja_clan_sect_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClanId")
+                        .HasColumnType("integer")
+                        .HasColumnName("clan_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("PK_yautja_clan_sect");
+
+                    b.HasIndex("ClanId")
+                        .HasDatabaseName("IX_yautja_clan_sect_clan_id");
+
+                    b.ToTable("yautja_clan_sect", (string)null);
+                });
             // cmu edit end
 
             modelBuilder.Entity("Content.Server.Database.YautjaClanMember", b =>
@@ -2577,6 +2608,10 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Property<int>("Rank")
                         .HasColumnType("integer")
                         .HasColumnName("rank");
+
+                    b.Property<int?>("SectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("sect_id");
 
                     b.HasKey("Id")
                         .HasName("PK_yautja_clan_member");

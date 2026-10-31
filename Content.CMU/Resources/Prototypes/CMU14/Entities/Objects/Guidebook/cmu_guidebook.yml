@@ -17,7 +17,6 @@
   - CMUGuideEngineering
   - CMUGuideIntelObjectives
   - CMUResearchIndex
-  - CMUGuideRoleRider
   - CMUChemicals
   - CMUGuideCooking
   - CMUGuideLore
@@ -381,6 +380,7 @@
   - CMUGuideMedsSuffocation
   - CMUGuideMedsPain
   - CMUGuideMedsOrgans
+  - CMUGuideMedsCryogenic
   - CMUGuideMedsOther
 
 - type: guideEntry
@@ -429,8 +429,15 @@
   parent: RMC
   id: CMUGuideMedsOther
   name: cmu-guide-entry-meds-other
-  priority: 6
+  priority: 7
   text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsOther.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsCryogenic
+  name: cmu-guide-entry-meds-cryogenic
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsCryogenic.xml"
 
 - type: guideEntry
   parent: RMC

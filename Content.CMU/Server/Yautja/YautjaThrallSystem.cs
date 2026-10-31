@@ -97,6 +97,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private YautjaMarkSystem _marks = default!;
+    [Dependency] private YautjaThrallHeroSystem _thrallHero = default!;
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
@@ -129,7 +130,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         SubscribeLocalEvent<YautjaThrallComponent, IsEquippingTargetAttemptEvent>(OnThrallEquipAttempt);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<YautjaComponent, EntityTerminatingEvent>(OnMasterTerminating);
-        SubscribeLocalEvent<YautjaThrallComponent, YautjaThrallSelfDestructConfirmEvent>(OnThrallSelfDestructConfirm);
+        SubscribeLocalEvent<YautjaComponent, YautjaThrallSelfDestructConfirmEvent>(OnThrallSelfDestructConfirm);
         SubscribeLocalEvent<YautjaHivebrokenXenoComponent, RefreshNameModifiersEvent>(OnHivebrokenRefreshName);
 
         SubscribeLocalEvent<YautjaBracerComponent, YautjaLinkThrallBracerActionEvent>(OnLinkThrallBracer);
@@ -546,16 +547,16 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         return true;
     }
 
-    private void OnThrallSelfDestructConfirm(Entity<YautjaThrallComponent> ent, ref YautjaThrallSelfDestructConfirmEvent args)
+    private void OnThrallSelfDestructConfirm(Entity<YautjaComponent> ent, ref YautjaThrallSelfDestructConfirmEvent args)
     {
         if (!TryGetEntity(args.Master, out var master) ||
+            master.Value != ent.Owner ||
+            !_mob.IsAlive(ent.Owner) ||
             !TryGetEntity(args.ThrallBracer, out var bracerId) ||
             !TryComp(bracerId, out YautjaThrallBracerComponent? bracer) ||
-            ent.Comp.Master != master.Value ||
-            bracer.User != ent.Owner ||
-            !TryFindThrall(master.Value, out var currentThrall) ||
-            currentThrall.Owner != ent.Owner ||
-            !TryGetWornThrallBracer(ent.Owner, out var wornBracer) ||
+            !TryFindThrall(ent.Owner, out var thrall) ||
+            bracer.User != thrall.Owner ||
+            !TryGetWornThrallBracer(thrall.Owner, out var wornBracer) ||
             wornBracer.Owner != bracerId)
         {
             return;
@@ -564,7 +565,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         if (bracer.SelfDestructArmed)
             return;
 
-        ArmThrallSelfDestruct((bracerId.Value, bracer), master.Value, ent.Owner);
+        ArmThrallSelfDestruct((bracerId.Value, bracer), ent.Owner, thrall.Owner);
     }
 
     private void OnGetThrallBracerActions(Entity<YautjaThrallBracerComponent> ent, ref GetItemActionsEvent args)
@@ -625,7 +626,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
 
         args.Cancel();
         args.Reason = "cmu-yautja-thrall-bracer-locked";
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-bracer-locked"), args.User, args.User, PopupType.SmallCaution);
+        // CMU14: cancel silently, same as the hunter bracer above - an unequip attempt (which a right-click
+        // also produces) must not pop a message; the thrall lock still cancels the attempt.
     }
 
     private void OnToggleThrallBracerLock(Entity<YautjaThrallBracerComponent> ent, ref YautjaToggleThrallBracerLockActionEvent args)
@@ -1015,6 +1017,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         thrall.Comp.ThrallBracer = thrallBracer.Owner;
         Dirty(thrall);
         InitializeThrallVendorCategories(thrall);
+        // cmss13 sets the Thrall species right here, in link_bracer
+        _thrallHero.Apply(thrall.Owner);
 
         thrallBracer.Comp.Master = master;
         thrallBracer.Comp.MasterBracer = masterBracer.Owner;
@@ -1045,11 +1049,14 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         thrall.BracerLinked = false;
         thrall.MasterBracer = null;
         thrall.ThrallBracer = null;
+        _thrallHero.Remove(target);
         thrall.Blooded = false;
         thrall.BloodedBy = null;
         thrall.BloodingReason = string.Empty;
         thrall.TechAuthorized = false;
         Dirty(target, thrall);
+        // the flag alone isn't enough, surgery and tech items check the component. a deleted master used to leave it behind
+        RemCompDeferred<YautjaTechAuthorizedComponent>(target);
     }
 
     private void CleanupThrallBracerLink(Entity<YautjaThrallBracerComponent> bracer, bool clearReciprocal)
@@ -1077,6 +1084,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         thrall.MasterBracer = null;
         thrall.ThrallBracer = null;
         Dirty(thrallUid, thrall);
+        _thrallHero.Remove(thrallUid);
     }
 
     private void CaptureHivebreakOriginalState(EntityUid target, YautjaThrallComponent thrall)
@@ -1405,7 +1413,12 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             comp.Blooded = _marks.IsMarkedBy(uid, YautjaMarkKind.Blooded, master);
             comp.BloodedBy = comp.Blooded ? master : null;
             comp.BloodingReason = comp.Blooded ? _marks.GetMarkReason(uid, YautjaMarkKind.Blooded) ?? string.Empty : string.Empty;
-            comp.TechAuthorized = comp.Blooded;
+            // CMU14: this revalidation must not clobber an explicit AuthorizeTechOnConversion grant set when the
+            // thrall was created or reset - that flag is what authorizes a non-blooded thrall, and CM-SS13's
+            // equivalent trait is granted permanently at conversion (yaut_hudprocs.dm:526 gives TRAIT_YAUTJA_TECH
+            // to the newblood). Blooded always authorizes, so this still grants tech when the blooded mark is
+            // present and still leaves a deliberate revocation (which sets TechAuthorized = false) revoked.
+            comp.TechAuthorized = comp.TechAuthorized || comp.Blooded;
             Dirty(uid, comp);
 
             if (comp.TechAuthorized)
@@ -1808,9 +1821,10 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             new(Loc.GetString("cmu-yautja-self-destruct-confirm-no")),
         };
 
+        // cmss13 sends this alert to the thrall, who can just press No. The question is the master's.
         _dialog.OpenOptions(
-            thrall,
-            thrall,
+            master,
+            master,
             Loc.GetString("cmu-yautja-thrall-self-destruct-dialog-title"),
             options,
             Loc.GetString("cmu-yautja-thrall-self-destruct-confirm", ("species", ThrallSelfDestructSpeciesName(thrall))),
@@ -1838,7 +1852,6 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         bracer.Comp.NextSelfDestructWarning = TimeSpan.Zero;
         Dirty(bracer);
 
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-self-destruct-cancelled", ("target", thrall)), master, master);
         _audio.PlayPvs(bracer.Comp.SelfDestructWarningSound, bracer.Owner);
 
         _adminLog.Add(LogType.Action, LogImpact.Medium,

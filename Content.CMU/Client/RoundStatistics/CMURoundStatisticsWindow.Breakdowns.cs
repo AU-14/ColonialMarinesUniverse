@@ -49,7 +49,7 @@ public sealed partial class CMURoundStatisticsWindow
             row.AddChild(Cell(FormatDurationOrNone(planet.AverageDurationSeconds), 100, true));
             row.AddChild(Cell(interactive ? "›" : "", 16));
             AddDataRow(row, interactive ? () => OpenDetail("location-file", PlanetName(planet.PlanetId),
-                new CMURoundStatisticsQuery(_query.Preset, planet.PlanetId)) : null);
+                new CMURoundStatisticsQuery(_query.Preset, planet.PlanetId, period: _query.Period)) : null);
         }
         if (mode.Total - mode.Planets.Sum(planet => planet.Total) is > 0 and var missing)
             _body.AddChild(Hint(Loc.GetString("cmu-round-stats-missing-planets", ("count", missing))));
@@ -81,7 +81,7 @@ public sealed partial class CMURoundStatisticsWindow
             row.AddChild(Cell(interactive ? "›" : "", 16));
             AddDataRow(row, interactive ? () => OpenDetail("population-file",
                 Loc.GetString("cmu-round-stats-players", ("band", band.Band)),
-                new CMURoundStatisticsQuery(_query.Preset, populationBand: band.Band)) : null);
+                new CMURoundStatisticsQuery(_query.Preset, populationBand: band.Band, period: _query.Period)) : null);
         }
         if (mode.PlayerCountBands.Count == 0)
             _body.AddChild(MakeEmptyPanel(Loc.GetString("cmu-round-stats-empty")));
@@ -107,7 +107,7 @@ public sealed partial class CMURoundStatisticsWindow
             row.AddChild(Cell((threat.SideAWins + threat.SideBWins).ToString(), 100, true));
             row.AddChild(Cell("›", 16));
             AddDataRow(row, () => OpenDetail("threat-file", ThreatName(threat.ThreatId),
-                new CMURoundStatisticsQuery(_query.Preset, threatId: threat.ThreatId)));
+                new CMURoundStatisticsQuery(_query.Preset, threatId: threat.ThreatId, period: _query.Period)));
         }
         var missing = mode.Total - mode.Threats.Sum(threat => threat.Total);
         if (missing > 0)
@@ -277,7 +277,7 @@ public sealed partial class CMURoundStatisticsWindow
         var searchRow = new BoxContainer { SeparationOverride = 8 };
         var search = new LineEdit { Text = _query.Search, PlaceHolder = Loc.GetString("cmu-round-stats-search-placeholder"), HorizontalExpand = true };
         CrtLobbyTheme.Apply(search, useCrtTypography: true);
-        void Submit() => Query(new CMURoundStatisticsQuery(_query.Preset, search: search.Text));
+        void Submit() => Query(new CMURoundStatisticsQuery(_query.Preset, search: search.Text, period: _query.Period));
         search.OnTextEntered += _ => Submit();
         searchRow.AddChild(search);
         searchRow.AddChild(ActionButton("search", Submit));
@@ -307,11 +307,13 @@ public sealed partial class CMURoundStatisticsWindow
         }
         var pages = Math.Max(1, (_dashboard.ArchiveTotal + CMURoundStatisticsQuery.PageSize - 1) / CMURoundStatisticsQuery.PageSize);
         var pager = new BoxContainer { SeparationOverride = 8 };
-        var previous = ActionButton("previous", () => Query(new CMURoundStatisticsQuery(_query.Preset, search: _query.Search, page: _query.Page - 1)));
+        var previous = ActionButton("previous", () => Query(new CMURoundStatisticsQuery(_query.Preset,
+            search: _query.Search, page: _query.Page - 1, period: _query.Period)));
         previous.Disabled = _query.Page == 0;
         pager.AddChild(previous);
         pager.AddChild(Hint(Loc.GetString("cmu-round-stats-page", ("page", _query.Page + 1), ("pages", pages), ("count", _dashboard.ArchiveTotal))));
-        var next = ActionButton("next", () => Query(new CMURoundStatisticsQuery(_query.Preset, search: _query.Search, page: _query.Page + 1)));
+        var next = ActionButton("next", () => Query(new CMURoundStatisticsQuery(_query.Preset,
+            search: _query.Search, page: _query.Page + 1, period: _query.Period)));
         next.Disabled = _query.Page + 1 >= pages;
         pager.AddChild(next);
         _body.AddChild(pager);

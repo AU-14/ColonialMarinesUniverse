@@ -27,6 +27,20 @@
   - predroar
 
 - type: emote
+  id: CMUYautjaLoudRoar
+  name: cmu-yautja-emote-name-loudroar
+  category: Vocal
+  icon: Interface/Actions/scream.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-loudroar"]
+  chatTriggers:
+  - yautjaloudroar
+  - predloudroar
+
+- type: emote
   id: CMUYautjaLaugh
   name: cmu-yautja-emote-name-laugh
   category: Vocal
@@ -263,7 +277,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-anytime"]
   chatTriggers:
   - yautjavoiceanytime
 
@@ -276,7 +289,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-helpme"]
   chatTriggers:
   - yautjavoicehelpme
 
@@ -289,7 +301,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-iseeyou"]
   chatTriggers:
   - yautjavoiceiseeyou
 
@@ -302,7 +313,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-itsatrap"]
   chatTriggers:
   - yautjavoiceitsatrap
 
@@ -315,7 +325,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-overhere"]
   chatTriggers:
   - yautjavoiceoverhere
 
@@ -328,7 +337,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-turnaround"]
   chatTriggers:
   - yautjavoiceturnaround
 
@@ -341,7 +349,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-comeonout"]
   chatTriggers:
   - yautjavoicecomeonout
 
@@ -354,7 +361,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-overthere"]
   chatTriggers:
   - yautjavoiceoverthere
 
@@ -367,7 +373,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-uglyfreak"]
   chatTriggers:
   - yautjavoiceuglyfreak
 
@@ -380,7 +385,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-luckyyou"]
   chatTriggers:
   - yautjavoiceluckyyou
 
@@ -393,7 +397,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-justyou"]
   chatTriggers:
   - yautjavoicejustyou
 
@@ -406,7 +409,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-tellme"]
   chatTriggers:
   - yautjavoicetellme
 
@@ -419,7 +421,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-doitrookie"]
   chatTriggers:
   - yautjavoicedoitrookie
 
@@ -432,7 +433,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-forwardmarine"]
   chatTriggers:
   - yautjavoiceforwardmarine
 
@@ -445,7 +445,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-voice-burnyoufucker"]
   chatTriggers:
   - yautjavoiceburnyoufucker
 
@@ -458,7 +457,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-fake-aliengrowl"]
   chatTriggers:
   - yautjafakealiengrowl
 
@@ -471,7 +469,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-fake-alienhelp"]
   chatTriggers:
   - yautjafakealienhelp
 
@@ -484,7 +481,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-fake-malescream"]
   chatTriggers:
   - yautjafakemalescream
 
@@ -497,7 +493,6 @@
   whitelist:
     components:
     - Yautja
-  chatMessages: ["cmu-yautja-emote-msg-fake-femalescream"]
   chatTriggers:
   - yautjafakefemalescream
 

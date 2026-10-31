@@ -21,7 +21,7 @@ public sealed partial class CMUOpenStumpComponent : Component
 }
 
 [DataDefinition, Serializable, NetSerializable]
-public sealed partial class CMUStump
+public sealed partial class CMUStump : IRobustCloneable<CMUStump>
 {
     [DataField]
     public BodyPartType Type;
@@ -36,4 +36,12 @@ public sealed partial class CMUStump
     /// <summary>What to give back when the stump tourniquet is taken off.</summary>
     [DataField]
     public EntProtoId? ClampRefund;
+
+    public CMUStump Clone() => new()
+    {
+        Type = Type,
+        Symmetry = Symmetry,
+        Clamped = Clamped,
+        ClampRefund = ClampRefund,
+    };
 }

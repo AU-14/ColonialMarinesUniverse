@@ -18,16 +18,19 @@ public sealed partial class YautjaMarkForHuntActionEvent : EntityTargetActionEve
 
 public sealed partial class YautjaOpenBracerMenuActionEvent : InstantActionEvent;
 
-public sealed partial class YautjaRecallActionEvent : InstantActionEvent;
-
 public sealed partial class YautjaCallDiscActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaCallCombiActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaButcherActionEvent : InstantActionEvent;
 
+public sealed partial class YautjaLeapActionEvent : WorldTargetActionEvent;
+
 [Serializable, NetSerializable]
 public sealed record YautjaButcherTargetSelectedEvent(NetEntity User, NetEntity Target);
+
+[Serializable, NetSerializable]
+public sealed record YautjaHonorDuelAcceptedEvent(NetEntity Challenger);
 
 [Serializable, NetSerializable]
 public sealed record YautjaButcherProcedureSelectedEvent(NetEntity User, NetEntity Target, YautjaButcherProcedure Procedure);
@@ -255,7 +258,12 @@ public sealed class YautjaBracerPanelState(
     bool thrallSelfDestructArmed,
     bool thrallBracerLocked,
     YautjaTrackerReadout trackerReadout,
-    List<YautjaGearTrackerEntry> trackedGear) : BoundUserInterfaceState
+    List<YautjaGearTrackerEntry> trackedGear,
+    List<YautjaBracerFabricatorEntry>? fabricator = null,
+    YautjaSelfDestructExplosionType explosionType = YautjaSelfDestructExplosionType.Small,
+    TimeSpan selfDestructAt = default,
+    bool notificationSound = true,
+    bool nameVisible = true) : BoundUserInterfaceState
 {
     public readonly int Charge = charge;
     public readonly int MaxCharge = maxCharge;
@@ -268,6 +276,22 @@ public sealed class YautjaBracerPanelState(
     public readonly bool ThrallBracerLocked = thrallBracerLocked;
     public readonly YautjaTrackerReadout TrackerReadout = trackerReadout;
     public readonly List<YautjaGearTrackerEntry> TrackedGear = trackedGear;
+    public readonly List<YautjaBracerFabricatorEntry> Fabricator = fabricator ?? new();
+    public readonly YautjaSelfDestructExplosionType ExplosionType = explosionType;
+    public readonly TimeSpan SelfDestructAt = selfDestructAt;
+    public readonly bool NotificationSound = notificationSound;
+    public readonly bool NameVisible = nameVisible;
+}
+
+// one fabricator recipe as the panel shows it: what it costs, when it's off cooldown, and
+// whether this bracer can make it at all
+[Serializable, NetSerializable]
+public sealed class YautjaBracerFabricatorEntry(YautjaBracerPanelCommand command, int cost, TimeSpan readyAt, bool available = true)
+{
+    public readonly YautjaBracerPanelCommand Command = command;
+    public readonly int Cost = cost;
+    public readonly TimeSpan ReadyAt = readyAt;
+    public readonly bool Available = available;
 }
 
 [Serializable, NetSerializable]

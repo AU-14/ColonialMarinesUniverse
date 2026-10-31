@@ -11,6 +11,11 @@
   name: Praetorian
   description: A huge, looming beast of an alien.
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
@@ -247,6 +252,9 @@
     - type: RMCSuperSlowdown
     - type: RMCRooted
   - type: XenoHighGallop
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      effect: 2.5
   - type: XenoHidden
   - type: AcidTrap
   - type: RMCActionOrder
@@ -288,6 +296,9 @@
         Slash: 20
         Piercing: 20
   - type: XenoTailTrip
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      effect: 0.3
   - type: XenoHidden
   - type: RMCActionOrder
     id: RMCXenoPraetorianDancer
@@ -407,7 +418,14 @@
   - type: XenoHook
   - type: XenoTailSeize
   - type: XenoAbduct
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      ticks: 1
+      effect: 2.5
   - type: XenoTailLash
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      effect: 2.5
   - type: XenoDislocate
     damage:
       types:

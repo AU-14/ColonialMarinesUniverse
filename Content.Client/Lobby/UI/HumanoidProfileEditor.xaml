@@ -378,7 +378,7 @@
                     <!-- cmu edit end -->
                 </BoxContainer>
                 <!-- cmu edit end -->
-                <!-- CMU14: strip-level FoF annotation, overlaid on the tab header row -->
+                <!-- CMU14: Insurgency role priorities and antag opt-ins, split by faction like the other gamemodes. -->
                 <Control VerticalExpand="True">
                     <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">
@@ -402,9 +402,6 @@
                             </ScrollContainer>
                         </BoxContainer>
                     </TabContainer>
-                    <Label Text="{Loc 'humanoid-profile-editor-fof-included-label'}"
-                           HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 3 6 0"
-                           MouseFilter="Ignore" StyleClasses="CrtText" />
                 </Control>
                 <BoxContainer Orientation="Vertical">
                     <TabContainer Name="ColonyFallTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
@@ -467,10 +464,17 @@
                     </BoxContainer>
                     <Label Text="{Loc 'cmu-fof-fallback-explanation'}" />
                     <TabContainer Name="ForceOnForceTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
-                        <ScrollContainer VerticalExpand="True">
-                            <!-- CMU14: faction gameplay options. -->
-                            <BoxContainer Name="FoFJobList" Orientation="Vertical" />
-                        </ScrollContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <!-- CMU14: faction gameplay options. -->
+                                <BoxContainer Name="FoFJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="FoFColonyJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
                     </TabContainer>
                 </BoxContainer>
                 <BoxContainer Name="NamedItemsTab" Orientation="Vertical" Margin="10">
