@@ -56,6 +56,7 @@
   - AU14AccessColonyAmbassador
   - AU14AccessOrbitalManagement
   - AU14AccessOrbitalLaw
+  - CMUAccessKitchen # DEFAC open for business button
 
 - type: accessGroup
   id: CO
