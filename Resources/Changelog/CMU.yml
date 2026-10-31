@@ -15821,5 +15821,256 @@
   id: 918
   time: '2026-10-29T10:44:05.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2366
+- author: rokudara-sen
+  changes:
+  - message: Free Company Raiders get better armor, rifle lights, flares, a real medical
+      pouch, a stocked pack and ex-MARSOC skills so they stand a chance on distress
+      calls against xenos.
+    type: Tweak
+  - message: The raider leader's XM40 no longer accepts HEAP magazines.
+    type: Tweak
+  id: 919
+  time: '2026-10-30T11:04:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2375
+- author: ILoveDespoiler
+  changes:
+  - message: Added 100 AP to King.
+    type: Add
+  - message: Adjusted some stats of King so it can fulfill its role as the Tie Breaker
+      that ends the game.
+    type: Tweak
+  id: 920
+  time: '2026-10-30T11:05:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2371
+- author: Mary-Marilyn
+  changes:
+  - message: Added a WY Corporate Synthetic for insurgency
+    type: Add
+  id: 921
+  time: '2026-10-30T11:06:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2372
+- author: rokudara-sen
+  changes:
+  - message: Yautja clan masks, thrall masks and the council helmet block chem smoke
+      and nerve gas, like in cmss13.
+    type: Fix
+  - message: The warrior punch, bone chips and hedgehog spikes no longer slow yautja.
+    type: Fix
+  - message: Yautja communicators keep working when the colony comms tower is down.
+    type: Fix
+  - message: Yautja get a warning just before they hit crit.
+    type: Add
+  - message: Yautja can't self-destruct while in crit, like in cmss13.
+    type: Fix
+  id: 922
+  time: '2026-10-30T11:07:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2367
+- author: rokudara-sen
+  changes:
+  - message: Admins can call the Yautja Military Caste as an ERT. They arrive on their
+      own shuttle with an Enforcer leading Soldiers.
+    type: Admin
+  - message: Military Caste bracers have their bracer menu, self-destruct and translator
+      again.
+    type: Fix
+  - message: Military Caste kits match CM13, with a plasma carbine, strong xeno restraints
+      and knife greaves.
+    type: Tweak
+  id: 923
+  time: '2026-10-30T11:08:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2370
+- author: rokudara-sen
+  changes:
+  - message: Serial killers can butcher human corpses with a knife or anything sharp
+      in hand, like preds do.
+    type: Add
+  id: 924
+  time: '2026-10-30T11:10:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2376
+- author: rokudara-sen
+  changes:
+  - message: Colony jeep kits only show up once, and only on the colony ASRS console.
+    type: Fix
+  id: 925
+  time: '2026-10-30T11:10:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2364
+- author: TheHellFireo
+  changes:
+  - message: Fixed several movement, ammunition, recycling, lathe, shuttle and sentry-camera
+      issues.
+    type: Fix
+  - message: Fixed gas loss and duplication when blocking and reopening tiles.
+    type: Fix
+  - message: Rockets now trigger at their aimed stopping point, and hijack pipe warnings
+      remain until their burst.
+    type: Fix
+  - message: Added guidebook Back/Forward navigation with remembered page searches
+      and scroll positions.
+    type: Add
+  - message: Ordinary handheld radios now support a receive-only mode.
+    type: Add
+  - message: Health scanners distinguish critical overdoses, and options refresh when
+      settings change.
+    type: Tweak
+  id: 926
+  time: '2026-10-30T14:05:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2377
+- author: maertayn
+  changes:
+  - message: Force on Force gains a colony roster with limited colony roles (`game_rules.yml`),
+      their own store, a colonist rule, faction job selection in the character editor
+      and a round time limit (75min + 20min overtime, perhaps too low, needs tweaking)
+    type: Add
+  - message: New Hotspot objectives with game preset support, ties into the round
+      time limit and enables sudden-death mode during overtime. During overtime the
+      loser gets extra points when holding the hotspot.
+    type: Add
+  - message: Distress Signal can now roll Runaway Synth and Replicant antagonists.
+    type: Add
+  - message: 'Ships and planets get a life support atmos layer: breathing vents, day/night
+      air cycles, spreading fires and sealed Z-level openings.'
+    type: Add
+  - message: Ship fire alarm, built into the shuttle console and separate prototypes
+      (`CMUShipFireAlarm`). Enables siphoning of bad gases in the life support vent
+      and stops feeding oxygen.
+    type: Add
+  - message: Gunship master arm toggle, weapons will not function on safe
+    type: Add
+  - message: Antagonist rolls now use pity weighting. Every consecutive round you
+      go unselected raises your draw weight by a step, up to a cap, and getting an
+      antag resets it.
+    type: Tweak
+  - message: 'Colony antagonist spawn chances now rise with demand: the more ready
+      players who specifically want an antag, the higher its roll, up to a cap. Players
+      with fewer antag selections influence the antag roll more than someone who selected
+      all antags.'
+    type: Tweak
+  - message: Alert levels are now tracked per warship instead of globally.
+    type: Tweak
+  - message: Yautja consoles are gated by rank (leader/ancient/elder), and youngbloods
+      hatch speaking Yautja.
+    type: Tweak
+  - message: Ship-launched gas weapons now hurt xenomorphs too.
+    type: Tweak
+  - message: Gas canister resale pays 1.75x more per mol, and can no longer sell above
+      catalog cost.
+    type: Tweak
+  - message: Food vendors stock twice as many prepared meals.
+    type: Tweak
+  - message: Helmets can take a tucked-in and enabled regular flashlight.
+    type: Tweak
+  - message: Ship MREs stay locked until round setup completes, with an admin override.
+    type: Tweak
+  - message: Incompatible vehicle hardpoints refuse with a popup explaining why (BUG-1173).
+    type: Fix
+  - message: Surgeons can clamp internal bleeds that drugs are holding shut (BUG-1174).
+    type: Fix
+  - message: Civilians can open the facility medical vendor (BUG-1168).
+    type: Fix
+  - message: Pathogen spore sacs are breakable (BUG-1176).
+    type: Fix
+  - message: Cutting a door's power wires now lets you hack it open.
+    type: Fix
+  - message: Hive leader popups say Xenomorph instead of Xenonid (BUG-1164).
+    type: Fix
+  - message: The ASRS guide button now opens the requisitions guide instead of the
+      generic cargo guide (BUG-1165).
+    type: Fix
+  - message: Cancelling a dropship landing no longer skips its refuel cooldown (BUG-1170).
+    type: Fix
+  - message: WeYu IPIE roles now use the WeYu faction instead of government forces
+      (BUG-1169).
+    type: Fix
+  - message: The AK-4047 stock now starts collapsed (BUG-1166).
+    type: Fix
+  - message: Threat member job previews show a larva instead of a queen (BUG-1073).
+    type: Fix
+  - message: Xeno chevrons in playtime stats now use xeno rank time thresholds (BUG-1072).
+    type: Fix
+  - message: Rider whisper text uses the right font again, and is muted when global
+      ghost chat is disabled.
+    type: Fix
+  - message: ahelp, mhelp and bug reports relay to Discord, with a reworked mentor
+      help window and a new in-game bug report window. Early prototype.
+    type: Admin
+  - message: 'Lobby voting hardened: round and gamemode commands require confirmation,
+      vote locks persist across restarts, platoons are out of the vote.'
+    type: Admin
+  - message: 'New tools: instant third-party deployment (force interest), a life support
+      command (adds the full pressure/breathing/heat medical set, which is disabled
+      during playtest, to a player), commendation print lock and a debug cigar that
+      never burns out.'
+    type: Admin
+  - message: Updates to the Mohawk dropship, Fort McNeil, Fiorina and the hunter ship.
+    type: Map
+  - message: Salamander pressure-suit only seals when wearing the new Salamander pressure
+      helmet, and fire resistance is fixed for the fire-suits.
+    type: Tweak
+  - message: Small 1x1 copy of the 2x2 StationAnchorIndestructible (`CMUAnchorIndestructible`)
+    type: Add
+  - message: '`showadmins` shell command now shows admins who are playing as [IC]
+      when adminned (deadminned implies it)'
+    type: Admin
+  - message: Fire stops spreading through closed double-doors (any door larger than
+      1x1)
+    type: Fix
+  - message: Initial Discord linking - post the single-use coupling code into the
+      configured channel
+    type: Add
+  - message: 'Leadership sleeper advisory fax is sent to all grouped faxes: `military-command`,
+      `marshal-bureau`, `colony-command`, `warship-command`'
+    type: Tweak
+  - message: Periodic cleanup of trash and loose items
+    type: Admin
+  id: 927
+  time: '2026-10-30T17:03:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2363
+- author: rokudara-sen
+  changes:
+  - message: Humans can turn on the clan mask visor while wearing yautja bracers.
+    type: Add
+  - message: 'Linked thralls become the cmss13 Thrall species: more health, half brute
+      and burn, stun resistance, no bleeding or broken bones, stronger punches, dark
+      vision, butchering, prey marking and dagger flaying.'
+    type: Add
+  - message: Yautja and thralls can hang corpses from the ceiling with the strange
+      rope, found on the hunter ship.
+    type: Add
+  - message: Yautja can butcher fallen yautja.
+    type: Add
+  - message: Dathwei and thwei restore blood on humans and mend shattered bones.
+    type: Tweak
+  - message: Yautja and linked thralls no longer choke when a xeno drags them in crit.
+    type: Tweak
+  id: 928
+  time: '2026-10-30T18:55:08.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2380
+- author: rokudara-sen
+  changes:
+  - message: Wielding the plasma rifle, plasma carbine or spike launcher no longer
+      slows yautja.
+    type: Tweak
+  - message: Plasma rifle and carbine bolts knock humans down for 4 seconds.
+    type: Tweak
+  - message: The plasma carbine and hunting bow fire at their intended speed, and
+      the carbine fires a 2-round burst.
+    type: Fix
+  id: 929
+  time: '2026-10-30T20:17:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2383
+- author: TheHellFireo
+  changes:
+  - message: Scientists can investigate recovered hunting bracers through twenty experiments
+      and decipher five clues to unlock their controls.
+    type: Add
+  - message: Yautja abilities now have distinct cloak, plasma, leap, roar, recall,
+      drone and staged trophy effects.
+    type: Tweak
+  - message: Caster sights and shots follow their firing mode and direction, with
+      firing sounds; Xenomorph victims remain visible during Butcher.
+    type: Fix
+  id: 930
+  time: '2026-10-30T23:42:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2386
 Name: CMU
 Order: -1

@@ -27,7 +27,7 @@ public sealed class YautjaRadioRegressionTest
     ];
 
     [Test]
-    public async Task CommunicatorUsesDedicatedEnglishRadioKeyAndCanTuneYautjaTower()
+    public async Task CommunicatorUsesDedicatedEnglishRadioKeyAndIgnoresColonyTower()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -70,7 +70,8 @@ public sealed class YautjaRadioRegressionTest
                         _ => '\0'
                     }), channelId);
                     Assert.That(channel.RadioPrefix, Is.EqualTo(channelId == "CMUYautja" ? ':' : '#'), channelId);
-                    Assert.That(channel.Tower, Is.True, channelId);
+                    // pred comms run off the ship, not the colony tower
+                    Assert.That(channel.Tower, Is.False, channelId);
                     Assert.That(channel.Faction, Is.EqualTo("FactionYautja"), channelId);
                 });
             }

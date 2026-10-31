@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Client.UserInterface.Systems.Ghost.Controls.Roles;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.Administration.Managers;
 using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server.CMU14.Threats;
 using Content.Server.Ghost.Roles.Components;
@@ -189,6 +190,45 @@ public sealed class ForceInterestTest : GameTest
     }
 
     [Test]
+    public async Task AdminCompleteDeploysImmediatelyWithoutQuorum()
+    {
+        var spawned = 0;
+        uint id = 0;
+        var admins = Server.ResolveDependency<IAdminManager>();
+        await Server.WaitAssertion(() =>
+        {
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, null);
+            var interest = SEntMan.System<ForceInterestSystem>();
+            id = interest.QueueForce("AdminSkip", new Dictionary<string, int> { ["TestForceInterestBody"] = 2 },
+                _ => { spawned++; return true; });
+        });
+        await Server.WaitAssertion(() =>
+        {
+            // Integration sessions are local and ConsoleLoginLocal auto-promotes them to host
+            // admin, so demote first to exercise the non-admin path.
+            admins.DeAdmin(ServerSession!);
+            SEntMan.System<ForceInterestSystem>().CompleteForce(ServerSession!, id);
+            Assert.That(spawned, Is.Zero, "a completion without the admin flag must not deploy");
+            Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(id), Is.True);
+        });
+        await Server.WaitAssertion(() =>
+        {
+            admins.PromoteHost(ServerSession!);
+            SEntMan.System<ForceInterestSystem>().CompleteForce(ServerSession!, id);
+            // The deploy leaves the queue synchronously; the spawn callback runs on the
+            // deployment iterator's next update, so the body count needs a tick first.
+            Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(id), Is.False,
+                "an admin completion must deploy immediately without quorum");
+        });
+        await RunSeconds(1);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(spawned, Is.EqualTo(1), "the admin-completed deployment must spawn its bodies");
+            Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(id), Is.False);
+        });
+    }
+
+    [Test]
     public async Task JoiningAnotherBodyRemovesInterestAndRestartClearsQueue()
     {
         var map = await Pair.CreateTestMap();
@@ -254,7 +294,7 @@ public sealed class ForceInterestTest : GameTest
         {
             var window = new GhostRolesWindow();
             window.BeginEntryUpdate();
-            window.AddForceEntry(new ForceInterestInfo(1, "Called marines", 10, 4, 7, true, true, true));
+            window.AddForceEntry(new ForceInterestInfo(1, "Called marines", 10, 4, 7, true, true, true, true));
             window.EndEntryUpdate();
             Assert.That(window.FindControl<PanelContainer>("ContentPanel").Visible, Is.True);
             Assert.That(window.FindControl<Label>("NoRolesMessage").Visible, Is.False);

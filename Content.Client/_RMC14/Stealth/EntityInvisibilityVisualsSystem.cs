@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Stealth;
+using Content.Shared.CMU14.Yautja; // CMU14
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Prototypes;
@@ -26,6 +27,8 @@ public sealed partial class EntityInvisibilityVisualsSystem : EntitySystem
 
     private void OnStartup(Entity<EntityTurnInvisibleComponent> ent, ref ComponentStartup args)
     {
+        if (HasComp<CMUYautjaOpticalCloakComponent>(ent)) // CMU14: optical cloak owns its sprite-masked refraction.
+            return;
         if (!TryComp(ent, out SpriteComponent? sprite))
             return;
 
@@ -48,6 +51,12 @@ public sealed partial class EntityInvisibilityVisualsSystem : EntitySystem
         var invisible = EntityQueryEnumerator<EntityTurnInvisibleComponent, SpriteComponent>();
         while (invisible.MoveNext(out var uid, out var comp, out var sprite))
         {
+            // CMU14: the marker may arrive after this component in a network state.
+            if (HasComp<CMUYautjaOpticalCloakComponent>(uid))
+            {
+                _sprite.RemovePostShader(sprite, ShaderId);
+                continue;
+            }
             var opacity =  TryComp<EntityActiveInvisibleComponent>(uid, out var activeInvisible) ? activeInvisible.Opacity : 1;
             if (!_sprite.TryGetPostShader(sprite, ShaderId, out var entry)) // CMU14
             {

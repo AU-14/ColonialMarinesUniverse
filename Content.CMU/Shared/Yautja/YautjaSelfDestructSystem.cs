@@ -548,7 +548,8 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
     private bool CanUseSelfDestructCommon(Entity<YautjaBracerComponent> bracer, EntityUid user)
     {
-        if (!HasComp<YautjaComponent>(user) || bracer.Comp.User != user)
+        if (!(HasComp<YautjaComponent>(user) || HasComp<CMUYautjaResearchOperatorComponent>(user)) ||
+            bracer.Comp.User != user)
         {
             // CMU14: CM-SS13's remote_kill_internal (yaut_bracers.dm:1157-1162) distinguishes the two:
             // a non-Yautja gets "This button is not for you.", an enthralled user gets the thrall notice.
@@ -580,6 +581,13 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         if (_mobState.IsDead(user))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-dead"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        // cmss13 blocks it past crit too, you have to pop it while the vitals warning is up
+        if (_mobState.IsCritical(user))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-critical"), user, user, PopupType.SmallCaution);
             return false;
         }
 

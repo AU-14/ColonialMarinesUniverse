@@ -292,6 +292,9 @@ cmu-yautja-trophy-verb-generic = Take trophy
 cmu-yautja-butcher-verb = Butcher corpse
 cmu-yautja-butcher-start-self = You begin ritual butchery on {$target}.
 cmu-yautja-butcher-start-others = {$hunter} begins ritual butchery on {$target}!
+cmu-butcher-start-self = You start carving up {$target}.
+cmu-butcher-start-others = {$hunter} starts carving up {$target}!
+cmu-butcher-need-blade = You need a knife or something sharp in your hand.
 cmu-yautja-butcher-stage-complete = You complete butchery stage {$stage} on {$target}.
 cmu-yautja-butcher-finished = You finish butchering {$target}.
 cmu-yautja-butcher-already-finished = The corpse has already been butchered.
@@ -348,6 +351,7 @@ cmu-yautja-self-destruct-armed = You set the timer. May your journey to the grea
 cmu-yautja-self-destruct-warning = Bracer self-destruct: {$seconds} seconds.
 cmu-yautja-self-destruct-critical = As you fall into unconsciousness you fail to activate your self-destruct device before you collapse.
 cmu-yautja-self-destruct-dead = Little too late for that now!
+cmu-yautja-vitals-failing = Your vitals are failing, you won't stay standing much longer!
 cmu-yautja-trap-arm-failed = You cannot set the trap here.
 cmu-yautja-trap-armed = hunting trap is now armed.
 cmu-yautja-trap-disarmed = {$trap} is now disarmed.
@@ -525,6 +529,25 @@ cmu-yautja-job-name-military-soldier = Yautja Military Caste Soldier
 cmu-yautja-job-description-military-soldier = An event-only military caste Yautja soldier deployed as part of a Predator Deathsquad.
 cmu-yautja-job-name-military-enforcer = Yautja Military Caste Enforcer
 cmu-yautja-job-description-military-enforcer = An event-only military caste Yautja enforcer leading a Predator Deathsquad.
+cmu-job-supervisors-yautja-military = the Ancients and the Elder Overseer
+
+# Military Caste ERT, cmss13 /datum/emergency_call/yautja_mcaste
+cmu-yautja-mcaste-party-name = Yautja Military Caste Soldiers (Deathsquad)
+cmu-yautja-mcaste-low-threat-party-name = Yautja Military Caste Soldiers
+cmu-yautja-mcaste-arrival = 'Des#<oy *&l th!^ @he Anci#*$!>- d=!#?ee unwor%*y o# *xist?n&*.'
+cmu-yautja-mcaste-soldier-ghost-name = Yautja Military Caste Soldier
+cmu-yautja-mcaste-soldier-ghost-description = One of few Yautja equipped for full-scale warfare, sent by the Ancients to wipe out a threat to your species.
+cmu-yautja-mcaste-enforcer-ghost-name = Yautja Military Caste Enforcer
+cmu-yautja-mcaste-enforcer-ghost-description = Lead a team of military caste soldiers against a threat to your species.
+cmu-yautja-mcaste-ghost-rules = You are a Yautja deathsquad. You answer only to the Ancients and the Elder Overseer and are not bound by the Honor Code. You are hostile to everyone who is not Yautja.
+cmu-yautja-mcaste-enforcer-name = Enforcer {$name}
+cmu-yautja-mcaste-elite-name = Elite {$name}
+cmu-yautja-mcaste-high-name = High {$name}
+cmu-yautja-mcaste-briefing-soldier = [bold][font size=16][color=#ff5555]You are a Military Caste Soldier, one of few Yautja equipped for full-scale warfare.[/color][/font][/bold]
+cmu-yautja-mcaste-briefing-enforcer = [bold][font size=16][color=#ff5555]You are a Military Caste Enforcer, tasked with leading a team of soldiers against threats to your species.[/color][/font][/bold]
+cmu-yautja-mcaste-briefing-answer = [bold]You answer only to the Ancients and the Elder Overseer, and are not required to follow the Honor Code.[/bold]
+cmu-yautja-mcaste-briefing-prejudice = [bold]Execute your mission with extreme prejudice.[/bold]
+cmu-yautja-mcaste-briefing-hostile = [bold][font size=20][color=#ff5555]YOU ARE HOSTILE to everyone who is not Yautja.[/color][/font][/bold]
 
 cmu-job-supervisors-yautja-youngblood = the Blooded and higher ranks
 cmu-job-supervisors-yautja-hellhound = your bonded master, then the Blooded and higher ranks
@@ -874,6 +897,20 @@ cmu-yautja-hunter-spear-fishing-caught-self = You quickly stab the {$spear} into
 cmu-yautja-ceremonial-dagger-flay-non-human = You can only use this dagger to flay humanoids!
 cmu-yautja-ceremonial-dagger-flay-not-strong = You're not strong enough to rip an entire humanoid apart. Also, that's kind of fucked up.
 cmu-yautja-ceremonial-dagger-flay-yautja = ARE YOU OUT OF YOUR MIND!?
+cmu-yautja-rope-wrong-body = {CAPITALIZE(THE($target))} has the wrong body plan to hang up.
+cmu-yautja-rope-not-strong = You're not strong enough to lift {THE($target)} up with a rope. Also, that's kind of fucked up.
+cmu-yautja-rope-no-ceiling = There's nothing to hang them from!
+cmu-yautja-rope-secure-start-self = You start securing the rope to the ceiling...
+cmu-yautja-rope-secure-start-others = {CAPITALIZE(THE($user))} starts to secure {POSS-ADJ($user)} rope to the ceiling...
+cmu-yautja-rope-secured-self = You secure the rope.
+cmu-yautja-rope-secured-others = {CAPITALIZE(THE($user))} secures the rope.
+cmu-yautja-rope-hang-start-self = You start hanging {THE($target)} up by the rope...
+cmu-yautja-rope-hang-start-others = {CAPITALIZE(THE($user))} begins hanging {THE($target)} up by the rope...
+cmu-yautja-rope-hung-self = You finish hanging {THE($target)}.
+cmu-yautja-rope-hung-others = {CAPITALIZE(THE($user))} hangs {THE($target)} from the ceiling!
+cmu-yautja-rope-cut-self = You cut down {THE($target)} with {THE($tool)}.
+cmu-yautja-rope-cut-others = {CAPITALIZE(THE($user))} cuts down {THE($target)} with {THE($tool)}.
+cmu-yautja-rope-fall = {CAPITALIZE(THE($target))}'s body falls down from the hanging rope!
 cmu-yautja-ceremonial-dagger-flay-synth = You can't flay metal...
 cmu-yautja-ceremonial-dagger-flay-start-others = {$user} begins to flay {$victim} with {$dagger}...
 cmu-yautja-ceremonial-dagger-flay-start-self = You start flaying {$victim} with your {$dagger}...
@@ -1245,7 +1282,7 @@ cmu-yautja-lobby-bracer = Bracer
 cmu-yautja-lobby-caster = Shoulder caster
 cmu-yautja-lobby-cape = Cape
 cmu-yautja-lobby-translator-type = Translator type
-cmu-yautja-lobby-invisibility-sound = Invisibility sound
+cmu-yautja-lobby-invisibility-sound = Cloak preset
 cmu-yautja-lobby-flavor = Flavor text
 cmu-yautja-lobby-flavor-placeholder = Optional character description
 cmu-yautja-lobby-flavor-limit = { $count } / { $max } characters maximum
@@ -1256,8 +1293,8 @@ cmu-yautja-lobby-preview-sound = Preview
 cmu-yautja-lobby-translator-help-modern = Clean translated speech with modern red bracer formatting.
 cmu-yautja-lobby-translator-help-retro = Leetspeak-style translated speech with white retro translator formatting.
 cmu-yautja-lobby-translator-help-combo = Leetspeak-style translated speech with modern translator formatting.
-cmu-yautja-lobby-invisibility-help-modern = Modern cloak activation and deactivation sounds.
-cmu-yautja-lobby-invisibility-help-retro = Old retro cloak activation and deactivation sounds.
+cmu-yautja-lobby-invisibility-help-modern = Smooth refractive sweep with a red activation seam and modern cloak sounds.
+cmu-yautja-lobby-invisibility-help-retro = Broken shimmering dissolve with blue-white electrical flickers and retro cloak sounds.
 
 cmu-yautja-medicomp-empty-gun = The healing gun is empty.
 cmu-yautja-medicomp-stabilized = You stabilize the wounds.

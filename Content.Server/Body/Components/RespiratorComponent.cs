@@ -1,4 +1,5 @@
 using Content.Server.Body.Systems;
+using Content.Server.CMU14.Medical; // CMU14: Access friend for life support
 using Content.Shared.Atmos;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
@@ -8,7 +9,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Server.Body.Components
 {
-    [RegisterComponent, Access(typeof(RespiratorSystem)), AutoGenerateComponentPause]
+    [RegisterComponent, Access(typeof(RespiratorSystem), typeof(CMULifeSupportSystem)), AutoGenerateComponentPause] // CMU14: life support resets the breathing timer on granted respirators
     public sealed partial class RespiratorComponent : Component
     {
         /// <summary>

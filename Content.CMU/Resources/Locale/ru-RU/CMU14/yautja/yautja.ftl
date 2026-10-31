@@ -392,6 +392,7 @@ cmu-yautja-ritual-examine-duel = Связан активной ритуальн�
 cmu-yautja-self-destruct-armed = Таймер запущен. Пусть путь в великие охотничьи угодья будет быстрым.
 cmu-yautja-self-destruct-warning = Самоуничтожение наруча: {$seconds} секунд.
 cmu-yautja-self-destruct-dead = Наруч не отвечает мёртвому охотнику.
+cmu-yautja-vitals-failing = Жизненные показатели падают, вы недолго продержитесь на ногах!
 cmu-yautja-trap-arm-failed = Здесь нельзя установить ловушку.
 cmu-yautja-trap-armed = Вы взводите охотничью ловушку.
 cmu-yautja-trap-disarmed = {$trap} обезврежена.

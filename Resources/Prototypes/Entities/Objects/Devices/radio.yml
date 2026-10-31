@@ -4,6 +4,7 @@
   parent: BaseItem
   id: RadioHandheld
   components:
+  - type: CMURadioListenOnly # CMU14: on / receive-only / off; inherited by ordinary RMC handhelds.
   - type: TelecomExempt
   - type: RadioMicrophone
     broadcastChannel: Handheld

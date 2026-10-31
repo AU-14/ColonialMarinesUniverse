@@ -4,6 +4,7 @@ using Content.Shared.Ghost.Components;
 using Content.Shared.Inventory;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Yautja;
 
@@ -11,6 +12,7 @@ public sealed partial class YautjaFalconVisibilitySystem : EntitySystem
 {
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private InventorySystem _inventory = default!;
 
     public override void Update(float frameTime)
@@ -22,11 +24,7 @@ public sealed partial class YautjaFalconVisibilitySystem : EntitySystem
         // (the previous HasComp<YautjaComponent> check) left a human who is allowed to pilot the drone unable to
         // see it. A Yautja still always counts, as does the drone's controller, who the server only accepts with
         // worn or held bracers.
-        var visible = local is { } viewer &&
-                      (HasComp<YautjaComponent>(viewer) ||
-                       HasComp<YautjaFalconControllerComponent>(viewer) ||
-                       HasComp<GhostComponent>(viewer) ||
-                       CarriesBracer(viewer));
+        var visible = local is { } viewer && CanSeeFalcon(viewer);
 
         var query = EntityQueryEnumerator<YautjaFalconDroneDeployedComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out _, out var sprite))
@@ -34,9 +32,17 @@ public sealed partial class YautjaFalconVisibilitySystem : EntitySystem
             if (!_sprite.LayerMapTryGet((uid, sprite), YautjaFalconVisualLayers.Base, out var layer, true))
                 continue;
 
-            _sprite.LayerSetVisible((uid, sprite), layer, visible);
+            var deploying = TryComp<CMUYautjaMotionComponent>(uid, out var motion) &&
+                            motion.Kind == CMUYautjaEffect.FalconDeploy && _timing.CurTime < motion.EndsAt;
+            _sprite.LayerSetVisible((uid, sprite), layer, visible && !deploying);
         }
     }
+
+    public bool CanSeeFalcon(EntityUid viewer) =>
+        HasComp<YautjaComponent>(viewer) ||
+        HasComp<YautjaFalconControllerComponent>(viewer) ||
+        HasComp<GhostComponent>(viewer) ||
+        CarriesBracer(viewer);
 
     /// <summary>
     /// CMU14: whether this viewer carries the bracers the Falcon runs on, worn in the gloves slot the control

@@ -943,6 +943,28 @@
   name: cmu-mohawk-camera-midway
   configurable: true
 
+# One Mohawk spawns per side, so these get a Govfor/Opfor variant appended at
+# load; on the shared seeds every ship would see the enemy transport's cameras.
+- type: cameraNetwork
+  id: CMUMohawkOmahaGovfor
+  name: cmu-mohawk-camera-omaha
+  configurable: true
+
+- type: cameraNetwork
+  id: CMUMohawkOmahaOpfor
+  name: cmu-mohawk-camera-omaha
+  configurable: true
+
+- type: cameraNetwork
+  id: CMUMohawkMidwayGovfor
+  name: cmu-mohawk-camera-midway
+  configurable: true
+
+- type: cameraNetwork
+  id: CMUMohawkMidwayOpfor
+  name: cmu-mohawk-camera-midway
+  configurable: true
+
 # The Omaha's weapons rack. It starts empty; click it with a weapon or ammo to rack it, or empty-handed to open it.
 # Every item takes one slot, whatever its size.
 - type: entity
