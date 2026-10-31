@@ -147,6 +147,10 @@
   - type: YautjaTechItem
   - type: Corrodible
     isCorrodible: false
+  # cmss13 power armor inherits the full hunter armor's fire_intensity_resistance 20, not the base 10
+  - type: RMCImmuneToIgnition
+    intensityResistance: 20
+    immuneToDirectHits: false
 
 - type: entity
   parent: CMUYautjaPoweredArmor

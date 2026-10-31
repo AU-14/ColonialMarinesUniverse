@@ -17536,6 +17536,9 @@ public sealed class YautjaBowTest
         yield return new FireIntensityResistanceRow("CMUYautjaClanArmor", standard);
         yield return new FireIntensityResistanceRow("CMUYautjaClanArmorScalable", standard);
         yield return new FireIntensityResistanceRow("CMUYautjaHeavyClanArmor", heavy);
+        // the military caste power armor is a hunter/full subtype in cmss13
+        yield return new FireIntensityResistanceRow("CMUYautjaPoweredArmor", heavy);
+        yield return new FireIntensityResistanceRow("CMUYautjaPoweredArmorEnforcer", heavy);
 
         yield return new FireIntensityResistanceRow("CMUYautjaMask", standard);
         yield return new FireIntensityResistanceRow("CMUYautjaMaskScalable", standard);
