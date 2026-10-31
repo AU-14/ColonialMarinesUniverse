@@ -2051,9 +2051,9 @@ public sealed partial class YautjaHuntConsoleComponent : Component
             HuntCall("mixed_group", "cmu-yautja-hunt-call-mixed-group", 6, 1.4f, MixedPrey()),
             HuntCall("mixed_large", "cmu-yautja-hunt-call-mixed-large", 8, 1.6f, MixedPrey()),
             HuntCall("mixed_larger", "cmu-yautja-hunt-call-mixed-larger", 12, 1.8f, MixedPrey()),
-            HuntCall("serpents_small", "cmu-yautja-hunt-call-serpents-small", 4, 1f, SerpentPrey()),
-            HuntCall("serpents_group", "cmu-yautja-hunt-call-serpents-group", 6, 1.2f, SerpentPrey()),
-            HuntCall("serpents_large", "cmu-yautja-hunt-call-serpents-large", 8, 1.4f, SerpentPrey()),
+            SerpentCall("serpents_small", "cmu-yautja-hunt-call-serpents-small", 4, 1f, maxT3: 1, maxT2: 1),
+            SerpentCall("serpents_group", "cmu-yautja-hunt-call-serpents-group", 6, 1.2f, maxT3: 3, maxT2: 1),
+            SerpentCall("serpents_large", "cmu-yautja-hunt-call-serpents-large", 8, 1.4f, maxT3: 3, maxT2: 3),
             HuntCall("tribal_small", "cmu-yautja-hunt-call-tribal-small", 8, 1f, TribalPrey()),
             HuntCall("tribal_group", "cmu-yautja-hunt-call-tribal-group", 12, 1.2f, TribalPrey()),
             HuntCall("tribal_large", "cmu-yautja-hunt-call-tribal-large", 15, 1.4f, TribalPrey()),
@@ -2136,15 +2136,35 @@ public sealed partial class YautjaHuntConsoleComponent : Component
         };
     }
 
-    private static List<YautjaHuntSpawnEntry> SerpentPrey()
+    // cmss13 /datum/emergency_call/pred/xeno: up to max_xeno_t3 of prae/rav/despoiler, then up to max_xeno_t2
+    // lurker/warrior, everyone after that is a warrior. without the caps a small group could roll four ravagers
+    private static YautjaHuntCallOption SerpentCall(
+        string id,
+        string displayName,
+        int spawnCount,
+        float cooldownMultiplier,
+        int maxT3,
+        int maxT2)
     {
-        return new List<YautjaHuntSpawnEntry>
+        var call = HuntCall(id, displayName, spawnCount, cooldownMultiplier, new List<YautjaHuntSpawnEntry>());
+        call.Tiers = new List<YautjaHuntSpawnTier>
         {
-            Entity("CMXenoWarrior", 3),
-            Entity("CMXenoLurker", 2),
-            Entity("CMXenoPraetorian"),
-            Entity("CMXenoRavager"),
+            new()
+            {
+                Max = maxT3,
+                Spawns = { Entity("CMXenoPraetorian"), Entity("CMXenoRavager"), Entity("RMCXenoDespoiler") },
+            },
+            new()
+            {
+                Max = maxT2,
+                Spawns = { Entity("CMXenoLurker"), Entity("CMXenoWarrior") },
+            },
+            new()
+            {
+                Spawns = { Entity("CMXenoWarrior") },
+            },
         };
+        return call;
     }
 
     private static List<YautjaHuntSpawnEntry> TribalPrey()
@@ -2231,6 +2251,21 @@ public sealed partial class YautjaHuntCallOption
 
     [DataField]
     public float CooldownMultiplier = 1f;
+
+    [DataField]
+    public List<YautjaHuntSpawnEntry> Spawns = new();
+
+    // filled in order, each member goes to the first tier that isn't full. used instead of Spawns when set
+    [DataField]
+    public List<YautjaHuntSpawnTier> Tiers = new();
+}
+
+[DataDefinition]
+public sealed partial class YautjaHuntSpawnTier
+{
+    // 0 means no cap, the filler tier
+    [DataField]
+    public int Max;
 
     [DataField]
     public List<YautjaHuntSpawnEntry> Spawns = new();
