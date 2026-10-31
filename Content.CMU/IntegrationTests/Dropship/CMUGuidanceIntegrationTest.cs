@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared.CMU14.Guidance;
 using Content.Shared.CMU14.Radio;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.CMU14.Dropship;
@@ -63,7 +64,7 @@ public sealed class CMUGuidanceIntegrationTest : GameTest
     }
 
     [Test]
-    public async Task GpsShellCostsTwiceHeAndInheritsItsExplosivePower()
+    public async Task GpsShellCostsTwoHundredMoreThanHeAndInheritsItsExplosivePower()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -73,7 +74,7 @@ public sealed class CMUGuidanceIntegrationTest : GameTest
             var he = SEntMan.GetComponent<DropshipAmmoComponent>(standard);
             var gps = SEntMan.GetComponent<DropshipAmmoComponent>(guided);
             Assert.That(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(guided).Cost,
-                Is.EqualTo(2 * SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(standard).Cost));
+                Is.EqualTo(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(standard).Cost + 200));
             Assert.That(gps.Explosion, Is.Not.Null);
             Assert.That(gps.Explosion!.Type, Is.EqualTo(he.Explosion!.Type));
             Assert.That(gps.Explosion.Total, Is.EqualTo(he.Explosion.Total));
@@ -91,6 +92,27 @@ public sealed class CMUGuidanceIntegrationTest : GameTest
             Assert.That(guidance.TryGetGps(guided, out var target), Is.True);
             Assert.That(transform.ToMapCoordinates(target),
                 Is.EqualTo(SEntMan.GetComponent<CMUMunitionGuidanceComponent>(guided).Coordinates!.Value));
+        });
+    }
+
+    [Test]
+    public async Task GpsRackCostsFourteenHundredAndContainsFourGuidedShells()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var rack = SEntMan.SpawnEntity("CMUDropshipAmmoHowitzerRackGPS", map.GridCoords);
+            Assert.That(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(rack).Cost, Is.EqualTo(1400));
+            var containers = Server.System<SharedContainerSystem>();
+            for (var i = 1; i <= 4; i++)
+            {
+                var slot = containers.GetContainer(rack, $"shell{i}");
+                Assert.That(slot.ContainedEntities, Has.Count.EqualTo(1));
+                var shell = slot.ContainedEntities.Single();
+                Assert.That(SEntMan.GetComponent<MetaDataComponent>(shell).EntityPrototype!.ID,
+                    Is.EqualTo("CMUDropshipAmmoHowitzerGPS"));
+                Assert.That(SEntMan.GetComponent<CMUMunitionGuidanceComponent>(shell).GpsOnly, Is.True);
+            }
         });
     }
 }

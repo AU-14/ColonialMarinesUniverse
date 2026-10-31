@@ -11,4 +11,23 @@
     mode: Gps
     gpsOnly: true
   - type: DropshipFabricatorPrintable
+    cost: 900
+
+- type: entity
+  parent: CMUDropshipAmmoHowitzerRackHE
+  id: CMUDropshipAmmoHowitzerRackGPS
+  name: M137 105mm GPS-guided HE shell rack
+  description: A heavy rack holding four PGU-48/B 105mm GPS-guided high-explosive shells for the M137 Howitzer. Too heavy to carry - drag it or move it with a powerloader.
+  components:
+  - type: ItemSlots
+    slots:
+      shell1:
+        startingItem: CMUDropshipAmmoHowitzerGPS
+      shell2:
+        startingItem: CMUDropshipAmmoHowitzerGPS
+      shell3:
+        startingItem: CMUDropshipAmmoHowitzerGPS
+      shell4:
+        startingItem: CMUDropshipAmmoHowitzerGPS
+  - type: DropshipFabricatorPrintable
     cost: 1400
