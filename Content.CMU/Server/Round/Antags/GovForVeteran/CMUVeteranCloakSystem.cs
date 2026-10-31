@@ -1,4 +1,3 @@
-using Content.Server.Chat.Managers;
 using Content.Shared._RMC14.Armor.ThermalCloak;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
@@ -26,6 +25,7 @@ using Content.Shared.Storage;
 using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Events;
+using Robust.Server.Player;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -59,21 +59,16 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         CollisionGroup.BarbedBarricade;
 
     /// <summary>
-    ///     Danger red used for the reveal line, matching the game's span_danger styling.
-    /// </summary>
-    private const string RevealDangerColor = "#c40000";
-
-    /// <summary>
     ///     The field controls are locked behind the antagonist skill; the veteran carries it, nobody else does.
     /// </summary>
     private static readonly EntProtoId<SkillDefinitionComponent> AntagonistSkill = "RMCSkillAntagonist";
 
-    [Dependency] private IChatManager _chat = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private SharedPopupSystem _popups = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private TagSystem _tags = default!;
@@ -271,28 +266,31 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         return false;
     }
 
-    /// <summary>
-    ///     Tells everyone nearby that the field dropped, once per drop.
-    /// </summary>
     private void NotifyReveal(Entity<CMUVeteranCloakComponent> ent)
     {
         var message = Loc.GetString("cmu-veteran-cloak-reveal");
-        var wrapped = $"[bold][color={RevealDangerColor}]{message}[/color][/bold]";
-        var filter = Filter.Empty().AddInRange(_transform.GetMapCoordinates(ent.Owner), ent.Comp.RevealRange);
-        _chat.ChatMessageToManyFiltered(filter,
-            ChatChannel.Notifications,
-            message,
-            wrapped,
-            EntityUid.Invalid,
-            false,
-            true,
-            Color.FromHex(RevealDangerColor));
+        var veteranCoords = _transform.GetMapCoordinates(ent.Owner);
+
+        foreach (var session in _playerManager.Sessions)
+        {
+            if (session.AttachedEntity is not { } viewer || viewer == ent.Owner)
+                continue;
+
+            var viewerCoords = _transform.GetMapCoordinates(viewer);
+            if (viewerCoords.MapId != veteranCoords.MapId ||
+                (viewerCoords.Position - veteranCoords.Position).Length() > ent.Comp.RevealRange)
+            {
+                continue;
+            }
+
+            _popups.PopupEntity(message, viewer, viewer, PopupType.MediumCaution);
+        }
     }
 
     /// <summary>
-    ///     Drops the collision bits that make doors solid while the field is up, and takes the door-bump tag off
-    ///     him so a closed airlock neither blocks him, opens for him, nor buzzes at him. Walls keep their
-    ///     Impassable bit, so he still cannot walk through them.
+    ///     Drops the collision bits that make doors and low obstacles solid while the field is up, and takes the
+    ///     door-bump tag off him so a closed airlock neither blocks him, opens for him, nor buzzes at him. Walls keep
+    ///     their Impassable bit, so he still cannot walk through them.
     /// </summary>
     private void MakePhaseable(Entity<CMUVeteranCloakComponent> ent)
     {

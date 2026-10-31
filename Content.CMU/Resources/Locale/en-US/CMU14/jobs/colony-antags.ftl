@@ -58,7 +58,7 @@ cmu-veteran-cloak-on = The field engages. Nothing on you reads as solid.
 cmu-veteran-cloak-watched = The field will not engage while you are being observed.
 cmu-veteran-cloak-watched-uncloak = The field will not disengage while you are being observed.
 cmu-veteran-cloak-off = The field disengages. You are back on every sensor.
-cmu-veteran-cloak-reveal = A camouflage field collapses nearby.
+cmu-veteran-cloak-reveal = The air turns cold. You are not alone.
 cmu-veteran-cloak-denied = The field is engaged. Nothing you do reaches the world.
 cmu-veteran-cloak-unskilled = The field controls are locked out. You do not know this equipment.
 
