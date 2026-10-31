@@ -70,64 +70,64 @@ cmu-yautja-experiment-seal-open = Seal { $number }: RELEASED — { $name }.
 cmu-yautja-experiment-seal-accepted = Recovered diagnostic: INTERLOCK RESPONSE ACCEPTED: { $count }/5. RESERVOIR VENTED.
 cmu-yautja-experiment-seal-unrelated = Human analysis: Subsystem response recorded. No keyed interlock matched this procedure.
 cmu-yautja-experiment-unlocked-help = Fully unlocked. The final operator is already authorized. Other trained humans can choose Bind recovered access key while this bracer is on the floor, then wear it to use its actions.
-cmu-yautja-experiment-diagnostic-clue = SURFACE MAP / CLEAR WATER / ROTATING TOOL. The outer circuit responds to a wet probe and the adjustment screw.
-cmu-yautja-experiment-translator-clue = CAPTURED VOICE / ALCOHOL / SILICON / PULSE. Recover the circuit that remembers how prey speak.
-cmu-yautja-experiment-solvent-clue = SERVICE SEAL / ALCOHOL DILUTED WITH WATER / ROTATING TOOL. Dissolve the coating beneath the screw.
-cmu-yautja-experiment-coolant-clue = HOT EXCHANGER / CRYOXADONE / WATER / TURN COUPLING. Open the coolant path with a wrench.
-cmu-yautja-experiment-bridge-clue = BROKEN COMMAND PATH / COPPER / SILICON / PULSE. Carry a signal across the severed bus.
-cmu-yautja-experiment-capacitor-clue = SLEEPING RESERVOIR / LITHIUM / SILICON / TIGHTEN HOUSING. Charge the circuit with a wrench on its coupling.
-cmu-yautja-experiment-prism-clue = THREE SPECTRA / CARBON / SILICON / ADJUST SCREW. Bring the hunting mask's optical channels into alignment.
-cmu-yautja-experiment-veil-clue = BENT LIGHT / SILICON / QUICKSILVER / PULSE. Make the calibration outline disappear into its surroundings.
-cmu-yautja-experiment-echo-clue = OLD HUNT / MERCURY / ALCOHOL / ADJUST SCREW. Retrieve a sound already stored in the archive.
-cmu-yautja-experiment-radar-clue = LIVING QUARRY / COPPER / IRON / PULSE. Wake the thermal sweep and count nearby lives.
-cmu-yautja-experiment-bio-clue = LIVING SIGNATURE / INAPROVALINE / WATER / CONTACT SCREW. Measure the difference between hunter and human.
-cmu-yautja-experiment-catalyst-clue = FIELD MEDICINE / INAPROVALINE / CARBON / LIVING FLAME. Heat the catalyst with a lit welder.
-cmu-yautja-experiment-decoy-clue = EMPTY HUNTER / SILICON / PHOSPHORUS / PULSE. Reconstruct the wearer without flesh.
-cmu-yautja-experiment-tether-clue = DISTANT EQUIPMENT / IRON / COPPER / TIGHTEN COUPLER. Reach the remote command bus with a wrench.
-cmu-yautja-experiment-orbit-clue = RETURNING BLADE / IRON / MERCURY / TURN COLLAR. Tune the smart-disc guidance loop with a wrench.
-cmu-yautja-experiment-plasma-clue = CAPTIVE PLASMA / PHOSPHORUS / LITHIUM / LIVING FLAME. Open a controlled bleed with a lit welder.
-cmu-yautja-experiment-flash-clue = SATURATED SIGHT / PHOSPHORUS / SILICON / ADJUST SCREW. Release the excess signal from the targeting optic.
-cmu-yautja-experiment-static-clue = REJECTED INTRUSION / COPPER / MERCURY / PULSE. Feed the defensive signal back into its own circuit.
-cmu-yautja-experiment-containment-clue = LOCKED CONTAINMENT / SILICON / CRYOXADONE / REVERSE COUPLING. Turn the interlock with a wrench while holding its temperature down.
-cmu-yautja-experiment-root-clue = COMMAND IDENTITY / INAPROVALINE / SILICON / COPPER / PULSE. Reconstruct the hunter's encoded operator block.
+cmu-yautja-experiment-diagnostic-clue = Buried tracks sharpen beneath a focused probe. Turn the outer adjustment screw.
+cmu-yautja-experiment-translator-clue = A captured voice strains behind the memory lattice. A strong stimulant wakes its stored patterns; pulse the channel.
+cmu-yautja-experiment-solvent-clue = The service seal resists ordinary solvent. Etch its skin, then turn the recessed screw.
+cmu-yautja-experiment-coolant-clue = The exchanger tightens around a chilled probe. Quench its heart before turning the coupling.
+cmu-yautja-experiment-bridge-clue = Two broken paths answer a living current. Pulse the gap between them.
+cmu-yautja-experiment-capacitor-clue = The sleeping reservoir demands a stronger living current. Tighten its housing.
+cmu-yautja-experiment-prism-clue = Three spectral channels answer a light-reactive compound. Align the adjustment screw.
+cmu-yautja-experiment-veil-clue = The empty outline calms when its metabolism slows. Pulse the camouflage bus.
+cmu-yautja-experiment-echo-clue = A dead hunt stirs under a stimulant. Turn the archive read-head screw.
+cmu-yautja-experiment-radar-clue = The quarry trace demands a sharper focus than the outer tracks. Pulse the sensor bus.
+cmu-yautja-experiment-bio-clue = The foreign pulse must fall quiet before the contact will read it. Turn the biometric screw.
+cmu-yautja-experiment-catalyst-clue = The field kit seeks a compound that repairs torn tissue. Ignite it with a living flame.
+cmu-yautja-experiment-decoy-clue = A false hunter gathers around a mind-distorting sample. Pulse the empty outline.
+cmu-yautja-experiment-tether-clue = A thickened carrier holds the distant command. Tighten the equipment coupler.
+cmu-yautja-experiment-orbit-clue = The returning blade answers unnatural density. Turn the guidance collar.
+cmu-yautja-experiment-plasma-clue = Captive plasma demands a strong heat-raising carrier. Apply a living flame.
+cmu-yautja-experiment-flash-clue = Excess light pools behind the targeting shutter. Introduce a light-reactive sample and turn its screw.
+cmu-yautja-experiment-static-clue = The defensive bus rejects a familiar pulse. Feed disruption back through its terminals.
+cmu-yautja-experiment-containment-clue = The containment cage rejects an etching carrier. Protect its channels, then reverse the coupling.
+cmu-yautja-experiment-root-clue = The owner pattern shelters behind a neural shield. Pulse a protected signature through the identity block.
 
-cmu-yautja-experiment-orbit-lore = Human analysis: the smart disc guides its flight and returns to its operator. Iron and mercury reconnect the guidance contacts. Corrections stream through the projected orbit until its return vector locks onto the bracer.
+cmu-yautja-experiment-orbit-lore = Human analysis: the smart disc guides its flight and returns to its operator. A dense generated carrier reconnects the guidance contacts. Corrections stream through the projected orbit until its return vector locks onto the bracer.
 
-cmu-yautja-experiment-echo-lore = Human analysis: damaged recordings remain in the mimicry archive. The waveform separates from the carrier as mercury and alcohol restore the read head. Surviving fragments contain breathing, hunting clicks and broken speech.
+cmu-yautja-experiment-echo-lore = Human analysis: damaged recordings remain in the mimicry archive. The waveform separates from the carrier as a psychostimulating carrier restores the read head. Surviving fragments contain breathing, hunting clicks and broken speech.
 
 cmu-yautja-experiment-decoy-lore = Human analysis: a damaged camouflage diagnostic reconstructs the stored outline of its wearer. Scanning slices assemble a hovering calibration image. Missing sections reveal where the camouflage circuit loses its tracking signal.
 
-cmu-yautja-experiment-plasma-lore = Human analysis: the shoulder caster launches concentrated plasma. This isolated bench test bleeds a small charge through three vent paths. A phosphorus-lithium mixture initiates the discharge under a lit welder.
+cmu-yautja-experiment-plasma-lore = Human analysis: the shoulder caster launches concentrated plasma. This isolated bench test bleeds a small charge through three vent paths. A strong hyperthermic compound initiates the discharge under a lit welder.
 
-cmu-yautja-experiment-root-lore = Human analysis: a command identity is encoded across biological and electronic checks. Inaprovaline, silicon and copper recover one cipher block. The recovered block exposes part of the operator signature; full access still requires this bracer's five independent interlocks.
+cmu-yautja-experiment-root-lore = Human analysis: a command identity is encoded across biological and electronic checks. A refined neuroshielding carrier protects one cipher block while it is read. The recovered block exposes part of the operator signature; full access still requires this bracer's five independent interlocks.
 
-cmu-yautja-experiment-flash-lore = Human analysis: the targeting interface rejects an excessive signal from the phosphorus-silicon test mixture. Stored light escapes as a brief flare, followed by a refractive wake and shutter recovery.
+cmu-yautja-experiment-flash-lore = Human analysis: the targeting interface rejects an excessive signal from the photosensitive test compound. Stored light escapes as a brief flare, followed by a refractive wake and shutter recovery.
 
 cmu-yautja-experiment-catalyst-lore = Human analysis: the field-service medical pathway can catalyze a stabilizer from a human substitute mixture. A lit welder supplies the initiating heat; the spiraling aerosol condenses around the recovered gel.
 
-cmu-yautja-experiment-translator-lore = Human analysis: the hunting equipment stores and reproduces captured voices. Alcohol clears the contacts while silicon bridges the damaged memory path. The glyph columns are a partial phoneme decode.
+cmu-yautja-experiment-translator-lore = Human analysis: the hunting equipment stores and reproduces captured voices. A generated neuroactive carrier bridges the damaged memory path. The glyph columns are a partial phoneme decode.
 
 cmu-yautja-experiment-solvent-lore = Human analysis: field-service sealant protects the gauntlet from blood, dust and moisture. The solvent mixture strips a damaged layer; suspended fragments break down in the extraction plume.
 
 cmu-yautja-experiment-diagnostic-lore = Human analysis: conductive liquid exposes buried tracks in the wrist computer. The rising cross-sections reconstruct its internal architecture. Moving scan bands trace the routes between isolated subsystems.
 
-cmu-yautja-experiment-tether-lore = Human analysis: the bracer sends commands to recovered remote hunting equipment. Iron and copper restore the coupler. Moving signal packets pass between projected endpoints while the physical equipment remains where it is.
+cmu-yautja-experiment-tether-lore = Human analysis: the bracer sends commands to recovered remote hunting equipment. A viscous generated carrier restores the coupler. Moving signal packets pass between projected endpoints while the physical equipment remains where it is.
 
-cmu-yautja-experiment-capacitor-lore = Human analysis: the cloak and weapons share limited stored power. This lithium-driven test restores 450 charge while the magnetic cage holds a small luminous discharge clear of the casing.
+cmu-yautja-experiment-capacitor-lore = Human analysis: the cloak and weapons share limited stored power. This electrogenetic test restores 450 charge while the magnetic cage holds a small luminous discharge clear of the casing.
 
 cmu-yautja-experiment-containment-lore = Human analysis: the wrist computer isolates hazardous power and destruction controls behind interlocks. This procedure reverses a detached test field inside the projected cage. It does not arm the self-destruct device.
 
-cmu-yautja-experiment-radar-lore = Human analysis: the hunting sensors distinguish living heat signatures. Copper and iron reconnect the sweep circuit. The display is a diagnostic projection; the bracer separately reports the measured number of nearby living contacts.
+cmu-yautja-experiment-radar-lore = Human analysis: the hunting sensors distinguish living heat signatures. A refined focusing compound restores the sweep circuit. The display is a diagnostic projection; the bracer separately reports the measured number of nearby living contacts.
 
-cmu-yautja-experiment-bridge-lore = Human analysis: the wrist computer routes commands between hunting systems. Copper and silicon restore an interrupted path. The branching discharge tests continuity between its isolated terminals.
+cmu-yautja-experiment-bridge-lore = Human analysis: the wrist computer routes commands between hunting systems. An electrogenetic carrier restores an interrupted path. The branching discharge tests continuity between its isolated terminals.
 
-cmu-yautja-experiment-coolant-lore = Human analysis: a heat exchanger protects the wrist computer from its power circuitry. Human cryoxadone is an experimental substitute coolant. Frost follows the exposed channels while condensed vapor escapes.
+cmu-yautja-experiment-coolant-lore = Human analysis: a heat exchanger protects the wrist computer from its power circuitry. A refined hypothermic compound substitutes for its unknown coolant. Frost follows the exposed channels while condensed vapor escapes.
 
-cmu-yautja-experiment-static-lore = Human analysis: a defensive circuit tries to reject foreign control signals. Copper and mercury turn its test pulse back into the isolated bus. The fractured glyphs are corrupted status data riding the discharge.
+cmu-yautja-experiment-static-lore = Human analysis: a defensive circuit tries to reject foreign control signals. A disruptive compound turns its test pulse back into the isolated bus. The fractured glyphs are corrupted status data riding the discharge.
 
-cmu-yautja-experiment-bio-lore = Human analysis: a biometric interface expects its hunter's physiology. Inaprovaline and water let human instruments read the contact response. The paired traces compare a stored pattern against the foreign sample.
+cmu-yautja-experiment-bio-lore = Human analysis: a biometric interface expects its hunter's physiology. A neuroinhibiting compound quiets the foreign signal enough to read the contact response. The paired traces compare a stored pattern against the foreign sample.
 
-cmu-yautja-experiment-veil-lore = Human analysis: camouflage bends surrounding light. Silicon and mercury couple a test signal into that circuit. The membrane refracts the real floor; a fading hunter silhouette marks the calibration boundary.
+cmu-yautja-experiment-veil-lore = Human analysis: camouflage bends surrounding light. A hypometabolic carrier couples a test signal into that circuit. The membrane refracts the real floor; a fading hunter silhouette marks the calibration boundary.
 
 cmu-yautja-experiment-prism-lore = Human analysis: the bio-mask separates hunting information into sensor channels. This alignment projects three test bands through the damaged optical interface; the converging geometry calibrates their common aim point.
 
@@ -140,7 +140,8 @@ cmu-yautja-experiment-records-empty = Complete a procedure to recover a field re
 cmu-yautja-experiment-help-title = Field analysis
 cmu-yautja-experiment-help-short = Keep the bracer on the floor.
     Inspect its five marked contacts for diagnostic clues.
-    Choose a procedure, pour in its samples, then use the listed tool on the bracer.
+    Acquire a tier-3 research compound, identify it with the XRF, and refine its required property in the synthesis simulator.
+    Add the identified sample, choose a procedure, then use the listed tool. Stock dispenser chemicals do not qualify.
     Match all five clues to recover full access. Other procedures still yield research.
     Strain at 8 triggers a vent; cooling procedures reduce it.
 cmu-yautja-experiment-seals-short = { $count } / 5 interlocks released
@@ -152,3 +153,5 @@ cmu-yautja-experiment-apply-tool = On the floor: add samples, then apply tool.
 cmu-yautja-experiment-seal-title = Diagnostic contact { $number }
 cmu-yautja-experiment-seal-recovered = Interlock released: { $name }
 cmu-yautja-experiment-selected-procedure = { $name } · materials & tool
+
+cmu-yautja-experiment-generated-requirement = { $amount }u XRF-identified generated compound: tier { $tier }+, { $property } { $level }+.

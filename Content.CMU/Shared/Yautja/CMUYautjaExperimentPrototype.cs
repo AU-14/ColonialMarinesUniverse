@@ -1,4 +1,4 @@
-using Content.Shared.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Tools.Components;
@@ -22,7 +22,10 @@ public sealed partial class CMUYautjaExperimentPrototype : IPrototype
     [DataField(required: true)] public LocId Clue;
     [DataField(required: true)] public LocId Lore;
     [DataField(required: true)] public ProtoId<ToolQualityPrototype> Tool;
-    [DataField(required: true)] public Dictionary<ProtoId<ReagentPrototype>, FixedPoint2> Reagents = new();
+    [DataField(required: true)] public ProtoId<ReagentPropertyPrototype> Property;
+    [DataField] public int PropertyLevel = 2;
+    [DataField] public int MinimumTier = 3;
+    [DataField] public FixedPoint2 SampleAmount = 5;
     [DataField] public TimeSpan Duration = TimeSpan.FromSeconds(8);
     [DataField] public int Heat = 1;
     [DataField] public int Charge;

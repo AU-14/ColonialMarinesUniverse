@@ -1,4 +1,8 @@
 using System.Linq;
+using Content.Server.CMU14.Chemistry.Reagents;
+using Content.Server.CMU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Reagents;
+using Content.Shared.Chemistry.Reagent;
 using Content.Server.CMU14.Yautja;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.Chemistry.Research;
@@ -21,12 +25,13 @@ public sealed class CMUYautjaExperimentTest
     [Test]
     public async Task MovingBracerIntoAHandCancelsWorkWithoutSpendingTheSample()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         var server = pair.Server;
         var map = await pair.CreateTestMap();
         EntityUid user = default, bracer = default, screwdriver = default;
         ProtoId<CMUYautjaExperimentPrototype>[] challenge = [];
         string clues = "";
+        string sample = "";
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
@@ -48,6 +53,16 @@ public sealed class CMUYautjaExperimentTest
             hands.TryPickupAnyHand(user, screwdriver);
             var research = entities.System<CMUYautjaExperimentSystem>();
             var comp = entities.GetComponent<CMUYautjaExperimentComponent>(bracer);
+            Assert.That(research.StartExperiment((bracer, comp), user, screwdriver), Is.False,
+                "Stock dispenser chemicals must not substitute for generated research chemistry.");
+            var recipe = server.ProtoMan.Index(comp.Selected);
+            sample = GenerateSample(entities, server.ProtoMan, recipe, identify: false);
+            solutions.TryGetSolution(bracer, CMUYautjaExperimentSystem.SampleWell, out var well, out _);
+            solutions.TryAddReagent(well!.Value, sample, recipe.SampleAmount);
+            Assert.That(research.StartExperiment((bracer, comp), user, screwdriver), Is.False,
+                "An unscanned compound must be identified through the XRF research path first.");
+            entities.System<ServerResearchDataTerminalSystem>().CompleteChemical(
+                server.ProtoMan.Index<ReagentPrototype>(sample), "corporate", bracer);
             challenge = comp.RequiredExperiments.ToArray();
             Assert.That(challenge, Has.Length.EqualTo(5));
             clues = research.ChallengeClues(comp);
@@ -68,6 +83,8 @@ public sealed class CMUYautjaExperimentTest
                 "An interrupted attempt must preserve the clues and cannot release a seal.");
             entities.System<SharedSolutionContainerSystem>().TryGetSolution(bracer, CMUYautjaExperimentSystem.SampleWell, out _, out var well);
             Assert.That(well!.GetTotalPrototypeQuantity("Water"), Is.EqualTo((FixedPoint2) 5));
+            Assert.That(well.GetTotalPrototypeQuantity(sample), Is.EqualTo((FixedPoint2) 5),
+                "Cancellation preserves the generated compound as well as unrelated diluent.");
             Assert.That(entities.System<CMUYautjaExperimentSystem>().StartExperiment((bracer, comp), user, screwdriver), Is.False,
                 "Held bracers cannot be experimented on.");
             var hands = entities.System<SharedHandsSystem>();
@@ -83,16 +100,18 @@ public sealed class CMUYautjaExperimentTest
             Assert.That(entities.GetComponent<CMUYautjaExperimentComponent>(bracer).Discoveries,
                 Does.Contain(new ProtoId<CMUYautjaExperimentPrototype>("CMUYautjaDiagnostic")));
             entities.System<SharedSolutionContainerSystem>().TryGetSolution(bracer, CMUYautjaExperimentSystem.SampleWell, out _, out var well);
-            Assert.That(well!.GetTotalPrototypeQuantity("Water"), Is.EqualTo(FixedPoint2.Zero));
+            Assert.That(well!.GetTotalPrototypeQuantity(sample), Is.EqualTo(FixedPoint2.Zero));
+            Assert.That(well.GetTotalPrototypeQuantity("Water"), Is.EqualTo((FixedPoint2) 5),
+                "Only the matching generated compound is consumed.");
         });
         await pair.CleanReturnAsync();
     }
 
     [TestCase(false)]
     [TestCase(true)]
-    public async Task FiveChosenExperimentsUnlockRealGearWithoutPrerequisitesOrRepeatRewards(bool requireRoot)
+    public async Task FiveChosenExperimentsUnlockRealGearWithoutRepeatRewards(bool requireRoot)
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         var server = pair.Server;
         var map = await pair.CreateTestMap();
         EntityUid user = default, bracer = default;
@@ -138,8 +157,7 @@ public sealed class CMUYautjaExperimentTest
                 var solutions = entities.System<SharedSolutionContainerSystem>();
                 solutions.TryGetSolution(bracer, CMUYautjaExperimentSystem.SampleWell, out var well, out _);
                 solutions.RemoveAllSolution(well!.Value);
-                foreach (var (reagent, amount) in recipe.Reagents)
-                    solutions.TryAddReagent(well.Value, reagent, amount);
+                solutions.TryAddReagent(well.Value, GenerateSample(entities, server.ProtoMan, recipe), recipe.SampleAmount);
                 var research = entities.System<CMUYautjaExperimentSystem>();
                 var lab = entities.System<SharedResearchDataTerminalSystem>();
                 beforeCredits = lab.GetCredits("corporate");
@@ -198,5 +216,25 @@ public sealed class CMUYautjaExperimentTest
                 "Call Disc must publish the return effect while recovering the real item.");
         });
         await pair.CleanReturnAsync();
+    }
+
+    private static string GenerateSample(IEntityManager entities, IPrototypeManager prototypes,
+        CMUYautjaExperimentPrototype recipe, bool identify = true)
+    {
+        var generator = entities.System<ServerReagentGeneratorSystem>();
+        var id = $"CMUBracerTest{recipe.ID}";
+        if (generator.ProceduralReagentData.ContainsKey(id))
+            return id;
+        var data = new GeneratedReagentData
+        {
+            ID = id, Name = id, GenTier = 3, Class = ReagentClass.Ultra, RecipeHint = "RMCGold",
+        };
+        generator.GenerateStats(ref data, noProperties: true);
+        data.Effects[recipe.Property.Id] = recipe.PropertyLevel;
+        var research = entities.System<ServerResearchDataTerminalSystem>();
+        Assert.That(research.LegalizeChem(data), Is.True, "The real procgen system must materialize the sample and its synthesis reaction.");
+        if (identify)
+            research.CompleteChemical(prototypes.Index<ReagentPrototype>(id), "corporate", null);
+        return id;
     }
 }

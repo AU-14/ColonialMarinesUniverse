@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Chemistry.Reagents;
 using Content.Server.Chat.Systems;
 using Content.Shared.Chat;
 using Content.Shared.ActionBlocker;
@@ -52,6 +53,7 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCReagentSystem _reagents = default!;
+    [Dependency] private ServerReagentGeneratorSystem _generator = default!;
     [Dependency] private SharedResearchDataTerminalSystem _research = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
@@ -119,8 +121,9 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
 
     private string Instructions(CMUYautjaExperimentPrototype recipe)
     {
-        var chemicals = string.Join(" + ", recipe.Reagents.Select(pair =>
-            $"{pair.Value}u {_reagents.Index(pair.Key).LocalizedName}"));
+        var chemicals = Loc.GetString("cmu-yautja-experiment-generated-requirement",
+            ("amount", recipe.SampleAmount), ("tier", recipe.MinimumTier),
+            ("property", _prototypes.Index(recipe.Property).LocalizedName), ("level", recipe.PropertyLevel));
         return Loc.GetString("cmu-yautja-experiment-instructions",
             ("name", Loc.GetString(recipe.Name)), ("tool", Loc.GetString(_prototypes.Index(recipe.Tool).ToolName)),
             ("chemicals", chemicals), ("seconds", (int) recipe.Duration.TotalSeconds), ("heat", recipe.Heat)) +
@@ -237,8 +240,26 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
     }
 
     private bool HasReagents(EntityUid uid, CMUYautjaExperimentPrototype recipe) =>
-        _solutions.TryGetSolution(uid, SampleWell, out _, out var solution) &&
-        recipe.Reagents.All(pair => solution.GetTotalPrototypeQuantity(pair.Key) >= pair.Value);
+        FindSample(uid, recipe) != null;
+
+    private string? FindSample(EntityUid uid, CMUYautjaExperimentPrototype recipe)
+    {
+        if (!_solutions.TryGetSolution(uid, SampleWell, out _, out var solution))
+            return null;
+
+        // Match actual round-generated chemistry, including simulator derivatives. Stock reagents
+        // with similar effects cannot substitute, and tiny amounts cannot qualify a diluted sample.
+        foreach (var (reagent, _) in solution.Contents)
+        {
+            var id = reagent.Prototype;
+            if (_generator.ProceduralReagentData.TryGetValue(id, out var data) &&
+                _generator.IdentifiedChemicals.ContainsKey(id) && data.GenTier >= recipe.MinimumTier &&
+                data.Effects.GetValueOrDefault(recipe.Property.Id) >= recipe.PropertyLevel &&
+                solution.GetTotalPrototypeQuantity(id) >= recipe.SampleAmount)
+                return id;
+        }
+        return null;
+    }
 
     public bool StartExperiment(Entity<CMUYautjaExperimentComponent> ent, EntityUid user, EntityUid tool)
     {
@@ -305,16 +326,15 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
         ent.Comp.Pending = null;
         args.Handled = true;
         UpdateGuide(ent);
-        if (args.Cancelled || !CanResearch(ent, args.User) || !HasReagents(ent, _prototypes.Index(args.Experiment)))
-            return;
         var recipe = _prototypes.Index(args.Experiment);
+        if (args.Cancelled || !CanResearch(ent, args.User) || FindSample(ent, recipe) is not { } sample)
+            return;
         if (!_solutions.TryGetSolution(ent.Owner, SampleWell, out var well, out _))
             return;
         if (recipe.Charge < 0 && (!TryComp<YautjaBracerComponent>(ent, out var power) ||
             !_power.TryDrainPower((ent.Owner, power), args.User, -recipe.Charge, false)))
             return;
-        foreach (var (reagent, quantity) in recipe.Reagents)
-            _solutions.RemoveReagent(well.Value, reagent, quantity);
+        _solutions.RemoveReagent(well.Value, sample, recipe.SampleAmount);
         ent.Comp.Heat = Math.Max(0, ent.Comp.Heat + recipe.Heat);
         PlayExperiment(ent, ent.Comp.Heat >= 8 ? Overload : recipe.ID);
         if (args.Used is { } used && TryComp<ToolComponent>(used, out var tool))

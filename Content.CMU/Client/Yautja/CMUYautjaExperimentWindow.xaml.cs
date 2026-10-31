@@ -93,8 +93,9 @@ public sealed partial class CMUYautjaExperimentWindow : DefaultWindow
     private string Requirements(CMUYautjaExperimentPrototype recipe) =>
         Loc.GetString("cmu-yautja-experiment-requirements-short",
             ("tool", Loc.GetString(_prototypes.Index(recipe.Tool).ToolName)),
-            ("chemicals", string.Join(" + ", recipe.Reagents.Select(pair =>
-                $"{pair.Value}u {_reagents.Index(pair.Key).LocalizedName}"))),
+            ("chemicals", Loc.GetString("cmu-yautja-experiment-generated-requirement",
+                ("amount", recipe.SampleAmount), ("tier", recipe.MinimumTier),
+                ("property", _prototypes.Index(recipe.Property).LocalizedName), ("level", recipe.PropertyLevel))),
             ("seconds", (int) recipe.Duration.TotalSeconds), ("heat", recipe.Heat));
 
     private void ShowProcedure()

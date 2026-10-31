@@ -8,28 +8,30 @@ Each new discovery prints notes and awards research credits and sample data to t
 
 A new result matching one of the five seals releases that seal and resets core strain to zero. The five chosen procedures therefore need no additional cooling experiment when begun with a cool core. At 8 core strain, the procedure vents the capacitor and fails. Field-kit sealant dissolution removes 2 strain; plasma exchanger quenching removes 5. Plasma reservoir excitation restores 450 charge. Field-medicine catalysis produces a usable stabilizer gel, and the bio-mask quarry sweep reports nearby living signatures.
 
-| Procedure | Tool | Reagents | Strain | Recovered subsystem |
-| --- | --- | --- | --- | --- |
-| Gauntlet circuit tomography | Screwdriver | 5u Water | 0 | Human analysis: conductive liquid exposes buried tracks in the wrist computer. The rising cross-sections reconstruct its internal architecture. Moving scan bands trace the routes between isolated subsystems. |
-| Vocal mimicry buffer | Multitool | 3u Ethanol + 3u Silicon | 1 | Human analysis: the hunting equipment stores and reproduces captured voices. Alcohol clears the contacts while silicon bridges the damaged memory path. The glyph columns are a partial phoneme decode. |
-| Field-kit sealant dissolution | Screwdriver | 5u Ethanol + 3u Water | -2 | Human analysis: field-service sealant protects the gauntlet from blood, dust and moisture. The solvent mixture strips a damaged layer; suspended fragments break down in the extraction plume. |
-| Plasma exchanger quench | Wrench | 3u Cryoxadone + 5u Water | -5 | Human analysis: a heat exchanger protects the wrist computer from its power circuitry. Human cryoxadone is an experimental substitute coolant. Frost follows the exposed channels while condensed vapor escapes. |
-| Wrist-computer bus bridge | Multitool | 4u Copper + 2u Silicon | 1 | Human analysis: the wrist computer routes commands between hunting systems. Copper and silicon restore an interrupted path. The branching discharge tests continuity between its isolated terminals. |
-| Plasma reservoir excitation | Wrench | 4u Lithium + 3u Silicon | 2 | Human analysis: the cloak and weapons share limited stored power. This lithium-driven test restores 450 charge while the magnetic cage holds a small luminous discharge clear of the casing. |
-| Bio-mask spectral alignment | Screwdriver | 3u Carbon + 5u Silicon | 1 | Human analysis: the bio-mask separates hunting information into sensor channels. This alignment projects three test bands through the damaged optical interface; the converging geometry calibrates their common aim point. |
-| Optical camouflage phase test | Multitool | 4u Silicon + 2u Mercury | 2 | Human analysis: camouflage bends surrounding light. Silicon and mercury couple a test signal into that circuit. The membrane refracts the real floor; a fading hunter silhouette marks the calibration boundary. |
-| Hunt-recording recovery | Screwdriver | 2u Mercury + 4u Ethanol | 1 | Human analysis: damaged recordings remain in the mimicry archive. The waveform separates from the carrier as mercury and alcohol restore the read head. Surviving fragments contain breathing, hunting clicks and broken speech. |
-| Bio-mask quarry sweep | Multitool | 3u Copper + 3u Iron | 1 | Human analysis: the hunting sensors distinguish living heat signatures. Copper and iron reconnect the sweep circuit. The display is a diagnostic projection; the bracer separately reports the measured number of nearby living contacts. |
-| Hunter biometrics assay | Screwdriver | 3u CMInaprovaline + 3u Water | 1 | Human analysis: a biometric interface expects its hunter's physiology. Inaprovaline and water let human instruments read the contact response. The paired traces compare a stored pattern against the foreign sample. |
-| Field-medicine catalyst | Lit welder | 5u CMInaprovaline + 3u Carbon | 2 | Human analysis: the field-service medical pathway can catalyze a stabilizer from a human substitute mixture. A lit welder supplies the initiating heat; the spiraling aerosol condenses around the recovered gel. |
-| Camouflage calibration phantom | Multitool | 4u Silicon + 2u Phosphorus | 2 | Human analysis: a damaged camouflage diagnostic reconstructs the stored outline of its wearer. Scanning slices assemble a hovering calibration image. Missing sections reveal where the camouflage circuit loses its tracking signal. |
-| Remote equipment command link | Wrench | 4u Iron + 4u Copper | 2 | Human analysis: the bracer sends commands to recovered remote hunting equipment. Iron and copper restore the coupler. Moving signal packets pass between projected endpoints while the physical equipment remains where it is. |
-| Smart-disc recall calibration | Wrench | 5u Iron + 2u Mercury | 2 | Human analysis: the smart disc guides its flight and returns to its operator. Iron and mercury reconnect the guidance contacts. Corrections stream through the projected orbit until its return vector locks onto the bracer. |
-| Caster containment bleed | Lit welder | 3u Phosphorus + 4u Lithium | 3 | Human analysis: the shoulder caster launches concentrated plasma. This isolated bench test bleeds a small charge through three vent paths. A phosphorus-lithium mixture initiates the discharge under a lit welder. |
-| Targeting optic overload | Screwdriver | 3u Phosphorus + 3u Silicon | 2 | Human analysis: the targeting interface rejects an excessive signal from the phosphorus-silicon test mixture. Stored light escapes as a brief flare, followed by a refractive wake and shutter recovery. |
-| Tamper circuit inversion | Multitool | 4u Copper + 3u Mercury | 3 | Human analysis: a defensive circuit tries to reject foreign control signals. Copper and mercury turn its test pulse back into the isolated bus. The fractured glyphs are corrupted status data riding the discharge. |
-| Gauntlet containment interlock | Wrench | 5u Silicon + 4u Cryoxadone | -2 | Human analysis: the wrist computer isolates hazardous power and destruction controls behind interlocks. This procedure reverses a detached test field inside the projected cage. It does not arm the self-destruct device. |
-| Hunter identity cipher | Multitool | 4u CMInaprovaline + 4u Silicon + 4u Copper | 2 | Human analysis: a command identity is encoded across biological and electronic checks. Inaprovaline, silicon and copper recover one cipher block. The recovered block exposes part of the operator signature; full access still requires this bracer's five independent interlocks. |
+Every procedure consumes 5u of an XRF-identified, round-generated tier-3 (or higher) compound. Research contracts supply the starting chemistry; the synthesis simulator can refine or combine its properties. Stock dispenser chemicals never qualify. Matching compounds may serve more than one procedure. The bracer consumes only the matching compound, after successful tool work.
+
+| Procedure | Tool | Required property | Strain |
+| --- | --- | --- | --- |
+| Gauntlet circuit tomography | Screwdriver | Focusing 2+ | 0 |
+| Vocal mimicry buffer | Multitool | Psychostimulating 3+ | 1 |
+| Field-kit sealant dissolution | Screwdriver | Corrosive 2+ | -2 |
+| Plasma exchanger quench | Wrench | Hypothermic 2+ | -5 |
+| Wrist-computer bus bridge | Multitool | Electrogenetic 2+ | 1 |
+| Plasma reservoir excitation | Wrench | Electrogenetic 3+ | 2 |
+| Bio-mask spectral alignment | Screwdriver | Photosensitive 1+ | 1 |
+| Optical camouflage phase test | Multitool | Hypometabolic 2+ | 2 |
+| Hunt-recording recovery | Screwdriver | Psychostimulating 2+ | 1 |
+| Bio-mask quarry sweep | Multitool | Focusing 3+ | 1 |
+| Hunter biometrics assay | Screwdriver | Neuroinhibiting 2+ | 1 |
+| Field-medicine catalyst | Lit welder | Repairing 2+ | 2 |
+| Camouflage calibration phantom | Multitool | Hallucinogenic 2+ | 2 |
+| Remote equipment command link | Wrench | Viscous 2+ | 2 |
+| Smart-disc recall calibration | Wrench | Hyperdensificating 1+ | 2 |
+| Caster containment bleed | Lit welder | Hyperthermic 3+ | 3 |
+| Targeting optic overload | Screwdriver | Photosensitive 1+ | 2 |
+| Tamper circuit inversion | Multitool | Disrupting 2+ | 3 |
+| Gauntlet containment interlock | Wrench | Anticorrosive 2+ | -2 |
+| Hunter identity cipher | Multitool | Neuroshielding 1+ | 2 |
 
 Each bracer chooses five distinct experiments at map initialization and saves that challenge on the device. The five numbered clues appear on the bracer's diagnostic contacts and in printed discovery notes. They hint at the materials, tool and intended reaction without naming the unresolved procedure. Released seals instead show the solved procedure name. Picking up the bracer, changing operators, selecting a different procedure and interrupted work do not reroll the challenge.
 
