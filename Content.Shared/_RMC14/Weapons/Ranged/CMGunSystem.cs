@@ -481,6 +481,10 @@ public sealed partial class CMGunSystem : EntitySystem
             return;
         }
 
+        //var userDelay = EnsureComp<UserPointblankCooldownComponent>(user); cmu14
+        //if (_timing.CurTime < userDelay.LastPBAt + userDelay.TimeBetweenPBs) cmu14
+            //return; cmu14
+
         var session = CompOrNull<ActorComponent>(user)?.PlayerSession;
         if (gunComp.Target.Value == user.Owner)
         {
