@@ -34,13 +34,18 @@ public sealed class CMUGuidanceIntegrationTest : GameTest
             {
                 window.OpenCentered();
                 var button = window.CasRequestsButton;
+                button.Measure(new Vector2(160, 30));
+                button.Arrange(UIBox2.FromDimensions(button.Position, new Vector2(160, 30)));
+                var at = button.Size / 2;
+                var screen = new ScreenCoordinates(
+                    (Vector2) button.GlobalPixelPosition + at * button.UIScale, default);
                 foreach (var state in new[] { BoundKeyState.Down, BoundKeyState.Up })
                 {
                     var method = typeof(BaseButton).GetMethod(
                         state == BoundKeyState.Down ? "KeyBindDown" : "KeyBindUp",
                         BindingFlags.Instance | BindingFlags.NonPublic)!;
                     method.Invoke(button, [new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick, state,
-                        default, true, Vector2.Zero, Vector2.Zero)]);
+                        screen, true, at, at * button.UIScale)]);
                 }
                 Assert.That(window.CasRequestsPanel.IsInsideTree, Is.True,
                     "The RTO CAS button must open the request management panel.");
