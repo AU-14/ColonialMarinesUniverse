@@ -1847,9 +1847,10 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
 
         curCount = 0;
         var limitedConstructs = EntityQueryEnumerator<HiveConstructionLimitedComponent, HiveMemberComponent>();
-        while (limitedConstructs.MoveNext(out var otherUnique, out _))
+        // CMU14: limits are per hive, another hive's core must not eat this hive's slot
+        while (limitedConstructs.MoveNext(out var otherUnique, out var member))
         {
-            if (otherUnique.Id == id)
+            if (otherUnique.Id == id && member.Hive == hive.Owner)
                 curCount++;
         }
 
