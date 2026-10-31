@@ -27,4 +27,7 @@ public interface IAdminLogManager : ISharedAdminLogManager
     Task<Round> CurrentRound();
     Task<int> CountLogs(int round);
     void OpenEui(ICommonSession admin, string? search = null, Guid? targetPlayer = null);
+
+    // CMU14: builds a line of tpto command links for arbitrary entities, header included
+    bool CreateTpLinks(string header, List<(EntityUid Entity, string Name)> entities, out string outString);
 }

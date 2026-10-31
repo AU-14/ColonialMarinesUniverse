@@ -55,6 +55,8 @@
   id: CannibalRole
   name: roles-antag-cannibal-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-cannibal-objective
 
 - type: startingGear

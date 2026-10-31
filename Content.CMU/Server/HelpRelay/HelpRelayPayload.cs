@@ -91,14 +91,7 @@ public static class HelpRelayPayload
                         : post.Description,
                     Color = source.Color(),
                     Timestamp = DateTime.UtcNow.ToString("o"),
-                    Fields =
-                    [
-                        new() { Name = "Round", Value = $"{context?.RoundId ?? 0}" },
-                        new() { Name = "Mode", Value = context?.Gamemode ?? "?" },
-                        new() { Name = "Map", Value = context?.Map ?? "?" },
-                        new() { Name = "Server", Value = context?.Server ?? "?" },
-                        ..post.ExtraFields ?? [],
-                    ],
+                    Fields = [.. ContextFields(context), ..post.ExtraFields ?? []],
                     Footer = new() { Text = FooterText(revision, builtAt, context?.Server) },
                 },
             ],
@@ -135,7 +128,7 @@ public static class HelpRelayPayload
         string username,
         string description,
         string? revision,
-        string? server,
+        HelpContext? context,
         string? builtAt = null)
     {
         return new HelpWebhookPayload
@@ -148,11 +141,21 @@ public static class HelpRelayPayload
                 {
                     Description = description,
                     Color = source.Color(),
-                    Footer = new() { Text = FooterText(revision, builtAt, server) },
+                    Fields = ContextFields(context),
+                    Footer = new() { Text = FooterText(revision, builtAt, context?.Server) },
                 },
             ],
         };
     }
+
+    /// <summary>The shared context skeleton every family embed carries: Round | Mode | Map | Server, inline.</summary>
+    private static List<HelpWebhookEmbedField> ContextFields(HelpContext? context) =>
+    [
+        new() { Name = "Round", Value = $"{context?.RoundId ?? 0}" },
+        new() { Name = "Mode", Value = context?.Gamemode ?? "?" },
+        new() { Name = "Map", Value = context?.Map ?? "?" },
+        new() { Name = "Server", Value = context?.Server ?? "?" },
+    ];
 
     private static string FooterText(string? revision, string? builtAt, string? server)
     {
