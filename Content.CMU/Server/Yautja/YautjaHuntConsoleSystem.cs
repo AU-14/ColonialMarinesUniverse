@@ -374,9 +374,10 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
             ? _random.Next(minCount, maxCount + 1)
             : maxCount;
         var spawnedCount = 0;
+        var tierCounts = new int[option.Tiers.Count];
         for (var i = 0; i < count; i++)
         {
-            var spawned = TrySpawnPrey(ent.Comp, option, coordinates, blooding);
+            var spawned = TrySpawnPrey(ent.Comp, option, coordinates, blooding, tierCounts);
             if (spawned == null)
                 continue;
 
@@ -448,9 +449,12 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         YautjaHuntConsoleComponent console,
         YautjaHuntCallOption option,
         MapCoordinates coordinates,
-        bool blooding)
+        bool blooding,
+        int[] tierCounts)
     {
-        var entry = PickSpawnEntry(option.Spawns);
+        var entry = option.Tiers.Count > 0
+            ? PickTierEntry(option.Tiers, tierCounts)
+            : PickSpawnEntry(option.Spawns);
         if (entry == null)
         {
             entry = new YautjaHuntSpawnEntry
@@ -488,6 +492,20 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         if (_inventory.TryGetSlotEntity(prey, "ears", out var worn)
             && HasComp<HeadsetComponent>(worn))
             Del(worn.Value);
+    }
+
+    private YautjaHuntSpawnEntry? PickTierEntry(List<YautjaHuntSpawnTier> tiers, int[] tierCounts)
+    {
+        for (var i = 0; i < tiers.Count; i++)
+        {
+            if (tiers[i].Max > 0 && tierCounts[i] >= tiers[i].Max)
+                continue;
+
+            tierCounts[i]++;
+            return PickSpawnEntry(tiers[i].Spawns);
+        }
+
+        return null;
     }
 
     private YautjaHuntSpawnEntry? PickSpawnEntry(List<YautjaHuntSpawnEntry> entries)
