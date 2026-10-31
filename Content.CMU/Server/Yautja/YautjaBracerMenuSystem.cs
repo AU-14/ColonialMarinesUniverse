@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared.CMU14.Xenonids.Hive;
 using Content.Server.EUI;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Rules;
@@ -45,6 +46,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
     [Dependency] private YautjaYoungbloodSystem _youngbloods = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private EuiManager _eui = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private TimeSpan _nextTrackerRefresh;
 
@@ -253,6 +255,10 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
     private TrackerBuildResult BuildTracker(EntityUid user, EntityUid bracer)
     {
         var origin = _transform.GetMapCoordinates(user);
+        // stacked z-levels are one z in cmss13 terms, so gear a floor up or down still gets a direction
+        var originLevels = origin.MapId == MapId.Nullspace
+            ? new HashSet<MapId> { origin.MapId }
+            : _zLevels.GetAllNetworkMapIds(origin.MapId);
         var readout = new TrackerReadoutBuilder();
         var groups = new Dictionary<(int X, int Y), TrackerSignalGroup>();
 
@@ -270,8 +276,8 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             if (coords.MapId == MapId.Nullspace)
                 continue;
 
-            readout.AddDead(GetTrackerLevelBucket(uid, xform, coords, origin));
-            if (coords.MapId == origin.MapId)
+            readout.AddDead(GetTrackerLevelBucket(uid, xform, coords, originLevels));
+            if (originLevels.Contains(coords.MapId))
                 AddTrackerSignal(groups, origin, coords, Loc.GetString(DeadYautjaBioSignatureName), readout, null);
         }
 
@@ -292,8 +298,8 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             if (coords.MapId == MapId.Nullspace)
                 continue;
 
-            readout.AddGear(GetTrackerLevelBucket(uid, xform, coords, origin));
-            if (coords.MapId == origin.MapId)
+            readout.AddGear(GetTrackerLevelBucket(uid, xform, coords, originLevels));
+            if (originLevels.Contains(coords.MapId))
                 AddTrackerSignal(groups, origin, coords, Name(uid), readout, Name(uid));
         }
 
@@ -353,7 +359,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             : Loc.GetString("rmc-tacmap-alert-no-area");
     }
 
-    private TrackerLevelBucket GetTrackerLevelBucket(EntityUid uid, TransformComponent xform, MapCoordinates coords, MapCoordinates origin)
+    private TrackerLevelBucket GetTrackerLevelBucket(EntityUid uid, TransformComponent xform, MapCoordinates coords, HashSet<MapId> originLevels)
     {
         if (_areas.TryGetArea(coords, out var area, out var areaPrototype))
         {
@@ -369,7 +375,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
         if (IsPlanetOrGroundMap(xform))
             return TrackerLevelBucket.HuntingGrounds;
 
-        return coords.MapId == origin.MapId
+        return originLevels.Contains(coords.MapId)
             ? TrackerLevelBucket.HuntingGrounds
             : TrackerLevelBucket.LowOrbit;
     }
