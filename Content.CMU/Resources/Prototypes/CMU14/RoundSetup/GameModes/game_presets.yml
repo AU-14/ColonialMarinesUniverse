@@ -4,7 +4,7 @@
   - colonyfall
   name: cmu-gamemode-colonyfall-name
   showInVote: true
-  maxPlayers: 45
+  maxPlayers: 65
   description: cmu-gamemode-colonyfall-desc
   burrowedLarvaEnabled: false
   thirdPartyAutoSpawn: true

@@ -84,6 +84,18 @@ rmc-squad-info-GROMCommandingOfficer = GROM Commanding Officer
 
 au14-uppgrom-description = You are a member of UPP's elite GROM special forces unit. Survive with your squad and contact any friendly Command.
 
+au14-uppgrom-rru-greeting = You are a member of UPP's elite GROM special forces unit. You have recieved an emergency signal from the local Ambassador.
+
+    The local UPP ambassador has called in a rapid response unit.
+    Investigate the reason and follow their orders.
+    
+    Ensure the ambassadors safety at all costs!
+
+    You are allied to the UPP and neutral to other countries!
+
+au14-uppgrom-rru-description = You are a member of a UPP elite GROM Rapid Reponse Team! You have recieved an emergency signal from the local Ambassador.
+
+
 au-14-job-name-papthirdparty-investigator = PaP Investigator
 au-14-job-prefix-papthirdparty-investigator = Pap Inv
 au14-papthirdparty-description = You are part of PaP's Investigation group. You were called to a colony to investigate. You are not aware of the situation. Investigate.

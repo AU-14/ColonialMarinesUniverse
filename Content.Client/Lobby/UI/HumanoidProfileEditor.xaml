@@ -362,7 +362,7 @@
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
-                <!-- cmu edit start: traits and markings sit between regulation appearance and colony roles -->
+                <!-- cmu edit start: traits and markings sit between regulation appearance and insurgency -->
                 <BoxContainer Orientation="Vertical" Margin="10">
                     <!-- Traits -->
                     <ScrollContainer VerticalExpand="True">
@@ -376,14 +376,31 @@
                     <!-- cmu edit end -->
                 </BoxContainer>
                 <!-- cmu edit end -->
-                <!-- CMU14: colony roles for colony-side gamemodes, replacing the retired insurgency tab -->
-                <BoxContainer Orientation="Vertical" Margin="10">
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="ColonyRolesJobList" Orientation="Vertical" />
-                        <!-- CMU14: antag opt-ins for colony rounds; restores the surface lost with the insurgency tab -->
-                        <BoxContainer Name="ColonyRolesAntagList" Orientation="Vertical" />
-                    </ScrollContainer>
-                </BoxContainer>
+                <!-- CMU14: Insurgency role priorities and antag opt-ins, split by faction like the other gamemodes. -->
+                <Control VerticalExpand="True">
+                    <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyGovernmentJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyInsurgentJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyCivilianJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" Margin="10">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyAntagList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                    </TabContainer>
+                </Control>
                 <BoxContainer Orientation="Vertical">
                     <TabContainer Name="ColonyFallTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">
@@ -445,10 +462,17 @@
                     </BoxContainer>
                     <Label Text="{Loc 'cmu-fof-fallback-explanation'}" />
                     <TabContainer Name="ForceOnForceTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
-                        <ScrollContainer VerticalExpand="True">
-                            <!-- CMU14: faction gameplay options. -->
-                            <BoxContainer Name="FoFJobList" Orientation="Vertical" />
-                        </ScrollContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <!-- CMU14: faction gameplay options. -->
+                                <BoxContainer Name="FoFJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="FoFColonyJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
                     </TabContainer>
                 </BoxContainer>
                 <BoxContainer Name="NamedItemsTab" Orientation="Vertical" Margin="10">
