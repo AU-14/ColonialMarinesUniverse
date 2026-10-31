@@ -52,7 +52,6 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
     /// </summary>
     private const CollisionGroup SolidMask =
         CollisionGroup.Impassable |
-        CollisionGroup.LowImpassable |
         CollisionGroup.GhostImpassable |
         CollisionGroup.BarricadeImpassable |
         CollisionGroup.BarbedBarricade;
@@ -240,12 +239,13 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
             if (seeAttempt.Blind)
                 continue;
 
-            if (_interaction.InRangeUnobstructed(observer,
-                    veteran,
+            var observerCoords = _transform.GetMapCoordinates(observer);
+            if (_interaction.InRangeUnobstructed(observerCoords,
+                    veteranCoords,
                     ent.Comp.SightRange,
                     SightMask,
-                    predicate: uid => uid == veteran,
-                    lagCompensate: false))
+                    predicate: uid => uid == veteran || uid == observer,
+                    checkAccess: false))
             {
                 return true;
             }

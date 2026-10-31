@@ -51,7 +51,10 @@
       RMCSkillJtac: 1
   - type: CMUStunImmunity
     taser: true
-    baton: true
+    # Batons still work, they just have to be swung about ten times (30 stamina x 0.33).
+    batonDamageMultiplier: 0.33
+  - type: FlashImmunity
+    showInExamine: false
   # Grants the cloak/jaunt action on spawn; the machete recall action follows the machete itself.
   - type: CMUVeteranCloak
   # Already worn: slots are filled at MapInit, so nothing ends up in storage.

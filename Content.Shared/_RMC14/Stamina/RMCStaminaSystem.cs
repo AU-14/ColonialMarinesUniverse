@@ -209,7 +209,8 @@ public sealed partial class RMCStaminaSystem : EntitySystem
 
         foreach (var (hit, comp) in toHit)
         {
-            DoStaminaDamage(hit, damage / toHit.Count, true);
+            // CMU14: baton resistance scales the hit instead of only allowing full immunity.
+            DoStaminaDamage(hit, damage / toHit.Count * _cmuStunImmunity.GetStaminaMultiplier(hit, ent.Owner), true);
             if (_net.IsServer)
                 _jitter.DoJitter(hit, ent.Comp.JitterDuration, true, 7, 5);
             _adminLogger.Add(LogType.Stamina, $"{ToPrettyString(hit):target} was dealt {damage} stamina damage from {args.User} with {args.Weapon}.");
@@ -237,7 +238,8 @@ public sealed partial class RMCStaminaSystem : EntitySystem
         if (!_itemToggle.IsActivated(ent.Owner))
             return;
 
-        DoStaminaDamage((target, stam), ent.Comp.Damage, true);
+        // CMU14: baton resistance scales the hit instead of only allowing full immunity.
+        DoStaminaDamage((target, stam), ent.Comp.Damage * _cmuStunImmunity.GetStaminaMultiplier(target, ent.Owner), true);
     }
 
     private bool IsYautjaTaserImmune(EntityUid source, EntityUid target)

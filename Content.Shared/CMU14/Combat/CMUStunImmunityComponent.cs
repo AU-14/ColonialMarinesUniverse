@@ -23,6 +23,13 @@ public sealed partial class CMUStunImmunityComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool Baton;
+
+    /// <summary>
+    ///     Multiplier applied to baton stamina damage when <see cref="Baton"/> is off. 1 keeps normal
+    ///     humans dropping in a handful of swings; 0.33 means a baton still works, it just takes ~10 hits.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BatonDamageMultiplier = 1f;
 }
 
 /// <summary>
@@ -41,12 +48,24 @@ public sealed partial class CMUStunImmunitySystem : EntitySystem
     /// </summary>
     public bool IsImmune(EntityUid target, EntityUid source)
     {
+        return GetStaminaMultiplier(target, source) <= 0f;
+    }
+
+    /// <summary>
+    ///     How much stamina damage <paramref name="source"/> should deal to <paramref name="target"/>:
+    ///     1 = normal, 0 = fully immune, anything between = resistance.
+    /// </summary>
+    public float GetStaminaMultiplier(EntityUid target, EntityUid source)
+    {
         if (!TryComp<CMUStunImmunityComponent>(target, out var immunity))
-            return false;
+            return 1f;
 
         if (immunity.Taser && _tags.HasTag(source, TaserTag))
-            return true;
+            return 0f;
 
-        return immunity.Baton && _tags.HasTag(source, BatonTag);
+        if (_tags.HasTag(source, BatonTag))
+            return immunity.Baton ? 0f : Math.Clamp(immunity.BatonDamageMultiplier, 0f, 1f);
+
+        return 1f;
     }
 }

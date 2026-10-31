@@ -29,7 +29,11 @@
   # Carried by the man rather than the armor so stripping him does not strip his capabilities.
   - type: CMUStunImmunity
     taser: true
-    baton: true
+    # Batons still work, they just have to be swung about ten times (30 stamina x 0.33).
+    batonDamageMultiplier: 0.33
+  # Flashbangs and camera flashes do nothing to him.
+  - type: FlashImmunity
+    showInExamine: false
   # Stealth jaunt: only possible while nothing can see him (see CMUVeteranCloakSystem).
   - type: CMUVeteranCloak
   mindRoles:

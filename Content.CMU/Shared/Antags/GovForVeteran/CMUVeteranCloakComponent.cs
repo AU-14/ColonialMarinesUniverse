@@ -6,12 +6,12 @@ namespace Content.Shared.CMU14.Antags.GovForVeteran;
 public sealed partial class CMUVeteranCloakComponent : Component
 {
     /// <summary>
-    ///     Mobs within this range that have line of sight count as watching him.
-    ///     Kept to roughly one screen: at the default eye zoom (2) a 1080p client sees about 15 tiles
-    ///     horizontally and 8.5 vertically, so an 8 tile radius never reaches past what the observer can see.
+    ///     Mobs within this range that have line of sight count as watching him. A 1080p client at the default
+    ///     eye zoom sees about 15 tiles across and 8.5 tall, so 12 covers anything a watcher can actually look at
+    ///     without stretching to the map-wide distances an observer cannot perceive anyway.
     /// </summary>
     [DataField]
-    public float SightRange = 8f;
+    public float SightRange = 12f;
 
     /// <summary>
     ///     How far the reveal message carries when the field drops.
