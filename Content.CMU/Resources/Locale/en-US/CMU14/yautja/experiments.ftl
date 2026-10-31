@@ -63,20 +63,8 @@ cmu-yautja-experiment-containment-response = Recovered warning: CONTAINMENT INTE
 cmu-yautja-experiment-root = Hunter identity cipher
 cmu-yautja-experiment-root-response = Recovered diagnostic: IDENTITY BLOCK RECONSTRUCTED / INTERLOCK AUTHORITY REQUIRED. The owner's mark resolves for a moment; its surrounding glyphs remain untranslated.
 
-cmu-yautja-experiment-entry = Wear marks surround a recessed service well beneath the alien script. Five damaged glyph groups pulse around an unchanging central mark. A trained human scientist can investigate: leave the bracer on the FLOOR, right-click it, then open Bracer experiments > Read instructions and challenge clues.
-cmu-yautja-experiment-guide-title = Read instructions and challenge clues
-cmu-yautja-experiment-clues-heading = Five security seals — decipher these signals
-cmu-yautja-experiment-selected-heading = Selected procedure and sample well
-cmu-yautja-experiment-guide = RECOVERED WRIST COMPUTER: HUMAN FIELD NOTES
-    This device carries traces of a particular hunter: a stored silhouette, fragments of captured voices and return commands for remote equipment. The central mark may identify its owner. Our procedure names are working hypotheses, not a translation of the alien script.
-    1. Leave the bracer on the floor. Stay next to it with a research-trained human.
-    2. Read the five challenge clues below. Match their materials and behavior to a procedure in Bracer experiments. All 20 procedures are available immediately.
-    3. Select that procedure. Examine the bracer to read its exact chemical amounts, tool and work time.
-    4. Purge old samples from the menu. Add the recipe's chemicals from a beaker: up to 10u per use, 30u capacity. More than one pour may be needed. Normal chemical reactions still occur.
-    5. Hold the indicated tool in your active hand and use it on the bracer. Light welders first. Keep still until the progress bar finishes.
-    A new matching result releases one seal and vents the core. Repeats and unrelated results cannot substitute for a different seal. All five automatically unlock the bracer and authorize the final operator.
-    Wrong experiments still yield research. At 8 strain a procedure fails: use Field-kit sealant dissolution or Plasma exchanger quench to cool it. Plasma reservoir excitation restores charge.
-    Compare the five damaged signatures with each recovered response. A released seal preserves the name of the successful procedure in the field record. Keep those notes with this bracer; the next recovered unit may have a different set of interlocks.
+cmu-yautja-experiment-entry = Five damaged glyph groups pulse around an owner's mark. Leave it on the floor, then right-click: Bracer experiments > Inspect bracer.
+cmu-yautja-experiment-guide-title = Inspect bracer
 cmu-yautja-experiment-seal-clue = Seal { $number }: "{ $clue }"
 cmu-yautja-experiment-seal-open = Seal { $number }: RELEASED — { $name }.
 cmu-yautja-experiment-seal-accepted = Recovered diagnostic: INTERLOCK RESPONSE ACCEPTED: { $count }/5. RESERVOIR VENTED.
@@ -142,3 +130,25 @@ cmu-yautja-experiment-bio-lore = Human analysis: a biometric interface expects i
 cmu-yautja-experiment-veil-lore = Human analysis: camouflage bends surrounding light. Silicon and mercury couple a test signal into that circuit. The membrane refracts the real floor; a fading hunter silhouette marks the calibration boundary.
 
 cmu-yautja-experiment-prism-lore = Human analysis: the bio-mask separates hunting information into sensor channels. This alignment projects three test bands through the damaged optical interface; the converging geometry calibrates their common aim point.
+
+cmu-yautja-experiment-device-tab = Bracer
+cmu-yautja-experiment-procedures-tab = Procedures
+cmu-yautja-experiment-records-tab = Recovered
+cmu-yautja-experiment-samples-tab = Sample well
+cmu-yautja-experiment-samples-empty = No samples.
+cmu-yautja-experiment-records-empty = Complete a procedure to recover a field record.
+cmu-yautja-experiment-help-title = Field analysis
+cmu-yautja-experiment-help-short = Keep the bracer on the floor.
+    Inspect its five marked contacts for diagnostic clues.
+    Choose a procedure, pour in its samples, then use the listed tool on the bracer.
+    Match all five clues to recover full access. Other procedures still yield research.
+    Strain at 8 triggers a vent; cooling procedures reduce it.
+cmu-yautja-experiment-seals-short = { $count } / 5 interlocks released
+cmu-yautja-experiment-strain-short = Core strain { $heat } / 8
+cmu-yautja-experiment-requirements-short = { $tool } · { $seconds }s · strain { $heat }
+    { $chemicals }
+cmu-yautja-experiment-working-short = Procedure running — keep the bracer stationary.
+cmu-yautja-experiment-apply-tool = On the floor: add samples, then apply tool.
+cmu-yautja-experiment-seal-title = Diagnostic contact { $number }
+cmu-yautja-experiment-seal-recovered = Interlock released: { $name }
+cmu-yautja-experiment-selected-procedure = { $name } · materials & tool

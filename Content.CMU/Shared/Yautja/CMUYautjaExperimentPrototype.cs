@@ -85,9 +85,35 @@ public enum CMUYautjaExperimentUiKey : byte
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUYautjaExperimentUiState(string status, string clues, string procedure) : BoundUserInterfaceState
+public sealed class CMUYautjaExperimentUiState(
+    ProtoId<CMUYautjaExperimentPrototype> selected,
+    List<CMUYautjaExperimentSeal> seals,
+    HashSet<ProtoId<CMUYautjaExperimentPrototype>> discoveries,
+    int heat, bool unlocked, bool busy, string samples) : BoundUserInterfaceState
 {
-    public readonly string Status = status;
-    public readonly string Clues = clues;
-    public readonly string Procedure = procedure;
+    public readonly ProtoId<CMUYautjaExperimentPrototype> Selected = selected;
+    public readonly List<CMUYautjaExperimentSeal> Seals = seals;
+    public readonly HashSet<ProtoId<CMUYautjaExperimentPrototype>> Discoveries = discoveries;
+    public readonly int Heat = heat;
+    public readonly bool Unlocked = unlocked;
+    public readonly bool Busy = busy;
+    public readonly string Samples = samples;
+}
+
+// Unsolved seals send their clue, never the hidden recipe ID.
+[Serializable, NetSerializable]
+public sealed record CMUYautjaExperimentSeal(string Clue, string? RecoveredName);
+
+[Serializable, NetSerializable]
+public enum CMUYautjaExperimentCommand : byte
+{
+    Select, Purge, Authorize,
+}
+
+[Serializable, NetSerializable]
+public sealed class CMUYautjaExperimentMessage(CMUYautjaExperimentCommand command,
+    ProtoId<CMUYautjaExperimentPrototype>? recipe = null) : BoundUserInterfaceMessage
+{
+    public readonly CMUYautjaExperimentCommand Command = command;
+    public readonly ProtoId<CMUYautjaExperimentPrototype>? Recipe = recipe;
 }

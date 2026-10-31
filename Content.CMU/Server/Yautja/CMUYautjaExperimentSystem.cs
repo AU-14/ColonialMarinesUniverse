@@ -66,6 +66,26 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
         SubscribeLocalEvent<CMUYautjaExperimentComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<CMUYautjaExperimentComponent, CMUYautjaExperimentDoAfterEvent>(OnFinished);
         SubscribeLocalEvent<CMUYautjaExperimentComponent, DoAfterAttemptEvent<CMUYautjaExperimentDoAfterEvent>>(OnAttempt);
+        Subs.BuiEvents<CMUYautjaExperimentComponent>(CMUYautjaExperimentUiKey.Key, subs =>
+        {
+            subs.Event<CMUYautjaExperimentMessage>(OnUiMessage);
+        });
+    }
+
+    private void OnUiMessage(Entity<CMUYautjaExperimentComponent> ent, ref CMUYautjaExperimentMessage args)
+    {
+        switch (args.Command)
+        {
+            case CMUYautjaExperimentCommand.Select when args.Recipe is { } recipe:
+                SelectExperiment(ent, args.Actor, recipe);
+                break;
+            case CMUYautjaExperimentCommand.Purge:
+                Purge(ent, args.Actor);
+                break;
+            case CMUYautjaExperimentCommand.Authorize:
+                Authorize(ent, args.Actor);
+                break;
+        }
     }
 
     private void OnMapInit(Entity<CMUYautjaExperimentComponent> ent, ref MapInitEvent args)
@@ -137,15 +157,6 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
             Act = () => ShowGuide(ent, user),
             Priority = 2,
         });
-        foreach (var recipe in _prototypes.EnumeratePrototypes<CMUYautjaExperimentPrototype>())
-        {
-            args.Verbs.Add(new AlternativeVerb
-            {
-                Text = Loc.GetString(recipe.Name), Category = Experiments, Message = Instructions(recipe),
-                Act = () => SelectExperiment(ent, user, recipe.ID),
-                Disabled = ent.Comp.Operator != null,
-            });
-        }
         args.Verbs.Add(new AlternativeVerb
         {
             Text = Loc.GetString("cmu-yautja-experiment-purge"), Category = Experiments,
@@ -164,16 +175,11 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
         args.PushText(Loc.GetString("cmu-yautja-experiment-entry"));
         if (!_skills.HasSkill(args.Examiner, ResearchSkill, 1))
             return;
-        args.PushText(Loc.GetString("cmu-yautja-experiment-status", ("count", ent.Comp.Discoveries.Count),
-            ("seals", ent.Comp.RequiredExperiments.Count(ent.Comp.Discoveries.Contains)), ("heat", ent.Comp.Heat)));
-        args.PushText(ChallengeClues(ent.Comp));
+        args.PushText(Loc.GetString("cmu-yautja-experiment-seals-short",
+            ("count", ent.Comp.RequiredExperiments.Count(ent.Comp.Discoveries.Contains))));
+        args.PushText(Loc.GetString("cmu-yautja-experiment-strain-short", ("heat", ent.Comp.Heat)));
         if (ent.Comp.Unlocked)
             args.PushText(Loc.GetString("cmu-yautja-experiment-unlocked-help"));
-        args.PushText(Instructions(_prototypes.Index(ent.Comp.Selected)));
-        if (_solutions.TryGetSolution(ent.Owner, SampleWell, out _, out var solution))
-            args.PushText(Loc.GetString("cmu-yautja-experiment-well", ("volume", solution.Volume),
-                ("contents", string.Join(", ", solution.Contents.Select(reagent =>
-                    $"{reagent.Quantity}u {_reagents.Index(reagent.Reagent.Prototype).LocalizedName}")))));
     }
 
     private void ShowGuide(Entity<CMUYautjaExperimentComponent> ent, EntityUid user)
@@ -186,17 +192,17 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
 
     private void UpdateGuide(Entity<CMUYautjaExperimentComponent> ent)
     {
-        var status = Loc.GetString("cmu-yautja-experiment-status", ("count", ent.Comp.Discoveries.Count),
-            ("seals", ent.Comp.RequiredExperiments.Count(ent.Comp.Discoveries.Contains)), ("heat", ent.Comp.Heat));
-        if (ent.Comp.Unlocked)
-            status += "\n" + Loc.GetString("cmu-yautja-experiment-unlocked-help");
-        var procedure = Instructions(_prototypes.Index(ent.Comp.Selected));
+        var seals = ent.Comp.RequiredExperiments.OrderBy(id => id.Id).Select(id =>
+            new CMUYautjaExperimentSeal(Loc.GetString(_prototypes.Index(id).Clue),
+                ent.Comp.Discoveries.Contains(id) ? Loc.GetString(_prototypes.Index(id).Name) : null)).ToList();
+        var samples = Loc.GetString("cmu-yautja-experiment-samples-empty");
         if (_solutions.TryGetSolution(ent.Owner, SampleWell, out _, out var well))
-            procedure += "\n" + Loc.GetString("cmu-yautja-experiment-well", ("volume", well.Volume),
+            samples = Loc.GetString("cmu-yautja-experiment-well", ("volume", well.Volume),
                 ("contents", string.Join(", ", well.Contents.Select(reagent =>
                     $"{reagent.Quantity}u {_reagents.Index(reagent.Reagent.Prototype).LocalizedName}"))));
         _ui.SetUiState(ent.Owner, CMUYautjaExperimentUiKey.Key,
-            new CMUYautjaExperimentUiState(status, ChallengeClues(ent.Comp), procedure));
+            new CMUYautjaExperimentUiState(ent.Comp.Selected, seals, new(ent.Comp.Discoveries),
+                ent.Comp.Heat, ent.Comp.Unlocked, ent.Comp.Operator != null, samples));
     }
 
     private void OnInteract(Entity<CMUYautjaExperimentComponent> ent, ref InteractUsingEvent args)
@@ -271,6 +277,7 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
             ent.Comp.Pending = id;
         Tell(ent, "cmu-yautja-experiment-start", ("name", Loc.GetString(recipe.Name)));
         _audio.PlayPvs(recipe.Sound, ent);
+        UpdateGuide(ent);
         return true;
     }
 
@@ -297,6 +304,7 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
         ent.Comp.Operator = null;
         ent.Comp.Pending = null;
         args.Handled = true;
+        UpdateGuide(ent);
         if (args.Cancelled || !CanResearch(ent, args.User) || !HasReagents(ent, _prototypes.Index(args.Experiment)))
             return;
         var recipe = _prototypes.Index(args.Experiment);
