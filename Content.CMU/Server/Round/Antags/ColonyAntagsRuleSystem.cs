@@ -40,7 +40,7 @@ public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntags
         { "Arsonist", 0.40f },
         { "CLFVeteran", 0.35f },
         { "SerialKiller", 0.35f },
-        { "GovForVeteran", 0.70f },
+        { "GovForVeteran", 0.80f },
         { "CLFSaboteur", 0.30f },
         { "Vigilante", 0.25f },
         { "BountyHunter", 0.20f },
