@@ -104,6 +104,40 @@ public sealed class YautjaThrallHeroTest
     }
 
     [Test]
+    public async Task BloodedThrallLosesTechWhenMasterIsDeleted()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid thrall = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            SpawnLinkedThrall(entMan, map.GridCoords, out var master, out var masterBracer, out thrall, out _);
+            var bracerEnt = (masterBracer, entMan.GetComponent<YautjaBracerComponent>(masterBracer));
+            Assert.That(entMan.System<YautjaMarkSystem>().TryMark(bracerEnt, master, thrall, YautjaMarkKind.Blooded, "proven"), Is.True);
+            Assert.That(entMan.HasComponent<YautjaTechAuthorizedComponent>(thrall), Is.True, "blooding grants yautja tech");
+
+            entMan.DeleteEntity(master);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var comp = entMan.GetComponent<YautjaThrallComponent>(thrall);
+            Assert.That(comp.TechAuthorized, Is.False);
+            Assert.That(entMan.HasComponent<YautjaTechAuthorizedComponent>(thrall), Is.False,
+                "the thrall data says unauthorized, so medicomp surgery and tech items have to stop working too");
+            entMan.DeleteEntity(thrall);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task LinkedThrallMarksAndReleasesPrey()
     {
         await using var pair = await PoolManager.GetServerClient();

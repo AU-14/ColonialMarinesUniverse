@@ -1055,6 +1055,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         thrall.BloodingReason = string.Empty;
         thrall.TechAuthorized = false;
         Dirty(target, thrall);
+        // the flag alone isn't enough, surgery and tech items check the component. a deleted master used to leave it behind
+        RemCompDeferred<YautjaTechAuthorizedComponent>(target);
     }
 
     private void CleanupThrallBracerLink(Entity<YautjaThrallBracerComponent> bracer, bool clearReciprocal)
