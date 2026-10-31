@@ -388,22 +388,16 @@ public sealed partial class HumanoidProfileEditor
         JobPrototype job,
         string departmentName)
     {
-        // CMU14: shared FoF role priorities.
+        // CMU14: one govfor guard feeds the FoF and Distress Signal military lists.
         if (department.Faction == "govfor")
         {
             var (key, title) = GetMilitaryJobSegment(job);
-            // CMU14: faction gameplay fixes.
             yield return (FoFJobList, GamemodeForceOnForce, $"fof-{key}", title);
-        }
-
-        if (department.Faction == "govfor")
-        {
-            var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);
             yield return (
                 DistressGovernmentJobList,
                 GamemodeDistressSignal,
-                $"distress-govfor-{segmentKey}",
-                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", segmentTitle)));
+                $"distress-govfor-{key}",
+                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", title)));
             yield break;
         }
 
