@@ -179,6 +179,14 @@ internal sealed partial class ChatManager : IChatManager
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Admin announcement: {message}");
     }
 
+    // CMU14: unescaped variant of SendAdminAnnouncement for command links; the caller must escape all dynamic text
+    public void SendAdminAnnouncementNoFormatOrEscape(string message)
+    {
+        var clients = _adminManager.ActiveAdminsWithFlag(AdminFlags.AdminAlerts).Select(p => p.Channel);
+
+        ChatMessageToMany(ChatChannel.Admin, message, message, default, false, true, clients);
+    }
+
     public void SendAdminAnnouncementMessage(ICommonSession player, string message, bool suppressLog = true)
     {
         var wrappedMessage = Loc.GetString("chat-manager-send-admin-announcement-wrap-message",

@@ -159,6 +159,11 @@ public sealed class CMUReligionSystem : EntitySystem
         _chat.SendAdminAnnouncement(Loc.GetString("cmu-pray-admin-message",
             ("name", Name(user)),
             ("prayer", prayer)));
+
+        if (_adminLog.CreateTpLinks(Loc.GetString("cmu-pray-teleport-header"),
+                [(user, Name(user))], out var tpLinks))
+            _chat.SendAdminAnnouncementNoFormatOrEscape(tpLinks);
+
         _popup.PopupEntity(Loc.GetString("cmu-pray-sent"), user, session, PopupType.Medium);
         _adminLog.Add(LogType.AdminMessage, LogImpact.Low,
             $"{ToPrettyString(user):player} prayed: {prayer}");
