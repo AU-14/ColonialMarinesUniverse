@@ -470,7 +470,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -503,9 +502,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -549,7 +548,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -570,9 +568,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -616,7 +614,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -637,9 +634,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -683,7 +680,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -704,9 +700,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -750,7 +746,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -772,9 +767,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 - type: entity
@@ -845,7 +840,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -874,9 +868,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -920,7 +914,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -949,9 +942,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -994,7 +987,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1017,9 +1009,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1063,7 +1055,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1085,9 +1076,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1130,7 +1121,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1150,9 +1140,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1196,7 +1186,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1217,9 +1206,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1262,7 +1251,6 @@
     stateDoorClosed: "fridge1"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1287,9 +1275,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1332,7 +1320,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1355,9 +1342,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1400,7 +1387,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1423,9 +1409,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1468,7 +1454,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1489,9 +1474,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1534,7 +1519,6 @@
     stateDoorClosed: "fridge1"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1557,9 +1541,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1602,7 +1586,6 @@
     stateDoorClosed: "fridge1"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1623,9 +1606,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1668,7 +1651,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1689,9 +1671,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1734,7 +1716,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1756,9 +1737,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1802,7 +1783,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1823,9 +1803,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -1868,7 +1848,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -1891,9 +1870,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -13444,7 +13423,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -13461,9 +13439,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -13506,7 +13484,6 @@
     stateDoorClosed: "closed"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -13523,9 +13500,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -13568,7 +13545,6 @@
     stateDoorClosed: "fridge1"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -13585,9 +13561,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -36003,7 +35979,6 @@
     stateDoorClosed: "fridge1"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -36028,9 +36003,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -36073,7 +36048,6 @@
     stateDoorClosed: "fridge1"
   - type: EntityStorage
     capacity: 100
-    enteringRange: 0.75
     closeSound:
       path: /Audio/Effects/closetclose.ogg
     openSound:
@@ -36094,7 +36068,7 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
