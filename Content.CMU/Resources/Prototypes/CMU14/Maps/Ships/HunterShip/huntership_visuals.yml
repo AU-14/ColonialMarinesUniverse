@@ -477,17 +477,11 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: ChemistryEmptyVial
-      amount: 10
     - id: CMUHunterShipSilverCatalystBeaker
       amount: 4
-    - id: Bucket
+    - id: CMHealthAnalyzer
       amount: 4
-    - id: HandheldHealthAnalyzer
-      amount: 4
-    - id: HydroponicsToolMiniHoe
-      amount: 4
-    - id: HydroponicsToolSpade
+    - id: RMCToolSpade
       amount: 4
     - id: RMCStoragePlantBag
       amount: 4
@@ -555,7 +549,7 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: BoxCandleSmall
+    - id: RMCCandle
       amount: 5
   - type: Clickable
   - type: InteractionOutline
@@ -753,8 +747,6 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: ClothingHeadHatGladiator
-    - id: ClothingUniformJumpsuitGladiator
     - id: CMUYautjaBodyMesh
   - type: Clickable
   - type: InteractionOutline
@@ -996,7 +988,7 @@
     contents:
     - id: CMUYautjaAncientShield
     - id: CMUYautjaPraetorianSkullTrophy
-    - id: HandheldStationMap
+    - id: RMCStationMap
     - id: RMCFlashlightLantern
   - type: Clickable
   - type: InteractionOutline
@@ -1064,7 +1056,7 @@
     contents:
     - id: CMUYautjaHunterSpear
       amount: 5
-    - id: SoapSyndie
+    - id: CMSoapSyndie
   - type: Clickable
   - type: InteractionOutline
   - type: Physics
@@ -1327,9 +1319,7 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: FloorCarpetItemRed
-      amount: 5
-    - id: MaterialWoodPlank
+    - id: RMCPlankWood1
       amount: 8
   - type: Clickable
   - type: InteractionOutline
@@ -1394,9 +1384,9 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: FloorTileItemSteel
+    - id: CMTileItemSteel
       amount: 10
-    - id: SheetGlass10
+    - id: CMSheetGlass10
       amount: 5
   - type: Clickable
   - type: InteractionOutline
@@ -1461,7 +1451,7 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: FloorTileItemSteel
+    - id: CMTileItemSteel
       amount: 27
   - type: Clickable
   - type: InteractionOutline
@@ -1658,7 +1648,7 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: HandheldStationMap
+    - id: RMCStationMap
     - id: RMCFlashlightLantern
   - type: Clickable
   - type: InteractionOutline
@@ -1723,9 +1713,9 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: MaterialWoodPlank10
+    - id: RMCPlankWood10
       amount: 4
-    - id: SoapSyndie
+    - id: CMSoapSyndie
   - type: Clickable
   - type: InteractionOutline
   - type: Physics
@@ -1855,9 +1845,9 @@
   - type: EntityStorageCloseOnMapInit
   - type: StorageFill
     contents:
-    - id: SheetPlasteel
+    - id: CMSheetPlasteel10
       amount: 5
-    - id: SheetSteel10
+    - id: CMSheetMetal10
       amount: 5
   - type: Clickable
   - type: InteractionOutline
