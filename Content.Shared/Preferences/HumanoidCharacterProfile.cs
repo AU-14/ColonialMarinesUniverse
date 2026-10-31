@@ -57,7 +57,7 @@ namespace Content.Shared.Preferences
         public const int MinWeight = 90;
         public const int MaxWeight = 300;
         public const int MinSyntheticGeneration = 1; // CMU14
-        public const int MaxSyntheticGeneration = 3; // CMU14
+        public const int MaxSyntheticGeneration = 4; // CMU14
         public const int SyntheticModelSuffixMaxLength = 12; // CMU14
 
         /// <summary>

@@ -471,6 +471,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             SetPdaAndIdCardDataWithSplitJob(entity.Value, metaDataEntity.EntityName, prototype, originalPrototype ?? prototype, station);
 
         DoJobSpecials(job, entity.Value);
+        ApplySyntheticGeneration(entity.Value, prototype, profile); // CMU14: job setup must not overwrite generation mechanics.
 
         EquipGlobalLoadout(entity.Value, profile); // CMU14: apply once, after job gear and specials.
 

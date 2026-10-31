@@ -11,7 +11,8 @@ public sealed partial class ServerDbSqliteTests
     {
         var db = GetDb(Server);
         var user = NewUserId();
-        var global = new RoleLoadout(HumanoidCharacterProfile.GlobalLoadoutId);
+        // Loadout names are stored as empty strings rather than null in the database.
+        var global = new RoleLoadout(HumanoidCharacterProfile.GlobalLoadoutId) { EntityName = string.Empty };
         global.SelectedLoadouts[HumanoidCharacterProfile.GlobalPinsGroup] = [new() { Prototype = "RMCPinLGBT" }];
         var profile = CharlieCharlieson().WithLoadout(HumanoidCharacterProfile.GlobalLoadoutId, global);
         await db.InitPrefsAsync(user, CharlieCharlieson());

@@ -36,7 +36,7 @@ public sealed class CharacterCreationTest : GameTest
         await client.WaitPost(() =>
         {
             profile = HumanoidCharacterProfile.Random()
-                .WithSyntheticGeneration(4) // CMU14: an unsupported generation clamps to Gen 3.
+                .WithSyntheticGeneration(4) // CMU14: Gen 4 survives the client/server round trip.
                 .WithSyntheticModelSuffix("1234567890123"); // CMU14: suffix clamps to 12 characters.
             clientPrefManager.CreateCharacter(profile);
         });

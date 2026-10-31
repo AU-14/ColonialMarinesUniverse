@@ -120,7 +120,7 @@ public sealed class GlobalLoadoutTest
             Assert.That(inventory.TryGetSlotEntity(mob, "back", out var backpack), Is.True, job);
             var storage = entities.GetComponent<StorageComponent>(backpack!.Value);
             Assert.That(storage.Container.ContainedEntities.Count(item =>
-                entities.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCClothingNeckTransgenderPin"),
+                entities.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCClothingNeckTransPin"),
                 Is.EqualTo(1), "Global pins must be added after job storage and not duplicated.");
             entities.DeleteEntity(mob);
         });

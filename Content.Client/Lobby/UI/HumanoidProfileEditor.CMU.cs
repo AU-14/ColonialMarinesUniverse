@@ -1028,6 +1028,7 @@ public sealed partial class HumanoidProfileEditor
         };
         generationSelector.OnItemSelected += args =>
         {
+            generationSelector.SelectId(args.Id);
             Profile = Profile?.WithSyntheticGeneration(args.Id);
             SetDirty();
             UpdateSaveButton();
