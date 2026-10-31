@@ -139,11 +139,13 @@
     bullet: 50
     bio: 35
     explosionArmor: 40
+  # cmss13 gives it the full hunter armor's slowdown (LOWHEAVY 0.75), so it moves like our heavy clan armor.
+  # movement_compensation there only offsets wielded gun slowdown
   - type: RMCArmorSpeedTier
-    speedTier: heavy
+    speedTier: very light
   - type: ClothingSpeedModifier
-    walkModifier: 0.64
-    sprintModifier: 0.64
+    walkModifier: 0.75
+    sprintModifier: 0.75
   - type: YautjaTechItem
   - type: Corrodible
     isCorrodible: false

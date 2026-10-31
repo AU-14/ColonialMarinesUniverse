@@ -3242,12 +3242,14 @@ public sealed class YautjaBowTest
                         var poweredArmor = SpawnAndTrack(entMan, "CMUYautjaPoweredArmor", spawned);
                         var speedTier = entMan.GetComponent<RMCArmorSpeedTierComponent>(poweredArmor);
                         var speed = entMan.GetComponent<ClothingSpeedModifierComponent>(poweredArmor);
-                        Assert.That(speedTier.SpeedTier, Is.EqualTo("heavy"),
-                            "CMSS13 powered armor slowdown = SLOWDOWN_ARMOR_LOWHEAVY uses the local heavy speed tier.");
-                        Assert.That(speed.WalkModifier, Is.EqualTo(0.64f),
-                            "Local SLOWDOWN_ARMOR_LOWHEAVY mapping.");
-                        Assert.That(speed.SprintModifier, Is.EqualTo(0.64f),
-                            "Local SLOWDOWN_ARMOR_LOWHEAVY mapping.");
+                        var fullArmor = SpawnAndTrack(entMan, "CMUYautjaHeavyClanArmor", spawned);
+                        var fullSpeed = entMan.GetComponent<ClothingSpeedModifierComponent>(fullArmor);
+                        Assert.That(speedTier.SpeedTier, Is.EqualTo(entMan.GetComponent<RMCArmorSpeedTierComponent>(fullArmor).SpeedTier),
+                            "CMSS13 powered armor keeps the full hunter armor's slowdown, so it shares its speed tier.");
+                        Assert.That(speed.WalkModifier, Is.EqualTo(fullSpeed.WalkModifier),
+                            "CMSS13 powered armor slowdown = SLOWDOWN_ARMOR_LOWHEAVY, same 0.75 as the full hunter armor.");
+                        Assert.That(speed.SprintModifier, Is.EqualTo(fullSpeed.SprintModifier),
+                            "CMSS13 powered armor slowdown = SLOWDOWN_ARMOR_LOWHEAVY, same 0.75 as the full hunter armor.");
                     }
 
                     if (prototypes.HasIndex<EntityPrototype>(CMUYautjaPoweredHelmetPrototype))
