@@ -362,7 +362,7 @@
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
-                <!-- cmu edit start: traits and markings sit between regulation appearance and insurgency -->
+                <!-- cmu edit start: traits and markings sit between regulation appearance and colony roles -->
                 <BoxContainer Orientation="Vertical" Margin="10">
                     <!-- Traits -->
                     <ScrollContainer VerticalExpand="True">
