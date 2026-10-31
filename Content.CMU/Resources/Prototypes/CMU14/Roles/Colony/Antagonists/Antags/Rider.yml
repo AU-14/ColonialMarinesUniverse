@@ -48,6 +48,8 @@
   id: RiderRole
   name: roles-antag-rider-role-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-rider-objective
 
 # The hide shrugs off most physical trauma; fire and chems land fully.

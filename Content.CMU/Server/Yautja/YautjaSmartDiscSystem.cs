@@ -140,11 +140,12 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         if (_containers.IsEntityInContainer(ent.Owner))
             return;
 
+        EntityManager.System<CMUYautjaEffectsSystem>().Recall(CMUYautjaEffect.DiscReturn, ent, user);
         if (ent.Comp.Active)
             _toggle.TrySetActive((ent.Owner, null), false, user, false);
 
         _transform.SetCoordinates(ent.Owner, Transform(user).Coordinates);
-        _hands.TryPickupAnyHand(user, ent.Owner, checkActionBlocker: false);
+        _hands.TryPickupAnyHand(user, ent.Owner, checkActionBlocker: false, animate: false);
         _audio.PlayPredicted(bracer.Comp.RecallSound, ent.Owner, user);
     }
 
@@ -157,7 +158,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             return;
         }
 
-        if (!HasComp<YautjaComponent>(user))
+        if (!CanOperateDisc(user))
         {
             if (_random.Prob(ent.Comp.NonYautjaFiddleChance))
             {
@@ -306,7 +307,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         if (!ent.Comp.Active)
             return;
 
-        if (!HasComp<YautjaComponent>(args.User))
+        if (!CanOperateDisc(args.User))
         {
             args.Cancel();
             _popup.PopupEntity(Loc.GetString("cmu-yautja-disc-stolen-active"), ent.Owner, args.User, PopupType.SmallCaution);
@@ -320,7 +321,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
     {
         ClearPendingThrowActivation(ent.Comp);
 
-        if (ent.Comp.Active && HasComp<YautjaComponent>(args.User))
+        if (ent.Comp.Active && CanOperateDisc(args.User))
             _toggle.TrySetActive((ent.Owner, null), false, args.User, false);
     }
 
@@ -330,7 +331,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!HasComp<YautjaComponent>(args.User))
+        if (!CanOperateDisc(args.User))
         {
             ent.Comp.RogueTarget = args.User;
             ent.Comp.RogueActivator = args.User;
@@ -965,12 +966,15 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
     private bool TryGetOrSetOwner(Entity<YautjaSmartDiscComponent> ent, EntityUid user, out EntityUid owner)
     {
         owner = default;
-        if (!HasComp<YautjaComponent>(user))
+        if (!CanOperateDisc(user))
             return false;
 
-        // CMU14: the removed binding system used to register the owner, so a Yautja claiming an
-        // unowned disc now records it directly and keeps the disc's return-to-owner behaviour.
-        if (ent.Comp.YautjaOwner is not { } existing || TerminatingOrDeleted(existing))
+        // A reconstructed interface can claim recovered gear while its operator holds it.
+        // Ownership stays on the disc so autonomous flight and recall use the same owner.
+        var researchClaim = HasComp<CMUYautjaResearchOperatorComponent>(user) &&
+                            TryComp(user, out HandsComponent? hands) &&
+                            _hands.IsHolding((user, hands), ent.Owner, out _);
+        if (ent.Comp.YautjaOwner is not { } existing || TerminatingOrDeleted(existing) || researchClaim)
         {
             ent.Comp.YautjaOwner = user;
             owner = user;
@@ -980,6 +984,9 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         owner = existing;
         return true;
     }
+
+    private bool CanOperateDisc(EntityUid user) =>
+        HasComp<YautjaComponent>(user) || HasComp<CMUYautjaResearchOperatorComponent>(user);
 
     private void DropFromHands(EntityUid disc, EntityUid owner)
     {

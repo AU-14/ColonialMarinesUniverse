@@ -4,6 +4,8 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared._RMC14.Weapons.Common;
+using Content.Shared._RMC14.Explosion;
+using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -23,6 +25,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
@@ -35,7 +38,6 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         SubscribeLocalEvent<YautjaCasterComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);
         SubscribeLocalEvent<YautjaCasterComponent, TakeAmmoEvent>(OnTakeAmmo, before: [_gun.GetType()]);
         SubscribeLocalEvent<YautjaCasterComponent, AmmoShotEvent>(OnAmmoShot);
-        SubscribeLocalEvent<YautjaCasterComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<YautjaCasterComponent, ContainerGettingInsertedAttemptEvent>(OnCasterInsertAttempt);
         SubscribeLocalEvent<YautjaCasterProjectileRefundComponent, EntityTerminatingEvent>(OnProjectileTerminating);
     }
@@ -121,7 +123,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        if (!TryGetSourceBracer(ent.Owner, out var sourceBracer))
+        if (!TryGetSourceBracer(ent.Owner, args.User, out var sourceBracer))
         {
             args.Cancelled = true;
             return;
@@ -197,7 +199,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         args.Shots = 0;
 
         if (args.User is not { } user ||
-            !TryGetSourceBracer(ent.Owner, out var sourceBracer) ||
+            !TryGetSourceBracer(ent.Owner, user, out var sourceBracer) ||
             GetMode(ent.Comp) is not { } mode)
         {
             args.Reason = Loc.GetString("cmu-yautja-spike-launcher-denied");
@@ -214,6 +216,15 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             }
 
             var projectile = Spawn(mode.Projectile, args.Coordinates);
+            // Configure both predicted and authoritative projectiles before the gun creates its effects.
+            var visual = EnsureComp<CMUYautjaPlasmaVisualComponent>(projectile);
+            visual.Mode = GetVisualMode(projectile);
+            if (TryComp<AmmoComponent>(projectile, out var ammo))
+                ammo.MuzzleFlash = null;
+            if (TryComp<ProjectileComponent>(projectile, out var shotProjectile))
+                shotProjectile.ImpactEffect = null;
+            RemComp<CMExplosionEffectComponent>(projectile);
+            Dirty(projectile, visual);
             if (_net.IsServer)
                 AddProjectileRefund(projectile, sourceBracer, chargeCost);
 
@@ -225,6 +236,15 @@ public sealed partial class YautjaCasterSystem : EntitySystem
     {
         foreach (var projectile in args.FiredProjectiles)
         {
+            if (TryComp<ProjectileComponent>(projectile, out var shot))
+            {
+                var visual = EnsureComp<CMUYautjaPlasmaVisualComponent>(projectile);
+                visual.Mode = GetVisualMode(projectile);
+                visual.Origin = _transform.GetWorldPosition(projectile);
+                // Projectile.Angle is the sprite's authored rotation offset, not its flight heading.
+                visual.Direction = (_transform.GetWorldRotation(projectile) - shot.Angle).ToWorldVec();
+                Dirty(projectile, visual);
+            }
             if (!TryComp(projectile, out YautjaCasterProjectileRefundComponent? refund))
                 continue;
 
@@ -232,13 +252,11 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         }
     }
 
-    private void OnGunShot(Entity<YautjaCasterComponent> ent, ref GunShotEvent args)
-    {
-        // CMU14: this used PlayPredicted, which only plays on a side that actually simulated the shot. The wrist
-        // caster is deployed from the bracer and is not client-predicted, so neither side ever emitted the shot
-        // noise - the main plasmacaster fired silently,
-        _audio.PlayPvs(GetFireSound(ent.Comp), ent.Owner);
-    }
+    private CMUYautjaPlasmaMode GetVisualMode(EntityUid projectile) =>
+        HasComp<YautjaCasterEradicatorProjectileComponent>(projectile) ? CMUYautjaPlasmaMode.Eradicator :
+        HasComp<YautjaCasterSingleLethalProjectileComponent>(projectile) ? CMUYautjaPlasmaMode.Lethal :
+        HasComp<YautjaCasterImmobilizerProjectileComponent>(projectile) ? CMUYautjaPlasmaMode.Immobilizer :
+        CMUYautjaPlasmaMode.Stun;
 
     private void OnProjectileTerminating(Entity<YautjaCasterProjectileRefundComponent> ent, ref EntityTerminatingEvent args)
     {
@@ -274,6 +292,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
     private static void OnGunRefreshModifiers(Entity<YautjaCasterComponent> ent, ref GunRefreshModifiersEvent args)
     {
+        args.SoundGunshot = GetFireSound(ent.Comp);
         var mode = GetMode(ent.Comp);
         if (mode?.FireRate > 0)
             args.FireRate = mode.FireRate;
@@ -328,8 +347,13 @@ public sealed partial class YautjaCasterSystem : EntitySystem
                HasComp<YautjaTechAuthorizedComponent>(user);
     }
 
-    private bool TryGetSourceBracer(EntityUid caster, out Entity<YautjaBracerComponent> bracer)
+    private bool TryGetSourceBracer(EntityUid caster, EntityUid user, out Entity<YautjaBracerComponent> bracer)
     {
+        // Attachment bookkeeping is server-only. Predict against the holder's replicated worn bracer;
+        // the server still validates the actual attachment and alone consumes its power.
+        if (_net.IsClient && _hands.IsHolding(user, caster))
+            return _power.TryGetWornBracer(user, out bracer);
+
         bracer = default;
         if (!TryComp(caster, out YautjaStoredGearComponent? stored) ||
             stored.Bracer is not { } source ||
