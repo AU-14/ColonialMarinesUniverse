@@ -83,23 +83,23 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartMinigunUPP
-  name:  P-17702 Rotary Cannon
-  description: An SPP rotary cannon tank hardpoint.
+  name:  20mm P-17702 Rotary Cannon
+  description: A UPP rotary cannon tank hardpoint.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPTankP17702
+    - id: VehicleUPPTankP17702
       amount: 1
 
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartRailgunUPP
-  name:  SPP Railgun
-  description: A railgun hardpoint for SPP tank turrets.
+  name: 91mm D-91TM-RGm "Tunguska" Railgun
+  description: A railgun hardpoint for UPP tank turrets.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPTankRailgun
+    - id: VehicleUPPTankRailgun
       amount: 1
 
 ### WEAPONS #SECONDARY ###
@@ -177,23 +177,23 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAuxHJ35T
-  name: HJ35T launcher
-  description: An SPP anti-armor launcher for tank turrets.
+  name: 84mm HJ35T launcher
+  description: An UPP anti-armor launcher for tank turrets.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPTankHJ35TLauncher
+    - id: VehicleUPPTankHJ35TLauncher
       amount: 1
 
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAuxT60P3M
   name: T60P3M cupola
-  description: A cupola-mounted weapon fitted to SPP armor.
+  description: A cupola-mounted weapon fitted to UPP armor.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPTankCupola
+    - id: VehicleUPPTankCupola
       amount: 1
 
 ### HUMVEE & APC WEAPONS ###
@@ -346,7 +346,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPAPCWheel
+    - id: VehicleUPPAPCWheel
       amount: 1
 
 ### SUPPORT MODULES ###
@@ -479,56 +479,56 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportSmokeUPP
-  name: SPP Smoke Launcher
-  description: A smoke launcher support attachment for an SPP tank.
+  name: Type-43 "Pokrov" smoke launcher
+  description: A smoke launcher support attachment for an UPP tank.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPTankRocketLauncher
+    - id: VehicleUPPTankRocketLauncher
       amount: 1
 
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportFlareUPP
-  name: SPP Flare Module
-  description: A flare launcher support attachment for an SPP tank.
+  name: UPP Flare Module
+  description: A flare launcher support attachment for an UPP tank.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPTankFlareModule
+    - id: VehicleUPPTankFlareModule
       amount: 1
 
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportWarningArrayUPP
-  name: SPP Warning Array
-  description: An integrated weapons sensor array for SPP tank support slots.
+  name: UPP Warning Array
+  description: An integrated weapons sensor array for UPP tank support slots.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPTankWarningArray
+    - id: VehicleUPPTankWarningArray
       amount: 1
 
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportOverdriveUPP
-  name: SPP Overdrive Enhancer
-  description: An overdrive enhancer support attachment for an SPP tank.
+  name: UPP Overdrive Enhancer
+  description: An overdrive enhancer support attachment for an UPP tank.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPTankOverdriveEnhancer
+    - id: VehicleUPPTankOverdriveEnhancer
       amount: 1
 
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportArtilleryUPP
-  name: SPP Artillery Module
-  description: An artillery support module for an SPP tank.
+  name: UPP Artillery Module
+  description: An artillery support module for an UPP tank.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPTankArtilleryModule
+    - id: VehicleUPPTankArtilleryModule
       amount: 1
 
 ### SUPPORT MODULES HUMVEE & APC ###
@@ -640,11 +640,11 @@
   parent: RMCCrateBase
   id: CMUCrateVehiclePartArmorReactiveUPP
   name: Reactive Armor Plating
-  description: Reactive armor plating for an SPP tank.
+  description: Reactive armor plating for an UPP tank.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleSPPTankReactiveArmor
+    - id: VehicleUPPTankReactiveArmor
       amount: 1
 
 ### AVIONICS PARTS ###

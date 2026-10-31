@@ -63,8 +63,6 @@ public sealed partial class BlackfootTowSystem : EntitySystem
             return;
         }
 
-        args.Handled = true;
-        Popup(args.User, "Use the Detach tug verb to release the tow gear.", PopupType.SmallCaution);
     }
 
     private void OnGetAlternativeVerbs(Entity<BlackfootTowComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
