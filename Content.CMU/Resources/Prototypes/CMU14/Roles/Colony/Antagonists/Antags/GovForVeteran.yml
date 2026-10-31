@@ -27,10 +27,12 @@
     RMCSkillJtac: 1
   components:
   # Carried by the man rather than the armor so stripping him does not strip his capabilities.
+  - type: RMCStamina
+    current: 300
+    max: 300
+    tierThresholds: [ 300, 210, 90, 30, 0 ]
   - type: CMUStunImmunity
-    taser: true
-    # Batons still work, they just have to be swung about ten times (30 stamina x 0.33).
-    batonDamageMultiplier: 0.33
+    taserDamageMultiplier: 0.33
   # Flashbangs and camera flashes do nothing to him.
   - type: FlashImmunity
     showInExamine: false

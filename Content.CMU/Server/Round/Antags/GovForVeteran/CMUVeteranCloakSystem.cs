@@ -17,9 +17,11 @@ using Content.Shared.Item;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Pulling.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
+using Content.Shared.Speech;
 using Content.Shared.Storage;
 using Content.Shared.Tag;
 using Content.Shared.Throwing;
@@ -101,6 +103,8 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         SubscribeLocalEvent<CMUVeteranCloakComponent, PickupAttemptEvent>(OnPickupAttempt);
         SubscribeLocalEvent<CMUVeteranCloakComponent, AttackAttemptEvent>(OnAttackAttempt);
         SubscribeLocalEvent<CMUVeteranCloakComponent, BeforeThrowEvent>(OnBeforeThrow);
+        SubscribeLocalEvent<CMUVeteranCloakComponent, StartPullAttemptEvent>(OnStartPullAttempt);
+        SubscribeLocalEvent<CMUVeteranCloakComponent, SpeakAttemptEvent>(OnSpeakAttempt);
 
         // These are raised on the storage / the gun rather than the user, so they need a targeted lookup.
         SubscribeLocalEvent<StorageInteractAttemptEvent>(OnStorageInteract);
@@ -150,6 +154,12 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
             return;
 
         cloak.Cloaked = true;
+
+        // Walk through people as well as doors; bullets are unaffected.
+        var active = EnsureComp<EntityActiveInvisibleComponent>(ent.Owner);
+        active.DisableMobCollision = true;
+        Dirty(ent.Owner, active);
+
         MakePhaseable((ent.Owner, cloak));
         HideHeldItems(ent.Owner);
         _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
@@ -161,6 +171,13 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
             return;
 
         cloak.Cloaked = false;
+
+        if (TryComp<EntityActiveInvisibleComponent>(ent.Owner, out var active))
+        {
+            active.DisableMobCollision = false;
+            Dirty(ent.Owner, active);
+        }
+
         cloak.UncloakLockUntil = _timing.CurTime + cloak.UncloakWeaponLock;
         RestorePhase((ent.Owner, cloak));
         RestoreHeldItems((ent.Owner, cloak));
@@ -431,6 +448,24 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
 
         args.Cancelled = true;
         DenyPopup(ent);
+    }
+
+    private void OnStartPullAttempt(Entity<CMUVeteranCloakComponent> ent, ref StartPullAttemptEvent args)
+    {
+        if (!IsLocked(ent))
+            return;
+
+        args.Cancel();
+        DenyPopup(ent);
+    }
+
+    private void OnSpeakAttempt(Entity<CMUVeteranCloakComponent> ent, ref SpeakAttemptEvent args)
+    {
+        // Silent while the field is up: no talking, no shouting, nothing that gives the position away.
+        if (!ent.Comp.Cloaked)
+            return;
+
+        args.Cancel();
     }
 
     private void OnStorageInteract(ref StorageInteractAttemptEvent args)
