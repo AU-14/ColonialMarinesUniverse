@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using Content.Server.Administration.Logs;
+using Content.Shared.CMU14.Round.Antags.Rider; // CMU14
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Xenonids;
@@ -314,6 +315,12 @@ public sealed partial class XenoPsychicCommunicationSystem : EntitySystem
             _ => Loc.GetString("rmc-xeno-psychic-message-alien", ("message", escapedMessage)),
         };
 
+        // CMU14 Begin: riders whisper plainly, matching their normal whisper to the host
+        var isRider = HasComp<RiderComponent>(queen);
+        if (isRider)
+            wrapped = Loc.GetString("rider-whisper-wrap", ("text", escapedMessage));
+        // CMU14 End
+
         var author = CompOrNull<ActorComponent>(queen)?.PlayerSession.UserId;
         _chat.ChatMessageToOne(
             ChatChannel.Local,
@@ -322,7 +329,7 @@ public sealed partial class XenoPsychicCommunicationSystem : EntitySystem
             queen,
             false,
             actor.PlayerSession.Channel,
-            PsychicColor,
+            isRider ? null : PsychicColor, // CMU14: default chat color for riders
             recordReplay: true,
             author: author);
     }
