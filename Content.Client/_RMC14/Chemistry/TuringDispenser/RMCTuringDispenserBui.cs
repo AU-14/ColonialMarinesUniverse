@@ -1,6 +1,6 @@
-using Content.Client.CMU14.UI;
 using System.Linq;
 using Content.Client._RMC14.UserInterface;
+using Content.Client.CMU14.UI;
 using Content.Client.Chemistry.Containers.EntitySystems;
 using Content.Client.Resources;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -17,7 +17,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
-using static Content.Client._RMC14.UserInterface.RMCMachineUiStyle;
+using static Content.Client.CMU14.UI.CMUMachineUiStyle;
 
 namespace Content.Client._RMC14.Chemistry.TuringDispenser;
 
@@ -58,7 +58,7 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
 
         var autoRow = new RMCTuringDispenserBeakerRow { Id = null };
         autoRow.Icon.Texture = _resourceCache.GetTexture(CMUIcons.ArrowsRotate);
-        autoRow.Icon.ModulateSelfOverride = CMUIcons.Idle;
+        autoRow.Icon.ModulateSelfOverride = ButtonTextColor;
         autoRow.NameLabel.Text = "Auto (best fit)";
         autoRow.OnPressed += _ => SendPredictedMessage(new RMCTuringDispenserSetPreferredBeakerBuiMsg(null));
         _window.BeakerSelectorContainer.AddChild(autoRow);
@@ -98,14 +98,14 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
         var minMultiplier = comp.MinMultiplier.Float();
         var maxMultiplier = comp.MaxMultiplier.Float();
         _window.MultiplierSpinBox.IsValid = value => value >= minMultiplier && value <= maxMultiplier;
-        _window.MultiplierSpinBox.OnValueChanged += args =>
-            SendPredictedMessage(new RMCTuringDispenserSetMultiplierBuiMsg(FixedPoint2.New(args.Value)));
+        _window.MultiplierSpinBox.OnValueChanged += value =>
+            SendPredictedMessage(new RMCTuringDispenserSetMultiplierBuiMsg(FixedPoint2.New(value)));
 
         var minCycles = comp.MinCycles;
         var maxCycles = comp.MaxCycles;
         _window.CyclesSpinBox.IsValid = value => value >= minCycles && value <= maxCycles;
-        _window.CyclesSpinBox.OnValueChanged += args =>
-            SendPredictedMessage(new RMCTuringDispenserSetCyclesBuiMsg((int) args.Value));
+        _window.CyclesSpinBox.OnValueChanged += value =>
+            SendPredictedMessage(new RMCTuringDispenserSetCyclesBuiMsg((int) value));
 
         Refresh();
     }
@@ -120,19 +120,22 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
 
         var maxEnergy = comp.MaxEnergy;
         var energy = comp.Energy;
-        _window.EnergyBar.MaxValue = maxEnergy.Float();
-        _window.EnergyBar.Value = energy.Float();
-        _window.EnergyLabel.Text = $"Energy: {(maxEnergy.Float() > 0 ? energy.Float() / maxEnergy.Float() * 100 : 0):0}%";
+        var energyRatio = maxEnergy > 0 ? energy.Float() / maxEnergy.Float() : 0f;
+        var energyColor = energyRatio < 0.1f
+            ? BadColor
+            : energyRatio < 0.33f ? AverageColor : GoodColor;
+        Bar(_window.EnergyBar, energyRatio, energyColor);
+        _window.EnergyLabel.Text = $"Energy: {energyRatio * 100:0}%";
 
         var (statusText, statusColor) = comp.Status switch
         {
-            TuringDispenserStatus.Idle => ("Status: IDLE", TanColor),
-            TuringDispenserStatus.Running => ("Status: RUNNING", OrangeColor),
-            TuringDispenserStatus.Finished => ("Status: FINISHED", GreenColor),
-            TuringDispenserStatus.Stuck => ($"Status: STUCK - {comp.Error}", RedColor),
-            _ => ("Status: IDLE", TanColor),
+            TuringDispenserStatus.Idle => ("Status: IDLE", NoticeColor),
+            TuringDispenserStatus.Running => ("Status: RUNNING", NoticeColor),
+            TuringDispenserStatus.Finished => ("Status: FINISHED", NoticeColor),
+            TuringDispenserStatus.Stuck => ($"Status: STUCK - {comp.Error}", NoticeDangerColor),
+            _ => ("Status: IDLE", NoticeColor),
         };
-        _window.SetStatusRow(_window.StatusPanel, _window.StatusLabel, statusText, statusColor);
+        _window.SetBanner(_window.StatusPanel, _window.StatusLabel, statusText, statusColor);
 
         UpdateBeakerRows((Owner, comp));
 
@@ -140,18 +143,18 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
         UpdateProgramRows(comp, _window.BoxProgramContainer, _window.BoxEmptyPanel, _window.BoxEmptyLabel, comp.BoxProgram);
 
         if (_itemSlots.GetItemOrNull(Owner, comp.InputBoxSlotId) != null)
-            _window.SetStatusRow(_window.BoxAlertPanel, _window.BoxStatusLabel, "Box loaded", TanColor);
+            _window.SetBanner(_window.BoxAlertPanel, _window.BoxStatusLabel, "Box loaded", NoticeColor);
         else
-            _window.SetStatusRow(_window.BoxAlertPanel, _window.BoxStatusLabel, "No input box loaded!", RedColor);
+            _window.SetBanner(_window.BoxAlertPanel, _window.BoxStatusLabel, "No input box loaded!", NoticeDangerColor);
 
         if (_itemSlots.GetItemOrNull(Owner, comp.OutputBeakerSlotId) is { } beaker &&
             _solution.TryGetMixableSolution(beaker, out _, out var solution))
         {
-            _window.SetStatusRow(_window.BeakerAlertPanel, _window.BeakerStatusLabel, $"{solution.Volume}/{solution.MaxVolume} units", TanColor);
+            _window.SetBanner(_window.BeakerAlertPanel, _window.BeakerStatusLabel, $"{solution.Volume}/{solution.MaxVolume} units", NoticeColor);
         }
         else
         {
-            _window.SetStatusRow(_window.BeakerAlertPanel, _window.BeakerStatusLabel, "No output beaker loaded!", RedColor);
+            _window.SetBanner(_window.BeakerAlertPanel, _window.BeakerStatusLabel, "No output beaker loaded!", NoticeDangerColor);
         }
 
         _window.SetAutoRun(comp.AutoRun);
@@ -194,20 +197,20 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
                 row.StockLabel.Text = string.Empty;
             }
 
-            RMCTuringDispenserWindow.SetBeakerRowSelected(row, row.Id == comp.PreferredBeaker);
+            row.SetSelected(row.Id == comp.PreferredBeaker);
         }
     }
 
     private void UpdateProgramRows(
         RMCTuringDispenserComponent comp,
         BoxContainer container,
-        Control emptyPanel,
+        PanelContainer emptyPanel,
         Label emptyLabel,
         List<TuringProgramEntry> program)
     {
         emptyPanel.Visible = program.Count == 0;
         if (program.Count == 0)
-            _window!.SetStatusRow(emptyPanel, emptyLabel, emptyLabel.Text ?? string.Empty, RedColor);
+            _window!.SetBanner(emptyPanel, emptyLabel, emptyLabel.Text ?? string.Empty, NoticeDangerColor);
 
         var vialVolume = comp.BeakerOptions.FirstOrDefault(o => o.Id == comp.VialPrototype).MaxVolume.Float();
 

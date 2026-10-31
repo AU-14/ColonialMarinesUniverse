@@ -1,15 +1,16 @@
 using Content.Client._RMC14.UserInterface;
+using Content.Client.CMU14.UI;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared.CMU14.Chemistry.Research;
 using JetBrains.Annotations;
-using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using static Content.Client.CMU14.Chemistry.Research.ChemSimulatorWindow;
+using static Content.Client.CMU14.UI.CMUMachineUiStyle;
 
 namespace Content.Client.CMU14.Chemistry.Research;
 
@@ -54,12 +55,7 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
         if (_window is not { IsOpen: true })
             return;
 
-        _window.CreditsLabel.Text = Loc.GetString("research-sim-ui-credits", ("NUM", state.SampleData));
-        _window.CreditsBar.Value = Math.Clamp(state.SampleData, 0, 100);
-        _window.CreditsBar.ForegroundStyleBoxOverride = new StyleBoxFlat
-        {
-            BackgroundColor = state.SampleData >= 60 ? CreditsGood : state.SampleData >= 15 ? CreditsAverage : CreditsBad,
-        };
+        _window.SetCredits(state.SampleData);
 
         var locked = state.Stage != ChemSimulatorStage.Off;
         _window.SimulateButton.Disabled = locked || !state.Ready;
@@ -71,7 +67,7 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
 
         _window.OverrideButton.Disabled = locked;
         _window.OverrideButton.Pressed = state.Override;
-        Colored(_window.OverrideButton, state.Override ? OverrideActiveColor : ActionColor);
+        _window.OverrideButton.Accent = state.Override ? ButtonCautionColor : ButtonColor;
 
         var targetItem = GetSlotItem("target");
         var referenceItem = GetSlotItem("reference");
@@ -88,10 +84,10 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
         _window.ReferenceIcon.SetEntity(referenceItem);
 
         var noData = Loc.GetString("research-sim-ui-no-data");
-        Row(_window.TargetStatusPanel, _window.TargetNameLabel, state.Target?.Name ?? noData,
-            targetItem != null ? GreenColor : RedColor);
-        Row(_window.ReferenceStatusPanel, _window.ReferenceNameLabel, state.Reference?.Name ?? noData,
-            referenceItem != null ? GreenColor : RedColor);
+        _window.SetNotice(_window.TargetStatusPanel, _window.TargetNameLabel, state.Target?.Name ?? noData,
+            targetItem != null ? NoticeColor : NoticeDangerColor);
+        _window.SetNotice(_window.ReferenceStatusPanel, _window.ReferenceNameLabel, state.Reference?.Name ?? noData,
+            referenceItem != null ? NoticeColor : NoticeDangerColor);
 
         var costProperty = state.Mode == ChemSimulatorMode.Add ? state.ReferenceProp : state.TargetProp;
         int? cost = costProperty != null && state.Costs.TryGetValue(costProperty, out var propertyCost)
@@ -109,19 +105,18 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
             : state.StatusBar;
         var statusColor = state.Stage switch
         {
-            ChemSimulatorStage.Final => GreenColor,
-            ChemSimulatorStage.Failure => RedColor,
-            > ChemSimulatorStage.Final => OrangeColor,
-            _ => state.Ready ? TanColor : RedColor,
+            ChemSimulatorStage.Final => NoticeSuccessColor,
+            ChemSimulatorStage.Failure => NoticeDangerColor,
+            > ChemSimulatorStage.Final => NoticeInfoColor,
+            _ => state.Ready ? NoticeColor : NoticeDangerColor,
         };
-        Row(_window.StatusPanel, _window.StatusLabel, statusText, statusColor);
+        _window.SetNotice(_window.StatusPanel, _window.StatusLabel, statusText, statusColor);
 
         var showReference = state.Mode is ChemSimulatorMode.Relate or ChemSimulatorMode.Add;
 
         _window.TargetPropertiesPanel.Visible = state.Target != null && state.Costs.Count > 0;
-        _window.ReferenceHeader.Visible = showReference;
-        _window.ReferenceStatusPanel.Visible = showReference;
-        _window.ReferencePropertiesPanel.Visible = state.Reference != null && showReference;
+        _window.ReferenceSection.Visible = showReference;
+        _window.ReferencePropertiesPanel.Visible = state.Reference != null;
 
         PopulateProperties(_window.TargetPropertiesBox, state, state.Target, state.TargetProp, state.ReferenceProp,
             state.Mode != ChemSimulatorMode.Add, "research-sim-ui-selected-ref-conflict", id =>
@@ -135,8 +130,7 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
         }
 
         var picking = state.Stage == ChemSimulatorStage.Final;
-        _window.RecipePickerHeader.Visible = picking;
-        _window.RecipePickerPanel.Visible = picking;
+        _window.RecipePickerSection.Visible = picking;
         PopulateRecipeCandidates(picking ? state.RecipeOptions : [], state.RecipePicked);
 
         _window.FinalizeButton.Disabled = !picking || state.RecipePicked is null;
@@ -174,16 +168,16 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
         {
             var name = propertyId;
             var description = string.Empty;
-            var categoryColor = Color.White;
+            string? categoryIcon = null;
             if (_prototype.TryIndex<ReagentPropertyPrototype>(propertyId, out var proto))
             {
                 name = proto.LocalizedName;
                 description = proto.LocalizedDescription;
-                categoryColor = proto.Hint switch
+                categoryIcon = proto.Hint switch
                 {
-                    ReagentPropertyHintEnum.Positive => PropertyPositiveColor,
-                    ReagentPropertyHintEnum.Negative => PropertyNegativeColor,
-                    _ => Color.White,
+                    ReagentPropertyHintEnum.Positive => CMUIcons.SquarePlus,
+                    ReagentPropertyHintEnum.Negative => CMUIcons.SquareMinus,
+                    _ => null,
                 };
             }
 
@@ -204,18 +198,22 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
             }
             else
             {
-                button = new SelectButton { HorizontalExpand = true, MinHeight = 28, ClipText = true };
+                button = new SelectButton { HorizontalExpand = true, ClipText = true };
                 box.AddChild(button);
             }
 
-            button.Id = propertyId;
-            button.OnSelect = selectable ? onSelect : null;
-            button.Text = Loc.GetString("research-sim-ui-property", ("NAME", name), ("LEVEL", level));
+            var iconRow = button.SetIcon(categoryIcon ?? CMUIcons.SquarePlus,
+                Loc.GetString("research-sim-ui-property", ("NAME", name), ("LEVEL", level)));
+            iconRow.Icon.Visible = categoryIcon != null;
+            button.ToggleMode = selectable;
             button.Pressed = propertyId == selectedId;
             button.Disabled = selectable && conflicting && !state.Override;
             button.ToolTip = conflicting && !state.Override ? Loc.GetString(conflictTooltip) : description;
             button.MouseFilter = selectable && !locked ? Control.MouseFilterMode.Stop : Control.MouseFilterMode.Ignore;
-            SetRowButton(button, categoryColor);
+            button.Id = propertyId;
+            button.OnSelect = selectable ? onSelect : null;
+
+            button.Accent = button.Pressed ? ButtonSelectedColor : ButtonColor;
 
             index++;
         }
@@ -239,15 +237,17 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
             }
             else
             {
-                button = new SelectButton { HorizontalExpand = true, MinHeight = 32, ClipText = true };
+                button = new SelectButton { HorizontalExpand = true, ClipText = true };
                 box.AddChild(button);
             }
 
+            button.Text = name;
+            button.ToggleMode = true;
+            button.Pressed = picked == id;
             button.Id = id;
             button.OnSelect = pick => SendPredictedMessage(new ChemSimulatorPickRecipeChemBuiMsg(pick));
-            button.Text = name;
-            button.Pressed = picked == id;
-            SetRowButton(button, Color.White);
+
+            button.Accent = button.Pressed ? ButtonSelectedColor : ButtonColor;
         }
 
         box.RemoveChildrenAfter(candidates.Count);
