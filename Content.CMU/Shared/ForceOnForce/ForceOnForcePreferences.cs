@@ -55,6 +55,26 @@ public sealed partial class HumanoidCharacterProfile
         return priority;
     }
 
+    /// <summary>
+    /// Whether the job sits on the opposite side of this character's preferred FoF side.
+    /// </summary>
+    public bool IsForceOnForceOtherSide(JobPrototype job)
+    {
+        var desired = FoFSide switch
+        {
+            ForceOnForceSide.Govfor => RoundJobSide.Govfor,
+            ForceOnForceSide.Opfor => RoundJobSide.Opfor,
+            _ => RoundJobSide.None,
+        };
+        return desired != RoundJobSide.None && job.RoundSide != desired;
+    }
+
+    /// <summary>
+    /// Whether FoF dealing can consider this job at all under the side and fallback preferences.
+    /// </summary>
+    public bool IsForceOnForceJobReachable(JobPrototype job)
+        => !IsForceOnForceOtherSide(job) || FoFFallback.HasFlag(ForceOnForceFallback.OtherSide);
+
     public HumanoidCharacterProfile WithForceOnForceJobPriority(JobPrototype job, JobPriority priority, IPrototypeManager prototypes)
     {
         var profile = this;
