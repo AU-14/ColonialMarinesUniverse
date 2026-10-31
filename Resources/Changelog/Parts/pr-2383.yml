@@ -1,0 +1,13 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Wielding the plasma rifle, plasma carbine or spike launcher no longer slows
+    yautja.
+  type: Tweak
+- message: Plasma rifle and carbine bolts knock humans down for 4 seconds.
+  type: Tweak
+- message: The plasma carbine and hunting bow fire at their intended speed, and the
+    carbine fires a 2-round burst.
+  type: Fix
+time: '2026-10-30T20:17:09.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2383

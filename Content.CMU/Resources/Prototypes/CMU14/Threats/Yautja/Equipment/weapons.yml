@@ -161,8 +161,8 @@
   - type: Clothing
     clothingVisuals:
       back:
-      - sprite: CMU14/Yautja/pred_gear_custom_worn.rsi
-        state: rending_sword
+      - sprite: CMU14/Yautja/pred_gear_worn.rsi
+        state: clansword_alt
 
 - type: entity
   parent: CMUYautjaClanSword
@@ -178,8 +178,8 @@
   - type: Clothing
     clothingVisuals:
       back:
-      - sprite: CMU14/Yautja/pred_gear_custom_worn.rsi
-        state: piercing_sword
+      - sprite: CMU14/Yautja/pred_gear_worn.rsi
+        state: clansword_alt2
 
 - type: entity
   parent: CMUYautjaClanSword
@@ -227,8 +227,8 @@
   - type: Clothing
     clothingVisuals:
       back:
-      - sprite: CMU14/Yautja/pred_gear_custom_worn.rsi
-        state: dual_war_scythe
+      - sprite: CMU14/Yautja/pred_gear_worn.rsi
+        state: predscythe
     slots:
     - back
     - belt
@@ -249,8 +249,8 @@
   - type: Clothing
     clothingVisuals:
       back:
-      - sprite: CMU14/Yautja/pred_gear_custom_worn.rsi
-        state: double_war_scythe
+      - sprite: CMU14/Yautja/pred_gear_worn.rsi
+        state: predscythe_alt
 
 - type: entity
   parent: CMUYautjaWeaponBase
