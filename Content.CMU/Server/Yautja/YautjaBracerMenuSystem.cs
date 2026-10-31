@@ -221,6 +221,16 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             out var thrallBracerLocked);
 
         var tracker = BuildTracker(actor, bracer.Owner);
+        var comp = bracer.Comp;
+        // crystal and human crystal share one cooldown on the server, so they share it here too
+        var fabricator = new List<YautjaBracerFabricatorEntry>
+        {
+            new(YautjaBracerPanelCommand.CreateStabilisingCrystal, comp.StabilisingCrystalCost.Int(), comp.NextStabilisingCrystal),
+            new(YautjaBracerPanelCommand.CreateHumanStabilisingCrystal, comp.HumanStabilisingCrystalCost.Int(), comp.NextStabilisingCrystal),
+            new(YautjaBracerPanelCommand.CreateHuntingTrap, comp.HuntingTrapCost.Int(), comp.NextHuntingTrap),
+            new(YautjaBracerPanelCommand.CreateHealingCapsule, comp.HealingCapsuleCost.Int(), comp.NextHealingCapsule, comp.HealingEnabled),
+        };
+
         var state = new YautjaBracerPanelState(
             (int) bracer.Comp.Charge,
             (int) bracer.Comp.MaxCharge,
@@ -232,7 +242,12 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             thrallSelfDestructArmed,
             thrallBracerLocked,
             tracker.Readout,
-            tracker.Entries);
+            tracker.Entries,
+            fabricator,
+            comp.SelfDestructExplosionType,
+            comp.SelfDestructAt,
+            comp.NotificationSound,
+            CompOrNull<YautjaComponent>(actor)?.BracerNameActive ?? false);
 
         _ui.SetUiState(bracer.Owner, YautjaBracerUIKey.Key, state);
     }
