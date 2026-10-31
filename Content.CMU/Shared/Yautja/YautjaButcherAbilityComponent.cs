@@ -15,4 +15,8 @@ public sealed partial class YautjaButcherAbilityComponent : Component
 
     [ViewVariables]
     public EntityUid? Action;
+
+    // cmss13 thralls butcher with the species verb, no tool asked for
+    [DataField]
+    public bool RequiresBlade = true;
 }

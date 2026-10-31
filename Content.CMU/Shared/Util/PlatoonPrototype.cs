@@ -47,6 +47,13 @@ public sealed partial class PlatoonPrototype : IPrototype
     [DataField("name", required: true)]
     public LocId Name { get; private set; } = string.Empty;
 
+    /// <summary>
+    /// Whether this platoon is offered as an option in the lobby govfor/opfor votes.
+    /// Hidden platoons remain valid selections for defaults and code paths outside the votes.
+    /// </summary>
+    [DataField]
+    public bool ShowInVote { get; private set; } = true;
+
     [DataField("lorePrimer")]
     public ProtoId<LorePrimerPrototype>? LorePrimer { get; private set; }
 

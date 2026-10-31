@@ -892,6 +892,10 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         if (dropship.WithdrawEvacuating)
             return;
 
+        // CMU14: the cancel button aborts flights, not refuels; the landing cooldown is the refuel window
+        if (ftl.State == FTLState.Cooldown)
+            return;
+
         if (dropship.Destination != dropship.DepartureLocation ||
             _timing.CurTime + dropship.CancelFlightTime >= ftl.StateTime.End)
             return;

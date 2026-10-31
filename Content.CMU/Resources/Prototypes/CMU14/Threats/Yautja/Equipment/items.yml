@@ -721,9 +721,6 @@
   - type: Clothing
     slots:
     - ears
-    clothingVisuals:
-      ears:
-      - state: falcon_drone
   - type: YautjaFalconDrone
   - type: ActiveListener
   - type: YautjaTechItem
@@ -735,10 +732,6 @@
   components:
   - type: Sprite
     state: falcon_drone_badblood
-  - type: Clothing
-    clothingVisuals:
-      ears:
-      - state: falcon_drone_badblood
   - type: YautjaFalconDrone
     deployedPrototype: CMUYautjaFalconDroneBadBloodDeployed
 
@@ -783,6 +776,7 @@
   components:
   - type: Sprite
     drawdepth: OverMobs
+    scale: 0.8, 0.8
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     layers:
     - state: falcon_drone_active

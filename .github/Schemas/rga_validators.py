@@ -1,6 +1,7 @@
 from yamale.validators import Validator
 import validators
 
+
 class License(Validator):
     tag = "license"
     licenses = [
@@ -19,11 +20,12 @@ class License(Validator):
         "CC SAMPLING+ 1.0",
         "OFL-1.1",
         "Apache-2.0",
-        "Custom" # implies that the license is described in the copyright field.
-        ]
+        "Custom",  # implies that the license is described in the copyright field.
+    ] # CMU14
 
     def _is_valid(self, value):
         return value in self.licenses
+
 
 class Url(Validator):
     tag = "url"

@@ -311,6 +311,9 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public float HuntingLeapSpeed = 30f;
 
+    [DataField]
+    public TimeSpan HuntingLeapMinimumFlightTime = TimeSpan.FromSeconds(0.6);
+
     private static List<ProtoId<EmotePrototype>> GetDefaultAllowedEmotes()
     {
         var emotes = new List<ProtoId<EmotePrototype>>();
@@ -777,7 +780,7 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     [DataField]
     public SoundSpecifier CloakOffSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/pred_cloakoff_modern.wav");
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public YautjaInvisibilitySound InvisibilitySound = YautjaInvisibilitySound.Modern;
 
     [DataField]
@@ -992,6 +995,10 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
 
     [DataField]
     public bool RequiresYautjaWearer;
+
+    // CMU14: cmss13 keeps the clan mask visor yautja-only, CMU lets any human run it off a worn bracer
+    [DataField]
+    public bool AllowAnyWearer;
 
     [DataField]
     public float ZoomLevel = 0.45f;
@@ -3464,6 +3471,10 @@ public sealed partial class YautjaPlasmaRifleBoltComponent : Component
 
     [DataField]
     public float XenoExtraDamageMultiplier = 0.75f;
+
+    // cmss13 debilitate weaken 2 (x20 ds), humans only, yautja and synths shrug it off
+    [DataField]
+    public TimeSpan HumanKnockdownTime = TimeSpan.FromSeconds(4);
 }
 
 [RegisterComponent]

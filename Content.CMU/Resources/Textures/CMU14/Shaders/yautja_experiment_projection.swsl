@@ -1,0 +1,25 @@
+light_mode unshaded;
+uniform highp vec4 tint;
+uniform highp vec4 core;
+uniform highp float phase;
+uniform highp float opacity;
+uniform highp float optical;
+
+void fragment() {
+    highp vec4 original = zTexture(UV);
+    if (original.a < 0.01) discard;
+    highp float row = floor(UV.y / TEXTURE_PIXEL_SIZE.y);
+    highp float signal = fract(sin(row * 127.1 + floor(phase * 7.0) * 19.3) * 43758.5453);
+    highp float tear = step(0.94, signal) * sin(phase * 17.0) * TEXTURE_PIXEL_SIZE.x;
+    highp vec2 displaced = UV + vec2(tear, 0.0);
+    highp vec4 sprite = zTexture(displaced);
+    highp float edge = max(max(abs(sprite.a - zTexture(displaced + vec2(TEXTURE_PIXEL_SIZE.x, 0.0)).a),
+        abs(sprite.a - zTexture(displaced - vec2(TEXTURE_PIXEL_SIZE.x, 0.0)).a)),
+        abs(sprite.a - zTexture(displaced + vec2(0.0, TEXTURE_PIXEL_SIZE.y)).a));
+    highp float scan = 0.45 + 0.55 * pow(max(0.0, sin(row * 1.5 - phase * 5.0)), 4.0);
+    highp float luminance = dot(sprite.rgb, vec3(0.2126, 0.7152, 0.0722));
+    highp float coverage = mix(0.35 + luminance * 0.6, edge * 0.55 + scan * 0.08, optical);
+    highp float dropout = mix(1.0, 0.15, step(0.97, signal));
+    COLOR = vec4(mix(tint.rgb, core.rgb, edge * 0.7 + luminance * 0.2),
+        min(original.a, sprite.a) * opacity * coverage * scan * dropout);
+}
