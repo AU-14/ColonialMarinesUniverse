@@ -222,6 +222,10 @@
   - type: XenoAnnounceDeath
     message: cmu-xeno-death-overmind
     color: "#8a8c50"
+  - type: RMCTrackable
+  # Its own tracker stays on Queen like today, the default Overmind mode would track itself
+  - type: HiveTracker
+    mode: Queen
   - type: DropshipHijacker
   - type: RMCGibOnDeath
     gibChance: 0

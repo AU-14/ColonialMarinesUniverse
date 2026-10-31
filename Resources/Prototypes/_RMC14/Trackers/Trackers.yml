@@ -176,6 +176,12 @@
   component: HiveCore
   alert: HiveCoreTracker
 
+# CMU14: the pathogen hive's queen is the overmind
+- type: trackerMode
+  id: Overmind
+  component: CMUXenoOvermind
+  alert: HiveTracker
+
 - type: trackerMode
   id: BattleBuddy
   alert: SquadTracker
