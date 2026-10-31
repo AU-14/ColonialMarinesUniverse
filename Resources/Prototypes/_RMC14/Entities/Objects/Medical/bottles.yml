@@ -2,6 +2,16 @@
   parent: BaseChemistryEmptyBottle
   id: CMBottleEmpty
   components:
+  - type: Shakeable # CMU14: lid-closed Mix verb (OpenableSystem blocks it while the lid is off)
+    shakeDuration: 3
+    requireInHand: false
+    shakeVerbText: cmu-chem-mix-verb
+    shakePopupMessageSelf: cmu-chem-mix-popup-self
+    shakePopupMessageOthers: cmu-chem-mix-popup-others
+  - type: ReactionMixer # CMU14: what the Mix verb reacts with
+    mixerType: None
+    reactionTypes:
+    - CMUMix
   - type: Item
     size: Small
     sprite: _RMC14/Objects/Chemistry/bottles.rsi

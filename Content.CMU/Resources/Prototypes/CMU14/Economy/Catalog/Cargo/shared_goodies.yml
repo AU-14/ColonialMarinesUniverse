@@ -24,6 +24,10 @@
         stockReplenishDelay: 1800
       - cost: 250
         crate: CMUCrateChemGlasses
+      - cost: 250
+        crate: CMUCrateChemistryHotplate
+      - cost: 250
+        crate: CMUCrateChemistryChiller
       - cost: 400
         crate: CMUCrateBiosuitScientist
       - cost: 4500

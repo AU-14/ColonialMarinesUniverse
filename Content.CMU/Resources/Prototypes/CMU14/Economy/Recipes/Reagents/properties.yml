@@ -813,6 +813,7 @@
   code: OXI
   rarity: common
   value: 2
+  maxLevel: 3 # each level is +7 intensity / -4 duration; higher levels made sub-5 duration fuels that dominated xeno burn ticks
   intensityPerLevel: 7
   durationPerLevel: -4
   intensityModPerLevel: 0.2
@@ -944,7 +945,7 @@
   rarity: rare
   category: reactant
   value: 3
-  maxLevel: 1
+  maxLevel: 5 # CMU14: FLOW-23, levels 3+ make tile fires melt structures (CMUStructureMeltingFireSystem)
   effectName: Firepenetrating
 
 #special

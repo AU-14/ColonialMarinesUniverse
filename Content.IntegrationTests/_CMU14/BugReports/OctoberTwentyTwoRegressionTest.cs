@@ -46,9 +46,11 @@ public sealed class OctoberTwentyTwoRegressionTest : GameTest
         });
     }
 
-    // BUG-1046: the chemical payload took jugs, buckets and canisters
+    // BUG-1046: the chemical payload took jugs, buckets and canisters. Only vials and beakers
+    // (including high-capacity beakers) are whitelisted now.
     [TestCase("CMBeakerLarge", true)]
-    [TestCase("RMCBeakerHighCapacity", false)]
+    [TestCase("RMCBeakerHighCapacity", true)]
+    [TestCase("RMCReagentJug", false)]
     public async Task ChemicalPayloadOnlyTakesBeakerSizedContainers(string container, bool fits)
     {
         var map = await Pair.CreateTestMap();

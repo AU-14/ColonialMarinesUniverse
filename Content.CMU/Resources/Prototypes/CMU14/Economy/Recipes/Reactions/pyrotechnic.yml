@@ -1,6 +1,9 @@
 - type: reaction
   id: CMUNapalmUT
+  conserveEnergy: false # fuel synthesis must not self-heat past its 500 K ignition (fuel_ignition.yml)
   priority: 20
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCNapalm:
       amount: 1
@@ -13,7 +16,10 @@
 
 - type: reaction
   id: CMUNapalmB
+  conserveEnergy: false # fuel synthesis must not self-heat past its 500 K ignition (fuel_ignition.yml)
   priority: 20
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCNapalm:
       amount: 2
@@ -28,7 +34,10 @@
 
 - type: reaction
   id: CMUNapalmE
+  conserveEnergy: false # fuel synthesis must not self-heat past its 500 K ignition (fuel_ignition.yml)
   priority: 20
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCPhoron:
       amount: 1

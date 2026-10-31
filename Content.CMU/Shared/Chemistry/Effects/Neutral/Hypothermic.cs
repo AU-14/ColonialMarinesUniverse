@@ -20,7 +20,9 @@ public sealed partial class Hypothermic : RMCChemicalEffect
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         => $"Lowers body temperature by [color=yellow]{PotencyPerSecond * 2}[/color] K per tick, down to [color=yellow]{LinearLevel * 5}[/color] K below normal.\n" +
            $"Overdoses deal [color=red]{PotencyPerSecond}[/color] cold damage.\n" +
-           $"Critical overdoses deal [color=red]{PotencyPerSecond * 3}[/color] cold damage and cause hypothermic unconsciousness.";
+           $"Critical overdoses deal [color=red]{PotencyPerSecond * 3}[/color] cold damage and cause hypothermic unconsciousness.\n" +
+           $"A generated recipe for it is endothermic: synthesis cools the solution by about [color=yellow]{Potency * Content.Shared.CMU14.Chemistry.Reagents.SharedReagentGeneratorSystem.SynthesisKelvinPerLevel}[/color] K, " +
+           $"never below [color=yellow]{Content.Shared.CMU14.Chemistry.Reagents.SharedReagentGeneratorSystem.SynthesisMinTemperature}[/color] K.";
 
     protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {

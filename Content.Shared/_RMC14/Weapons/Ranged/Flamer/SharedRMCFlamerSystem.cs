@@ -1,3 +1,4 @@
+using System.Linq; // CMU14
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Atmos;
@@ -55,6 +56,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfileSystem _fuelProfile = default!; // CMU14
+    [Dependency] private Content.Shared.CMU14.Weapons.CMUFlameConeSystem _flameCone = default!; // CMU14
 
     public override void Initialize()
     {
@@ -242,18 +244,52 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         raw = default;
         effective = default;
         if (!_solution.TryGetSolution(tank.Owner, tank.Comp.SolutionId, out _, out var solution) ||
-            !_fuelProfile.TryCompute(solution, out raw))
+            !_fuelProfile.TryCompute(solution, out raw) ||
+            !_fuelProfile.TryResolveFire(solution, Content.Shared.CMU14.Chemistry.Fuel.CMUFireSource.Flamer, out var spec, tank))
         {
             return false;
         }
 
+        // FLOW-22: the same spec the flamer fires, so non-specialist tanks report the 39 intensity cap.
         effective = raw with
         {
-            Intensity = Math.Min(tank.Comp.MaxIntensity, raw.Intensity),
-            Duration = Math.Min(tank.Comp.MaxDuration, raw.Duration),
-            Radius = tank.Comp.IgnoreReagentRange ? tank.Comp.MaxRange : Math.Min(tank.Comp.MaxRange, raw.Radius),
+            Intensity = spec.Intensity,
+            Duration = spec.Duration,
+            Radius = spec.Radius,
+            FireEntity = spec.BehaviourEntity,
+            FirePenetrating = spec.PenetrationLevel >= 1,
         };
         return true;
+    }
+
+    /// <summary>FLOW-22: the fire spec the tank's current contents fire with, after its caps.</summary>
+    public bool TryGetTankFireSpec(Entity<RMCFlamerTankComponent> tank, out Content.Shared.CMU14.Chemistry.Fuel.CMUFireSpec spec)
+    {
+        spec = default;
+        return _solution.TryGetSolution(tank.Owner, tank.Comp.SolutionId, out _, out var solution) &&
+               _fuelProfile.TryResolveFire(solution, Content.Shared.CMU14.Chemistry.Fuel.CMUFireSource.Flamer, out spec, tank);
+    }
+
+    /// <summary>Blue fire: 40 max stacks instead of 20, reserved for specialist tanks.</summary>
+    public static readonly EntProtoId BlueFire = "RMCTileFireBlue";
+
+    /// <summary>
+    /// The fire entity <paramref name="tank"/> actually fires for a fuel whose fire is <paramref name="fire"/>:
+    /// blue fire falls back to the tank's <see cref="RMCFlamerTankComponent.FallbackFire"/> unless the tank
+    /// allows it. FLOW-22: this only picks the behaviour entity; colour comes from the fire's intensity tier and
+    /// non-specialist tanks are capped below the blue tier (CMUFuelProfileSystem.TryResolveFire).
+    /// </summary>
+    public EntProtoId GetTankFireEntity(Entity<RMCFlamerTankComponent> tank, EntProtoId fire)
+    {
+        if (tank.Comp.AllowBlueFire || !IsBlueFire(fire))
+            return fire;
+
+        return tank.Comp.FallbackFire;
+    }
+
+    private bool IsBlueFire(EntProtoId fire)
+    {
+        return _fuelProfile.IsBlueFire(fire);
     }
 
     private void AddLoadedFuelExamine(Entity<RMCFlamerTankComponent> tank, FormattedMessage msg)
@@ -387,8 +423,11 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         EntityCoordinates fromCoordinates,
         EntityCoordinates toCoordinates)
     {
-        if (!CanShootFlamer(flamer, fromCoordinates, toCoordinates, out var tiles, out var solution, out var fuel, out var tank)) // CMU14
+        if (!CanShootFlamer(flamer, fromCoordinates, toCoordinates, out var tiles, out var solution, out var spec, out var tank)) // CMU14
             return;
+
+        // CMU14: the chain records the tank's primary fuel (read before this shot's fuel is drawn).
+        _fuelProfile.TryCompute(solution.Value.Comp.Solution, out var primaryProfile);
 
         if (!_zLevels.PlayPredictedDirectlyAcrossZ(gun.Comp.SoundGunshotModified, gun, user))
             _audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
@@ -396,9 +435,9 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         //  333456
         // 1233456
         //  333456
-        var cost = tiles.Count;
-        if (fuel.FireSpread && cost > 2) // CMU14
-            cost = (int)Math.Ceiling(cost / 3.0f);
+        // CMU14: the cone's side tiles are free; fuel pays for the reach (one unit per distance step),
+        // so widening the flame into a cone doesn't change how much a shot uses.
+        var cost = tiles.Select(tile => tile.At).Distinct().Count();
 
         solution.Value.Comp.Solution.RemoveSolution(flamer.Comp.CostPer * cost);
         _solution.UpdateChemicals(solution.Value);
@@ -408,14 +447,16 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
         var chain = Spawn();
         var chainComp = EnsureComp<RMCFlamerChainComponent>(chain);
-        // CMU14 start - size the fire from the blended tank profile
-        chainComp.Spawn = fuel.FireEntity;
+        // CMU14 start - size the fire from the tank fire spec (FLOW-22: caps already applied)
+        chainComp.Spawn = spec.BehaviourEntity;
         chainComp.Tiles = tiles;
         chainComp.Origin = fromCoordinates;
-        chainComp.Reagent = fuel.PrimaryReagent;
-        chainComp.Intensity = fuel.Intensity;
-        chainComp.Duration = fuel.Duration;
-        chainComp.FirePenetrating = fuel.FirePenetrating;
+        chainComp.Reagent = primaryProfile.PrimaryReagent;
+        chainComp.Intensity = spec.Intensity;
+        chainComp.Duration = spec.Duration;
+        chainComp.FirePenetrating = spec.PenetrationLevel >= 1;
+        chainComp.PenetrationLevel = spec.PenetrationLevel;
+        chainComp.SpreadDepth = spec.SpreadDepth;
         // CMU14 end
         chainComp.MaxIntensity = tank.Value.Comp.MaxIntensity;
         chainComp.MaxDuration = tank.Value.Comp.MaxDuration;
@@ -448,11 +489,11 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         EntityCoordinates toCoordinates,
         [NotNullWhen(true)] out List<LineTile>? tiles,
         [NotNullWhen(true)] out Entity<SolutionComponent>? solution,
-        out Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfile fuel, // CMU14
+        out Content.Shared.CMU14.Chemistry.Fuel.CMUFireSpec spec, // CMU14
         [NotNullWhen(true)] out Entity<RMCFlamerTankComponent>? tank)
     {
         tiles = null;
-        fuel = default; // CMU14
+        spec = default; // CMU14
         if (!TryGetTankSolution(flamer, out solution, out tank))
             return false;
 
@@ -471,18 +512,21 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         // to prevent hitting yourself
         fromCoordinates = fromCoordinates.Offset(normalized * 0.23f);
 
-        // CMU14 start - the whole tank solution decides range, spread and fire type, not the first reagent
-        if (!_fuelProfile.TryCompute(solution.Value.Comp.Solution, out fuel))
+        // CMU14 start - the whole tank solution decides range, spread and fire type, not the first reagent.
+        // FLOW-22: one fire spec (tank caps, 39 unless specialist) and a cone instead of a line or 3-wide band.
+        if (!_fuelProfile.TryResolveFire(solution.Value.Comp.Solution, Content.Shared.CMU14.Chemistry.Fuel.CMUFireSource.Flamer, out spec, tank.Value))
             return false;
 
-        var maxRange = tank.Value.Comp.IgnoreReagentRange
-            ? tank.Value.Comp.MaxRange
-            : Math.Min(tank.Value.Comp.MaxRange, fuel.Radius);
-        var range = Math.Min((volume / flamer.Comp.CostPer).Int(), maxRange);
+        var maxRange = spec.Radius;
+        var affordable = (volume / flamer.Comp.CostPer).Int();
+        var range = Math.Min(affordable, maxRange);
         if (delta.Length() > maxRange)
             toCoordinates = fromCoordinates.Offset(normalized * range);
 
-        tiles = _line.DrawLine(fromCoordinates, toCoordinates, flamer.Comp.DelayPer, maxRange, out _, true, fuel.FireSpread);
+        tiles = _line.DrawLine(fromCoordinates, toCoordinates, flamer.Comp.DelayPer, maxRange, out _, true);
+        tiles = _flameCone.WidenToCone(fromCoordinates, tiles, spec.FireSpread, tank.Value.Comp.AllowBlueFire);
+
+        // Fuel pays per distance step (see ShootFlamer), and the line is already cut to what the tank affords.
         // CMU14 end
         if (tiles.Count == 0)
         {
@@ -791,19 +835,18 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
                         && oldTileFire.Owner.Id != fire.Id)
                     QueueDel(oldTileFire);
 
-                // CMU14 start - prefer the blended profile stored on the chain
+                // CMU14 start - prefer the blended profile stored on the chain. FLOW-22: applied as one fire spec
+                // (intensity/duration, lifetime scaled around napalm UT, penetration, colour tier, max stacks).
                 if (comp.Intensity > 0 && comp.Duration > 0)
                 {
-                    var blendDuration = Math.Min(comp.MaxDuration, comp.Duration);
-                    _rmcFlammable.SetIntensityDuration(fire,
+                    var spec = Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfileSystem.CreateSpec(
                         Math.Min(comp.MaxIntensity, comp.Intensity),
-                        blendDuration);
-                    // The fire prototype's lifetime is balanced around napalm UT; longer-burning blends keep
-                    // the tile alight proportionally longer, weaker ones shorter.
-                    _rmcFlammable.ScaleTileFireDuration(fire,
-                        Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfileSystem.TileLifetimeMultiplier(blendDuration));
-                    if (comp.FirePenetrating)
-                        _rmcFlammable.SetFirePenetrating(fire, true);
+                        Math.Min(comp.MaxDuration, comp.Duration),
+                        0,
+                        comp.Spawn,
+                        Math.Max(comp.PenetrationLevel, comp.FirePenetrating ? 1 : 0),
+                        spreadDepth: comp.SpreadDepth);
+                    _rmcFlammable.ApplyFireSpec(fire, spec);
                 }
                 else if (_reagent.TryIndex(comp.Reagent, out var reagent))
                 // CMU14 end

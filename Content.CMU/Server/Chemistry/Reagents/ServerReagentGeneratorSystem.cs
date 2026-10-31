@@ -538,9 +538,9 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             }
             // catalyst check unnecessary
 
-            // Precious metals are the scarce part of a contract: never ask for more than a few parts of one,
-            // whatever the first-slot multiplier, Hard bump or catalyst amount rolled.
-            if (IsPreciousMetal(chemid))
+            // Precious metals and nested contract chemicals are the scarce part of a contract: never ask for more
+            // than a few parts of one, whatever the first-slot multiplier, Hard bump or catalyst amount rolled.
+            if (IsCappedReagent(chemid))
                 mod = Math.Min(mod, MaxPreciousMetalParts);
 
             (int, bool) compmod = (mod, catalyst);
@@ -550,14 +550,28 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         return chemid;
     }
 
-    /// <summary>Most parts of any one precious metal (CMUPreciousMetals) a procgen recipe may require.</summary>
+    /// <summary>
+    /// Most parts of any one capped reagent (a CMUPreciousMetals metal or a TAU contract chemical) a procgen
+    /// recipe may require.
+    /// </summary>
     public const int MaxPreciousMetalParts = 3;
+
+    /// <summary>Gen-class key for the pool of registered contract chemicals.</summary>
+    public const string ContractChemicalPool = "TAU";
 
     public bool IsPreciousMetal(string reagent)
         => ChemicalGenClassesList.TryGetValue(PreciousMetalPool, out var precious) && precious.Contains(reagent);
 
     /// <summary>
-    /// Caps every precious-metal reactant or catalyst in <paramref name="recipe"/> at
+    /// True for reagents a recipe may only ask a few parts of (<see cref="MaxPreciousMetalParts"/>): precious
+    /// metals, and contract chemicals (TAU) used as a nested reactant of another contract.
+    /// </summary>
+    public bool IsCappedReagent(string reagent)
+        => IsPreciousMetal(reagent) ||
+           ChemicalGenClassesList.TryGetValue(ContractChemicalPool, out var contracts) && contracts.Contains(reagent);
+
+    /// <summary>
+    /// Caps every capped reactant or catalyst (see <see cref="IsCappedReagent"/>) in <paramref name="recipe"/> at
     /// <see cref="MaxPreciousMetalParts"/>. For recipes assembled outside <see cref="AddChemical"/>,
     /// such as simulator output copied from a parent or stock reaction.
     /// </summary>
@@ -565,7 +579,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
     {
         foreach (var (reagent, (amount, catalyst)) in recipe.ToList())
         {
-            if (amount > MaxPreciousMetalParts && IsPreciousMetal(reagent))
+            if (amount > MaxPreciousMetalParts && IsCappedReagent(reagent))
                 recipe[reagent] = (MaxPreciousMetalParts, catalyst);
         }
     }
@@ -978,6 +992,8 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.RecipeHint = B.RecipeHint;
         A.RecipeYield = B.RecipeYield;
         A.ScanPointYield = B.ScanPointYield;
+        A.SubContractID = B.SubContractID ?? string.Empty;
+        A.SubContractIsNew = B.SubContractIsNew;
         return;
     }
 
@@ -1037,6 +1053,8 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.RecipeHint = other.RecipeHint;
         A.RecipeYield = other.RecipeYield;
         A.ScanPointYield = other.ScanPointYield;
+        A.SubContractID = other.SubContractID ?? string.Empty;
+        A.SubContractIsNew = other.SubContractIsNew;
         return;
     }
 
@@ -1190,7 +1208,9 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         var reagents = _protoMan.GetInstances<ReagentPrototype>();
         foreach (var ingredient in data.Recipe)
         {
-            if (!reagents[ingredient.Key].Flags.HasFlag(ReagentFlags.Medical))
+            // A nested contract chemical is not registered until just before its parent; unknown reagents are
+            // generated chemicals, which are never Medical.
+            if (!reagents.TryGetValue(ingredient.Key, out var reagent) || !reagent.Flags.HasFlag(ReagentFlags.Medical))
                 return false;
         }
         return true;

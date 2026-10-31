@@ -714,7 +714,7 @@ namespace Content.Server.Atmos.EntitySystems
             }
 
             var damage = HasComp<XenoComponent>(uid)
-                ? rmcFire.Intensity * (flammable.FireStacks / rmcFire.Duration * 0.2 + 0.8) * protectionMultiplier * flammable.Damage / 2
+                ? XenoBurnTickScale(rmcFire.Intensity, flammable.FireStacks, rmcFire.Duration) * protectionMultiplier * flammable.Damage / 2 // CMU14
                 : rmcFire.Intensity / 5f * flammable.Damage;
 
             if (_steppingOnFireQuery.HasComp(uid))
@@ -732,6 +732,22 @@ namespace Content.Server.Atmos.EntitySystems
             // CMU14: fire growth and synthetic resistance.
             _rmcFlammable.DamageFromFire(uid, damage, interruptsDoAfters: false, origin: uid);
         }
+
+        // CMU14 start
+        /// <summary>
+        /// Smallest fire duration the xeno burn tick divides by. The RMC formula scales with
+        /// <c>stacks / duration</c>, so a very short-burning fuel (procgen Oxidizing blends reach a duration of 2)
+        /// multiplied xeno burn damage several times over instead of simply burning out sooner. Napalm UT is 20,
+        /// so stock fuels at or above this floor are unaffected.
+        /// </summary>
+        public const int MinBurnTickDuration = 10;
+
+        /// <summary>The scalar part of the xeno burn tick, before protection and the flammable's damage.</summary>
+        internal static double XenoBurnTickScale(int intensity, float fireStacks, int duration)
+        {
+            return intensity * (fireStacks / Math.Max(duration, MinBurnTickDuration) * 0.2 + 0.8);
+        }
+        // CMU14 end
 
         // CMU14 method
         private void WarnInvalidFire(EntityUid uid, FlammableComponent flammable, string stage, float value)
