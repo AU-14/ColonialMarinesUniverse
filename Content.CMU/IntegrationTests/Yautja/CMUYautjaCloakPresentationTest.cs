@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Content.Client._RMC14.NightVision;
 using Content.Client.CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Stealth;
@@ -6,7 +8,13 @@ using Content.Shared.Actions;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Inventory;
 using Content.Shared.Humanoid;
+using Moq;
 using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
+using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.Enums;
+using Robust.Shared.Graphics;
+using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.CMU14.Yautja;
@@ -78,6 +86,9 @@ public sealed class CMUYautjaCloakPresentationTest
             var sprite = entities.GetComponent<SpriteComponent>(localHunter);
             Assert.That(entities.System<SpriteSystem>().TryGetPostShader(sprite, "cmu-yautja-optical-cloak", out _), Is.True,
                 "The reverse sweep must survive removal of the active cloak and bracer.");
+            if (removeSlot == null)
+                Assert.That(DrawThermalVision(localHunter), Is.Zero,
+                    "The mask's thermal pass must not paint the raw equipped sprite over the reverse sweep.");
         });
         await pair.RunTicksSync(pair.SecondsToTicks(1.5f));
         await client.WaitAssertion(() =>
@@ -87,8 +98,38 @@ public sealed class CMUYautjaCloakPresentationTest
             var sprite = client.EntMan.GetComponent<SpriteComponent>(localHunter);
             Assert.That(client.EntMan.System<SpriteSystem>().TryGetPostShader(sprite, "cmu-yautja-optical-cloak", out _), Is.False,
                 "The reverse sweep must release its shader when the body is fully visible.");
+            if (removeSlot == null)
+                Assert.That(DrawThermalVision(localHunter), Is.GreaterThan(0),
+                    "Thermal highlighting must resume once the reverse sweep has finished.");
         });
         await pair.CleanReturnAsync();
     }
 
+    private static int DrawThermalVision(EntityUid hunter)
+    {
+        var entities = IoCManager.Resolve<IEntityManager>();
+        var xform = entities.GetComponent<TransformComponent>(hunter);
+        var overlay = IoCManager.Resolve<IOverlayManager>().GetOverlay<NightVisionOverlay>();
+        var world = new Mock<DrawingHandleWorld>(MockBehavior.Loose, Texture.White);
+        var render = new Mock<IRenderHandle>();
+        render.SetupGet(handle => handle.DrawingHandleWorld).Returns(world.Object);
+        var eye = new Mock<IEye>();
+        eye.SetupGet(e => e.Position).Returns(new MapCoordinates(xform.WorldPosition, xform.MapID));
+        var viewport = new Mock<IClydeViewport>();
+        viewport.SetupGet(v => v.Eye).Returns(eye.Object);
+        var bounds = new Box2(-10, -10, 10, 10);
+        var args = CreateDrawArgs(overlay.Space, null, viewport.Object, render.Object,
+            new UIBox2i(0, 0, 640, 640), xform.MapUid!.Value, xform.MapID, bounds, new Box2Rotated(bounds, Angle.Zero));
+        DrawOverlay(overlay, in args);
+        return world.Invocations.Count(call => call.Method.Name is "DrawTextureRect" or "DrawTextureRectRegion");
+    }
+
+    // Exercise the actual overlay pass, not only its component or shader bookkeeping.
+    [UnsafeAccessor(UnsafeAccessorKind.Constructor)]
+    private static extern OverlayDrawArgs CreateDrawArgs(OverlaySpace space, IViewportControl? viewportControl,
+        IClydeViewport viewport, IRenderHandle renderHandle, in UIBox2i viewportBounds, in EntityUid mapUid,
+        in MapId mapId, in Box2 worldAabb, in Box2Rotated worldBounds);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Draw")]
+    private static extern void DrawOverlay(NightVisionOverlay overlay, in OverlayDrawArgs args);
 }
