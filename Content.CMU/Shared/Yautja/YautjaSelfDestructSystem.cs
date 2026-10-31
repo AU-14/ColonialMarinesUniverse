@@ -7,6 +7,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
+using Content.Shared.CMU14.Ghost;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
@@ -429,6 +430,10 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         foreach (var nearby in _lookup.GetEntitiesInRange<BodyComponent>(epicenter, bracer.Comp.SelfDestructGibRadius))
         {
             if (nearby.Owner == user || TerminatingOrDeleted(nearby.Owner)) // wearer is gibbed above
+                continue;
+
+            // a lobby observer's ghost carries a hidden body to look like their character, it isn't really there
+            if (HasComp<CMUGhostAppearanceStandInComponent>(nearby.Owner))
                 continue;
 
             _body.GibBody(nearby.Owner, true, nearby.Comp, launchGibs: false, splatModifier: bracer.Comp.SelfDestructGibSplatModifier);
