@@ -170,7 +170,7 @@ public sealed class CMUSurrenderTest : GameTest
 
     [TestCase(true)]
     [TestCase(false)]
-    public async Task StartingSurrenderSendsOneOverheadMessage(bool canSpeak)
+    public async Task StartingSurrenderDoesNotSendOverheadText(bool canSpeak)
     {
         var map = await Pair.CreateTestMap();
         var originalAttached = ServerSession!.AttachedEntity;
@@ -200,11 +200,12 @@ public sealed class CMUSurrenderTest : GameTest
                 var overhead = messages.Where(message => message.SenderEntity == netSource
                     && !message.HidePopup
                     && message.Channel is ChatChannel.Local or ChatChannel.Emotes).ToArray();
-                Assert.That(overhead, Has.Length.EqualTo(1),
-                    "Surrender must not stack a raise-hands emote beneath the spoken plea.");
-                Assert.That(overhead[0].Channel, Is.EqualTo(canSpeak ? ChatChannel.Local : ChatChannel.Emotes));
-                Assert.That(overhead[0].Message, Is.Not.Empty,
-                    "Characters who cannot speak still need the visual action message.");
+                Assert.That(overhead, Is.Empty,
+                    "The hand animation replaces both spoken pleas and raise-hands text, including for mute characters.");
+                var actions = messages.Where(message => message.SenderEntity == netSource
+                    && message.Channel == ChatChannel.Emotes && !message.HideChat).ToArray();
+                Assert.That(actions, Has.Length.EqualTo(1), "Successful surrender must appear once in the chat box.");
+                Assert.That(actions[0].HidePopup, Is.True, "The action must not add an overhead text bubble.");
             });
         }
         finally
@@ -236,7 +237,11 @@ public sealed class CMUSurrenderTest : GameTest
             source = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             Server.PlayerMan.SetAttachedEntity(ServerSession, source);
             var torso = Server.System<BodySystem>().EnumerateOrgans<VisualOrganMarkingsComponent>(source)
-                .Single(organ => organ.Comp2.MarkingData.Layers.Contains(bodyPart));
+                .Single(organ =>
+                {
+                    var markings = organ.Comp2.MarkingData;
+                    return markings.Layers.Contains(bodyPart);
+                });
             category = SEntMan.GetComponent<OrganComponent>(torso.Owner).Category!.Value;
             Server.System<Content.Server.Body.VisualBodySystem>().ApplyMarkings(source, new()
             {
@@ -667,7 +672,7 @@ public sealed class CMUSurrenderTest : GameTest
                 Server.PlayerMan.SetAttachedEntity(ServerSession, source);
                 Assert.That(Server.System<ChatSystem>().TryEmoteWithChat(source, CMUSurrenderSystem.SurrenderEmote), Is.True);
                 var part = Server.System<BodySystem>().EnumerateOrgans<VisualOrganComponent>(source)
-                    .Single(organ => organ.Comp2.Layer.Equals(limb));
+                    .Single(organ => Equals(organ.Comp2.Layer, limb));
                 var result = Server.System<DetachableOrganSystem>().Detach(part.Owner);
                 Assert.That(result, Is.Not.Null);
                 detached = result!.Value;

@@ -85,7 +85,11 @@ public sealed class CMUSurrenderLayerLifecycleTest : GameTest
                 human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
                 Server.PlayerMan.SetAttachedEntity(ServerSession, human);
                 var torso = Server.System<BodySystem>().EnumerateOrgans<VisualOrganMarkingsComponent>(human)
-                    .Single(organ => organ.Comp2.MarkingData.Layers.Contains(HumanoidVisualLayers.UndergarmentTop));
+                    .Single(organ =>
+                    {
+                        var markings = organ.Comp2.MarkingData;
+                        return markings.Layers.Contains(HumanoidVisualLayers.UndergarmentTop);
+                    });
                 category = SEntMan.GetComponent<OrganComponent>(torso.Owner).Category!.Value;
                 Server.System<Content.Server.Body.VisualBodySystem>().ApplyMarkings(human, new()
                 {

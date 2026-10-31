@@ -1,15 +1,16 @@
-using Robust.Shared.Random;
-using Content.Server.Chat.Systems;
+using Content.Server.Chat.Managers;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.CMU14.Surrender;
+using Content.Shared.Coordinates;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Mobs;
 using Content.Shared.Standing;
@@ -17,20 +18,24 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Containers;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Player;
+using Robust.Shared.Utility;
 
 namespace Content.Server.CMU14.Surrender;
 
 public sealed class CMUSurrenderSystem : EntitySystem
 {
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private ChatSystem _chat = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public static readonly ProtoId<EmotePrototype> SurrenderEmote = "CMUSurrender";
     private static readonly SoundSpecifier RaiseSound = new SoundCollectionSpecifier("Salutes");
+    private static readonly EntProtoId RaiseEffect = "CMUEffectSurrenderHands";
+    private readonly Dictionary<EntityUid, EntityUid> _effects = new();
 
     public override void Initialize()
     {
@@ -39,6 +44,7 @@ public sealed class CMUSurrenderSystem : EntitySystem
         SubscribeLocalEvent<CMUSurrenderComponent, EntInsertedIntoContainerMessage>(OnContainerInserted);
         SubscribeLocalEvent<CMUSurrenderComponent, DownedEvent>(OnDowned);
         SubscribeLocalEvent<CMUSurrenderComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CMUSurrenderComponent, ComponentShutdown>(OnShutdown);
     }
 
     private void OnBeforeEmote(Entity<HandsComponent> ent, ref BeforeEmoteEvent args)
@@ -61,7 +67,6 @@ public sealed class CMUSurrenderSystem : EntitySystem
         if (HasComp<CMUSurrenderComponent>(ent))
         {
             LowerHands(ent);
-            Announce(ent, "cmu-surrender-lower");
             return;
         }
 
@@ -78,17 +83,23 @@ public sealed class CMUSurrenderSystem : EntitySystem
             return;
 
         EnsureComp<CMUSurrenderComponent>(ent);
+        RemoveEffect(ent);
+        _effects[ent] = SpawnAttachedTo(RaiseEffect, ent.Owner.ToCoordinates());
         _audio.PlayPvs(RaiseSound, ent.Owner);
-        if (_actionBlocker.CanSpeak(ent))
-        {
-            var index = _random.Next(1, 5);
-            _chat.TrySendInGameICMessage(ent, Loc.GetString($"cmu-surrender-line-{index}"),
-                InGameICChatType.Speak, ChatTransmitRange.Normal, checkRadioPrefix: false);
-        }
-        else
-        {
-            Announce(ent, "cmu-surrender-raise");
-        }
+        AnnounceSurrender(ent);
+    }
+
+    private void AnnounceSurrender(EntityUid uid)
+    {
+        var message = Loc.GetString("cmu-surrender-chat-raise", ("entity", uid));
+        var identity = Identity.Entity(uid, EntityManager);
+        var wrapped = Loc.GetString("chat-manager-entity-me-wrap-message",
+            ("entityName", FormattedMessage.EscapeText(Name(identity))),
+            ("entity", identity),
+            ("message", FormattedMessage.EscapeText(message)));
+        var filter = Filter.Empty().AddInRange(_transform.GetMapCoordinates(uid), SharedChatSystem.VoiceRange);
+        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Emotes, message, wrapped, uid,
+            hideChat: false, recordReplay: true, colorOverride: null, hidePopup: true);
     }
 
     public bool CanSurrender(EntityUid uid)
@@ -112,13 +123,15 @@ public sealed class CMUSurrenderSystem : EntitySystem
             LowerHands(ent);
     }
 
-    private void Announce(EntityUid uid, string message)
+    private void OnShutdown(Entity<CMUSurrenderComponent> ent, ref ComponentShutdown args)
     {
-        _chat.TrySendInGameICMessage(uid,
-            Loc.GetString(message, ("entity", uid)),
-            InGameICChatType.Emote,
-            ChatTransmitRange.Normal,
-            ignoreActionBlocker: true);
+        RemoveEffect(ent);
+    }
+
+    private void RemoveEffect(EntityUid uid)
+    {
+        if (_effects.Remove(uid, out var effect) && !TerminatingOrDeleted(effect))
+            QueueDel(effect);
     }
 
     private void OnDowned(Entity<CMUSurrenderComponent> ent, ref DownedEvent args)
