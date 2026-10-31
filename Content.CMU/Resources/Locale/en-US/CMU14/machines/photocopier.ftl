@@ -1,0 +1,10 @@
+cmu-photocopier-inserted = The machine takes the sheet.
+cmu-photocopier-occupied = There is already a sheet on the glass.
+cmu-photocopier-copying = The scanner light starts to sweep.
+cmu-photocopier-printed = A fresh copy slides out.
+cmu-photocopier-no-toner = The display blinks red. It is out of toner.
+cmu-photocopier-ejected = The machine spits the sheet back out.
+cmu-photocopier-verb-copy = Copy
+cmu-photocopier-verb-eject = Eject paper
+cmu-photocopier-toner = The toner gauge reads {$toner}/{$max}.
+cmu-photocopier-paper-inside = There is a sheet on the glass.
