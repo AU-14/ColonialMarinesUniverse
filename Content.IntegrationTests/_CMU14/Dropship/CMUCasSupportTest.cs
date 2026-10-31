@@ -90,7 +90,7 @@ public sealed class CMUCasSupportTest
             Expect("RMCDropshipAttachmentAmmoRocketMiniMikeWeedKiller", "CMUCasFalloutWeedKiller");
             Expect("RMCDropshipAttachmentAmmoRocketMiniMikeSmoke", "CMUCasFalloutObscurant");
             Expect("RMCDropshipAttachmentAmmoRocketMiniMikeFlare", "CMUCasFalloutFlare");
-            Expect("RMCDropshipAttachmentAmmoRocketMiniMikeThermobaric", "CMUCasFalloutResin");
+            Expect("RMCDropshipAttachmentAmmoRocketMiniMikeThermobaric", "CMUCasFalloutMiniMikeResin");
             Expect("AU14DropshipAttachmentAmmoRocketThermobaricTwo", "CMUCasFalloutResin");
             Expect("RMCDropshipAttachmentAmmoRocketMiniMikeHEAT", "CMUCasFalloutArmor");
         });

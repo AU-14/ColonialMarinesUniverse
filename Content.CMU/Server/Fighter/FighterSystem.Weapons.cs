@@ -119,14 +119,13 @@ public sealed partial class FighterSystem
         loadout.Clear();
         foreach (var uid in weapons.Hardpoints)
             if (!TerminatingOrDeleted(uid) && TryComp(uid, out FighterHardpointComponent? point))
-                weapons.Loadout.Add(GetWeaponStatus((uid, point)));
-        weapons.Targets.Clear();
+                loadout.Add(GetWeaponStatus((uid, point)));
         designations.Clear();
         foreach (var pointUid in weapons.Hardpoints)
         {
             if (TryComp(pointUid, out FighterHardpointComponent? point) && point.Ammo is { } ammo &&
                 TryGetGpsTarget(ammo, aircraft, weapons, out var gps))
-                weapons.Targets.Add(gps);
+                designations.Add(gps);
         }
         var targets = EntityQueryEnumerator<DropshipTargetComponent>();
         while (targets.MoveNext(out var uid, out _))
@@ -172,7 +171,7 @@ public sealed partial class FighterSystem
             }
             if (seat.Target is not { } target)
             {
-                Dirty(uid, seat);
+                DirtySeatChanges((uid, seat));
                 continue;
             }
             var current = weapons.Targets.FirstOrDefault(flare => flare.Id == target);
