@@ -1,0 +1,42 @@
+- type: job
+  parent: AU14UPPGROMPointman
+  id: AU14UPPGROMRRUPointman
+  description: au14-uppgrom-rru-description
+  spawnMenuRoleName: UPP GROM Pointman (Rapid Response Unit)
+  startingGear: AU14GearUPPGROMRRUPointman
+  greeting: au14-uppgrom-rru-greeting
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14UPPGROMRRUPointman
+  name: UPP GROM Pointman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadGROM
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-govforspecialist-pointmanRMC
+    description: au14-uppgrom-rru-description
+    reregister: false
+    job: AU14UPPGROMRRUPointman
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMRRUPointman
+  equipment:
+    id: AU14IDCardUPPGROMPointman
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPP
+    shoes: RMCBootsSPPFilled
+    head: AU14Altyn
+    belt: AU14ShotgunShellLoadingRigUPPRRU
+    pocket1: AU14PouchShotgunLargeBuckshot
+    pocket2: AU14PouchIFAKFill
+    back: CMUUPPNavalInfantrySatchelFull
+    ears: RMCHeadsetGROM
+    suitstorage: RMCWeaponShotgunType23
