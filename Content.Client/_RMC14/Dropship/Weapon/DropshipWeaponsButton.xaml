@@ -1,6 +1,6 @@
 ﻿<controls:DropshipWeaponsButton
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Dropship.Weapon"
-    SetSize="56 56" StyleClasses="OpenBoth" Margin="10">
+    SetSize="64 40" StyleClasses="CrtButton" Margin="4">
     <RichTextLabel Name="RichLabel" Access="Public" HorizontalAlignment="Center" />
 </controls:DropshipWeaponsButton>

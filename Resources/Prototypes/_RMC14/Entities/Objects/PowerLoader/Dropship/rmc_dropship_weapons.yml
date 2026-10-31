@@ -23,7 +23,7 @@
   parent: RMCDropshipAttachmentWeapon
   id: RMCDropshipAttachmentGau21Cannon
   name: GAU-21 30mm cannon
-  description: A dismounted GAU-21 'Rattler' 30mm rotary cannon. It seems to be missing its feed links and has exposed connection wires. Capable of firing 5200 rounds a minute, feared by many for its power. Earned the nickname 'Rattler' from the vibrations it would cause on dropships in its initial production run. Accepts PGU-100/PGU-105 ammo crates
+  description: A dismounted GAU-21 'Rattler' 30mm rotary cannon. It seems to be missing its feed links and has exposed connection wires. Capable of firing 5200 rounds a minute, feared by many for its power. Earned the nickname 'Rattler' from the vibrations it would cause on dropships in its initial production run. Accepts PGU-100 multi-purpose, PGU-105 anti-tank, PGU-110 fragmentation, PGU-115 precision AP, and PGU-120 incendiary ammo crates, or a mixed belt carrier that cycles whole bursts between three physically loaded crates.
   components:
   - type: Sprite
     layers:

@@ -5,6 +5,23 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Dropship.DirectFire;
 
+/// <summary>Optional integrations may veto firing without coupling the turret to their systems.</summary>
+[ByRefEvent]
+public struct GunshipWeaponReadyEvent
+{
+    public bool Cancelled;
+}
+
+[ByRefEvent]
+public struct GunshipAmmoConsumedEvent;
+
+[ByRefEvent]
+public struct GunshipTargetVisibilityEvent(MapCoordinates coordinates)
+{
+    public MapCoordinates Coordinates = coordinates;
+    public bool Obscured;
+}
+
 /// <summary>
 /// A dropship weapon point reserved for pilot-controlled, forward-firing weapons.
 /// </summary>
@@ -20,6 +37,9 @@ public sealed partial class GunshipDirectFirePointComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float ForwardOffset = 1f;
+
+    [DataField, AutoNetworkedField]
+    public float LateralOffset = 0.5f;
 }
 
 /// <summary>
@@ -45,6 +65,10 @@ public sealed partial class GunshipDirectFireWeaponComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float MuzzleOffset = 1.25f;
+
+    /// <summary>Overrides CAS burst consumption for individual direct-fire projectiles.</summary>
+    [DataField]
+    public int? RoundsPerProjectile;
 }
 
 [Serializable, NetSerializable]

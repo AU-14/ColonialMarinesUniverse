@@ -39,6 +39,15 @@ public sealed partial class AmmoInFlightComponent : Component
     public int ShotsPerVolley;
 
     [DataField, AutoNetworkedField]
+    public int ImpactsPerVolley = 1;
+
+    [DataField, AutoNetworkedField]
+    public DropshipLaserPattern LaserPattern;
+
+    [DataField, AutoNetworkedField]
+    public Angle? PatternRotation;
+
+    [DataField, AutoNetworkedField]
     public int SoundEveryShots = 3;
 
     [DataField, AutoNetworkedField]
@@ -55,6 +64,13 @@ public sealed partial class AmmoInFlightComponent : Component
 
     [DataField, AutoNetworkedField]
     public int BulletSpread = 3;
+
+    // CMU14: impact safety is server-only; the source may be deleted before the round finishes.
+    [DataField]
+    public EntityUid? ChinGunSource;
+
+    [DataField, AutoNetworkedField]
+    public float FriendlyImpactRadius = 2f;
 
     [DataField, AutoNetworkedField]
     public int ZLevelPenetration = 0;

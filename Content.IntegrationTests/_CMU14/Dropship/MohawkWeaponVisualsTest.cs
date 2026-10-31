@@ -20,6 +20,60 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 public sealed class MohawkWeaponVisualsTest
 {
     [Test]
+    public async Task FallujahArtilleryMountsUseFullWeaponFrames()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
+        EntityUid map = default;
+        var points = new List<NetEntity>();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            map = entities.System<SharedMapSystem>().CreateMap();
+            foreach (var prototype in new[] { "CMAlamoWall61", "CMAlamoWall65", "CMAlamoWall84", "CMAlamoWall84Flipped" })
+                points.Add(entities.GetNetEntity(entities.SpawnEntity(prototype,
+                    new EntityCoordinates(map, Vector2.Zero))));
+        });
+        foreach (var (installed, full) in new[]
+                 {
+                     ("bofors_cannon_loaded", "boforsnew2"),
+                     ("bofors_cannon_unloaded", "boforsnew2"),
+                     ("cas_howitzer_105_installed_loaded", "cas_howitzer_105_uninstalled"),
+                     ("cas_howitzer_105_installed_unloaded", "cas_howitzer_105_uninstalled"),
+                 })
+        {
+            await pair.Server.WaitAssertion(() =>
+            {
+                var entities = pair.Server.EntMan;
+                var appearance = entities.System<SharedAppearanceSystem>();
+                foreach (var net in points)
+                {
+                    var point = entities.GetEntity(net);
+                    appearance.SetData(point, DropshipWeaponVisuals.Sprite, "_RMC14/Objects/dropship_attachments.rsi");
+                    appearance.SetData(point, DropshipWeaponVisuals.State, installed);
+                }
+            });
+            await pair.RunUntilSynced();
+            await pair.Client.WaitAssertion(() =>
+            {
+                var entities = pair.Client.EntMan;
+                entities.System<AppearanceSystem>().FrameUpdate(0);
+                foreach (var net in points)
+                {
+                    var layer = entities.GetComponent<SpriteComponent>(entities.GetEntity(net))
+                        [DropshipWeaponPointLayers.Layer];
+                    Assert.That(layer.Visible, Is.True);
+                    Assert.That(layer.RsiState.ToString(), Is.EqualTo(full));
+                    Assert.That(layer.ActualRsi!.Size, Is.EqualTo(new Vector2i(64, 64)));
+                    Assert.That(((SpriteComponent.Layer) layer).DirOffset,
+                        Is.EqualTo(SpriteComponent.DirectionOffset.None));
+                }
+            });
+        }
+        await pair.Server.WaitAssertion(() => pair.Server.EntMan.DeleteEntity(map));
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task StandardMountsKeepTheirOriginalAttachmentArtwork()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
@@ -65,6 +119,8 @@ public sealed class MohawkWeaponVisualsTest
     [TestCase("midway_navy", "RMCDropshipAttachmentGau21Cannon", "RMCDropshipAttachmentAmmoGAU", "30mm_cannon", 64)]
     [TestCase("omaha", "RMCDropshipAttachmentGuidedMissileLauncher", "RMCDropshipAttachmentAmmoRocketWidowmaker", "rocket_pod", 51)]
     [TestCase("midway", "RMCDropshipAttachmentRocketPod", "RMCDropshipAttachmentAmmoRocketMiniMike", "minirocket_pod", 40)]
+    [TestCase("omaha", "CMUDropshipAttachmentBOFORS", "CMUDropshipAmmoBOFORSMagHE", "boforsnew2", 64)]
+    [TestCase("midway", "CMUDropshipAttachmentHowitzer", "CMUDropshipAmmoHowitzerHE", "cas_howitzer_105_uninstalled", 60)]
     public async Task InstalledWeaponsAndAmmoAppearOnConnectedClients(string variant, string weaponPrototype,
         string ammoPrototype, string fullState, int fullHeight)
     {
@@ -140,7 +196,10 @@ public sealed class MohawkWeaponVisualsTest
                         if (expected.State != "m90_minigun")
                         {
                             // Click maps expand opaque pixels by two pixels, clipped to the frame.
-                            Assert.That(maxY - minY + 1, Is.EqualTo(Math.Min(rsi.Size.Y, fullHeight + 4)),
+                            var clickHeight = expected.State == "cas_howitzer_105_uninstalled"
+                                ? 62 // The opaque frame reaches the bottom edge, clipping two pixels of click-map padding.
+                                : Math.Min(rsi.Size.Y, fullHeight + 4);
+                            Assert.That(maxY - minY + 1, Is.EqualTo(clickHeight),
                                 "The underside must display the whole weapon, not the short hull-edge fragment.");
                             Assert.That(((SpriteComponent.Layer) layer).DirOffset, Is.EqualTo(SpriteComponent.DirectionOffset.None));
                         }

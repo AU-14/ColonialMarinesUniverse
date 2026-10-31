@@ -1,0 +1,14 @@
+- type: entity
+  parent: CMUDropshipAmmoHowitzerHE
+  id: CMUDropshipAmmoHowitzerGPS
+  name: PGU-48/B 105mm GPS-guided High-Explosive shell
+  description: A GPS-guided 105mm high-explosive shell for the M137 Howitzer. Program it with a friendly ground rangefinder report before firing. It carries the same explosive payload as the standard HE shell.
+  components:
+  - type: DropshipAmmo
+    ammoType: howitzer_105mm_gps
+    targetSpread: 0
+  - type: CMUMunitionGuidance
+    mode: Gps
+    gpsOnly: true
+  - type: DropshipFabricatorPrintable
+    cost: 1400

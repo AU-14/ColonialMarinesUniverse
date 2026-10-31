@@ -236,19 +236,9 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     /// </summary>
     public float IntensityToRadius(float totalIntensity, float slope, float maxIntensity)
     {
-        // max radius to avoid being capped by max-intensity
-        var r0 = maxIntensity / slope;
-
-        // volume at r0
-        var v0 = RadiusToIntensity(r0, slope);
-
-        if (totalIntensity <= v0)
-        {
-            // maxIntensity is a non-issue, can use simple inverse formula
-            return MathF.Cbrt(3 * totalIntensity / (slope * MathF.PI));
-        }
-
-        return r0 * (MathF.Sqrt(12 * totalIntensity / v0 - 3) / 6 + 0.5f);
+        // CMU14 Begin
+        return CalculateBlastRadius(totalIntensity, slope, maxIntensity);
+        // CMU14 End
     }
 
     /// <inheritdoc />
@@ -319,9 +309,12 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         if (addLog) // dont log if already created a separate, more detailed, log.
             _adminLogger.Add(LogType.Explosion, LogImpact.High, $"Explosion ({typeId}) spawned at {epicenter:coordinates} with intensity {totalIntensity} slope {slope}");
 
-        // CMU14: snapshot the firing vehicle before the projectile is deleted.
+        // CMU14 Begin
+        var nonGibbing = HasComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(cause) ||
+                        EntityManager.System<Content.Shared.Gibbing.GibbingSystem>().GibbingSuppressed;
+        // Snapshot the firing vehicle before the projectile is deleted.
         var sourceVehicle = GetCMUProjectileVehicle(cause);
-
+        // CMU14 End
         // try to combine explosions on the same tile if they are the same type
         foreach (var queued in _queuedExplosions)
         {
@@ -329,10 +322,11 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             if (queued.Proto.ID != type.ID || queued.Epicenter.MapId != epicenter.MapId)
                 continue;
 
-            // CMU14: merging different shooters would also merge their crew-damage exemptions.
-            if (queued.SourceVehicle != sourceVehicle)
+            // CMU14 Begin
+            // Keep gibbing policy and crew-damage exemptions separate when combining blasts.
+            if (queued.NonGibbing != nonGibbing || queued.SourceVehicle != sourceVehicle)
                 continue;
-
+            // CMU14 End
             var dst2 = queued.Proto.MaxCombineDistance * queued.Proto.MaxCombineDistance;
             var direction = queued.Epicenter.Position - epicenter.Position;
             if (direction.LengthSquared() > dst2)
@@ -353,7 +347,10 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             MaxTileBreak = maxTileBreak,
             CanCreateVacuum = canCreateVacuum,
             Cause = cause,
-            SourceVehicle = sourceVehicle, // CMU14
+            // CMU14 Begin
+            NonGibbing = nonGibbing,
+            SourceVehicle = sourceVehicle,
+            // CMU14 End
         };
         _explosionQueue.Enqueue(boom);
         _queuedExplosions.Add(boom);
@@ -445,7 +442,10 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             EntityManager,
             visualEnt,
             queued.Cause,
-            queued.SourceVehicle, // CMU14
+            // CMU14 Begin
+            queued.NonGibbing,
+            queued.SourceVehicle,
+            // CMU14 End
             _map,
             _damageableSystem,
             _tileHistoryQuery);

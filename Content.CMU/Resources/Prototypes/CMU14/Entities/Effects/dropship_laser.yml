@@ -1,0 +1,19 @@
+- type: entity
+  id: CMUDropshipLaserPulse
+  name: dropship laser pulse
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Effects/beam.rsi
+    state: laser_beam_intense
+    drawdepth: Effects
+    scale: 0.7, 6
+    layers:
+    - state: laser_beam_intense
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.3
+  - type: EffectAlphaAnimation
+  - type: PointLight
+    radius: 2
+    color: "#ff4040"
