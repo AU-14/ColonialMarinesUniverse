@@ -481,10 +481,6 @@ public sealed partial class CMGunSystem : EntitySystem
             return;
         }
 
-        var userDelay = EnsureComp<UserPointblankCooldownComponent>(user);
-        if (_timing.CurTime < userDelay.LastPBAt + userDelay.TimeBetweenPBs)
-            return;
-
         var session = CompOrNull<ActorComponent>(user)?.PlayerSession;
         if (gunComp.Target.Value == user.Owner)
         {
@@ -499,6 +495,15 @@ public sealed partial class CMGunSystem : EntitySystem
         }
 
         if (!_interaction.InRangeUnobstructed(gun.Owner, gunComp.Target.Value, gun.Comp.Range, user: user))
+            return;
+
+        // CMU14 Begin: point blank shots are far more accurate. This runs before the point blank cooldown so a
+        // follow-up shot that can't get the guaranteed hit still lands most of its pellets.
+        ApplyPointBlankAccuracy(gun, args.FiredProjectiles);
+        // CMU14 End
+
+        var userDelay = EnsureComp<UserPointblankCooldownComponent>(user);
+        if (_timing.CurTime < userDelay.LastPBAt + userDelay.TimeBetweenPBs)
             return;
 
         foreach (var projectile in args.FiredProjectiles)
@@ -531,6 +536,23 @@ public sealed partial class CMGunSystem : EntitySystem
         //Can't melee right after a PB
         melee.NextAttack = userDelay.LastPBAt + userDelay.TimeBetweenPBs;
         Dirty(gun, melee);
+    }
+
+    // CMU14 method: point blank shots trade pellets scattering past the target for hitting it.
+    private void ApplyPointBlankAccuracy(Entity<GunPointBlankComponent> gun, List<EntityUid> projectiles)
+    {
+        var multiplier = gun.Comp.AccuracyMultiplier;
+        if (multiplier <= 1)
+            return;
+
+        foreach (var projectile in projectiles)
+        {
+            if (!TryComp(projectile, out RMCProjectileAccuracyComponent? accuracy))
+                continue;
+
+            accuracy.Accuracy *= multiplier;
+            Dirty<RMCProjectileAccuracyComponent>((projectile, accuracy));
+        }
     }
 
     private void OnRecoilSkilledRefreshModifiers(Entity<GunSkilledRecoilComponent> ent, ref GunRefreshModifiersEvent args)
