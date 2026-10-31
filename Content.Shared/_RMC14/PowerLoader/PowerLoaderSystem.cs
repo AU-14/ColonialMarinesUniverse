@@ -898,7 +898,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
     {
         slot = null;
 
-        if (!CanAttachDropshipPayload(user, target, used)) // CMU14: one internal weapon and grounded reloads.
+        if (!CanAttachDropshipPayload(user, target, used)) // CMU14: internal weapon limit and grounded reloads.
             return false;
 
         // AU-14: weapons installed on crew compartment points (JDAM bomb clamp, etc.)

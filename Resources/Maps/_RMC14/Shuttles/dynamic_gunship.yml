@@ -443,6 +443,7 @@ entities:
     - type: GasTileOverlay
     - type: RadiationGridResistance
     - type: Dropship
+      maxInternalWeapons: 2
       attachmentPoints:
       - 60
       - 59

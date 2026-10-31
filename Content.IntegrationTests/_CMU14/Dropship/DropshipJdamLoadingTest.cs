@@ -77,47 +77,52 @@ public sealed class DropshipJdamLoadingTest : GameTest
     }
 
     [Test]
-    public async Task ConcurrentInternalInstallsRespectTheShipLimitAndAllowReplacement()
+    public async Task InternalWeaponLimitAllowsTwoAndExemptsDedicatedPoints()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
             var ship = SEntMan.EnsureComponent<DropshipComponent>(map.Grid);
             var containers = Server.System<SharedContainerSystem>();
-            var points = new EntityUid[2];
-            var weapons = new EntityUid[2];
-            var loaders = new EntityUid[2];
-            var slots = new ContainerSlot[2];
-            var afters = new Content.Shared.DoAfter.DoAfter[2];
-            for (var i = 0; i < 2; i++)
+            var powerLoader = Server.System<PowerLoaderSystem>();
+            var loader = SEntMan.SpawnEntity("RMCMechPowerLoader", map.GridCoords);
+            var points = new EntityUid[4];
+            var slots = new ContainerSlot[4];
+            for (var i = 0; i < points.Length; i++)
             {
-                points[i] = SEntMan.SpawnEntity("AU14InteriorWeaponAttachmentPoint", map.GridCoords);
+                points[i] = SEntMan.SpawnEntity("RMCUtilityAttachmentPoint", map.GridCoords);
                 ship.AttachmentPoints.Add(points[i]);
                 var point = SEntMan.GetComponent<DropshipUtilityPointComponent>(points[i]);
                 slots[i] = containers.EnsureContainer<ContainerSlot>(points[i], point.UtilitySlotId);
-                weapons[i] = SEntMan.SpawnEntity("CMUDropshipAttachmentJDAMBombClamp", map.GridCoords);
-                loaders[i] = SEntMan.SpawnEntity("RMCMechPowerLoader", map.GridCoords);
-                SEntMan.GetComponent<PowerLoaderAttachableComponent>(weapons[i]).AttachDelay = TimeSpan.FromSeconds(1);
-                SEntMan.EventBus.RaiseLocalEvent(weapons[i],
-                    new BeforeRangedInteractEvent(loaders[i], weapons[i], points[i], map.GridCoords, true));
-                afters[i] = SEntMan.GetComponent<DoAfterComponent>(loaders[i]).DoAfters.Values.Single(d => !d.Completed && !d.Cancelled);
             }
-            for (var i = 0; i < 2; i++)
+
+            var weapons = new EntityUid[2];
+            for (var i = 0; i < weapons.Length; i++)
             {
-                afters[i].StartTime = SGameTiming.CurTime - afters[i].Args.Delay - TimeSpan.FromSeconds(1);
-                Server.System<SharedDoAfterSystem>().Update(0);
-                Assert.That(afters[i].Completed, Is.True);
+                weapons[i] = SEntMan.SpawnEntity("CMUDropshipAttachmentJDAMBombClamp", map.GridCoords);
+                Assert.That(containers.Insert(weapons[i], slots[i]), Is.True);
             }
-            Assert.That(slots[0].ContainedEntity, Is.EqualTo(weapons[0]));
-            Assert.That(slots[1].ContainedEntity, Is.Null, "Only the first completed internal weapon may install.");
-            var request = new GetAttachmentSlotEvent(SEntMan.GetNetEntity(loaders[1]), SEntMan.GetNetEntity(weapons[1]));
-            SEntMan.EventBus.RaiseLocalEvent(points[1], request);
-            Assert.That(request.CanUse, Is.False, "Subsequent installs must also reject the occupied ship allowance.");
+
+            var candidate = SEntMan.SpawnEntity("CMUDropshipAttachmentJDAMBombClamp", map.GridCoords);
+            Assert.That(powerLoader.CanAttachDropshipPayload(loader, points[3], candidate), Is.False,
+                "Only two ordinary internal weapons may be installed.");
+
+            var dedicated = SEntMan.SpawnEntity("AU14InteriorWeaponAttachmentPoint", map.GridCoords);
+            ship.AttachmentPoints.Add(dedicated);
+            var dedicatedPoint = SEntMan.GetComponent<DropshipUtilityPointComponent>(dedicated);
+            var dedicatedSlot = containers.EnsureContainer<ContainerSlot>(dedicated, dedicatedPoint.UtilitySlotId);
+            Assert.That(powerLoader.CanAttachDropshipPayload(loader, dedicated, candidate), Is.True,
+                "Dedicated internal weapon points are exempt from the ship limit.");
+            Assert.That(containers.Insert(candidate, dedicatedSlot), Is.True);
+
             Assert.That(containers.Remove(weapons[0], slots[0]), Is.True);
-            SEntMan.GetComponent<PowerLoaderAttachableComponent>(weapons[1]).AttachDelay = TimeSpan.Zero;
-            SEntMan.EventBus.RaiseLocalEvent(weapons[1],
-                new BeforeRangedInteractEvent(loaders[1], weapons[1], points[1], map.GridCoords, true));
-            Assert.That(slots[1].ContainedEntity, Is.EqualTo(weapons[1]), "Removing the existing weapon frees the allowance.");
+            var replacement = SEntMan.SpawnEntity("CMUDropshipAttachmentJDAMBombClamp", map.GridCoords);
+            Assert.That(powerLoader.CanAttachDropshipPayload(loader, points[3], replacement), Is.True,
+                "A weapon on a dedicated point does not consume the ordinary internal weapon allowance.");
+            Assert.That(containers.Insert(replacement, slots[3]), Is.True);
+            var fourth = SEntMan.SpawnEntity("CMUDropshipAttachmentJDAMBombClamp", map.GridCoords);
+            Assert.That(powerLoader.CanAttachDropshipPayload(loader, points[0], fourth), Is.False,
+                "The dedicated weapon must not increase the two-weapon limit for ordinary points.");
         });
     }
 

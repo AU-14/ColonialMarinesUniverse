@@ -16,4 +16,4 @@ cmu-dropship-preview-help = Yellow: estimated payload footprint. Orange: dispers
 cmu-dropship-hand-load-flight = Hand-loading is blocked during takeoff. In flight, use a dedicated interior weapon point or land first.
 cmu-dropship-hand-load-failed = The ammunition could not be loaded.
 cmu-dropship-load-flight = Land the dropship before loading ammunition.
-cmu-dropship-internal-weapon-limit = This dropship already has an internal weapon. Remove it before installing another.
+cmu-dropship-internal-weapon-limit = This dropship has reached its internal weapon limit. Remove one before installing another.

@@ -1,8 +1,10 @@
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared.Popups;
+using Content.Shared.Tag;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
+using Robust.Shared.Prototypes;
 
 #pragma warning disable IDE0130
 namespace Content.Shared._RMC14.PowerLoader;
@@ -10,6 +12,8 @@ namespace Content.Shared._RMC14.PowerLoader;
 
 public sealed partial class PowerLoaderSystem
 {
+    private static readonly ProtoId<TagPrototype> DedicatedInternalWeaponPointTag = "AU14InteriorWeaponPoint";
+
     /// <summary>
     /// Rechecked when attachment completes so takeoff and simultaneous installs cannot bypass the limits.
     /// </summary>
@@ -26,25 +30,37 @@ public sealed partial class PowerLoaderSystem
         {
             message = "cmu-dropship-load-flight";
         }
-        else if (HasComp<DropshipUtilityPointComponent>(point) && HasComp<DropshipWeaponComponent>(payload))
+        else if (HasComp<DropshipUtilityPointComponent>(point) &&
+                 HasComp<DropshipWeaponComponent>(payload) &&
+                 !_tag.HasTag(point, DedicatedInternalWeaponPointTag))
         {
-            foreach (var attachment in ship.Comp.AttachmentPoints)
+            if (ship.Comp.MaxInternalWeapons <= 0)
             {
-                if (!TryComp(attachment, out DropshipUtilityPointComponent? utility) ||
-                    !_container.TryGetContainer(attachment, utility.UtilitySlotId, out var slot))
-                    continue;
-
-                foreach (var installed in slot.ContainedEntities)
+                message = "cmu-dropship-internal-weapon-limit";
+            }
+            else
+            {
+                var internalWeapons = 0;
+                foreach (var attachment in ship.Comp.AttachmentPoints)
                 {
-                    if (HasComp<DropshipWeaponComponent>(installed))
-                    {
-                        message = "cmu-dropship-internal-weapon-limit";
-                        break;
-                    }
-                }
+                    if (!TryComp(attachment, out DropshipUtilityPointComponent? utility) ||
+                        _tag.HasTag(attachment, DedicatedInternalWeaponPointTag) ||
+                        !_container.TryGetContainer(attachment, utility.UtilitySlotId, out var slot))
+                        continue;
 
-                if (message != null)
-                    break;
+                    foreach (var installed in slot.ContainedEntities)
+                    {
+                        if (HasComp<DropshipWeaponComponent>(installed) &&
+                            ++internalWeapons >= ship.Comp.MaxInternalWeapons)
+                        {
+                            message = "cmu-dropship-internal-weapon-limit";
+                            break;
+                        }
+                    }
+
+                    if (message != null)
+                        break;
+                }
             }
         }
 
