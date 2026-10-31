@@ -323,16 +323,31 @@ public sealed class CMUGuidanceSystem : EntitySystem
         }
         if (args.Mode == CMUGuidanceMode.Gps)
         {
-            var reportId = args.ReportId;
-            var report = _reports.FirstOrDefault(report => report.Report.Id == reportId && CanUseReport(ent, report));
-            if (report == null ||
-                !_planet.TryPlanetToCoordinates(report.Coordinates, out var coordinates, report.Target.MapId))
+            if (args.Coordinates is { } entered)
             {
-                Error(ent, args.Actor, "cmu-guidance-invalid-gps");
-                return;
+                MapId? targetMap = TryComp(Receiver(ent), out FighterAircraftComponent? aircraft)
+                    ? _transform.GetMapId(aircraft.TerrainMap) : null;
+                if (!_planet.TryPlanetToCoordinates(entered, out var coordinates, targetMap))
+                {
+                    Error(ent, args.Actor, "cmu-guidance-no-planet");
+                    return;
+                }
+                guidance.Coordinates = coordinates;
+                guidance.PlanetCoordinates = entered;
             }
-            guidance.Coordinates = new MapCoordinates(coordinates.Position + report.Deviation, coordinates.MapId);
-            guidance.PlanetCoordinates = report.Coordinates;
+            else
+            {
+                var reportId = args.ReportId;
+                var report = _reports.FirstOrDefault(report => report.Report.Id == reportId && CanUseReport(ent, report));
+                if (report == null ||
+                    !_planet.TryPlanetToCoordinates(report.Coordinates, out var coordinates, report.Target.MapId))
+                {
+                    Error(ent, args.Actor, "cmu-guidance-invalid-gps");
+                    return;
+                }
+                guidance.Coordinates = new MapCoordinates(coordinates.Position + report.Deviation, coordinates.MapId);
+                guidance.PlanetCoordinates = report.Coordinates;
+            }
         }
         guidance.Mode = args.Mode;
         Dirty(uid, guidance);

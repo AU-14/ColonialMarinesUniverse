@@ -140,7 +140,7 @@ public sealed class FighterLaserTest : GameTest
     }
 
     [Test]
-    public async Task GpsProgrammingUsesGroundReportsPerLoadedRoundWithoutAContinuingDesignation()
+    public async Task GpsProgrammingSupportsReportsAndManualCoordinatesPerLoadedRoundWithoutAContinuingDesignation()
     {
         await CreateWorld(false);
         MapCoordinates programmed = default;
@@ -191,6 +191,23 @@ public sealed class FighterLaserTest : GameTest
             Assert.That(guidance.TryGetGps(_missile, out target), Is.True);
             Assert.That(Server.System<SharedTransformSystem>().ToMapCoordinates(target), Is.EqualTo(programmed),
                 "the other seat cannot program through this seat's UI host");
+
+            SEntMan.DeleteEntity(finder);
+            Assert.That(guidance.GetReports(host), Is.Empty);
+            SEntMan.EventBus.RaiseLocalEvent(host, new CMUProgramGpsMessage(SEntMan.GetNetEntity(_missile),
+                CMUGuidanceMode.Gps, null, new Vector2i(352, -272))
+                { Actor = _user, UiKey = CMUGuidanceUi.Key });
+            Assert.That(guidance.TryGetGps(_missile, out target), Is.True);
+            programmed = Server.System<SharedTransformSystem>().ToMapCoordinates(target);
+            Assert.That(programmed.MapId, Is.EqualTo(Server.System<SharedTransformSystem>().GetMapId(map)));
+            Assert.That(programmed.Position, Is.EqualTo(new Vector2(2, 3)),
+                "Manual coordinates must resolve against the fighter's terrain map without a report.");
+            SEntMan.EventBus.RaiseLocalEvent(host, new CMUProgramGpsMessage(SEntMan.GetNetEntity(_missile),
+                CMUGuidanceMode.Gps, null, new Vector2i(999, 999))
+                { Actor = _other, UiKey = CMUGuidanceUi.Key });
+            Assert.That(guidance.TryGetGps(_missile, out target), Is.True);
+            Assert.That(Server.System<SharedTransformSystem>().ToMapCoordinates(target), Is.EqualTo(programmed),
+                "Manual programming must preserve seat ownership checks.");
         });
         await Advance(.25);
         await Server.WaitAssertion(() =>

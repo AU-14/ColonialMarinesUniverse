@@ -63,12 +63,14 @@ public sealed class CMUSetLaserCodeMessage(string code, bool designator) : Bound
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUProgramGpsMessage(NetEntity ammo, CMUGuidanceMode mode, int? reportId)
+public sealed class CMUProgramGpsMessage(NetEntity ammo, CMUGuidanceMode mode, int? reportId,
+    Vector2i? coordinates = null)
     : BoundUserInterfaceMessage
 {
     public readonly NetEntity Ammo = ammo;
     public readonly CMUGuidanceMode Mode = mode;
     public readonly int? ReportId = reportId;
+    public readonly Vector2i? Coordinates = coordinates;
 }
 
 [Serializable, NetSerializable]

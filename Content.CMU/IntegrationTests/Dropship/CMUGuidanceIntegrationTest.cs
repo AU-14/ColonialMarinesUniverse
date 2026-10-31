@@ -1,5 +1,7 @@
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
+using Content.Client._RMC14.Dropship.Weapon;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Dropship.Fabricator;
 using Content.Shared._RMC14.Dropship.Weapon;
@@ -11,6 +13,9 @@ using Content.Shared.CMU14.Guidance;
 using Content.Shared.CMU14.Radio;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Input;
 
 namespace Content.IntegrationTests.CMU14.Dropship;
 
@@ -18,6 +23,37 @@ namespace Content.IntegrationTests.CMU14.Dropship;
 public sealed class CMUGuidanceIntegrationTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false };
+
+    [Test]
+    public async Task CasRequestsButtonOpensManagementAndClosesWithConsole()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            using var window = new DropshipWeaponsWindow();
+            try
+            {
+                window.OpenCentered();
+                var button = window.CasRequestsButton;
+                foreach (var state in new[] { BoundKeyState.Down, BoundKeyState.Up })
+                {
+                    var method = typeof(BaseButton).GetMethod(
+                        state == BoundKeyState.Down ? "KeyBindDown" : "KeyBindUp",
+                        BindingFlags.Instance | BindingFlags.NonPublic)!;
+                    method.Invoke(button, [new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick, state,
+                        default, true, Vector2.Zero, Vector2.Zero)]);
+                }
+                Assert.That(window.CasRequestsPanel.IsInsideTree, Is.True,
+                    "The RTO CAS button must open the request management panel.");
+                window.Close();
+                Assert.That(window.CasRequestsPanel.IsInsideTree, Is.False,
+                    "Closing the weapons console must close its request management window.");
+            }
+            finally
+            {
+                window.DisposeAuxiliaryWindows();
+            }
+        });
+    }
 
     [Test]
     public async Task RtoGpsRequestsUseValidatedGroundSolutionsWithoutRerolling()

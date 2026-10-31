@@ -12,6 +12,7 @@ public sealed partial class DropshipWeaponsWindow : RMCPopOutWindow
 {
     protected override Control Control => Panel;
     private readonly DefaultWindow _turretWindow;
+    private readonly DefaultWindow _casRequestsWindow; // CMU14
 
     public DropshipWeaponsWindow()
     {
@@ -25,15 +26,26 @@ public sealed partial class DropshipWeaponsWindow : RMCPopOutWindow
         TurretPanel.Orphan();
         _turretWindow.Contents.AddChild(TurretPanel);
         TurretPanelButton.OnPressed += _ => _turretWindow.OpenCentered();
+        // CMU14: request actions remain bound to the owning weapons interface.
+        _casRequestsWindow = new DefaultWindow
+        {
+            Title = Loc.GetString("cmu-cas-requests-title"),
+            MinSize = new System.Numerics.Vector2(420, 500),
+        };
+        CasRequestsPanel.Orphan();
+        _casRequestsWindow.Contents.AddChild(CasRequestsPanel);
+        CasRequestsButton.OnPressed += _ => _casRequestsWindow.OpenCentered();
         OnClose += () =>
         {
             _turretWindow.Close();
+            _casRequestsWindow.Close(); // CMU14
         };
     }
 
     public void DisposeAuxiliaryWindows()
     {
         _turretWindow.Dispose();
+        _casRequestsWindow.Dispose(); // CMU14
     }
 
     public void SetConsoleVisible(bool visible)
@@ -42,5 +54,6 @@ public sealed partial class DropshipWeaponsWindow : RMCPopOutWindow
         if (visible)
             return;
         _turretWindow.Close();
+        _casRequestsWindow.Close(); // CMU14
     }
 }

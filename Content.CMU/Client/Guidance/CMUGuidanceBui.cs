@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Shared.CMU14.Guidance;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -48,16 +47,16 @@ public sealed class CMUGuidanceBui(EntityUid owner, Enum key) : BoundUserInterfa
             mode.SelectId((int) ammo.Mode);
             mode.OnItemSelected += args => mode.SelectId(args.Id);
             _body.AddChild(mode);
-            var reports = new OptionButton { HorizontalExpand = true, Disabled = settings.Reports.Count == 0 };
-            foreach (var report in settings.Reports)
-                reports.AddItem(Loc.GetString("cmu-guidance-ground-report",
-                    ("observer", report.Observer), ("map", report.Map), ("x", report.X), ("y", report.Y)));
-            if (settings.Reports.Count > 0)
-                reports.Select(0);
-            else
-                reports.AddItem(Loc.GetString("cmu-guidance-no-ground-reports"));
-            reports.OnItemSelected += args => reports.SelectId(args.Id);
-            _body.AddChild(reports);
+            var coordinates = new BoxContainer();
+            var x = new SpinBox { HorizontalExpand = true };
+            var y = new SpinBox { HorizontalExpand = true };
+            x.Value = ammo.X;
+            y.Value = ammo.Y;
+            coordinates.AddChild(new Label { Text = Loc.GetString("cmu-guidance-gps-x") });
+            coordinates.AddChild(x);
+            coordinates.AddChild(new Label { Text = Loc.GetString("cmu-guidance-gps-y") });
+            coordinates.AddChild(y);
+            _body.AddChild(coordinates);
             if (ammo.Map != null)
                 _body.AddChild(new Label
                 {
@@ -67,8 +66,8 @@ public sealed class CMUGuidanceBui(EntityUid owner, Enum key) : BoundUserInterfa
             var apply = new Button { Text = Loc.GetString("cmu-guidance-program") };
             apply.OnPressed += _ =>
             {
-                var report = settings.Reports.ElementAtOrDefault(reports.SelectedId);
-                SendMessage(new CMUProgramGpsMessage(ammo.Id, (CMUGuidanceMode) mode.SelectedId, report?.Id));
+                SendMessage(new CMUProgramGpsMessage(ammo.Id, (CMUGuidanceMode) mode.SelectedId, null,
+                    new Vector2i(x.Value, y.Value)));
             };
             row.AddChild(apply);
             _body.AddChild(row);

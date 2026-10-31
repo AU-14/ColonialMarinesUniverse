@@ -10,6 +10,8 @@
             <BoxContainer Orientation="Horizontal">
                 <Label StyleClasses="CrtHeading" Text="{Loc 'rmc-dropship-weapons-title'}" Margin="8 4" HorizontalExpand="True" />
                 <Button Name="GuidanceButton" Access="Public" Text="{Loc 'cmu-guidance-title'}" />
+                <!-- CMU14: keep RTO request management accessible as a separate window. -->
+                <Button Name="CasRequestsButton" Access="Public" Text="{Loc 'cmu-cas-requests-title'}" />
                 <Button Name="TurretPanelButton" Access="Public" Text="{Loc 'cmu-mohawk-gunnery-panel-title'}" />
             </BoxContainer>
         </PanelContainer>
@@ -20,8 +22,7 @@
               <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
                <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="4">
                 <Label Name="BootStatusLabel" Access="Public" MaxWidth="260" ClipText="True" />
-                <Label Text="{Loc 'cmu-cas-requests-title'}" />
-                <ScrollContainer MaxHeight="300" MinWidth="280" HScrollEnabled="False">
+                <ScrollContainer Name="CasRequestsPanel" Access="Public" MinWidth="380" HScrollEnabled="False" VerticalExpand="True">
                     <BoxContainer Name="CasRequestsBox" Access="Public" Orientation="Vertical" />
                 </ScrollContainer>
                 <BoxContainer Orientation="Horizontal">

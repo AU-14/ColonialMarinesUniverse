@@ -93,6 +93,59 @@ public sealed class CMUGuidanceTest : GameTest
     }
 
     [Test]
+    public async Task GpsShellAcceptsManualPlanetCoordinatesWithoutGroundReports()
+    {
+        var shipMap = await Pair.CreateTestMap();
+        var ground = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.EnsureComponent<DropshipComponent>(shipMap.Grid);
+            SEntMan.EnsureComponent<RMCPlanetComponent>(ground.MapUid).Offset = new Vector2i(350, -275);
+            SEntMan.EnsureComponent<RMCPlanetComponent>(ground.Grid).Offset = new Vector2i(350, -275);
+            var point = SEntMan.SpawnEntity("AU14InteriorWeaponAttachmentPoint", shipMap.GridCoords);
+            var mount = SEntMan.GetComponent<DropshipUtilityPointComponent>(point);
+            var weapon = SEntMan.SpawnEntity("CMUDropshipAttachmentHowitzer", shipMap.GridCoords);
+            var ammo = SEntMan.SpawnEntity("CMUDropshipAmmoHowitzerGPS", shipMap.GridCoords);
+            var containers = Server.System<SharedContainerSystem>();
+            Assert.That(containers.Insert(weapon,
+                containers.EnsureContainer<ContainerSlot>(point, mount.UtilitySlotId)), Is.True);
+            var ammoSlot = containers.EnsureContainer<ContainerSlot>(point, mount.AmmoContainerSlotId);
+            Assert.That(containers.Insert(ammo, ammoSlot), Is.True);
+            var host = SEntMan.SpawnEntity("CMUMohawkMidwayGunneryea0f8d621b", shipMap.GridCoords);
+            var user = SEntMan.SpawnEntity("MobHuman", shipMap.GridCoords);
+            var guidance = Server.System<CMUGuidanceSystem>();
+            guidance.Open(host, user);
+            Assert.That(guidance.GetReports(host), Is.Empty);
+            var entered = new Vector2i(362, -290);
+            SEntMan.EventBus.RaiseLocalEvent(host, new CMUProgramGpsMessage(SEntMan.GetNetEntity(ammo),
+                CMUGuidanceMode.Gps, null, entered) { Actor = user, UiKey = CMUGuidanceUi.Key });
+            Assert.That(guidance.TryGetGps(ammo, out var target), Is.True);
+            var transform = Server.System<SharedTransformSystem>();
+            var actual = transform.ToMapCoordinates(target);
+            Assert.That(actual.MapId, Is.EqualTo(transform.GetMapId(ground.MapUid)));
+            Assert.That(actual.Position, Is.EqualTo(new Vector2(12, -15)));
+            Assert.That(SEntMan.GetComponent<CMUMunitionGuidanceComponent>(ammo).PlanetCoordinates, Is.EqualTo(entered));
+            Assert.That(SEntMan.GetComponent<DropshipTerminalWeaponsComponent>(host).Target, Is.Null,
+                "Manual GPS programming must not require a live target mark.");
+
+            Assert.That(containers.Remove(ammo, ammoSlot), Is.True);
+            SEntMan.EventBus.RaiseLocalEvent(host, new CMUProgramGpsMessage(SEntMan.GetNetEntity(ammo),
+                CMUGuidanceMode.Gps, null, new Vector2i(999, 999)) { Actor = user, UiKey = CMUGuidanceUi.Key });
+            Assert.That(SEntMan.GetComponent<CMUMunitionGuidanceComponent>(ammo).PlanetCoordinates, Is.EqualTo(entered),
+                "Manual programming must still reject ammunition that is no longer loaded.");
+
+            Assert.That(containers.Insert(ammo, ammoSlot), Is.True);
+            SEntMan.RemoveComponent<RMCPlanetComponent>(ground.MapUid);
+            SEntMan.RemoveComponent<RMCPlanetComponent>(ground.Grid);
+            SEntMan.EventBus.RaiseLocalEvent(host, new CMUProgramGpsMessage(SEntMan.GetNetEntity(ammo),
+                CMUGuidanceMode.Gps, null, new Vector2i(999, 999)) { Actor = user, UiKey = CMUGuidanceUi.Key });
+            Assert.That(guidance.TryGetGps(ammo, out target), Is.True);
+            Assert.That(transform.ToMapCoordinates(target), Is.EqualTo(actual),
+                "Failure to resolve a planet must retain the previous valid solution.");
+        });
+    }
+
+    [Test]
     public async Task DropshipGpsRequiresGroundReportAndConvertsPlanetCoordinatesWithDeviation()
     {
         var map = await Pair.CreateTestMap();
