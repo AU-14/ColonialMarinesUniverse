@@ -11,6 +11,7 @@ using Content.Shared.Popups;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Dropship.Exchange;
@@ -25,6 +26,7 @@ namespace Content.Server.CMU14.Dropship.Exchange;
 public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
 {
     [Dependency] private SharedDropshipSystem _dropship = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private PlatoonSpawnRuleSystem _platoonSpawn = default!;
@@ -36,6 +38,7 @@ public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
     private TimeSpan _nextCheck;
 
     private readonly List<Entity<CMUDropshipMohawkExchangeComponent, DropshipComponent>> _readyToDepart = new();
+    private readonly HashSet<EntityUid> _gridEntities = new();
 
     public override void Initialize()
     {
@@ -201,10 +204,12 @@ public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
 
     private bool HasBoardedMobs(EntityUid grid)
     {
-        var query = EntityQueryEnumerator<MobStateComponent, TransformComponent>();
-        while (query.MoveNext(out _, out _, out var xform))
+        if (!TryQueryGridEntities(grid))
+            return false;
+
+        foreach (var uid in _gridEntities)
         {
-            if (xform.GridUid == grid)
+            if (HasComp<MobStateComponent>(uid))
                 return true;
         }
 
@@ -213,14 +218,30 @@ public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
 
     private Entity<DropshipNavigationComputerComponent>? FindNavComputer(EntityUid grid)
     {
-        var query = EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var computer, out var xform))
+        if (!TryQueryGridEntities(grid))
+            return null;
+
+        foreach (var uid in _gridEntities)
         {
-            if (xform.GridUid == grid)
+            if (TryComp(uid, out DropshipNavigationComputerComponent? computer))
                 return (uid, computer);
         }
 
         return null;
+    }
+
+    private bool TryQueryGridEntities(EntityUid grid)
+    {
+        if (!TryComp(grid, out MapGridComponent? mapGrid) ||
+            !TryComp(grid, out TransformComponent? xform))
+        {
+            return false;
+        }
+
+        var worldBounds = _transform.GetWorldMatrix(xform).TransformBox(mapGrid.LocalAABB);
+        _gridEntities.Clear();
+        _entityLookup.GetEntitiesIntersecting(grid, worldBounds, _gridEntities, LookupFlags.All);
+        return true;
     }
 
     private void RefreshNavigationUis(EntityUid grid)
