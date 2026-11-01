@@ -26,6 +26,36 @@
       - id: XenoEgg
         amount: 2
 
+- type: entity  
+  parent: Hypospray  
+  id: AU14WeYuBloodburstingHypospray  
+  name: Experiment Hypospray  
+  description: A Weyland-Yutani pattern hypospray loaded with a swirling black mass. The dose looks fixed.  
+  components:  
+  - type: SolutionContainerManager  
+    solutions:  
+      hypospray:  
+        maxVol: 15  
+        reagents:  
+        - ReagentId: WeYuBloodbursting  
+          Quantity: 15  
+  - type: Hypospray  
+    onlyAffectsMobs: true  
+    transferAmount: 15  
+    injectOnly: true
+
+- type: entity  
+  id: AU14CrateSecureWeYuBloodbursting  
+  parent: RMCCrateSecureWeYa  
+  name: secure Weyland-Yutani crate  
+  description: A secure Weyland-Yutani crate marked "CLASSIFIED" with biohazard semiotics. Seems to be stressing the importance of gas masks and PPE.
+  suffix: CMU, Bloodbursting Injectors  
+  components:  
+  - type: StorageFill  
+    contents:  
+    - id: AU14WeYuBloodburstingHypospray  
+      amount: 3
+
 - type: entity
   id: AU14CrateSecureWeYuDrugs
   parent: AU14CrateSecureWeYuXenoEggs
