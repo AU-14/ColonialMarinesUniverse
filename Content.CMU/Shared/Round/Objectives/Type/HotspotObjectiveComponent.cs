@@ -4,7 +4,7 @@ namespace Content.Shared.CMU14.Round.Objectives.Type;
 
 public enum HotspotVisuals : byte
 {
-    Controller,
+    ZoneColor,
 }
 
 /// <summary>

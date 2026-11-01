@@ -759,8 +759,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
         }
 
-        // In Force on Force a party whose allegiance matches a side's platoon is part of that
-        // side: identification treats its members as teammates of it.
+        // In Force on Force a party whose allegiance matches exactly one side's platoon is part
+        // of that side: identification treats its members as teammates of it.
         var alignedSide = ResolveFoFAlignedSide(party);
         if (alignedSide != null)
         {
@@ -1033,7 +1033,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
         }
     }
 
-    // Govfor wins ties when both sides rolled platoons of the same allegiance.
+    // A party fights for the side whose platoon shares its allegiance. When both sides rolled
+    // platoons of that allegiance the tie stays unaligned and shows the question mark to both.
     private string? ResolveFoFAlignedSide(ThirdPartyPrototype party)
     {
         var ticker = _entityManager.System<GameTicker>();
@@ -1044,10 +1045,12 @@ public sealed partial class ThirdPartySystem : EntitySystem
         if (party.Allegiance is not { } allegiance)
             return null;
 
-        if (_platoons.SelectedGovforPlatoon?.Allegiance == allegiance)
-            return "govfor";
+        var govfor = _platoons.SelectedGovforPlatoon?.Allegiance == allegiance;
+        var opfor = _platoons.SelectedOpforPlatoon?.Allegiance == allegiance;
+        if (govfor == opfor)
+            return null;
 
-        return _platoons.SelectedOpforPlatoon?.Allegiance == allegiance ? "opfor" : null;
+        return govfor ? "govfor" : "opfor";
     }
 
     private bool TrySpawnAtMarker(string protoId,
