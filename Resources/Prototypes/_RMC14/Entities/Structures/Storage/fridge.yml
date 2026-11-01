@@ -9,6 +9,12 @@
   - type: Sprite
     sprite: _RMC14/Structures/Storage/Lockers/fridge.rsi
   - type: AntiRottingContainer
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodytype: Static
+  - type: Anchorable
+    flags: [Anchorable, Unanchorable]
 
 - type: entity
   parent: CMLockerFridge
