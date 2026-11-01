@@ -32,7 +32,7 @@
         showEnts: False
         occludes: True
   - type: Item
-    size: Huge
+    size: Normal
   - type: Sprite
     sprite: Objects/Weapons/Bombs/c4.rsi
     state: icon
