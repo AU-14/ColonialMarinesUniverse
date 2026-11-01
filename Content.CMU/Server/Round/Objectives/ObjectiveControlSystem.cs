@@ -541,12 +541,12 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         // snapshots never overlap and fight over restores.
         var halfWidth = hotspotComp.HalfWidth;
         var halfHeight = hotspotComp.HalfHeight == 0 ? hotspotComp.HalfWidth : hotspotComp.HalfHeight;
-        var zones = new List<(Vector2 Pos, int HalfWidth, int HalfHeight)>();
+        var zones = new List<(MapId Map, Vector2 Pos, int HalfWidth, int HalfHeight)>();
         var hotspotQuery = EntityQueryEnumerator<HotspotObjectiveComponent, TransformComponent>();
         while (hotspotQuery.MoveNext(out _, out var zone, out var zoneXform))
         {
             var zoneHalfHeight = zone.HalfHeight == 0 ? zone.HalfWidth : zone.HalfHeight;
-            zones.Add((_transform.GetWorldPosition(zoneXform), zone.HalfWidth, zoneHalfHeight));
+            zones.Add((zoneXform.MapID, _transform.GetWorldPosition(zoneXform), zone.HalfWidth, zoneHalfHeight));
         }
 
         var markers = new List<Entity<TransformComponent>>();
@@ -557,7 +557,8 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
                 continue;
 
             var pos = _transform.GetWorldPosition(markerXform);
-            if (zones.Any(z => MathF.Abs(pos.X - z.Pos.X) < halfWidth + z.HalfWidth
+            if (zones.Any(z => z.Map == markerXform.MapID
+                    && MathF.Abs(pos.X - z.Pos.X) < halfWidth + z.HalfWidth
                     && MathF.Abs(pos.Y - z.Pos.Y) < halfHeight + z.HalfHeight))
                 continue;
 

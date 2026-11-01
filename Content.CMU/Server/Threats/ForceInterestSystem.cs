@@ -201,9 +201,9 @@ public sealed partial class ForceInterestSystem : EntitySystem
             // Interest gets first crack at filling the force. Once the wait expires it deploys
             // with whoever signed up. A force nobody signed up for stays queued instead of
             // spawning roles nobody asked for.
-            if (force.Interested.Count < ForceInterest.RequiredPlayers(force.TotalRoles) &&
-                (force.Interested.Count == 0 ||
-                 _timing.CurTime < force.ReadyAt + FallbackDeployDelay))
+            if (force.Interested.Count < ForceInterest.RequiredPlayers(force.TotalRoles)
+                && (force.Interested.Count == 0
+                    || _timing.CurTime < force.ReadyAt + FallbackDeployDelay))
                 continue;
 
             Deploy(id, force);

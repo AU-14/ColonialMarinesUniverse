@@ -92,7 +92,7 @@
     visuals:
       enum.CMUPhotocopierVisuals.Copying:
         enum.CMUPhotocopierVisuals.Copying:
-          True: { state: bigscannercopyingpro }
+          True: { state: bigscannerprocopying }
           False: { state: bigscannerpro }
   - type: Icon
     sprite: _RMC14/Structures/Machines/photocopier.rsi
