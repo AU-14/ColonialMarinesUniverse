@@ -5,11 +5,11 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Fighter;
 
-/// <summary>A compact readout for the separate flight and reconnaissance panel.</summary>
+/// <summary>A compact readout for the corner cockpit panels.</summary>
 public sealed class FighterCockpitReadout : Control
 {
     private readonly Font _font = new VectorFont(IoCManager.Resolve<IResourceCache>()
-        .GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Regular.ttf"), 12);
+        .GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Regular.ttf"), 9);
 
     public string Text { get; set; } = string.Empty;
     public bool Warning { get; set; }
@@ -23,9 +23,10 @@ public sealed class FighterCockpitReadout : Control
 
     protected override void Draw(DrawingHandleScreen handle)
     {
-        if (Emphasis > .01f) handle.DrawRect(PixelSizeBox, Color.FromHex("#AEC987").WithAlpha(Emphasis * .2f));
+        if (PixelSize.X <= 8 || PixelSize.Y <= 0) return;
+        if (Emphasis > .01f) handle.DrawRect(PixelSizeBox, Color.White.WithAlpha(Emphasis * .12f));
         var lines = Text.Split('\n');
-        var scale = Math.Clamp(PixelSize.Y / (Math.Max(1, lines.Length) * 22f), .75f, 2.5f);
+        var scale = Math.Min(UIScale, PixelSize.Y / (Math.Max(1, lines.Length) * 16f));
         foreach (var line in lines)
         {
             var width = handle.GetDimensions(_font, line, scale).X;
@@ -35,9 +36,8 @@ public sealed class FighterCockpitReadout : Control
         var y = (PixelSize.Y - lines.Length * lineHeight) / 2f;
         foreach (var line in lines)
         {
-            var size = handle.GetDimensions(_font, line, scale);
-            handle.DrawString(_font, new Vector2((PixelSize.X - size.X) / 2, y), line, scale,
-                Color.FromHex(Warning ? "#DAB476" : "#B2CD98"));
+            handle.DrawString(_font, new Vector2(2 * UIScale, y), line, scale,
+                Color.FromHex(Warning ? "#DAB476" : "#CBD3DE"));
             y += lineHeight;
         }
     }

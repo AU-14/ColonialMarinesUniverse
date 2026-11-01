@@ -149,6 +149,17 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
         }
     }
 
+    public void RecordHijackDeclined()
+    {
+        if (GetCurrentPreset() != CMURoundStatisticsPreset.DistressSignal)
+            return;
+
+        TrySetPendingOutcome(
+            CMURoundStatisticsWinner.Xeno,
+            CMURoundStatisticsOutcome.XenoMinorHijackLoss,
+            "DropshipHijackDeclined");
+    }
+
     public void RecordWithdrawal(string? faction, bool isStalemate)
     {
         switch (GetCurrentPreset())

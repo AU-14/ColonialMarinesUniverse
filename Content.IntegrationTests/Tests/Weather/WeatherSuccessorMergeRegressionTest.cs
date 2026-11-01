@@ -142,8 +142,10 @@ public sealed class WeatherSuccessorMergeRegressionTest : GameTest
         await Pair.RunUntilSynced();
     }
 
-    [Test]
-    public async Task WeatherEligibilityUnionsTileAreaRoofBlockerAndTileAboveRules()
+    // CMU14: renderer batches must preserve the same eligibility rules as ordinary gameplay queries.
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task WeatherEligibilityUnionsTileAreaRoofBlockerAndTileAboveRules(bool batchRoofs)
     {
         var ordinary = await Pair.CreateTestMap(initialized: true, "FloorBasalt");
         EntityUid lower = default;
@@ -160,12 +162,31 @@ public sealed class WeatherSuccessorMergeRegressionTest : GameTest
             var tiles = Server.ResolveDependency<ITileDefinitionManager>();
             var indices = ordinary.Tile.GridIndices;
 
-            Assert.That(weather.CanWeatherAffect(
+            bool CanAffect(Entity<MapGridComponent?, RoofComponent?> ent, TileRef tileRef)
+            {
+                if (!batchRoofs)
+                    return weather.CanWeatherAffect(ent, tileRef);
+
+                SEntMan.TryGetComponent(ent.Owner, out RoofComponent? tileRoof);
+                var isRoof = false;
+                if (tileRoof != null && ent.Comp1 is { } grid)
+                {
+                    var colors = new Dictionary<Vector2i, Color>();
+                    var exact = new HashSet<Vector2i>();
+                    var bounds = SEntMan.System<EntityLookupSystem>().GetLocalBounds(tileRef.GridIndices, grid.TileSize);
+                    roofs.GetEntityRoofColors((ent.Owner, grid, tileRoof), bounds, colors, exact);
+                    isRoof = roofs.IsRooved((ent.Owner, grid, tileRoof), tileRef.GridIndices,
+                        exact.Contains(tileRef.GridIndices), colors.ContainsKey(tileRef.GridIndices));
+                }
+                return weather.CanWeatherAffect(ent, tileRef, isRoof);
+            }
+
+            Assert.That(CanAffect(
                 (ordinary.Grid.Owner, ordinary.Grid.Comp, (RoofComponent?) null), ordinary.Tile), Is.True);
 
             map.SetTile(ordinary.Grid, indices, new Tile(tiles["Plating"].TileId));
             var tile = map.GetTileRef(ordinary.Grid, indices);
-            Assert.That(weather.CanWeatherAffect(
+            Assert.That(CanAffect(
                 (ordinary.Grid.Owner, ordinary.Grid.Comp, (RoofComponent?) null), tile), Is.False,
                 "ordinary grids must retain the upstream tile weather flag");
 
@@ -173,12 +194,12 @@ public sealed class WeatherSuccessorMergeRegressionTest : GameTest
             tile = map.GetTileRef(ordinary.Grid, indices);
             var roof = SEntMan.EnsureComponent<RoofComponent>(ordinary.Grid.Owner);
             roofs.SetRoof((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), indices, true);
-            Assert.That(weather.CanWeatherAffect((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), tile), Is.False);
+            Assert.That(CanAffect((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), tile), Is.False);
             roofs.SetRoof((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), indices, false);
 
             var blocker = SEntMan.SpawnEntity("WeatherMergeBlocker", ordinary.GridCoords);
             transform.AnchorEntity(blocker);
-            Assert.That(weather.CanWeatherAffect((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), tile), Is.False,
+            Assert.That(CanAffect((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), tile), Is.False,
                 "an anchored BlockWeather entity must stop weather after roof and tile checks");
             SEntMan.DeleteEntity(blocker);
 
@@ -186,10 +207,10 @@ public sealed class WeatherSuccessorMergeRegressionTest : GameTest
             map.SetTile(ordinary.Grid, indices, new Tile(tiles["Plating"].TileId));
             tile = map.GetTileRef(ordinary.Grid, indices);
             areas.ReplaceArea(areaGrid, indices, "WeatherMergeOpenArea");
-            Assert.That(weather.CanWeatherAffect((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), tile), Is.True,
+            Assert.That(CanAffect((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), tile), Is.True,
                 "Area grids must delegate to local weather settings instead of the upstream tile flag");
             areas.ReplaceArea(areaGrid, indices, "WeatherMergeBlockedArea");
-            Assert.That(weather.CanWeatherAffect((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), tile), Is.False);
+            Assert.That(CanAffect((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), tile), Is.False);
 
             // Z-level terrain lives on map grids registered in a real network.
             lower = map.CreateMap(out _, runMapInit: true);
@@ -209,17 +230,17 @@ public sealed class WeatherSuccessorMergeRegressionTest : GameTest
             }), Is.True);
 
             var lowerTile = map.GetTileRef(lower, lowerGrid, indices);
-            Assert.That(weather.CanWeatherAffect(
+            Assert.That(CanAffect(
                 (lower, lowerGrid, (RoofComponent?) null), lowerTile), Is.False,
                 "a nonempty tile at the same indices on the level above must block weather");
 
             map.SetTile(upper, upperGrid, indices, Tile.Empty);
-            Assert.That(weather.CanWeatherAffect(
+            Assert.That(CanAffect(
                 (lower, lowerGrid, (RoofComponent?) null), lowerTile), Is.True,
                 "an empty tile above must not be treated as a roof");
 
             map.SetTile(upper, upperGrid, indices, basalt);
-            Assert.That(weather.CanWeatherAffect(
+            Assert.That(CanAffect(
                 (lower, lowerGrid, (RoofComponent?) null), lowerTile), Is.False,
                 "replacing the tile above must block weather again without rebuilding the network");
         });
