@@ -37,7 +37,7 @@ namespace Content.Server.Power.Nodes
             Entity<MapGridComponent>? grid,
             IEntityManager entMan)
         {
-            // RUMC Connection Begin: Direct: only the cables run by hand; Both: those and the ones lying under it.
+            // CMU14 Connection Begin: Direct: only the cables run by hand; Both: those and the ones lying under it.
             if (Connection != NodeConnectorMode.Adjacent)
             {
                 foreach (var link in DirectLinks)
@@ -46,7 +46,7 @@ namespace Content.Server.Power.Nodes
                 if (Connection == NodeConnectorMode.Direct)
                     yield break;
             }
-            // RUMC End
+            // CMU14 End
 
             if (!xform.Comp.Anchored || grid is not { } gridEnt)
                 yield break;

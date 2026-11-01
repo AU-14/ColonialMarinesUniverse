@@ -41,7 +41,7 @@ namespace Content.Server.Power.EntitySystems
 
                 var otherTransform = Transform(reachable.Owner);
 
-                // RUMC: a cable joined from another level (a cable shaft) is not drawn as a neighbour of this one.
+                // CMU14: a cable joined from another level (a cable shaft) is not drawn as a neighbour of this one.
                 if (otherTransform.GridUid != transform.GridUid)
                     continue;
 

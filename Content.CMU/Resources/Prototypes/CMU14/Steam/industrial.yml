@@ -124,10 +124,7 @@
   name: industrial steam grinder
   description: A gray shredder driven by steam, built of machine hulls. Join a gas pipe with steam to it and it chews through every slot it can at once.
   components:
-  - type: Sprite
-    sprite: CMU14/Production/Grinding/grinder_steel.rsi
-    state: grinder
-    noRot: true
+  # The upstream steel grinder RSI was not committed; use the inherited grinder art.
   - type: AutoPorts
     inputSlots: [ material1, material2, material3, material4, material5, material6, material7, material8, material9 ]
     outputSlots: [ output1, output2, output3, output4, output5, output6, output7, output8, output9, output10, output11, output12, output13, output14, output15, output16, output17, output18 ]

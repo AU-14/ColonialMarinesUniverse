@@ -41,7 +41,7 @@
     tags:
     - CableCoil
   - type: RMCCableCoil
-  - type: DirectCableLinker # RUMC: a coil runs a cable by hand from one device to another
+  - type: DirectCableLinker # CMU14: a coil runs a cable by hand from one device to another
   # CMU14 start - RMC cable coils are the ghetto surgery cable fallback.
   - type: CMSurgeryTool
   - type: CMHemostat

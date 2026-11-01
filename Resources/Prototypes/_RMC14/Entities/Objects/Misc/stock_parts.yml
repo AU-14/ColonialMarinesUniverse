@@ -37,7 +37,7 @@
   components:
   - type: Sprite
     state: capacitor
-  - type: Tag # RUMC: the part is found by its tag in the recipes of the machines
+  - type: Tag # CMU14: the part is found by its tag in the recipes of the machines
     tags:
     - AU14PartCapacitor
 #  - type: MachinePart
@@ -53,7 +53,7 @@
   components:
   - type: Sprite
     state: scan_module
-  - type: Tag # RUMC: the part is found by its tag in the recipes of the machines
+  - type: Tag # CMU14: the part is found by its tag in the recipes of the machines
     tags:
     - AU14PartScanningModule
   #- type: MachinePart
@@ -69,7 +69,7 @@
   components:
   - type: Sprite
     state: micro_mani
-  - type: Tag # RUMC: the part is found by its tag in the recipes of the machines
+  - type: Tag # CMU14: the part is found by its tag in the recipes of the machines
     tags:
     - AU14PartManipulator
 #  - type: MachinePart
@@ -85,7 +85,7 @@
   components:
   - type: Sprite
     state: micro_laser
-  - type: Tag # RUMC: the part is found by its tag in the recipes of the machines
+  - type: Tag # CMU14: the part is found by its tag in the recipes of the machines
     tags:
     - AU14PartMicroLaser
   #- type: MachinePart
@@ -101,7 +101,7 @@
   components:
   - type: Sprite
     state: matter_bin
-  - type: Tag # RUMC: the part is found by its tag in the recipes of the machines
+  - type: Tag # CMU14: the part is found by its tag in the recipes of the machines
     tags:
     - AU14PartMatterBin
 #  - type: MachinePart

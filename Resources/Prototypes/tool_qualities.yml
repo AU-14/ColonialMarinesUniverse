@@ -91,21 +91,21 @@
   icon: { sprite: _RMC14/Objects/Tools/maintenance_jack.rsi, state: icon }
 
 - type: tool
-  id: Hammering # RUMC: the quality of the smithing hammers
+  id: Hammering # CMU14: the quality of the smithing hammers
   name: tool-quality-hammering-name
   toolName: tool-quality-hammering-tool-name
   spawn: RUMCForgeHammer
   icon: { sprite: Objects/Weapons/Melee/sledgehammer.rsi, state: icon }
 
 - type: tool
-  id: Tonging # RUMC: the quality of the smithing tongs
+  id: Tonging # CMU14: the quality of the smithing tongs
   name: tool-quality-tonging-name
   toolName: tool-quality-tonging-tool-name
   spawn: RUMCForgeTongs
   icon: { sprite: CMU14/Objects/Smelting/tongs.rsi, state: tongs }
 
 - type: tool
-  id: Chiseling # RUMC: the quality of the smithing chisel
+  id: Chiseling # CMU14: the quality of the smithing chisel
   name: tool-quality-chiseling-name
   toolName: tool-quality-chiseling-tool-name
   spawn: RUMCForgeChisel

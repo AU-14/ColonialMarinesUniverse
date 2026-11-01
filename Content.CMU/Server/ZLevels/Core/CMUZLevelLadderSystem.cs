@@ -61,7 +61,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
 
     private void OnGlobalMove(ref MoveEvent ev)
     {
-        if (_moving.Contains(ev.Sender) ||
+        if (ev.OnlyRotation || _moving.Contains(ev.Sender) ||
             !HasComp<CMUZLevelAutoTransitionComponent>(ev.Sender) ||
             ev.OldPosition.EntityId != ev.NewPosition.EntityId ||
             !_gridQuery.TryGetComponent(ev.NewPosition.EntityId, out var grid))

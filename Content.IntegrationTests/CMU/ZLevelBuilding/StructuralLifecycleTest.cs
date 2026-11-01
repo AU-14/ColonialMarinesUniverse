@@ -317,7 +317,7 @@ public sealed class StructuralLifecycleTest
             var entities = server.EntMan;
             cave = CreateCave(entities, map.MapUid, map.Grid.Owner, map.Tile.Tile, first, second);
 
-            // What falls into a cave is the block that stood over it: over each of the two the level above has one.
+            // CMU14: Cave-ins transfer the blocks above these tiles into the cave.
             var surface = entities.System<SharedMapSystem>();
             foreach (var spot in new[] { first, second })
             {
@@ -412,13 +412,13 @@ public sealed class StructuralLifecycleTest
                 Assert.That(entities.HasComponent<ZFallenDebrisComponent>(contents), Is.True);
                 Assert.That(entities.Deleted(marker), Is.True);
             });
-            // It landed on open cave floor, not inside a rock: it keeps its collision (only what lands inside something solid loses it).
+            // CMU14: Debris on open cave floor retains collision; only embedded debris loses it.
             foreach (var fixture in entities.GetComponent<FixturesComponent>(contents).Fixtures.Values)
             {
-                // RUMC: the asserts that were here (kept): the fixture is not hard and has no layer or mask.
-                // RUMC: Assert.That(fixture.Hard, Is.False);
-                // RUMC: Assert.That(fixture.CollisionLayer, Is.Zero);
-                // RUMC: Assert.That(fixture.CollisionMask, Is.Zero);
+                // CMU14: the asserts that were here (kept): the fixture is not hard and has no layer or mask.
+                // CMU14: Assert.That(fixture.Hard, Is.False);
+                // CMU14: Assert.That(fixture.CollisionLayer, Is.Zero);
+                // CMU14: Assert.That(fixture.CollisionMask, Is.Zero);
                 Assert.That(fixture.Hard, Is.True);
                 Assert.That(fixture.CollisionLayer, Is.Not.Zero);
                 Assert.That(fixture.CollisionMask, Is.Not.Zero);

@@ -823,4 +823,3 @@
   parent: [ RUMCBaseVeinCokeCoal, RUMCClayWall ]
   id: RUMCClayWallCokeCoal
   name: clay wall
-

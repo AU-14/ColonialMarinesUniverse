@@ -1,4 +1,4 @@
-﻿# The cities of the world map (a few of them are taken at random in every round), to try it out with, each with a different thing that it can do for the colony (see WorldCityPrototype). The place of a city is not set here: the map is made at random every round,
+# The cities of the world map (a few of them are taken at random in every round), to try it out with, each with a different thing that it can do for the colony (see WorldCityPrototype). The place of a city is not set here: the map is made at random every round,
 # and the cities are put on its land (a city with coastal is a port and stands on a coast).
 
 # A trade hub: the favour of it takes a part off the duty (one percent for every twenty-five of favour).

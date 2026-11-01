@@ -55,4 +55,3 @@ public sealed partial class SurveyorTabletComponent : Component
 // A zone as the tablet shows it: the grid, the corner of the lowest coordinates (in the tiles of the grid), the side and the kind.
 [Serializable, NetSerializable]
 public readonly record struct SurveyorMark(NetEntity Grid, Vector2i Min, int Size, ZoneKind Kind);
-

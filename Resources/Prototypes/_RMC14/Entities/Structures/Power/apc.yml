@@ -179,7 +179,7 @@
   - type: Construction
     graph: CMApc
     node: apc
-  - type: NodeContainer # RUMC: the APC takes its power from a cable run by hand to it
+  - type: NodeContainer # CMU14: the APC takes its power from a cable run by hand to it
     examinable: true
     nodes:
       input:

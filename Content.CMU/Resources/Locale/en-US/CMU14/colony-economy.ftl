@@ -108,85 +108,53 @@ cmu-atm-nav-no-card = You have no card of your own
 cmu-atm-nav-pin-unknown = Reading your card...
 cmu-atm-nav-pop-out = Pop Out
 
-# ATM screens and transaction messages
-cmu-atm-busy = Someone else is using this ATM.
-cmu-atm-tampered = Warning: This device shows signs of electronic tampering.
-cmu-atm-normal = The ATM appears to be functioning normally.
-cmu-atm-unknown = Unknown
-cmu-atm-invalid-amount = Enter a valid amount.
-cmu-atm-insufficient-funds = Insufficient funds.
-cmu-atm-insufficient-hand = Insufficient cash in hand.
-cmu-atm-invalid-account = Enter a valid 5-digit account number.
-cmu-atm-account-missing = Account not found.
-cmu-atm-insufficient-cash = Insufficient cash.
-cmu-atm-own-account = Cannot transfer to own account.
-cmu-atm-timeout = Session timed out.
-cmu-atm-take-cash-first = Please take your cash first.
-cmu-atm-invalid-pin = Invalid PIN. Enter all { $digits } digits.
-cmu-atm-incorrect-pin = Incorrect PIN. Attempt { $attempt }/{ $maximum }.
-cmu-atm-withdraw-confirm = Withdraw ${ $amount }? You receive ${ $net } after tax.
-cmu-atm-dispensed = Dispensed ${ $amount }. Balance: ${ $balance }.
-cmu-atm-deposited = Deposited ${ $amount }. Balance: ${ $balance }.
-cmu-atm-recipient = To: { $name }. Enter amount:
-cmu-atm-remote-confirm = Deposit ${ $amount } to account #{ $account }?
-cmu-atm-remote-done = Deposited ${ $amount } to #{ $account }.
-cmu-atm-transfer-confirm = Transfer ${ $amount } to #{ $account }?
-cmu-atm-transfer-done = Transferred ${ $amount }. Balance: ${ $balance }.
-cmu-atm-welcome =
-    COLONY FINANCIAL TERMINAL
-    v2.7  UN TREASURY
-    { "" }
-    1) REMOTE DEPOSIT
-    { "" }
-    Insert ID card for account access.
-cmu-atm-pin-prompt = ENTER PIN:
-cmu-atm-locked =
-    { "** CARD LOCKED **" }
-    Too many incorrect attempts. Please try again later.
-cmu-atm-main-menu =
-    Welcome, { $name }.
-    { "" }
-    1) WITHDRAW
-    2) DEPOSIT
-    3) TRANSFER
-    4) REMOTE DEPOSIT
-    5) HISTORY
-    6) EXIT
-cmu-atm-withdraw-prompt =
-    WITHDRAW
-    Enter amount:
-cmu-atm-deposit-prompt =
-    DEPOSIT
-    Enter amount:
-cmu-atm-remote-prompt =
-    REMOTE DEPOSIT
-    Recipient account #:
-cmu-atm-transfer-prompt =
-    TRANSFER
-    Recipient account #:
-cmu-atm-history-title = ACCOUNT HISTORY
-cmu-atm-history-empty = No transactions yet.
-cmu-atm-history-back = OK = back
-cmu-atm-history-withdrawal = -${ $amount } WITHDRAWAL
-cmu-atm-history-deposit = +${ $amount } DEPOSIT
-cmu-atm-history-cash = +${ $amount } CASH DEPOSIT
-cmu-atm-history-out = -${ $amount } TO #{ $account }
-cmu-atm-history-in = +${ $amount } FROM #{ $account }
-cmu-atm-history-returned = +${ $amount } CASH RETURNED
-cmu-atm-history-purchase = -${ $amount } PURCHASE
-cmu-atm-fault-fatal = FATAL { $byte }: LEDGER CRC MISMATCH
-cmu-atm-fault-segv = SEGV AT { $address } IN TXN_CORE
-cmu-atm-fault-halted = TXN_CORE HALTED
-cmu-atm-fault-watchdog = WATCHDOG RESET ... FAILED
-cmu-atm-fault-uplink = UPLINK LOST, RETRY { $attempt }/3
-cmu-atm-fault-dispenser = DISPENSER BUS ERROR { $byte }
-cmu-atm-fault-auth = AUTH TABLE CORRUPT AT { $address }
-cmu-atm-fault-kernel = KERNEL PANIC: NOT SYNCING
-cmu-atm-fault-stack = STACK SMASHED, ABORTING
-cmu-atm-fault-trap = UNHANDLED TRAP { $byte } AT { $address }
-cmu-atm-fault-garbled = ?? ???? ?????? ??? ??
+# Shared console screen pieces
+cmu-economy-sales-tax = Sales tax
+cmu-economy-income-tax = Income tax
+cmu-economy-transit-tariff = Transit tariff
+cmu-economy-embargoes = Embargoes
+cmu-economy-trade-pacts = Trade pacts
+cmu-economy-none = None
 
-# RUMC: tax on the parcels sold through the trade platforms
+# Corporate affairs console screen
+cmu-corporate-heading = CORPORATE AFFAIRS
+cmu-corporate-subheading = COLONY LIAISON OFFICE // TRANSIT & SUPPORT
+cmu-corporate-treasury = Corporate Treasury
+cmu-corporate-withdraw-tax = Withdrawals pay { $percent }% colony income tax.
+cmu-corporate-withdraw-no-tax = Withdrawals are currently untaxed.
+cmu-corporate-tariff = Transit Tariff
+cmu-corporate-current-tariff = Current rate
+cmu-corporate-exact = EXACT RATE (0-{ $max }%)
+cmu-corporate-apply = APPLY
+cmu-corporate-tariff-announced = Every tariff change is announced colony-wide.
+cmu-corporate-support = Corporate Support
+cmu-corporate-support-hint = Call in corporate security, synthetics or contractors, paid from the corporate budget.
+cmu-corporate-footer = Tariff income is paid into the corporate budget from every submission.
+
+# Budget console screen
+cmu-budget-heading = COLONY BUDGET
+cmu-budget-subheading = COLONY TREASURY // ADMINISTRATION
+cmu-budget-treasury = Treasury
+cmu-budget-payroll = Payroll
+cmu-budget-payroll-hint = Pays every department's staff now, from each department's own budget.
+cmu-budget-dispense = DISPENSE ALL SALARIES
+cmu-budget-dispense-confirm = CONFIRM PAYDAY
+cmu-budget-departments = Departments
+cmu-budget-department-count = { $count ->
+    [one] 1 DEPARTMENT
+   *[other] { $count } DEPARTMENTS
+}
+cmu-budget-transfer-amount = TRANSFER AMOUNT
+cmu-budget-transfer = TRANSFER
+cmu-budget-department-budget = BUDGET { $amount }
+cmu-budget-total = Held by departments
+cmu-budget-footer = Transfers move money from the colony budget into a department's budget.
+
+# Cash vendor front
+cmu-cash-vendor-credit = CREDIT
+cmu-cash-vendor-other = Other
+
+# CMU14: industry trade tax
 admin-console-trade-tax-section = -- Parcel Sales Tax --
 admin-console-current-trade-tax = Current Parcel Sales Tax: { $percent }%
 admin-console-trade-tax-description = Taken from what the drone pays for a parcel sold on a trade platform. That share goes to the colony budget, the rest to the seller.

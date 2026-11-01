@@ -211,7 +211,7 @@
       - RMCCircuitboard
       - RMCSynthResetKey
       - MaintenanceJack
-      # RUMC: the hand saw and the hammer go into the belt
+      # CMU14: the hand saw and the hammer go into the belt
       - RUMCHandSaw
       - RUMCHammer
       components:
@@ -326,7 +326,7 @@
       - RMCNailgunCompact
       - RMCNailgunTactical
       - RMCSynthResetKey
-      # RUMC: the hand saw and the hammer go into the belt
+      # CMU14: the hand saw and the hammer go into the belt
       - RUMCHandSaw
       - RUMCHammer
       #      - # TODO analyzer

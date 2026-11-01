@@ -30,7 +30,6 @@ public abstract partial class SharedStackSystem
         var entityUid = PredictedSpawnNextToOrDrop(stackId.Spawn, stackEnt.Owner);
 
         SetCount((entityUid, null), 1);
-
         return entityUid;
     }
 

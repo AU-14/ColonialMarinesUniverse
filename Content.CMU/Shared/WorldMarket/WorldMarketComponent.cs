@@ -94,4 +94,3 @@ public sealed partial class WorldMarketComponent : Component
 
     public bool Started;
 }
-

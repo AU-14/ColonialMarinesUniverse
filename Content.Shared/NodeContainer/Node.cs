@@ -17,12 +17,12 @@ public abstract partial class Node
     [DataField("nodeGroupID")]
     public NodeGroupID NodeGroupID { get; private set; } = NodeGroupID.Default;
 
-    // RUMC Connection Begin: how the node joins cables (Adjacent as before; Direct and Both for the cables run by hand), and the cables that are joined to it so.
+    // CMU14 Connection Begin: how the node joins cables (Adjacent as before; Direct and Both for the cables run by hand), and the cables that are joined to it so.
     [DataField("connection")]
     public NodeConnectorMode Connection { get; private set; } = NodeConnectorMode.Adjacent;
 
     public readonly HashSet<Node> DirectLinks = new();
-    // RUMC End
+    // CMU14 End
 
     /// <summary>
     ///     The node group this node is a part of.

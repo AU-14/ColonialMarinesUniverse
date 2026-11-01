@@ -200,7 +200,7 @@
       state: meat_plate
   requirements:
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookMeat
     - RUMCCookMeatSlice
 
@@ -229,7 +229,7 @@
       state: mashed_potato
   requirements:
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookPotato
 
 # 2 req
@@ -245,11 +245,11 @@
       state: green_salad_meat
   requirements:
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookSalad
     - RUMCCookVegetable
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookMeat
 
 - type: cookingRecipe
@@ -263,10 +263,10 @@
       state: monster_egg
   requirements:
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookEgg
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookMeatMonster
 
 - type: cookingRecipe
@@ -280,7 +280,7 @@
       state: mashed_potato_meat
   requirements:
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookPotato
   - !type:CookingTagRequired
     tags:
@@ -297,7 +297,7 @@
       state: mashed_potato_salad
   requirements:
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookPotato
   - !type:CookingTagRequired
     tags:
@@ -315,7 +315,7 @@
       state: cheese_bread
   requirements:
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookDough
   - !type:CookingTagRequired
     tags:
@@ -334,13 +334,13 @@
       state: zellasian_breakfast
   requirements:
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookEgg
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookDough
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookMeat
 
 - type: cookingRecipe
@@ -428,7 +428,7 @@
       state: meat
   requirements:
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookMeat
     - RUMCCookMeatSlice
 
@@ -443,5 +443,5 @@
       state: meat
   requirements:
   - !type:CookingTagRequired
-    tags: 
+    tags:
     - RUMCCookPumpkin
