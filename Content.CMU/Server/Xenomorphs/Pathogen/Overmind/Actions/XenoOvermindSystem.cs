@@ -198,8 +198,10 @@ public sealed partial class CMUXenoOvermindSystem : EntitySystem
             return;
         }
 
-        Log.Debug($"EnsurePathogenHive: CMUPathogenHive not found for {ToPrettyString(uid)}, retrying next tick");
-        Timer.Spawn(0, () => EnsurePathogenHive(uid));
+        // a 0 ms timer re-ran every tick for as long as no pathogen hive existed (admin spawns, rounds without one)
+        // and spun test threads forever. keep retrying, just slowly
+        Log.Debug($"EnsurePathogenHive: CMUPathogenHive not found for {ToPrettyString(uid)}, retrying");
+        Timer.Spawn(TimeSpan.FromSeconds(1), () => EnsurePathogenHive(uid));
     }
 
     private void OnChangeForm(Entity<CMUXenoOvermindComponent> ent, ref CMUXenoOvermindChangeFormActionEvent args)
