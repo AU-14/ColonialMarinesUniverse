@@ -121,9 +121,12 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
 
     private string Instructions(CMUYautjaExperimentPrototype recipe)
     {
-        var chemicals = Loc.GetString("cmu-yautja-experiment-generated-requirement",
-            ("amount", recipe.SampleAmount), ("tier", recipe.MinimumTier),
-            ("property", _prototypes.Index(recipe.Property).LocalizedName), ("level", recipe.PropertyLevel));
+        var chemicals = recipe.Reagent is { } reagent
+            ? Loc.GetString("cmu-yautja-experiment-standard-requirement", ("amount", recipe.SampleAmount),
+                ("reagent", _reagents.Index(reagent).LocalizedName))
+            : Loc.GetString("cmu-yautja-experiment-generated-requirement",
+                ("amount", recipe.SampleAmount), ("tier", recipe.MinimumTier),
+                ("property", _prototypes.Index(recipe.Property!.Value).LocalizedName), ("level", recipe.PropertyLevel));
         return Loc.GetString("cmu-yautja-experiment-instructions",
             ("name", Loc.GetString(recipe.Name)), ("tool", Loc.GetString(_prototypes.Index(recipe.Tool).ToolName)),
             ("chemicals", chemicals), ("seconds", (int) recipe.Duration.TotalSeconds), ("heat", recipe.Heat)) +
@@ -247,6 +250,11 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
         if (!_solutions.TryGetSolution(uid, SampleWell, out _, out var solution))
             return null;
 
+        if (recipe.Reagent is { } stock)
+            return solution.GetTotalPrototypeQuantity(stock.Id) >= recipe.SampleAmount ? stock.Id : null;
+        if (recipe.Property is not { } property)
+            return null;
+
         // Match actual round-generated chemistry, including simulator derivatives. Stock reagents
         // with similar effects cannot substitute, and tiny amounts cannot qualify a diluted sample.
         foreach (var (reagent, _) in solution.Contents)
@@ -254,7 +262,7 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
             var id = reagent.Prototype;
             if (_generator.ProceduralReagentData.TryGetValue(id, out var data) &&
                 _generator.IdentifiedChemicals.ContainsKey(id) && data.GenTier >= recipe.MinimumTier &&
-                data.Effects.GetValueOrDefault(recipe.Property.Id) >= recipe.PropertyLevel &&
+                data.Effects.GetValueOrDefault(property.Id) >= recipe.PropertyLevel &&
                 solution.GetTotalPrototypeQuantity(id) >= recipe.SampleAmount)
                 return id;
         }

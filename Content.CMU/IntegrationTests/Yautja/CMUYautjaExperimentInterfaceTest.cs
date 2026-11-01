@@ -27,11 +27,14 @@ public sealed class CMUYautjaExperimentInterfaceTest
         NetEntity bracerNet = default;
         CMUYautjaExperimentBui ui = default!;
         CMUYautjaExperimentWindow window = default!;
-        Popup popup = default!;
+        string firstClue = default!;
         await server.WaitAssertion(() =>
         {
             user = server.EntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             bracer = server.EntMan.SpawnEntity("CMUYautjaBracerBone", map.GridCoords);
+            // Switch from a short clue to a long one before opening the procedure picker.
+            server.EntMan.GetComponent<CMUYautjaExperimentComponent>(bracer).RequiredExperiments =
+                ["CMUYautjaBio", "CMUYautjaRadar", "CMUYautjaRoot", "CMUYautjaStatic", "CMUYautjaVeil"];
             bracerNet = server.EntMan.GetNetEntity(bracer);
             server.EntMan.System<SkillsSystem>().SetSkill(user, "RMCSkillResearch", 1);
             server.PlayerMan.SetAttachedEntity(pair.Player!, user);
@@ -47,23 +50,28 @@ public sealed class CMUYautjaExperimentInterfaceTest
             ui = opened!;
             window = client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children
                 .OfType<CMUYautjaExperimentWindow>().Single();
+            firstClue = window.FindControl<RichTextLabel>("Clue").Text!;
         });
-        // Click the real contacts: opening the BUI alone misses double-parenting in OpenAtMouse.
+        // Repeated contacts update the same inspection panel without attaching modal popups.
         foreach (var index in new[] { 0, 0, 1 })
         {
             var contact = window.FindControl<CMUYautjaBracerDiagram>("Diagram").Children.OfType<BaseButton>().ElementAt(index);
-            var point = new ScreenCoordinates(contact.GlobalPixelPosition + contact.PixelSize / 2, default);
-            foreach (var keyState in new[] { BoundKeyState.Down, BoundKeyState.Up })
-                await client.DoGuiEvent(contact, new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick,
-                    keyState, point, default, contact.Size / 2, contact.PixelSize / 2));
+            await Click(contact);
             await client.WaitAssertion(() =>
             {
-                popup = client.ResolveDependency<IUserInterfaceManager>().ModalRoot.Children.OfType<Popup>()
-                    .Single(control => control.Visible);
-                popup.Close();
-                Assert.That(popup.Parent, Is.Null, "Closing a clue must release the modal root before reopening it.");
+                var clue = window.FindControl<RichTextLabel>("Clue").Text;
+                Assert.That(clue, index == 0 ? Is.EqualTo(firstClue) : Is.Not.EqualTo(firstClue));
+                Assert.That(client.ResolveDependency<IUserInterfaceManager>().ModalRoot.Children.OfType<Popup>()
+                    .Any(control => control.Visible), Is.False, "Inspecting contacts must leave world interaction available.");
             });
         }
+        await Click(window.FindControl<Button>("ProcedureButton"));
+        await pair.RunTicksSync(2);
+        var firstProcedure = window.FindControl<BoxContainer>("DrawerContent").Children.OfType<Button>().First();
+        await Click(firstProcedure);
+        await pair.RunTicksSync(2);
+        await client.WaitAssertion(() => Assert.That(window.FindControl<BoxContainer>("Drawer").Visible, Is.False,
+            "Choosing a visible procedure must close the drawer."));
         await client.WaitPost(() => ui.SendMessage(new CMUYautjaExperimentMessage(CMUYautjaExperimentCommand.Select, "CMUYautjaTranslator")));
         await pair.RunTicksSync(10);
         await server.WaitAssertion(() =>
@@ -85,6 +93,8 @@ public sealed class CMUYautjaExperimentInterfaceTest
             Assert.That(server.EntMan.System<SharedHandsSystem>().TryPickupAnyHand(user, bracer), Is.True);
         });
         await pair.RunTicksSync(5);
+        await client.WaitAssertion(() =>
+            Assert.That(window.IsOpen, Is.False, "Picking up the bracer must safely close floor inspection."));
         await client.WaitPost(() =>
         {
             // A stale menu must not bypass the same floor restriction as physical tools.
@@ -101,5 +111,23 @@ public sealed class CMUYautjaExperimentInterfaceTest
             Assert.That(solution!.Volume, Is.EqualTo((FixedPoint2) 5), "Held bracers must retain their samples.");
         });
         await pair.CleanReturnAsync();
+
+        async Task Click(BaseButton button)
+        {
+            ScreenCoordinates point = default;
+            Control hit = default!;
+            await client.WaitAssertion(() =>
+            {
+                var manager = client.ResolveDependency<IUserInterfaceManager>();
+                point = new ScreenCoordinates(button.GlobalPixelPosition + button.PixelSize / 2,
+                    button.Root!.Window!.Id);
+                hit = manager.MouseGetControl(point)!;
+                Assert.That(hit, Is.SameAs(button),
+                    $"{button.Name}: the rendered button must be reachable through its clipping ancestors.");
+            });
+            foreach (var keyState in new[] { BoundKeyState.Down, BoundKeyState.Up })
+                await client.DoGuiEvent(hit, new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick,
+                    keyState, point, true, hit.Size / 2, hit.PixelSize / 2));
+        }
     }
 }

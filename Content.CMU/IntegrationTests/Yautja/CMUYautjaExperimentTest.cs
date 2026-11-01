@@ -22,8 +22,9 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class CMUYautjaExperimentTest
 {
-    [Test]
-    public async Task MovingBracerIntoAHandCancelsWorkWithoutSpendingTheSample()
+    [TestCase("CMUYautjaDiagnostic")]
+    [TestCase("CMUYautjaBio")]
+    public async Task MovingBracerIntoAHandCancelsWorkWithoutSpendingTheSample(string recipeId)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         var server = pair.Server;
@@ -53,16 +54,23 @@ public sealed class CMUYautjaExperimentTest
             hands.TryPickupAnyHand(user, screwdriver);
             var research = entities.System<CMUYautjaExperimentSystem>();
             var comp = entities.GetComponent<CMUYautjaExperimentComponent>(bracer);
+            Assert.That(research.SelectExperiment(bracer, user, recipeId), Is.True);
             Assert.That(research.StartExperiment((bracer, comp), user, screwdriver), Is.False,
-                "Stock dispenser chemicals must not substitute for generated research chemistry.");
+                "An unrelated stock chemical must not satisfy either requirement type.");
             var recipe = server.ProtoMan.Index(comp.Selected);
             sample = GenerateSample(entities, server.ProtoMan, recipe, identify: false);
             solutions.TryGetSolution(bracer, CMUYautjaExperimentSystem.SampleWell, out var well, out _);
-            solutions.TryAddReagent(well!.Value, sample, recipe.SampleAmount);
+            solutions.TryAddReagent(well!.Value, sample, recipe.SampleAmount - 1);
             Assert.That(research.StartExperiment((bracer, comp), user, screwdriver), Is.False,
-                "An unscanned compound must be identified through the XRF research path first.");
-            entities.System<ServerResearchDataTerminalSystem>().CompleteChemical(
-                server.ProtoMan.Index<ReagentPrototype>(sample), "corporate", bracer);
+                "Unrelated diluent must not count toward the required sample quantity.");
+            solutions.TryAddReagent(well.Value, sample, 1);
+            if (recipe.Property != null)
+            {
+                Assert.That(research.StartExperiment((bracer, comp), user, screwdriver), Is.False,
+                    "An unscanned compound must be identified through the XRF research path first.");
+                entities.System<ServerResearchDataTerminalSystem>().CompleteChemical(
+                    server.ProtoMan.Index<ReagentPrototype>(sample), "corporate", bracer);
+            }
             challenge = comp.RequiredExperiments.ToArray();
             Assert.That(challenge, Has.Length.EqualTo(5));
             clues = research.ChallengeClues(comp);
@@ -84,7 +92,7 @@ public sealed class CMUYautjaExperimentTest
             entities.System<SharedSolutionContainerSystem>().TryGetSolution(bracer, CMUYautjaExperimentSystem.SampleWell, out _, out var well);
             Assert.That(well!.GetTotalPrototypeQuantity("Water"), Is.EqualTo((FixedPoint2) 5));
             Assert.That(well.GetTotalPrototypeQuantity(sample), Is.EqualTo((FixedPoint2) 5),
-                "Cancellation preserves the generated compound as well as unrelated diluent.");
+                "Cancellation preserves the required sample as well as unrelated diluent.");
             Assert.That(entities.System<CMUYautjaExperimentSystem>().StartExperiment((bracer, comp), user, screwdriver), Is.False,
                 "Held bracers cannot be experimented on.");
             var hands = entities.System<SharedHandsSystem>();
@@ -98,11 +106,11 @@ public sealed class CMUYautjaExperimentTest
         {
             var entities = server.EntMan;
             Assert.That(entities.GetComponent<CMUYautjaExperimentComponent>(bracer).Discoveries,
-                Does.Contain(new ProtoId<CMUYautjaExperimentPrototype>("CMUYautjaDiagnostic")));
+                Does.Contain(new ProtoId<CMUYautjaExperimentPrototype>(recipeId)));
             entities.System<SharedSolutionContainerSystem>().TryGetSolution(bracer, CMUYautjaExperimentSystem.SampleWell, out _, out var well);
             Assert.That(well!.GetTotalPrototypeQuantity(sample), Is.EqualTo(FixedPoint2.Zero));
             Assert.That(well.GetTotalPrototypeQuantity("Water"), Is.EqualTo((FixedPoint2) 5),
-                "Only the matching generated compound is consumed.");
+                "Only the matching sample is consumed.");
         });
         await pair.CleanReturnAsync();
     }
@@ -117,7 +125,7 @@ public sealed class CMUYautjaExperimentTest
         EntityUid user = default, bracer = default;
         var tools = new Dictionary<string, EntityUid>();
         // Exercise both a challenge containing Root and one where Root must not bypass the five seals.
-        var required = new[] { "CMUYautjaPlasma", "CMUYautjaStatic", "CMUYautjaDecoy", "CMUYautjaContainment",
+        var required = new[] { "CMUYautjaPlasma", "CMUYautjaDiagnostic", "CMUYautjaDecoy", "CMUYautjaContainment",
             requireRoot ? "CMUYautjaRoot" : "CMUYautjaVeil" };
         await server.WaitAssertion(() =>
         {
@@ -221,6 +229,8 @@ public sealed class CMUYautjaExperimentTest
     private static string GenerateSample(IEntityManager entities, IPrototypeManager prototypes,
         CMUYautjaExperimentPrototype recipe, bool identify = true)
     {
+        if (recipe.Reagent is { } stock)
+            return stock.Id;
         var generator = entities.System<ServerReagentGeneratorSystem>();
         var id = $"CMUBracerTest{recipe.ID}";
         if (generator.ProceduralReagentData.ContainsKey(id))
@@ -230,7 +240,7 @@ public sealed class CMUYautjaExperimentTest
             ID = id, Name = id, GenTier = 3, Class = ReagentClass.Ultra, RecipeHint = "RMCGold",
         };
         generator.GenerateStats(ref data, noProperties: true);
-        data.Effects[recipe.Property.Id] = recipe.PropertyLevel;
+        data.Effects[recipe.Property!.Value.Id] = recipe.PropertyLevel;
         var research = entities.System<ServerResearchDataTerminalSystem>();
         Assert.That(research.LegalizeChem(data), Is.True, "The real procgen system must materialize the sample and its synthesis reaction.");
         if (identify)

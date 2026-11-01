@@ -7,8 +7,7 @@
   clue: cmu-yautja-experiment-diagnostic-clue
   lore: cmu-yautja-experiment-diagnostic-lore
   tool: Screwing
-  property: Focusing
-  propertyLevel: 2
+  reagent: RMCEthanol
   visual: Scan
   color: "#FF6341"
   coreColor: "#FFE6A8"
@@ -67,8 +66,7 @@
   clue: cmu-yautja-experiment-solvent-clue
   lore: cmu-yautja-experiment-solvent-lore
   tool: Screwing
-  property: Corrosive
-  propertyLevel: 2
+  reagent: RMCSulphuricAcid
   visual: Solvent
   color: "#BCD680"
   coreColor: "#E4F5B1"
@@ -97,8 +95,7 @@
   clue: cmu-yautja-experiment-coolant-clue
   lore: cmu-yautja-experiment-coolant-lore
   tool: Anchoring
-  property: Hypothermic
-  propertyLevel: 2
+  reagent: Water
   visual: Coolant
   color: "#8EBBD4"
   coreColor: "#E7F8FF"
@@ -127,8 +124,7 @@
   clue: cmu-yautja-experiment-bridge-clue
   lore: cmu-yautja-experiment-bridge-lore
   tool: Pulsing
-  property: Electrogenetic
-  propertyLevel: 2
+  reagent: RMCCopper
   visual: Bridge
   color: "#83BFFF"
   coreColor: "#E4F6FF"
@@ -187,8 +183,7 @@
   clue: cmu-yautja-experiment-prism-clue
   lore: cmu-yautja-experiment-prism-lore
   tool: Screwing
-  property: Photosensitive
-  propertyLevel: 1
+  reagent: RMCSilver
   visual: Prism
   color: "#FFB16A"
   coreColor: "#FFF0CC"
@@ -337,8 +332,7 @@
   clue: cmu-yautja-experiment-catalyst-clue
   lore: cmu-yautja-experiment-catalyst-lore
   tool: Welding
-  property: Repairing
-  propertyLevel: 2
+  reagent: CMBicaridine
   visual: Catalyst
   color: "#E2A55E"
   coreColor: "#FFF0B6"
@@ -398,8 +392,7 @@
   clue: cmu-yautja-experiment-tether-clue
   lore: cmu-yautja-experiment-tether-lore
   tool: Anchoring
-  property: Viscous
-  propertyLevel: 2
+  reagent: CMUSiliconeOil
   visual: Tether
   color: "#F16A3B"
   coreColor: "#FFD3A0"
@@ -488,8 +481,7 @@
   clue: cmu-yautja-experiment-flash-clue
   lore: cmu-yautja-experiment-flash-lore
   tool: Screwing
-  property: Photosensitive
-  propertyLevel: 1
+  reagent: RMCPhosphorus
   visual: Flash
   color: "#FFE5B4"
   coreColor: "#FFFFFF"
