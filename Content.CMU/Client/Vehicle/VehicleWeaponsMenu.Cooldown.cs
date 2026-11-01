@@ -12,6 +12,8 @@ public sealed partial class VehicleWeaponsMenu
     private readonly StyleBoxFlat _cmuCooldownForeground = new();
     private readonly StyleBoxFlat _cmuCooldownBackground = new() { BackgroundColor = Color.FromHex("#1E2B3B") };
     private readonly ILocalizationManager _cmuLocalization = IoCManager.Resolve<ILocalizationManager>();
+    // Managed storage keeps the formatting path verifiable by the content sandbox.
+    private readonly char[] _cmuCooldownBuffer = new char[64];
     private (bool Charging, string? Seconds, CultureInfo? Culture)? _cmuDisplayedCooldown;
     private string _cmuCooldownText = string.Empty;
 
@@ -21,7 +23,7 @@ public sealed partial class VehicleWeaponsMenu
         string? seconds = null;
         if (charging)
         {
-            Span<char> buffer = stackalloc char[64];
+            var buffer = _cmuCooldownBuffer.AsSpan();
             if (!remaining.TryFormat(buffer, out var length, "0.0"))
                 seconds = remaining.ToString("0.0");
             else

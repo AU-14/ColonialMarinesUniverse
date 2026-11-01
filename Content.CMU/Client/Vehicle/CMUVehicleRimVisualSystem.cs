@@ -246,7 +246,8 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
     public static List<Color> Colors(CMUVehicleWheelPaintComponent wheels, CMURimDesignPrototype design)
     {
         var colors = ColorValues(wheels, design);
-        return [colors.Base, colors.Accent, colors.Lip, colors.Cap];
+        // List collection expressions emit CollectionsMarshal.SetCount, which the sandbox disallows.
+        return new List<Color> { colors.Base, colors.Accent, colors.Lip, colors.Cap };
     }
 
     private static (Color Base, Color Accent, Color Lip, Color Cap) ColorValues(

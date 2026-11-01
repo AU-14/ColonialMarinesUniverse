@@ -159,8 +159,14 @@ public sealed class RunechatLayoutPerformanceTest : GameTest
     private static object Layout(Control control) =>
         ((IList) control.GetType().GetField("_layouts", PrivateInstance)!.GetValue(control)!)[0]!;
 
-    private static void Draw(Control control, DrawingHandleScreen handle) =>
-        Method(control, "Draw").Invoke(control, [handle]);
+    private static void Draw(Control control, DrawingHandleScreen handle)
+    {
+        var render = new Mock<IRenderHandle>();
+        render.SetupGet(r => r.DrawingHandleScreen).Returns(handle);
+        // These unarranged controls use the direct draw fallback, so glyph assertions
+        // still exercise layout reuse independently of the rendered-texture cache.
+        Method(control, "Draw").Invoke(control, [render.Object]);
+    }
 
     private sealed class ScaledRoot : UIRoot
     {

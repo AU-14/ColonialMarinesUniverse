@@ -73,7 +73,6 @@ public sealed partial class LineSystem : EntitySystem
         var gridComp = gridId == null ? null : _mapGridQuery.CompOrNull(gridId.Value);
         Entity<MapGridComponent>? grid = gridComp == null ? null : new Entity<MapGridComponent>(gridId!.Value, gridComp);
         var lastCoords = start;
-        Span<EntityCoordinates> coords = stackalloc EntityCoordinates[9];
 
         for (var i = 0; i < distance; i++)
         {
@@ -83,27 +82,23 @@ public sealed partial class LineSystem : EntitySystem
             if (center == lastCoords)
                 continue;
 
-            var coordCount = 1;
-            coords[0] = center;
-            if (thick && i > 1)
-            {
-                for (var xo = -1; xo < 2; xo++)
-                {
-                    for (var yo = -1; yo < 2; yo++)
-                    {
-                        if (xo == 0 && yo == 0)
-                            continue;
-
-                        var point = new EntityCoordinates(start.EntityId, x + xo, y + yo).SnapToGrid(EntityManager);
-                        coords[coordCount++] = point;
-                    }
-                }
-            }
-
+            var coordCount = thick && i > 1 ? 9 : 1;
             var centerBlocked = false;
             for (var j = 0; j < coordCount; j++)
             {
-                var entityCoords = coords[j];
+                var entityCoords = center;
+                if (j != 0)
+                {
+                    // Center first, then the original x/y neighbor order, skipping its center.
+                    // Calculating each coordinate directly needs no unverifiable stack buffer.
+                    var index = j - 1;
+                    if (index >= 4)
+                        index++;
+                    var xo = index / 3 - 1;
+                    var yo = index % 3 - 1;
+                    entityCoords = new EntityCoordinates(start.EntityId, x + xo, y + yo).SnapToGrid(EntityManager);
+                }
+
                 // CMU14: a wide spray must not place its side tiles behind an intervening door or wall.
                 if (j != 0 && !CanReachTile(start, entityCoords, hitBlocker, ignoreBarricades))
                     continue;
