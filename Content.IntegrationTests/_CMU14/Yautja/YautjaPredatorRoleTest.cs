@@ -439,8 +439,8 @@ public sealed class YautjaPredatorRoleTest
                 Assert.That(predatorRound.PredatorJob.Id, Is.EqualTo("CMUYautjaHunter"));
                 Assert.That(predatorRound.HunterShipMap.Id, Is.EqualTo("CMUYautjaHunterShip"));
                 Assert.That(YautjaPredatorRoundCVars.RandomEnabled.DefaultValue, Is.True);
-                Assert.That(YautjaPredatorRoundCVars.RandomMinimumRounds.DefaultValue, Is.EqualTo(3));
-                Assert.That(YautjaPredatorRoundCVars.RandomMaximumRounds.DefaultValue, Is.EqualTo(5));
+                Assert.That(YautjaPredatorRoundCVars.InsurgencyChance.DefaultValue, Is.EqualTo(1f / 6f));
+                Assert.That(YautjaPredatorRoundCVars.DistressSignalChance.DefaultValue, Is.EqualTo(1f / 3f));
             });
         });
 
@@ -469,7 +469,7 @@ public sealed class YautjaPredatorRoleTest
     }
 
     [Test]
-    public async Task PredatorRoundStartAutomaticallyLoadsHunterShipZLevels()
+    public async Task PredatorRoundStartLoadsHunterShipZLevels()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -493,10 +493,9 @@ public sealed class YautjaPredatorRoleTest
             {
                 var cfg = server.CfgMan;
                 cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, false);
-                cfg.SetCVar(YautjaPredatorRoundCVars.RandomMinimumRounds, 1);
-                cfg.SetCVar(YautjaPredatorRoundCVars.RandomMaximumRounds, 1);
-                cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, true);
                 server.EntMan.System<GameTicker>().RestartRound();
+                // the test preset never rolls a hunt, so start it the way staff would
+                Assert.That(server.EntMan.System<YautjaPredatorRoundSystem>().TryInitializePredatorRound(out _), Is.True);
             });
 
             await server.WaitAssertion(() =>
@@ -671,9 +670,7 @@ public sealed class YautjaPredatorRoleTest
         finally
         {
             var cfg = server.CfgMan;
-            cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, YautjaPredatorRoundCVars.RandomEnabled.DefaultValue);
-            cfg.SetCVar(YautjaPredatorRoundCVars.RandomMinimumRounds, YautjaPredatorRoundCVars.RandomMinimumRounds.DefaultValue);
-            cfg.SetCVar(YautjaPredatorRoundCVars.RandomMaximumRounds, YautjaPredatorRoundCVars.RandomMaximumRounds.DefaultValue);
+            server.CfgMan.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, YautjaPredatorRoundCVars.RandomEnabled.DefaultValue);
         }
 
         await pair.CleanReturnAsync();
@@ -704,20 +701,24 @@ public sealed class YautjaPredatorRoleTest
 
             try
             {
-                editor.HandleMessage(new YautjaClanHallRoundRandomMessage(true, 3, 5));
+                editor.HandleMessage(new YautjaClanHallRoundRandomMessage(true, 0.25f, 0.5f));
                 Assert.Multiple(() =>
                 {
                     Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.RandomEnabled), Is.True);
-                    Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.RandomMinimumRounds), Is.EqualTo(3));
-                    Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.RandomMaximumRounds), Is.EqualTo(5));
+                    Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.InsurgencyChance), Is.EqualTo(0.25f));
+                    Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.DistressSignalChance), Is.EqualTo(0.5f));
                 });
+
+                // out of range gets refused and leaves the saved chances alone
+                editor.HandleMessage(new YautjaClanHallRoundRandomMessage(true, 1.5f, -0.1f));
+                Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.InsurgencyChance), Is.EqualTo(0.25f));
 
                 editor.HandleMessage(new YautjaClanHallRoundSlotsMessage(4));
                 Assert.That(entMan.System<YautjaPredatorRoundSystem>().ConfiguredHunterSlots, Is.EqualTo(4));
 
                 // Keep this EUI routing test focused on the admin controls. The
                 // first-time map load (including Z-level linking) is covered by
-                // PredatorRoundStartAutomaticallyLoadsHunterShipZLevels below.
+                // PredatorRoundStartLoadsHunterShipZLevels below.
                 var ticker = entMan.System<GameTicker>();
                 Assert.That(ticker.StartGameRule(CMUYautjaPredatorRoundPrototype, out var ruleUid), Is.True);
                 // A marker makes EnsurePredatorRound take its already-provisioned
@@ -744,8 +745,8 @@ public sealed class YautjaPredatorRoleTest
                     Assert.That(activeSlots, Is.EqualTo(4));
                     Assert.That(round.ConfiguredHunterSlots, Is.EqualTo(4));
                     Assert.That(round.RandomEnabled, Is.True);
-                    Assert.That(round.RandomMinimumRounds, Is.EqualTo(3));
-                    Assert.That(round.RandomMaximumRounds, Is.EqualTo(5));
+                    Assert.That(round.InsurgencyChance, Is.EqualTo(0.25f));
+                    Assert.That(round.DistressSignalChance, Is.EqualTo(0.5f));
                 });
             }
             finally
@@ -754,6 +755,8 @@ public sealed class YautjaPredatorRoleTest
                 if (predatorSpawn.IsValid() && !entMan.Deleted(predatorSpawn))
                     entMan.DeleteEntity(predatorSpawn);
                 cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, YautjaPredatorRoundCVars.RandomEnabled.DefaultValue);
+                cfg.SetCVar(YautjaPredatorRoundCVars.InsurgencyChance, YautjaPredatorRoundCVars.InsurgencyChance.DefaultValue);
+                cfg.SetCVar(YautjaPredatorRoundCVars.DistressSignalChance, YautjaPredatorRoundCVars.DistressSignalChance.DefaultValue);
             }
         });
 

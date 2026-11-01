@@ -118,9 +118,9 @@ cmu-yautja-hall-minus = -
 cmu-yautja-hall-plus = +
 cmu-yautja-hall-round-slots = Hunter slots
 cmu-yautja-hall-round-random = Random hunts
-cmu-yautja-hall-round-every = every
-cmu-yautja-hall-round-rounds = rounds
-cmu-yautja-hall-round-random-left = Next random hunt in {$rounds} rounds.
+cmu-yautja-hall-round-insurgency = Insurgency %
+cmu-yautja-hall-round-distress = Distress Signal %
+cmu-yautja-hall-round-random-info = Each round rolls once on these chances. Other gamemodes never roll a hunt.
 
 # results
 cmu-yautja-hall-not-found = Player {$player} not found.

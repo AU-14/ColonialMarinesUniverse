@@ -54,17 +54,16 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
     [Dependency] private IRobustRandom _random = default!;
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.yautja.round");
-    private readonly YautjaPredatorRoundSchedule _randomSchedule = new(1);
     private int _configuredHunterSlots;
     private bool _randomEnabled;
-    private int _lastRandomAttemptRoundId;
+    private float _insurgencyChance;
+    private float _distressSignalChance;
 
     public bool RandomEnabled => _randomEnabled;
     public bool RoundActive => GameTicker.RunLevel == GameRunLevel.InRound;
     public int CurrentRoundId => GameTicker.RoundId;
-    public int RandomMinimumRounds => GetRandomMinimumRounds();
-    public int RandomMaximumRounds => GetRandomMaximumRounds();
-    public int RandomRoundsRemaining => _randomEnabled ? _randomSchedule.RoundsRemaining : 0;
+    public float InsurgencyChance => _insurgencyChance;
+    public float DistressSignalChance => _distressSignalChance;
     public int ConfiguredHunterSlots => _configuredHunterSlots;
 
     public static YautjaRankSpawnPolicy GetRankSpawnPolicy(YautjaRank rank)
@@ -151,12 +150,12 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
             SetRandomEnabled,
             true);
         Subs.CVar(_configuration,
-            YautjaPredatorRoundCVars.RandomMinimumRounds,
-            _ => OnRandomIntervalChanged(),
+            YautjaPredatorRoundCVars.InsurgencyChance,
+            value => _insurgencyChance = Math.Clamp(value, 0f, 1f),
             true);
         Subs.CVar(_configuration,
-            YautjaPredatorRoundCVars.RandomMaximumRounds,
-            _ => OnRandomIntervalChanged(),
+            YautjaPredatorRoundCVars.DistressSignalChance,
+            value => _distressSignalChance = Math.Clamp(value, 0f, 1f),
             true);
     }
 
@@ -220,23 +219,23 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         return true;
     }
 
-    public bool TryConfigureRandom(bool enabled, int minimumRounds, int maximumRounds, out string message)
+    public bool TryConfigureRandom(bool enabled, float insurgencyChance, float distressSignalChance, out string message)
     {
-        if (minimumRounds is < 1 or > 100 ||
-            maximumRounds is < 1 or > 100 ||
-            minimumRounds > maximumRounds)
+        if (!float.IsFinite(insurgencyChance) || insurgencyChance is < 0f or > 1f ||
+            !float.IsFinite(distressSignalChance) || distressSignalChance is < 0f or > 1f)
         {
             message = Loc.GetString("cmu-yautja-admin-editor-random-invalid");
             return false;
         }
 
-        _configuration.SetCVar(YautjaPredatorRoundCVars.RandomMinimumRounds, minimumRounds);
-        _configuration.SetCVar(YautjaPredatorRoundCVars.RandomMaximumRounds, maximumRounds);
+        _configuration.SetCVar(YautjaPredatorRoundCVars.InsurgencyChance, insurgencyChance);
+        _configuration.SetCVar(YautjaPredatorRoundCVars.DistressSignalChance, distressSignalChance);
         _configuration.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, enabled);
-        ScheduleNextRandomHunt();
 
         message = enabled
-            ? Loc.GetString("cmu-yautja-admin-editor-random-enabled-message", ("minimum", minimumRounds), ("maximum", maximumRounds))
+            ? Loc.GetString("cmu-yautja-admin-editor-random-enabled-message",
+                ("insurgency", MathF.Round(insurgencyChance * 100f, 1)),
+                ("distress", MathF.Round(distressSignalChance * 100f, 1)))
             : Loc.GetString("cmu-yautja-admin-editor-random-disabled");
         return true;
     }
@@ -465,62 +464,29 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         if (_lobbyHuntRoundId == GameTicker.RoundId && !IsHuntActive() && !TryInitializePredatorRound(out var restoreMessage))
             _sawmill.Warning($"Queued Yautja hunt was lost at round start and could not be restored: {restoreMessage}");
 
+        // no lobby this round (lobby off, forced start), so roll on the preset that actually started
         if (!_randomEnabled ||
             GameTicker.DummyTicker ||
-            GameTicker.RoundId <= 0)
-            return;
-
-        if (!_randomSchedule.CountRound(GameTicker.RoundId) ||
-            _lastRandomAttemptRoundId == GameTicker.RoundId)
+            GameTicker.RoundId <= 0 ||
+            _rolledRoundId == GameTicker.RoundId)
         {
             return;
         }
 
-        _lastRandomAttemptRoundId = GameTicker.RoundId;
-        if (!TryInitializePredatorRound(out var message))
-        {
-            _sawmill.Warning($"Automatic Yautja hunt initialization failed: {message}");
-        }
-
-        ScheduleNextRandomHunt();
+        _rolledRoundId = GameTicker.RoundId;
+        _rolledPresetId = GameTicker.CurrentPreset?.ID;
+        RollHunt(_rolledPresetId);
     }
 
     private void SetRandomEnabled(bool enabled)
     {
         _randomEnabled = enabled;
-        _lastRandomAttemptRoundId = 0;
 
-        if (enabled)
-            ScheduleNextRandomHunt();
-        else
-            _randomSchedule.Reset(1);
-    }
-
-    private void OnRandomIntervalChanged()
-    {
-        if (_randomEnabled)
-            ScheduleNextRandomHunt();
-    }
-
-    private void ScheduleNextRandomHunt()
-    {
-        if (!_randomEnabled)
-            return;
-
-        _randomSchedule.Reset(_random.Next(GetRandomMinimumRounds(), GetRandomMaximumRounds() + 1));
-    }
-
-    private int GetRandomMinimumRounds()
-    {
-        return Math.Clamp(_configuration.GetCVar(YautjaPredatorRoundCVars.RandomMinimumRounds), 1, 100);
-    }
-
-    private int GetRandomMaximumRounds()
-    {
-        return Math.Clamp(
-            _configuration.GetCVar(YautjaPredatorRoundCVars.RandomMaximumRounds),
-            GetRandomMinimumRounds(),
-            100);
+        // turned back on mid-lobby, let it roll again. turned off, take back a hunt it already queued
+        _rolledRoundId = 0;
+        _rolledPresetId = null;
+        if (!enabled)
+            WithdrawRolledHunt();
     }
 
     private bool TryGetActivePredatorRule(out Entity<YautjaPredatorRoundComponent> rule)

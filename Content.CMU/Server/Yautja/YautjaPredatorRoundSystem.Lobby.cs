@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.Players.JobWhitelist;
@@ -13,6 +14,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Yautja;
 
@@ -23,6 +25,7 @@ public sealed partial class YautjaPredatorRoundSystem
 {
     [Dependency] private IAdminManager _admin = default!;
     [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private JobWhitelistManager _jobWhitelist = default!;
     [Dependency] private IPlayerManager _players = default!;
@@ -31,8 +34,13 @@ public sealed partial class YautjaPredatorRoundSystem
 
     private readonly HashSet<NetUserId> _huntReady = new();
     private readonly List<ICommonSession> _roundStartHunters = new();
-    private int _lobbyRolledRoundId;
     private int _lobbyHuntRoundId;
+
+    // the dice is rolled once per (round, preset). a new preset after the roll (the vote landing,
+    // admin setgamepreset) throws the old roll away and rolls again for the new one
+    private int _rolledRoundId;
+    private string? _rolledPresetId;
+    private EntityUid? _rolledHunt;
     private bool _huntWasActive;
 
     public bool HuntActive => IsHuntActive();
@@ -68,26 +76,60 @@ public sealed partial class YautjaPredatorRoundSystem
         if (!_randomEnabled ||
             GameTicker.DummyTicker ||
             GameTicker.RunLevel != GameRunLevel.PreRoundLobby ||
-            GameTicker.RoundId <= 0 ||
-            _lobbyRolledRoundId == GameTicker.RoundId)
+            GameTicker.RoundId <= 0)
         {
             return;
         }
 
-        _lobbyRolledRoundId = GameTicker.RoundId;
-        if (!_randomSchedule.CountRound(GameTicker.RoundId) ||
-            _lastRandomAttemptRoundId == GameTicker.RoundId)
-        {
+        // gamemode vote still going, the preset isn't final yet
+        if (_auRound.IsVoteSequenceRunning())
             return;
-        }
 
-        _lastRandomAttemptRoundId = GameTicker.RoundId;
-        if (TryInitializePredatorRound(out var message))
+        var presetId = GameTicker.Preset?.ID;
+        if (_rolledRoundId == GameTicker.RoundId && presetId == _rolledPresetId)
+            return;
+
+        WithdrawRolledHunt();
+        _rolledRoundId = GameTicker.RoundId;
+        _rolledPresetId = presetId;
+        RollHunt(presetId);
+    }
+
+    private void RollHunt(string? presetId)
+    {
+        var chance = YautjaHuntRoll.ChanceFor(presetId, _insurgencyChance, _distressSignalChance);
+        if (chance <= 0f || !_random.Prob(chance))
+            return;
+
+        // staff already set one up by hand
+        if (IsHuntActive())
+            return;
+
+        if (GameTicker.RunLevel == GameRunLevel.PreRoundLobby)
+        {
+            _rolledHunt = GameTicker.AddGameRule(CMUYautjaPredatorRoundPrototype);
             _lobbyHuntRoundId = GameTicker.RoundId;
-        else
-            _sawmill.Warning($"Automatic Yautja hunt queueing failed: {message}");
+            return;
+        }
 
-        ScheduleNextRandomHunt();
+        if (!TryInitializePredatorRound(out var message))
+            _sawmill.Warning($"Automatic Yautja hunt initialization failed: {message}");
+    }
+
+    // only ever takes back the hunt the dice queued, never one staff queued, and only before round start
+    private void WithdrawRolledHunt()
+    {
+        if (_rolledHunt is not { } hunt)
+            return;
+
+        _rolledHunt = null;
+        if (GameTicker.RunLevel != GameRunLevel.PreRoundLobby || TerminatingOrDeleted(hunt))
+            return;
+
+        // never started, so there's nothing to end. just drop it
+        Del(hunt);
+        if (_lobbyHuntRoundId == GameTicker.RoundId)
+            _lobbyHuntRoundId = 0;
     }
 
     private bool TryQueueLobbyHunt(out string message)
@@ -220,6 +262,7 @@ public sealed partial class YautjaPredatorRoundSystem
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
+        _rolledHunt = null;
         _huntReady.Clear();
         _roundStartHunters.Clear();
     }
