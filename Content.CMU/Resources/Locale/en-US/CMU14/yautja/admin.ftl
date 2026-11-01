@@ -7,5 +7,5 @@ cmu-yautja-admin-editor-slots-invalid = The Yautja count must be between 1 and 5
 cmu-yautja-admin-editor-slots-applied = Active Yautja count set to {$slots}.
 cmu-yautja-admin-editor-slots-saved = Yautja count {$slots} saved for the next hunt.
 cmu-yautja-admin-editor-random-invalid = Hunt chances must be between 0% and 100%.
-cmu-yautja-admin-editor-random-enabled-message = Random Yautja hunts enabled: {$insurgency}% on Insurgency, {$distress}% on Distress Signal.
+cmu-yautja-admin-editor-random-enabled-message = Random Yautja hunts enabled: {$insurgency}% on Insurgency, {$distress}% on Distress Signal and Force on Force.
 cmu-yautja-admin-editor-random-disabled = Random Yautja initialization disabled.

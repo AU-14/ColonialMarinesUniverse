@@ -119,7 +119,7 @@ cmu-yautja-hall-plus = +
 cmu-yautja-hall-round-slots = Hunter slots
 cmu-yautja-hall-round-random = Random hunts
 cmu-yautja-hall-round-insurgency = Insurgency %
-cmu-yautja-hall-round-distress = Distress Signal %
+cmu-yautja-hall-round-distress = Distress Signal / FOF %
 cmu-yautja-hall-round-random-info = Each round rolls once on these chances. Other gamemodes never roll a hunt.
 
 # results

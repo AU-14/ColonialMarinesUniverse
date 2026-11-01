@@ -7,5 +7,5 @@ cmu-yautja-admin-editor-slots-invalid = Количество яутжей дол
 cmu-yautja-admin-editor-slots-applied = Активное количество яутжей установлено: {$slots}.
 cmu-yautja-admin-editor-slots-saved = Количество яутжей {$slots} сохранено для следующей охоты.
 cmu-yautja-admin-editor-random-invalid = Шанс охоты должен быть от 0% до 100%.
-cmu-yautja-admin-editor-random-enabled-message = Случайные охоты включены: {$insurgency}% на Insurgency, {$distress}% на Distress Signal.
+cmu-yautja-admin-editor-random-enabled-message = Случайные охоты включены: {$insurgency}% на Insurgency, {$distress}% на Distress Signal и Force on Force.
 cmu-yautja-admin-editor-random-disabled = Случайная инициализация отключена.

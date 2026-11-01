@@ -11,10 +11,10 @@ public sealed class YautjaHuntRollTest
     [TestCase("Insurgency", 1f / 6f)]
     [TestCase("insurgency", 1f / 6f)]
     [TestCase("DistressSignal", 1f / 3f)]
+    [TestCase("ForceOnForce", 1f / 3f)]
     [TestCase("ColonyFall", 0f)]
-    [TestCase("ForceOnForce", 0f)]
     [TestCase(null, 0f)]
-    public void OnlyInsurgencyAndDistressSignalRoll(string? preset, float expected)
+    public void OnlyInsurgencyDistressSignalAndForceOnForceRoll(string? preset, float expected)
     {
         Assert.That(YautjaHuntRoll.ChanceFor(preset, 1f / 6f, 1f / 3f), Is.EqualTo(expected));
     }
@@ -70,6 +70,19 @@ public sealed class YautjaHuntRollTest
             await pair.RunTicksSync(5);
             await server.WaitAssertion(() => Assert.That(round.HuntActive, Is.False, "DS at 0% never rolls"));
 
+            // FOF goes off the DS chance
+            await server.WaitPost(() =>
+            {
+                cfg.SetCVar(YautjaPredatorRoundCVars.DistressSignalChance, 1f);
+                ticker.SetGamePreset("ForceOnForce");
+            });
+            await pair.RunTicksSync(5);
+            await server.WaitAssertion(() => Assert.That(round.HuntActive, Is.True, "FOF at the 100% DS chance should roll a hunt"));
+
+            await server.WaitPost(() => ticker.SetGamePreset("ColonyFall"));
+            await pair.RunTicksSync(5);
+            await server.WaitAssertion(() => Assert.That(round.HuntActive, Is.False));
+
             // staff can still force one on any mode, and a preset change doesn't take it back
             await server.WaitPost(() =>
             {
@@ -77,7 +90,7 @@ public sealed class YautjaHuntRollTest
                 Assert.That(round.TryInitializePredatorRound(out _), Is.True);
             });
             await pair.RunTicksSync(5);
-            await server.WaitPost(() => ticker.SetGamePreset("ForceOnForce"));
+            await server.WaitPost(() => ticker.SetGamePreset("Sandbox"));
             await pair.RunTicksSync(5);
             await server.WaitAssertion(() => Assert.That(round.HuntActive, Is.True));
         }
