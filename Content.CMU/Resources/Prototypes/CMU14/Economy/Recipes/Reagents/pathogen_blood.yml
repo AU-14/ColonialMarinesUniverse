@@ -222,12 +222,30 @@
       - !type:Encrypted
         potency: 1
 
+- type: reagent
+  parent: CMReagent
+  id: WeYuBloodbursting
+  name: reagent-name-weyu-bloodbursting-chem
+  desc: reagent-desc-weyu-bloodbursting-chem
+  physicalDesc: unidentifiable
+  class: Special
+  reward: 0
+  overdose: 10
+  metabolisms:
+    Bloodstream:
+    metabolismrate: 0.1
+    effects:
+    - !type:Bloodbursting
+      embyroSpawn: CMU14XenoBloodburster
+      requiresOverdose: true
+      burstDelay: 40
+
 - type: reagent  
   parent: CMReagent  
   id: TestBloodbursting
   flags: NoGeneration
   name: reagent-name-test-bloodbursting-chem
-  desc: reagent-desc-test-mycotoxigenic-chem
+  desc: reagent-desc-test-bloodbursting-chem
   physicalDesc: reagent-physical-desc-unidentifiable
   class: Special
   color: "#bed700"
