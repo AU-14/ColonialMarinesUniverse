@@ -249,3 +249,10 @@
   icon:
     sprite: CMU14/Interface/au14colonyjobicons.rsi
     state: wms
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconWeYSynth
+  icon: 
+    sprite: CMU14/Interface/au14colonyjobicons.rsi
+    state: wey_syn

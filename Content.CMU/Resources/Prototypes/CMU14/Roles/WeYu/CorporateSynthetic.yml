@@ -14,30 +14,26 @@
     - AUWeYu
   - type: JobPrefix
     prefix: au14-job-prefix-civiliancorporatesynthetic
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: wys
   - type: AssignSquad
     whitelist:
       tags:
       - SquadPMC
   ranks:
-    AU14RankCorporateSyntheticGrade5:
-    - !type:RoleTimeRequirement
-      role: CMUJobCorporateSynthetic
-      time: 252000 # 70 hours
-    AU14RankCorporateSyntheticGrade4:
-    - !type:RoleTimeRequirement
-      role: CMUJobCorporateSynthetic
-      time: 180000 # 50 hours
     AU14RankCorporateSyntheticGrade3:
     - !type:RoleTimeRequirement
       role: CMUJobCorporateSynthetic
-      time: 36000 # 10 hours
+      time: 180000 # 50 hours
     AU14RankCorporateSyntheticGrade2:
     - !type:RoleTimeRequirement
       role: CMUJobCorporateSynthetic
-      time: 18000 # 5 hours
+      time: 108000 # 30 hours
     AU14RankCorporateSyntheticGrade1: []
   startingGear: AU14GearCorporateSynthetic
-  icon: RMCJobIconSynth
+  icon: "AU14JobIconWeYSynth"
   supervisors: au14-job-supervisors-wy
   spawnMenuRoleName: au14-spawn-role-name-wy-corporate-synthetic
   accessGroups:
