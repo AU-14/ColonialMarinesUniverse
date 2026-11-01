@@ -188,6 +188,7 @@
       AU14JobCivilianColonist: 5
       AU14JobCivilianCMBMarshal: 1
       AU14JobCivilianCMBDeputy: 2
+      AU14JobCivilianCMBDetective: 1
       AU14JobCivilianPrisoner: 2
     randomJobs:
     - AU14JobCivilianAmbassadorCCA

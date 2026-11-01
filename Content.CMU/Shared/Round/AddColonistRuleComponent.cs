@@ -3,10 +3,11 @@ using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.CMU14.Round;
+namespace Content.Shared.CMU14.Round;
 
 /// <summary>
 /// Restores a fixed colonist roster on the planet station after RemoveAllJobs.
+/// Lives in Shared so the lobby role editor can offer exactly the FoF colonist roster.
 /// </summary>
 [RegisterComponent]
 public sealed partial class AddColonistRuleComponent : Component
@@ -17,7 +18,7 @@ public sealed partial class AddColonistRuleComponent : Component
 
     /// <summary>
     /// One slot goes to one randomly picked job from this list, e.g. the round's
-    /// ambassador allegiance. Only map-declared jobs are picked.
+    /// ambassador allegiance.
     /// </summary>
     [DataField("randomJobs")]
     public List<ProtoId<JobPrototype>> RandomJobs { get; set; } = new();

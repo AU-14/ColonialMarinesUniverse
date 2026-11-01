@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Shared.CMU14.Round;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Inventory;
@@ -46,31 +46,14 @@ public sealed partial class AddColonistRuleSystem : GameRuleSystem<AddColonistRu
         if (stationJobs == null)
             return;
 
-        // Slots only ever go to jobs the planet map declares, so undeclared
-        // roster entries cannot create spawnless slots.
-        // RA0002: method calls must go through a local; chained access on the
-        // other type's field itself counts as Execute.
-        var setupJobs = stationJobs.SetupAvailableJobs;
+        // The rule is FoF's only colonist slot source: it opens the roster itself so
+        // planet declarations never leak these jobs into other gamemodes.
         var counts = new Dictionary<ProtoId<JobPrototype>, int>(component.Jobs);
-        var candidates = component.RandomJobs
-            .Where(job => setupJobs.ContainsKey(job))
-            .ToList();
         if (component.RandomJobs.Count > 0)
-        {
-            if (candidates.Count == 0)
-                _logs.Warning("no randomJobs candidate is declared by this planet's map");
-            else
-                counts.TryAdd(_random.Pick(candidates), 1);
-        }
+            counts.TryAdd(_random.Pick(component.RandomJobs), 1);
 
         foreach (var (jobId, count) in counts)
         {
-            if (!setupJobs.ContainsKey(jobId))
-            {
-                _logs.Warning($"{jobId} is not declared by this planet's map, skipping");
-                continue;
-            }
-
             _stationJobs.TrySetJobSlot(stationUid.Value, jobId.ToString(), count, true, stationJobs);
             _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, count, stationJobs);
         }
