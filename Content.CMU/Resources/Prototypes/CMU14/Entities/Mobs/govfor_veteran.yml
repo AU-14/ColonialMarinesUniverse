@@ -1,0 +1,86 @@
+# CMU14: ready-to-spawn A.W. GovFor Veteran.
+# This is a standalone mob entity, not the colony antagonist: spawning it never rolls, selects or counts
+# towards the one-per-round antagonist limit, and it needs no player selection.
+# It exists so staff can place a fully dressed, fully equipped veteran straight from the entity spawn menu.
+# Unlike the antagonist (who spawns as a colonist with his kit boxed in his bag), this mob is dressed and
+# armed at spawn: no backpack, no kit box, everything in its equipment slots.
+
+- type: entity
+  parent: CMMobHuman
+  id: CMUMobGovForVeteran
+  name: A.W. GovFor Veteran
+  suffix: CMU14, Event
+  components:
+  # A weathered old soldier: grey hair and a veteran's moustache, with a random colonist name so
+  # nothing about him announces what he is.
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairShavedHead
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairMarineFade
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairShort
+    - RMCHumanHairCut
+    allowedFemaleHairStyles:
+    - RMCHumanHairShavedHead
+    - RMCHumanHairHeadStubble
+    - AU14HumanHairLowPonyTail
+    allowedHairColorsHex:
+    - "#b8b8b8"
+    - "#d6d6d6"
+    - "#8f8f8f"
+    allowedEyeColorsHex:
+    - "#4a5a63"
+    - "#5d5145"
+    allowedBeardStyles:
+    - RMCHumanFacialHairSoulfulSelleck
+    beardChance: 0.7
+  # The veteran's mechanics, identical to the antagonist's components.
+  # Weapon specialist line skills on top of the veteran's CQC/Endurance 5.
+  - type: Skills
+    skills:
+      RMCSkillAntagonist: 1
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 5
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 1
+  - type: RMCStamina
+    current: 300
+    max: 300
+    tierThresholds: [ 300, 210, 90, 30, 0 ]
+  - type: CMUStunImmunity
+    taserDamageMultiplier: 0.33
+  - type: FlashImmunity
+    showInExamine: false
+  # Grants the cloak/jaunt action on spawn; the machete recall action follows the machete itself.
+  - type: CMUVeteranCloak
+  # Already worn: slots are filled at MapInit, so nothing ends up in storage.
+  - type: EquipEntityPreset
+    preset: CMUVeteranOutfitPreset
+
+# One item per slot, so the preset is deterministic: worn M3-L armor, M10 helmet, urban USCM fatigues
+# with sensors locked off, grey shemagh, dark M1A1 goggles, black combat gloves, silent boots,
+# and the signature machete
+# in an empty hand.
+- type: entity
+  id: CMUVeteranOutfitPreset
+  name: A.W. GovFor Veteran outfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      jumpsuit: [ CMUVeteranUniformForecon ]
+      outerClothing: [ CMUVeteranArmorM3SWorn ]
+      head: [ CMUVeteranHelmetM10Worn ]
+      mask: [ CMUVeteranShemaghGrey ]
+      eyes: [ AU14GogglesM1A1DarkBallistic ]
+      gloves: [ CMUVeteranGloves ]
+      shoes: [ CMUVeteranBootsSilent ]
+      back: [ CMUVeteranThermalCloak ]
+    randomGear:
+    - [ CMUVeteranMachete ]

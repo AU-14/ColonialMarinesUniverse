@@ -1,0 +1,244 @@
+# CMU14: A.W. GovFor Veteran - military slasher colony antagonist.
+# An A.W. USCM veteran who changed his name, settled down in this colony, and has just snapped.
+# He spawns as an ordinary colonist; his old kit travels in a case in his bag.
+
+- type: antagSpecifier
+  id: GovForVeteran
+  prefRoles: [ GovForVeteranRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  - AllCLFJobs
+  - AllSynthJobs
+  briefing:
+    text: govforveteran-role-greeting
+    color: DarkRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingSkills:
+    # The cloak's field controls are locked behind this; every antag carries it.
+    RMCSkillAntagonist: 1
+    RMCSkillCqc: 5
+    RMCSkillEndurance: 5
+    RMCSkillConstruction: 1
+    RMCSkillEngineer: 1
+    RMCSkillFirearms: 1
+    RMCSkillFireman: 2
+    RMCSkillVehicles: 1
+    RMCSkillJtac: 1
+  components:
+  # Carried by the man rather than the armor so stripping him does not strip his capabilities.
+  - type: RMCStamina
+    current: 300
+    max: 300
+    tierThresholds: [ 300, 210, 90, 30, 0 ]
+  - type: CMUStunImmunity
+    taserDamageMultiplier: 0.33
+  # Flashbangs and camera flashes do nothing to him.
+  - type: FlashImmunity
+    showInExamine: false
+  # Stealth jaunt: only possible while nothing can see him (see CMUVeteranCloakSystem).
+  - type: CMUVeteranCloak
+  mindRoles:
+  - MindRoleGovForVeteran
+
+- type: entity
+  id: GovForVeteran
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: GovForVeteranRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:RandomAntagCount
+      proto: GovForVeteran
+      range:
+        min: 1
+        max: 1
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleGovForVeteran
+  name: A.W. GovFor Veteran Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: GovForVeteranRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+    subtype: cmu-role-subtype-govfor-veteran
+  # Same slot the other colony antags use for their role icon (Runaway Synth's synth icon), but with the
+  # Government Forces weapons specialist icon.
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
+      state: govfor_ws
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: GovForVeteranRole
+  name: roles-antag-govforveteran-name
+  setPreference: true
+  objective: roles-antag-govforveteran-objective
+
+# He spawns as an ordinary colonist: the job and loadout keep their own clothing, satchel and equipment.
+# The rule system (`GovForVeteranRuleSystem`) drops this case into the bag he already carries.
+- type: entity
+  parent: RMCGunCaseBase
+  id: CMUVeteranKitBox
+  name: battered service case
+  description: A scuffed old case with the markings sanded off and a latch that has been repaired more than once. Something heavy shifts inside when it is moved.
+  components:
+  - type: Item
+    size: Small
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,19,5
+  - type: StorageFill
+    contents:
+    - id: CMUVeteranArmorM3SWorn
+    - id: CMUVeteranThermalCloak
+    - id: CMUVeteranHelmetM10Worn
+    - id: CMUVeteranUniformForecon
+    - id: CMUVeteranShemaghGrey
+    - id: AU14GogglesM1A1DarkBallistic
+    - id: CMUVeteranGloves
+    - id: CMUVeteranBootsSilent
+    - id: CMUVeteranMachete
+
+# The scout's own M3-S plate (it carries the RMCScoutArmor tag the thermal cloak insists on), in urban pattern,
+# minus the issue slow-down: the point of this armor is that he never stops closing the distance.
+- type: entity
+  parent: RMCArmorM3Scout
+  id: CMUVeteranArmorM3SWorn
+  name: worn M3-S pattern light armor
+  description: A scout's cut-down M3-S plate in urban pattern. The padding is flattened to nothing, the straps have been replaced by hand more than once, and an old unit stencil has been scratched away.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/scout/urban.rsi
+  # Every pattern keyed to urban so the map's camouflage roll cannot change the look.
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/scout/urban.rsi
+      Desert: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/scout/urban.rsi
+      Snow: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/scout/urban.rsi
+      Classic: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/scout/urban.rsi
+      Urban: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/scout/urban.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 0.8
+    sprintModifier: 0.8
+
+# The scout's M68 thermal cloak: same shell, same sounds, same armour requirement, but dialled to full invisibility.
+# Built on the satchel base rather than parenting RMCBackpackScout so it does not inherit that prototype's
+# DestroyOnPreset, which deletes the standard cloak on Distress Signal rounds.
+- type: entity
+  parent: CMSatchel
+  id: CMUVeteranThermalCloak
+  name: XM-13 experimental thermal cloak
+  description: An experimental thermal cloak, pulled from a scout trial and patched by hand since. It folds light around the wearer completely, at the cost of every other courtesy.
+  suffix: Veteran
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/scout_cloak.rsi
+  - type: Storage
+    grid:
+    - 0,0,14,1 # 15 slots
+  - type: ClothingRequireEquipped
+    autoUnequip: true
+    whitelist:
+      tags:
+      - RMCScoutArmor
+    denyReason: rmc-wear-scout-armor-required
+  - type: ThermalCloak
+    opacity: 0
+    movingOpacity: 0
+    restrictWeapons: true
+    cloakedHideLayers:
+    - Tail
+    - Snout
+    whitelist:
+      components:
+      - CMUVeteranCloak
+    cloakSound:
+      path: /Audio/_RMC14/Effects/Cloak/cloak_scout_on.ogg
+      params:
+        variation: 0.09
+    uncloakSound:
+      path: /Audio/_RMC14/Effects/Cloak/cloak_scout_off.ogg
+      params:
+        variation: 0.09
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: CMUVeteranHelmetM10Worn
+  name: worn M10 pattern marine helmet
+  description: A standard-issue M10 helmet, sun-bleached and scuffed down to bare metal along one side. The liner has been padded with strips of old uniform.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UrbanHats/m10helmet.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/UrbanHats/m10helmet.rsi
+  # Urban netting comes already fitted to the helmet (helmet accessor storage).
+  - type: StorageFill
+    contents:
+    - id: RMCHelmetGarbNettingUrban
+
+# The USCMC uniform FORECON survivors are found in - torn, burned and bloodstained - with a poncho over it.
+# Sensors are forced off rather than relying on the map's random sensor roll: nobody reads his vitals off a monitor.
+- type: entity
+  parent: RMCJumpsuitSurvivorMarineDropPouch
+  id: CMUVeteranUniformForecon
+  description: A USCMC uniform, torn, burned and bloodstained. The suit sensor wiring has been pulled out left dangling.
+  components:
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - RMCPatchUNMC
+    - RMCPatchFORECON
+    - AU14ArmorGarbUrbanPoncho
+  - type: SuitSensor
+    randomMode: false
+    mode: SensorOff
+    controlsLocked: true
+
+- type: entity
+  parent: RMCMaskKeffiyeh
+  id: CMUVeteranShemaghGrey
+  name: grey shemagh
+  description: A faded grey shemagh, wound tight and pulled up over the nose. It smells of cordite, old sweat, and wet earth.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_white.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_white.rsi
+
+# Worn black combat boots with the soles wrapped flat. The FootstepModifier is left with no sound
+# collection, which the mover controller treats as a silent step on every surface and gait.
+- type: entity
+  parent: CMBootsBlack
+  id: CMUVeteranBootsSilent
+  name: worn combat boots
+  description: Scuffed black combat boots with the soles bound in cloth and stitched flat. They make no sound at all on deck plating.
+  suffix: Veteran
+  components:
+  - type: FootstepModifier
+
+- type: entity
+  parent: CMHandsBlackMarine
+  id: CMUVeteranGloves
+  name: worn combat gloves
+  description: Scuffed black combat gloves, knuckles reinforced and palms worn smooth by years of use.
+  suffix: Veteran
+
+# Spawned into the kit case by GovForVeteranRuleSystem when the player's name is the veteran's own.
+- type: entity
+  parent: CMIDCardStandardDogtag
+  id: CMUVeteranDogtag
+  name: faded dogtag
+  description: A dog tag worn smooth by years in a pocket, the stamped letters barely legible any more.
+  categories: [ HideSpawnMenu ]

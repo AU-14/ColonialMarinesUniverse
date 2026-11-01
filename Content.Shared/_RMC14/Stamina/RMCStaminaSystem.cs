@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Stun;
+using Content.Shared.CMU14.Combat; // CMU14
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
@@ -47,6 +48,7 @@ public sealed partial class RMCStaminaSystem : EntitySystem
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private CMUStunImmunitySystem _cmuStunImmunity = default!; // CMU14
 
     public override void Initialize()
     {
@@ -207,7 +209,8 @@ public sealed partial class RMCStaminaSystem : EntitySystem
 
         foreach (var (hit, comp) in toHit)
         {
-            DoStaminaDamage(hit, damage / toHit.Count, true);
+            // CMU14: baton resistance scales the hit instead of only allowing full immunity.
+            DoStaminaDamage(hit, damage / toHit.Count * _cmuStunImmunity.GetStaminaMultiplier(hit, ent.Owner), true);
             if (_net.IsServer)
                 _jitter.DoJitter(hit, ent.Comp.JitterDuration, true, 7, 5);
             _adminLogger.Add(LogType.Stamina, $"{ToPrettyString(hit):target} was dealt {damage} stamina damage from {args.User} with {args.Weapon}.");
@@ -235,11 +238,16 @@ public sealed partial class RMCStaminaSystem : EntitySystem
         if (!_itemToggle.IsActivated(ent.Owner))
             return;
 
-        DoStaminaDamage((target, stam), ent.Comp.Damage, true);
+        // CMU14: baton resistance scales the hit instead of only allowing full immunity.
+        DoStaminaDamage((target, stam), ent.Comp.Damage * _cmuStunImmunity.GetStaminaMultiplier(target, ent.Owner), true);
     }
 
     private bool IsYautjaTaserImmune(EntityUid source, EntityUid target)
     {
+        // CMU14: taser/baton immunity is a component so non-Yautja mobs can carry it too.
+        if (_cmuStunImmunity.IsImmune(target, source))
+            return true;
+
         return HasComp<YautjaComponent>(target) && _tag.HasTag(source, TaserTag);
     }
 

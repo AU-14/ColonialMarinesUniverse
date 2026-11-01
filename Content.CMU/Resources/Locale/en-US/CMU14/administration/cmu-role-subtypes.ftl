@@ -10,6 +10,7 @@ cmu-role-subtype-clf-leader = {roles-antag-clf-leader-name}
 cmu-role-subtype-clf-saboteur = {cmu-antag-clf-saboteur-name}
 cmu-role-subtype-clf-sleeper-agent = {roles-antag-clf-sleeper-agent-name}
 cmu-role-subtype-clf-veteran = {roles-antag-clfveteran-name}
+cmu-role-subtype-govfor-veteran = {roles-antag-govforveteran-name}
 cmu-role-subtype-arsonist = {cmu-antag-arsonist-name}
 cmu-role-subtype-bounty-hunter = {cmu-antag-bounty-hunter-name}
 cmu-role-subtype-cannibal = {roles-antag-cannibal-name}
