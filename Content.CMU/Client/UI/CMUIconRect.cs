@@ -1,4 +1,3 @@
-using Content.Client.CMU14.UI;
 using System.Numerics;
 using Content.Client.Resources;
 using Robust.Client.ResourceManagement;
@@ -7,9 +6,9 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
 
-namespace Content.Client._RMC14.UserInterface;
+namespace Content.Client.CMU14.UI;
 
-public sealed partial class RMCIconRect : TextureRect
+public sealed class CMUIconRect : TextureRect
 {
     private readonly IResourceCache _resourceCache;
 
@@ -17,7 +16,7 @@ public sealed partial class RMCIconRect : TextureRect
     private Color _hoverColor = CMUIcons.Hover;
     private bool _hovered;
 
-    public RMCIconRect()
+    public CMUIconRect()
     {
         _resourceCache = IoCManager.Resolve<IResourceCache>();
         Stretch = StretchMode.KeepAspectCentered;
@@ -25,7 +24,7 @@ public sealed partial class RMCIconRect : TextureRect
         UpdateColor();
     }
 
-    public RMCIconRect(string path, float size) : this()
+    public CMUIconRect(string path, float size) : this()
     {
         SetIcon(path);
         IconSize = size;
