@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared.Chat;
 using Content.Shared.CMU14.Antags.GovForVeteran;
+using Content.Shared.CMU14.Stealth;
 using Content.Shared.Doors.Systems;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.Hands;
@@ -84,8 +85,8 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         // reliable handle on the cloak toggle regardless of what the action considers its provider.
         SubscribeLocalEvent<ActionComponent, ActionAttemptEvent>(OnActionAttempt);
 
-        SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentStartup>(OnCloakStarted);
-        SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentShutdown>(OnCloakStopped);
+        SubscribeLocalEvent<CMUVeteranCloakComponent, CMUInvisibilityStartedEvent>(OnCloakStarted);
+        SubscribeLocalEvent<CMUVeteranCloakComponent, CMUInvisibilityStoppedEvent>(OnCloakStopped);
 
         SubscribeLocalEvent<CMUVeteranCloakComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<CMUVeteranCloakComponent, MobStateChangedEvent>(OnMobStateChanged);
@@ -143,11 +144,9 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         args.Type = PopupType.MediumCaution;
     }
 
-    private void OnCloakStarted(Entity<EntityActiveInvisibleComponent> ent, ref ComponentStartup args)
+    private void OnCloakStarted(Entity<CMUVeteranCloakComponent> ent, ref CMUInvisibilityStartedEvent args)
     {
-        if (!TryComp<CMUVeteranCloakComponent>(ent.Owner, out var cloak))
-            return;
-
+        var cloak = ent.Comp;
         cloak.Cloaked = true;
 
         // Walk through people as well as doors; bullets are unaffected.
@@ -160,11 +159,9 @@ public sealed partial class CMUVeteranCloakSystem : EntitySystem
         _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
     }
 
-    private void OnCloakStopped(Entity<EntityActiveInvisibleComponent> ent, ref ComponentShutdown args)
+    private void OnCloakStopped(Entity<CMUVeteranCloakComponent> ent, ref CMUInvisibilityStoppedEvent args)
     {
-        if (!TryComp<CMUVeteranCloakComponent>(ent.Owner, out var cloak))
-            return;
-
+        var cloak = ent.Comp;
         cloak.Cloaked = false;
 
         if (TryComp<EntityActiveInvisibleComponent>(ent.Owner, out var active))

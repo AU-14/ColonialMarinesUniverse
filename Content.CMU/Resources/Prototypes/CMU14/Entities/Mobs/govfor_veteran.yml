@@ -54,7 +54,6 @@
     max: 300
     tierThresholds: [ 300, 210, 90, 30, 0 ]
   - type: CMUStunImmunity
-    taserDamageMultiplier: 0.33
   - type: FlashImmunity
     showInExamine: false
   # Grants the cloak/jaunt action on spawn; the machete recall action follows the machete itself.

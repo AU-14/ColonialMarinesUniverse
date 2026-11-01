@@ -9,6 +9,7 @@ public sealed partial class ActiveInvisibleSystem : EntitySystem
 
     public override void Initialize()
     {
+        InitializeCMUInvisibilityLifetime(); // CMU14: publish cloak lifecycle events through their owner.
         SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentAdd>(OnInvisibleComponentAdd);
         SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentRemove>(OnInvisibleComponentRemove);
         SubscribeLocalEvent<EntityActiveInvisibleComponent, EvasionRefreshModifiersEvent>(OnInvisibleRefreshModifiers);

@@ -15,6 +15,7 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Light.Components;
 using Content.Shared.Mobs;
 using Content.Shared.CMU14.Movement;
+using Content.Shared.CMU14.Stealth;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Devour;
@@ -82,23 +83,22 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, GetMobFootstepVolumeEvent>(OnFootstepVolume);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnAnyDamageChanged);
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
-        SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentStartup>(OnInvisibilityStartup);
-        SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentShutdown>(OnInvisibilityShutdown);
+        SubscribeLocalEvent<CMUYautjaOpticalCloakComponent, CMUInvisibilityStartedEvent>(OnInvisibilityStartup);
+        SubscribeLocalEvent<CMUYautjaOpticalCloakComponent, CMUInvisibilityStoppedEvent>(OnInvisibilityShutdown);
     }
 
-    private void OnInvisibilityStartup(Entity<EntityActiveInvisibleComponent> ent, ref ComponentStartup args)
+    private void OnInvisibilityStartup(Entity<CMUYautjaOpticalCloakComponent> ent, ref CMUInvisibilityStartedEvent args)
     {
         // Another cloak may take over during the reverse sweep. Return its shader ownership immediately.
-        if (_net.IsServer && TryComp<CMUYautjaOpticalCloakComponent>(ent, out var optical) && !optical.Enabled)
+        if (_net.IsServer && !ent.Comp.Enabled)
             RemComp<CMUYautjaOpticalCloakComponent>(ent);
     }
 
-    private void OnInvisibilityShutdown(Entity<EntityActiveInvisibleComponent> ent, ref ComponentShutdown args)
+    private void OnInvisibilityShutdown(Entity<CMUYautjaOpticalCloakComponent> ent, ref CMUInvisibilityStoppedEvent args)
     {
         // A worn thermal harness can also end invisibility without using the bracer action.
-        if (_net.IsServer && !TerminatingOrDeleted(ent) &&
-            TryComp<CMUYautjaOpticalCloakComponent>(ent, out var optical) && optical.Enabled)
-            SetOpticalTransition(ent, optical.Preset, false);
+        if (_net.IsServer && !TerminatingOrDeleted(ent) && ent.Comp.Enabled)
+            SetOpticalTransition(ent, ent.Comp.Preset, false);
     }
 
     public override void Update(float frameTime)
