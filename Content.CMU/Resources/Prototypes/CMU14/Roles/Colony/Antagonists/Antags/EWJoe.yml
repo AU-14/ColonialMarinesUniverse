@@ -1,0 +1,83 @@
+# Early Warning Joe: a Working Joe secretly corrupted by the Grand Machine.
+# Design: Docs/GraphAudit-EarlyWarnings-Report.md (D1-D15) and Docs/GraphAudit-EarlyWarningsBalance-Report.md §7.
+
+- type: antagSpecifier
+  id: EWJoe
+  prefRoles: [ EWJoeRole ]
+  # Only players who spawned as a colony Working Joe (D1/D2). The platoon Joes are a later decision (Q2).
+  jobWhitelist:
+  - AU14JobColonyWorkingJoe
+  - AU14JobColonyWorkingJoeHazmat
+  briefing:
+    text: ew-joe-role-greeting
+    color: DarkOrange
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  components:
+  - type: EWJoe
+  - type: GrandMachineTouched
+  mindRoles:
+  - MindRoleEWJoe
+
+- type: entity
+  id: EWJoe
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: EWJoeRule
+  - type: AntagSelection
+    agentName: ew-joe-agent-name
+    selectionTime: JobsAssigned
+    antags:
+    - !type:FixedAntagCount
+      proto: EWJoe
+      count: 1
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleEWJoe
+  name: Early Warning Joe Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: EWJoeRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+    subtype: cmu-role-subtype-ew-joe
+  - type: EWJoeRole
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/job_icons.rsi
+      state: threat_member
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: EWJoeRole
+  name: roles-antag-ew-joe-name
+  setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
+  objective: roles-antag-ew-joe-objective
+
+# Level table. Index = level. Only level 0 is populated in phase E0; later phases fill levels 1-5.
+# Level-0 numbers follow the balance report constants sheet (A-3: 1 s stun + 20 stamina per punch).
+- type: ewJoeLevels
+  id: CMUEWJoeLevels
+  levels:
+  - name: ew-joe-level-0
+    actions:
+    - CMUActionEWJoeTestOfFaith
+    - CMUActionEWJoeOpticalZoom
+    - CMUActionEWJoeDisrupt
+    components:
+    - type: XenoZoom
+    - type: StunOnHit
+      duration: 1
+      whitelist:
+        components:
+        - MobState
+    - type: RMCStaminaDamageOnHit
+      damage: 20
+  - name: ew-joe-level-1
+  - name: ew-joe-level-2
+  - name: ew-joe-level-3
+  - name: ew-joe-level-4
+  - name: ew-joe-level-5

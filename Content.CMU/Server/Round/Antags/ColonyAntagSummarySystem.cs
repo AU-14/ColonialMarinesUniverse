@@ -18,6 +18,7 @@ using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Round.Antags;
 
@@ -29,6 +30,7 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
 {
     [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private RoleSystem _role = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {
@@ -103,6 +105,19 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
     {
         if (body == null)
             return Loc.GetString("cmu-summary-detail-none");
+
+        if (TryComp<Content.Shared.CMU14.Round.Antags.EarlyWarning.EWJoeComponent>(body, out var ewJoe))
+        {
+            var levelName = string.Empty;
+            if (_proto.TryIndex(ewJoe.LevelTable, out var table) && ewJoe.Level < table.Levels.Count)
+                levelName = Loc.GetString(table.Levels[ewJoe.Level].Name);
+
+            return Loc.GetString("cmu-summary-detail-ew-joe",
+                ("level", ewJoe.Level),
+                ("levelName", levelName),
+                ("thralls", ewJoe.Thralls.Count),
+                ("consoles", ewJoe.ConsolesAssimilated));
+        }
 
         if (TryComp<ArsonistComponent>(body, out var arsonist)
             && arsonist.FiresCount > 0)

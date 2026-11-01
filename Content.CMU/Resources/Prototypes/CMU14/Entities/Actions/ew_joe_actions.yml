@@ -1,0 +1,47 @@
+# Early Warning Joe level-0 actions. Icons are placeholders until the GM action icon set exists.
+# Names and descriptions come from ent-<id> locale entries (ew-joe.ftl).
+
+- type: entity
+  id: CMUActionEWJoeTestOfFaith
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 20
+  - type: Sprite
+    layers:
+    - sprite: Objects/Weapons/Melee/flash.rsi
+      state: flash
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeTestOfFaithActionEvent
+
+- type: entity
+  id: CMUActionEWJoeOpticalZoom
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 0.2
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: toggle_long_range
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:XenoZoomActionEvent
+
+- type: entity
+  id: CMUActionEWJoeDisrupt
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 45
+  - type: Sprite
+    layers:
+    - sprite: Objects/Weapons/Grenades/empgrenade.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeDisruptActionEvent
