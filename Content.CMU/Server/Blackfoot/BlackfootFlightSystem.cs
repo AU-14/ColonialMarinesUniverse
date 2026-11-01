@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Server.CMU14.Blackfoot;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.Blackfoot;
 using Content.Shared.CMU14.ZLevels.Core;
@@ -54,6 +55,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private CMUBlackfootDestructionSystem _destruction = default!;
 
     public override void Initialize()
     {
@@ -81,6 +83,9 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         var aircraft = EntityQueryEnumerator<BlackfootFlightComponent>();
         while (aircraft.MoveNext(out var uid, out var flight))
         {
+            if (_destruction.IsFalling(uid))
+                continue;
+
             ProcessFuel((uid, flight), frameTime);
             ProcessThrusters((uid, flight));
             TryRecoverFromCrash((uid, flight));
@@ -368,10 +373,13 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
     private void ProcessThrusters(Entity<BlackfootFlightComponent> flight)
     {
         if (!IsAirborneOrTransitioning(flight.Comp.State) ||
-            HasFunctionalThrusters(flight.Owner))
+            (HasFunctionalThrusters(flight.Owner) && !_hardpoints.IsDestroyedBeyondRepair(flight.Owner)))
         {
             return;
         }
+
+        if (_destruction.TryBeginFall(flight.Owner))
+            return;
 
         Crash(flight);
     }
@@ -379,6 +387,9 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
     private void TryRecoverFromCrash(Entity<BlackfootFlightComponent> flight)
     {
         if (flight.Comp.State != BlackfootFlightState.Crashed)
+            return;
+
+        if (_hardpoints.IsDestroyedBeyondRepair(flight.Owner))
             return;
 
         TryComp(flight, out BlackfootFuelPowerComponent? fuel);
@@ -597,7 +608,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         return true;
     }
 
-    private void Crash(Entity<BlackfootFlightComponent> flight)
+    public void Crash(Entity<BlackfootFlightComponent> flight)
     {
         DeleteShadow(flight);
         DeleteDownwash(flight);
@@ -606,13 +617,31 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         flight.Comp.MovementMode = BlackfootMovementMode.VTOL;
 
         if (IsAirborne(flight.Comp.State))
-            _zLevels.TryMove(flight.Owner, flight.Comp.GroundMapOffset);
+            _zLevels.TryMove(flight.Owner, GetCrashOffset(flight));
 
         _viewToggle.RefreshOutsideViewers(flight.Owner);
         SetState(flight.Owner, flight, BlackfootFlightState.Crashed);
 
         var ev = new BlackfootCrashedEvent();
         RaiseLocalEvent(flight.Owner, ref ev);
+    }
+
+    // falls through open air to the first solid level
+    private int GetCrashOffset(Entity<BlackfootFlightComponent> flight)
+    {
+        if (Transform(flight.Owner).MapUid is not { } map ||
+            !TryComp(map, out CMUZLevelMapComponent? level) ||
+            !_zLevels.TryProjectToGroundEffectMap(
+                map,
+                flight.Comp.GroundMapOffset,
+                _transform.GetWorldPosition(flight.Owner),
+                out var ground) ||
+            !TryComp(_map.GetMapOrInvalid(ground.MapId), out CMUZLevelMapComponent? groundLevel))
+        {
+            return flight.Comp.GroundMapOffset;
+        }
+
+        return Math.Min(groundLevel.Depth - level.Depth, flight.Comp.GroundMapOffset);
     }
 
     private void SpawnShadow(Entity<BlackfootFlightComponent> flight)
@@ -1385,7 +1414,8 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
 
         if (performer != ent.Owner || !_actionBlocker.CanConsciouslyPerformAction(performer) ||
             ent.Comp.Vehicle is not { } vehicleUid ||
-            !TryComp(vehicleUid, out BlackfootFlightComponent? flightComp))
+            !TryComp(vehicleUid, out BlackfootFlightComponent? flightComp) ||
+            _destruction.IsFalling(vehicleUid))
         {
             return false;
         }

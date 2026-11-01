@@ -1,0 +1,16 @@
+- type: entity
+  id: CMUBlackfootCrashEffect
+  categories: [ HideSpawnMenu, DoNotMap ]
+  name: crash explosion
+  components:
+  - type: Sprite
+    sprite: _RMC14/Effects/grenade_explosion.rsi
+    state: grenade
+    scale: 3, 3
+    drawdepth: Effects
+  - type: PointLight
+    color: "#FFB45E"
+    radius: 7
+    energy: 5
+  - type: TimedDespawn
+    lifetime: 0.8
