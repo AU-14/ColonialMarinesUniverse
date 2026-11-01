@@ -44,12 +44,14 @@ public sealed partial class LineSystem : EntitySystem
         _mapGridQuery = GetEntityQuery<MapGridComponent>();
     }
 
-    public List<LineTile> DrawLine(EntityCoordinates start, EntityCoordinates end, TimeSpan delayPer, float? range, out EntityUid? blocker, bool hitBlocker = false, bool thick = false, bool ignoreBarricades = false)
+    // CMU14 method: an optional caller-owned buffer is cleared and returned; other callers own a fresh list.
+    public List<LineTile> DrawLine(EntityCoordinates start, EntityCoordinates end, TimeSpan delayPer, float? range, out EntityUid? blocker, bool hitBlocker = false, bool thick = false, bool ignoreBarricades = false, List<LineTile>? buffer = null)
     {
         blocker = null;
         start = _mapSystem.AlignToGrid(start);
         end = _mapSystem.AlignToGrid(end);
-        var tiles = new List<LineTile>();
+        var tiles = buffer ?? new List<LineTile>();
+        tiles.Clear();
         if (!start.TryDistance(EntityManager, _transform, end, out var distance) || distance <= 0)
             return tiles;
 
@@ -71,6 +73,7 @@ public sealed partial class LineSystem : EntitySystem
         var gridComp = gridId == null ? null : _mapGridQuery.CompOrNull(gridId.Value);
         Entity<MapGridComponent>? grid = gridComp == null ? null : new Entity<MapGridComponent>(gridId!.Value, gridComp);
         var lastCoords = start;
+        Span<EntityCoordinates> coords = stackalloc EntityCoordinates[9];
 
         for (var i = 0; i < distance; i++)
         {
@@ -80,8 +83,8 @@ public sealed partial class LineSystem : EntitySystem
             if (center == lastCoords)
                 continue;
 
-            List<EntityCoordinates> coords = new(9);
-            coords.Add(center);
+            var coordCount = 1;
+            coords[0] = center;
             if (thick && i > 1)
             {
                 for (var xo = -1; xo < 2; xo++)
@@ -92,13 +95,13 @@ public sealed partial class LineSystem : EntitySystem
                             continue;
 
                         var point = new EntityCoordinates(start.EntityId, x + xo, y + yo).SnapToGrid(EntityManager);
-                        coords.Add(point);
+                        coords[coordCount++] = point;
                     }
                 }
             }
 
             var centerBlocked = false;
-            for (var j = 0; j < coords.Count; j++)
+            for (var j = 0; j < coordCount; j++)
             {
                 var entityCoords = coords[j];
                 // CMU14: a wide spray must not place its side tiles behind an intervening door or wall.
