@@ -1,0 +1,16 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed Yautja cloak transitions and Butcher presentation under thermal vision.
+  type: Fix
+- message: Reworked bracer inspection around the real item on the floor, with clearer
+    physical clues and a compact procedure menu.
+  type: Tweak
+- message: Bracer research now mixes eight standard-chemical procedures with twelve
+    generated-compound procedures.
+  type: Tweak
+- message: Fixed bracer contact/menu interaction and granted research access to Wey-Yu
+    scientists and corporate liaison variants.
+  type: Fix
+time: '2026-11-01T09:21:19.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2395

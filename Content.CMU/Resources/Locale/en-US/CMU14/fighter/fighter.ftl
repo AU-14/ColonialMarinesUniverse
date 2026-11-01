@@ -22,6 +22,32 @@ cmu-fighter-obscured = OPTICS / CLOUD OBSCURED
 cmu-fighter-clear = OPTICS / LIVE
 cmu-fighter-mark-status = Mark { $x }, { $y } · { $age } s old · last-known position
 cmu-fighter-title = CMU / TWO-SEAT STRIKE & RECON
+cmu-fighter-hud-title = FIGHTER
+cmu-fighter-hud-airspace = Airspace
+cmu-fighter-hud-flight = Flight
+cmu-fighter-hud-mission = Mission
+cmu-fighter-hud-entry = Entry
+cmu-fighter-hud-exit = Exit
+cmu-fighter-hud-apply = Apply
+cmu-fighter-hud-pylon = P{ $number }
+cmu-fighter-hud-gun = GUN
+cmu-fighter-hud-crew = PILOT · { $pilot } / WSO · { $wso }
+cmu-fighter-hud-cover = Cover
+cmu-fighter-hud-night = Night
+cmu-fighter-hud-height = { $height } m
+cmu-fighter-hud-speed = { $speed } t/s
+cmu-fighter-hud-low = Low
+cmu-fighter-hud-cloud = Cloud
+cmu-fighter-hud-high = High
+cmu-fighter-hud-slow = Slow
+cmu-fighter-hud-burner = Burner
+cmu-fighter-hud-swap = Swap
+cmu-fighter-hud-prepare = Prepare run
+cmu-fighter-hud-queue = Queue fire
+cmu-fighter-hud-targets-help = Select a target
+cmu-fighter-hud-targets-empty = No flares or laser marks
+cmu-fighter-hud-range = Range { $distance } / { $range } tiles
+cmu-fighter-hud-weapon = { $name } · { $rounds } rounds
 cmu-fighter-airspace = AIRSPACE / CUSTOM APPROACH
 cmu-fighter-entry = Set entry
 cmu-fighter-exit = Set exit
@@ -79,7 +105,7 @@ cmu-fighter-observer-controls = WEAPONS OFFICER
 cmu-fighter-spectating-pilot = SPECTATING PILOT
 cmu-fighter-spectating-wso = SPECTATING WEAPONS OFFICER
 cmu-fighter-spectating-help = Read-only crew view
-    Plan route / Targeting · switch display
+    Airspace / Ground camera · switch display
 cmu-fighter-spectating-exit-help = Read-only crew view
     Move or Stop observing to leave
 cmu-fighter-stop-observing = Stop observing
@@ -87,7 +113,7 @@ cmu-fighter-lock = Lock
 cmu-fighter-unlock = Unlock
 cmu-fighter-lock-help = Hold the selected ground point. Unlock releases the target without moving the view. WASD pans the unlocked camera; selecting a flare moves the view to it.
 cmu-fighter-range-help = Higher altitude increases camera reach. An out-of-range lock is retained, but its ground feed cuts out until it is in range again.
-cmu-fighter-shared-sight = Targeting shows your independent ground camera in the left display. WASD pans it; Plan route restores flight controls.
+cmu-fighter-shared-sight = Ground camera shows your independent optics in the left display. WASD pans it; Airspace restores flight controls.
 cmu-fighter-sensor-status = { $mode }
     Distance { $distance } / { $range } tiles
 cmu-fighter-sensor-following = MANUAL CAMERA
@@ -144,7 +170,7 @@ cmu-fighter-fire-missilesonly = LASER REQUIRES A MISSILE
 cmu-fighter-fire-targetexpiring = LASER EXPIRING · CANNOT LOCK
 cmu-fighter-missile-incoming = MISSILE INCOMING
 cmu-fighter-pilot-camera-keys = WASD · pan camera
-    Plan route · flight controls
+    Airspace · flight controls
 cmu-fighter-mount-rejected = Cannot fit this here. Use an empty pylon for missiles, fit a rocket pod before rockets, or load GAU ammunition into the internal feed. Service only between passes.
 cmu-fighter-pylon-examine = Pylon { $number }: direct missiles or a rocket pod. Activate with a power loader to unload ammunition, then remove the pod.
 cmu-fighter-gau-feed = Internal GAU feed: load a 30mm crate with a power loader. The cannon does not use a pylon.
@@ -168,18 +194,18 @@ cmu-fighter-air-incoming = MISSILE APPROACHING
 cmu-fighter-ground-incoming = GROUND LAUNCH · MISSILE APPROACHING
 cmu-fighter-takeoff = Take off
 cmu-fighter-land = Land
-cmu-fighter-ground-grounded = GROUNDED · WINGS FOLDED
-cmu-fighter-ground-takingoff = VERTICAL TAKEOFF
+cmu-fighter-ground-grounded = GROUNDED · READY TO TAXI
+cmu-fighter-ground-takingoff = SHORT TAKEOFF
 cmu-fighter-ground-returning = RETURNING · WAITING FOR A CLEAR LANDING SITE
-cmu-fighter-ground-landing = VERTICAL LANDING
-cmu-fighter-vtol-help = Vertical flight · wait for the transition to finish
+cmu-fighter-ground-landing = SHORT LANDING
+cmu-fighter-vtol-help = Takeoff / landing · keep the short run clear
 cmu-fighter-taxi-camera-help = Close the ground camera to taxi
 cmu-fighter-taxi-help = W/S · taxi forward/back
     A/D · steer while rolling · release to brake
 cmu-fighter-tab-flight = Flight
 cmu-fighter-tab-targeting = Targeting
 cmu-fighter-targeting-keys = WASD · pan camera
-    Plan route · flight controls
+    Airspace · flight controls
 cmu-fighter-ground-officer-help = Pilot controls taxi and takeoff.
     Targeting becomes available in flight.
 cmu-fighter-route-hint = Plan route · set entry and exit
@@ -207,14 +233,10 @@ cmu-fighter-queue-help = Fire one rocket or one GAU burst when the target is in 
 cmu-fighter-assist-unavailable = Select a strikeable signal flare while holding to prepare a run.
 cmu-fighter-run-range = { $status }
     Target { $distance } / { $range } tiles
-cmu-fighter-form-up = Form up on pad
 cmu-fighter-taxi-forward = Forward
 cmu-fighter-taxi-back = Reverse
 cmu-fighter-taxi-left = Turn left
 cmu-fighter-taxi-right = Turn right
-cmu-fighter-pad-unavailable = No clear, available friendly fighter pad within taxi range.
-cmu-fighter-pad-path-blocked = Taxi assist stopped: the path is blocked. Steer around the obstacle and try again.
-cmu-fighter-pad-ready = Aligned on the VTOL pad. Ready for takeoff.
 cmu-fighter-eject = Eject
 cmu-fighter-eject-warning = EMERGENCY EJECTION
 cmu-fighter-eject-both-warning = This fires BOTH crew seats.
@@ -284,16 +306,12 @@ cmu-fighter-weapon-brief = { $name }
     { $rounds } rounds
 cmu-fighter-flares-short = Flares
 cmu-fighter-flares-idle = Countermeasures become available when a missile is approaching.
-ent-CMUFighterGroundLoaded = two-seat VTOL fighter
+ent-CMUFighterGround = two-seat fighter
+    .desc = A strike and reconnaissance fighter with a short rolling takeoff. Taxi to clear ground and launch without a runway or staging pad. Service its weapons with a power loader.
+ent-CMUFighterGroundLoaded = two-seat fighter
     .desc = A strike and reconnaissance fighter supplied with six different missiles and a full internal GAU ammunition feed. Service its weapons on the ground with a power loader.
     .suffix = Fully equipped, mixed missiles
 
 cmu-fighter-crash-warning = AIRFRAME FAILURE — EJECT! Impact in { $seconds } seconds!
 cmu-fighter-crashed = AIRFRAME LOST — Aircraft cannot be repaired.
 cmu-fighter-exit-blocked = There is no clear footing beside the cockpit to climb out.
-
-cmu-fighter-pad-unfold-hint = Use a wrench to unfold the fighter VTOL pad.
-cmu-fighter-pad-unfolded = The fighter VTOL pad unfolds and its guide lights come on.
-cmu-fighter-pad-anchors-loosened = The VTOL pad anchor bolts are loosened.
-cmu-fighter-pad-panel-opened = The VTOL pad guide light panel is opened.
-cmu-fighter-pad-packed = The fighter VTOL pad is folded and packed.

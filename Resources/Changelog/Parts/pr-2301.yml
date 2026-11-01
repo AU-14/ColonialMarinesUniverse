@@ -1,0 +1,16 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Submission points pay the same for an item everywhere, crops are rebalanced
+    so every crop is worth growing, and salvage, wood and steel pay less.
+  type: Tweak
+- message: Submission point prices now move with supply and demand, and off-world
+    buyers sometimes want one thing badly or are flooded with it.
+  type: Add
+- message: Use a submission point with an empty hand to see what it buys and what
+    it pays right now.
+  type: Add
+- message: Submission points no longer swallow items they don't pay for.
+  type: Fix
+time: '2026-11-01T05:41:31.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2301

@@ -1,4 +1,4 @@
-// CC0-1.0. Twin lift jets distort only the hot air around the rear of the aircraft.
+// CC0-1.0. Refraction follows each airframe's exhaust sockets.
 light_mode unshaded;
 uniform sampler2D SCREEN_TEXTURE;
 uniform lowp int count;
@@ -27,7 +27,7 @@ void fragment() {
         if (abs(det)<0.00000001) continue;
         highp vec2 world=vec2(delta.x*axisY[i].y-delta.y*axisY[i].x,
             delta.y*axisX[i].x-delta.x*axisX[i].y)/det;
-        highp vec2 q=vec2(abs(world.x)-0.42,(world.y+1.35)*0.65);
+        highp vec2 q=vec2(world.x,world.y*0.65);
         highp float mask=exp(-dot(q,q)*2.8)*strength[i];
         highp float n=vtolNoise(world*6.0-vec2(0.0,clock*5.0));
         highp float cross=vtolNoise(world*9.0+vec2(clock*3.0,0.0));

@@ -24,7 +24,13 @@ public abstract partial class SharedRoofSystem : EntitySystem
     /// </summary>
     /// <returns>Returns false if no data or not rooved.</returns>
     [Pure]
-    public bool IsRooved(Entity<MapGridComponent, RoofComponent> grid, Vector2i index)
+    public bool IsRooved(Entity<MapGridComponent, RoofComponent> grid, Vector2i index) =>
+        IsRooved(grid, index, true, false); // CMU14
+
+    /// <summary>CMU14: Uses proven entity coverage from a render batch, retaining explicit tile roofs.</summary>
+    [Pure]
+    public bool IsRooved(Entity<MapGridComponent, RoofComponent> grid, Vector2i index,
+        bool queryEntities, bool entityRoof)
     {
         var roof = grid.Comp2;
         var chunkOrigin = SharedMapSystem.GetChunkIndices(index, RoofComponent.ChunkSize);
@@ -40,6 +46,11 @@ public abstract partial class SharedRoofSystem : EntitySystem
             if (isRoof)
                 return true;
         }
+
+        if (entityRoof)
+            return true;
+        if (!queryEntities)
+            return false;
 
         _roofSet.Clear();
         _lookup.GetLocalEntitiesIntersecting(grid.Owner, index, _roofSet);
@@ -90,10 +101,12 @@ public abstract partial class SharedRoofSystem : EntitySystem
     [Pure]
     public Color? GetColor(Entity<MapGridComponent, RoofComponent> grid, Vector2i index) => GetColor(grid, index, true);
 
-    /// <param name="queryEntities">Whether this tile is in the current <see cref="GetEntityRoofTiles"/> batch.</param>
+    /// <param name="queryEntities">Whether this tile still needs an exact entity lookup.</param>
+    /// <param name="entityColor">A resolved entity-roof color, used when no exact lookup is needed.</param>
     // CMU14 method
     [Pure]
-    public Color? GetColor(Entity<MapGridComponent, RoofComponent> grid, Vector2i index, bool queryEntities)
+    public Color? GetColor(Entity<MapGridComponent, RoofComponent> grid, Vector2i index, bool queryEntities,
+        Color? entityColor = null)
     {
         var roof = grid.Comp2;
         var chunkOrigin = SharedMapSystem.GetChunkIndices(index, RoofComponent.ChunkSize);
@@ -125,6 +138,10 @@ public abstract partial class SharedRoofSystem : EntitySystem
 
                 return isRoofEnt.Comp.Color ?? roof.Color;
             }
+        }
+        else if (entityColor is { } color)
+        {
+            return color;
         }
 
         //RMC14 - This goes last so we can still use upstream methods to define additional roof colors

@@ -1,0 +1,262 @@
+- type: reagent
+  parent: CMReagent
+  id: CMUPathogenMycohemolymph
+  name: reagent-name-pathogen-blood
+  desc: reagent-desc-pathogen-blood
+  physicalDesc: reagent-physical-desc-unidentifiable
+  class: Special
+  color: "#e6e6e6"
+  reward: 2
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.1
+      effects:
+      - !type:Hemorrhaging
+        potency: 3
+      - !type:Allergenic
+        potency: 1
+
+- type: reagent
+  parent: CMUPathogenMycohemolymph
+  id: CMUPathogenRoyalMycohemolymph
+  name: reagent-name-pathogen-royal-blood
+  desc: reagent-desc-pathogen-royal-blood
+  color: "#cac703"
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.1
+      effects:
+      - !type:Hemorrhaging
+        potency: 6
+      - !type:Electrogenetic
+        potency: 1
+
+
+- type: reagent
+  parent: CMReagent
+  id: CMUPathogenSporoplasm
+  name: reagent-name-pathogen-plasma
+  desc: reagent-desc-pathogen-plasma
+  color: "#f1e8cf"
+  physicalDesc: reagent-physical-desc-unidentifiable
+
+- type: reagent
+  parent: CMUPathogenSporoplasm
+  id: CMUPathogenSporoplasmPhero
+  name: reagent-name-pathogen-phero-plasma
+  desc: reagent-desc-pathogen-phero-plasma
+  color: "#a2e7d6"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Hallucinogenic
+        potency: 8
+      - !type:Nervestimulating
+        potency: 2
+      - !type:Psychostimulating
+        potency: 2
+  
+- type: reagent
+  parent: CMUPathogenSporoplasm
+  id: CMUPathogenSporoplasmChitin
+  name: reagent-name-pathogen-chitin-plasma
+  desc: reagent-desc-pathogen-chitin-plasma
+  color: "#6d7694"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Hyperdensificating
+        potency: 1
+      - !type:Bonemending
+        potency: 1
+      - !type:Viscous
+        potency: 1
+
+- type: reagent
+  parent: CMUPathogenSporoplasm
+  id: CMUPathogenSporoplasmCatecholamine
+  name: reagent-name-pathogen-cat-plasma
+  desc: reagent-desc-pathogen-cat-plasma
+  color: "#cf7551"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Neuropathic
+        potency: 2
+      - !type:Musclestimulating
+        potency: 6
+      - !type:Hypermetabolic
+        potency: 1
+
+- type: reagent
+  parent: CMUPathogenSporoplasm
+  id: CMUPathogenSporoplasmSpore
+  name: reagent-name-pathogen-spore-plasma
+  desc: reagent-desc-pathogen-spore-plasma
+  color: "#c3c371"
+  reward: 2
+  class: Special
+  overdose: 80
+  criticalOverdose: 100
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Hemositic
+        potency: 6
+      - !type:Bloodbursting
+        embryoSpawn: CMU14XenoBloodburster  
+        requiresOverdose: true
+        
+
+- type: reagent
+  parent: CMUPathogenSporoplasm
+  id: CMUPathogenSporoplasmNeuro
+  name: reagent-name-pathogen-neuro-plasma
+  desc: reagent-desc-pathogen-neuro-plasma
+  color: "#ba8216"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Hypnotic
+        potency: 4
+      - !type:Excreting
+        potency: 2
+      - !type:Hallucinogenic
+        potency: 6
+
+- type: reagent
+  parent: CMUPathogenSporoplasm
+  id: CMUPathogenSporoplasmNutrient
+  name: reagent-name-pathogen-nutrient-plasma
+  desc: reagent-desc-pathogen-nutrient-plasma
+  color: "#2fbe88"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Viscous
+        potency: 3
+      - !type:Addictive
+        potency: 4
+      - !type:Nutritious
+        potency: 3
+      - !type:Euphoric
+        potency: 2
+
+- type: reagent
+  parent: CMUPathogenSporoplasm
+  id: CMUPathogenSporoplasmMycotoxin
+  name: reagent-name-pathogen-mycotoxin-plasma
+  desc: reagent-desc-pathogen-mycotoxin-plasma
+  color: "#a65d7f"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Defibrillating
+        potency: 1
+      - !type:Mycotoxigenic
+      - !type:Biocidic
+        potency: 2
+
+- type: reagent
+  parent: CMUPathogenSporoplasm
+  id: CMUPathogenSporoplasmRoyal
+  name: reagent-name-pathogen-royal-plasma
+  desc: reagent-desc-pathogen-royal-plasma
+  color: "#ffeb9c"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.2
+      effects:
+      - !type:Biocidic
+        potency: 4
+      - !type:Antiparasitic
+        potency: 1
+      - !type:Mycotoxigenic
+      - !type:Hallucinogenic
+        potency: 4
+      - !type:Encrypted
+        potency: 1
+
+- type: reagent  
+  parent: CMReagent  
+  id: TestBloodbursting
+  flags: NoGeneration
+  name: reagent-name-test-bloodbursting-chem
+  desc: reagent-desc-test-mycotoxigenic-chem
+  physicalDesc: reagent-physical-desc-unidentifiable
+  class: Special
+  color: "#bed700"
+  reward: 0
+  overdose: 10
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      metabolismRate: 0.1
+      effects:
+      - !type:Bloodbursting
+        embryoSpawn: CMU14XenoBloodburster
+        requiresOverdose: true
+        burstDelay: 30
+
+- type: reagent
+  parent: CMReagent
+  id: TestMycotoxigenic
+  flags: NoGeneration
+  name:  reagent-name-test-mycotoxigenic-chem
+  desc:  reagent-desc-test-mycotoxigenic-chem
+  physicalDesc: reagent-physical-desc-unidentifiable
+  class: Special
+  color: "#5a8a3c"
+  reward: 0
+  overdose: 10
+  metabolisms:  
+    Bloodstream:  
+      cmuToxicity: [ Poison ]  
+      metabolismRate: 0.1  
+      effects:  
+      - !type:Mycotoxigenic
