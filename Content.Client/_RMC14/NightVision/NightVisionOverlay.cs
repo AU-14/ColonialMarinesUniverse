@@ -138,6 +138,10 @@ public sealed partial class NightVisionOverlay : Overlay
         if (xform.MapID != map)
             return;
 
+        // CMU14: these effects already render the composed body; a raw thermal redraw erases them.
+        if (HasCMUComposedPresentation(uid))
+            return;
+
         var seeThrough = seeThroughContainers && !_xenoQuery.HasComp(uid);
         if (!seeThrough && _container.IsEntityOrParentInContainer(uid, xform: xform))
             return;

@@ -29,8 +29,7 @@ jobs:
 
   publish_start:
     name: Start publish
-    needs: changelog
-    if: always() && (needs.changelog.result == 'success' || needs.changelog.result == 'skipped')
+    # CMU14: Start the build path alongside the optional changelog job.
     runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 15
     outputs:
@@ -59,10 +58,10 @@ jobs:
 
   package:
     name: Package ${{ matrix.name }}
-    needs: [changelog, publish_start]
+    # CMU14: Packaging can proceed while changelogs are still being generated.
+    needs: publish_start
     if: >-
       always() &&
-      (needs.changelog.result == 'success' || needs.changelog.result == 'skipped') &&
       needs.publish_start.result == 'success' &&
       needs.publish_start.outputs.already-published != 'true'
     runs-on: ${{ matrix.runner }}
@@ -150,13 +149,15 @@ jobs:
 
   publish_finish:
     name: Finish publish
+    # CMU14: Keep changelog failures from publishing a release after the parallel build.
     if: >-
       always() &&
+      (needs.changelog.result == 'success' || needs.changelog.result == 'skipped') &&
       needs.publish_start.result == 'success' &&
       needs.publish_start.outputs.already-published != 'true'
     runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 15
-    needs: [publish_start, package]
+    needs: [changelog, publish_start, package]
     steps:
       - uses: actions/checkout@v7
         with:
