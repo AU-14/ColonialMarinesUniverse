@@ -24,6 +24,28 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood
+    solution:  
+      maxVol: 600
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 200
+      - ReagentId: CMUPathogenSporoplasmPhero
+        Quantity: 200
+      - ReagentId: CMUPathogenSporoplasmNeuro
+        Quantity: 200
+  - type: SolutionRegeneration  
+    generated:  
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmPhero
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmNeuro
+        Quantity: 1
   - type: XenoDevour
   - type: Xeno
     role: CMU14JobPathogenConditor

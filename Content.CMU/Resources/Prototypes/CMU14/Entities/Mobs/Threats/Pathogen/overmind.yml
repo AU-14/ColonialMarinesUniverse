@@ -37,6 +37,28 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood  
+    solution:  
+      maxVol: 600
+      reagents:  
+      - ReagentId: CMUPathogenRoyalMycohemolymph  
+        Quantity: 200
+      - ReagentId: CMUPathogenSporoplasmRoyal
+        Quantity: 200
+      - ReagentId: CMUPathogenSporoplasmMycotoxin
+        Quantity: 200
+  - type: SolutionRegeneration  
+    generated:  
+      reagents:  
+      - ReagentId: CMUPathogenRoyalMycohemolymph  
+        Quantity: 1  
+      - ReagentId: CMUPathogenSporoplasmRoyal 
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmMycotoxin
+        Quantity: 1
   - type: Xeno
     role: CMU14JobPathogenOvermind
     tier: 4
