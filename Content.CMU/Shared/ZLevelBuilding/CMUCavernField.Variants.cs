@@ -37,10 +37,10 @@ public sealed partial class CMUCavernField
     private CMUCavernVariant RegionVariant(Vector2i region, int top) =>
         _settings.Variant ?? (CMUCavernVariant) (Hash(region, top, 17) % 8);
 
-    /// <summary>Use the nearest geological centre, not a chunk edge, to choose the local environment.</summary>
+    /// <summary>Geology follows local chambers, allowing several environments within one region.</summary>
     public CMUCavernVariant VariantAt(Vector2i tile, int depth)
     {
-        TryGetBand(depth, out var top, out var bottom);
+        TryGetBand(depth, out var top, out _);
         var size = Math.Clamp(_settings.RegionSize, 48, 160);
         var cell = new Vector2i(FloorDiv(tile.X, size), FloorDiv(tile.Y, size));
         var closest = float.MaxValue;
@@ -49,12 +49,18 @@ public sealed partial class CMUCavernField
         for (var y = -1; y <= 1; y++)
         {
             var region = cell + new Vector2i(x, y);
-            var center = Center(region, top, bottom, size);
-            var distance = Vector2.DistanceSquared(new Vector2(tile.X + 0.5f, tile.Y + 0.5f), new Vector2(center.X, center.Y));
-            if (distance >= closest)
-                continue;
-            closest = distance;
-            result = RegionVariant(region, top);
+            var chambers = GetRegionPlan(region, depth).Chambers;
+            for (var i = 0; i < chambers.Count; i++)
+            {
+                var chamber = chambers[i];
+                var delta = new Vector3(tile.X + 0.5f, tile.Y + 0.5f, depth) - chamber.Center;
+                delta.Z *= 8;
+                var distance = delta.LengthSquared();
+                if (distance >= closest)
+                    continue;
+                closest = distance;
+                result = chamber.Variant;
+            }
         }
         return result;
     }
@@ -62,13 +68,13 @@ public sealed partial class CMUCavernField
     /// <summary>Scenery only; the caller must require a natural floor and preserve existing entities.</summary>
     public CMUCavernScenery SceneryAt(Vector2i tile, int depth)
     {
-        if (!TryGetBand(depth, out var top, out var bottom))
+        if (!TryGetBand(depth, out var top, out _))
             return CMUCavernScenery.None;
 
         var variant = VariantAt(tile, depth);
         var wet = _roughness.GetNoise(tile.X * 0.7f + 173, tile.Y * 0.7f - 97, top * 9f);
         // Preserve dry centres along the connecting galleries; pools follow geology, not chunk edges.
-        var dry = OnGallerySpine(tile, top, bottom);
+        var dry = OnGallerySpine(tile, depth);
         if (!dry)
         {
             if (variant == CMUCavernVariant.FloodedFork && wet > 0.12f ||
@@ -101,7 +107,7 @@ public sealed partial class CMUCavernField
         };
     }
 
-    private bool OnGallerySpine(Vector2i tile, int top, int bottom)
+    private bool OnGallerySpine(Vector2i tile, int depth)
     {
         var size = Math.Clamp(_settings.RegionSize, 48, 160);
         var cell = new Vector2i(FloorDiv(tile.X, size), FloorDiv(tile.Y, size));
@@ -110,15 +116,22 @@ public sealed partial class CMUCavernField
         for (var y = -1; y <= 1; y++)
         {
             var region = cell + new Vector2i(x, y);
-            var center = Center(region, top, bottom, size);
-            var a = new Vector2(center.X, center.Y);
-            for (var axis = 0; axis < 2; axis++)
+            var passages = GetRegionPlan(region, depth).Passages;
+            for (var p = 0; p < passages.Count; p++)
             {
-                var other = Center(region + (axis == 0 ? new Vector2i(1, 0) : new Vector2i(0, 1)), top, bottom, size);
-                var line = new Vector2(other.X, other.Y) - a;
-                var along = Math.Clamp(Vector2.Dot(point - a, line) / line.LengthSquared(), 0, 1);
-                if (Vector2.DistanceSquared(point, a + along * line) < 9)
-                    return true;
+                var passage = passages[p];
+                for (var i = 1; i < passage.Points.Count; i++)
+                {
+                    var from = passage.Points[i - 1];
+                    var to = passage.Points[i];
+                    var a = new Vector2(from.X, from.Y);
+                    var line = new Vector2(to.X, to.Y) - a;
+                    var along = line.LengthSquared() < 0.001f ? 0 :
+                        Math.Clamp(Vector2.Dot(point - a, line) / line.LengthSquared(), 0, 1);
+                    var width = Math.Min(2.5f, passage.Widths[i - 1] * 0.6f);
+                    if (Vector2.DistanceSquared(point, a + along * line) < width * width)
+                        return true;
+                }
             }
         }
         return false;

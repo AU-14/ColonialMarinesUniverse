@@ -13,9 +13,9 @@ chambers; natural drops make ropes, ladders, stairs and bridges useful. Deep
 mining should involve choosing a route and building access to a resource.
 
 The current implementation samples a shared three-dimensional volume rather
-than generating unrelated cave patches on each map. Default chamber diameters
-are roughly 55–80 tiles before wall variation. Broad connecting galleries cross
-region boundaries. Six levels of possible cavern space sit above a solid
+than generating unrelated cave patches on each map. Chambers range from narrow
+pockets to large halls, with independent scale and aspect ratio. Branching
+passages cross region boundaries. Six levels of possible cavern space sit above a solid
 separator; the next group begins below it. Floor height follows the chamber
 shape, producing shelves around a lower floor. Separators give shaft digging a
 purpose and bound how much terrain must be prepared below a natural opening.
@@ -50,9 +50,10 @@ cutting rock, but should not be treated as an absolute access lock.
   Server memory can still grow with the total explored area. Existing networking
   and visibility systems handle what clients receive; no engine code was changed.
 
-`ZBuildableMap.caverns` configures `startDepth`, `regionSize`, `bandHeight` and an
-optional `variant` override (for example `PillarCathedral`). Without the override,
-each geological region selects a seeded variant, independent of chunk boundaries.
+`ZBuildableMap.caverns` configures `startDepth`, `regionSize`, `bandHeight` and
+optional `variant` and `layout` overrides (for example `PillarCathedral` and
+`Crescent`). Without overrides, each region mixes two to four chambers with their
+own geology and structural recipes, independent of chunk boundaries.
 Setting `caverns: null` retains independent legacy layers. Mapper-authored station
 levels use the existing localized generation path and are not hollowed out by
 the new volume. These settings should be selected before a round generates its
@@ -154,7 +155,7 @@ output. Its close-up uses native asset frames with schematic wall edges; it is
 not an in-game screenshot and does not reproduce lighting, smoothing or ore
 rolls. The loading view illustrates queue order, not measured elapsed time.
 
-### Variant verification
+### Verification of the first eight-family pass
 
 The same focused commands above passed with nine geometry cases and 31
 integration cases, and rebuilt the shared, server and client content projects.
@@ -173,3 +174,87 @@ The atlas was checked in Edge at 780, 360 and 320 pixels, in light and dark
 appearance, with all variants, all four views and the loading control. No script
 errors or horizontal overflow were found. Full multiplayer visual playtesting
 and long-round performance measurements remain outstanding.
+
+## Eighty recipes and a branching underground
+
+There are eight geological kernels and ten structural arrangements. Every pair
+is a different recipe, giving eighty combinations before seeded variation.
+These are procedural recipes, not eighty copied map rooms. Ordinary generation
+mixes several recipes inside each region. The optional overrides are intended
+for mapper control and comparing samples in the atlas.
+
+| Arrangement | Structural change |
+| --- | --- |
+| Vault | One large, asymmetric volume retaining the geological family's shape. |
+| Twin | Two offset chambers joined by a neck. |
+| Crescent | A chamber cut around a solid rock mass, with an entrance on its inner side. |
+| Ring | An annular gallery with a geological side chamber and radial entrance. |
+| Clover | Three lobes around a branching junction. |
+| Terrace | Successive chambers at different heights with connecting slopes. |
+| Rift | A tall, narrow cleft and an off-centre side pocket. |
+| Honeycomb | Six small chambers branching from a common vestibule. |
+| Spiral | A winding gallery wrapping outward to a terminal chamber. |
+| Broken gallery | Offset rooms linked by an angular route with a blind finger. |
+
+Each region contains two to four chambers. Satellite chambers select a different
+geological family from the primary chamber unless a mapper forces one family.
+Their positions, elevations, scale, aspect ratio, full-angle rotation and shape
+parameters vary independently. Occasional oversized primary chambers provide
+large openings among smaller pockets. Scenery follows the nearest local chamber,
+so water, dead growth, crystals and other environments can meet inside one region.
+
+The previous mandatory east/north grid has been replaced with connected mazes
+over groups of sixteen regions. Each group starts as a seeded spanning tree,
+then adds sparse loops; independently seeded gateways join neighbouring groups.
+That preserves a connected main network while allowing local terminal branches,
+missing exits and routes that require a detour. Connectivity here means connected
+air volume, not a promise of a flat, dry walking route: drops can require stairs
+or bridges. Natural intersections between chambers can add further shortcuts.
+
+Passages independently choose one of eight styles: broad gallery, narrow crawl,
+meander, switchback, tall chasm, wide-to-narrow keyhole, split loop, or shaft with
+an elevation change. Width, bend direction and bend size also vary. Finite side
+branches terminate without a destination chamber; if a branch intersects another
+natural void it becomes a shortcut, otherwise it ends in ordinary mineable rock.
+The voxel checks verify that closed tips actually occur in the generated terrain.
+
+Only small geometry descriptions are cached (up to 64 regional plans and sixteen
+maze plans per sampler). They contain no world tiles or entities. Eviction and
+opposite discovery orders produce the same geometry. Tile materialization still
+uses the existing nearby, bottom-up chunk queue and preserves previously explored
+areas. This changes newly generated worlds; it is not a migration of an active
+round's existing caves.
+
+### Diversity regression coverage
+
+- `PassageShapesConnectTheirEndpointsThroughRealVoxels` searches actual carved
+  cells from one chamber to the next for each passage style.
+- `ShortBandsDoNotBuryShaftConnectionsInTheSeparator` checks the lower bend of a
+  shaft with the shortest supported vertical band.
+- `RegionalMazeHasBranchesAndConnectsAcrossNegativeMacroBoundaries` traverses the
+  regional graph across negative coordinates and checks interior terminal nodes.
+- `ClosedSideBranchesEndInRock` checks open branch tips against closed rock ahead.
+- `MixedChambersAndTerrainSurviveDifferentDiscoveryOrderAndCacheEviction` checks
+  mixed geology within a region and repeatable terrain/scenery after distant
+  exploration and cache eviction.
+
+The atlas exports the compiled sampler, compares all eighty geometry signatures
+without counting scenery, and draws passage routes directly from regional plans.
+Routes are projected across the vertical band; a line is not a claim that its
+whole length lies on the selected floor. Dashed routes identify finite branches,
+which may intersect other natural voids. The existing streaming illustration
+shows queue order rather than measured elapsed time.
+
+The final focused runs passed thirteen geometry cases and 31 gameplay integration
+cases using the commands above. Shared, client and server projects compiled.
+The export found eighty distinct geometric signatures with scenery excluded.
+The atlas contains 198 sampled combinations across two seeds, including wider
+192-by-192 views of normal mixed generation. All eighty recipe selections, route
+overlays, depth views and narrow/light/dark layouts passed the browser check.
+
+A local standalone sampler run measured a fresh eight-by-eight chunk at 0.72 ms
+median and 1.45 ms at the 95th percentile over 100 samples after warm-up. This
+includes constructing the sampler and selecting floor scenery, but excludes
+world entity creation, physics, networking and client rendering. It is not a
+server frame-time or player-capacity guarantee. A multiplayer exploration session
+and long-round memory/performance measurements remain necessary.
