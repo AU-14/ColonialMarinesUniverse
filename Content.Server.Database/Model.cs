@@ -859,6 +859,11 @@ namespace Content.Server.Database
 
         public DateTime? LastReadRules { get; set; }
 
+        // CMU14: opted out of the playtime leaderboard. Explicit column name: the snake-case
+        // convention splits this acronym differently than the shipped migration.
+        [Column("cmu_playtime_hidden")]
+        public bool CMUPlaytimeHidden { get; set; }
+
         public List<AdminNote> AdminNotesReceived { get; set; } = null!;
         public List<AdminNote> AdminNotesCreated { get; set; } = null!;
         public List<AdminNote> AdminNotesLastEdited { get; set; } = null!;

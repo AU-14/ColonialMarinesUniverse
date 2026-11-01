@@ -17,14 +17,23 @@ public readonly record struct CMUPlaytimeLeaderboardRow(
     string Player,
     double Hours);
 
-// Rank 0 means the viewer's appended row, too far down to rank cheaply
+// Rank 0 means the viewer's appended row, too far down to rank cheaply.
+// Redacted entries carry no hours over the wire, only the redaction reason.
 [Serializable, NetSerializable]
 public readonly record struct CMUPlaytimeLeaderboardEntry(
     int Rank,
     string Player,
     double Hours,
     string Tag,
-    bool IsYou);
+    bool IsYou,
+    CMUPlaytimeRedaction Redaction);
+
+public enum CMUPlaytimeRedaction
+{
+    None,
+    HiddenByUser,
+    Banned,
+}
 
 [Serializable, NetSerializable]
 public sealed class CMUPlaytimeRoleLeaderboard(
@@ -45,13 +54,15 @@ public sealed class CMUPlaytimeLeaderboard(
     List<CMUPlaytimeLeaderboardEntry> xenoChampions,
     List<CMUPlaytimeLeaderboardEntry> govforChampions,
     List<CMUPlaytimeRoleLeaderboard> xeno,
-    List<CMUPlaytimeRoleLeaderboard> govfor)
+    List<CMUPlaytimeRoleLeaderboard> govfor,
+    bool youHidden)
 {
     public readonly int Players = players;
     public readonly List<CMUPlaytimeLeaderboardEntry> XenoChampions = xenoChampions;
     public readonly List<CMUPlaytimeLeaderboardEntry> GovforChampions = govforChampions;
     public readonly List<CMUPlaytimeRoleLeaderboard> Xeno = xeno;
     public readonly List<CMUPlaytimeRoleLeaderboard> Govfor = govfor;
+    public readonly bool YouHidden = youHidden;
 }
 
 [Serializable, NetSerializable]
@@ -62,3 +73,9 @@ public sealed class CMUPlaytimeLeaderboardEuiState(CMUPlaytimeLeaderboard leader
 
 [Serializable, NetSerializable]
 public sealed class CMUPlaytimeLeaderboardRefreshMsg : EuiMessageBase;
+
+[Serializable, NetSerializable]
+public sealed class CMUPlaytimeLeaderboardSetHiddenMsg(bool hidden) : EuiMessageBase
+{
+    public readonly bool Hidden = hidden;
+}

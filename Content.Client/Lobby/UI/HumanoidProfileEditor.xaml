@@ -377,7 +377,7 @@
                 </BoxContainer>
                 <!-- cmu edit end -->
                 <!-- CMU14: Insurgency role priorities and antag opt-ins, split by faction like the other gamemodes. -->
-                <Control VerticalExpand="True">
+                <BoxContainer Orientation="Vertical">
                     <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">
                             <ScrollContainer VerticalExpand="True">
@@ -400,7 +400,7 @@
                             </ScrollContainer>
                         </BoxContainer>
                     </TabContainer>
-                </Control>
+                </BoxContainer>
                 <BoxContainer Orientation="Vertical">
                     <TabContainer Name="ColonyFallTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">

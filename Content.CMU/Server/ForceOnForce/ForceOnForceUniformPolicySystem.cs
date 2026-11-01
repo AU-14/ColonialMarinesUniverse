@@ -31,7 +31,15 @@ public sealed partial class ForceOnForceUniformPolicySystem : EntitySystem
             "opfor" => _platoons.SelectedOpforPlatoon,
             _ => null,
         };
-        if (platoon == null) return;
+        if (platoon == null)
+        {
+            // Side members without a resolved platoon get no recognition list yet.
+            if (marine.Faction?.ToLowerInvariant() is "govfor" or "opfor") return;
+            // Other FoF participants (colonists, third parties) identify as neutrals:
+            // both war sides show the exclamation mark, everything else the question mark.
+            EnsureComp<ForceOnForceUniformComponent>(args.Mob);
+            return;
+        }
         var policy = EnsureComp<ForceOnForceUniformComponent>(args.Mob);
         policy.Uniforms.Clear();
         if (_prototypes.TryIndex<ForceOnForceUniformPrototype>(platoon.ID, out var whitelist))

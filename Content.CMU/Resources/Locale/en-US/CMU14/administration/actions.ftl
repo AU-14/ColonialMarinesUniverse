@@ -28,7 +28,6 @@ cmu-admin-current-hive = Current hive: {$hive}
 cmu-admin-leave-hive = Leave hive
 cmu-admin-hives = Hives
 cmu-admin-hive-hint = Assign a hive below. Empty hives are visible to admins.
-cmu-admin-hive-needs-xeno = Hive assignment requires a xenomorph target.
 cmu-admin-create-hive = Create hive
 cmu-admin-hive-name = Custom name (optional)
 cmu-admin-create-hive-hint = Click a template to create its hive.

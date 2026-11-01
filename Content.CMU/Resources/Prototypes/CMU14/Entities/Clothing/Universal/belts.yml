@@ -533,10 +533,6 @@
       - CMMagazineRifle
       - CMMagazineSmg
       - CMMagazineSniper
-    blacklist:
-      tags:
-      - RMCSmartPistol
-      - RMCMagazinePistolSU6
   - type: FixedItemSizeStorage
   - type: LimitedStorage
     limits:

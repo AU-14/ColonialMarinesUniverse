@@ -162,6 +162,10 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
         if (_mobState.IsDead(learner.Owner))
             return;
 
+        // CMU14: radio relays reach this path without the speech loop's trait guard
+        if (HasComp<NoLanguageLearningComponent>(learner))
+            return;
+
         if (!learner.Comp.Languages.ContainsKey(language))
             return;
 

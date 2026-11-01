@@ -11,6 +11,7 @@ using Content.Server.GameTicking.Presets;
 using Content.Server.Mind;
 using Content.Server.Preferences.Managers;
 using Content.Server.Station.Systems;
+using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
@@ -192,6 +193,44 @@ public sealed class ForceOnForceGameplayTest : GameTest
         });
     }
 
+    [Test]
+    public async Task NoHijackInitiationIsAcceptedInForceOnForce()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipHijackInitialDelayMinutes, 0);
+            var maps = Server.System<SharedMapSystem>();
+            var ship = maps.CreateMap();
+            var computer = SEntMan.SpawnEntity(null, new EntityCoordinates(ship, 0, 0));
+            var user = SEntMan.SpawnEntity(null, new EntityCoordinates(ship, 1, 0));
+            SEntMan.EnsureComponent<DropshipHijackerComponent>(user);
+            var dropships = Server.System<ServerDropshipSystem>();
+            var popup = typeof(SharedDropshipSystem)
+                .GetMethod("TryDropshipHijackPopup", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            var ticker = Server.System<GameTicker>();
+            var currentPreset = typeof(GameTicker)
+                .GetProperty(nameof(GameTicker.CurrentPreset))!;
+            var originalPreset = (GamePresetPrototype?) currentPreset.GetValue(ticker);
+            void SetPreset(Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> id) => currentPreset
+                .SetValue(ticker, SProtoMan.Index<GamePresetPrototype>(id));
+            bool Accepted() => (bool) popup.Invoke(dropships,
+            [
+                computer,
+                Activator.CreateInstance(typeof(Entity<DropshipHijackerComponent?>), user, null)!,
+                false
+            ])!;
+
+            SetPreset(DistressSignalPrototype);
+            Assert.That(Accepted(), Is.True, "a hijacker can still initiate outside Force on Force");
+
+            SetPreset(ForceOnForcePrototype);
+            Assert.That(Accepted(), Is.False, "Force on Force accepts no hijack initiation, whatever the hijacker type");
+
+            // Leave the pooled ticker as found: CurrentPreset drives other systems' behavior.
+            currentPreset.SetValue(ticker, originalPreset);
+        });
+    }
+
     [TestCase("govfor", "opfor")]
     [TestCase("opfor", "govfor")]
     public async Task OrdinaryNavigationRejectsEnemyCarrierAndControlledLandingZone(string own, string enemy)
@@ -258,6 +297,50 @@ public sealed class ForceOnForceGameplayTest : GameTest
             Assert.That(recognition.IsUnidentified(target, viewer), Is.False, "teammates keep identifiers even in foreign uniforms");
             Assert.That(inventory.TryUnequip(target, "jumpsuit", silent: true, force: true), Is.True);
             Assert.That(recognition.IsUnidentified(target, viewer), Is.False, "teammates without uniforms are never marked");
+        });
+    }
+
+    [Test]
+    public async Task IdentificationSplitsOppositionAlliesAndNeutrals()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var recognition = Server.System<ForceOnForceUniformSystem>();
+            var viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(viewer).Faction = "govfor";
+            var policy = SEntMan.EnsureComponent<ForceOnForceUniformComponent>(viewer);
+            policy.Uniforms.UnionWith(SProtoMan.Index<ForceOnForceUniformPrototype>("USCM").Uniforms);
+
+            var enemy = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(enemy).Faction = "opfor";
+            Assert.That(recognition.Classify(enemy, viewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "the opposing side is the direct competition");
+
+            var ally = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(ally).Faction = "marine";
+            SEntMan.EnsureComponent<ForceOnForceSideComponent>(ally).Side = "opfor";
+            Assert.That(recognition.Classify(ally, viewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "a third party aligned with the opposing side is still the competition");
+
+            var opforViewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(opforViewer).Faction = "opfor";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(opforViewer);
+            Assert.That(recognition.Classify(ally, opforViewer), Is.EqualTo(ForceOnForceIdentification.None),
+                "aligned third parties count as teammates of their side, whatever they wear");
+
+            var colonist = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(colonist).Faction = "marine";
+            Assert.That(recognition.Classify(colonist, viewer), Is.EqualTo(ForceOnForceIdentification.Unknown),
+                "unaffiliated parties stay unknown to a war side");
+
+            var neutralViewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(neutralViewer).Faction = "marine";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(neutralViewer);
+            Assert.That(recognition.Classify(viewer, neutralViewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "neutrals see both war sides as the direct competition");
+            Assert.That(recognition.Classify(colonist, neutralViewer), Is.EqualTo(ForceOnForceIdentification.Unknown),
+                "neutrals cannot tell other unaffiliated parties apart");
         });
     }
 

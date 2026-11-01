@@ -583,6 +583,9 @@ public sealed partial class CMURoundStatisticsWindow : DefaultWindow
             CMURoundStatisticsOutcome.ColonyFallSurvivorVictory => "Colonist victory",
             CMURoundStatisticsOutcome.Stalemate => "Stalemate",
             CMURoundStatisticsOutcome.ObjectiveVictory => "Objective victory",
+            CMURoundStatisticsOutcome.FoFMinorVictory => "FoF minor - sudden death zone steal",
+            CMURoundStatisticsOutcome.FoFMajorVictory => "FoF major - hotspot score lead",
+            CMURoundStatisticsOutcome.FoFDraw => "FoF draw - even hotspot score",
             CMURoundStatisticsOutcome.Unknown => "Unknown / manual ending",
             _ => outcome.ToString(),
         };

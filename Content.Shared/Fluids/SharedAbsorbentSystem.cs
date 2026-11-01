@@ -20,6 +20,9 @@ namespace Content.Shared.Fluids;
 /// </summary>
 public abstract partial class SharedAbsorbentSystem : EntitySystem
 {
+    // CMU14: solution consumed per decal clean; decals carry no reagents, so without
+    // this a wet mop cleaned forever. Mirrors CM13's per-use mop economy.
+    private static readonly FixedPoint2 MopCleanSolutionUse = FixedPoint2.New(5);
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popups = default!;
     [Dependency] protected SharedPuddleSystem Puddle = default!;
@@ -156,6 +159,8 @@ public abstract partial class SharedAbsorbentSystem : EntitySystem
             }
 
             Puddle.DoTileReactions(tileRef, absorberSolution);
+            absorberSolution.SplitSolutionWithOnly(MopCleanSolutionUse,
+                Puddle.GetAbsorbentReagents(absorberSolution));
             SolutionContainer.UpdateChemicals(absorberSoln.Value);
         }
 

@@ -22,6 +22,7 @@ public abstract partial class SharedDropshipSystem
 
     protected virtual bool IsForceOnForceHijacker(EntityUid computer, EntityUid user) => false;
     protected virtual bool IsForceOnForceHuman(EntityUid user) => false;
+    protected virtual bool IsForceOnForceRound() => false;
 
     private void StartForceOnForceHijack(Entity<DropshipNavigationComputerComponent> computer, EntityUid user)
     {

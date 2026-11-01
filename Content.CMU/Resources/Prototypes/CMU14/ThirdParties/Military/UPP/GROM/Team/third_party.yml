@@ -14,6 +14,7 @@
 
 - type: thirdParty
   id: UPPGROM
+  allegiance: UPP
   announceAsSurvivors: true
   partyspawn: UPPGROMSpawn
   blacklistedGamemodes:
@@ -44,6 +45,7 @@
 
 - type: thirdParty
   id: UPPGROMAlt
+  allegiance: UPP
   announceAsSurvivors: true
   partyspawn: UPPGROMSpawnAlt
   blacklistedGamemodes:
@@ -74,6 +76,7 @@
 
 - type: thirdParty
   id: UPPGROMAlt2
+  allegiance: UPP
   announceAsSurvivors: true
   partyspawn: UPPGROMSpawnAlt2
   blacklistedGamemodes:

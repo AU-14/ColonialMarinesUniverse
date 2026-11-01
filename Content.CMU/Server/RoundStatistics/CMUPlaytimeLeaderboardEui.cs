@@ -13,7 +13,7 @@ public sealed partial class CMUPlaytimeLeaderboardEui : BaseEui
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.playtime_leaderboard");
 
-    private CMUPlaytimeLeaderboard _board = new(0, [], [], [], []);
+    private CMUPlaytimeLeaderboard _board = new(0, [], [], [], [], false);
 
     public CMUPlaytimeLeaderboardEui()
     {
@@ -36,6 +36,8 @@ public sealed partial class CMUPlaytimeLeaderboardEui : BaseEui
 
         if (msg is CMUPlaytimeLeaderboardRefreshMsg)
             Load();
+        else if (msg is CMUPlaytimeLeaderboardSetHiddenMsg setHidden)
+            SetHidden(setHidden.Hidden);
     }
 
     private async void Load()
@@ -63,6 +65,27 @@ public sealed partial class CMUPlaytimeLeaderboardEui : BaseEui
         catch (Exception e)
         {
             _sawmill.Error($"Failed to load CMU playtime leaderboard:\n{e}");
+        }
+    }
+
+    private async void SetHidden(bool hidden)
+    {
+        try
+        {
+            var leaderboard = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<CMUPlaytimeLeaderboardSystem>();
+            await leaderboard.SetPlayerHidden(Player.UserId, hidden);
+            _task.RunOnMainThread(() =>
+            {
+                if (IsShutDown)
+                    return;
+
+                leaderboard.InvalidateSnapshot();
+                Load();
+            });
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"Failed to update CMU playtime privacy:\n{e}");
         }
     }
 }

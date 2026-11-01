@@ -10,6 +10,8 @@ using Content.Shared.CMU14.Dropship.GunshipControls;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Ordnance;
+using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines;
@@ -60,6 +62,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
     [Dependency] private DropshipIntegritySystem _integrity = default!;
     [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
 
     private static readonly TimeSpan FootprintTickInterval = TimeSpan.FromMilliseconds(150);
     private static readonly TimeSpan HoverEffectUpdateInterval = TimeSpan.FromMilliseconds(50);
@@ -499,6 +503,14 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
                         blockedThis = true;
                     else if (!opening &&
                              _turf.IsTileBlocked(tileRef, blockMask, DropshipMinimumBlockingArea))
+                        blockedThis = true;
+
+                    // The hull descends from the sky: the tile must be open above, and its
+                    // area must allow aerial access, so level 4 areas cannot be landed in.
+                    // Only tiles with a surface; unmapped air above is hover territory.
+                    if (!blockedThis &&
+                        (!_topDownOrdnance.IsOpenToSky(_map.GridTileToWorld(gridUid, grid, t))
+                            || !_area.CanOrbitalBombard(_map.ToCoordinates(gridUid, t, grid), out _)))
                         blockedThis = true;
                 }
 

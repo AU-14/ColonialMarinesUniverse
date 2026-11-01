@@ -96,5 +96,8 @@ public sealed partial class MGhostCommand : LocalizedCommands
 
         var comp = _entities.GetComponent<GhostComponent>(ghost);
         ghostSystem.SetCanReturnToBody((ghost, comp), canReturn);
+
+        // With a body to copy the call is a no-op, so the ghost keeps the body's look over the profile.
+        _entities.System<CMUGhostProfileAppearanceSystem>().DressAsSelectedCharacter(ghost, player);
     }
 }

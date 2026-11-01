@@ -3931,7 +3931,7 @@
     slot:
       whitelist:
         tags:
-        - RMCMagazineRifleL90DrumAP
+        - RMCMagazineRifleL88 # CMU14: was the L90 drum AP tag this box was copied from, so L88 mags did not fit
 
 - type: entity
   parent: RMCBoxMagazineRifleL88Empty

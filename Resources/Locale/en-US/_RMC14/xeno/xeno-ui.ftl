@@ -50,6 +50,8 @@ rmc-xeno-tracker-target-Queen = Queen
 rmc-xeno-tracker-target-HiveLeader = Hive Leader
 rmc-xeno-tracker-target-Tunnel = Tunnel
 rmc-xeno-tracker-target-HiveCore = Hive Core
+# CMU14: pathogen hive tracker tab
+rmc-xeno-tracker-target-Overmind = Overmind
 
 # CMU14
 rmc-xeno-hive-leader-none = There are no Xenomorph leaders. Overwatch a Xenomorph to make it a leader.

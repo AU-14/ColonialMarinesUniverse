@@ -1,5 +1,7 @@
 # Rotating alert beacons spawned by CMUWarshipAlertLightsSystem as children of
 # warship light fixtures. Pure lights, no sprite: the sweep is the visual.
+# castShadows stays false: a shadow-casting light re-renders the scene's occluders
+# every frame, and a wall of them starves the per-scene shadow budget real lights need.
 - type: entity
   id: CMUWarshipAlertBeaconBlue
   categories: [ HideSpawnMenu ]
@@ -11,6 +13,7 @@
     netsync: false
     color: "#3D7BFF"
     lightMask: ConeDouble
+    castShadows: false
   - type: RotatingLight
     speed: 15
 
@@ -25,6 +28,7 @@
     netsync: false
     color: "#EE0500"
     lightMask: ConeDouble
+    castShadows: false
   - type: RotatingLight
     speed: 45
 
@@ -39,6 +43,7 @@
     netsync: false
     color: "#E50F0F"
     lightMask: ConeDouble
+    castShadows: false
   - type: RotatingLight
     speed: 30
 
@@ -53,5 +58,6 @@
     netsync: false
     color: "#FFC82E"
     lightMask: ConeDouble
+    castShadows: false
   - type: RotatingLight
     speed: 60

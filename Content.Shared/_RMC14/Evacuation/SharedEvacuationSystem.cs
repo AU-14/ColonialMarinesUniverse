@@ -158,6 +158,18 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
                 Dirty(computerId, computer);
             }
         }
+
+        // CMU14: an authorized evacuation unlocks evacuation doors the same way a crash landing does,
+        // otherwise the crew cannot reach the lifeboats until the dropship arrives.
+        var doors = EntityQueryEnumerator<EvacuationDoorComponent, TransformComponent>();
+        while (doors.MoveNext(out var uid, out var door, out var xform))
+        {
+            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map))
+                continue;
+
+            door.Locked = false;
+            Dirty(uid, door);
+        }
     }
 
     private void OnEvacuationDisabled(ref EvacuationDisabledEvent ev)
@@ -558,7 +570,13 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
         progress.Enabled = !progress.Enabled;
         progress.EnabledAt = progress.Enabled ? _timing.CurTime : null;
-        progress.SelfDestructAt = progress.Enabled ? _timing.CurTime + progress.SelfDestructDelay : null;
+        // CMU14 Begin: enable_evac_sfx is the master switch for the destruct show.
+        // With it off there is no narrated countdown, so Delta and the scuttle never arm.
+        // progress.SelfDestructAt = progress.Enabled ? _timing.CurTime + progress.SelfDestructDelay : null;
+        progress.SelfDestructAt = progress.Enabled && _config.GetCVar(CCVars.EnableEvacSfx)
+            ? _timing.CurTime + progress.SelfDestructDelay
+            : null;
+        // CMU14 End
         progress.SelfDestructed = false;
         Dirty(map.Value, progress);
 
@@ -648,7 +666,9 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         while (query.MoveNext(out var uid, out var progress))
         {
             //Only start fueling once the dropship has crashed into the ship
-            if (!progress.DropShipCrashed)
+            // CMU14: an authorized evacuation pumps fuel too, even before the crash; the toggle announcement
+            // promises pressurized pumps, and the meltdown scenario needs lifeboats before the dropship arrives.
+            if (!progress.DropShipCrashed && !progress.Enabled)
                 continue;
 
             var faction = progress.VictimFaction;

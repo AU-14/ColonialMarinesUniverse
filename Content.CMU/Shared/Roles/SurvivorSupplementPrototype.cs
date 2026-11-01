@@ -3,9 +3,15 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Roles;
 
+public enum SupplementTarget
+{
+    Survivors,
+    Colonists,
+}
+
 /// <summary>
-///     Bonus items handed to Distress Signal roundstart survivors when their party spawns.
-///     Skill-gated entries only apply to survivors meeting the skill level.
+///     Bonus items handed to spawn paths when their party spawns. Skill-gated
+///     entries only apply to survivors meeting the skill level.
 /// </summary>
 [Prototype]
 public sealed partial class SurvivorSupplementPrototype : IPrototype
@@ -14,15 +20,19 @@ public sealed partial class SurvivorSupplementPrototype : IPrototype
     public string ID { get; private set; } = default!;
 
     /// <summary>
-    ///     Supplements conflict: only the highest-priority mode-matching one applies per survivor.
-    ///     ID breaks ties so the pick stays deterministic.
+    ///     Only the highest-priority mode-matching supplement applies; ID breaks ties.
     /// </summary>
     [DataField]
     public int Priority { get; private set; }
 
     /// <summary>
-    ///     Game preset ids this supplement applies in. Empty means every mode.
+    ///     Which spawn path this applies to: survivors are threat party members,
+    ///     colonists are round-start civilian job spawns.
     /// </summary>
+    [DataField]
+    public SupplementTarget Target { get; private set; } = SupplementTarget.Survivors;
+
+    /// <summary>Game preset ids this applies in; empty means every mode.</summary>
     [DataField]
     public List<string> WhitelistedGamemodes { get; private set; } = new();
 
@@ -36,9 +46,7 @@ public sealed partial class SurvivorSupplementPrototype : IPrototype
 [DataDefinition]
 public sealed partial class SupplementEntry
 {
-    /// <summary>
-    ///     Skill gate; null means the entry applies to every survivor.
-    /// </summary>
+    /// <summary>Skill gate; null means the entry applies to everyone.</summary>
     [DataField]
     public EntProtoId<SkillDefinitionComponent>? Skill { get; private set; }
 
