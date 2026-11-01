@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 10/04/2026 08:52:09
-  entityCount: 13872
+  entityCount: 13857
 maps:
 - 1
 grids:
@@ -82785,20 +82785,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 13.5,-7.5
       parent: 2
-- proto: VMarkerShipAICore
-  entities:
-  - uid: 267
-    components:
-    - type: Transform
-      pos: 84.5,-16.5
-      parent: 2
-- proto: VMarkerShipAnalyzer
-  entities:
-  - uid: 10393
-    components:
-    - type: Transform
-      pos: 98.5,8.5
-      parent: 2
 - proto: VMarkerShipAutomaticRifleman
   entities:
   - uid: 10394
@@ -83121,76 +83107,6 @@ entities:
     - type: Transform
       pos: 4.5,-15.5
       parent: 2
-- proto: VMarkerShipLockedCommandDoorGlass
-  entities:
-  - uid: 10465
-    components:
-    - type: Transform
-      pos: 98.5,5.5
-      parent: 2
-- proto: VMarkerShipLockedDoorEngineering
-  entities:
-  - uid: 10468
-    components:
-    - type: Transform
-      pos: 15.5,20.5
-      parent: 2
-  - uid: 10469
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 69.5,-12.5
-      parent: 2
-- proto: VMarkerShipLockedGlassDoorEngineering
-  entities:
-  - uid: 10471
-    components:
-    - type: Transform
-      pos: 18.5,-16.5
-      parent: 2
-- proto: VMarkerShipLockedGlassDoorMedical
-  entities:
-  - uid: 10472
-    components:
-    - type: Transform
-      pos: 75.5,3.5
-      parent: 2
-- proto: VMarkerShipLockedNormalDoor
-  entities:
-  - uid: 10480
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 4.5,-1.5
-      parent: 2
-- proto: VMarkerShipLockedSecurityDoor
-  entities:
-  - uid: 10481
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 10.5,7.5
-      parent: 2
-  - uid: 10482
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 6.5,12.5
-      parent: 2
-- proto: VMarkerShipLockedSecurityDoorGlass
-  entities:
-  - uid: 10483
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 7.5,15.5
-      parent: 2
-  - uid: 10484
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 11.5,15.5
-      parent: 2
 - proto: VMarkerShipMPPoliceman
   entities:
   - uid: 10485
@@ -83202,20 +83118,6 @@ entities:
     components:
     - type: Transform
       pos: 2.5,10.5
-      parent: 2
-- proto: VMarkerShipOverwatchConsole
-  entities:
-  - uid: 10489
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 105.5,-3.5
-      parent: 2
-  - uid: 10492
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 105.5,4.5
       parent: 2
 - proto: VMarkerShipPilot
   entities:
@@ -83426,14 +83328,6 @@ entities:
     components:
     - type: Transform
       pos: -18.5,-4.5
-      parent: 2
-- proto: VMarkerShipTacticalMap
-  entities:
-  - uid: 10540
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 10.5,-13.5
       parent: 2
 - proto: VMarkerShipWeapons
   entities:

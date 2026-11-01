@@ -1,15 +1,15 @@
 - type: gameMap
   id: LSDJuniperMap
   mapName: LSD Juniper
-  mapPath: /Maps/_AU14/JuniperMultiZ/LSDJuniper0.yml
+  mapPath: /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper0.yml
   mapsBelow:
-  - /Maps/_AU14/JuniperMultiZ/LSDJuniper-1.yml
-  - /Maps/_AU14/JuniperMultiZ/LSDJuniper-2.yml
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper-1.yml
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper-2.yml
   mapsAbove:
-  - /Maps/_AU14/JuniperMultiZ/LSDJuniper1.yml
-  - /Maps/_AU14/JuniperMultiZ/LSDJuniper2.yml
-  - /Maps/_AU14/JuniperMultiZ/LSDJuniper3.yml
-  - /Maps/_AU14/JuniperMultiZ/LSDJuniper3.yml
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper1.yml
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper2.yml
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper3.yml
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper3.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0
