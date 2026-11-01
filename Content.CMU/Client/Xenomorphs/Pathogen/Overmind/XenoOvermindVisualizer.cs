@@ -69,7 +69,7 @@ public sealed class CMUXenoOvermindVisualizerSystem : VisualizerSystem<CMUXenoOv
                 break;
             
             case OvermindVisualState.Dead:  
-                 SpriteSystem.LayerSetRsiState((uid, sprite), OvermindVisualLayers.Base, "dead");  
+                 SpriteSystem.LayerSetRsiState((uid, args.Sprite), OvermindVisualLayers.Base, "dead");  
                  break;
         }
     }
