@@ -17,6 +17,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Fighter;
@@ -63,8 +64,20 @@ public sealed partial class FighterSystem : EntitySystem
         SubscribeLocalEvent<FighterAircraftComponent, ComponentShutdown>(OnAircraftShutdown);
     }
 
-    public Entity<FighterAircraftComponent> CreateAircraft(EntityUid terrain, Vector2 home)
+    private CMUFighterAirframePrototype Airframe(EntityUid entity) =>
+        ProtoMan.Index(CompOrNull<CMUFighterAppearanceComponent>(entity)?.Airframe ?? CMUFighterAirframePrototype.Default);
+
+    private void SetAirframe(EntityUid entity, ProtoId<CMUFighterAirframePrototype> airframe)
     {
+        var appearance = EnsureComp<CMUFighterAppearanceComponent>(entity);
+        appearance.Airframe = airframe;
+        Dirty(entity, appearance);
+    }
+
+    public Entity<FighterAircraftComponent> CreateAircraft(EntityUid terrain, Vector2 home,
+        ProtoId<CMUFighterAirframePrototype>? airframe = null)
+    {
+        var definition = ProtoMan.Index(airframe ?? CMUFighterAirframePrototype.Default);
         // A station's largest grid can be a roof level. Always locate the ground map first.
         while (TryComp(terrain, out CMUZLevelMapComponent? upper) && upper.Depth > 0 && upper.MapBelow is { } below)
             terrain = below;
@@ -81,9 +94,10 @@ public sealed partial class FighterSystem : EntitySystem
         atmosphere.SetMoles(Gas.Nitrogen, 82.10312f);
         _atmos.SetMapAtmosphere(cockpitMap, false, atmosphere);
         var grid = _map.CreateGridEntity(cockpitId);
+        SetAirframe(grid, definition.ID);
         var floor = new Tile(_tiles["RMCFloorVehicleInteriorDarkSterile"].TileId);
         for (var x = -7; x <= 7; x++)
-        for (var y = -5; y <= 6; y++)
+        for (var y = -5; y <= Math.Max(6, (int) Math.Ceiling(definition.PilotOffset.Y) + 1); y++)
             _map.SetTile(grid.Owner, grid.Comp, new Vector2i(x, y), floor);
 
         var aircraft = AddComp<FighterAircraftComponent>(grid);
@@ -97,15 +111,18 @@ public sealed partial class FighterSystem : EntitySystem
         aircraft.Exit = aircraft.Home - new Vector2(0, aircraft.Battlefield.Height / 2 + 12);
         // Spawn coordinates override prototype rotation, so orient every physical part explicitly.
         var forward = new Angle(Math.PI);
-        aircraft.Hull = SpawnAttachedTo("CMUFighterHull", new EntityCoordinates(grid, new Vector2(.5f, 0)), rotation: forward);
-        aircraft.Canopy = SpawnAttachedTo("CMUFighterCanopy", new EntityCoordinates(grid, new Vector2(.5f, 0)), rotation: forward);
+        aircraft.Hull = SpawnAttachedTo(definition.Hull, new EntityCoordinates(grid, new Vector2(.5f, 0)), rotation: forward);
+        aircraft.Canopy = SpawnAttachedTo(definition.Canopy, new EntityCoordinates(grid, new Vector2(.5f, 0)), rotation: forward);
         SpawnAttachedTo("AU14VehicleRadioSet", new EntityCoordinates(grid, new Vector2(1.5f, 3.5f)));
         // Scale the narrow canopy and its seats together to fit ordinary crew,
         // without changing the players' own sprite scale.
-        aircraft.FrontSeat = SpawnAttachedTo("CMUFighterPilotSeat", new EntityCoordinates(grid, new Vector2(.5f, 4.2f)), rotation: forward);
-        aircraft.RearSeat = SpawnAttachedTo("CMUFighterObserverSeat", new EntityCoordinates(grid, new Vector2(.5f, 2.1f)), rotation: forward);
+        aircraft.FrontSeat = SpawnAttachedTo(definition.PilotSeat, new EntityCoordinates(grid, new Vector2(.5f, 0) + definition.PilotOffset), rotation: forward);
+        aircraft.RearSeat = SpawnAttachedTo(definition.ObserverSeat, new EntityCoordinates(grid, new Vector2(.5f, 0) + definition.ObserverOffset), rotation: forward);
         foreach (var part in new[] { aircraft.Hull.Value, aircraft.Canopy.Value, aircraft.FrontSeat.Value, aircraft.RearSeat.Value })
+        {
             AddComp<CMUFighterPartOwnerComponent>(part).Aircraft = grid;
+            SetAirframe(part, definition.ID);
+        }
         foreach (var seat in new[] { aircraft.FrontSeat.Value, aircraft.RearSeat.Value })
         {
             var component = Comp<FighterSeatComponent>(seat);
@@ -277,9 +294,6 @@ public sealed partial class FighterSystem : EntitySystem
         {
             case FighterCommand.ProgramGuidance:
                 EntityManager.System<Content.Shared.CMU14.Guidance.CMUGuidanceSystem>().Open(seat, player);
-                break;
-            case FighterCommand.FormUp:
-                TryFormUp(player);
                 break;
             case FighterCommand.ConfirmEject:
                 TryConfirmEjection(player);

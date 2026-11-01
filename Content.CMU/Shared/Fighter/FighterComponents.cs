@@ -207,7 +207,7 @@ public enum FighterCommand : byte
 {
     Launch, Ascend, Descend, Mark, Zoom, Center, SwapSeat, LeaveSeat, Return, TrainingRelease, Lock,
     VisionNormal, VisionNight, VisionThermal, Fire, Laser, Flares, PrepareRun, QueueFire, Takeoff,
-    FormUp, ConfirmEject, CancelEject,
+    ConfirmEject, CancelEject,
     ProgramGuidance,
 }
 

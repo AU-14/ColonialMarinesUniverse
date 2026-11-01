@@ -95,6 +95,53 @@ public sealed class FighterLaserTest : GameTest
         SEntMan.DeleteEntity(Server.Transform(_aircraft).MapUid!.Value);
     }
 
+    [TestCase(FighterWeaponKind.Missile, -1)]
+    [TestCase(FighterWeaponKind.Rockets, .65)]
+    [TestCase(FighterWeaponKind.Gau, .15)]
+    public async Task ReleasedStrikeReservesLaserAndWarningWindowsUntilActualImpact(FighterWeaponKind kind, double travel)
+    {
+        await CreateWorld(true);
+        FighterStrikeVisualComponent strike = null!;
+        var impactDelay = 0d;
+        await Server.WaitAssertion(() =>
+        {
+            var weapons = SEntMan.GetComponent<FighterWeaponsComponent>(_aircraft);
+            var point = weapons.Hardpoints[0];
+            var ammo = SEntMan.GetComponent<DropshipAmmoComponent>(_missile);
+            impactDelay = Math.Max(2.3, travel < 0 ? ammo.TravelTime.TotalSeconds + 1 : travel);
+            Assert.That(SEntMan.System<SharedDropshipWeaponSystem>().TryFireFighterAmmo((_missile, ammo),
+                (point, SEntMan.GetComponent<FighterHardpointComponent>(point)), Server.Transform(_flare).Coordinates,
+                _user, travel < 0 ? null : TimeSpan.FromSeconds(travel), kind), Is.True);
+            strike = SEntMan.QueryEntities<FighterStrikeVisualComponent>().Single().Comp;
+            Assert.That((strike.ImpactAt - Now).TotalSeconds, Is.EqualTo(impactDelay).Within(.001));
+            Assert.That(FighterEffects.LaserVisible(strike, strike.ImpactAt - TimeSpan.FromSeconds(2.301)), Is.False);
+            Assert.That(FighterEffects.LaserVisible(strike, strike.ImpactAt - TimeSpan.FromSeconds(2.3)), Is.True);
+            Assert.That(FighterEffects.WarningVisible(strike, strike.ImpactAt - TimeSpan.FromSeconds(1.001)), Is.False);
+            Assert.That(FighterEffects.WarningVisible(strike, strike.ImpactAt - TimeSpan.FromSeconds(1)), Is.True);
+            Assert.That(strike.WarningPlayed, Is.False);
+        });
+        await Advance(impactDelay - 1.15);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(strike.WarningPlayed, Is.False, "The audible warning must not play on release.");
+            Assert.That(strike.Impacts, Is.Empty);
+        });
+        await Advance(.25);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(strike.WarningPlayed, Is.True);
+            Assert.That(strike.Impacts, Is.Empty, "The warning must precede the payload's real damage.");
+        });
+        await Advance(1.1);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(strike.Impacts, Is.Not.Empty);
+            Assert.That(FighterEffects.LaserVisible(strike, Now), Is.False);
+            Assert.That(FighterEffects.WarningVisible(strike, Now), Is.False);
+            CleanWorld();
+        });
+    }
+
     [Test]
     public async Task CodesFilterDetectionSelectionAndStaleLocks()
     {

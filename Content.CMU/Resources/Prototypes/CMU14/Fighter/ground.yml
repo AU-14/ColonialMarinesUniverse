@@ -1,8 +1,8 @@
 - type: entity
   parent: BaseStructure
   id: CMUFighterGround
-  name: two-seat VTOL fighter
-  description: A strike and reconnaissance fighter. Board the cockpit, taxi into clear air, and take off vertically. The six pylons and internal GAU feed can be serviced on the ground with a power loader.
+  name: two-seat fighter
+  description: A strike and reconnaissance fighter with a short rolling takeoff. Taxi to clear ground and launch without a runway or staging pad. Service its weapons with a power loader.
   components:
   - type: Transform
     anchored: false

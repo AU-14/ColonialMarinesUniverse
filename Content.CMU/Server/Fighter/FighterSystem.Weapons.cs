@@ -33,12 +33,13 @@ public sealed partial class FighterSystem
     private void CreateHardpoints(Entity<FighterAircraftComponent> aircraft)
     {
         var weapons = AddComp<FighterWeaponsComponent>(aircraft);
+        var definition = Airframe(aircraft);
         for (var i = 0; i <= FighterWeaponsComponent.GauSlot; i++)
         {
             var cannon = i == FighterWeaponsComponent.GauSlot;
-            var x = cannon ? .5f : .5f + (i < 3 ? -1 : 1) * (2.5f + i % 3 * 1.8f);
+            var position = new Vector2(.5f, 0) + (cannon ? definition.GauOffset : definition.PylonOffsets[i]);
             var point = SpawnAttachedTo(cannon ? "CMUFighterGauFeed" : "CMUFighterHardpoint",
-                new EntityCoordinates(aircraft, new Vector2(x, cannon ? 5.5f : -1.5f - i % 3 * .7f)));
+                new EntityCoordinates(aircraft, position));
             var component = Comp<FighterHardpointComponent>(point);
             AddComp<CMUFighterPartOwnerComponent>(point).Aircraft = aircraft;
             component.Aircraft = aircraft;
@@ -302,7 +303,7 @@ public sealed partial class FighterSystem
         var coordinates = flare is { Gps: true } && _guidance.TryGetGps(ammo, out var gpsCoordinates)
             ? gpsCoordinates : Transform(target.Value).Coordinates;
         if (!_payloads.TryFireFighterAmmo((ammo, payload), mount, coordinates, user!.Value,
-                strikeTravelTime, weapon.Kind, aircraft.Comp.Position)) return false;
+                strikeTravelTime, weapon.Kind, aircraft.Comp.Position, target)) return false;
         var effect = weapon.Kind switch
         {
             FighterWeaponKind.Gau => FighterEffectKind.Gau,
@@ -311,7 +312,6 @@ public sealed partial class FighterSystem
         };
         PlayEffect(aircraft, effect, weapon.Slot, duration: weapon.Kind == FighterWeaponKind.Gau
             ? Math.Min(6, .1f * payload.RoundsPerShot / Math.Max(1, payload.ShotsPerVolley)) : 2);
-        if (flare is { Laser: true }) WarnLaserStrike(target.Value);
         CancelLaserLock(seat);
         point.ReadyAt = _timing.CurTime + (weapon.Kind switch
         {

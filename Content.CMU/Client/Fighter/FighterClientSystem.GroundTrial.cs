@@ -22,7 +22,6 @@ public sealed partial class FighterClientSystem
             {
                 _input = FighterInput.None;
                 SendInput();
-                RaiseNetworkEvent(new FighterCommandEvent(FighterCommand.FormUp));
             }
             CaptureTrial($"ground-{role}-taxi");
             _trialStep = 21;
