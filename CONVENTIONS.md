@@ -75,6 +75,25 @@ New constructs use a marker such as `// CMU14 method`,
 YAML uses `# CMU14`; a whole prototype can mark its `type:` or `id:` line.
 Preserve existing upstream markers and identify new CMU divergence as CMU.
 
+## Global loadouts
+
+Character-wide loadout preferences use the `CMUGlobalLoadout` role loadout
+in the profile's existing loadout dictionary. Pins belong only to this
+global loadout, are free, and are selected once per character (up to 13).
+Legacy per-job pin selections migrate to a deduplicated global selection.
+Apply global gear after job gear so backpack storage is available.
+
+## Synthetic generations
+
+Player-selected synth generations are applied after round job profiles and
+before loadout skill upgrades. Gen 1/2 share a 0.85 innate movement modifier, 250/300
+critical/death thresholds, normal acid damage, and skills one level below
+the support-synth preset. They have a 15% frontal runner/lurker pounce block.
+Gen 3/4 have no innate slowdown, 200/250 thresholds, 1.5x acid damage, the full
+support-synth skill preset, and no innate pounce block. Fixed Working Joe
+bodies retain their own mechanics regardless of character preferences.
+Equipment slowdown and shield-provided leap protection still apply.
+
 ## Components and data
 
 Components store data; systems own behavior. Avoid behavior in property

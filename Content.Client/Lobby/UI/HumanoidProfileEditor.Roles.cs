@@ -66,6 +66,14 @@ public sealed partial class HumanoidProfileEditor
 
     private void OpenLoadout(JobPrototype jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
     {
+        OpenLoadout(jobProto, roleLoadout, roleLoadoutProto, LoadoutSystem.GetJobPrototype(jobProto.ID),
+            Loc.GetString("loadout-window-title-loadout", ("job", jobProto.LocalizedName)));
+    }
+
+    // CMU14: the global loadout uses the same editor without selecting a preview job.
+    private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto,
+        string concreteKey, string title)
+    {
         _loadoutWindow?.Release();
         _loadoutWindow = null;
         var collection = IoCManager.Instance;
@@ -78,13 +86,12 @@ public sealed partial class HumanoidProfileEditor
 
         _loadoutWindow = new LoadoutWindow(Profile, roleLoadout, roleLoadoutProto, session, collection)
         {
-            Title = Loc.GetString("loadout-window-title-loadout", ("job", jobProto.LocalizedName)),
+            Title = title,
         };
 
         _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
         _loadoutWindow.OpenCenteredLeft();
 
-        var concreteKey = LoadoutSystem.GetJobPrototype(jobProto.ID);
         _loadoutWindow.OnNameChanged += name =>
         {
             roleLoadout.EntityName = name;

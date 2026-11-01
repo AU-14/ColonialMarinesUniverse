@@ -436,9 +436,14 @@ public sealed partial class XenoLeapSystem : EntitySystem
         if (!TryComp(user, out RMCLeapProtectionComponent? leapProtection))
             return true;
 
-        var stunDuration = new TimeSpan();
         leapProtection.ProtectionProviders.Remove(protection);
+        return RefreshLeapProtection(user, leapProtection); // CMU14: also used when inherent protection changes.
+    }
 
+    // CMU14: shared recalculation preserves equipped shields when inherent protection is removed.
+    private bool RefreshLeapProtection(EntityUid user, RMCLeapProtectionComponent leapProtection)
+    {
+        var stunDuration = TimeSpan.Zero;
         // Set the inherent stun duration if it exists.
         if (leapProtection.InherentStunDuration != null)
         {
