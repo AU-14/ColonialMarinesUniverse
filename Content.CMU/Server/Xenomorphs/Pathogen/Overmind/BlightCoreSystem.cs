@@ -340,7 +340,8 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
         }
 
         PopupToHive(hive, Loc.GetString("cmu14-blight-core-destroyed-overmind-died"));
-        QueueDel(overmind);
+
+        _mobState.ChangeMobState(overmind, MobState.Dead);
     }
 
     private void OnOvermindDeath(Entity<CMUXenoOvermindComponent> overmind, ref MobStateChangedEvent args)  
