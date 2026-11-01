@@ -43,6 +43,10 @@ public sealed partial class ZBuildableMapComponent : Component
     [DataField]
     public int ChunkSize = 8;
 
+    /// <summary>Shared vertical cavern geometry. Null preserves the legacy independent layers.</summary>
+    [DataField]
+    public CMUCavernSettings? Caverns = new();
+
     /// <summary>
     /// Content tile prototypes used for the floor of generated stone levels. Generation picks one at random per
     /// tile, giving a stone/dirt mix. These are the CM planet tiles used on maps like Barker's Lament, not the

@@ -185,6 +185,9 @@ public sealed class PitDiggingToolSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(doAfter))
             return false;
 
+        if (!digUp)
+            _building.PrefetchDigDestination(user, target, DigDelay * comp.DigTimeMultiplier);
+
         _popup.PopupEntity(Loc.GetString("au14-pit-tool-dig-started"), ent, user);
 
         // The tile that is being dug is outlined while the dig goes on, the way the ground of a tent is while it is pitched.
@@ -204,6 +207,7 @@ public sealed class PitDiggingToolSystem : EntitySystem
     {
         // The dig is over, done or given up: the outline goes.
         SendToPlayer(args.User, new RMCHideDeployAreaEvent());
+        _building.CancelDigPreparation(args.User);
 
         if (args.Cancelled || args.Handled)
             return;

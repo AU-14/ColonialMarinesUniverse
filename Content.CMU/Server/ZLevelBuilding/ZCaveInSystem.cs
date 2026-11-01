@@ -291,7 +291,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
         var pending = stoneMap.Comp.PendingCollapse;
 
         // Solid (or not-yet-dug) tiles can't cave in; clear any stale pending state.
-        if (IsSolid(grid, tile, stoneMap.Comp, chunkSize))
+        if (stoneMap.Comp.NaturalCaves.Contains(tile) || IsSolid(grid, tile, stoneMap.Comp, chunkSize))
         {
             pending.Remove(tile);
             return false;
@@ -344,7 +344,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
 
         while (frontier.TryDequeue(out var t) && region.Count < CollapseTileCap)
         {
-            if (IsSolid(grid, t, stoneMap.Comp, chunkSize))
+            if (stoneMap.Comp.NaturalCaves.Contains(t) || IsSolid(grid, t, stoneMap.Comp, chunkSize))
                 continue;
 
             // Built support beams shut off a spreading collapse like a valve: every open tile within a beam's
@@ -506,7 +506,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // Keep a stable platform around any staircase: if a walk-through stair is on this tile or an adjacent
         // one, do not bury it and do not pull the floor out above it. Otherwise the tile a stair drops you onto
         // would vanish and you would instantly fall (and risk clipping through to the level below).
-        if (HasStairWithin(grid, tile, 1) ||
+        if (stoneMap.Comp.NaturalCaves.Contains(tile) || HasStairWithin(grid, tile, 1) ||
             IsSolid(grid, tile, stoneMap.Comp, Math.Max(2, settings.ChunkSize)) ||
             HasBuiltSupportWithin(grid, tile, Math.Max(1, settings.MaxRoofSpan)))
             return;

@@ -6,6 +6,9 @@ design interpretation. Exact equipment translations, prototype IDs, example
 recipes and upstream source links are in
 [the equipment reference](upstream-equipment-and-research.md).
 
+The subsequent mining changes and accepted design direction are tracked in
+[the cavern and mining rework](mining-rework.md).
+
 ## What players are building
 
 The central loop is **survey → extract → process → manufacture → use or sell →

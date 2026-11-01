@@ -35,6 +35,13 @@ public sealed partial class ZGeneratedStoneComponent : Component
     [ViewVariables]
     public int NoiseSeed;
 
+    /// <summary>Shared volume used by server generation and the client's structural scanner.</summary>
+    [DataField, AutoNetworkedField]
+    public int CavernSeed;
+
+    [DataField, AutoNetworkedField]
+    public CMUCavernSettings? Caverns;
+
     /// <summary>Tiles of the natural, noise-made caves. They hold themselves up: they never cave in and a collapse does not spread into them.</summary>
     [ViewVariables]
     public readonly HashSet<Vector2i> NaturalCaves = new();
