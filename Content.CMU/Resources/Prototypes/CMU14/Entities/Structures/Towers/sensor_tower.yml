@@ -11,6 +11,10 @@
     visibleToClf: true
     visibleToXenos: true
     visibleAsXenoStructure: true
+  - type: CMUGamemodeBlacklist
+    blacklistedGamemodes:
+    - ForceOnForce
+    - Insurgency
 
 - type: entity
   parent: AU14SensorTower
