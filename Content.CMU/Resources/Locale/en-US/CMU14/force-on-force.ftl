@@ -5,6 +5,7 @@ cmu-fof-respawn-wait = You can respawn in {$seconds} seconds. The wait is five m
 cmu-fof-dropship-wrong-faction = This dropship is not cleared to land at the other faction's destination.
 cmu-dropship-navigation-access-denied = You are not authorized to use this dropship's navigation controls.
 cmu-fof-hijack-no-destination = No assault vectors are available on the enemy ship.
+cmu-fof-hijack-disabled = Hijacking is disabled in this operation. Both forces require their ships.
 cmu-dropship-hijack-initiate = Initiate hijack
 cmu-dropship-hijack-random-header = A valid destination will be selected automatically when you initiate the hijack.
 cmu-dropship-hijack-no-destinations = No valid hijack destinations are currently available.

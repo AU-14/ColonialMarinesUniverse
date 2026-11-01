@@ -11,6 +11,7 @@ using Content.Server.GameTicking.Presets;
 using Content.Server.Mind;
 using Content.Server.Preferences.Managers;
 using Content.Server.Station.Systems;
+using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
@@ -189,6 +190,38 @@ public sealed class ForceOnForceGameplayTest : GameTest
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
                 SProtoMan.Index<GamePresetPrototype>(DistressSignalPrototype));
             Assert.That(CanHijack(), Is.False);
+        });
+    }
+
+    [Test]
+    public async Task NoHijackInitiationIsAcceptedInForceOnForce()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipHijackInitialDelayMinutes, 0);
+            var maps = Server.System<SharedMapSystem>();
+            var ship = maps.CreateMap();
+            var computer = SEntMan.SpawnEntity(null, new EntityCoordinates(ship, 0, 0));
+            var user = SEntMan.SpawnEntity(null, new EntityCoordinates(ship, 1, 0));
+            SEntMan.EnsureComponent<DropshipHijackerComponent>(user);
+            var dropships = Server.System<ServerDropshipSystem>();
+            var popup = typeof(SharedDropshipSystem)
+                .GetMethod("TryDropshipHijackPopup", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            var ticker = Server.System<GameTicker>();
+            void SetPreset(Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> id) => typeof(GameTicker)
+                .GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker, SProtoMan.Index<GamePresetPrototype>(id));
+            bool Accepted() => (bool) popup.Invoke(dropships,
+            [
+                computer,
+                Activator.CreateInstance(typeof(Entity<DropshipHijackerComponent?>), user, null)!,
+                false
+            ])!;
+
+            SetPreset(DistressSignalPrototype);
+            Assert.That(Accepted(), Is.True, "a hijacker can still initiate outside Force on Force");
+
+            SetPreset(ForceOnForcePrototype);
+            Assert.That(Accepted(), Is.False, "Force on Force accepts no hijack initiation, whatever the hijacker type");
         });
     }
 

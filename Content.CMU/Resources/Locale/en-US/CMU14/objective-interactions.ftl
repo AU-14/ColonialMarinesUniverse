@@ -10,6 +10,9 @@ cmu-capture-objective-damage-lowered = The flag has been lowered due to heavy da
 
 # Hotspot objectives
 cmu-hotspot-objective-controller = { $faction } has taken control of the hotspot zone
+cmu-hotspot-objective-progress = { $faction } holds the hotspot at { $progress }%
+cmu-hotspot-objective-progress-trails = { $other } trails by { $gap }%
+cmu-hotspot-objective-progress-leads = { $other } leads by { $gap }%
 
 # Force on Force time limit rule
 fof-time-limit-score-leading = Hotspot control: GOVFOR { $govfor } - OPFOR { $opfor }. { $faction } is leading!

@@ -24,13 +24,9 @@ faction; otherwise consoles inherit their grid's faction.
 
 Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
 
-In FoF, squad leaders, acting squad leaders, officers and command personnel can hack an opposing dropship's navigation console. The hack takes 60 seconds and breaks on movement, damage or resting. Existing launch and hijack timing limits apply. Authorization is tied to the user and console and expires after one minute.
-
-Humans and xenos have a single **Initiate hijack** action. The server chooses a valid destination at random when pressed. FoF humans only target the opposing faction's carrier: GOVFOR attacks OPFOR and OPFOR attacks GOVFOR. The human FoF route uses the queen-style crash sequence. Xenos retain the existing valid carrier set and queen decline option. Legacy human intel hijacks outside FoF retain their landing-zone behavior with random selection.
+Hijacking is disabled in Force on Force. Both factions need their carrier for the whole round, and a hijack crash takes the victim carrier out of play, so no hijack initiation is accepted in the mode: not the FoF command hack, not legacy intel hijackers, not xenos or third parties carrying a hijacker component. The console hack and the hijack join offer stay wired up but have no trigger while the mode disables hijacking.
 
 Ordinary navigation respects both carrier ownership (including connected decks) and landing-zone faction whitelists. A hostile passenger on a launched dropship triggers the owning faction's ship announcement, including passengers on other dropship decks.
-
-When a FoF hijack flight starts, living attackers on the ground or their own carrier receive a **Join / Stay** popup offering transport aboard the hijacked dropship. Living defenders on the ground or the attackers' carrier receive the same choice to return to their own carrier's spawn area. Players already aboard the hijacking dropship or defending carrier are not prompted. Closing the popup counts as staying. The offer expires at landing, on death, or when the player changes body, faction or eligible location; acceptance is validated on the server and requires a clear floor tile.
 
 Admin commands support faction recipients:
 

@@ -3,10 +3,12 @@ using Content.Server.CMU14.Round.Objectives;
 using Content.Server.CMU14.RoundStatistics;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
+using Content.Shared.CCVar;
 using Content.Shared.CMU14.Ops.ForceOnForce;
 using Content.Shared.CMU14.Round.Objectives.Type;
 using Content.Shared.CMU14.RoundStatistics;
 using Content.Shared.GameTicking.Components;
+using Robust.Shared.Configuration;
 
 namespace Content.Server.CMU14.Ops.ForceOnForce;
 
@@ -21,6 +23,7 @@ public sealed partial class FoFTimeLimitRuleSystem : GameRuleSystem<FoFTimeLimit
     [Dependency] private readonly MarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private readonly ObjectiveControlSystem _objCtrl = default!;
     [Dependency] private readonly CMURoundStatisticsSystem _stats = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     public override void Update(float frameTime)
     {
@@ -34,20 +37,25 @@ public sealed partial class FoFTimeLimitRuleSystem : GameRuleSystem<FoFTimeLimit
         {
             var duration = _gameTicker.RoundDuration();
 
-            // Start of overtime: record who held the zone at the 75:00 limit.
-            if (duration >= rule.TimeLimit && string.IsNullOrEmpty(rule.ZoneLeaderAtLimit))
+            var timeLimit = rule.TimeLimit;
+            var cvarMinutes = _cfg.GetCVar(CCVars.FoFTimeLimitMinutes);
+            if (cvarMinutes > 0)
+                timeLimit = TimeSpan.FromMinutes(cvarMinutes);
+
+            // Start of overtime: record who held the zone at the limit.
+            if (duration >= timeLimit && string.IsNullOrEmpty(rule.ZoneLeaderAtLimit))
             {
                 rule.ZoneLeaderAtLimit = GetZoneController();
             }
 
             // Announce overtime start once.
-            if (duration >= rule.TimeLimit && !rule.SuddenDeathAnnounced)
+            if (duration >= timeLimit && !rule.SuddenDeathAnnounced)
             {
                 rule.SuddenDeathAnnounced = true;
                 Announce(Loc.GetString("fof-time-limit-sudden-death"));
             }
 
-            if (duration >= rule.TimeLimit + rule.Overtime)
+            if (duration >= timeLimit + rule.Overtime)
             {
                 ResolveOvertime(rule);
                 continue;
@@ -72,7 +80,7 @@ public sealed partial class FoFTimeLimitRuleSystem : GameRuleSystem<FoFTimeLimit
 
         if (govfor == opfor)
         {
-            _stats.RecordObjectiveVictory(null, CMURoundStatisticsOutcome.DrawAlmayerAutodestruct);
+            _stats.RecordObjectiveVictory(null, CMURoundStatisticsOutcome.FoFDraw);
             _gameTicker.EndRound(Loc.GetString("fof-time-limit-draw",
                 ("govfor", govfor),
                 ("opfor", opfor)));
@@ -106,14 +114,21 @@ public sealed partial class FoFTimeLimitRuleSystem : GameRuleSystem<FoFTimeLimit
 
     private string GetZoneController()
     {
+        // Aggregated, not first-hit: two zones disagreeing is contested, not whichever queried first.
+        string? controller = null;
         var query = EntityQueryEnumerator<HotspotObjectiveComponent>();
         while (query.MoveNext(out _, out var hotspot))
         {
-            var controller = hotspot.CurrentController;
-            if (!string.IsNullOrEmpty(controller))
-                return controller;
+            if (string.IsNullOrEmpty(hotspot.CurrentController))
+                continue;
+
+            if (controller == null)
+                controller = hotspot.CurrentController;
+            else if (controller != hotspot.CurrentController)
+                return string.Empty;
         }
-        return string.Empty;
+
+        return controller ?? string.Empty;
     }
 
     private void Announce(string message)

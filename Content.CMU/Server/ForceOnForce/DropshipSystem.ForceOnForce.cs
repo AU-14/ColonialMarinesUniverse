@@ -106,6 +106,9 @@ public sealed partial class DropshipSystem
         EntityManager.System<GameTicker>().CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true &&
         !HasComp<XenoComponent>(user) && EntityManager.System<ForceOnForceSystem>().GetFaction(user) != null;
 
+    protected override bool IsForceOnForceRound() =>
+        EntityManager.System<GameTicker>().CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true;
+
     private bool CanLandAt(EntityUid computer, EntityUid destination)
     {
         if (Transform(computer).GridUid is { } grid)

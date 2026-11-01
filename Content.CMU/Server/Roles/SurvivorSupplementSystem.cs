@@ -1,8 +1,13 @@
 using System.Linq;
 using Content.Server.CMU14.Round;
+using Content.Server.GameTicking;
+using Content.Server.Station.Systems;
 using Content.Shared.CMU14.Roles;
+using Content.Shared.CMU14.Round.Roles;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared.GameTicking;
 using Content.Shared.Inventory;
+using Content.Shared.Roles;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
 using Robust.Shared.Prototypes;
@@ -12,13 +17,41 @@ namespace Content.Server.CMU14.Roles;
 public sealed partial class SurvivorSupplementSystem : EntitySystem
 {
     [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedStorageSystem _storage = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
+    }
+
+    private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)
+    {
+        // Planet-station civilian jobs are the AddColonist roster; ship-side staff like the
+        // WeYu liaison never match it.
+        if (ev.JobId == null
+            || !_prototype.TryIndex<JobPrototype>(ev.JobId, out var job)
+            || job.RoundSide != RoundJobSide.Civilian)
+            return;
+
+        if (_stationSystem.GetStationInMap(_gameTicker.DefaultMap) is not { } planetStation
+            || ev.Station != planetStation)
+            return;
+
+        ApplySupplement(ev.Mob, SupplementTarget.Colonists);
+    }
+
     public void ApplyToSurvivor(EntityUid entity)
+    {
+        ApplySupplement(entity, SupplementTarget.Survivors);
+    }
+
+    private void ApplySupplement(EntityUid entity, SupplementTarget target)
     {
         var mode = _auRound.SelectedPreset?.ID;
         if (mode == null)
@@ -27,7 +60,8 @@ public sealed partial class SurvivorSupplementSystem : EntitySystem
         SurvivorSupplementPrototype? best = null;
         foreach (var supplement in _prototype.EnumeratePrototypes<SurvivorSupplementPrototype>())
         {
-            if (supplement.BlacklistedGamemodes.Contains(mode, StringComparer.OrdinalIgnoreCase)
+            if (supplement.Target != target
+                || supplement.BlacklistedGamemodes.Contains(mode, StringComparer.OrdinalIgnoreCase)
                 || supplement.WhitelistedGamemodes.Count > 0
                 && !supplement.WhitelistedGamemodes.Contains(mode, StringComparer.OrdinalIgnoreCase))
                 continue;

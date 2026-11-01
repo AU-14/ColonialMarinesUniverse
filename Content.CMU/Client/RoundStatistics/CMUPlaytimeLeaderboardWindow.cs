@@ -28,9 +28,13 @@ public sealed class CMUPlaytimeLeaderboardWindow : DefaultWindow
 
     private readonly BoxContainer _sections;
     private readonly Label _summary;
+    private readonly Button _toggle;
     private readonly Button _refresh;
 
+    private bool _youHidden;
+
     public event Action? OnRefresh;
+    public event Action<bool>? OnSetHidden;
 
     public CMUPlaytimeLeaderboardWindow()
     {
@@ -61,6 +65,15 @@ public sealed class CMUPlaytimeLeaderboardWindow : DefaultWindow
             HorizontalExpand = true,
         };
         header.AddChild(_summary);
+
+        _toggle = new Button
+        {
+            Text = Loc.GetString("cmu-playtime-leaderboard-hide"),
+            MinSize = new Vector2(110, 34),
+            VerticalAlignment = VAlignment.Center,
+        };
+        _toggle.OnPressed += _ => OnSetHidden?.Invoke(!_youHidden);
+        header.AddChild(_toggle);
 
         _refresh = new Button
         {
@@ -102,7 +115,13 @@ public sealed class CMUPlaytimeLeaderboardWindow : DefaultWindow
             ("roles", roleCount),
             ("players", leaderboard.Players));
 
-        _sections.ReleaseChildren();
+        _sections.DisposeAllChildren();
+        _youHidden = leaderboard.YouHidden;
+        _toggle.Text = Loc.GetString(_youHidden
+            ? "cmu-playtime-leaderboard-unhide"
+            : "cmu-playtime-leaderboard-hide");
+
+        _sections.DisposeAllChildren();
         AddSection(
             Loc.GetString("cmu-playtime-leaderboard-xeno-header"),
             Loc.GetString("cmu-playtime-leaderboard-xeno-champions"),
@@ -218,11 +237,14 @@ public sealed class CMUPlaytimeLeaderboardWindow : DefaultWindow
         for (var i = 0; i < entries.Count; i++)
         {
             var entry = entries[i];
-            var color = entry.IsYou
-                ? You
-                : i == 0
-                    ? accent
-                    : Muted;
+            var redacted = entry.Redaction != CMUPlaytimeRedaction.None;
+            var color = redacted
+                ? Muted
+                : entry.IsYou
+                    ? You
+                    : i == 0
+                        ? accent
+                        : Muted;
             var you = entry.IsYou ? $" {Loc.GetString("cmu-playtime-leaderboard-you")}" : string.Empty;
             var tag = entry.Tag.Length > 0 ? $" {entry.Tag}" : string.Empty;
             var rank = entry.Rank > 0 ? $"{entry.Rank}.".PadRight(4) : "    ";
@@ -241,7 +263,12 @@ public sealed class CMUPlaytimeLeaderboardWindow : DefaultWindow
             });
             row.AddChild(new Label
             {
-                Text = $"{entry.Hours:0.0}h",
+                Text = entry.Redaction switch
+                {
+                    CMUPlaytimeRedaction.HiddenByUser => Loc.GetString("cmu-playtime-leaderboard-hidden"),
+                    CMUPlaytimeRedaction.Banned => Loc.GetString("cmu-playtime-leaderboard-banned"),
+                    _ => $"{entry.Hours:0.0}h",
+                },
                 FontColorOverride = color,
             });
             box.AddChild(row);

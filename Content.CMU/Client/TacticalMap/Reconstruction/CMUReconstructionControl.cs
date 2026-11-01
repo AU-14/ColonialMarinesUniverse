@@ -381,7 +381,10 @@ public sealed partial class CMUReconstructionControl : Control
         if (ShowLabels) DrawLabels(handle, scene);
         foreach (var order in Orders)
         {
-            if (Draft.Removals.Contains(order.Id) || order.Depth != scene.MinDepth + _selectedLevel)
+            // Shared strokes are level-independent overlays; the hotspot zone shows on every level view.
+            if (Draft.Removals.Contains(order.Id)
+                || order.Depth != scene.MinDepth + _selectedLevel
+                && !order.Shared)
                 continue;
             if (order.Text is { } text && order.Waypoints is { Length: > 0 } point)
                 DrawTextMarker(handle, point[0], (order.Color ?? InkColor(order.Ink)), text);

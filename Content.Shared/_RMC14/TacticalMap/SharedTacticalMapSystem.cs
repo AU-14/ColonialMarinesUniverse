@@ -164,7 +164,7 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
 
     // CMU14 method: draws a rectangle of line segments into the shared line list (FoF KoTH).
     // Center and half sizes are classic canvas units: 3 px per tile, min-offset, Y flipped.
-    public void DrawTacticalMapRectangle(Entity<TacticalMapComponent> map, Color color, Vector2 center, float halfWidth, float halfHeight, float thickness = 3f, int depth = 0)
+    public void DrawTacticalMapRectangle(Entity<TacticalMapComponent> map, Color color, Vector2 center, float halfWidth, float halfHeight, float thickness = 3f, int depth = 0, Color? removeColor = null)
     {
         var corners = new List<Vector2>(4);
         corners.Add(new Vector2(center.X - halfWidth, center.Y - halfHeight));
@@ -177,12 +177,13 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         {
             var a = corners[i];
             var b = corners[(i + 1) % 4];
-            // CMU14
             rect.Add(new TacticalMapLine(new Vector2i((int) a.X, (int) a.Y), new Vector2i((int) b.X, (int) b.Y), color, thickness, null, depth));
         }
 
-        // CMU14
-        var shared = map.Comp.SharedLines.Where(l => l.Color != color).ToList();
+        // CMU14: rebuild the list so the new reference marks shared lines dirty for recon baselines.
+        // removeColor drops the previous zone color so a recolor replaces instead of stacking.
+        var remove = removeColor ?? color;
+        var shared = map.Comp.SharedLines.Where(l => l.Color != color && l.Color != remove).ToList();
         shared.AddRange(rect);
         map.Comp.SharedLines = shared;
 

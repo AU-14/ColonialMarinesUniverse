@@ -175,7 +175,7 @@
   parent: BaseGameRule
   id: AddColonist
   name: Add Colonists
-  description: Restores a small fixed colonist roster on the planet after RemoveAllJobs. One ambassador allegiance is picked at random from the jobs the planet declares.
+  description: Restores a small fixed colonist roster on the planet after RemoveAllJobs. One ambassador allegiance is picked at random from the roster.
   components:
   - type: AddColonistRule
     jobs:
