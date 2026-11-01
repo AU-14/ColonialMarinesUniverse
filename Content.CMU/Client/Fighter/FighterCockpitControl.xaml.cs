@@ -214,12 +214,21 @@ public sealed partial class FighterCockpitControl : LayoutContainer
 
     private static void FillViewport(ScalingViewport viewport)
     {
-        var dimension = viewport.PixelSize.X * 540 >= viewport.PixelSize.Y * 960
-            ? ScalingViewportIgnoreDimension.Vertical
-            : ScalingViewportIgnoreDimension.Horizontal;
+        var pixels = viewport.PixelSize;
+        if (pixels.X <= 0 || pixels.Y <= 0)
+            return;
+
+        // Keep the existing pixels-per-metre and zoom, but render only the part of
+        // the 960x540 view that fits this panel. The old fill discarded the rest.
+        var ratio = Math.Max(pixels.X / 960f, pixels.Y / 540f);
+        var wide = pixels.X * 540 >= pixels.Y * 960;
+        var size = wide
+            ? new Vector2i(960, Math.Max(1, (int) Math.Ceiling(960d * pixels.Y / pixels.X)))
+            : new Vector2i(Math.Max(1, (int) Math.Ceiling(540d * pixels.X / pixels.Y)), 540);
+        if (viewport.ViewportSize != size) viewport.ViewportSize = size;
+        var dimension = wide ? ScalingViewportIgnoreDimension.Vertical : ScalingViewportIgnoreDimension.Horizontal;
         if (viewport.IgnoreDimension != dimension) viewport.IgnoreDimension = dimension;
-        var renderScale = Math.Clamp((int) Math.Ceiling(Math.Max(viewport.PixelSize.X / 960f,
-            viewport.PixelSize.Y / 540f)), 1, 2);
+        var renderScale = Math.Clamp((int) Math.Ceiling(ratio), 1, 2);
         if (viewport.FixedRenderScale != renderScale) viewport.FixedRenderScale = renderScale;
     }
 
