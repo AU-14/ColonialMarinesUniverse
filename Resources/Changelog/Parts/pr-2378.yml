@@ -1,0 +1,12 @@
+author: toot521
+category: CMU
+changes:
+- message: Grom Rapid Response Unit Squad and Team to UPP Ambassador Callins
+  type: Add
+- message: Ministry of Space Security Informal Collaborator Team to UPP Ambassador
+    Callins
+  type: Add
+- message: Grom Survs from UPP Ambassador Console
+  type: Remove
+time: '2026-10-31T12:55:22.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2378
