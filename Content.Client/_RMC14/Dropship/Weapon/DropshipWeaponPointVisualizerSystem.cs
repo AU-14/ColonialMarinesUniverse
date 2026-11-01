@@ -88,7 +88,8 @@ public sealed partial class DropshipWeaponPointVisualizerSystem : VisualizerSyst
         {
             // Preserve the attachment layer's original half-tile lateral
             // alignment. Only its forward coordinate is being extended.
-            _sprite.LayerSetOffset((uid, spriteComp), layer, new Vector2(0.5f, directFirePoint.ForwardOffset));
+            _sprite.LayerSetOffset((uid, spriteComp), layer,
+                new Vector2(directFirePoint.LateralOffset, directFirePoint.ForwardOffset));
         }
 
         _sprite.LayerSetVisible((uid, spriteComp), layer, true);

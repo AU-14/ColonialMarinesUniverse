@@ -292,6 +292,9 @@ public sealed partial class FighterSystem : EntitySystem
         var player = seat.Comp.Occupant!.Value;
         switch (ev.Command)
         {
+            case FighterCommand.ProgramGuidance:
+                EntityManager.System<Content.Shared.CMU14.Guidance.CMUGuidanceSystem>().Open(seat, player);
+                break;
             case FighterCommand.ConfirmEject:
                 TryConfirmEjection(player);
                 break;

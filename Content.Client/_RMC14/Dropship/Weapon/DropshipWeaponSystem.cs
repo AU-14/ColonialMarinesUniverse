@@ -11,12 +11,26 @@ public sealed class DropshipWeaponSystem : SharedDropshipWeaponSystem
     {
         base.Initialize();
         SubscribeLocalEvent<DropshipTerminalWeaponsComponent, AfterAutoHandleStateEvent>(OnWeaponsState);
+        SubscribeLocalEvent<DropshipWeaponComponent, AfterAutoHandleStateEvent>(OnPayloadState);
+        SubscribeLocalEvent<DropshipAmmoComponent, AfterAutoHandleStateEvent>(OnPayloadState);
+        SubscribeLocalEvent<DropshipMixedBeltComponent, AfterAutoHandleStateEvent>(OnPayloadState);
         SubscribeLocalEvent<RMCEquipmentDeployerComponent, RMCEquipmentDeployerStateUpdatedEvent>(OnEquipmentDeployerState);
     }
 
     private void OnWeaponsState(Entity<DropshipTerminalWeaponsComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         RefreshWeaponsUI(ent);
+    }
+
+    private void OnPayloadState<T>(Entity<T> ent, ref AfterAutoHandleStateEvent args) where T : Component
+    {
+        var grid = Transform(ent).GridUid;
+        var query = EntityQueryEnumerator<DropshipTerminalWeaponsComponent>();
+        while (query.MoveNext(out var uid, out var terminal))
+        {
+            if (grid != null && Transform(uid).GridUid == grid)
+                RefreshWeaponsUI((uid, terminal));
+        }
     }
 
     private void OnEquipmentDeployerState(Entity<RMCEquipmentDeployerComponent> ent,

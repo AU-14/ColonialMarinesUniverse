@@ -224,6 +224,10 @@ public sealed partial class SharedBodySystem : EntitySystem
         Angle splatCone = default,
         SoundSpecifier? gibSoundOverride = null)
     {
+        // CMU14 Begin
+        if (_gibbing.GibbingSuppressed)
+            return new();
+        // CMU14 End
         if (!Resolve(bodyId, ref body, false))
             return new();
 

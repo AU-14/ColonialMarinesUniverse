@@ -269,7 +269,7 @@ public sealed partial class RMCProjectileSystem : EntitySystem
             }
         }
 
-        var spawn = CMUSpawnVehicleImpact(ent, coordinates); // CMU14: retain attribution before impact MapInit triggers an explosion.
+        var spawn = CMUSpawnVehicleImpact(ent, coordinates); // CMU14: preserve attribution and gibbing policy before impact MapInit.
         _hive.SetSameHive(ent.Owner, spawn);
 
         if (ent.Comp.Popup is { } popup)

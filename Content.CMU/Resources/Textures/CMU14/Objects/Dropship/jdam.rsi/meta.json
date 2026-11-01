@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "CMU14 JDAM sprites",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "jdam2_bst"
+    },
+    {
+      "name": "jdam2_nap"
+    },
+    {
+      "name": "jdam2_ap"
+    },
+    {
+      "name": "jdam2_clst"
+    }
+  ]
+}

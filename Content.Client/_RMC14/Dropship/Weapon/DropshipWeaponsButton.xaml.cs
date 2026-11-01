@@ -16,24 +16,10 @@ public sealed partial class DropshipWeaponsButton : Button
         RobustXamlLoader.Load(this);
     }
 
-    private StyleBoxFlat ActiveStyleBox()
-    {
-        return new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex("#222222"),
-            BorderColor = Color.FromHex("#00FF36"),
-            BorderThickness = new Thickness(3),
-        };
-    }
-
     public void Refresh()
     {
         Disabled = string.IsNullOrEmpty(FormattedMessage.RemoveMarkupPermissive(RichLabel.GetMessage() ?? string.Empty));
-        var box = ActiveStyleBox();
-        if (Disabled)
-            box.BorderColor = Color.Black;
-
-        StyleBoxOverride = box;
+        Visible = !Disabled;
     }
 
     public void SetOnPressed(Action<ButtonEventArgs>? action)

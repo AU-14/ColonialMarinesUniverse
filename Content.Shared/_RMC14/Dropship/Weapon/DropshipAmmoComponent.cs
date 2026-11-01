@@ -10,8 +10,8 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(SharedDropshipWeaponSystem), typeof(GunshipDirectFireSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(GunshipDirectFireSystem), typeof(AmmoHolderSystem))]
 public sealed partial class DropshipAmmoComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -19,6 +19,34 @@ public sealed partial class DropshipAmmoComponent : Component
 
     [DataField, AutoNetworkedField]
     public int BulletSpread = 3;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId? DirectFireProjectile;
+
+    [DataField, AutoNetworkedField]
+    public float DirectFireSpreadDegrees;
+
+    [DataField, AutoNetworkedField]
+    public float? DirectFireRate;
+
+    [DataField, AutoNetworkedField]
+    public bool GroundCompatible;
+
+    /// <summary>Heat added to an M90 mount per shell fired from this crate.</summary>
+    [DataField, AutoNetworkedField]
+    public float DirectFireHeat;
+
+    [DataField, AutoNetworkedField]
+    public bool AirborneCompatible = true;
+
+    [DataField, AutoNetworkedField]
+    public bool LivingTargetsOnly;
+
+    [DataField, AutoNetworkedField]
+    public bool EjectCasing = true;
+
+    [DataField, AutoNetworkedField]
+    public float FriendlyImpactRadius = 2f;
 
     [DataField(required: true), AutoNetworkedField]
     public int Rounds = 400;
@@ -30,7 +58,20 @@ public sealed partial class DropshipAmmoComponent : Component
     public int RoundsPerShot = 40;
 
     [DataField, AutoNetworkedField]
+    public int? RoundsPerSprite;
+
+    [DataField, AutoNetworkedField]
     public int ShotsPerVolley = 1;
+
+    /// <summary>Separate impact locations per volley, independent of ammunition consumption.</summary>
+    [DataField, AutoNetworkedField]
+    public int ImpactsPerVolley = 1;
+
+    [DataField, AutoNetworkedField]
+    public bool SelectableLaserPattern;
+
+    [DataField, AutoNetworkedField]
+    public bool SelectableAirburstHeight;
 
     [DataField, AutoNetworkedField]
     public DamageSpecifier? Damage;
@@ -67,6 +108,10 @@ public sealed partial class DropshipAmmoComponent : Component
 
     [DataField, AutoNetworkedField]
     public string? AmmoType;
+
+    /// <summary>Allows distinct ammunition types to share existing depletion artwork.</summary>
+    [DataField, AutoNetworkedField]
+    public string? AmmoSpriteType;
 
     [DataField, AutoNetworkedField]
     public RMCExplosion? Explosion;
