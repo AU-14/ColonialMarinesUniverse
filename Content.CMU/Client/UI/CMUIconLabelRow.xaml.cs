@@ -3,12 +3,12 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 
-namespace Content.Client._RMC14.UserInterface;
+namespace Content.Client.CMU14.UI;
 
 [GenerateTypedNameReferences]
-public sealed partial class RMCIconLabelRow : BoxContainer
+public sealed partial class CMUIconLabelRow : BoxContainer
 {
-    public RMCIconLabelRow()
+    public CMUIconLabelRow()
     {
         RobustXamlLoader.Load(this);
     }
