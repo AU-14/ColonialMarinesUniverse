@@ -29,6 +29,7 @@ public sealed partial class YautjaPredatorRoundSystem
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private JobWhitelistManager _jobWhitelist = default!;
     [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private YautjaStrandedSystem _stranded = default!;
 
     private static readonly SoundSpecifier HuntNoticeSound = new SoundCollectionSpecifier("CMUYautjaElderOverseer");
 
@@ -42,6 +43,7 @@ public sealed partial class YautjaPredatorRoundSystem
     private string? _rolledPresetId;
     private EntityUid? _rolledHunt;
     private bool _huntWasActive;
+    private bool _strandedWasOpen;
 
     public bool HuntActive => IsHuntActive();
 
@@ -56,6 +58,14 @@ public sealed partial class YautjaPredatorRoundSystem
         base.Update(frameTime);
 
         TryRollLobbyHunt();
+
+        // the stranded slot opens at round start or by hand and closes once someone takes it
+        var strandedOpen = _stranded.StrandedSlotOpen;
+        if (strandedOpen != _strandedWasOpen)
+        {
+            _strandedWasOpen = strandedOpen;
+            SendLobbyStatusToAll();
+        }
 
         // admins can also start/stop it from the clan hall, so just watch for the edge
         var active = IsHuntActive();
@@ -282,7 +292,8 @@ public sealed partial class YautjaPredatorRoundSystem
                 IsHuntActive(),
                 _huntReady.Contains(session.UserId),
                 IsAncientSlotEligible(session),
-                CanUseHuntWhitelist(session)),
+                CanUseHuntWhitelist(session),
+                _stranded.StrandedSlotOpen),
             session);
     }
 

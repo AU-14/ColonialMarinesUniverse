@@ -84,6 +84,7 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
     [Dependency] private YautjaTeleportSystem _teleport = default!;
 
     private int _slotRound = -1;
+    private EntityUid? _slotStation;
     private EntityUid? _hutGrid;
     private readonly HashSet<NetUserId> _strandedPlayers = new();
     private readonly HashSet<NetUserId> _hunterPlayers = new();
@@ -111,6 +112,14 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
 
     public IReadOnlyCollection<EntityUid> StrandedMobs => _strandedMobs;
 
+    // opened this round and nobody took it yet. the lobby uses this to show the Join Hunt card on rounds with no hunt
+    public bool StrandedSlotOpen =>
+        _slotRound == _gameTicker.RoundId &&
+        _slotStation is { } station &&
+        !TerminatingOrDeleted(station) &&
+        _stationJobs.TryGetJobSlot(station, StrandedJob.Id, out var slots) &&
+        slots is null or > 0;
+
     private void OnRulePlayerSpawning(RulePlayerSpawningEvent ev)
     {
         // runs before round start job assignment, so a readied whitelisted player can roll into the slot.
@@ -131,6 +140,7 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
         _stationJobs.SetRoundStartJobSlot(station, StrandedJob, slots);
         _stationJobs.TrySetJobSlot(station, StrandedJob.Id, slots, true);
         _slotRound = _gameTicker.RoundId;
+        _slotStation = station;
         Log.Info($"Opened {slots} stranded Yautja slot(s) on {ToPrettyString(station)}");
         return true;
     }
@@ -251,6 +261,7 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _slotRound = -1;
+        _slotStation = null;
         _hutGrid = null;
         _strandedPlayers.Clear();
         _hunterPlayers.Clear();

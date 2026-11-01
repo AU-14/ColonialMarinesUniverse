@@ -478,7 +478,7 @@ namespace Content.Client.Lobby
                 // into a join button.
                 Lobby!.ReadyButton.Visible = false;
                 Lobby!.JoinRoundButton.Visible = true;
-                if (_joinRoundWindow != null) _joinRoundWindow.SetHuntVisible(CanSeeHunt()); // CMU14
+                if (_joinRoundWindow != null) _joinRoundWindow.SetHuntVisible(_huntLobby.CanSeeHuntCard); // CMU14
                 if (_huntReadyButton != null) _huntReadyButton.Visible = false; // CMU14
             }
             else
@@ -603,7 +603,7 @@ namespace Content.Client.Lobby
             window.JoinColonistsButton.OnPressed += args2 => { window.Close(); OnReadyPressed(args2); };
             window.JoinGovforButton.OnPressed += args2 => { window.Close(); OnJoinGovforPressed(args2); };
             window.JoinOpforButton.OnPressed += args2 => { window.Close(); OnJoinOpforPressed(args2); };
-            window.SetHuntVisible(CanSeeHunt()); // CMU14
+            window.SetHuntVisible(_huntLobby.CanSeeHuntCard); // CMU14
             window.JoinHuntButton.OnPressed += args2 => { window.Close(); OnJoinHuntPressed(args2); };
             window.JoinOtherButton.OnPressed += args2 => { window.Close(); OnJoinOtherPressed(args2); };
             window.OnClose += () =>
@@ -641,7 +641,8 @@ namespace Content.Client.Lobby
             UpdateLobbyUi();
         }
 
-        // CMU14 start: the hunt card and toggle only exist for whitelisted players while a hunt is on
+        // CMU14 start: the ready toggle only exists for whitelisted players while a hunt is on. the card
+        // also shows for an open stranded slot, see YautjaHuntLobbySystem.CanSeeHuntCard
         private bool CanSeeHunt()
         {
             return _huntLobby.HuntActive && _huntLobby.HuntWhitelisted;
