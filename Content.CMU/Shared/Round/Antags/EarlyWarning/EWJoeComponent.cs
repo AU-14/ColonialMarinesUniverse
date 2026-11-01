@@ -1,3 +1,4 @@
+using Content.Shared.Random;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -73,6 +74,38 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public Dictionary<string, int> GrantedComponents = new();
 
+    /// <summary>How many objectives each level offers (D8: three offered).</summary>
+    [DataField]
+    public int ObjectivesPerLevel = 3;
+
+    /// <summary>Credit needed to advance a level (D8: two completed). A completion is worth 1 credit, or
+    /// <see cref="PreThreatCreditMultiplier"/> while the round's threat is not yet selected in
+    /// <see cref="PreThreatPreset"/> (balance A-17).</summary>
+    [DataField]
+    public int CreditPerLevel = 2;
+
+    [DataField]
+    public int PreThreatCreditMultiplier = 2;
+
+    [DataField]
+    public string PreThreatPreset = "ColonyFall";
+
+    /// <summary>Objectives offered for the current level, finished or not. Server bookkeeping.</summary>
+    [DataField]
+    public List<EntityUid> CurrentObjectives = new();
+
+    /// <summary>Credit earned per finished objective of the current level. Cleared on advance.</summary>
+    [DataField]
+    public Dictionary<EntityUid, int> CompletedCredit = new();
+
+    /// <summary>When an offer came up empty (no valid targets yet), the next time the pool is retried.</summary>
+    [DataField]
+    public TimeSpan NextOfferAttempt;
+
+    /// <summary>How long to wait before retrying an empty offer.</summary>
+    [DataField]
+    public TimeSpan OfferRetryDelay = TimeSpan.FromSeconds(60);
+
     [DataField]
     public List<EntityUid> Thralls = new();
 
@@ -100,6 +133,21 @@ public sealed partial class EWJoeLevelDef
     /// <summary>Components added when this level is reached. Existing components are not replaced.</summary>
     [DataField]
     public ComponentRegistry Components = new();
+
+    /// <summary>
+    /// Objective pool (a weightedRandom of weightedRandom groups, as the traitor pools are) offered when
+    /// this level is reached. Null for the last level: nothing is offered past Melding.
+    /// </summary>
+    [DataField]
+    public ProtoId<WeightedRandomPrototype>? ObjectiveGroup;
+
+    /// <summary>An objective always included in this level's offer, before the random picks (D8: level 4 always offers a console).</summary>
+    [DataField]
+    public EntProtoId? ForcedObjective;
+
+    /// <summary>Advancing out of this level also requires a finished console assimilation (D8: level 4 to 5).</summary>
+    [DataField]
+    public bool RequireAssimilation;
 }
 
 /// <summary>

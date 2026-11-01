@@ -57,12 +57,14 @@
   - DistressSignal
   objective: roles-antag-ew-joe-objective
 
-# Level table. Index = level. Only level 0 is populated in phase E0; later phases fill levels 1-5.
+# Level table. Index = level. Level 0 grants the E0 kit; each level's objectiveGroup is the pool offered
+# on reaching it (phase E1; pools in Objectives/ew_joe.yml). Ability grants for levels 1-5 arrive in E4-E6.
 # Level-0 numbers follow the balance report constants sheet (A-3: 1 s stun + 20 stamina per punch).
 - type: ewJoeLevels
   id: CMUEWJoeLevels
   levels:
   - name: ew-joe-level-0
+    objectiveGroup: CMUEWJoeObjectivesLevel0
     actions:
     - CMUActionEWJoeTestOfFaith
     - CMUActionEWJoeOpticalZoom
@@ -77,7 +79,22 @@
     - type: RMCStaminaDamageOnHit
       damage: 20
   - name: ew-joe-level-1
+    objectiveGroup: CMUEWJoeObjectivesLevel1
   - name: ew-joe-level-2
+    objectiveGroup: CMUEWJoeObjectivesLevel2
+  # D15: the CMB wanted record exists from level 3, when the disfigurement becomes the tell.
+  # Synths have no prints or DNA, so the record carries neither.
   - name: ew-joe-level-3
+    objectiveGroup: CMUEWJoeObjectivesLevel3
+    components:
+    - type: ColonyBounty
+      bounty: 1500
+      reason: Rogue synthetic unit - malfunctioning, hostile, do not approach alone
+      recordName: Rogue Working Joe (Unknown)
+      capturedFaxPaper: CMUPaperColonyAntagCaptured
+  # D8: level 4 always offers a console, and leaving it requires a finished assimilation.
   - name: ew-joe-level-4
+    objectiveGroup: CMUEWJoeObjectivesLevel4
+    forcedObjective: CMUEWJoeAssimilateConsoleObjective
+    requireAssimilation: true
   - name: ew-joe-level-5

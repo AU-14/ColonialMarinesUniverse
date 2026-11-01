@@ -150,6 +150,9 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         if (TerminatingOrDeleted(ent))
             return;
 
+        var ev = new EWJoeRemovedEvent();
+        RaiseLocalEvent(ent, ref ev);
+
         ClearGrants(ent);
     }
 

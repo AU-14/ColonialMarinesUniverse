@@ -44,3 +44,24 @@ cmu-summary-detail-ew-joe = Reached {$level} ({$levelName}); {$thralls ->
 
 # Reboot
 working-joe-reboot-refused-ew = Its systems reject the reset key.
+
+# Objectives (phase E1)
+objective-issuer-grand-machine = The Signal
+
+cmu-ew-joe-objective-kill-person-title = Make {$targetName}, {$job}, stop.
+cmu-ew-joe-objective-kill-count-title = Make {$count} people stop.
+cmu-ew-joe-objective-kill-count-description = Organics only. Any death that is yours counts: your hands, your weapon, your trigger.
+
+cmu-ew-joe-objective-collect-firearms-title = Hold {$count} firearms.
+cmu-ew-joe-objective-collect-firearms-description = Carry {$count} firearms on you at once. Where they came from does not matter.
+cmu-ew-joe-objective-collect-intel-title = Hold {$count} pieces of sensitive equipment.
+cmu-ew-joe-objective-collect-intel-description = Carry {$count} tracked intelligence items on you at once: recorders, laptops, data units.
+cmu-ew-joe-objective-collect-disks-title = Hold {$count} encrypted data disks.
+cmu-ew-joe-objective-collect-disks-description = Carry {$count} encrypted intel disks on you at once.
+
+cmu-ew-joe-objective-assimilate-title = Assimilate the {$console} ({$area}).
+cmu-ew-joe-objective-assimilate-description = Bring the {$console} in {$area} into the signal.
+cmu-ew-joe-objective-area-unknown = location unknown
+
+cmu-ew-joe-objective-complete = The signal is pleased.
+cmu-ew-joe-level-up = The signal grows louder. You have reached {$levelName}.
