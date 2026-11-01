@@ -119,9 +119,12 @@ public sealed partial class RMCDefibrillatorSystem : EntitySystem
                 return false;
             _damageable.TryChangeDamage(target, effectiveHeal, true, origin: origin,
                 interruptsDoAfters: interruptsDoAfters);
+            // CMU14: prosthetic limb damage is tool-repair-only and must not veto defibrillation
+            var protectedEv = new RMCDefibrillatorProtectedDamageEvent(target);
+            RaiseLocalEvent(target, ref protectedEv);
             if (!IsCurrentPatient() || mob.CurrentState != MobState.Dead ||
                 !_mobThreshold.TryGetThresholdForState(target, MobState.Dead, out var threshold, thresholds) ||
-                _damageable.GetTotalDamage(target) >= threshold)
+                _damageable.GetTotalDamage(target) - protectedEv.Protected.GetTotal() >= threshold)
                 return false;
 
             _mobState.ChangeMobState(target, MobState.Critical, mob, origin);
