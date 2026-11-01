@@ -1,0 +1,141 @@
+# Shared pieces for Dutch's Dozen (cmss13 FACTION_DUTCH): faction, IFF, radio, ID cards and the mob base.
+
+- type: npcFaction
+  parent: MILITARY
+  id: CMUDutchsDozen
+  name: Dutch's Dozen
+
+- type: entity
+  id: CMUDutchsDozen
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+
+# cmss13 DUT_FREQ, the team's own channel
+- type: radioChannel
+  id: CMUDutchsDozen
+  name: cmu-radio-dutchs-dozen
+  keycode: "ð"
+  frequency: 158.9
+  color: "#6b8e23"
+  longRange: true
+  tower: true
+
+- type: entity
+  parent: CMEncryptionKey
+  id: CMUEncryptionKeyDutchsDozen
+  name: Dutch's Dozen encryption key
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EncryptionKey
+    channels:
+    - CMUDutchsDozen
+    - Colony
+    defaultChannel: CMUDutchsDozen
+  - type: Sprite
+    state: cap_key
+
+# cmss13 /obj/item/device/radio/headset/distress/dutch
+- type: entity
+  parent: RMCHeadsetIcons
+  id: CMUHeadsetDutchsDozen
+  name: Dutch's Dozen headset
+  description: A special headset used by small groups of trained operatives. Or terrorists.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMUEncryptionKeyDutchsDozen
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardDutchsDozen
+  name: Dutch's Dozen dogtag
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobDutchsDozenRifleman
+  - type: ItemIFF
+    factions:
+    - CMUDutchsDozen
+
+- type: entity
+  parent: CMUIDCardDutchsDozen
+  id: CMUIDCardDutchsDozenMinigunner
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobDutchsDozenMinigunner
+
+- type: entity
+  parent: CMUIDCardDutchsDozen
+  id: CMUIDCardDutchsDozenFlamer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobDutchsDozenFlamer
+
+- type: entity
+  parent: CMUIDCardDutchsDozen
+  id: CMUIDCardDutchsDozenMedic
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobDutchsDozenMedic
+
+# cmss13 gives Arnold a gold ID
+- type: entity
+  parent: CMUIDCardDutchsDozen
+  id: CMUIDCardDutchsDozenArnold
+  name: Arnold's gold ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobDutchsDozenArnold
+  - type: Sprite
+    state: gold
+
+- type: entity
+  parent: CMMobHuman
+  id: CMUBaseMobDutchsDozen
+  abstract: true
+  suffix: CMU, Dutch's Dozen
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: NpcFactionMember
+    factions:
+    - CMUDutchsDozen
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAverageJoe
+    - RMCHumanHairCut
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSkinhead
+    - RMCHumanHairUndercut
+    allowedFemaleHairStyles:
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairShortbangs
+    # cmss13 load_name rolls dark brown hair and amber-brown eyes for the whole team
+    allowedHairColorsHex:
+    - "#1A1A1A"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    allowedEyeColorsHex: [ "#8B3E13" ]
+    beardChance: 0.6
+    allowedBeardStyles:
+    - HumanFacialHairFiveoclock
+    - HumanFacialHair5oclockmoustache
+    - HumanFacialHair3oclock
+    - HumanFacialHairMoustache
