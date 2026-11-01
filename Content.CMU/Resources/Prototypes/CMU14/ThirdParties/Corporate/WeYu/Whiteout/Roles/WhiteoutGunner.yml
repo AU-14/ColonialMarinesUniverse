@@ -19,6 +19,7 @@
       RMCSkillFirearms: 3
       RMCSkillSpecialistWeapons: 2
       RMCSkillPolice: 2
+  - type: CMULastStand
   - type: JobPrefix
     prefix: cmu-whiteout-prefix-gunner
   - type: Language

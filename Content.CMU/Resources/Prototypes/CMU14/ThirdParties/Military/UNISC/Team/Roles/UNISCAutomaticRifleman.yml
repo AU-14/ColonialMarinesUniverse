@@ -12,6 +12,7 @@
       - AU14SquadUNISC
   - type: Skills
     preset: AU14SkillPresetPlatoonAutomaticRifleman
+  - type: CMULastStand
   - type: JobPrefix
     prefix: au14-job-name-unisc-automatic-rifleman
   - type: Language

@@ -29,6 +29,7 @@
       RMCSkillSmartGun: 1
   - type: EquipEntityPreset
     preset: RuMCBEARmachinegunPreset
+  - type: CMULastStand
   - type: JobPrefix
     prefix: rumc-job-prefix-machinegunner
   - type: MarineOrders

@@ -221,6 +221,7 @@
       RMCSkillEngineer: 1
       RMCSkillMedical: 1
       RMCSkillSmartGun: 1
+  - type: CMULastStand
   name: cmu-job-title-prodigy-sf-smartgunner
   description: cmu-prodigy-sf-description
   playTimeTracker: CMUJobProdigySFSmartgunner

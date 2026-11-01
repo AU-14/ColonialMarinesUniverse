@@ -45,6 +45,7 @@
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: smartgunner
     - type: MutinyEligible
+    - type: CMULastStand # CMU14: smartgunner Last Stand ability
 
 - type: startingGear
   id: CMGearSmartGunOperator

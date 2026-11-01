@@ -1,0 +1,9 @@
+# Last Stand ability tuning. Jobs grant the ability with `- type: CMULastStand` in their
+# roundComponents; the component points here (CMUDefaultLastStand by default) for its numbers.
+- type: cmuLastStand
+  id: CMUDefaultLastStand
+  damageMultiplier: 2
+  accuracyBonus: 0.25 # +25%
+  duration: 30
+  cooldown: 600 # 10 minutes
+  deathCooldown: 300 # 5 minutes, from activation, when the user dies mid-surge

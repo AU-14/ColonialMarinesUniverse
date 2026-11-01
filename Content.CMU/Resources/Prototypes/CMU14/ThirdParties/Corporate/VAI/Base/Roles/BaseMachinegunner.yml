@@ -25,6 +25,7 @@
       RMCSkillSmartGun: 1
   - type: EquipEntityPreset
     preset: AU14VAIMGPreset
+  - type: CMULastStand
   - type: JobPrefix
     prefix: au14-job-prefix-vai-machinegunner
 

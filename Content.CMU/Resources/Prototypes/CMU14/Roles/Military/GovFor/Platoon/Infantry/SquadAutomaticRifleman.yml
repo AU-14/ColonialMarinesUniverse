@@ -25,6 +25,7 @@
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
   - type: SquadArmorWearer
+  - type: CMULastStand
   - type: Skills
     preset: AU14SkillPresetPlatoonAutomaticRifleman
   - type: JobPrefix

@@ -23,6 +23,7 @@
       RMCSkillEngineer: 2
       RMCSkillPolice: 2
   - type: SquadArmorWearer
+  - type: CMULastStand
   - type: JobPrefix
     prefix: au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC
   - type: TacticalMapIcon

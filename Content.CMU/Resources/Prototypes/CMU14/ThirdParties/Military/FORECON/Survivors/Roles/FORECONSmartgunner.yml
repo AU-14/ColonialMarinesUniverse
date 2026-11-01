@@ -6,6 +6,8 @@
   playTimeTracker: AU14JobFORECONSmartGunOperator
   basePlaytimeTracker: true
   hidden: true
+  roundComponents:
+  - type: CMULastStand
 
 - type: job
   parent: AU14FORECONSmartGunOperatorBase

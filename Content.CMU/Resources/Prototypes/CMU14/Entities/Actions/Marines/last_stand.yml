@@ -1,0 +1,14 @@
+- type: entity
+  id: CMUActionLastStand
+  name: Last Stand
+  description: Do or die. While badly hurt, surge with adrenaline for 30 seconds, doubling your gun damage and firing 25% more accurately.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Marines.LastStand.CMULastStandActionEvent
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_actions.rsi
+      state: hold
+      map: ["enum.ActionVisuals.Icon"]

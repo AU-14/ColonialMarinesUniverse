@@ -27,6 +27,7 @@
       RMCSkillEndurance: 2
   - type: EquipEntityPreset
     preset: RuMCBEARmachinegunPresetGROZA
+  - type: CMULastStand
   - type: JobPrefix
     prefix: rumc-job-prefix-machinegunner
   - type: MarineOrders

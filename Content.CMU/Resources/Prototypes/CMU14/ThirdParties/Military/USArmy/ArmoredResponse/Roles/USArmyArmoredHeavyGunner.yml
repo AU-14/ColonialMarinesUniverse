@@ -6,6 +6,8 @@
   playTimeTracker: AU14JobUSArmyHeavyGunner
   basePlaytimeTracker: true
   hidden: true
+  roundComponents:
+  - type: CMULastStand
 
 - type: job
   parent: AU14USArmyHeavyGunnerBase

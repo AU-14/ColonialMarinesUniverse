@@ -22,6 +22,7 @@
       RMCSkillJtac: 2
       RMCSkillSmartGun: 1
       RMCSkillSpecialistWeapons: 1
+  - type: CMULastStand
   - type: JobPrefix
     prefix: au14-job-prefix-clfmachinegunner
   - type: TacticalMapIcon
