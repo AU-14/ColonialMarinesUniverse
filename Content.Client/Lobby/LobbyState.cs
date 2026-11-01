@@ -35,7 +35,6 @@ namespace Content.Client.Lobby
 {
     public sealed partial class LobbyState : State
     {
-    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaHunterPrototype = "CMUYautjaHunter";
 
         [Dependency] private IBaseClient _baseClient = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
@@ -645,7 +644,7 @@ namespace Content.Client.Lobby
         // CMU14 start: the hunt card and toggle only exist for whitelisted players while a hunt is on
         private bool CanSeeHunt()
         {
-            return _huntLobby.HuntActive && HasYautjaWhitelist();
+            return _huntLobby.HuntActive && _huntLobby.HuntWhitelisted;
         }
 
         private void UpdateHuntReadyButton()
@@ -664,14 +663,6 @@ namespace Content.Client.Lobby
             CmuReadyToggle.Apply(_huntReadyButton!, args.Pressed, "cmu-yautja-hunt-ready-button-on", "cmu-yautja-hunt-ready-button-off");
         }
         // CMU14 end
-
-        private bool HasYautjaWhitelist()
-        {
-            if (!_protoMan.TryIndex<JobPrototype>(CMUYautjaHunterPrototype, out var hunter))
-                return false;
-
-            return _jobRequirements.CheckWhitelist(hunter, out _);
-        }
 
         private void OnPrevCharPressed(BaseButton.ButtonEventArgs args)
         {

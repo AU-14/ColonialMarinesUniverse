@@ -8,6 +8,8 @@ public sealed class YautjaHuntLobbySystem : EntitySystem
     public bool HuntActive { get; private set; }
     public bool HuntReady { get; private set; }
     public bool AncientSlotAllowed { get; private set; }
+    // server's call, the client-side whitelist check also counts Boosty tiers
+    public bool HuntWhitelisted { get; private set; }
 
     public event Action? Updated;
 
@@ -23,6 +25,7 @@ public sealed class YautjaHuntLobbySystem : EntitySystem
         HuntActive = ev.HuntActive;
         HuntReady = ev.HuntReady;
         AncientSlotAllowed = ev.AncientSlotAllowed;
+        HuntWhitelisted = ev.HuntWhitelisted;
         Updated?.Invoke();
     }
 

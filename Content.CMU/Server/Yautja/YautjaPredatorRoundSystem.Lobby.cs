@@ -118,9 +118,10 @@ public sealed partial class YautjaPredatorRoundSystem
         return false;
     }
 
+    // real whitelist holders only, Boosty tiers don't get the hunt card, the ready toggle or the notice
     public bool CanUseHuntWhitelist(ICommonSession session)
     {
-        return _jobWhitelist.IsAllowed(session, "CMUYautjaHunter");
+        return _jobWhitelist.HoldsYautjaWhitelist(session.UserId);
     }
 
     public bool TrySetHuntReady(ICommonSession session, bool ready, out string message)
@@ -236,7 +237,8 @@ public sealed partial class YautjaPredatorRoundSystem
         RaiseNetworkEvent(new YautjaHuntLobbyStatusEvent(
                 IsHuntActive(),
                 _huntReady.Contains(session.UserId),
-                IsAncientSlotEligible(session)),
+                IsAncientSlotEligible(session),
+                CanUseHuntWhitelist(session)),
             session);
     }
 

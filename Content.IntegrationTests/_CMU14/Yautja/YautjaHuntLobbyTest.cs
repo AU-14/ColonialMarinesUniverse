@@ -46,6 +46,15 @@ public sealed class YautjaHuntLobbyTest
             // no whitelist yet, so no hunt for you
             Assert.That(round.TrySetHuntReady(player, true, out _), Is.False);
         });
+        await pair.RunTicksSync(10);
+
+        // the hunt is on, but the card/toggle stay hidden from non-holders
+        await pair.Client.WaitAssertion(() =>
+        {
+            var lobby = pair.Client.System<YautjaHuntLobbySystem>();
+            Assert.That(lobby.HuntActive, Is.True);
+            Assert.That(lobby.HuntWhitelisted, Is.False);
+        });
 
         var db = server.ResolveDependency<IServerDbManager>();
         await db.SetYautjaWhitelistFlagsAsync(player.UserId.UserId, (int) YautjaWhitelistFlags.Yautja);
@@ -63,6 +72,7 @@ public sealed class YautjaHuntLobbyTest
         {
             var lobby = pair.Client.System<YautjaHuntLobbySystem>();
             Assert.That(lobby.HuntActive, Is.True);
+            Assert.That(lobby.HuntWhitelisted, Is.True);
             Assert.That(lobby.HuntReady, Is.True);
         });
 
