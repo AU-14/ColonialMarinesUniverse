@@ -45,8 +45,13 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
     private static readonly EntProtoId HutWall = "CMUHunterShipWallTurfClosedWallHuntershipHunterBase";
     private static readonly EntProtoId HutVendor = "CMUYautjaStrandedLoadoutVendor";
     private static readonly EntProtoId HutLocker = "CMUHunterShipMeatLockerFoodBreadMeatXenoSlicex5FoodMeatTomatox5";
-    private static readonly EntProtoId HutBed = "CMBed";
-    private static readonly EntProtoId HutRope = "CMUYautjaRope";
+    private static readonly EntProtoId HutBed = "CMUHunterShipPlacedCMBedAbedSouthOffset6x7";
+    private static readonly EntProtoId HutCloset = "CMUYautjaStrandedHutCloset";
+    private static readonly EntProtoId HutTable = "CMUHunterShipPlacedTableReinforcedPrison1tilethickSouth";
+    private static readonly EntProtoId HutStew = "CMUHunterShipPlacedFoodSoupStewStewSouthOffset0x6";
+    private static readonly EntProtoId HutFork = "CMUHunterShipPlacedForkForkSouthOffset10x3";
+    private static readonly EntProtoId HutSpoon = "CMUHunterShipPlacedSpoonSpoonSouthOffset4x5";
+    private static readonly EntProtoId HutLantern = "CMUHunterShipPlacedRMCFlashlightLanternYautjaSouth";
     private static readonly EntProtoId HutLight = "CMUHunterShipRedGlowFloorLight";
     private static readonly EntProtoId HutTeleporter = "CMUYautjaStrandedTeleporter";
 
@@ -294,10 +299,25 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
             }
         }
 
+        // same furniture as cmss13 predsurv_base, plus our meat locker. two racks side by side auto-join into
+        // the left/right pair, and the vend limits live on the user so the second one doesn't double the kit
         SpawnInHut(grid, HutVendor, new Vector2i(-2, 2));
+        SpawnInHut(grid, HutVendor, new Vector2i(-1, 2));
+        SpawnInHut(grid, HutCloset, new Vector2i(1, 2));
         SpawnInHut(grid, HutLocker, new Vector2i(2, 2));
         SpawnInHut(grid, HutBed, new Vector2i(3, 2));
-        SpawnInHut(grid, HutRope, new Vector2i(3, 1));
+
+        var stewTable = new Vector2i(3, 0);
+        SpawnInHut(grid, HutTable, stewTable);
+        SpawnInHut(grid, HutStew, stewTable);
+        SpawnInHut(grid, HutStew, stewTable);
+
+        var toolTable = new Vector2i(3, -1);
+        SpawnInHut(grid, HutTable, toolTable);
+        SpawnInHut(grid, HutFork, toolTable);
+        SpawnInHut(grid, HutSpoon, toolTable);
+        SpawnInHut(grid, HutLantern, toolTable);
+
         SpawnInHut(grid, HutLight, HutSpawnTile);
         SpawnInHut(grid, HutLight, HutPadTile);
         SpawnInHut(grid, HutTeleporter, HutPadTile);

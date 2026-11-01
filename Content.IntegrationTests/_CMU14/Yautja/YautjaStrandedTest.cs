@@ -10,6 +10,8 @@ using Content.Shared.NPC.Components;
 using Content.Shared.Preferences;
 using Content.Shared.Radio.Components;
 using Content.Shared.Roles;
+using Content.Shared.Stacks;
+using Content.Shared.Storage.Components;
 using Content.Shared._RMC14.TacticalMap;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
@@ -123,19 +125,45 @@ public sealed class YautjaStrandedTest
             Assert.That(entMan.HasComponent<MapGridComponent>(hut!.Value), Is.True);
 
             EntityUid? pad = null;
-            var hasRack = false;
+            EntityUid? closet = null;
+            var counts = new Dictionary<string, int>();
             var hutChildren = entMan.GetComponent<TransformComponent>(hut.Value).ChildEnumerator;
             while (hutChildren.MoveNext(out var child))
             {
                 var id = entMan.GetComponent<MetaDataComponent>(child).EntityPrototype?.ID;
-                if (id == "CMUYautjaStrandedLoadoutVendor")
-                    hasRack = true;
+                if (id != null)
+                    counts[id] = counts.GetValueOrDefault(id) + 1;
+                if (id == "CMUYautjaStrandedHutCloset")
+                    closet = child;
                 if (entMan.HasComponent<YautjaStrandedTeleporterComponent>(child))
                     pad = child;
             }
 
-            Assert.That(hasRack, Is.True, "cmss13 predsurv_base has the stranded gear vendors");
-            Assert.That(pad, Is.Not.Null);
+            // cmss13 predsurv_base: left + right rack, a stocked closet, bed, two tables with stew,
+            // fork, spoon and a lantern
+            Assert.Multiple(() =>
+            {
+                Assert.That(counts.GetValueOrDefault("CMUYautjaStrandedLoadoutVendor"), Is.EqualTo(2));
+                Assert.That(counts.GetValueOrDefault("CMUHunterShipPlacedCMBedAbedSouthOffset6x7"), Is.EqualTo(1));
+                Assert.That(counts.GetValueOrDefault("CMUHunterShipPlacedTableReinforcedPrison1tilethickSouth"), Is.EqualTo(2));
+                Assert.That(counts.GetValueOrDefault("CMUHunterShipPlacedFoodSoupStewStewSouthOffset0x6"), Is.EqualTo(2));
+                Assert.That(counts.GetValueOrDefault("CMUHunterShipPlacedForkForkSouthOffset10x3"), Is.EqualTo(1));
+                Assert.That(counts.GetValueOrDefault("CMUHunterShipPlacedSpoonSpoonSouthOffset4x5"), Is.EqualTo(1));
+                Assert.That(counts.GetValueOrDefault("CMUHunterShipPlacedRMCFlashlightLanternYautjaSouth"), Is.EqualTo(1));
+                Assert.That(closet, Is.Not.Null);
+                Assert.That(pad, Is.Not.Null);
+            });
+
+            // the build material is the part that matters, two big stacks of each sandstone and two ropes
+            var stored = entMan.GetComponent<EntityStorageComponent>(closet!.Value).Contents.ContainedEntities
+                .Select(e => (Id: entMan.GetComponent<MetaDataComponent>(e).EntityPrototype?.ID, Count: entMan.GetComponent<StackComponent>(e).Count))
+                .ToList();
+            Assert.Multiple(() =>
+            {
+                Assert.That(stored.Where(s => s.Id == "CMUYautjaRope").Select(s => s.Count), Is.EqualTo(new[] { 8, 8 }));
+                Assert.That(stored.Where(s => s.Id == "CMUSheetSandstone").Select(s => s.Count), Is.EqualTo(new[] { 50, 50 }));
+                Assert.That(stored.Where(s => s.Id == "CMUSheetRunedSandstone").Select(s => s.Count), Is.EqualTo(new[] { 50, 50 }));
+            });
 
             var destination = entMan.SpawnEntity("CMUYautjaGroundRelayDestination", map.GridCoords);
             entMan.GetComponent<YautjaRelayDestinationComponent>(destination).Id = "test.ground";

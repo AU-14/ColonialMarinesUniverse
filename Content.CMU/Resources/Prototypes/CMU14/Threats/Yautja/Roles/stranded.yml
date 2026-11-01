@@ -36,6 +36,21 @@
 - type: playTimeTracker
   id: CMUYautjaStranded
 
+# cmss13 predsurv_base closet/yautja/big: two ropes and the sandstone to build with
+- type: entity
+  parent: CMUHunterShipMeatLockerBoxCandleSmallx5OffsetNeg1xNeg1
+  id: CMUYautjaStrandedHutCloset
+  suffix: Yautja, Stranded
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUYautjaRope
+      amount: 2
+    - id: CMUSheetSandstone
+      amount: 2
+    - id: CMUSheetRunedSandstone
+      amount: 2
+
 - type: entity
   parent: MarkerBase
   id: CMUYautjaStrandedTeleporter
