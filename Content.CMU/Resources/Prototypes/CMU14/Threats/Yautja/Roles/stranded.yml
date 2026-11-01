@@ -1,0 +1,89 @@
+# cmss13 /datum/job/antag/pred_surv/stranded and /datum/equipment_preset/yautja/stranded
+- type: job
+  parent: CMUYautjaJobBase
+  id: CMUYautjaStranded
+  name: cmu-yautja-job-name-stranded
+  description: cmu-yautja-job-description-stranded
+  playTimeTracker: CMUYautjaStranded
+  icon: CMUYautjaJobIcon
+  supervisors: cmu-job-supervisors-yautja-stranded
+  joinNotifyCrew: false
+  hidden: false
+  canBeAntag: false
+  whitelisted: true
+  whitelistParent: CMUYautjaHunter
+  jobEntity: CMUMobYautjaStranded
+  jobPreviewEntity: CMUMobYautjaStranded
+  startingGear: CMUYautjaStrandedSpawnGear
+  usePlayerProfile: false
+  applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Yautja
+      npcFaction: CMUYautjaStranded
+    - type: IgnoreXenoWeedsSlowdown
+    - type: Skills
+      preset: CMUSkillPresetYautjaWarrior
+
+# cmss13 only equips the bracer and the damaged communicator, the rest comes from the hut rack
+- type: startingGear
+  id: CMUYautjaStrandedSpawnGear
+  equipment:
+    ears: CMUYautjaStrandedCommunicator
+    gloves: CMUYautjaBracer
+
+- type: playTimeTracker
+  id: CMUYautjaStranded
+
+# cmss13 predsurv_base closet/yautja/big: two ropes and the sandstone to build with
+- type: entity
+  parent: CMUHunterShipMeatLockerBoxCandleSmallx5OffsetNeg1xNeg1
+  id: CMUYautjaStrandedHutCloset
+  suffix: Yautja, Stranded
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUYautjaRope
+      amount: 2
+    - id: CMUSheetSandstone
+      amount: 2
+    - id: CMUSheetRunedSandstone
+      amount: 2
+
+- type: entity
+  parent: MarkerBase
+  id: CMUYautjaStrandedTeleporter
+  name: stranded hut teleporter
+  description: One-way step trigger out of the stranded Yautja hut.
+  suffix: Yautja, Stranded
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 1500
+        hard: false
+        mask:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+        layer:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+  - type: StepTrigger
+    intersectRatio: 0.15
+    requiredTriggeredSpeed: 0.5
+    ignoreWeightless: true
+    stepOn: true
+  - type: YautjaStrandedTeleporter
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui

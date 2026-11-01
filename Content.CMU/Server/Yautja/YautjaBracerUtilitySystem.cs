@@ -65,6 +65,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
     private static readonly Color RetroTranslatorColor = Color.White;
     private static readonly ProtoId<EmotePrototype> HumanPainEmote = "Scream";
     private static readonly ProtoId<AccessLevelPrototype> YautjaBadBloodAccess = "CMUAccessYautjaBadBlood";
+    private static readonly ProtoId<AccessLevelPrototype> YautjaSecureAccess = "CMUAccessYautjaSecure";
     private static readonly DamageSpecifier DefaultTechShockDamage = new()
     {
         DamageDict = new()
@@ -1419,9 +1420,12 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         if (TryComp(chip, out IdCardComponent? id))
             _idCard.TryChangeFullName(chip, Name(user), id);
 
+        // cmss13 embedded bracer ID returns early for stranded, so they only ever get secure access
         var access = bracer.Comp.BadBlood
             ? [YautjaBadBloodAccess]
-            : AccessForOwnerRank(bracer.Comp.OwnerRank);
+            : HasComp<YautjaStrandedComponent>(user)
+                ? [YautjaSecureAccess]
+                : AccessForOwnerRank(bracer.Comp.OwnerRank);
 
         _access.TrySetTags(chip, access);
     }

@@ -21,6 +21,8 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
+  # cmss13 resist_fire: quick expert roll, never the panic roll
+  - type: CMUHunterFireRoll
   # cmss13 /datum/pain/yautja ignores a hostile xeno dragging them in crit
   - type: CMUNoDragSuffocation
   # cmss13 YAUTJA_SLOWED_AMOUNT / YAUTJA_SUPERSLOWED_AMOUNT take most of the human slow off preds (+0.75 / +1 move

@@ -1200,22 +1200,9 @@
   - type: Icon
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
     state: pred_vendor_left
+  # no GenericVisualizer here, YautjaGearRackClientSystem draws the rack layers itself every frame. a visualizer
+  # setting pred_vendor_left on a pair it had already swapped to the merged rsi just logged a missing state
   - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.YautjaGearRackVisuals.State:
-        enum.VendingMachineVisualLayers.Base:
-          Left: {state: pred_vendor_left}
-          LeftCentre: {state: pred_vendor_lcenter}
-          Centre: {state: pred_vendor_centre}
-          RightCentre: {state: pred_vendor_rcentre}
-          Right: {state: pred_vendor_right}
-        enum.VendingMachineVisualLayers.BaseUnshaded:
-          Left: {state: pred_vendor_left}
-          LeftCentre: {state: pred_vendor_lcenter}
-          Centre: {state: pred_vendor_centre}
-          RightCentre: {state: pred_vendor_rcentre}
-          Right: {state: pred_vendor_right}
   - type: YautjaGearRack
   - type: RemoveComponents
     components:
@@ -2633,15 +2620,6 @@
   - type: Icon
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
     state: pred_vendor_elder_left
-  - type: GenericVisualizer
-    visuals:
-      enum.YautjaGearRackVisuals.State:
-        enum.VendingMachineVisualLayers.Base:
-          Left: {state: pred_vendor_elder_left}
-          Right: {state: pred_vendor_elder_right}
-        enum.VendingMachineVisualLayers.BaseUnshaded:
-          Left: {state: pred_vendor_elder_left}
-          Right: {state: pred_vendor_elder_right}
   - type: YautjaGearRack
     kind: Elder
   - type: CMAutomatedVendor

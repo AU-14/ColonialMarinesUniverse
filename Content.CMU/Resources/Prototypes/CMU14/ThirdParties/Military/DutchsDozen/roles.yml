@@ -1,0 +1,457 @@
+# cmss13 code/modules/gear_presets/dutch.dm and code/datums/skills/dutch.dm
+# cmss13 hands the leader, minigun, flamer and medic slots only to volunteers with 5 hours on the matching squad role.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobDutchsDozenBase
+  abstract: true
+  roundSide: ThirdParty
+  roundForce: DutchsDozen
+  description: cmu-dutchs-dozen-job-description
+  supervisors: cmu-dutchs-dozen-supervisors
+  greeting: cmu-dutchs-dozen-greeting
+  joinNotifyCrew: false
+  hidden: true
+  canBeAntag: false
+  ranks:
+    RMCRankCivilian: []
+  accessGroups:
+  - Colonist
+
+# /datum/skills/dutchmerc
+- type: job
+  parent: CMUJobDutchsDozenBase
+  id: CMUJobDutchsDozenRifleman
+  roundRole: DutchsDozenRifleman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 2
+      RMCSkillFirearms: 2
+      RMCSkillMedical: 1
+      RMCSkillFireman: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillSpecialistWeapons: 1
+      RMCSkillJtac: 1
+      RMCSkillEndurance: 4
+  name: cmu-dutchs-dozen-name-rifleman
+  playTimeTracker: CMUJobDutchsDozenRifleman
+  startingGear: CMUGearDutchsDozenRifleman
+  icon: RMCJobIconFreelancerStandard
+
+- type: job
+  parent: CMUJobDutchsDozenRifleman
+  id: CMUJobDutchsDozenGrenadier
+  name: cmu-dutchs-dozen-name-grenadier
+  startingGear: CMUGearDutchsDozenGrenadier
+
+- type: job
+  parent: CMUJobDutchsDozenRifleman
+  id: CMUJobDutchsDozenMachineGunner
+  name: cmu-dutchs-dozen-name-machine-gunner
+  startingGear: CMUGearDutchsDozenMachineGunner
+
+- type: job
+  parent: CMUJobDutchsDozenRifleman
+  id: CMUJobDutchsDozenMinigunner
+  roundRole: DutchsDozenMinigunner
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 2
+      RMCSkillFirearms: 2
+      RMCSkillMedical: 1
+      RMCSkillFireman: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillSpecialistWeapons: 1
+      RMCSkillSmartGun: 1
+      RMCSkillJtac: 1
+      RMCSkillEndurance: 4
+  name: cmu-dutchs-dozen-name-minigunner
+  playTimeTracker: CMUJobDutchsDozenMinigunner
+  startingGear: CMUGearDutchsDozenMinigunner
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORSquadAutomaticRifleman
+    time: 18000
+
+- type: job
+  parent: CMUJobDutchsDozenRifleman
+  id: CMUJobDutchsDozenFlamer
+  roundRole: DutchsDozenFlamer
+  name: cmu-dutchs-dozen-name-flamer
+  playTimeTracker: CMUJobDutchsDozenFlamer
+  startingGear: CMUGearDutchsDozenFlamer
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORWeaponsSpecialist
+    time: 18000
+
+# /datum/skills/dutchmedic
+- type: job
+  parent: CMUJobDutchsDozenBase
+  id: CMUJobDutchsDozenMedic
+  roundRole: DutchsDozenMedic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 1
+      RMCSkillFirearms: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 1
+      RMCSkillFireman: 3
+      RMCSkillMeleeWeapons: 1
+      RMCSkillJtac: 1
+      RMCSkillEndurance: 4
+  name: cmu-dutchs-dozen-name-medic
+  playTimeTracker: CMUJobDutchsDozenMedic
+  startingGear: CMUGearDutchsDozenMedic
+  icon: RMCJobIconFreelancerMedic
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORPlatoonCorpsman
+    time: 18000
+
+# /datum/skills/dutch
+- type: job
+  parent: CMUJobDutchsDozenBase
+  id: CMUJobDutchsDozenArnold
+  roundRole: DutchsDozenArnold
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillCqc: 5
+      RMCSkillFireman: 5
+      RMCSkillMeleeWeapons: 2
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 2
+      RMCSkillFirearms: 3
+      RMCSkillLeadership: 4
+      RMCSkillOverwatch: 1
+      RMCSkillMedical: 3
+      RMCSkillSpecialistWeapons: 1
+      RMCSkillEndurance: 5
+      RMCSkillJtac: 3
+      RMCSkillAntagonist: 2
+  name: cmu-dutchs-dozen-name-arnold
+  supervisors: cmu-dutchs-dozen-supervisors-arnold
+  greeting: cmu-dutchs-dozen-greeting-arnold
+  playTimeTracker: CMUJobDutchsDozenArnold
+  startingGear: CMUGearDutchsDozenArnold
+  icon: RMCJobIconFreelancerLeader
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORSquadSergeant
+    time: 18000
+
+- type: playTimeTracker
+  id: CMUJobDutchsDozenRifleman
+
+- type: playTimeTracker
+  id: CMUJobDutchsDozenMinigunner
+
+- type: playTimeTracker
+  id: CMUJobDutchsDozenFlamer
+
+- type: playTimeTracker
+  id: CMUJobDutchsDozenMedic
+
+- type: playTimeTracker
+  id: CMUJobDutchsDozenArnold
+
+# ghost roles
+
+- type: entity
+  parent: CMUBaseMobDutchsDozen
+  id: CMUMobDutchsDozenRifleman
+  name: Dutch's Dozen Rifleman
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-dutchs-dozen-name-rifleman
+    description: cmu-dutchs-dozen-ghost-description
+    rules: cmu-dutchs-dozen-ghost-rules
+    reregister: false
+    job: CMUJobDutchsDozenRifleman
+    raffle:
+      settings: short
+
+- type: entity
+  parent: CMUMobDutchsDozenRifleman
+  id: CMUMobDutchsDozenGrenadier
+  name: Dutch's Dozen Grenadier
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-dutchs-dozen-name-grenadier
+    description: cmu-dutchs-dozen-ghost-description
+    rules: cmu-dutchs-dozen-ghost-rules
+    reregister: false
+    job: CMUJobDutchsDozenGrenadier
+    raffle:
+      settings: short
+
+- type: entity
+  parent: CMUMobDutchsDozenRifleman
+  id: CMUMobDutchsDozenMachineGunner
+  name: Dutch's Dozen Machine Gunner
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-dutchs-dozen-name-machine-gunner
+    description: cmu-dutchs-dozen-ghost-description
+    rules: cmu-dutchs-dozen-ghost-rules
+    reregister: false
+    job: CMUJobDutchsDozenMachineGunner
+    raffle:
+      settings: short
+
+- type: entity
+  parent: CMUMobDutchsDozenRifleman
+  id: CMUMobDutchsDozenMinigunner
+  name: Dutch's Dozen Minigunner
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-dutchs-dozen-name-minigunner
+    description: cmu-dutchs-dozen-ghost-description
+    rules: cmu-dutchs-dozen-ghost-rules
+    reregister: false
+    job: CMUJobDutchsDozenMinigunner
+    raffle:
+      settings: short
+
+- type: entity
+  parent: CMUMobDutchsDozenRifleman
+  id: CMUMobDutchsDozenFlamer
+  name: Dutch's Dozen Flamer
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-dutchs-dozen-name-flamer
+    description: cmu-dutchs-dozen-ghost-description
+    rules: cmu-dutchs-dozen-ghost-rules
+    reregister: false
+    job: CMUJobDutchsDozenFlamer
+    raffle:
+      settings: short
+
+- type: entity
+  parent: CMUMobDutchsDozenRifleman
+  id: CMUMobDutchsDozenMedic
+  name: Dutch's Dozen Medic
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-dutchs-dozen-name-medic
+    description: cmu-dutchs-dozen-ghost-description-medic
+    rules: cmu-dutchs-dozen-ghost-rules
+    reregister: false
+    job: CMUJobDutchsDozenMedic
+    raffle:
+      settings: short
+
+- type: entity
+  parent: CMUBaseMobDutchsDozen
+  id: CMUMobDutchsDozenArnold
+  name: Arnold 'Dutch' Schäfer
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-dutchs-dozen-name-arnold
+    description: cmu-dutchs-dozen-ghost-description-arnold
+    rules: cmu-dutchs-dozen-ghost-rules
+    reregister: false
+    job: CMUJobDutchsDozenArnold
+    raffle:
+      settings: short
+
+# gear
+
+- type: startingGear
+  id: CMUGearDutchsDozenBase
+  equipment:
+    head: RMCArmorHelmetDutch
+    ears: CMUHeadsetDutchsDozen
+    jumpsuit: RMCJumpsuitDutch
+    outerClothing: CMArmorDutchVest
+    gloves: RMCHandsVeteran
+    shoes: CMBootsJungleFilled
+    id: CMUIDCardDutchsDozen
+    pocket2: RMCPouchFirstAidERTFill
+
+# 60% in cmss13: M16 with AP mags, M16 AP rig and pouch
+- type: startingGear
+  parent: CMUGearDutchsDozenBase
+  id: CMUGearDutchsDozenRifleman
+  equipment:
+    back: RMCSatchelLightpack
+    suitstorage: AU14WeaponRifleM16A1
+    belt: CMUBeltMarineFilledM16APDutch
+    pocket1: CMUPouchMagazineLargeFilledM16AP
+  storage:
+    outerClothing:
+    - CMUMagazineRifleM16AP
+    - CMUMagazineRifleM16AP
+    back:
+    - CMUGrenadeEMPDutch
+    - CMUGrenadeEMPDutch
+    - CMUGrenadeEMPDutch
+    - CMFirstAidKitFilled
+    - RMCMotionDetector
+    - RMCWeaponPistolMK45
+    - RMCMagazinePistolMK45
+    - RMCMagazinePistolMK45
+    - RMCCigarettePackLuckySloths
+    - RMCZippo
+
+# 30% in cmss13: M16 with an M203 and Dutch's grenadier rig
+- type: startingGear
+  parent: CMUGearDutchsDozenRifleman
+  id: CMUGearDutchsDozenGrenadier
+  equipment:
+    suitstorage: CMUWeaponRifleM16A1UGL
+    belt: RMCBeltGrenadeLargeFilled
+
+# 10% in cmss13: the M60
+- type: startingGear
+  parent: CMUGearDutchsDozenRifleman
+  id: CMUGearDutchsDozenMachineGunner
+  equipment:
+    suitstorage: RMCWeaponLMGM60
+    belt: AU14BeltHolsterPistolCultistMK45
+    pocket1: AU14PouchGeneralLargeFilledM60
+  storage:
+    outerClothing: []
+    back:
+    - CMUGrenadeEMPDutch
+    - CMUGrenadeEMPDutch
+    - CMUGrenadeEMPDutch
+    - CMFirstAidKitFilled
+    - RMCMotionDetector
+    - RMCMagazineLMGM60
+    - RMCMagazineLMGM60
+    - RMCCigarettePackLuckySloths
+    - RMCZippo
+
+# the GAU-19/H stands in for cmss13's minigun; its battery pack takes the lightpack's place
+- type: startingGear
+  parent: CMUGearDutchsDozenBase
+  id: CMUGearDutchsDozenMinigunner
+  equipment:
+    back: AU14HAZOPSBatteryMinigunGAU19Backpack
+    suitstorage: AU14SmartGunMinigunHAZOPS
+    belt: AU14BeltHolsterPistolCultistMK45
+    pocket1: CMUPouchExplosiveFilledDutchEMP
+    id: CMUIDCardDutchsDozenMinigunner
+  storage:
+    outerClothing:
+    - CMUGrenadeEMPDutch
+    - CMUGrenadeEMPDutch
+    back:
+    - AU14MagazineMinigunHAZOPS
+    - AU14MagazineMinigunHAZOPS
+
+# the M240A2 stands in for the M240 spec flamer, the M16A1 for the XM177
+- type: startingGear
+  parent: CMUGearDutchsDozenBase
+  id: CMUGearDutchsDozenFlamer
+  equipment:
+    back: RMCBackpackFlamer
+    suitstorage: AU14WeaponFlamerM240A2HAZOPS
+    belt: CMUBeltMarineFilledM16APDutch
+    pocket1: CMUPouchFuelTankFilledDutch
+    id: CMUIDCardDutchsDozenFlamer
+  storage:
+    outerClothing:
+    - CMUGrenadeEMPDutch
+    - CMUGrenadeEMPDutch
+  inhand:
+  - AU14WeaponRifleM16A1
+
+- type: startingGear
+  parent: CMUGearDutchsDozenBase
+  id: CMUGearDutchsDozenMedic
+  equipment:
+    eyes: RMCGlassesMedicalHUDGlasses
+    back: RMCSatchelLightpack
+    suitstorage: AU14WeaponRifleM16A1
+    belt: RMCBeltMedicBagERTFilled
+    pocket1: CMUPouchMagazineLargeFilledM16AP
+    pocket2: RMCPouchMedkitFillAdvanced
+    id: CMUIDCardDutchsDozenMedic
+  storage:
+    outerClothing:
+    - CMUGrenadeEMPDutch
+    - CMUGrenadeEMPDutch
+    back:
+    - CMUGrenadeEMPDutch
+    - CMUDefibrillatorCompact
+    - RMCMotionDetector
+    - CMSurgicalLine
+    - CMSynthGraft
+    - CMGrenadeSmoke
+    - CMGrenadeSmoke
+    - CMAdvFirstAidKitFilled
+    - CMRollerBedSpawnFolded
+    - CMUMagazineRifleM16AP
+    - CMUMagazineRifleM16AP
+    - CMUMagazineRifleM16AP
+    - RMCCigarettePackLuckySloths
+    - RMCZippo
+
+# Arnold wears a Yautja clan mask, a tech item, so every bracer's gear tracker points the hunters straight at him
+- type: startingGear
+  parent: CMUGearDutchsDozenBase
+  id: CMUGearDutchsDozenArnold
+  equipment:
+    head: RMCArmorHelmetDutchCap
+    mask: CMUYautjaMask
+    back: RMCScabbardMacheteFilled
+    suitstorage: AU14WeaponRifleM16A1
+    belt: CMUBeltMarineFilledM16APDutch
+    pocket1: CMUPouchExplosiveFilledDutchEMP
+    pocket2: RMCPouchMedicalSocDutchFill
+    id: CMUIDCardDutchsDozenArnold
+  storage:
+    outerClothing:
+    - CMUMagazineRifleM16AP
+    - CMUMagazineRifleM16AP

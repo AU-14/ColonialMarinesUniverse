@@ -1,0 +1,11 @@
+# one hunt slot on top of the normal cap that only ancients and staff can take,
+# so someone can always come aboard and sort out a misbehaving pred IC.
+# the server gates it (YautjaPredatorRoundSystem.Ancient), it spawns as a hunter at ancient rank
+- type: job
+  parent: CMUYautjaHunter
+  id: CMUYautjaAncient
+  name: cmu-yautja-job-name-ancient
+  description: cmu-yautja-job-description-ancient
+  playTimeTracker: CMUYautjaHunter
+  # staff without the pred whitelist still need in, the rule does the gating instead
+  whitelisted: false
