@@ -108,6 +108,9 @@ public sealed partial class CmuPanelPreviewSystem : EntitySystem
                     _atm = new ColonyAtmPreview();
                     _atm.Open();
                     break;
+                default:
+                    OpenYautjaPreview(part.ToLowerInvariant(), ref opened);
+                    break;
             }
         }
     }
