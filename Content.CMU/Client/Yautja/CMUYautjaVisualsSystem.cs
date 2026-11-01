@@ -104,11 +104,10 @@ public sealed partial class CMUYautjaVisualsSystem : EntitySystem
         RestorePoses();
         UpdateReturningItems();
         var cloaks = EntityQueryEnumerator<CMUYautjaOpticalCloakComponent, SpriteComponent>();
-        while (cloaks.MoveNext(out var uid, out _, out var sprite))
+        while (cloaks.MoveNext(out _, out var cloak, out var sprite))
         {
-            if (TryComp<EntityTurnInvisibleComponent>(uid, out var invisible) &&
-                (invisible.Enabled || (_timing.CurTime - invisible.UncloakTime).TotalSeconds <
-                    CMUYautjaPresentation.CloakDuration))
+            if (cloak.Enabled || (_timing.CurTime - cloak.StartedAt).TotalSeconds <
+                    CMUYautjaPresentation.CloakDuration)
                 EnsureShader(sprite, CloakShader, "CMUYautjaOpticalCloak", true);
             else
                 _sprites.RemovePostShader(sprite, CloakShader);
@@ -233,11 +232,13 @@ public sealed partial class CMUYautjaVisualsSystem : EntitySystem
     {
         if (args.Id != CloakShader)
             return;
-        var enabled = TryComp<EntityTurnInvisibleComponent>(ent, out var invisible) && invisible.Enabled;
-        var elapsed = invisible == null ? 1 : (float) (_timing.CurTime - invisible.UncloakTime).TotalSeconds;
-        var p = CMUYautjaPresentation.Smooth(Math.Clamp(elapsed / CMUYautjaPresentation.CloakDuration, 0, 1));
-        var visibility = TryComp<EntityActiveInvisibleComponent>(ent, out var active) ? active.Opacity : 1;
-        SetBodyCoordinates(ent, args);
+        var enabled = ent.Comp.Enabled;
+        // The gameplay invisibility component is set fully opaque during predicted decloaking,
+        // before the server's reverse sweep arrives. Use the field's opacity, which never contains
+        // that instantaneous reset, so the composed body, mask and armour stay behind the sweep.
+        var field = CompOrNull<ThermalCloakUserComponent>(ent);
+        var visibility = field?.CurrentOpacity ?? 0;
+        SetBodyCoordinates(ent, args, bounds: _sprites.GetLocalBounds((ent.Owner, args.Sprite)));
         var origin = _transform.GetWorldPosition(ent);
         var pixel = (args.Viewport.WorldToLocal(origin + new Vector2(1f / 32, 0)) -
                      args.Viewport.WorldToLocal(origin)).Length();
@@ -247,8 +248,8 @@ public sealed partial class CMUYautjaVisualsSystem : EntitySystem
         args.Shader.SetParameter("phase", (float) _timing.CurTime.TotalSeconds);
         args.Shader.SetParameter("retro", ent.Comp.Preset == YautjaInvisibilitySound.Retro ? 1f : 0f);
         args.Shader.SetParameter("visibility", enabled ? visibility : 0f);
-        args.Shader.SetParameter("transition", enabled ? p : 1 - p);
-        args.Shader.SetParameter("rain", enabled && TryComp<ThermalCloakUserComponent>(ent, out var cloak) && cloak.Malfunction ? 1f : 0f);
+        args.Shader.SetParameter("transition", CMUYautjaPresentation.CloakCoverage(ent.Comp, _timing.CurTime));
+        args.Shader.SetParameter("rain", enabled && field is { Malfunction: true } ? 1f : 0f);
     }
 
     private void OnButcherRender(Entity<CMUYautjaButcherVisualComponent> ent, ref BeforePostShaderRenderEvent args)
@@ -281,18 +282,18 @@ public sealed partial class CMUYautjaVisualsSystem : EntitySystem
         return Box2.CenteredAround(Vector2.Zero, Vector2.Abs(sprite.Scale));
     }
 
-    private void SetBodyCoordinates(EntityUid ent, BeforePostShaderRenderEvent args, bool xeno = false)
+    private void SetBodyCoordinates(EntityUid ent, BeforePostShaderRenderEvent args, bool xeno = false, Box2? bounds = null)
     {
         // Match RenderSprite's local matrix, including prone rotation, scale and camera rotation.
         var sprite = args.Sprite;
         var rotation = sprite.NoRotation ? -(args.Viewport.Eye?.Rotation ?? Angle.Zero) : _transform.GetWorldRotation(ent);
         var origin = _transform.GetWorldPosition(ent) + rotation.RotateVec(sprite.Offset);
         rotation += sprite.Rotation;
-        var bounds = GetButcherBounds(ent, sprite, xeno);
-        origin += rotation.RotateVec(bounds.Center);
+        var bodyBounds = bounds ?? GetButcherBounds(ent, sprite, xeno);
+        origin += rotation.RotateVec(bodyBounds.Center);
         var center = ScreenUv(args.Viewport, origin);
-        var x = ScreenUv(args.Viewport, origin + rotation.RotateVec(new Vector2(bounds.Width / 32, 0))) - center;
-        var y = ScreenUv(args.Viewport, origin + rotation.RotateVec(new Vector2(0, -bounds.Height / 32))) - center;
+        var x = ScreenUv(args.Viewport, origin + rotation.RotateVec(new Vector2(bodyBounds.Width / 32, 0))) - center;
+        var y = ScreenUv(args.Viewport, origin + rotation.RotateVec(new Vector2(0, -bodyBounds.Height / 32))) - center;
         var determinant = x.X * y.Y - y.X * x.Y;
         if (MathF.Abs(determinant) < 1e-12f)
             return;

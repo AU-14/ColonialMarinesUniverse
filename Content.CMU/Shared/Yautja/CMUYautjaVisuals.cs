@@ -64,12 +64,17 @@ public sealed partial class CMUYautjaMotionComponent : Component
     public TimeSpan EndsAt;
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class CMUYautjaOpticalCloakComponent : Component
 {
-    // Keep the selected preset on the wearer through forced decloak and bracer removal.
+    // The visual transition outlives gameplay invisibility and the equipment that granted it.
     [DataField, AutoNetworkedField]
     public YautjaInvisibilitySound Preset;
+
+    [DataField, AutoNetworkedField] public bool Enabled;
+    [DataField, AutoNetworkedField] public float From;
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan StartedAt;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -126,6 +131,11 @@ public static class CMUYautjaPresentation
         Math.Clamp((float) ((now - start).TotalSeconds / Math.Max(.001, (end - start).TotalSeconds)), 0, 1);
 
     public static float Smooth(float p) => p * p * (3 - 2 * p);
+    public static float CloakCoverage(CMUYautjaOpticalCloakComponent cloak, TimeSpan now)
+    {
+        var p = Smooth(Math.Clamp((float) (now - cloak.StartedAt).TotalSeconds / CloakDuration, 0, 1));
+        return cloak.From + ((cloak.Enabled ? 1 : 0) - cloak.From) * p;
+    }
     public static float Segment(float p, float start, float end) => Smooth(Math.Clamp((p - start) / (end - start), 0, 1));
 
     public static Vector2 Recall(Vector2 from, Vector2 to, float p)
