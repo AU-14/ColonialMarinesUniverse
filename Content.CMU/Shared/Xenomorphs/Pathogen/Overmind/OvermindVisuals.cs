@@ -17,6 +17,7 @@ public enum OvermindVisualState : byte
     Manifested,
     ManifestedStrengthened,
     Dying,
+    Dead,
 }
 
 /// <summary>
