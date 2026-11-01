@@ -400,7 +400,7 @@ namespace Content.Client.LateJoin
 
         public static bool JobMatchesFilter(string? factionFilter, string jobId)
         {
-            return factionFilter is not ("hunt" or "hunters") || jobId is "CMUYautjaHunter" or "CMUYautjaAncient"; // CMU14
+            return factionFilter is not ("hunt" or "hunters") || jobId is "CMUYautjaHunter" or "CMUYautjaAncient" or "CMUYautjaStranded"; // CMU14
         }
 
         private void JobsAvailableUpdated(IReadOnlyDictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>> updatedJobs)
