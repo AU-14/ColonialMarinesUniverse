@@ -228,7 +228,7 @@
   name: reagent-name-weyu-bloodbursting-chem
   desc: reagent-desc-weyu-bloodbursting-chem
   color: "#000000"
-  physicalDesc: unidentifiable
+  physicalDesc: reagent-physical-desc-unidentifiable
   class: Special
   reward: 0
   overdose: 10
