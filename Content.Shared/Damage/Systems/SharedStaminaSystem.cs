@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Shared.CMU14.Combat; // CMU14
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
@@ -57,7 +56,6 @@ public abstract partial class SharedStaminaSystem : EntitySystem
     [Dependency] protected SharedStunSystem StunSystem = default!;
     [Dependency] private MeleeBatteryHitsLeftSystem _meleeBattery = default!;
     [Dependency] private TagSystem _tag = default!;
-    [Dependency] private CMUStunImmunitySystem _cmuStunImmunity = default!; // CMU14
 
     [Dependency] private EntityQuery<StaminaComponent> _stamQuery = default!;
 
@@ -310,10 +308,6 @@ public abstract partial class SharedStaminaSystem : EntitySystem
 
     private bool IsYautjaTaserImmune(EntityUid source, EntityUid target)
     {
-        // CMU14: taser/baton immunity is a component so non-Yautja mobs can carry it too.
-        if (_cmuStunImmunity.IsImmune(target, source))
-            return true;
-
         return HasComp<YautjaComponent>(target) && _tag.HasTag(source, TaserTag);
     }
 
