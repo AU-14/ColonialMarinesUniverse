@@ -300,6 +300,9 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
         if (TerminatingOrDeleted(overmind))
             return;
 
+        if (_mobState.IsDead(overmind))  
+            return;
+
         if (_hive.GetHive(overmind) is not { } hive)
             return;
 
