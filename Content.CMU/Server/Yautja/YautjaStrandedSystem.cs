@@ -33,8 +33,8 @@ using Robust.Shared.Timing;
 namespace Content.Server.CMU14.Yautja;
 
 // cmss13 /datum/job/antag/pred_surv/stranded: one whitelisted yautja stuck on the colony, spawning in an offmap
-// hut with a gear rack and a one-way pad down. lives apart from YautjaPredatorRoundSystem so the hunt round can
-// change without dragging this along, it only asks that system whether a hunt is running
+// hut with a gear rack and a one-way pad down. lives apart from YautjaPredatorRoundSystem, the slot doesn't
+// care whether there's a hunt
 public sealed partial class YautjaStrandedSystem : EntitySystem
 {
     public static readonly ProtoId<JobPrototype> StrandedJob = "CMUYautjaStranded";
@@ -68,7 +68,6 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private YautjaPredatorRoundSystem _predatorRound = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private YautjaRankManager _rankManager = default!;
     [Dependency] private StationJobsSystem _stationJobs = default!;
@@ -91,7 +90,6 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<RulePlayerSpawningEvent>(OnRulePlayerSpawning);
-        SubscribeLocalEvent<GameRuleStartedEvent>(OnGameRuleStarted);
         SubscribeLocalEvent<PlayerSpawningEvent>(OnPlayerSpawning, before: [typeof(SpawnPointSystem)]);
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
         SubscribeLocalEvent<GetDisallowedJobsEvent>(OnGetDisallowedJobs);
@@ -110,22 +108,10 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
 
     private void OnRulePlayerSpawning(RulePlayerSpawningEvent ev)
     {
-        // runs before round start job assignment, so a readied whitelisted player can roll into the slot
-        var huntActive = _predatorRound.TryGetActiveHunterSlots(out _);
-        if (huntActive || _random.Prob(Math.Clamp(_config.GetCVar(YautjaStrandedCVars.HuntlessChance), 0f, 1f)))
+        // runs before round start job assignment, so a readied whitelisted player can roll into the slot.
+        // cmss13 always opens it on hunt rounds, here it's the same flat chance whether there's a hunt or not
+        if (_random.Prob(Math.Clamp(_config.GetCVar(YautjaStrandedCVars.Chance), 0f, 1f)))
             OpenStrandedSlot();
-    }
-
-    private void OnGameRuleStarted(ref GameRuleStartedEvent ev)
-    {
-        // a hunt started mid round opens the slot too, same as cmss13's predator round toggle
-        if (!HasComp<YautjaPredatorRoundComponent>(ev.RuleEntity) ||
-            _gameTicker.RunLevel != GameRunLevel.InRound)
-        {
-            return;
-        }
-
-        OpenStrandedSlot();
     }
 
     public bool OpenStrandedSlot()
