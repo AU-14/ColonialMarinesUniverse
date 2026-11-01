@@ -260,6 +260,11 @@ namespace Content.Client.LateJoin
                         if (!JobMatchesFilter(_factionFilter, jobId))
                             continue;
 
+                        // CMU14: the ancient slot is staff/ancients only, don't dangle it at everyone else
+                        if (jobId == "CMUYautjaAncient" &&
+                            !_entitySystem.GetEntitySystem<Content.Client.CMU14.Yautja.Lobby.YautjaHuntLobbySystem>().AncientSlotAllowed)
+                            continue;
+
                         if (!stationAvailable.ContainsKey(jobId))
                             continue;
 
@@ -395,7 +400,7 @@ namespace Content.Client.LateJoin
 
         public static bool JobMatchesFilter(string? factionFilter, string jobId)
         {
-            return factionFilter is not ("hunt" or "hunters") || jobId == "CMUYautjaHunter";
+            return factionFilter is not ("hunt" or "hunters") || jobId is "CMUYautjaHunter" or "CMUYautjaAncient"; // CMU14
         }
 
         private void JobsAvailableUpdated(IReadOnlyDictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>> updatedJobs)

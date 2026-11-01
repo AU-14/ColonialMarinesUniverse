@@ -20,6 +20,7 @@ using Content.Shared.Preferences;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Configuration;
+using Robust.Shared.Enums;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Log;
@@ -139,6 +140,7 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         SubscribeLocalEvent<PlayerSpawningEvent>(OnPlayerSpawning, before: [typeof(SpawnPointSystem)]);
         SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnGameRunLevelChanged);
+        InitializeLobby();
 
         Subs.CVar(_configuration,
             YautjaPredatorRoundCVars.HunterSlots,
@@ -160,6 +162,9 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
 
     public bool TryInitializePredatorRound(out string message)
     {
+        if (GameTicker.RunLevel == GameRunLevel.PreRoundLobby)
+            return TryQueueLobbyHunt(out message);
+
         if (GameTicker.RunLevel != GameRunLevel.InRound)
         {
             message = Loc.GetString("cmu-yautja-admin-editor-round-only");
@@ -261,6 +266,8 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
             if (!comp.ModePredator)
                 continue;
 
+            PullRoundStartHunters((uid, comp), ev);
+
             comp.RankBypassSlotsRemaining = ev.PlayerPool.Count(session =>
                 GetRankSpawnPolicy(ResolveRankForSession(session)).BypassSlotCap);
             comp.RoundStartBypassSlotsRemaining = comp.RankBypassSlotsRemaining;
@@ -335,6 +342,9 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         if (!TryGetActivePredatorRule(out var rule))
             return;
 
+        if (!IsAncientSlotEligible(ev.Player))
+            ev.Jobs.Add(AncientJob);
+
         var rank = ResolveRankForSession(ev.Player);
         if (GetRankSpawnPolicy(rank).BypassSlotCap)
         {
@@ -364,6 +374,10 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         {
             _sawmill.Warning($"Failed to prime Yautja rank for {ev.PlayerSession.UserId}: {exception.Message}");
         }
+
+        // after the prime, the ancient slot check reads the cached rank
+        if (ev.PlayerSession.Status != SessionStatus.Disconnected)
+            SendLobbyStatus(ev.PlayerSession);
     }
 
     private void OnPlayerSpawning(PlayerSpawningEvent ev)
@@ -374,18 +388,23 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         var query = QueryActiveRules();
         while (query.MoveNext(out var uid, out _, out var comp, out var gameRule))
         {
+            var ancientSlot = job == AncientJob;
             if (!GameTicker.IsGameRuleAdded(uid, gameRule) ||
                 !comp.ModePredator ||
-                job != comp.PredatorJob)
+                job != comp.PredatorJob && !ancientSlot)
             {
                 continue;
             }
 
             var entitlementCapabilities = ev.PlayerSession is { } session
-                ? _rankManager.ResolveProfileCapabilitiesCached(session.UserId)
+                ? ancientSlot
+                    ? GetAncientSlotCapabilities(session)
+                    : _rankManager.ResolveProfileCapabilitiesCached(session.UserId)
                 : YautjaProfileCapabilities.Default;
-            var activeCapabilities = entitlementCapabilities.ForStatus(
-                ev.HumanoidCharacterProfile?.YautjaProfile.Status ?? YautjaProfileStatus.Normal);
+            var activeCapabilities = ancientSlot
+                ? entitlementCapabilities
+                : entitlementCapabilities.ForStatus(
+                    ev.HumanoidCharacterProfile?.YautjaProfile.Status ?? YautjaProfileStatus.Normal);
             var rank = activeCapabilities.Rank;
             var spawnKind = GetRankSpawnPolicy(rank).SpawnKind;
 
@@ -393,7 +412,7 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
             if (GetRandomPredatorSpawn(comp.PredatorJob, spawnKind) is not { } coordinates)
                 return;
 
-            if (GetRankSpawnPolicy(rank).BypassSlotCap && comp.RankBypassSlotsRemaining > 0)
+            if (!ancientSlot && GetRankSpawnPolicy(rank).BypassSlotCap && comp.RankBypassSlotsRemaining > 0)
                 comp.RankBypassSlotsRemaining--;
 
             ev.SpawnResult = _stationSpawning.SpawnPlayerMob(
@@ -437,9 +456,17 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
 
     private void OnGameRunLevelChanged(GameRunLevelChangedEvent ev)
     {
+        if (ev.New != GameRunLevel.InRound)
+            return;
+
+        SpawnRoundStartHunters();
+
+        // a failed preset start can clear every added rule, lobby hunt included. put it back
+        if (_lobbyHuntRoundId == GameTicker.RoundId && !IsHuntActive() && !TryInitializePredatorRound(out var restoreMessage))
+            _sawmill.Warning($"Queued Yautja hunt was lost at round start and could not be restored: {restoreMessage}");
+
         if (!_randomEnabled ||
             GameTicker.DummyTicker ||
-            ev.New != GameRunLevel.InRound ||
             GameTicker.RoundId <= 0)
             return;
 
@@ -517,7 +544,10 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         if (!rule.Comp.ModePredator)
         {
             if (applySlots)
+            {
                 SetSlots(rule.Comp.PredatorJob, 0, rule.Comp.HunterShipMap);
+                SetAncientSlots(rule.Comp, 0);
+            }
             return;
         }
 
@@ -548,7 +578,10 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         }
 
         if (applySlots)
+        {
             SetSlots(rule.Comp.PredatorJob, rule.Comp.Slots, rule.Comp.HunterShipMap);
+            SetAncientSlots(rule.Comp, rule.Comp.AncientSlots);
+        }
     }
 
     private void SetSlots(ProtoId<JobPrototype> job, int slots, ProtoId<GameMapPrototype> map)

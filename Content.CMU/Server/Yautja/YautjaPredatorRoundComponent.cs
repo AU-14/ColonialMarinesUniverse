@@ -23,6 +23,10 @@ public sealed partial class YautjaPredatorRoundComponent : Component
     [DataField]
     public bool ModePredator = true;
 
+    // the ancient/staff-only hunt slot, on top of the normal cap
+    [DataField]
+    public int AncientSlots = 1;
+
     [DataField]
     public bool LoadHunterShip = true;
 
