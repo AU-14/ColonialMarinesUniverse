@@ -9,6 +9,13 @@ namespace Content.Shared.Traits.Assorted;
 public sealed partial class UnrevivableComponent : Component
 {
     /// <summary>
+    /// Whether revival is blocked only because the RMC revival countdown expired.
+    /// Cryogenic treatment may reverse this cause of permanent death.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool FromRevivalTimer;
+
+    /// <summary>
     /// A field to define if we should display the "Genetic incompatibility" warning on health analysers
     /// </summary>
     [DataField, AutoNetworkedField]

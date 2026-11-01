@@ -1,0 +1,26 @@
+<Document>
+  # Pathogen
+
+  <Box>
+    <GuideEntityEmbed Entity="CMU14XenoSprinter" Caption="Sprinter"/>
+    <GuideEntityEmbed Entity="CMU14XenoNeomorph" Caption="Neomorph"/>
+    <GuideEntityEmbed Entity="CMU14XenoVenator" Caption="Venator"/>
+    <GuideEntityEmbed Entity="CMU14XenoBrute" Caption="Brute"/>
+  </Box>
+
+  Nobody knows what they are. The [bold]Pathogen[/bold] creatures have never been documented. Every encounter is, as far as anyone knows, the first, and whoever survives one is facing something no one has seen before.
+
+  What little survivors describe is a living fungal infestation: creatures grown from mycelium and spores, spreading through a colony like a disease.
+
+  ## The Confluence
+  - The creatures belong to the [bold]Mycelial Confluence[/bold], a single organism made of many bodies. Each one is a manifestation of the Confluence's will, and their only task is to spread it until it covers everything they can reach.
+  - They are led by the [bold]Overmind[/bold], a mind bound to the Confluence through a [bold]Blight Core[/bold]. Without a core to anchor it, the Overmind withers away.
+  - The creatures share thoughts through the [bold]Mycelial Link[/bold], and speak among themselves in a wet, clicking language carried on spores.
+  - They carpet the ground in [bold]blight[/bold], a living mycelium that feeds and heals them, and raise towers that fill the air with spores and choking fog.
+
+  ## Infection
+  - The Confluence spreads through [bold]spores[/bold]. Sacs and growths release them onto anyone who wanders too close, and they can get past an ordinary gas mask. Only fully sealed protective gear keeps them out.
+  - Infected hosts are taken to the nest, where a [bold]bloodburster[/bold] grows inside them and eventually tears its way out, then matures into a larger creature.
+  - Even death is no escape. Its mycotoxin can rewrite a corpse's nervous system and raise it again as a [bold]walker[/bold], bound to serve the Overmind.
+  - On rare occasions, a creature born from a [textlink="Yautja" link="CMUGuideLoreHunters"] host becomes a horrific hybrid aberration.
+</Document>

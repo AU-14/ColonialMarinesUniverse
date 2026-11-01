@@ -4,7 +4,7 @@
     xmlns:ui="clr-namespace:Robust.Client.UserInterface.Controls;assembly=Robust.Client"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:rmcui="clr-namespace:Content.Client._RMC14.Vehicle.Ui"
-    MinSize="900 400">
+    MinSize="450 400">
     <PanelContainer HorizontalExpand="True" VerticalExpand="True">
         <PanelContainer.PanelOverride>
             <graphics:StyleBoxFlat
@@ -17,14 +17,16 @@
             <BoxContainer Orientation="Horizontal" SeparationOverride="12" HorizontalExpand="True">
                 <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" VerticalExpand="True">
                     <!-- CMU14 -->
-                    <Label Name="AllowanceLabel" Access="Public"/>
+                    <RichTextLabel Name="AllowanceLabel" Access="Public"/>
+                    <Label Name="NoRefundLabel" Text="{Loc 'cmu-vehicle-supply-yes-refund'}" FontColorOverride="#E0A040"/>
+                    <Label Name="NoRefundLabel2" Text="{Loc 'cmu-vehicle-supply-yes-refund2'}" FontColorOverride="#E0A040"/>
                     <Label Name="IssuedLabel" Access="Public"/>
                     <Label Name="StatusLabel" Access="Public" FontColorOverride="#9DB5D1"/>
                 </BoxContainer>
             </BoxContainer>
 
             <BoxContainer Orientation="Horizontal" SeparationOverride="12" HorizontalExpand="True" VerticalExpand="True">
-                <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                <PanelContainer HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="1">
                 <PanelContainer.PanelOverride>
                     <graphics:StyleBoxFlat
                         BackgroundColor="#0B131F"
@@ -32,15 +34,15 @@
                         BorderThickness="1"/>
                 </PanelContainer.PanelOverride>
 
-                <BoxContainer Orientation="Vertical" SeparationOverride="6" Margin="10" HorizontalExpand="True" VerticalExpand="True">
-                    <Label Text="Stored Vehicles" FontColorOverride="#C7D7EA"/>
+                <BoxContainer Orientation="Vertical" SeparationOverride="6" Margin="10" SizeFlagsStretchRatio="1" HorizontalExpand="True" VerticalExpand="True">
+                    <Label Text="{Loc 'cmu-vehicle-supply-stored-vehicles'}" FontColorOverride="#C7D7EA"/>
                     <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
                         <BoxContainer Name="AvailableRows" Access="Public" Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" />
                     </ScrollContainer>
                 </BoxContainer>
                 </PanelContainer>
 
-                <PanelContainer Name="LoadoutPanel" Access="Public" MinSize="280 0" HorizontalExpand="True" VerticalExpand="True">
+                <PanelContainer Name="LoadoutPanel" Access="Public" SizeFlagsStretchRatio="1" HorizontalExpand="True" VerticalExpand="True">
                     <PanelContainer.PanelOverride>
                         <graphics:StyleBoxFlat
                             BackgroundColor="#0B131F"
@@ -49,12 +51,12 @@
                     </PanelContainer.PanelOverride>
 
                     <BoxContainer Orientation="Vertical" SeparationOverride="6" Margin="10" HorizontalExpand="True" VerticalExpand="True">
-                        <Label Text="Vehicle Loadout" FontColorOverride="#C7D7EA"/>
+                        <Label Text="{Loc 'cmu-vehicle-supply-loadout'}" FontColorOverride="#C7D7EA"/>
                         <BoxContainer Name="LoadoutColumns" Access="Public" Orientation="Horizontal" SeparationOverride="8" HorizontalExpand="True" VerticalExpand="True"/>
                     </BoxContainer>
                 </PanelContainer>
 
-                <PanelContainer Name="PreviewPanel" MinSize="160 0" VerticalExpand="True">
+                <PanelContainer Name="PreviewPanel" SizeFlagsStretchRatio="1" HorizontalExpand="True" VerticalExpand="True">
                     <PanelContainer.PanelOverride>
                         <graphics:StyleBoxFlat
                             BackgroundColor="#0D2235"
@@ -63,7 +65,7 @@
                     </PanelContainer.PanelOverride>
 
                     <BoxContainer Orientation="Vertical" SeparationOverride="4" Margin="8" HorizontalExpand="True" VerticalExpand="True">
-                        <Label Name="PreviewTitle" Access="Public" Text="Vehicle" FontColorOverride="#C7D7EA"/>
+                        <Label Name="PreviewTitle" Access="Public" Text="{Loc 'cmu-vehicle-supply-preview-title'}" FontColorOverride="#C7D7EA"/>
                         <PanelContainer Name="VehiclePreviewContainer" HorizontalExpand="True" VerticalExpand="True">
                             <ui:EntityPrototypeView Name="VehiclePreview"
                                                     MinSize="120 120"
@@ -78,14 +80,15 @@
             </BoxContainer>
 
             <BoxContainer Orientation="Horizontal" SeparationOverride="6">
-                <rmcui:HardpointButton Name="RaiseButton" Access="Public" LabelText="Raise" MinSize="98 26" />
-                <rmcui:HardpointButton Name="LowerButton" Access="Public" LabelText="Lower" MinSize="98 26" />
+                <rmcui:HardpointButton Name="RaiseButton" Access="Public" LabelText="{Loc 'cmu-vehicle-supply-raise'}" MinSize="98 26" />
+                <rmcui:HardpointButton Name="LowerButton" Access="Public" LabelText="{Loc 'cmu-vehicle-supply-lower'}" MinSize="98 26" />
                 <BoxContainer Name="LiftActivity" Access="Public" Orientation="Horizontal" SeparationOverride="4" VerticalAlignment="Center" Margin="6,0,0,0">
                     <PanelContainer Name="LiftDot1" Access="Public" MinSize="8 8" MaxSize="8 8" />
                     <PanelContainer Name="LiftDot2" Access="Public" MinSize="8 8" MaxSize="8 8" />
                     <PanelContainer Name="LiftDot3" Access="Public" MinSize="8 8" MaxSize="8 8" />
                 </BoxContainer>
             </BoxContainer>
+        <Label Name="NoRefundLabel3" Text="{Loc 'cmu-vehicle-supply-yes-refund3'}" FontColorOverride="#FF0000"/>
         </BoxContainer>
     </PanelContainer>
 </controls:VehicleSupplyWindow>

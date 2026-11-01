@@ -1,0 +1,9 @@
+- type: satiation
+  id: CMUYautjaHunger
+  parent: RMCHumanHunger
+  baseChangeRate: -0.02
+
+- type: satiation
+  id: CMUYautjaThirst
+  parent: RMCHumanThirst
+  baseChangeRate: -0.02

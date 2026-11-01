@@ -201,6 +201,7 @@
     mode: SnapgridCenter
   components:
   - type: OrbitalCannonExplosion
+    multiZ: true
     steps:
     - type: RMCOBXenoTunnel
       total: 5000
@@ -230,6 +231,7 @@
     mode: SnapgridCenter
   components:
   - type: OrbitalCannonExplosion
+    multiZ: true
     steps:
     - type: RMCOBXenoTunnel
       total: 5000
@@ -260,6 +262,7 @@
     mode: SnapgridCenter
   components:
   - type: OrbitalCannonExplosion
+    multiZ: true
     steps:
     - type: RMCOB
       total: 5000
@@ -280,6 +283,7 @@
     mode: SnapgridCenter
   components:
   - type: OrbitalCannonExplosion
+    multiZ: true
     steps:
     - type: RMCOBXenoTunnel
       total: 6500

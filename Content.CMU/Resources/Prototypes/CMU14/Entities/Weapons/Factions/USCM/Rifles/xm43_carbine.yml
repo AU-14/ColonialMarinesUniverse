@@ -1,0 +1,146 @@
+# Ported from cmss13-pve PR 375. A cut-down carbine version of the M41A MK1 for crew and other confined-space work:
+# trades the grenade launcher and some modularity for quick handling.
+- type: entity
+  parent: RMCWeaponRifleM54CMK1
+  id: CMUWeaponRifleXM43
+  name: XM43 pulse carbine
+  description: Pulse action 10x24mm caseless carbine, semi-experimental. In low-rate procurement as a self defense weapon for crew and other confined spaces operation. Exchanges the firepower of a grenade launcher and some modularity for handling.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/USCM/xm43.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/USCM/xm43.rsi
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilUnwielded: 3
+    scatterWielded: 6
+    scatterUnwielded: 16
+    baseFireRate: 4
+    burstScatterMult: 1
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 13
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1
+    accuracyMultiplierUnwielded: 0.8
+  - type: WieldableSpeedModifiers
+    base: 0.725
+    light: 1
+    medium: 1
+    heavy: 1
+  - type: WieldDelay
+    baseDelay: 0.1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentSuppressor
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-stock:
+        startingAttachable: RMCAttachmentM54CMK1StockCollapsible
+        whitelist:
+          tags:
+          - RMCAttachmentM54CStockCollapsible
+      rmc-aslot-underbarrel:
+        startingAttachable: CMUAttachmentXM43LaserSight
+        locked: true
+        whitelist:
+          tags:
+          - CMUAttachmentXM43LaserSight
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.69, 0.06
+      rmc-aslot-rail: -0.07, 0.15
+      rmc-aslot-stock: -0.78, 0
+      rmc-aslot-underbarrel: 0.25, -0.25
+  - type: Tag
+    tags:
+    - CMUWeaponRifleXM43
+
+- type: entity
+  parent: CMUWeaponRifleXM43
+  id: CMUWeaponRifleXM43Unloaded
+  suffix: Unloaded
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineRifleM54CMK1
+          - CMMagazineRifleM54CMK1AP
+          - RMCMagazineRifleM54CMK1Incendiary
+          - RMCMagazineRifleM54CMK1HEAP
+          - RMCMagazineRifleM54CMK1WP
+          - CMMagazineRifleM54CMK1TracerTag
+        startingItem: null
+
+- type: entity
+  parent: RMCAttachmentLaserSight
+  id: CMUAttachmentXM43LaserSight
+  name: XM43 carbine underbarrel laser module
+  description: What in god's name is this doing off the gun?
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Attachments/xm43_laser.rsi
+    state: lasersight
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+    - CMUAttachmentXM43LaserSight
+
+- type: Tag
+  id: CMUWeaponRifleXM43
+
+- type: Tag
+  id: CMUAttachmentXM43LaserSight
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: CMUXM43Case
+  name: XM43 pulse carbine case
+  description: Contains an unloaded XM43 pulse carbine and three standard M41A magazines.
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,5,1
+    whitelist:
+      tags:
+      - CMUWeaponRifleXM43
+      - CMMagazineRifleM54CMK1
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponRifleXM43Unloaded
+    - id: CMMagazineRifleM54CMK1
+    - id: CMMagazineRifleM54CMK1
+    - id: CMMagazineRifleM54CMK1

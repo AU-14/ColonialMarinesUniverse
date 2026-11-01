@@ -80,7 +80,7 @@ public sealed class CMUCombatDroneTurretTest
             Assert.That(muzzle, Is.Not.Null);
             muzzle!.Invoke(clientEntities.System<Content.Client.Weapons.Ranged.Systems.GunSystem>(),
                 [clientDrone, new AmmoComponent(), Angle.Zero, clientDrone]);
-            var flashes = clientEntities.EntityQuery<CMUCombatDroneMuzzleFlashComponent>().ToList();
+            var flashes = clientEntities.QueryEntities<CMUCombatDroneMuzzleFlashComponent>().ToList();
             Assert.That(flashes, Has.Count.EqualTo(1), "UGV shots must use the barrel-tracking flash path.");
             var flash = flashes[0].Owner;
             var relative = transform.GetWorldPosition(flash) - transform.GetWorldPosition(clientDrone);

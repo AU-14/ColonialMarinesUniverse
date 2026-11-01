@@ -9,9 +9,9 @@ using Content.Shared.Damage.Systems;
 namespace Content.Server.CMU14.Medical;
 
 /// <summary>
-/// Breathing from an oxygen tank through internals clears suffocation damage three times as fast as normal breathing.
+/// Breathing from an oxygen tank through internals clears suffocation damage half a time faster than normal breathing.
 /// </summary>
-public sealed class CMUOxygenTankRecoverySystem : EntitySystem
+public sealed partial class CMUOxygenTankRecoverySystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedInternalsSystem _internals = default!;
@@ -19,7 +19,7 @@ public sealed class CMUOxygenTankRecoverySystem : EntitySystem
     /// <summary>
     /// Normal breathing already heals once per breath; this adds the rest.
     /// </summary>
-    private const float ExtraRecoveryMultiplier = 2f;
+    private const float ExtraRecoveryMultiplier = 0.5f;
 
     public override void Initialize()
     {

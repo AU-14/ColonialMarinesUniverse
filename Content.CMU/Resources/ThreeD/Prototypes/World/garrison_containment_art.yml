@@ -1,0 +1,13 @@
+# Original CC-BY-SA-3.0 ventilation pixels; see SOURCES_CONTAINMENT_WALLS.md.
+- type: cmu3DSurface
+  id: CMU3DContainmentVentFace
+  atlasIndex: 1027
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DContainmentVentFace.png
+- type: cmu3DSurface
+  id: CMU3DContainmentNorthWestHatch
+  atlasIndex: 1028
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DContainmentNorthWestHatch.png
+- type: cmu3DSurface
+  id: CMU3DContainmentNorthEastHatch
+  atlasIndex: 1029
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DContainmentNorthEastHatch.png

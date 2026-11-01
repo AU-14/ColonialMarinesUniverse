@@ -779,6 +779,9 @@
   - type: StorageFill
     contents:
     - id: AU14WeaponShotgunSPAS12HAZOPS
+    # cmu edit start: HAZOPS shotgunners get the PVS-71
+    - id: CMUHelmetGarbPVS71NightVision
+    # cmu edit end
     - id: RMCBoxShotgunSlugs
       amount: 6
     - id: RMCBoxShotgunBuckshot

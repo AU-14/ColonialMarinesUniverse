@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared._RMC14.Hands;
 using Content.Shared.Armor;
+using Content.Shared.CMU14.Inventory; // CMU14
 using Content.Shared.Clothing.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Gibbing;
@@ -294,7 +295,7 @@ public abstract partial class InventorySystem
             return false;
 
         DebugTools.Assert(slotDefinition.Name == slot);
-        if (slotDefinition.DependsOn != null)
+        if (slotDefinition.DependsOn != null && !CMUHasIndependentSuitStorage(itemUid, slot)) // CMU14: an attached sling supports the weapon without armor.
         {
             if (!TryGetSlotEntity(target, slotDefinition.DependsOn, out EntityUid? slotEntity, inventory))
                 return false;
@@ -307,6 +308,7 @@ public abstract partial class InventorySystem
                         return false;
 
                     if (TryComp<AllowSuitStorageComponent>(slotEntity, out var comp) &&
+                        !HasComp<CMUAllowAnySuitStorageComponent>(itemUid) && // CMU14
                         _whitelistSystem.IsWhitelistFailOrNull(comp.Whitelist, itemUid))
                         return false;
                 }

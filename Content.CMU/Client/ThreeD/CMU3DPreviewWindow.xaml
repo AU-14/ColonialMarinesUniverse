@@ -1,0 +1,35 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:three="clr-namespace:Content.Client.CMU14.ThreeD"
+               Title="{Loc cmu-3d-title}" MinSize="680 430" SetSize="1000 680">
+  <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
+    <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+      <Label Text="{Loc cmu-3d-model}" />
+      <OptionButton Name="Models" HorizontalExpand="True" Filterable="True" MaxWidth="780" />
+      <Label Name="Count" />
+    </BoxContainer>
+    <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+      <Button Name="Reset" Text="{Loc cmu-3d-reset}" />
+      <OptionButton Name="DirectionSelection" />
+      <CheckBox Name="Edges" Text="{Loc cmu-3d-edges}" />
+    </BoxContainer>
+    <BoxContainer Orientation="Horizontal" SeparationOverride="12" VerticalExpand="True">
+      <three:CMU3DPreviewControl Name="View" HorizontalExpand="True" VerticalExpand="True" MinSize="340 280" />
+      <ScrollContainer SetWidth="248" HScrollEnabled="False">
+        <BoxContainer Orientation="Vertical" SeparationOverride="8">
+          <Label Name="ModelId" ClipText="True" FontColorOverride="#87CFC8" />
+          <RichTextLabel Name="Details" />
+          <RichTextLabel Name="Description" />
+          <Label Text="{Loc cmu-3d-reference}" Margin="0,12,0,0" />
+          <OptionButton Name="References" Filterable="True" MaxWidth="240" />
+          <PanelContainer>
+            <TextureRect Name="ReferenceIcon" SetSize="232 180" Stretch="KeepAspectCentered" CanShrink="True" />
+          </PanelContainer>
+          <RichTextLabel Name="ReferenceStatus" />
+          <RichTextLabel Text="{Loc cmu-3d-reference-help}" />
+        </BoxContainer>
+      </ScrollContainer>
+    </BoxContainer>
+    <RichTextLabel Text="{Loc cmu-3d-controls}" />
+    <RichTextLabel Text="{Loc cmu-3d-preview-status}" />
+  </BoxContainer>
+</DefaultWindow>

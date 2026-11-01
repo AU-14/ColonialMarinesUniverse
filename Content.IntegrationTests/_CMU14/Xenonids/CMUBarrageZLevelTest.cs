@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using Content.IntegrationTests.Fixtures;
 using Content.Server._RMC14.Xenonids.Despoiler;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared._RMC14.Actions;
@@ -16,8 +17,10 @@ using Robust.Shared.Timing;
 namespace Content.IntegrationTests.CMU14.Xenonids;
 
 [TestFixture]
-public sealed class CMUBarrageZLevelTest
+public sealed class CMUBarrageZLevelTest : GameTest
 {
+    public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
     [TestCase(0, true, false)]
     [TestCase(1, true, false)]
     [TestCase(-1, true, false)]
@@ -25,7 +28,7 @@ public sealed class CMUBarrageZLevelTest
     [TestCase(1, true, true)]
     public async Task BarrageUsesRequestedLevelAndRejectsInvalidShotsBeforeSpendingPlasma(int offset, bool hasLevel, bool blocked)
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var pair = Pair;
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
@@ -50,9 +53,10 @@ public sealed class CMUBarrageZLevelTest
             pair.Server.PlayerMan.SetAttachedEntity(pair.Player!, caster);
             var action = entities.System<SharedRMCActionsSystem>()
                 .GetActionsWithEvent<XenoDespoilerAcidBarrageActionEvent>(caster).Single();
+            var barrage = entities.GetComponent<XenoDespoilerAcidBarrageActionComponent>(action);
             var target = new EntityCoordinates(sourceMap, new Vector2(5, 0));
             var charge = entities.AddComponent<XenoDespoilerChargingBarrageComponent>(caster);
-            charge.StartedAt = pair.Server.ResolveDependency<IGameTiming>().CurTime - TimeSpan.FromSeconds(3);
+            charge.StartedAt = pair.Server.ResolveDependency<IGameTiming>().CurTime - TimeSpan.FromSeconds(barrage.MaxChargeSeconds);
             charge.Target = entities.GetNetCoordinates(target);
             #pragma warning disable RA0002
             var plasma = entities.GetComponent<XenoPlasmaComponent>(caster);
@@ -75,12 +79,11 @@ public sealed class CMUBarrageZLevelTest
             }
             else
             {
-                Assert.That(projectiles, Has.Length.EqualTo(8));
+                Assert.That(projectiles, Has.Length.EqualTo(barrage.MaxProjectiles));
                 Assert.That(projectiles.All(p => p.Item2.MapID == (offset == 0 ? sourceId : destinationId)), Is.True,
                     "Every shot in the volley must spawn on the selected level.");
                 Assert.That(plasma.Plasma, Is.LessThan(before));
             }
         });
-        await pair.CleanReturnAsync();
     }
 }

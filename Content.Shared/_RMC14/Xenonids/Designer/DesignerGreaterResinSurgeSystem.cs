@@ -87,7 +87,7 @@ public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
         // Server-authoritative cooldown gate (action useDelay is UI-side).
         if (_timing.CurTime < ent.Comp.NextGreaterResinSurgeAt)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-greater-surge-cooldown"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-greater-surge-cooldown"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
@@ -139,7 +139,7 @@ public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
 
         if (tileCenters.Count == 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-greater-surge-none"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-greater-surge-none"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
@@ -229,9 +229,9 @@ public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
         }
 
         if (affected == 0)
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-greater-surge-none"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-greater-surge-none"), user, user, PopupType.SmallCaution);
         else
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-greater-surge-success", ("count", affected)), user, user, PopupType.Small);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-greater-surge-success", ("count", affected)), user, user, PopupType.Small);
     }
 
     private void CleanupEffects(DesignerGreaterResinSurgePendingComponent pending)

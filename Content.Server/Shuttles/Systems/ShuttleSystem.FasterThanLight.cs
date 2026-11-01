@@ -100,6 +100,8 @@ public sealed partial class ShuttleSystem
         // CMU14: faction gameplay fixes.
         if (TryComp(ent.Comp.StartupStream, out AudioComponent? startup) && startup.Params.Loop)
             ent.Comp.StartupStream = _audio.Stop(ent.Comp.StartupStream);
+        // CMU14: interrupted flights must release their owned loop as well as normal arrivals.
+        ent.Comp.TravelStream = _audio.Stop(ent.Comp.TravelStream);
     }
 
     private void OnStationPostInit(ref StationPostInitEvent ev)
@@ -290,6 +292,15 @@ public sealed partial class ShuttleSystem
         float? hyperspaceTime = null,
         string? priorityTag = null)
     {
+        // CMU14 Begin: reject malformed destinations before starting the FTL transition.
+        if (!coordinates.IsValid(EntityManager) || !double.IsFinite(angle.Theta) ||
+            !_mapSystem.TryGetMap(_transform.GetMapId(coordinates), out var mapUid))
+        {
+            Log.Error($"Found invalid FTL destination with coordinates {coordinates} and angle {angle} for shuttle {shuttleUid}");
+            return;
+        }
+        // CMU14 End
+
         // CMU14: faction gameplay fixes.
         startupTime ??= DefaultStartupTime;
         if (!TrySetupFTL(shuttleUid, component, startupTime.Value, out var hyperspace))
@@ -308,9 +319,11 @@ public sealed partial class ShuttleSystem
 
         _console.RefreshShuttleConsoles(shuttleUid);
 
-        var mapId = _transform.GetMapId(coordinates);
-        var mapUid = _mapSystem.GetMap(mapId);
-        var ev = new FTLRequestEvent(mapUid);
+        // CMU14 Begin: the destination map was resolved before setup could change shuttle state.
+        // var mapId = _transform.GetMapId(coordinates);
+        // var mapUid = _mapSystem.GetMap(mapId);
+        var ev = new FTLRequestEvent(mapUid.Value);
+        // CMU14 End
         RaiseLocalEvent(shuttleUid, ref ev, true);
     }
 
@@ -462,9 +475,14 @@ public sealed partial class ShuttleSystem
                 playback = length > 0 ? playback % length : 0;
             }
             var tailParams = startupAudio.Params;
-            var clippedAudio = _audio.PlayStatic(new SoundPathSpecifier(startupAudio.FileName), Filter.Broadcast(),
-                // CMU14: faction gameplay fixes.
-                new EntityCoordinates(fromMapUid.Value, _mapSystem.GetGridPosition(entity.Owner)), true, tailParams.WithLoop(false));
+            // CMU14 Begin: distant clients should not allocate an inaudible departure tail.
+            // var clippedAudio = _audio.PlayStatic(new SoundPathSpecifier(startupAudio.FileName), Filter.Broadcast(),
+            //     new EntityCoordinates(fromMapUid.Value, _mapSystem.GetGridPosition(entity.Owner)), true, tailParams.WithLoop(false));
+            var tailCoordinates = new EntityCoordinates(fromMapUid.Value, _mapSystem.GetGridPosition(entity.Owner));
+            var tailAudience = Filter.Empty().AddInRange(_transform.ToMapCoordinates(tailCoordinates), tailParams.MaxDistance);
+            var clippedAudio = _audio.PlayStatic(new SoundPathSpecifier(startupAudio.FileName), tailAudience,
+                tailCoordinates, true, tailParams.WithLoop(false));
+            // CMU14 End
 
             // CMU14: faction gameplay fixes.
             _audio.SetPlaybackPosition(clippedAudio, playback);
@@ -732,6 +750,11 @@ public sealed partial class ShuttleSystem
         {
             foreach (var child in toKnock)
             {
+                // cmu edit start: aircrew keep their feet through takeoff and landing
+                if (CMUKeepsFooting(child))
+                    continue;
+                // cmu edit end
+
                 _stuns.TryUpdateParalyzeDuration(child, _hyperspaceKnockdownTime);
 
                 // If the guy we knocked down is on a spaced tile, throw them too
@@ -1073,7 +1096,7 @@ public sealed partial class ShuttleSystem
         var tiles = new HashSet<Vector2i>();
         if (TryComp(uid, out MapGridComponent? shuttleGrid))
         {
-            var enumerator = _mapSystem.GetAllTilesEnumerator(uid, shuttleGrid);
+            var enumerator = _mapSystem.GetAllTiles(uid, shuttleGrid);
             while (enumerator.MoveNext(out var tile))
             {
                 tiles.Add(tile.Value.GridIndices);

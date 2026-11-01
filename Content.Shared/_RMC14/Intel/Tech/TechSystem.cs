@@ -56,9 +56,21 @@ public sealed partial class TechSystem : EntitySystem
             });
     }
 
+    // CMU14-start
+    private string LocOrRaw(string value)
+    {
+        return Loc.TryGetString(value, out var localized) ? localized : value;
+    }
+    // CMU14-end
+
     private void OnTechAnnounce(TechAnnounceEvent ev)
     {
-        var msg = Loc.GetString("rmc-announcement-message-raw", ("author", ev.Author), ("message", ev.Message));
+        // CMU14-start: use LocOrRaw to avoid missing localization keys causing exceptions
+        var author = LocOrRaw(ev.Author);
+        var message = LocOrRaw(ev.Message);
+
+        var msg = Loc.GetString("rmc-announcement-message-raw", ("author", author), ("message", message));
+        // CMU14-end
         _marineAnnounce.AnnounceToMarines(msg, ev.Sound, faction: ev.Team);
     }
 
@@ -131,6 +143,11 @@ public sealed partial class TechSystem : EntitySystem
         if (option.Purchased && !option.Repurchasable)
             return;
 
+        // cmu edit start: capped repurchases
+        if (option.MaxPurchases > 0 && option.TimesPurchased >= option.MaxPurchases)
+            return;
+        // cmu edit end
+
         // cmu edit start: spend from the combined objective + intel pool shown on the console (intel first)
         if (!_intel.TrySpendCombinedPoints(team, option.CurrentCost))
             return;
@@ -140,6 +157,11 @@ public sealed partial class TechSystem : EntitySystem
         {
             CurrentCost = option.CurrentCost + option.Increase,
             Purchased = true,
+            TimesPurchased = option.TimesPurchased + 1, // cmu edit
+            // CMU14: reuse the round-relative lock so all consoles display and enforce the same cooldown.
+            TimeLock = option.PurchaseCooldown > TimeSpan.Zero
+                ? _ticker.RoundDuration() + option.PurchaseCooldown
+                : option.TimeLock,
         };
         Dirty(ent);
 
@@ -177,6 +199,13 @@ public sealed partial class TechSystem : EntitySystem
                 var newEv = logisticsEv with { Team = team };
                 RaiseLocalEvent(newEv);
             }
+            // cmu edit start: ship fire missions go to the buying team's ship
+            else if (ev is Content.Shared.CMU14.ShipWeapons.CMUTechShipWeaponMissionEvent shipWeaponEv)
+            {
+                var newEv = shipWeaponEv with { Team = team };
+                RaiseLocalEvent(newEv);
+            }
+            // cmu edit end
             else if (ev is TechPartySpawnEvent partySpawnEv)
             {
                 if (string.IsNullOrEmpty(partySpawnEv.ThirdPartyId))
@@ -202,12 +231,12 @@ public sealed partial class TechSystem : EntitySystem
         {
             foreach (var faction in idCardIFF.Factions)
             {
-                _core.CreateARESLog(faction, LogCat, (string) $"{Name(args.Actor)} purchased intel node: {option.Name}");
+                _core.CreateARESLog(faction, LogCat, (string) $"{Name(args.Actor)} purchased intel node: {LocOrRaw(option.Name)}"); // CMU14
             }
         }
         else
         {
-            _core.CreateARESLog(ent, LogCat, (string) $"{Name(args.Actor)} purchased intel node: {option.Name}");
+            _core.CreateARESLog(ent, LogCat, (string) $"{Name(args.Actor)} purchased intel node: {LocOrRaw(option.Name)}"); // CMU14
         }
     }
 

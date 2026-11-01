@@ -59,6 +59,9 @@ public sealed partial class AreaSystem : EntitySystem
         _xenoConstruct = GetEntityQuery<XenoConstructComponent>();
 
         SubscribeLocalEvent<AreaGridComponent, MapInitEvent>(OnAreaGridMapInit);
+        // CMU14: normalize gameplay permissions after map initialization, preserving editor/save defaults.
+        // SubscribeLocalEvent<AreaComponent, ComponentInit>(OnAreaInit);
+        SubscribeLocalEvent<AreaComponent, MapInitEvent>(OnAreaMapInit);
 
         Subs.CVar(_config, RMCCVars.RMCHiveSpreadEarlyMinutes, v => _earlySpreadHiveTime = TimeSpan.FromMinutes(v), true);
     }
@@ -360,7 +363,7 @@ public sealed partial class AreaSystem : EntitySystem
         if (area.Value.Comp.WeedKilling)
         {
             if (user != null && popup)
-                _popup.PopupClient("This area is unsuited to host the hive!", user.Value, user.Value, PopupType.MediumCaution);
+                _popup.PopupEntity("This area is unsuited to host the hive!", user.Value, user.Value, PopupType.MediumCaution);
 
             return false;
         }
@@ -373,7 +376,7 @@ public sealed partial class AreaSystem : EntitySystem
             return true;
 
         if (user != null && popup)
-            _popup.PopupClient("It's too early to spread the hive this far.", user.Value, user.Value, PopupType.MediumCaution);
+            _popup.PopupEntity("It's too early to spread the hive this far.", user.Value, user.Value, PopupType.MediumCaution);
 
         return false;
     }
@@ -423,13 +426,13 @@ public sealed partial class AreaSystem : EntitySystem
                 areaGrid.Colors.Clear();
                 Dirty(ent, areaGrid);
 
-                var tiles = _map.GetAllTilesEnumerator(ent, mapGrid);
+                var tiles = _map.GetAllTiles(ent, mapGrid);
                 var areasOccupied = new Dictionary<EntProtoId<AreaComponent>, (int Resin, int Buildable)>();
                 while (tiles.MoveNext(out var tileRefNullable))
                 {
                     var tileRef = tileRefNullable.Value;
                     var pos = tileRef.GridIndices;
-                    var anchoredEnumerator = _map.GetAnchoredEntitiesEnumerator(ent, mapGrid, pos);
+                    var anchoredEnumerator = _map.GetAnchoredEntities(ent, mapGrid, pos);
 
                     var found = false;
                     var invincibleWall = false;

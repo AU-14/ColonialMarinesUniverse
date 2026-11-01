@@ -2,6 +2,11 @@ using Content.Shared._RMC14.Cassette;
 using Content.Shared._RMC14.Armor.Magnetic;
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Deploy;
+// CMU14 Begin: deleted combat-reference coverage.
+using Content.Shared._RMC14.Weapons.Ranged.AimedShot.FocusedShooting;
+using Content.Shared._RMC14.Weapons.Ranged.Prediction;
+using Content.Shared._RMC14.Xenonids.Spray;
+// CMU14 End
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared._RMC14.Xenonids.Fruit.Components;
@@ -18,6 +23,7 @@ using Content.Shared.CombatMode;
 using Content.Shared.Placeable;
 using Content.Shared.Projectiles;
 using Content.Shared.Speech.Components;
+using Content.Shared.StepTrigger.Components; // CMU14
 using Content.Shared.Trigger.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.GameObjects;
@@ -30,6 +36,10 @@ namespace Content.IntegrationTests.Tests._RMC14.Networking;
 [TestFixture]
 public sealed class StaleEntityStateTest
 {
+    // CMU14: references retained after a target dies, a shooter leaves, or a xeno evolves.
+    [TestCase(typeof(RMCFocusedShootingComponent), nameof(RMCFocusedShootingComponent.CurrentTarget))]
+    [TestCase(typeof(PredictedProjectileServerComponent), nameof(PredictedProjectileServerComponent.ClientEnt))]
+    [TestCase(typeof(XenoAcidSplatterComponent), nameof(XenoAcidSplatterComponent.Xeno))]
     [TestCase(typeof(ProjectileComponent), nameof(ProjectileComponent.Shooter))]
     [TestCase(typeof(VocalComponent), nameof(VocalComponent.EmoteActionEntity))]
     [TestCase(typeof(TimerTriggerComponent), nameof(TimerTriggerComponent.User))]
@@ -142,6 +152,35 @@ public sealed class StaleEntityStateTest
         await pair.CleanReturnAsync();
     }
 
+    // CMU14 method: contact end events may arrive after a collider was deleted.
+    [TestCase(nameof(StepTriggerComponent.Colliding))]
+    [TestCase(nameof(StepTriggerComponent.CurrentlySteppedOn))]
+    public async Task DeletedStepContactsAreFilteredWithoutChangingGameplayState(string field)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = false });
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var owner = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            var live = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            var dead = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            var component = new StepTriggerComponent();
+            SetField(component, nameof(component.Active), false);
+            entities.AddComponent(owner, component);
+            var contacts = new HashSet<EntityUid> { live, dead };
+            SetField(component, field, contacts);
+            entities.DeleteEntity(dead);
+            var state = entities.GetComponentState(entities.EventBus, component, null, GameTick.Zero)!;
+            Assert.That(state.GetType().GetProperty(field)!.GetValue(state),
+                Is.EquivalentTo(new[] { entities.GetNetEntity(live) }));
+            Assert.That(contacts, Is.EquivalentTo(new[] { live, dead }),
+                "State serialization must not mutate collision tracking on a PVS worker.");
+            entities.DeleteEntity(owner);
+            entities.DeleteEntity(live);
+        });
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task ReferencesAndGameplayStateReplicateAfterSourceDeletion()
     {
@@ -194,6 +233,31 @@ public sealed class StaleEntityStateTest
             projectile.Weapon = source;
             projectile.MaxFixedRange = 17f;
             components.Add(projectile);
+
+            // CMU14 Begin: combat references may survive their target's deletion.
+            var focus = entities.AddComponent<RMCFocusedShootingComponent>(owner);
+            focus.CurrentTarget = source;
+            focus.FocusCounter = 2;
+            focus.FocusMultiplier = 0.75f;
+            components.Add(focus);
+
+            var prediction = entities.AddComponent<PredictedProjectileServerComponent>(owner);
+            prediction.ClientEnt = source;
+            prediction.ClientId = 42;
+            components.Add(prediction);
+
+            var splatter = entities.AddComponent<XenoAcidSplatterComponent>(owner);
+            SetField(splatter, nameof(splatter.Xeno), (EntityUid?) source);
+            components.Add(splatter);
+
+            var step = new StepTriggerComponent();
+            SetField(step, nameof(step.Active), false);
+            SetField(step, nameof(step.StepOn), true);
+            SetField(step, nameof(step.Colliding), new HashSet<EntityUid> { source });
+            SetField(step, nameof(step.CurrentlySteppedOn), new HashSet<EntityUid> { source });
+            entities.AddComponent(owner, step);
+            components.Add(step);
+            // CMU14 End
 
             var intoxicated = entities.AddComponent<XenoIntoxicatedComponent>(owner);
             SetField(intoxicated, nameof(XenoIntoxicatedComponent.LastSource), (EntityUid?) source);
@@ -293,6 +357,23 @@ public sealed class StaleEntityStateTest
                     Assert.That(projectile.Shooter, Is.EqualTo(expected));
                     Assert.That(projectile.Weapon, Is.EqualTo(expected));
                     Assert.That(projectile.MaxFixedRange, Is.EqualTo(17f));
+                    // CMU14 Begin
+                    var focus = entities.GetComponent<RMCFocusedShootingComponent>(clientOwner);
+                    var prediction = entities.GetComponent<PredictedProjectileServerComponent>(clientOwner);
+                    var splatter = entities.GetComponent<XenoAcidSplatterComponent>(clientOwner);
+                    Assert.That(focus.CurrentTarget, Is.EqualTo(expected));
+                    Assert.That(focus.FocusCounter, Is.EqualTo(2));
+                    Assert.That(focus.FocusMultiplier, Is.EqualTo(0.75f));
+                    Assert.That(prediction.ClientEnt, Is.EqualTo(expected));
+                    Assert.That(prediction.ClientId, Is.EqualTo(42));
+                    Assert.That(splatter.Xeno, Is.EqualTo(expected));
+                    var step = entities.GetComponent<StepTriggerComponent>(clientOwner);
+                    Assert.That(step.StepOn, Is.True);
+                    Assert.That(step.Active, Is.False);
+                    var expectedContacts = deleted ? Array.Empty<EntityUid>() : new[] { expected };
+                    Assert.That(step.Colliding, Is.EquivalentTo(expectedContacts));
+                    Assert.That(step.CurrentlySteppedOn, Is.EquivalentTo(expectedContacts));
+                    // CMU14 End
                     Assert.That(intoxicated.LastSource, Is.EqualTo(expected));
                     Assert.That(intoxicated.Stacks, Is.EqualTo(25));
                     Assert.That(parasite.InfectedVictim, Is.EqualTo(expected));

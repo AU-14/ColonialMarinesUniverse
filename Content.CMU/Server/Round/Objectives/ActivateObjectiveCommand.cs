@@ -6,7 +6,7 @@ using Robust.Shared.GameObjects;
 namespace Content.Server.CMU14.Round.Objectives;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed class ActivateObjectiveCommand : IConsoleCommand
+public sealed partial class ActivateObjectiveCommand : IConsoleCommand
 {
     [Dependency] private IEntityManager _entManager = default!;
 

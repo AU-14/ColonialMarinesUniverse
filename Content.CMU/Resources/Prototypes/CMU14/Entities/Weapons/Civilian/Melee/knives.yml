@@ -1,0 +1,5 @@
+- type: entity
+  parent: RMCM5Bayonet
+  id: CMUSurvivalKnife
+  name: survival knife
+  description: A sturdy fixed-blade knife kept in emergency kits. Good for cutting, prying and getting yourself out of trouble. It fits in your boots, or on the end of a rifle in a pinch.

@@ -72,6 +72,7 @@ public sealed partial class RespiratoryStrainSystem : EntitySystem
 
             comp.NextCheck = time + comp.TimeBetweenChecks;
 
+            var previous = comp.Current;
             var sprinting = IsSprinting(uid);
             if (sprinting)
             {
@@ -90,7 +91,8 @@ public sealed partial class RespiratoryStrainSystem : EntitySystem
                 comp.Current = Math.Clamp(comp.Current - decay, 0, comp.Max);
             }
 
-            Dirty(uid, comp);
+            if (comp.Current != previous)
+                Dirty(uid, comp);
             ProcessEffects((uid, comp));
         }
     }

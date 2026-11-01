@@ -1,0 +1,8 @@
+author: CatoChristopherMrow
+category: CMU
+changes:
+- message: Both military and civilian doctors and nurses should now have relatively
+    consistent skills between their counterpart.
+  type: Tweak
+time: '2026-10-18T03:37:24.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2204

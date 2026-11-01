@@ -1,0 +1,6 @@
+# Keeps aircrew on their feet when a dropship hits turbulence (CMUDropshipTurbulenceSystem).
+- type: entity
+  parent: RMCSkillBase
+  id: CMUSkillAircrew
+  name: Aircrew
+  categories: [ HideSpawnMenu ]

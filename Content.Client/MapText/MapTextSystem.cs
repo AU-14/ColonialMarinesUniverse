@@ -1,4 +1,4 @@
-﻿using Content.Shared.MapText;
+using Content.Shared.MapText;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -69,11 +69,11 @@ public sealed partial class MapTextSystem : SharedMapTextSystem
             component.Color = Color.Red;
 
             if (ProtoMan.TryIndex<FontPrototype>(SharedMapTextComponent.DefaultFont, out var @default))
-                component.CachedFont = new VectorFont(_resourceCache.GetResource<FontResource>(@default.Path), 14);
+                component.CachedFont = new VectorFont(_resourceCache.GetResource<FontResource>(CMUFontPrototypes.GetPath(@default)), 14);
             return;
         }
 
-        var fontResource = _resourceCache.GetResource<FontResource>(fontPrototype.Path);
+        var fontResource = _resourceCache.GetResource<FontResource>(CMUFontPrototypes.GetPath(fontPrototype));
         component.CachedFont = new VectorFont(fontResource, component.FontSize);
     }
 }

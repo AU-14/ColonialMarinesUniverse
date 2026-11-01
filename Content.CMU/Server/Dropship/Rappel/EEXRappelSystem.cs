@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.Dropship.Rappel;
 using Content.Shared.CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Dropship.Utility.Components;
 using Content.Shared._RMC14.Dropship.Utility.Systems;
@@ -21,6 +22,7 @@ public sealed partial class EEXRappelSystem : SharedEEXRappelSystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private ITileDefinitionManager _cmuTileDefinitions = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     public override void Initialize()
@@ -152,7 +154,7 @@ public sealed partial class EEXRappelSystem : SharedEEXRappelSystem
 
         var groundTile = _map.WorldToTile(groundMap.Value.Owner, groundGrid, groundCoordinates.Position);
         if (!_map.TryGetTileRef(groundMap.Value.Owner, groundGrid, groundTile, out var groundTileRef) ||
-            groundTileRef.Tile.IsEmpty)
+            CMUZLevelOpeningCache.IsFallThroughTile(groundTileRef.Tile, _cmuTileDefinitions))
         {
             failure = "cmu-eex-rappel-no-ground";
             return false;
@@ -179,7 +181,7 @@ public sealed partial class EEXRappelSystem : SharedEEXRappelSystem
 
     private bool HasLadderAt(Entity<MapGridComponent> grid, Vector2i tile)
     {
-        var anchored = _map.GetAnchoredEntitiesEnumerator(grid.Owner, grid.Comp, tile);
+        var anchored = _map.GetAnchoredEntities(grid.Owner, grid.Comp, tile);
         while (anchored.MoveNext(out var uid))
         {
             if (HasComp<CMUZLevelLadderComponent>(uid) || HasComp<LadderComponent>(uid))

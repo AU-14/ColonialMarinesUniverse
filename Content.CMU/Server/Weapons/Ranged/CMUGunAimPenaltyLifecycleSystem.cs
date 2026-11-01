@@ -10,10 +10,10 @@ namespace Content.Server.CMU14.Weapons.Ranged;
 /// <summary>
 /// Relays the shared gun lifecycle events to each CMU gun aim penalty system.
 /// </summary>
-public sealed class CMUGunAimPenaltyLifecycleSystem : EntitySystem
+public sealed partial class CMUGunAimPenaltyLifecycleSystem : EntitySystem
 {
-    [Dependency] private readonly PanicGunSystem _panic = default!;
-    [Dependency] private readonly CMUMedicalSpeedSystem _medical = default!;
+    [Dependency] private PanicGunSystem _panic = default!;
+    [Dependency] private CMUMedicalSpeedSystem _medical = default!;
 
     public override void Initialize()
     {

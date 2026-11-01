@@ -263,7 +263,7 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
 
         // Set faction-specific starting balance (for DistressSignal)
         if (account.Comp.Faction == "govfor" || account.Comp.Faction == "opfor")
-            account.Comp.Balance = 200000;
+            account.Comp.Balance = 300000;
         else
             account.Comp.Balance = Starting; // fallback: RMCCVars.RMCRequisitionsStartingBalance
 

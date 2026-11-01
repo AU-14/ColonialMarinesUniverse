@@ -1,6 +1,8 @@
+# cmu edit start: lore names
 rmc-job-greeting-chances-colonist = You are a colonist living on LV-522. You are tasked by your employer, the Weyland-Yutani Corporation, to preform your expected duties.
 
-  You are [bold][color=#51A16C][font size=16]NON-HOSTILE to the UNMC![/font][/color][/bold]
+  You are [bold][color=#51A16C][font size=16]NON-HOSTILE to the USCM![/font][/color][/bold]
+# cmu edit end
 
 rmc-job-name-colonist-chances-trucker = Weyland-Yutani Heavy Vehicle Operator
 rmc-job-description-colonist-chances-trucker = Operate heavy equipment in and around the colony.

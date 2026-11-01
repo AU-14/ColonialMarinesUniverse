@@ -52,8 +52,9 @@
   id: CMUYautjaGroundRelayDestination
   name: Yautja ground relay destination
   description: Invisible destination marker for Yautja relay beacons on a ground map.
-  categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite
+    state: green
   - type: YautjaRelayDestination
     kind: Ground
 
@@ -81,8 +82,5 @@
   parent: MarkerBase
   id: CMUYautjaYoungbloodSpawn
   name: Yautja youngblood spawn
-  description: Invisible spawn marker for youngblood blooding calls.
+  description: Invisible spawn marker for a youngblood called out for its blooding.
   categories: [ HideSpawnMenu ]
-  components:
-  - type: YautjaHuntSpawnPoint
-    kind: Youngblood

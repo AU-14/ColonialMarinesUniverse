@@ -1,0 +1,1415 @@
+# Physical fixture drafts; original sources and limits in SOURCES_FIXTURES_CLOUD.md.
+- type: cmu3DModel
+  id: CMU3DWhiteAlmayerPodDoorCloud
+  label: White Almayer pod door closed
+  status: draft
+  sourcePrototypes:
+  - RMCPodDoorAlmayerWhite
+  referencePrototype: RMCPodDoorAlmayerWhite
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Almayer/white_almayer_poddoor.rsi
+  referenceState: closed
+  sourceDirections: 4
+  description: Source-inspected physical fixture draft. Height, depth, hidden construction and map fitting remain
+    inferred. State, animation and runtime acceptance are separate; see SOURCES_FIXTURES_CLOUD.md.
+  parts:
+  - label: sunken floor pocket
+    min: -0.50000, -0.15000, -0.03500
+    max: 0.50000, 0.15000, -0.00500
+    color: '#868479'
+  - label: front white threshold rim
+    min: -0.50000, -0.17000, 0.00000
+    max: 0.50000, -0.13000, 0.04500
+    color: '#E2E0DC'
+  - label: rear white threshold rim
+    min: -0.50000, 0.13000, 0.00000
+    max: 0.50000, 0.17000, 0.04500
+    color: '#E2E0DC'
+  - label: west threshold end
+    min: -0.50000, -0.13000, 0.00000
+    max: -0.46500, 0.13000, 0.04500
+    color: '#D2D0CA'
+  - label: east threshold end
+    min: 0.46500, -0.13000, 0.00000
+    max: 0.50000, 0.13000, 0.04500
+    color: '#D2D0CA'
+  - label: left leaf runner
+    min: -0.50000, -0.11500, 0.04500
+    max: -0.46500, 0.11500, 2.50000
+    color: '#898478'
+  - label: right leaf runner
+    min: 0.46500, -0.11500, 0.04500
+    max: 0.50000, 0.11500, 2.50000
+    color: '#898478'
+  - label: lower armor slat
+    min: -0.46500, -0.09400, 0.04500
+    max: 0.46500, 0.09400, 0.71000
+    color: '#D2D0CA'
+  - label: middle drive slat
+    min: -0.46500, -0.09400, 0.72600
+    max: 0.46500, 0.09400, 1.55000
+    color: '#AAA798'
+  - label: upper armor slat
+    min: -0.46500, -0.09400, 1.56600
+    max: 0.46500, 0.09400, 2.50000
+    color: '#D2D0CA'
+  - label: white inset rim
+    min: -0.44600, -0.11900, 0.11000
+    max: 0.44600, -0.09500, 0.64000
+    color: '#E2E0DC'
+  - label: recessed pale armor face
+    min: -0.41300, -0.12100, 0.15500
+    max: 0.41300, -0.11900, 0.59500
+    color: '#D2D0CA'
+  - label: white inset rim
+    min: -0.44600, -0.11900, 1.71000
+    max: 0.44600, -0.09500, 2.40000
+    color: '#E2E0DC'
+  - label: recessed pale armor face
+    min: -0.41300, -0.12100, 1.75500
+    max: 0.41300, -0.11900, 2.35500
+    color: '#D2D0CA'
+  - label: gray hazard band
+    min: -0.46300, -0.13100, 0.78000
+    max: 0.46300, -0.08300, 0.90500
+    color: '#9F9B88'
+  - label: diagonal hazard paint
+    min: -0.45000, -0.13200, 0.80000
+    max: -0.38200, -0.12900, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: -0.42700, -0.13200, 0.83800
+    max: -0.35900, -0.12900, 0.87600
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: -0.29500, -0.13200, 0.80000
+    max: -0.22700, -0.12900, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: -0.27200, -0.13200, 0.83800
+    max: -0.20400, -0.12900, 0.87600
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: -0.14000, -0.13200, 0.80000
+    max: -0.07200, -0.12900, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: -0.11700, -0.13200, 0.83800
+    max: -0.04900, -0.12900, 0.87600
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.01500, -0.13200, 0.80000
+    max: 0.08300, -0.12900, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.03800, -0.13200, 0.83800
+    max: 0.10600, -0.12900, 0.87600
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.17000, -0.13200, 0.80000
+    max: 0.23800, -0.12900, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.19300, -0.13200, 0.83800
+    max: 0.26100, -0.12900, 0.87600
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.32500, -0.13200, 0.80000
+    max: 0.39300, -0.12900, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.34800, -0.13200, 0.83800
+    max: 0.41600, -0.12900, 0.87600
+    color: '#898478'
+  - label: gray hazard band
+    min: -0.46300, -0.13100, 1.23000
+    max: 0.46300, -0.08300, 1.35500
+    color: '#9F9B88'
+  - label: diagonal hazard paint
+    min: -0.45000, -0.13200, 1.25000
+    max: -0.38200, -0.12900, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: -0.42700, -0.13200, 1.28800
+    max: -0.35900, -0.12900, 1.32600
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: -0.29500, -0.13200, 1.25000
+    max: -0.22700, -0.12900, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: -0.27200, -0.13200, 1.28800
+    max: -0.20400, -0.12900, 1.32600
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: -0.14000, -0.13200, 1.25000
+    max: -0.07200, -0.12900, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: -0.11700, -0.13200, 1.28800
+    max: -0.04900, -0.12900, 1.32600
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.01500, -0.13200, 1.25000
+    max: 0.08300, -0.12900, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.03800, -0.13200, 1.28800
+    max: 0.10600, -0.12900, 1.32600
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.17000, -0.13200, 1.25000
+    max: 0.23800, -0.12900, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.19300, -0.13200, 1.28800
+    max: 0.26100, -0.12900, 1.32600
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.32500, -0.13200, 1.25000
+    max: 0.39300, -0.12900, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint
+    min: 0.34800, -0.13200, 1.28800
+    max: 0.41600, -0.12900, 1.32600
+    color: '#898478'
+  - label: double pale cross rail
+    min: -0.46400, -0.14000, 0.96300
+    max: 0.46400, -0.07400, 1.01700
+    color: '#E2E0DC'
+  - label: white inset rim
+    min: -0.44600, 0.09500, 0.11000
+    max: 0.44600, 0.11900, 0.64000
+    color: '#E2E0DC'
+  - label: recessed pale armor face
+    min: -0.41300, 0.11900, 0.15500
+    max: 0.41300, 0.12100, 0.59500
+    color: '#D2D0CA'
+  - label: white inset rim
+    min: -0.44600, 0.09500, 1.71000
+    max: 0.44600, 0.11900, 2.40000
+    color: '#E2E0DC'
+  - label: recessed pale armor face
+    min: -0.41300, 0.11900, 1.75500
+    max: 0.41300, 0.12100, 2.35500
+    color: '#D2D0CA'
+  - label: gray hazard band
+    min: -0.46300, 0.08300, 0.78000
+    max: 0.46300, 0.13100, 0.90500
+    color: '#9F9B88'
+  - label: diagonal hazard paint back
+    min: -0.45000, 0.12900, 0.80000
+    max: -0.38200, 0.13200, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: -0.42700, 0.12900, 0.83800
+    max: -0.35900, 0.13200, 0.87600
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: -0.29500, 0.12900, 0.80000
+    max: -0.22700, 0.13200, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: -0.27200, 0.12900, 0.83800
+    max: -0.20400, 0.13200, 0.87600
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: -0.14000, 0.12900, 0.80000
+    max: -0.07200, 0.13200, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: -0.11700, 0.12900, 0.83800
+    max: -0.04900, 0.13200, 0.87600
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.01500, 0.12900, 0.80000
+    max: 0.08300, 0.13200, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.03800, 0.12900, 0.83800
+    max: 0.10600, 0.13200, 0.87600
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.17000, 0.12900, 0.80000
+    max: 0.23800, 0.13200, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.19300, 0.12900, 0.83800
+    max: 0.26100, 0.13200, 0.87600
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.32500, 0.12900, 0.80000
+    max: 0.39300, 0.13200, 0.83800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.34800, 0.12900, 0.83800
+    max: 0.41600, 0.13200, 0.87600
+    color: '#898478'
+  - label: gray hazard band
+    min: -0.46300, 0.08300, 1.23000
+    max: 0.46300, 0.13100, 1.35500
+    color: '#9F9B88'
+  - label: diagonal hazard paint back
+    min: -0.45000, 0.12900, 1.25000
+    max: -0.38200, 0.13200, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: -0.42700, 0.12900, 1.28800
+    max: -0.35900, 0.13200, 1.32600
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: -0.29500, 0.12900, 1.25000
+    max: -0.22700, 0.13200, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: -0.27200, 0.12900, 1.28800
+    max: -0.20400, 0.13200, 1.32600
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: -0.14000, 0.12900, 1.25000
+    max: -0.07200, 0.13200, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: -0.11700, 0.12900, 1.28800
+    max: -0.04900, 0.13200, 1.32600
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.01500, 0.12900, 1.25000
+    max: 0.08300, 0.13200, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.03800, 0.12900, 1.28800
+    max: 0.10600, 0.13200, 1.32600
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.17000, 0.12900, 1.25000
+    max: 0.23800, 0.13200, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.19300, 0.12900, 1.28800
+    max: 0.26100, 0.13200, 1.32600
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.32500, 0.12900, 1.25000
+    max: 0.39300, 0.13200, 1.28800
+    color: '#898478'
+  - label: diagonal hazard paint back
+    min: 0.34800, 0.12900, 1.28800
+    max: 0.41600, 0.13200, 1.32600
+    color: '#898478'
+  - label: double pale cross rail
+    min: -0.46400, 0.07400, 0.96300
+    max: 0.46400, 0.14000, 1.01700
+    color: '#E2E0DC'
+  doorState: Closed
+  alternateDoorModel: CMU3DWhiteAlmayerPodDoorOpenCloud
+- type: cmu3DModel
+  id: CMU3DWhiteAlmayerPodDoorOpenCloud
+  label: White Almayer pod door open
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCPodDoorAlmayerWhite
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Almayer/white_almayer_poddoor.rsi
+  referenceState: open
+  sourceDirections: 4
+  description: Source-inspected physical fixture draft. Height, depth, hidden construction and map fitting remain
+    inferred. State, animation and runtime acceptance are separate; see SOURCES_FIXTURES_CLOUD.md.
+  parts:
+  - label: sunken floor pocket
+    min: -0.50000, -0.15000, -0.03500
+    max: 0.50000, 0.15000, -0.00500
+    color: '#868479'
+  - label: front white threshold rim
+    min: -0.50000, -0.17000, 0.00000
+    max: 0.50000, -0.13000, 0.04500
+    color: '#E2E0DC'
+  - label: rear white threshold rim
+    min: -0.50000, 0.13000, 0.00000
+    max: 0.50000, 0.17000, 0.04500
+    color: '#E2E0DC'
+  - label: west threshold end
+    min: -0.50000, -0.13000, 0.00000
+    max: -0.46500, 0.13000, 0.04500
+    color: '#D2D0CA'
+  - label: east threshold end
+    min: 0.46500, -0.13000, 0.00000
+    max: 0.50000, 0.13000, 0.04500
+    color: '#D2D0CA'
+  - label: retracted panel crown
+    min: -0.46400, -0.12800, -0.02400
+    max: 0.46400, 0.12800, 0.01400
+    color: '#898478'
+  - label: recessed leaf seam
+    min: -0.46400, -0.00900, 0.01400
+    max: 0.46400, 0.00900, 0.01900
+    color: '#AAA798'
+  doorState: Open
+  alternateDoorModel: CMU3DWhiteAlmayerPodDoorCloud
+- type: cmu3DModel
+  id: CMU3DElectrifiedGrilleCloud
+  label: Electrified mesh grille
+  status: draft
+  sourcePrototypes:
+  - RMCGrilleElectrified
+  referencePrototype: RMCGrilleElectrified
+  referenceRsi: /Textures/_RMC14/Structures/Walls/electric_grille.rsi
+  referenceState: grille
+  sourceDirections: 4
+  description: Source-inspected physical fixture draft. Height, depth, hidden construction and map fitting remain
+    inferred. State, animation and runtime acceptance are separate; see SOURCES_FIXTURES_CLOUD.md.
+  parts:
+  - label: open diamond mesh wire
+    min: -0.50485, -0.02100, 0.13300
+    max: -0.33515, -0.00700, 0.14700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.53385, -0.02100, 0.20300
+    max: -0.16615, -0.00700, 0.21700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.56284, -0.02100, 0.27300
+    max: 0.00284, -0.00700, 0.28700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.59184, -0.02100, 0.34300
+    max: 0.17184, -0.00700, 0.35700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.62083, -0.02100, 0.41300
+    max: 0.34083, -0.00700, 0.42700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.64983, -0.02100, 0.48300
+    max: 0.50983, -0.00700, 0.49700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.67882, -0.02100, 0.55300
+    max: 0.67882, -0.00700, 0.56700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.67882, -0.02100, 0.69300
+    max: 0.67882, -0.00700, 0.70700
+    color: '#2F302D'
+    pitch: -45.00000000000001
+  - label: open diamond mesh wire
+    min: -0.67882, -0.02100, 0.83300
+    max: 0.67882, -0.00700, 0.84700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.67882, -0.02100, 0.97300
+    max: 0.67882, -0.00700, 0.98700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.67882, -0.02100, 1.11300
+    max: 0.67882, -0.00700, 1.12700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.63054, -0.02100, 1.23300
+    max: 0.67054, -0.00700, 1.24700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.46154, -0.02100, 1.30300
+    max: 0.64154, -0.00700, 1.31700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.29255, -0.02100, 1.37300
+    max: 0.61255, -0.00700, 1.38700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: -0.12355, -0.02100, 1.44300
+    max: 0.58355, -0.00700, 1.45700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: 0.04544, -0.02100, 1.51300
+    max: 0.55456, -0.00700, 1.52700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: 0.21444, -0.02100, 1.58300
+    max: 0.52556, -0.00700, 1.59700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: 0.38343, -0.02100, 1.65300
+    max: 0.49657, -0.00700, 1.66700
+    color: '#2F302D'
+    pitch: -45.0
+  - label: open diamond mesh wire
+    min: 0.33515, 0.00700, 0.13300
+    max: 0.50485, 0.02100, 0.14700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: 0.16615, 0.00700, 0.20300
+    max: 0.53385, 0.02100, 0.21700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.00284, 0.00700, 0.27300
+    max: 0.56284, 0.02100, 0.28700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.17184, 0.00700, 0.34300
+    max: 0.59184, 0.02100, 0.35700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.34083, 0.00700, 0.41300
+    max: 0.62083, 0.02100, 0.42700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.50983, 0.00700, 0.48300
+    max: 0.64983, 0.02100, 0.49700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.67882, 0.00700, 0.55300
+    max: 0.67882, 0.02100, 0.56700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.67882, 0.00700, 0.69300
+    max: 0.67882, 0.02100, 0.70700
+    color: '#464944'
+    pitch: 45.00000000000001
+  - label: open diamond mesh wire
+    min: -0.67882, 0.00700, 0.83300
+    max: 0.67882, 0.02100, 0.84700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.67882, 0.00700, 0.97300
+    max: 0.67882, 0.02100, 0.98700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.67882, 0.00700, 1.11300
+    max: 0.67882, 0.02100, 1.12700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.67054, 0.00700, 1.23300
+    max: 0.63054, 0.02100, 1.24700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.64154, 0.00700, 1.30300
+    max: 0.46154, 0.02100, 1.31700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.61255, 0.00700, 1.37300
+    max: 0.29255, 0.02100, 1.38700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.58355, 0.00700, 1.44300
+    max: 0.12355, 0.02100, 1.45700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.55456, 0.00700, 1.51300
+    max: -0.04544, 0.02100, 1.52700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.52556, 0.00700, 1.58300
+    max: -0.21444, 0.02100, 1.59700
+    color: '#464944'
+    pitch: 45.0
+  - label: open diamond mesh wire
+    min: -0.49657, 0.00700, 1.65300
+    max: -0.38343, 0.02100, 1.66700
+    color: '#464944'
+    pitch: 45.0
+  - label: lower support rail
+    min: -0.50000, -0.07000, 0.05000
+    max: 0.50000, 0.07000, 0.10500
+    color: '#181917'
+  - label: upper support rail
+    min: -0.50000, -0.06200, 1.66000
+    max: 0.50000, 0.06200, 1.72000
+    color: '#181917'
+  - label: mesh side upright
+    min: -0.48700, -0.06500, 0.07000
+    max: -0.43300, 0.06500, 1.72000
+    color: '#0D0E0D'
+  - label: mesh side upright
+    min: 0.43300, -0.06500, 0.07000
+    max: 0.48700, 0.06500, 1.72000
+    color: '#0D0E0D'
+  - label: red insulated conductor casing
+    min: -0.23500, -0.10800, 1.03500
+    max: 0.23500, 0.10800, 1.26500
+    color: '#360D0F'
+  - label: red casing cooling rib
+    min: -0.22300, -0.11600, 1.04700
+    max: 0.22300, 0.11600, 1.06500
+    color: '#55161B'
+  - label: red casing cooling rib
+    min: -0.22300, -0.11600, 1.08900
+    max: 0.22300, 0.11600, 1.10700
+    color: '#55161B'
+  - label: red casing cooling rib
+    min: -0.22300, -0.11600, 1.13100
+    max: 0.22300, 0.11600, 1.14900
+    color: '#55161B'
+  - label: red casing cooling rib
+    min: -0.22300, -0.11600, 1.17300
+    max: 0.22300, 0.11600, 1.19100
+    color: '#55161B'
+  - label: red casing cooling rib
+    min: -0.22300, -0.11600, 1.21500
+    max: 0.22300, 0.11600, 1.23300
+    color: '#55161B'
+  - label: middle reinforcement rail
+    min: -0.48800, -0.05800, 0.89500
+    max: 0.48800, 0.05800, 0.93600
+    color: '#181917'
+  - label: warning rail black backing
+    min: -0.49000, -0.11900, 0.29000
+    max: 0.49000, -0.09400, 0.40500
+    color: '#181917'
+  - label: yellow diagonal warning stripe
+    min: -0.48699, -0.13750, 0.33250
+    max: -0.38501, -0.11050, 0.35950
+    color: '#AA720F'
+    pitch: 48.17983011986426
+  - label: yellow diagonal warning stripe
+    min: -0.34899, -0.13750, 0.33250
+    max: -0.24701, -0.11050, 0.35950
+    color: '#AA720F'
+    pitch: 48.17983011986426
+  - label: yellow diagonal warning stripe
+    min: -0.21099, -0.13750, 0.33250
+    max: -0.10901, -0.11050, 0.35950
+    color: '#AA720F'
+    pitch: 48.17983011986426
+  - label: yellow diagonal warning stripe
+    min: -0.07299, -0.13750, 0.33250
+    max: 0.02899, -0.11050, 0.35950
+    color: '#AA720F'
+    pitch: 48.17983011986426
+  - label: yellow diagonal warning stripe
+    min: 0.06501, -0.13750, 0.33250
+    max: 0.16699, -0.11050, 0.35950
+    color: '#AA720F'
+    pitch: 48.17983011986426
+  - label: yellow diagonal warning stripe
+    min: 0.20301, -0.13750, 0.33250
+    max: 0.30499, -0.11050, 0.35950
+    color: '#AA720F'
+    pitch: 48.17983011986426
+  - label: yellow diagonal warning stripe
+    min: 0.34101, -0.13750, 0.33250
+    max: 0.44299, -0.11050, 0.35950
+    color: '#AA720F'
+    pitch: 48.17983011986426
+  - label: coil post
+    min: -0.40000, -0.07700, 0.70000
+    max: -0.28000, 0.07700, 1.63000
+    color: '#2F302D'
+  - label: Tesla insulator coil ring
+    min: -0.42500, -0.08500, 1.28000
+    max: -0.25500, 0.08500, 1.31600
+    color: '#1E1F1D'
+    shape: CylinderZ
+  - label: Tesla insulator coil ring
+    min: -0.44800, -0.10800, 1.34000
+    max: -0.23200, 0.10800, 1.37600
+    color: '#444642'
+    shape: CylinderZ
+  - label: Tesla insulator coil ring
+    min: -0.45800, -0.11800, 1.40000
+    max: -0.22200, 0.11800, 1.43600
+    color: '#6A6D67'
+    shape: CylinderZ
+  - label: Tesla insulator coil ring
+    min: -0.46100, -0.12100, 1.46000
+    max: -0.21900, 0.12100, 1.49600
+    color: '#444642'
+    shape: CylinderZ
+  - label: Tesla insulator coil ring
+    min: -0.45000, -0.11000, 1.52000
+    max: -0.23000, 0.11000, 1.55600
+    color: '#6A6D67'
+    shape: CylinderZ
+  - label: Tesla insulator coil ring
+    min: -0.43500, -0.09500, 1.58000
+    max: -0.24500, 0.09500, 1.61600
+    color: '#464944'
+    shape: CylinderZ
+  - label: coil central red cap
+    min: -0.39600, -0.05600, 1.61600
+    max: -0.28400, 0.05600, 1.65000
+    color: '#360D0F'
+    shape: CylinderZ
+  - label: coil post
+    min: 0.28000, -0.07700, 0.70000
+    max: 0.40000, 0.07700, 1.63000
+    color: '#2F302D'
+  - label: Tesla insulator coil ring
+    min: 0.25500, -0.08500, 1.28000
+    max: 0.42500, 0.08500, 1.31600
+    color: '#1E1F1D'
+    shape: CylinderZ
+  - label: Tesla insulator coil ring
+    min: 0.23200, -0.10800, 1.34000
+    max: 0.44800, 0.10800, 1.37600
+    color: '#444642'
+    shape: CylinderZ
+  - label: Tesla insulator coil ring
+    min: 0.22200, -0.11800, 1.40000
+    max: 0.45800, 0.11800, 1.43600
+    color: '#6A6D67'
+    shape: CylinderZ
+  - label: Tesla insulator coil ring
+    min: 0.21900, -0.12100, 1.46000
+    max: 0.46100, 0.12100, 1.49600
+    color: '#444642'
+    shape: CylinderZ
+  - label: Tesla insulator coil ring
+    min: 0.23000, -0.11000, 1.52000
+    max: 0.45000, 0.11000, 1.55600
+    color: '#6A6D67'
+    shape: CylinderZ
+  - label: Tesla insulator coil ring
+    min: 0.24500, -0.09500, 1.58000
+    max: 0.43500, 0.09500, 1.61600
+    color: '#464944'
+    shape: CylinderZ
+  - label: coil central red cap
+    min: 0.28400, -0.05600, 1.61600
+    max: 0.39600, 0.05600, 1.65000
+    color: '#360D0F'
+    shape: CylinderZ
+  referenceDirection: 2
+  yawOffset: 90
+- type: cmu3DModel
+  id: CMU3DElectrifiedGrilleBrokenCloud
+  label: Broken electrified mesh grille
+  status: draft
+  sourcePrototypes:
+  - RMCGrilleElectrifiedBroken
+  referencePrototype: RMCGrilleElectrifiedBroken
+  referenceRsi: /Textures/_RMC14/Structures/Walls/electric_grille.rsi
+  referenceState: brokengrille
+  sourceDirections: 4
+  description: Source-inspected physical fixture draft. Height, depth, hidden construction and map fitting remain
+    inferred. State, animation and runtime acceptance are separate; see SOURCES_FIXTURES_CLOUD.md.
+  parts:
+  - label: broken lower support rail left
+    min: -0.50000, -0.07000, 0.03000
+    max: -0.13000, 0.07000, 0.07500
+    color: '#181917'
+  - label: broken lower support rail right
+    min: 0.16000, -0.07000, 0.03000
+    max: 0.50000, 0.07000, 0.07500
+    color: '#181917'
+  - label: torn mesh strand
+    min: -0.56920, -0.02700, 0.16800
+    max: -0.35080, -0.01300, 0.18200
+    color: '#464944'
+    pitch: 74.05460409907715
+  - label: torn mesh strand
+    min: -0.54095, -0.02700, 0.17500
+    max: -0.30905, -0.01300, 0.18900
+    color: '#464944'
+    pitch: 75.00492087082402
+  - label: torn mesh strand
+    min: -0.51272, -0.02700, 0.18200
+    max: -0.26728, -0.01300, 0.19600
+    color: '#464944'
+    pitch: 75.85052391365483
+  - label: torn mesh strand
+    min: -0.48452, -0.02700, 0.18900
+    max: -0.22548, -0.01300, 0.20300
+    color: '#464944'
+    pitch: 76.6075022462489
+  - label: torn mesh strand
+    min: -0.45634, -0.02700, 0.19600
+    max: -0.18366, -0.01300, 0.21000
+    color: '#464944'
+    pitch: 77.28886743447052
+  - label: torn mesh strand
+    min: -0.42818, -0.02700, 0.20300
+    max: -0.14182, -0.01300, 0.21700
+    color: '#464944'
+    pitch: 77.9052429229879
+  - label: torn mesh strand
+    min: -0.40003, -0.02700, 0.21000
+    max: -0.09997, -0.01300, 0.22400
+    color: '#464944'
+    pitch: 78.46537934635529
+  - label: torn mesh strand
+    min: -0.37189, -0.02700, 0.21700
+    max: -0.05811, -0.01300, 0.23100
+    color: '#464944'
+    pitch: 78.97654403625687
+  - label: remaining ragged crosswire
+    min: -0.49248, 0.01900, 0.08900
+    max: -0.23752, 0.03100, 0.10100
+    color: '#2F302D'
+    pitch: 11.309932474020215
+  - label: remaining ragged crosswire
+    min: -0.49248, 0.01900, 0.14700
+    max: -0.23752, 0.03100, 0.15900
+    color: '#2F302D'
+    pitch: 11.309932474020211
+  - label: remaining ragged crosswire
+    min: -0.49248, 0.01900, 0.20500
+    max: -0.23752, 0.03100, 0.21700
+    color: '#2F302D'
+    pitch: 11.309932474020211
+  - label: remaining ragged crosswire
+    min: -0.49248, 0.01900, 0.26300
+    max: -0.23752, 0.03100, 0.27500
+    color: '#2F302D'
+    pitch: 11.309932474020217
+  - label: remaining ragged crosswire
+    min: -0.49248, 0.01900, 0.32100
+    max: -0.23752, 0.03100, 0.33300
+    color: '#2F302D'
+    pitch: 11.309932474020211
+  - label: broken red conductor section
+    min: -0.49000, -0.12000, 0.11000
+    max: -0.19000, 0.09000, 0.19000
+    color: '#55161B'
+  - label: torn mesh strand
+    min: 0.35080, -0.02700, 0.16800
+    max: 0.56920, -0.01300, 0.18200
+    color: '#464944'
+    pitch: 74.05460409907715
+  - label: torn mesh strand
+    min: 0.30905, -0.02700, 0.17500
+    max: 0.54095, -0.01300, 0.18900
+    color: '#464944'
+    pitch: 75.00492087082402
+  - label: torn mesh strand
+    min: 0.26728, -0.02700, 0.18200
+    max: 0.51272, -0.01300, 0.19600
+    color: '#464944'
+    pitch: 75.85052391365483
+  - label: torn mesh strand
+    min: 0.22548, -0.02700, 0.18900
+    max: 0.48452, -0.01300, 0.20300
+    color: '#464944'
+    pitch: 76.6075022462489
+  - label: torn mesh strand
+    min: 0.18366, -0.02700, 0.19600
+    max: 0.45634, -0.01300, 0.21000
+    color: '#464944'
+    pitch: 77.28886743447052
+  - label: torn mesh strand
+    min: 0.14182, -0.02700, 0.20300
+    max: 0.42818, -0.01300, 0.21700
+    color: '#464944'
+    pitch: 77.9052429229879
+  - label: torn mesh strand
+    min: 0.09997, -0.02700, 0.21000
+    max: 0.40003, -0.01300, 0.22400
+    color: '#464944'
+    pitch: 78.46537934635529
+  - label: torn mesh strand
+    min: 0.05811, -0.02700, 0.21700
+    max: 0.37189, -0.01300, 0.23100
+    color: '#464944'
+    pitch: 78.97654403625687
+  - label: remaining ragged crosswire
+    min: 0.21770, 0.01900, 0.08900
+    max: 0.49230, 0.03100, 0.10100
+    color: '#2F302D'
+    pitch: 10.491477012331599
+  - label: remaining ragged crosswire
+    min: 0.21770, 0.01900, 0.14700
+    max: 0.49230, 0.03100, 0.15900
+    color: '#2F302D'
+    pitch: 10.491477012331595
+  - label: remaining ragged crosswire
+    min: 0.21770, 0.01900, 0.20500
+    max: 0.49230, 0.03100, 0.21700
+    color: '#2F302D'
+    pitch: 10.491477012331595
+  - label: remaining ragged crosswire
+    min: 0.21770, 0.01900, 0.26300
+    max: 0.49230, 0.03100, 0.27500
+    color: '#2F302D'
+    pitch: 10.491477012331602
+  - label: remaining ragged crosswire
+    min: 0.21770, 0.01900, 0.32100
+    max: 0.49230, 0.03100, 0.33300
+    color: '#2F302D'
+    pitch: 10.491477012331595
+  - label: broken red conductor section
+    min: 0.21000, -0.12000, 0.11000
+    max: 0.49000, 0.09000, 0.19000
+    color: '#55161B'
+  - label: broken warning stripe
+    min: -0.42606, -0.14150, 0.21850
+    max: -0.35394, -0.11850, 0.24150
+    color: '#AA720F'
+    pitch: 33.69006752597979
+  - label: broken warning stripe
+    min: -0.29606, -0.14150, 0.21850
+    max: -0.22394, -0.11850, 0.24150
+    color: '#AA720F'
+    pitch: 33.69006752597979
+  - label: broken warning stripe
+    min: -0.16606, -0.14150, 0.09350
+    max: -0.09394, -0.11850, 0.11650
+    color: '#AA720F'
+    pitch: 33.690067525979785
+  - label: broken warning stripe
+    min: -0.03606, -0.14150, 0.09350
+    max: 0.03606, -0.11850, 0.11650
+    color: '#AA720F'
+    pitch: 33.690067525979785
+  - label: broken warning stripe
+    min: 0.09394, -0.14150, 0.09350
+    max: 0.16606, -0.11850, 0.11650
+    color: '#AA720F'
+    pitch: 33.690067525979785
+  - label: broken warning stripe
+    min: 0.22394, -0.14150, 0.21850
+    max: 0.29606, -0.11850, 0.24150
+    color: '#AA720F'
+    pitch: 33.69006752597979
+  - label: broken warning stripe
+    min: 0.35394, -0.14150, 0.21850
+    max: 0.42606, -0.11850, 0.24150
+    color: '#AA720F'
+    pitch: 33.69006752597979
+  - label: fallen coil shaft
+    min: -0.26500, -0.35000, 0.03000
+    max: -0.17500, 0.03000, 0.12000
+    color: '#2F302D'
+    shape: CylinderY
+    yaw: -32
+  - label: fallen coil ring
+    min: -0.32200, -0.29000, 0.01200
+    max: -0.11800, -0.26400, 0.21600
+    color: '#444642'
+    shape: CylinderY
+    yaw: -32
+  - label: fallen coil ring
+    min: -0.32200, -0.23100, 0.01200
+    max: -0.11800, -0.20500, 0.21600
+    color: '#6A6D67'
+    shape: CylinderY
+    yaw: -32
+  - label: fallen coil ring
+    min: -0.32200, -0.17200, 0.01200
+    max: -0.11800, -0.14600, 0.21600
+    color: '#444642'
+    shape: CylinderY
+    yaw: -32
+  - label: fallen coil ring
+    min: -0.32200, -0.11300, 0.01200
+    max: -0.11800, -0.08700, 0.21600
+    color: '#6A6D67'
+    shape: CylinderY
+    yaw: -32
+  - label: fallen coil ring
+    min: -0.32200, -0.05400, 0.01200
+    max: -0.11800, -0.02800, 0.21600
+    color: '#444642'
+    shape: CylinderY
+    yaw: -32
+  - label: fallen coil shaft
+    min: 0.16500, -0.07000, 0.03000
+    max: 0.25500, 0.31000, 0.12000
+    color: '#2F302D'
+    shape: CylinderY
+    yaw: 24
+  - label: fallen coil ring
+    min: 0.10800, -0.01000, 0.01200
+    max: 0.31200, 0.01600, 0.21600
+    color: '#444642'
+    shape: CylinderY
+    yaw: 24
+  - label: fallen coil ring
+    min: 0.10800, 0.04900, 0.01200
+    max: 0.31200, 0.07500, 0.21600
+    color: '#6A6D67'
+    shape: CylinderY
+    yaw: 24
+  - label: fallen coil ring
+    min: 0.10800, 0.10800, 0.01200
+    max: 0.31200, 0.13400, 0.21600
+    color: '#444642'
+    shape: CylinderY
+    yaw: 24
+  - label: fallen coil ring
+    min: 0.10800, 0.16700, 0.01200
+    max: 0.31200, 0.19300, 0.21600
+    color: '#6A6D67'
+    shape: CylinderY
+    yaw: 24
+  - label: fallen coil ring
+    min: 0.10800, 0.22600, 0.01200
+    max: 0.31200, 0.25200, 0.21600
+    color: '#444642'
+    shape: CylinderY
+    yaw: 24
+  - label: bent severed red cable
+    min: -0.24416, 0.04250, 0.14750
+    max: 0.14416, 0.06750, 0.17250
+    color: '#55161B'
+    pitch: 34.50852298766841
+  - label: loose metal fragment
+    min: -0.30122, -0.09350, 0.10150
+    max: 0.21122, -0.06650, 0.12850
+    color: '#464944'
+    pitch: 5.599339336520573
+  referenceDirection: 2
+  yawOffset: 90
+- type: cmu3DModel
+  id: CMU3DStationMapCloud
+  label: Vessel map wall display
+  status: draft
+  sourcePrototypes:
+  - RMCStationMap
+  referencePrototype: RMCStationMap
+  referenceRsi: /Textures/_RMC14/Structures/Machines/status_display.rsi
+  referenceState: map
+  sourceDirections: 1
+  description: Source-inspected physical fixture draft. Height, depth, hidden construction and map fitting remain
+    inferred. State, animation and runtime acceptance are separate; see SOURCES_FIXTURES_CLOUD.md. Static resource
+    pose map frame 0; no invented clock, alert or power binding.
+  parts:
+  - label: rear electronics shell
+    min: -0.46600, -0.59000, 1.34000
+    max: 0.46600, -0.50200, 2.09675
+    color: '#292A28'
+  - label: rear wall mounting cleat
+    min: -0.31000, -0.53000, 1.44000
+    max: 0.31000, -0.49800, 1.98375
+    color: '#171817'
+  - label: top bevel tier
+    min: -0.50000, -0.62500, 2.03875
+    max: 0.50000, -0.59000, 2.09875
+    color: '#555652'
+  - label: top shadow tier
+    min: -0.50000, -0.60700, 2.09875
+    max: 0.50000, -0.57200, 2.14375
+    color: '#353633'
+  - label: left thick bezel
+    min: -0.50000, -0.64600, 1.36000
+    max: -0.43300, -0.58700, 2.03775
+    color: '#383936'
+  - label: right thick bezel
+    min: 0.43300, -0.64600, 1.36000
+    max: 0.50000, -0.58700, 2.03775
+    color: '#383936'
+  - label: upper bezel
+    min: -0.43600, -0.64600, 1.97375
+    max: 0.43600, -0.58600, 2.03675
+    color: '#383936'
+  - label: lower bezel
+    min: -0.43600, -0.64600, 1.36100
+    max: 0.43600, -0.58600, 1.42500
+    color: '#383936'
+  - label: screen well
+    min: -0.40900, -0.61700, 1.45600
+    max: 0.40900, -0.59300, 1.93875
+    color: '#101110'
+  - label: screen glass
+    min: -0.37800, -0.63200, 1.48900
+    max: 0.37800, -0.61800, 1.90575
+    color: '#222222'
+  - label: inner left shadow bevel
+    min: -0.40900, -0.63700, 1.48900
+    max: -0.37800, -0.61700, 1.90575
+    color: '#181918'
+  - label: inner right shadow bevel
+    min: 0.37800, -0.63700, 1.48900
+    max: 0.40900, -0.61700, 1.90575
+    color: '#181918'
+  - label: inner lower shadow bevel
+    min: -0.37800, -0.63700, 1.45600
+    max: 0.37800, -0.61700, 1.48900
+    color: '#181918'
+  - label: inner upper shadow bevel
+    min: -0.37800, -0.63700, 1.90575
+    max: 0.37800, -0.61700, 1.93875
+    color: '#181918'
+  - label: lower service tab
+    min: 0.07000, -0.63100, 1.30000
+    max: 0.50000, -0.54000, 1.38200
+    color: '#292A28'
+  - label: service tab inset
+    min: 0.10200, -0.63800, 1.33000
+    max: 0.46700, -0.63200, 1.36000
+    color: '#41423F'
+  - label: red status button
+    min: -0.34500, -0.65300, 1.37000
+    max: -0.28200, -0.64700, 1.40000
+    color: '#802E2D'
+  - label: cyan indicator
+    min: 0.28000, -0.64600, 1.33300
+    max: 0.31100, -0.63800, 1.36300
+    color: '#287282'
+  - label: red indicator
+    min: 0.34300, -0.64600, 1.33300
+    max: 0.37400, -0.63800, 1.36300
+    color: '#833030'
+  - label: top ventilation slot
+    min: -0.33000, -0.58000, 2.10375
+    max: -0.26800, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: -0.20500, -0.58000, 2.10375
+    max: -0.14300, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: -0.08000, -0.58000, 2.10375
+    max: -0.01800, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: 0.04500, -0.58000, 2.10375
+    max: 0.10700, -0.54500, 2.11875
+    color: '#171817'
+  - label: source screen insert
+    min: -0.43750, -0.64000, 1.45625
+    max: 0.43750, -0.63700, 2.01875
+    color: '#FFFFFF'
+    surface: CMU3DFixtureCloudMapF0
+    surfaceAxis: XZ
+  wallMounted: true
+- type: cmu3DModel
+  id: CMU3DStatusDisplayCloud
+  label: Status display physical housing
+  status: draft
+  sourcePrototypes:
+  - RMCStatusDisplay
+  referencePrototype: RMCStatusDisplay
+  referenceRsi: /Textures/_RMC14/Structures/Machines/status_display.rsi
+  referenceState: frame
+  sourceDirections: 1
+  description: Source-inspected physical fixture draft. Height, depth, hidden construction and map fitting remain
+    inferred. State, animation and runtime acceptance are separate; see SOURCES_FIXTURES_CLOUD.md. Default uninitialized
+    housing only. Alert overlays and the live four-digit clock are not represented by this mapping; A live layer
+    selector or fallback guard is still required; this static mapping does not establish one.
+  parts:
+  - label: rear electronics shell
+    min: -0.46600, -0.59000, 1.34000
+    max: 0.46600, -0.50200, 2.09675
+    color: '#292A28'
+  - label: rear wall mounting cleat
+    min: -0.31000, -0.53000, 1.44000
+    max: 0.31000, -0.49800, 1.98375
+    color: '#171817'
+  - label: top bevel tier
+    min: -0.50000, -0.62500, 2.03875
+    max: 0.50000, -0.59000, 2.09875
+    color: '#555652'
+  - label: top shadow tier
+    min: -0.50000, -0.60700, 2.09875
+    max: 0.50000, -0.57200, 2.14375
+    color: '#353633'
+  - label: left thick bezel
+    min: -0.50000, -0.64600, 1.36000
+    max: -0.43300, -0.58700, 2.03775
+    color: '#383936'
+  - label: right thick bezel
+    min: 0.43300, -0.64600, 1.36000
+    max: 0.50000, -0.58700, 2.03775
+    color: '#383936'
+  - label: upper bezel
+    min: -0.43600, -0.64600, 1.97375
+    max: 0.43600, -0.58600, 2.03675
+    color: '#383936'
+  - label: lower bezel
+    min: -0.43600, -0.64600, 1.36100
+    max: 0.43600, -0.58600, 1.42500
+    color: '#383936'
+  - label: screen well
+    min: -0.40900, -0.61700, 1.45600
+    max: 0.40900, -0.59300, 1.93875
+    color: '#101110'
+  - label: screen glass
+    min: -0.37800, -0.63200, 1.48900
+    max: 0.37800, -0.61800, 1.90575
+    color: '#222222'
+  - label: inner left shadow bevel
+    min: -0.40900, -0.63700, 1.48900
+    max: -0.37800, -0.61700, 1.90575
+    color: '#181918'
+  - label: inner right shadow bevel
+    min: 0.37800, -0.63700, 1.48900
+    max: 0.40900, -0.61700, 1.90575
+    color: '#181918'
+  - label: inner lower shadow bevel
+    min: -0.37800, -0.63700, 1.45600
+    max: 0.37800, -0.61700, 1.48900
+    color: '#181918'
+  - label: inner upper shadow bevel
+    min: -0.37800, -0.63700, 1.90575
+    max: 0.37800, -0.61700, 1.93875
+    color: '#181918'
+  - label: lower service tab
+    min: 0.07000, -0.63100, 1.30000
+    max: 0.50000, -0.54000, 1.38200
+    color: '#292A28'
+  - label: service tab inset
+    min: 0.10200, -0.63800, 1.33000
+    max: 0.46700, -0.63200, 1.36000
+    color: '#41423F'
+  - label: red status button
+    min: -0.34500, -0.65300, 1.37000
+    max: -0.28200, -0.64700, 1.40000
+    color: '#802E2D'
+  - label: cyan indicator
+    min: 0.28000, -0.64600, 1.33300
+    max: 0.31100, -0.63800, 1.36300
+    color: '#287282'
+  - label: red indicator
+    min: 0.34300, -0.64600, 1.33300
+    max: 0.37400, -0.63800, 1.36300
+    color: '#833030'
+  - label: top ventilation slot
+    min: -0.33000, -0.58000, 2.10375
+    max: -0.26800, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: -0.20500, -0.58000, 2.10375
+    max: -0.14300, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: -0.08000, -0.58000, 2.10375
+    max: -0.01800, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: 0.04500, -0.58000, 2.10375
+    max: 0.10700, -0.54500, 2.11875
+    color: '#171817'
+  wallMounted: true
+- type: cmu3DModel
+  id: CMU3DStatusDisplayPropCloud
+  label: Status display prop
+  status: draft
+  sourcePrototypes:
+  - RMCStatusDisplayProp
+  referencePrototype: RMCStatusDisplayProp
+  referenceRsi: /Textures/_RMC14/Structures/Machines/status_display.rsi
+  referenceState: frame
+  sourceDirections: 1
+  description: Source-inspected physical fixture draft. Height, depth, hidden construction and map fitting remain
+    inferred. State, animation and runtime acceptance are separate; see SOURCES_FIXTURES_CLOUD.md.
+  parts:
+  - label: rear electronics shell
+    min: -0.46600, -0.59000, 1.34000
+    max: 0.46600, -0.50200, 2.09675
+    color: '#292A28'
+  - label: rear wall mounting cleat
+    min: -0.31000, -0.53000, 1.44000
+    max: 0.31000, -0.49800, 1.98375
+    color: '#171817'
+  - label: top bevel tier
+    min: -0.50000, -0.62500, 2.03875
+    max: 0.50000, -0.59000, 2.09875
+    color: '#555652'
+  - label: top shadow tier
+    min: -0.50000, -0.60700, 2.09875
+    max: 0.50000, -0.57200, 2.14375
+    color: '#353633'
+  - label: left thick bezel
+    min: -0.50000, -0.64600, 1.36000
+    max: -0.43300, -0.58700, 2.03775
+    color: '#383936'
+  - label: right thick bezel
+    min: 0.43300, -0.64600, 1.36000
+    max: 0.50000, -0.58700, 2.03775
+    color: '#383936'
+  - label: upper bezel
+    min: -0.43600, -0.64600, 1.97375
+    max: 0.43600, -0.58600, 2.03675
+    color: '#383936'
+  - label: lower bezel
+    min: -0.43600, -0.64600, 1.36100
+    max: 0.43600, -0.58600, 1.42500
+    color: '#383936'
+  - label: screen well
+    min: -0.40900, -0.61700, 1.45600
+    max: 0.40900, -0.59300, 1.93875
+    color: '#101110'
+  - label: screen glass
+    min: -0.37800, -0.63200, 1.48900
+    max: 0.37800, -0.61800, 1.90575
+    color: '#222222'
+  - label: inner left shadow bevel
+    min: -0.40900, -0.63700, 1.48900
+    max: -0.37800, -0.61700, 1.90575
+    color: '#181918'
+  - label: inner right shadow bevel
+    min: 0.37800, -0.63700, 1.48900
+    max: 0.40900, -0.61700, 1.90575
+    color: '#181918'
+  - label: inner lower shadow bevel
+    min: -0.37800, -0.63700, 1.45600
+    max: 0.37800, -0.61700, 1.48900
+    color: '#181918'
+  - label: inner upper shadow bevel
+    min: -0.37800, -0.63700, 1.90575
+    max: 0.37800, -0.61700, 1.93875
+    color: '#181918'
+  - label: lower service tab
+    min: 0.07000, -0.63100, 1.30000
+    max: 0.50000, -0.54000, 1.38200
+    color: '#292A28'
+  - label: service tab inset
+    min: 0.10200, -0.63800, 1.33000
+    max: 0.46700, -0.63200, 1.36000
+    color: '#41423F'
+  - label: red status button
+    min: -0.34500, -0.65300, 1.37000
+    max: -0.28200, -0.64700, 1.40000
+    color: '#802E2D'
+  - label: cyan indicator
+    min: 0.28000, -0.64600, 1.33300
+    max: 0.31100, -0.63800, 1.36300
+    color: '#287282'
+  - label: red indicator
+    min: 0.34300, -0.64600, 1.33300
+    max: 0.37400, -0.63800, 1.36300
+    color: '#833030'
+  - label: top ventilation slot
+    min: -0.33000, -0.58000, 2.10375
+    max: -0.26800, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: -0.20500, -0.58000, 2.10375
+    max: -0.14300, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: -0.08000, -0.58000, 2.10375
+    max: -0.01800, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: 0.04500, -0.58000, 2.10375
+    max: 0.10700, -0.54500, 2.11875
+    color: '#171817'
+  wallMounted: true
+- type: cmu3DModel
+  id: CMU3DStatusDisplayLargeCloud
+  label: Large status display
+  status: draft
+  sourcePrototypes:
+  - RMCStatusDisplayLarge
+  referencePrototype: RMCStatusDisplayLarge
+  referenceRsi: /Textures/_RMC14/Structures/Machines/status_display_large.rsi
+  referenceState: frame
+  sourceDirections: 1
+  description: Source-inspected physical fixture draft. Height, depth, hidden construction and map fitting remain
+    inferred. State, animation and runtime acceptance are separate; see SOURCES_FIXTURES_CLOUD.md. The 64-pixel
+    source and explicit +0.5 horizontal sprite offset give a two-tile physical span from local X -0.5 to +1.5; mounting/context
+    acceptance is unverified.
+  parts:
+  - label: rear electronics shell
+    min: -0.46600, -0.59000, 1.34000
+    max: 1.46600, -0.50200, 2.09675
+    color: '#292A28'
+  - label: rear wall mounting cleat
+    min: -0.31000, -0.53000, 1.44000
+    max: 1.31000, -0.49800, 1.98375
+    color: '#171817'
+  - label: top bevel tier
+    min: -0.50000, -0.62500, 2.03875
+    max: 1.50000, -0.59000, 2.09875
+    color: '#555652'
+  - label: top shadow tier
+    min: -0.50000, -0.60700, 2.09875
+    max: 1.50000, -0.57200, 2.14375
+    color: '#353633'
+  - label: left thick bezel
+    min: -0.50000, -0.64600, 1.36000
+    max: -0.43300, -0.58700, 2.03775
+    color: '#383936'
+  - label: right thick bezel
+    min: 1.43300, -0.64600, 1.36000
+    max: 1.50000, -0.58700, 2.03775
+    color: '#383936'
+  - label: upper bezel
+    min: -0.43600, -0.64600, 1.97375
+    max: 1.43600, -0.58600, 2.03675
+    color: '#383936'
+  - label: lower bezel
+    min: -0.43600, -0.64600, 1.36100
+    max: 1.43600, -0.58600, 1.42500
+    color: '#383936'
+  - label: screen well
+    min: -0.40900, -0.61700, 1.45600
+    max: 1.40900, -0.59300, 1.93875
+    color: '#101110'
+  - label: screen glass
+    min: -0.37800, -0.63200, 1.48900
+    max: 1.37800, -0.61800, 1.90575
+    color: '#222222'
+  - label: inner left shadow bevel
+    min: -0.40900, -0.63700, 1.48900
+    max: -0.37800, -0.61700, 1.90575
+    color: '#181918'
+  - label: inner right shadow bevel
+    min: 1.37800, -0.63700, 1.48900
+    max: 1.40900, -0.61700, 1.90575
+    color: '#181918'
+  - label: inner lower shadow bevel
+    min: -0.37800, -0.63700, 1.45600
+    max: 1.37800, -0.61700, 1.48900
+    color: '#181918'
+  - label: inner upper shadow bevel
+    min: -0.37800, -0.63700, 1.90575
+    max: 1.37800, -0.61700, 1.93875
+    color: '#181918'
+  - label: lower service tab
+    min: 1.07000, -0.63100, 1.30000
+    max: 1.50000, -0.54000, 1.38200
+    color: '#292A28'
+  - label: service tab inset
+    min: 1.10200, -0.63800, 1.33000
+    max: 1.46700, -0.63200, 1.36000
+    color: '#41423F'
+  - label: red status button
+    min: -0.34500, -0.65300, 1.37000
+    max: -0.28200, -0.64700, 1.40000
+    color: '#802E2D'
+  - label: cyan indicator
+    min: 1.28000, -0.64600, 1.33300
+    max: 1.31100, -0.63800, 1.36300
+    color: '#287282'
+  - label: red indicator
+    min: 1.34300, -0.64600, 1.33300
+    max: 1.37400, -0.63800, 1.36300
+    color: '#833030'
+  - label: top ventilation slot
+    min: -0.33000, -0.58000, 2.10375
+    max: -0.26800, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: -0.20500, -0.58000, 2.10375
+    max: -0.14300, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: -0.08000, -0.58000, 2.10375
+    max: -0.01800, -0.54500, 2.11875
+    color: '#171817'
+  - label: top ventilation slot
+    min: 0.04500, -0.58000, 2.10375
+    max: 0.10700, -0.54500, 2.11875
+    color: '#171817'
+  wallMounted: true

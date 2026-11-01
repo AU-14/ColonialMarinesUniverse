@@ -1,0 +1,412 @@
+# Small-prop support corrections; attribution in SOURCES_SMALLPROP_SUPPORTS.md.
+- type: cmu3DModel
+  id: CMU3DPrisonTable
+  label: Gray prison table
+  sourcePrototypes:
+  - RMCTablePrison
+  status: draft
+  description: Source-specific square gray prison tabletop with rolled borders, corner rivets, dark underframe and four
+    legs. Its exact .86-tile support places medical and desk supplies at the tabletop. Soro tint is baked only once.
+    Connected side-border removal, unseen structure and material detail remain unfinished.
+  supportSurface: tabletop surface
+  referencePrototype: RMCTablePrison
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Tables/prison.rsi
+  referenceState: full
+  sourceDirections: 1
+  parts:
+  - label: table leg
+    min: -0.45000, -0.45000, 0.00000
+    max: -0.38000, -0.38000, 0.77800
+    color: '#414B3F'
+  - label: table leg
+    min: -0.45000, 0.38000, 0.00000
+    max: -0.38000, 0.45000, 0.77800
+    color: '#414B3F'
+  - label: table leg
+    min: 0.38000, -0.45000, 0.00000
+    max: 0.45000, -0.38000, 0.77800
+    color: '#414B3F'
+  - label: table leg
+    min: 0.38000, 0.38000, 0.00000
+    max: 0.45000, 0.45000, 0.77800
+    color: '#414B3F'
+  - label: table underframe
+    min: -0.48000, -0.48000, 0.71000
+    max: 0.48000, 0.48000, 0.78800
+    color: '#414B3F'
+  - label: tabletop surface
+    min: -0.50000, -0.50000, 0.78800
+    max: 0.50000, 0.50000, 0.86000
+    color: '#777B75'
+  - label: table side rolled edge
+    min: -0.49900, -0.49900, 0.82900
+    max: -0.46900, 0.49900, 0.86000
+    color: '#959A91'
+  - label: table side rolled edge
+    min: 0.46900, -0.49900, 0.82900
+    max: 0.49900, 0.49900, 0.86000
+    color: '#959A91'
+  - label: table end rolled edge
+    min: -0.46900, -0.49900, 0.82900
+    max: 0.46900, -0.46900, 0.86000
+    color: '#959A91'
+  - label: table end rolled edge
+    min: -0.46900, 0.46900, 0.82900
+    max: 0.46900, 0.49900, 0.86000
+    color: '#959A91'
+  - label: corner rivet
+    min: -0.38600, -0.38600, 0.86000
+    max: -0.34800, -0.34800, 0.86400
+    color: '#878F80'
+  - label: corner rivet
+    min: -0.38600, 0.34800, 0.86000
+    max: -0.34800, 0.38600, 0.86400
+    color: '#878F80'
+  - label: corner rivet
+    min: 0.34800, -0.38600, 0.86000
+    max: 0.38600, -0.34800, 0.86400
+    color: '#878F80'
+  - label: corner rivet
+    min: 0.34800, 0.34800, 0.86000
+    max: 0.38600, 0.38600, 0.86400
+    color: '#878F80'
+  - label: front lower stretcher
+    min: -0.41200, -0.44300, 0.19000
+    max: 0.41200, -0.39900, 0.23700
+    color: '#56604E'
+- type: cmu3DModel
+  id: CMU3DSoroPrisonTable
+  label: Blue-gray prison table
+  sourcePrototypes:
+  - RMCTablePrisonSoro
+  status: draft
+  description: Source-specific square gray prison tabletop with rolled borders, corner rivets, dark underframe and four
+    legs. Its exact .86-tile support places medical and desk supplies at the tabletop. Soro tint is baked only once.
+    Connected side-border removal, unseen structure and material detail remain unfinished.
+  supportSurface: tabletop surface
+  referencePrototype: RMCTablePrisonSoro
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Tables/prison.rsi
+  referenceState: full
+  sourceDirections: 1
+  parts:
+  - label: table leg
+    min: -0.45000, -0.45000, 0.00000
+    max: -0.38000, -0.38000, 0.77800
+    color: '#27302A'
+  - label: table leg
+    min: -0.45000, 0.38000, 0.00000
+    max: -0.38000, 0.45000, 0.77800
+    color: '#27302A'
+  - label: table leg
+    min: 0.38000, -0.45000, 0.00000
+    max: 0.45000, -0.38000, 0.77800
+    color: '#27302A'
+  - label: table leg
+    min: 0.38000, 0.38000, 0.00000
+    max: 0.45000, 0.45000, 0.77800
+    color: '#27302A'
+  - label: table underframe
+    min: -0.48000, -0.48000, 0.71000
+    max: 0.48000, 0.48000, 0.78800
+    color: '#27302A'
+  - label: tabletop surface
+    min: -0.50000, -0.50000, 0.78800
+    max: 0.50000, 0.50000, 0.86000
+    color: '#474F4E'
+  - label: table side rolled edge
+    min: -0.49900, -0.49900, 0.82900
+    max: -0.46900, 0.49900, 0.86000
+    color: '#596261'
+  - label: table side rolled edge
+    min: 0.46900, -0.49900, 0.82900
+    max: 0.49900, 0.49900, 0.86000
+    color: '#596261'
+  - label: table end rolled edge
+    min: -0.46900, -0.49900, 0.82900
+    max: 0.46900, -0.46900, 0.86000
+    color: '#596261'
+  - label: table end rolled edge
+    min: -0.46900, 0.46900, 0.82900
+    max: 0.46900, 0.49900, 0.86000
+    color: '#596261'
+  - label: corner rivet
+    min: -0.38600, -0.38600, 0.86000
+    max: -0.34800, -0.34800, 0.86400
+    color: '#505B56'
+  - label: corner rivet
+    min: -0.38600, 0.34800, 0.86000
+    max: -0.34800, 0.38600, 0.86400
+    color: '#505B56'
+  - label: corner rivet
+    min: 0.34800, -0.38600, 0.86000
+    max: 0.38600, -0.34800, 0.86400
+    color: '#505B56'
+  - label: corner rivet
+    min: 0.34800, 0.34800, 0.86000
+    max: 0.38600, 0.38600, 0.86400
+    color: '#505B56'
+  - label: front lower stretcher
+    min: -0.41200, -0.44300, 0.19000
+    max: 0.41200, -0.39900, 0.23700
+    color: '#333D34'
+  referenceTint: '#98A3AB'
+  bakedSpriteTint: '#98A3AB'
+- type: cmu3DModel
+  id: CMU3DCMReinforcedTable
+  label: RMC reinforced steel table
+  sourcePrototypes:
+  - CMTableReinforced
+  status: draft
+  description: Bright reinforced steel table with a framed top, four corner fasteners and the source recessed slotted
+    front apron. The exact .86-tile support replaces an inherited ordinary-table candidate. Connected edges and hidden
+    reinforcement remain inferred.
+  supportSurface: tabletop surface
+  referencePrototype: CMTableReinforced
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Tables/reinforced.rsi
+  referenceState: full
+  sourceDirections: 1
+  parts:
+  - label: reinforced square leg
+    min: -0.45000, -0.44000, 0.00000
+    max: -0.36000, -0.35000, 0.74300
+    color: '#555A58'
+  - label: reinforced square leg
+    min: -0.45000, 0.35000, 0.00000
+    max: -0.36000, 0.44000, 0.74300
+    color: '#555A58'
+  - label: reinforced square leg
+    min: 0.36000, -0.44000, 0.00000
+    max: 0.45000, -0.35000, 0.74300
+    color: '#555A58'
+  - label: reinforced square leg
+    min: 0.36000, 0.35000, 0.00000
+    max: 0.45000, 0.44000, 0.74300
+    color: '#555A58'
+  - label: reinforced underframe
+    min: -0.47800, -0.47800, 0.68700
+    max: 0.47800, 0.47800, 0.80100
+    color: '#686C6A'
+  - label: tabletop surface
+    min: -0.50000, -0.50000, 0.80100
+    max: 0.50000, 0.50000, 0.86000
+    color: '#B9BCBA'
+  - label: bright side rim
+    min: -0.49600, -0.49600, 0.82900
+    max: -0.44900, 0.49600, 0.86000
+    color: '#D4D5CF'
+  - label: bright side rim
+    min: 0.44900, -0.49600, 0.82900
+    max: 0.49600, 0.49600, 0.86000
+    color: '#D4D5CF'
+  - label: bright end rim
+    min: -0.44900, -0.49600, 0.82900
+    max: 0.44900, -0.44900, 0.86000
+    color: '#D4D5CF'
+  - label: bright end rim
+    min: -0.44900, 0.44900, 0.82900
+    max: 0.44900, 0.49600, 0.86000
+    color: '#D4D5CF'
+  - label: table corner fastener
+    min: -0.41600, -0.41600, 0.86000
+    max: -0.38400, -0.38400, 0.86500
+    color: '#8A8F8C'
+  - label: table corner fastener
+    min: -0.41600, 0.38400, 0.86000
+    max: -0.38400, 0.41600, 0.86500
+    color: '#8A8F8C'
+  - label: table corner fastener
+    min: 0.38400, -0.41600, 0.86000
+    max: 0.41600, -0.38400, 0.86500
+    color: '#8A8F8C'
+  - label: table corner fastener
+    min: 0.38400, 0.38400, 0.86000
+    max: 0.41600, 0.41600, 0.86500
+    color: '#8A8F8C'
+  - label: front bright apron
+    min: -0.46000, -0.49400, 0.69800
+    max: 0.46000, -0.47900, 0.79200
+    color: '#AEB4B0'
+  - label: front vent recess
+    min: -0.29600, -0.50500, 0.72400
+    max: 0.29600, -0.49400, 0.76000
+    color: '#444D4E'
+  - label: apron vent divider
+    min: -0.27800, -0.51300, 0.72400
+    max: -0.25200, -0.50300, 0.76000
+    color: '#909996'
+  - label: apron vent divider
+    min: -0.20200, -0.51300, 0.72400
+    max: -0.17600, -0.50300, 0.76000
+    color: '#909996'
+  - label: apron vent divider
+    min: -0.12600, -0.51300, 0.72400
+    max: -0.10000, -0.50300, 0.76000
+    color: '#909996'
+  - label: apron vent divider
+    min: -0.05000, -0.51300, 0.72400
+    max: -0.02400, -0.50300, 0.76000
+    color: '#909996'
+  - label: apron vent divider
+    min: 0.02600, -0.51300, 0.72400
+    max: 0.05200, -0.50300, 0.76000
+    color: '#909996'
+  - label: apron vent divider
+    min: 0.10200, -0.51300, 0.72400
+    max: 0.12800, -0.50300, 0.76000
+    color: '#909996'
+  - label: apron vent divider
+    min: 0.17800, -0.51300, 0.72400
+    max: 0.20400, -0.50300, 0.76000
+    color: '#909996'
+  - label: apron vent divider
+    min: 0.25400, -0.51300, 0.72400
+    max: 0.28000, -0.50300, 0.76000
+    color: '#909996'
+- type: cmu3DModel
+  id: CMU3DSoroStorageRack
+  label: Blue-gray open storage rack
+  sourcePrototypes:
+  - RMCRackSoro
+  status: draft
+  description: Open three-level gray storage rack with distinct upper shelf support at .948 tiles. Source rack.png
+    and CMRack PlaceableSurface/fixture were inspected. Saved loose items rest on its upper deck where their pivot
+    falls within the deck. Shelf spacing, hidden sides and runtime contents remain inferred. This explicit variant
+    applies its original Sprite tint once to all gray metal parts.
+  supportSurface: upper shelf support
+  referencePrototype: RMCRackSoro
+  referenceRsi: /Textures/_RMC14/Structures/Storage/rack.rsi
+  referenceState: rack
+  sourceDirections: 1
+  parts:
+  - min: -0.423, -0.298, 0.0
+    max: -0.377, -0.252, 1.02
+    color: '#4D5357'
+    label: rack upright
+  - min: -0.423, 0.252, 0.0
+    max: -0.377, 0.298, 1.02
+    color: '#4D5357'
+    label: rack upright
+  - min: 0.377, -0.298, 0.0
+    max: 0.423, -0.252, 1.02
+    color: '#4D5357'
+    label: rack upright
+  - min: 0.377, 0.252, 0.0
+    max: 0.423, 0.298, 1.02
+    color: '#4D5357'
+    label: rack upright
+  - min: -0.4, -0.275, 0.18
+    max: 0.4, 0.275, 0.208
+    color: '#4D5357'
+    label: open shelf
+  - min: -0.4, -0.305, 0.16
+    max: 0.4, -0.275, 0.215
+    color: '#2A2D30'
+    label: shelf front beam
+  - min: -0.4, -0.275, 0.55
+    max: 0.4, 0.275, 0.578
+    color: '#4D5357'
+    label: open shelf
+  - min: -0.4, -0.305, 0.53
+    max: 0.4, -0.275, 0.585
+    color: '#2A2D30'
+    label: shelf front beam
+  - min: -0.4, -0.275, 0.92
+    max: 0.4, 0.275, 0.948
+    color: '#4D5357'
+    label: upper shelf support
+  - min: -0.4, -0.305, 0.9
+    max: 0.4, -0.275, 0.955
+    color: '#2A2D30'
+    label: shelf front beam
+  - min: -0.41, -0.3, 0.97
+    max: -0.31, -0.255, 1.025
+    color: '#71797F'
+    label: upper post cap
+  - min: 0.31, -0.3, 0.97
+    max: 0.41, -0.255, 1.025
+    color: '#71797F'
+    label: upper post cap
+  - min: -0.39, -0.298, 0.967
+    max: 0.39, -0.277, 0.985
+    color: '#71797F'
+    label: top shelf front trim
+  - min: -0.19, -0.308, 0.938
+    max: 0.19, -0.299, 0.96
+    color: '#151617'
+    label: top shelf recessed slot
+  referenceTint: '#98A3AB'
+  bakedSpriteTint: '#98A3AB'
+- type: cmu3DModel
+  id: CMU3DBrownStorageRack
+  label: Brown open storage rack
+  sourcePrototypes:
+  - RMCRackBrown
+  status: draft
+  description: Open three-level gray storage rack with distinct upper shelf support at .948 tiles. Source rack.png
+    and CMRack PlaceableSurface/fixture were inspected. Saved loose items rest on its upper deck where their pivot
+    falls within the deck. Shelf spacing, hidden sides and runtime contents remain inferred. This explicit variant
+    applies its original Sprite tint once to all gray metal parts.
+  supportSurface: upper shelf support
+  referencePrototype: RMCRackBrown
+  referenceRsi: /Textures/_RMC14/Structures/Storage/rack.rsi
+  referenceState: rack
+  sourceDirections: 1
+  parts:
+  - min: -0.423, -0.298, 0.0
+    max: -0.377, -0.252, 1.02
+    color: '#473F2E'
+    label: rack upright
+  - min: -0.423, 0.252, 0.0
+    max: -0.377, 0.298, 1.02
+    color: '#473F2E'
+    label: rack upright
+  - min: 0.377, -0.298, 0.0
+    max: 0.423, -0.252, 1.02
+    color: '#473F2E'
+    label: rack upright
+  - min: 0.377, 0.252, 0.0
+    max: 0.423, 0.298, 1.02
+    color: '#473F2E'
+    label: rack upright
+  - min: -0.4, -0.275, 0.18
+    max: 0.4, 0.275, 0.208
+    color: '#473F2E'
+    label: open shelf
+  - min: -0.4, -0.305, 0.16
+    max: 0.4, -0.275, 0.215
+    color: '#272219'
+    label: shelf front beam
+  - min: -0.4, -0.275, 0.55
+    max: 0.4, 0.275, 0.578
+    color: '#473F2E'
+    label: open shelf
+  - min: -0.4, -0.305, 0.53
+    max: 0.4, -0.275, 0.585
+    color: '#272219'
+    label: shelf front beam
+  - min: -0.4, -0.275, 0.92
+    max: 0.4, 0.275, 0.948
+    color: '#473F2E'
+    label: upper shelf support
+  - min: -0.4, -0.305, 0.9
+    max: 0.4, -0.275, 0.955
+    color: '#272219'
+    label: shelf front beam
+  - min: -0.41, -0.3, 0.97
+    max: -0.31, -0.255, 1.025
+    color: '#675B43'
+    label: upper post cap
+  - min: 0.31, -0.3, 0.97
+    max: 0.41, -0.255, 1.025
+    color: '#675B43'
+    label: upper post cap
+  - min: -0.39, -0.298, 0.967
+    max: 0.39, -0.277, 0.985
+    color: '#675B43'
+    label: top shelf front trim
+  - min: -0.19, -0.308, 0.938
+    max: 0.19, -0.299, 0.96
+    color: '#13110C'
+    label: top shelf recessed slot
+  referenceTint: '#8B7B5B'
+  bakedSpriteTint: '#8B7B5B'

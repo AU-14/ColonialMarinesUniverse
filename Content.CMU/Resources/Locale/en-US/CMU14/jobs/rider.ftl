@@ -34,7 +34,7 @@ rider-grip-desc = How tightly the grip. Abilities spend, resistance drains.
 
 rider-whisper-wrap = Something whispers: { $text }
 rider-whisper-echo = You whisper to your host: { $text }
-rider-whisper-ghost = {"["}color=#3cb371][font size=14][bold]Rider Whisper ({$rider} -> {$host}):[/bold] "{$message}"[/font][/color]
+rider-whisper-ghost = {"["}color=#3cb371][font size=10][bold]Rider Whisper ({$rider} -> {$host}):[/bold]"{$message}"[/font][/color]
 rider-speak-blocked = Their throat will not answer.
 
 rider-punish-host = Something burns behind your eyes!
@@ -43,6 +43,7 @@ rider-mute-cast = You clamp your host's throat shut.
 rider-mute-host = Your throat seizes. No sound comes out.
 rider-mute-blocked = Your throat refuses to make a sound.
 rider-mute-end = The clamp inside your throat lets go.
+rider-mute-release = You loosen your hold on your host's throat.
 
 rider-seize-host = Your body moves on its own. You watch from somewhere behind your own eyes.
 rider-seize-end-host = Control floods back. Your hands are yours again - for now.

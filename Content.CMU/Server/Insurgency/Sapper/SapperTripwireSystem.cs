@@ -35,15 +35,15 @@ namespace Content.Server.CMU14.Insurgency.Sapper;
 /// </summary>
 public sealed partial class SapperTripwireSystem : EntitySystem
 {
-    [Dependency] private  SharedContainerSystem _container = default!;
-    [Dependency] private  SharedPhysicsSystem _physics = default!;
-    [Dependency] private  CollisionWakeSystem _collisionWake = default!;
-    [Dependency] private  SharedTransformSystem _transform = default!;
-    [Dependency] private  SharedMapSystem _map = default!;
-    [Dependency] private  SharedHandsSystem _hands = default!;
-    [Dependency] private  ExamineSystemShared _examine = default!;
-    [Dependency] private  SharedPopupSystem _popup = default!;
-    [Dependency] private  TriggerSystem _trigger = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private CollisionWakeSystem _collisionWake = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
 
     // Very short fuse the attached devices are set off on, so each fires its own real prototype effect.
     private const float PayloadFuseDelay = 0.2f;
@@ -89,7 +89,7 @@ public sealed partial class SapperTripwireSystem : EntitySystem
         ent.Comp.PendingPlacer = placer;
 
         _hands.TryPickupAnyHand(args.User, placer);
-        _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-place-other-end", ("range", ent.Comp.MaxWireRange)), ent, args.User);
+        _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-place-other-end", ("range", ent.Comp.MaxWireRange)), ent, args.User);
     }
 
     private void OnPlacerUseInHand(Entity<SapperTripwireEndPlacerComponent> ent, ref UseInHandEvent args)
@@ -101,7 +101,7 @@ public sealed partial class SapperTripwireSystem : EntitySystem
 
         if (!TryComp<SapperTripwireComponent>(ent.Comp.Device, out var deviceComp))
         {
-            _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-charge-gone"), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-charge-gone"), args.User, args.User, PopupType.SmallCaution);
             QueueDel(ent);
             return;
         }
@@ -119,7 +119,7 @@ public sealed partial class SapperTripwireSystem : EntitySystem
             return; // TryStringWire already told them why; keep the end so they can reposition and retry.
 
         device.Comp.PendingPlacer = null;
-        _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-strung"), args.User, args.User);
+        _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-strung"), args.User, args.User);
         QueueDel(ent);
     }
 
@@ -133,7 +133,7 @@ public sealed partial class SapperTripwireSystem : EntitySystem
         var grid = deviceXform.GridUid;
         if (grid == null || grid != userXform.GridUid || !TryComp<MapGridComponent>(grid, out var gridComp))
         {
-            _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-bad-spot"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-bad-spot"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -143,28 +143,28 @@ public sealed partial class SapperTripwireSystem : EntitySystem
 
         if (delta == Vector2i.Zero)
         {
-            _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-too-close"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-too-close"), user, user, PopupType.SmallCaution);
             return false;
         }
 
         // The wire has to be a clean straight run: a cardinal or a perfect diagonal.
         if (delta.X != 0 && delta.Y != 0 && Math.Abs(delta.X) != Math.Abs(delta.Y))
         {
-            _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-not-straight"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-not-straight"), user, user, PopupType.SmallCaution);
             return false;
         }
 
         var count = Math.Max(Math.Abs(delta.X), Math.Abs(delta.Y));
         if (count > device.Comp.MaxWireRange)
         {
-            _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-too-far"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-too-far"), user, user, PopupType.SmallCaution);
             return false;
         }
 
         // Need a clear line of sight between the two ends: no walls in the way.
         if (!_examine.InRangeUnOccluded(device.Owner, userXform.Coordinates, count + 1.5f))
         {
-            _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-no-los"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-no-los"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -178,7 +178,7 @@ public sealed partial class SapperTripwireSystem : EntitySystem
             var piece = Spawn(isEnd ? device.Comp.EndPrototype : device.Comp.SegmentPrototype, coords);
 
             var pieceXform = Transform(piece);
-            _transform.SetLocalRotation(pieceXform, strandAngle);
+            _transform.SetLocalRotation(piece, strandAngle, pieceXform);
             // Guard against a double-anchor (the prototype must not also anchor) which trips a snap-grid assert.
             if (!pieceXform.Anchored)
                 _transform.AnchorEntity(piece, pieceXform);
@@ -245,7 +245,7 @@ public sealed partial class SapperTripwireSystem : EntitySystem
         if (_container.TryGetContainer(ent, ent.Comp.PayloadContainer, out var container) && container.ContainedEntities.Count > 0)
             return;
 
-        _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-need-explosive"), ent, args.User, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-need-explosive"), ent, args.User, PopupType.MediumCaution);
         args.Handled = true;
     }
 
@@ -261,14 +261,14 @@ public sealed partial class SapperTripwireSystem : EntitySystem
         var container = _container.EnsureContainer<Container>(ent, ent.Comp.PayloadContainer);
         if (container.ContainedEntities.Count >= ent.Comp.MaxPayload)
         {
-            _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-full"), ent, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-full"), ent, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return;
         }
 
         if (_container.Insert(args.Used, container))
         {
-            _popup.PopupClient(Loc.GetString("insfor-sapper-tripwire-attached"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("insfor-sapper-tripwire-attached"), ent, args.User);
             args.Handled = true;
         }
     }

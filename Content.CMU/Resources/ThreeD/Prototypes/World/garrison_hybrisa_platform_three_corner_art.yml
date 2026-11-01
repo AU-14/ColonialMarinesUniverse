@@ -1,0 +1,5 @@
+# Exact CC-BY-SA-3.0 crop; see SOURCES_PLATFORM_THREE_CORNER.md.
+- type: cmu3DSurface
+  id: CMU3DPlatformThreeCornerTrimmedSupport
+  atlasIndex: 1204
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DPlatformThreeCornerTrimmedSupport.png

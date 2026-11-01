@@ -4,6 +4,8 @@
   name: Type 6 fragmentation grenade
   suffix: UPP
   components:
+  - type: CMUSmartGrenade
+    enabled: false
   - type: Sprite
     sprite: CMU14/Weapons/Grenades/UPP/HEDP.rsi
   - type: Tag
@@ -19,6 +21,8 @@
   name: RDG-17 smoke grenade
   suffix: UPP
   components:
+  - type: CMUSmartGrenade
+    enabled: false
   - type: Sprite
     sprite: CMU14/Weapons/Grenades/UPP/HSDP.rsi
   - type: Tag
@@ -34,6 +38,8 @@
   name: Type 8 incendiary grenade
   suffix: UPP
   components:
+  - type: CMUSmartGrenade
+    enabled: false
   - type: Sprite
     sprite: CMU14/Weapons/Grenades/UPP/HIDP.rsi
   - type: Tag

@@ -12,6 +12,7 @@ namespace Content.Server.CMU14.Platoon;
 public sealed partial class PlatoonLanguageSystem : EntitySystem
 {
     [Dependency] private  LanguageLearningSystem _learning = default!;
+    [Dependency] private  LanguageSystem _language = default!;
     [Dependency] private  PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
 
     public override void Initialize()
@@ -55,6 +56,10 @@ public sealed partial class PlatoonLanguageSystem : EntitySystem
         var platoon = GetPlatoonForMarine(marine);
         if (platoon == null)
             return;
+
+        // the mob's languages were built at mapinit, before the job gave it a faction, so
+        // platoon languages only showed up if a trait or origin happened to force a refresh later
+        _language.UpdateEntityLanguages(ev.Mob);
 
         // learnable languages still set at spawn only
         foreach (var lang in platoon.LearnableLanguages)

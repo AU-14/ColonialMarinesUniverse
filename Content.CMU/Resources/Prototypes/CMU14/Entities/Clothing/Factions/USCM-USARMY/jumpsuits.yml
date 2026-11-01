@@ -268,10 +268,11 @@
     startingAccessories:
     - AU14PatchUAFlag
     - AU14PatchUSCM
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/junglefatigues.rsi
       Desert: CMU14/Clothing/desertfatigues.rsi
       Snow: CMU14/Clothing/snowfatigues.rsi
       Classic: CMU14/Clothing/junglefatigues.rsi
-      Urban: CMU14/Clothing/junglefatigues.rsi
+      Urban: CMU14/Clothing/urbanfatigues.rsi

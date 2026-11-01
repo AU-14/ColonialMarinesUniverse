@@ -2,6 +2,7 @@ using Content.Shared.Mind;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Utility; // CMU14
 
 namespace Content.Shared.Administration;
 
@@ -19,7 +20,8 @@ public sealed record PlayerInfo(
     NetUserId SessionId,
     bool Connected,
     bool ActiveThisRound,
-    TimeSpan? OverallPlaytime)
+    TimeSpan? OverallPlaytime,
+    SpriteSpecifier? AntagIcon = null) // CMU14: icon of the active mind role, shown in admin tooling
 {
     private string? _playtimeString;
 

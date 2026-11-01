@@ -12,8 +12,9 @@ public sealed class XenoHeatshieldTest
 {
     private const string FireSpewEffectPrototype = "RMCEffectXenoFireSpew";
 
+    // CMU14: cover enemies in the extended outer rows while leaving targets behind the xeno untouched.
     [Test]
-    public async Task BurningVomitBileIgnitesThreeTilesInFront()
+    public async Task BurningVomitBileIgnitesThreeRowsInFront()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -32,9 +33,9 @@ public sealed class XenoHeatshieldTest
             {
                 var entMan = server.EntMan;
                 xeno = entMan.SpawnEntity("CMXenoDefenderHeatshield", map.GridCoords);
-                targetNorth = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 1)));
+                targetNorth = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(3, 1)));
                 targetCenter = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
-                targetSouth = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, -1)));
+                targetSouth = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(3, -1)));
                 behind = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(-1, 0)));
                 action = SpawnAction(entMan);
 
@@ -47,7 +48,7 @@ public sealed class XenoHeatshieldTest
             await server.WaitPost(() => { RaiseVomitBile(server.EntMan, xeno, map.GridCoords.Offset(new Vector2(1, 0)), action); });
 
             await PoolManager.WaitUntil(server, ()
-                => CountPrototype(server.EntMan, FireSpewEffectPrototype) == 3
+                => CountPrototype(server.EntMan, FireSpewEffectPrototype) == 9
                 && IsOnFire(server.EntMan, targetNorth)
                 && IsOnFire(server.EntMan, targetCenter)
                 && IsOnFire(server.EntMan, targetSouth));
@@ -61,7 +62,7 @@ public sealed class XenoHeatshieldTest
                     Assert.That(IsOnFire(entMan, targetCenter), Is.True);
                     Assert.That(IsOnFire(entMan, targetSouth), Is.True);
                     Assert.That(IsOnFire(entMan, behind), Is.False);
-                    Assert.That(CountPrototype(entMan, FireSpewEffectPrototype), Is.EqualTo(3));
+                    Assert.That(CountPrototype(entMan, FireSpewEffectPrototype), Is.EqualTo(9));
                 });
             });
         }

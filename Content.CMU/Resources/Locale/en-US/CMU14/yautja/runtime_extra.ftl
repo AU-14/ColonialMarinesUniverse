@@ -18,6 +18,8 @@ cmu-yautja-action-create-healing-capsule = Create Healing Capsule
 cmu-yautja-action-create-healing-capsule-desc = Spend bracer energy to print a single-use healing capsule.
 cmu-yautja-action-create-human-crystal = Create Human Crystal
 cmu-yautja-action-create-human-crystal-desc = Spend bracer energy to grow a crystal for humans and thralls.
+cmu-yautja-action-honor-roar-desc = Roar, staggering and deafening nearby prey.
+cmu-yautja-action-hunting-leap-desc = Leap at a target and strike it with your melee weapon.
 cmu-yautja-action-link-thrall-bracer = Link Thrall Bracer
 cmu-yautja-action-link-thrall-bracer-desc = Link your hunting bracer to a marked thrall's bracer.
 cmu-yautja-action-mark-panel = Hunt Marks
@@ -71,7 +73,6 @@ cmu-yautja-action-voice-pain-desc = Play a Yautja cry of pain.
 cmu-yautja-action-voice-roar = Voice: Roar
 cmu-yautja-action-voice-roar-desc = Emit a hunting roar.
 
-cmu-yautja-bracer-healing-capsule-created = The bracer prints {$item}.
 cmu-yautja-bracer-healing-disabled = The bracer's healing-capsule synthesis is disabled.
 cmu-yautja-falcon-drone = Falcon Drone
 cmu-yautja-gear = Yautja Gear

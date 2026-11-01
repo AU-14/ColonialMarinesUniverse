@@ -7,7 +7,7 @@ using Robust.Shared.Network;
 
 namespace Content.Shared.CMU14.Vehicle;
 
-public sealed class CMUEmergencyLightsSystem : EntitySystem
+public sealed partial class CMUEmergencyLightsSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private INetManager _net = default!;

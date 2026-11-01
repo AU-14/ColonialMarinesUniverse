@@ -1,0 +1,10 @@
+# Landing pad aboard a faction's ship for the third parties that faction calls in through intel. While the faction is
+# shipside its summoned shuttles can only land here (or go back to deep space); 60 seconds after landing the shuttle
+# heads back to deep space on its own. Third parties that weren't called in by this ship's faction can't use it.
+- type: entity
+  parent: CMDropshipDestinationThirdPartyWhitelist
+  id: CMUDropshipDestinationSummonedThirdParty
+  name: dropship destination (summoned third party)
+  description: Defines where third parties called in by this ship's faction land aboard it.
+  components:
+  - type: CMUSummonedThirdPartyDestination

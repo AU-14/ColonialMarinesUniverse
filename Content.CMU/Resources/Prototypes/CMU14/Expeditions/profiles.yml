@@ -1,0 +1,425 @@
+# Native RMC water and flora. Solid cover and walk-through understory use separate palettes.
+- type: entity
+  id: CMUExpeditionWoodland
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUExpeditionProfile
+    biome: Woodland
+    ambientLight: "#BAC8AE"
+    tiles:
+      Ground: CMPlanetGrass1
+      Scrub: CMPlanetGrass2
+      Mud: RMCPlanetDirtBrown
+      Water: CMPlanetDirt
+      Stone: FloorBasalt
+      Trail: CMPlanetGrassDirt
+      Deck: CMPlanetWoodDamaged
+      Structure: CMPlanetShuttleBlue
+      Beach: CMPlanetSand
+      Cliff: FloorBasalt
+    props:
+      Tree: [ RMCFloraTree01, RMCFloraTree02, RMCFloraTree03, RMCFloraTree04, RMCFloraTree05, RMCFloraTree06, RMCFloraTreeConifer01, RMCFloraTreeConifer02, RMCFloraTreeConifer03, RMCFloraTreeLarge01, RMCFloraTreeLarge03, RMCFloraTreeLarge05, RMCFloraTyrargoDeadTree01 ]
+      Rock: [ CMUExpeditionRock ]
+      Boulder: [ CMUExpeditionBoulder1, CMUExpeditionBoulder2, CMUExpeditionBoulder3 ]
+      Hull: [ CMUExpeditionHull ]
+      Supply: [ CMUExpeditionSupply ]
+      Relay: [ CMUExpeditionRelay ]
+      Recovery: [ CMUExpeditionMiner ]
+      Boundary: [ CMUExpeditionWaterBoundary ]
+      CharredTree: [ CMUExpeditionCharredTree1, CMUExpeditionCharredTree2, CMUExpeditionCharredTree3, CMUExpeditionCharredTree4 ]
+      FallenLog: [ CMUExpeditionFallenLog1, CMUExpeditionFallenLog2 ]
+      Campfire: [ CMUExpeditionCampfire ]
+      BurntFrame: [ CMUExpeditionBurntFrame ]
+      DiscardedPack: [ CMUExpeditionAbandonedPack, CMUExpeditionWreckedCart ]
+      CargoDebris: [ CMUCargoCarrierDebris, CMUCargoCarrierDebrisSide, CMUCargoCarrierDebrisHood, CMUCargoCarrierDebrisBumper ]
+    details:
+      LeafLitter: [ CMUExpeditionLeafLitter1, CMUExpeditionLeafLitter2, CMUExpeditionLeafLitter3, CMUExpeditionLeafLitter4 ]
+      Moss: [ CMUExpeditionMoss1, CMUExpeditionMoss2, CMUExpeditionMoss3 ]
+      Fungus: [ CMUExpeditionFungus1, CMUExpeditionFungus2, CMUExpeditionFungus3 ]
+      DryGrass: [ RMCGrassDesert, RMCGrassDesert1, RMCGrassDesert2, RMCGrassDesert3, RMCGrassDesert4, RMCGrassDesert5, RMCGrassDesert6, RMCGrassDesert7, RMCGrassDesert8, RMCGrassDesert9, RMCGrassDesert10 ]
+      Ash: [ CMUExpeditionAsh, CMUExpeditionCharcoal ]
+      Grass: [ RMCGrassa1, RMCGrassa2, RMCGrassa3, RMCGrassa4, RMCGrassa5, RMCGrassb1, RMCGrassb2, RMCGrassb3, RMCGrassb4, RMCGrassb5, RMCGrassc1, RMCGrassc2, RMCGrassc3, RMCGrassc4, RMCGrassd1, RMCGrassd2, RMCGrassd3, RMCGrasse1, RMCGrasse2, RMCGrasse3 ]
+      Bush: [ RMCBusha1, RMCBusha2, RMCBusha3, RMCBushb1, RMCBushb2, RMCBushb3, RMCBushc1, RMCBushc2, RMCBushc3, RMCBushd1, RMCBushd2, RMCBushd3, RMCBushd4, RMCBushg1, RMCBushg2, RMCBushg3, RMCBushg4 ]
+      Fern: [ RMCBushj1, RMCBushj2, RMCBushj3, RMCBushk1, RMCBushk2, RMCBushk3, RMCBushl1, RMCBushl2, RMCBushl3, RMCBushl4 ]
+      Reeds: [ StalkyBush01, StalkyBush02, StalkyBush03, RMCBushi1, RMCBushi2, RMCBushi3, RMCBushi4 ]
+      Litter: [ RMCTyrargoStick01, RMCTyrargoStick02, RMCTyrargoStick03, RMCTyrargoStick04 ]
+      Pebbles: [ RMCRock01, RMCRock02, RMCRock03, RMCRock04, RMCRock05, RMCRock06, RMCRock07, RMCRockColourable7, RMCRockColourable8, RMCRockColourable9, RMCRockColourable10, RMCRockColourable11, RMCRockColourable12 ]
+      Deadwood: [ RMCTyrargoTrunk01, RMCTyrargoTrunk02, RMCStump1, RMCStump2 ]
+      Flowers: [ RMCFlowersbr1, RMCFlowersbr2, RMCFlowersbr3, RMCFlowerspv1, RMCFlowerspv2, RMCFlowerspv3, RMCFlowersy1, RMCFlowersy2, RMCFlowersy3, RMCFlowersy4 ]
+
+- type: entity
+  id: CMUExpeditionSwamp
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUExpeditionProfile
+    biome: Swamp
+    ambientLight: "#A5B4A0"
+    tiles:
+      Ground: CMPlanetGrass2
+      Scrub: CMPlanetGrass3
+      Mud: RMCPlanetDirtBrown
+      Water: CMPlanetDirt
+      Stone: FloorBasalt
+      Trail: CMPlanetGrassDirt
+      Deck: CMPlanetWoodDamaged
+      Structure: CMPlanetShuttleBlue
+      Beach: CMPlanetSand
+      Cliff: FloorBasalt
+    props:
+      Tree: [ RMCFloraTree01, RMCFloraTree03, RMCFloraTree05, RMCFloraTree06, RMCFloraTreeLarge02, RMCFloraTreeLarge04, RMCFloraTreeStump, RMCFloraTyrargoDeadTree02, RMCFloraTyrargoDeadTree04 ]
+      Rock: [ CMUExpeditionRock ]
+      Boulder: [ CMUExpeditionBoulder1, CMUExpeditionBoulder2, CMUExpeditionBoulder3 ]
+      Hull: [ CMUExpeditionHull ]
+      Supply: [ CMUExpeditionSupply ]
+      Relay: [ CMUExpeditionRelay ]
+      Recovery: [ CMUExpeditionMiner ]
+      Boundary: [ CMUExpeditionWaterBoundary ]
+      CharredTree: [ CMUExpeditionCharredTree1, CMUExpeditionCharredTree2, CMUExpeditionCharredTree3, CMUExpeditionCharredTree4 ]
+      FallenLog: [ CMUExpeditionFallenLog1, CMUExpeditionFallenLog2 ]
+      Campfire: [ CMUExpeditionCampfire ]
+      BurntFrame: [ CMUExpeditionBurntFrame ]
+      DiscardedPack: [ CMUExpeditionAbandonedPack, CMUExpeditionWreckedCart ]
+      CargoDebris: [ CMUCargoCarrierDebris, CMUCargoCarrierDebrisSide, CMUCargoCarrierDebrisHood, CMUCargoCarrierDebrisBumper ]
+    details:
+      LeafLitter: [ CMUExpeditionLeafLitter1, CMUExpeditionLeafLitter2, CMUExpeditionLeafLitter3, CMUExpeditionLeafLitter4 ]
+      Moss: [ CMUExpeditionMoss1, CMUExpeditionMoss2, CMUExpeditionMoss3 ]
+      Fungus: [ CMUExpeditionFungus1, CMUExpeditionFungus2, CMUExpeditionFungus3 ]
+      DryGrass: [ RMCGrassDesert, RMCGrassDesert1, RMCGrassDesert2, RMCGrassDesert3, RMCGrassDesert4, RMCGrassDesert5, RMCGrassDesert6, RMCGrassDesert7, RMCGrassDesert8, RMCGrassDesert9, RMCGrassDesert10 ]
+      Ash: [ CMUExpeditionAsh, CMUExpeditionCharcoal ]
+      Grass: [ RMCGrassa1, RMCGrassa2, RMCGrassa3, RMCGrassa4, RMCGrassa5, RMCGrassb1, RMCGrassb2, RMCGrassb3, RMCGrassb4, RMCGrassb5, RMCGrassc1, RMCGrassc2, RMCGrassc3, RMCGrassc4, RMCGrassd1, RMCGrassd2, RMCGrassd3, RMCGrasse1, RMCGrasse2, RMCGrasse3 ]
+      Bush: [ RMCBushJungle1, RMCBushJungle2, RMCBushJungle3, RMCBushg1, RMCBushg2, RMCBushm1, RMCBushm2, RMCBushm3, RMCBushm4 ]
+      Fern: [ RMCBushj1, RMCBushj2, RMCBushj3, RMCBushk1, RMCBushk2, RMCBushk3, RMCBushl1, RMCBushl2, RMCBushl3, RMCBushl4 ]
+      Reeds: [ StalkyBush01, StalkyBush02, StalkyBush03, RMCBushi1, RMCBushi2, RMCBushi3, RMCBushi4 ]
+      Litter: [ RMCTyrargoStick01, RMCTyrargoStick02, RMCTyrargoStick03, RMCTyrargoStick04 ]
+      Pebbles: [ RMCRock01, RMCRock02, RMCRock03, RMCRock04, RMCRock05, RMCRock06, RMCRock07, RMCRockColourable7, RMCRockColourable8, RMCRockColourable9, RMCRockColourable10, RMCRockColourable11, RMCRockColourable12 ]
+      Deadwood: [ RMCTyrargoTrunk01, RMCTyrargoTrunk02, RMCStump1, RMCStump2 ]
+      Flowers: [ RMCFlowersbr1, RMCFlowersbr2, RMCFlowersbr3, RMCFlowerspv1, RMCFlowerspv2, RMCFlowerspv3, RMCFlowersy1, RMCFlowersy2, RMCFlowersy3, RMCFlowersy4 ]
+
+- type: entity
+  id: CMUExpeditionTundra
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUExpeditionProfile
+    biome: Tundra
+    ambientLight: "#C4D3DF"
+    tiles:
+      Ground: RMCPlanetSnow1
+      Scrub: RMCPlanetSnow2
+      Mud: RMCPlanetSnow0
+      Water: CMPlanetDirt
+      Stone: FloorBasalt
+      Trail: RMCPlanetSnow0
+      Deck: CMPlanetWoodDamaged
+      Structure: CMPlanetShuttleBlue
+      Beach: CMPlanetSand
+      Cliff: FloorBasalt
+    props:
+      Tree: [ RMCFloraTreeSnow01, RMCFloraTreeSnow02, RMCFloraTreeSnow03, RMCFloraTreeSnow04, RMCFloraTreeSnow05, RMCFloraTreeSnow06, RMCFloraTyrargoDeadTree01, RMCFloraTyrargoDeadTree03 ]
+      Rock: [ CMUExpeditionRock ]
+      Boulder: [ CMUExpeditionBoulder1, CMUExpeditionBoulder2, CMUExpeditionBoulder3 ]
+      Hull: [ CMUExpeditionHull ]
+      Supply: [ CMUExpeditionSupply ]
+      Relay: [ CMUExpeditionRelay ]
+      Recovery: [ CMUExpeditionMiner ]
+      Boundary: [ CMUExpeditionWaterBoundary ]
+      CharredTree: [ CMUExpeditionCharredTree1, CMUExpeditionCharredTree2, CMUExpeditionCharredTree3, CMUExpeditionCharredTree4 ]
+      FallenLog: [ CMUExpeditionFallenLog1, CMUExpeditionFallenLog2 ]
+      Campfire: [ CMUExpeditionCampfire ]
+      BurntFrame: [ CMUExpeditionBurntFrame ]
+      DiscardedPack: [ CMUExpeditionAbandonedPack, CMUExpeditionWreckedCart ]
+      CargoDebris: [ CMUCargoCarrierDebris, CMUCargoCarrierDebrisSide, CMUCargoCarrierDebrisHood, CMUCargoCarrierDebrisBumper ]
+    details:
+      LeafLitter: [ CMUExpeditionLeafLitter1, CMUExpeditionLeafLitter2, CMUExpeditionLeafLitter3, CMUExpeditionLeafLitter4 ]
+      Moss: [ CMUExpeditionMoss1, CMUExpeditionMoss2, CMUExpeditionMoss3 ]
+      Fungus: [ CMUExpeditionFungus1, CMUExpeditionFungus2, CMUExpeditionFungus3 ]
+      DryGrass: [ RMCGrassDesert, RMCGrassDesert1, RMCGrassDesert2, RMCGrassDesert3, RMCGrassDesert4, RMCGrassDesert5, RMCGrassDesert6, RMCGrassDesert7, RMCGrassDesert8, RMCGrassDesert9, RMCGrassDesert10 ]
+      Ash: [ CMUExpeditionAsh, CMUExpeditionCharcoal ]
+      Grass: [ RMCGrassa1, RMCGrassa2, RMCGrassa3, RMCGrassa4, RMCGrassa5, RMCGrassb1, RMCGrassb2, RMCGrassb3, RMCGrassb4, RMCGrassb5, RMCGrassc1, RMCGrassc2, RMCGrassc3, RMCGrassc4, RMCGrassd1, RMCGrassd2, RMCGrassd3, RMCGrasse1, RMCGrasse2, RMCGrasse3 ]
+      Bush: [ RMCbushsnowa1, RMCbushsnowa2, RMCbushsnowa3, RMCbushsnowb1, RMCbushsnowb2, RMCbushsnowb3 ]
+      Fern: [ RMCRock03, RMCRock04 ]
+      Reeds: [ RMCTyrargoStick01, RMCTyrargoStick02, RMCTyrargoStick03, RMCTyrargoStick04 ]
+      Litter: [ RMCTyrargoStick01, RMCTyrargoStick02, RMCTyrargoStick03, RMCTyrargoStick04 ]
+      Pebbles: [ RMCRock01, RMCRock02, RMCRock03, RMCRock04, RMCRock05, RMCRock06, RMCRock07, RMCRockColourable7, RMCRockColourable8, RMCRockColourable9, RMCRockColourable10, RMCRockColourable11, RMCRockColourable12 ]
+      Deadwood: [ RMCTyrargoTrunk01, RMCTyrargoTrunk02, RMCStump1, RMCStump2 ]
+      Flowers: [ RMCFlowersbr1, RMCFlowersbr2, RMCFlowersbr3, RMCFlowerspv1, RMCFlowerspv2, RMCFlowerspv3, RMCFlowersy1, RMCFlowersy2, RMCFlowersy3, RMCFlowersy4 ]
+
+- type: entity
+  id: CMUExpeditionBeach
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUExpeditionProfile
+    biome: Beach
+    ambientLight: "#E1DAC0"
+    tiles:
+      Ground: CMPlanetGrass1
+      Scrub: CMPlanetGrass2
+      Mud: CMPlanetSand
+      Water: CMPlanetDirt
+      Stone: FloorBasalt
+      Trail: CMPlanetSand
+      Deck: CMPlanetWoodDamaged
+      Structure: CMPlanetShuttleBlue
+      Beach: CMPlanetSand
+      Cliff: FloorBasalt
+    props:
+      Tree: [ RMCFloraTreePalm01, RMCFloraTreePalm02, RMCFloraTree03, RMCFloraTree05, RMCFloraTreeLarge03 ]
+      Rock: [ CMUExpeditionRock ]
+      Boulder: [ CMUExpeditionBoulder1, CMUExpeditionBoulder2, CMUExpeditionBoulder3 ]
+      Hull: [ CMUExpeditionHull ]
+      Supply: [ CMUExpeditionSupply ]
+      Relay: [ CMUExpeditionRelay ]
+      Recovery: [ CMUExpeditionMiner ]
+      Boundary: [ CMUExpeditionWaterBoundary ]
+      CharredTree: [ CMUExpeditionCharredTree1, CMUExpeditionCharredTree2, CMUExpeditionCharredTree3, CMUExpeditionCharredTree4 ]
+      FallenLog: [ CMUExpeditionFallenLog1, CMUExpeditionFallenLog2 ]
+      Campfire: [ CMUExpeditionCampfire ]
+      BurntFrame: [ CMUExpeditionBurntFrame ]
+      DiscardedPack: [ CMUExpeditionAbandonedPack, CMUExpeditionWreckedCart ]
+      CargoDebris: [ CMUCargoCarrierDebris, CMUCargoCarrierDebrisSide, CMUCargoCarrierDebrisHood, CMUCargoCarrierDebrisBumper ]
+    details:
+      LeafLitter: [ CMUExpeditionLeafLitter1, CMUExpeditionLeafLitter2, CMUExpeditionLeafLitter3, CMUExpeditionLeafLitter4 ]
+      Moss: [ CMUExpeditionMoss1, CMUExpeditionMoss2, CMUExpeditionMoss3 ]
+      Fungus: [ CMUExpeditionFungus1, CMUExpeditionFungus2, CMUExpeditionFungus3 ]
+      DryGrass: [ RMCGrassDesert, RMCGrassDesert1, RMCGrassDesert2, RMCGrassDesert3, RMCGrassDesert4, RMCGrassDesert5, RMCGrassDesert6, RMCGrassDesert7, RMCGrassDesert8, RMCGrassDesert9, RMCGrassDesert10 ]
+      Ash: [ CMUExpeditionAsh, CMUExpeditionCharcoal ]
+      Grass: [ RMCGrassDesert, RMCGrassDesert2, RMCGrassDesert4, RMCGrassDesert6, RMCGrassDesert8, RMCGrassDesert10 ]
+      Bush: [ RMCBusha1, RMCBusha2, RMCBusha3, RMCBushb1, RMCBushb2, RMCBushb3, RMCBushc1, RMCBushc2, RMCBushc3, RMCBushd1, RMCBushd2, RMCBushd3, RMCBushd4, RMCBushg1, RMCBushg2, RMCBushg3, RMCBushg4 ]
+      Fern: [ RMCBushj1, RMCBushj2, RMCBushj3, RMCBushk1, RMCBushk2, RMCBushk3, RMCBushl1, RMCBushl2, RMCBushl3, RMCBushl4 ]
+      Reeds: [ StalkyBush01, StalkyBush02, StalkyBush03, RMCBushi1, RMCBushi2, RMCBushi3, RMCBushi4 ]
+      Litter: [ RMCTyrargoStick01, RMCTyrargoStick02, RMCTyrargoStick03, RMCTyrargoStick04 ]
+      Pebbles: [ RMCRock01, RMCRock02, RMCRock03, RMCRock04, RMCRock05, RMCRock06, RMCRock07, RMCRockColourable7, RMCRockColourable8, RMCRockColourable9, RMCRockColourable10, RMCRockColourable11, RMCRockColourable12 ]
+      Deadwood: [ RMCTyrargoTrunk01, RMCTyrargoTrunk02, RMCStump1, RMCStump2 ]
+      Flowers: [ RMCFlowersbr1, RMCFlowersbr2, RMCFlowersbr3, RMCFlowerspv1, RMCFlowerspv2, RMCFlowerspv3, RMCFlowersy1, RMCFlowersy2, RMCFlowersy3, RMCFlowersy4 ]
+
+- type: entity
+  id: CMUExpeditionMountain
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUExpeditionProfile
+    biome: Mountain
+    ambientLight: "#BDC7CC"
+    tiles:
+      Ground: FloorBasalt
+      Scrub: RMCPlanetSnow0
+      Mud: CMPlanetDirt
+      Water: CMPlanetDirt
+      Stone: FloorBasalt
+      Trail: CMPlanetDirt
+      Deck: CMPlanetWoodDamaged
+      Structure: CMPlanetShuttleBlue
+      Beach: CMPlanetSand
+      Cliff: FloorBasalt
+    props:
+      Tree: [ RMCFloraTreeConifer01, RMCFloraTreeConifer02, RMCFloraTreeConifer03, RMCFloraTreeSnow02, RMCFloraTreeSnow05, RMCFloraTyrargoDeadTree01, RMCFloraTyrargoDeadTree05 ]
+      Rock: [ CMUExpeditionRock ]
+      Boulder: [ CMUExpeditionBoulder1, CMUExpeditionBoulder2, CMUExpeditionBoulder3 ]
+      Hull: [ CMUExpeditionHull ]
+      Supply: [ CMUExpeditionSupply ]
+      Relay: [ CMUExpeditionRelay ]
+      Recovery: [ CMUExpeditionMiner ]
+      Boundary: [ CMUExpeditionWaterBoundary ]
+      CharredTree: [ CMUExpeditionCharredTree1, CMUExpeditionCharredTree2, CMUExpeditionCharredTree3, CMUExpeditionCharredTree4 ]
+      FallenLog: [ CMUExpeditionFallenLog1, CMUExpeditionFallenLog2 ]
+      Campfire: [ CMUExpeditionCampfire ]
+      BurntFrame: [ CMUExpeditionBurntFrame ]
+      DiscardedPack: [ CMUExpeditionAbandonedPack, CMUExpeditionWreckedCart ]
+      CargoDebris: [ CMUCargoCarrierDebris, CMUCargoCarrierDebrisSide, CMUCargoCarrierDebrisHood, CMUCargoCarrierDebrisBumper ]
+    details:
+      LeafLitter: [ CMUExpeditionLeafLitter1, CMUExpeditionLeafLitter2, CMUExpeditionLeafLitter3, CMUExpeditionLeafLitter4 ]
+      Moss: [ CMUExpeditionMoss1, CMUExpeditionMoss2, CMUExpeditionMoss3 ]
+      Fungus: [ CMUExpeditionFungus1, CMUExpeditionFungus2, CMUExpeditionFungus3 ]
+      DryGrass: [ RMCGrassDesert, RMCGrassDesert1, RMCGrassDesert2, RMCGrassDesert3, RMCGrassDesert4, RMCGrassDesert5, RMCGrassDesert6, RMCGrassDesert7, RMCGrassDesert8, RMCGrassDesert9, RMCGrassDesert10 ]
+      Ash: [ CMUExpeditionAsh, CMUExpeditionCharcoal ]
+      Grass: [ RMCGrassa1, RMCGrassa2, RMCGrassa3, RMCGrassa4, RMCGrassa5, RMCGrassb1, RMCGrassb2, RMCGrassb3, RMCGrassb4, RMCGrassb5, RMCGrassc1, RMCGrassc2, RMCGrassc3, RMCGrassc4, RMCGrassd1, RMCGrassd2, RMCGrassd3, RMCGrasse1, RMCGrasse2, RMCGrasse3 ]
+      Bush: [ RMCbushsnowa1, RMCbushsnowa2, RMCbushsnowa3, RMCbushsnowb1, RMCbushsnowb2, RMCbushsnowb3 ]
+      Fern: [ RMCRock03, RMCRock04 ]
+      Reeds: [ RMCTyrargoStick01, RMCTyrargoStick02, RMCTyrargoStick03, RMCTyrargoStick04 ]
+      Litter: [ RMCTyrargoStick01, RMCTyrargoStick02, RMCTyrargoStick03, RMCTyrargoStick04 ]
+      Pebbles: [ RMCRock01, RMCRock02, RMCRock03, RMCRock04, RMCRock05, RMCRock06, RMCRock07, RMCRockColourable7, RMCRockColourable8, RMCRockColourable9, RMCRockColourable10, RMCRockColourable11, RMCRockColourable12 ]
+      Deadwood: [ RMCTyrargoTrunk01, RMCTyrargoTrunk02, RMCStump1, RMCStump2 ]
+      Flowers: [ RMCFlowersbr1, RMCFlowersbr2, RMCFlowersbr3, RMCFlowerspv1, RMCFlowerspv2, RMCFlowerspv3, RMCFlowersy1, RMCFlowersy2, RMCFlowersy3, RMCFlowersy4 ]
+
+- type: entity
+  id: CMUExpeditionSwampJungle
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUExpeditionProfile
+    biome: SwampJungle
+    ambientLight: "#9DAC8E"
+    tiles:
+      Ground: CMPlanetGrass2
+      Scrub: CMPlanetGrass3
+      Mud: RMCPlanetDirtBrown
+      Water: CMPlanetDirt
+      Stone: FloorBasalt
+      Trail: CMPlanetGrassDirt
+      Deck: CMPlanetWoodDamaged
+      Structure: CMPlanetShuttleBlue
+      Beach: CMPlanetSand
+      Cliff: FloorBasalt
+    props:
+      Tree: [ RMCFloraTreeLarge01, RMCFloraTreeLarge02, RMCFloraTreeLarge03, RMCFloraTreeLarge04, RMCFloraTreeLarge05, RMCFloraTreeLarge06, RMCFloraTree01, RMCFloraTree03, RMCFloraTree05, RMCFloraTreePalm01, RMCFloraTyrargoDeadTree02 ]
+      Rock: [ CMUExpeditionRock ]
+      Boulder: [ CMUExpeditionBoulder1, CMUExpeditionBoulder2, CMUExpeditionBoulder3 ]
+      Hull: [ CMUExpeditionHull ]
+      Supply: [ CMUExpeditionSupply ]
+      Relay: [ CMUExpeditionRelay ]
+      Recovery: [ CMUExpeditionMiner ]
+      Boundary: [ CMUExpeditionWaterBoundary ]
+      CharredTree: [ CMUExpeditionCharredTree1, CMUExpeditionCharredTree2, CMUExpeditionCharredTree3, CMUExpeditionCharredTree4 ]
+      FallenLog: [ CMUExpeditionFallenLog1, CMUExpeditionFallenLog2 ]
+      Campfire: [ CMUExpeditionCampfire ]
+      BurntFrame: [ CMUExpeditionBurntFrame ]
+      DiscardedPack: [ CMUExpeditionAbandonedPack, CMUExpeditionWreckedCart ]
+      CargoDebris: [ CMUCargoCarrierDebris, CMUCargoCarrierDebrisSide, CMUCargoCarrierDebrisHood, CMUCargoCarrierDebrisBumper ]
+    details:
+      LeafLitter: [ CMUExpeditionLeafLitter1, CMUExpeditionLeafLitter2, CMUExpeditionLeafLitter3, CMUExpeditionLeafLitter4 ]
+      Moss: [ CMUExpeditionMoss1, CMUExpeditionMoss2, CMUExpeditionMoss3 ]
+      Fungus: [ CMUExpeditionFungus1, CMUExpeditionFungus2, CMUExpeditionFungus3 ]
+      DryGrass: [ RMCGrassDesert, RMCGrassDesert1, RMCGrassDesert2, RMCGrassDesert3, RMCGrassDesert4, RMCGrassDesert5, RMCGrassDesert6, RMCGrassDesert7, RMCGrassDesert8, RMCGrassDesert9, RMCGrassDesert10 ]
+      Ash: [ CMUExpeditionAsh, CMUExpeditionCharcoal ]
+      Grass: [ RMCGrassa1, RMCGrassa2, RMCGrassa3, RMCGrassa4, RMCGrassa5, RMCGrassb1, RMCGrassb2, RMCGrassb3, RMCGrassb4, RMCGrassb5, RMCGrassc1, RMCGrassc2, RMCGrassc3, RMCGrassc4, RMCGrassd1, RMCGrassd2, RMCGrassd3, RMCGrasse1, RMCGrasse2, RMCGrasse3 ]
+      Bush: [ RMCBushJungle1, RMCBushJungle2, RMCBushJungle3, RMCBushg1, RMCBushg2, RMCBushm1, RMCBushm2, RMCBushm3, RMCBushm4 ]
+      Fern: [ RMCBushj1, RMCBushj2, RMCBushj3, RMCBushk1, RMCBushk2, RMCBushk3, RMCBushl1, RMCBushl2, RMCBushl3, RMCBushl4 ]
+      Reeds: [ StalkyBush01, StalkyBush02, StalkyBush03, RMCBushi1, RMCBushi2, RMCBushi3, RMCBushi4 ]
+      Litter: [ RMCTyrargoStick01, RMCTyrargoStick02, RMCTyrargoStick03, RMCTyrargoStick04 ]
+      Pebbles: [ RMCRock01, RMCRock02, RMCRock03, RMCRock04, RMCRock05, RMCRock06, RMCRock07, RMCRockColourable7, RMCRockColourable8, RMCRockColourable9, RMCRockColourable10, RMCRockColourable11, RMCRockColourable12 ]
+      Deadwood: [ RMCTyrargoTrunk01, RMCTyrargoTrunk02, RMCStump1, RMCStump2 ]
+      Flowers: [ RMCFlowersbr1, RMCFlowersbr2, RMCFlowersbr3, RMCFlowerspv1, RMCFlowerspv2, RMCFlowerspv3, RMCFlowersy1, RMCFlowersy2, RMCFlowersy3, RMCFlowersy4 ]
+
+- type: entity
+  id: CMUExpeditionBurnedWoodland
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUExpeditionProfile
+    biome: BurnedWoodland
+    ambientLight: "#B6AA97"
+    tiles:
+      Ground: CMPlanetDirt
+      Scrub: CMPlanetGrass2
+      Mud: RMCPlanetDirtBrown
+      Water: CMPlanetDirt
+      Stone: FloorBasalt
+      Trail: CMPlanetDirt
+      Deck: CMPlanetWoodDamaged
+      Structure: CMPlanetShuttleBlue
+      Beach: CMPlanetSand
+      Cliff: FloorBasalt
+    props:
+      Tree: [ RMCFloraTyrargoDeadTree01, RMCFloraTyrargoDeadTree02, RMCFloraTyrargoDeadTree03, RMCFloraTyrargoDeadTree04, RMCFloraTyrargoDeadTree05, RMCFloraTreeStump, RMCFloraTreeStumpConifer, RMCFloraTyrargoTreeStump01 ]
+      Rock: [ CMUExpeditionRock ]
+      Boulder: [ CMUExpeditionBoulder1, CMUExpeditionBoulder2, CMUExpeditionBoulder3 ]
+      Hull: [ CMUExpeditionHull ]
+      Supply: [ CMUExpeditionSupply ]
+      Relay: [ CMUExpeditionRelay ]
+      Recovery: [ CMUExpeditionMiner ]
+      Boundary: [ CMUExpeditionWaterBoundary ]
+      CharredTree: [ CMUExpeditionCharredTree1, CMUExpeditionCharredTree2, CMUExpeditionCharredTree3, CMUExpeditionCharredTree4 ]
+      FallenLog: [ CMUExpeditionFallenLog1, CMUExpeditionFallenLog2 ]
+      Campfire: [ CMUExpeditionCampfire ]
+      BurntFrame: [ CMUExpeditionBurntFrame ]
+      DiscardedPack: [ CMUExpeditionAbandonedPack, CMUExpeditionWreckedCart ]
+      CargoDebris: [ CMUCargoCarrierDebris, CMUCargoCarrierDebrisSide, CMUCargoCarrierDebrisHood, CMUCargoCarrierDebrisBumper ]
+    details:
+      LeafLitter: [ CMUExpeditionLeafLitter1, CMUExpeditionLeafLitter2, CMUExpeditionLeafLitter3, CMUExpeditionLeafLitter4 ]
+      Moss: [ CMUExpeditionMoss1, CMUExpeditionMoss2, CMUExpeditionMoss3 ]
+      Fungus: [ CMUExpeditionFungus1, CMUExpeditionFungus2, CMUExpeditionFungus3 ]
+      DryGrass: [ RMCGrassDesert, RMCGrassDesert1, RMCGrassDesert2, RMCGrassDesert3, RMCGrassDesert4, RMCGrassDesert5, RMCGrassDesert6, RMCGrassDesert7, RMCGrassDesert8, RMCGrassDesert9, RMCGrassDesert10 ]
+      Ash: [ CMUExpeditionAsh, CMUExpeditionCharcoal ]
+      Grass: [ RMCGrassDesert, RMCGrassDesert2, RMCGrassDesert4, RMCGrassDesert6, RMCGrassDesert8, RMCGrassDesert10 ]
+      Bush: [ RMCTyrargoTrunk01, RMCTyrargoTrunk02 ]
+      Fern: [ RMCTyrargoStick01, RMCTyrargoStick02 ]
+      Reeds: [ RMCTyrargoStick01, RMCTyrargoStick02, RMCTyrargoStick03, RMCTyrargoStick04 ]
+      Litter: [ RMCTyrargoStick01, RMCTyrargoStick02, RMCTyrargoStick03, RMCTyrargoStick04 ]
+      Pebbles: [ RMCRock01, RMCRock02, RMCRock03, RMCRock04, RMCRock05, RMCRock06, RMCRock07, RMCRockColourable7, RMCRockColourable8, RMCRockColourable9, RMCRockColourable10, RMCRockColourable11, RMCRockColourable12 ]
+      Deadwood: [ RMCTyrargoTrunk01, RMCTyrargoTrunk02, RMCStump1, RMCStump2 ]
+      Flowers: [ RMCFlowersbr1, RMCFlowersbr2, RMCFlowersbr3, RMCFlowerspv1, RMCFlowerspv2, RMCFlowerspv3, RMCFlowersy1, RMCFlowersy2, RMCFlowersy3, RMCFlowersy4 ]
+
+- type: entity
+  id: CMUExpeditionWaterBoundary
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: '-0.5,-0.5,0.5,0.5'
+        layer: [ WallLayer ]
+
+- type: entity
+  parent: CMDropshipDestinationGovforWhitelist
+  id: CMUExpeditionLandingBeacon
+  components:
+  - type: DropshipDestination
+    canBePrimary: false
+
+# These site props carry no loot rewards, production, or mission completion behavior yet.
+- type: entity
+  parent: RMCRock
+  id: CMUExpeditionBoulder1
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Flora/rocks.rsi
+    state: rock_4
+
+- type: entity
+  parent: CMUExpeditionBoulder1
+  id: CMUExpeditionBoulder2
+  components:
+  - type: Sprite
+    state: rock_5
+
+- type: entity
+  parent: CMUExpeditionBoulder1
+  id: CMUExpeditionBoulder3
+  components:
+  - type: Sprite
+    state: rock_6
+
+- type: entity
+  parent: CMWallRock
+  id: CMUExpeditionRock
+
+- type: entity
+  parent: CMWallShuttleBlack
+  id: CMUExpeditionHull
+
+- type: entity
+  parent: RMCPropBase
+  id: CMUExpeditionSupply
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/basic.rsi
+    state: icon
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: '-0.4,-0.4,0.4,0.4'
+        density: 100
+        layer:
+        - MachineLayer
+        - BulletImpassable
+
+- type: entity
+  parent: CMUExpeditionSupply
+  id: CMUExpeditionRelay
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/telecommunication.rsi
+    state: relay_off
+
+- type: entity
+  parent: CMUExpeditionSupply
+  id: CMUExpeditionMiner
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/drill.rsi
+    state: drill
+    offset: 0, 1

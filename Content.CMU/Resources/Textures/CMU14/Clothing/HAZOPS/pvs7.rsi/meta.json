@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "made by diedsniper. (discord) for CMU",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "helmet",
+      "directions": 4
+    },
+    {
+      "name": "helmet-down",
+      "directions": 4
+    },
+    {
+      "name": "hat",
+      "directions": 4
+    },
+    {
+      "name": "hat-down",
+      "directions": 4
+    }
+  ]
+}

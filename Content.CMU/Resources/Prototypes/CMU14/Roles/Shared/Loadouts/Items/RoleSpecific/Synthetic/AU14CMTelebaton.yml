@@ -1,4 +1,5 @@
 - type: loadout
   id: AU14telebatonloadout
+  cost: 10
   inhand:
   - AU14TeleBaton

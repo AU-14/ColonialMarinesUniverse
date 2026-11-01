@@ -1,0 +1,4 @@
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, RMCBootsCorporate]
+  id: CMUBootsCorporateFilled
+  suffix: Filled

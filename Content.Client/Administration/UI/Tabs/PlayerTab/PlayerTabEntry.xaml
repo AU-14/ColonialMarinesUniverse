@@ -19,10 +19,21 @@
                HorizontalExpand="True"
                ClipText="True"/>
         <customControls:VSeparator/>
-        <Label Name="RoleTypeLabel"
-               SizeFlagsStretchRatio="2"
-               HorizontalExpand="True"
-               ClipText="True"/>
+        <!-- CMU14 Admin Role Icon Begin: icon of the active mind role next to the role type -->
+        <BoxContainer Orientation="Horizontal"
+                      SizeFlagsStretchRatio="2"
+                      HorizontalExpand="True"
+                      SeparationOverride="2">
+            <TextureRect Name="CMUAntagIconRect"
+                         Visible="False"
+                         Stretch="KeepAspectCentered"
+                         VerticalAlignment="Center"
+                         SetSize="16 16"/>
+            <Label Name="RoleTypeLabel"
+                   HorizontalExpand="True"
+                   ClipText="True"/>
+        </BoxContainer>
+        <!-- CMU14 End -->
         <customControls:VSeparator/>
         <Label Name="OverallPlaytimeLabel"
                SizeFlagsStretchRatio="1"

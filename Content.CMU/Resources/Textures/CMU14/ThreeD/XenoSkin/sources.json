@@ -1,0 +1,268 @@
+{
+  "CMU3DXenoSkin4030": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/xeno_resin_wall.rsi",
+      "state": "thickresin",
+      "rect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/a0fcc13da4bf066a297541571a4a0f064681002f/icons/turf/walls/xeno.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4031": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/xeno_resin_door.rsi",
+      "state": "thick_resin",
+      "rect": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/af7813ee8c36f9195a88f3b3d018af2b8833cbea/icons/mob/xenos/effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4032": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/xeno_resin_door.rsi",
+      "state": "thick_resin",
+      "rect": [
+        16,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/af7813ee8c36f9195a88f3b3d018af2b8833cbea/icons/mob/xenos/effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4033": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/xeno_resin_door.rsi",
+      "state": "resin",
+      "rect": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/af7813ee8c36f9195a88f3b3d018af2b8833cbea/icons/mob/xenos/effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4034": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/xeno_resin_door.rsi",
+      "state": "resin",
+      "rect": [
+        16,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/af7813ee8c36f9195a88f3b3d018af2b8833cbea/icons/mob/xenos/effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4035": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/weedbound_resin_doors.rsi",
+      "state": "weedbound_resin",
+      "rect": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/cfa259bbd2d627ed94a359fa8c0dec63006f49fa/icons/mob/xenos/effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4036": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/weedbound_resin_doors.rsi",
+      "state": "weedbound_resin",
+      "rect": [
+        16,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/cfa259bbd2d627ed94a359fa8c0dec63006f49fa/icons/mob/xenos/effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4037": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/weedbound_resin_doors.rsi",
+      "state": "thick_weedbound_resin",
+      "rect": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/cfa259bbd2d627ed94a359fa8c0dec63006f49fa/icons/mob/xenos/effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4038": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/weedbound_resin_doors.rsi",
+      "state": "thick_weedbound_resin",
+      "rect": [
+        16,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/cfa259bbd2d627ed94a359fa8c0dec63006f49fa/icons/mob/xenos/effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4039": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/xeno_resin_wall.rsi",
+      "state": "resin",
+      "rect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/a0fcc13da4bf066a297541571a4a0f064681002f/icons/turf/walls/xeno.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4040": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/weedbound_resin_walls.rsi",
+      "state": "weedboundresin",
+      "rect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/cfa259bbd2d627ed94a359fa8c0dec63006f49fa/icons/mob/xenos/effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4041": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Xenos/weedbound_resin_walls.rsi",
+      "state": "thickweedboundresin",
+      "rect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/cfa259bbd2d627ed94a359fa8c0dec63006f49fa/icons/mob/xenos/effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4042": [
+    {
+      "rsi": "/Textures/_RMC14/Structures/Walls/bone_resin.rsi",
+      "state": "bone_resin",
+      "rect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/turf/walls/prison/bone_resin.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4043": [
+    {
+      "rsi": "/Textures/CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi",
+      "state": "mycelium",
+      "rect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "taken from cm13 https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/pathogen/pathogen_structures.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4044": [
+    {
+      "rsi": "/Textures/CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi",
+      "state": "thickmycelium",
+      "rect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "taken from cm13 https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/pathogen/pathogen_structures.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4045": [
+    {
+      "rsi": "/Textures/CMU14/Effects/pathogen_effects.rsi",
+      "state": "mycelium",
+      "rect": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/pathogen_effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4046": [
+    {
+      "rsi": "/Textures/CMU14/Effects/pathogen_effects.rsi",
+      "state": "mycelium",
+      "rect": [
+        16,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/pathogen_effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4047": [
+    {
+      "rsi": "/Textures/CMU14/Effects/pathogen_effects.rsi",
+      "state": "thick mycelium",
+      "rect": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/pathogen_effects.dmi"
+    }
+  ],
+  "CMU3DXenoSkin4048": [
+    {
+      "rsi": "/Textures/CMU14/Effects/pathogen_effects.rsi",
+      "state": "thick mycelium",
+      "rect": [
+        16,
+        0,
+        32,
+        32
+      ],
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/pathogen_effects.dmi"
+    }
+  ]
+}

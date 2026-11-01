@@ -27,18 +27,26 @@
 
   name: au14-job-name-civiliancmbdeputy
   description: au14-job-description-civiliancmbdeputy
-  setPreference: false
+  setPreference: true
   canBeAntag: false
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
+    time: 14400 # 4 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -96,5 +104,8 @@
   components:
   - type: SpawnPoint
     job_id: AU14JobCivilianCMBDeputy
+  - type: CMUSpawnPointExtraJobs
+    jobs:
+    - AU14JobCivilianCMBDetective
   - type: Sprite
     state: syn_spawn

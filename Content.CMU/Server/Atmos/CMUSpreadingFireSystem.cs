@@ -1,3 +1,4 @@
+using Content.Server.Atmos.Components;
 using Content.Shared.CCVar;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Map;
@@ -14,24 +15,26 @@ using Robust.Shared.Timing;
 namespace Content.Server.CMU14.Atmos;
 
 /// <summary>
-/// Drives tile fire creep: fires periodically ignite an adjacent tile, so a burn creeps
+/// Drives AU14 tile fire creep: opted-in fires periodically ignite an adjacent tile, so a burn creeps
 /// outward from where it was sprayed instead of sitting still until it decays. Spread
-/// never overwrites an existing fire and stops at walls, structures, and
-/// <see cref="BlockTileFireComponent"/> blockers.
+/// never overwrites an existing fire and stops at walls, structures,
+/// <see cref="BlockTileFireComponent"/> blockers, and anything atmos seals:
+/// a closed door or wide-door seal companion is as opaque to fire as to air.
 ///
 /// Depth comes from <see cref="CMUSpreadingFireComponent"/> when the prototype carries it
-/// (the arsonist phoron fire fixes its own), otherwise from
-/// <see cref="CCVars.CMUFireSpreadDepth"/> so every ordinary fire creeps with a
-/// server-tunable range. 0 on the cvar leaves plain fires still.
+/// or otherwise from <see cref="CCVars.CMUFireSpreadDepth"/>. Only fires carrying
+/// <see cref="CMUAllowFireSpreadComponent"/> may spread, including when a prototype
+/// supplies its own depth. 0 on the cvar leaves default-depth fires still.
 /// </summary>
 public sealed partial class CMUSpreadingFireSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private SharedRMCFlammableSystem _flammable = default!;
 
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
@@ -71,6 +74,13 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
         var query = EntityQueryEnumerator<TileFireComponent>();
         while (query.MoveNext(out var uid, out var fire))
         {
+            if (TerminatingOrDeleted(uid)
+                || IsPaused(uid))
+                continue;
+
+            if (!HasComp<CMUAllowFireSpreadComponent>(uid))
+                continue;
+
             if (!TryComp(uid, out CMUSpreadingFireComponent? spread))
             {
                 if (depth <= 0)
@@ -110,10 +120,16 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
             for (var i = 0; i < Directions.Length; i++)
             {
                 var target = coordinates.Offset(Directions[(start + i) % Directions.Length].ToVec());
-                if (!CanBurn(target))
+                if (!_zLevels.TryProjectToGround(target, out var spawnAt)
+                    || !CanBurn(spawnAt))
                     continue;
 
                 var child = Spawn(spawn, target);
+
+                // Spread fire burns as strong as its parent and goes out with it.
+                if (TryComp(child, out TileFireComponent? childFire))
+                    _flammable.MatchTileFire((child, childFire), (uid, fire));
+
                 var childSpread = EnsureComp<CMUSpreadingFireComponent>(child);
                 childSpread.Depth = spread.Depth - 1;
                 childSpread.NextSpread = time + childSpread.SpreadEvery;
@@ -124,9 +140,6 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
 
     private bool CanBurn(EntityCoordinates target)
     {
-        if (!_zLevels.TryProjectToGround(target, out target))
-            return false;
-
         if (!_rmcMap.TryGetTileDef(target, out var tile) ||
             tile.ID == ContentTileDefinition.SpaceID)
             return false;
@@ -136,6 +149,10 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
         {
             if (_tileFireQuery.HasComp(ent)
                 || _blockQuery.HasComp(ent))
+                return false;
+
+            if (TryComp(ent, out AirtightComponent? airtight)
+                && airtight.AirBlocked)
                 return false;
 
             if (_tag.HasAnyTag(ent, StructureTag, WallTag)

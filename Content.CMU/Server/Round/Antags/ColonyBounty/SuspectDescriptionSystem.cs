@@ -15,9 +15,9 @@ namespace Content.Server.CMU14.Round.Antags.ColonyBounty;
 /// </summary>
 public sealed partial class SuspectDescriptionSystem : EntitySystem
 {
-    [Dependency] private readonly HumanoidOrganAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _appearance = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private StationSystem _station = default!;
 
     private const float MisrememberChance = 0.33f;
 
@@ -69,7 +69,7 @@ public sealed partial class SuspectDescriptionSystem : EntitySystem
     public EntityUid? RandomWitness(EntityUid subject, EntityUid? station)
     {
         var pool = new List<EntityUid>();
-        var enumerator = EntityManager.AllEntityQueryEnumerator<HumanoidProfileComponent>();
+        var enumerator = AllEntityQuery<HumanoidProfileComponent>();
         while (enumerator.MoveNext(out var colonist, out _))
         {
             if (colonist == subject)

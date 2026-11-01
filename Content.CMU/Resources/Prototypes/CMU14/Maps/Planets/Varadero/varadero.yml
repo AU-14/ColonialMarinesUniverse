@@ -1,0 +1,57 @@
+- type: entity
+  id: CMUPlanetVaradero
+  name: New Varadero
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "New Varadero"
+    mapId: CMUVaradero
+    lorePrimer: CMUPrimerPlanetVaradero
+    allegiance: UA
+    camouflage: Jungle
+    announcement: "A distress signal has been received from New Varadero, an island research station and mining outpost run by the Latin American branch of the Colonial Administration. A response force has been dispatched to investigate."
+    platoonsGovfor:
+    - USCM
+    - RMC
+    - LACN
+    platoonsOpfor:
+    - UPP
+    - ProdigySF
+    - VAIPO
+    defaultgovfor: LACN
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: false
+    # thirdparties: # map has no third-party spawn markers
+    threats:
+    - XenoThreat
+    # - NeomorphsThreat
+    # - BadBloodClanThreat
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: lorePrimer
+  id: CMUPrimerPlanetVaradero
+  planetText: "Date 2181 - New Varadero, an island outpost of the Latin American branch of the Colonial Administration, hosting a research station and mining facility. UA controlled."
+
+- type: gameMap
+  id: CMUVaradero
+  mapName: New Varadero
+  allegiance: UA
+  mapPath: /Maps/CMU14/Planets/Varadero/VaraderoMultiZ0.yml
+  mapsBelow:
+  - /Maps/CMU14/Planets/Varadero/VaraderoMultiZ-1.yml
+  mapsAbove:
+  - /Maps/CMU14/Planets/Varadero/VaraderoMultiZ1.yml
+  - /Maps/CMU14/Planets/Varadero/VaraderoMultiZ2.yml
+  - /Maps/CMU14/Planets/Varadero/VaraderoMultiZ3.yml
+  minPlayers: 0
+  maxPlayers: 500
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    varadero:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'New Varadero'

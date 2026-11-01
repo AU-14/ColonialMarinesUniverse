@@ -10,6 +10,7 @@
     - state: icon
   - type: Clothing
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNbootsbrown.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNbootsbrown.rsi
@@ -19,7 +20,7 @@
       Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNbootsblack.rsi
 
 - type: entity
-  parent: [RMCItemSlotM5Bayonet, CMBootsJungle]
+  parent: [RMCItemSlotM5Bayonet, AU14LACNBoots]
   id: AU14LACNBootsFilled
   suffix: Filled
 
@@ -35,3 +36,8 @@
     - state: icon
   - type: Clothing
     sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Shared/LACNbootswhite.rsi
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, CMULACNBootsWhite]
+  id: CMULACNBootsWhiteFilled
+  suffix: Filled

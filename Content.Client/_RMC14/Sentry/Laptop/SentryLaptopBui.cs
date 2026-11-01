@@ -89,7 +89,7 @@ public sealed partial class SentryLaptopBui : BoundUserInterface
         if (_window == null)
             return;
 
-        _window.GlobalFactionContainer.DisposeAllChildren();
+        _window.GlobalFactionContainer.ReleaseChildren();
 
         if (State is not SentryLaptopBuiState state || state.AllFactions.Count == 0)
             return;
@@ -483,7 +483,7 @@ public sealed partial class SentryLaptopBui : BoundUserInterface
 
     private void PopulateSentryFactionControls(SentryCard card, SentryInfo info)
     {
-        card.FactionContainer.DisposeAllChildren();
+        card.FactionContainer.ReleaseChildren();
 
         if (State is not SentryLaptopBuiState state)
             return;

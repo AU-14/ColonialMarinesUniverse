@@ -134,7 +134,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         if (TryComp(tool, out ItemToggleComponent? toggle) && !toggle.Activated)
             return;
 
-        _popup.PopupClient(Loc.GetString("cm-entrenching-dismantle"), args.User, args.User);
+        _popup.PopupEntity(Loc.GetString("cm-entrenching-dismantle"), args.User, args.User);
 
         var ev = new SandbagDismantleDoAfterEvent(GetNetCoordinates(args.ClickLocation));
         var doAfter = new DoAfterArgs(EntityManager, args.User, GetToolDelay(tool, tool.Comp.DigDelay), ev, tool, args.Target, tool)
@@ -149,7 +149,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         if (TryComp(tool, out ItemToggleComponent? toggle) && !toggle.Activated)
             return;
 
-        _popup.PopupClient(Loc.GetString("cm-entrenching-dismantle-mound"), args.User, args.User);
+        _popup.PopupEntity(Loc.GetString("cm-entrenching-dismantle-mound"), args.User, args.User);
 
         var ev = new DirtMoundDismantleDoAfterEvent();
         var doAfter = new DoAfterArgs(EntityManager, args.User, GetToolDelay(tool, tool.Comp.DigDelay), ev, tool, args.Target, tool)
@@ -218,7 +218,7 @@ public sealed partial class BarricadeSystem : EntitySystem
 
         if (args.Cancelled)
         {
-            _popup.PopupClient(Loc.GetString("cm-entrenching-stop-digging"), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("cm-entrenching-stop-digging"), args.User, args.User);
             return;
         }
 
@@ -240,7 +240,7 @@ public sealed partial class BarricadeSystem : EntitySystem
                 BreakOnMove = true,
             };
             _doAfter.TryStartDoAfter(doAfter);
-            _popup.PopupClient(Loc.GetString("cm-entrenching-begin-filling"), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("cm-entrenching-begin-filling"), args.User, args.User);
             break;
         }
     }
@@ -374,7 +374,7 @@ public sealed partial class BarricadeSystem : EntitySystem
 
                 ent.Comp.Disassembling = true;
                 Dirty(ent);
-                _popup.PopupClient(Loc.GetString("cm-entrenching-hesco-armed-disassemble"), user, user);
+                _popup.PopupEntity(Loc.GetString("cm-entrenching-hesco-armed-disassemble"), user, user);
             },
         });
     }
@@ -459,7 +459,7 @@ public sealed partial class BarricadeSystem : EntitySystem
             BreakOnMove = true,
         };
         _doAfter.TryStartDoAfter(doAfter);
-        _popup.PopupClient(Loc.GetString("cm-entrenching-begin-filling"), args.User, args.User);
+        _popup.PopupEntity(Loc.GetString("cm-entrenching-begin-filling"), args.User, args.User);
     }
 
     private void OnFullActivateInWorld(Entity<FullSandbagComponent> full, ref ActivateInWorldEvent args)
@@ -599,7 +599,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         };
 
         _doAfter.TryStartDoAfter(doAfter);
-        _popup.PopupClient(Loc.GetString("cm-entrenching-start-digging"), user, user);
+        _popup.PopupEntity(Loc.GetString("cm-entrenching-start-digging"), user, user);
         _audio.PlayPredicted(tool.Comp.DigSound, user, user);
 
         if (TryComp(tool, out UseDelayComponent? useDelay))
@@ -623,7 +623,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         };
 
         _doAfter.TryStartDoAfter(doAfter);
-        _popup.PopupClient(Loc.GetString("cm-entrenching-start-mound"), user, user);
+        _popup.PopupEntity(Loc.GetString("cm-entrenching-start-mound"), user, user);
         _audio.PlayPredicted(tool.Comp.DigSound, user, user);
 
         return true;
@@ -662,7 +662,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         if (!_rmcConstruction.CanBuildAt(buildCoordinates, tool.Comp.MoundPrototype, out var popupStr, direction: direction, user: user))
         {
             if (_net.IsClient)
-                _popup.PopupClient(popupStr, user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(popupStr, user, user, PopupType.SmallCaution);
 
             return false;
         }
@@ -686,7 +686,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         };
 
         if (_doAfter.TryStartDoAfter(doAfter))
-            _popup.PopupClient(Loc.GetString("cm-entrenching-begin-hesco-fill"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-entrenching-begin-hesco-fill"), user, user);
     }
 
     private void StartHescoRaise(Entity<EntrenchingToolComponent> tool, EntityUid user, EntityUid target, HescoRaisableComponent raisable)
@@ -705,7 +705,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         };
 
         if (_doAfter.TryStartDoAfter(doAfter))
-            _popup.PopupClient(Loc.GetString("cm-entrenching-begin-hesco-raise"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-entrenching-begin-hesco-raise"), user, user);
     }
 
     private void StartHescoDisassemble(Entity<EntrenchingToolComponent> tool, EntityUid user, EntityUid target, HescoDisassemblableComponent disassemblable)
@@ -724,7 +724,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         };
 
         if (_doAfter.TryStartDoAfter(doAfter))
-            _popup.PopupClient(Loc.GetString("cm-entrenching-begin-hesco-disassemble"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-entrenching-begin-hesco-disassemble"), user, user);
     }
 
     private bool BuildHescoKit(Entity<HescoKitComponent> kit, EntityUid user, EntityCoordinates coordinates, Direction direction, out bool handled)
@@ -768,7 +768,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         if (!_rmcConstruction.CanBuildAt(coordinates, kit.Comp.Builds, out var popupStr, direction: direction, user: user))
         {
             if (popup)
-                _popup.PopupClient(popupStr, user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(popupStr, user, user, PopupType.SmallCaution);
 
             return false;
         }
@@ -913,7 +913,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         if (!TileSolidAndNotBlocked(tile))
             return false;
 
-        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(grid, grid, tile.GridIndices);
+        var anchored = _mapSystem.GetAnchoredEntities(grid, grid, tile.GridIndices);
         while (anchored.MoveNext(out var uid))
         {
             if (HasComp<BarricadeComponent>(uid) &&
@@ -927,7 +927,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         if (!_rmcConstruction.CanBuildAt(coordinates, full.Comp.Builds, out var popupStr, user: user))
         {
             if (popup)
-                _popup.PopupClient(popupStr, user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(popupStr, user, user, PopupType.SmallCaution);
 
             return false;
         }
@@ -944,7 +944,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         }
 
         var indices = _mapSystem.TileIndicesFor(gridId, grid, coordinates);
-        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridId, grid, indices);
+        var anchored = _mapSystem.GetAnchoredEntities(gridId, grid, indices);
         while (anchored.MoveNext(out var uid))
         {
             if (_barricadeQuery.HasComp(uid))
@@ -979,7 +979,7 @@ public sealed partial class BarricadeSystem : EntitySystem
             if (HasComp<BarricadeComponent>(anchored))
             {
                 var msg = Loc.GetString("barricade-anchored-too-close", ("barricade", anchored));
-                _popup.PopupClient(msg, user, user, PopupType.SmallCaution );
+                _popup.PopupEntity(msg, user, user, PopupType.SmallCaution );
                 return true;
             }
         }

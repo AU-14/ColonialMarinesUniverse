@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using System.Linq;
 using Content.Client.LateJoin;
 using Content.IntegrationTests.Fixtures;
@@ -46,7 +47,7 @@ public sealed class UiControlTest : GameTest
 
                 // Don't inject because the control themselves have to do it.
                 var window = (BaseWindow) activator.CreateInstance(type, oneOff: true, inject: false);
-                window.DisposeAllChildren();
+                window.ReleaseChildren();
             }
         });
 

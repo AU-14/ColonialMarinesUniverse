@@ -45,7 +45,8 @@ namespace Content.Client.Stylesheets
 
     }
     // STLYE SHEETS WERE A MISTAKE. KILL ALL OF THIS WITH FIRE
-    [Obsolete("Please use the new sheetlet system to define styles, and remove all references to this class as it may be deleted in the future")]
+    // CMU14: this stylesheet supplies the active CRT palette and chat-font rules layered over Nanotrasen.
+    // [Obsolete("Please use the new sheetlet system to define styles, and remove all references to this class as it may be deleted in the future")]
     // i did :)
     public sealed partial class StyleNano : StyleBase
     {

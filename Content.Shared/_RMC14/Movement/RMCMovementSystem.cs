@@ -108,7 +108,7 @@ public sealed partial class RMCMovementSystem : EntitySystem
 
             if (popup)
             {
-                _popup.PopupClient(Loc.GetString("rmc-climb-prevented-by-obstacles"), user, PopupType.MediumCaution);
+                _popup.PopupSelf(Loc.GetString("rmc-climb-prevented-by-obstacles"), user, PopupType.MediumCaution);
             }
             return false;
         }

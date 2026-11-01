@@ -180,6 +180,12 @@
     chainDamage:
       types:
         Heat: 14.2
+    # CMU14: K9 synths must take trap damage and paralysis too.
+    whitelist:
+      components:
+      - Marine
+      - Xeno
+      - K9Dog
   - type: TimedDespawn
     lifetime: 1.0
 

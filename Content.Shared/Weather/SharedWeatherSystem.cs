@@ -70,16 +70,22 @@ public abstract partial class SharedWeatherSystem : EntitySystem
     /// </summary>
     public float GetWeatherPercent(Entity<StatusEffectComponent> ent)
     {
-        var elapsed = Timing.CurTime - ent.Comp.StartEffectTime;
-        var duration = ent.Comp.Duration;
-        var remaining = duration - elapsed;
+        // CMU14 Begin: restored timestamps can overflow TimeSpan subtraction. Compare
+        // absolute times and subtract seconds only for the bounded weather fade.
+        var now = Timing.CurTime;
+        if (now < ent.Comp.StartEffectTime || ent.Comp.EndEffectTime <= now)
+            return 0f;
 
-        if (remaining < ShutdownTime)
-            return (float)(remaining / ShutdownTime);
-        else if (elapsed < StartupTime)
-            return (float)(elapsed / StartupTime);
-        else
-            return 1f;
+        if (ent.Comp.EndEffectTime is { } end)
+        {
+            var remaining = end.TotalSeconds - now.TotalSeconds;
+            if (remaining < ShutdownTime.TotalSeconds)
+                return (float)(remaining / ShutdownTime.TotalSeconds);
+        }
+
+        var elapsed = now.TotalSeconds - ent.Comp.StartEffectTime.TotalSeconds;
+        return (float)Math.Min(1, elapsed / StartupTime.TotalSeconds);
+        // CMU14 End
     }
 
     /// <summary>

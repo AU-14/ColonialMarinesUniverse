@@ -42,6 +42,21 @@ public sealed partial class RMCAlertLevelComponent : Component
     [DataField, AutoNetworkedField]
     public LocId? RedLoweredMessage = "rmc-alert-level-red-lowered";
 
+    // CMU14 Begin: darkened ship level. No voice line exists for it, so it reuses the
+    // delta klaxon. The self destruct sirens are a separate scripted sequence, not this sound.
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? BlackElevatedSound = new SoundPathSpecifier("/Audio/Misc/gamma.ogg");
+
+    [DataField, AutoNetworkedField]
+    public LocId? BlackElevatedMessage = "rmc-alert-level-black-elevated";
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? BlackLoweredSound = new SoundPathSpecifier("/Audio/Misc/gamma.ogg");
+
+    [DataField, AutoNetworkedField]
+    public LocId? BlackLoweredMessage = "rmc-alert-level-black-lowered";
+    // CMU14 End
+
     [DataField, AutoNetworkedField]
     public LocId? DeltaAnnouncement = "rmc-announcement-delta";
 

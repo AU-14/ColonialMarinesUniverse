@@ -54,9 +54,6 @@ ent-CMUActionYautjaGuardChainGauntlet = { cmu-yautja-chain-gauntlet-guard-action
 ent-CMUActionYautjaRemoveBracerAttachments = { cmu-yautja-remove-bracer-attachments-action-name }
     .desc = { cmu-yautja-remove-bracer-attachments-action-desc }
 
-ent-CMUActionYautjaLeap = прыжок
-    .desc = Прыгнуть в указанную точку.
-
 ent-CMUActionYautjaMarkForHunt = пометить для Hunt
     .desc = Пометить цель для охоты.
 
@@ -2021,7 +2018,7 @@ ent-CMUYautjaStructureYautjaMachinesMixer1Nopower = яутжа mixer1 nopower
     .desc = Древняя постройка охотничьих угодий яутжа.
 
 ent-CMUYautjaStructureYautjaMachinesDispenser = химический раздатчик
-    .desc = complex machine для смешивание элементы в chemicals. Вэй-Ю product.
+    .desc = Машина охотников, которая берёт элементы из своих запасов и смешивает их в химикаты.
 
 ent-CMUYautjaStructureYautjaMachinesBeaker1 = яутжа +beaker1
     .desc = Древняя постройка охотничьих угодий яутжа.

@@ -1,0 +1,44 @@
+- type: entity
+  parent: BaseItem
+  id: CMUPortableFax
+  name: portable press fax machine
+  description: A portable fax machine for civilian reporters, running off an internal battery. It can't receive faxes while it's packed up. Use it in hand to set it up where you're standing.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Devices/portable_fax.rsi
+    state: icon
+  - type: Item
+    size: Huge
+  - type: Clothing
+    sprite: CMU14/Objects/Devices/portable_fax.rsi
+    quickEquip: false
+    slots:
+    - back
+  - type: CMUPortableFax
+    deployed: CMUPortableFaxDeployed
+
+- type: entity
+  parent: CMFax
+  id: CMUPortableFaxDeployed
+  name: portable press fax machine
+  description: A portable fax machine for civilian reporters, running off an internal battery. Pack it back up with its alt-click verb once it's empty.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Devices/portable_fax.rsi
+    drawdepth: SmallObjects
+    layers:
+    - state: icon
+      map: [ "enum.FaxMachineVisuals.VisualState" ]
+  - type: Icon
+    sprite: CMU14/Objects/Devices/portable_fax.rsi
+    state: icon
+  - type: GenericVisualizer
+    visuals:
+      enum.FaxMachineVisuals.VisualState:
+        enum.FaxMachineVisuals.VisualState:
+          Printing: { state: printing }
+          Normal: { state: icon }
+  - type: FaxMachine
+    name: "Portable Press Fax"
+  - type: CMUPortableFaxDeployed
+    item: CMUPortableFax

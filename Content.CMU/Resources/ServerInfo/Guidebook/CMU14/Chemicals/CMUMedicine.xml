@@ -38,6 +38,7 @@
 
   <GuideReagentEmbed Reagent="CMInaprovaline"/>
   <GuideReagentEmbed Reagent="CMEpinephrine"/>
+  <GuideReagentEmbed Reagent="CMUTranexamicAcid"/>
   <GuideReagentEmbed Reagent="CMEthylredoxrazine"/>
   <GuideReagentEmbed Reagent="CMArithrazine"/>
   <GuideReagentEmbed Reagent="CMLeporazine"/>
@@ -76,6 +77,7 @@
   <GuideReagentEmbed Reagent="RMCLipozine"/>
   <GuideReagentEmbed Reagent="CMInaprovaline"/>
   <GuideReagentEmbed Reagent="CMEpinephrine"/>
+  <GuideReagentEmbed Reagent="CMUTranexamicAcid"/>
   <GuideReagentEmbed Reagent="CMEthylredoxrazine"/>
   <GuideReagentEmbed Reagent="CMArithrazine"/>
   <GuideReagentEmbed Reagent="CMLeporazine"/>

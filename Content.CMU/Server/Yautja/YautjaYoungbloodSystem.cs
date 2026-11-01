@@ -82,6 +82,22 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
         "CMJobXenoSentinel",
         "CMJobXenoSpitter",
         "CMJobXenoWarrior",
+
+        // Pathogen castes keep their own trackers and count as xeno time.
+        "CMU14JobPathogenAberration",
+        "CMU14JobPathogenBlight",
+        "CMUJobPathogenBloodburster",
+        "CMU14JobPathogenBrute",
+        "CMU14JobPathogenConditor",
+        "CMU14JobPathogenHarbinger",
+        "CMU14JobPathogenHaze",
+        "CMU14JobPathogenMatriarch",
+        "CMU14JobPathogenNeomorph",
+        "CMU14JobPathogenOvermind",
+        "CMU14JobPathogenPopper",
+        "CMU14JobPathogenRoot",
+        "CMU14JobPathogenSprinter",
+        "CMU14JobPathogenVenator",
     };
 
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
@@ -195,10 +211,8 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
         if (_prototype.TryIndex<JobPrototype>(YoungbloodJob, out var job))
             _stationSpawning.EquipStartingGear(ent.Owner, job.StartingGear, raiseEvent: false);
 
-        var mask = Spawn("CMUYautjaMask", Transform(ent).Coordinates);
-        if (!_inventory.TryEquip(ent.Owner, mask, "mask", silent: true, force: true))
-            QueueDel(mask);
-
+        // CMU14: youngbloods are unblooded and wear no clan mask, so none is spawned here. A mask equipped later must
+        // come from the player, not from spawn initialisation.
         var yautja = EnsureComp<YautjaComponent>(ent.Owner);
         yautja.ClanRank = YautjaRank.YoungBlood;
         Dirty(ent.Owner, yautja);

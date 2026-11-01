@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Generated default-layer/tint reference composites, preserving original RGBA pixels after declared prototype tint. Original attribution: bread.rsi: Taken from tgstation and modified by potato1234x at https://github.com/tgstation/tgstation/commit/0631fe5bde73a68b4c12bdfa633c30b2cee442d5. Crostini created by Github user deathride58, baguette taken from tgstation at commit https://github.com/tgstation/tgstation/commit/7ffd61b6fa6a6183daa8900f9a490f46f7a81955, cotton made by mlexf (discord 1143460554963427380). Cotton baguette and crostini variants by JuneSzalkowska. Batard by SurrealShibe (GitHub) | pie.rsi: Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/c6e3401f2e7e1e55c57060cdf956a98ef1fefc24, the pumpkin and pumpkin slice are made by ss14nekow (Mute Maid), the mime tart slice and banana cream pie slice are made by rosysyntax, the amanita and plump resprite by AndrewFenriz (github). | cake.rsi: Taken from tgstation and modified by Swept at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa, inhands by mubururu_ (github), cotton cake sprites by DispenserG0inUp, berry delight sprites by FairlySadPanda (Github)",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "FoodBreadBaguette"
+    },
+    {
+      "name": "FoodBreadBaguetteSlice"
+    },
+    {
+      "name": "FoodBreadBanana"
+    },
+    {
+      "name": "FoodBreadGarlicSlice"
+    },
+    {
+      "name": "FoodBreadMeat"
+    },
+    {
+      "name": "FoodBreadPlain"
+    },
+    {
+      "name": "FoodCakeApple"
+    },
+    {
+      "name": "FoodCakeBirthday"
+    },
+    {
+      "name": "FoodCakeBirthdaySlice"
+    },
+    {
+      "name": "FoodCakeBlueberry"
+    },
+    {
+      "name": "FoodCakeCarrot"
+    },
+    {
+      "name": "FoodCakeCheese"
+    },
+    {
+      "name": "FoodCakeChocolate"
+    },
+    {
+      "name": "FoodCakePlain"
+    },
+    {
+      "name": "FoodPieApple"
+    },
+    {
+      "name": "FoodPieBaklava"
+    },
+    {
+      "name": "FoodPieBananaCream"
+    },
+    {
+      "name": "FoodPieCherry"
+    },
+    {
+      "name": "FoodPieCherrySlice"
+    },
+    {
+      "name": "FoodPieClafoutis"
+    },
+    {
+      "name": "FoodPieFrosty"
+    },
+    {
+      "name": "FoodPieMeat"
+    },
+    {
+      "name": "FoodPiePumpkin"
+    }
+  ]
+}

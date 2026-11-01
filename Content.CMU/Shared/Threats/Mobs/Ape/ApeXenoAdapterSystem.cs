@@ -10,7 +10,7 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared.CMU14.Threats.Mobs.Ape;
 
-public sealed class ApeXenoAdapterSystem : EntitySystem
+public sealed partial class ApeXenoAdapterSystem : EntitySystem
 {
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;

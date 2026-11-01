@@ -137,6 +137,10 @@ public sealed partial class HardpointIntegrityComponent : Component
     [DataField, AutoNetworkedField]
     public float Integrity;
 
+    // CMU14: catastrophic damage permanently destroys the frame, even if its parts survive.
+    [DataField, AutoNetworkedField]
+    public bool DestroyedBeyondRepair;
+
     // CMU14: ordinary combat damage can fault a damaged part, with a vehicle-wide rate limit.
     [DataField]
     public float FailureIntegrityThreshold = 0.75f;

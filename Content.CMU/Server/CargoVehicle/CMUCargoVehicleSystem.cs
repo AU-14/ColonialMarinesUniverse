@@ -41,7 +41,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.CargoVehicle;
 
-public sealed class CMUCargoVehicleSystem : EntitySystem
+public sealed partial class CMUCargoVehicleSystem : EntitySystem
 {
     private const string ReturnActionId = "CMUActionCargoVehicleReturn";
     private const string SelfDestructActionId = "CMUActionCargoVehicleSelfDestruct";
@@ -152,7 +152,8 @@ public sealed class CMUCargoVehicleSystem : EntitySystem
 
     private void OnVehicleGetVerbs(Entity<CMUCargoVehicleComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
-        if (!args.CanInteract || !args.CanAccess || args.Using != null)
+        // no hands = ghosts and the like, they shouldn't get to work the bay
+        if (!args.CanInteract || !args.CanAccess || args.Hands == null || args.Using != null)
             return;
 
         if (ent.Comp.ArmingMode != CMUCargoVehicleArmingMode.None)

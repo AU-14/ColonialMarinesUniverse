@@ -84,7 +84,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
         _pickupDroppedItemsQuery = GetEntityQuery<RMCPickupDroppedItemsComponent>();
 
         SubscribeLocalEvent<GunComponent, IsUnholsterableEvent>(AllowUnholster);
-        SubscribeLocalEvent<MeleeWeaponComponent, IsUnholsterableEvent>(AllowUnholster);
+        SubscribeLocalEvent<MeleeWeaponComponent, IsUnholsterableEvent>(OnMeleeIsUnholsterable); // CMU14: flashlights and other 0 damage utility items aren't weapons
         SubscribeLocalEvent<BlockingComponent, IsUnholsterableEvent>(AllowUnholster);
 
         SubscribeLocalEvent<CMItemSlotsComponent, MapInitEvent>(OnSlotsFillMapInit);
@@ -118,7 +118,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
                 InputCmdHandler.FromDelegate(session =>
                 {
                     if (session?.AttachedEntity is { } entity)
-                        OnHolster(entity, 1);
+                        OnHolsterSecondary(entity); // CMU14: draws the next weapon after the one primary would take
                 }, handle: false))
             .Bind(CMKeyFunctions.CMHolsterTertiary,
                 InputCmdHandler.FromDelegate(session =>
@@ -610,7 +610,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
             }
         }
 
-        _popup.PopupClient(Loc.GetString("cm-inventory-unable-equip"), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cm-inventory-unable-equip"), user, user, PopupType.SmallCaution);
         return false;
     }
 
@@ -767,7 +767,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
                 _timing.CurTime < holster.LastEjectAt + cooldown)
             {
                 stop = true;
-                _popup.PopupPredicted(holster.CooldownPopup, user, user, PopupType.SmallCaution);
+                _popup.PopupBroadcast(holster.CooldownPopup, user, user, PopupType.SmallCaution);
                 return false;
             }
 

@@ -151,6 +151,16 @@ namespace Content.Shared.Movement.Systems
                 ev.ModifySpeed(walk, sprint);
             }
 
+            // CMU14: absolute caps apply after every multiplier, so they clamp rather than stack with slowdowns.
+            if (ev.SpeedCap is { } cap)
+            {
+                if (ent.Comp.BaseWalkSpeed > 0f && ev.WalkSpeedModifier * ent.Comp.BaseWalkSpeed > cap)
+                    ev.ModifySpeed(cap / (ev.WalkSpeedModifier * ent.Comp.BaseWalkSpeed), 1f);
+
+                if (ent.Comp.BaseSprintSpeed > 0f && ev.SprintSpeedModifier * ent.Comp.BaseSprintSpeed > cap)
+                    ev.ModifySpeed(1f, cap / (ev.SprintSpeedModifier * ent.Comp.BaseSprintSpeed));
+            }
+
             if (MathHelper.CloseTo(ev.WalkSpeedModifier, ent.Comp.WalkSpeedModifier) &&
                 MathHelper.CloseTo(ev.SprintSpeedModifier, ent.Comp.SprintSpeedModifier))
                 return;
@@ -239,6 +249,18 @@ namespace Content.Shared.Movement.Systems
         {
             ModifySpeed(mod, mod);
         }
+
+        // CMU14 Begin
+        /// <summary>
+        ///     Lowest absolute speed cap requested, in tiles per second. Applied after all multipliers.
+        /// </summary>
+        public float? SpeedCap { get; private set; }
+
+        public void CapSpeed(float max)
+        {
+            SpeedCap = SpeedCap is { } current ? MathF.Min(current, max) : max;
+        }
+        // CMU14 End
     }
 
     [ByRefEvent]

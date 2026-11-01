@@ -1,0 +1,7 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Two Point Slings can now be alt-clicked to be put on underbarrels
+  type: Tweak
+time: '2026-10-18T10:11:33.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2212

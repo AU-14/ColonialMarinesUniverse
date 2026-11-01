@@ -80,7 +80,8 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
 
     private void OnVocalizeTriggered(Entity<CMVocalizeTriggerComponent> ent, ref SharedActiveTimerTriggerEvent args)
     {
-        SpawnAttachedTo(ent.Comp.Effect, ent.Owner.ToCoordinates());
+        // CMU14: no exclamation mark above primed grenades
+        // SpawnAttachedTo(ent.Comp.Effect, ent.Owner.ToCoordinates());
 
         if (args.User is not { } user)
             return;

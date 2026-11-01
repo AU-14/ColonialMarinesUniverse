@@ -53,7 +53,7 @@ public sealed partial class RMCFlammableSystem : SharedRMCFlammableSystem
         if (!Resolve(flammable, ref flammable.Comp, false))
             return;
 
-        _flammable.Extinguish(flammable, flammable);
+        _flammable.TryExtinguish(flammable);
     }
 
     public override void Pat(Entity<FlammableComponent?> flammable, int stacks)

@@ -53,6 +53,7 @@
       - radioGovforCharlie
       - radioGovforBravo
       - radioGovforIntel
+      - radioGovforFoxtrot
       - radioGovforMILP
     - type: ActiveRadio
       channels:
@@ -63,6 +64,7 @@
       - radioGovforCharlie
       - radioGovforBravo
       - radioGovforIntel
+      - radioGovforFoxtrot
       - radioGovforMILP
     - type: Tag
       tags:
@@ -90,6 +92,7 @@
       - radioOpforCharlie
       - radioOpforBravo
       - radioOpforIntel
+      - radioOpforVictor
       - radioOpforJTAC
     - type: ActiveRadio
       channels:
@@ -99,6 +102,7 @@
       - radioOpforCharlie
       - radioOpforBravo
       - radioOpforIntel
+      - radioOpforVictor
       - radioOpforJTAC
     - type: Tag
       tags:

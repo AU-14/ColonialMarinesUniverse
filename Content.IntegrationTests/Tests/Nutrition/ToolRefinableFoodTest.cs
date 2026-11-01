@@ -41,9 +41,9 @@ public sealed class ToolRefinableFoodTest : InteractionTest
         Assert.That(SEntMan.Deleted(source), Is.True);
 
         var slices = new List<EntityUid>();
-        foreach (var metadata in SEntMan.EntityQuery<MetaDataComponent>())
+        foreach (var metadata in SEntMan.QueryEntities<MetaDataComponent>())
         {
-            if (!metadata.Deleted && metadata.EntityPrototype?.ID == resultPrototype)
+            if (!metadata.Comp.Deleted && metadata.Comp.EntityPrototype?.ID == resultPrototype)
                 slices.Add(metadata.Owner);
         }
 

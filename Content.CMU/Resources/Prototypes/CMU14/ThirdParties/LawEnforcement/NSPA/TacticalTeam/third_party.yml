@@ -1,0 +1,173 @@
+# NSPA tactical team, called in through the TWE intel list: a team leader and three tactical officers in riot
+# helmets, two with PDW-90s and one with an L49 shotgun, carrying tear gas and breaching charges.
+
+- type: job
+  parent: AU14JobNSPAInvestigationPartyJobConstableSMGArmor
+  id: CMUJobNSPATacticalLeader
+  name: cmu-job-title-nspa-tactical-leader
+  description: cmu-job-description-nspa-tactical
+  startingGear: CMUGearNSPATacticalLeader
+  spawnMenuRoleName: NSPA Tactical Team Leader (Tactical Team)
+  chevrons:
+    SeniorConstable:
+      entity: AU14ChevronNSPAInspector
+      requirements: []
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicNSPA
+  id: CMUJobNSPATacticalLeader
+  name: NSPA Tactical Team Leader (Tactical Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-nspa-tactical-leader
+    description: cmu-job-description-nspa-tactical
+    reregister: false
+    job: CMUJobNSPATacticalLeader
+    raffle:
+      settings: short
+    rules: cmu-job-rules-nspa-tactical
+
+- type: job
+  parent: AU14JobNSPAInvestigationPartyJobConstableSMGArmor
+  id: CMUJobNSPATacticalOfficer
+  name: cmu-job-title-nspa-tactical-officer
+  description: cmu-job-description-nspa-tactical
+  startingGear: CMUGearNSPATacticalOfficer
+  spawnMenuRoleName: NSPA Tactical Officer (Tactical Team, PDW-90)
+  chevrons:
+    SeniorConstable:
+      entity: AU14ChevronNSPASeniorConstable
+      requirements: []
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicNSPA
+  id: CMUJobNSPATacticalOfficer
+  name: NSPA Tactical Officer (Tactical Team, PDW-90)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-nspa-tactical-officer
+    description: cmu-job-description-nspa-tactical
+    reregister: false
+    job: CMUJobNSPATacticalOfficer
+    raffle:
+      settings: short
+    rules: cmu-job-rules-nspa-tactical
+
+- type: job
+  parent: AU14JobNSPAInvestigationPartyJobConstableSMGArmor
+  id: CMUJobNSPATacticalOfficerShotgun
+  name: cmu-job-title-nspa-tactical-officer
+  description: cmu-job-description-nspa-tactical
+  startingGear: CMUGearNSPATacticalOfficerShotgun
+  spawnMenuRoleName: NSPA Tactical Officer (Tactical Team, L49)
+  chevrons:
+    SeniorConstable:
+      entity: AU14ChevronNSPASeniorConstable
+      requirements: []
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicNSPA
+  id: CMUJobNSPATacticalOfficerShotgun
+  name: NSPA Tactical Officer (Tactical Team, L49)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-nspa-tactical-officer
+    description: cmu-job-description-nspa-tactical
+    reregister: false
+    job: CMUJobNSPATacticalOfficerShotgun
+    raffle:
+      settings: short
+    rules: cmu-job-rules-nspa-tactical
+
+- type: startingGear
+  id: CMUGearNSPATacticalBase
+  equipment:
+    id: AU14IDCardCivilianNSPAConstable
+    outerClothing: RMCArmorVestTSEPA
+    jumpsuit: RMCJumpsuitTSEPA
+    shoes: RMCBootsPMCFilled
+    head: ArmorHelmetRiot
+    gloves: CMHandsBlackMarine
+    belt: RMCBeltHolsterPistolTSEFilledL54
+    pocket1: RMCPouchMagazineFilledPDW90
+    pocket2: AU14PouchIFAKFill
+    back: AU14SatchelNSPAShotgun
+    ears: AU14CMBHeadsetOnlyCMB
+    suitstorage: RMCWeaponSMGPDW90
+  storage:
+    back:
+    - AU14PacketGrenadeTearGasFilled
+    - RMCExplosiveBreachingCharge
+    - RMCZipties
+    - RMCZipties
+
+- type: startingGear
+  parent: CMUGearNSPATacticalBase
+  id: CMUGearNSPATacticalLeader
+  storage:
+    back:
+    - AU14PacketGrenadeTearGasFilled
+    - RMCExplosiveBreachingCharge
+    - RMCZipties
+    - RMCZipties
+    - RMCBinoculars
+
+- type: startingGear
+  parent: CMUGearNSPATacticalBase
+  id: CMUGearNSPATacticalOfficer
+
+- type: startingGear
+  parent: CMUGearNSPATacticalBase
+  id: CMUGearNSPATacticalOfficerShotgun
+  equipment:
+    pocket1: AU14PouchShotgunLargeBuckshot
+    suitstorage: CMUWeaponShotgunL49Buckshot
+
+- type: partySpawn
+  id: CMUNSPATacticalTeamSpawn
+  leadersToSpawn:
+    CMUJobNSPATacticalLeader: 1
+  gruntsToSpawn:
+    CMUJobNSPATacticalOfficer: 2
+    CMUJobNSPATacticalOfficerShotgun: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUNSPATacticalTeam
+  displayName: NSPA Tactical Team
+  partyspawn: CMUNSPATacticalTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_tsepa_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 4
+  roundstart: false
+
+# The L49 comes empty; the tactical officer's is loaded with buckshot.
+- type: entity
+  parent: RMCWeaponShotgunL49
+  id: CMUWeaponShotgunL49Buckshot
+  suffix: Filled, Buckshot
+  components:
+  - type: BallisticAmmoProvider
+    proto: CMShellShotgunBuckshot

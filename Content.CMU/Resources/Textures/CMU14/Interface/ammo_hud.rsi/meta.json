@@ -1,0 +1,278 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from TerraGov Marine Corps ammoHUD.dmi via Colonial Warfare (https://gitlab.com/cmdevs/colonial-warfare/-/merge_requests/1590). Ported by troy.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ammo"
+    },
+    {
+      "name": "o0_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "o0"
+    },
+    {
+      "name": "o1"
+    },
+    {
+      "name": "o2"
+    },
+    {
+      "name": "o3"
+    },
+    {
+      "name": "o4"
+    },
+    {
+      "name": "o5"
+    },
+    {
+      "name": "o6"
+    },
+    {
+      "name": "o7"
+    },
+    {
+      "name": "o8"
+    },
+    {
+      "name": "o9"
+    },
+    {
+      "name": "t0"
+    },
+    {
+      "name": "t1"
+    },
+    {
+      "name": "t2"
+    },
+    {
+      "name": "t3"
+    },
+    {
+      "name": "t4"
+    },
+    {
+      "name": "t5"
+    },
+    {
+      "name": "t6"
+    },
+    {
+      "name": "t7"
+    },
+    {
+      "name": "t8"
+    },
+    {
+      "name": "t9"
+    },
+    {
+      "name": "h0"
+    },
+    {
+      "name": "h1"
+    },
+    {
+      "name": "h2"
+    },
+    {
+      "name": "h3"
+    },
+    {
+      "name": "h4"
+    },
+    {
+      "name": "h5"
+    },
+    {
+      "name": "h6"
+    },
+    {
+      "name": "h7"
+    },
+    {
+      "name": "h8"
+    },
+    {
+      "name": "h9"
+    },
+    {
+      "name": "rifle"
+    },
+    {
+      "name": "rifle_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "smg"
+    },
+    {
+      "name": "smg_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "pistol"
+    },
+    {
+      "name": "pistol_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "revolver"
+    },
+    {
+      "name": "revolver_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "smartgun"
+    },
+    {
+      "name": "smartgun_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "minigun"
+    },
+    {
+      "name": "minigun_empty"
+    },
+    {
+      "name": "flame"
+    },
+    {
+      "name": "flame_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "sniper"
+    },
+    {
+      "name": "sniper_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "rocket_he"
+    },
+    {
+      "name": "rocket_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "shotgun_buckshot"
+    },
+    {
+      "name": "shotgun_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "grenade_he"
+    },
+    {
+      "name": "grenade_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "taser"
+    },
+    {
+      "name": "battery_empty_flash",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "unknown"
+    }
+  ]
+}

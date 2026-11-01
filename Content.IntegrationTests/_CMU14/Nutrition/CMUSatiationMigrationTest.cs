@@ -21,6 +21,11 @@ namespace Content.IntegrationTests.CMU14.Nutrition;
 [TestOf(typeof(SatiationSystem))]
 public sealed class CMUSatiationMigrationTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<SatiationPrototype> RMCHumanHungerPrototype = "RMCHumanHunger";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMMobHumanPrototype = "CMMobHuman";
+    private static readonly Robust.Shared.Prototypes.EntProtoId RMCSynthRemoveComponentsPrototype = "RMCSynthRemoveComponents";
+    private static readonly Robust.Shared.Prototypes.ProtoId<ReagentPrototype> RMCIronPrototype = "RMCIron";
+
     private static readonly ProtoId<SatiationTypePrototype> Hunger = SatiationSystem.Hunger;
     private static readonly ProtoId<SatiationTypePrototype> Thirst = SatiationSystem.Thirst;
 
@@ -127,7 +132,7 @@ public sealed class CMUSatiationMigrationTest
                     ["Starving"] = 50,
                     ["Dead"] = 0,
                 });
-            var humanHunger = prototypes.Index<SatiationPrototype>("RMCHumanHunger");
+            var humanHunger = prototypes.Index<SatiationPrototype>(RMCHumanHungerPrototype);
             Assert.Multiple(() =>
             {
                 Assert.That(humanHunger.ChangeModifiers["Overfed"], Is.EqualTo(1));
@@ -180,14 +185,14 @@ public sealed class CMUSatiationMigrationTest
                     ["Dead"] = 0,
                 });
 
-            var human = prototypes.Index<EntityPrototype>("CMMobHuman");
+            var human = prototypes.Index<EntityPrototype>(CMMobHumanPrototype);
             Assert.That(human.TryComp<SatiationSpeedModifierComponent>(out var speed, factory), Is.True);
             AssertSpeedThreshold(speed!, Hunger, "Peckish", 0.9f);
             AssertSpeedThreshold(speed, Hunger, "Starving", 0.72f);
             AssertSpeedThreshold(speed, Thirst, "Thirsty", 0.9f);
             AssertSpeedThreshold(speed, Thirst, "Parched", 0.72f);
 
-            var synthRemovals = prototypes.Index<EntityPrototype>("RMCSynthRemoveComponents");
+            var synthRemovals = prototypes.Index<EntityPrototype>(RMCSynthRemoveComponentsPrototype);
             Assert.That(synthRemovals.HasComp<SatiationComponent>(factory), Is.True,
                 "Synthetic conversion must remove the combined Satiation component.");
         });
@@ -213,7 +218,7 @@ public sealed class CMUSatiationMigrationTest
             {
                 var satiation = entities.GetComponent<SatiationComponent>(human);
                 var entity = new Entity<SatiationComponent>(human, satiation);
-                var reagent = prototypes.Index<ReagentPrototype>("RMCIron");
+                var reagent = prototypes.Index<ReagentPrototype>(RMCIronPrototype);
                 var hemogenic = reagent.Metabolisms!.Metabolisms.Values
                     .SelectMany(entry => entry.Effects)
                     .OfType<Hemogenic>()

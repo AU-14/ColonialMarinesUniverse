@@ -89,6 +89,9 @@ public sealed partial class VictimInfectedComponent : Component
     /// </summary>
     public NetUserId? InfectorUser;
 
+    // CMU14: retain the prompt's infection identity after the spent parasite is deleted.
+    public NetEntity? InfectorParasite;
+
     /// <summary>
     ///     Whether the infector accepted becoming the larva from this infection.
     /// </summary>

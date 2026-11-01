@@ -144,8 +144,22 @@
     belt: AU14BeltMedicBagSupportSynthRMC
     pocket1: AU14PouchToolsFilledComtech
     pocket2: AU14PouchPoliceEquipmentSupportSynth
-    back: AU14CMDefibrillator
+    back: AU14MolleBackpack
     ears: AU14HeadsetUSArmyERT
+  storage:
+    back:
+    - AU14CMDefibrillator
+    - CMSurgicalCaseFilled
+    - CMPortableSurgicalBedSpawnFolded
+    - CMSurgicalLine
+    - CMSynthGraft
+    - RMCFlashlight
+    - CMSheetMetal50
+    - CMSheetMetal50
+    - CMSheetMetal50
+    - CMSheetPlasteel50
+    - CMSheetPlasteel50
+    - CMSheetPlasteel50
 
 - type: jobIcon
   parent: CMJobIconBase

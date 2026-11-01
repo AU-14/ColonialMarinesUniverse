@@ -43,17 +43,19 @@ namespace Content.Server.CMU14.ZLevelBuilding;
 /// </summary>
 public sealed partial class ZLevelSupportSystem : EntitySystem
 {
-    [Dependency] private  SharedMapSystem _map = default!;
-    [Dependency] private  SharedTransformSystem _transform = default!;
-    [Dependency] private  SharedPopupSystem _popup = default!;
-    [Dependency] private  IGameTiming _timing = default!;
-    [Dependency] private  SharedAudioSystem _audio = default!;
-    [Dependency] private  ThrowingSystem _throwing = default!;
-    [Dependency] private  IRobustRandom _random = default!;
-    [Dependency] private  ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private  IChatManager _chat = default!;
-    [Dependency] private  TagSystem _tag = default!;
-    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> WallTag = "Wall";
+
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
 
     // Per-map cooldown so a cascading floor collapse (many structures at once) logs/alerts admins once, not per
     // tile. Maps the collapsing level -> the time after which the next collapse there alerts again.
@@ -653,7 +655,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             // body to fall, so don't move it.
             if (HasComp<TileFloorSupportComponent>(ent))
             {
-                if (TryComp<TransformComponent>(ent, out var supportXform) && supportXform.Anchored)
+                if (TryComp(ent, out TransformComponent? supportXform) && supportXform.Anchored)
                     _transform.Unanchor(ent, supportXform);
 
                 QueueDel(ent);
@@ -664,7 +666,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             if (HasComp<CMUZLevelHighGroundComponent>(ent) || IsIndestructibleWall(ent))
                 continue;
 
-            if (TryComp<TransformComponent>(ent, out var exf) && exf.Anchored)
+            if (TryComp(ent, out TransformComponent? exf) && exf.Anchored)
                 _transform.Unanchor(ent, exf);
 
             // No longer a structural participant once it has broken loose.
@@ -705,7 +707,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
     /// CMBaseWallInvincible family). These are map boundaries and must never fall or be moved.</summary>
     private bool IsIndestructibleWall(EntityUid uid)
     {
-        return _tag.HasTag(uid, "Wall") && !HasComp<DamageableComponent>(uid);
+        return _tag.HasTag(uid, WallTag) && !HasComp<DamageableComponent>(uid);
     }
 
     /// <summary>Turns a structure that has fallen through a collapsed floor into inert rubble: every fixture's

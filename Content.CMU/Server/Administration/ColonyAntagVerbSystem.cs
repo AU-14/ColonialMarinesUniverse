@@ -44,9 +44,9 @@ public sealed partial class ColonyAntagVerbSystem : EntitySystem
         ["WeylandYutaniAgent"] = new SpriteSpecifier.Rsi(new("/Textures/_RMC14/Interface/cm_job_icons.rsi"), "hudWE-YA"),
     };
 
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {
@@ -77,7 +77,7 @@ public sealed partial class ColonyAntagVerbSystem : EntitySystem
             // ForceMakeAntag resolves the rule entity by the specifier's id, so
             // only offer antags whose same-id rule actually lists the specifier.
             if (!_proto.TryIndex<EntityPrototype>(specifier.ID, out var rule)
-                || !rule.TryGetComponent<AntagSelectionComponent>(out var selection)
+                || !rule.TryComp<AntagSelectionComponent>(out var selection, Factory)
                 || !selection.Antags.Any(sel => sel.Proto == specifier.ID))
                 continue;
 

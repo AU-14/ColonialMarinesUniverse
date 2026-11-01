@@ -20,6 +20,7 @@ public sealed partial class LoadMapRuleSystem : StationEventSystem<LoadMapRuleCo
 
     protected override void Added(EntityUid uid, LoadMapRuleComponent comp, GameRuleComponent rule, GameRuleAddedEvent args)
     {
+#pragma warning disable CS0618 // CMU14: The loader must still handle rules authored with the legacy preloaded-grid field.
         if (comp.PreloadedGrid != null && !_gridPreloader.PreloadingEnabled)
         {
             // Preloading will never work if it's disabled, duh
@@ -99,5 +100,6 @@ public sealed partial class LoadMapRuleSystem : StationEventSystem<LoadMapRuleCo
         RaiseLocalEvent(uid, ref ev);
 
         base.Added(uid, comp, rule, args);
+#pragma warning restore CS0618
     }
 }

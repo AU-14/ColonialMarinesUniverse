@@ -38,9 +38,9 @@ public sealed partial class BreechLoadedSystem : EntitySystem
 
         args.Cancelled = true;
         if (gun.Comp.Open)
-            _popupSystem.PopupClient(Loc.GetString("rmc-breech-loaded-open-shoot-attempt"), args.User, args.User);
+            _popupSystem.PopupEntity(Loc.GetString("rmc-breech-loaded-open-shoot-attempt"), args.User, args.User);
         else
-            _popupSystem.PopupClient(Loc.GetString("rmc-breech-loaded-not-ready-to-shoot"), args.User, args.User);
+            _popupSystem.PopupEntity(Loc.GetString("rmc-breech-loaded-not-ready-to-shoot"), args.User, args.User);
     }
 
     private void OnGunShot(Entity<BreechLoadedComponent> gun, ref GunShotEvent args)
@@ -57,7 +57,7 @@ public sealed partial class BreechLoadedSystem : EntitySystem
         if (gun.Comp.Open)
             return;
 
-        _popupSystem.PopupClient(Loc.GetString("rmc-breech-loaded-closed-extract-attempt"), args.User, args.User);
+        _popupSystem.PopupEntity(Loc.GetString("rmc-breech-loaded-closed-extract-attempt"), args.User, args.User);
         args.Cancelled = true;
     }
 
@@ -72,7 +72,7 @@ public sealed partial class BreechLoadedSystem : EntitySystem
         {
             var actionLocale = gun.Comp.Open ? Loc.GetString("rmc-breech-loaded-close") : Loc.GetString("rmc-breech-loaded-open");
             var popup = Loc.GetString("rmc-breech-loaded-toggle-attempt-cooldown", ("action", actionLocale));
-            _popupSystem.PopupClient(popup, args.UserUid, args.UserUid, PopupType.Small);
+            _popupSystem.PopupEntity(popup, args.UserUid, args.UserUid, PopupType.Small);
             return;
         }
 
@@ -105,7 +105,7 @@ public sealed partial class BreechLoadedSystem : EntitySystem
             !_tagSystem.HasAnyTag(args.Used, ammoProviderComponent.Whitelist.Tags))
             return;
 
-        _popupSystem.PopupClient(Loc.GetString("rmc-breech-loaded-closed-load-attempt"), args.User, args.User);
+        _popupSystem.PopupEntity(Loc.GetString("rmc-breech-loaded-closed-load-attempt"), args.User, args.User);
         args.Handled = true;
     }
 }

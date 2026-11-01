@@ -16,8 +16,15 @@
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentCorporate
     time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
   roundRole: CivilianCorporateLiaison
   roundComponents:
   - type: Skills
@@ -92,6 +99,7 @@
     ears: AU14ColonyWeylandHeadset
     ears2: RMCM5CameraGear
     pocket1: AU14StampLiaison
+    pocket2: CMUPepperSpray
   inhand:
   - RMCPortableVendorCorporate
   - CMUMobilePhone

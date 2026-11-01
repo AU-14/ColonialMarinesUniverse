@@ -1,0 +1,2946 @@
+# Source-guided wardrobe and desk fan drafts.
+- type: cmu3DModel
+  id: CMU3DCivilianClothingWardrobe
+  label: Civilian clothing wardrobe
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianClothingVendor
+  referencePrototype: AU14CivilianClothingVendor
+  referenceRsi: _RMC14/Structures/Machines/VendingMachines/ColMarTech/corp_wardrobe.rsi
+  referenceState: base
+  sourceDirections: 1
+  faceAwayFromWall: true
+  faceAwayFromWindows: true
+  placement: floor
+  groundOffset: 0,0
+  description: Open wooden wardrobe with real shelf and side construction, separate folded and hanging garments,
+    exact source crops and inferred physical depth/height. Existing source-aware vendor aisle-facing rule; saved
+    transforms and vending UI unchanged. Static base only. See SOURCES_VENDOR_FANS.md.
+  parts:
+  - label: left wooden cabinet side
+    min: -0.431250000, -0.272000000, 0.050000000
+    max: -0.373750000, 0.280000000, 1.550000000
+    color: '#584532'
+  - label: right wooden cabinet side
+    min: 0.373750000, -0.272000000, 0.050000000
+    max: 0.431250000, 0.280000000, 1.550000000
+    color: '#584532'
+  - label: rear wooden cabinet wall
+    min: -0.373750000, 0.250000000, 0.050000000
+    max: 0.373750000, 0.280000000, 1.550000000
+    color: '#2D2A27'
+  - label: cabinet upper cap
+    min: -0.431250000, -0.272000000, 1.350000000
+    max: 0.431250000, 0.250000000, 1.550000000
+    color: '#584532'
+  - label: folded garment upper shelf
+    min: -0.373750000, -0.272000000, 1.150000000
+    max: 0.373750000, 0.250000000, 1.200000000
+    color: '#8E643A'
+  - label: hanging garment shelf
+    min: -0.373750000, -0.272000000, 0.900000000
+    max: 0.373750000, 0.250000000, 0.950000000
+    color: '#8E643A'
+  - label: cabinet bottom shelf
+    min: -0.431250000, -0.272000000, 0.050000000
+    max: 0.431250000, 0.250000000, 0.150000000
+    color: '#8E643A'
+  - label: left foot
+    min: -0.460000000, -0.260000000, 0.000000000
+    max: -0.373750000, 0.240000000, 0.050000000
+    color: '#2D231A'
+  - label: right foot
+    min: 0.373750000, -0.260000000, 0.000000000
+    max: 0.460000000, 0.240000000, 0.050000000
+    color: '#2D231A'
+  - label: original header and upper rails
+    min: -0.460000000, -0.280000000, 1.150000000
+    max: 0.460000000, -0.276000000, 1.550000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2100
+    surfaceAxis: XZ
+  - label: original left front rail
+    min: -0.460000000, -0.280000000, 0.150000000
+    max: -0.373750000, -0.276000000, 1.150000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2101
+    surfaceAxis: XZ
+  - label: original right front rail
+    min: 0.373750000, -0.280000000, 0.150000000
+    max: 0.460000000, -0.276000000, 1.150000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2102
+    surfaceAxis: XZ
+  - label: original bottom rail and feet
+    min: -0.460000000, -0.280000000, 0.000000000
+    max: 0.460000000, -0.276000000, 0.150000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2103
+    surfaceAxis: XZ
+  - label: original center shelf edge
+    min: -0.373750000, -0.280000000, 0.900000000
+    max: 0.373750000, -0.276000000, 0.950000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2104
+    surfaceAxis: XZ
+  - label: folded blue garments
+    min: -0.373750000, -0.210000000, 0.950000000
+    max: -0.086250000, 0.150000000, 1.150000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2105
+    surfaceAxis: XZ
+  - label: dark shelf recess
+    min: -0.086250000, -0.210000000, 0.950000000
+    max: 0.115000000, 0.150000000, 1.150000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2106
+    surfaceAxis: XZ
+  - label: folded brown garments
+    min: 0.115000000, -0.210000000, 0.950000000
+    max: 0.373750000, 0.150000000, 1.150000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2107
+    surfaceAxis: XZ
+  - label: deep original dark recess
+    min: -0.373750000, 0.242000000, 0.150000000
+    max: 0.373750000, 0.246000000, 0.900000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2108
+    surfaceAxis: XZ
+  - label: hanging garment 1
+    min: -0.373750000, -0.170000000, 0.150000000
+    max: -0.230000000, 0.040000000, 0.900000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2109
+    surfaceAxis: XZ
+  - label: hanging garment 2
+    min: -0.230000000, -0.170000000, 0.150000000
+    max: -0.115000000, 0.040000000, 0.900000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2110
+    surfaceAxis: XZ
+  - label: hanging garment 3
+    min: -0.115000000, -0.170000000, 0.150000000
+    max: 0.000000000, 0.040000000, 0.900000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2111
+    surfaceAxis: XZ
+  - label: hanging garment 4
+    min: 0.000000000, -0.170000000, 0.150000000
+    max: 0.115000000, 0.040000000, 0.900000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2112
+    surfaceAxis: XZ
+  - label: hanging garment 5
+    min: 0.115000000, -0.170000000, 0.150000000
+    max: 0.258750000, 0.040000000, 0.900000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2113
+    surfaceAxis: XZ
+  - label: hanging garment 6
+    min: 0.258750000, -0.170000000, 0.150000000
+    max: 0.373750000, 0.040000000, 0.900000000
+    color: '#FFFFFF'
+    surface: CMU3DVendorFanSurface2114
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DTanDeskFanSouth
+  label: Tan desk fan / South
+  status: draft
+  sourcePrototypes:
+  - RMCDeskFanTan
+  referencePrototype: RMCDeskFanTan
+  referenceRsi: _RMC14/Objects/Misc/desk_fan.rsi
+  referenceState: deskfan
+  referenceDirection: 0
+  sourceDirections: 4
+  directionalModels:
+  - CMU3DTanDeskFanSouth
+  - CMU3DTanDeskFanNorth
+  - CMU3DTanDeskFanEast
+  - CMU3DTanDeskFanWest
+  sourceSpriteOffset: 0,0
+  sourceSpriteRotates: true
+  useEntityRotation: true
+  yawOffset: 0
+  placement: surface
+  groundOffset: 0,0
+  backWallMountTargets:
+  - RMCWallHybrisa
+  - RMCWallSPPGreyReinforced
+  - RMCWallPrisonReinforced
+  - RMCWallStrata
+  description: 'Source-colored physical fan: two hollow segmented cages, protective spokes, four static curved blades,
+    motor with original logos/vents, pedestal and weighted base. Depth/cage spacing and solid silhouette are inferred.
+    No source spinning animation exists. Saved yaw and exact table support retained. See SOURCES_VENDOR_FANS.md.'
+  parts:
+  - label: weighted tan base
+    min: -0.175625000, -0.155000000, 0.000000000
+    max: 0.144375000, 0.265000000, 0.075000000
+    color: '#3D342A'
+    shape: Ellipsoid
+  - label: raised base upper casting
+    min: -0.145625000, -0.135000000, 0.028000000
+    max: 0.114375000, 0.205000000, 0.098000000
+    color: '#99826A'
+    shape: Ellipsoid
+  - label: flat load-bearing foot
+    min: -0.140625000, -0.120000000, 0.000000000
+    max: 0.109375000, 0.210000000, 0.024000000
+    color: '#3D342A'
+  - label: pedestal stem
+    min: -0.048625000, 0.025000000, 0.075000000
+    max: 0.017375000, 0.105000000, 0.375000000
+    color: '#99826A'
+    shape: CylinderZ
+  - label: pedestal top collar
+    min: -0.070625000, 0.005000000, 0.355000000
+    max: 0.039375000, 0.125000000, 0.445000000
+    color: '#D2B48C'
+    shape: Ellipsoid
+  - label: rear motor body
+    min: -0.106625000, -0.015000000, 0.420625000
+    max: 0.075375000, 0.245000000, 0.610625000
+    color: '#99826A'
+    shape: CylinderY
+  - label: rear motor cover
+    min: -0.090625000, 0.228000000, 0.437625000
+    max: 0.059375000, 0.264000000, 0.593625000
+    color: '#D2B48C'
+    shape: CylinderY
+  - label: shaft housing
+    min: -0.067625000, -0.100000000, 0.463625000
+    max: 0.036375000, 0.090000000, 0.567625000
+    color: '#3D342A'
+    shape: CylinderY
+  - label: front cage rim 1
+    min: 0.254375000, -0.129000000, 0.458531712
+    max: 0.278375000, -0.105000000, 0.572718288
+    color: '#99826A'
+    pitch: 0.0
+  - label: front cage rim 2
+    min: 0.232909028, -0.129000000, 0.566448440
+    max: 0.256909028, -0.105000000, 0.680635016
+    color: '#D2B48C'
+    pitch: 22.5
+  - label: front cage rim 3
+    min: 0.171779112, -0.129000000, 0.657935825
+    max: 0.195779112, -0.105000000, 0.772122400
+    color: '#D2B48C'
+    pitch: 45.0
+  - label: front cage rim 4
+    min: 0.080291728, -0.129000000, 0.719065741
+    max: 0.104291728, -0.105000000, 0.833252316
+    color: '#D2B48C'
+    pitch: 67.5
+  - label: front cage rim 5
+    min: -0.027625000, -0.129000000, 0.740531712
+    max: -0.003625000, -0.105000000, 0.854718288
+    color: '#D2B48C'
+    pitch: -90.0
+  - label: front cage rim 6
+    min: -0.135541728, -0.129000000, 0.719065741
+    max: -0.111541728, -0.105000000, 0.833252316
+    color: '#D2B48C'
+    pitch: -67.5
+  - label: front cage rim 7
+    min: -0.227029112, -0.129000000, 0.657935825
+    max: -0.203029112, -0.105000000, 0.772122400
+    color: '#D2B48C'
+    pitch: -45.0
+  - label: front cage rim 8
+    min: -0.288159028, -0.129000000, 0.566448440
+    max: -0.264159028, -0.105000000, 0.680635016
+    color: '#D2B48C'
+    pitch: -22.5
+  - label: front cage rim 9
+    min: -0.309625000, -0.129000000, 0.458531712
+    max: -0.285625000, -0.105000000, 0.572718288
+    color: '#99826A'
+    pitch: 0.0
+  - label: front cage rim 10
+    min: -0.288159028, -0.129000000, 0.350614984
+    max: -0.264159028, -0.105000000, 0.464801560
+    color: '#99826A'
+    pitch: 22.5
+  - label: front cage rim 11
+    min: -0.227029112, -0.129000000, 0.259127600
+    max: -0.203029112, -0.105000000, 0.373314175
+    color: '#3D342A'
+    pitch: 45.0
+  - label: front cage rim 12
+    min: -0.135541728, -0.129000000, 0.197997684
+    max: -0.111541728, -0.105000000, 0.312184259
+    color: '#3D342A'
+    pitch: 67.5
+  - label: front cage rim 13
+    min: -0.027625000, -0.129000000, 0.176531712
+    max: -0.003625000, -0.105000000, 0.290718288
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front cage rim 14
+    min: 0.080291728, -0.129000000, 0.197997684
+    max: 0.104291728, -0.105000000, 0.312184259
+    color: '#3D342A'
+    pitch: -67.5
+  - label: front cage rim 15
+    min: 0.171779112, -0.129000000, 0.259127600
+    max: 0.195779112, -0.105000000, 0.373314175
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front cage rim 16
+    min: 0.232909028, -0.129000000, 0.350614984
+    max: 0.256909028, -0.105000000, 0.464801560
+    color: '#99826A'
+    pitch: -22.5
+  - label: rear cage rim 1
+    min: 0.244375000, -0.055000000, 0.460918661
+    max: 0.264375000, -0.031000000, 0.570331339
+    color: '#99826A'
+    pitch: 0.0
+  - label: rear cage rim 2
+    min: 0.223822474, -0.055000000, 0.564243188
+    max: 0.243822474, -0.031000000, 0.673655866
+    color: '#D2B48C'
+    pitch: 22.5
+  - label: rear cage rim 3
+    min: 0.165293831, -0.055000000, 0.651837492
+    max: 0.185293831, -0.031000000, 0.761250170
+    color: '#D2B48C'
+    pitch: 45.0
+  - label: rear cage rim 4
+    min: 0.077699527, -0.055000000, 0.710366135
+    max: 0.097699527, -0.031000000, 0.819778813
+    color: '#D2B48C'
+    pitch: 67.5
+  - label: rear cage rim 5
+    min: -0.025625000, -0.055000000, 0.730918661
+    max: -0.005625000, -0.031000000, 0.840331339
+    color: '#D2B48C'
+    pitch: -90.0
+  - label: rear cage rim 6
+    min: -0.128949527, -0.055000000, 0.710366135
+    max: -0.108949527, -0.031000000, 0.819778813
+    color: '#D2B48C'
+    pitch: -67.5
+  - label: rear cage rim 7
+    min: -0.216543831, -0.055000000, 0.651837492
+    max: -0.196543831, -0.031000000, 0.761250170
+    color: '#D2B48C'
+    pitch: -45.0
+  - label: rear cage rim 8
+    min: -0.275072474, -0.055000000, 0.564243188
+    max: -0.255072474, -0.031000000, 0.673655866
+    color: '#D2B48C'
+    pitch: -22.5
+  - label: rear cage rim 9
+    min: -0.295625000, -0.055000000, 0.460918661
+    max: -0.275625000, -0.031000000, 0.570331339
+    color: '#99826A'
+    pitch: 0.0
+  - label: rear cage rim 10
+    min: -0.275072474, -0.055000000, 0.357594134
+    max: -0.255072474, -0.031000000, 0.467006812
+    color: '#99826A'
+    pitch: 22.5
+  - label: rear cage rim 11
+    min: -0.216543831, -0.055000000, 0.269999830
+    max: -0.196543831, -0.031000000, 0.379412508
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage rim 12
+    min: -0.128949527, -0.055000000, 0.211471187
+    max: -0.108949527, -0.031000000, 0.320883865
+    color: '#3D342A'
+    pitch: 67.5
+  - label: rear cage rim 13
+    min: -0.025625000, -0.055000000, 0.190918661
+    max: -0.005625000, -0.031000000, 0.300331339
+    color: '#3D342A'
+    pitch: -90.0
+  - label: rear cage rim 14
+    min: 0.077699527, -0.055000000, 0.211471187
+    max: 0.097699527, -0.031000000, 0.320883865
+    color: '#3D342A'
+    pitch: -67.5
+  - label: rear cage rim 15
+    min: 0.165293831, -0.055000000, 0.269999830
+    max: 0.185293831, -0.031000000, 0.379412508
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage rim 16
+    min: 0.223822474, -0.055000000, 0.357594134
+    max: 0.243822474, -0.031000000, 0.467006812
+    color: '#99826A'
+    pitch: -22.5
+  - label: cage depth bridge 1
+    min: 0.247375000, -0.115000000, 0.502625000
+    max: 0.273375000, -0.045000000, 0.528625000
+    color: '#99826A'
+  - label: cage depth bridge 2
+    min: -0.028625000, -0.115000000, 0.778625000
+    max: -0.002625000, -0.045000000, 0.804625000
+    color: '#99826A'
+  - label: cage depth bridge 3
+    min: -0.304625000, -0.115000000, 0.502625000
+    max: -0.278625000, -0.045000000, 0.528625000
+    color: '#99826A'
+  - label: cage depth bridge 4
+    min: -0.028625000, -0.115000000, 0.226625000
+    max: -0.002625000, -0.045000000, 0.252625000
+    color: '#99826A'
+  - label: front protective spoke 1
+    min: 0.162375000, -0.136000000, 0.416625000
+    max: 0.170375000, -0.128000000, 0.614625000
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front protective spoke 2
+    min: 0.109068434, -0.136000000, 0.545318434
+    max: 0.117068434, -0.128000000, 0.743318434
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front protective spoke 3
+    min: -0.019625000, -0.136000000, 0.598625000
+    max: -0.011625000, -0.128000000, 0.796625000
+    color: '#3D342A'
+    pitch: 0.0
+  - label: front protective spoke 4
+    min: -0.148318434, -0.136000000, 0.545318434
+    max: -0.140318434, -0.128000000, 0.743318434
+    color: '#3D342A'
+    pitch: 45.0
+  - label: front protective spoke 5
+    min: -0.201625000, -0.136000000, 0.416625000
+    max: -0.193625000, -0.128000000, 0.614625000
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front protective spoke 6
+    min: -0.148318434, -0.136000000, 0.287931566
+    max: -0.140318434, -0.128000000, 0.485931566
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front protective spoke 7
+    min: -0.019625000, -0.136000000, 0.234625000
+    max: -0.011625000, -0.128000000, 0.432625000
+    color: '#3D342A'
+    pitch: 0.0
+  - label: front protective spoke 8
+    min: 0.109068434, -0.136000000, 0.287931566
+    max: 0.117068434, -0.128000000, 0.485931566
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage support 1
+    min: 0.102825793, -0.033000000, 0.540075793
+    max: 0.114825793, -0.021000000, 0.740075793
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage support 2
+    min: -0.146075793, -0.033000000, 0.540075793
+    max: -0.134075793, -0.021000000, 0.740075793
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage support 3
+    min: -0.146075793, -0.033000000, 0.291174207
+    max: -0.134075793, -0.021000000, 0.491174207
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage support 4
+    min: 0.102825793, -0.033000000, 0.291174207
+    max: 0.114825793, -0.021000000, 0.491174207
+    color: '#3D342A'
+    pitch: 45.0
+  - label: stationary rotor blade 1
+    min: 0.093886479, -0.097000000, 0.469946321
+    max: 0.199886479, -0.069000000, 0.679946321
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: -44.94647717042119
+  - label: stationary rotor blade 2
+    min: -0.127946321, -0.097000000, 0.573136479
+    max: -0.021946321, -0.069000000, 0.783136479
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: 45.05352282957881
+  - label: stationary rotor blade 3
+    min: -0.231136479, -0.097000000, 0.351303679
+    max: -0.125136479, -0.069000000, 0.561303679
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: -44.94647717042119
+  - label: stationary rotor blade 4
+    min: -0.009303679, -0.097000000, 0.248113521
+    max: 0.096696321, -0.069000000, 0.458113521
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: 45.05352282957881
+  - label: front bronze rotor hub
+    min: -0.106625000, -0.140000000, 0.424625000
+    max: 0.075375000, -0.090000000, 0.606625000
+    color: '#99826A'
+    shape: CylinderY
+  - label: original patterned front hub
+    min: -0.078125000, -0.145000000, 0.453125000
+    max: 0.046875000, -0.139000000, 0.578125000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2115
+    surfaceAxis: XZ
+  - label: original rear motor vents
+    min: -0.070625000, 0.263000000, 0.468125000
+    max: 0.039375000, 0.269000000, 0.563125000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2116
+    surfaceAxis: XZ
+  - label: original left Weyland-Yutani motor label
+    min: -0.111625000, 0.020000000, 0.479625000
+    max: -0.105625000, 0.250000000, 0.567625000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2117
+    surfaceAxis: YZ
+  - label: original right Weyland-Yutani motor label
+    min: 0.074375000, 0.020000000, 0.479625000
+    max: 0.080375000, 0.250000000, 0.567625000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2118
+    surfaceAxis: YZ
+  spriteStates:
+    deskfan:
+      frames:
+      - parts:
+        - label: weighted tan base
+          min: -0.175625000, -0.155000000, 0.000000000
+          max: 0.144375000, 0.265000000, 0.075000000
+          color: '#3D342A'
+          shape: Ellipsoid
+        - label: raised base upper casting
+          min: -0.145625000, -0.135000000, 0.028000000
+          max: 0.114375000, 0.205000000, 0.098000000
+          color: '#99826A'
+          shape: Ellipsoid
+        - label: flat load-bearing foot
+          min: -0.140625000, -0.120000000, 0.000000000
+          max: 0.109375000, 0.210000000, 0.024000000
+          color: '#3D342A'
+        - label: pedestal stem
+          min: -0.048625000, 0.025000000, 0.075000000
+          max: 0.017375000, 0.105000000, 0.375000000
+          color: '#99826A'
+          shape: CylinderZ
+        - label: pedestal top collar
+          min: -0.070625000, 0.005000000, 0.355000000
+          max: 0.039375000, 0.125000000, 0.445000000
+          color: '#D2B48C'
+          shape: Ellipsoid
+        - label: rear motor body
+          min: -0.106625000, -0.015000000, 0.420625000
+          max: 0.075375000, 0.245000000, 0.610625000
+          color: '#99826A'
+          shape: CylinderY
+        - label: rear motor cover
+          min: -0.090625000, 0.228000000, 0.437625000
+          max: 0.059375000, 0.264000000, 0.593625000
+          color: '#D2B48C'
+          shape: CylinderY
+        - label: shaft housing
+          min: -0.067625000, -0.100000000, 0.463625000
+          max: 0.036375000, 0.090000000, 0.567625000
+          color: '#3D342A'
+          shape: CylinderY
+        - label: front cage rim 1
+          min: 0.254375000, -0.129000000, 0.458531712
+          max: 0.278375000, -0.105000000, 0.572718288
+          color: '#99826A'
+          pitch: 0.0
+        - label: front cage rim 2
+          min: 0.232909028, -0.129000000, 0.566448440
+          max: 0.256909028, -0.105000000, 0.680635016
+          color: '#D2B48C'
+          pitch: 22.5
+        - label: front cage rim 3
+          min: 0.171779112, -0.129000000, 0.657935825
+          max: 0.195779112, -0.105000000, 0.772122400
+          color: '#D2B48C'
+          pitch: 45.0
+        - label: front cage rim 4
+          min: 0.080291728, -0.129000000, 0.719065741
+          max: 0.104291728, -0.105000000, 0.833252316
+          color: '#D2B48C'
+          pitch: 67.5
+        - label: front cage rim 5
+          min: -0.027625000, -0.129000000, 0.740531712
+          max: -0.003625000, -0.105000000, 0.854718288
+          color: '#D2B48C'
+          pitch: -90.0
+        - label: front cage rim 6
+          min: -0.135541728, -0.129000000, 0.719065741
+          max: -0.111541728, -0.105000000, 0.833252316
+          color: '#D2B48C'
+          pitch: -67.5
+        - label: front cage rim 7
+          min: -0.227029112, -0.129000000, 0.657935825
+          max: -0.203029112, -0.105000000, 0.772122400
+          color: '#D2B48C'
+          pitch: -45.0
+        - label: front cage rim 8
+          min: -0.288159028, -0.129000000, 0.566448440
+          max: -0.264159028, -0.105000000, 0.680635016
+          color: '#D2B48C'
+          pitch: -22.5
+        - label: front cage rim 9
+          min: -0.309625000, -0.129000000, 0.458531712
+          max: -0.285625000, -0.105000000, 0.572718288
+          color: '#99826A'
+          pitch: 0.0
+        - label: front cage rim 10
+          min: -0.288159028, -0.129000000, 0.350614984
+          max: -0.264159028, -0.105000000, 0.464801560
+          color: '#99826A'
+          pitch: 22.5
+        - label: front cage rim 11
+          min: -0.227029112, -0.129000000, 0.259127600
+          max: -0.203029112, -0.105000000, 0.373314175
+          color: '#3D342A'
+          pitch: 45.0
+        - label: front cage rim 12
+          min: -0.135541728, -0.129000000, 0.197997684
+          max: -0.111541728, -0.105000000, 0.312184259
+          color: '#3D342A'
+          pitch: 67.5
+        - label: front cage rim 13
+          min: -0.027625000, -0.129000000, 0.176531712
+          max: -0.003625000, -0.105000000, 0.290718288
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front cage rim 14
+          min: 0.080291728, -0.129000000, 0.197997684
+          max: 0.104291728, -0.105000000, 0.312184259
+          color: '#3D342A'
+          pitch: -67.5
+        - label: front cage rim 15
+          min: 0.171779112, -0.129000000, 0.259127600
+          max: 0.195779112, -0.105000000, 0.373314175
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front cage rim 16
+          min: 0.232909028, -0.129000000, 0.350614984
+          max: 0.256909028, -0.105000000, 0.464801560
+          color: '#99826A'
+          pitch: -22.5
+        - label: rear cage rim 1
+          min: 0.244375000, -0.055000000, 0.460918661
+          max: 0.264375000, -0.031000000, 0.570331339
+          color: '#99826A'
+          pitch: 0.0
+        - label: rear cage rim 2
+          min: 0.223822474, -0.055000000, 0.564243188
+          max: 0.243822474, -0.031000000, 0.673655866
+          color: '#D2B48C'
+          pitch: 22.5
+        - label: rear cage rim 3
+          min: 0.165293831, -0.055000000, 0.651837492
+          max: 0.185293831, -0.031000000, 0.761250170
+          color: '#D2B48C'
+          pitch: 45.0
+        - label: rear cage rim 4
+          min: 0.077699527, -0.055000000, 0.710366135
+          max: 0.097699527, -0.031000000, 0.819778813
+          color: '#D2B48C'
+          pitch: 67.5
+        - label: rear cage rim 5
+          min: -0.025625000, -0.055000000, 0.730918661
+          max: -0.005625000, -0.031000000, 0.840331339
+          color: '#D2B48C'
+          pitch: -90.0
+        - label: rear cage rim 6
+          min: -0.128949527, -0.055000000, 0.710366135
+          max: -0.108949527, -0.031000000, 0.819778813
+          color: '#D2B48C'
+          pitch: -67.5
+        - label: rear cage rim 7
+          min: -0.216543831, -0.055000000, 0.651837492
+          max: -0.196543831, -0.031000000, 0.761250170
+          color: '#D2B48C'
+          pitch: -45.0
+        - label: rear cage rim 8
+          min: -0.275072474, -0.055000000, 0.564243188
+          max: -0.255072474, -0.031000000, 0.673655866
+          color: '#D2B48C'
+          pitch: -22.5
+        - label: rear cage rim 9
+          min: -0.295625000, -0.055000000, 0.460918661
+          max: -0.275625000, -0.031000000, 0.570331339
+          color: '#99826A'
+          pitch: 0.0
+        - label: rear cage rim 10
+          min: -0.275072474, -0.055000000, 0.357594134
+          max: -0.255072474, -0.031000000, 0.467006812
+          color: '#99826A'
+          pitch: 22.5
+        - label: rear cage rim 11
+          min: -0.216543831, -0.055000000, 0.269999830
+          max: -0.196543831, -0.031000000, 0.379412508
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage rim 12
+          min: -0.128949527, -0.055000000, 0.211471187
+          max: -0.108949527, -0.031000000, 0.320883865
+          color: '#3D342A'
+          pitch: 67.5
+        - label: rear cage rim 13
+          min: -0.025625000, -0.055000000, 0.190918661
+          max: -0.005625000, -0.031000000, 0.300331339
+          color: '#3D342A'
+          pitch: -90.0
+        - label: rear cage rim 14
+          min: 0.077699527, -0.055000000, 0.211471187
+          max: 0.097699527, -0.031000000, 0.320883865
+          color: '#3D342A'
+          pitch: -67.5
+        - label: rear cage rim 15
+          min: 0.165293831, -0.055000000, 0.269999830
+          max: 0.185293831, -0.031000000, 0.379412508
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage rim 16
+          min: 0.223822474, -0.055000000, 0.357594134
+          max: 0.243822474, -0.031000000, 0.467006812
+          color: '#99826A'
+          pitch: -22.5
+        - label: cage depth bridge 1
+          min: 0.247375000, -0.115000000, 0.502625000
+          max: 0.273375000, -0.045000000, 0.528625000
+          color: '#99826A'
+        - label: cage depth bridge 2
+          min: -0.028625000, -0.115000000, 0.778625000
+          max: -0.002625000, -0.045000000, 0.804625000
+          color: '#99826A'
+        - label: cage depth bridge 3
+          min: -0.304625000, -0.115000000, 0.502625000
+          max: -0.278625000, -0.045000000, 0.528625000
+          color: '#99826A'
+        - label: cage depth bridge 4
+          min: -0.028625000, -0.115000000, 0.226625000
+          max: -0.002625000, -0.045000000, 0.252625000
+          color: '#99826A'
+        - label: front protective spoke 1
+          min: 0.162375000, -0.136000000, 0.416625000
+          max: 0.170375000, -0.128000000, 0.614625000
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front protective spoke 2
+          min: 0.109068434, -0.136000000, 0.545318434
+          max: 0.117068434, -0.128000000, 0.743318434
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front protective spoke 3
+          min: -0.019625000, -0.136000000, 0.598625000
+          max: -0.011625000, -0.128000000, 0.796625000
+          color: '#3D342A'
+          pitch: 0.0
+        - label: front protective spoke 4
+          min: -0.148318434, -0.136000000, 0.545318434
+          max: -0.140318434, -0.128000000, 0.743318434
+          color: '#3D342A'
+          pitch: 45.0
+        - label: front protective spoke 5
+          min: -0.201625000, -0.136000000, 0.416625000
+          max: -0.193625000, -0.128000000, 0.614625000
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front protective spoke 6
+          min: -0.148318434, -0.136000000, 0.287931566
+          max: -0.140318434, -0.128000000, 0.485931566
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front protective spoke 7
+          min: -0.019625000, -0.136000000, 0.234625000
+          max: -0.011625000, -0.128000000, 0.432625000
+          color: '#3D342A'
+          pitch: 0.0
+        - label: front protective spoke 8
+          min: 0.109068434, -0.136000000, 0.287931566
+          max: 0.117068434, -0.128000000, 0.485931566
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage support 1
+          min: 0.102825793, -0.033000000, 0.540075793
+          max: 0.114825793, -0.021000000, 0.740075793
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage support 2
+          min: -0.146075793, -0.033000000, 0.540075793
+          max: -0.134075793, -0.021000000, 0.740075793
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage support 3
+          min: -0.146075793, -0.033000000, 0.291174207
+          max: -0.134075793, -0.021000000, 0.491174207
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage support 4
+          min: 0.102825793, -0.033000000, 0.291174207
+          max: 0.114825793, -0.021000000, 0.491174207
+          color: '#3D342A'
+          pitch: 45.0
+        - label: stationary rotor blade 1
+          min: 0.093886479, -0.097000000, 0.469946321
+          max: 0.199886479, -0.069000000, 0.679946321
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: -44.94647717042119
+        - label: stationary rotor blade 2
+          min: -0.127946321, -0.097000000, 0.573136479
+          max: -0.021946321, -0.069000000, 0.783136479
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: 45.05352282957881
+        - label: stationary rotor blade 3
+          min: -0.231136479, -0.097000000, 0.351303679
+          max: -0.125136479, -0.069000000, 0.561303679
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: -44.94647717042119
+        - label: stationary rotor blade 4
+          min: -0.009303679, -0.097000000, 0.248113521
+          max: 0.096696321, -0.069000000, 0.458113521
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: 45.05352282957881
+        - label: front bronze rotor hub
+          min: -0.106625000, -0.140000000, 0.424625000
+          max: 0.075375000, -0.090000000, 0.606625000
+          color: '#99826A'
+          shape: CylinderY
+        - label: original patterned front hub
+          min: -0.078125000, -0.145000000, 0.453125000
+          max: 0.046875000, -0.139000000, 0.578125000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2115
+          surfaceAxis: XZ
+        - label: original rear motor vents
+          min: -0.070625000, 0.263000000, 0.468125000
+          max: 0.039375000, 0.269000000, 0.563125000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2116
+          surfaceAxis: XZ
+        - label: original left Weyland-Yutani motor label
+          min: -0.111625000, 0.020000000, 0.479625000
+          max: -0.105625000, 0.250000000, 0.567625000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2117
+          surfaceAxis: YZ
+        - label: original right Weyland-Yutani motor label
+          min: 0.074375000, 0.020000000, 0.479625000
+          max: 0.080375000, 0.250000000, 0.567625000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2118
+          surfaceAxis: YZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DTanDeskFanNorth
+  label: Tan desk fan / North
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCDeskFanTan
+  referenceRsi: _RMC14/Objects/Misc/desk_fan.rsi
+  referenceState: deskfan
+  referenceDirection: 1
+  sourceDirections: 4
+  directionalModels:
+  - CMU3DTanDeskFanSouth
+  - CMU3DTanDeskFanNorth
+  - CMU3DTanDeskFanEast
+  - CMU3DTanDeskFanWest
+  sourceSpriteOffset: 0,0
+  sourceSpriteRotates: true
+  useEntityRotation: true
+  yawOffset: 0
+  placement: surface
+  groundOffset: 0,0
+  backWallMountTargets:
+  - RMCWallHybrisa
+  - RMCWallSPPGreyReinforced
+  - RMCWallPrisonReinforced
+  - RMCWallStrata
+  description: 'Source-colored physical fan: two hollow segmented cages, protective spokes, four static curved blades,
+    motor with original logos/vents, pedestal and weighted base. Depth/cage spacing and solid silhouette are inferred.
+    No source spinning animation exists. Saved yaw and exact table support retained. See SOURCES_VENDOR_FANS.md.'
+  parts:
+  - label: weighted tan base
+    min: -0.175625000, -0.155000000, 0.000000000
+    max: 0.144375000, 0.265000000, 0.075000000
+    color: '#3D342A'
+    shape: Ellipsoid
+  - label: raised base upper casting
+    min: -0.145625000, -0.135000000, 0.028000000
+    max: 0.114375000, 0.205000000, 0.098000000
+    color: '#99826A'
+    shape: Ellipsoid
+  - label: flat load-bearing foot
+    min: -0.140625000, -0.120000000, 0.000000000
+    max: 0.109375000, 0.210000000, 0.024000000
+    color: '#3D342A'
+  - label: pedestal stem
+    min: -0.048625000, 0.025000000, 0.075000000
+    max: 0.017375000, 0.105000000, 0.375000000
+    color: '#99826A'
+    shape: CylinderZ
+  - label: pedestal top collar
+    min: -0.070625000, 0.005000000, 0.355000000
+    max: 0.039375000, 0.125000000, 0.445000000
+    color: '#D2B48C'
+    shape: Ellipsoid
+  - label: rear motor body
+    min: -0.106625000, -0.015000000, 0.420625000
+    max: 0.075375000, 0.245000000, 0.610625000
+    color: '#99826A'
+    shape: CylinderY
+  - label: rear motor cover
+    min: -0.090625000, 0.228000000, 0.437625000
+    max: 0.059375000, 0.264000000, 0.593625000
+    color: '#D2B48C'
+    shape: CylinderY
+  - label: shaft housing
+    min: -0.067625000, -0.100000000, 0.463625000
+    max: 0.036375000, 0.090000000, 0.567625000
+    color: '#3D342A'
+    shape: CylinderY
+  - label: front cage rim 1
+    min: 0.254375000, -0.129000000, 0.458531712
+    max: 0.278375000, -0.105000000, 0.572718288
+    color: '#99826A'
+    pitch: 0.0
+  - label: front cage rim 2
+    min: 0.232909028, -0.129000000, 0.566448440
+    max: 0.256909028, -0.105000000, 0.680635016
+    color: '#D2B48C'
+    pitch: 22.5
+  - label: front cage rim 3
+    min: 0.171779112, -0.129000000, 0.657935825
+    max: 0.195779112, -0.105000000, 0.772122400
+    color: '#D2B48C'
+    pitch: 45.0
+  - label: front cage rim 4
+    min: 0.080291728, -0.129000000, 0.719065741
+    max: 0.104291728, -0.105000000, 0.833252316
+    color: '#D2B48C'
+    pitch: 67.5
+  - label: front cage rim 5
+    min: -0.027625000, -0.129000000, 0.740531712
+    max: -0.003625000, -0.105000000, 0.854718288
+    color: '#D2B48C'
+    pitch: -90.0
+  - label: front cage rim 6
+    min: -0.135541728, -0.129000000, 0.719065741
+    max: -0.111541728, -0.105000000, 0.833252316
+    color: '#D2B48C'
+    pitch: -67.5
+  - label: front cage rim 7
+    min: -0.227029112, -0.129000000, 0.657935825
+    max: -0.203029112, -0.105000000, 0.772122400
+    color: '#D2B48C'
+    pitch: -45.0
+  - label: front cage rim 8
+    min: -0.288159028, -0.129000000, 0.566448440
+    max: -0.264159028, -0.105000000, 0.680635016
+    color: '#D2B48C'
+    pitch: -22.5
+  - label: front cage rim 9
+    min: -0.309625000, -0.129000000, 0.458531712
+    max: -0.285625000, -0.105000000, 0.572718288
+    color: '#99826A'
+    pitch: 0.0
+  - label: front cage rim 10
+    min: -0.288159028, -0.129000000, 0.350614984
+    max: -0.264159028, -0.105000000, 0.464801560
+    color: '#99826A'
+    pitch: 22.5
+  - label: front cage rim 11
+    min: -0.227029112, -0.129000000, 0.259127600
+    max: -0.203029112, -0.105000000, 0.373314175
+    color: '#3D342A'
+    pitch: 45.0
+  - label: front cage rim 12
+    min: -0.135541728, -0.129000000, 0.197997684
+    max: -0.111541728, -0.105000000, 0.312184259
+    color: '#3D342A'
+    pitch: 67.5
+  - label: front cage rim 13
+    min: -0.027625000, -0.129000000, 0.176531712
+    max: -0.003625000, -0.105000000, 0.290718288
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front cage rim 14
+    min: 0.080291728, -0.129000000, 0.197997684
+    max: 0.104291728, -0.105000000, 0.312184259
+    color: '#3D342A'
+    pitch: -67.5
+  - label: front cage rim 15
+    min: 0.171779112, -0.129000000, 0.259127600
+    max: 0.195779112, -0.105000000, 0.373314175
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front cage rim 16
+    min: 0.232909028, -0.129000000, 0.350614984
+    max: 0.256909028, -0.105000000, 0.464801560
+    color: '#99826A'
+    pitch: -22.5
+  - label: rear cage rim 1
+    min: 0.244375000, -0.055000000, 0.460918661
+    max: 0.264375000, -0.031000000, 0.570331339
+    color: '#99826A'
+    pitch: 0.0
+  - label: rear cage rim 2
+    min: 0.223822474, -0.055000000, 0.564243188
+    max: 0.243822474, -0.031000000, 0.673655866
+    color: '#D2B48C'
+    pitch: 22.5
+  - label: rear cage rim 3
+    min: 0.165293831, -0.055000000, 0.651837492
+    max: 0.185293831, -0.031000000, 0.761250170
+    color: '#D2B48C'
+    pitch: 45.0
+  - label: rear cage rim 4
+    min: 0.077699527, -0.055000000, 0.710366135
+    max: 0.097699527, -0.031000000, 0.819778813
+    color: '#D2B48C'
+    pitch: 67.5
+  - label: rear cage rim 5
+    min: -0.025625000, -0.055000000, 0.730918661
+    max: -0.005625000, -0.031000000, 0.840331339
+    color: '#D2B48C'
+    pitch: -90.0
+  - label: rear cage rim 6
+    min: -0.128949527, -0.055000000, 0.710366135
+    max: -0.108949527, -0.031000000, 0.819778813
+    color: '#D2B48C'
+    pitch: -67.5
+  - label: rear cage rim 7
+    min: -0.216543831, -0.055000000, 0.651837492
+    max: -0.196543831, -0.031000000, 0.761250170
+    color: '#D2B48C'
+    pitch: -45.0
+  - label: rear cage rim 8
+    min: -0.275072474, -0.055000000, 0.564243188
+    max: -0.255072474, -0.031000000, 0.673655866
+    color: '#D2B48C'
+    pitch: -22.5
+  - label: rear cage rim 9
+    min: -0.295625000, -0.055000000, 0.460918661
+    max: -0.275625000, -0.031000000, 0.570331339
+    color: '#99826A'
+    pitch: 0.0
+  - label: rear cage rim 10
+    min: -0.275072474, -0.055000000, 0.357594134
+    max: -0.255072474, -0.031000000, 0.467006812
+    color: '#99826A'
+    pitch: 22.5
+  - label: rear cage rim 11
+    min: -0.216543831, -0.055000000, 0.269999830
+    max: -0.196543831, -0.031000000, 0.379412508
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage rim 12
+    min: -0.128949527, -0.055000000, 0.211471187
+    max: -0.108949527, -0.031000000, 0.320883865
+    color: '#3D342A'
+    pitch: 67.5
+  - label: rear cage rim 13
+    min: -0.025625000, -0.055000000, 0.190918661
+    max: -0.005625000, -0.031000000, 0.300331339
+    color: '#3D342A'
+    pitch: -90.0
+  - label: rear cage rim 14
+    min: 0.077699527, -0.055000000, 0.211471187
+    max: 0.097699527, -0.031000000, 0.320883865
+    color: '#3D342A'
+    pitch: -67.5
+  - label: rear cage rim 15
+    min: 0.165293831, -0.055000000, 0.269999830
+    max: 0.185293831, -0.031000000, 0.379412508
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage rim 16
+    min: 0.223822474, -0.055000000, 0.357594134
+    max: 0.243822474, -0.031000000, 0.467006812
+    color: '#99826A'
+    pitch: -22.5
+  - label: cage depth bridge 1
+    min: 0.247375000, -0.115000000, 0.502625000
+    max: 0.273375000, -0.045000000, 0.528625000
+    color: '#99826A'
+  - label: cage depth bridge 2
+    min: -0.028625000, -0.115000000, 0.778625000
+    max: -0.002625000, -0.045000000, 0.804625000
+    color: '#99826A'
+  - label: cage depth bridge 3
+    min: -0.304625000, -0.115000000, 0.502625000
+    max: -0.278625000, -0.045000000, 0.528625000
+    color: '#99826A'
+  - label: cage depth bridge 4
+    min: -0.028625000, -0.115000000, 0.226625000
+    max: -0.002625000, -0.045000000, 0.252625000
+    color: '#99826A'
+  - label: front protective spoke 1
+    min: 0.162375000, -0.136000000, 0.416625000
+    max: 0.170375000, -0.128000000, 0.614625000
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front protective spoke 2
+    min: 0.109068434, -0.136000000, 0.545318434
+    max: 0.117068434, -0.128000000, 0.743318434
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front protective spoke 3
+    min: -0.019625000, -0.136000000, 0.598625000
+    max: -0.011625000, -0.128000000, 0.796625000
+    color: '#3D342A'
+    pitch: 0.0
+  - label: front protective spoke 4
+    min: -0.148318434, -0.136000000, 0.545318434
+    max: -0.140318434, -0.128000000, 0.743318434
+    color: '#3D342A'
+    pitch: 45.0
+  - label: front protective spoke 5
+    min: -0.201625000, -0.136000000, 0.416625000
+    max: -0.193625000, -0.128000000, 0.614625000
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front protective spoke 6
+    min: -0.148318434, -0.136000000, 0.287931566
+    max: -0.140318434, -0.128000000, 0.485931566
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front protective spoke 7
+    min: -0.019625000, -0.136000000, 0.234625000
+    max: -0.011625000, -0.128000000, 0.432625000
+    color: '#3D342A'
+    pitch: 0.0
+  - label: front protective spoke 8
+    min: 0.109068434, -0.136000000, 0.287931566
+    max: 0.117068434, -0.128000000, 0.485931566
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage support 1
+    min: 0.102825793, -0.033000000, 0.540075793
+    max: 0.114825793, -0.021000000, 0.740075793
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage support 2
+    min: -0.146075793, -0.033000000, 0.540075793
+    max: -0.134075793, -0.021000000, 0.740075793
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage support 3
+    min: -0.146075793, -0.033000000, 0.291174207
+    max: -0.134075793, -0.021000000, 0.491174207
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage support 4
+    min: 0.102825793, -0.033000000, 0.291174207
+    max: 0.114825793, -0.021000000, 0.491174207
+    color: '#3D342A'
+    pitch: 45.0
+  - label: stationary rotor blade 1
+    min: 0.093886479, -0.097000000, 0.469946321
+    max: 0.199886479, -0.069000000, 0.679946321
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: -44.94647717042119
+  - label: stationary rotor blade 2
+    min: -0.127946321, -0.097000000, 0.573136479
+    max: -0.021946321, -0.069000000, 0.783136479
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: 45.05352282957881
+  - label: stationary rotor blade 3
+    min: -0.231136479, -0.097000000, 0.351303679
+    max: -0.125136479, -0.069000000, 0.561303679
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: -44.94647717042119
+  - label: stationary rotor blade 4
+    min: -0.009303679, -0.097000000, 0.248113521
+    max: 0.096696321, -0.069000000, 0.458113521
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: 45.05352282957881
+  - label: front bronze rotor hub
+    min: -0.106625000, -0.140000000, 0.424625000
+    max: 0.075375000, -0.090000000, 0.606625000
+    color: '#99826A'
+    shape: CylinderY
+  - label: original patterned front hub
+    min: -0.078125000, -0.145000000, 0.453125000
+    max: 0.046875000, -0.139000000, 0.578125000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2115
+    surfaceAxis: XZ
+  - label: original rear motor vents
+    min: -0.070625000, 0.263000000, 0.468125000
+    max: 0.039375000, 0.269000000, 0.563125000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2116
+    surfaceAxis: XZ
+  - label: original left Weyland-Yutani motor label
+    min: -0.111625000, 0.020000000, 0.479625000
+    max: -0.105625000, 0.250000000, 0.567625000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2117
+    surfaceAxis: YZ
+  - label: original right Weyland-Yutani motor label
+    min: 0.074375000, 0.020000000, 0.479625000
+    max: 0.080375000, 0.250000000, 0.567625000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2118
+    surfaceAxis: YZ
+  spriteStates:
+    deskfan:
+      frames:
+      - parts:
+        - label: weighted tan base
+          min: -0.175625000, -0.155000000, 0.000000000
+          max: 0.144375000, 0.265000000, 0.075000000
+          color: '#3D342A'
+          shape: Ellipsoid
+        - label: raised base upper casting
+          min: -0.145625000, -0.135000000, 0.028000000
+          max: 0.114375000, 0.205000000, 0.098000000
+          color: '#99826A'
+          shape: Ellipsoid
+        - label: flat load-bearing foot
+          min: -0.140625000, -0.120000000, 0.000000000
+          max: 0.109375000, 0.210000000, 0.024000000
+          color: '#3D342A'
+        - label: pedestal stem
+          min: -0.048625000, 0.025000000, 0.075000000
+          max: 0.017375000, 0.105000000, 0.375000000
+          color: '#99826A'
+          shape: CylinderZ
+        - label: pedestal top collar
+          min: -0.070625000, 0.005000000, 0.355000000
+          max: 0.039375000, 0.125000000, 0.445000000
+          color: '#D2B48C'
+          shape: Ellipsoid
+        - label: rear motor body
+          min: -0.106625000, -0.015000000, 0.420625000
+          max: 0.075375000, 0.245000000, 0.610625000
+          color: '#99826A'
+          shape: CylinderY
+        - label: rear motor cover
+          min: -0.090625000, 0.228000000, 0.437625000
+          max: 0.059375000, 0.264000000, 0.593625000
+          color: '#D2B48C'
+          shape: CylinderY
+        - label: shaft housing
+          min: -0.067625000, -0.100000000, 0.463625000
+          max: 0.036375000, 0.090000000, 0.567625000
+          color: '#3D342A'
+          shape: CylinderY
+        - label: front cage rim 1
+          min: 0.254375000, -0.129000000, 0.458531712
+          max: 0.278375000, -0.105000000, 0.572718288
+          color: '#99826A'
+          pitch: 0.0
+        - label: front cage rim 2
+          min: 0.232909028, -0.129000000, 0.566448440
+          max: 0.256909028, -0.105000000, 0.680635016
+          color: '#D2B48C'
+          pitch: 22.5
+        - label: front cage rim 3
+          min: 0.171779112, -0.129000000, 0.657935825
+          max: 0.195779112, -0.105000000, 0.772122400
+          color: '#D2B48C'
+          pitch: 45.0
+        - label: front cage rim 4
+          min: 0.080291728, -0.129000000, 0.719065741
+          max: 0.104291728, -0.105000000, 0.833252316
+          color: '#D2B48C'
+          pitch: 67.5
+        - label: front cage rim 5
+          min: -0.027625000, -0.129000000, 0.740531712
+          max: -0.003625000, -0.105000000, 0.854718288
+          color: '#D2B48C'
+          pitch: -90.0
+        - label: front cage rim 6
+          min: -0.135541728, -0.129000000, 0.719065741
+          max: -0.111541728, -0.105000000, 0.833252316
+          color: '#D2B48C'
+          pitch: -67.5
+        - label: front cage rim 7
+          min: -0.227029112, -0.129000000, 0.657935825
+          max: -0.203029112, -0.105000000, 0.772122400
+          color: '#D2B48C'
+          pitch: -45.0
+        - label: front cage rim 8
+          min: -0.288159028, -0.129000000, 0.566448440
+          max: -0.264159028, -0.105000000, 0.680635016
+          color: '#D2B48C'
+          pitch: -22.5
+        - label: front cage rim 9
+          min: -0.309625000, -0.129000000, 0.458531712
+          max: -0.285625000, -0.105000000, 0.572718288
+          color: '#99826A'
+          pitch: 0.0
+        - label: front cage rim 10
+          min: -0.288159028, -0.129000000, 0.350614984
+          max: -0.264159028, -0.105000000, 0.464801560
+          color: '#99826A'
+          pitch: 22.5
+        - label: front cage rim 11
+          min: -0.227029112, -0.129000000, 0.259127600
+          max: -0.203029112, -0.105000000, 0.373314175
+          color: '#3D342A'
+          pitch: 45.0
+        - label: front cage rim 12
+          min: -0.135541728, -0.129000000, 0.197997684
+          max: -0.111541728, -0.105000000, 0.312184259
+          color: '#3D342A'
+          pitch: 67.5
+        - label: front cage rim 13
+          min: -0.027625000, -0.129000000, 0.176531712
+          max: -0.003625000, -0.105000000, 0.290718288
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front cage rim 14
+          min: 0.080291728, -0.129000000, 0.197997684
+          max: 0.104291728, -0.105000000, 0.312184259
+          color: '#3D342A'
+          pitch: -67.5
+        - label: front cage rim 15
+          min: 0.171779112, -0.129000000, 0.259127600
+          max: 0.195779112, -0.105000000, 0.373314175
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front cage rim 16
+          min: 0.232909028, -0.129000000, 0.350614984
+          max: 0.256909028, -0.105000000, 0.464801560
+          color: '#99826A'
+          pitch: -22.5
+        - label: rear cage rim 1
+          min: 0.244375000, -0.055000000, 0.460918661
+          max: 0.264375000, -0.031000000, 0.570331339
+          color: '#99826A'
+          pitch: 0.0
+        - label: rear cage rim 2
+          min: 0.223822474, -0.055000000, 0.564243188
+          max: 0.243822474, -0.031000000, 0.673655866
+          color: '#D2B48C'
+          pitch: 22.5
+        - label: rear cage rim 3
+          min: 0.165293831, -0.055000000, 0.651837492
+          max: 0.185293831, -0.031000000, 0.761250170
+          color: '#D2B48C'
+          pitch: 45.0
+        - label: rear cage rim 4
+          min: 0.077699527, -0.055000000, 0.710366135
+          max: 0.097699527, -0.031000000, 0.819778813
+          color: '#D2B48C'
+          pitch: 67.5
+        - label: rear cage rim 5
+          min: -0.025625000, -0.055000000, 0.730918661
+          max: -0.005625000, -0.031000000, 0.840331339
+          color: '#D2B48C'
+          pitch: -90.0
+        - label: rear cage rim 6
+          min: -0.128949527, -0.055000000, 0.710366135
+          max: -0.108949527, -0.031000000, 0.819778813
+          color: '#D2B48C'
+          pitch: -67.5
+        - label: rear cage rim 7
+          min: -0.216543831, -0.055000000, 0.651837492
+          max: -0.196543831, -0.031000000, 0.761250170
+          color: '#D2B48C'
+          pitch: -45.0
+        - label: rear cage rim 8
+          min: -0.275072474, -0.055000000, 0.564243188
+          max: -0.255072474, -0.031000000, 0.673655866
+          color: '#D2B48C'
+          pitch: -22.5
+        - label: rear cage rim 9
+          min: -0.295625000, -0.055000000, 0.460918661
+          max: -0.275625000, -0.031000000, 0.570331339
+          color: '#99826A'
+          pitch: 0.0
+        - label: rear cage rim 10
+          min: -0.275072474, -0.055000000, 0.357594134
+          max: -0.255072474, -0.031000000, 0.467006812
+          color: '#99826A'
+          pitch: 22.5
+        - label: rear cage rim 11
+          min: -0.216543831, -0.055000000, 0.269999830
+          max: -0.196543831, -0.031000000, 0.379412508
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage rim 12
+          min: -0.128949527, -0.055000000, 0.211471187
+          max: -0.108949527, -0.031000000, 0.320883865
+          color: '#3D342A'
+          pitch: 67.5
+        - label: rear cage rim 13
+          min: -0.025625000, -0.055000000, 0.190918661
+          max: -0.005625000, -0.031000000, 0.300331339
+          color: '#3D342A'
+          pitch: -90.0
+        - label: rear cage rim 14
+          min: 0.077699527, -0.055000000, 0.211471187
+          max: 0.097699527, -0.031000000, 0.320883865
+          color: '#3D342A'
+          pitch: -67.5
+        - label: rear cage rim 15
+          min: 0.165293831, -0.055000000, 0.269999830
+          max: 0.185293831, -0.031000000, 0.379412508
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage rim 16
+          min: 0.223822474, -0.055000000, 0.357594134
+          max: 0.243822474, -0.031000000, 0.467006812
+          color: '#99826A'
+          pitch: -22.5
+        - label: cage depth bridge 1
+          min: 0.247375000, -0.115000000, 0.502625000
+          max: 0.273375000, -0.045000000, 0.528625000
+          color: '#99826A'
+        - label: cage depth bridge 2
+          min: -0.028625000, -0.115000000, 0.778625000
+          max: -0.002625000, -0.045000000, 0.804625000
+          color: '#99826A'
+        - label: cage depth bridge 3
+          min: -0.304625000, -0.115000000, 0.502625000
+          max: -0.278625000, -0.045000000, 0.528625000
+          color: '#99826A'
+        - label: cage depth bridge 4
+          min: -0.028625000, -0.115000000, 0.226625000
+          max: -0.002625000, -0.045000000, 0.252625000
+          color: '#99826A'
+        - label: front protective spoke 1
+          min: 0.162375000, -0.136000000, 0.416625000
+          max: 0.170375000, -0.128000000, 0.614625000
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front protective spoke 2
+          min: 0.109068434, -0.136000000, 0.545318434
+          max: 0.117068434, -0.128000000, 0.743318434
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front protective spoke 3
+          min: -0.019625000, -0.136000000, 0.598625000
+          max: -0.011625000, -0.128000000, 0.796625000
+          color: '#3D342A'
+          pitch: 0.0
+        - label: front protective spoke 4
+          min: -0.148318434, -0.136000000, 0.545318434
+          max: -0.140318434, -0.128000000, 0.743318434
+          color: '#3D342A'
+          pitch: 45.0
+        - label: front protective spoke 5
+          min: -0.201625000, -0.136000000, 0.416625000
+          max: -0.193625000, -0.128000000, 0.614625000
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front protective spoke 6
+          min: -0.148318434, -0.136000000, 0.287931566
+          max: -0.140318434, -0.128000000, 0.485931566
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front protective spoke 7
+          min: -0.019625000, -0.136000000, 0.234625000
+          max: -0.011625000, -0.128000000, 0.432625000
+          color: '#3D342A'
+          pitch: 0.0
+        - label: front protective spoke 8
+          min: 0.109068434, -0.136000000, 0.287931566
+          max: 0.117068434, -0.128000000, 0.485931566
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage support 1
+          min: 0.102825793, -0.033000000, 0.540075793
+          max: 0.114825793, -0.021000000, 0.740075793
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage support 2
+          min: -0.146075793, -0.033000000, 0.540075793
+          max: -0.134075793, -0.021000000, 0.740075793
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage support 3
+          min: -0.146075793, -0.033000000, 0.291174207
+          max: -0.134075793, -0.021000000, 0.491174207
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage support 4
+          min: 0.102825793, -0.033000000, 0.291174207
+          max: 0.114825793, -0.021000000, 0.491174207
+          color: '#3D342A'
+          pitch: 45.0
+        - label: stationary rotor blade 1
+          min: 0.093886479, -0.097000000, 0.469946321
+          max: 0.199886479, -0.069000000, 0.679946321
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: -44.94647717042119
+        - label: stationary rotor blade 2
+          min: -0.127946321, -0.097000000, 0.573136479
+          max: -0.021946321, -0.069000000, 0.783136479
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: 45.05352282957881
+        - label: stationary rotor blade 3
+          min: -0.231136479, -0.097000000, 0.351303679
+          max: -0.125136479, -0.069000000, 0.561303679
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: -44.94647717042119
+        - label: stationary rotor blade 4
+          min: -0.009303679, -0.097000000, 0.248113521
+          max: 0.096696321, -0.069000000, 0.458113521
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: 45.05352282957881
+        - label: front bronze rotor hub
+          min: -0.106625000, -0.140000000, 0.424625000
+          max: 0.075375000, -0.090000000, 0.606625000
+          color: '#99826A'
+          shape: CylinderY
+        - label: original patterned front hub
+          min: -0.078125000, -0.145000000, 0.453125000
+          max: 0.046875000, -0.139000000, 0.578125000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2115
+          surfaceAxis: XZ
+        - label: original rear motor vents
+          min: -0.070625000, 0.263000000, 0.468125000
+          max: 0.039375000, 0.269000000, 0.563125000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2116
+          surfaceAxis: XZ
+        - label: original left Weyland-Yutani motor label
+          min: -0.111625000, 0.020000000, 0.479625000
+          max: -0.105625000, 0.250000000, 0.567625000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2117
+          surfaceAxis: YZ
+        - label: original right Weyland-Yutani motor label
+          min: 0.074375000, 0.020000000, 0.479625000
+          max: 0.080375000, 0.250000000, 0.567625000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2118
+          surfaceAxis: YZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DTanDeskFanEast
+  label: Tan desk fan / East
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCDeskFanTan
+  referenceRsi: _RMC14/Objects/Misc/desk_fan.rsi
+  referenceState: deskfan
+  referenceDirection: 2
+  sourceDirections: 4
+  directionalModels:
+  - CMU3DTanDeskFanSouth
+  - CMU3DTanDeskFanNorth
+  - CMU3DTanDeskFanEast
+  - CMU3DTanDeskFanWest
+  sourceSpriteOffset: 0,0
+  sourceSpriteRotates: true
+  useEntityRotation: true
+  yawOffset: 0
+  placement: surface
+  groundOffset: 0,0
+  backWallMountTargets:
+  - RMCWallHybrisa
+  - RMCWallSPPGreyReinforced
+  - RMCWallPrisonReinforced
+  - RMCWallStrata
+  description: 'Source-colored physical fan: two hollow segmented cages, protective spokes, four static curved blades,
+    motor with original logos/vents, pedestal and weighted base. Depth/cage spacing and solid silhouette are inferred.
+    No source spinning animation exists. Saved yaw and exact table support retained. See SOURCES_VENDOR_FANS.md.'
+  parts:
+  - label: weighted tan base
+    min: -0.175625000, -0.155000000, 0.000000000
+    max: 0.144375000, 0.265000000, 0.075000000
+    color: '#3D342A'
+    shape: Ellipsoid
+  - label: raised base upper casting
+    min: -0.145625000, -0.135000000, 0.028000000
+    max: 0.114375000, 0.205000000, 0.098000000
+    color: '#99826A'
+    shape: Ellipsoid
+  - label: flat load-bearing foot
+    min: -0.140625000, -0.120000000, 0.000000000
+    max: 0.109375000, 0.210000000, 0.024000000
+    color: '#3D342A'
+  - label: pedestal stem
+    min: -0.048625000, 0.025000000, 0.075000000
+    max: 0.017375000, 0.105000000, 0.375000000
+    color: '#99826A'
+    shape: CylinderZ
+  - label: pedestal top collar
+    min: -0.070625000, 0.005000000, 0.355000000
+    max: 0.039375000, 0.125000000, 0.445000000
+    color: '#D2B48C'
+    shape: Ellipsoid
+  - label: rear motor body
+    min: -0.106625000, -0.015000000, 0.420625000
+    max: 0.075375000, 0.245000000, 0.610625000
+    color: '#99826A'
+    shape: CylinderY
+  - label: rear motor cover
+    min: -0.090625000, 0.228000000, 0.437625000
+    max: 0.059375000, 0.264000000, 0.593625000
+    color: '#D2B48C'
+    shape: CylinderY
+  - label: shaft housing
+    min: -0.067625000, -0.100000000, 0.463625000
+    max: 0.036375000, 0.090000000, 0.567625000
+    color: '#3D342A'
+    shape: CylinderY
+  - label: front cage rim 1
+    min: 0.254375000, -0.129000000, 0.458531712
+    max: 0.278375000, -0.105000000, 0.572718288
+    color: '#99826A'
+    pitch: 0.0
+  - label: front cage rim 2
+    min: 0.232909028, -0.129000000, 0.566448440
+    max: 0.256909028, -0.105000000, 0.680635016
+    color: '#D2B48C'
+    pitch: 22.5
+  - label: front cage rim 3
+    min: 0.171779112, -0.129000000, 0.657935825
+    max: 0.195779112, -0.105000000, 0.772122400
+    color: '#D2B48C'
+    pitch: 45.0
+  - label: front cage rim 4
+    min: 0.080291728, -0.129000000, 0.719065741
+    max: 0.104291728, -0.105000000, 0.833252316
+    color: '#D2B48C'
+    pitch: 67.5
+  - label: front cage rim 5
+    min: -0.027625000, -0.129000000, 0.740531712
+    max: -0.003625000, -0.105000000, 0.854718288
+    color: '#D2B48C'
+    pitch: -90.0
+  - label: front cage rim 6
+    min: -0.135541728, -0.129000000, 0.719065741
+    max: -0.111541728, -0.105000000, 0.833252316
+    color: '#D2B48C'
+    pitch: -67.5
+  - label: front cage rim 7
+    min: -0.227029112, -0.129000000, 0.657935825
+    max: -0.203029112, -0.105000000, 0.772122400
+    color: '#D2B48C'
+    pitch: -45.0
+  - label: front cage rim 8
+    min: -0.288159028, -0.129000000, 0.566448440
+    max: -0.264159028, -0.105000000, 0.680635016
+    color: '#D2B48C'
+    pitch: -22.5
+  - label: front cage rim 9
+    min: -0.309625000, -0.129000000, 0.458531712
+    max: -0.285625000, -0.105000000, 0.572718288
+    color: '#99826A'
+    pitch: 0.0
+  - label: front cage rim 10
+    min: -0.288159028, -0.129000000, 0.350614984
+    max: -0.264159028, -0.105000000, 0.464801560
+    color: '#99826A'
+    pitch: 22.5
+  - label: front cage rim 11
+    min: -0.227029112, -0.129000000, 0.259127600
+    max: -0.203029112, -0.105000000, 0.373314175
+    color: '#3D342A'
+    pitch: 45.0
+  - label: front cage rim 12
+    min: -0.135541728, -0.129000000, 0.197997684
+    max: -0.111541728, -0.105000000, 0.312184259
+    color: '#3D342A'
+    pitch: 67.5
+  - label: front cage rim 13
+    min: -0.027625000, -0.129000000, 0.176531712
+    max: -0.003625000, -0.105000000, 0.290718288
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front cage rim 14
+    min: 0.080291728, -0.129000000, 0.197997684
+    max: 0.104291728, -0.105000000, 0.312184259
+    color: '#3D342A'
+    pitch: -67.5
+  - label: front cage rim 15
+    min: 0.171779112, -0.129000000, 0.259127600
+    max: 0.195779112, -0.105000000, 0.373314175
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front cage rim 16
+    min: 0.232909028, -0.129000000, 0.350614984
+    max: 0.256909028, -0.105000000, 0.464801560
+    color: '#99826A'
+    pitch: -22.5
+  - label: rear cage rim 1
+    min: 0.244375000, -0.055000000, 0.460918661
+    max: 0.264375000, -0.031000000, 0.570331339
+    color: '#99826A'
+    pitch: 0.0
+  - label: rear cage rim 2
+    min: 0.223822474, -0.055000000, 0.564243188
+    max: 0.243822474, -0.031000000, 0.673655866
+    color: '#D2B48C'
+    pitch: 22.5
+  - label: rear cage rim 3
+    min: 0.165293831, -0.055000000, 0.651837492
+    max: 0.185293831, -0.031000000, 0.761250170
+    color: '#D2B48C'
+    pitch: 45.0
+  - label: rear cage rim 4
+    min: 0.077699527, -0.055000000, 0.710366135
+    max: 0.097699527, -0.031000000, 0.819778813
+    color: '#D2B48C'
+    pitch: 67.5
+  - label: rear cage rim 5
+    min: -0.025625000, -0.055000000, 0.730918661
+    max: -0.005625000, -0.031000000, 0.840331339
+    color: '#D2B48C'
+    pitch: -90.0
+  - label: rear cage rim 6
+    min: -0.128949527, -0.055000000, 0.710366135
+    max: -0.108949527, -0.031000000, 0.819778813
+    color: '#D2B48C'
+    pitch: -67.5
+  - label: rear cage rim 7
+    min: -0.216543831, -0.055000000, 0.651837492
+    max: -0.196543831, -0.031000000, 0.761250170
+    color: '#D2B48C'
+    pitch: -45.0
+  - label: rear cage rim 8
+    min: -0.275072474, -0.055000000, 0.564243188
+    max: -0.255072474, -0.031000000, 0.673655866
+    color: '#D2B48C'
+    pitch: -22.5
+  - label: rear cage rim 9
+    min: -0.295625000, -0.055000000, 0.460918661
+    max: -0.275625000, -0.031000000, 0.570331339
+    color: '#99826A'
+    pitch: 0.0
+  - label: rear cage rim 10
+    min: -0.275072474, -0.055000000, 0.357594134
+    max: -0.255072474, -0.031000000, 0.467006812
+    color: '#99826A'
+    pitch: 22.5
+  - label: rear cage rim 11
+    min: -0.216543831, -0.055000000, 0.269999830
+    max: -0.196543831, -0.031000000, 0.379412508
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage rim 12
+    min: -0.128949527, -0.055000000, 0.211471187
+    max: -0.108949527, -0.031000000, 0.320883865
+    color: '#3D342A'
+    pitch: 67.5
+  - label: rear cage rim 13
+    min: -0.025625000, -0.055000000, 0.190918661
+    max: -0.005625000, -0.031000000, 0.300331339
+    color: '#3D342A'
+    pitch: -90.0
+  - label: rear cage rim 14
+    min: 0.077699527, -0.055000000, 0.211471187
+    max: 0.097699527, -0.031000000, 0.320883865
+    color: '#3D342A'
+    pitch: -67.5
+  - label: rear cage rim 15
+    min: 0.165293831, -0.055000000, 0.269999830
+    max: 0.185293831, -0.031000000, 0.379412508
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage rim 16
+    min: 0.223822474, -0.055000000, 0.357594134
+    max: 0.243822474, -0.031000000, 0.467006812
+    color: '#99826A'
+    pitch: -22.5
+  - label: cage depth bridge 1
+    min: 0.247375000, -0.115000000, 0.502625000
+    max: 0.273375000, -0.045000000, 0.528625000
+    color: '#99826A'
+  - label: cage depth bridge 2
+    min: -0.028625000, -0.115000000, 0.778625000
+    max: -0.002625000, -0.045000000, 0.804625000
+    color: '#99826A'
+  - label: cage depth bridge 3
+    min: -0.304625000, -0.115000000, 0.502625000
+    max: -0.278625000, -0.045000000, 0.528625000
+    color: '#99826A'
+  - label: cage depth bridge 4
+    min: -0.028625000, -0.115000000, 0.226625000
+    max: -0.002625000, -0.045000000, 0.252625000
+    color: '#99826A'
+  - label: front protective spoke 1
+    min: 0.162375000, -0.136000000, 0.416625000
+    max: 0.170375000, -0.128000000, 0.614625000
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front protective spoke 2
+    min: 0.109068434, -0.136000000, 0.545318434
+    max: 0.117068434, -0.128000000, 0.743318434
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front protective spoke 3
+    min: -0.019625000, -0.136000000, 0.598625000
+    max: -0.011625000, -0.128000000, 0.796625000
+    color: '#3D342A'
+    pitch: 0.0
+  - label: front protective spoke 4
+    min: -0.148318434, -0.136000000, 0.545318434
+    max: -0.140318434, -0.128000000, 0.743318434
+    color: '#3D342A'
+    pitch: 45.0
+  - label: front protective spoke 5
+    min: -0.201625000, -0.136000000, 0.416625000
+    max: -0.193625000, -0.128000000, 0.614625000
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front protective spoke 6
+    min: -0.148318434, -0.136000000, 0.287931566
+    max: -0.140318434, -0.128000000, 0.485931566
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front protective spoke 7
+    min: -0.019625000, -0.136000000, 0.234625000
+    max: -0.011625000, -0.128000000, 0.432625000
+    color: '#3D342A'
+    pitch: 0.0
+  - label: front protective spoke 8
+    min: 0.109068434, -0.136000000, 0.287931566
+    max: 0.117068434, -0.128000000, 0.485931566
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage support 1
+    min: 0.102825793, -0.033000000, 0.540075793
+    max: 0.114825793, -0.021000000, 0.740075793
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage support 2
+    min: -0.146075793, -0.033000000, 0.540075793
+    max: -0.134075793, -0.021000000, 0.740075793
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage support 3
+    min: -0.146075793, -0.033000000, 0.291174207
+    max: -0.134075793, -0.021000000, 0.491174207
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage support 4
+    min: 0.102825793, -0.033000000, 0.291174207
+    max: 0.114825793, -0.021000000, 0.491174207
+    color: '#3D342A'
+    pitch: 45.0
+  - label: stationary rotor blade 1
+    min: 0.093886479, -0.097000000, 0.469946321
+    max: 0.199886479, -0.069000000, 0.679946321
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: -44.94647717042119
+  - label: stationary rotor blade 2
+    min: -0.127946321, -0.097000000, 0.573136479
+    max: -0.021946321, -0.069000000, 0.783136479
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: 45.05352282957881
+  - label: stationary rotor blade 3
+    min: -0.231136479, -0.097000000, 0.351303679
+    max: -0.125136479, -0.069000000, 0.561303679
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: -44.94647717042119
+  - label: stationary rotor blade 4
+    min: -0.009303679, -0.097000000, 0.248113521
+    max: 0.096696321, -0.069000000, 0.458113521
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: 45.05352282957881
+  - label: front bronze rotor hub
+    min: -0.106625000, -0.140000000, 0.424625000
+    max: 0.075375000, -0.090000000, 0.606625000
+    color: '#99826A'
+    shape: CylinderY
+  - label: original patterned front hub
+    min: -0.078125000, -0.145000000, 0.453125000
+    max: 0.046875000, -0.139000000, 0.578125000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2115
+    surfaceAxis: XZ
+  - label: original rear motor vents
+    min: -0.070625000, 0.263000000, 0.468125000
+    max: 0.039375000, 0.269000000, 0.563125000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2116
+    surfaceAxis: XZ
+  - label: original left Weyland-Yutani motor label
+    min: -0.111625000, 0.020000000, 0.479625000
+    max: -0.105625000, 0.250000000, 0.567625000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2117
+    surfaceAxis: YZ
+  - label: original right Weyland-Yutani motor label
+    min: 0.074375000, 0.020000000, 0.479625000
+    max: 0.080375000, 0.250000000, 0.567625000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2118
+    surfaceAxis: YZ
+  spriteStates:
+    deskfan:
+      frames:
+      - parts:
+        - label: weighted tan base
+          min: -0.175625000, -0.155000000, 0.000000000
+          max: 0.144375000, 0.265000000, 0.075000000
+          color: '#3D342A'
+          shape: Ellipsoid
+        - label: raised base upper casting
+          min: -0.145625000, -0.135000000, 0.028000000
+          max: 0.114375000, 0.205000000, 0.098000000
+          color: '#99826A'
+          shape: Ellipsoid
+        - label: flat load-bearing foot
+          min: -0.140625000, -0.120000000, 0.000000000
+          max: 0.109375000, 0.210000000, 0.024000000
+          color: '#3D342A'
+        - label: pedestal stem
+          min: -0.048625000, 0.025000000, 0.075000000
+          max: 0.017375000, 0.105000000, 0.375000000
+          color: '#99826A'
+          shape: CylinderZ
+        - label: pedestal top collar
+          min: -0.070625000, 0.005000000, 0.355000000
+          max: 0.039375000, 0.125000000, 0.445000000
+          color: '#D2B48C'
+          shape: Ellipsoid
+        - label: rear motor body
+          min: -0.106625000, -0.015000000, 0.420625000
+          max: 0.075375000, 0.245000000, 0.610625000
+          color: '#99826A'
+          shape: CylinderY
+        - label: rear motor cover
+          min: -0.090625000, 0.228000000, 0.437625000
+          max: 0.059375000, 0.264000000, 0.593625000
+          color: '#D2B48C'
+          shape: CylinderY
+        - label: shaft housing
+          min: -0.067625000, -0.100000000, 0.463625000
+          max: 0.036375000, 0.090000000, 0.567625000
+          color: '#3D342A'
+          shape: CylinderY
+        - label: front cage rim 1
+          min: 0.254375000, -0.129000000, 0.458531712
+          max: 0.278375000, -0.105000000, 0.572718288
+          color: '#99826A'
+          pitch: 0.0
+        - label: front cage rim 2
+          min: 0.232909028, -0.129000000, 0.566448440
+          max: 0.256909028, -0.105000000, 0.680635016
+          color: '#D2B48C'
+          pitch: 22.5
+        - label: front cage rim 3
+          min: 0.171779112, -0.129000000, 0.657935825
+          max: 0.195779112, -0.105000000, 0.772122400
+          color: '#D2B48C'
+          pitch: 45.0
+        - label: front cage rim 4
+          min: 0.080291728, -0.129000000, 0.719065741
+          max: 0.104291728, -0.105000000, 0.833252316
+          color: '#D2B48C'
+          pitch: 67.5
+        - label: front cage rim 5
+          min: -0.027625000, -0.129000000, 0.740531712
+          max: -0.003625000, -0.105000000, 0.854718288
+          color: '#D2B48C'
+          pitch: -90.0
+        - label: front cage rim 6
+          min: -0.135541728, -0.129000000, 0.719065741
+          max: -0.111541728, -0.105000000, 0.833252316
+          color: '#D2B48C'
+          pitch: -67.5
+        - label: front cage rim 7
+          min: -0.227029112, -0.129000000, 0.657935825
+          max: -0.203029112, -0.105000000, 0.772122400
+          color: '#D2B48C'
+          pitch: -45.0
+        - label: front cage rim 8
+          min: -0.288159028, -0.129000000, 0.566448440
+          max: -0.264159028, -0.105000000, 0.680635016
+          color: '#D2B48C'
+          pitch: -22.5
+        - label: front cage rim 9
+          min: -0.309625000, -0.129000000, 0.458531712
+          max: -0.285625000, -0.105000000, 0.572718288
+          color: '#99826A'
+          pitch: 0.0
+        - label: front cage rim 10
+          min: -0.288159028, -0.129000000, 0.350614984
+          max: -0.264159028, -0.105000000, 0.464801560
+          color: '#99826A'
+          pitch: 22.5
+        - label: front cage rim 11
+          min: -0.227029112, -0.129000000, 0.259127600
+          max: -0.203029112, -0.105000000, 0.373314175
+          color: '#3D342A'
+          pitch: 45.0
+        - label: front cage rim 12
+          min: -0.135541728, -0.129000000, 0.197997684
+          max: -0.111541728, -0.105000000, 0.312184259
+          color: '#3D342A'
+          pitch: 67.5
+        - label: front cage rim 13
+          min: -0.027625000, -0.129000000, 0.176531712
+          max: -0.003625000, -0.105000000, 0.290718288
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front cage rim 14
+          min: 0.080291728, -0.129000000, 0.197997684
+          max: 0.104291728, -0.105000000, 0.312184259
+          color: '#3D342A'
+          pitch: -67.5
+        - label: front cage rim 15
+          min: 0.171779112, -0.129000000, 0.259127600
+          max: 0.195779112, -0.105000000, 0.373314175
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front cage rim 16
+          min: 0.232909028, -0.129000000, 0.350614984
+          max: 0.256909028, -0.105000000, 0.464801560
+          color: '#99826A'
+          pitch: -22.5
+        - label: rear cage rim 1
+          min: 0.244375000, -0.055000000, 0.460918661
+          max: 0.264375000, -0.031000000, 0.570331339
+          color: '#99826A'
+          pitch: 0.0
+        - label: rear cage rim 2
+          min: 0.223822474, -0.055000000, 0.564243188
+          max: 0.243822474, -0.031000000, 0.673655866
+          color: '#D2B48C'
+          pitch: 22.5
+        - label: rear cage rim 3
+          min: 0.165293831, -0.055000000, 0.651837492
+          max: 0.185293831, -0.031000000, 0.761250170
+          color: '#D2B48C'
+          pitch: 45.0
+        - label: rear cage rim 4
+          min: 0.077699527, -0.055000000, 0.710366135
+          max: 0.097699527, -0.031000000, 0.819778813
+          color: '#D2B48C'
+          pitch: 67.5
+        - label: rear cage rim 5
+          min: -0.025625000, -0.055000000, 0.730918661
+          max: -0.005625000, -0.031000000, 0.840331339
+          color: '#D2B48C'
+          pitch: -90.0
+        - label: rear cage rim 6
+          min: -0.128949527, -0.055000000, 0.710366135
+          max: -0.108949527, -0.031000000, 0.819778813
+          color: '#D2B48C'
+          pitch: -67.5
+        - label: rear cage rim 7
+          min: -0.216543831, -0.055000000, 0.651837492
+          max: -0.196543831, -0.031000000, 0.761250170
+          color: '#D2B48C'
+          pitch: -45.0
+        - label: rear cage rim 8
+          min: -0.275072474, -0.055000000, 0.564243188
+          max: -0.255072474, -0.031000000, 0.673655866
+          color: '#D2B48C'
+          pitch: -22.5
+        - label: rear cage rim 9
+          min: -0.295625000, -0.055000000, 0.460918661
+          max: -0.275625000, -0.031000000, 0.570331339
+          color: '#99826A'
+          pitch: 0.0
+        - label: rear cage rim 10
+          min: -0.275072474, -0.055000000, 0.357594134
+          max: -0.255072474, -0.031000000, 0.467006812
+          color: '#99826A'
+          pitch: 22.5
+        - label: rear cage rim 11
+          min: -0.216543831, -0.055000000, 0.269999830
+          max: -0.196543831, -0.031000000, 0.379412508
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage rim 12
+          min: -0.128949527, -0.055000000, 0.211471187
+          max: -0.108949527, -0.031000000, 0.320883865
+          color: '#3D342A'
+          pitch: 67.5
+        - label: rear cage rim 13
+          min: -0.025625000, -0.055000000, 0.190918661
+          max: -0.005625000, -0.031000000, 0.300331339
+          color: '#3D342A'
+          pitch: -90.0
+        - label: rear cage rim 14
+          min: 0.077699527, -0.055000000, 0.211471187
+          max: 0.097699527, -0.031000000, 0.320883865
+          color: '#3D342A'
+          pitch: -67.5
+        - label: rear cage rim 15
+          min: 0.165293831, -0.055000000, 0.269999830
+          max: 0.185293831, -0.031000000, 0.379412508
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage rim 16
+          min: 0.223822474, -0.055000000, 0.357594134
+          max: 0.243822474, -0.031000000, 0.467006812
+          color: '#99826A'
+          pitch: -22.5
+        - label: cage depth bridge 1
+          min: 0.247375000, -0.115000000, 0.502625000
+          max: 0.273375000, -0.045000000, 0.528625000
+          color: '#99826A'
+        - label: cage depth bridge 2
+          min: -0.028625000, -0.115000000, 0.778625000
+          max: -0.002625000, -0.045000000, 0.804625000
+          color: '#99826A'
+        - label: cage depth bridge 3
+          min: -0.304625000, -0.115000000, 0.502625000
+          max: -0.278625000, -0.045000000, 0.528625000
+          color: '#99826A'
+        - label: cage depth bridge 4
+          min: -0.028625000, -0.115000000, 0.226625000
+          max: -0.002625000, -0.045000000, 0.252625000
+          color: '#99826A'
+        - label: front protective spoke 1
+          min: 0.162375000, -0.136000000, 0.416625000
+          max: 0.170375000, -0.128000000, 0.614625000
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front protective spoke 2
+          min: 0.109068434, -0.136000000, 0.545318434
+          max: 0.117068434, -0.128000000, 0.743318434
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front protective spoke 3
+          min: -0.019625000, -0.136000000, 0.598625000
+          max: -0.011625000, -0.128000000, 0.796625000
+          color: '#3D342A'
+          pitch: 0.0
+        - label: front protective spoke 4
+          min: -0.148318434, -0.136000000, 0.545318434
+          max: -0.140318434, -0.128000000, 0.743318434
+          color: '#3D342A'
+          pitch: 45.0
+        - label: front protective spoke 5
+          min: -0.201625000, -0.136000000, 0.416625000
+          max: -0.193625000, -0.128000000, 0.614625000
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front protective spoke 6
+          min: -0.148318434, -0.136000000, 0.287931566
+          max: -0.140318434, -0.128000000, 0.485931566
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front protective spoke 7
+          min: -0.019625000, -0.136000000, 0.234625000
+          max: -0.011625000, -0.128000000, 0.432625000
+          color: '#3D342A'
+          pitch: 0.0
+        - label: front protective spoke 8
+          min: 0.109068434, -0.136000000, 0.287931566
+          max: 0.117068434, -0.128000000, 0.485931566
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage support 1
+          min: 0.102825793, -0.033000000, 0.540075793
+          max: 0.114825793, -0.021000000, 0.740075793
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage support 2
+          min: -0.146075793, -0.033000000, 0.540075793
+          max: -0.134075793, -0.021000000, 0.740075793
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage support 3
+          min: -0.146075793, -0.033000000, 0.291174207
+          max: -0.134075793, -0.021000000, 0.491174207
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage support 4
+          min: 0.102825793, -0.033000000, 0.291174207
+          max: 0.114825793, -0.021000000, 0.491174207
+          color: '#3D342A'
+          pitch: 45.0
+        - label: stationary rotor blade 1
+          min: 0.093886479, -0.097000000, 0.469946321
+          max: 0.199886479, -0.069000000, 0.679946321
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: -44.94647717042119
+        - label: stationary rotor blade 2
+          min: -0.127946321, -0.097000000, 0.573136479
+          max: -0.021946321, -0.069000000, 0.783136479
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: 45.05352282957881
+        - label: stationary rotor blade 3
+          min: -0.231136479, -0.097000000, 0.351303679
+          max: -0.125136479, -0.069000000, 0.561303679
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: -44.94647717042119
+        - label: stationary rotor blade 4
+          min: -0.009303679, -0.097000000, 0.248113521
+          max: 0.096696321, -0.069000000, 0.458113521
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: 45.05352282957881
+        - label: front bronze rotor hub
+          min: -0.106625000, -0.140000000, 0.424625000
+          max: 0.075375000, -0.090000000, 0.606625000
+          color: '#99826A'
+          shape: CylinderY
+        - label: original patterned front hub
+          min: -0.078125000, -0.145000000, 0.453125000
+          max: 0.046875000, -0.139000000, 0.578125000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2115
+          surfaceAxis: XZ
+        - label: original rear motor vents
+          min: -0.070625000, 0.263000000, 0.468125000
+          max: 0.039375000, 0.269000000, 0.563125000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2116
+          surfaceAxis: XZ
+        - label: original left Weyland-Yutani motor label
+          min: -0.111625000, 0.020000000, 0.479625000
+          max: -0.105625000, 0.250000000, 0.567625000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2117
+          surfaceAxis: YZ
+        - label: original right Weyland-Yutani motor label
+          min: 0.074375000, 0.020000000, 0.479625000
+          max: 0.080375000, 0.250000000, 0.567625000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2118
+          surfaceAxis: YZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DTanDeskFanWest
+  label: Tan desk fan / West
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCDeskFanTan
+  referenceRsi: _RMC14/Objects/Misc/desk_fan.rsi
+  referenceState: deskfan
+  referenceDirection: 3
+  sourceDirections: 4
+  directionalModels:
+  - CMU3DTanDeskFanSouth
+  - CMU3DTanDeskFanNorth
+  - CMU3DTanDeskFanEast
+  - CMU3DTanDeskFanWest
+  sourceSpriteOffset: 0,0
+  sourceSpriteRotates: true
+  useEntityRotation: true
+  yawOffset: 0
+  placement: surface
+  groundOffset: 0,0
+  backWallMountTargets:
+  - RMCWallHybrisa
+  - RMCWallSPPGreyReinforced
+  - RMCWallPrisonReinforced
+  - RMCWallStrata
+  description: 'Source-colored physical fan: two hollow segmented cages, protective spokes, four static curved blades,
+    motor with original logos/vents, pedestal and weighted base. Depth/cage spacing and solid silhouette are inferred.
+    No source spinning animation exists. Saved yaw and exact table support retained. See SOURCES_VENDOR_FANS.md.'
+  parts:
+  - label: weighted tan base
+    min: -0.175625000, -0.155000000, 0.000000000
+    max: 0.144375000, 0.265000000, 0.075000000
+    color: '#3D342A'
+    shape: Ellipsoid
+  - label: raised base upper casting
+    min: -0.145625000, -0.135000000, 0.028000000
+    max: 0.114375000, 0.205000000, 0.098000000
+    color: '#99826A'
+    shape: Ellipsoid
+  - label: flat load-bearing foot
+    min: -0.140625000, -0.120000000, 0.000000000
+    max: 0.109375000, 0.210000000, 0.024000000
+    color: '#3D342A'
+  - label: pedestal stem
+    min: -0.048625000, 0.025000000, 0.075000000
+    max: 0.017375000, 0.105000000, 0.375000000
+    color: '#99826A'
+    shape: CylinderZ
+  - label: pedestal top collar
+    min: -0.070625000, 0.005000000, 0.355000000
+    max: 0.039375000, 0.125000000, 0.445000000
+    color: '#D2B48C'
+    shape: Ellipsoid
+  - label: rear motor body
+    min: -0.106625000, -0.015000000, 0.420625000
+    max: 0.075375000, 0.245000000, 0.610625000
+    color: '#99826A'
+    shape: CylinderY
+  - label: rear motor cover
+    min: -0.090625000, 0.228000000, 0.437625000
+    max: 0.059375000, 0.264000000, 0.593625000
+    color: '#D2B48C'
+    shape: CylinderY
+  - label: shaft housing
+    min: -0.067625000, -0.100000000, 0.463625000
+    max: 0.036375000, 0.090000000, 0.567625000
+    color: '#3D342A'
+    shape: CylinderY
+  - label: front cage rim 1
+    min: 0.254375000, -0.129000000, 0.458531712
+    max: 0.278375000, -0.105000000, 0.572718288
+    color: '#99826A'
+    pitch: 0.0
+  - label: front cage rim 2
+    min: 0.232909028, -0.129000000, 0.566448440
+    max: 0.256909028, -0.105000000, 0.680635016
+    color: '#D2B48C'
+    pitch: 22.5
+  - label: front cage rim 3
+    min: 0.171779112, -0.129000000, 0.657935825
+    max: 0.195779112, -0.105000000, 0.772122400
+    color: '#D2B48C'
+    pitch: 45.0
+  - label: front cage rim 4
+    min: 0.080291728, -0.129000000, 0.719065741
+    max: 0.104291728, -0.105000000, 0.833252316
+    color: '#D2B48C'
+    pitch: 67.5
+  - label: front cage rim 5
+    min: -0.027625000, -0.129000000, 0.740531712
+    max: -0.003625000, -0.105000000, 0.854718288
+    color: '#D2B48C'
+    pitch: -90.0
+  - label: front cage rim 6
+    min: -0.135541728, -0.129000000, 0.719065741
+    max: -0.111541728, -0.105000000, 0.833252316
+    color: '#D2B48C'
+    pitch: -67.5
+  - label: front cage rim 7
+    min: -0.227029112, -0.129000000, 0.657935825
+    max: -0.203029112, -0.105000000, 0.772122400
+    color: '#D2B48C'
+    pitch: -45.0
+  - label: front cage rim 8
+    min: -0.288159028, -0.129000000, 0.566448440
+    max: -0.264159028, -0.105000000, 0.680635016
+    color: '#D2B48C'
+    pitch: -22.5
+  - label: front cage rim 9
+    min: -0.309625000, -0.129000000, 0.458531712
+    max: -0.285625000, -0.105000000, 0.572718288
+    color: '#99826A'
+    pitch: 0.0
+  - label: front cage rim 10
+    min: -0.288159028, -0.129000000, 0.350614984
+    max: -0.264159028, -0.105000000, 0.464801560
+    color: '#99826A'
+    pitch: 22.5
+  - label: front cage rim 11
+    min: -0.227029112, -0.129000000, 0.259127600
+    max: -0.203029112, -0.105000000, 0.373314175
+    color: '#3D342A'
+    pitch: 45.0
+  - label: front cage rim 12
+    min: -0.135541728, -0.129000000, 0.197997684
+    max: -0.111541728, -0.105000000, 0.312184259
+    color: '#3D342A'
+    pitch: 67.5
+  - label: front cage rim 13
+    min: -0.027625000, -0.129000000, 0.176531712
+    max: -0.003625000, -0.105000000, 0.290718288
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front cage rim 14
+    min: 0.080291728, -0.129000000, 0.197997684
+    max: 0.104291728, -0.105000000, 0.312184259
+    color: '#3D342A'
+    pitch: -67.5
+  - label: front cage rim 15
+    min: 0.171779112, -0.129000000, 0.259127600
+    max: 0.195779112, -0.105000000, 0.373314175
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front cage rim 16
+    min: 0.232909028, -0.129000000, 0.350614984
+    max: 0.256909028, -0.105000000, 0.464801560
+    color: '#99826A'
+    pitch: -22.5
+  - label: rear cage rim 1
+    min: 0.244375000, -0.055000000, 0.460918661
+    max: 0.264375000, -0.031000000, 0.570331339
+    color: '#99826A'
+    pitch: 0.0
+  - label: rear cage rim 2
+    min: 0.223822474, -0.055000000, 0.564243188
+    max: 0.243822474, -0.031000000, 0.673655866
+    color: '#D2B48C'
+    pitch: 22.5
+  - label: rear cage rim 3
+    min: 0.165293831, -0.055000000, 0.651837492
+    max: 0.185293831, -0.031000000, 0.761250170
+    color: '#D2B48C'
+    pitch: 45.0
+  - label: rear cage rim 4
+    min: 0.077699527, -0.055000000, 0.710366135
+    max: 0.097699527, -0.031000000, 0.819778813
+    color: '#D2B48C'
+    pitch: 67.5
+  - label: rear cage rim 5
+    min: -0.025625000, -0.055000000, 0.730918661
+    max: -0.005625000, -0.031000000, 0.840331339
+    color: '#D2B48C'
+    pitch: -90.0
+  - label: rear cage rim 6
+    min: -0.128949527, -0.055000000, 0.710366135
+    max: -0.108949527, -0.031000000, 0.819778813
+    color: '#D2B48C'
+    pitch: -67.5
+  - label: rear cage rim 7
+    min: -0.216543831, -0.055000000, 0.651837492
+    max: -0.196543831, -0.031000000, 0.761250170
+    color: '#D2B48C'
+    pitch: -45.0
+  - label: rear cage rim 8
+    min: -0.275072474, -0.055000000, 0.564243188
+    max: -0.255072474, -0.031000000, 0.673655866
+    color: '#D2B48C'
+    pitch: -22.5
+  - label: rear cage rim 9
+    min: -0.295625000, -0.055000000, 0.460918661
+    max: -0.275625000, -0.031000000, 0.570331339
+    color: '#99826A'
+    pitch: 0.0
+  - label: rear cage rim 10
+    min: -0.275072474, -0.055000000, 0.357594134
+    max: -0.255072474, -0.031000000, 0.467006812
+    color: '#99826A'
+    pitch: 22.5
+  - label: rear cage rim 11
+    min: -0.216543831, -0.055000000, 0.269999830
+    max: -0.196543831, -0.031000000, 0.379412508
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage rim 12
+    min: -0.128949527, -0.055000000, 0.211471187
+    max: -0.108949527, -0.031000000, 0.320883865
+    color: '#3D342A'
+    pitch: 67.5
+  - label: rear cage rim 13
+    min: -0.025625000, -0.055000000, 0.190918661
+    max: -0.005625000, -0.031000000, 0.300331339
+    color: '#3D342A'
+    pitch: -90.0
+  - label: rear cage rim 14
+    min: 0.077699527, -0.055000000, 0.211471187
+    max: 0.097699527, -0.031000000, 0.320883865
+    color: '#3D342A'
+    pitch: -67.5
+  - label: rear cage rim 15
+    min: 0.165293831, -0.055000000, 0.269999830
+    max: 0.185293831, -0.031000000, 0.379412508
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage rim 16
+    min: 0.223822474, -0.055000000, 0.357594134
+    max: 0.243822474, -0.031000000, 0.467006812
+    color: '#99826A'
+    pitch: -22.5
+  - label: cage depth bridge 1
+    min: 0.247375000, -0.115000000, 0.502625000
+    max: 0.273375000, -0.045000000, 0.528625000
+    color: '#99826A'
+  - label: cage depth bridge 2
+    min: -0.028625000, -0.115000000, 0.778625000
+    max: -0.002625000, -0.045000000, 0.804625000
+    color: '#99826A'
+  - label: cage depth bridge 3
+    min: -0.304625000, -0.115000000, 0.502625000
+    max: -0.278625000, -0.045000000, 0.528625000
+    color: '#99826A'
+  - label: cage depth bridge 4
+    min: -0.028625000, -0.115000000, 0.226625000
+    max: -0.002625000, -0.045000000, 0.252625000
+    color: '#99826A'
+  - label: front protective spoke 1
+    min: 0.162375000, -0.136000000, 0.416625000
+    max: 0.170375000, -0.128000000, 0.614625000
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front protective spoke 2
+    min: 0.109068434, -0.136000000, 0.545318434
+    max: 0.117068434, -0.128000000, 0.743318434
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front protective spoke 3
+    min: -0.019625000, -0.136000000, 0.598625000
+    max: -0.011625000, -0.128000000, 0.796625000
+    color: '#3D342A'
+    pitch: 0.0
+  - label: front protective spoke 4
+    min: -0.148318434, -0.136000000, 0.545318434
+    max: -0.140318434, -0.128000000, 0.743318434
+    color: '#3D342A'
+    pitch: 45.0
+  - label: front protective spoke 5
+    min: -0.201625000, -0.136000000, 0.416625000
+    max: -0.193625000, -0.128000000, 0.614625000
+    color: '#3D342A'
+    pitch: -90.0
+  - label: front protective spoke 6
+    min: -0.148318434, -0.136000000, 0.287931566
+    max: -0.140318434, -0.128000000, 0.485931566
+    color: '#3D342A'
+    pitch: -45.0
+  - label: front protective spoke 7
+    min: -0.019625000, -0.136000000, 0.234625000
+    max: -0.011625000, -0.128000000, 0.432625000
+    color: '#3D342A'
+    pitch: 0.0
+  - label: front protective spoke 8
+    min: 0.109068434, -0.136000000, 0.287931566
+    max: 0.117068434, -0.128000000, 0.485931566
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage support 1
+    min: 0.102825793, -0.033000000, 0.540075793
+    max: 0.114825793, -0.021000000, 0.740075793
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage support 2
+    min: -0.146075793, -0.033000000, 0.540075793
+    max: -0.134075793, -0.021000000, 0.740075793
+    color: '#3D342A'
+    pitch: 45.0
+  - label: rear cage support 3
+    min: -0.146075793, -0.033000000, 0.291174207
+    max: -0.134075793, -0.021000000, 0.491174207
+    color: '#3D342A'
+    pitch: -45.0
+  - label: rear cage support 4
+    min: 0.102825793, -0.033000000, 0.291174207
+    max: 0.114825793, -0.021000000, 0.491174207
+    color: '#3D342A'
+    pitch: 45.0
+  - label: stationary rotor blade 1
+    min: 0.093886479, -0.097000000, 0.469946321
+    max: 0.199886479, -0.069000000, 0.679946321
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: -44.94647717042119
+  - label: stationary rotor blade 2
+    min: -0.127946321, -0.097000000, 0.573136479
+    max: -0.021946321, -0.069000000, 0.783136479
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: 45.05352282957881
+  - label: stationary rotor blade 3
+    min: -0.231136479, -0.097000000, 0.351303679
+    max: -0.125136479, -0.069000000, 0.561303679
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: -44.94647717042119
+  - label: stationary rotor blade 4
+    min: -0.009303679, -0.097000000, 0.248113521
+    max: 0.096696321, -0.069000000, 0.458113521
+    color: '#999999'
+    shape: Ellipsoid
+    pitch: 45.05352282957881
+  - label: front bronze rotor hub
+    min: -0.106625000, -0.140000000, 0.424625000
+    max: 0.075375000, -0.090000000, 0.606625000
+    color: '#99826A'
+    shape: CylinderY
+  - label: original patterned front hub
+    min: -0.078125000, -0.145000000, 0.453125000
+    max: 0.046875000, -0.139000000, 0.578125000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2115
+    surfaceAxis: XZ
+  - label: original rear motor vents
+    min: -0.070625000, 0.263000000, 0.468125000
+    max: 0.039375000, 0.269000000, 0.563125000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2116
+    surfaceAxis: XZ
+  - label: original left Weyland-Yutani motor label
+    min: -0.111625000, 0.020000000, 0.479625000
+    max: -0.105625000, 0.250000000, 0.567625000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2117
+    surfaceAxis: YZ
+  - label: original right Weyland-Yutani motor label
+    min: 0.074375000, 0.020000000, 0.479625000
+    max: 0.080375000, 0.250000000, 0.567625000
+    color: '#FFFFFF'
+    shape: Box
+    surface: CMU3DVendorFanSurface2118
+    surfaceAxis: YZ
+  spriteStates:
+    deskfan:
+      frames:
+      - parts:
+        - label: weighted tan base
+          min: -0.175625000, -0.155000000, 0.000000000
+          max: 0.144375000, 0.265000000, 0.075000000
+          color: '#3D342A'
+          shape: Ellipsoid
+        - label: raised base upper casting
+          min: -0.145625000, -0.135000000, 0.028000000
+          max: 0.114375000, 0.205000000, 0.098000000
+          color: '#99826A'
+          shape: Ellipsoid
+        - label: flat load-bearing foot
+          min: -0.140625000, -0.120000000, 0.000000000
+          max: 0.109375000, 0.210000000, 0.024000000
+          color: '#3D342A'
+        - label: pedestal stem
+          min: -0.048625000, 0.025000000, 0.075000000
+          max: 0.017375000, 0.105000000, 0.375000000
+          color: '#99826A'
+          shape: CylinderZ
+        - label: pedestal top collar
+          min: -0.070625000, 0.005000000, 0.355000000
+          max: 0.039375000, 0.125000000, 0.445000000
+          color: '#D2B48C'
+          shape: Ellipsoid
+        - label: rear motor body
+          min: -0.106625000, -0.015000000, 0.420625000
+          max: 0.075375000, 0.245000000, 0.610625000
+          color: '#99826A'
+          shape: CylinderY
+        - label: rear motor cover
+          min: -0.090625000, 0.228000000, 0.437625000
+          max: 0.059375000, 0.264000000, 0.593625000
+          color: '#D2B48C'
+          shape: CylinderY
+        - label: shaft housing
+          min: -0.067625000, -0.100000000, 0.463625000
+          max: 0.036375000, 0.090000000, 0.567625000
+          color: '#3D342A'
+          shape: CylinderY
+        - label: front cage rim 1
+          min: 0.254375000, -0.129000000, 0.458531712
+          max: 0.278375000, -0.105000000, 0.572718288
+          color: '#99826A'
+          pitch: 0.0
+        - label: front cage rim 2
+          min: 0.232909028, -0.129000000, 0.566448440
+          max: 0.256909028, -0.105000000, 0.680635016
+          color: '#D2B48C'
+          pitch: 22.5
+        - label: front cage rim 3
+          min: 0.171779112, -0.129000000, 0.657935825
+          max: 0.195779112, -0.105000000, 0.772122400
+          color: '#D2B48C'
+          pitch: 45.0
+        - label: front cage rim 4
+          min: 0.080291728, -0.129000000, 0.719065741
+          max: 0.104291728, -0.105000000, 0.833252316
+          color: '#D2B48C'
+          pitch: 67.5
+        - label: front cage rim 5
+          min: -0.027625000, -0.129000000, 0.740531712
+          max: -0.003625000, -0.105000000, 0.854718288
+          color: '#D2B48C'
+          pitch: -90.0
+        - label: front cage rim 6
+          min: -0.135541728, -0.129000000, 0.719065741
+          max: -0.111541728, -0.105000000, 0.833252316
+          color: '#D2B48C'
+          pitch: -67.5
+        - label: front cage rim 7
+          min: -0.227029112, -0.129000000, 0.657935825
+          max: -0.203029112, -0.105000000, 0.772122400
+          color: '#D2B48C'
+          pitch: -45.0
+        - label: front cage rim 8
+          min: -0.288159028, -0.129000000, 0.566448440
+          max: -0.264159028, -0.105000000, 0.680635016
+          color: '#D2B48C'
+          pitch: -22.5
+        - label: front cage rim 9
+          min: -0.309625000, -0.129000000, 0.458531712
+          max: -0.285625000, -0.105000000, 0.572718288
+          color: '#99826A'
+          pitch: 0.0
+        - label: front cage rim 10
+          min: -0.288159028, -0.129000000, 0.350614984
+          max: -0.264159028, -0.105000000, 0.464801560
+          color: '#99826A'
+          pitch: 22.5
+        - label: front cage rim 11
+          min: -0.227029112, -0.129000000, 0.259127600
+          max: -0.203029112, -0.105000000, 0.373314175
+          color: '#3D342A'
+          pitch: 45.0
+        - label: front cage rim 12
+          min: -0.135541728, -0.129000000, 0.197997684
+          max: -0.111541728, -0.105000000, 0.312184259
+          color: '#3D342A'
+          pitch: 67.5
+        - label: front cage rim 13
+          min: -0.027625000, -0.129000000, 0.176531712
+          max: -0.003625000, -0.105000000, 0.290718288
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front cage rim 14
+          min: 0.080291728, -0.129000000, 0.197997684
+          max: 0.104291728, -0.105000000, 0.312184259
+          color: '#3D342A'
+          pitch: -67.5
+        - label: front cage rim 15
+          min: 0.171779112, -0.129000000, 0.259127600
+          max: 0.195779112, -0.105000000, 0.373314175
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front cage rim 16
+          min: 0.232909028, -0.129000000, 0.350614984
+          max: 0.256909028, -0.105000000, 0.464801560
+          color: '#99826A'
+          pitch: -22.5
+        - label: rear cage rim 1
+          min: 0.244375000, -0.055000000, 0.460918661
+          max: 0.264375000, -0.031000000, 0.570331339
+          color: '#99826A'
+          pitch: 0.0
+        - label: rear cage rim 2
+          min: 0.223822474, -0.055000000, 0.564243188
+          max: 0.243822474, -0.031000000, 0.673655866
+          color: '#D2B48C'
+          pitch: 22.5
+        - label: rear cage rim 3
+          min: 0.165293831, -0.055000000, 0.651837492
+          max: 0.185293831, -0.031000000, 0.761250170
+          color: '#D2B48C'
+          pitch: 45.0
+        - label: rear cage rim 4
+          min: 0.077699527, -0.055000000, 0.710366135
+          max: 0.097699527, -0.031000000, 0.819778813
+          color: '#D2B48C'
+          pitch: 67.5
+        - label: rear cage rim 5
+          min: -0.025625000, -0.055000000, 0.730918661
+          max: -0.005625000, -0.031000000, 0.840331339
+          color: '#D2B48C'
+          pitch: -90.0
+        - label: rear cage rim 6
+          min: -0.128949527, -0.055000000, 0.710366135
+          max: -0.108949527, -0.031000000, 0.819778813
+          color: '#D2B48C'
+          pitch: -67.5
+        - label: rear cage rim 7
+          min: -0.216543831, -0.055000000, 0.651837492
+          max: -0.196543831, -0.031000000, 0.761250170
+          color: '#D2B48C'
+          pitch: -45.0
+        - label: rear cage rim 8
+          min: -0.275072474, -0.055000000, 0.564243188
+          max: -0.255072474, -0.031000000, 0.673655866
+          color: '#D2B48C'
+          pitch: -22.5
+        - label: rear cage rim 9
+          min: -0.295625000, -0.055000000, 0.460918661
+          max: -0.275625000, -0.031000000, 0.570331339
+          color: '#99826A'
+          pitch: 0.0
+        - label: rear cage rim 10
+          min: -0.275072474, -0.055000000, 0.357594134
+          max: -0.255072474, -0.031000000, 0.467006812
+          color: '#99826A'
+          pitch: 22.5
+        - label: rear cage rim 11
+          min: -0.216543831, -0.055000000, 0.269999830
+          max: -0.196543831, -0.031000000, 0.379412508
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage rim 12
+          min: -0.128949527, -0.055000000, 0.211471187
+          max: -0.108949527, -0.031000000, 0.320883865
+          color: '#3D342A'
+          pitch: 67.5
+        - label: rear cage rim 13
+          min: -0.025625000, -0.055000000, 0.190918661
+          max: -0.005625000, -0.031000000, 0.300331339
+          color: '#3D342A'
+          pitch: -90.0
+        - label: rear cage rim 14
+          min: 0.077699527, -0.055000000, 0.211471187
+          max: 0.097699527, -0.031000000, 0.320883865
+          color: '#3D342A'
+          pitch: -67.5
+        - label: rear cage rim 15
+          min: 0.165293831, -0.055000000, 0.269999830
+          max: 0.185293831, -0.031000000, 0.379412508
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage rim 16
+          min: 0.223822474, -0.055000000, 0.357594134
+          max: 0.243822474, -0.031000000, 0.467006812
+          color: '#99826A'
+          pitch: -22.5
+        - label: cage depth bridge 1
+          min: 0.247375000, -0.115000000, 0.502625000
+          max: 0.273375000, -0.045000000, 0.528625000
+          color: '#99826A'
+        - label: cage depth bridge 2
+          min: -0.028625000, -0.115000000, 0.778625000
+          max: -0.002625000, -0.045000000, 0.804625000
+          color: '#99826A'
+        - label: cage depth bridge 3
+          min: -0.304625000, -0.115000000, 0.502625000
+          max: -0.278625000, -0.045000000, 0.528625000
+          color: '#99826A'
+        - label: cage depth bridge 4
+          min: -0.028625000, -0.115000000, 0.226625000
+          max: -0.002625000, -0.045000000, 0.252625000
+          color: '#99826A'
+        - label: front protective spoke 1
+          min: 0.162375000, -0.136000000, 0.416625000
+          max: 0.170375000, -0.128000000, 0.614625000
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front protective spoke 2
+          min: 0.109068434, -0.136000000, 0.545318434
+          max: 0.117068434, -0.128000000, 0.743318434
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front protective spoke 3
+          min: -0.019625000, -0.136000000, 0.598625000
+          max: -0.011625000, -0.128000000, 0.796625000
+          color: '#3D342A'
+          pitch: 0.0
+        - label: front protective spoke 4
+          min: -0.148318434, -0.136000000, 0.545318434
+          max: -0.140318434, -0.128000000, 0.743318434
+          color: '#3D342A'
+          pitch: 45.0
+        - label: front protective spoke 5
+          min: -0.201625000, -0.136000000, 0.416625000
+          max: -0.193625000, -0.128000000, 0.614625000
+          color: '#3D342A'
+          pitch: -90.0
+        - label: front protective spoke 6
+          min: -0.148318434, -0.136000000, 0.287931566
+          max: -0.140318434, -0.128000000, 0.485931566
+          color: '#3D342A'
+          pitch: -45.0
+        - label: front protective spoke 7
+          min: -0.019625000, -0.136000000, 0.234625000
+          max: -0.011625000, -0.128000000, 0.432625000
+          color: '#3D342A'
+          pitch: 0.0
+        - label: front protective spoke 8
+          min: 0.109068434, -0.136000000, 0.287931566
+          max: 0.117068434, -0.128000000, 0.485931566
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage support 1
+          min: 0.102825793, -0.033000000, 0.540075793
+          max: 0.114825793, -0.021000000, 0.740075793
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage support 2
+          min: -0.146075793, -0.033000000, 0.540075793
+          max: -0.134075793, -0.021000000, 0.740075793
+          color: '#3D342A'
+          pitch: 45.0
+        - label: rear cage support 3
+          min: -0.146075793, -0.033000000, 0.291174207
+          max: -0.134075793, -0.021000000, 0.491174207
+          color: '#3D342A'
+          pitch: -45.0
+        - label: rear cage support 4
+          min: 0.102825793, -0.033000000, 0.291174207
+          max: 0.114825793, -0.021000000, 0.491174207
+          color: '#3D342A'
+          pitch: 45.0
+        - label: stationary rotor blade 1
+          min: 0.093886479, -0.097000000, 0.469946321
+          max: 0.199886479, -0.069000000, 0.679946321
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: -44.94647717042119
+        - label: stationary rotor blade 2
+          min: -0.127946321, -0.097000000, 0.573136479
+          max: -0.021946321, -0.069000000, 0.783136479
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: 45.05352282957881
+        - label: stationary rotor blade 3
+          min: -0.231136479, -0.097000000, 0.351303679
+          max: -0.125136479, -0.069000000, 0.561303679
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: -44.94647717042119
+        - label: stationary rotor blade 4
+          min: -0.009303679, -0.097000000, 0.248113521
+          max: 0.096696321, -0.069000000, 0.458113521
+          color: '#999999'
+          shape: Ellipsoid
+          pitch: 45.05352282957881
+        - label: front bronze rotor hub
+          min: -0.106625000, -0.140000000, 0.424625000
+          max: 0.075375000, -0.090000000, 0.606625000
+          color: '#99826A'
+          shape: CylinderY
+        - label: original patterned front hub
+          min: -0.078125000, -0.145000000, 0.453125000
+          max: 0.046875000, -0.139000000, 0.578125000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2115
+          surfaceAxis: XZ
+        - label: original rear motor vents
+          min: -0.070625000, 0.263000000, 0.468125000
+          max: 0.039375000, 0.269000000, 0.563125000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2116
+          surfaceAxis: XZ
+        - label: original left Weyland-Yutani motor label
+          min: -0.111625000, 0.020000000, 0.479625000
+          max: -0.105625000, 0.250000000, 0.567625000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2117
+          surfaceAxis: YZ
+        - label: original right Weyland-Yutani motor label
+          min: 0.074375000, 0.020000000, 0.479625000
+          max: 0.080375000, 0.250000000, 0.567625000
+          color: '#FFFFFF'
+          shape: Box
+          surface: CMU3DVendorFanSurface2118
+          surfaceAxis: YZ
+      delays:
+      - 1

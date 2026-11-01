@@ -4,7 +4,9 @@
 - type: marking
   id: UndergarmentBottomBoxers
   bodyPart: UndergarmentBottom
-  groupWhitelist: [Arachnid, Diona, Human, Moth, Slime]
+  # cmu edit start: humans use the cmss13 underwear instead
+  groupWhitelist: [Arachnid, Diona, Moth, Slime]
+  # cmu edit end
   coloring:
     default:
       type: null
@@ -16,7 +18,9 @@
 - type: marking
   id: UndergarmentBottomBriefs
   bodyPart: UndergarmentBottom
-  groupWhitelist: [Arachnid, Diona, Human, Moth, Slime]
+  # cmu edit start: humans use the cmss13 underwear instead
+  groupWhitelist: [Arachnid, Diona, Moth, Slime]
+  # cmu edit end
   coloring:
     default:
       type: null
@@ -28,7 +32,9 @@
 - type: marking
   id: UndergarmentBottomSatin
   bodyPart: UndergarmentBottom
-  groupWhitelist: [Arachnid, Diona, Human, Moth, Slime]
+  # cmu edit start: humans use the cmss13 underwear instead
+  groupWhitelist: [Arachnid, Diona, Moth, Slime]
+  # cmu edit end
   coloring:
     default:
       type: null
@@ -40,7 +46,9 @@
 - type: marking
   id: UndergarmentTopBra
   bodyPart: UndergarmentTop
-  groupWhitelist: [Arachnid, Diona, Human, Moth, Reptilian, Slime]
+  # cmu edit start: humans use the cmss13 underwear instead
+  groupWhitelist: [Arachnid, Diona, Moth, Reptilian, Slime]
+  # cmu edit end
   coloring:
     default:
       type: null
@@ -52,7 +60,9 @@
 - type: marking
   id: UndergarmentTopSportsbra
   bodyPart: UndergarmentTop
-  groupWhitelist: [Arachnid, Diona, Human, Moth, Reptilian, Slime]
+  # cmu edit start: humans use the cmss13 underwear instead
+  groupWhitelist: [Arachnid, Diona, Moth, Reptilian, Slime]
+  # cmu edit end
   coloring:
     default:
       type: null
@@ -64,7 +74,9 @@
 - type: marking
   id: UndergarmentTopBinder
   bodyPart: UndergarmentTop
-  groupWhitelist: [Arachnid, Diona, Human, Moth, Reptilian, Slime]
+  # cmu edit start: humans use the cmss13 underwear instead
+  groupWhitelist: [Arachnid, Diona, Moth, Reptilian, Slime]
+  # cmu edit end
   coloring:
     default:
       type: null
@@ -76,7 +88,9 @@
 - type: marking
   id: UndergarmentTopTanktop
   bodyPart: UndergarmentTop
-  groupWhitelist: [Arachnid, Diona, Human, Moth, Reptilian, Slime]
+  # cmu edit start: humans use the cmss13 underwear instead
+  groupWhitelist: [Arachnid, Diona, Moth, Reptilian, Slime]
+  # cmu edit end
   coloring:
     default:
       type: null

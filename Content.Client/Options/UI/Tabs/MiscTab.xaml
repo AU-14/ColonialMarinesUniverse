@@ -49,10 +49,7 @@
                     <CheckBox Name="StaticStorageUI" Text="{Loc 'ui-options-static-storage-ui'}" />
                 </cmu:CmuOptionSection>
 
-                <cmu:CmuOptionSection Title="{Loc 'ui-options-general-area-echo'}"> <!-- Mono -->
-                    <CheckBox Name="AreaEchoCheckBox" Text="{Loc 'ui-options-area-echo-enabled'}" /> <!-- Mono -->
-                    <CheckBox Name="AreaEchoHighResolutionCheckBox" Text="{Loc 'ui-options-area-echo-highres'}" /> <!-- Mono -->
-                </cmu:CmuOptionSection>
+                <!-- cmu edit: area echo options moved to the CMU tab -->
                 <!-- <CheckBox Name="ToggleWalk" Text="{Loc 'ui-options-hotkey-toggle-walk'}" /> -->
             </BoxContainer>
         </ScrollContainer>

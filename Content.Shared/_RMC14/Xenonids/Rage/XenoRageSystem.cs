@@ -73,7 +73,7 @@ public sealed partial class XenoRageSystem : EntitySystem
         _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
         _armor.UpdateArmorValue(xeno.Owner);
         _aura.GiveAura(xeno, xeno.Comp.RageLockColor, xeno.Comp.RageLockDuration, 3);
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rage-lock"), xeno, xeno, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rage-lock"), xeno, xeno, PopupType.Medium);
     }
 
     public void RageUnlock(Entity<XenoRageComponent> xeno)

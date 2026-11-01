@@ -14,35 +14,13 @@
                 </cmu:CmuOptionSection>
 
                 <cmu:CmuOptionSection Title="{Loc 'rmc-ui-voicelines'}">
-                    <CheckBox Name="RMCVoicelinesArachnid" Text="{Loc 'rmc-ui-audio-voicelines-arachnid'}" />
-                    <CheckBox Name="RMCVoicelinesDiona" Text="{Loc 'rmc-ui-audio-voicelines-diona'}" />
-                    <CheckBox Name="RMCVoicelinesDwarf" Text="{Loc 'rmc-ui-audio-voicelines-dwarf'}" />
-                    <CheckBox Name="RMCVoicelinesFelinid" Text="{Loc 'rmc-ui-audio-voicelines-felinid'}" />
+                    <!-- cmu edit: only humans are playable, other species' options removed -->
                     <CheckBox Name="RMCVoicelinesHuman" Text="{Loc 'rmc-ui-audio-voicelines-human'}" />
-                    <CheckBox Name="RMCVoicelinesMoth" Text="{Loc 'rmc-ui-audio-voicelines-moth'}" />
-                    <CheckBox Name="RMCVoicelinesReptilian" Text="{Loc 'rmc-ui-audio-voicelines-reptilian'}" />
-                    <CheckBox Name="RMCVoicelinesSlime" Text="{Loc 'rmc-ui-audio-voicelines-slime'}" />
-                    <CheckBox Name="RMCVoicelinesAvali" Text="{Loc 'rmc-ui-audio-voicelines-avali'}" />
-                    <CheckBox Name="RMCVoicelinesVulpkanin" Text="{Loc 'rmc-ui-audio-voicelines-vulpkanin'}" />
-                    <CheckBox Name="RMCVoicelinesRodentia" Text="{Loc 'rmc-ui-audio-voicelines-rodentia'}" />
-                    <CheckBox Name="RMCVoicelinesFeroxi" Text="{Loc 'rmc-ui-audio-voicelines-feroxi'}" />
-                    <CheckBox Name="RMCVoicelinesSkrell" Text="{Loc 'rmc-ui-audio-voicelines-skrell'}" />
                 </cmu:CmuOptionSection>
 
                 <cmu:CmuOptionSection Title="{Loc 'rmc-ui-emotes'}">
-                    <CheckBox Name="RMCEmotesArachnid" Text="{Loc 'rmc-ui-audio-emotes-arachnid'}" />
-                    <CheckBox Name="RMCEmotesDiona" Text="{Loc 'rmc-ui-audio-emotes-diona'}" />
-                    <CheckBox Name="RMCEmotesDwarf" Text="{Loc 'rmc-ui-audio-emotes-dwarf'}" />
-                    <CheckBox Name="RMCEmotesFelinid" Text="{Loc 'rmc-ui-audio-emotes-felinid'}" />
+                    <!-- cmu edit: only humans are playable, other species' options removed -->
                     <CheckBox Name="RMCEmotesHuman" Text="{Loc 'rmc-ui-audio-emotes-human'}" />
-                    <CheckBox Name="RMCEmotesMoth" Text="{Loc 'rmc-ui-audio-emotes-moth'}" />
-                    <CheckBox Name="RMCEmotesReptilian" Text="{Loc 'rmc-ui-audio-emotes-reptilian'}" />
-                    <CheckBox Name="RMCEmotesSlime" Text="{Loc 'rmc-ui-audio-emotes-slime'}" />
-                    <CheckBox Name="RMCEmotesAvali" Text="{Loc 'rmc-ui-audio-emotes-avali'}" />
-                    <CheckBox Name="RMCEmotesVulpkanin" Text="{Loc 'rmc-ui-audio-emotes-vulpkanin'}" />
-                    <CheckBox Name="RMCEmotesRodentia" Text="{Loc 'rmc-ui-audio-emotes-rodentia'}" />
-                    <CheckBox Name="RMCEmotesFeroxi" Text="{Loc 'rmc-ui-audio-emotes-feroxi'}" />
-                    <CheckBox Name="RMCEmotesSkrell" Text="{Loc 'rmc-ui-audio-emotes-skrell'}" />
                 </cmu:CmuOptionSection>
             </BoxContainer>
         </ScrollContainer>

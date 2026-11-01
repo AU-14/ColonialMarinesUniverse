@@ -52,3 +52,6 @@ insfor-picker-flag-title = Select a flag
 
 # Marker job used only as an INSFOR editor whitelist key.
 au14-job-name-insfor-editor = INSFOR Editor Access
+
+# Vendor section added to every faction's points vendor that lacks the ATGM.
+cmu-insfor-vendor-section-anti-armor = Anti-Armor

@@ -29,7 +29,7 @@
   - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: OPS
-    commandElement: true
+    auxiliaryElement: true # LONGBOW OPS, the logistics net is the auxiliary net
   - type: Skills
     preset: AU14SkillPresetOfficerLogistics
   - type: JobPrefix
@@ -57,7 +57,7 @@
     #   prefix: au14-job-prefix-govforlogisticsCMBCIU
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours
@@ -71,9 +71,18 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -210,7 +219,7 @@
   roundForce: UPP
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours
@@ -229,7 +238,7 @@
   roundForce: WYPMC
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours

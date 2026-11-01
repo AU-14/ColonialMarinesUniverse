@@ -34,6 +34,7 @@
     closedSpriteState: door_closed
     canCrush: false
     performCollisionCheck: true
+    checkFixtureCollision: true # CMU14: the tile check only sees the anchor tile, so 2-3 tile hatches auto-closed on people and shoved them
   - type: Airlock
     denySpriteState: door_deny
     powered: true

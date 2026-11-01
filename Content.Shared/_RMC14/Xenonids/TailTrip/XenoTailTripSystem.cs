@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Finesse;
@@ -20,6 +21,7 @@ public sealed partial class XenoTailTripSystem : EntitySystem
     [Dependency] private RMCDazedSystem _daze = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
@@ -59,7 +61,8 @@ public sealed partial class XenoTailTripSystem : EntitySystem
         {
             if (!_size.TryGetSize(args.Target, out var size) || size < RMCSizes.Big)
                 _stun.TryParalyze(args.Target, xeno.Comp.StunTime, true);
-            _slow.TrySlowdown(args.Target, xeno.Comp.SlowTime, ignoreDurationModifier: true);
+            if (!_yautjaSlow.TryApply(args.Target, xeno.Comp.YautjaSlow)) // CMU14
+                _slow.TrySlowdown(args.Target, xeno.Comp.SlowTime, ignoreDurationModifier: true);
         }
     }
 }

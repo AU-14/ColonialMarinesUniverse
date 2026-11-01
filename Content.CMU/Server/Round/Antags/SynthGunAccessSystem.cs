@@ -5,7 +5,7 @@ namespace Content.Server.CMU14.Round.Antags;
 
 public sealed partial class SynthGunAccessSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSynthSystem _synth = default!;
+    [Dependency] private SharedSynthSystem _synth = default!;
 
     public override void Initialize()
     {

@@ -245,7 +245,7 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
                     descMsg.PushNewline();
                     descMsg.AddMarkupOrThrow(Loc.GetString("rmc-flamer-guidebook-description-shred"));
                 }
-                if (fire.HasComponent<RMCFireImmunityBypassComponent>())
+                if (fire.HasComp<RMCFireImmunityBypassComponent>(_componentFactory))
                 {
                     descMsg.PushNewline();
                     descMsg.AddMarkupOrThrow(Loc.GetString("rmc-flamer-guidebook-description-bypass"));

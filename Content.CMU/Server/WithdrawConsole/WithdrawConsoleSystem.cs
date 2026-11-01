@@ -30,6 +30,8 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
 
+    private const string DistressSignalPresetId = "DistressSignal";
+
     public bool IsDropdownBlocked(string faction)
     {
         var query = EntityQueryEnumerator<WithdrawConsoleComponent>();
@@ -158,6 +160,13 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
         if (args.Handled || ent.Comp.IsUnlocked)
             return;
 
+        if (IsDisabledForGamemode())
+        {
+            _popup.PopupEntity(Loc.GetString("withdraw-console-gamemode-disabled"), ent, args.User, PopupType.MediumCaution);
+            args.Handled = true;
+            return;
+        }
+
         if (ent.Comp.UseAccessCheck)
         {
             OnInteractUsingAccessCheck(ent, ref args);
@@ -242,6 +251,13 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     private void OnOpenAttempt(Entity<WithdrawConsoleComponent> ent, ref ActivatableUIOpenAttemptEvent args)
     {
+        if (IsDisabledForGamemode())
+        {
+            args.Cancel();
+            _popup.PopupEntity(Loc.GetString("withdraw-console-gamemode-disabled"), ent, args.User, PopupType.MediumCaution);
+            return;
+        }
+
         if (!IsFactionAllowedToWithdraw(ent.Comp.Faction))
         {
             args.Cancel();
@@ -339,8 +355,18 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
         EndWithdraw(null, isStalemate: true);
     }
 
+    /// <summary>Withdrawal isn't available in Distress Signal.</summary>
+    private bool IsDisabledForGamemode()
+    {
+        var preset = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
+        return string.Equals(preset, DistressSignalPresetId, StringComparison.OrdinalIgnoreCase);
+    }
+
     private bool IsFactionAllowedToWithdraw(string faction)
     {
+        if (IsDisabledForGamemode())
+            return false;
+
         var query = EntityQueryEnumerator<RMCPlanetComponent>();
         while (query.MoveNext(out _, out var planet))
         {

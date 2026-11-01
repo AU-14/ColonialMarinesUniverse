@@ -13,9 +13,9 @@
   id: SAS
   partyspawn: SASSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
   weight: 20
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: false

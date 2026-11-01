@@ -59,13 +59,7 @@ public sealed partial class SpawnThirdPartyToolSystem : EntitySystem
             return false;
         }
 
-        bool spawned = _thirdPartySystem.SpawnThirdParty(party, partySpawnProto, false, null, component.Comp.Dropship);
-
-        if (!spawned)
-        {
-            _popup.PopupEntity($"Failed to spawn third party {component.Comp.Party.Id}.", component.Owner, user);
-            return false;
-        }
+        _thirdPartySystem.SpawnThirdParty(party, partySpawnProto, false, null, component.Comp.Dropship);
 
         _popup.PopupEntity($"Called in third party {component.Comp.Party.Id}.", user, user);
         Del(component.Owner);

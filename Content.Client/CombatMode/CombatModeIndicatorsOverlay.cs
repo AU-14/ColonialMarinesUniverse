@@ -158,7 +158,8 @@ public sealed class CombatModeIndicatorsOverlay : Overlay
             return;
 
         var lookUp = _entMan.TryGetComponent(player, out CMUZLevelViewerComponent? viewer) && viewer.LookUp;
-        var shootDown = _entMan.TryGetComponent(player, out CMUZLevelShooterComponent? shooter) && shooter.ShootDown;
+        var shootDown = _entMan.TryGetComponent(player, out CMUZLevelShooterComponent? shooter) &&
+            (shooter.ShootDown || shooter.AimDown && HasReadyGun(crosshairEntity)); // CMU14
         var indicator = ZLevelCrosshairIndicatorHelper.Get(
             lookUp && HasReadyGun(crosshairEntity),
             shootDown);

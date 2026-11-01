@@ -164,7 +164,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
                 ("puller", user),
                 ("pulled", Identity.Name(target, EntityManager, user)));
 
-            _popup.PopupClient(selfMsg, user, user, PopupType.MediumCaution);
+            _popup.PopupEntity(selfMsg, user, user, PopupType.MediumCaution);
 
             return;
         }
@@ -198,7 +198,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
                         ("puller", user),
                         ("pulled", Identity.Name(target, EntityManager, user)));
 
-                    _popup.PopupClient(selfMsg, user, user, PopupType.MediumCaution);
+                    _popup.PopupEntity(selfMsg, user, user, PopupType.MediumCaution);
 
                     return;
                 }
@@ -218,7 +218,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
 
         var othersMessage = Loc.GetString("rmc-pull-paralyze-others", ("puller", user), ("pulled", target));
         var selfMessage = Loc.GetString("rmc-pull-paralyze-self", ("puller", user), ("pulled", Identity.Name(target, EntityManager, user)));
-        _popup.PopupPredicted(selfMessage, othersMessage, user, user, PopupType.MediumCaution);
+        _popup.PopupEntity(selfMessage, othersMessage, user, user, PopupType.MediumCaution);
     }
 
     private void OnInfectOnPullAttempt(Entity<InfectOnPullAttemptComponent> ent, ref PullAttemptEvent args)
@@ -249,7 +249,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
         var othersMessage = Loc.GetString("rmc-pull-infect-others", ("puller", puller), ("pulled", pulled));
         var selfMessage = Loc.GetString("rmc-pull-infect-self", ("puller", puller), ("pulled", pulled));
 
-        _popup.PopupPredicted(selfMessage, othersMessage, puller, puller, PopupType.MediumCaution);
+        _popup.PopupEntity(selfMessage, othersMessage, puller, puller, PopupType.MediumCaution);
     }
 
     private void OnSlowPullStarted(Entity<SlowOnPullComponent> ent, ref PullStartedMessage args)
@@ -306,7 +306,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
 
         if (!_whitelist.IsValid(ent.Comp.Whitelist, args.PulledUid))
         {
-            _popup.PopupClient(Loc.GetString("cm-pull-whitelist-denied", ("name", args.PulledUid)), args.PulledUid, args.PullerUid);
+            _popup.PopupEntity(Loc.GetString("cm-pull-whitelist-denied", ("name", args.PulledUid)), args.PulledUid, args.PullerUid);
             args.Cancelled = true;
         }
     }
@@ -320,7 +320,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
 
         if (!CanPullDead(ent, args.PulledUid))
         {
-            _popup.PopupClient(Loc.GetString("cm-pull-whitelist-denied-dead", ("name", targetName)), args.PulledUid, args.PullerUid);
+            _popup.PopupEntity(Loc.GetString("cm-pull-whitelist-denied-dead", ("name", targetName)), args.PulledUid, args.PullerUid);
             args.Cancelled = true;
         }
     }
@@ -345,7 +345,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
         if (!CanPullPreventPulledWhileAlive((ent, ent), args.PullerUid))
         {
             var msg = Loc.GetString("rmc-prevent-pull-alive", ("target", ent));
-            _popup.PopupClient(msg, ent, args.PullerUid, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, ent, args.PullerUid, PopupType.SmallCaution);
             args.Cancelled = true;
         }
     }

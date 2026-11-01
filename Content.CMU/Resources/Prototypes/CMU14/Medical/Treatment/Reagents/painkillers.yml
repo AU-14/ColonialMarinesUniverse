@@ -273,20 +273,14 @@
         tierSuppression: 5
         decayBonus: 1.5
         durationPerUnit: 75
+      # Oxycodone's haze, twice as strong and with a heavy vignette. It no longer puts people to sleep.
+      - !type:TemporaryBlurryVision
+        blur: 0.3
+        time: 4
       - !type:ModifyStatusEffect
-        effectProto: StatusEffectDrowsiness
-        conditions:
-        - !type:ReagentCondition
-          min: 8
-        time: 15
+        effectProto: StatusEffectCMUSoporificHaze
+        time: 4
         type: Update
-      - !type:ModifyStatusEffect
-        conditions:
-        - !type:ReagentCondition
-          min: 8
-        effectProto: StatusEffectForcedSleeping
-        time: 3
-        type: Add
       - !type:ModifyStatusEffect
         conditions:
         - !type:ReagentCondition

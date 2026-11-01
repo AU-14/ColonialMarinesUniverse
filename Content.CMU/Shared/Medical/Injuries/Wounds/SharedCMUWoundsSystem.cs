@@ -48,6 +48,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     [Dependency] protected CMUWoundLedgerSystem WoundLedger = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
     [Dependency] protected INetManager Net = default!;
+
+    private readonly List<EntityUid> _expiredSuppressions = new();
+    private TimeSpan _nextSuppressionCheck;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -269,7 +272,28 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return;
         }
 
-        ComputeInternalBleedSource(part, ignoreSplint, out var maxRate, out var source);
+        // One internal bleed per limb: a hand's or foot's sources bleed on its arm or leg.
+        var changedPart = part;
+        part = GetBleedSite(part);
+
+        var maxRate = 0f;
+        var source = string.Empty;
+        foreach (var segment in GetBleedSegments(part))
+        {
+            ComputeInternalBleedSource(segment, ignoreSplint && segment == changedPart, out var segmentRate, out var segmentSource);
+            if (segmentRate > maxRate)
+            {
+                maxRate = segmentRate;
+                source = segmentSource;
+            }
+
+            // A bleed left on a hand or foot from before limbs shared one is folded into the limb's.
+            if (segment != part && HasComp<InternalBleedingComponent>(segment))
+            {
+                RemComp<InternalBleedingComponent>(segment);
+                RaiseInternalBleedingChanged(segment, true);
+            }
+        }
 
         if (maxRate <= 0f)
         {
@@ -286,7 +310,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         // a different source means the patient has developed a new active IB.
         if (TryComp<CMUInternalBleedingSuppressedComponent>(part, out var suppressed))
         {
-            if (IsSuppressedBleedSourceMatch(suppressed.Source, source)
+            if ((suppressed.ExpiresAt is not { } expires || Timing.CurTime < expires)
+                && IsSuppressedBleedSourceMatch(suppressed.Source, source)
                 && maxRate <= suppressed.BloodlossPerSecond + 0.001f)
             {
                 if (HasComp<InternalBleedingComponent>(part))
@@ -367,6 +392,63 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
                 source = existing.Source;
             }
         }
+
+        // Drug suppression hides the active bleed, but does not treat its persistent source.
+        // Include it even at expiry so recomputation can restore it before removing the suppression.
+        if (TryComp<CMUInternalBleedingSuppressedComponent>(part, out var suppressed)
+            && suppressed.ExpiresAt != null
+            && IsPersistentSeedSource(suppressed.Source)
+            && suppressed.BloodlossPerSecond > maxRate)
+        {
+            maxRate = suppressed.BloodlossPerSecond;
+            source = suppressed.Source;
+        }
+    }
+
+    /// <summary>
+    ///     Where a part's internal bleed is tracked: hands bleed on their arm and feet on their leg,
+    ///     so a limb never carries two separate bleeds.
+    /// </summary>
+    public EntityUid GetBleedSite(EntityUid part)
+    {
+        if (!TryComp<BodyPartComponent>(part, out var partComp) ||
+            partComp.PartType is not (BodyPartType.Hand or BodyPartType.Foot) ||
+            TryGetBodyOwner(part) is not { } body)
+        {
+            return part;
+        }
+
+        var limbType = partComp.PartType == BodyPartType.Hand ? BodyPartType.Arm : BodyPartType.Leg;
+        foreach (var (limb, limbComp) in MedicalIndex.GetBodyParts(body))
+        {
+            if (limbComp.PartType == limbType && limbComp.Symmetry == partComp.Symmetry)
+                return limb;
+        }
+
+        return part;
+    }
+
+    /// <summary>
+    ///     The parts whose bleed sources feed the bleed tracked on <paramref name="site"/>: the site,
+    ///     and for an arm or leg its hand or foot.
+    /// </summary>
+    private IEnumerable<EntityUid> GetBleedSegments(EntityUid site)
+    {
+        yield return site;
+
+        if (!TryComp<BodyPartComponent>(site, out var siteComp) ||
+            siteComp.PartType is not (BodyPartType.Arm or BodyPartType.Leg) ||
+            TryGetBodyOwner(site) is not { } body)
+        {
+            yield break;
+        }
+
+        var extremity = siteComp.PartType == BodyPartType.Arm ? BodyPartType.Hand : BodyPartType.Foot;
+        foreach (var (part, partComp) in MedicalIndex.GetBodyParts(body))
+        {
+            if (partComp.PartType == extremity && partComp.Symmetry == siteComp.Symmetry)
+                yield return part;
+        }
     }
 
     private static bool IsSuppressedBleedSourceMatch(string suppressed, string current)
@@ -399,6 +481,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         if (IsSynthOwned(part))
             return;
+
+        // One internal bleed per limb: a hand or foot bleeds on its arm or leg.
+        part = GetBleedSite(part);
 
         RemComp<CMUInternalBleedingSuppressedComponent>(part);
 
@@ -440,6 +525,67 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         ClearInternalBleed(part, true);
     }
 
+    /// <summary>
+    ///     Holds a limb's internal bleed back for a while without treating it, the way a clotting drug does. Calling it
+    ///     again pushes the end back. Once it runs out the bleed comes back as it was, unless it was clamped for good.
+    /// </summary>
+    public void SuppressInternalBleedFor(EntityUid part, TimeSpan duration)
+    {
+        if (Net.IsClient || IsSynthOwned(part))
+            return;
+
+        part = GetBleedSite(part);
+        var expires = Timing.CurTime + duration;
+        if (TryComp<CMUInternalBleedingSuppressedComponent>(part, out var suppressed))
+        {
+            // A surgical clamp already holds it for good.
+            if (suppressed.ExpiresAt is not { } current)
+                return;
+
+            if (!HasComp<InternalBleedingComponent>(part))
+            {
+                if (expires > current)
+                    suppressed.ExpiresAt = expires;
+                return;
+            }
+        }
+
+        if (!TryComp<InternalBleedingComponent>(part, out var existing))
+            return;
+
+        suppressed = EnsureComp<CMUInternalBleedingSuppressedComponent>(part);
+        suppressed.Source = existing.Source;
+        suppressed.BloodlossPerSecond = existing.BloodlossPerSecond;
+        suppressed.ExpiresAt = expires;
+
+        RemComp<InternalBleedingComponent>(part);
+        RaiseInternalBleedingChanged(part, true);
+    }
+
+    /// <summary>
+    ///     Lets internal bleeds held back by a drug start again once it has worn off.
+    /// </summary>
+    protected void ExpireInternalBleedSuppression()
+    {
+        var now = Timing.CurTime;
+        if (now < _nextSuppressionCheck)
+            return;
+
+        _nextSuppressionCheck = now + TimeSpan.FromSeconds(1);
+        _expiredSuppressions.Clear();
+        var query = EntityQueryEnumerator<CMUInternalBleedingSuppressedComponent>();
+        while (query.MoveNext(out var uid, out var suppressed))
+        {
+            if (suppressed.ExpiresAt is { } expires && now >= expires)
+                _expiredSuppressions.Add(uid);
+        }
+
+        foreach (var part in _expiredSuppressions)
+        {
+            RecomputeInternalBleed(part);
+        }
+    }
+
     private void ClearInternalBleed(EntityUid part, bool suppressCurrentSource)
     {
         RemComp<CMUSurgicalInternalBleedingComponent>(part);
@@ -453,6 +599,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
                 var suppressed = EnsureComp<CMUInternalBleedingSuppressedComponent>(part);
                 suppressed.Source = existing.Source;
                 suppressed.BloodlossPerSecond = existing.BloodlossPerSecond;
+                suppressed.ExpiresAt = null;
             }
             else
             {
@@ -462,6 +609,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
                     var suppressed = EnsureComp<CMUInternalBleedingSuppressedComponent>(part);
                     suppressed.Source = source;
                     suppressed.BloodlossPerSecond = rate;
+                    suppressed.ExpiresAt = null;
                 }
             }
         }
@@ -979,7 +1127,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             if (bodyOwner is null || IsWoundPhysiologySuspended(bodyOwner.Value))
                 continue;
 
-            if (TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
+            // Arterial bleeding keeps draining a corpse; lesser bleeds stop at death.
+            if (wounds.ExternalBleeding != ExternalBleedTier.Arterial &&
+                TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
                 continue;
 
             ApplyExternalBleed(bodyOwner.Value, partUid, wounds.ExternalBleeding, 1f);
@@ -1161,7 +1311,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     // pause state. Explicit treatment remains available while physiology is frozen.
     private bool IsWoundPhysiologySuspended(EntityUid body)
         => HasComp<CMInStasisComponent>(body) ||
-           TryComp<MetaDataComponent>(body, out var metadata) && metadata.EntityPaused;
+           TryComp(body, out MetaDataComponent? metadata) && metadata.EntityPaused;
 
     private bool IsCurrentWoundOwner(EntityUid body, EntityUid partUid, BodyPartComponent part,
         BodyPartWoundComponent wounds)

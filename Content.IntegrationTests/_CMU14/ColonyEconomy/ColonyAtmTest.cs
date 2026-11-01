@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Access.Systems;
+using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.Station.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.ColonyEconomy;
@@ -105,10 +106,9 @@ public sealed class ColonyAtmTest
             var card = entMan.GetComponent<IdCardComponent>(cardUid);
             var comp = entMan.GetComponent<ColonyAtmComponent>(atm);
 
-            // The owner has swiped their card and is at the PIN prompt.
-            comp.CurrentUser = owner;
-            comp.SwipedCard = cardUid;
-            comp.Screen = AtmScreen.PinEntry;
+            // The owner has put their card in and is at the PIN prompt.
+            Assert.That(server.System<ColonyAtmSystem>().TryInsertCard(atm, comp, cardUid, owner), "The ATM refused the card");
+            Assert.That(comp.Screen, Is.EqualTo(AtmScreen.PinEntry));
 
             void Press(EntityUid actor, string digit) =>
                 entMan.EventBus.RaiseLocalEvent(atm, new ColonyAtmDigitBuiMsg(digit) { Actor = actor });

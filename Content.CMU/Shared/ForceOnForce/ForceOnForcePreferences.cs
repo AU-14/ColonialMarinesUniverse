@@ -32,19 +32,21 @@ public sealed partial class HumanoidCharacterProfile
 
     /// <summary>
     /// Role priorities apply to either side; side eligibility is controlled separately by FoFSide and FoFFallback.
-    /// Existing side-specific preferences remain readable through their equivalent round role.
+    /// Existing side-specific preferences remain readable through their equivalent preference role.
     /// </summary>
     public JobPriority GetForceOnForceJobPriority(JobPrototype job, IPrototypeManager prototypes)
     {
         var priorities = GetJobPrioritiesForGamemode("ForceOnForce");
         var priority = priorities.GetValueOrDefault(job.ID, JobPriority.Never);
-        if (job.RoundRole == null || job.RoundSide is not (RoundJobSide.Govfor or RoundJobSide.Opfor))
+        var role = job.ForceOnForcePreferenceRole ?? job.RoundRole;
+        if (role == null || job.RoundSide is not (RoundJobSide.Govfor or RoundJobSide.Opfor))
             return priority;
 
         foreach (var (id, preference) in priorities)
         {
             if (preference > priority && prototypes.TryIndex(id, out var source) &&
-                source.RoundRole == job.RoundRole && source.RoundSide is RoundJobSide.Govfor or RoundJobSide.Opfor)
+                (source.ForceOnForcePreferenceRole ?? source.RoundRole) == role &&
+                source.RoundSide is RoundJobSide.Govfor or RoundJobSide.Opfor)
             {
                 priority = preference;
             }
@@ -53,15 +55,37 @@ public sealed partial class HumanoidCharacterProfile
         return priority;
     }
 
+    /// <summary>
+    /// Whether the job sits on the opposite side of this character's preferred FoF side.
+    /// </summary>
+    public bool IsForceOnForceOtherSide(JobPrototype job)
+    {
+        var desired = FoFSide switch
+        {
+            ForceOnForceSide.Govfor => RoundJobSide.Govfor,
+            ForceOnForceSide.Opfor => RoundJobSide.Opfor,
+            _ => RoundJobSide.None,
+        };
+        return desired != RoundJobSide.None && job.RoundSide != desired;
+    }
+
+    /// <summary>
+    /// Whether FoF dealing can consider this job at all under the side and fallback preferences.
+    /// </summary>
+    public bool IsForceOnForceJobReachable(JobPrototype job)
+        => !IsForceOnForceOtherSide(job) || FoFFallback.HasFlag(ForceOnForceFallback.OtherSide);
+
     public HumanoidCharacterProfile WithForceOnForceJobPriority(JobPrototype job, JobPriority priority, IPrototypeManager prototypes)
     {
         var profile = this;
-        if (job.RoundRole != null && job.RoundSide is RoundJobSide.Govfor or RoundJobSide.Opfor)
+        var role = job.ForceOnForcePreferenceRole ?? job.RoundRole;
+        if (role != null && job.RoundSide is RoundJobSide.Govfor or RoundJobSide.Opfor)
         {
             // Clear legacy entries for the same role so lowering a priority also lowers the hidden side's preference.
             foreach (var (id, _) in GetJobPrioritiesForGamemode("ForceOnForce"))
             {
-                if (id != job.ID && prototypes.TryIndex(id, out var source) && source.RoundRole == job.RoundRole &&
+                if (id != job.ID && prototypes.TryIndex(id, out var source) &&
+                    (source.ForceOnForcePreferenceRole ?? source.RoundRole) == role &&
                     source.RoundSide is RoundJobSide.Govfor or RoundJobSide.Opfor)
                 {
                     profile = profile.WithGamemodeJobPriority("ForceOnForce", id, JobPriority.Never);

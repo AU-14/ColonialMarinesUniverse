@@ -122,10 +122,14 @@ public sealed class HungerThirstTest : InteractionTest
 
         Assert.That(ingestion.CanConsume(SPlayer, SPlayer, serverDrink, out var solution, out _), Is.True);
 
+        // CMU14: drinking takes long enough that the test map starts hurting the player, and damage interrupts sipping.
+        await Server.WaitPost(() => SEntMan.System<Content.Shared.Damage.Systems.SharedGodmodeSystem>().EnableGodmode(SPlayer));
+
         try
         {
             await UseInHand();
-            await RunSeconds(30);
+            // CMU14: sips take longer, so wait as much longer for the drink to empty.
+            await RunSeconds(30f * (float) IngestionSystem.CMUIngestionDelayMultiplier);
 
             Assert.That(solution.Value.Comp.Solution.Volume, Is.EqualTo(FixedPoint2.Zero),
                 "Drinks should continue consuming after the first sip until empty.");

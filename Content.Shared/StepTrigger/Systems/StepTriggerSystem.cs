@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.Gravity;
 using Content.Shared.StepTrigger.Components;
 using Content.Shared.Whitelist;
@@ -20,7 +21,8 @@ public sealed partial class StepTriggerSystem : EntitySystem
     public override void Initialize()
     {
         UpdatesOutsidePrediction = true;
-        SubscribeLocalEvent<StepTriggerComponent, AfterAutoHandleStateEvent>(TriggerHandleState);
+        // CMU14: explicit state handling refreshes activation after restoring the contact sets.
+        // SubscribeLocalEvent<StepTriggerComponent, AfterAutoHandleStateEvent>(TriggerHandleState);
 
         SubscribeLocalEvent<StepTriggerComponent, StartCollideEvent>(OnStartCollide);
         SubscribeLocalEvent<StepTriggerComponent, EndCollideEvent>(OnEndCollide);
@@ -136,6 +138,11 @@ public sealed partial class StepTriggerSystem : EntitySystem
         if (!component.Active || component.CurrentlySteppedOn.Contains(otherUid))
             return false;
 
+        // CMU14: a Yautja does not set off traps. Scoped to entities that actually are traps, so step-triggered
+        // teleporters, slips, shards and chasms still trigger for them.
+        if (HasComp<YautjaComponent>(otherUid) && YautjaTrapIgnore.IsTrap(EntityManager, uid))
+            return false;
+
         // Can't trigger if we don't ignore weightless entities
         // and the entity is flying or currently weightless
         // Makes sense simulation wise to have this be part of steptrigger directly IMO
@@ -190,7 +197,7 @@ public sealed partial class StepTriggerSystem : EntitySystem
         }
     }
 
-    private void TriggerHandleState(EntityUid uid, StepTriggerComponent component, ref AfterAutoHandleStateEvent args)
+    private void RefreshActiveTrigger(EntityUid uid, StepTriggerComponent component) // CMU14
     {
         if (component.Colliding.Count > 0)
         {

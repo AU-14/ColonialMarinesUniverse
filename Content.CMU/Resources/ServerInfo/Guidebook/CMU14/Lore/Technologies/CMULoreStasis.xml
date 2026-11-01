@@ -1,0 +1,25 @@
+<Document>
+  # Stasis
+
+  [italic]"Earn while you doze."[/italic]
+
+  [bold]Stasis[/bold], better known as [bold]hypersleep[/bold], cryosleep or just "cryo", is what makes long-haul space travel possible. Even faster than light, a journey between stars can take months or years, and almost everyone aboard spends it asleep.
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCHyperSleepChamberPVE" Caption="Hypersleep chamber"/>
+  </Box>
+
+  ## How It Works
+  - Sleepers lie in [bold]hypersleep chambers[/bold], simple cots under a glass lid. Inside, the body's processes slow almost to a stop, so a sleeper barely ages and their hair doesn't grow.
+  - Despite the name, nothing is frozen anymore. The freezing step was dropped generations ago, but the word "cryo" stuck.
+  - Sleepers still dream, and dreaming is encouraged to protect their mental health. With the body slowed so far, a single dream can last a year or more.
+  - Stasis also prevents the mental illness that long stretches of faster-than-light travel can cause.
+  - Sleep can be shallow or deep. Military crews often use [bold]light stasis[/bold] so they can wake quickly, though it is never pleasant.
+
+  ## Side Effects
+  - Long sleeps waste muscle, leaving sleepers cramped and weak on waking.
+  - Waking after a very long sleep brings nausea, exhaustion and dizziness for days, and sometimes memory loss, an effect spacers call [bold]"freezer burn"[/bold].
+  - Standing up, stretching or relieving yourself too soon after waking can make your blood pressure crash and knock you out.
+  - Being pulled out without a proper wake-up procedure is dangerous. It is rarely fatal, but can cause breathing, circulation and cell damage that only shows up days or weeks later. Waking colonists before they arrive is illegal except in an emergency.
+  - Time in stasis pulls families apart. After enough voyages, a spacer's age on paper and their body's real age can be decades apart.
+</Document>

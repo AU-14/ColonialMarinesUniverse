@@ -14,6 +14,7 @@ using Content.Shared.Doors.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared.Gravity;
 using Content.Shared.Physics;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
@@ -26,6 +27,10 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaPreserveConsoleTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaHuntingGroundPreserveShutterPrototype = "CMUYautjaHuntingGroundPreserveShutter";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaHuntingGroundEscapeConsolePrototype = "CMUYautjaHuntingGroundEscapeConsole";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaHuntingGroundPreserveEdgePrototype = "CMUYautjaHuntingGroundPreserveEdge";
+
     [Test]
     public async Task HuntingGroundEscapePrototypesMatchCmss13PreserveContract()
     {
@@ -36,26 +41,26 @@ public sealed class YautjaPreserveConsoleTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.EntMan.ComponentFactory;
-            var shutter = prototypes.Index<EntityPrototype>("CMUYautjaHuntingGroundPreserveShutter");
-            var console = prototypes.Index<EntityPrototype>("CMUYautjaHuntingGroundEscapeConsole");
-            var edge = prototypes.Index<EntityPrototype>("CMUYautjaHuntingGroundPreserveEdge");
+            var shutter = prototypes.Index<EntityPrototype>(CMUYautjaHuntingGroundPreserveShutterPrototype);
+            var console = prototypes.Index<EntityPrototype>(CMUYautjaHuntingGroundEscapeConsolePrototype);
+            var edge = prototypes.Index<EntityPrototype>(CMUYautjaHuntingGroundPreserveEdgePrototype);
 
             Assert.Multiple(() =>
             {
-                Assert.That(shutter.TryGetComponent<YautjaPreserveShutterComponent>(out _, factory), Is.True);
-                Assert.That(shutter.TryGetComponent<DoorComponent>(out var door, factory), Is.True);
+                Assert.That(shutter.TryComp<YautjaPreserveShutterComponent>(out _, factory), Is.True);
+                Assert.That(shutter.TryComp<DoorComponent>(out var door, factory), Is.True);
                 Assert.That(door!.State, Is.EqualTo(DoorState.Closed));
                 Assert.That(door.CanPry, Is.False);
-                Assert.That(shutter.TryGetComponent<ApcPowerReceiverComponent>(out var apc, factory), Is.True);
+                Assert.That(shutter.TryComp<ApcPowerReceiverComponent>(out var apc, factory), Is.True);
                 Assert.That(apc!.NeedsPower, Is.False);
-                Assert.That(shutter.TryGetComponent<RMCPowerReceiverComponent>(out var rmcPower, factory), Is.True);
+                Assert.That(shutter.TryComp<RMCPowerReceiverComponent>(out var rmcPower, factory), Is.True);
                 Assert.That(rmcPower!.IdleLoad, Is.Zero);
                 Assert.That(rmcPower.ActiveLoad, Is.Zero);
-                Assert.That(console.TryGetComponent<YautjaHuntEscapeConsoleComponent>(out _, factory), Is.True);
-                Assert.That(console.TryGetComponent<FixturesComponent>(out var fixtures, factory), Is.True);
+                Assert.That(console.TryComp<YautjaHuntEscapeConsoleComponent>(out _, factory), Is.True);
+                Assert.That(console.TryComp<FixturesComponent>(out var fixtures, factory), Is.True);
                 Assert.That(fixtures!.Fixtures, Is.Not.Empty, "The console must be a collidable structure, like the CMSS13 escape console.");
-                Assert.That(edge.TryGetComponent<YautjaPreserveEdgeComponent>(out _, factory), Is.True);
-                Assert.That(edge.TryGetComponent<FixturesComponent>(out var edgeFixtures, factory), Is.True);
+                Assert.That(edge.TryComp<YautjaPreserveEdgeComponent>(out _, factory), Is.True);
+                Assert.That(edge.TryComp<FixturesComponent>(out var edgeFixtures, factory), Is.True);
                 Assert.That(edgeFixtures!.Fixtures, Is.Not.Empty, "The preserve edge must block movement until the escape completes.");
             });
         });
@@ -80,10 +85,16 @@ public sealed class YautjaPreserveConsoleTest
             await server.WaitPost(() =>
             {
                 var entMan = server.EntMan;
-                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-                prey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2, 0)));
-                hunterEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(1, 0)));
-                preyEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(3, 0)));
+                var mapSystem = entMan.System<SharedMapSystem>();
+                mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(1, 0), map.Tile.Tile);
+                mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(2, 0), map.Tile.Tile);
+                mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(3, 0), map.Tile.Tile);
+                entMan.EnsureComponent<GravityComponent>(map.Grid).Enabled = true;
+
+                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+                prey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
+                hunterEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(1.5f, 0.5f)));
+                preyEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(3.5f, 0.5f)));
                 entMan.EnsureComponent<YautjaComponent>(hunter);
 
                 entMan.EventBus.RaiseLocalEvent(hunterEdge, new InteractHandEvent(hunter, hunterEdge));

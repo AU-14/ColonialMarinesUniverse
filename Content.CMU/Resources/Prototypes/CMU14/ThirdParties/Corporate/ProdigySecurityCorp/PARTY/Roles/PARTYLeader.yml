@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobPARTYPartyContractorBase
   id: AU14JobProdigyPartyLeader #m41a/2
+  chevrons:
+    AU14RankPrDEnforcerLead:
+      entity: AU14ChevronPrDEnforcerLead
+      requirements: []
   roundSide: ThirdParty
   roundProfiles:
   - AU14RoundJobProfileThirdParty
@@ -29,7 +33,7 @@
       state: synth
   - type: MarineOrders
 
-  name: Prodigy Yankee Party Leader
+  name: Team Leader
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobProdigyPartyLeader
   ranks:
@@ -93,7 +97,7 @@
     back:
     - CMSurgicalLine
     - CMSynthGraft
-    - CMMRE
+    - CMUMREFSR
     - RMCLaserDesignatorPVE
     - CMStunbaton
     - RMCHandcuffs

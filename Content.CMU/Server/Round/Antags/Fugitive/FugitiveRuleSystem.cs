@@ -7,7 +7,7 @@ namespace Content.Server.CMU14.Round.Antags.Fugitive;
 
 public sealed partial class FugitiveRuleSystem : GameRuleSystem<FugitiveRuleComponent>
 {
-    [Dependency] private readonly WantedSystem _wantedSystem = default!;
+    [Dependency] private WantedSystem _wantedSystem = default!;
 
     public override void Initialize()
     {

@@ -14,6 +14,7 @@ public sealed partial class CMUTacticalReconstructionSystem
     [Dependency] private Content.Server._RMC14.TacticalMap.TacticalMapSystem _tacticalMaps = default!;
     private TimeSpan _nextContacts;
     private TimeSpan _nextPrototypeContacts;
+    private readonly HashSet<EntityUid> _refreshedContactSources = new();
 
     private void SendContacts()
     {
@@ -21,14 +22,14 @@ public sealed partial class CMUTacticalReconstructionSystem
         _nextContacts = _timing.CurTime + TimeSpan.FromSeconds(0.25);
         var refreshPrototype = _timing.CurTime >= _nextPrototypeContacts;
         if (refreshPrototype) _nextPrototypeContacts = _timing.CurTime + TimeSpan.FromSeconds(1);
-        var refreshed = new HashSet<EntityUid>();
+        _refreshedContactSources.Clear();
         foreach (var (key, survey) in _surveys)
         {
             if (!CanUse(key.Console, key.Actor) || !IsCurrentSurvey(key.Console, survey)) continue;
             if (TryComp<TacticalMapComputerComponent>(key.Console, out var computer))
             {
                 // Ordinary computer interfaces already refresh through TacticalMapSystem.
-                if (refreshPrototype && HasComp<CMUTacticalReconstructionComponent>(key.Console) && refreshed.Add(key.Console))
+                if (refreshPrototype && HasComp<CMUTacticalReconstructionComponent>(key.Console) && _refreshedContactSources.Add(key.Console))
                     EntityManager.System<Content.Server._RMC14.TacticalMap.TacticalMapSystem>().RefreshReconstructionContacts((key.Console, computer));
             }
             SendContacts(key.Console, key.Actor, survey);
@@ -38,8 +39,7 @@ public sealed partial class CMUTacticalReconstructionSystem
     private void SendContacts(EntityUid source, EntityUid actor, Survey survey)
     {
         var message = Contacts(source, actor, survey);
-        if (survey.LastContacts is { } last && last.OperatorPosition == message.OperatorPosition &&
-            last.OperatorDepth == message.OperatorDepth && last.Contacts.SequenceEqual(message.Contacts)) return;
+        if (ReferenceEquals(survey.LastContacts, message)) return;
         survey.LastContacts = message;
         _ui.ServerSendUiMessage(source, UiKey(source), message, actor);
     }
@@ -47,8 +47,10 @@ public sealed partial class CMUTacticalReconstructionSystem
     private CMUReconContactsMessage Contacts(EntityUid source, EntityUid actor, Survey survey)
     {
         RefreshLayer(survey);
-        var contacts = new List<CMUReconContact>();
-        var seen = new HashSet<int>();
+        var contacts = survey.ContactBuffer;
+        var seen = survey.ContactIds;
+        contacts.Clear();
+        seen.Clear();
         var canWatch = CanUseCamera(source, actor, out var console);
         void Add(Dictionary<int, TacticalMapBlip> blips)
         {
@@ -58,7 +60,7 @@ public sealed partial class CMUTacticalReconstructionSystem
                 if (!seen.Add(id)) continue;
                 // an intel blip (DF ping, jammer fix) has no entity behind its key; it sits on the grid
                 // it was placed on. without this every intel blip silently vanished from the view
-                var mapUid = TryComp<TransformComponent>(target, out var transform)
+                var mapUid = TryComp(target, out TransformComponent? transform)
                     ? transform.MapUid
                     : _tacticalMaps.TryGetIntelBlipGrid(id, out var intelGrid) && TryComp(intelGrid, out TransformComponent? gridTransform)
                         ? gridTransform.MapUid
@@ -74,7 +76,8 @@ public sealed partial class CMUTacticalReconstructionSystem
                     ? GetNetEntity(target) : null;
                 NetEntity? xenoWatchTarget = source == actor && blip.Image?.RsiState != "enemy_blip" &&
                     _xenoWatch.CanQueenWatch(actor, target) ? GetNetEntity(target) : null;
-                contacts.Add(new CMUReconContact(survey.Atlas.MinDepth + level, blip, name, cameraTarget, xenoWatchTarget));
+                contacts.Add(new CMUReconContact(survey.Atlas.MinDepth + level, blip, name, cameraTarget, xenoWatchTarget,
+                    IsOperator: target == actor));
             }
         }
         if (TryComp<TacticalMapUserComponent>(source, out var user))
@@ -98,10 +101,16 @@ public sealed partial class CMUTacticalReconstructionSystem
         }
         var operatorLevel = Array.IndexOf(survey.Atlas.Maps, Transform(actor).MapUid);
         ValidateCamera(survey, contacts);
+        var operatorPosition = operatorLevel >= 0 ? _transform.GetWorldPosition(actor) : (System.Numerics.Vector2?) null;
+        var operatorDepth = survey.Atlas.MinDepth + operatorLevel;
+        // Permission and camera checks above must run even when the wire state is unchanged.
+        if (survey.LastContacts is { } last && last.OperatorPosition == operatorPosition &&
+            last.OperatorDepth == operatorDepth && contacts.SequenceEqual(last.Contacts))
+            return last;
         return new CMUReconContactsMessage(survey.Generation, contacts.ToArray())
         {
-            OperatorPosition = operatorLevel >= 0 ? _transform.GetWorldPosition(actor) : null,
-            OperatorDepth = survey.Atlas.MinDepth + operatorLevel,
+            OperatorPosition = operatorPosition,
+            OperatorDepth = operatorDepth,
         };
     }
 }

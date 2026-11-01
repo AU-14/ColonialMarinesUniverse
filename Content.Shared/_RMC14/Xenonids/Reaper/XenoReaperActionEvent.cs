@@ -8,7 +8,12 @@ namespace Content.Shared._RMC14.Xenonids.Reaper;
 public sealed partial class XenoFleshHarvestActionEvent : EntityTargetActionEvent;
 
 [Serializable, NetSerializable]
-public sealed partial class XenoFleshHarvestDoAfterEvent : SimpleDoAfterEvent;
+// CMU14: track the server-owned harvest visual through cancellation.
+public sealed partial class XenoFleshHarvestDoAfterEvent : SimpleDoAfterEvent
+{
+    [DataField]
+    public NetEntity? Effect;
+}
 
 public sealed partial class XenoRaptureActionEvent : EntityTargetActionEvent;
 
@@ -35,6 +40,10 @@ public sealed partial class XenoReaperRedGasDoAfterEvent : SimpleDoAfterEvent
 [Serializable, NetSerializable]
 public sealed partial class XenoFleshBloomDoAfterEvent : SimpleDoAfterEvent
 {
+    // CMU14: remove the tendril on completion or cancellation.
+    [DataField]
+    public NetEntity? Telegraph;
+
     [DataField]
     public NetCoordinates Coordinates;
 

@@ -64,6 +64,20 @@ namespace Content.Server.GameTicking.Presets
         [DataField]
         public int MaxThirdParties = 7;
 
+        /// <summary>
+        /// If ground entry should be disallowed for third parties, they always arrive by dropship.
+        /// </summary>
+        [DataField]
+        public bool ThirdPartyForceShuttle; // CMU14
+
+        // CMU14 Start: per-preset dropship fabricator points
+        /// <summary>
+        /// Starting dropship fabricator points for this preset. Uses the rmc.dropship_fabricator_starting_points CVar when null.
+        /// </summary>
+        [DataField]
+        public int? DropshipFabricatorStartingPoints;
+        // CMU14 End
+
         [DataField]
         public IReadOnlyList<EntProtoId> Rules { get; private set; } = Array.Empty<EntProtoId>();
 

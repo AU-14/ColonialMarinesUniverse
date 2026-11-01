@@ -79,7 +79,7 @@ public sealed partial class SensorTowerSystem : EntitySystem
         ent.Comp.Faction = string.Empty;
         Dirty(ent);
         var msg = $"You wipe the faction settings from the {Name(ent)}.";
-        _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
         // Notify tactical map system that sensor ownership changed so the canvas updates immediately
         RaiseLocalEvent(ent.Owner, new SensorTowerStateChangedEvent(ent.Owner));
     }
@@ -99,7 +99,7 @@ public sealed partial class SensorTowerSystem : EntitySystem
             Dirty(ent);
             args.Handled = true;
             var msg = $"You set the {Name(ent)} to faction {faction}.";
-            _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+            _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
             // Notify tactical map system that sensor ownership changed so the canvas updates immediately
             RaiseLocalEvent(ent.Owner, new SensorTowerStateChangedEvent(ent.Owner));
         }
@@ -129,7 +129,7 @@ public sealed partial class SensorTowerSystem : EntitySystem
         if (!_skills.HasSkill(user, ent.Comp.Skill, ent.Comp.SkillLevel))
         {
             var msg = Loc.GetString("rmc-skills-no-training", ("target", ent));
-            _popup.PopupClient(msg, ent, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, ent, user, PopupType.SmallCaution);
             return;
         }
 
@@ -142,7 +142,7 @@ public sealed partial class SensorTowerSystem : EntitySystem
             if (ent.Comp.State == SensorTowerState.Weld)
             {
                 var msg = "This sensor tower is too damaged to reconfigure.";
-                _popup.PopupClient(msg, ent, args.User, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, ent, args.User, PopupType.SmallCaution);
                 args.Handled = true;
                 return;
             }
@@ -153,7 +153,7 @@ public sealed partial class SensorTowerSystem : EntitySystem
                 ent.Comp.Faction = faction.ToString();
                 Dirty(ent);
                 var msg = $"You configure the {Name(ent)} to faction {faction}.";
-                _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+                _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
                 _adminLog.Add(LogType.RMCCommunicationsTower, $"{ToPrettyString(args.User)} set {ToPrettyString(ent)} to faction {faction}.");
             }
             else
@@ -162,7 +162,7 @@ public sealed partial class SensorTowerSystem : EntitySystem
                 ent.Comp.Faction = string.Empty;
                 Dirty(ent);
                 var msg = $"You wipe the faction settings from the {Name(ent)}.";
-                _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+                _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
                 _adminLog.Add(LogType.RMCCommunicationsTower, $"{ToPrettyString(args.User)} wiped faction settings from {ToPrettyString(ent)}.");
             }
 
@@ -220,7 +220,7 @@ public sealed partial class SensorTowerSystem : EntitySystem
 
         if (!_skills.HasSkill(user, ent.Comp.Skill, ent.Comp.SkillLevel))
         {
-            _popup.PopupClient("You have no clue how this thing works...", ent, user, PopupType.SmallCaution);
+            _popup.PopupEntity("You have no clue how this thing works...", ent, user, PopupType.SmallCaution);
             return;
         }
 
@@ -234,7 +234,7 @@ public sealed partial class SensorTowerSystem : EntitySystem
             SensorTowerState.On => $"The {Name(ent)} goes dark.",
             _ => throw new ArgumentOutOfRangeException(),
         };
-        _popup.PopupClient(popup, ent, user, PopupType.Medium);
+        _popup.PopupEntity(popup, ent, user, PopupType.Medium);
 
         if (state < SensorTowerState.Off)
             return;
@@ -377,7 +377,7 @@ public sealed partial class SensorTowerSystem : EntitySystem
     {
         if (tower.Comp.State == SensorTowerState.Weld)
         {
-            _popup.PopupClient("We stare at the experimental sensor tower cluelessly.", user, user, PopupType.SmallCaution);
+            _popup.PopupEntity("We stare at the experimental sensor tower cluelessly.", user, user, PopupType.SmallCaution);
             return;
         }
 
@@ -389,7 +389,7 @@ public sealed partial class SensorTowerSystem : EntitySystem
 
         if (_doAfter.TryStartDoAfter(doAfter))
         {
-            _popup.PopupClient($"You start wrenching apart the {Name(tower)}'s panels and reaching inside it!", tower, user, PopupType.Medium);
+            _popup.PopupEntity($"You start wrenching apart the {Name(tower)}'s panels and reaching inside it!", tower, user, PopupType.Medium);
         }
     }
 

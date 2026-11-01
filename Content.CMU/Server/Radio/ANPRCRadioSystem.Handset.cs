@@ -223,8 +223,12 @@ public sealed partial class ANPRCRadioSystem
         if (TryComp(user.Owner, out WearingHeadsetComponent? headset) &&
             TryComp(headset.Headset, out EncryptionKeyHolderComponent? keys))
         {
-            headsetChannels = [.. keys.Channels];
+            headsetChannels = keys.Channels;
         }
+
+        // Check current grants without allocating on every unchanged tick.
+        if (HandsetChannelsMatch(user.Comp.GrantedChannels, radio.GrantedChannels, headsetChannels))
+            return;
 
         var wanted = new HashSet<string>();
 
@@ -233,9 +237,6 @@ public sealed partial class ANPRCRadioSystem
             if (headsetChannels == null || !headsetChannels.Contains(channel))
                 wanted.Add(channel);
         }
-
-        if (wanted.SetEquals(user.Comp.GrantedChannels))
-            return;
 
         var active = EnsureComp<ActiveRadioComponent>(user.Owner);
 
@@ -258,6 +259,26 @@ public sealed partial class ANPRCRadioSystem
 
         user.Comp.GrantedChannels.Clear();
         user.Comp.GrantedChannels.UnionWith(wanted);
+    }
+
+    internal static bool HandsetChannelsMatch(
+        HashSet<string> granted,
+        HashSet<string> radio,
+        HashSet<ProtoId<RadioChannelPrototype>>? headset)
+    {
+        var count = 0;
+        foreach (var channel in radio)
+        {
+            if (headset != null && headset.Contains(channel))
+                continue;
+
+            if (!granted.Contains(channel))
+                return false;
+
+            count++;
+        }
+
+        return count == granted.Count;
     }
 
     private void RevokeHandsetHearing(Entity<ANPRCHandsetUserComponent> user)

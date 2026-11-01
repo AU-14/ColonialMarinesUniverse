@@ -5,6 +5,9 @@
   name: M56B smart gun
   description: The actual firearm in the Smart Gun System. Essentially a heavy, mobile machinegun.
   components:
+  # cmu edit start: built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Wieldable
   - type: Item
     size: Huge
@@ -51,6 +54,11 @@
     damage:
       types:
         Blunt: 20
+  # cmu edit start: low ammo rattle (cmss13 PR 13169)
+  - type: CMULowAmmoFireSound
+    sound:
+      collection: AU14SmartgunRattleFireSound
+  # cmu edit end
   - type: Gun
     selectedMode: FullAuto
     availableModes:
@@ -62,8 +70,8 @@
   - type: RMCSelectiveFire
     baseFireModes:
     - FullAuto
-    recoilWielded: 3
-    scatterWielded: 10
+    recoilWielded: 0
+    scatterWielded: 2
     baseFireRate: 8.5
     burstScatterMult: 4
     modifiers:
@@ -73,7 +81,7 @@
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 80
   - type: RMCWeaponAccuracy
-    accuracyMultiplier: 1.05
+    accuracyMultiplier: 1.15
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -126,14 +134,19 @@
     skills:
       RMCSkillFirearms: 100
   - type: GunDrainBatteryOnShoot
+    baseDrain: 3.12
+    minDrainMultiplier: 0.5
   - type: GunRequireEquipped
     whitelist:
       components:
       - SmartGunArmor
-  - type: GunToggleableRecoil
-  - type: GunToggleableAutoFire
+  - type: GunAimAssist
   - type: ToggleableMotionDetector
+    batteryDrain: 0.6
   - type: IFFToggle
+  # cmu edit start: more damage and less falloff with IFF off
+  - type: CMUIFFOffBonus
+  # cmu edit end
   - type: MotionDetector
     handToggleable: false
     deactivateOnDrop: false
@@ -182,6 +195,10 @@
   name: M56T smart gun
   description: The actual firearm in the 4-piece M56T Smartgun System. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
   components:
+  - type: GunAimAssist
+    active: true
+    batteryDrain: 3.32
+    accuracyPenalty: 0
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml79a.rsi
     layers:
@@ -237,8 +254,8 @@
   suffix: Whiteout
   components:
   - type: RMCSelectiveFire
-    recoilWielded: 3
-    scatterWielded: 10
+    recoilWielded: 0
+    scatterWielded: 2
     baseFireRate: 16
     burstScatterMult: 1
     modifiers:

@@ -1,0 +1,4237 @@
+# Source-derived physical prop drafts; see SOURCES_MEDICAL_SMALL_CLOUD.md
+- type: cmu3DModel
+  id: CMU3DCMBeakerMedicalSmallCloud
+  label: Open empty CMBeaker
+  status: draft
+  sourcePrototypes:
+  - CMBeaker
+  referencePrototype: CMBeaker
+  referenceRsi: /Textures/_RMC14/Objects/Medical/beaker.rsi
+  referenceState: beaker
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Actual Openable.opened=true and no initial reagents: open, empty default. Separate sixteen-sided thin
+    wall, true open cavity, floor, rim, pouring lip and original narrow graduation/gauge crop. Glass wall alpha, depth
+    and hidden construction are inferred. The chemistry glass adapter only accepts its specific drinking-glass RSI
+    resources; these beaker fill/lid compositions are deliberately not bound to it. Live reagent colors, five fill
+    levels, lid changes, spilling, breakage and held states remain unsupported.'
+  parts:
+  - label: thin hollow vessel wall 01
+    min: 0.101304, -0.011000, 0.031000
+    max: 0.261832, 0.011000, 0.333000
+    color: '#8BABA892'
+    yaw: 90.0
+  - label: thin hollow vessel wall 02
+    min: 0.048124, 0.117388, 0.031000
+    max: 0.208652, 0.139388, 0.333000
+    color: '#8BABA892'
+    yaw: 135.0
+  - label: thin hollow vessel wall 03
+    min: -0.080264, 0.170568, 0.031000
+    max: 0.080264, 0.192568, 0.333000
+    color: '#8BABA892'
+    yaw: 180.0
+  - label: thin hollow vessel wall 04
+    min: -0.208652, 0.117388, 0.031000
+    max: -0.048124, 0.139388, 0.333000
+    color: '#8BABA892'
+    yaw: 225.0
+  - label: thin hollow vessel wall 05
+    min: -0.261832, -0.011000, 0.031000
+    max: -0.101304, 0.011000, 0.333000
+    color: '#8BABA892'
+    yaw: 270.0
+  - label: thin hollow vessel wall 06
+    min: -0.208652, -0.139388, 0.031000
+    max: -0.048124, -0.117388, 0.333000
+    color: '#8BABA892'
+    yaw: 315.0
+  - label: thin hollow vessel wall 07
+    min: -0.080264, -0.192568, 0.031000
+    max: 0.080264, -0.170568, 0.333000
+    color: '#8BABA892'
+    yaw: 0.0
+  - label: thin hollow vessel wall 08
+    min: 0.048124, -0.139388, 0.031000
+    max: 0.208652, -0.117388, 0.333000
+    color: '#8BABA892'
+    yaw: 45.0
+  - label: rolled open mouth 01
+    min: 0.106060, -0.012000, 0.314500
+    max: 0.274730, 0.012000, 0.341500
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth 02
+    min: 0.050295, 0.122630, 0.314500
+    max: 0.218964, 0.146630, 0.341500
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth 03
+    min: -0.084335, 0.178395, 0.314500
+    max: 0.084335, 0.202395, 0.341500
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth 04
+    min: -0.218964, 0.122630, 0.314500
+    max: -0.050295, 0.146630, 0.341500
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth 05
+    min: -0.274730, -0.012000, 0.314500
+    max: -0.106060, 0.012000, 0.341500
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth 06
+    min: -0.218964, -0.146630, 0.314500
+    max: -0.050295, -0.122630, 0.341500
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rolled open mouth 07
+    min: -0.084335, -0.202395, 0.314500
+    max: 0.084335, -0.178395, 0.341500
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth 08
+    min: 0.050295, -0.146630, 0.314500
+    max: 0.218964, -0.122630, 0.341500
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: closed vessel floor
+    min: -0.193125, -0.193125, 0.0
+    max: 0.193125, 0.193125, 0.036
+    color: '#5A8D88A0'
+    shape: CylinderZ
+  - label: thickened glass foot 01
+    min: 0.097395, -0.013500, 0.021000
+    max: 0.255933, 0.013500, 0.049000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: thickened glass foot 02
+    min: 0.045652, 0.111420, 0.021000
+    max: 0.204189, 0.138420, 0.049000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: thickened glass foot 03
+    min: -0.079269, 0.163164, 0.021000
+    max: 0.079269, 0.190164, 0.049000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: thickened glass foot 04
+    min: -0.204189, 0.111420, 0.021000
+    max: -0.045652, 0.138420, 0.049000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: thickened glass foot 05
+    min: -0.255933, -0.013500, 0.021000
+    max: -0.097395, 0.013500, 0.049000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: thickened glass foot 06
+    min: -0.204189, -0.138420, 0.021000
+    max: -0.045652, -0.111420, 0.049000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: thickened glass foot 07
+    min: -0.079269, -0.190164, 0.021000
+    max: 0.079269, -0.163164, 0.049000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: thickened glass foot 08
+    min: 0.045652, -0.138420, 0.021000
+    max: 0.204189, -0.111420, 0.049000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: original curved graduation column 16
+    min: 0.0, -0.197492, 0.02624
+    max: 0.03125, -0.187492, 0.21648
+    color: '#FFFFFF'
+    yaw: 4.64065
+    surface: CMU3DMedicalSmallCloudArt00
+    surfaceAxis: XZ
+  - label: original curved graduation column 17
+    min: 0.03125, -0.19235, 0.02624
+    max: 0.0625, -0.18235, 0.21648
+    color: '#FFFFFF'
+    yaw: 14.04704
+    surface: CMU3DMedicalSmallCloudArt01
+    surfaceAxis: XZ
+  - label: original curved graduation column 18
+    min: 0.0625, -0.181618, 0.02624
+    max: 0.09375, -0.171618, 0.21648
+    color: '#FFFFFF'
+    yaw: 23.86172
+    surface: CMU3DMedicalSmallCloudArt02
+    surfaceAxis: XZ
+  - label: original curved graduation column 19
+    min: 0.09375, -0.164168, 0.02624
+    max: 0.125, -0.154168, 0.21648
+    color: '#FFFFFF'
+    yaw: 34.49561
+    surface: CMU3DMedicalSmallCloudArt03
+    surfaceAxis: XZ
+  - label: subtle vertical glass edge 0
+    min: -0.176625, -0.085656, 0.04428
+    max: -0.159625, -0.064656, 0.28372
+    color: '#B7C9C350'
+  - label: subtle vertical glass edge 1
+    min: 0.154625, -0.085656, 0.04428
+    max: 0.171625, -0.064656, 0.28372
+    color: '#B7C9C350'
+  - label: spout left lip
+    min: -0.078, -0.212125, 0.324
+    max: -0.01, -0.174125, 0.34
+    color: '#B7C9C3'
+    yaw: -22
+  - label: spout right lip
+    min: 0.01, -0.212125, 0.324
+    max: 0.078, -0.174125, 0.34
+    color: '#B7C9C3'
+    yaw: 22
+- type: cmu3DModel
+  id: CMU3DCMBeakerMedicalSmallCloudLidStudy
+  label: Closed lid study CMBeaker
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMBeaker
+  referenceRsi: /Textures/_RMC14/Objects/Medical/beaker.rsi
+  referenceState: beaker
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound closed-lid art study, original base + lid source composition. Separate removable lid covers
+    the physical mouth; not a runtime Openable adapter.
+  parts:
+  - label: thin hollow vessel wall 01
+    min: 0.101304, -0.011000, 0.031000
+    max: 0.261832, 0.011000, 0.333000
+    color: '#8BABA892'
+    yaw: 90.0
+  - label: thin hollow vessel wall 02
+    min: 0.048124, 0.117388, 0.031000
+    max: 0.208652, 0.139388, 0.333000
+    color: '#8BABA892'
+    yaw: 135.0
+  - label: thin hollow vessel wall 03
+    min: -0.080264, 0.170568, 0.031000
+    max: 0.080264, 0.192568, 0.333000
+    color: '#8BABA892'
+    yaw: 180.0
+  - label: thin hollow vessel wall 04
+    min: -0.208652, 0.117388, 0.031000
+    max: -0.048124, 0.139388, 0.333000
+    color: '#8BABA892'
+    yaw: 225.0
+  - label: thin hollow vessel wall 05
+    min: -0.261832, -0.011000, 0.031000
+    max: -0.101304, 0.011000, 0.333000
+    color: '#8BABA892'
+    yaw: 270.0
+  - label: thin hollow vessel wall 06
+    min: -0.208652, -0.139388, 0.031000
+    max: -0.048124, -0.117388, 0.333000
+    color: '#8BABA892'
+    yaw: 315.0
+  - label: thin hollow vessel wall 07
+    min: -0.080264, -0.192568, 0.031000
+    max: 0.080264, -0.170568, 0.333000
+    color: '#8BABA892'
+    yaw: 0.0
+  - label: thin hollow vessel wall 08
+    min: 0.048124, -0.139388, 0.031000
+    max: 0.208652, -0.117388, 0.333000
+    color: '#8BABA892'
+    yaw: 45.0
+  - label: rolled open mouth 01
+    min: 0.106060, -0.012000, 0.314500
+    max: 0.274730, 0.012000, 0.341500
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth 02
+    min: 0.050295, 0.122630, 0.314500
+    max: 0.218964, 0.146630, 0.341500
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth 03
+    min: -0.084335, 0.178395, 0.314500
+    max: 0.084335, 0.202395, 0.341500
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth 04
+    min: -0.218964, 0.122630, 0.314500
+    max: -0.050295, 0.146630, 0.341500
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth 05
+    min: -0.274730, -0.012000, 0.314500
+    max: -0.106060, 0.012000, 0.341500
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth 06
+    min: -0.218964, -0.146630, 0.314500
+    max: -0.050295, -0.122630, 0.341500
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rolled open mouth 07
+    min: -0.084335, -0.202395, 0.314500
+    max: 0.084335, -0.178395, 0.341500
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth 08
+    min: 0.050295, -0.146630, 0.314500
+    max: 0.218964, -0.122630, 0.341500
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: closed vessel floor
+    min: -0.193125, -0.193125, 0.0
+    max: 0.193125, 0.193125, 0.036
+    color: '#5A8D88A0'
+    shape: CylinderZ
+  - label: thickened glass foot 01
+    min: 0.097395, -0.013500, 0.021000
+    max: 0.255933, 0.013500, 0.049000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: thickened glass foot 02
+    min: 0.045652, 0.111420, 0.021000
+    max: 0.204189, 0.138420, 0.049000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: thickened glass foot 03
+    min: -0.079269, 0.163164, 0.021000
+    max: 0.079269, 0.190164, 0.049000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: thickened glass foot 04
+    min: -0.204189, 0.111420, 0.021000
+    max: -0.045652, 0.138420, 0.049000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: thickened glass foot 05
+    min: -0.255933, -0.013500, 0.021000
+    max: -0.097395, 0.013500, 0.049000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: thickened glass foot 06
+    min: -0.204189, -0.138420, 0.021000
+    max: -0.045652, -0.111420, 0.049000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: thickened glass foot 07
+    min: -0.079269, -0.190164, 0.021000
+    max: 0.079269, -0.163164, 0.049000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: thickened glass foot 08
+    min: 0.045652, -0.138420, 0.021000
+    max: 0.204189, -0.111420, 0.049000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: original curved graduation column 16
+    min: 0.0, -0.197492, 0.02624
+    max: 0.03125, -0.187492, 0.21648
+    color: '#FFFFFF'
+    yaw: 4.64065
+    surface: CMU3DMedicalSmallCloudArt00
+    surfaceAxis: XZ
+  - label: original curved graduation column 17
+    min: 0.03125, -0.19235, 0.02624
+    max: 0.0625, -0.18235, 0.21648
+    color: '#FFFFFF'
+    yaw: 14.04704
+    surface: CMU3DMedicalSmallCloudArt01
+    surfaceAxis: XZ
+  - label: original curved graduation column 18
+    min: 0.0625, -0.181618, 0.02624
+    max: 0.09375, -0.171618, 0.21648
+    color: '#FFFFFF'
+    yaw: 23.86172
+    surface: CMU3DMedicalSmallCloudArt02
+    surfaceAxis: XZ
+  - label: original curved graduation column 19
+    min: 0.09375, -0.164168, 0.02624
+    max: 0.125, -0.154168, 0.21648
+    color: '#FFFFFF'
+    yaw: 34.49561
+    surface: CMU3DMedicalSmallCloudArt03
+    surfaceAxis: XZ
+  - label: subtle vertical glass edge 0
+    min: -0.176625, -0.085656, 0.04428
+    max: -0.159625, -0.064656, 0.28372
+    color: '#B7C9C350'
+  - label: subtle vertical glass edge 1
+    min: 0.154625, -0.085656, 0.04428
+    max: 0.171625, -0.064656, 0.28372
+    color: '#B7C9C350'
+  - label: spout left lip
+    min: -0.078, -0.212125, 0.324
+    max: -0.01, -0.174125, 0.34
+    color: '#B7C9C3'
+    yaw: -22
+  - label: spout right lip
+    min: 0.01, -0.212125, 0.324
+    max: 0.078, -0.174125, 0.34
+    color: '#B7C9C3'
+    yaw: 22
+  - label: removable solid closed lid
+    min: -0.21125, -0.21125, 0.3335
+    max: 0.21125, 0.21125, 0.3785
+    color: '#706C6A'
+    shape: CylinderZ
+  - label: lid inset top
+    min: -0.177734, -0.177734, 0.375
+    max: 0.177734, 0.177734, 0.387
+    color: '#999393'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DCMBeakerLargeMedicalSmallCloud
+  label: Open empty CMBeakerLarge
+  status: draft
+  sourcePrototypes:
+  - CMBeakerLarge
+  referencePrototype: CMBeakerLarge
+  referenceRsi: /Textures/_RMC14/Objects/Medical/large_beaker.rsi
+  referenceState: beakerlarge
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Actual Openable.opened=true and no initial reagents: open, empty default. Separate sixteen-sided thin
+    wall, true open cavity, floor, rim, pouring lip and original narrow graduation/gauge crop. Glass wall alpha, depth
+    and hidden construction are inferred. The chemistry glass adapter only accepts its specific drinking-glass RSI
+    resources; these beaker fill/lid compositions are deliberately not bound to it. Live reagent colors, five fill
+    levels, lid changes, spilling, breakage and held states remain unsupported.'
+  parts:
+  - label: thin hollow vessel wall 01
+    min: 0.128235, -0.011000, 0.031000
+    max: 0.326849, 0.011000, 0.419000
+    color: '#8BABA892'
+    yaw: 90.0
+  - label: thin hollow vessel wall 02
+    min: 0.061589, 0.149896, 0.031000
+    max: 0.260204, 0.171896, 0.419000
+    color: '#8BABA892'
+    yaw: 135.0
+  - label: thin hollow vessel wall 03
+    min: -0.099307, 0.216542, 0.031000
+    max: 0.099307, 0.238542, 0.419000
+    color: '#8BABA892'
+    yaw: 180.0
+  - label: thin hollow vessel wall 04
+    min: -0.260204, 0.149896, 0.031000
+    max: -0.061589, 0.171896, 0.419000
+    color: '#8BABA892'
+    yaw: 225.0
+  - label: thin hollow vessel wall 05
+    min: -0.326849, -0.011000, 0.031000
+    max: -0.128235, 0.011000, 0.419000
+    color: '#8BABA892'
+    yaw: 270.0
+  - label: thin hollow vessel wall 06
+    min: -0.260204, -0.171896, 0.031000
+    max: -0.061589, -0.149896, 0.419000
+    color: '#8BABA892'
+    yaw: 315.0
+  - label: thin hollow vessel wall 07
+    min: -0.099307, -0.238542, 0.031000
+    max: 0.099307, -0.216542, 0.419000
+    color: '#8BABA892'
+    yaw: 0.0
+  - label: thin hollow vessel wall 08
+    min: 0.061589, -0.171896, 0.031000
+    max: 0.260204, -0.149896, 0.419000
+    color: '#8BABA892'
+    yaw: 45.0
+  - label: rolled open mouth 01
+    min: 0.132991, -0.012000, 0.400500
+    max: 0.339747, 0.012000, 0.427500
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth 02
+    min: 0.063760, 0.155138, 0.400500
+    max: 0.270516, 0.179138, 0.427500
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth 03
+    min: -0.103378, 0.224369, 0.400500
+    max: 0.103378, 0.248369, 0.427500
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth 04
+    min: -0.270516, 0.155138, 0.400500
+    max: -0.063760, 0.179138, 0.427500
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth 05
+    min: -0.339747, -0.012000, 0.400500
+    max: -0.132991, 0.012000, 0.427500
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth 06
+    min: -0.270516, -0.179138, 0.400500
+    max: -0.063760, -0.155138, 0.427500
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rolled open mouth 07
+    min: -0.103378, -0.248369, 0.400500
+    max: 0.103378, -0.224369, 0.427500
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth 08
+    min: 0.063760, -0.179138, 0.400500
+    max: 0.270516, -0.155138, 0.427500
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: closed vessel floor
+    min: -0.24, -0.24, 0.0
+    max: 0.24, 0.24, 0.036
+    color: '#5A8D88A0'
+    shape: CylinderZ
+  - label: thickened glass foot 01
+    min: 0.124327, -0.013500, 0.021000
+    max: 0.320950, 0.013500, 0.049000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: thickened glass foot 02
+    min: 0.059117, 0.143929, 0.021000
+    max: 0.255741, 0.170929, 0.049000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: thickened glass foot 03
+    min: -0.098312, 0.209139, 0.021000
+    max: 0.098312, 0.236139, 0.049000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: thickened glass foot 04
+    min: -0.255741, 0.143929, 0.021000
+    max: -0.059117, 0.170929, 0.049000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: thickened glass foot 05
+    min: -0.320950, -0.013500, 0.021000
+    max: -0.124327, 0.013500, 0.049000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: thickened glass foot 06
+    min: -0.255741, -0.170929, 0.021000
+    max: -0.059117, -0.143929, 0.049000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: thickened glass foot 07
+    min: -0.098312, -0.236139, 0.021000
+    max: 0.098312, -0.209139, 0.049000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: thickened glass foot 08
+    min: 0.059117, -0.170929, 0.021000
+    max: 0.255741, -0.143929, 0.049000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: original curved graduation column 17
+    min: 0.03125, -0.240378, 0.03312
+    max: 0.0625, -0.230378, 0.27324
+    color: '#FFFFFF'
+    yaw: 11.26298
+    surface: CMU3DMedicalSmallCloudArt04
+    surfaceAxis: XZ
+  - label: original curved graduation column 18
+    min: 0.0625, -0.231928, 0.03312
+    max: 0.09375, -0.221928, 0.27324
+    color: '#FFFFFF'
+    yaw: 18.99713
+    surface: CMU3DMedicalSmallCloudArt05
+    surfaceAxis: XZ
+  - label: original curved graduation column 19
+    min: 0.09375, -0.218628, 0.03312
+    max: 0.125, -0.208628, 0.27324
+    color: '#FFFFFF'
+    yaw: 27.11186
+    surface: CMU3DMedicalSmallCloudArt06
+    surfaceAxis: XZ
+  - label: original curved graduation column 20
+    min: 0.125, -0.199485, 0.03312
+    max: 0.15625, -0.189485, 0.27324
+    color: '#FFFFFF'
+    yaw: 35.86925
+    surface: CMU3DMedicalSmallCloudArt07
+    surfaceAxis: XZ
+  - label: original curved graduation column 21
+    min: 0.15625, -0.172508, 0.03312
+    max: 0.1875, -0.162508, 0.27324
+    color: '#FFFFFF'
+    yaw: 45.73718
+    surface: CMU3DMedicalSmallCloudArt08
+    surfaceAxis: XZ
+  - label: subtle vertical glass edge 0
+    min: -0.2235, -0.103, 0.05589
+    max: -0.2065, -0.082, 0.35811
+    color: '#B7C9C350'
+  - label: subtle vertical glass edge 1
+    min: 0.2015, -0.103, 0.05589
+    max: 0.2185, -0.082, 0.35811
+    color: '#B7C9C350'
+  - label: spout left lip
+    min: -0.078, -0.259, 0.41
+    max: -0.01, -0.221, 0.426
+    color: '#B7C9C3'
+    yaw: -22
+  - label: spout right lip
+    min: 0.01, -0.259, 0.41
+    max: 0.078, -0.221, 0.426
+    color: '#B7C9C3'
+    yaw: 22
+- type: cmu3DModel
+  id: CMU3DCMBeakerLargeMedicalSmallCloudLidStudy
+  label: Closed lid study CMBeakerLarge
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMBeakerLarge
+  referenceRsi: /Textures/_RMC14/Objects/Medical/large_beaker.rsi
+  referenceState: beakerlarge
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound closed-lid art study, original base + lid source composition. Separate removable lid covers
+    the physical mouth; not a runtime Openable adapter.
+  parts:
+  - label: thin hollow vessel wall 01
+    min: 0.128235, -0.011000, 0.031000
+    max: 0.326849, 0.011000, 0.419000
+    color: '#8BABA892'
+    yaw: 90.0
+  - label: thin hollow vessel wall 02
+    min: 0.061589, 0.149896, 0.031000
+    max: 0.260204, 0.171896, 0.419000
+    color: '#8BABA892'
+    yaw: 135.0
+  - label: thin hollow vessel wall 03
+    min: -0.099307, 0.216542, 0.031000
+    max: 0.099307, 0.238542, 0.419000
+    color: '#8BABA892'
+    yaw: 180.0
+  - label: thin hollow vessel wall 04
+    min: -0.260204, 0.149896, 0.031000
+    max: -0.061589, 0.171896, 0.419000
+    color: '#8BABA892'
+    yaw: 225.0
+  - label: thin hollow vessel wall 05
+    min: -0.326849, -0.011000, 0.031000
+    max: -0.128235, 0.011000, 0.419000
+    color: '#8BABA892'
+    yaw: 270.0
+  - label: thin hollow vessel wall 06
+    min: -0.260204, -0.171896, 0.031000
+    max: -0.061589, -0.149896, 0.419000
+    color: '#8BABA892'
+    yaw: 315.0
+  - label: thin hollow vessel wall 07
+    min: -0.099307, -0.238542, 0.031000
+    max: 0.099307, -0.216542, 0.419000
+    color: '#8BABA892'
+    yaw: 0.0
+  - label: thin hollow vessel wall 08
+    min: 0.061589, -0.171896, 0.031000
+    max: 0.260204, -0.149896, 0.419000
+    color: '#8BABA892'
+    yaw: 45.0
+  - label: rolled open mouth 01
+    min: 0.132991, -0.012000, 0.400500
+    max: 0.339747, 0.012000, 0.427500
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth 02
+    min: 0.063760, 0.155138, 0.400500
+    max: 0.270516, 0.179138, 0.427500
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth 03
+    min: -0.103378, 0.224369, 0.400500
+    max: 0.103378, 0.248369, 0.427500
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth 04
+    min: -0.270516, 0.155138, 0.400500
+    max: -0.063760, 0.179138, 0.427500
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth 05
+    min: -0.339747, -0.012000, 0.400500
+    max: -0.132991, 0.012000, 0.427500
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth 06
+    min: -0.270516, -0.179138, 0.400500
+    max: -0.063760, -0.155138, 0.427500
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rolled open mouth 07
+    min: -0.103378, -0.248369, 0.400500
+    max: 0.103378, -0.224369, 0.427500
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth 08
+    min: 0.063760, -0.179138, 0.400500
+    max: 0.270516, -0.155138, 0.427500
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: closed vessel floor
+    min: -0.24, -0.24, 0.0
+    max: 0.24, 0.24, 0.036
+    color: '#5A8D88A0'
+    shape: CylinderZ
+  - label: thickened glass foot 01
+    min: 0.124327, -0.013500, 0.021000
+    max: 0.320950, 0.013500, 0.049000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: thickened glass foot 02
+    min: 0.059117, 0.143929, 0.021000
+    max: 0.255741, 0.170929, 0.049000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: thickened glass foot 03
+    min: -0.098312, 0.209139, 0.021000
+    max: 0.098312, 0.236139, 0.049000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: thickened glass foot 04
+    min: -0.255741, 0.143929, 0.021000
+    max: -0.059117, 0.170929, 0.049000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: thickened glass foot 05
+    min: -0.320950, -0.013500, 0.021000
+    max: -0.124327, 0.013500, 0.049000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: thickened glass foot 06
+    min: -0.255741, -0.170929, 0.021000
+    max: -0.059117, -0.143929, 0.049000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: thickened glass foot 07
+    min: -0.098312, -0.236139, 0.021000
+    max: 0.098312, -0.209139, 0.049000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: thickened glass foot 08
+    min: 0.059117, -0.170929, 0.021000
+    max: 0.255741, -0.143929, 0.049000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: original curved graduation column 17
+    min: 0.03125, -0.240378, 0.03312
+    max: 0.0625, -0.230378, 0.27324
+    color: '#FFFFFF'
+    yaw: 11.26298
+    surface: CMU3DMedicalSmallCloudArt04
+    surfaceAxis: XZ
+  - label: original curved graduation column 18
+    min: 0.0625, -0.231928, 0.03312
+    max: 0.09375, -0.221928, 0.27324
+    color: '#FFFFFF'
+    yaw: 18.99713
+    surface: CMU3DMedicalSmallCloudArt05
+    surfaceAxis: XZ
+  - label: original curved graduation column 19
+    min: 0.09375, -0.218628, 0.03312
+    max: 0.125, -0.208628, 0.27324
+    color: '#FFFFFF'
+    yaw: 27.11186
+    surface: CMU3DMedicalSmallCloudArt06
+    surfaceAxis: XZ
+  - label: original curved graduation column 20
+    min: 0.125, -0.199485, 0.03312
+    max: 0.15625, -0.189485, 0.27324
+    color: '#FFFFFF'
+    yaw: 35.86925
+    surface: CMU3DMedicalSmallCloudArt07
+    surfaceAxis: XZ
+  - label: original curved graduation column 21
+    min: 0.15625, -0.172508, 0.03312
+    max: 0.1875, -0.162508, 0.27324
+    color: '#FFFFFF'
+    yaw: 45.73718
+    surface: CMU3DMedicalSmallCloudArt08
+    surfaceAxis: XZ
+  - label: subtle vertical glass edge 0
+    min: -0.2235, -0.103, 0.05589
+    max: -0.2065, -0.082, 0.35811
+    color: '#B7C9C350'
+  - label: subtle vertical glass edge 1
+    min: 0.2015, -0.103, 0.05589
+    max: 0.2185, -0.082, 0.35811
+    color: '#B7C9C350'
+  - label: spout left lip
+    min: -0.078, -0.259, 0.41
+    max: -0.01, -0.221, 0.426
+    color: '#B7C9C3'
+    yaw: -22
+  - label: spout right lip
+    min: 0.01, -0.259, 0.41
+    max: 0.078, -0.221, 0.426
+    color: '#B7C9C3'
+    yaw: 22
+  - label: removable solid closed lid
+    min: -0.26, -0.26, 0.4195
+    max: 0.26, 0.26, 0.4645
+    color: '#706C6A'
+    shape: CylinderZ
+  - label: lid inset top
+    min: -0.21875, -0.21875, 0.461
+    max: 0.21875, 0.21875, 0.473
+    color: '#999393'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DRMCBeakerHighCapacityMedicalSmallCloud
+  label: Open empty RMCBeakerHighCapacity
+  status: draft
+  sourcePrototypes:
+  - RMCBeakerHighCapacity
+  referencePrototype: RMCBeakerHighCapacity
+  referenceRsi: /Textures/_RMC14/Objects/Medical/high_capacity_beaker.rsi
+  referenceState: beakerbluespace
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Actual Openable.opened=true and no initial reagents: open, empty default. Separate sixteen-sided thin
+    wall, true open cavity, floor, rim, pouring lip and original narrow graduation/gauge crop. Glass wall alpha, depth
+    and hidden construction are inferred. The chemistry glass adapter only accepts its specific drinking-glass RSI
+    resources; these beaker fill/lid compositions are deliberately not bound to it. Live reagent colors, five fill
+    levels, lid changes, spilling, breakage and held states remain unsupported.'
+  parts:
+  - label: thin hollow vessel wall 01
+    min: 0.128235, -0.011000, 0.031000
+    max: 0.326849, 0.011000, 0.419000
+    color: '#6F6D68'
+    yaw: 90.0
+  - label: thin hollow vessel wall 02
+    min: 0.061589, 0.149896, 0.031000
+    max: 0.260204, 0.171896, 0.419000
+    color: '#6F6D68'
+    yaw: 135.0
+  - label: thin hollow vessel wall 03
+    min: -0.099307, 0.216542, 0.031000
+    max: 0.099307, 0.238542, 0.419000
+    color: '#6F6D68'
+    yaw: 180.0
+  - label: thin hollow vessel wall 04
+    min: -0.260204, 0.149896, 0.031000
+    max: -0.061589, 0.171896, 0.419000
+    color: '#6F6D68'
+    yaw: 225.0
+  - label: thin hollow vessel wall 05
+    min: -0.326849, -0.011000, 0.031000
+    max: -0.128235, 0.011000, 0.419000
+    color: '#6F6D68'
+    yaw: 270.0
+  - label: thin hollow vessel wall 06
+    min: -0.260204, -0.171896, 0.031000
+    max: -0.061589, -0.149896, 0.419000
+    color: '#6F6D68'
+    yaw: 315.0
+  - label: thin hollow vessel wall 07
+    min: -0.099307, -0.238542, 0.031000
+    max: 0.099307, -0.216542, 0.419000
+    color: '#6F6D68'
+    yaw: 0.0
+  - label: thin hollow vessel wall 08
+    min: 0.061589, -0.171896, 0.031000
+    max: 0.260204, -0.149896, 0.419000
+    color: '#6F6D68'
+    yaw: 45.0
+  - label: rolled open mouth 01
+    min: 0.132991, -0.012000, 0.400500
+    max: 0.339747, 0.012000, 0.427500
+    color: '#494846'
+    yaw: 90.0
+  - label: rolled open mouth 02
+    min: 0.063760, 0.155138, 0.400500
+    max: 0.270516, 0.179138, 0.427500
+    color: '#494846'
+    yaw: 135.0
+  - label: rolled open mouth 03
+    min: -0.103378, 0.224369, 0.400500
+    max: 0.103378, 0.248369, 0.427500
+    color: '#494846'
+    yaw: 180.0
+  - label: rolled open mouth 04
+    min: -0.270516, 0.155138, 0.400500
+    max: -0.063760, 0.179138, 0.427500
+    color: '#494846'
+    yaw: 225.0
+  - label: rolled open mouth 05
+    min: -0.339747, -0.012000, 0.400500
+    max: -0.132991, 0.012000, 0.427500
+    color: '#494846'
+    yaw: 270.0
+  - label: rolled open mouth 06
+    min: -0.270516, -0.179138, 0.400500
+    max: -0.063760, -0.155138, 0.427500
+    color: '#494846'
+    yaw: 315.0
+  - label: rolled open mouth 07
+    min: -0.103378, -0.248369, 0.400500
+    max: 0.103378, -0.224369, 0.427500
+    color: '#494846'
+    yaw: 0.0
+  - label: rolled open mouth 08
+    min: 0.063760, -0.179138, 0.400500
+    max: 0.270516, -0.155138, 0.427500
+    color: '#494846'
+    yaw: 45.0
+  - label: closed vessel floor
+    min: -0.24, -0.24, 0.0
+    max: 0.24, 0.24, 0.036
+    color: '#262421'
+    shape: CylinderZ
+  - label: lower metal collar 01
+    min: 0.124327, -0.013500, 0.021000
+    max: 0.320950, 0.013500, 0.049000
+    color: '#494846'
+    yaw: 90.0
+  - label: lower metal collar 02
+    min: 0.059117, 0.143929, 0.021000
+    max: 0.255741, 0.170929, 0.049000
+    color: '#494846'
+    yaw: 135.0
+  - label: lower metal collar 03
+    min: -0.098312, 0.209139, 0.021000
+    max: 0.098312, 0.236139, 0.049000
+    color: '#494846'
+    yaw: 180.0
+  - label: lower metal collar 04
+    min: -0.255741, 0.143929, 0.021000
+    max: -0.059117, 0.170929, 0.049000
+    color: '#494846'
+    yaw: 225.0
+  - label: lower metal collar 05
+    min: -0.320950, -0.013500, 0.021000
+    max: -0.124327, 0.013500, 0.049000
+    color: '#494846'
+    yaw: 270.0
+  - label: lower metal collar 06
+    min: -0.255741, -0.170929, 0.021000
+    max: -0.059117, -0.143929, 0.049000
+    color: '#494846'
+    yaw: 315.0
+  - label: lower metal collar 07
+    min: -0.098312, -0.236139, 0.021000
+    max: 0.098312, -0.209139, 0.049000
+    color: '#494846'
+    yaw: 0.0
+  - label: lower metal collar 08
+    min: 0.059117, -0.170929, 0.021000
+    max: 0.255741, -0.143929, 0.049000
+    color: '#494846'
+    yaw: 45.0
+  - label: front recessed blue gauge bezel
+    min: -0.0925, -0.265, 0.03933
+    max: 0.0925, -0.227, 0.29187
+    color: '#34322F'
+  - label: original blue capacity window
+    min: -0.078, -0.266, 0.05589
+    max: 0.078, -0.262, 0.27531
+    color: '#FFFFFF'
+    surface: CMU3DMedicalSmallCloudArt09
+    surfaceAxis: XZ
+  - label: left raised protective rib
+    min: -0.2425, -0.1, 0.03519
+    max: -0.2155, 0.1, 0.32913
+    color: '#88857E'
+  - label: right raised protective rib
+    min: 0.2155, -0.1, 0.03519
+    max: 0.2425, 0.1, 0.32913
+    color: '#88857E'
+  - label: spout left lip
+    min: -0.078, -0.259, 0.41
+    max: -0.01, -0.221, 0.426
+    color: '#6F6D68'
+    yaw: -22
+  - label: spout right lip
+    min: 0.01, -0.259, 0.41
+    max: 0.078, -0.221, 0.426
+    color: '#6F6D68'
+    yaw: 22
+- type: cmu3DModel
+  id: CMU3DRMCBeakerHighCapacityMedicalSmallCloudLidStudy
+  label: Closed lid study RMCBeakerHighCapacity
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCBeakerHighCapacity
+  referenceRsi: /Textures/_RMC14/Objects/Medical/high_capacity_beaker.rsi
+  referenceState: beakerbluespace
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound closed-lid art study, original base + lid source composition. Separate removable lid covers
+    the physical mouth; not a runtime Openable adapter.
+  parts:
+  - label: thin hollow vessel wall 01
+    min: 0.128235, -0.011000, 0.031000
+    max: 0.326849, 0.011000, 0.419000
+    color: '#6F6D68'
+    yaw: 90.0
+  - label: thin hollow vessel wall 02
+    min: 0.061589, 0.149896, 0.031000
+    max: 0.260204, 0.171896, 0.419000
+    color: '#6F6D68'
+    yaw: 135.0
+  - label: thin hollow vessel wall 03
+    min: -0.099307, 0.216542, 0.031000
+    max: 0.099307, 0.238542, 0.419000
+    color: '#6F6D68'
+    yaw: 180.0
+  - label: thin hollow vessel wall 04
+    min: -0.260204, 0.149896, 0.031000
+    max: -0.061589, 0.171896, 0.419000
+    color: '#6F6D68'
+    yaw: 225.0
+  - label: thin hollow vessel wall 05
+    min: -0.326849, -0.011000, 0.031000
+    max: -0.128235, 0.011000, 0.419000
+    color: '#6F6D68'
+    yaw: 270.0
+  - label: thin hollow vessel wall 06
+    min: -0.260204, -0.171896, 0.031000
+    max: -0.061589, -0.149896, 0.419000
+    color: '#6F6D68'
+    yaw: 315.0
+  - label: thin hollow vessel wall 07
+    min: -0.099307, -0.238542, 0.031000
+    max: 0.099307, -0.216542, 0.419000
+    color: '#6F6D68'
+    yaw: 0.0
+  - label: thin hollow vessel wall 08
+    min: 0.061589, -0.171896, 0.031000
+    max: 0.260204, -0.149896, 0.419000
+    color: '#6F6D68'
+    yaw: 45.0
+  - label: rolled open mouth 01
+    min: 0.132991, -0.012000, 0.400500
+    max: 0.339747, 0.012000, 0.427500
+    color: '#494846'
+    yaw: 90.0
+  - label: rolled open mouth 02
+    min: 0.063760, 0.155138, 0.400500
+    max: 0.270516, 0.179138, 0.427500
+    color: '#494846'
+    yaw: 135.0
+  - label: rolled open mouth 03
+    min: -0.103378, 0.224369, 0.400500
+    max: 0.103378, 0.248369, 0.427500
+    color: '#494846'
+    yaw: 180.0
+  - label: rolled open mouth 04
+    min: -0.270516, 0.155138, 0.400500
+    max: -0.063760, 0.179138, 0.427500
+    color: '#494846'
+    yaw: 225.0
+  - label: rolled open mouth 05
+    min: -0.339747, -0.012000, 0.400500
+    max: -0.132991, 0.012000, 0.427500
+    color: '#494846'
+    yaw: 270.0
+  - label: rolled open mouth 06
+    min: -0.270516, -0.179138, 0.400500
+    max: -0.063760, -0.155138, 0.427500
+    color: '#494846'
+    yaw: 315.0
+  - label: rolled open mouth 07
+    min: -0.103378, -0.248369, 0.400500
+    max: 0.103378, -0.224369, 0.427500
+    color: '#494846'
+    yaw: 0.0
+  - label: rolled open mouth 08
+    min: 0.063760, -0.179138, 0.400500
+    max: 0.270516, -0.155138, 0.427500
+    color: '#494846'
+    yaw: 45.0
+  - label: closed vessel floor
+    min: -0.24, -0.24, 0.0
+    max: 0.24, 0.24, 0.036
+    color: '#2E2C2A'
+    shape: CylinderZ
+  - label: lower metal collar 01
+    min: 0.124327, -0.013500, 0.021000
+    max: 0.320950, 0.013500, 0.049000
+    color: '#494846'
+    yaw: 90.0
+  - label: lower metal collar 02
+    min: 0.059117, 0.143929, 0.021000
+    max: 0.255741, 0.170929, 0.049000
+    color: '#494846'
+    yaw: 135.0
+  - label: lower metal collar 03
+    min: -0.098312, 0.209139, 0.021000
+    max: 0.098312, 0.236139, 0.049000
+    color: '#494846'
+    yaw: 180.0
+  - label: lower metal collar 04
+    min: -0.255741, 0.143929, 0.021000
+    max: -0.059117, 0.170929, 0.049000
+    color: '#494846'
+    yaw: 225.0
+  - label: lower metal collar 05
+    min: -0.320950, -0.013500, 0.021000
+    max: -0.124327, 0.013500, 0.049000
+    color: '#494846'
+    yaw: 270.0
+  - label: lower metal collar 06
+    min: -0.255741, -0.170929, 0.021000
+    max: -0.059117, -0.143929, 0.049000
+    color: '#494846'
+    yaw: 315.0
+  - label: lower metal collar 07
+    min: -0.098312, -0.236139, 0.021000
+    max: 0.098312, -0.209139, 0.049000
+    color: '#494846'
+    yaw: 0.0
+  - label: lower metal collar 08
+    min: 0.059117, -0.170929, 0.021000
+    max: 0.255741, -0.143929, 0.049000
+    color: '#494846'
+    yaw: 45.0
+  - label: front recessed blue gauge bezel
+    min: -0.0925, -0.265, 0.03933
+    max: 0.0925, -0.227, 0.29187
+    color: '#2E2C2A'
+  - label: original blue capacity window
+    min: -0.078, -0.266, 0.05589
+    max: 0.078, -0.262, 0.27531
+    color: '#FFFFFF'
+    surface: CMU3DMedicalSmallCloudArt09
+    surfaceAxis: XZ
+  - label: left raised protective rib
+    min: -0.2425, -0.1, 0.03519
+    max: -0.2155, 0.1, 0.32913
+    color: '#88857E'
+  - label: right raised protective rib
+    min: 0.2155, -0.1, 0.03519
+    max: 0.2425, 0.1, 0.32913
+    color: '#88857E'
+  - label: spout left lip
+    min: -0.078, -0.259, 0.41
+    max: -0.01, -0.221, 0.426
+    color: '#6F6D68'
+    yaw: -22
+  - label: spout right lip
+    min: 0.01, -0.259, 0.41
+    max: 0.078, -0.221, 0.426
+    color: '#6F6D68'
+    yaw: 22
+  - label: removable solid closed lid
+    min: -0.26, -0.26, 0.4195
+    max: 0.26, 0.26, 0.4645
+    color: '#334F73'
+    shape: CylinderZ
+  - label: lid inset top
+    min: -0.21875, -0.21875, 0.461
+    max: 0.21875, 0.21875, 0.473
+    color: '#334F73'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DCMHemostatMedicalSmallCloud
+  label: Hemostat with open finger loops
+  status: draft
+  sourcePrototypes:
+  - CMHemostat
+  referencePrototype: CMHemostat
+  referenceRsi: /Textures/_RMC14/Objects/Medical/Surgery/hemostat.rsi
+  referenceState: hemostat
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Exact hemostat world icon, reconstructed as physical finger rings, two linked shanks, pivot, catch
+    and closed opposing jaws. Finger holes are through-open. Hidden thickness and serrations inferred. Existing rotating
+    single-layer adapter supports only this idle world state; held, worn and procedural operation states remain unsupported.
+  parts:
+  - label: left open finger ring 01
+    min: -0.070047, 0.261188, 0.0205
+    max: -0.031533, 0.285188, 0.0595
+    color: '#A29989'
+    yaw: 116.3295
+  - label: left open finger ring 02
+    min: -0.091961, 0.288412, 0.0205
+    max: -0.056288, 0.312412, 0.0595
+    color: '#A29989'
+    yaw: 146.03677
+  - label: left open finger ring 03
+    min: -0.123082, 0.298376, 0.0205
+    max: -0.088918, 0.322376, 0.0595
+    color: '#A29989'
+    yaw: -180.0
+  - label: left open finger ring 04
+    min: -0.155712, 0.288412, 0.0205
+    max: -0.120039, 0.312412, 0.0595
+    color: '#A29989'
+    yaw: -146.03677
+  - label: left open finger ring 05
+    min: -0.180467, 0.261188, 0.0205
+    max: -0.141953, 0.285188, 0.0595
+    color: '#A29989'
+    yaw: -116.3295
+  - label: left open finger ring 06
+    min: -0.18968, 0.224, 0.0205
+    max: -0.149822, 0.248, 0.0595
+    color: '#A29989'
+    yaw: -90.0
+  - label: left open finger ring 07
+    min: -0.180467, 0.186812, 0.0205
+    max: -0.141953, 0.210812, 0.0595
+    color: '#A29989'
+    yaw: -63.6705
+  - label: left open finger ring 08
+    min: -0.155712, 0.159588, 0.0205
+    max: -0.120039, 0.183588, 0.0595
+    color: '#A29989'
+    yaw: -33.96323
+  - label: left open finger ring 09
+    min: -0.123082, 0.149624, 0.0205
+    max: -0.088918, 0.173624, 0.0595
+    color: '#A29989'
+  - label: left open finger ring 10
+    min: -0.091961, 0.159588, 0.0205
+    max: -0.056288, 0.183588, 0.0595
+    color: '#A29989'
+    yaw: 33.96323
+  - label: left open finger ring 11
+    min: -0.070047, 0.186812, 0.0205
+    max: -0.031533, 0.210812, 0.0595
+    color: '#A29989'
+    yaw: 63.6705
+  - label: left open finger ring 12
+    min: -0.062178, 0.224, 0.0205
+    max: -0.02232, 0.248, 0.0595
+    color: '#A29989'
+    yaw: 90.0
+  - label: curved shank 0
+    min: -0.143878, 0.09, 0.0265
+    max: 0.017878, 0.117, 0.0535
+    color: '#71675C'
+    yaw: -57.88198
+  - label: separate jaw 0
+    min: -0.186027, -0.1445, 0.0295
+    max: 0.152027, -0.1235, 0.0505
+    color: '#DACCB6'
+    yaw: -88.98302
+  - label: jaw tooth 0.0
+    min: -0.01, -0.1565, 0.0485
+    max: -0.002, -0.1435, 0.0555
+    color: '#71675C'
+  - label: jaw tooth 0.1
+    min: -0.01, -0.1885, 0.0485
+    max: -0.002, -0.1755, 0.0555
+    color: '#71675C'
+  - label: jaw tooth 0.2
+    min: -0.01, -0.2205, 0.0485
+    max: -0.002, -0.2075, 0.0555
+    color: '#71675C'
+  - label: jaw tooth 0.3
+    min: -0.01, -0.2525, 0.0485
+    max: -0.002, -0.2395, 0.0555
+    color: '#71675C'
+  - label: jaw tooth 0.4
+    min: -0.01, -0.2845, 0.0485
+    max: -0.002, -0.2715, 0.0555
+    color: '#71675C'
+  - label: right open finger ring 01
+    min: 0.141953, 0.261188, 0.0205
+    max: 0.180467, 0.285188, 0.0595
+    color: '#A29989'
+    yaw: 116.3295
+  - label: right open finger ring 02
+    min: 0.120039, 0.288412, 0.0205
+    max: 0.155712, 0.312412, 0.0595
+    color: '#A29989'
+    yaw: 146.03677
+  - label: right open finger ring 03
+    min: 0.088918, 0.298376, 0.0205
+    max: 0.123082, 0.322376, 0.0595
+    color: '#A29989'
+    yaw: -180.0
+  - label: right open finger ring 04
+    min: 0.056288, 0.288412, 0.0205
+    max: 0.091961, 0.312412, 0.0595
+    color: '#A29989'
+    yaw: -146.03677
+  - label: right open finger ring 05
+    min: 0.031533, 0.261188, 0.0205
+    max: 0.070047, 0.285188, 0.0595
+    color: '#A29989'
+    yaw: -116.3295
+  - label: right open finger ring 06
+    min: 0.02232, 0.224, 0.0205
+    max: 0.062178, 0.248, 0.0595
+    color: '#A29989'
+    yaw: -90.0
+  - label: right open finger ring 07
+    min: 0.031533, 0.186812, 0.0205
+    max: 0.070047, 0.210812, 0.0595
+    color: '#A29989'
+    yaw: -63.6705
+  - label: right open finger ring 08
+    min: 0.056288, 0.159588, 0.0205
+    max: 0.091961, 0.183588, 0.0595
+    color: '#A29989'
+    yaw: -33.96323
+  - label: right open finger ring 09
+    min: 0.088918, 0.149624, 0.0205
+    max: 0.123082, 0.173624, 0.0595
+    color: '#A29989'
+  - label: right open finger ring 10
+    min: 0.120039, 0.159588, 0.0205
+    max: 0.155712, 0.183588, 0.0595
+    color: '#A29989'
+    yaw: 33.96323
+  - label: right open finger ring 11
+    min: 0.141953, 0.186812, 0.0205
+    max: 0.180467, 0.210812, 0.0595
+    color: '#A29989'
+    yaw: 63.6705
+  - label: right open finger ring 12
+    min: 0.149822, 0.224, 0.0205
+    max: 0.18968, 0.248, 0.0595
+    color: '#A29989'
+    yaw: 90.0
+  - label: curved shank 1
+    min: -0.017878, 0.09, 0.0265
+    max: 0.143878, 0.117, 0.0535
+    color: '#71675C'
+    yaw: -122.11802
+  - label: separate jaw 1
+    min: -0.152027, -0.1445, 0.0295
+    max: 0.186027, -0.1235, 0.0505
+    color: '#DACCB6'
+    yaw: -91.01698
+  - label: jaw tooth 1.0
+    min: 0.002, -0.1565, 0.0485
+    max: 0.01, -0.1435, 0.0555
+    color: '#71675C'
+  - label: jaw tooth 1.1
+    min: 0.002, -0.1885, 0.0485
+    max: 0.01, -0.1755, 0.0555
+    color: '#71675C'
+  - label: jaw tooth 1.2
+    min: 0.002, -0.2205, 0.0485
+    max: 0.01, -0.2075, 0.0555
+    color: '#71675C'
+  - label: jaw tooth 1.3
+    min: 0.002, -0.2525, 0.0485
+    max: 0.01, -0.2395, 0.0555
+    color: '#71675C'
+  - label: jaw tooth 1.4
+    min: 0.002, -0.2845, 0.0485
+    max: 0.01, -0.2715, 0.0555
+    color: '#71675C'
+  - label: metal pivot rivet
+    min: -0.024, 0.021, 0.043
+    max: 0.024, 0.069, 0.067
+    color: '#71675C'
+    shape: CylinderZ
+  - label: locking catch left
+    min: -0.05527, 0.088, 0.024
+    max: 0.00427, 0.104, 0.04
+    color: '#71675C'
+    yaw: 7.72183
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    hemostat:
+      frames:
+      - parts:
+        - label: left open finger ring 01
+          min: -0.070047, 0.261188, 0.0205
+          max: -0.031533, 0.285188, 0.0595
+          color: '#A29989'
+          yaw: 116.3295
+        - label: left open finger ring 02
+          min: -0.091961, 0.288412, 0.0205
+          max: -0.056288, 0.312412, 0.0595
+          color: '#A29989'
+          yaw: 146.03677
+        - label: left open finger ring 03
+          min: -0.123082, 0.298376, 0.0205
+          max: -0.088918, 0.322376, 0.0595
+          color: '#A29989'
+          yaw: -180.0
+        - label: left open finger ring 04
+          min: -0.155712, 0.288412, 0.0205
+          max: -0.120039, 0.312412, 0.0595
+          color: '#A29989'
+          yaw: -146.03677
+        - label: left open finger ring 05
+          min: -0.180467, 0.261188, 0.0205
+          max: -0.141953, 0.285188, 0.0595
+          color: '#A29989'
+          yaw: -116.3295
+        - label: left open finger ring 06
+          min: -0.18968, 0.224, 0.0205
+          max: -0.149822, 0.248, 0.0595
+          color: '#A29989'
+          yaw: -90.0
+        - label: left open finger ring 07
+          min: -0.180467, 0.186812, 0.0205
+          max: -0.141953, 0.210812, 0.0595
+          color: '#A29989'
+          yaw: -63.6705
+        - label: left open finger ring 08
+          min: -0.155712, 0.159588, 0.0205
+          max: -0.120039, 0.183588, 0.0595
+          color: '#A29989'
+          yaw: -33.96323
+        - label: left open finger ring 09
+          min: -0.123082, 0.149624, 0.0205
+          max: -0.088918, 0.173624, 0.0595
+          color: '#A29989'
+        - label: left open finger ring 10
+          min: -0.091961, 0.159588, 0.0205
+          max: -0.056288, 0.183588, 0.0595
+          color: '#A29989'
+          yaw: 33.96323
+        - label: left open finger ring 11
+          min: -0.070047, 0.186812, 0.0205
+          max: -0.031533, 0.210812, 0.0595
+          color: '#A29989'
+          yaw: 63.6705
+        - label: left open finger ring 12
+          min: -0.062178, 0.224, 0.0205
+          max: -0.02232, 0.248, 0.0595
+          color: '#A29989'
+          yaw: 90.0
+        - label: curved shank 0
+          min: -0.143878, 0.09, 0.0265
+          max: 0.017878, 0.117, 0.0535
+          color: '#71675C'
+          yaw: -57.88198
+        - label: separate jaw 0
+          min: -0.186027, -0.1445, 0.0295
+          max: 0.152027, -0.1235, 0.0505
+          color: '#DACCB6'
+          yaw: -88.98302
+        - label: jaw tooth 0.0
+          min: -0.01, -0.1565, 0.0485
+          max: -0.002, -0.1435, 0.0555
+          color: '#71675C'
+        - label: jaw tooth 0.1
+          min: -0.01, -0.1885, 0.0485
+          max: -0.002, -0.1755, 0.0555
+          color: '#71675C'
+        - label: jaw tooth 0.2
+          min: -0.01, -0.2205, 0.0485
+          max: -0.002, -0.2075, 0.0555
+          color: '#71675C'
+        - label: jaw tooth 0.3
+          min: -0.01, -0.2525, 0.0485
+          max: -0.002, -0.2395, 0.0555
+          color: '#71675C'
+        - label: jaw tooth 0.4
+          min: -0.01, -0.2845, 0.0485
+          max: -0.002, -0.2715, 0.0555
+          color: '#71675C'
+        - label: right open finger ring 01
+          min: 0.141953, 0.261188, 0.0205
+          max: 0.180467, 0.285188, 0.0595
+          color: '#A29989'
+          yaw: 116.3295
+        - label: right open finger ring 02
+          min: 0.120039, 0.288412, 0.0205
+          max: 0.155712, 0.312412, 0.0595
+          color: '#A29989'
+          yaw: 146.03677
+        - label: right open finger ring 03
+          min: 0.088918, 0.298376, 0.0205
+          max: 0.123082, 0.322376, 0.0595
+          color: '#A29989'
+          yaw: -180.0
+        - label: right open finger ring 04
+          min: 0.056288, 0.288412, 0.0205
+          max: 0.091961, 0.312412, 0.0595
+          color: '#A29989'
+          yaw: -146.03677
+        - label: right open finger ring 05
+          min: 0.031533, 0.261188, 0.0205
+          max: 0.070047, 0.285188, 0.0595
+          color: '#A29989'
+          yaw: -116.3295
+        - label: right open finger ring 06
+          min: 0.02232, 0.224, 0.0205
+          max: 0.062178, 0.248, 0.0595
+          color: '#A29989'
+          yaw: -90.0
+        - label: right open finger ring 07
+          min: 0.031533, 0.186812, 0.0205
+          max: 0.070047, 0.210812, 0.0595
+          color: '#A29989'
+          yaw: -63.6705
+        - label: right open finger ring 08
+          min: 0.056288, 0.159588, 0.0205
+          max: 0.091961, 0.183588, 0.0595
+          color: '#A29989'
+          yaw: -33.96323
+        - label: right open finger ring 09
+          min: 0.088918, 0.149624, 0.0205
+          max: 0.123082, 0.173624, 0.0595
+          color: '#A29989'
+        - label: right open finger ring 10
+          min: 0.120039, 0.159588, 0.0205
+          max: 0.155712, 0.183588, 0.0595
+          color: '#A29989'
+          yaw: 33.96323
+        - label: right open finger ring 11
+          min: 0.141953, 0.186812, 0.0205
+          max: 0.180467, 0.210812, 0.0595
+          color: '#A29989'
+          yaw: 63.6705
+        - label: right open finger ring 12
+          min: 0.149822, 0.224, 0.0205
+          max: 0.18968, 0.248, 0.0595
+          color: '#A29989'
+          yaw: 90.0
+        - label: curved shank 1
+          min: -0.017878, 0.09, 0.0265
+          max: 0.143878, 0.117, 0.0535
+          color: '#71675C'
+          yaw: -122.11802
+        - label: separate jaw 1
+          min: -0.152027, -0.1445, 0.0295
+          max: 0.186027, -0.1235, 0.0505
+          color: '#DACCB6'
+          yaw: -91.01698
+        - label: jaw tooth 1.0
+          min: 0.002, -0.1565, 0.0485
+          max: 0.01, -0.1435, 0.0555
+          color: '#71675C'
+        - label: jaw tooth 1.1
+          min: 0.002, -0.1885, 0.0485
+          max: 0.01, -0.1755, 0.0555
+          color: '#71675C'
+        - label: jaw tooth 1.2
+          min: 0.002, -0.2205, 0.0485
+          max: 0.01, -0.2075, 0.0555
+          color: '#71675C'
+        - label: jaw tooth 1.3
+          min: 0.002, -0.2525, 0.0485
+          max: 0.01, -0.2395, 0.0555
+          color: '#71675C'
+        - label: jaw tooth 1.4
+          min: 0.002, -0.2845, 0.0485
+          max: 0.01, -0.2715, 0.0555
+          color: '#71675C'
+        - label: metal pivot rivet
+          min: -0.024, 0.021, 0.043
+          max: 0.024, 0.069, 0.067
+          color: '#71675C'
+          shape: CylinderZ
+        - label: locking catch left
+          min: -0.05527, 0.088, 0.024
+          max: 0.00427, 0.104, 0.04
+          color: '#71675C'
+          yaw: 7.72183
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DCMSurgicalDrillMedicalSmallCloud
+  label: Tan surgical drill
+  status: draft
+  sourcePrototypes:
+  - CMSurgicalDrill
+  referencePrototype: CMSurgicalDrill
+  referenceRsi: /Textures/_RMC14/Objects/Medical/Surgery/drill.rsi
+  referenceState: drill
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Original tan/red idle drill with motor barrel, chuck, fluted steel bit, sloped grip, trigger and heel.
+    Existing single-layer rotating adapter includes drill_on with both original 0.1-second resource frames. This records
+    source-owned animation only, not a new surgery controller; mechanics, held poses and material realism remain draft.
+  parts:
+  - label: tan motor housing
+    min: -0.362, 0.079, 0.005
+    max: 0.106, 0.191, 0.165
+    color: '#B9AF9D'
+    shape: CylinderX
+  - label: rear motor cap
+    min: -0.3915, 0.0655, 0.0015
+    max: -0.3305, 0.2045, 0.1685
+    color: '#706758'
+    shape: CylinderX
+  - label: rear raised flat housing
+    min: -0.3915, 0.099, 0.1175
+    max: -0.3285, 0.171, 0.1525
+    color: '#B9AF9D'
+  - label: front chuck collar
+    min: 0.0865, 0.085, 0.021
+    max: 0.1495, 0.185, 0.149
+    color: '#847A68'
+    shape: CylinderX
+  - label: steel drill shaft
+    min: 0.1385, 0.1205, 0.0665
+    max: 0.4375, 0.1495, 0.1055
+    color: '#A8A8AC'
+    shape: CylinderX
+  - label: dark pointed drill end
+    min: 0.428, 0.126, 0.076
+    max: 0.468, 0.144, 0.094
+    color: '#626262'
+    shape: CylinderX
+  - label: red source safety band
+    min: -0.2265, 0.0765, 0.0005
+    max: -0.1975, 0.1935, 0.1695
+    color: '#743C3C'
+    shape: CylinderX
+  - label: slanted pistol handle
+    min: -0.409975, -0.134, 0.02
+    max: -0.084025, -0.036, 0.116
+    color: '#B9AF9D'
+    yaw: -100.9652
+  - label: handle heel
+    min: -0.38, -0.307, 0.005
+    max: -0.208, -0.231, 0.131
+    color: '#847A68'
+  - label: dark under-body trigger assembly
+    min: -0.1185, 0.021, 0.02
+    max: 0.0185, 0.093, 0.09
+    color: '#5E564D'
+  - label: trigger
+    min: -0.105, -0.0555, 0.021
+    max: -0.075, 0.0275, 0.089
+    color: '#706758'
+    yaw: -18
+  - label: steel fluting 0
+    min: 0.168, 0.119, 0.104
+    max: 0.186, 0.143, 0.112
+    color: '#DCDCDE'
+    yaw: -20
+  - label: steel fluting 1
+    min: 0.207, 0.119, 0.104
+    max: 0.225, 0.143, 0.112
+    color: '#DCDCDE'
+    yaw: -20
+  - label: steel fluting 2
+    min: 0.246, 0.119, 0.104
+    max: 0.264, 0.143, 0.112
+    color: '#DCDCDE'
+    yaw: -20
+  - label: steel fluting 3
+    min: 0.285, 0.119, 0.104
+    max: 0.303, 0.143, 0.112
+    color: '#DCDCDE'
+    yaw: -20
+  - label: steel fluting 4
+    min: 0.324, 0.119, 0.104
+    max: 0.342, 0.143, 0.112
+    color: '#DCDCDE'
+    yaw: -20
+  - label: steel fluting 5
+    min: 0.363, 0.119, 0.104
+    max: 0.381, 0.143, 0.112
+    color: '#DCDCDE'
+    yaw: -20
+  - label: steel fluting 6
+    min: 0.402, 0.119, 0.104
+    max: 0.42, 0.143, 0.112
+    color: '#DCDCDE'
+    yaw: -20
+  - label: grip raised rib 0
+    min: -0.27, -0.036, 0.112
+    max: -0.184, -0.024, 0.122
+    color: '#DACCB6'
+    yaw: 11
+  - label: grip raised rib 1
+    min: -0.282, -0.088, 0.112
+    max: -0.196, -0.076, 0.122
+    color: '#DACCB6'
+    yaw: 11
+  - label: grip raised rib 2
+    min: -0.294, -0.14, 0.112
+    max: -0.208, -0.128, 0.122
+    color: '#DACCB6'
+    yaw: 11
+  - label: grip raised rib 3
+    min: -0.306, -0.192, 0.112
+    max: -0.22, -0.18, 0.122
+    color: '#DACCB6'
+    yaw: 11
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    drill:
+      frames:
+      - parts:
+        - label: tan motor housing
+          min: -0.362, 0.079, 0.005
+          max: 0.106, 0.191, 0.165
+          color: '#B9AF9D'
+          shape: CylinderX
+        - label: rear motor cap
+          min: -0.3915, 0.0655, 0.0015
+          max: -0.3305, 0.2045, 0.1685
+          color: '#706758'
+          shape: CylinderX
+        - label: rear raised flat housing
+          min: -0.3915, 0.099, 0.1175
+          max: -0.3285, 0.171, 0.1525
+          color: '#B9AF9D'
+        - label: front chuck collar
+          min: 0.0865, 0.085, 0.021
+          max: 0.1495, 0.185, 0.149
+          color: '#847A68'
+          shape: CylinderX
+        - label: steel drill shaft
+          min: 0.1385, 0.1205, 0.0665
+          max: 0.4375, 0.1495, 0.1055
+          color: '#A8A8AC'
+          shape: CylinderX
+        - label: dark pointed drill end
+          min: 0.428, 0.126, 0.076
+          max: 0.468, 0.144, 0.094
+          color: '#626262'
+          shape: CylinderX
+        - label: red source safety band
+          min: -0.2265, 0.0765, 0.0005
+          max: -0.1975, 0.1935, 0.1695
+          color: '#743C3C'
+          shape: CylinderX
+        - label: slanted pistol handle
+          min: -0.409975, -0.134, 0.02
+          max: -0.084025, -0.036, 0.116
+          color: '#B9AF9D'
+          yaw: -100.9652
+        - label: handle heel
+          min: -0.38, -0.307, 0.005
+          max: -0.208, -0.231, 0.131
+          color: '#847A68'
+        - label: dark under-body trigger assembly
+          min: -0.1185, 0.021, 0.02
+          max: 0.0185, 0.093, 0.09
+          color: '#5E564D'
+        - label: trigger
+          min: -0.105, -0.0555, 0.021
+          max: -0.075, 0.0275, 0.089
+          color: '#706758'
+          yaw: -18
+        - label: steel fluting 0
+          min: 0.168, 0.119, 0.104
+          max: 0.186, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 1
+          min: 0.207, 0.119, 0.104
+          max: 0.225, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 2
+          min: 0.246, 0.119, 0.104
+          max: 0.264, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 3
+          min: 0.285, 0.119, 0.104
+          max: 0.303, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 4
+          min: 0.324, 0.119, 0.104
+          max: 0.342, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 5
+          min: 0.363, 0.119, 0.104
+          max: 0.381, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 6
+          min: 0.402, 0.119, 0.104
+          max: 0.42, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: grip raised rib 0
+          min: -0.27, -0.036, 0.112
+          max: -0.184, -0.024, 0.122
+          color: '#DACCB6'
+          yaw: 11
+        - label: grip raised rib 1
+          min: -0.282, -0.088, 0.112
+          max: -0.196, -0.076, 0.122
+          color: '#DACCB6'
+          yaw: 11
+        - label: grip raised rib 2
+          min: -0.294, -0.14, 0.112
+          max: -0.208, -0.128, 0.122
+          color: '#DACCB6'
+          yaw: 11
+        - label: grip raised rib 3
+          min: -0.306, -0.192, 0.112
+          max: -0.22, -0.18, 0.122
+          color: '#DACCB6'
+          yaw: 11
+      delays:
+      - 1
+    drill_on:
+      frames:
+      - parts:
+        - label: tan motor housing
+          min: -0.362, 0.079, 0.005
+          max: 0.106, 0.191, 0.165
+          color: '#B9AF9D'
+          shape: CylinderX
+        - label: rear motor cap
+          min: -0.3915, 0.0655, 0.0015
+          max: -0.3305, 0.2045, 0.1685
+          color: '#706758'
+          shape: CylinderX
+        - label: rear raised flat housing
+          min: -0.3915, 0.099, 0.1175
+          max: -0.3285, 0.171, 0.1525
+          color: '#B9AF9D'
+        - label: front chuck collar
+          min: 0.0865, 0.085, 0.021
+          max: 0.1495, 0.185, 0.149
+          color: '#847A68'
+          shape: CylinderX
+        - label: steel drill shaft
+          min: 0.1385, 0.1205, 0.0665
+          max: 0.4375, 0.1495, 0.1055
+          color: '#A8A8AC'
+          shape: CylinderX
+        - label: dark pointed drill end
+          min: 0.428, 0.126, 0.076
+          max: 0.468, 0.144, 0.094
+          color: '#626262'
+          shape: CylinderX
+        - label: red source safety band
+          min: -0.2265, 0.0765, 0.0005
+          max: -0.1975, 0.1935, 0.1695
+          color: '#743C3C'
+          shape: CylinderX
+        - label: slanted pistol handle
+          min: -0.409975, -0.134, 0.02
+          max: -0.084025, -0.036, 0.116
+          color: '#B9AF9D'
+          yaw: -100.9652
+        - label: handle heel
+          min: -0.38, -0.307, 0.005
+          max: -0.208, -0.231, 0.131
+          color: '#847A68'
+        - label: dark under-body trigger assembly
+          min: -0.1185, 0.021, 0.02
+          max: 0.0185, 0.093, 0.09
+          color: '#5E564D'
+        - label: trigger
+          min: -0.105, -0.0555, 0.021
+          max: -0.075, 0.0275, 0.089
+          color: '#706758'
+          yaw: -18
+        - label: steel fluting 0
+          min: 0.168, 0.119, 0.104
+          max: 0.186, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 1
+          min: 0.207, 0.119, 0.104
+          max: 0.225, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 2
+          min: 0.246, 0.119, 0.104
+          max: 0.264, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 3
+          min: 0.285, 0.119, 0.104
+          max: 0.303, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 4
+          min: 0.324, 0.119, 0.104
+          max: 0.342, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 5
+          min: 0.363, 0.119, 0.104
+          max: 0.381, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: steel fluting 6
+          min: 0.402, 0.119, 0.104
+          max: 0.42, 0.143, 0.112
+          color: '#DCDCDE'
+          yaw: -20
+        - label: grip raised rib 0
+          min: -0.27, -0.036, 0.112
+          max: -0.184, -0.024, 0.122
+          color: '#DACCB6'
+          yaw: 11
+        - label: grip raised rib 1
+          min: -0.282, -0.088, 0.112
+          max: -0.196, -0.076, 0.122
+          color: '#DACCB6'
+          yaw: 11
+        - label: grip raised rib 2
+          min: -0.294, -0.14, 0.112
+          max: -0.208, -0.128, 0.122
+          color: '#DACCB6'
+          yaw: 11
+        - label: grip raised rib 3
+          min: -0.306, -0.192, 0.112
+          max: -0.22, -0.18, 0.122
+          color: '#DACCB6'
+          yaw: 11
+      - parts:
+        - label: tan motor housing
+          min: -0.362, 0.079, 0.005
+          max: 0.106, 0.191, 0.165
+          color: '#B9AF9D'
+          shape: CylinderX
+        - label: rear motor cap
+          min: -0.3915, 0.0655, 0.0015
+          max: -0.3305, 0.2045, 0.1685
+          color: '#706758'
+          shape: CylinderX
+        - label: rear raised flat housing
+          min: -0.3915, 0.099, 0.1175
+          max: -0.3285, 0.171, 0.1525
+          color: '#B9AF9D'
+        - label: front chuck collar
+          min: 0.0865, 0.085, 0.021
+          max: 0.1495, 0.185, 0.149
+          color: '#847A68'
+          shape: CylinderX
+        - label: steel drill shaft
+          min: 0.1385, 0.1205, 0.0665
+          max: 0.4375, 0.1495, 0.1055
+          color: '#A8A8AC'
+          shape: CylinderX
+        - label: dark pointed drill end
+          min: 0.428, 0.126, 0.076
+          max: 0.468, 0.144, 0.094
+          color: '#626262'
+          shape: CylinderX
+        - label: red source safety band
+          min: -0.2265, 0.0765, 0.0005
+          max: -0.1975, 0.1935, 0.1695
+          color: '#743C3C'
+          shape: CylinderX
+        - label: slanted pistol handle
+          min: -0.409975, -0.134, 0.02
+          max: -0.084025, -0.036, 0.116
+          color: '#B9AF9D'
+          yaw: -100.9652
+        - label: handle heel
+          min: -0.38, -0.307, 0.005
+          max: -0.208, -0.231, 0.131
+          color: '#847A68'
+        - label: dark under-body trigger assembly
+          min: -0.1185, 0.021, 0.02
+          max: 0.0185, 0.093, 0.09
+          color: '#5E564D'
+        - label: trigger
+          min: -0.105, -0.0555, 0.021
+          max: -0.075, 0.0275, 0.089
+          color: '#706758'
+          yaw: -18
+        - label: steel fluting 0
+          min: 0.168, 0.127, 0.104
+          max: 0.186, 0.151, 0.112
+          color: '#DCDCDE'
+          yaw: 20
+        - label: steel fluting 1
+          min: 0.207, 0.127, 0.104
+          max: 0.225, 0.151, 0.112
+          color: '#DCDCDE'
+          yaw: 20
+        - label: steel fluting 2
+          min: 0.246, 0.127, 0.104
+          max: 0.264, 0.151, 0.112
+          color: '#DCDCDE'
+          yaw: 20
+        - label: steel fluting 3
+          min: 0.285, 0.127, 0.104
+          max: 0.303, 0.151, 0.112
+          color: '#DCDCDE'
+          yaw: 20
+        - label: steel fluting 4
+          min: 0.324, 0.127, 0.104
+          max: 0.342, 0.151, 0.112
+          color: '#DCDCDE'
+          yaw: 20
+        - label: steel fluting 5
+          min: 0.363, 0.127, 0.104
+          max: 0.381, 0.151, 0.112
+          color: '#DCDCDE'
+          yaw: 20
+        - label: steel fluting 6
+          min: 0.402, 0.127, 0.104
+          max: 0.42, 0.151, 0.112
+          color: '#DCDCDE'
+          yaw: 20
+        - label: grip raised rib 0
+          min: -0.27, -0.036, 0.112
+          max: -0.184, -0.024, 0.122
+          color: '#DACCB6'
+          yaw: 11
+        - label: grip raised rib 1
+          min: -0.282, -0.088, 0.112
+          max: -0.196, -0.076, 0.122
+          color: '#DACCB6'
+          yaw: 11
+        - label: grip raised rib 2
+          min: -0.294, -0.14, 0.112
+          max: -0.208, -0.128, 0.122
+          color: '#DACCB6'
+          yaw: 11
+        - label: grip raised rib 3
+          min: -0.306, -0.192, 0.112
+          max: -0.22, -0.18, 0.122
+          color: '#DACCB6'
+          yaw: 11
+      delays:
+      - 0.1
+      - 0.1
+- type: cmu3DModel
+  id: CMU3DRMCStethoscopeMedicalSmallCloud
+  label: Black-tubed stethoscope
+  status: draft
+  sourcePrototypes:
+  - RMCStethoscope
+  referencePrototype: RMCStethoscope
+  referenceRsi: /Textures/_RMC14/Objects/Medical/stethoscope.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Original loose world icon traced into continuous curved tube segments, open fork, exposed metal ear
+    stems, rubber tips and three-level chestpiece. Tubing has physical cross-section and bends. Existing one-state
+    rotating adapter for the loose icon only; four-direction inhand and uniform utility art is not modeled.
+  parts:
+  - label: continuous black acoustic tube 0
+    min: -0.320959, -0.127375, 0.032
+    max: -0.225916, -0.091375, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+    yaw: -80.53768
+  - label: continuous black acoustic tube 1
+    min: -0.308938, -0.23675, 0.032
+    max: -0.175437, -0.20075, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+    yaw: -69.44395
+  - label: continuous black acoustic tube 2
+    min: -0.221286, -0.314875, 0.032
+    max: -0.122464, -0.278875, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+    yaw: -18.43495
+  - label: continuous black acoustic tube 3
+    min: -0.134462, -0.29925, 0.032
+    max: -0.021788, -0.26325, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+    yaw: 33.69007
+  - label: continuous black acoustic tube 4
+    min: -0.056337, -0.221125, 0.032
+    max: 0.056337, -0.185125, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+    yaw: 56.30993
+  - label: continuous black acoustic tube 5
+    min: 0.03125, -0.17425, 0.032
+    max: 0.09375, -0.13825, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+  - label: continuous black acoustic tube 6
+    min: 0.074334, -0.221125, 0.032
+    max: 0.206916, -0.185125, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+    yaw: -45.0
+  - label: continuous black acoustic tube 7
+    min: 0.1875, -0.268, 0.032
+    max: 0.25, -0.232, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+  - label: continuous black acoustic tube 8
+    min: 0.237056, -0.23675, 0.032
+    max: 0.325444, -0.20075, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+    yaw: 45.0
+  - label: continuous black acoustic tube 9
+    min: 0.28125, -0.17425, 0.032
+    max: 0.34375, -0.13825, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+    yaw: 90.0
+  - label: continuous black acoustic tube 10
+    min: 0.237056, -0.11175, 0.032
+    max: 0.325444, -0.07575, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+    yaw: 135.0
+  - label: continuous black acoustic tube 11
+    min: 0.208228, -0.028937, 0.032
+    max: 0.313647, 0.007063, 0.068
+    color: '#0E0E0E'
+    shape: CylinderX
+    yaw: 78.02387
+  - label: continuous black acoustic tube bend 0
+    min: -0.283625, -0.17425, 0.032
+    max: -0.247625, -0.13825, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: continuous black acoustic tube bend 1
+    min: -0.23675, -0.29925, 0.032
+    max: -0.20075, -0.26325, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: continuous black acoustic tube bend 2
+    min: -0.143, -0.3305, 0.032
+    max: -0.107, -0.2945, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: continuous black acoustic tube bend 3
+    min: -0.04925, -0.268, 0.032
+    max: -0.01325, -0.232, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: continuous black acoustic tube bend 4
+    min: 0.01325, -0.17425, 0.032
+    max: 0.04925, -0.13825, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: continuous black acoustic tube bend 5
+    min: 0.07575, -0.17425, 0.032
+    max: 0.11175, -0.13825, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: continuous black acoustic tube bend 6
+    min: 0.1695, -0.268, 0.032
+    max: 0.2055, -0.232, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: continuous black acoustic tube bend 7
+    min: 0.232, -0.268, 0.032
+    max: 0.268, -0.232, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: continuous black acoustic tube bend 8
+    min: 0.2945, -0.2055, 0.032
+    max: 0.3305, -0.1695, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: continuous black acoustic tube bend 9
+    min: 0.2945, -0.143, 0.032
+    max: 0.3305, -0.107, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: continuous black acoustic tube bend 10
+    min: 0.232, -0.0805, 0.032
+    max: 0.268, -0.0445, 0.068
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: left ear fork 0
+    min: -0.370337, -0.078, 0.0345
+    max: -0.270288, -0.047, 0.0655
+    color: '#30302E'
+    shape: CylinderX
+    yaw: 141.34019
+  - label: left ear fork 1
+    min: -0.40625, 0.000125, 0.0345
+    max: -0.3125, 0.031125, 0.0655
+    color: '#30302E'
+    shape: CylinderX
+    yaw: 90.0
+  - label: left ear fork bend 0
+    min: -0.374875, -0.04675, 0.0345
+    max: -0.343875, -0.01575, 0.0655
+    color: '#30302E'
+    shape: Ellipsoid
+  - label: right ear fork 0
+    min: -0.292212, -0.078, 0.0345
+    max: -0.192163, -0.047, 0.0655
+    color: '#30302E'
+    shape: CylinderX
+    yaw: 38.65981
+  - label: right ear fork 1
+    min: -0.25, 0.000125, 0.0345
+    max: -0.15625, 0.031125, 0.0655
+    color: '#30302E'
+    shape: CylinderX
+    yaw: 90.0
+  - label: right ear fork bend 0
+    min: -0.218625, -0.04675, 0.0345
+    max: -0.187625, -0.01575, 0.0655
+    color: '#30302E'
+    shape: Ellipsoid
+  - label: exposed metal ear stem 4.5 0
+    min: -0.457813, 0.137562, 0.036
+    max: -0.260937, 0.165563, 0.064
+    color: '#A29989'
+    shape: CylinderX
+    yaw: 90.0
+  - label: rubber ear tip 4.5
+    min: -0.386375, 0.243, 0.0285
+    max: -0.332375, 0.332, 0.0755
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: exposed metal ear stem 9.5 0
+    min: -0.301563, 0.137562, 0.036
+    max: -0.104687, 0.165563, 0.064
+    color: '#A29989'
+    shape: CylinderX
+    yaw: 90.0
+  - label: rubber ear tip 9.5
+    min: -0.230125, 0.243, 0.0285
+    max: -0.176125, 0.332, 0.0755
+    color: '#0E0E0E'
+    shape: Ellipsoid
+  - label: separate chestpiece diaphragm
+    min: 0.176375, 0.011875, 0.01
+    max: 0.367375, 0.206875, 0.064
+    color: '#71675C'
+    shape: CylinderZ
+  - label: metal diaphragm face
+    min: 0.202375, 0.033875, 0.0615
+    max: 0.341375, 0.184875, 0.0785
+    color: '#DACCB6'
+    shape: CylinderZ
+  - label: recessed central diaphragm
+    min: 0.228375, 0.057875, 0.0775
+    max: 0.315375, 0.160875, 0.0825
+    color: '#A29989'
+    shape: CylinderZ
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: continuous black acoustic tube 0
+          min: -0.320959, -0.127375, 0.032
+          max: -0.225916, -0.091375, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+          yaw: -80.53768
+        - label: continuous black acoustic tube 1
+          min: -0.308938, -0.23675, 0.032
+          max: -0.175437, -0.20075, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+          yaw: -69.44395
+        - label: continuous black acoustic tube 2
+          min: -0.221286, -0.314875, 0.032
+          max: -0.122464, -0.278875, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+          yaw: -18.43495
+        - label: continuous black acoustic tube 3
+          min: -0.134462, -0.29925, 0.032
+          max: -0.021788, -0.26325, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+          yaw: 33.69007
+        - label: continuous black acoustic tube 4
+          min: -0.056337, -0.221125, 0.032
+          max: 0.056337, -0.185125, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+          yaw: 56.30993
+        - label: continuous black acoustic tube 5
+          min: 0.03125, -0.17425, 0.032
+          max: 0.09375, -0.13825, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+        - label: continuous black acoustic tube 6
+          min: 0.074334, -0.221125, 0.032
+          max: 0.206916, -0.185125, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+          yaw: -45.0
+        - label: continuous black acoustic tube 7
+          min: 0.1875, -0.268, 0.032
+          max: 0.25, -0.232, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+        - label: continuous black acoustic tube 8
+          min: 0.237056, -0.23675, 0.032
+          max: 0.325444, -0.20075, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+          yaw: 45.0
+        - label: continuous black acoustic tube 9
+          min: 0.28125, -0.17425, 0.032
+          max: 0.34375, -0.13825, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+          yaw: 90.0
+        - label: continuous black acoustic tube 10
+          min: 0.237056, -0.11175, 0.032
+          max: 0.325444, -0.07575, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+          yaw: 135.0
+        - label: continuous black acoustic tube 11
+          min: 0.208228, -0.028937, 0.032
+          max: 0.313647, 0.007063, 0.068
+          color: '#0E0E0E'
+          shape: CylinderX
+          yaw: 78.02387
+        - label: continuous black acoustic tube bend 0
+          min: -0.283625, -0.17425, 0.032
+          max: -0.247625, -0.13825, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: continuous black acoustic tube bend 1
+          min: -0.23675, -0.29925, 0.032
+          max: -0.20075, -0.26325, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: continuous black acoustic tube bend 2
+          min: -0.143, -0.3305, 0.032
+          max: -0.107, -0.2945, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: continuous black acoustic tube bend 3
+          min: -0.04925, -0.268, 0.032
+          max: -0.01325, -0.232, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: continuous black acoustic tube bend 4
+          min: 0.01325, -0.17425, 0.032
+          max: 0.04925, -0.13825, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: continuous black acoustic tube bend 5
+          min: 0.07575, -0.17425, 0.032
+          max: 0.11175, -0.13825, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: continuous black acoustic tube bend 6
+          min: 0.1695, -0.268, 0.032
+          max: 0.2055, -0.232, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: continuous black acoustic tube bend 7
+          min: 0.232, -0.268, 0.032
+          max: 0.268, -0.232, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: continuous black acoustic tube bend 8
+          min: 0.2945, -0.2055, 0.032
+          max: 0.3305, -0.1695, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: continuous black acoustic tube bend 9
+          min: 0.2945, -0.143, 0.032
+          max: 0.3305, -0.107, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: continuous black acoustic tube bend 10
+          min: 0.232, -0.0805, 0.032
+          max: 0.268, -0.0445, 0.068
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: left ear fork 0
+          min: -0.370337, -0.078, 0.0345
+          max: -0.270288, -0.047, 0.0655
+          color: '#30302E'
+          shape: CylinderX
+          yaw: 141.34019
+        - label: left ear fork 1
+          min: -0.40625, 0.000125, 0.0345
+          max: -0.3125, 0.031125, 0.0655
+          color: '#30302E'
+          shape: CylinderX
+          yaw: 90.0
+        - label: left ear fork bend 0
+          min: -0.374875, -0.04675, 0.0345
+          max: -0.343875, -0.01575, 0.0655
+          color: '#30302E'
+          shape: Ellipsoid
+        - label: right ear fork 0
+          min: -0.292212, -0.078, 0.0345
+          max: -0.192163, -0.047, 0.0655
+          color: '#30302E'
+          shape: CylinderX
+          yaw: 38.65981
+        - label: right ear fork 1
+          min: -0.25, 0.000125, 0.0345
+          max: -0.15625, 0.031125, 0.0655
+          color: '#30302E'
+          shape: CylinderX
+          yaw: 90.0
+        - label: right ear fork bend 0
+          min: -0.218625, -0.04675, 0.0345
+          max: -0.187625, -0.01575, 0.0655
+          color: '#30302E'
+          shape: Ellipsoid
+        - label: exposed metal ear stem 4.5 0
+          min: -0.457813, 0.137562, 0.036
+          max: -0.260937, 0.165563, 0.064
+          color: '#A29989'
+          shape: CylinderX
+          yaw: 90.0
+        - label: rubber ear tip 4.5
+          min: -0.386375, 0.243, 0.0285
+          max: -0.332375, 0.332, 0.0755
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: exposed metal ear stem 9.5 0
+          min: -0.301563, 0.137562, 0.036
+          max: -0.104687, 0.165563, 0.064
+          color: '#A29989'
+          shape: CylinderX
+          yaw: 90.0
+        - label: rubber ear tip 9.5
+          min: -0.230125, 0.243, 0.0285
+          max: -0.176125, 0.332, 0.0755
+          color: '#0E0E0E'
+          shape: Ellipsoid
+        - label: separate chestpiece diaphragm
+          min: 0.176375, 0.011875, 0.01
+          max: 0.367375, 0.206875, 0.064
+          color: '#71675C'
+          shape: CylinderZ
+        - label: metal diaphragm face
+          min: 0.202375, 0.033875, 0.0615
+          max: 0.341375, 0.184875, 0.0785
+          color: '#DACCB6'
+          shape: CylinderZ
+        - label: recessed central diaphragm
+          min: 0.228375, 0.057875, 0.0775
+          max: 0.315375, 0.160875, 0.0825
+          color: '#A29989'
+          shape: CylinderZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRMCDropperMedicalSmallCloud
+  label: Empty green-bulb dropper
+  status: draft
+  sourcePrototypes:
+  - RMCDropper
+  referencePrototype: RMCDropper
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/dropper.rsi
+  referenceState: dropper
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Actual inherited SolutionInjector has no initial reagent contents; fill layer is absent at default.
+    Separate rubber bulb, collar and hollow glass barrel. Runtime fill color/layer, drawing and dispensing, and held
+    appearance remain unsupported because the existing glass adapter is RSI-specific.
+  parts:
+  - label: green rubber bulb
+    min: -0.3805, -0.045, 0.002
+    max: -0.1495, 0.045, 0.098
+    color: '#426A58'
+    shape: Ellipsoid
+  - label: green collar
+    min: -0.148, -0.0715, -0.0195
+    max: -0.118, 0.0715, 0.1195
+    color: '#578864'
+    shape: CylinderX
+  - label: bulb-to-collar continuous neck
+    min: -0.1985, -0.028, 0.0205
+    max: -0.1235, 0.028, 0.0795
+    color: '#426A58'
+    shape: CylinderX
+  - label: hollow pipette wall 0
+    min: -0.1265, 0.017, 0.045
+    max: 0.2425, 0.027, 0.055
+    color: '#C3C6C689'
+  - label: hollow pipette wall 1
+    min: -0.1265, 0.014053, 0.056
+    max: 0.2425, 0.024053, 0.066
+    color: '#C3C6C689'
+  - label: hollow pipette wall 2
+    min: -0.1265, 0.006, 0.064053
+    max: 0.2425, 0.016, 0.074053
+    color: '#C3C6C689'
+  - label: hollow pipette wall 3
+    min: -0.1265, -0.005, 0.067
+    max: 0.2425, 0.005, 0.077
+    color: '#C3C6C689'
+  - label: hollow pipette wall 4
+    min: -0.1265, -0.016, 0.064053
+    max: 0.2425, -0.006, 0.074053
+    color: '#C3C6C689'
+  - label: hollow pipette wall 5
+    min: -0.1265, -0.024053, 0.056
+    max: 0.2425, -0.014053, 0.066
+    color: '#C3C6C689'
+  - label: hollow pipette wall 6
+    min: -0.1265, -0.027, 0.045
+    max: 0.2425, -0.017, 0.055
+    color: '#C3C6C689'
+  - label: hollow pipette wall 7
+    min: -0.1265, -0.024053, 0.034
+    max: 0.2425, -0.014053, 0.044
+    color: '#C3C6C689'
+  - label: hollow pipette wall 8
+    min: -0.1265, -0.016, 0.025947
+    max: 0.2425, -0.006, 0.035947
+    color: '#C3C6C689'
+  - label: hollow pipette wall 9
+    min: -0.1265, -0.005, 0.023
+    max: 0.2425, 0.005, 0.033
+    color: '#C3C6C689'
+  - label: hollow pipette wall 10
+    min: -0.1265, 0.006, 0.025947
+    max: 0.2425, 0.016, 0.035947
+    color: '#C3C6C689'
+  - label: hollow pipette wall 11
+    min: -0.1265, 0.014053, 0.034
+    max: 0.2425, 0.024053, 0.044
+    color: '#C3C6C689'
+  - label: pipette narrow tip shoulder
+    min: 0.2195, -0.024, 0.026
+    max: 0.2445, 0.024, 0.074
+    color: '#578864'
+    shape: CylinderX
+  - label: tapered delivery tip
+    min: 0.2345, -0.012, 0.038
+    max: 0.2615, 0.012, 0.062
+    color: '#578864'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DCMAdvFirstAidKitMedicalSmallCloud
+  label: Advanced red first-aid case
+  status: draft
+  sourcePrototypes:
+  - CMAdvFirstAidKit
+  referencePrototype: CMAdvFirstAidKit
+  referenceRsi: /Textures/_RMC14/Objects/Medical/first_aid_kits.rsi
+  referenceState: advfirstaid
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Actual SharedBagOpenVisuals default is Closed while no storage UI is open. Source-specific center marking,
+    hollow carrying handle, shell seams, molded ribs, clasps and lower hinges. Static closed default only; multilayer
+    UI-driven kit_empty overlay and storage contents do not fit the single-layer adapter. Contents, opening transitions
+    and carried art remain unsupported.
+  parts:
+  - label: case bottom
+    min: -0.375, -0.1225, 0.0
+    max: 0.375, 0.1225, 0.05
+    color: '#8C8783'
+  - label: left shell wall
+    min: -0.375, -0.1225, 0.0225
+    max: -0.331, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: right shell wall
+    min: 0.331, -0.1225, 0.0225
+    max: 0.375, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: case rear shell
+    min: -0.3475, 0.0915, 0.0225
+    max: 0.3475, 0.1235, 0.3795
+    color: '#C7C0B7'
+  - label: case top rail
+    min: -0.375, -0.1235, 0.3645
+    max: 0.375, 0.1235, 0.4015
+    color: '#C7C0B7'
+  - label: left inner side seam
+    min: -0.335, -0.142, 0.0585
+    max: -0.317, -0.121, 0.3635
+    color: '#6E6863'
+  - label: left case molded rib 0
+    min: -0.359, -0.149, 0.076
+    max: -0.293, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: left case molded rib 1
+    min: -0.359, -0.149, 0.182
+    max: -0.293, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: left case molded rib 2
+    min: -0.359, -0.149, 0.285
+    max: -0.293, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: right inner side seam
+    min: 0.317, -0.142, 0.0585
+    max: 0.335, -0.121, 0.3635
+    color: '#6E6863'
+  - label: right case molded rib 0
+    min: 0.293, -0.149, 0.076
+    max: 0.359, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: right case molded rib 1
+    min: 0.293, -0.149, 0.182
+    max: 0.359, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: right case molded rib 2
+    min: 0.293, -0.149, 0.285
+    max: 0.359, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: left handle upright
+    min: -0.1745, -0.03, 0.37
+    max: -0.1395, 0.03, 0.478
+    color: '#8C8783'
+  - label: right handle upright
+    min: 0.1395, -0.03, 0.37
+    max: 0.1745, 0.03, 0.478
+    color: '#8C8783'
+  - label: carry handle top bridge
+    min: -0.175, -0.03, 0.4595
+    max: 0.175, 0.03, 0.4965
+    color: '#C7C0B7'
+  - label: top clasp -0.25
+    min: -0.304, -0.0785, 0.3915
+    max: -0.196, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: top clasp 0.25
+    min: 0.196, -0.0785, 0.3915
+    max: 0.304, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: hinge knuckle -0.24
+    min: -0.2795, -0.138, 0.0275
+    max: -0.2005, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: hinge knuckle 0.24
+    min: 0.2005, -0.138, 0.0275
+    max: 0.2795, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: closed front lid
+    min: -0.337, -0.145, 0.0365
+    max: 0.337, -0.105, 0.3855
+    color: '#D6D0C9'
+  - label: original center kit marking
+    min: -0.125, -0.1465, 0.0545
+    max: 0.125, -0.1415, 0.3975
+    color: '#FFFFFF'
+    surface: CMU3DMedicalSmallCloudArt10
+    surfaceAxis: XZ
+  - label: recessed lid latch -0.24
+    min: -0.258, -0.157, 0.0835
+    max: -0.222, -0.143, 0.1065
+    color: '#8C8783'
+  - label: recessed lid latch 0.24
+    min: 0.222, -0.157, 0.0835
+    max: 0.258, -0.143, 0.1065
+    color: '#8C8783'
+- type: cmu3DModel
+  id: CMU3DCMAdvFirstAidKitMedicalSmallCloudOpenStudy
+  label: Advanced red first-aid case open study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMAdvFirstAidKit
+  referenceRsi: /Textures/_RMC14/Objects/Medical/first_aid_kits.rsi
+  referenceState: advfirstaid
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound source base + kit_empty overlay study. Shell cavity, divider and hinged down front are real
+    separate volumes. Source-specific physical interpretation; UI state and stored contents remain unsupported.
+  parts:
+  - label: case bottom
+    min: -0.375, -0.1225, 0.0
+    max: 0.375, 0.1225, 0.05
+    color: '#8C8783'
+  - label: left shell wall
+    min: -0.375, -0.1225, 0.0225
+    max: -0.331, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: right shell wall
+    min: 0.331, -0.1225, 0.0225
+    max: 0.375, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: case rear shell
+    min: -0.3475, 0.0915, 0.0225
+    max: 0.3475, 0.1235, 0.3795
+    color: '#C7C0B7'
+  - label: case top rail
+    min: -0.375, -0.1235, 0.3645
+    max: 0.375, 0.1235, 0.4015
+    color: '#C7C0B7'
+  - label: left inner side seam
+    min: -0.335, -0.142, 0.0585
+    max: -0.317, -0.121, 0.3635
+    color: '#6E6863'
+  - label: left case molded rib 0
+    min: -0.359, -0.149, 0.076
+    max: -0.293, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: left case molded rib 1
+    min: -0.359, -0.149, 0.182
+    max: -0.293, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: left case molded rib 2
+    min: -0.359, -0.149, 0.285
+    max: -0.293, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: right inner side seam
+    min: 0.317, -0.142, 0.0585
+    max: 0.335, -0.121, 0.3635
+    color: '#6E6863'
+  - label: right case molded rib 0
+    min: 0.293, -0.149, 0.076
+    max: 0.359, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: right case molded rib 1
+    min: 0.293, -0.149, 0.182
+    max: 0.359, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: right case molded rib 2
+    min: 0.293, -0.149, 0.285
+    max: 0.359, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: left handle upright
+    min: -0.1745, -0.03, 0.37
+    max: -0.1395, 0.03, 0.478
+    color: '#8C8783'
+  - label: right handle upright
+    min: 0.1395, -0.03, 0.37
+    max: 0.1745, 0.03, 0.478
+    color: '#8C8783'
+  - label: carry handle top bridge
+    min: -0.175, -0.03, 0.4595
+    max: 0.175, 0.03, 0.4965
+    color: '#B1ABA5'
+  - label: top clasp -0.25
+    min: -0.304, -0.0785, 0.3915
+    max: -0.196, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: top clasp 0.25
+    min: 0.196, -0.0785, 0.3915
+    max: 0.304, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: hinge knuckle -0.24
+    min: -0.2795, -0.138, 0.0275
+    max: -0.2005, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: hinge knuckle 0.24
+    min: 0.2005, -0.138, 0.0275
+    max: 0.2795, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: interior recessed back lining
+    min: -0.316, 0.0855, 0.0555
+    max: 0.316, 0.0965, 0.3505
+    color: '#595551'
+  - label: interior tray floor
+    min: -0.313, -0.0995, 0.049
+    max: 0.313, 0.0995, 0.069
+    color: '#6E6863'
+  - label: internal divider
+    min: -0.311, -0.0085, 0.138
+    max: 0.311, 0.0185, 0.156
+    color: '#464340'
+  - label: open hinged front panel
+    min: -0.355, -0.527, 0.024
+    max: 0.355, -0.137, 0.054
+    color: '#8C8783'
+  - label: open lid recessed insert
+    min: -0.3055, -0.474, 0.053
+    max: 0.3055, -0.174, 0.063
+    color: '#5B5754'
+  - label: open lid raised perimeter -0.338
+    min: -0.3515, -0.5115, 0.053
+    max: -0.3245, -0.1465, 0.079
+    color: '#B1ABA5'
+  - label: open lid raised perimeter 0.338
+    min: 0.3245, -0.5115, 0.053
+    max: 0.3515, -0.1465, 0.079
+    color: '#B1ABA5'
+  - label: open lid front perimeter
+    min: -0.347, -0.527, 0.05
+    max: 0.347, -0.501, 0.08
+    color: '#C7C0B7'
+- type: cmu3DModel
+  id: CMU3DCMFirstAidKitSurgeryMedicalSmallCloud
+  label: Basic surgery first-aid case
+  status: draft
+  sourcePrototypes:
+  - CMFirstAidKitSurgery
+  referencePrototype: CMFirstAidKitSurgery
+  referenceRsi: /Textures/_RMC14/Objects/Medical/first_aid_kits.rsi
+  referenceState: firstaid
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Actual SharedBagOpenVisuals default is Closed while no storage UI is open. Source-specific center marking,
+    hollow carrying handle, shell seams, molded ribs, clasps and lower hinges. Static closed default only; multilayer
+    UI-driven kit_empty overlay and storage contents do not fit the single-layer adapter. Contents, opening transitions
+    and carried art remain unsupported.
+  parts:
+  - label: case bottom
+    min: -0.375, -0.1225, 0.0
+    max: 0.375, 0.1225, 0.05
+    color: '#8C8783'
+  - label: left shell wall
+    min: -0.375, -0.1225, 0.0225
+    max: -0.331, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: right shell wall
+    min: 0.331, -0.1225, 0.0225
+    max: 0.375, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: case rear shell
+    min: -0.3475, 0.0915, 0.0225
+    max: 0.3475, 0.1235, 0.3795
+    color: '#C7C0B7'
+  - label: case top rail
+    min: -0.375, -0.1235, 0.3645
+    max: 0.375, 0.1235, 0.4015
+    color: '#C7C0B7'
+  - label: left inner side seam
+    min: -0.335, -0.142, 0.0585
+    max: -0.317, -0.121, 0.3635
+    color: '#6E6863'
+  - label: left case molded rib 0
+    min: -0.359, -0.149, 0.076
+    max: -0.293, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: left case molded rib 1
+    min: -0.359, -0.149, 0.182
+    max: -0.293, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: left case molded rib 2
+    min: -0.359, -0.149, 0.285
+    max: -0.293, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: right inner side seam
+    min: 0.317, -0.142, 0.0585
+    max: 0.335, -0.121, 0.3635
+    color: '#6E6863'
+  - label: right case molded rib 0
+    min: 0.293, -0.149, 0.076
+    max: 0.359, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: right case molded rib 1
+    min: 0.293, -0.149, 0.182
+    max: 0.359, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: right case molded rib 2
+    min: 0.293, -0.149, 0.285
+    max: 0.359, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: left handle upright
+    min: -0.1745, -0.03, 0.37
+    max: -0.1395, 0.03, 0.478
+    color: '#8C8783'
+  - label: right handle upright
+    min: 0.1395, -0.03, 0.37
+    max: 0.1745, 0.03, 0.478
+    color: '#8C8783'
+  - label: carry handle top bridge
+    min: -0.175, -0.03, 0.4595
+    max: 0.175, 0.03, 0.4965
+    color: '#C7C0B7'
+  - label: top clasp -0.25
+    min: -0.304, -0.0785, 0.3915
+    max: -0.196, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: top clasp 0.25
+    min: 0.196, -0.0785, 0.3915
+    max: 0.304, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: hinge knuckle -0.24
+    min: -0.2795, -0.138, 0.0275
+    max: -0.2005, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: hinge knuckle 0.24
+    min: 0.2005, -0.138, 0.0275
+    max: 0.2795, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: closed front lid
+    min: -0.337, -0.145, 0.0365
+    max: 0.337, -0.105, 0.3855
+    color: '#D6D0C9'
+  - label: original center kit marking
+    min: -0.125, -0.1465, 0.0545
+    max: 0.125, -0.1415, 0.3975
+    color: '#FFFFFF'
+    surface: CMU3DMedicalSmallCloudArt11
+    surfaceAxis: XZ
+  - label: recessed lid latch -0.24
+    min: -0.258, -0.157, 0.0835
+    max: -0.222, -0.143, 0.1065
+    color: '#8C8783'
+  - label: recessed lid latch 0.24
+    min: 0.222, -0.157, 0.0835
+    max: 0.258, -0.143, 0.1065
+    color: '#8C8783'
+- type: cmu3DModel
+  id: CMU3DCMFirstAidKitSurgeryMedicalSmallCloudOpenStudy
+  label: Basic surgery first-aid case open study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMFirstAidKitSurgery
+  referenceRsi: /Textures/_RMC14/Objects/Medical/first_aid_kits.rsi
+  referenceState: firstaid
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound source base + kit_empty overlay study. Shell cavity, divider and hinged down front are real
+    separate volumes. Source-specific physical interpretation; UI state and stored contents remain unsupported.
+  parts:
+  - label: case bottom
+    min: -0.375, -0.1225, 0.0
+    max: 0.375, 0.1225, 0.05
+    color: '#8C8783'
+  - label: left shell wall
+    min: -0.375, -0.1225, 0.0225
+    max: -0.331, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: right shell wall
+    min: 0.331, -0.1225, 0.0225
+    max: 0.375, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: case rear shell
+    min: -0.3475, 0.0915, 0.0225
+    max: 0.3475, 0.1235, 0.3795
+    color: '#C7C0B7'
+  - label: case top rail
+    min: -0.375, -0.1235, 0.3645
+    max: 0.375, 0.1235, 0.4015
+    color: '#C7C0B7'
+  - label: left inner side seam
+    min: -0.335, -0.142, 0.0585
+    max: -0.317, -0.121, 0.3635
+    color: '#6E6863'
+  - label: left case molded rib 0
+    min: -0.359, -0.149, 0.076
+    max: -0.293, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: left case molded rib 1
+    min: -0.359, -0.149, 0.182
+    max: -0.293, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: left case molded rib 2
+    min: -0.359, -0.149, 0.285
+    max: -0.293, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: right inner side seam
+    min: 0.317, -0.142, 0.0585
+    max: 0.335, -0.121, 0.3635
+    color: '#6E6863'
+  - label: right case molded rib 0
+    min: 0.293, -0.149, 0.076
+    max: 0.359, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: right case molded rib 1
+    min: 0.293, -0.149, 0.182
+    max: 0.359, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: right case molded rib 2
+    min: 0.293, -0.149, 0.285
+    max: 0.359, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: left handle upright
+    min: -0.1745, -0.03, 0.37
+    max: -0.1395, 0.03, 0.478
+    color: '#8C8783'
+  - label: right handle upright
+    min: 0.1395, -0.03, 0.37
+    max: 0.1745, 0.03, 0.478
+    color: '#8C8783'
+  - label: carry handle top bridge
+    min: -0.175, -0.03, 0.4595
+    max: 0.175, 0.03, 0.4965
+    color: '#B1ABA5'
+  - label: top clasp -0.25
+    min: -0.304, -0.0785, 0.3915
+    max: -0.196, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: top clasp 0.25
+    min: 0.196, -0.0785, 0.3915
+    max: 0.304, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: hinge knuckle -0.24
+    min: -0.2795, -0.138, 0.0275
+    max: -0.2005, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: hinge knuckle 0.24
+    min: 0.2005, -0.138, 0.0275
+    max: 0.2795, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: interior recessed back lining
+    min: -0.316, 0.0855, 0.0555
+    max: 0.316, 0.0965, 0.3505
+    color: '#595551'
+  - label: interior tray floor
+    min: -0.313, -0.0995, 0.049
+    max: 0.313, 0.0995, 0.069
+    color: '#6E6863'
+  - label: internal divider
+    min: -0.311, -0.0085, 0.138
+    max: 0.311, 0.0185, 0.156
+    color: '#464340'
+  - label: open hinged front panel
+    min: -0.355, -0.527, 0.024
+    max: 0.355, -0.137, 0.054
+    color: '#8C8783'
+  - label: open lid recessed insert
+    min: -0.3055, -0.474, 0.053
+    max: 0.3055, -0.174, 0.063
+    color: '#5B5754'
+  - label: open lid raised perimeter -0.338
+    min: -0.3515, -0.5115, 0.053
+    max: -0.3245, -0.1465, 0.079
+    color: '#B1ABA5'
+  - label: open lid raised perimeter 0.338
+    min: 0.3245, -0.5115, 0.053
+    max: 0.3515, -0.1465, 0.079
+    color: '#B1ABA5'
+  - label: open lid front perimeter
+    min: -0.347, -0.527, 0.05
+    max: 0.347, -0.501, 0.08
+    color: '#C7C0B7'
+- type: cmu3DModel
+  id: CMU3DCMFirstAidO2KitMedicalSmallCloud
+  label: Blue oxygen first-aid case
+  status: draft
+  sourcePrototypes:
+  - CMFirstAidO2Kit
+  referencePrototype: CMFirstAidO2Kit
+  referenceRsi: /Textures/_RMC14/Objects/Medical/first_aid_kits.rsi
+  referenceState: o2
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Actual SharedBagOpenVisuals default is Closed while no storage UI is open. Source-specific center marking,
+    hollow carrying handle, shell seams, molded ribs, clasps and lower hinges. Static closed default only; multilayer
+    UI-driven kit_empty overlay and storage contents do not fit the single-layer adapter. Contents, opening transitions
+    and carried art remain unsupported.
+  parts:
+  - label: case bottom
+    min: -0.375, -0.1225, 0.0
+    max: 0.375, 0.1225, 0.05
+    color: '#8C8783'
+  - label: left shell wall
+    min: -0.375, -0.1225, 0.0225
+    max: -0.331, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: right shell wall
+    min: 0.331, -0.1225, 0.0225
+    max: 0.375, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: case rear shell
+    min: -0.3475, 0.0915, 0.0225
+    max: 0.3475, 0.1235, 0.3795
+    color: '#C7C0B7'
+  - label: case top rail
+    min: -0.375, -0.1235, 0.3645
+    max: 0.375, 0.1235, 0.4015
+    color: '#C7C0B7'
+  - label: left inner side seam
+    min: -0.335, -0.142, 0.0585
+    max: -0.317, -0.121, 0.3635
+    color: '#6E6863'
+  - label: left case molded rib 0
+    min: -0.359, -0.149, 0.076
+    max: -0.293, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: left case molded rib 1
+    min: -0.359, -0.149, 0.182
+    max: -0.293, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: left case molded rib 2
+    min: -0.359, -0.149, 0.285
+    max: -0.293, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: right inner side seam
+    min: 0.317, -0.142, 0.0585
+    max: 0.335, -0.121, 0.3635
+    color: '#6E6863'
+  - label: right case molded rib 0
+    min: 0.293, -0.149, 0.076
+    max: 0.359, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: right case molded rib 1
+    min: 0.293, -0.149, 0.182
+    max: 0.359, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: right case molded rib 2
+    min: 0.293, -0.149, 0.285
+    max: 0.359, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: left handle upright
+    min: -0.1745, -0.03, 0.37
+    max: -0.1395, 0.03, 0.478
+    color: '#8C8783'
+  - label: right handle upright
+    min: 0.1395, -0.03, 0.37
+    max: 0.1745, 0.03, 0.478
+    color: '#8C8783'
+  - label: carry handle top bridge
+    min: -0.175, -0.03, 0.4595
+    max: 0.175, 0.03, 0.4965
+    color: '#C7C0B7'
+  - label: top clasp -0.25
+    min: -0.304, -0.0785, 0.3915
+    max: -0.196, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: top clasp 0.25
+    min: 0.196, -0.0785, 0.3915
+    max: 0.304, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: hinge knuckle -0.24
+    min: -0.2795, -0.138, 0.0275
+    max: -0.2005, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: hinge knuckle 0.24
+    min: 0.2005, -0.138, 0.0275
+    max: 0.2795, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: closed front lid
+    min: -0.337, -0.145, 0.0365
+    max: 0.337, -0.105, 0.3855
+    color: '#D6D0C9'
+  - label: original center kit marking
+    min: -0.125, -0.1465, 0.0545
+    max: 0.125, -0.1415, 0.3975
+    color: '#FFFFFF'
+    surface: CMU3DMedicalSmallCloudArt12
+    surfaceAxis: XZ
+  - label: recessed lid latch -0.24
+    min: -0.258, -0.157, 0.0835
+    max: -0.222, -0.143, 0.1065
+    color: '#8C8783'
+  - label: recessed lid latch 0.24
+    min: 0.222, -0.157, 0.0835
+    max: 0.258, -0.143, 0.1065
+    color: '#8C8783'
+- type: cmu3DModel
+  id: CMU3DCMFirstAidO2KitMedicalSmallCloudOpenStudy
+  label: Blue oxygen first-aid case open study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMFirstAidO2Kit
+  referenceRsi: /Textures/_RMC14/Objects/Medical/first_aid_kits.rsi
+  referenceState: o2
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound source base + kit_empty overlay study. Shell cavity, divider and hinged down front are real
+    separate volumes. Source-specific physical interpretation; UI state and stored contents remain unsupported.
+  parts:
+  - label: case bottom
+    min: -0.375, -0.1225, 0.0
+    max: 0.375, 0.1225, 0.05
+    color: '#8C8783'
+  - label: left shell wall
+    min: -0.375, -0.1225, 0.0225
+    max: -0.331, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: right shell wall
+    min: 0.331, -0.1225, 0.0225
+    max: 0.375, 0.1225, 0.3795
+    color: '#C7C0B7'
+  - label: case rear shell
+    min: -0.3475, 0.0915, 0.0225
+    max: 0.3475, 0.1235, 0.3795
+    color: '#C7C0B7'
+  - label: case top rail
+    min: -0.375, -0.1235, 0.3645
+    max: 0.375, 0.1235, 0.4015
+    color: '#C7C0B7'
+  - label: left inner side seam
+    min: -0.335, -0.142, 0.0585
+    max: -0.317, -0.121, 0.3635
+    color: '#6E6863'
+  - label: left case molded rib 0
+    min: -0.359, -0.149, 0.076
+    max: -0.293, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: left case molded rib 1
+    min: -0.359, -0.149, 0.182
+    max: -0.293, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: left case molded rib 2
+    min: -0.359, -0.149, 0.285
+    max: -0.293, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: right inner side seam
+    min: 0.317, -0.142, 0.0585
+    max: 0.335, -0.121, 0.3635
+    color: '#6E6863'
+  - label: right case molded rib 0
+    min: 0.293, -0.149, 0.076
+    max: 0.359, -0.134, 0.094
+    color: '#D8D0C9'
+  - label: right case molded rib 1
+    min: 0.293, -0.149, 0.182
+    max: 0.359, -0.134, 0.2
+    color: '#D8D0C9'
+  - label: right case molded rib 2
+    min: 0.293, -0.149, 0.285
+    max: 0.359, -0.134, 0.303
+    color: '#D8D0C9'
+  - label: left handle upright
+    min: -0.1745, -0.03, 0.37
+    max: -0.1395, 0.03, 0.478
+    color: '#8C8783'
+  - label: right handle upright
+    min: 0.1395, -0.03, 0.37
+    max: 0.1745, 0.03, 0.478
+    color: '#8C8783'
+  - label: carry handle top bridge
+    min: -0.175, -0.03, 0.4595
+    max: 0.175, 0.03, 0.4965
+    color: '#B1ABA5'
+  - label: top clasp -0.25
+    min: -0.304, -0.0785, 0.3915
+    max: -0.196, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: top clasp 0.25
+    min: 0.196, -0.0785, 0.3915
+    max: 0.304, 0.0025, 0.4205
+    color: '#D8D0C9'
+  - label: hinge knuckle -0.24
+    min: -0.2795, -0.138, 0.0275
+    max: -0.2005, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: hinge knuckle 0.24
+    min: 0.2005, -0.138, 0.0275
+    max: 0.2795, -0.107, 0.0625
+    color: '#8C8783'
+    shape: CylinderX
+  - label: interior recessed back lining
+    min: -0.316, 0.0855, 0.0555
+    max: 0.316, 0.0965, 0.3505
+    color: '#595551'
+  - label: interior tray floor
+    min: -0.313, -0.0995, 0.049
+    max: 0.313, 0.0995, 0.069
+    color: '#6E6863'
+  - label: internal divider
+    min: -0.311, -0.0085, 0.138
+    max: 0.311, 0.0185, 0.156
+    color: '#464340'
+  - label: open hinged front panel
+    min: -0.355, -0.527, 0.024
+    max: 0.355, -0.137, 0.054
+    color: '#8C8783'
+  - label: open lid recessed insert
+    min: -0.3055, -0.474, 0.053
+    max: 0.3055, -0.174, 0.063
+    color: '#5B5754'
+  - label: open lid raised perimeter -0.338
+    min: -0.3515, -0.5115, 0.053
+    max: -0.3245, -0.1465, 0.079
+    color: '#B1ABA5'
+  - label: open lid raised perimeter 0.338
+    min: 0.3245, -0.5115, 0.053
+    max: 0.3515, -0.1465, 0.079
+    color: '#B1ABA5'
+  - label: open lid front perimeter
+    min: -0.347, -0.527, 0.05
+    max: 0.347, -0.501, 0.08
+    color: '#C7C0B7'
+- type: cmu3DModel
+  id: CMU3DCMOintment10MedicalSmallCloud
+  label: Ten-use ointment bottle
+  status: draft
+  sourcePrototypes:
+  - CMOintment10
+  referencePrototype: CMOintment10
+  referenceRsi: /Textures/_RMC14/Objects/Medical/medical.rsi
+  referenceState: ointment
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Source ointment icon retains dark body, tan neck, small cap and original orange center label. Physical
+    tapered shoulder and side depth are inferred. Stack count ten is prototype state, not ten modeled bottles; no
+    quantity-dependent sprite layers are defined. Existing one-state world adapter only, consumption and held art
+    unsupported.
+  parts:
+  - label: dark ointment bottle base
+    min: -0.1235, -0.0955, -0.0005
+    max: 0.1235, 0.0955, 0.0605
+    color: '#352B25'
+  - label: bottle body
+    min: -0.123, -0.091, 0.0275
+    max: 0.123, 0.091, 0.2625
+    color: '#564F43'
+  - label: rounded shoulder
+    min: -0.116, -0.085, 0.249
+    max: 0.116, 0.085, 0.323
+    color: '#A29989'
+    shape: Ellipsoid
+  - label: narrow neck
+    min: -0.046, -0.052, 0.309
+    max: 0.046, 0.052, 0.377
+    color: '#A29989'
+    shape: CylinderZ
+  - label: dark cap
+    min: -0.0545, -0.0555, 0.3685
+    max: 0.0545, 0.0555, 0.4095
+    color: '#50433B'
+    shape: CylinderZ
+  - label: cap top
+    min: -0.0365, -0.0395, 0.4065
+    max: 0.0365, 0.0395, 0.4155
+    color: '#A29989'
+    shape: CylinderZ
+  - label: original orange ointment label
+    min: -0.09375, -0.093, 0.04825
+    max: 0.09375, -0.089, 0.23575
+    color: '#FFFFFF'
+    surface: CMU3DMedicalSmallCloudArt13
+    surfaceAxis: XZ
+  - label: upper bottle seam
+    min: -0.108, -0.102, 0.257
+    max: 0.108, -0.09, 0.273
+    color: '#352B25'
+  - label: lower bottle heel highlight
+    min: -0.094, -0.098, 0.019
+    max: 0.094, -0.088, 0.039
+    color: '#DACCB6'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    ointment:
+      frames:
+      - parts:
+        - label: dark ointment bottle base
+          min: -0.1235, -0.0955, -0.0005
+          max: 0.1235, 0.0955, 0.0605
+          color: '#352B25'
+        - label: bottle body
+          min: -0.123, -0.091, 0.0275
+          max: 0.123, 0.091, 0.2625
+          color: '#564F43'
+        - label: rounded shoulder
+          min: -0.116, -0.085, 0.249
+          max: 0.116, 0.085, 0.323
+          color: '#A29989'
+          shape: Ellipsoid
+        - label: narrow neck
+          min: -0.046, -0.052, 0.309
+          max: 0.046, 0.052, 0.377
+          color: '#A29989'
+          shape: CylinderZ
+        - label: dark cap
+          min: -0.0545, -0.0555, 0.3685
+          max: 0.0545, 0.0555, 0.4095
+          color: '#50433B'
+          shape: CylinderZ
+        - label: cap top
+          min: -0.0365, -0.0395, 0.4065
+          max: 0.0365, 0.0395, 0.4155
+          color: '#A29989'
+          shape: CylinderZ
+        - label: original orange ointment label
+          min: -0.09375, -0.093, 0.04825
+          max: 0.09375, -0.089, 0.23575
+          color: '#FFFFFF'
+          surface: CMU3DMedicalSmallCloudArt13
+          surfaceAxis: XZ
+        - label: upper bottle seam
+          min: -0.108, -0.102, 0.257
+          max: 0.108, -0.09, 0.273
+          color: '#352B25'
+        - label: lower bottle heel highlight
+          min: -0.094, -0.098, 0.019
+          max: 0.094, -0.088, 0.039
+          color: '#DACCB6'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRMCStasisBagUsedMedicalSmallCloud
+  label: Ripped used stasis bag
+  status: draft
+  sourcePrototypes:
+  - RMCStasisBagUsed
+  referencePrototype: RMCStasisBagUsed
+  referenceRsi: /Textures/_RMC14/Objects/Medical/stasisbag.rsi
+  referenceState: bodybag_used
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Actual RMCStasisBagUsed is BaseItem trash, not a Foldable or occupied stasis container. Six joined
+    thin cloth ribbons with changing height, rolled sewn edges and original worn cross surround a true open tear.
+    Fold depth and hidden underside inferred. Existing one-state rotating source adapter only; no invented deploy/fold/occupant
+    state.
+  parts:
+  - label: lower left fold cloth panel 0
+    min: -0.453141, -0.3, 0.033
+    max: -0.296859, -0.15, 0.047
+    color: '#426E6E'
+    yaw: 11.30993
+    pitch: 11.81535
+  - label: lower left fold bound rolled seam 0
+    min: -0.453141, -0.173, 0.036
+    max: -0.296859, -0.157, 0.052
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 11.30993
+    pitch: 11.81535
+  - label: lower left fold cloth panel 1
+    min: -0.300135, -0.285, 0.0445
+    max: -0.149865, -0.135, 0.0585
+    color: '#426E6E'
+    pitch: -3.43363
+  - label: lower left fold bound rolled seam 1
+    min: -0.300135, -0.158, 0.0475
+    max: -0.149865, -0.142, 0.0635
+    color: '#264B4B'
+    shape: CylinderX
+    pitch: -3.43363
+  - label: lower left fold cloth panel 2
+    min: -0.150208, -0.29, 0.0425
+    max: 0.000208, -0.14, 0.0565
+    color: '#426E6E'
+    yaw: -3.81407
+    pitch: 1.90493
+  - label: lower left fold bound rolled seam 2
+    min: -0.150208, -0.163, 0.0455
+    max: 0.000208, -0.147, 0.0615
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: -3.81407
+    pitch: 1.90493
+  - label: lower left fold cloth panel 3
+    min: -0.001162, -0.285, 0.037
+    max: 0.141162, -0.135, 0.051
+    color: '#426E6E'
+    yaw: 8.1301
+    pitch: -6.45483
+  - label: lower left fold bound rolled seam 3
+    min: -0.001162, -0.158, 0.04
+    max: 0.141162, -0.142, 0.056
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 8.1301
+    pitch: -6.45483
+  - label: middle worn flap cloth panel 0
+    min: -0.400419, -0.1925, 0.0515
+    max: -0.239581, -0.0175, 0.0655
+    color: '#649A9A'
+    yaw: -3.57633
+    pitch: 4.63607
+  - label: middle worn flap bound rolled seam 0
+    min: -0.400419, -0.043, 0.0545
+    max: -0.239581, -0.027, 0.0705
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: -3.57633
+    pitch: 4.63607
+  - label: middle worn flap cloth panel 1
+    min: -0.24, -0.1975, 0.058
+    max: 0.09, -0.0225, 0.072
+    color: '#649A9A'
+  - label: middle worn flap bound rolled seam 1
+    min: -0.24, -0.048, 0.061
+    max: -0.075, -0.032, 0.077
+    color: '#264B4B'
+    shape: CylinderX
+  - label: middle worn flap bound rolled seam 2
+    min: -0.075, -0.048, 0.061
+    max: 0.09, -0.032, 0.077
+    color: '#264B4B'
+    shape: CylinderX
+  - label: middle worn flap cloth panel 3
+    min: 0.089012, -0.1925, 0.046
+    max: 0.260988, -0.0175, 0.06
+    color: '#649A9A'
+    yaw: 3.36646
+    pitch: -8.02202
+  - label: middle worn flap bound rolled seam 3
+    min: 0.089012, -0.043, 0.049
+    max: 0.260988, -0.027, 0.065
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 3.36646
+    pitch: -8.02202
+  - label: middle worn flap cloth panel 4
+    min: 0.256162, -0.2125, 0.0275
+    max: 0.433838, -0.0375, 0.0415
+    color: '#649A9A'
+    yaw: -16.38954
+    pitch: -4.19589
+  - label: middle worn flap bound rolled seam 4
+    min: 0.256162, -0.063, 0.0305
+    max: 0.433838, -0.047, 0.0465
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: -16.38954
+    pitch: -4.19589
+  - label: left torn sleeve cloth panel 0
+    min: -0.497202, -0.258, 0.0355
+    max: -0.332798, -0.142, 0.0495
+    color: '#264B4B'
+    yaw: 79.38034
+    pitch: 8.04197
+  - label: left torn sleeve bound rolled seam 0
+    min: -0.450802, -0.208, 0.0385
+    max: -0.286398, -0.192, 0.0545
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 79.38034
+    pitch: 8.04197
+  - label: left torn sleeve cloth panel 1
+    min: -0.477243, -0.1055, 0.065
+    max: -0.327757, 0.0105, 0.079
+    color: '#264B4B'
+    yaw: 91.97493
+    pitch: 13.93527
+  - label: left torn sleeve bound rolled seam 1
+    min: -0.430843, -0.0555, 0.068
+    max: -0.281357, -0.0395, 0.084
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 91.97493
+    pitch: 13.93527
+  - label: left torn sleeve cloth panel 2
+    min: -0.437918, 0.0205, 0.064
+    max: -0.307082, 0.1365, 0.078
+    color: '#264B4B'
+    yaw: 58.7223
+    pitch: -16.88433
+  - label: left torn sleeve bound rolled seam 2
+    min: -0.391518, 0.0705, 0.067
+    max: -0.260682, 0.0865, 0.083
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 58.7223
+    pitch: -16.88433
+  - label: left torn sleeve cloth panel 3
+    min: -0.343596, 0.0895, 0.0565
+    max: -0.236404, 0.2055, 0.0705
+    color: '#264B4B'
+    yaw: 17.22344
+    pitch: 12.39027
+  - label: left torn sleeve bound rolled seam 3
+    min: -0.343596, 0.1859, 0.0595
+    max: -0.236404, 0.2019, 0.0755
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 17.22344
+    pitch: 12.39027
+  - label: right curled sleeve cloth panel 0
+    min: 0.310058, -0.251, 0.032
+    max: 0.499942, -0.129, 0.046
+    color: '#426E6E'
+    yaw: 105.52411
+    pitch: 10.31481
+  - label: right curled sleeve bound rolled seam 0
+    min: 0.358858, -0.198, 0.035
+    max: 0.548742, -0.182, 0.051
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 105.52411
+    pitch: 10.31481
+  - label: right curled sleeve cloth panel 1
+    min: 0.305334, -0.077, 0.0525
+    max: 0.474666, 0.045, 0.0665
+    color: '#426E6E'
+    yaw: 83.21103
+    pitch: 2.36923
+  - label: right curled sleeve bound rolled seam 1
+    min: 0.354134, -0.024, 0.0555
+    max: 0.523466, -0.008, 0.0715
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 83.21103
+    pitch: 2.36923
+  - label: right curled sleeve cloth panel 2
+    min: 0.30871, 0.092, 0.07
+    max: 0.48129, 0.214, 0.084
+    color: '#426E6E'
+    yaw: 93.36646
+    pitch: 9.33712
+  - label: right curled sleeve bound rolled seam 2
+    min: 0.35751, 0.145, 0.073
+    max: 0.53009, 0.161, 0.089
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 93.36646
+    pitch: 9.33712
+  - label: back ripped seam cloth panel 0
+    min: -0.260243, 0.137, 0.0625
+    max: -0.084757, 0.196, 0.0765
+    color: '#649A9A'
+    yaw: 2.29061
+    pitch: -3.59385
+  - label: back ripped seam bound rolled seam 0
+    min: -0.260243, 0.1821, 0.0655
+    max: -0.084757, 0.1981, 0.0815
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 2.29061
+    pitch: -3.59385
+  - label: back ripped seam cloth panel 1
+    min: -0.086067, 0.153, 0.0635
+    max: 0.101067, 0.212, 0.0775
+    color: '#649A9A'
+    yaw: 7.69605
+    pitch: 3.98349
+  - label: back ripped seam bound rolled seam 1
+    min: -0.086067, 0.1981, 0.0665
+    max: 0.101067, 0.2141, 0.0825
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 7.69605
+    pitch: 3.98349
+  - label: back ripped seam cloth panel 2
+    min: 0.099759, 0.1705, 0.074
+    max: 0.270241, 0.2295, 0.088
+    color: '#649A9A'
+    yaw: 3.36646
+    pitch: 2.68964
+  - label: back ripped seam bound rolled seam 2
+    min: 0.099759, 0.2156, 0.077
+    max: 0.270241, 0.2316, 0.093
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 3.36646
+    pitch: 2.68964
+  - label: back ripped seam cloth panel 3
+    min: 0.2677, 0.192, 0.081
+    max: 0.3923, 0.251, 0.095
+    color: '#649A9A'
+    yaw: 15.37625
+    pitch: 2.76011
+  - label: back ripped seam bound rolled seam 3
+    min: 0.2677, 0.2371, 0.084
+    max: 0.3923, 0.2531, 0.1
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: 15.37625
+    pitch: 2.76011
+  - label: inner back fold cloth panel 0
+    min: -0.120106, 0.0585, 0.0375
+    max: 0.080106, 0.1135, 0.0515
+    color: '#264B4B'
+    yaw: -1.71836
+    pitch: 2.00363
+  - label: inner back fold bound rolled seam 0
+    min: -0.120106, 0.1, 0.0405
+    max: 0.080106, 0.116, 0.0565
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: -1.71836
+    pitch: 2.00363
+  - label: inner back fold cloth panel 1
+    min: 0.07997, 0.054, 0.039
+    max: 0.29003, 0.109, 0.053
+    color: '#264B4B'
+    yaw: -0.81846
+    pitch: -1.0911
+  - label: inner back fold bound rolled seam 1
+    min: 0.07997, 0.0955, 0.042
+    max: 0.29003, 0.1115, 0.058
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: -0.81846
+    pitch: -1.0911
+  - label: inner back fold cloth panel 2
+    min: 0.288864, 0.0465, 0.0465
+    max: 0.401136, 0.1015, 0.0605
+    color: '#264B4B'
+    yaw: -6.22583
+    pitch: 9.74316
+  - label: inner back fold bound rolled seam 2
+    min: 0.288864, 0.088, 0.0495
+    max: 0.401136, 0.104, 0.0655
+    color: '#264B4B'
+    shape: CylinderX
+    yaw: -6.22583
+    pitch: 9.74316
+  - label: flat cloth marking patch
+    min: -0.1425, -0.197, 0.059
+    max: 0.1345, -0.025, 0.071
+    color: '#649A9A'
+  - label: original faded cross on lower bag flap
+    min: -0.129, -0.189, 0.0705
+    max: 0.121, -0.033, 0.0735
+    color: '#FFFFFF'
+    surface: CMU3DMedicalSmallCloudArt14
+    surfaceAxis: XY
+  - label: tucked fabric crease 0
+    min: -0.351231, -0.2035, 0.055
+    max: -0.268769, -0.1765, 0.065
+    color: '#99BDBD'
+    yaw: -14.03624
+  - label: tucked fabric crease 1
+    min: 0.195757, -0.1735, 0.0355
+    max: 0.304243, -0.1465, 0.0455
+    color: '#99BDBD'
+    yaw: -21.80141
+    pitch: -6.88242
+  - label: tucked fabric crease 2
+    min: 0.323545, 0.1815, 0.08
+    max: 0.396455, 0.2085, 0.09
+    color: '#99BDBD'
+    yaw: 74.0546
+    pitch: 3.14491
+  - label: tucked fabric crease 3
+    min: -0.365598, 0.0715, 0.0645
+    max: -0.314402, 0.0985, 0.0745
+    color: '#99BDBD'
+    yaw: 36.8699
+    pitch: -12.40742
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    bodybag_used:
+      frames:
+      - parts:
+        - label: lower left fold cloth panel 0
+          min: -0.453141, -0.3, 0.033
+          max: -0.296859, -0.15, 0.047
+          color: '#426E6E'
+          yaw: 11.30993
+          pitch: 11.81535
+        - label: lower left fold bound rolled seam 0
+          min: -0.453141, -0.173, 0.036
+          max: -0.296859, -0.157, 0.052
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 11.30993
+          pitch: 11.81535
+        - label: lower left fold cloth panel 1
+          min: -0.300135, -0.285, 0.0445
+          max: -0.149865, -0.135, 0.0585
+          color: '#426E6E'
+          pitch: -3.43363
+        - label: lower left fold bound rolled seam 1
+          min: -0.300135, -0.158, 0.0475
+          max: -0.149865, -0.142, 0.0635
+          color: '#264B4B'
+          shape: CylinderX
+          pitch: -3.43363
+        - label: lower left fold cloth panel 2
+          min: -0.150208, -0.29, 0.0425
+          max: 0.000208, -0.14, 0.0565
+          color: '#426E6E'
+          yaw: -3.81407
+          pitch: 1.90493
+        - label: lower left fold bound rolled seam 2
+          min: -0.150208, -0.163, 0.0455
+          max: 0.000208, -0.147, 0.0615
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: -3.81407
+          pitch: 1.90493
+        - label: lower left fold cloth panel 3
+          min: -0.001162, -0.285, 0.037
+          max: 0.141162, -0.135, 0.051
+          color: '#426E6E'
+          yaw: 8.1301
+          pitch: -6.45483
+        - label: lower left fold bound rolled seam 3
+          min: -0.001162, -0.158, 0.04
+          max: 0.141162, -0.142, 0.056
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 8.1301
+          pitch: -6.45483
+        - label: middle worn flap cloth panel 0
+          min: -0.400419, -0.1925, 0.0515
+          max: -0.239581, -0.0175, 0.0655
+          color: '#649A9A'
+          yaw: -3.57633
+          pitch: 4.63607
+        - label: middle worn flap bound rolled seam 0
+          min: -0.400419, -0.043, 0.0545
+          max: -0.239581, -0.027, 0.0705
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: -3.57633
+          pitch: 4.63607
+        - label: middle worn flap cloth panel 1
+          min: -0.24, -0.1975, 0.058
+          max: 0.09, -0.0225, 0.072
+          color: '#649A9A'
+        - label: middle worn flap bound rolled seam 1
+          min: -0.24, -0.048, 0.061
+          max: -0.075, -0.032, 0.077
+          color: '#264B4B'
+          shape: CylinderX
+        - label: middle worn flap bound rolled seam 2
+          min: -0.075, -0.048, 0.061
+          max: 0.09, -0.032, 0.077
+          color: '#264B4B'
+          shape: CylinderX
+        - label: middle worn flap cloth panel 3
+          min: 0.089012, -0.1925, 0.046
+          max: 0.260988, -0.0175, 0.06
+          color: '#649A9A'
+          yaw: 3.36646
+          pitch: -8.02202
+        - label: middle worn flap bound rolled seam 3
+          min: 0.089012, -0.043, 0.049
+          max: 0.260988, -0.027, 0.065
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 3.36646
+          pitch: -8.02202
+        - label: middle worn flap cloth panel 4
+          min: 0.256162, -0.2125, 0.0275
+          max: 0.433838, -0.0375, 0.0415
+          color: '#649A9A'
+          yaw: -16.38954
+          pitch: -4.19589
+        - label: middle worn flap bound rolled seam 4
+          min: 0.256162, -0.063, 0.0305
+          max: 0.433838, -0.047, 0.0465
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: -16.38954
+          pitch: -4.19589
+        - label: left torn sleeve cloth panel 0
+          min: -0.497202, -0.258, 0.0355
+          max: -0.332798, -0.142, 0.0495
+          color: '#264B4B'
+          yaw: 79.38034
+          pitch: 8.04197
+        - label: left torn sleeve bound rolled seam 0
+          min: -0.450802, -0.208, 0.0385
+          max: -0.286398, -0.192, 0.0545
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 79.38034
+          pitch: 8.04197
+        - label: left torn sleeve cloth panel 1
+          min: -0.477243, -0.1055, 0.065
+          max: -0.327757, 0.0105, 0.079
+          color: '#264B4B'
+          yaw: 91.97493
+          pitch: 13.93527
+        - label: left torn sleeve bound rolled seam 1
+          min: -0.430843, -0.0555, 0.068
+          max: -0.281357, -0.0395, 0.084
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 91.97493
+          pitch: 13.93527
+        - label: left torn sleeve cloth panel 2
+          min: -0.437918, 0.0205, 0.064
+          max: -0.307082, 0.1365, 0.078
+          color: '#264B4B'
+          yaw: 58.7223
+          pitch: -16.88433
+        - label: left torn sleeve bound rolled seam 2
+          min: -0.391518, 0.0705, 0.067
+          max: -0.260682, 0.0865, 0.083
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 58.7223
+          pitch: -16.88433
+        - label: left torn sleeve cloth panel 3
+          min: -0.343596, 0.0895, 0.0565
+          max: -0.236404, 0.2055, 0.0705
+          color: '#264B4B'
+          yaw: 17.22344
+          pitch: 12.39027
+        - label: left torn sleeve bound rolled seam 3
+          min: -0.343596, 0.1859, 0.0595
+          max: -0.236404, 0.2019, 0.0755
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 17.22344
+          pitch: 12.39027
+        - label: right curled sleeve cloth panel 0
+          min: 0.310058, -0.251, 0.032
+          max: 0.499942, -0.129, 0.046
+          color: '#426E6E'
+          yaw: 105.52411
+          pitch: 10.31481
+        - label: right curled sleeve bound rolled seam 0
+          min: 0.358858, -0.198, 0.035
+          max: 0.548742, -0.182, 0.051
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 105.52411
+          pitch: 10.31481
+        - label: right curled sleeve cloth panel 1
+          min: 0.305334, -0.077, 0.0525
+          max: 0.474666, 0.045, 0.0665
+          color: '#426E6E'
+          yaw: 83.21103
+          pitch: 2.36923
+        - label: right curled sleeve bound rolled seam 1
+          min: 0.354134, -0.024, 0.0555
+          max: 0.523466, -0.008, 0.0715
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 83.21103
+          pitch: 2.36923
+        - label: right curled sleeve cloth panel 2
+          min: 0.30871, 0.092, 0.07
+          max: 0.48129, 0.214, 0.084
+          color: '#426E6E'
+          yaw: 93.36646
+          pitch: 9.33712
+        - label: right curled sleeve bound rolled seam 2
+          min: 0.35751, 0.145, 0.073
+          max: 0.53009, 0.161, 0.089
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 93.36646
+          pitch: 9.33712
+        - label: back ripped seam cloth panel 0
+          min: -0.260243, 0.137, 0.0625
+          max: -0.084757, 0.196, 0.0765
+          color: '#649A9A'
+          yaw: 2.29061
+          pitch: -3.59385
+        - label: back ripped seam bound rolled seam 0
+          min: -0.260243, 0.1821, 0.0655
+          max: -0.084757, 0.1981, 0.0815
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 2.29061
+          pitch: -3.59385
+        - label: back ripped seam cloth panel 1
+          min: -0.086067, 0.153, 0.0635
+          max: 0.101067, 0.212, 0.0775
+          color: '#649A9A'
+          yaw: 7.69605
+          pitch: 3.98349
+        - label: back ripped seam bound rolled seam 1
+          min: -0.086067, 0.1981, 0.0665
+          max: 0.101067, 0.2141, 0.0825
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 7.69605
+          pitch: 3.98349
+        - label: back ripped seam cloth panel 2
+          min: 0.099759, 0.1705, 0.074
+          max: 0.270241, 0.2295, 0.088
+          color: '#649A9A'
+          yaw: 3.36646
+          pitch: 2.68964
+        - label: back ripped seam bound rolled seam 2
+          min: 0.099759, 0.2156, 0.077
+          max: 0.270241, 0.2316, 0.093
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 3.36646
+          pitch: 2.68964
+        - label: back ripped seam cloth panel 3
+          min: 0.2677, 0.192, 0.081
+          max: 0.3923, 0.251, 0.095
+          color: '#649A9A'
+          yaw: 15.37625
+          pitch: 2.76011
+        - label: back ripped seam bound rolled seam 3
+          min: 0.2677, 0.2371, 0.084
+          max: 0.3923, 0.2531, 0.1
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: 15.37625
+          pitch: 2.76011
+        - label: inner back fold cloth panel 0
+          min: -0.120106, 0.0585, 0.0375
+          max: 0.080106, 0.1135, 0.0515
+          color: '#264B4B'
+          yaw: -1.71836
+          pitch: 2.00363
+        - label: inner back fold bound rolled seam 0
+          min: -0.120106, 0.1, 0.0405
+          max: 0.080106, 0.116, 0.0565
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: -1.71836
+          pitch: 2.00363
+        - label: inner back fold cloth panel 1
+          min: 0.07997, 0.054, 0.039
+          max: 0.29003, 0.109, 0.053
+          color: '#264B4B'
+          yaw: -0.81846
+          pitch: -1.0911
+        - label: inner back fold bound rolled seam 1
+          min: 0.07997, 0.0955, 0.042
+          max: 0.29003, 0.1115, 0.058
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: -0.81846
+          pitch: -1.0911
+        - label: inner back fold cloth panel 2
+          min: 0.288864, 0.0465, 0.0465
+          max: 0.401136, 0.1015, 0.0605
+          color: '#264B4B'
+          yaw: -6.22583
+          pitch: 9.74316
+        - label: inner back fold bound rolled seam 2
+          min: 0.288864, 0.088, 0.0495
+          max: 0.401136, 0.104, 0.0655
+          color: '#264B4B'
+          shape: CylinderX
+          yaw: -6.22583
+          pitch: 9.74316
+        - label: flat cloth marking patch
+          min: -0.1425, -0.197, 0.059
+          max: 0.1345, -0.025, 0.071
+          color: '#649A9A'
+        - label: original faded cross on lower bag flap
+          min: -0.129, -0.189, 0.0705
+          max: 0.121, -0.033, 0.0735
+          color: '#FFFFFF'
+          surface: CMU3DMedicalSmallCloudArt14
+          surfaceAxis: XY
+        - label: tucked fabric crease 0
+          min: -0.351231, -0.2035, 0.055
+          max: -0.268769, -0.1765, 0.065
+          color: '#99BDBD'
+          yaw: -14.03624
+        - label: tucked fabric crease 1
+          min: 0.195757, -0.1735, 0.0355
+          max: 0.304243, -0.1465, 0.0455
+          color: '#99BDBD'
+          yaw: -21.80141
+          pitch: -6.88242
+        - label: tucked fabric crease 2
+          min: 0.323545, 0.1815, 0.08
+          max: 0.396455, 0.2085, 0.09
+          color: '#99BDBD'
+          yaw: 74.0546
+          pitch: 3.14491
+        - label: tucked fabric crease 3
+          min: -0.365598, 0.0715, 0.0645
+          max: -0.314402, 0.0985, 0.0745
+          color: '#99BDBD'
+          yaw: 36.8699
+          pitch: -12.40742
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRMCVialBoxFullMedicalSmallCloud
+  label: Full six-vial storage box
+  status: draft
+  sourcePrototypes:
+  - RMCVialBoxFull
+  referencePrototype: RMCVialBoxFull
+  referenceRsi: /Textures/_RMC14/Objects/Storage/vial_box.rsi
+  referenceState: vialbox
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Default StorageFill creates six RMCVial items. ItemCounter composite=true and hideStackVisualsWhenClosed=false
+    keep all six source vial layers visible, including with the UI closed. Six distinct glass/capped volumes sit in
+    real divided pockets. Full static default is exact-prototype art, but live counts, reordered vial identities,
+    emptying and refilling remain unsupported; no static empty-box substitution.
+  parts:
+  - label: bottom storage shell
+    min: -0.25, -0.172, 0.0005
+    max: 0.25, 0.172, 0.0435
+    color: '#8C8A84'
+  - label: left side shell
+    min: -0.2495, -0.172, 0.022
+    max: -0.2025, 0.172, 0.202
+    color: '#8C8A84'
+  - label: right side shell
+    min: 0.2025, -0.172, 0.022
+    max: 0.2495, 0.172, 0.202
+    color: '#8C8A84'
+  - label: front labeled rim
+    min: -0.2285, -0.1715, 0.0215
+    max: 0.2285, -0.1225, 0.1685
+    color: '#B3AFA8'
+  - label: rear shell
+    min: -0.228, 0.122, 0.022
+    max: 0.228, 0.172, 0.168
+    color: '#B3AFA8'
+  - label: recessed green insert
+    min: -0.2025, -0.119, 0.047
+    max: 0.2025, 0.119, 0.087
+    color: '#408C58'
+  - label: green insert longitudinal divider -0.205
+    min: -0.215, -0.127, 0.076
+    max: -0.195, 0.127, 0.196
+    color: '#408C58'
+  - label: green insert longitudinal divider 0
+    min: -0.01, -0.127, 0.076
+    max: 0.01, 0.127, 0.196
+    color: '#408C58'
+  - label: green insert longitudinal divider 0.205
+    min: 0.195, -0.127, 0.076
+    max: 0.215, 0.127, 0.196
+    color: '#408C58'
+  - label: green insert cross divider -0.124
+    min: -0.201, -0.1325, 0.076
+    max: 0.201, -0.1155, 0.196
+    color: '#408C58'
+  - label: green insert cross divider -0.041
+    min: -0.201, -0.0495, 0.076
+    max: 0.201, -0.0325, 0.196
+    color: '#408C58'
+  - label: green insert cross divider 0.041
+    min: -0.201, 0.0325, 0.076
+    max: 0.201, 0.0495, 0.196
+    color: '#408C58'
+  - label: green insert cross divider 0.124
+    min: -0.201, 0.1155, 0.076
+    max: 0.201, 0.1325, 0.196
+    color: '#408C58'
+  - label: original vial box lower control markings
+    min: -0.203, -0.174, 0.041
+    max: 0.203, -0.17, 0.135
+    color: '#FFFFFF'
+    surface: CMU3DMedicalSmallCloudArt15
+    surfaceAxis: XZ
+  - label: vial 1 glass body
+    min: -0.137, 0.052, 0.088
+    max: -0.071, 0.112, 0.224
+    color: '#87ACD1AA'
+    shape: CylinderZ
+  - label: vial 1 base
+    min: -0.136, 0.0525, 0.082
+    max: -0.072, 0.1115, 0.102
+    color: '#87ACD1'
+    shape: CylinderZ
+  - label: vial 1 colored cap
+    min: -0.141, 0.048, 0.2195
+    max: -0.067, 0.116, 0.2425
+    color: '#723500'
+    shape: CylinderZ
+  - label: vial 2 glass body
+    min: 0.071, 0.052, 0.088
+    max: 0.137, 0.112, 0.224
+    color: '#87ACD1AA'
+    shape: CylinderZ
+  - label: vial 2 base
+    min: 0.072, 0.0525, 0.082
+    max: 0.136, 0.1115, 0.102
+    color: '#87ACD1'
+    shape: CylinderZ
+  - label: vial 2 colored cap
+    min: 0.067, 0.048, 0.2195
+    max: 0.141, 0.116, 0.2425
+    color: '#723500'
+    shape: CylinderZ
+  - label: vial 3 glass body
+    min: -0.137, -0.03, 0.088
+    max: -0.071, 0.03, 0.224
+    color: '#87ACD1AA'
+    shape: CylinderZ
+  - label: vial 3 base
+    min: -0.136, -0.0295, 0.082
+    max: -0.072, 0.0295, 0.102
+    color: '#87ACD1'
+    shape: CylinderZ
+  - label: vial 3 colored cap
+    min: -0.141, -0.034, 0.2195
+    max: -0.067, 0.034, 0.2425
+    color: '#3B4EB0'
+    shape: CylinderZ
+  - label: vial 4 glass body
+    min: 0.071, -0.03, 0.088
+    max: 0.137, 0.03, 0.224
+    color: '#87ACD1AA'
+    shape: CylinderZ
+  - label: vial 4 base
+    min: 0.072, -0.0295, 0.082
+    max: 0.136, 0.0295, 0.102
+    color: '#87ACD1'
+    shape: CylinderZ
+  - label: vial 4 colored cap
+    min: 0.067, -0.034, 0.2195
+    max: 0.141, 0.034, 0.2425
+    color: '#3B4EB0'
+    shape: CylinderZ
+  - label: vial 5 glass body
+    min: -0.137, -0.112, 0.088
+    max: -0.071, -0.052, 0.224
+    color: '#87ACD1AA'
+    shape: CylinderZ
+  - label: vial 5 base
+    min: -0.136, -0.1115, 0.082
+    max: -0.072, -0.0525, 0.102
+    color: '#87ACD1'
+    shape: CylinderZ
+  - label: vial 5 colored cap
+    min: -0.141, -0.116, 0.2195
+    max: -0.067, -0.048, 0.2425
+    color: '#723500'
+    shape: CylinderZ
+  - label: vial 6 glass body
+    min: 0.071, -0.112, 0.088
+    max: 0.137, -0.052, 0.224
+    color: '#87ACD1AA'
+    shape: CylinderZ
+  - label: vial 6 base
+    min: 0.072, -0.1115, 0.082
+    max: 0.136, -0.0525, 0.102
+    color: '#87ACD1'
+    shape: CylinderZ
+  - label: vial 6 colored cap
+    min: 0.067, -0.116, 0.2195
+    max: 0.141, -0.048, 0.2425
+    color: '#723500'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DRMCVialBoxFullMedicalSmallCloudEmptyStudy
+  label: Empty vial box pocket study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCVialBoxFull
+  referenceRsi: /Textures/_RMC14/Objects/Storage/vial_box.rsi
+  referenceState: vialbox
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound empty study only. Six real recessed pockets and original printed controls, not the full prototype
+    default. Dynamic count selection is unsupported.
+  parts:
+  - label: bottom storage shell
+    min: -0.25, -0.172, 0.0005
+    max: 0.25, 0.172, 0.0435
+    color: '#8C8A84'
+  - label: left side shell
+    min: -0.2495, -0.172, 0.022
+    max: -0.2025, 0.172, 0.202
+    color: '#8C8A84'
+  - label: right side shell
+    min: 0.2025, -0.172, 0.022
+    max: 0.2495, 0.172, 0.202
+    color: '#8C8A84'
+  - label: front labeled rim
+    min: -0.2285, -0.1715, 0.0215
+    max: 0.2285, -0.1225, 0.1685
+    color: '#B3AFA8'
+  - label: rear shell
+    min: -0.228, 0.122, 0.022
+    max: 0.228, 0.172, 0.168
+    color: '#B3AFA8'
+  - label: recessed green insert
+    min: -0.2025, -0.119, 0.047
+    max: 0.2025, 0.119, 0.087
+    color: '#408C58'
+  - label: green insert longitudinal divider -0.205
+    min: -0.215, -0.127, 0.076
+    max: -0.195, 0.127, 0.196
+    color: '#408C58'
+  - label: green insert longitudinal divider 0
+    min: -0.01, -0.127, 0.076
+    max: 0.01, 0.127, 0.196
+    color: '#408C58'
+  - label: green insert longitudinal divider 0.205
+    min: 0.195, -0.127, 0.076
+    max: 0.215, 0.127, 0.196
+    color: '#408C58'
+  - label: green insert cross divider -0.124
+    min: -0.201, -0.1325, 0.076
+    max: 0.201, -0.1155, 0.196
+    color: '#408C58'
+  - label: green insert cross divider -0.041
+    min: -0.201, -0.0495, 0.076
+    max: 0.201, -0.0325, 0.196
+    color: '#408C58'
+  - label: green insert cross divider 0.041
+    min: -0.201, 0.0325, 0.076
+    max: 0.201, 0.0495, 0.196
+    color: '#408C58'
+  - label: green insert cross divider 0.124
+    min: -0.201, 0.1155, 0.076
+    max: 0.201, 0.1325, 0.196
+    color: '#408C58'
+  - label: original vial box lower control markings
+    min: -0.203, -0.174, 0.041
+    max: 0.203, -0.17, 0.135
+    color: '#FFFFFF'
+    surface: CMU3DMedicalSmallCloudArt15
+    surfaceAxis: XZ

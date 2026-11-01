@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Window shutter motion · Garrison Redux</title><style>
+    :root {color-scheme:dark;font-family:system-ui,sans-serif;background:#0d171d;color:#dfe9e7}
+    body {max-width:1200px;margin:auto;padding:26px} h1{font-size:27px} p{color:#b4c6c7;line-height:1.6} a{color:#8ee1c8}
+    .controls{display:flex;gap:16px;flex-wrap:wrap;align-items:center;padding:20px;background:#192931;border-radius:9px}
+    label{display:flex;gap:8px;align-items:center} button,select{padding:8px 12px;background:#253a43;color:inherit;border:1px solid #48616a;border-radius:5px}
+    button{cursor:pointer} button:disabled{opacity:.5} input[type=range]{width:190px}
+    .views{display:grid;grid-template-columns:250px 1fr;gap:20px;margin-top:22px} figure{margin:0}
+    img{width:224px;height:224px;image-rendering:pixelated;background:#17262d} figcaption{color:#adc4c2;font-size:14px;margin:12px 0}
+    canvas{width:100%;height:540px;display:block;touch-action:none;border:1px solid #30484f;border-radius:7px} output{font-variant-numeric:tabular-nums}
+    #error{color:#ffb3a0;white-space:pre-wrap} .badge{color:#ffd092;font-size:13px;letter-spacing:.05em}
+    @media(max-width:700px){.views{grid-template-columns:1fr}canvas{height:390px}img{width:160px;height:160px}}
+  </style></head>
+<body><div class="badge">STABLE GARRISON REDUX · SOURCE AND 3D ANIMATION</div>
+<h1>Window shutters: opening and closing</h1>
+<p>Six source frames play, then the last frame holds until the one-second door animation finishes. Change the transition to restart it. Source facing and the freely rotating camera are independent.</p>
+<div class="controls">
+<label>State <select id="state"><option value="opening">Opening</option><option value="closing">Closing</option><option value="open">Open</option><option value="closed">Closed</option></select></label>
+<label>Source facing <select id="facing"><option value="0">South</option><option value="1">North</option><option value="2">East</option><option value="3">West</option></select></label>
+<button id="play" disabled>Play transition</button><button id="reset" disabled>Restart</button>
+<label>Time <input id="time" type="range" min="0" max="1" step=".001" value="0" aria-label="Shutter animation time"></label><output id="clock">0.000 s</output></div>
+<p id="frame" aria-live="polite">Loading source frames and geometry…</p><p id="error" role="alert" hidden></p>
+<div class="views"><figure><img id="source" alt="Original shutter sprite at the selected state, frame and facing"><figcaption>Original directional source sprite.</figcaption></figure>
+<figure><canvas id="model" tabindex="0" aria-label="Rotatable 3D window shutter. Drag or use arrow keys to orbit; scroll to zoom."></canvas><figcaption>Drag to rotate; scroll to zoom.</figcaption></figure></div>
+<p>Draft steel bands preserve the south-facing source shapes and colors. Height, unseen roll mechanics, reverse/side appearance and native gameplay interaction remain unfinished. This study follows the visual animation; gameplay changes passability on its separate 0.4 + 0.4 second schedule.</p>
+<p><a href="./">Redux map</a> · <a href="./?scene=../generated/shutter-animation-fixture.json">All transition poses</a> · <a href="../generated/shutter-animation.glb" download>Download animated GLB</a></p>
+<script type="module" src="./shutter-animation.js"></script></body></html>

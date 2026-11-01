@@ -16,7 +16,7 @@
   id: IASFSurvLarge
   displayName: IASF Survivors Large
   partyspawn: IASFSurvSpawnLarge
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -24,7 +24,7 @@
   weight: 25
   minplayers: 101
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 - type: partySpawn
@@ -45,7 +45,7 @@
   id: IASFSurvMedium
   displayName: IASF Survivors Medium
   partyspawn: IASFSurvSpawnMedium
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -53,7 +53,7 @@
   weight: 25
   minplayers: 51
   maxplayers: 99
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 - type: partySpawn
@@ -74,7 +74,7 @@
   id: IASFSurvSmall
   displayName: IASF Survivors Small
   partyspawn: IASFSurvSpawnSmall
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -82,5 +82,5 @@
   weight: 25
   minplayers: 25
   maxplayers: 50
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true

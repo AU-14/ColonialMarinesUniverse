@@ -162,7 +162,7 @@ public sealed partial class FighterClientSystem : EntitySystem
         if (_sensorOverlay != null)
             _sensorOverlay.Viewport = null;
         _display?.Orphan();
-        _display?.Dispose();
+        _display?.Release();
         _display = null;
         _parent = null;
         _currentSeat = null;

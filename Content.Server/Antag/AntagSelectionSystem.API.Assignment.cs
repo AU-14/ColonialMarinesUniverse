@@ -434,7 +434,8 @@ public sealed partial class AntagSelectionSystem
     /// Then attempts to ticket an existing antag slot to our player, forcing one if there are no open slots.
     /// You shouldn't be using this basically ever except for debug and admin stuff.
     /// </summary>
-    [Obsolete]
+    // CMU14: Admin verbs and AutoTraitor still select an available antag from the rule dynamically.
+    // [Obsolete]
     public void ForceMakeAntag<T>(ICommonSession player, EntProtoId defaultRule) where T : Component
     {
         var rule = ForceGetGameRuleEnt<T>(defaultRule);

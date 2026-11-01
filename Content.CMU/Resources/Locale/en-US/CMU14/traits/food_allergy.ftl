@@ -1,0 +1,11 @@
+cmu-trait-food-allergy-desc = You are allergic to this food. Eating anything made with it triggers a serious allergic reaction until treated with epinephrine. You spawn with an epinephrine injector and a tag noting your allergy.
+cmu-trait-food-allergy-nuts-name = Food Allergy: Nuts
+cmu-trait-food-allergy-fish-name = Food Allergy: Fish
+cmu-trait-food-allergy-dairy-name = Food Allergy: Dairy
+cmu-trait-food-allergy-eggs-name = Food Allergy: Eggs
+cmu-trait-food-allergy-random-name = Food Allergy: Random
+cmu-trait-food-allergy-random-desc = You are allergic to one of the foods in this section, picked at random. Eating anything made with it triggers a serious allergic reaction until treated with epinephrine. You spawn with an epinephrine injector and a tag noting your allergy.
+cmu-food-allergen-nuts = nuts
+cmu-food-allergen-fish = fish
+cmu-food-allergen-dairy = dairy
+cmu-food-allergen-eggs = eggs

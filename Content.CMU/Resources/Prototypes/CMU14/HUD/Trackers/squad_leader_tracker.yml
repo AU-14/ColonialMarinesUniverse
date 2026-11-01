@@ -1,0 +1,71 @@
+# Second, always-on squad leader tracker shown above the normal squad tracker for GOVFOR/OPFOR
+# squads. Its own category lets it show alongside the SquadTracker alert, which then defaults to
+# the fireteam leader. Driven by CMUSquadLeaderTrackerSystem.
+
+- type: alertCategory
+  id: CMUSquadLeaderTracker
+
+- type: alert
+  parent: SquadTracker
+  id: CMUSquadLeaderTracker
+  category: CMUSquadLeaderTracker
+  name: Squad Leader Tracker
+  description: Always tracks your Squad Leader.
+
+# ├──[ GOVFOR ]──────────────────────────────────────────────────────┤
+- type: alert
+  parent: SquadTrackerAlpha
+  id: CMUSquadLeaderTrackerAlpha
+  category: CMUSquadLeaderTracker
+  name: Squad Leader Tracker
+  description: Always tracks the Alpha Squad Leader.
+
+- type: alert
+  parent: SquadTrackerBravo
+  id: CMUSquadLeaderTrackerBravo
+  category: CMUSquadLeaderTracker
+  name: Squad Leader Tracker
+  description: Always tracks the Bravo Squad Leader.
+
+- type: alert
+  parent: SquadTrackerCharlie
+  id: CMUSquadLeaderTrackerCharlie
+  category: CMUSquadLeaderTracker
+  name: Squad Leader Tracker
+  description: Always tracks the Charlie Squad Leader.
+
+- type: alert
+  parent: SquadTrackerAuxiliary
+  id: CMUSquadLeaderTrackerAuxiliary
+  category: CMUSquadLeaderTracker
+  name: Squad Leader Tracker
+  description: Always tracks the Auxiliary Squad Leader.
+
+# ├──[ OPFOR ]───────────────────────────────────────────────────────┤
+- type: alert
+  parent: SquadTrackerSierra
+  id: CMUSquadLeaderTrackerSierra
+  category: CMUSquadLeaderTracker
+  name: Squad Leader Tracker
+  description: Always tracks the Sierra Squad Leader.
+
+- type: alert
+  parent: SquadTrackerTango
+  id: CMUSquadLeaderTrackerTango
+  category: CMUSquadLeaderTracker
+  name: Squad Leader Tracker
+  description: Always tracks the Tango Squad Leader.
+
+- type: alert
+  parent: SquadTrackerUniform
+  id: CMUSquadLeaderTrackerUniform
+  category: CMUSquadLeaderTracker
+  name: Squad Leader Tracker
+  description: Always tracks the Uniform Squad Leader.
+
+- type: alert
+  parent: SquadTrackerIntel
+  id: CMUSquadLeaderTrackerIntel
+  category: CMUSquadLeaderTracker
+  name: Squad Leader Tracker
+  description: Always tracks the Intel Squad Leader.

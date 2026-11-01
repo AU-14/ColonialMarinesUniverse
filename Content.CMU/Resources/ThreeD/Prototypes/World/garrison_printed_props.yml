@@ -1,0 +1,1136 @@
+# Printed structures and floor coverings; see SOURCES_SURFACES.md.
+- type: cmu3DModel
+  id: CMU3DPrintedAU14LandingSignStableColony
+  label: Garrison One welcome sign
+  sourcePrototypes:
+  - AU14LandingSignStableColony
+  status: draft
+  description: Original first display frame in a separate steel housing, with individual legs and ground feet. Upper
+    stand braces and side indicator follow the source. Printed panel dimensions use visible source pixels; flashing sequences
+    and changing display frames remain unfinished. Source artwork is sampled without repainting. Hidden structure, material
+    response and physical height remain inferred; dynamic animation and live appearance are unfinished.
+  referencePrototype: AU14LandingSignStableColony
+  referenceRsi: /Textures/CMU14/Structures/signs/stablesigns.rsi
+  referenceState: stable_welcome
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: steel stand leg
+    min: -0.63600, -0.09000, 0.00000
+    max: -0.56400, 0.09000, 1.84000
+    color: '#343A3B'
+  - label: wide ground foot
+    min: -0.67000, -0.16000, 0.00000
+    max: -0.53000, 0.16000, 0.05600
+    color: '#252B2D'
+  - label: steel stand leg
+    min: 0.57400, -0.09000, 0.00000
+    max: 0.64600, 0.09000, 1.84000
+    color: '#343A3B'
+  - label: wide ground foot
+    min: 0.54000, -0.16000, 0.00000
+    max: 0.68000, 0.16000, 0.05600
+    color: '#252B2D'
+  - label: rear sign housing
+    min: -0.79250, -0.07000, 0.39500
+    max: 0.85500, 0.09000, 1.51125
+    color: '#3A4545'
+  - label: original entrance display
+    min: -0.81250, -0.09300, 0.37500
+    max: 0.87500, -0.07100, 1.53125
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceAU14LandingSignStableColony
+    surfaceAxis: XZ
+  - label: upper stand cross brace
+    min: -0.60000, -0.04500, 1.65000
+    max: 0.65000, 0.04500, 1.68500
+    color: '#525C5C'
+  - label: upper stand cross brace
+    min: -0.60000, -0.04500, 1.81000
+    max: 0.65000, 0.04500, 1.84500
+    color: '#525C5C'
+  - label: side green indicator
+    min: 0.78000, -0.08000, 0.20500
+    max: 0.80500, -0.05000, 0.25000
+    color: '#486937'
+- type: cmu3DModel
+  id: CMU3DPrintedAU14LandingSignStableMilitary
+  label: Joint Base Schaefer entrance sign
+  sourcePrototypes:
+  - AU14LandingSignStableMilitary
+  status: draft
+  description: Original Schaefer lettering and UA emblem on a broad timber panel above a concrete plinth. The visible
+    60-pixel width is retained; the source collider is not mistaken for the complete sign silhouette. Source artwork
+    is sampled without repainting. Hidden structure, material response and physical height remain inferred; dynamic animation
+    and live appearance are unfinished.
+  referencePrototype: AU14LandingSignStableMilitary
+  referenceRsi: /Textures/CMU14/Structures/signs/schaefer.rsi
+  referenceState: schaefer_clean
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: concrete sign plinth
+    min: -0.94000, -0.24000, 0.00000
+    max: 0.94000, 0.24000, 0.21900
+    color: '#777B70'
+  - label: wooden base sign panel
+    min: -0.93750, -0.07000, 0.21900
+    max: 0.93750, 0.07000, 0.87600
+    color: '#573B2C'
+  - label: joint base Schaefer graphic
+    min: -0.93750, -0.08600, 0.21900
+    max: 0.93750, -0.07100, 0.87525
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceAU14LandingSignStableMilitary
+    surfaceAxis: XZ
+  - label: timber top cap
+    min: -0.96000, -0.08800, 0.87500
+    max: 0.96000, 0.08800, 0.91000
+    color: '#654537'
+- type: cmu3DModel
+  id: CMU3DPrintedAU14LandingSignStableSpacePort
+  label: Albacetire spaceport sign
+  sourcePrototypes:
+  - AU14LandingSignStableSpacePort
+  status: draft
+  description: Original first display frame in a separate steel housing, with individual legs and ground feet. Two red
+    beacons sit on the upper stand posts. Printed panel dimensions use visible source pixels; flashing sequences and
+    changing display frames remain unfinished. Source artwork is sampled without repainting. Hidden structure, material
+    response and physical height remain inferred; dynamic animation and live appearance are unfinished.
+  referencePrototype: AU14LandingSignStableSpacePort
+  referenceRsi: /Textures/CMU14/Structures/signs/stablesigns.rsi
+  referenceState: stable_spaceport
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: steel stand leg
+    min: -0.48600, -0.09000, 0.00000
+    max: -0.41400, 0.09000, 1.49000
+    color: '#343A3B'
+  - label: wide ground foot
+    min: -0.52000, -0.16000, 0.00000
+    max: -0.38000, 0.16000, 0.05600
+    color: '#252B2D'
+  - label: steel stand leg
+    min: 0.42400, -0.09000, 0.00000
+    max: 0.49600, 0.09000, 1.49000
+    color: '#343A3B'
+  - label: wide ground foot
+    min: 0.39000, -0.16000, 0.00000
+    max: 0.53000, 0.16000, 0.05600
+    color: '#252B2D'
+  - label: rear sign housing
+    min: -0.66750, -0.07000, 0.39500
+    max: 0.73000, 0.09000, 1.23000
+    color: '#3A4545'
+  - label: original entrance display
+    min: -0.68750, -0.09300, 0.37500
+    max: 0.75000, -0.07100, 1.25000
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceAU14LandingSignStableSpacePort
+    surfaceAxis: XZ
+  - label: beacon dark socket
+    min: -0.50000, -0.05500, 1.45000
+    max: -0.40000, 0.05500, 1.49000
+    color: '#202529'
+  - label: red beacon lens
+    min: -0.47600, -0.03400, 1.48000
+    max: -0.42400, 0.03400, 1.65000
+    color: '#B32632'
+  - label: pale beacon glint
+    min: -0.46300, -0.03800, 1.51000
+    max: -0.44100, -0.03400, 1.63000
+    color: '#FFB0B6'
+  - label: beacon dark socket
+    min: 0.41000, -0.05500, 1.45000
+    max: 0.51000, 0.05500, 1.49000
+    color: '#202529'
+  - label: red beacon lens
+    min: 0.43400, -0.03400, 1.48000
+    max: 0.48600, 0.03400, 1.65000
+    color: '#B32632'
+  - label: pale beacon glint
+    min: 0.44700, -0.03800, 1.51000
+    max: 0.46900, -0.03400, 1.63000
+    color: '#FFB0B6'
+- type: cmu3DModel
+  id: CMU3DPrintedAU14UADeskFlag
+  label: UA desk flag
+  sourcePrototypes:
+  - AU14UADeskFlag
+  status: draft
+  description: Separate weighted base and pole support the narrow draped flag. The cloth crop omits the original 2D pole;
+    insignia and transparent cloth outline remain exact. Uses an authored counter or table beneath the actual saved pivot.
+    Source artwork is sampled without repainting. Hidden structure, material response and physical height remain inferred;
+    dynamic animation and live appearance are unfinished.
+  referencePrototype: AU14UADeskFlag
+  referenceRsi: /Textures/CMU14/Items/DeskFlags/uadeskflag.rsi
+  referenceState: uaflag
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: weighted rounded desktop base
+    min: -0.05200, -0.04500, 0.00000
+    max: 0.04600, 0.04500, 0.03500
+    color: '#22282D'
+    shape: Ellipsoid
+  - label: flag pole
+    min: -0.01800, -0.00900, 0.01800
+    max: -0.00500, 0.00900, 0.63600
+    color: '#444A4D'
+  - label: draped printed flag
+    min: -0.00300, -0.00900, 0.04400
+    max: 0.18450, 0.00400, 0.60650
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceAU14UADeskFlag
+    surfaceAxis: XZ
+  - label: pole top finial
+    min: -0.02000, -0.01100, 0.62800
+    max: -0.00300, 0.01100, 0.64700
+    color: '#3C3430'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DPrintedAU14USCMDeskFlag
+  label: USCM desk flag
+  sourcePrototypes:
+  - AU14USCMDeskFlag
+  status: draft
+  description: Separate weighted base and pole support the narrow draped flag. The cloth crop omits the original 2D pole;
+    insignia and transparent cloth outline remain exact. Uses an authored counter or table beneath the actual saved pivot.
+    Source artwork is sampled without repainting. Hidden structure, material response and physical height remain inferred;
+    dynamic animation and live appearance are unfinished.
+  referencePrototype: AU14USCMDeskFlag
+  referenceRsi: /Textures/CMU14/Items/DeskFlags/uscmdeskflag.rsi
+  referenceState: uscmflag
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: weighted rounded desktop base
+    min: -0.05200, -0.04500, 0.00000
+    max: 0.04600, 0.04500, 0.03500
+    color: '#22282D'
+    shape: Ellipsoid
+  - label: flag pole
+    min: -0.01800, -0.00900, 0.01800
+    max: -0.00500, 0.00900, 0.63600
+    color: '#444A4D'
+  - label: draped printed flag
+    min: -0.00300, -0.00900, 0.04400
+    max: 0.18450, 0.00400, 0.60650
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceAU14USCMDeskFlag
+    surfaceAxis: XZ
+  - label: pole top finial
+    min: -0.02000, -0.01100, 0.62800
+    max: -0.00300, 0.01100, 0.64700
+    color: '#3C3430'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DPrintedAU14WallFlagCLF
+  label: CLF hanging wall flag
+  sourcePrototypes:
+  - AU14WallFlagCLF
+  status: draft
+  description: Printed cloth with its original folds and insignia, a shallow volume, upper rod and clasps. The 96-pixel
+    source canvas places the visible cloth half a tile left of the saved pivot; that along-wall anchor is retained. Wall
+    normals and inner-wall reflection preserve readable lettering. Source artwork is sampled without repainting. Hidden
+    structure, material response and physical height remain inferred; dynamic animation and live appearance are unfinished.
+  referencePrototype: AU14WallFlagCLF
+  referenceRsi: /Textures/CMU14/Structures/wallflags.rsi
+  referenceState: clfflag
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: hanging printed cloth
+    min: -1.12500, -0.55100, 1.42750
+    max: 0.12500, -0.53700, 2.24000
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceAU14WallFlagCLF
+    surfaceAxis: XZ
+  - label: upper hanging rod
+    min: -1.14000, -0.54800, 2.24000
+    max: 0.14000, -0.50800, 2.26400
+    color: '#333C3D'
+  - label: wall clasp
+    min: -1.08500, -0.55200, 2.22600
+    max: -1.05900, -0.49800, 2.27000
+    color: '#6B706D'
+  - label: wall clasp
+    min: 0.06500, -0.55200, 2.22600
+    max: 0.09100, -0.49800, 2.27000
+    color: '#6B706D'
+- type: cmu3DModel
+  id: CMU3DPrintedAU14WallFlagTWE
+  label: TWE hanging wall flag
+  sourcePrototypes:
+  - AU14WallFlagTWE
+  status: draft
+  description: Printed cloth with its original folds and insignia, a shallow volume, upper rod and clasps. The 96-pixel
+    source canvas places the visible cloth half a tile left of the saved pivot; that along-wall anchor is retained. Wall
+    normals and inner-wall reflection preserve readable lettering. Source artwork is sampled without repainting. Hidden
+    structure, material response and physical height remain inferred; dynamic animation and live appearance are unfinished.
+  referencePrototype: AU14WallFlagTWE
+  referenceRsi: /Textures/CMU14/Structures/wallflags.rsi
+  referenceState: tweflag
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: hanging printed cloth
+    min: -1.12500, -0.55100, 1.42750
+    max: 0.12500, -0.53700, 2.24000
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceAU14WallFlagTWE
+    surfaceAxis: XZ
+  - label: upper hanging rod
+    min: -1.14000, -0.54800, 2.24000
+    max: 0.14000, -0.50800, 2.26400
+    color: '#333C3D'
+  - label: wall clasp
+    min: -1.08500, -0.55200, 2.22600
+    max: -1.05900, -0.49800, 2.27000
+    color: '#6B706D'
+  - label: wall clasp
+    min: 0.06500, -0.55200, 2.22600
+    max: 0.09100, -0.49800, 2.27000
+    color: '#6B706D'
+- type: cmu3DModel
+  id: CMU3DPrintedAU14WallFlagUA
+  label: UA hanging wall flag
+  sourcePrototypes:
+  - AU14WallFlagUA
+  - captureadminobjective
+  - capturedesertobjective
+  - capturemineobjective
+  - captureobjectiveneroidgeothermalgenerators
+  - captureobjectiveneroidspaceport
+  - captureuaflagobjective
+  status: draft
+  description: Printed cloth with its original folds and insignia, a shallow volume, upper rod and clasps. The 96-pixel
+    source canvas places the visible cloth half a tile left of the saved pivot; that along-wall anchor is retained. Wall
+    normals and inner-wall reflection preserve readable lettering. Source artwork is sampled without repainting. Hidden
+    structure, material response and physical height remain inferred; dynamic animation and live appearance are unfinished.
+  referencePrototype: AU14WallFlagUA
+  referenceRsi: /Textures/CMU14/Structures/wallflags.rsi
+  referenceState: uaflag
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: hanging printed cloth
+    min: -1.12500, -0.55100, 1.42750
+    max: 0.12500, -0.53700, 2.24000
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceAU14WallFlagUA
+    surfaceAxis: XZ
+  - label: upper hanging rod
+    min: -1.14000, -0.54800, 2.24000
+    max: 0.14000, -0.50800, 2.26400
+    color: '#333C3D'
+  - label: wall clasp
+    min: -1.08500, -0.55200, 2.22600
+    max: -1.05900, -0.49800, 2.27000
+    color: '#6B706D'
+  - label: wall clasp
+    min: 0.06500, -0.55200, 2.22600
+    max: 0.09100, -0.49800, 2.27000
+    color: '#6B706D'
+- type: cmu3DModel
+  id: CMU3DPrintedDecorSignMines
+  label: Triangular mine warning
+  sourcePrototypes:
+  - DecorSignMines
+  status: draft
+  description: Separate timber post supports the exact triangular warning graphic; transparent corners remain open from
+    both sides. Physical entity rotation is retained for the saved turned sign despite its billboard sprite. Source artwork
+    is sampled without repainting. Hidden structure, material response and physical height remain inferred; dynamic animation
+    and live appearance are unfinished.
+  referencePrototype: DecorSignMines
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: mine_sign
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: weathered timber warning post
+    min: -0.03800, -0.04000, 0.00000
+    max: 0.05400, 0.04400, 0.82000
+    color: '#554130'
+  - label: dark split timber groove
+    min: 0.00700, -0.04600, 0.06000
+    max: 0.02400, -0.04000, 0.29000
+    color: '#2C251E'
+  - label: triangular printed mine warning
+    min: -0.40625, -0.06800, 0.25500
+    max: 0.37500, -0.04500, 0.72375
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceDecorSignMines
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBeige1
+  label: Beige1 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBeige1
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBeige1
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/beige_carpet.rsi
+  referenceState: bcarpet01
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBeige1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBeige2
+  label: Beige2 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBeige2
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBeige2
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/beige_carpet.rsi
+  referenceState: bcarpet02
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBeige2
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBeige3
+  label: Beige3 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBeige3
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBeige3
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/beige_carpet.rsi
+  referenceState: bcarpet03
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBeige3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBeige4
+  label: Beige4 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBeige4
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBeige4
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/beige_carpet.rsi
+  referenceState: bcarpet04
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBeige4
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBeige5
+  label: Beige5 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBeige5
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBeige5
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/beige_carpet.rsi
+  referenceState: bcarpet05
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBeige5
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBeige6
+  label: Beige6 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBeige6
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBeige6
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/beige_carpet.rsi
+  referenceState: bcarpet06
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBeige6
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBeige7
+  label: Beige7 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBeige7
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBeige7
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/beige_carpet.rsi
+  referenceState: bcarpet07
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBeige7
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBeige8
+  label: Beige8 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBeige8
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBeige8
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/beige_carpet.rsi
+  referenceState: bcarpet08
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBeige8
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBeige9
+  label: Beige9 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBeige9
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBeige9
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/beige_carpet.rsi
+  referenceState: bcarpet09
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBeige9
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBlack1
+  label: Black1 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBlack1
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBlack1
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/black_carpet.rsi
+  referenceState: bcarpet01
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBlack1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBlack2
+  label: Black2 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBlack2
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBlack2
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/black_carpet.rsi
+  referenceState: bcarpet02
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBlack2
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBlack3
+  label: Black3 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBlack3
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBlack3
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/black_carpet.rsi
+  referenceState: bcarpet03
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBlack3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBlack4
+  label: Black4 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBlack4
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBlack4
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/black_carpet.rsi
+  referenceState: bcarpet04
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBlack4
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBlack5
+  label: Black5 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBlack5
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBlack5
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/black_carpet.rsi
+  referenceState: bcarpet05
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBlack5
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBlack6
+  label: Black6 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBlack6
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBlack6
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/black_carpet.rsi
+  referenceState: bcarpet06
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBlack6
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBlack7
+  label: Black7 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBlack7
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBlack7
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/black_carpet.rsi
+  referenceState: bcarpet07
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBlack7
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBlack8
+  label: Black8 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBlack8
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBlack8
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/black_carpet.rsi
+  referenceState: bcarpet08
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBlack8
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetBlack9
+  label: Black9 woven carpet
+  sourcePrototypes:
+  - RMCCarpetBlack9
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetBlack9
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/black_carpet.rsi
+  referenceState: bcarpet09
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetBlack9
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetGreyBlue1
+  label: GreyBlue1 woven carpet
+  sourcePrototypes:
+  - RMCCarpetGreyBlue1
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetGreyBlue1
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/grey_blue_carpet.rsi
+  referenceState: bcarpet01
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetGreyBlue1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetGreyBlue2
+  label: GreyBlue2 woven carpet
+  sourcePrototypes:
+  - RMCCarpetGreyBlue2
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetGreyBlue2
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/grey_blue_carpet.rsi
+  referenceState: bcarpet02
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetGreyBlue2
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetGreyBlue3
+  label: GreyBlue3 woven carpet
+  sourcePrototypes:
+  - RMCCarpetGreyBlue3
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetGreyBlue3
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/grey_blue_carpet.rsi
+  referenceState: bcarpet03
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetGreyBlue3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetGreyBlue5
+  label: GreyBlue5 woven carpet
+  sourcePrototypes:
+  - RMCCarpetGreyBlue5
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetGreyBlue5
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/grey_blue_carpet.rsi
+  referenceState: bcarpet05
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetGreyBlue5
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetGreyBlue6
+  label: GreyBlue6 woven carpet
+  sourcePrototypes:
+  - RMCCarpetGreyBlue6
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetGreyBlue6
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/grey_blue_carpet.rsi
+  referenceState: bcarpet06
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetGreyBlue6
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetGreyBlue7
+  label: GreyBlue7 woven carpet
+  sourcePrototypes:
+  - RMCCarpetGreyBlue7
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetGreyBlue7
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/grey_blue_carpet.rsi
+  referenceState: bcarpet07
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetGreyBlue7
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetGreyBlue8
+  label: GreyBlue8 woven carpet
+  sourcePrototypes:
+  - RMCCarpetGreyBlue8
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetGreyBlue8
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/grey_blue_carpet.rsi
+  referenceState: bcarpet08
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetGreyBlue8
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCCarpetGreyBlue9
+  label: GreyBlue9 woven carpet
+  sourcePrototypes:
+  - RMCCarpetGreyBlue9
+  status: draft
+  description: Twelve-millimetre-thick floor covering retaining the exact 32 by 32 weave, edge and corner pattern. Original
+    north is local +Y; the nine section states join at the saved tile boundaries. Source artwork is sampled without repainting.
+    Hidden structure, material response and physical height remain inferred; dynamic animation and live appearance are
+    unfinished.
+  referencePrototype: RMCCarpetGreyBlue9
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Carpets/grey_blue_carpet.rsi
+  referenceState: bcarpet09
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: woven carpet tile
+    min: -0.50000, -0.50000, 0.00200
+    max: 0.50000, 0.50000, 0.01400
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCCarpetGreyBlue9
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DPrintedRMCOverheadBillboardWallmount23
+  label: Green beer wall billboard
+  sourcePrototypes:
+  - RMCOverheadBillboardWallmount23
+  status: draft
+  description: Exact beer graphic on a shallow metal sign casing with two mounting lugs. The visible 46-pixel panel spans
+    1.4375 tiles, centered half a tile right of its saved anchor, matching the source horizontal offset. Sprite vertical
+    padding is not floor height. Source artwork is sampled without repainting. Hidden structure, material response and
+    physical height remain inferred; dynamic animation and live appearance are unfinished.
+  referencePrototype: RMCOverheadBillboardWallmount23
+  referenceRsi: /Textures/_RMC14/Structures/billboards.rsi
+  referenceState: billboard1_b
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: billboard rear casing
+    min: -0.20075, -0.54200, 1.98800
+    max: 1.20075, -0.48000, 2.70200
+    color: '#353936'
+  - label: original beer advertisement
+    min: -0.21875, -0.56000, 1.97000
+    max: 1.21875, -0.54300, 2.72000
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCOverheadBillboardWallmount23
+    surfaceAxis: XZ
+  - label: rear mounting lug
+    min: -0.09875, -0.49600, 2.07000
+    max: -0.05875, -0.46000, 2.62000
+    color: '#1D2421'
+  - label: rear mounting lug
+    min: 1.06875, -0.49600, 2.07000
+    max: 1.10875, -0.46000, 2.62000
+    color: '#1D2421'
+- type: cmu3DModel
+  id: CMU3DPrintedRMCOverheadSignNeonCafeAlt
+  label: CafeAlt neon sign
+  sourcePrototypes:
+  - RMCOverheadSignNeonCafeAlt
+  status: draft
+  description: First powered source frame retains exact lettering, frame outline and transparent gaps on a thin raised
+    sign. Metal standoffs attach it to the inspected adjacent wall face. The source horizontal padding/offset informs
+    along-wall position; vertical sprite padding does not lower the sign. Flicker, emissive bloom and light casting remain
+    unfinished. Source artwork is sampled without repainting. Hidden structure, material response and physical height
+    remain inferred; dynamic animation and live appearance are unfinished. The physical sign plane follows the inspected
+    east/west adjacent wall; an explicit quarter turn supplies the axis absent from the single-frame sprite.
+  referencePrototype: RMCOverheadSignNeonCafeAlt
+  referenceRsi: /Textures/_RMC14/Structures/overhead_neon_signs.rsi
+  referenceState: cafealt_on
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: lit source lettering and outline
+    min: -0.75000, -0.55000, 2.24000
+    max: 0.09375, -0.52600, 2.74000
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCOverheadSignNeonCafeAlt
+    surfaceAxis: XZ
+  - label: small wall standoff
+    min: -0.68500, -0.52700, 2.64000
+    max: -0.65300, -0.48700, 2.70500
+    color: '#363E40'
+  - label: small wall standoff
+    min: 0.01875, -0.52700, 2.64000
+    max: 0.05075, -0.48700, 2.70500
+    color: '#363E40'
+  yawOffset: -90
+- type: cmu3DModel
+  id: CMU3DPrintedRMCOverheadSignNeonHotel
+  label: Hotel neon sign
+  sourcePrototypes:
+  - RMCOverheadSignNeonHotel
+  status: draft
+  description: First powered source frame retains exact lettering, frame outline and transparent gaps on a thin raised
+    sign. Metal standoffs attach it to the inspected adjacent wall face. The source horizontal padding/offset informs
+    along-wall position; vertical sprite padding does not lower the sign. Flicker, emissive bloom and light casting remain
+    unfinished. Source artwork is sampled without repainting. Hidden structure, material response and physical height
+    remain inferred; dynamic animation and live appearance are unfinished. The physical sign plane follows the inspected
+    east/west adjacent wall; an explicit quarter turn supplies the axis absent from the single-frame sprite.
+  referencePrototype: RMCOverheadSignNeonHotel
+  referenceRsi: /Textures/_RMC14/Structures/overhead_neon_signs.rsi
+  referenceState: hotel_on
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: lit source lettering and outline
+    min: -0.75000, -0.55000, 2.24000
+    max: 0.34375, -0.52600, 2.74000
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCOverheadSignNeonHotel
+    surfaceAxis: XZ
+  - label: small wall standoff
+    min: -0.68500, -0.52700, 2.64000
+    max: -0.65300, -0.48700, 2.70500
+    color: '#363E40'
+  - label: small wall standoff
+    min: 0.26875, -0.52700, 2.64000
+    max: 0.30075, -0.48700, 2.70500
+    color: '#363E40'
+  yawOffset: -90
+- type: cmu3DModel
+  id: CMU3DPrintedRMCOverheadSignNeonJacks
+  label: Jacks neon sign
+  sourcePrototypes:
+  - RMCOverheadSignNeonJacks
+  status: draft
+  description: First powered source frame retains exact lettering, frame outline and transparent gaps on a thin raised
+    sign. Metal standoffs attach it to the inspected adjacent wall face. The source horizontal padding/offset informs
+    along-wall position; vertical sprite padding does not lower the sign. Flicker, emissive bloom and light casting remain
+    unfinished. Source artwork is sampled without repainting. Hidden structure, material response and physical height
+    remain inferred; dynamic animation and live appearance are unfinished.
+  referencePrototype: RMCOverheadSignNeonJacks
+  referenceRsi: /Textures/_RMC14/Structures/overhead_neon_signs.rsi
+  referenceState: jacksopen_on
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: lit source lettering and outline
+    min: -0.75000, -0.55000, 1.99000
+    max: 0.62500, -0.52600, 2.74000
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCOverheadSignNeonJacks
+    surfaceAxis: XZ
+  - label: small wall standoff
+    min: -0.68500, -0.52700, 2.64000
+    max: -0.65300, -0.48700, 2.70500
+    color: '#363E40'
+  - label: small wall standoff
+    min: 0.55000, -0.52700, 2.64000
+    max: 0.58200, -0.48700, 2.70500
+    color: '#363E40'
+- type: cmu3DModel
+  id: CMU3DPrintedRMCOverheadSignNeonOpen2
+  label: Open2 neon sign
+  sourcePrototypes:
+  - RMCOverheadSignNeonOpen2
+  status: draft
+  description: First powered source frame retains exact lettering, frame outline and transparent gaps on a thin raised
+    sign. Metal standoffs attach it to the inspected adjacent wall face. The source horizontal padding/offset informs
+    along-wall position; vertical sprite padding does not lower the sign. Flicker, emissive bloom and light casting remain
+    unfinished. Source artwork is sampled without repainting. Hidden structure, material response and physical height
+    remain inferred; dynamic animation and live appearance are unfinished. The physical sign plane follows the inspected
+    east/west adjacent wall; an explicit quarter turn supplies the axis absent from the single-frame sprite.
+  referencePrototype: RMCOverheadSignNeonOpen2
+  referenceRsi: /Textures/_RMC14/Structures/overhead_neon_signs.rsi
+  referenceState: open_on2
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: lit source lettering and outline
+    min: -0.18750, -0.55000, 2.24000
+    max: 0.75000, -0.52600, 2.74000
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCOverheadSignNeonOpen2
+    surfaceAxis: XZ
+  - label: small wall standoff
+    min: -0.12250, -0.52700, 2.64000
+    max: -0.09050, -0.48700, 2.70500
+    color: '#363E40'
+  - label: small wall standoff
+    min: 0.67500, -0.52700, 2.64000
+    max: 0.70700, -0.48700, 2.70500
+    color: '#363E40'
+  yawOffset: 90
+- type: cmu3DModel
+  id: CMU3DPrintedRMCSignRequisitions
+  label: Framed requisitions notice
+  sourcePrototypes:
+  - RMCSignRequisitions
+  status: draft
+  description: Source framed paper preserved on a wooden backing with readable asymmetric marks, mounted to the saved
+    hull-wall tile. Source artwork is sampled without repainting. Hidden structure, material response and physical height
+    remain inferred; dynamic animation and live appearance are unfinished. The back sits 0.006 tile beyond the inspected
+    prison hull armor ribs, keeping the whole notice readable.
+  referencePrototype: RMCSignRequisitions
+  referenceRsi: /Textures/_RMC14/Structures/decals.rsi
+  referenceState: roplaque
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: wooden notice backing
+    min: -0.42550, -0.60900, 1.58400
+    max: 0.42550, -0.56600, 2.21225
+    color: '#665241'
+  - label: printed framed requisitions notice
+    min: -0.43750, -0.62800, 1.57000
+    max: 0.43750, -0.61000, 2.22625
+    color: '#FFFFFF'
+    surface: CMU3DSurfaceRMCSignRequisitions
+    surfaceAxis: XZ

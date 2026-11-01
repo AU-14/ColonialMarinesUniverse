@@ -172,13 +172,13 @@ public sealed partial class DogtagsSystem : EntitySystem
     {
         if (tags.Comp.TagsTaken)
         {
-            _popup.PopupClient(Loc.GetString("rmc-dogtags-already-taken", ("target", wearer)), user);
+            _popup.PopupSelf(Loc.GetString("rmc-dogtags-already-taken", ("target", wearer)), user);
             return;
         }
 
         if (!CanTakeTags(tags, wearer, user, out var equipped, out var reason))
         {
-            _popup.PopupClient(reason, user);
+            _popup.PopupSelf(reason, user);
             return;
         }
 

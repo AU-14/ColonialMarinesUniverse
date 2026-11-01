@@ -1,7 +1,7 @@
 - type: entity
   id: CMUFighterLandingPad
   name: fighter VTOL pad
-  description: A faction-locked staging pad for tandem fighters. Taxi onto it for a marked takeoff and landing site. The aircraft returns to its takeoff position.
+  description: A faction-locked staging pad for tandem fighters. Taxi onto it for a marked takeoff and landing site. The aircraft returns to its takeoff position. Fold it back up with a wrench and a screwdriver.
   placement:
     mode: SnapgridCenter
   components:
@@ -16,6 +16,11 @@
   - type: InteractionOutline
   - type: FighterLandingPad
   - type: FighterIFF
+  - type: BlackfootPackableSupport
+    packedPrototype: CMUFighterLandingPadFolded
+    initialPopup: cmu-fighter-pad-anchors-loosened
+    panelPopup: cmu-fighter-pad-panel-opened
+    packedPopup: cmu-fighter-pad-packed
   - type: PointLight
     radius: 4
     energy: 0.3
@@ -30,8 +35,8 @@
   - type: FighterIFF
   - type: BlackfootDeployableSupport
     prototype: CMUFighterLandingPad
-    toolPopup: Use a wrench to unfold the fighter VTOL pad.
-    deployPopup: The fighter VTOL pad unfolds and its guide lights come on.
+    toolPopup: cmu-fighter-pad-unfold-hint
+    deployPopup: cmu-fighter-pad-unfolded
     requireClearFootprint: true
     clearFootprint: 7,7
     useFixedDeployRotation: true

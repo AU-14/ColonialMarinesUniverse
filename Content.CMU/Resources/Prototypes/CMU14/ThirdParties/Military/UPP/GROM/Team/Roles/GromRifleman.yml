@@ -56,7 +56,7 @@
     UPP_Plutonowy:
       entity: AU14ChevronUPPNIPlutonowy
       requirements: []
-  spawnMenuRoleName: UPP GROM Rifleman (Survivor)
+  spawnMenuRoleName: UPP GROM Rifleman
   startingGear: AU14GearUPPGROMRifleman
   greeting: au14-uppgrom-greeting
   icon: "CMJobIconEmpty"
@@ -90,14 +90,14 @@
   id: AU14GearUPPGROMRifleman
   equipment:
     id: AU14IDCardUPPGROMRifleman
-    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    outerClothing: CMUUPPArmorFull
     jumpsuit: AU14FatiguesUPPGROM
     shoes: RMCBootsSPPFilled
-    head: AU14UPPNavalInfantryHelmet
+    head: AU14UPPPatrolCap
     belt: AU14BeltHolsterPistolUPPFull
-    pocket1: AU14PouchIFAKFill
-    pocket2: AU14PouchIFAKFill
-    back: RMCSatchelSPPFull
+    pocket1: RuMCUPPPouchIFAKFill
+    pocket2: CMUUPPPouchMagazineUPPFull
+    back: CMUUPPNavalInfantrySatchelFull
     ears: RMCHeadsetGROM
     suitstorage: AU14WeaponRifleAG80Filled
 

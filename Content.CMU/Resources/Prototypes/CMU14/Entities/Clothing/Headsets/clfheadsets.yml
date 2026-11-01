@@ -2,7 +2,7 @@
   parent: AU14EncryptionKey
   id: AU14EncryptionKeyCLF
   name: modified colony encryption key
-  description: An encryption key used to communicate on colony and CLF radio channels.
+  description: An encryption key used to communicate on colony and INSFOR radio channels.
   components:
   - type: EncryptionKey
     channels:
@@ -13,9 +13,9 @@
 - type: entity
   parent: RMCBaseUniformAccessory
   id: AU14CLFHeadset
-  name: CLF earpiece
-  description: A small, concealable earpiece used by CLF operatives. Virtually invisible when worn, it clips discreetly onto a uniform.
-  suffix: CLF, Colony
+  name: INSFOR earpiece
+  description: A small, concealable earpiece used by INSFOR operatives. Virtually invisible when worn, it clips discreetly onto a uniform.
+  suffix: INSFOR, Colony
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/headsets.rsi
@@ -35,3 +35,14 @@
     - Colony
     - radioCLF
     defaultChannel: radioCLF
+
+# the upstream CLF headset only inherits the colony key, so off-map cells never heard radioCLF
+- type: entity
+  parent: RMCHeadsetDistressCLF
+  id: AU14HeadsetCLF
+  suffix: CLF, Colony
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyCLF

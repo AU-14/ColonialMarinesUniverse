@@ -273,7 +273,7 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
         var parent = Transform(laptop).ParentUid;
         if (!HasComp<PlaceableSurfaceComponent>(parent))
         {
-            _popup.PopupClient("Place the laptop on a table first!", laptop, args.User);
+            _popup.PopupEntity("Place the laptop on a table first!", laptop, args.User);
             args.Cancel();
             return;
         }
@@ -437,13 +437,13 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
     {
         if (!laptop.Comp.IsOpen)
         {
-            _popup.PopupClient("The laptop must be opened first!", laptop, user);
+            _popup.PopupEntity("The laptop must be opened first!", laptop, user);
             return false;
         }
 
         if (GetLinkedSentries(laptop).Count >= laptop.Comp.MaxLinkedSentries)
         {
-            _popup.PopupClient($"The laptop can only control {laptop.Comp.MaxLinkedSentries} sentries at once!", laptop, user);
+            _popup.PopupEntity($"The laptop can only control {laptop.Comp.MaxLinkedSentries} sentries at once!", laptop, user);
             return false;
         }
 
@@ -694,7 +694,8 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
 
     private NetEntity? GetSentryTarget(EntityUid sentry)
     {
-        if (TryComp<GunComponent>(sentry, out var gun) && gun.Target != null)
+        if (TryComp<GunComponent>(sentry, out var gun) && gun.Target != null &&
+            !TerminatingOrDeleted(gun.Target.Value)) // CMU14: targets can terminate before the next UI refresh.
             return GetNetEntity(gun.Target.Value);
 
         return null;

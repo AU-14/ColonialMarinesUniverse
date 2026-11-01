@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobTARSPartyContractorBase
   id: AU14JobProdigyTARSPartyLeader #m41a/2
+  chevrons:
+    AU14RankPrDEnforcerLead:
+      entity: AU14ChevronPrDEnforcerLead
+      requirements: []
   roundSide: ThirdParty
   roundForce: PSC
   roundRole: ProdigyTARSPartyLeader
@@ -27,7 +31,7 @@
       state: synth
   - type: MarineOrders
 
-  name: Prodigy TARS Leader
+  name: Team Leader
   description: au14-prodigyrescue-description
   playTimeTracker: AU14JobProdigyTARSPartyLeaderTracker
   ranks:
@@ -88,7 +92,7 @@
     back:
     - CMSurgicalLine
     - CMSynthGraft
-    - CMMRE
+    - CMUMREFSR
     - RMCLaserDesignatorPVE
     - CMStunbaton
     - RMCHandcuffs

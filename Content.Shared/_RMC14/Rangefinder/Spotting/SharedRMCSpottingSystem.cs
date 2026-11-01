@@ -124,7 +124,7 @@ public abstract partial class SharedRMCSpottingSystem : EntitySystem
         if(!HasComp<SpotterWhitelistComponent>(user))
         {
             var message = Loc.GetString("rmc-action-popup-spotting-user-no-skill", ("rangefinder", ent));
-            _popup.PopupClient(message, user, user);
+            _popup.PopupEntity(message, user, user);
             return false;
         }
 
@@ -132,7 +132,7 @@ public abstract partial class SharedRMCSpottingSystem : EntitySystem
         if (!_hands.TryGetActiveItem(user, out var heldItem) || heldItem != ent)
         {
             var message = Loc.GetString("rmc-action-popup-spotting-user-must-hold", ("rangefinder", ent));
-            _popup.PopupClient(message, user, user);
+            _popup.PopupEntity(message, user, user);
             return false;
         }
 

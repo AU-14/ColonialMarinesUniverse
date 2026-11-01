@@ -16,6 +16,8 @@ namespace Content.IntegrationTests._RMC14.Chemistry;
 [TestOf(typeof(SolutionComponent))]
 public sealed class RMCJugSolutionMigrationTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId RMCJugPrototype = "RMCJug";
+
     private const string SolutionName = "beaker";
     private const int Capacity = 200;
 
@@ -70,7 +72,9 @@ public sealed class RMCJugSolutionMigrationTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(prototype.TryComp<SolutionComponent>(out _, factory), Is.True, prototypeId);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                     Assert.That(prototype.TryComp<SolutionContainerManagerComponent>(out _, factory), Is.False,
+#pragma warning restore CS0612
                         prototypeId);
                     Assert.That(prototype.TryComp<SolutionManagerComponent>(out _, factory), Is.False, prototypeId);
                     Assert.That(_solutions.TryGetSolution(prototype, SolutionName, out var prototypeSolution), Is.True,
@@ -89,13 +93,15 @@ public sealed class RMCJugSolutionMigrationTest : GameTest
                 {
                     Assert.That(solutionEntity!.Value.Owner, Is.EqualTo(jug),
                         $"{prototypeId} must own its sole solution directly");
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                     Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(jug), Is.False, prototypeId);
+#pragma warning restore CS0612
                     Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(jug), Is.False, prototypeId);
                     AssertSolution(solution!, reagentId, prototypeId);
                 });
             }
 
-            var basePrototype = SProtoMan.Index<EntityPrototype>("RMCJug");
+            var basePrototype = SProtoMan.Index<EntityPrototype>(RMCJugPrototype);
             AssertSolutionName<MixableSolutionComponent>(basePrototype, component => component.Solution);
             AssertSolutionName<RefillableSolutionComponent>(basePrototype, component => component.Solution);
             AssertSolutionName<DrainableSolutionComponent>(basePrototype, component => component.Solution);

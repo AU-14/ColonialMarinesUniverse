@@ -44,12 +44,19 @@
     antagPrototype: CannibalRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-cannibal
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudmutineer
 
 - type: antag
   parent: CMUAntagColonyBase
   id: CannibalRole
   name: roles-antag-cannibal-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-cannibal-objective
 
 - type: startingGear

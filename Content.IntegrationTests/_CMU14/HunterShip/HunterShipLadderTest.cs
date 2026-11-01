@@ -131,7 +131,7 @@ public sealed class HunterShipLadderTest
             })
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<CMUZLevelLadderComponent>(out var ladder, factory), Is.True, id);
+                Assert.That(prototype.TryComp<CMUZLevelLadderComponent>(out var ladder, factory), Is.True, id);
                 Assert.Multiple(() =>
                 {
                     Assert.That(ladder!.CanMoveUp, Is.True, id);

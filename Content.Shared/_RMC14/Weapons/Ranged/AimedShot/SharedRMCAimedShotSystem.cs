@@ -186,7 +186,7 @@ public abstract partial class SharedRMCAimedShotSystem : EntitySystem
         {
             RemoveTarget(ent, args.Target);
             var message = Loc.GetString("rmc-action-popup-aiming-target-blocked", ("gun", ent));
-            _popup.PopupClient(message, args.User, args.User);
+            _popup.PopupEntity(message, args.User, args.User);
             return;
         }
 
@@ -258,7 +258,7 @@ public abstract partial class SharedRMCAimedShotSystem : EntitySystem
         if (!_whitelist.IsValid(ent.Comp.Whitelist, user) && ent.Comp.Whitelist.Components != null)
         {
             var message = Loc.GetString("cm-gun-unskilled", ("gun", ent));
-            _popup.PopupClient(message, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(message, user, user, PopupType.SmallCaution);
 
             return false;
         }
@@ -268,7 +268,7 @@ public abstract partial class SharedRMCAimedShotSystem : EntitySystem
             !wieldable.Wielded)
         {
             var message = Loc.GetString("rmc-action-popup-aiming-user-must-wield", ("gun", ent));
-            _popup.PopupClient(message, user, user);
+            _popup.PopupEntity(message, user, user);
 
             return false;
         }
@@ -279,7 +279,7 @@ public abstract partial class SharedRMCAimedShotSystem : EntitySystem
         if (ammoCount.Count <= 0)
         {
             var message = Loc.GetString("rmc-action-popup-aiming-gun-no-ammo", ("gun", ent));
-            _popup.PopupClient(message, user, user);
+            _popup.PopupEntity(message, user, user);
 
             return false;
         }
@@ -288,7 +288,7 @@ public abstract partial class SharedRMCAimedShotSystem : EntitySystem
         if (_transform.InRange(Transform(target).Coordinates, Transform(user).Coordinates, ent.Comp.MinRange))
         {
             var message = Loc.GetString("rmc-action-popup-aiming-target-too-close", ("target", target));
-            _popup.PopupClient(message, user, user);
+            _popup.PopupEntity(message, user, user);
 
             return false;
         }

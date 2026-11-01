@@ -100,9 +100,7 @@ public sealed class AfkSystemTest : GameTest
             var session = GetSession();
             var actor = session.AttachedEntity!.Value;
             var ev = new BoundUserInterfaceMessageReceivedEvent(actor, actor, TestUiKey.Key);
-            OnBoundUiMessageReceived.Invoke(_afkSystem, [ev]);
-
-            Assert.That(_afkManager.IsAfk(session), Is.False);
+            AssertCountsAsActivity(session, () => OnBoundUiMessageReceived.Invoke(_afkSystem, [ev]), "Bound UI message");
         });
     }
 
@@ -126,9 +124,9 @@ public sealed class AfkSystemTest : GameTest
                 NetCoordinates.Invalid,
                 ScreenCoordinates.Invalid);
 
-            HandleInputCmd.Invoke(_afkSystem, [message, new EntitySessionEventArgs(session)]);
-
-            Assert.That(_afkManager.IsAfk(session), Is.False, inputType);
+            AssertCountsAsActivity(session,
+                () => HandleInputCmd.Invoke(_afkSystem, [message, new EntitySessionEventArgs(session)]),
+                inputType);
         });
     }
 
@@ -210,6 +208,25 @@ public sealed class AfkSystemTest : GameTest
             var session = GetSession();
             Assert.That(_afkManager.IsAfk(session), Is.True);
         });
+    }
+
+    // CMU14: IsAfk compares wall-clock time against MakeAfk's 1 ms threshold, so it failed whenever a GC
+    // pause took over 1 ms on a loaded runner. check the activity got recorded instead, no timing involved
+    private void AssertCountsAsActivity(ICommonSession session, Action act, string what)
+    {
+        var recorded = false;
+        void OnAction(ICommonSession s) => recorded |= s == session;
+        _afkManager.PlayerDidActionEvent += OnAction;
+        try
+        {
+            act();
+        }
+        finally
+        {
+            _afkManager.PlayerDidActionEvent -= OnAction;
+        }
+
+        Assert.That(recorded, Is.True, $"{what} must count as player activity");
     }
 
     private ICommonSession GetSession()

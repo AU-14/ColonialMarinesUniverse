@@ -14,7 +14,9 @@ public sealed partial class ParallaxSystem : SharedParallaxSystem
     [Dependency] private IParallaxManager _parallax = default!;
     [Dependency] private SharedMapSystem _map = default!;
 
-    private static readonly ProtoId<ParallaxPrototype> Fallback = "Default";
+    // cmu edit start: CM13 static starfield by default
+    private static readonly ProtoId<ParallaxPrototype> Fallback = "CMUParallaxSpace";
+    // cmu edit end
 
     public const int ParallaxZIndex = 0;
 

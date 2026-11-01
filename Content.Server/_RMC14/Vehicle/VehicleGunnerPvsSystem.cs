@@ -8,7 +8,7 @@ namespace Content.Server._RMC14.Vehicle;
 
 /// <summary>Exterior views subscribe to the hull's eye, not the gunner's interior eye.</summary>
 // CMU14
-public sealed class VehicleGunnerPvsSystem : EntitySystem
+public sealed partial class VehicleGunnerPvsSystem : EntitySystem
 {
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private ISharedPlayerManager _players = default!;

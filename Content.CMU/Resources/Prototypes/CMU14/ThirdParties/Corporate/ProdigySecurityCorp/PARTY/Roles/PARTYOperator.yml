@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobPARTYPartyContractorBase
   id: AU14JobProdigyPartySmartgunner
+  chevrons:
+    AU14RankPrDSeniorOperator:
+      entity: AU14ChevronPrDSeniorOperator
+      requirements: []
   roundSide: ThirdParty
   roundProfiles:
   - AU14RoundJobProfileThirdParty
@@ -25,7 +29,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: smartgunner
 
-  name: au14-job-name-wypmc-smartgun-operator
+  name: cmu-job-title-smartgun-operator
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobProdigyPartySmartgunnerTracker
   ranks:
@@ -84,7 +88,7 @@
     #- AU14Tourniquet
     # no need, pouch already has 6 slots and is filled with med supplies
     back:
-    - CMMRE
+    - CMUMREFSR
     - RMCBinocularsPVE
     - AU14PacketGrenadeFragM12Filled
     - RMCMagazineSmartGunirradiated

@@ -1,0 +1,22 @@
+- type: partySpawn
+  id: CMUCCAFFireTeamSpawn
+  leadersToSpawn:
+    CMUJobCCAFSectionCommander: 1
+  gruntsToSpawn:
+    CMUJobCCAFRifleman: 1
+    CMUJobCCAFGrenadier: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUCCAFFireTeam
+  announceAsSurvivors: true
+  displayName: CCAF Fire Team
+  partyspawn: CMUCCAFFireTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 600
+  ghostsNeeded: 3
+  roundstart: false

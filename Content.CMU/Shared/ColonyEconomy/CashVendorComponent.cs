@@ -22,6 +22,10 @@ public sealed partial class AU14CashVendorEntry
     /// <summary>Base price in cash before sales tax.</summary>
     [DataField("price", required: true)]
     public int BasePrice = 10;
+
+    /// <summary>The heading this item is listed under, like a free vendor's section; none if unset.</summary>
+    [DataField("section")]
+    public string? Section;
 }
 
 [RegisterComponent, NetworkedComponent]

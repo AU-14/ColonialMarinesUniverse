@@ -44,6 +44,21 @@ public sealed partial class CMUReconstructionTest
             await Pair.RunTicksSync(60);
             var droneNet = SEntMan.GetNetEntity(drone);
 
+            // the feed publishes on a 0.5s faction cooldown and contacts go out every 0.25s,
+            // so wait for what the client actually shows instead of betting on a tick count
+            async Task WaitForClient(Func<CMUReconstructionControl, bool> ready)
+            {
+                for (var i = 0; i < 90; i++)
+                {
+                    var done = false;
+                    await Client.WaitPost(() => done = ready(Client.ResolveDependency<IUserInterfaceManager>()
+                        .WindowRoot.Children.OfType<CMUReconstructionWindow>().Single().SurveyView));
+                    if (done)
+                        return;
+                    await Pair.RunTicksSync(1);
+                }
+            }
+
             async Task AssertContact(int depth, Vector2i tile, bool click)
             {
                 await Server.WaitAssertion(() =>
@@ -80,18 +95,18 @@ public sealed partial class CMUReconstructionTest
             await AssertContact(-1, new Vector2i(3, 3), !ghost);
             await Server.WaitPost(() => SEntMan.System<SharedTransformSystem>().SetCoordinates(drone,
                 new EntityCoordinates(_upper, new Vector2(5.5f, 4.5f))));
-            await Pair.RunTicksSync(30);
+            await WaitForClient(v => v.TrackedContacts.Any(c => c.Blip.Indices == new Vector2i(5, 4)));
             await AssertContact(0, new Vector2i(5, 4), false);
             await Server.WaitPost(() => SEntMan.System<SharedTransformSystem>().SetCoordinates(drone,
                 new EntityCoordinates(_lower, new Vector2(-3.5f, 2.5f))));
-            await Pair.RunTicksSync(30);
+            await WaitForClient(v => v.TrackedContacts.Any(c => c.Blip.Indices == new Vector2i(-4, 2)));
             await AssertContact(-1, new Vector2i(-4, 2), false);
             await Server.WaitPost(() =>
             {
                 unlinked = _maps.CreateMap(runMapInit: true);
                 SEntMan.System<SharedTransformSystem>().SetCoordinates(drone, new EntityCoordinates(unlinked, Vector2.Zero));
             });
-            await Pair.RunTicksSync(30);
+            await WaitForClient(v => !v.TrackedContacts.Any(c => c.XenoWatchTarget == droneNet || c.Blip.Indices == new Vector2i(-4, 2)));
             await Server.WaitAssertion(() => Assert.That(SComp<TacticalMapComponent>(_upper).XenoBlips.ContainsKey(drone.Id), Is.False,
                 "Leaving the z-level network must remove the old battlefield contact."));
             await Client.WaitAssertion(() =>

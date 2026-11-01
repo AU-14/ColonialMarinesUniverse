@@ -1,0 +1,943 @@
+# Generate with author_elevation.py followed by author_multiz_elevation.py.
+- type: cmu3DElevation
+  id: CMU3DStableGarrisonRedux1
+  regions:
+  - bounds: 177, -160, 178, -157
+    height: -0.6525
+  - bounds: 231, -129, 232, -127
+    height: -0.6525
+  - bounds: 180, -111, 183, -110
+    height: -0.555
+  - bounds: 283, -104, 284, -103
+    height: -0.39
+  - bounds: 287, -104, 288, -103
+    height: -0.39
+  - bounds: 283, -103, 289, -100
+    height: -0.39
+  - bounds: 283, -100, 288, -99
+    height: -0.39
+  - bounds: 282, -103, 283, -98
+    height: -0.195
+  - bounds: 283, -99, 287, -98
+    height: -0.39
+  - bounds: 219, -94, 220, -91
+    height: -0.6525
+  - bounds: 165, -84, 166, -83
+    height: -0.78
+  - bounds: 164, -83, 168, -82
+    height: -0.78
+  - bounds: 163, -82, 167, -81
+    height: -0.78
+  - bounds: 164, -81, 167, -80
+    height: -0.78
+  - bounds: 164, -80, 169, -79
+    height: -0.78
+  - bounds: 164, -79, 167, -78
+    height: -0.585
+  - bounds: 167, -79, 168, -78
+    height: -0.39
+  - bounds: 124, -77, 126, -76
+    height: -0.39
+  - bounds: 164, -78, 168, -76
+    height: -0.39
+  - bounds: 168, -78, 169, -76
+    height: -0.195
+  - bounds: 139, -78, 140, -75
+    height: -0.39
+  - bounds: 142, -78, 143, -75
+    height: -0.39
+  - bounds: 145, -78, 146, -75
+    height: -0.39
+  - bounds: 148, -78, 149, -75
+    height: -0.39
+  - bounds: 166, -76, 167, -75
+    height: -0.39
+  - bounds: 156, -75, 159, -73
+    height: -0.39
+  - bounds: 99, -76, 102, -72
+    height: -0.39
+  - bounds: 106, -71, 107, -70
+    height: -0.39
+  - bounds: 118, -71, 121, -70
+    height: -0.39
+  - bounds: 124, -71, 126, -70
+    height: -0.39
+  - bounds: 127, -72, 129, -70
+    height: -0.39
+  - bounds: 133, -72, 135, -70
+    height: -0.39
+  - bounds: 126, -70, 128, -69
+    height: -0.39
+  - bounds: 134, -70, 135, -69
+    height: -0.39
+  - bounds: 139, -72, 140, -69
+    height: -0.39
+  - bounds: 142, -72, 143, -69
+    height: -0.39
+  - bounds: 145, -72, 146, -69
+    height: -0.39
+  - bounds: 148, -72, 149, -69
+    height: -0.39
+  - bounds: 105, -70, 107, -68
+    height: -0.39
+  - bounds: 112, -71, 113, -68
+    height: -0.39
+  - bounds: 125, -69, 128, -68
+    height: -0.39
+  - bounds: 124, -68, 129, -65
+    height: -0.39
+  - bounds: 105, -65, 107, -64
+    height: -0.39
+  - bounds: 125, -65, 128, -64
+    height: -0.39
+  - bounds: 92, -64, 95, -63
+    height: -0.39
+  - bounds: 104, -64, 107, -63
+    height: -0.39
+  - bounds: 112, -65, 113, -63
+    height: -0.39
+  - bounds: 125, -64, 127, -63
+    height: -0.39
+  - bounds: 104, -62, 106, -59
+    height: -0.39
+  - bounds: 111, -62, 114, -59
+    height: -0.39
+  - bounds: 104, -59, 105, -58
+    height: -0.39
+  - bounds: 124, -61, 127, -55
+    height: -0.39
+  - bounds: 97, -53, 100, -52
+    height: -0.39
+  - bounds: 103, -53, 105, -52
+    height: -0.39
+  - bounds: 104, -52, 106, -51
+    height: -0.39
+  - bounds: 108, -54, 111, -51
+    height: -0.39
+  - bounds: 117, -54, 123, -51
+    height: -0.39
+  - bounds: 97, -47, 100, -46
+    height: -0.39
+  - bounds: 103, -51, 107, -46
+    height: -0.39
+  - bounds: 104, -46, 106, -45
+    height: -0.39
+  - bounds: 105, -45, 106, -44
+    height: -0.39
+  - bounds: 105, -44, 107, -43
+    height: -0.39
+  - bounds: 105, -43, 108, -39
+    height: -0.39
+  - bounds: 105, -39, 107, -38
+    height: -0.39
+  - bounds: 70, -25, 71, -22
+    height: -0.6525
+  ramps:
+  - tile: 282, -101
+    direction: -1, 0
+    bottom: -0.195
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+  - tile: 283, -103
+    direction: -1, 0
+    bottom: -0.39
+    top: -0.195
+    sourcePrototype: AU14FlightStairs
+  - tile: 282, -102
+    direction: -1, 0
+    bottom: -0.195
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+  - tile: 282, -103
+    direction: -1, 0
+    bottom: -0.195
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+  - tile: 283, -102
+    direction: -1, 0
+    bottom: -0.39
+    top: -0.195
+    sourcePrototype: AU14FlightStairs
+  - tile: 283, -101
+    direction: -1, 0
+    bottom: -0.39
+    top: -0.195
+    sourcePrototype: AU14FlightStairs
+  - tile: 166, -79
+    direction: 0, 1
+    bottom: -0.585
+    top: -0.39
+    sourcePrototype: RMCHybrisaStairs
+  - tile: 165, -80
+    direction: 0, 1
+    bottom: -0.78
+    top: -0.585
+    sourcePrototype: RMCHybrisaStairs
+  - tile: 166, -80
+    direction: 0, 1
+    bottom: -0.78
+    top: -0.585
+    sourcePrototype: RMCHybrisaStairs
+  - tile: 167, -78
+    direction: 1, 0
+    bottom: -0.39
+    top: -0.195
+    sourcePrototype: RMCHybrisaStairs
+  - tile: 167, -77
+    direction: 1, 0
+    bottom: -0.39
+    top: -0.195
+    sourcePrototype: RMCHybrisaStairs
+  - tile: 165, -79
+    direction: 0, 1
+    bottom: -0.585
+    top: -0.39
+    sourcePrototype: RMCHybrisaStairs
+  - tile: 168, -77
+    direction: 1, 0
+    bottom: -0.195
+    top: 0.0
+    sourcePrototype: RMCHybrisaStairs
+  - tile: 168, -78
+    direction: 1, 0
+    bottom: -0.195
+    top: 0.0
+    sourcePrototype: RMCHybrisaStairs
+  - tile: 67, -25
+    direction: 1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 67, -24
+    direction: 1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 67, -23
+    direction: 1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 68, -25
+    direction: 1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 68, -24
+    direction: 1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 68, -23
+    direction: 1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 69, -25
+    direction: 1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 69, -24
+    direction: 1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 69, -23
+    direction: 1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 70, -25
+    direction: 1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 70, -24
+    direction: 1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 70, -23
+    direction: 1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 167, -82
+    direction: -1, 0
+    bottom: -1.695
+    top: -0.78
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 167, -81
+    direction: -1, 0
+    bottom: -1.695
+    top: -0.78
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 168, -82
+    direction: -1, 0
+    bottom: -2.61
+    top: -1.695
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 168, -81
+    direction: -1, 0
+    bottom: -2.61
+    top: -1.695
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 174, -160
+    direction: 1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 174, -159
+    direction: 1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 174, -158
+    direction: 1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 175, -160
+    direction: 1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 175, -159
+    direction: 1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 175, -158
+    direction: 1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 176, -160
+    direction: 1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 176, -159
+    direction: 1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 176, -158
+    direction: 1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 177, -160
+    direction: 1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: RMCHybrisaStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 177, -159
+    direction: 1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: RMCHybrisaStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 177, -158
+    direction: 1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: RMCHybrisaStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 180, -114
+    direction: 0, 1
+    bottom: -2.22
+    top: -1.665
+    sourcePrototype: RMCAlmayerStairsTop
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 180, -113
+    direction: 0, 1
+    bottom: -1.665
+    top: -1.11
+    sourcePrototype: RMCAlmayerStairsTop
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 180, -112
+    direction: 0, 1
+    bottom: -1.11
+    top: -0.555
+    sourcePrototype: CMUMultiZStairsNoPreview
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 180, -111
+    direction: 0, 1
+    bottom: -0.555
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairsTop
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 181, -114
+    direction: 0, 1
+    bottom: -2.22
+    top: -1.665
+    sourcePrototype: RMCAlmayerStairsTop
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 181, -113
+    direction: 0, 1
+    bottom: -1.665
+    top: -1.11
+    sourcePrototype: RMCAlmayerStairsTop
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 181, -112
+    direction: 0, 1
+    bottom: -1.11
+    top: -0.555
+    sourcePrototype: CMUMultiZStairsNoPreview
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 181, -111
+    direction: 0, 1
+    bottom: -0.555
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairsTop
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 182, -114
+    direction: 0, 1
+    bottom: -2.22
+    top: -1.665
+    sourcePrototype: RMCAlmayerStairsTop
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 182, -113
+    direction: 0, 1
+    bottom: -1.665
+    top: -1.11
+    sourcePrototype: RMCAlmayerStairsTop
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 182, -112
+    direction: 0, 1
+    bottom: -1.11
+    top: -0.555
+    sourcePrototype: CMUMultiZStairsNoPreview
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 182, -111
+    direction: 0, 1
+    bottom: -0.555
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairsTop
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 200, -75
+    direction: 0, 1
+    bottom: -3.0
+    top: -2.0
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 200, -74
+    direction: 0, 1
+    bottom: -2.0
+    top: -1.0
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 200, -73
+    direction: 0, 1
+    bottom: -1.0
+    top: 0.0
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 201, -75
+    direction: 0, 1
+    bottom: -3.0
+    top: -2.0
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 201, -74
+    direction: 0, 1
+    bottom: -2.0
+    top: -1.0
+    sourcePrototype: RMCHybrisaStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 201, -73
+    direction: 0, 1
+    bottom: -1.0
+    top: 0.0
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 219, -94
+    direction: -1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 219, -93
+    direction: -1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 219, -92
+    direction: -1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 220, -94
+    direction: -1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 220, -93
+    direction: -1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 220, -92
+    direction: -1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 221, -94
+    direction: -1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 221, -93
+    direction: -1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 221, -92
+    direction: -1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 222, -94
+    direction: -1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 222, -93
+    direction: -1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 222, -92
+    direction: -1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 228, -129
+    direction: 1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: RMCAlmayerStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 228, -128
+    direction: 1, 0
+    bottom: -2.61
+    top: -1.9575
+    sourcePrototype: RMCAlmayerStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 229, -129
+    direction: 1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: RMCAlmayerStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 229, -128
+    direction: 1, 0
+    bottom: -1.9575
+    top: -1.305
+    sourcePrototype: RMCAlmayerStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: -1
+  - tile: 230, -129
+    direction: 1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsNoPreview
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 230, -128
+    direction: 1, 0
+    bottom: -1.305
+    top: -0.6525
+    sourcePrototype: CMUMultiZStairsNoPreview
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 231, -129
+    direction: 1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 231, -128
+    direction: 1, 0
+    bottom: -0.6525
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 284, -104
+    direction: 0, 1
+    bottom: -2.22
+    top: -0.39
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 285, -104
+    direction: 0, 1
+    bottom: -2.22
+    top: -0.39
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 286, -104
+    direction: 0, 1
+    bottom: -2.22
+    top: -0.39
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  stairOpenings:
+  - 220, -94
+  - 220, -93
+  - 220, -92
+  - 228, -128
+  - 228, -129

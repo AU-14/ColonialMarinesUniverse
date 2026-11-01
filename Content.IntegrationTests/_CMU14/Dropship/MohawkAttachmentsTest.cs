@@ -135,9 +135,9 @@ public sealed class MohawkAttachmentsTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
-            enginePoints.AddRange(entities.EntityQuery<DropshipEnginePointComponent>()
+            enginePoints.AddRange(entities.QueryEntities<DropshipEnginePointComponent>()
                 .Select(p => entities.GetNetEntity(p.Owner)));
         });
         await pair.RunSeconds(1);
@@ -161,7 +161,7 @@ public sealed class MohawkAttachmentsTest
                     if (installed)
                     {
                         Assert.That(attachment.Color.A, Is.EqualTo(1f));
-                        Assert.That(attachment.RsiState.ToString(), Is.AnyOf("fuel_enhancer_omaha", "cooling_system_omaha"));
+                        Assert.That(attachment.RsiState.ToString(), Is.AnyOf("fuel_enhancer_mohawk", "cooling_system_mohawk")); // CMU14: current upstream engine art.
                         Assert.That(((SpriteComponent.Layer) attachment).Rotation, Is.EqualTo(Angle.Zero));
                         var rsi = attachment.ActualRsi!;
                         var clicks = pair.Client.ResolveDependency<IClickMapManager>();
@@ -172,9 +172,11 @@ public sealed class MohawkAttachmentsTest
                         {
                             if (!clicks.IsOccluding(rsi, attachment.RsiState, direction, 0, new Vector2i(x, y)))
                                 continue;
-                            // Click maps add a two-pixel tolerance around the 20x12 equipment face.
-                            Assert.That(x, Is.InRange(20, 43));
-                            Assert.That(y, Is.InRange(24, 39), "The long engine housing must not be drawn.");
+                            // CMU14 Begin: upstream centers the same 20x12 face in a 32px sheet.
+                            // Click maps add a two-pixel tolerance around the equipment face.
+                            Assert.That(x, Is.InRange(4, 27));
+                            Assert.That(y, Is.InRange(8, 23), "The long engine housing must not be drawn.");
+                            // CMU14 End
                             pixels++;
                         }
                         Assert.That(pixels, Is.GreaterThan(100), "The compact equipment face must remain visible.");
@@ -251,7 +253,7 @@ public sealed class MohawkAttachmentsTest
             Assert.That(entities.System<SharedBuckleSystem>().TryBuckle(patient, null, target, popup: false), Is.True);
             var marker = entities.SpawnEntity(null, new EntityCoordinates(ground, 30, 30));
             entities.AddComponent<DropshipDestinationComponent>(marker);
-            var nav = entities.EntityQuery<DropshipNavigationComputerComponent>()
+            var nav = entities.QueryEntities<DropshipNavigationComputerComponent>()
                 .Single(c => entities.GetComponent<TransformComponent>(c.Owner).GridUid == ship);
             Assert.That(dropships.FlyTo((nav.Owner, nav), marker, null, startupTime: 0.5f), Is.True);
             var config = pair.Server.ResolveDependency<IConfigurationManager>();
@@ -272,13 +274,13 @@ public sealed class MohawkAttachmentsTest
             var before = rounds.Rounds;
             Assert.That(weapons.TryFireWeapon(gun, new EntityCoordinates(ground, 20, 20), DropshipWeaponStrikeType.Direct), Is.True);
             Assert.That(rounds.Rounds, Is.EqualTo(before - rounds.RoundsPerShot));
-            Assert.That(entities.EntityQuery<AmmoInFlightComponent>().Any(), Is.True);
+            Assert.That(entities.QueryEntities<AmmoInFlightComponent>().Any(), Is.True);
             if (variant == "midway")
             {
-                var seat = entities.EntityQuery<MohawkGunnerySeatComponent>().Single().Owner;
+                var seat = entities.QueryEntities<MohawkGunnerySeatComponent>().Single().Owner;
                 var gunner = entities.SpawnEntity("CMMobHuman", entities.GetComponent<TransformComponent>(seat).Coordinates);
                 Assert.That(entities.System<SharedBuckleSystem>().TryBuckle(gunner, null, seat, popup: false), Is.True);
-                var terminal = entities.EntityQuery<DropshipTerminalWeaponsComponent>().Single(c => c.Gunnery);
+                var terminal = entities.QueryEntities<DropshipTerminalWeaponsComponent>().Single(c => c.Comp.Gunnery);
                 Assert.That(weapons.TryFireWeapon(chinGun, new EntityCoordinates(ground, 25, 25),
                     DropshipWeaponStrikeType.Direct, gunner, terminal), Is.True);
                 Assert.That(entities.GetComponent<DropshipAmmoComponent>(chinAmmo).Rounds, Is.EqualTo(360));

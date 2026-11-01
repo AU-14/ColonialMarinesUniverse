@@ -51,7 +51,7 @@
 - type: entity
   parent: SquadBase
   id: AU14SquadTD
-  name: Territorial Defense
+  name: UPP TD
   components:
   - type: SquadTeam
     color: "#ed7e57"
@@ -280,7 +280,7 @@
 - type: entity
   parent: SquadBase
   id: SquadPARTY
-  name: Prodigy Armed Repair Team Yankee # PARTY
+  name: PART Yankee
   components:
   - type: SquadTeam
     color: "#92969A"
@@ -308,7 +308,7 @@
 - type: entity
   parent: SquadBase
   id: SquadPARTS
-  name: Prodigy Armed Repair Team Sierra # PARTS
+  name: PART Sierra
   components:
   - type: SquadTeam
     color: "#92969A"
@@ -336,7 +336,7 @@
 - type: entity
   parent: SquadBase
   id: SquadPET
-  name: Prodigy Extraction Team # PET
+  name: Prodigy PET
   components:
   - type: SquadTeam
     color: "#92969A"
@@ -364,7 +364,7 @@
 - type: entity
   parent: SquadBase
   id: SquadTARS
-  name: Prodigy Tactical Assault and Rescue Squad # TARS
+  name: Prodigy TARS
   components:
   - type: SquadTeam
     color: "#92969A"
@@ -541,7 +541,7 @@
 - type: entity
   parent: SquadBase
   id: CMUSquadUPPLine
-  name: UPP Line Infantry
+  name: UPP Line
   components:
   - type: SquadTeam
     color: "#b02e26"
@@ -566,7 +566,7 @@
 - type: entity
   parent: SquadBase
   id: CMUSquadParamarines
-  name: TWE Royal Paramarines
+  name: IASF Para
   components:
   - type: SquadTeam
     color: "#1c4f9c"

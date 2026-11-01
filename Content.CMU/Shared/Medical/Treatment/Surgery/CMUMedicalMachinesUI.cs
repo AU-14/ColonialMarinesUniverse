@@ -341,6 +341,7 @@ public enum CMUBodyScannerScanKind : byte
     MissingOrgan,
     NoData,
     FleshInfection,
+    Parasite,
 }
 
 [Serializable, NetSerializable]

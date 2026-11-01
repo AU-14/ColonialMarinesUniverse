@@ -5,16 +5,19 @@ using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing.EntitySystems;
+using Content.Shared.Dataset;
 using Content.Shared.DetailExaminable;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
 using Content.Shared.Preferences;
+using Content.Shared.Random.Helpers;
 using Robust.Shared.Audio;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Yautja;
 
@@ -29,6 +32,10 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
     [Dependency] private SharedItemSystem _items = default!;
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IRobustRandom _random = default!;
+
+    private static readonly ProtoId<LocalizedDatasetPrototype> YautjaFirstName = "CMUNamesYautjaFirst";
+    private static readonly ProtoId<LocalizedDatasetPrototype> YautjaLastName = "CMUNamesYautjaLast";
 
     private static readonly Dictionary<string, string> PostVendProfileSlots = new()
     {
@@ -54,6 +61,48 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<YautjaAppliedProfileComponent, RMCAutomatedVendedUserEvent>(OnAutomatedVendorVended);
+        // CMU14: SharedVisualBodySystem stamps a species-default appearance on the body at VisualBodyComponent MapInit
+        // (SharedVisualBodySystem.Initial.cs:13, ordered after InitialBodySystem so the organs already exist). A
+        // console-spawned youngblood has its profile applied before that point, so the default overwrote the rolled tone
+        // and the body sat tan until a player took the role. Re-apply the already-selected profile right after body
+        // initialisation. The hook rides HumanoidProfileComponent because Robust permits only one subscription per
+        // component+event pair and SharedVisualBodySystem already owns VisualBodyComponent+MapInitEvent.
+        SubscribeLocalEvent<HumanoidProfileComponent, MapInitEvent>(OnHumanoidProfileMapInit, after: [typeof(Content.Server.Body.VisualBodySystem)]);
+    }
+
+    /// <summary>
+    /// Builds the humanoid profile an applied Yautja profile maps onto, including the species voice (DefaultWithSpecies
+    /// leaves the human default, which strips every Yautja emote sound).
+    /// </summary>
+    private HumanoidCharacterProfile BuildHumanoidProfile(YautjaCharacterProfile profile, YautjaComponent? yautja)
+    {
+        var humanoidProfile = HumanoidCharacterProfile.DefaultWithSpecies("Yautja")
+            .WithName(profile.Name)
+            .WithAge(profile.Age)
+            .WithSex(profile.Sex)
+            .WithGender(profile.Gender)
+            .WithCharacterAppearance(profile.Appearance);
+
+        if (yautja != null && yautja.VocalSounds.TryGetValue(profile.Sex, out var voice))
+            humanoidProfile = humanoidProfile.WithVoice(voice);
+
+        return humanoidProfile;
+    }
+
+    private void OnHumanoidProfileMapInit(Entity<HumanoidProfileComponent> ent, ref MapInitEvent args)
+    {
+        if (!TryComp<YautjaAppliedProfileComponent>(ent.Owner, out var applied) ||
+            !TryComp<HumanoidProfileComponent>(ent.Owner, out var humanoid))
+        {
+            return;
+        }
+
+        // The stored profile is the authority: no reroll here, so an explicitly selected tone survives.
+        // Appearance only - never EnsureComp here, or this path would initialise species stats as a side effect.
+        TryComp<YautjaComponent>(ent.Owner, out var yautja);
+        var humanoidProfile = BuildHumanoidProfile(applied.Profile, yautja);
+        _humanoid.ApplyProfileTo((ent.Owner, humanoid), humanoidProfile);
+        _visualBody.ApplyProfileTo(ent.Owner, humanoidProfile);
     }
 
     public void ApplyProfile(
@@ -76,6 +125,21 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
             YautjaRankResolver.CanUseUnique(authoritativeBaseRank),
             false);
         var profile = yautjaProfile.SanitizeForCapabilities(capabilities);
+        // A nameless profile rolls a CMSS13-style random name; the default is only a placeholder.
+        // "Неизвестно" is the pre-fix default, still present in saved profiles.
+        if (profile.Name is "Unknown" or "Неизвестно")
+            profile = profile.WithName(
+                $"{_random.Pick(_prototypes.Index(YautjaFirstName))} {_random.Pick(_prototypes.Index(YautjaLastName))}");
+        // CMU14: CM-SS13's load_race only rolls a tone when the player has not chosen one (prefs override it). The
+        // default appearance is built with Green, so an untouched profile is Green with SkinColorSelected false: that
+        // is the only case rolled from PRED_SKIN_COLOR. An explicit pick - including an explicit Green - sets the
+        // selection flag and is kept.
+        if (!profile.SkinColorSelected &&
+            profile.Appearance.SkinColor == YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green))
+        {
+            profile = profile.WithSkinColor(_random.Pick(YautjaCharacterProfile.SkinColorOrder[..6]));
+        }
+
         var rank = capabilities.ForStatus(profile.Status).Rank;
         EnsureComp<YautjaAppliedProfileComponent>(uid).Profile = profile.Clone();
 
@@ -84,15 +148,10 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         yautja.SkinColorRandomized = true;
         Dirty(uid, yautja);
 
-        var humanoidProfile = HumanoidCharacterProfile.DefaultWithSpecies("Yautja")
-            .WithName(profile.Name)
-            .WithAge(profile.Age)
-            .WithSex(profile.Sex)
-            .WithGender(profile.Gender)
-            .WithCharacterAppearance(profile.Appearance);
-
+        var humanoidProfile = BuildHumanoidProfile(profile, yautja);
         _humanoid.ApplyProfileTo((uid, humanoid), humanoidProfile);
         _visualBody.ApplyProfileTo(uid, humanoidProfile);
+
         // The profile is authoritative for player-controlled Yautja appearance.
         // Mark the deferred randomizer complete so the next stats tick cannot
         // replace the selected skin color.
@@ -106,7 +165,11 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         if (equipProfileGear)
         {
             ReplaceEquipped(uid, "outerClothing", profile.ArmorPrototype);
-            mask = ReplaceEquipped(uid, "mask", profile.MaskPrototype);
+            // CMU14: an unblooded youngblood does not wear a clan bio-mask, so only a blooded hunter gets one. Every
+            // other piece of profile gear is still applied.
+            mask = HasComp<YautjaYoungbloodComponent>(uid)
+                ? null
+                : ReplaceEquipped(uid, "mask", profile.MaskPrototype);
             ReplaceEquipped(uid, "shoes", profile.GreavesPrototype);
             bracer = ReplaceEquipped(uid, "gloves", profile.BracerPrototype);
             cape = ReplaceEquipped(uid, "back", profile.CapePrototype);
@@ -166,9 +229,15 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
                 return;
             case "CMUYautjaMask":
                 ReplaceVended(ent, slot, profile.MaskPrototype, args.Item);
+                if (_inventory.TryGetSlotEntity(ent, slot, out var wornMask))
+                    ApplyMaskAccessory(wornMask.Value, profile);
+
                 return;
             case "CMUYautjaMaskScalable":
                 ApplyVendedProfileVisuals(ent, slot, profile.MaskPrototype, args.Item);
+                if (_inventory.TryGetSlotEntity(ent, slot, out var wornScalableMask))
+                    ApplyMaskAccessory(wornScalableMask.Value, profile);
+
                 return;
             case "CMUYautjaClanGreaves":
                 ReplaceVended(ent, slot, profile.GreavesPrototype, args.Item);
@@ -276,13 +345,13 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
     private void CopyProfileVisuals(EntityUid uid, EntityPrototype visualPrototype)
     {
         if (TryComp(uid, out ItemComponent? item) &&
-            visualPrototype.TryGetComponent(out ItemComponent? visualItem, EntityManager.ComponentFactory))
+            visualPrototype.TryComp(out ItemComponent? visualItem, EntityManager.ComponentFactory))
         {
             _items.CopyVisuals(uid, visualItem, item);
         }
 
         if (TryComp(uid, out ClothingComponent? clothing) &&
-            visualPrototype.TryGetComponent(out ClothingComponent? visualClothing, EntityManager.ComponentFactory))
+            visualPrototype.TryComp(out ClothingComponent? visualClothing, EntityManager.ComponentFactory))
         {
             _clothing.CopyVisuals(uid, visualClothing, clothing);
         }

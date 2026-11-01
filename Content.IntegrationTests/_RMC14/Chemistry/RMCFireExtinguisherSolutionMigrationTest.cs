@@ -42,7 +42,9 @@ public sealed class RMCFireExtinguisherSolutionMigrationTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(prototype.TryComp<SolutionComponent>(out _, factory), Is.True, prototypeId);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                     Assert.That(prototype.TryComp<SolutionContainerManagerComponent>(out _, factory), Is.False,
+#pragma warning restore CS0612
                         prototypeId);
                     Assert.That(prototype.TryComp<SolutionManagerComponent>(out _, factory), Is.False, prototypeId);
                     Assert.That(prototype.TryComp<RefillableSolutionComponent>(out var refillable, factory), Is.True,
@@ -64,7 +66,9 @@ public sealed class RMCFireExtinguisherSolutionMigrationTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(solutionEntity!.Value.Owner, Is.EqualTo(extinguisher), prototypeId);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                     Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(extinguisher), Is.False,
+#pragma warning restore CS0612
                         prototypeId);
                     Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(extinguisher), Is.False, prototypeId);
                     Assert.That(_solutions.TryGetRefillableSolution(extinguisher, out var refillableEntity, out _),

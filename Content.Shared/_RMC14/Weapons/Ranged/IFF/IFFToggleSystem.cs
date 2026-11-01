@@ -73,7 +73,7 @@ public sealed partial class IFFToggleSystem : EntitySystem
         if (ent.Comp.RequireIDLock && TryComp<GunIDLockComponent>(ent.Owner, out var comp) && comp.Locked && comp.User != args.Performer)
         {
             var popup = Loc.GetString("rmc-id-lock-unauthorized");
-            _popup.PopupClient(popup, args.Performer, args.Performer, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.Performer, args.Performer, PopupType.SmallCaution);
             return;
         }
 
@@ -83,7 +83,7 @@ public sealed partial class IFFToggleSystem : EntitySystem
             _iffSystem.SetIFFState(ent.Owner, ent.Comp.Enabled);
 
             var popup = Loc.GetString("rmc-iff-toggle", ("action", Loc.GetString("rmc-iff-toggle-off")), ("gun", ent.Owner));
-            _popup.PopupClient(popup, args.Performer, args.Performer, PopupType.Small);
+            _popup.PopupEntity(popup, args.Performer, args.Performer, PopupType.Small);
 
             _audio.PlayPredicted(ent.Comp.ToggleSound, ent, args.Performer);
 
@@ -98,7 +98,7 @@ public sealed partial class IFFToggleSystem : EntitySystem
             _iffSystem.SetIFFState(ent.Owner, ent.Comp.Enabled);
 
             var popup = Loc.GetString("rmc-iff-toggle", ("action", Loc.GetString("rmc-iff-toggle-on")), ("gun", ent.Owner));
-            _popup.PopupClient(popup, args.Performer, args.Performer, PopupType.Small);
+            _popup.PopupEntity(popup, args.Performer, args.Performer, PopupType.Small);
 
             _audio.PlayPredicted(ent.Comp.ToggleSound, ent, args.Performer);
 
@@ -109,5 +109,10 @@ public sealed partial class IFFToggleSystem : EntitySystem
         }
 
         Dirty(ent);
+
+        // cmu edit start
+        var toggled = new Content.Shared.CMU14.Weapons.Ranged.CMUGunIFFToggledEvent(ent.Comp.Enabled);
+        RaiseLocalEvent(ent, ref toggled);
+        // cmu edit end
     }
 }

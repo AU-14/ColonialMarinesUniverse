@@ -8,6 +8,7 @@ using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Body;
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -108,6 +109,7 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
         }
 
         AddAnatomyLines(patient, lines);
+        AddParasiteLine(patient, lines);
 
         if (lines.Count == 0)
         {
@@ -266,6 +268,24 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
                 0f,
                 0f));
         }
+    }
+
+    /// <summary>
+    ///     A parasite embryo growing in the chest. Only the body scanner can see it; a handheld analyzer can't.
+    /// </summary>
+    private void AddParasiteLine(EntityUid patient, List<CMUBodyScannerScanLine> lines)
+    {
+        if (!TryComp<VictimInfectedComponent>(patient, out var infected) || HasComp<VictimBurstComponent>(patient))
+            return;
+
+        lines.Add(ScanLine(
+            CMUBodyScannerScanCategory.Organs,
+            CMUBodyScannerScanKind.Parasite,
+            CMUBodyScannerScanSeverity.Critical,
+            Loc.GetString("cmu-body-scanner-title-parasite"),
+            Loc.GetString("cmu-body-scanner-detail-parasite",
+                ("stage", infected.CurrentStage),
+                ("final", infected.FinalStage))));
     }
 
     private void AddOrganLines(EntityUid patient, List<CMUBodyScannerScanLine> lines)

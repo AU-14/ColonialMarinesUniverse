@@ -124,12 +124,12 @@
 
 - type: language
   id: Portuguese
-  name: "Portuguese"
-  description: "An old Earth language."
+  name: "Brazilian Portuguese"
+  description: "An old Earth language, in the form spoken across Brazil."
   typefaceId: DefaultItalic
   languageIcon:
     sprite: /Textures/_RMC14/Interface/flags.rsi
-    state: PT
+    state: BR
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["lhão", "nhê", "chã", "brio", "grão", "três", "prão", "frão", "vão", "ção", "rê", "dê", "fla", "cro", "gri", "plu", "são", "mão", "nho", "lho", "qui", "gue", "ria", "rio", "mar", "sol", "lua", "bom", "bem", "lar"]
@@ -294,6 +294,20 @@
     maxSyllables: 3
 
 - type: language
+  id: Beast
+  name: "Beast"
+  description: "The tongue of nature."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/map_blips.rsi
+    state: hellhound
+  expectedVocabularySize: 40
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["grr", "grrr", "ghrr", "gnrr", "grrk", "rgh", "grhk", "grrrah", "rrgh", "hrrk", "snrr", "snrgh", "snra", "gnaar", "vrrr", "vrak", "rawr", "rawrr", "raargh", "graah", "graargh", "braargh", "roargh", "wraar", "groar", "hss", "hsss", "ssrah", "ssk", "zrah", "krk", "krrk", "grk", "hrak"]
+    maxSyllables: 3
+
+- type: language
   id: Arcturian
   name: "Arcturian"
   description: "An ancient alien language from the Arcturian colonies."
@@ -326,20 +340,6 @@
     German: 0.35
 
 - type: language
-  id: Brazilian
-  name: "Brazilian"
-  description: "An old Earth language."
-  typefaceId: DefaultBold
-  languageIcon:
-    sprite: /Textures/_RMC14/Interface/flags.rsi
-    state: BR
-  expectedVocabularySize: 140
-  obfuscationMethod:
-    !type:SyllableObfuscation
-    replacement: ["ih", "tá", "okay", "ser", "tu", "opa", "me", "de", "senhor", "senhora", "nome", "copo", "prato", "talher", "um", "tipo", "aquilo", "pessoa", "fulano", "oi", "ei", "e", "é", "ah", "tem", "algo", "bem", "mal", "legal", "illegal", "maldito", "maldita", "arma", "sim", "não", "talvez", "quem", "onde", "quando", "como", "porquê", "porque", "eu", "você", "ele", "ela", "nós", "eles", "amigo", "inimigo", "homem", "mulher", "criança", "chefe", "soldado", "médico", "comandante", "ajuda", "perigo", "cuidado", "pare", "vá", "vem", "fica", "espera", "olha", "escuta", "fala", "silêncio", "água", "comida", "casa", "porta", "chão", "céu", "terra", "fogo", "luz", "escuro", "noite", "dia", "agora", "depois", "antes", "aqui", "lá", "perto", "longe", "rápido", "devagar", "forte", "fraco", "bom", "ruim", "novo", "velho", "grande", "pequeno", "verdade", "mentira", "seguro", "morto", "vivo"]
-    minSyllables: 2
-
-- type: language
   id: Ukrainian
   name: "Ukrainian"
   description: "An old Earth language."
@@ -355,7 +355,7 @@
     Russian: 0.45
     Serbian: 0.35
     Czech: 0.38
-    Slovak: 0.35  
+    Slovak: 0.35
 
 - type: language
   id: Korean
@@ -514,7 +514,7 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["ба", "ва", "га", "да", "ђа", "жа", "за", "ка", "ља", "на", "ња", "па", "ра", "са", "та", "ћа", "ча", "џа", "ша", "би", "ли", "ђи", "жи", "ки", "љи", "ми", "ни", "њи", "ри", "ћи", "бра", "дра", "гра", "вра", "здр", "шта", "чар", "жар", "њег", "љуб", "ћир"]
-    
+
 - type: language
   id: Lithuanian
   name: "Lithuanian"
@@ -568,7 +568,7 @@
     replacement: ["a", "aa", "ba", "bha", "cha", "da", "dha", "ga", "ha", "ja", "ka", "kha", "la", "ma", "na", "pa", "pha", "ra", "sa", "sha", "ta", "tha", "va", "ya", "raj", "dev", "ram", "krish", "sur", "prem", "dhar", "kar", "nagar", "mandir", "shakti", "ganga", "chandra", "akash"]
   sisterLanguages:
     Urdu: 0.85
-  
+
 - type: language
   id: Vietnamese
   name: "Vietnamese"

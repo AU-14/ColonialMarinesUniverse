@@ -70,6 +70,7 @@
     - radioGovforCharlie
     - radioGovforBravo
     - radioGovforIntel
+    - radioGovforFoxtrot
   - type: ActiveRadio
     channels:
     - radioAI
@@ -79,6 +80,7 @@
     - radioGovforCharlie
     - radioGovforBravo
     - radioGovforIntel
+    - radioGovforFoxtrot
 
 - type: entity
   id: AU14AICoreApolloOPFOR
@@ -94,6 +96,7 @@
     - radioOpforCharlie
     - radioOpforBravo
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
   - type: ActiveRadio
     channels:
@@ -103,6 +106,7 @@
     - radioOpforCharlie
     - radioOpforBravo
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
 
 - type: entity

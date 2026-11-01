@@ -48,7 +48,7 @@ public sealed partial class CMUXenoBullChargeSystem : EntitySystem
         bull.Comp.Mode = args.Mode;
         Dirty(bull);
         UpdateModeActions(bull, args.Mode);
-        _popup.PopupClient(Loc.GetString(CMUXenoBullChargeSystem.GetModePopup(args.Mode)), bull, bull);
+        _popup.PopupEntity(Loc.GetString(CMUXenoBullChargeSystem.GetModePopup(args.Mode)), bull, bull);
         args.Handled = true;
     }
 

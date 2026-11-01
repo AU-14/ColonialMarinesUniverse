@@ -200,7 +200,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             }
             if (ent.Comp.TargetProperty is not null && ent.Comp.Mode != ChemSimulatorMode.Add)
             {
-                if (ent.Comp.PropertyCosts[ent.Comp.TargetProperty] > _dat.GetCredits(_dat.GetFaction(ent.Owner)))
+                if (ent.Comp.PropertyCosts[ent.Comp.TargetProperty] > _dat.GetSampleData(_dat.GetFaction(ent.Owner)))
                 {
                     ent.Comp.StatusBar = Loc.GetString("research-sim-status-insufficient-funds");
                     Dirty(ent);
@@ -306,7 +306,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                         }
                         if (properties[ent.Comp.ReferenceProperty].Category.HasFlag(ReagentPropertyTypeEnum.Unadjustable))
                         {
-                            ent.Comp.StatusBar = Loc.GetString("reseach-sim-status-reference-unadjustable");
+                            ent.Comp.StatusBar = Loc.GetString("research-sim-status-reference-unadjustable");
                             Dirty(ent);
                             return false;
                         }
@@ -325,7 +325,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                     }
                     if (ent.Comp.Mode == ChemSimulatorMode.Add)
                     {
-                        if (ent.Comp.PropertyCosts[ent.Comp.ReferenceProperty] > _dat.GetCredits(_dat.GetFaction(ent.Owner)))
+                        if (ent.Comp.PropertyCosts[ent.Comp.ReferenceProperty] > _dat.GetSampleData(_dat.GetFaction(ent.Owner)))
                         {
                             ent.Comp.StatusBar = Loc.GetString("research-sim-status-insufficient-funds");
                             Dirty(ent);
@@ -343,7 +343,10 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
         }
         if (ent.Comp.Stage == ChemSimulatorStage.Off)
         {
-            ent.Comp.StatusBar = Loc.GetString("research-sim-status-ready");
+            // warn before they pay, a conflicting insert silently eats properties otherwise
+            ent.Comp.StatusBar = TryGetConflictWarning(ent, out var conflictWarning)
+                ? conflictWarning
+                : Loc.GetString("research-sim-status-ready");
         }
         Dirty(ent);
         return true;
@@ -499,7 +502,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             statusBar: ent.Comp.StatusBar,
             targprop: ent.Comp.TargetProperty,
             refprop: ent.Comp.ReferenceProperty,
-            credits: _dat.GetCredits(_dat.GetFaction(ent.Owner)),
+            sampleData: _dat.GetSampleData(_dat.GetFaction(ent.Owner)),
             overdose: ent.Comp.Overdose,
             recipePicked: ent.Comp.PickedRecipeChem,
             recipeOptions: ent.Comp.RecipeChemOptions,

@@ -15,7 +15,9 @@ rmc-sentry-active-norot = {CAPITALIZE(THE($sentry))} is currently active. The mo
 rmc-sentry-item-norot = You can't rotate it like this!
 rmc-sentry-magazine-does-not-fit = {CAPITALIZE(THE($magazine))} doesn't fit into {THE($sentry)}!
 
-rmc-sentry-upgrade-not-item = You need to disassemble {THE($sentry)} with a multitool before upgrading it!
+# cmu edit start: sentries are disassembled with a wrench
+rmc-sentry-upgrade-not-item = You need to disassemble {THE($sentry)} with a wrench before upgrading it!
+# cmu edit end
 rmc-sentry-upgrade-not-holding = You need to be holding an upgrade kit in your active hand to upgrade {THE($sentry)}!
 rmc-sentry-upgrade-not-upgradeable = You can't upgrade {THE($sentry)}!
 

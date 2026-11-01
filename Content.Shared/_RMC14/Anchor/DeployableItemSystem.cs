@@ -191,7 +191,7 @@ public sealed partial class DeployableItemSystem : EntitySystem
         if (!TryComp(ent.Owner, out PhysicsComponent? anchorBody) ||
             !_anchorable.TileFree(coordinates, anchorBody))
         {
-            _popup.PopupPredicted(Loc.GetString("foldable-deploy-fail", ("object", ent)), ent, args.User);
+            _popup.PopupBroadcast(Loc.GetString("foldable-deploy-fail", ("object", ent)), ent, args.User);
             return;
         }
 
@@ -242,7 +242,7 @@ public sealed partial class DeployableItemSystem : EntitySystem
 
             if (lower && upper)
             {
-                _popup.PopupClient(Loc.GetString("cm-magazine-box-no-space"), user, PopupType.SmallCaution);
+                _popup.PopupSelf(Loc.GetString("cm-magazine-box-no-space"), user, PopupType.SmallCaution);
                 return;
             }
         }

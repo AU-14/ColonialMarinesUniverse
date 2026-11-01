@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using System.Linq;
 using System.Numerics;
 using Content.Client.GameTicking.Managers;
@@ -69,7 +70,7 @@ public sealed class LobbyLineupTest : GameTest
                     "The visual effect must receive the same dodge outcome as the character pose.");
                 var targetEntity = cards[1].StageEntity!.Value;
                 cards[1].Orphan();
-                cards[1].Dispose();
+                cards[1].Release();
                 effects.Advance(0.1f);
                 Assert.That(CEntMan.Deleted(targetEntity), Is.True);
                 Assert.That(effects.ActiveCount, Is.Zero);
@@ -84,7 +85,7 @@ public sealed class LobbyLineupTest : GameTest
             finally
             {
                 holder.Orphan();
-                holder.Dispose();
+                holder.Release();
             }
         });
     }
@@ -181,7 +182,10 @@ public sealed class LobbyLineupTest : GameTest
     }
 
     [TestCase("AU14JobGOVFORPlatCo", "GOVFOR/command")]
-    [TestCase("AU14JobGOVFORSquadRifleman", "GOVFOR/SquadGovforBravo")]
+    // cmu edit start: squad preference no longer places squad roles under that squad, they share the squads section
+    // [TestCase("AU14JobGOVFORSquadRifleman", "GOVFOR/SquadGovforBravo")]
+    [TestCase("AU14JobGOVFORSquadRifleman", "GOVFOR/squads")]
+    // cmu edit end
     public async Task ReadyLineupTracksAppearanceAndCleansUpPreviews(string job, string section)
     {
         var preferences = Server.ResolveDependency<IServerPreferencesManager>();

@@ -1,0 +1,774 @@
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaperSouthPatch1
+  atlasIndex: 485
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaperSouthPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaperSouthPatch2
+  atlasIndex: 486
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaperSouthPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaperNorthPatch1
+  atlasIndex: 487
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaperNorthPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaperEastPatch1
+  atlasIndex: 488
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaperEastPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaperWestPatch1
+  atlasIndex: 489
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaperWestPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaperSouthEastPatch1
+  atlasIndex: 490
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaperSouthEastPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaperSouthWestPatch1
+  atlasIndex: 491
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaperSouthWestPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaperNorthEastPatch1
+  atlasIndex: 492
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaperNorthEastPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaperNorthWestPatch1
+  atlasIndex: 493
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaperNorthWestPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaperNorthWestPatch2
+  atlasIndex: 494
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaperNorthWestPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1SouthPatch1
+  atlasIndex: 495
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1SouthPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1SouthPatch2
+  atlasIndex: 496
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1SouthPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1SouthPatch3
+  atlasIndex: 497
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1SouthPatch3.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1NorthPatch1
+  atlasIndex: 498
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1NorthPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1NorthPatch2
+  atlasIndex: 499
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1NorthPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1NorthPatch3
+  atlasIndex: 500
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1NorthPatch3.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1EastPatch1
+  atlasIndex: 501
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1EastPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1EastPatch2
+  atlasIndex: 502
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1EastPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1EastPatch3
+  atlasIndex: 503
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1EastPatch3.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1WestPatch1
+  atlasIndex: 504
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1WestPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1WestPatch2
+  atlasIndex: 505
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1WestPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1WestPatch3
+  atlasIndex: 506
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1WestPatch3.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper1WestPatch4
+  atlasIndex: 507
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper1WestPatch4.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper2SouthPatch1
+  atlasIndex: 508
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper2SouthPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper2SouthPatch2
+  atlasIndex: 509
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper2SouthPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper2SouthPatch3
+  atlasIndex: 510
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper2SouthPatch3.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper2NorthPatch1
+  atlasIndex: 511
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper2NorthPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper2NorthPatch2
+  atlasIndex: 512
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper2NorthPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper2NorthPatch3
+  atlasIndex: 513
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper2NorthPatch3.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper2EastPatch1
+  atlasIndex: 514
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper2EastPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper2WestPatch1
+  atlasIndex: 515
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper2WestPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper2WestPatch2
+  atlasIndex: 516
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper2WestPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper2WestPatch3
+  atlasIndex: 517
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper2WestPatch3.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper3SouthPatch1
+  atlasIndex: 518
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper3SouthPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper3NorthPatch1
+  atlasIndex: 519
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper3NorthPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper3NorthPatch2
+  atlasIndex: 520
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper3NorthPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper3EastPatch1
+  atlasIndex: 521
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper3EastPatch1.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper3EastPatch2
+  atlasIndex: 522
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper3EastPatch2.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper3EastPatch3
+  atlasIndex: 523
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper3EastPatch3.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper3EastPatch4
+  atlasIndex: 524
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper3EastPatch4.png
+- type: cmu3DSurface
+  id: CMU3DDecorFloorPaper3WestPatch1
+  atlasIndex: 525
+  texture: /Textures/CMU14/ThreeD/FloorPapers/CMU3DDecorFloorPaper3WestPatch1.png
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaperSouth
+  label: Paper floor sheets / South
+  status: draft
+  sourcePrototypes:
+  - DecorFloorPaper
+  referencePrototype: DecorFloorPaper
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: scattered_papers
+  referenceDirection: 0
+  sourceDirections: 8
+  directionalModels: &id001
+  - CMU3DDecorFloorPaperSouth
+  - CMU3DDecorFloorPaperNorth
+  - CMU3DDecorFloorPaperEast
+  - CMU3DDecorFloorPaperWest
+  - CMU3DDecorFloorPaperSouthEast
+  - CMU3DDecorFloorPaperSouthWest
+  - CMU3DDecorFloorPaperNorthEast
+  - CMU3DDecorFloorPaperNorthWest
+  yawOffset: 0
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.4375, -0.25, 0.002
+    max: -0.09375, 0.09375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaperSouthPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: -0.21875, -0.5625, 0.002
+    max: 0.25, -0.15625, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaperSouthPatch2
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaperNorth
+  label: Paper floor sheets / North
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: scattered_papers
+  referenceDirection: 1
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: -180
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.40625, -0.375, 0.002
+    max: 0.0, 0.15625, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaperNorthPatch1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaperEast
+  label: Paper floor sheets / East
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: scattered_papers
+  referenceDirection: 2
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: -90
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.3125, -0.625, 0.002
+    max: 0.46875, 0.09375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaperEastPatch1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaperWest
+  label: Paper floor sheets / West
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: scattered_papers
+  referenceDirection: 3
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: 90
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.4375, -0.6875, 0.002
+    max: 0.25, -0.09375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaperWestPatch1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaperSouthEast
+  label: Paper floor sheets / SouthEast
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: scattered_papers
+  referenceDirection: 4
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: -45
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.375, -0.6875, 0.002
+    max: 0.40625, 0.03125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaperSouthEastPatch1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaperSouthWest
+  label: Paper floor sheets / SouthWest
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: scattered_papers
+  referenceDirection: 5
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: 45
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.3125, -0.5625, 0.002
+    max: 0.34375, 0.03125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaperSouthWestPatch1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaperNorthEast
+  label: Paper floor sheets / NorthEast
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: scattered_papers
+  referenceDirection: 6
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: -135
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.40625, -0.65625, 0.002
+    max: 0.375, 0.0625, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaperNorthEastPatch1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaperNorthWest
+  label: Paper floor sheets / NorthWest
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: scattered_papers
+  referenceDirection: 7
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: 135
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.4375, -0.25, 0.002
+    max: -0.09375, 0.09375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaperNorthWestPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: -0.21875, -0.5625, 0.002
+    max: 0.46875, 0.03125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaperNorthWestPatch2
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper1South
+  label: Paper1 floor sheets / South
+  status: draft
+  sourcePrototypes:
+  - DecorFloorPaper1
+  referencePrototype: DecorFloorPaper1
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_1
+  referenceDirection: 0
+  sourceDirections: 4
+  directionalModels: &id002
+  - CMU3DDecorFloorPaper1South
+  - CMU3DDecorFloorPaper1North
+  - CMU3DDecorFloorPaper1East
+  - CMU3DDecorFloorPaper1West
+  yawOffset: 0
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: 0.21875, -0.0625, 0.002
+    max: 0.46875, 0.125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1SouthPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: -0.28125, -0.3125, 0.002
+    max: 0.125, 0.03125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1SouthPatch2
+    surfaceAxis: XY
+  - label: source paper patch 3
+    min: -0.09375, -0.59375, 0.002
+    max: 0.40625, -0.25, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1SouthPatch3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper1North
+  label: Paper1 floor sheets / North
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper1
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_1
+  referenceDirection: 1
+  sourceDirections: 4
+  directionalModels: *id002
+  yawOffset: -180
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.375, -0.28125, 0.002
+    max: 0.09375, 0.03125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1NorthPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: 0.03125, -0.625, 0.002
+    max: 0.4375, -0.28125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1NorthPatch2
+    surfaceAxis: XY
+  - label: source paper patch 3
+    min: -0.40625, -0.59375, 0.002
+    max: -0.09375, -0.34375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1NorthPatch3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper1East
+  label: Paper1 floor sheets / East
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper1
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_1
+  referenceDirection: 2
+  sourceDirections: 4
+  directionalModels: *id002
+  yawOffset: -90
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.40625, -0.09375, 0.002
+    max: 0.03125, 0.1875, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1EastPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: -0.4375, -0.5, 0.002
+    max: -0.0625, -0.1875, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1EastPatch2
+    surfaceAxis: XY
+  - label: source paper patch 3
+    min: -0.09375, -0.59375, 0.002
+    max: 0.40625, -0.28125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1EastPatch3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper1West
+  label: Paper1 floor sheets / West
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper1
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_1
+  referenceDirection: 3
+  sourceDirections: 4
+  directionalModels: *id002
+  yawOffset: 90
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.375, -0.0625, 0.002
+    max: -0.09375, 0.125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1WestPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: 0.125, -0.25, 0.002
+    max: 0.4375, 0.0, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1WestPatch2
+    surfaceAxis: XY
+  - label: source paper patch 3
+    min: -0.25, -0.5, 0.002
+    max: 0.09375, -0.15625, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1WestPatch3
+    surfaceAxis: XY
+  - label: source paper patch 4
+    min: -0.15625, -0.6875, 0.002
+    max: 0.125, -0.5, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper1WestPatch4
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper2South
+  label: Paper2 floor sheets / South
+  status: draft
+  sourcePrototypes:
+  - DecorFloorPaper2
+  referencePrototype: DecorFloorPaper2
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_2
+  referenceDirection: 0
+  sourceDirections: 4
+  directionalModels: &id003
+  - CMU3DDecorFloorPaper2South
+  - CMU3DDecorFloorPaper2North
+  - CMU3DDecorFloorPaper2East
+  - CMU3DDecorFloorPaper2West
+  yawOffset: 0
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.40625, -0.1875, 0.002
+    max: 0.0625, 0.125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper2SouthPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: -0.03125, -0.5, 0.002
+    max: 0.4375, -0.15625, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper2SouthPatch2
+    surfaceAxis: XY
+  - label: source paper patch 3
+    min: -0.375, -0.65625, 0.002
+    max: 0.0, -0.34375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper2SouthPatch3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper2North
+  label: Paper2 floor sheets / North
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper2
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_2
+  referenceDirection: 1
+  sourceDirections: 4
+  directionalModels: *id003
+  yawOffset: -180
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: 0.0, -0.21875, 0.002
+    max: 0.46875, 0.09375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper2NorthPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: 0.15625, -0.46875, 0.002
+    max: 0.4375, -0.28125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper2NorthPatch2
+    surfaceAxis: XY
+  - label: source paper patch 3
+    min: -0.4375, -0.65625, 0.002
+    max: 0.0, -0.34375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper2NorthPatch3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper2East
+  label: Paper2 floor sheets / East
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper2
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_2
+  referenceDirection: 2
+  sourceDirections: 4
+  directionalModels: *id003
+  yawOffset: -90
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.40625, -0.65625, 0.002
+    max: 0.46875, 0.1875, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper2EastPatch1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper2West
+  label: Paper2 floor sheets / West
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper2
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_2
+  referenceDirection: 3
+  sourceDirections: 4
+  directionalModels: *id003
+  yawOffset: 90
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.34375, -0.4375, 0.002
+    max: 0.5, 0.21875, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper2WestPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: -0.03125, -0.625, 0.002
+    max: 0.34375, -0.3125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper2WestPatch2
+    surfaceAxis: XY
+  - label: source paper patch 3
+    min: -0.5, -0.71875, 0.002
+    max: 0.0, -0.40625, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper2WestPatch3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper3South
+  label: Paper3 floor sheets / South
+  status: draft
+  sourcePrototypes:
+  - DecorFloorPaper3
+  referencePrototype: DecorFloorPaper3
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_3
+  referenceDirection: 0
+  sourceDirections: 4
+  directionalModels: &id004
+  - CMU3DDecorFloorPaper3South
+  - CMU3DDecorFloorPaper3North
+  - CMU3DDecorFloorPaper3East
+  - CMU3DDecorFloorPaper3West
+  yawOffset: 0
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.4375, -0.65625, 0.002
+    max: 0.40625, 0.1875, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper3SouthPatch1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper3North
+  label: Paper3 floor sheets / North
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper3
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_3
+  referenceDirection: 1
+  sourceDirections: 4
+  directionalModels: *id004
+  yawOffset: -180
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.09375, -0.25, 0.002
+    max: 0.375, 0.09375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper3NorthPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: -0.4375, -0.59375, 0.002
+    max: 0.375, -0.09375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper3NorthPatch2
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper3East
+  label: Paper3 floor sheets / East
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper3
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_3
+  referenceDirection: 2
+  sourceDirections: 4
+  directionalModels: *id004
+  yawOffset: -90
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.4375, -0.21875, 0.002
+    max: 0.15625, 0.1875, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper3EastPatch1
+    surfaceAxis: XY
+  - label: source paper patch 2
+    min: 0.03125, -0.5625, 0.002
+    max: 0.5, -0.03125, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper3EastPatch2
+    surfaceAxis: XY
+  - label: source paper patch 3
+    min: -0.4375, -0.375, 0.002
+    max: -0.1875, -0.1875, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper3EastPatch3
+    surfaceAxis: XY
+  - label: source paper patch 4
+    min: -0.28125, -0.6875, 0.002
+    max: 0.09375, -0.375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper3EastPatch4
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DDecorFloorPaper3West
+  label: Paper3 floor sheets / West
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorPaper3
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: papers_3
+  referenceDirection: 3
+  sourceDirections: 4
+  directionalModels: *id004
+  yawOffset: 90
+  placement: floor
+  description: Direction-specific thin paper patches preserve original page arrangements
+    and print. Touching pages are grouped; curling and hidden stack anatomy remain
+    inferred. Original 32x48 frame pivot retained.
+  parts:
+  - label: source paper patch 1
+    min: -0.46875, -0.65625, 0.002
+    max: 0.4375, 0.09375, 0.008
+    color: '#FFFFFF'
+    surface: CMU3DDecorFloorPaper3WestPatch1
+    surfaceAxis: XY

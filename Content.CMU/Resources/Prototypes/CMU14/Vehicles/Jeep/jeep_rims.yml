@@ -1,0 +1,152 @@
+# Rim designs the vehicle spray painter puts on a vehicle's wheels; see CMURimDesignPrototype and
+# rim.swsl. A rim is 11 pixels across. Nuts and lip bolts come in multiples of the count, so a
+# turning wheel's four frame loop is seamless.
+
+- type: cmuRimDesign
+  id: CMURimFactory
+  name: cmu-rim-design-factory
+  order: 0
+  factory: true
+  pattern: Dish
+  count: 4
+  nuts: 4
+  regions: [ ]
+
+- type: cmuRimDesign
+  id: CMURimFiveSpoke
+  name: cmu-rim-design-five-spoke
+  order: 1
+  pattern: Spokes
+  count: 5
+  width: 0.45
+  cap: 1.9
+  accent: "#D8DCE0"
+  lipColor: "#2E3238"
+  capColor: "#F0F2F4"
+
+- type: cmuRimDesign
+  id: CMURimSixSpoke
+  name: cmu-rim-design-six-spoke
+  order: 2
+  pattern: Spokes
+  count: 6
+  width: 0.5
+  cap: 1.9
+  accent: "#B8BEC4"
+  lipColor: "#1E1F21"
+  capColor: "#D7262E"
+
+- type: cmuRimDesign
+  id: CMURimRally
+  name: cmu-rim-design-rally
+  order: 3
+  pattern: Spokes
+  count: 3
+  width: 0.32
+  cap: 2.0
+  accent: "#E8E8E2"
+  lipColor: "#1E1F21"
+  capColor: "#D7262E"
+
+- type: cmuRimDesign
+  id: CMURimTenSpoke
+  name: cmu-rim-design-ten-spoke
+  order: 4
+  pattern: Mesh
+  count: 5
+  width: 0.24
+  cap: 1.6
+  accent: "#B8BEC4"
+  lipColor: "#B8BEC4"
+  capColor: "#3C4046"
+
+- type: cmuRimDesign
+  id: CMURimTurbine
+  name: cmu-rim-design-turbine
+  order: 5
+  pattern: Spokes
+  count: 6
+  width: 0.35
+  twist: 0.55
+  cap: 1.6
+  accent: "#6A737B"
+  lipColor: "#C8CDD2"
+  capColor: "#6A737B"
+
+- type: cmuRimDesign
+  id: CMURimMesh
+  name: cmu-rim-design-mesh
+  order: 6
+  pattern: Mesh
+  count: 6
+  width: 0.22
+  twist: 0.6
+  cap: 1.6
+  accent: "#C9A23A"
+  lipColor: "#D8DCE0"
+  capColor: "#C9A23A"
+
+- type: cmuRimDesign
+  id: CMURimSteelie
+  name: cmu-rim-design-steelie
+  order: 7
+  pattern: Holes
+  count: 8
+  holeRadius: 3.4
+  holeSize: 0.75
+  regions: [ Lip, Cap ]
+  lipColor: "#3C4046"
+  capColor: "#D8DCE0"
+
+- type: cmuRimDesign
+  id: CMURimSlotted
+  name: cmu-rim-design-slotted
+  order: 8
+  pattern: Slots
+  count: 4
+  width: 0.32
+  holeRadius: 3.6
+  holeSize: 0.7
+  nuts: 4
+  nutRadius: 2.2
+  regions: [ Lip, Cap ]
+  lipColor: "#2E3238"
+  capColor: "#C8CDD2"
+
+- type: cmuRimDesign
+  id: CMURimDeepDish
+  name: cmu-rim-design-deep-dish
+  order: 9
+  pattern: Dish
+  count: 5
+  lip: 3.6
+  nuts: 5
+  nutRadius: 2.4
+  regions: [ Lip, Cap ]
+  lipColor: "#E0E4E8"
+  capColor: "#2A2C2E"
+
+- type: cmuRimDesign
+  id: CMURimBeadlock
+  name: cmu-rim-design-beadlock
+  order: 10
+  pattern: Dish
+  count: 4
+  lip: 4.4
+  lipBolts: 12
+  nuts: 4
+  nutRadius: 2.6
+  regions: [ Lip, Cap ]
+  lipColor: "#1E1F21"
+  capColor: "#C8CDD2"
+
+- type: cmuRimDesign
+  id: CMURimHubcap
+  name: cmu-rim-design-hubcap
+  order: 11
+  pattern: Disc
+  count: 4
+  cap: 1.2
+  accent: "#E6E9EC"
+  lipColor: "#3C4046"
+  capColor: "#8E2A22"

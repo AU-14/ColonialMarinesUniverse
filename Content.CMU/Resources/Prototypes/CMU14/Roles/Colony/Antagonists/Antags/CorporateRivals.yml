@@ -61,10 +61,17 @@
     antagPrototype: WeylandYutaniAgentRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-wy-agent
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudWE-YA
 
 - type: antag
   parent: CMUAntagColonyBase
   id: WeylandYutaniAgentRole
+  blacklistedGamemodes:
+  - DistressSignal
   name: cmu-antag-wy-agent-name
   setPreference: true
   objective: cmu-antag-wy-agent-objective
@@ -131,12 +138,19 @@
     antagPrototype: CorporateSpyRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-corporate-spy
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: laselle_liaison
 
 - type: antag
   parent: CMUAntagColonyBase
   id: CorporateSpyRole
   name: roles-antag-spy-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-spy-objective
 
 - type: startingGear

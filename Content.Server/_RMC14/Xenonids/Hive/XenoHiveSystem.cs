@@ -179,9 +179,12 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
             return;
         }
 
-        // Hive not ready yet — defer one tick and retry.
-        Log.Debug($"TryAssignPathogenHive: CMUPathogenHive not found for {ToPrettyString(uid)}, retrying next tick");
-        Timer.Spawn(0, () => TryAssignPathogenHive(uid));
+        // CMU14 Begin
+        // a 0 ms timer re-ran every tick for as long as no pathogen hive existed (admin spawns, rounds without one)
+        // and spun test threads forever. map-placed members can wait a while for the hive, so keep retrying, just slowly
+        Log.Debug($"TryAssignPathogenHive: CMUPathogenHive not found for {ToPrettyString(uid)}, retrying");
+        Timer.Spawn(TimeSpan.FromSeconds(1), () => TryAssignPathogenHive(uid));
+        // CMU14 End
     }
 
     private void UpdateInvincible()

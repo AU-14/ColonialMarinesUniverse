@@ -17,6 +17,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Popups;
+using Content.Shared.Prying.Systems;
 using Content.Shared.Database;
 using Content.Shared.Standing;
 using Content.Shared.Throwing;
@@ -55,9 +56,12 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         SubscribeLocalEvent<YautjaGearContainerComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<YautjaGearContainerComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<YautjaGearContainerComponent, GetItemActionsEvent>(OnGetItemActions);
-        SubscribeLocalEvent<YautjaGearContainerComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<YautjaGearContainerComponent, InteractUsingEvent>(OnInteractUsing, before: [typeof(PryingSystem)]);
         SubscribeLocalEvent<YautjaGearContainerComponent, YautjaBracerUnequippedEvent>(OnBracerUnequipped);
         SubscribeLocalEvent<YautjaGearContainerComponent, YautjaToggleCasterActionEvent>(OnToggleCaster);
+        // CMU14: the gear toggles run through the bracer misuse roll (yaut_bracers.dm:629), which lives in
+        // YautjaBracerUtilitySystem - hand it the real toggle so a successful roll still flips the gear.
+        EntityManager.System<YautjaBracerUtilitySystem>().TryRunBracerGearToggle = TryToggleGearForMisuse;
         SubscribeLocalEvent<YautjaGearContainerComponent, YautjaToggleWristBladesActionEvent>(OnToggleWristBlades);
         SubscribeLocalEvent<YautjaGearContainerComponent, YautjaToggleScimitarActionEvent>(OnToggleScimitar);
         SubscribeLocalEvent<YautjaGearContainerComponent, YautjaToggleShieldActionEvent>(OnToggleShield);
@@ -79,10 +83,13 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         SubscribeLocalEvent<YautjaStoredGearComponent, GotUnequippedHandEvent>(OnStoredGearUnequippedHand);
         SubscribeLocalEvent<YautjaStoredGearComponent, DroppedEvent>(OnStoredGearDropped);
         SubscribeLocalEvent<YautjaStoredGearComponent, RMCDroppedEvent>(OnStoredGearRMCDropped);
+        SubscribeLocalEvent<YautjaStoredGearComponent, RMCItemDropAttemptEvent>(OnStoredGearDropAttempt);
+        SubscribeLocalEvent<YautjaStoredGearComponent, ContainerGettingRemovedAttemptEvent>(OnStoredGearRemoveAttempt);
         SubscribeLocalEvent<YautjaStoredGearHandRemovalCompletedEvent>(OnStoredGearHandRemovalCompleted);
         SubscribeLocalEvent<DoorComponent, YautjaBracerAttachmentForceDoorDoAfterEvent>(OnBracerAttachmentForceDoorDoAfter);
-        SubscribeLocalEvent<AirlockComponent, InteractUsingEvent>(OnForceAirlockWithBracerAttachment);
-        SubscribeLocalEvent<ResinDoorComponent, InteractUsingEvent>(OnForceResinDoorWithBracerAttachment);
+        SubscribeLocalEvent<AirlockComponent, InteractUsingEvent>(OnForceAirlockWithBracerAttachment, before: [typeof(PryingSystem)]);
+        SubscribeLocalEvent<ResinDoorComponent, InteractUsingEvent>(OnForceResinDoorWithBracerAttachment, before: [typeof(PryingSystem)]);
+        InitializeTempleDoor();
     }
 
     private void OnMapInit(Entity<YautjaGearContainerComponent> ent, ref MapInitEvent args)
@@ -121,6 +128,13 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             return;
 
         var youngblood = HasComp<YautjaYoungbloodComponent>(args.User);
+        // CMU14: every gear button follows the installed attachments. A bracer pre-installs only its plasma caster
+        // (YautjaComponents.GetDefaultGearPrototypes), so the caster button is present from that attachment and the
+        // physical attachments each grant their button only once fitted. HasAction demands both the bracer_actions
+        // membership and an installed, non-deleted attachment (primary or secondary); SyncGearAction keeps the
+        // grant and removal in step, and activating still re-checks possession via TryToggleGear -> EnsureGear.
+        // Granting straight from the whitelist instead - as this method briefly did - gave every whitelisted
+        // button to a bracer with nothing fitted, which is the reported Deploy Wristblades/Scimitar/Shield bug.
         if (!youngblood && HasAction(ent.Comp, YautjaGearKind.Caster))
             args.AddAction(ref ent.Comp.ToggleCasterAction, ent.Comp.ToggleCasterActionId);
 
@@ -159,8 +173,12 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             return;
         }
 
-        if (!CanUseYautjaGear(args.User) ||
-            IsYoungbloodRestrictedGear(args.User, stored.Kind))
+        // Attachment insertion is not Yautja-only: anyone may fit a valid attachment to a bracer. Only this
+        // authorization requirement was dropped - the compatibility, slot and hand checks below still run, and the
+        // other CanUseYautjaGear gates (menu, gear toggles, activation) are untouched.
+        // CM-SS13 counterpart: yaut_bracers.dm:536-540 attackby only refuses a non-tech attach for its wording, and
+        // the feature itself is not gated.
+        if (IsYoungbloodRestrictedGear(args.User, stored.Kind))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), args.User, args.User, PopupType.SmallCaution);
             return;
@@ -195,8 +213,19 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             return;
         }
 
-        if (!CanUseYautjaGear(user.Value) ||
-            IsYoungbloodRestrictedGear(user.Value, stored.Kind))
+        if (!CanUseYautjaGear(user.Value))
+        {
+            // CMU14: yaut_bracers.dm:536-540 attackby - attaching an attachment is gated on the tech trait
+            // with its own wording; the youngblood gear restriction below is CMU's own and keeps its message.
+            _popup.PopupEntity(
+                Loc.GetString("cmu-yautja-attach-no-idea", ("item", gear.Value), ("bracer", ent.Owner)),
+                user.Value,
+                user.Value,
+                PopupType.SmallCaution);
+            return;
+        }
+
+        if (IsYoungbloodRestrictedGear(user.Value, stored.Kind))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), user.Value, user.Value, PopupType.SmallCaution);
             return;
@@ -433,14 +462,16 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         args.Handled = true;
         var user = args.Performer;
 
-        if (!CanUseYautjaGear(user) ||
-            !_power.TryGetWornBracer(user, out var wornBracer) ||
+        if (!_power.TryGetWornBracer(user, out var wornBracer) ||
             wornBracer.Owner != ent.Owner)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-must-be-worn"), user, user, PopupType.SmallCaution);
             return;
         }
 
+        // CMU14: CM-SS13's remove_attachment verb calls attachment_internal(usr, TRUE) - the forced branch -
+        // so retracting attachments has no check_random_function roll and no tech gate; whoever wears the
+        // bracer can retract.
         TryRemoveBracerAttachments(ent, user);
     }
 
@@ -604,7 +635,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearThrowAttempt(Entity<YautjaStoredGearComponent> ent, ref ThrowItemAttemptEvent args)
     {
-        if (!ent.Comp.Deployed)
+        // Standalone gear with no bracer to retract into stays throwable
+        if (ent.Comp.Bracer is null)
             return;
 
         TryRetractStoredGear(ent, args.User);
@@ -613,9 +645,6 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearFellDownThrowAttempt(Entity<YautjaStoredGearComponent> ent, ref FellDownThrowAttemptEvent args)
     {
-        if (!ent.Comp.Deployed)
-            return;
-
         args.Cancelled = true;
     }
 
@@ -634,8 +663,10 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearUnequippedHand(Entity<YautjaStoredGearComponent> ent, ref GotUnequippedHandEvent args)
     {
-        if (!ent.Comp.Deployed || ent.Comp.Retracting)
+        if (ent.Comp.Retracting)
             return;
+
+        ent.Comp.ReinsertedByDeploy = false;
 
         // This event is raised from inside container removal. Wait until the transfer has completed before
         // moving the gear again, otherwise hand -> hand/container operations are re-entered mid-insertion.
@@ -644,10 +675,16 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearHandRemovalCompleted(YautjaStoredGearHandRemovalCompletedEvent args)
     {
-        if (!TryComp(args.Gear, out YautjaStoredGearComponent? stored) ||
-            !stored.Deployed ||
-            stored.Retracting)
+        if (!TryComp(args.Gear, out YautjaStoredGearComponent? stored)
+            || !stored.Deployed
+            || stored.Retracting)
+            return;
+
+        // A deploy in the same frame as the removal re-lands the gear in a hand, so the removal
+        // never left the deployment. Any other removal retracts, including a hand-to-hand swap.
+        if (stored.ReinsertedByDeploy)
         {
+            stored.ReinsertedByDeploy = false;
             return;
         }
 
@@ -656,18 +693,55 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearDropped(Entity<YautjaStoredGearComponent> ent, ref DroppedEvent args)
     {
-        if (!ent.Comp.Deployed)
-            return;
-
         TryRetractStoredGear(ent, args.User);
     }
 
     private void OnStoredGearRMCDropped(Entity<YautjaStoredGearComponent> ent, ref RMCDroppedEvent args)
     {
-        if (!ent.Comp.Deployed)
-            return;
-
         TryRetractStoredGear(ent, args.User);
+    }
+
+    private void OnStoredGearDropAttempt(Entity<YautjaStoredGearComponent> ent, ref RMCItemDropAttemptEvent args)
+    {
+        if (args.Cancelled ||
+            !ent.Comp.Deployed ||
+            !HasComp<YautjaCasterComponent>(ent.Owner))
+        {
+            return;
+        }
+
+        // CMU14: a deployed plasma caster is glued to the hunter. No drop attempt - the player's own drop,
+        // a disarm, a strip or a forced drop - may take it out of the hand. Instead it re-attaches to its
+        // source bracer, matching CMSS13 plasma_caster/dropped() which forceMoves the caster back to source.
+        var user = ent.Comp.Bracer is { } bracer && !TerminatingOrDeleted(bracer)
+            ? Transform(bracer).ParentUid
+            : ent.Owner;
+
+        TryRetractStoredGear(ent, user);
+        args.Cancelled = true;
+    }
+
+    private void OnStoredGearRemoveAttempt(Entity<YautjaStoredGearComponent> ent, ref ContainerGettingRemovedAttemptEvent args)
+    {
+        // Retracting disables this guard - the retraction itself has to take the gear out of the hand.
+        if (args.Cancelled ||
+            ent.Comp.Retracting ||
+            !ent.Comp.Deployed ||
+            !HasComp<YautjaCasterComponent>(ent.Owner))
+        {
+            return;
+        }
+
+        // CMU14: a deployed plasma caster is glued to the hunter. Any attempt to take it out of the hand -
+        // the player's own drop, another entity stripping it (which skips the CanDrop action blocker), a
+        // hand swap or a container transfer - re-attaches it to its source bracer instead of removing it.
+        // This is the same hook UnremoveableComponent uses, scoped to the caster and non-destructive.
+        var user = ent.Comp.Bracer is { } bracer && !TerminatingOrDeleted(bracer)
+            ? Transform(bracer).ParentUid
+            : ent.Owner;
+
+        TryRetractStoredGear(ent, user);
+        args.Cancel();
     }
 
     private void ToggleGear(Entity<YautjaGearContainerComponent> bracer, InstantActionEvent args, YautjaGearKind kind)
@@ -681,11 +755,10 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         args.Handled = true;
         var user = args.Performer;
 
-        if (!CanUseYautjaGear(user) ||
-            !_power.TryGetWornBracer(user, out var wornBracer) ||
+        if (!_power.TryGetWornBracer(user, out var wornBracer) ||
             wornBracer.Owner != bracer.Owner)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-must-be-worn"), user, user, PopupType.SmallCaution);
             return;
         }
 
@@ -695,7 +768,24 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             return;
         }
 
-        TryToggleGear(bracer, user, kind);
+        // CMU14: yaut_bracers.dm:629 attachment_internal opens with check_random_function(user, forced), so a
+        // non-tech press runs the bracer misuse roll first (and a tech press simply runs the toggle).
+        if (TryComp<YautjaBracerComponent>(bracer.Owner, out var bracerComp))
+        {
+            EntityManager.System<YautjaBracerUtilitySystem>()
+                .TryToggleGearMisuse((bracer.Owner, bracerComp), user, kind);
+        }
+    }
+
+    /// <summary>
+    /// CMU14: the real gear toggle, invoked by <c>YautjaBracerUtilitySystem</c> once its misuse roll allows it.
+    /// </summary>
+    private bool TryToggleGearForMisuse(EntityUid bracerUid, EntityUid user, YautjaGearKind kind)
+    {
+        if (!TryComp<YautjaGearContainerComponent>(bracerUid, out var container))
+            return false;
+
+        return TryToggleGear((bracerUid, container), user, kind);
     }
 
     private void ToggleBracerAttachments(Entity<YautjaGearContainerComponent> bracer, InstantActionEvent args)
@@ -709,23 +799,37 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         args.Handled = true;
         var user = args.Performer;
 
-        if (!CanUseYautjaGear(user) ||
-            !_power.TryGetWornBracer(user, out var wornBracer) ||
+        if (!_power.TryGetWornBracer(user, out var wornBracer) ||
             wornBracer.Owner != bracer.Owner)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-must-be-worn"), user, user, PopupType.SmallCaution);
             return;
         }
 
-        TryToggleBracerAttachments(bracer, user);
+        // CMU14: the wrist blade button only touches wrist blades; a gauntlet on the other wrist has its own button.
+        if (CanUseYautjaGear(user))
+        {
+            TryToggleBracerAttachments(bracer, user, YautjaGearKind.WristBlades);
+            return;
+        }
+
+        // CMU14: yaut_bracers.dm:625 bracer_attachment() calls attachment_internal(usr, FALSE), whose very
+        // first act is check_random_function(user, forced) - so a non-tech press rolls instead of being
+        // refused. A successful roll runs the real deploy/retract through YautjaGearKind.WristBlades.
+        if (TryComp<YautjaBracerComponent>(bracer.Owner, out var bracerComp))
+        {
+            EntityManager.System<YautjaBracerUtilitySystem>()
+                .TryToggleGearMisuse((bracer.Owner, bracerComp), user, YautjaGearKind.WristBlades);
+        }
     }
 
-    public bool TryToggleBracerAttachments(Entity<YautjaGearContainerComponent> bracer, EntityUid user)
+    // onlyKind null = every installed attachment (cmss13 deploy_bracer_attachments, the random-function roll)
+    public bool TryToggleBracerAttachments(Entity<YautjaGearContainerComponent> bracer, EntityUid user, YautjaGearKind? onlyKind = null)
     {
-        if (AnyInstalledGearDeployed(bracer.Comp))
+        if (AnyInstalledGearDeployed(bracer.Comp, onlyKind))
         {
-            RetractDeployedInstalledAttachments(bracer, user);
-            _actions.SetToggled(bracer.Comp.ToggleWristBladesAction, AnyInstalledGearDeployed(bracer.Comp));
+            RetractDeployedInstalledAttachments(bracer, user, onlyKind);
+            _actions.SetToggled(bracer.Comp.ToggleWristBladesAction, AnyInstalledGearDeployed(bracer.Comp, onlyKind));
             return true;
         }
 
@@ -739,7 +843,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         foreach (var gear in EnumerateInstalledBracerAttachmentsBySourceSlot(bracer.Comp))
         {
             if (TerminatingOrDeleted(gear) ||
-                !TryComp(gear, out YautjaStoredGearComponent? stored))
+                !TryComp(gear, out YautjaStoredGearComponent? stored) ||
+                onlyKind != null && stored.Kind != onlyKind)
             {
                 continue;
             }
@@ -751,7 +856,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         if (!deployed)
             _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-attachments-none"), user, user, PopupType.SmallCaution);
 
-        _actions.SetToggled(bracer.Comp.ToggleWristBladesAction, AnyInstalledGearDeployed(bracer.Comp));
+        _actions.SetToggled(bracer.Comp.ToggleWristBladesAction, AnyInstalledGearDeployed(bracer.Comp, onlyKind));
         return true;
     }
 
@@ -875,7 +980,18 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             return;
         }
 
+        stored.ReinsertedByDeploy = true;
+        if (deployed != gear && TryComp(deployed, out YautjaStoredGearComponent? deployedStored))
+            deployedStored.ReinsertedByDeploy = true;
+
         SetGearState(bracer, gear, kind, true);
+        if (kind == YautjaGearKind.Caster)
+        {
+            var effect = EntityManager.System<CMUYautjaEffectsSystem>().Emit(
+                CMUYautjaEffect.CasterDeploy, Transform(user).Coordinates, .972f, user);
+            effect.Comp.Item = deployed;
+            Dirty(effect);
+        }
         PlayGearSound(GetDeploySound(bracer.Comp, kind), user);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-gear-deployed", ("item", deployed)), user, user);
         _adminLog.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user):player} deployed Yautja gear {ToPrettyString(deployed):gear} from {ToPrettyString(bracer.Owner):bracer}");
@@ -1001,12 +1117,16 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         }
     }
 
-    private bool AnyInstalledGearDeployed(YautjaGearContainerComponent bracer)
+    private bool AnyInstalledGearDeployed(YautjaGearContainerComponent bracer, YautjaGearKind? onlyKind = null)
     {
         foreach (var gear in bracer.InstalledGear)
         {
-            if (TryComp(gear, out YautjaStoredGearComponent? stored) && stored.Deployed)
+            if (TryComp(gear, out YautjaStoredGearComponent? stored) &&
+                stored.Deployed &&
+                (onlyKind == null || stored.Kind == onlyKind))
+            {
                 return true;
+            }
         }
 
         return false;
@@ -1033,7 +1153,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         }
     }
 
-    private void RetractDeployedInstalledAttachments(Entity<YautjaGearContainerComponent> bracer, EntityUid user)
+    private void RetractDeployedInstalledAttachments(Entity<YautjaGearContainerComponent> bracer, EntityUid user, YautjaGearKind? onlyKind = null)
     {
         var installed = new EntityUid[bracer.Comp.InstalledGear.Count];
         bracer.Comp.InstalledGear.CopyTo(installed);
@@ -1042,7 +1162,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         {
             if (TerminatingOrDeleted(gear) ||
                 !TryComp(gear, out YautjaStoredGearComponent? stored) ||
-                !stored.Deployed)
+                !stored.Deployed ||
+                onlyKind != null && stored.Kind != onlyKind)
             {
                 continue;
             }
@@ -1504,7 +1625,14 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private bool CanUseYautjaGear(EntityUid user)
     {
+        // CMU14: CM-SS13 gates attachment handling on HAS_TRAIT(user, TRAIT_YAUTJA_TECH) alone - see
+        // yaut_bracers.dm:535 attackby ("You do not know how to attach the [attacking_item] to [src].") and the
+        // attachment/gear procs around it. YautjaTechAuthorizedComponent is how CMU models that trait (thralls
+        // and other authorized users hold it), so accepting it here is what lets a thrall or authorized human
+        // attach wristblades and operate bracer gear. Before this, only Yautja and blooded thralls qualified,
+        // so an authorized human was refused exactly like a random marine.
         return HasComp<YautjaComponent>(user) ||
+               HasComp<YautjaTechAuthorizedComponent>(user) ||
                (TryComp(user, out YautjaThrallComponent? thrall) && thrall.Blooded && thrall.TechAuthorized);
     }
 }

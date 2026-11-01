@@ -25,7 +25,7 @@ namespace Content.Server.CMU14.Atmos;
 /// IsRoof entities), the same source weather uses, so roofed rooms are never
 /// normalized on any deck.
 /// </summary>
-public sealed class CMUOutdoorAtmosphereSystem : EntitySystem
+public sealed partial class CMUOutdoorAtmosphereSystem : EntitySystem
 {
     // Seconds between relaxation passes. The strength is a CVar so recovery
     // speed can be tuned live.
@@ -37,12 +37,12 @@ public sealed class CMUOutdoorAtmosphereSystem : EntitySystem
 
     private const int BudgetCheckInterval = 64;
 
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefs = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedRoofSystem _roof = default!;
-    [Dependency] private readonly CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ITileDefinitionManager _tileDefs = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedRoofSystem _roof = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private EntityQuery<GridAtmosphereComponent> _atmosQuery = default!;
     private EntityQuery<MapGridComponent> _gridQuery = default!;

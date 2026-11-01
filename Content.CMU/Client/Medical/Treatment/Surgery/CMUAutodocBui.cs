@@ -177,7 +177,7 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         if (_window is null)
             return;
 
-        _window.ChemicalList.DisposeAllChildren();
+        _window.ChemicalList.ReleaseChildren();
         if (state.Chemicals.Count == 0)
         {
             _window.ChemicalList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-autodoc-no-chemicals")));
@@ -280,7 +280,7 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         EnsureSelectedPart(state);
         var noParts = !state.CanQueue || state.Parts.Count == 0;
         SetEmpty(_window.PartList, ref _partsEmpty, noParts, Loc.GetString(
-            state.CanQueue ? "cmu-autodoc-no-surgeries" : "cmu-autodoc-surgery2-required"));
+            state.CanQueue ? "cmu-autodoc-no-surgeries" : "cmu-autodoc-no-patient-to-queue"));
         if (state.CanQueue)
         {
             var index = 0;
@@ -337,7 +337,7 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         else
         {
             SetText(_window.SelectedPartLabel, Loc.GetString("cmu-medical-surgery-no-part-selected"));
-            var empty = Loc.GetString(state.CanQueue ? "cmu-autodoc-no-surgeries" : "cmu-autodoc-surgery2-required");
+            var empty = Loc.GetString(state.CanQueue ? "cmu-autodoc-no-surgeries" : "cmu-autodoc-no-patient-to-queue");
             SetText(_window.SelectedPartStatusLabel, empty);
             SetEmpty(_window.SurgeryList, ref _proceduresEmpty, true, empty);
         }

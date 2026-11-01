@@ -16,15 +16,15 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared.CMU14.WallLean;
 
-public sealed class CMUWallLeanSystem : EntitySystem
+public sealed partial class CMUWallLeanSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly RMCSlowSystem _slow = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private const float SideShift = 10f / 32f;
     private const float UnderWallShift = 16f / 32f;
@@ -127,7 +127,7 @@ public sealed class CMUWallLeanSystem : EntitySystem
         leaning.Wall = wall;
         leaning.Offset = offset;
         leaning.BehindWall = direction == Direction.North;
-        leaning.Position = spot;
+        leaning.Position = WallFramePosition(user, wall);
         Dirty(user, leaning);
         _physics.RegenerateContacts(user);
     }
@@ -154,6 +154,17 @@ public sealed class CMUWallLeanSystem : EntitySystem
         RemCompDeferred<CMUWallLeaningComponent>(ent);
     }
 
+    /// <summary>
+    ///     Where the leaner is in the frame of whatever the wall is on, so a moving grid, like a dropship in
+    ///     flight, doesn't count as them stepping away from it.
+    /// </summary>
+    private Vector2 WallFramePosition(EntityUid user, EntityUid wall)
+    {
+        var frame = Transform(wall).ParentUid;
+        var world = _transform.GetWorldPosition(user);
+        return frame.IsValid() ? Vector2.Transform(world, _transform.GetInvWorldMatrix(frame)) : world;
+    }
+
     public override void Update(float frameTime)
     {
         if (_net.IsClient)
@@ -169,7 +180,7 @@ public sealed class CMUWallLeanSystem : EntitySystem
                 _mobState.IsIncapacitated(uid) ||
                 _standing.IsDown(uid) ||
                 TryComp<BuckleComponent>(uid, out var buckle) && buckle.Buckled ||
-                (_transform.GetWorldPosition(uid) - leaning.Position).Length() > 0.1f)
+                (WallFramePosition(uid, wall) - leaning.Position).Length() > 0.1f)
             {
                 StopLeaning((uid, leaning));
             }

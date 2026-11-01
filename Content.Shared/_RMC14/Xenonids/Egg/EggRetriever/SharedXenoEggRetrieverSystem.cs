@@ -50,7 +50,7 @@ public abstract partial class SharedXenoEggRetrieverSystem : EntitySystem
         args.Handled = true;
         ToggleProduceEggs(xeno, xeno.Comp);
         if (xeno.Comp.Active)
-            _popup.PopupClient(Loc.GetString("rmc-xeno-produce-eggs-start"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-produce-eggs-start"), xeno, xeno);
     }
 
     protected void ToggleProduceEggs(EntityUid xeno, XenoGenerateEggsComponent produce)

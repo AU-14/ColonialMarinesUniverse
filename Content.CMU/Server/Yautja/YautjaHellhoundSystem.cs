@@ -6,6 +6,7 @@ using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Camera;
+using Content.Shared._RMC14.K9.Events;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Body.Part;
 using Content.Shared.Examine;
@@ -49,6 +50,7 @@ public sealed partial class YautjaHellhoundSystem : EntitySystem
         SubscribeLocalEvent<YautjaHellhoundComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<YautjaHellhoundComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<YautjaHellhoundComponent, GetMeleeDamageEvent>(OnGetMeleeDamage);
+        SubscribeLocalEvent<YautjaHellhoundComponent, K9BondChangedEvent>(OnBondChanged);
     }
 
     private void OnSenseOwner(Entity<YautjaHellhoundComponent> ent, ref YautjaHellhoundSenseOwnerActionEvent args)
@@ -86,6 +88,12 @@ public sealed partial class YautjaHellhoundSystem : EntitySystem
     private void OnStartup(Entity<YautjaHellhoundComponent> ent, ref ComponentStartup args)
     {
         RemCompDeferred<HiveMemberComponent>(ent);
+    }
+
+    private void OnBondChanged(Entity<YautjaHellhoundComponent> ent, ref K9BondChangedEvent args)
+    {
+        // The K9 bond is the record of truth; YautjaOwner mirrors it for sense and examine.
+        ent.Comp.YautjaOwner = args.Master;
     }
 
     private void OnGetMeleeDamage(Entity<YautjaHellhoundComponent> ent, ref GetMeleeDamageEvent args)

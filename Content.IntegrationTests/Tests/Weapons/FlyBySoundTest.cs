@@ -112,8 +112,8 @@ public sealed class FlyBySoundTest : GameTest
             Assert.That(client.EntMan.System<FlyByContactProbeSystem>().Count(predicted,
                 contact => contact.OurFixtureId == SharedFlyBySoundSystem.FlyByFixture && contact.OtherEntity == clientListener),
                 Is.EqualTo(1));
-            var sounds = client.EntMan.EntityQuery<AudioComponent>()
-                .Where(audio => audio.FileName == SoundPath)
+            var sounds = client.EntMan.QueryEntities<AudioComponent>()
+                .Where(audio => audio.Comp.FileName == SoundPath)
                 .Where(audio => client.Transform(audio.Owner).ParentUid == clientListener)
                 .ToArray();
 

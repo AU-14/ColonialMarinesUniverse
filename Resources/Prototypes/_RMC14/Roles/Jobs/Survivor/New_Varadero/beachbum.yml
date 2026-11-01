@@ -30,15 +30,16 @@
     - type: RMCConditionalMarkings
       targetCategory: UndergarmentTop
       markings:
+        # cmu edit start: cmss13-pve underwear
         Male:
-        - RMCUndershirtNone
+        - CMUUndershirtNone
         Female:
-        - RMCUndershirtClassic
-        - RMCUndershirtSports
-        - RMCUndershirtStrapless
-        - RMCUndershirtClassicJungle
-        - RMCUndershirtSportsJungle
-        - RMCUndershirtStraplessJungle
+        - CMUBraWhite
+        - CMUBraBlack
+        - CMUSportsBraWhite
+        - CMUSportsBraBlack
+        - CMUSportsBraOlive
+        # cmu edit end
   useLoadoutOfJob: CMSurvivor # for inheritance
 
 - type: startingGear

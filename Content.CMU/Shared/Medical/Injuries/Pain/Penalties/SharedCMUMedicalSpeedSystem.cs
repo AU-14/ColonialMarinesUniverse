@@ -33,6 +33,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected SharedPainShockSystem Pain = default!;
     [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] private CMULegSupportSystem _legSupport = default!;
 
     private bool _medicalEnabled;
     private bool _statusEffectsEnabled;
@@ -75,7 +76,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         // Other penalty consumers have their own CVar callbacks. Refresh after
         // those callbacks finish so held-gun caches use the new configuration too.
         // Paused patients also need current projections when the layer is toggled.
-        var query = EntityManager.AllEntityQueryEnumerator<CMUHumanMedicalComponent>();
+        var query = AllEntityQuery<CMUHumanMedicalComponent>();
         while (query.MoveNext(out var body, out _))
         {
             if (!TerminatingOrDeleted(body))
@@ -198,6 +199,9 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
                     mult *= (float)FractureProfile.Get(sev).MovementMult;
             }
             if (TryComp<CMUCastComponent>(partUid, out var cast) && cast.ImmobilizesLimb)
+                mult *= 0.5f;
+            // a footless leg only halves you, the same as SharedBodySystem does for a missing leg
+            if (partComp.PartType == BodyPartType.Leg && _legSupport.MissingFoot(partUid))
                 mult *= 0.5f;
         }
 

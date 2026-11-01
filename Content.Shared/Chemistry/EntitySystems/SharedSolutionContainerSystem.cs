@@ -1160,7 +1160,8 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
     /// If you're running this when your entity is created, it is HIGHLY recommended to run on <see cref="MapInitEvent"/>
     /// Deviance from these instructions may prevent your game from building. YOU HAVE BEEN WARNED.
     /// </remarks>
-    [Obsolete("Solution string matching will be removed in the future in favor of relations and enumerators.")]
+    // CMU14: Named solutions remain part of the blood, lungs, botany and prototype-loading contracts.
+    // [Obsolete("Solution string matching will be removed in the future in favor of relations and enumerators.")]
     public bool EnsureSolution(
         Entity<SolutionManagerComponent?> entity,
         string name,

@@ -125,7 +125,7 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
         }
 
         var popup = Loc.GetString("cm-xeno-pheromones-start", ("pheromones", args.Pheromones.ToString()));
-        _popup.PopupClient(popup, xeno, xeno);
+        _popup.PopupEntity(popup, xeno, xeno);
 
         _ui.CloseUi(xeno.Owner, XenoPheromonesUI.Key, xeno);
 
@@ -244,7 +244,7 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
         if (_net.IsServer)
             RemComp<XenoActivePheromonesComponent>(xeno);
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-pheromones-stop"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-pheromones-stop"), xeno, xeno);
         var pheroEv = new XenoPheromonesDeactivatedEvent();
         RaiseLocalEvent(xeno, ref pheroEv);
     }

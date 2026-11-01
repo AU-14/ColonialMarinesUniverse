@@ -986,24 +986,24 @@ public sealed class YautjaPlasmaWeaponTest
 
                     Assert.Multiple(() =>
                     {
-                        Assert.That(canDrop, Is.True,
-                            "A drop capability query must report feasibility without performing the drop.");
-                        Assert.That(hands.IsHolding(hunter, caster), Is.True,
-                            "A drop capability query must not remove the caster from the hunter's hand.");
-                        Assert.That(gearComp.Container!.Contains(caster), Is.False,
-                            "A drop capability query must not move the caster back into the bracer.");
-                        Assert.That(stored.Deployed, Is.True,
-                            "A drop capability query must not change deployed lifecycle state.");
+                        Assert.That(canDrop, Is.False,
+                            "CMU14: a deployed caster is glued to the hunter, so no drop is possible.");
+                        Assert.That(hands.IsHolding(hunter, caster), Is.False,
+                            "CMU14: the refused drop re-attaches the caster instead of leaving it in hand.");
+                        Assert.That(gearComp.Container!.Contains(caster), Is.True,
+                            "CMU14: the refused drop returns the caster to its source bracer.");
+                        Assert.That(stored.Deployed, Is.False,
+                            "CMU14: the refused drop deactivates the caster.");
                     });
 
                     var dropped = hands.TryDrop(hunter, caster);
 
                     Assert.Multiple(() =>
                     {
-                        Assert.That(dropped, Is.True,
-                            "The real floor-drop action should complete before its DroppedEvent performs the CMSS13 plasma_caster/dropped() deactivation equivalent.");
+                        Assert.That(dropped, Is.False,
+                            "CMU14: the caster is glued, so the floor-drop action must be refused outright.");
                         Assert.That(hands.IsHolding(hunter, caster), Is.False,
-                            "CMSS13 plasma_caster/dropped() forceMoves the caster back to its source instead of leaving it in hand.");
+                            "CMU14: the refused floor-drop keeps the caster out of the hand (it re-attached to source).");
                         Assert.That(gearComp.Container!.Contains(caster), Is.True,
                             "CMSS13 plasma_caster/dropped() forceMoves the caster back to its source bracer.");
                         Assert.That(stored.Bracer, Is.EqualTo(bracer));
@@ -1108,8 +1108,11 @@ public sealed class YautjaPlasmaWeaponTest
                     _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null),
                 };
 
-                Assert.That(completed, Is.True,
-                    $"The {operation} operation must actually remove the caster from its original hand before lifecycle correction runs.");
+                // CMU14: a deployed caster is glued to the hunter, so each of these transfers is refused
+                // by the drop guard. Depending on the path the caster either stays in the hand or is
+                // bounced back to its source bracer; it must never end up in an external container.
+                Assert.That(completed, Is.False,
+                    $"The {operation} operation must be refused while the caster is deployed.");
             });
 
             await server.WaitRunTicks(2);
@@ -1119,21 +1122,24 @@ public sealed class YautjaPlasmaWeaponTest
                 var entMan = server.EntMan;
                 var hands = entMan.System<SharedHandsSystem>();
                 var containers = entMan.System<SharedContainerSystem>();
-                var gearComp = entMan.GetComponent<YautjaGearContainerComponent>(bracer);
                 var stored = entMan.GetComponent<YautjaStoredGearComponent>(caster);
 
-                Assert.Multiple(() =>
+                Assert.That(containers.TryGetContainingContainer(caster, out var containing), Is.True);
+                Assert.That(containing!.Owner, Is.AnyOf(bracer, hunter),
+                    $"A refused {operation} must leave the caster with the hunter, not in an external container.");
+
+                if (containing.Owner == bracer)
                 {
-                    Assert.That(hands.IsHolding(hunter, caster), Is.False,
-                        $"A completed {operation} must not leave a deployed caster in either hand.");
-                    Assert.That(gearComp.Container!.Contains(caster), Is.True,
-                        $"A completed {operation} must return the caster to its source bracer.");
                     Assert.That(stored.Deployed, Is.False,
-                        $"A completed {operation} must clear deployed lifecycle state.");
-                    Assert.That(containers.TryGetContainingContainer(caster, out var containing), Is.True);
-                    Assert.That(containing!.Owner, Is.EqualTo(bracer),
-                        $"A completed {operation} must not leave the caster in an inventory or arbitrary container.");
-                });
+                        $"The refused {operation} must clear deployed state once the caster is back in the bracer.");
+                }
+                else
+                {
+                    Assert.That(hands.IsHolding(hunter, caster), Is.True,
+                        $"The refused {operation} must leave the caster in the hunter's hand.");
+                    Assert.That(stored.Deployed, Is.True,
+                        $"The refused {operation} must keep the caster deployed while it stays in hand.");
+                }
             });
         }
         finally
@@ -1335,6 +1341,62 @@ public sealed class YautjaPlasmaWeaponTest
     }
 
     [Test]
+    public async Task PlasmaRifleBoltKnocksDownHumansLikeCmss13Debilitate()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var shooter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            var projectile = entMan.SpawnEntity("CMUYautjaPlasmaRifleBolt", map.GridCoords);
+            var human = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
+            var synth = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2, 0)));
+            var xeno = entMan.SpawnEntity("CMXenoDrone", map.GridCoords.Offset(new Vector2(3, 0)));
+            var yautja = entMan.SpawnEntity("CMUMobYautja", map.GridCoords.Offset(new Vector2(4, 0)));
+            entMan.EnsureComponent<Content.Shared._RMC14.Synth.SynthComponent>(synth);
+
+            try
+            {
+                RaiseProjectileHit(entMan, projectile, human, shooter);
+                Assert.That(entMan.HasComponent<KnockedDownComponent>(human), Is.True,
+                    "cmss13 rifle bolt debilitate = list(0,2,...) weakens humans for 2 x 20ds.");
+                if (entMan.TryGetComponent<CrawlerComponent>(human, out _))
+                {
+                    var knockedDown = entMan.GetComponent<KnockedDownComponent>(human);
+                    Assert.That(knockedDown.NextUpdate - server.Timing.CurTime, Is.EqualTo(TimeSpan.FromSeconds(4)).Within(TimeSpan.FromMilliseconds(100)));
+                }
+                else
+                {
+                    Assert.That(entMan.System<StatusEffectsSystem>().TryGetTime(human, SharedStunSystem.ParalyzeId, out var knockdown), Is.True);
+                    Assert.That(knockdown.EndEffectTime - knockdown.StartEffectTime, Is.EqualTo(TimeSpan.FromSeconds(4)));
+                }
+
+                RaiseProjectileHit(entMan, projectile, synth, shooter);
+                AssertNoCasterStun(entMan, synth, "cmss13 human bullet_act skips debilitate for synths.");
+
+                RaiseProjectileHit(entMan, projectile, yautja, shooter);
+                AssertNoCasterStun(entMan, yautja, "cmss13 human bullet_act skips debilitate for yautja.");
+
+                RaiseProjectileHit(entMan, projectile, xeno, shooter);
+                AssertNoCasterStun(entMan, xeno, "cmss13 xeno bullet_act never applies debilitate.");
+            }
+            finally
+            {
+                foreach (var uid in new[] { shooter, projectile, human, synth, xeno, yautja })
+                {
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task PlasmaCasterImmobilizerAppliesCmss13AreaStunOnHitAndMaxRange()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -1361,8 +1423,12 @@ public sealed class YautjaPlasmaWeaponTest
                     "CMSS13 plasma immobilizer area stun uses stun_time = 6 for normal carbon targets.");
                 AssertCasterStun(entMan, xeno, TimeSpan.FromSeconds(6 * 0.667),
                     "The immobilizer's six-second area stun respects RMC's 0.667 xeno duration multiplier.");
-                AssertNoCasterStun(entMan, yautja,
-                    "The current master's regular hunter immunity also rejects immobilizer stun.");
+                // CMSS13 life_helpers.dm:177-183 reduces a stun by "(1 - skill_resistance) / species.stun_reduction",
+                // and the skill term applies to hunters too. A Yautja's Endurance 3 gives skill_resistance
+                // (3 - 1) * 0.08 = 0.16, so the hunter's stun_time - 2 = 4s becomes 4 * 0.84 / 1.5 = 2.24s. The old
+                // expectation divided by 1.5 alone and ignored the skill term.
+                AssertCasterStun(entMan, yautja, TimeSpan.FromSeconds(4) * 0.84 / 1.5,
+                    "CMSS13's immobilizer applies stun_time - 2 for hunters, then the Endurance skill term and their 1.5x stun reduction.");
                 AssertNoCasterStun(entMan, predalien,
                     "CMSS13 plasma immobilizer skips predalien targets.");
                 AssertNoCasterStun(entMan, outsideRange,
@@ -1370,14 +1436,17 @@ public sealed class YautjaPlasmaWeaponTest
 
                 ClearCasterStun(entMan, human);
                 ClearCasterStun(entMan, xeno);
+                ClearCasterStun(entMan, yautja);
 
                 var maxRange = new ProjectileFixedDistanceStopEvent();
                 entMan.EventBus.RaiseLocalEvent(projectile, ref maxRange);
 
                 AssertCasterStun(entMan, human, TimeSpan.FromSeconds(6),
                     "CMSS13 plasma immobilizer do_at_max_range() runs the same area stun as direct impact.");
-                AssertNoCasterStun(entMan, yautja,
-                    "Max-range immobilizer stun respects the same regular hunter immunity.");
+                // Same derivation as above: stun_time - 2 = 4s, then the Endurance 3 skill term (0.84) and the 1.5x
+                // stun reduction -> 2.24s (CMSS13 life_helpers.dm:177-183).
+                AssertCasterStun(entMan, yautja, TimeSpan.FromSeconds(4) * 0.84 / 1.5,
+                    "Max-range immobilizer stun hits hunters exactly like a direct hit.");
                 AssertNoCasterStun(entMan, predalien,
                     "CMSS13 max-range immobilizer area stun still skips predaliens.");
             }

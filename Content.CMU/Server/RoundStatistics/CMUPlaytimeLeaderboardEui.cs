@@ -9,7 +9,7 @@ namespace Content.Server.CMU14.RoundStatistics;
 
 public sealed partial class CMUPlaytimeLeaderboardEui : BaseEui
 {
-    [Dependency] private readonly ITaskManager _task = default!;
+    [Dependency] private ITaskManager _task = default!;
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.playtime_leaderboard");
 

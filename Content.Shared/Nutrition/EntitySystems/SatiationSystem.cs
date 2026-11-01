@@ -30,12 +30,17 @@ public abstract partial class SatiationSystem : EntitySystem
     /// <inheritdoc/>
     public override void Update(float frameTime)
     {
+        var now = _timing.CurTime; // CMU14: deadlines are stable throughout this update.
         var query = EntityQueryEnumerator<SatiationComponent>();
         while (query.MoveNext(out var uid, out var component))
         {
             var entity = new Entity<SatiationComponent>(uid, component);
             foreach (var satiation in component.Satiations.Values)
             {
+                // CMU14: skip prototype lookup until either deadline is due; null means no deadline.
+                if (!(now >= satiation.NextAlertUpdateTime || now >= satiation.NextChangeRateModUpdateTime))
+                    continue;
+
                 if (!ProtoMan.Resolve(satiation.Prototype, out var proto))
                     continue;
 
@@ -196,7 +201,15 @@ public abstract partial class SatiationSystem : EntitySystem
             currentChangeMod = 1f;
         }
 
-        satiation.ActualChangeRate = proto.BaseChangeRate * currentChangeMod;
+        // CMU14 Satiation Begin: slow hunger drain before applying the character's traits.
+        var changeRate = proto.BaseChangeRate * currentChangeMod;
+        if (satiation.SatiationType == Hunger && changeRate < 0f)
+            changeRate /= 1.5f;
+
+        var cmuRate = new Content.Shared.CMU14.Nutrition.CMUSatiationRateEvent(satiation.SatiationType.Id, changeRate);
+        RaiseLocalEvent(entity, ref cmuRate);
+        satiation.ActualChangeRate = cmuRate.Rate;
+        // CMU14 End
         satiation.NextChangeRateModUpdateTime = EvolvesToBoundAt(
             satiation,
             proto,

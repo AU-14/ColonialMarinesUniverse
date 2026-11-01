@@ -1,0 +1,197 @@
+# Static source-derived water surfaces. See SOURCES_WATER.md.
+- type: cmu3DModel
+  id: CMU3DRMCEntityDesertWaterShallow
+  label: Desert water shallow
+  sourcePrototypes:
+  - RMCEntityDesertWaterShallow
+  status: draft
+  referenceRsi: _RMC14/Tiles/planet/desert_water.rsi
+  referenceState: shallow
+  sourceDirections: 1
+  description: Thin ground-level water volume with original first South frame projected in XY. Cutouts reveal terrain
+    and half-alpha shore shadows retain fractional coverage. Water top .012 tiles is below catwalk grates. Saved
+    transform is preserved. Static draft; waves, refraction, reflection and depth are unfinished. See SOURCES_WATER.md.
+  parts:
+  - label: water surface
+    min: -0.5, -0.5, 0.008
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DWaterArtRMCEntityDesertWaterShallow
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCEntityDesertWaterDeep
+  label: Desert water deep
+  sourcePrototypes:
+  - RMCEntityDesertWaterDeep
+  status: draft
+  referenceRsi: _RMC14/Tiles/planet/desert_water.rsi
+  referenceState: deep
+  sourceDirections: 1
+  description: Thin ground-level water volume with original first South frame projected in XY. Cutouts reveal terrain
+    and half-alpha shore shadows retain fractional coverage. Water top .012 tiles is below catwalk grates. Saved
+    transform is preserved. Static draft; waves, refraction, reflection and depth are unfinished. See SOURCES_WATER.md.
+  parts:
+  - label: water surface
+    min: -0.5, -0.5, 0.008
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DWaterArtRMCEntityDesertWaterDeep
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCEntityDesertWaterShallowEdge
+  label: Desert water shallow edge
+  sourcePrototypes:
+  - RMCEntityDesertWaterShallowEdge
+  status: draft
+  referenceRsi: _RMC14/Tiles/planet/desert_water.rsi
+  referenceState: shallow_edge
+  sourceDirections: 4
+  description: Thin ground-level water volume with original first South frame projected in XY. Cutouts reveal terrain
+    and half-alpha shore shadows retain fractional coverage. Water top .012 tiles is below catwalk grates. Saved
+    transform is preserved. Static draft; waves, refraction, reflection and depth are unfinished. Non-South caustic
+    details rotate with this frame; only their shoreline footprint is exact. See SOURCES_WATER.md.
+  parts:
+  - label: water surface and shoreline cutout
+    min: -0.5, -0.5, 0.008
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DWaterArtRMCEntityDesertWaterShallowEdge
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCEntityDesertWaterShallowCorner
+  label: Desert water shallow convex corner
+  sourcePrototypes:
+  - RMCEntityDesertWaterShallowCorner
+  status: draft
+  referenceRsi: _RMC14/Tiles/planet/desert_water.rsi
+  referenceState: shallow_corner
+  sourceDirections: 4
+  description: Thin ground-level water volume with original first South frame projected in XY. Cutouts reveal terrain
+    and half-alpha shore shadows retain fractional coverage. Water top .012 tiles is below catwalk grates. Saved
+    transform is preserved. Static draft; waves, refraction, reflection and depth are unfinished. Non-South caustic
+    details rotate with this frame; only their shoreline footprint is exact. See SOURCES_WATER.md.
+  parts:
+  - label: water surface and shoreline cutout
+    min: -0.5, -0.5, 0.008
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DWaterArtRMCEntityDesertWaterShallowCorner
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCEntityDesertWaterShallowCornerEdge
+  label: Desert water shallow concave corner
+  sourcePrototypes:
+  - RMCEntityDesertWaterShallowCornerEdge
+  status: draft
+  referenceRsi: _RMC14/Tiles/planet/desert_water.rsi
+  referenceState: shallow_corner_edge
+  sourceDirections: 4
+  description: Thin ground-level water volume with original first South frame projected in XY. Cutouts reveal terrain
+    and half-alpha shore shadows retain fractional coverage. Water top .012 tiles is below catwalk grates. Saved
+    transform is preserved. Static draft; waves, refraction, reflection and depth are unfinished. Non-South caustic
+    details rotate with this frame; only their shoreline footprint is exact. See SOURCES_WATER.md.
+  parts:
+  - label: water surface and shoreline cutout
+    min: -0.5, -0.5, 0.008
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DWaterArtRMCEntityDesertWaterShallowCornerEdge
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAUEntityShepBeachEdge
+  label: Beach  edge
+  sourcePrototypes:
+  - AUEntityShepBeachEdge
+  status: draft
+  referenceRsi: _RMC14/Tiles/sheperd/shep_beach.rsi
+  referenceState: shallow_edge
+  sourceDirections: 4
+  description: Thin ground-level water volume with original first South frame projected in XY. Cutouts reveal terrain
+    and half-alpha shore shadows retain fractional coverage. Water top .012 tiles is below catwalk grates. Saved
+    transform is preserved. Static draft; waves, refraction, reflection and depth are unfinished. Non-South caustic
+    details rotate with this frame; only their shoreline footprint is exact. See SOURCES_WATER.md.
+  parts:
+  - label: water surface and shoreline cutout
+    min: -0.5, -0.5, 0.008
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DWaterArtAUEntityShepBeachEdge
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAUEntityShepBeachCorner
+  label: Beach  convex corner
+  sourcePrototypes:
+  - AUEntityShepBeachCorner
+  status: draft
+  referenceRsi: _RMC14/Tiles/sheperd/shep_beach.rsi
+  referenceState: shallow_corner
+  sourceDirections: 4
+  description: Thin ground-level water volume with original first South frame projected in XY. Cutouts reveal terrain
+    and half-alpha shore shadows retain fractional coverage. Water top .012 tiles is below catwalk grates. Saved
+    transform is preserved. Static draft; waves, refraction, reflection and depth are unfinished. Non-South caustic
+    details rotate with this frame; only their shoreline footprint is exact. See SOURCES_WATER.md.
+  parts:
+  - label: water surface and shoreline cutout
+    min: -0.5, -0.5, 0.008
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DWaterArtAUEntityShepBeachCorner
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAUEntityShepBeachCornerEdge
+  label: Beach  concave corner
+  sourcePrototypes:
+  - AUEntityShepBeachCornerEdge
+  status: draft
+  referenceRsi: _RMC14/Tiles/sheperd/shep_beach.rsi
+  referenceState: shallow_corner_edge
+  sourceDirections: 4
+  description: Thin ground-level water volume with original first South frame projected in XY. Cutouts reveal terrain
+    and half-alpha shore shadows retain fractional coverage. Water top .012 tiles is below catwalk grates. Saved
+    transform is preserved. Static draft; waves, refraction, reflection and depth are unfinished. Non-South caustic
+    details rotate with this frame; only their shoreline footprint is exact. See SOURCES_WATER.md.
+  parts:
+  - label: water surface and shoreline cutout
+    min: -0.5, -0.5, 0.008
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DWaterArtAUEntityShepBeachCornerEdge
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DCMFloorShallowWaterEntity
+  label: shallow water
+  sourcePrototypes:
+  - CMFloorShallowWaterEntity
+  status: draft
+  referenceRsi: _RMC14/Tiles/planet/water.rsi
+  referenceState: seashallow
+  sourceDirections: 1
+  description: Thin ground-level water volume with original first South frame projected in XY. Cutouts reveal terrain
+    and half-alpha shore shadows retain fractional coverage. Water top .012 tiles is below catwalk grates. Saved
+    transform is preserved. Static draft; waves, refraction, reflection and depth are unfinished. See SOURCES_WATER.md.
+  parts:
+  - label: water surface
+    min: -0.5, -0.5, 0.008
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DWaterArtCMFloorShallowWaterEntity
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DCMFloorDeepWaterEntity
+  label: deep water
+  sourcePrototypes:
+  - CMFloorDeepWaterEntity
+  status: draft
+  referenceRsi: _RMC14/Tiles/planet/water.rsi
+  referenceState: seadeep
+  sourceDirections: 1
+  description: Thin ground-level water volume with original first South frame projected in XY. Cutouts reveal terrain
+    and half-alpha shore shadows retain fractional coverage. Water top .012 tiles is below catwalk grates. Saved
+    transform is preserved. Static draft; waves, refraction, reflection and depth are unfinished. See SOURCES_WATER.md.
+  parts:
+  - label: water surface
+    min: -0.5, -0.5, 0.008
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DWaterArtCMFloorDeepWaterEntity
+    surfaceAxis: XY

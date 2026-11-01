@@ -1,0 +1,15 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Mobs laid down as they spawn no longer stand right back up
+  type: Fix
+- message: Expedition squads no longer jam up at corners and narrow spots
+  type: Fix
+- message: Tactical map blips no longer freeze in place on quiet maps
+  type: Fix
+- message: Parked dropships are no longer pushed around by depressurization
+  type: Fix
+- message: Restarting the round right after a dropship hijack no longer errors
+  type: Fix
+time: '2026-10-12T14:21:06.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2165

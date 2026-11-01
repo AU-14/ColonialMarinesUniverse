@@ -62,10 +62,17 @@
     antagPrototype: CLFSleeperAgentRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-clf-sleeper-agent
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudCLF
 
 - type: antag
   parent: CMUAntagColonyBase
   id: CLFSleeperAgentRole
   name: roles-antag-clf-sleeper-agent-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-clf-sleeper-agent-objective

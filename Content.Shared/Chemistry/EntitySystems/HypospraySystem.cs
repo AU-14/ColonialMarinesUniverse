@@ -105,7 +105,7 @@ public sealed partial class HypospraySystem : EntitySystem
         {
             var message = selfEvent.OverrideMessage ??
                           Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target, EntityManager)));
-            _popup.PopupClient(message, target, user);
+            _popup.PopupEntity(message, target, user);
             return false;
         }
 
@@ -122,7 +122,7 @@ public sealed partial class HypospraySystem : EntitySystem
         {
             var message = targetEvent.OverrideMessage ??
                           Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target, EntityManager)));
-            _popup.PopupClient(message, target, user);
+            _popup.PopupEntity(message, target, user);
             return false;
         }
 
@@ -133,13 +133,13 @@ public sealed partial class HypospraySystem : EntitySystem
 
         if (!_solutionContainers.TryGetSolution(uid, component.SolutionName, out var hypoSpraySoln, out var hypoSpraySolution) || hypoSpraySolution.Volume == 0)
         {
-            _popup.PopupClient(Loc.GetString("hypospray-component-empty-message"), target, user);
+            _popup.PopupEntity(Loc.GetString("hypospray-component-empty-message"), target, user);
             return true;
         }
 
         if (!_solutionContainers.TryGetInjectableSolution(target, out var targetSoln, out var targetSolution))
         {
-            _popup.PopupClient(Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target, EntityManager))), target, user);
+            _popup.PopupEntity(Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target, EntityManager))), target, user);
             return false;
         }
 
@@ -149,7 +149,7 @@ public sealed partial class HypospraySystem : EntitySystem
                              (target == user
                                  ? Loc.GetString("hypospray-component-inject-self-message")
                                  : Loc.GetString("hypospray-component-inject-other-message", ("other", target)));
-        _popup.PopupClient(successMessage, target, user);
+        _popup.PopupEntity(successMessage, target, user);
 
         if (target != user)
         {
@@ -170,7 +170,7 @@ public sealed partial class HypospraySystem : EntitySystem
 
         if (realTransferAmount <= 0)
         {
-            _popup.PopupClient(Loc.GetString("hypospray-component-transfer-already-full-message", ("owner", target)), target, user);
+            _popup.PopupEntity(Loc.GetString("hypospray-component-transfer-already-full-message", ("owner", target)), target, user);
             return true;
         }
 
@@ -204,7 +204,7 @@ public sealed partial class HypospraySystem : EntitySystem
 
         if (realTransferAmount <= 0)
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("injector-component-target-is-empty-message",
                     ("target", Identity.Entity(target, EntityManager))),
                 entity.Owner, user);
@@ -218,7 +218,7 @@ public sealed partial class HypospraySystem : EntitySystem
             return false;
         }
 
-        _popup.PopupClient(Loc.GetString("injector-component-draw-success-message",
+        _popup.PopupEntity(Loc.GetString("injector-component-draw-success-message",
             ("amount", removedSolution.Volume),
             ("target", Identity.Entity(target, EntityManager))), entity.Owner, user);
         return true;
@@ -265,7 +265,7 @@ public sealed partial class HypospraySystem : EntitySystem
     {
         SetMode(entity, !entity.Comp.OnlyAffectsMobs);
         var msg = (entity.Comp.OnlyAffectsMobs && entity.Comp.CanContainerDraw) ? "hypospray-verb-mode-inject-mobs-only" : "hypospray-verb-mode-inject-all";
-        _popup.PopupClient(Loc.GetString(msg), entity, user);
+        _popup.PopupEntity(Loc.GetString(msg), entity, user);
     }
 
     public void SetMode(Entity<HyposprayComponent> entity, bool onlyAffectsMobs)

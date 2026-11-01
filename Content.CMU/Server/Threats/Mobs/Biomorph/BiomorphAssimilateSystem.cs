@@ -99,7 +99,7 @@ public sealed partial class BiomorphAssimilateSystem : EntitySystem
 
         if (!CanAssimilate(mimic.Owner, args.Target, out string reason))
         {
-            _popup.PopupClient(reason, mimic, mimic);
+            _popup.PopupEntity(reason, mimic, mimic);
             return;
         }
 
@@ -128,7 +128,7 @@ public sealed partial class BiomorphAssimilateSystem : EntitySystem
 
         if (!CanAssimilate(mimic.Owner, target, out string reason))
         {
-            _popup.PopupClient(reason, mimic, mimic);
+            _popup.PopupEntity(reason, mimic, mimic);
             return;
         }
 

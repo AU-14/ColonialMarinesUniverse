@@ -1,0 +1,728 @@
+- type: cmu3DModel
+  id: CMU3DGreenFabricCurtain
+  label: Green fabric curtain
+  status: draft
+  sourcePrototypes:
+  - RMCCurtainGreen
+  referencePrototype: RMCCurtainGreen
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Curtains/green.rsi
+  referenceState: closed
+  referenceTint: '#FFFFFF'
+  bakedSpriteTint: '#FFFFFF'
+  doorState: Closed
+  sourceDirections: 1
+  useEntityRotation: true
+  alternateDoorModel: CMU3DGreenFabricCurtainOpen
+  description: Green opaque fabric curtain with original patterned folds and separate open/closed volumes. Height and fold
+    depth are inferred; no cloth animation. See SOURCES_CURTAIN_FORMS.md. Hanging plane inset to local Y -.35 for medical-bay
+    wall trim clearance; source pivot and facing are retained.
+  parts:
+  - label: Source hanging edge 1:1-3
+    min: -0.468750, -0.369000, 2.265000
+    max: -0.437500, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 2:0-3
+    min: -0.437500, -0.369000, 2.265000
+    max: -0.406250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold000
+    surfaceAxis: XZ
+  - label: Folded fabric section 2:3-30
+    min: -0.437500, -0.374607, 0.240000
+    max: -0.406250, -0.362607, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold001
+    surfaceAxis: XZ
+  - label: Source hanging edge 3:0-3
+    min: -0.406250, -0.369000, 2.265000
+    max: -0.375000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold127
+    surfaceAxis: XZ
+  - label: Folded fabric section 3:3-31
+    min: -0.406250, -0.374607, 0.165000
+    max: -0.375000, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold003
+    surfaceAxis: XZ
+  - label: Source hanging edge 4:0-3
+    min: -0.375000, -0.369000, 2.265000
+    max: -0.343750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold128
+    surfaceAxis: XZ
+  - label: Folded fabric section 4:3-31
+    min: -0.375000, -0.348893, 0.165000
+    max: -0.343750, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold129
+    surfaceAxis: XZ
+  - label: Source hanging edge 5:0-3
+    min: -0.343750, -0.369000, 2.265000
+    max: -0.312500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 5:3-31
+    min: -0.343750, -0.348893, 0.165000
+    max: -0.312500, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold130
+    surfaceAxis: XZ
+  - label: Source hanging edge 6:0-3
+    min: -0.312500, -0.369000, 2.265000
+    max: -0.281250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 6:3-31
+    min: -0.312500, -0.374607, 0.165000
+    max: -0.281250, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold005
+    surfaceAxis: XZ
+  - label: Source hanging edge 7:0-3
+    min: -0.281250, -0.369000, 2.265000
+    max: -0.250000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold000
+    surfaceAxis: XZ
+  - label: Folded fabric section 7:3-30
+    min: -0.281250, -0.374607, 0.240000
+    max: -0.250000, -0.362607, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold001
+    surfaceAxis: XZ
+  - label: Source hanging edge 8:0-3
+    min: -0.250000, -0.369000, 2.265000
+    max: -0.218750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold127
+    surfaceAxis: XZ
+  - label: Folded fabric section 8:3-31
+    min: -0.250000, -0.374607, 0.165000
+    max: -0.218750, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold003
+    surfaceAxis: XZ
+  - label: Source hanging edge 9:0-3
+    min: -0.218750, -0.369000, 2.265000
+    max: -0.187500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold128
+    surfaceAxis: XZ
+  - label: Folded fabric section 9:3-31
+    min: -0.218750, -0.348893, 0.165000
+    max: -0.187500, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold131
+    surfaceAxis: XZ
+  - label: Source hanging edge 10:0-3
+    min: -0.187500, -0.369000, 2.265000
+    max: -0.156250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 10:3-31
+    min: -0.187500, -0.348893, 0.165000
+    max: -0.156250, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold005
+    surfaceAxis: XZ
+  - label: Source hanging edge 11:0-3
+    min: -0.156250, -0.369000, 2.265000
+    max: -0.125000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 11:3-31
+    min: -0.156250, -0.374607, 0.165000
+    max: -0.125000, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold005
+    surfaceAxis: XZ
+  - label: Source hanging edge 12:0-3
+    min: -0.125000, -0.369000, 2.265000
+    max: -0.093750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold000
+    surfaceAxis: XZ
+  - label: Folded fabric section 12:3-30
+    min: -0.125000, -0.374607, 0.240000
+    max: -0.093750, -0.362607, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold001
+    surfaceAxis: XZ
+  - label: Source hanging edge 13:0-3
+    min: -0.093750, -0.369000, 2.265000
+    max: -0.062500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold127
+    surfaceAxis: XZ
+  - label: Folded fabric section 13:3-31
+    min: -0.093750, -0.374607, 0.165000
+    max: -0.062500, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold003
+    surfaceAxis: XZ
+  - label: Source hanging edge 14:0-3
+    min: -0.062500, -0.369000, 2.265000
+    max: -0.031250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold128
+    surfaceAxis: XZ
+  - label: Folded fabric section 14:3-31
+    min: -0.062500, -0.348893, 0.165000
+    max: -0.031250, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold131
+    surfaceAxis: XZ
+  - label: Source hanging edge 15:0-3
+    min: -0.031250, -0.369000, 2.265000
+    max: 0.000000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 15:3-31
+    min: -0.031250, -0.348893, 0.165000
+    max: 0.000000, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold005
+    surfaceAxis: XZ
+  - label: Source hanging edge 16:0-3
+    min: 0.000000, -0.369000, 2.265000
+    max: 0.031250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 16:3-30
+    min: 0.000000, -0.374607, 0.240000
+    max: 0.031250, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold132
+    surfaceAxis: XZ
+  - label: Source hanging edge 17:0-3
+    min: 0.031250, -0.369000, 2.265000
+    max: 0.062500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold133
+    surfaceAxis: XZ
+  - label: Folded fabric section 17:3-30
+    min: 0.031250, -0.374607, 0.240000
+    max: 0.062500, -0.362607, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold134
+    surfaceAxis: XZ
+  - label: Source hanging edge 18:0-3
+    min: 0.062500, -0.369000, 2.265000
+    max: 0.093750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold000
+    surfaceAxis: XZ
+  - label: Folded fabric section 18:3-30
+    min: 0.062500, -0.374607, 0.240000
+    max: 0.093750, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold001
+    surfaceAxis: XZ
+  - label: Source hanging edge 19:0-3
+    min: 0.093750, -0.369000, 2.265000
+    max: 0.125000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold127
+    surfaceAxis: XZ
+  - label: Folded fabric section 19:3-31
+    min: 0.093750, -0.348893, 0.165000
+    max: 0.125000, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold003
+    surfaceAxis: XZ
+  - label: Source hanging edge 20:0-3
+    min: 0.125000, -0.369000, 2.265000
+    max: 0.156250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold128
+    surfaceAxis: XZ
+  - label: Folded fabric section 20:3-31
+    min: 0.125000, -0.348893, 0.165000
+    max: 0.156250, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold131
+    surfaceAxis: XZ
+  - label: Source hanging edge 21:0-3
+    min: 0.156250, -0.369000, 2.265000
+    max: 0.187500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 21:3-31
+    min: 0.156250, -0.374607, 0.165000
+    max: 0.187500, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold005
+    surfaceAxis: XZ
+  - label: Source hanging edge 22:0-3
+    min: 0.187500, -0.369000, 2.265000
+    max: 0.218750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 22:3-31
+    min: 0.187500, -0.374607, 0.165000
+    max: 0.218750, -0.362607, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold005
+    surfaceAxis: XZ
+  - label: Source hanging edge 23:0-3
+    min: 0.218750, -0.369000, 2.265000
+    max: 0.250000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold000
+    surfaceAxis: XZ
+  - label: Folded fabric section 23:3-30
+    min: 0.218750, -0.374607, 0.240000
+    max: 0.250000, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold001
+    surfaceAxis: XZ
+  - label: Source hanging edge 24:0-3
+    min: 0.250000, -0.369000, 2.265000
+    max: 0.281250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold127
+    surfaceAxis: XZ
+  - label: Folded fabric section 24:3-31
+    min: 0.250000, -0.348893, 0.165000
+    max: 0.281250, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold003
+    surfaceAxis: XZ
+  - label: Source hanging edge 25:0-3
+    min: 0.281250, -0.369000, 2.265000
+    max: 0.312500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold128
+    surfaceAxis: XZ
+  - label: Folded fabric section 25:3-31
+    min: 0.281250, -0.348893, 0.165000
+    max: 0.312500, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold135
+    surfaceAxis: XZ
+  - label: Source hanging edge 26:0-3
+    min: 0.312500, -0.369000, 2.265000
+    max: 0.343750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 26:3-31
+    min: 0.312500, -0.374607, 0.165000
+    max: 0.343750, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold136
+    surfaceAxis: XZ
+  - label: Source hanging edge 27:0-3
+    min: 0.343750, -0.369000, 2.265000
+    max: 0.375000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 27:3-31
+    min: 0.343750, -0.374607, 0.165000
+    max: 0.375000, -0.362607, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold137
+    surfaceAxis: XZ
+  - label: Source hanging edge 28:0-3
+    min: 0.375000, -0.369000, 2.265000
+    max: 0.406250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold000
+    surfaceAxis: XZ
+  - label: Folded fabric section 28:3-30
+    min: 0.375000, -0.374607, 0.240000
+    max: 0.406250, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold138
+    surfaceAxis: XZ
+  - label: Source hanging edge 29:0-3
+    min: 0.406250, -0.369000, 2.265000
+    max: 0.437500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold127
+    surfaceAxis: XZ
+  - label: Folded fabric section 29:3-31
+    min: 0.406250, -0.348893, 0.165000
+    max: 0.437500, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold139
+    surfaceAxis: XZ
+  - label: Source hanging edge 30:0-3
+    min: 0.437500, -0.369000, 2.265000
+    max: 0.468750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold128
+    surfaceAxis: XZ
+  - label: Folded fabric section 30:3-31
+    min: 0.437500, -0.348893, 0.165000
+    max: 0.468750, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold140
+    surfaceAxis: XZ
+  - label: Source hanging edge 31:0-3
+    min: 0.468750, -0.369000, 2.265000
+    max: 0.500000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold004
+    surfaceAxis: XZ
+  - label: Folded fabric section 31:3-31
+    min: 0.468750, -0.374607, 0.165000
+    max: 0.500000, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold141
+    surfaceAxis: XZ
+
+- type: cmu3DModel
+  id: CMU3DGreenFabricCurtainOpen
+  label: Green fabric curtain open
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCCurtainGreen
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/Curtains/green.rsi
+  referenceState: open
+  referenceTint: '#FFFFFF'
+  bakedSpriteTint: '#FFFFFF'
+  doorState: Open
+  sourceDirections: 1
+  useEntityRotation: true
+  alternateDoorModel: CMU3DGreenFabricCurtain
+  description: Green opaque fabric curtain with original patterned folds and separate open/closed volumes. Height and fold
+    depth are inferred; no cloth animation. See SOURCES_CURTAIN_FORMS.md. Hanging plane inset to local Y -.35 for medical-bay
+    wall trim clearance; source pivot and facing are retained.
+  parts:
+  - label: Source hanging edge 1:1-3
+    min: -0.468750, -0.369000, 2.265000
+    max: -0.437500, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Folded fabric section 1:16-31
+    min: -0.468750, -0.374607, 0.165000
+    max: -0.437500, -0.336893, 1.290000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold028
+    surfaceAxis: XZ
+  - label: Source hanging edge 2:0-3
+    min: -0.437500, -0.369000, 2.265000
+    max: -0.406250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold029
+    surfaceAxis: XZ
+  - label: Folded fabric section 2:3-31
+    min: -0.437500, -0.374607, 0.165000
+    max: -0.406250, -0.362607, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold030
+    surfaceAxis: XZ
+  - label: Source hanging edge 3:0-3
+    min: -0.406250, -0.369000, 2.265000
+    max: -0.375000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold031
+    surfaceAxis: XZ
+  - label: Folded fabric section 3:3-32
+    min: -0.406250, -0.374607, 0.090000
+    max: -0.375000, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold032
+    surfaceAxis: XZ
+  - label: Source hanging edge 4:0-3
+    min: -0.375000, -0.369000, 2.265000
+    max: -0.343750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold033
+    surfaceAxis: XZ
+  - label: Folded fabric section 4:3-32
+    min: -0.375000, -0.348893, 0.090000
+    max: -0.343750, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold034
+    surfaceAxis: XZ
+  - label: Source hanging edge 5:0-3
+    min: -0.343750, -0.369000, 2.265000
+    max: -0.312500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold029
+    surfaceAxis: XZ
+  - label: Folded fabric section 5:3-32
+    min: -0.343750, -0.348893, 0.090000
+    max: -0.312500, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold035
+    surfaceAxis: XZ
+  - label: Source hanging edge 6:0-3
+    min: -0.312500, -0.369000, 2.265000
+    max: -0.281250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold029
+    surfaceAxis: XZ
+  - label: Folded fabric section 6:3-31
+    min: -0.312500, -0.374607, 0.165000
+    max: -0.281250, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold036
+    surfaceAxis: XZ
+  - label: Source hanging edge 7:0-3
+    min: -0.281250, -0.369000, 2.265000
+    max: -0.250000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold037
+    surfaceAxis: XZ
+  - label: Folded fabric section 7:3-32
+    min: -0.281250, -0.374607, 0.090000
+    max: -0.250000, -0.362607, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold038
+    surfaceAxis: XZ
+  - label: Source hanging edge 8:0-3
+    min: -0.250000, -0.369000, 2.265000
+    max: -0.218750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold039
+    surfaceAxis: XZ
+  - label: Folded fabric section 8:3-17
+    min: -0.250000, -0.374607, 1.215000
+    max: -0.218750, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold040
+    surfaceAxis: XZ
+  - label: Folded fabric section 8:18-32
+    min: -0.250000, -0.374607, 0.090000
+    max: -0.218750, -0.336893, 1.140000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold041
+    surfaceAxis: XZ
+  - label: Source hanging edge 9:0-3
+    min: -0.218750, -0.369000, 2.265000
+    max: -0.187500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold042
+    surfaceAxis: XZ
+  - label: Folded fabric section 9:3-15
+    min: -0.218750, -0.348893, 1.365000
+    max: -0.187500, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold043
+    surfaceAxis: XZ
+  - label: Folded fabric section 9:21-32
+    min: -0.218750, -0.348893, 0.090000
+    max: -0.187500, -0.321000, 0.915000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold044
+    surfaceAxis: XZ
+  - label: Source hanging edge 10:0-3
+    min: -0.187500, -0.369000, 2.265000
+    max: -0.156250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold042
+    surfaceAxis: XZ
+  - label: Folded fabric section 10:3-9
+    min: -0.187500, -0.348893, 1.815000
+    max: -0.156250, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold045
+    surfaceAxis: XZ
+  - label: Folded fabric section 10:25-31
+    min: -0.187500, -0.348893, 0.165000
+    max: -0.156250, -0.321000, 0.615000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold045
+    surfaceAxis: XZ
+  - label: Source hanging edge 11:1-3
+    min: -0.156250, -0.369000, 2.265000
+    max: -0.125000, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 12:1-3
+    min: -0.125000, -0.369000, 2.265000
+    max: -0.093750, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 13:1-3
+    min: -0.093750, -0.369000, 2.265000
+    max: -0.062500, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 14:1-3
+    min: -0.062500, -0.369000, 2.265000
+    max: -0.031250, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 15:1-3
+    min: -0.031250, -0.369000, 2.265000
+    max: 0.000000, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 16:1-3
+    min: 0.000000, -0.369000, 2.265000
+    max: 0.031250, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 17:1-3
+    min: 0.031250, -0.369000, 2.265000
+    max: 0.062500, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 18:1-3
+    min: 0.062500, -0.369000, 2.265000
+    max: 0.093750, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 19:1-3
+    min: 0.093750, -0.369000, 2.265000
+    max: 0.125000, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 20:1-3
+    min: 0.125000, -0.369000, 2.265000
+    max: 0.156250, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 21:1-3
+    min: 0.156250, -0.369000, 2.265000
+    max: 0.187500, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 22:1-3
+    min: 0.187500, -0.369000, 2.265000
+    max: 0.218750, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 23:1-3
+    min: 0.218750, -0.369000, 2.265000
+    max: 0.250000, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 24:1-3
+    min: 0.250000, -0.369000, 2.265000
+    max: 0.281250, -0.331000, 2.415000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold027
+    surfaceAxis: XZ
+  - label: Source hanging edge 25:0-3
+    min: 0.281250, -0.369000, 2.265000
+    max: 0.312500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold042
+    surfaceAxis: XZ
+  - label: Folded fabric section 25:3-9
+    min: 0.281250, -0.348893, 1.815000
+    max: 0.312500, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold045
+    surfaceAxis: XZ
+  - label: Folded fabric section 25:25-31
+    min: 0.281250, -0.348893, 0.165000
+    max: 0.312500, -0.321000, 0.615000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold045
+    surfaceAxis: XZ
+  - label: Source hanging edge 26:0-3
+    min: 0.312500, -0.369000, 2.265000
+    max: 0.343750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold042
+    surfaceAxis: XZ
+  - label: Folded fabric section 26:3-15
+    min: 0.312500, -0.374607, 1.365000
+    max: 0.343750, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold043
+    surfaceAxis: XZ
+  - label: Folded fabric section 26:21-32
+    min: 0.312500, -0.374607, 0.090000
+    max: 0.343750, -0.336893, 0.915000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold044
+    surfaceAxis: XZ
+  - label: Source hanging edge 27:0-3
+    min: 0.343750, -0.369000, 2.265000
+    max: 0.375000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold046
+    surfaceAxis: XZ
+  - label: Folded fabric section 27:3-17
+    min: 0.343750, -0.374607, 1.215000
+    max: 0.375000, -0.362607, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold047
+    surfaceAxis: XZ
+  - label: Folded fabric section 27:18-32
+    min: 0.343750, -0.374607, 0.090000
+    max: 0.375000, -0.362607, 1.140000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold041
+    surfaceAxis: XZ
+  - label: Source hanging edge 28:0-3
+    min: 0.375000, -0.369000, 2.265000
+    max: 0.406250, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold046
+    surfaceAxis: XZ
+  - label: Folded fabric section 28:3-32
+    min: 0.375000, -0.374607, 0.090000
+    max: 0.406250, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold038
+    surfaceAxis: XZ
+  - label: Source hanging edge 29:0-3
+    min: 0.406250, -0.369000, 2.265000
+    max: 0.437500, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold029
+    surfaceAxis: XZ
+  - label: Folded fabric section 29:3-31
+    min: 0.406250, -0.348893, 0.165000
+    max: 0.437500, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold036
+    surfaceAxis: XZ
+  - label: Source hanging edge 30:0-3
+    min: 0.437500, -0.369000, 2.265000
+    max: 0.468750, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold029
+    surfaceAxis: XZ
+  - label: Folded fabric section 30:3-32
+    min: 0.437500, -0.348893, 0.090000
+    max: 0.468750, -0.321000, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold048
+    surfaceAxis: XZ
+  - label: Source hanging edge 31:0-3
+    min: 0.468750, -0.369000, 2.265000
+    max: 0.500000, -0.331000, 2.490000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold033
+    surfaceAxis: XZ
+  - label: Folded fabric section 31:3-32
+    min: 0.468750, -0.374607, 0.090000
+    max: 0.500000, -0.336893, 2.265000
+    color: '#FFFFFF'
+    surface: CMU3DCurtainFold049
+    surfaceAxis: XZ

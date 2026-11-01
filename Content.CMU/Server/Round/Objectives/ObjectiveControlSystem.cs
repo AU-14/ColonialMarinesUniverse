@@ -135,8 +135,9 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         if (presetId.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase)
             || presetId.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase))
         {
-            SeedIncidentalIntelSpawners(mapId);
-            _intel.RunSpawners();
+            // Spawning intel right as the map loads left it missing, while running the spawners later worked,
+            // so wait until the round has settled before seeding and spawning it.
+            ScheduleIntelSpawn(mapId);
         }
 
         bool hasPlanetMaster = false;
@@ -201,6 +202,23 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
     /// <see cref="FallbackIntelSpawnPoints"/> of them spread over random cabinets and tables. Intel landing on a
     /// cabinet goes into its drawers.
     /// </summary>
+    private static readonly TimeSpan IntelSpawnDelay = TimeSpan.FromMinutes(2.5);
+
+    private void ScheduleIntelSpawn(MapId mapId)
+    {
+        var roundId = _gameTicker.RoundId;
+        Timer.Spawn(IntelSpawnDelay, () =>
+        {
+            // The round may have ended or restarted while we waited.
+            if (_gameTicker.RoundId != roundId || _gameTicker.RunLevel != GameRunLevel.InRound || !_mapSystem.MapExists(mapId))
+                return;
+
+            SeedIncidentalIntelSpawners(mapId);
+            _intel.RunSpawners();
+            _logs.Info($"[OBJ-CTRL] Spawned round-start intel on map {mapId}.");
+        });
+    }
+
     private void SeedIncidentalIntelSpawners(MapId planetMap)
     {
         var planetMaps = _zLevels.GetAllNetworkMapIds(planetMap);

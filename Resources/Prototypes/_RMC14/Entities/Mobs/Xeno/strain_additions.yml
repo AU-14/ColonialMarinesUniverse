@@ -191,6 +191,7 @@
     - ActionXenoPlantWeeds
     - ActionXenoChooseStructure
     - ActionXenoSecreteStructure
+    - CMUActionReaperRevive # CMU14
     - ActionXenoFleshHarvest
     - ActionXenoFleshBloom
     - ActionXenoCarrionMantle
@@ -249,6 +250,9 @@
     - HiveClusterXenoConstructionNode
     - HiveRecoveryNodeXenoConstructionNode
     - HivePlasmaTreeXenoConstructionNode
+  - type: CMUReaperRevival # CMU14
   - type: XenoReaper
+    fleshBloomPrototype: CMUFleshBloom # CMU14: muted vascular residue
+    fleshBloomDelay: 2.3 # CMU14: approximately 30% faster than the three-second wind-up.
   - type: RMCActionOrder
     id: CMXenoReaper

@@ -14,6 +14,7 @@ public sealed partial class FighterSystem
 
     private void OnAircraftShutdown(Entity<FighterAircraftComponent> aircraft, ref ComponentShutdown args)
     {
+        _aircraftNetworkState.Remove(aircraft);
         StopGroundEngine(aircraft);
         ClearFlyby(aircraft.Comp);
     }

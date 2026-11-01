@@ -8,7 +8,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Pistols/m82f.rsi
   - type: Item
-    size: Normal
+    size: Small # CMU14: flare guns fit in pouches and small storage.
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/Pistols/m82f.rsi
     slots:

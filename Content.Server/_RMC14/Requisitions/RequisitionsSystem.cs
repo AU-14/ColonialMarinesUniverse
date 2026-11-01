@@ -127,7 +127,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         // Also apply platoon catalog in case the console needs a custom catalog based on current round
         ApplyPlatoonCatalogToComputer(uid, comp);
+        AppendFactionVendorGear(uid, comp); // CMU14: use the ReqVend/ReqEquipment vmarker mapping for ASRS stock.
         AddXRFToCatalog(uid, comp);
+        var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
         ResetStock((uid, comp));
         Dirty(uid, comp);
     }
@@ -278,6 +280,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         account.Balance -= order.Cost;
         elevator.Comp.Orders.Add(order);
+        // cmu edit start: who bought it, for the colony firearm registry
+        var bought = new Content.Server.CMU14.Requisitions.CMURequisitionsOrderBoughtEvent(elevator, elevator.Comp.Orders.Count - 1, actor,
+            computer.Comp.Faction);
+        RaiseLocalEvent(ref bought);
+        // cmu edit end
         SendUIStateAll();
         _adminLogs.Add(LogType.RMCRequisitionsBuy, $"{ToPrettyString(args.Actor):actor} bought requisitions crate {order.Name} with crate {order.Crate} for {order.Cost}");
 
@@ -366,7 +373,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             case "govfor":
             case "opfor":
-                comp.Balance = 20000;
+                comp.Balance = 30000;
                 break;
             case "colony":
                 comp.Balance = 450;
@@ -551,6 +558,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 var crate = delivery.Roots[orderIndex];
                 _transform.SetCoordinates(crate, coordinates.Offset(new Vector2(xOffset, yOffset)));
                 remainingDeliveries--;
+                // cmu edit start: lets the colony firearm registry log the guns in it
+                var delivered = new Content.Server.CMU14.Requisitions.CMURequisitionsCrateDeliveredEvent(elevator, orderIndex, crate,
+                    order.Name ?? (_prototypeManager.TryIndex<EntityPrototype>(order.Crate, out var crateProto) ? crateProto.Name : order.Crate.Id));
+                RaiseLocalEvent(ref delivered);
+                // cmu edit end
 
                 // If this order came from a department console, attach a department note
                 // instead of the generic invoice so it shows on the crate label.
@@ -627,7 +639,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             // Instead of blacklist, we use a whitelist to selectively control generated funds from selling
             // if (HasComp<CargoSellBlacklistComponent>(entity))
             //     continue;
-            if (!HasComp<CargoSellWhitelistComponent>(entity))
+            // cmu edit start: loose invoices and order slips pay out too, not just ones in or on a crate
+            if (!HasComp<CargoSellWhitelistComponent>(entity) && !HasComp<RequisitionsInvoiceComponent>(entity))
+            // cmu edit end
             {
                 QueueDel(entity);
                 continue;
@@ -695,6 +709,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         var time = _timing.CurTime;
         var updateUI = false;
         _stockUiUpdates.Clear();
+        int? groundXenos = null; // CMU14: share the count only among pools due in this update.
         var accounts = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (accounts.MoveNext(out var uid, out var account))
         {
@@ -707,7 +722,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             //     updateUI = true;
             // }
 
-            var xenos = _xeno.GetGroundXenosAlive();
+            // CMU14: count lazily below, after checking the pool deadline.
+            // var xenos = _xeno.GetGroundXenosAlive();
             var randomCrates = CollectionsMarshal.AsSpan(account.RandomCrates);
             foreach (ref var pool in randomCrates)
             {
@@ -717,7 +733,10 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 if (pool.Next >= time)
                     continue;
 
-                var crates = Math.Max(0, Math.Sqrt((float)xenos / _freeCratesXenoDivider));
+                // CMU14 Begin: idle pools need no population scan.
+                groundXenos ??= _xeno.GetGroundXenosAlive();
+                var crates = Math.Max(0, Math.Sqrt((float) groundXenos.Value / _freeCratesXenoDivider));
+                // CMU14 End
 
                 if (crates < pool.Minimum && pool.Given < pool.MinimumFor)
                     crates = pool.Minimum;
@@ -773,31 +792,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             if (ProcessElevator((uid, elevator)))
                 updateUI = true;
 
-            if (!_chasmQuery.TryComp(uid, out var chasm))
-                continue;
-
-            if (time < elevator.NextChasmCheck)
-                continue;
-
-            elevator.NextChasmCheck = time + elevator.ChasmCheckEvery;
-
             if (_net.IsClient)
                 continue;
 
-            if (elevator.Mode != Raised && elevator.Mode != Preparing)
-            {
-                _toPit.Clear();
-                _lookup.GetEntitiesInRange(uid.ToCoordinates(), elevator.Radius + 0.25f, _toPit);
-
-                foreach (var toPit in _toPit)
-                {
-                    if (_chasmFallingQuery.HasComp(toPit))
-                        continue;
-
-                    _chasm.StartFalling((uid, chasm), toPit, playEmote: false);
-                    _audio.PlayEntity(chasm.FallingSound, toPit, uid);
-                }
-            }
         }
 
         if (updateUI)
@@ -993,7 +990,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             }
         }
 
-        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate)
+        // CMU14: stock replenishes above even when nobody is watching its countdown.
+        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate &&
+            _itemizedUi.IsUiOpen(computer.Owner, RequisitionsUIKey.Key))
         {
             computer.Comp.NextStockUiUpdate = time + TimeSpan.FromSeconds(1);
             updateUi = true;
@@ -1140,6 +1139,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private void OnMoneyInserted(EntityUid uid, ColonyAtmComponent comp, EntInsertedIntoContainerMessage args)
     {
+        // CMU14: the colony ATM holds the customer's ID card, and the cash it pays out until it is taken,
+        // in containers of their own; neither is a payment.
+        if (args.Container.ID is ColonyAtmComponent.CardSlotId or ColonyAtmComponent.CashTrayId)
+            return;
+
         int stackCount = 1;
         if (TryComp(args.Entity, out StackComponent? stack))
             stackCount = stack.Count;
@@ -1222,7 +1226,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         while (computers.MoveNext(out var uid, out var comp))
         {
             ApplyPlatoonCatalogToComputer(uid, comp);
+            AppendFactionVendorGear(uid, comp); // CMU14: keep selected platoon vendor stock after round-start catalog refreshes.
             AddResearchTerminalToCatalog(uid, comp); // CMU14
+            var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
             ResetStock((uid, comp));
             Dirty(uid, comp);
         }

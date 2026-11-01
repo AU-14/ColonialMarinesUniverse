@@ -14,7 +14,6 @@
       visible: false
   - type: HideLayerClothing
     slots:
-    - Hair
     - HeadTop
     - HeadSide
     - Snout

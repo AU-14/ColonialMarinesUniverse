@@ -1,0 +1,1208 @@
+# Source-specific furniture. Attribution and assumptions: SOURCES_FURNITURE.md.
+- type: cmu3DModel
+  id: CMU3DRMCTableBrown
+  label: Brown worn utility table
+  sourcePrototypes:
+  - RMCTableBrown
+  status: draft
+  description: Brown worn utility table. Source-specific static draft; hidden construction and dimensions remain
+    inferred. See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/Tables/standard.rsi
+  referenceState: full
+  sourceDirections: 1
+  supportSurface: tabletop
+  connectToNeighbours: true
+  parts:
+  - min: -0.40300, -0.40800, 0.01500
+    max: -0.34700, -0.35200, 0.77500
+    color: '#362916'
+    label: frame leg
+  - min: -0.40300, 0.35200, 0.01500
+    max: -0.34700, 0.40800, 0.77500
+    color: '#362916'
+    label: frame leg
+  - min: 0.34700, -0.40800, 0.01500
+    max: 0.40300, -0.35200, 0.77500
+    color: '#362916'
+    label: frame leg
+  - min: 0.34700, 0.35200, 0.01500
+    max: 0.40300, 0.40800, 0.77500
+    color: '#362916'
+    label: frame leg
+  - min: -0.41200, -0.41500, 0.74000
+    max: 0.412, 0.415, 0.86
+    color: '#715C39'
+    label: tabletop
+  - min: -0.42700, -0.43000, 0.82800
+    max: -0.39500, 0.43000, 0.86000
+    color: '#524024'
+    label: recessed edge trim
+    omitWhenConnected: 8
+  - min: 0.39500, -0.43000, 0.82800
+    max: 0.42700, 0.43000, 0.86000
+    color: '#524024'
+    label: recessed edge trim
+    omitWhenConnected: 4
+  - min: -0.39500, -0.43000, 0.82800
+    max: 0.39500, -0.39800, 0.86000
+    color: '#524024'
+    label: recessed edge trim
+    omitWhenConnected: 2
+  - min: -0.39500, 0.39800, 0.82800
+    max: 0.39500, 0.43000, 0.86000
+    color: '#524024'
+    label: recessed edge trim
+    omitWhenConnected: 1
+  - min: -0.39000, -0.42500, 0.15000
+    max: 0.39000, -0.38900, 0.21000
+    color: '#524024'
+    label: lower stretcher
+    omitWhenConnected: 2
+  - min: -0.39000, 0.38900, 0.15000
+    max: 0.39000, 0.42500, 0.21000
+    color: '#524024'
+    label: lower stretcher
+    omitWhenConnected: 1
+  - min: -0.34000, -0.33500, 0.85500
+    max: 0.34000, 0.33500, 0.85900
+    color: '#6D5735'
+    label: worn top inset
+  - min: -0.29000, 0.12000, 0.85900
+    max: -0.26600, 0.21000, 0.86000
+    color: '#6D5735'
+    label: top wear mark
+  - min: -0.12000, 0.10000, 0.85900
+    max: -0.08500, 0.17000, 0.86000
+    color: '#715C39'
+    label: top wear mark
+  - min: 0.18000, -0.03000, 0.85900
+    max: 0.21300, 0.09000, 0.86000
+    color: '#6D5735'
+    label: top wear mark
+  - min: 0.06000, -0.23000, 0.85900
+    max: 0.09500, -0.17000, 0.86000
+    color: '#715C39'
+    label: top wear mark
+  - min: -0.24000, -0.26000, 0.85900
+    max: -0.16000, -0.23500, 0.86000
+    color: '#6D5735'
+    label: top wear mark
+  - min: 0.26000, 0.12000, 0.85900
+    max: 0.42000, 0.13800, 0.86100
+    color: '#362916'
+    label: right-edge score
+    omitWhenConnected: 4
+  - min: 0.26000, 0.18500, 0.85900
+    max: 0.42000, 0.20300, 0.86100
+    color: '#362916'
+    label: right-edge score
+    omitWhenConnected: 4
+  referenceTint: '#8B7B5B'
+  bakedSpriteTint: '#8B7B5B'
+- type: cmu3DModel
+  id: CMU3DChair
+  label: Gray metal chair
+  sourcePrototypes:
+  - Chair
+  status: draft
+  description: Gray metal chair. Source-specific static draft; hidden construction and dimensions remain inferred.
+    See SOURCES_FURNITURE.md.
+  referenceRsi: Structures/Furniture/chairs.rsi
+  referenceState: chair
+  sourceDirections: 4
+  parts:
+  - min: -0.18800, -0.18800, 0.01500
+    max: -0.13200, -0.13200, 0.45000
+    color: '#555555'
+    label: frame leg
+  - min: -0.18800, 0.13200, 0.01500
+    max: -0.13200, 0.18800, 0.45000
+    color: '#555555'
+    label: frame leg
+  - min: 0.13200, -0.18800, 0.01500
+    max: 0.18800, -0.13200, 0.45000
+    color: '#555555'
+    label: frame leg
+  - min: 0.13200, 0.13200, 0.01500
+    max: 0.18800, 0.18800, 0.45000
+    color: '#555555'
+    label: frame leg
+  - min: -0.21900, -0.22000, 0.40000
+    max: 0.21900, 0.22000, 0.46000
+    color: '#555555'
+    label: seat frame
+  - min: -0.19000, -0.19000, 0.46000
+    max: 0.19000, 0.18500, 0.49000
+    color: '#969696'
+    label: seat rolled rim
+  - min: -0.14000, -0.14000, 0.49000
+    max: 0.14000, 0.13500, 0.49400
+    color: '#757575'
+    label: seat inset
+  - min: -0.19000, 0.15500, 0.44000
+    max: -0.14000, 0.20000, 0.95000
+    color: '#555555'
+    label: back upright
+  - min: 0.14000, 0.15500, 0.44000
+    max: 0.19000, 0.20000, 0.95000
+    color: '#555555'
+    label: back upright
+  - min: -0.21900, 0.16000, 0.77000
+    max: 0.21900, 0.21500, 0.96500
+    color: '#969696'
+    label: upper back rim
+  - min: -0.17300, 0.14800, 0.80000
+    max: 0.17300, 0.16100, 0.93000
+    color: '#757575'
+    label: back inset
+  - min: -0.14500, 0.14200, 0.82000
+    max: 0.14500, 0.14900, 0.84000
+    color: '#555555'
+    label: lower back crease
+  - min: -0.17500, -0.17500, 0.18000
+    max: 0.17500, -0.14300, 0.21500
+    color: '#3E3E3E'
+    label: front stretcher
+- type: cmu3DModel
+  id: CMU3DCMChairFolded
+  label: Folded steel chair
+  sourcePrototypes:
+  - CMChairFolded
+  status: draft
+  description: Folded steel chair. Source-specific static draft; hidden construction and dimensions remain inferred.
+    See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/folding_chair.rsi
+  referenceState: chair_folded
+  sourceDirections: 1
+  placement: surface
+  folded: true
+  alternateFoldModel: CMU3DFoldingChair
+  parts:
+  - min: -0.46000, -0.34920, 0.02500
+    max: 0.46000, -0.26280, 0.07500
+    color: '#979AB0'
+    label: folded outer tube
+  - min: -0.46000, 0.26280, 0.02500
+    max: 0.46000, 0.34920, 0.07500
+    color: '#979AB0'
+    label: folded outer tube
+  - min: -0.48200, -0.30600, 0.02500
+    max: -0.43800, 0.30600, 0.07500
+    color: '#767991'
+    label: folded cross tube
+  - min: -0.10200, -0.30600, 0.02500
+    max: -0.05800, 0.30600, 0.07500
+    color: '#767991'
+    label: folded cross tube
+  - min: 0.16800, -0.30600, 0.02500
+    max: 0.21200, 0.30600, 0.07500
+    color: '#767991'
+    label: folded cross tube
+  - min: 0.40800, -0.30600, 0.02500
+    max: 0.45200, 0.30600, 0.07500
+    color: '#767991'
+    label: folded cross tube
+  - min: -0.37000, -0.23040, 0.04300
+    max: -0.17000, 0.23040, 0.08700
+    color: '#4A4C5B'
+    label: folded back panel
+  - min: -0.04500, -0.22500, 0.05100
+    max: 0.16000, 0.22500, 0.09700
+    color: '#5C5F72'
+    label: folded seat panel
+  - min: -0.37000, -0.22860, 0.08700
+    max: -0.17000, -0.18540, 0.09800
+    color: '#979AB0'
+    label: back edge
+  - min: -0.04500, -0.22860, 0.09700
+    max: 0.16000, -0.18540, 0.10600
+    color: '#979AB0'
+    label: seat edge
+  - min: -0.37000, 0.18540, 0.08700
+    max: -0.17000, 0.22860, 0.09800
+    color: '#979AB0'
+    label: back edge
+  - min: -0.04500, 0.18540, 0.09700
+    max: 0.16000, 0.22860, 0.10600
+    color: '#979AB0'
+    label: seat edge
+  - min: -0.12000, -0.36000, 0.03700
+    max: -0.07000, 0.36000, 0.08000
+    color: '#33383E'
+    label: folded hinge
+  - min: 0.16500, -0.36000, 0.03700
+    max: 0.21500, 0.36000, 0.08000
+    color: '#33383E'
+    label: folded hinge
+- type: cmu3DModel
+  id: CMU3DRMCRackParts
+  label: Collapsed rack assembly
+  sourcePrototypes:
+  - RMCRackParts
+  status: draft
+  description: Collapsed rack assembly. Source-specific static draft; hidden construction and dimensions remain
+    inferred. See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Objects/Materials/rack_parts.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - min: -0.36200, -0.26000, 0.01200
+    max: -0.31800, 0.26000, 0.14000
+    color: '#828282'
+    label: nested side rail
+  - min: 0.31800, -0.26000, 0.01200
+    max: 0.36200, 0.26000, 0.14000
+    color: '#828282'
+    label: nested side rail
+  - min: -0.34000, -0.29500, 0.04000
+    max: 0.34000, -0.16500, 0.11000
+    color: '#828282'
+    label: nested shelf panel
+  - min: -0.35000, -0.30500, 0.01200
+    max: 0.35000, -0.27500, 0.05600
+    color: '#474747'
+    label: nested front beam
+  - min: -0.34000, -0.06500, 0.04000
+    max: 0.34000, 0.06500, 0.11000
+    color: '#828282'
+    label: nested shelf panel
+  - min: -0.35000, -0.07500, 0.01200
+    max: 0.35000, -0.04500, 0.05600
+    color: '#474747'
+    label: nested front beam
+  - min: -0.34000, 0.13500, 0.04000
+    max: 0.34000, 0.26500, 0.11000
+    color: '#828282'
+    label: nested shelf panel
+  - min: -0.35000, 0.12500, 0.01200
+    max: 0.35000, 0.15500, 0.05600
+    color: '#474747'
+    label: nested front beam
+  - min: -0.30000, -0.23000, 0.11200
+    max: -0.26000, 0.22000, 0.13500
+    color: '#232323'
+    label: folded support slot
+  - min: 0.26000, -0.23000, 0.11200
+    max: 0.30000, 0.22000, 0.13500
+    color: '#232323'
+    label: folded support slot
+  - min: -0.14000, 0.20000, 0.04000
+    max: -0.10000, 0.31000, 0.16000
+    color: '#BDBDBD'
+    label: carry handle upright
+  - min: 0.10000, 0.20000, 0.04000
+    max: 0.14000, 0.31000, 0.16000
+    color: '#BDBDBD'
+    label: carry handle upright
+  - min: -0.12000, 0.29000, 0.14000
+    max: 0.12000, 0.33000, 0.18000
+    color: '#828282'
+    label: carry handle bridge
+- type: cmu3DModel
+  id: CMU3DRMCBedAlt
+  label: Bare tan mattress bed
+  sourcePrototypes:
+  - RMCBedAlt
+  status: draft
+  description: Bare tan mattress bed. Source-specific static draft; hidden construction and dimensions remain inferred.
+    See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/bed.rsi
+  referenceState: abed
+  sourceDirections: 1
+  parts:
+  - min: -0.48300, -0.27800, 0.01500
+    max: -0.42700, -0.22200, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48300, 0.22200, 0.01500
+    max: -0.42700, 0.27800, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, -0.27800, 0.01500
+    max: 0.48300, -0.22200, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, 0.22200, 0.01500
+    max: 0.48300, 0.27800, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48500, -0.29000, 0.34000
+    max: 0.48500, 0.29000, 0.39500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 0.39500
+    max: -0.45100, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 0.39500
+    max: 0.48900, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.43000, -0.26500, 0.39500
+    max: 0.43000, 0.26500, 0.47300
+    color: '#796C51'
+    label: mattress
+  - min: -0.41600, -0.24000, 0.46800
+    max: -0.39400, 0.24000, 0.47500
+    color: '#8D7E5F'
+    label: mattress edge
+  - min: 0.39400, -0.24000, 0.46800
+    max: 0.41600, 0.24000, 0.47500
+    color: '#8D7E5F'
+    label: mattress edge
+  - min: -0.39500, -0.25200, 0.46800
+    max: 0.39500, -0.22800, 0.47500
+    color: '#675C45'
+    label: mattress seam
+  - min: -0.39500, 0.22800, 0.46800
+    max: 0.39500, 0.25200, 0.47500
+    color: '#675C45'
+    label: mattress seam
+- type: cmu3DModel
+  id: CMU3DRMCBedDingy
+  supportSurface: Blanket source pixels
+  label: Worn checker blanket bed
+  sourcePrototypes:
+  - RMCBedDingy
+  status: draft
+  description: Worn checker blanket bed. Source-specific static draft; hidden construction and dimensions remain
+    inferred. See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/bed.rsi
+  referenceState: dingy_bed
+  sourceDirections: 1
+  parts:
+  - min: -0.48300, -0.27800, 0.01500
+    max: -0.42700, -0.22200, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48300, 0.22200, 0.01500
+    max: -0.42700, 0.27800, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, -0.27800, 0.01500
+    max: 0.48300, -0.22200, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, 0.22200, 0.01500
+    max: 0.48300, 0.27800, 0.37000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48500, -0.29000, 0.34000
+    max: 0.48500, 0.29000, 0.39500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 0.39500
+    max: -0.45100, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 0.39500
+    max: 0.48900, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.43000, -0.26500, 0.39500
+    max: 0.43000, 0.26500, 0.47300
+    color: '#B89F8F'
+    label: mattress
+  - min: 0.27000, -0.22300, 0.47200
+    max: 0.45500, 0.22300, 0.53000
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 0.52900
+    max: 0.44700, 0.21500, 0.54400
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 0.54300
+    max: 0.43600, 0.20400, 0.55200
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40700, -0.24200, 0.47400
+    max: 0.26500, 0.24200, 0.47700
+    color: '#FFFFFF'
+    label: Blanket source pixels
+    surface: CMU3DFurnitureArtRMCBedDingyBlanket
+    surfaceAxis: XY
+  - min: -0.41000, -0.26700, 0.42000
+    max: 0.26000, -0.25100, 0.46500
+    color: '#9C8378'
+    label: blanket front fold
+- type: cmu3DModel
+  id: CMU3DRMCBedBunkBlue
+  label: Blue two-tier bunk bed
+  sourcePrototypes:
+  - RMCBedBunkBlue
+  status: draft
+  description: Blue two-tier bunk bed. Source-specific static draft; hidden construction and dimensions remain inferred.
+    See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/bed.rsi
+  referenceState: bunk_blue
+  sourceDirections: 1
+  parts:
+  - min: -0.48300, -0.27800, 0.01500
+    max: -0.42700, -0.22200, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48300, 0.22200, 0.01500
+    max: -0.42700, 0.27800, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, -0.27800, 0.01500
+    max: 0.48300, -0.22200, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, 0.22200, 0.01500
+    max: 0.48300, 0.27800, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48500, -0.29000, 0.34000
+    max: 0.48500, 0.29000, 0.39500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 0.39500
+    max: -0.45100, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 0.39500
+    max: 0.48900, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.48500, -0.29000, 1.05000
+    max: 0.48500, 0.29000, 1.10500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 1.10500
+    max: -0.45100, 0.29000, 1.15500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 1.10500
+    max: 0.48900, 0.29000, 1.15500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.44500, -0.31100, 0.47000
+    max: 0.44500, -0.27500, 0.50200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, -0.31100, 1.18000
+    max: 0.44500, -0.27500, 1.21200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, 0.27500, 0.47000
+    max: 0.44500, 0.31100, 0.50200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, 0.27500, 1.18000
+    max: 0.44500, 0.31100, 1.21200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: 0.44000, -0.32000, 0.17000
+    max: 0.50000, -0.17000, 0.19800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.40000
+    max: 0.50000, -0.17000, 0.42800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.63000
+    max: 0.50000, -0.17000, 0.65800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.86000
+    max: 0.50000, -0.17000, 0.88800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: -0.43000, -0.26500, 0.39500
+    max: 0.43000, 0.26500, 0.47300
+    color: '#424A54'
+    label: mattress
+  - min: 0.27000, -0.22300, 0.47200
+    max: 0.45500, 0.22300, 0.53000
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 0.52900
+    max: 0.44700, 0.21500, 0.54400
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 0.54300
+    max: 0.43600, 0.20400, 0.55200
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40700, -0.24000, 0.47400
+    max: 0.26500, 0.24000, 0.47700
+    color: '#FFFFFF'
+    label: LowerBlanket source pixels
+    surface: CMU3DFurnitureArtRMCBedBunkBlueLowerBlanket
+    surfaceAxis: XY
+  - min: -0.41000, -0.26700, 0.41500
+    max: 0.27500, -0.25000, 0.47000
+    color: '#424A54'
+    label: blanket front fold
+  - min: -0.43000, -0.26500, 1.10500
+    max: 0.43000, 0.26500, 1.18300
+    color: '#596471'
+    label: mattress
+  - min: 0.27000, -0.22300, 1.18200
+    max: 0.45500, 0.22300, 1.24000
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 1.23900
+    max: 0.44700, 0.21500, 1.25400
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 1.25300
+    max: 0.43600, 0.20400, 1.26200
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40700, -0.24000, 1.18400
+    max: 0.26500, 0.24000, 1.18700
+    color: '#FFFFFF'
+    label: UpperBlanket source pixels
+    surface: CMU3DFurnitureArtRMCBedBunkBlueUpperBlanket
+    surfaceAxis: XY
+  - min: -0.41000, -0.26700, 1.12500
+    max: 0.27500, -0.25000, 1.18000
+    color: '#596471'
+    label: blanket front fold
+- type: cmu3DModel
+  id: CMU3DRMCBedBunkGreen
+  label: Green two-tier bunk bed
+  sourcePrototypes:
+  - RMCBedBunkGreen
+  status: draft
+  description: Green two-tier bunk bed. Source-specific static draft; hidden construction and dimensions remain
+    inferred. See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/bed.rsi
+  referenceState: bunk_green
+  sourceDirections: 1
+  parts:
+  - min: -0.48300, -0.27800, 0.01500
+    max: -0.42700, -0.22200, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48300, 0.22200, 0.01500
+    max: -0.42700, 0.27800, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, -0.27800, 0.01500
+    max: 0.48300, -0.22200, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, 0.22200, 0.01500
+    max: 0.48300, 0.27800, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48500, -0.29000, 0.34000
+    max: 0.48500, 0.29000, 0.39500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 0.39500
+    max: -0.45100, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 0.39500
+    max: 0.48900, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.48500, -0.29000, 1.05000
+    max: 0.48500, 0.29000, 1.10500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 1.10500
+    max: -0.45100, 0.29000, 1.15500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 1.10500
+    max: 0.48900, 0.29000, 1.15500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.44500, -0.31100, 0.47000
+    max: 0.44500, -0.27500, 0.50200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, -0.31100, 1.18000
+    max: 0.44500, -0.27500, 1.21200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, 0.27500, 0.47000
+    max: 0.44500, 0.31100, 0.50200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, 0.27500, 1.18000
+    max: 0.44500, 0.31100, 1.21200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: 0.44000, -0.32000, 0.17000
+    max: 0.50000, -0.17000, 0.19800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.40000
+    max: 0.50000, -0.17000, 0.42800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.63000
+    max: 0.50000, -0.17000, 0.65800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.86000
+    max: 0.50000, -0.17000, 0.88800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: -0.43000, -0.26500, 0.39500
+    max: 0.43000, 0.26500, 0.47300
+    color: '#485046'
+    label: mattress
+  - min: 0.27000, -0.22300, 0.47200
+    max: 0.45500, 0.22300, 0.53000
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 0.52900
+    max: 0.44700, 0.21500, 0.54400
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 0.54300
+    max: 0.43600, 0.20400, 0.55200
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40700, -0.24000, 0.47400
+    max: 0.26500, 0.24000, 0.47700
+    color: '#FFFFFF'
+    label: LowerBlanket source pixels
+    surface: CMU3DFurnitureArtRMCBedBunkGreenLowerBlanket
+    surfaceAxis: XY
+  - min: -0.41000, -0.26700, 0.41500
+    max: 0.27500, -0.25000, 0.47000
+    color: '#485046'
+    label: blanket front fold
+  - min: -0.43000, -0.26500, 1.10500
+    max: 0.43000, 0.26500, 1.18300
+    color: '#626B5F'
+    label: mattress
+  - min: 0.27000, -0.22300, 1.18200
+    max: 0.45500, 0.22300, 1.24000
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 1.23900
+    max: 0.44700, 0.21500, 1.25400
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 1.25300
+    max: 0.43600, 0.20400, 1.26200
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40700, -0.24000, 1.18400
+    max: 0.26500, 0.24000, 1.18700
+    color: '#FFFFFF'
+    label: UpperBlanket source pixels
+    surface: CMU3DFurnitureArtRMCBedBunkGreenUpperBlanket
+    surfaceAxis: XY
+  - min: -0.41000, -0.26700, 1.12500
+    max: 0.27500, -0.25000, 1.18000
+    color: '#626B5F'
+    label: blanket front fold
+- type: cmu3DModel
+  id: CMU3DRMCBedBunkRed
+  label: Red two-tier bunk bed
+  sourcePrototypes:
+  - RMCBedBunkRed
+  status: draft
+  description: Red two-tier bunk bed. Source-specific static draft; hidden construction and dimensions remain inferred.
+    See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/bed.rsi
+  referenceState: bunk_red
+  sourceDirections: 1
+  parts:
+  - min: -0.48300, -0.27800, 0.01500
+    max: -0.42700, -0.22200, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48300, 0.22200, 0.01500
+    max: -0.42700, 0.27800, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, -0.27800, 0.01500
+    max: 0.48300, -0.22200, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: 0.42700, 0.22200, 0.01500
+    max: 0.48300, 0.27800, 1.22000
+    color: '#2A2926'
+    label: frame leg
+  - min: -0.48500, -0.29000, 0.34000
+    max: 0.48500, 0.29000, 0.39500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 0.39500
+    max: -0.45100, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 0.39500
+    max: 0.48900, 0.29000, 0.44500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.48500, -0.29000, 1.05000
+    max: 0.48500, 0.29000, 1.10500
+    color: '#3D3D3D'
+    label: bed frame
+  - min: -0.48900, -0.29000, 1.10500
+    max: -0.45100, 0.29000, 1.15500
+    color: '#2A2926'
+    label: frame end lip
+  - min: 0.45100, -0.29000, 1.10500
+    max: 0.48900, 0.29000, 1.15500
+    color: '#2A2926'
+    label: frame end lip
+  - min: -0.44500, -0.31100, 0.47000
+    max: 0.44500, -0.27500, 0.50200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, -0.31100, 1.18000
+    max: 0.44500, -0.27500, 1.21200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, 0.27500, 0.47000
+    max: 0.44500, 0.31100, 0.50200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: -0.44500, 0.27500, 1.18000
+    max: 0.44500, 0.31100, 1.21200
+    color: '#3D3D3D'
+    label: guard rail
+  - min: 0.44000, -0.32000, 0.17000
+    max: 0.50000, -0.17000, 0.19800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.40000
+    max: 0.50000, -0.17000, 0.42800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.63000
+    max: 0.50000, -0.17000, 0.65800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: 0.44000, -0.32000, 0.86000
+    max: 0.50000, -0.17000, 0.88800
+    color: '#3D3D3D'
+    label: head-end ladder rung
+  - min: -0.43000, -0.26500, 0.39500
+    max: 0.43000, 0.26500, 0.47300
+    color: '#5A3C3C'
+    label: mattress
+  - min: 0.27000, -0.22300, 0.47200
+    max: 0.45500, 0.22300, 0.53000
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 0.52900
+    max: 0.44700, 0.21500, 0.54400
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 0.54300
+    max: 0.43600, 0.20400, 0.55200
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40700, -0.24000, 0.47400
+    max: 0.26500, 0.24000, 0.47700
+    color: '#FFFFFF'
+    label: LowerBlanket source pixels
+    surface: CMU3DFurnitureArtRMCBedBunkRedLowerBlanket
+    surfaceAxis: XY
+  - min: -0.41000, -0.26700, 0.41500
+    max: 0.27500, -0.25000, 0.47000
+    color: '#5A3C3C'
+    label: blanket front fold
+  - min: -0.43000, -0.26500, 1.10500
+    max: 0.43000, 0.26500, 1.18300
+    color: '#795251'
+    label: mattress
+  - min: 0.27000, -0.22300, 1.18200
+    max: 0.45500, 0.22300, 1.24000
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 1.23900
+    max: 0.44700, 0.21500, 1.25400
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 1.25300
+    max: 0.43600, 0.20400, 1.26200
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40700, -0.24000, 1.18400
+    max: 0.26500, 0.24000, 1.18700
+    color: '#FFFFFF'
+    label: UpperBlanket source pixels
+    surface: CMU3DFurnitureArtRMCBedBunkRedUpperBlanket
+    surfaceAxis: XY
+  - min: -0.41000, -0.26700, 1.12500
+    max: 0.27500, -0.25000, 1.18000
+    color: '#795251'
+    label: blanket front fold
+- type: cmu3DModel
+  id: CMU3DRMCRollerBedHospitalBlood
+  label: Blood-stained hospital trolley
+  sourcePrototypes:
+  - RMCRollerBedHospitalBlood
+  status: draft
+  description: Blood-stained hospital trolley. Source-specific static draft; hidden construction and dimensions
+    remain inferred. See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/rollerbeds.rsi
+  referenceState: bigrollerblood_down
+  sourceDirections: 1
+  folded: false
+  alternateFoldModel: CMU3DRMCRollerBedHospitalBloodFolded
+  parts:
+  - min: -0.42200, -0.23100, 0.03500
+    max: -0.34800, -0.18900, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: -0.40300, -0.23000, 0.08700
+    max: -0.36700, -0.19000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: -0.42200, 0.18900, 0.03500
+    max: -0.34800, 0.23100, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: -0.40300, 0.19000, 0.08700
+    max: -0.36700, 0.23000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: 0.34800, -0.23100, 0.03500
+    max: 0.42200, -0.18900, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: 0.36700, -0.23000, 0.08700
+    max: 0.40300, -0.19000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: 0.34800, 0.18900, 0.03500
+    max: 0.42200, 0.23100, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: 0.36700, 0.19000, 0.08700
+    max: 0.40300, 0.23000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: -0.40500, -0.22500, 0.20000
+    max: 0.40500, 0.22500, 0.23900
+    color: '#535456'
+    label: lower carriage
+  - min: -0.47700, -0.28600, 0.36000
+    max: 0.47700, 0.28600, 0.41700
+    color: '#666666'
+    label: trolley deck
+  - min: -0.43000, -0.26500, 0.41700
+    max: 0.43000, 0.26500, 0.49500
+    color: '#B1AEAB'
+    label: mattress
+  - min: 0.27000, -0.22300, 0.49400
+    max: 0.45500, 0.22300, 0.55200
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 0.55100
+    max: 0.44700, 0.21500, 0.56600
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 0.56500
+    max: 0.43600, 0.20400, 0.57400
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40900, -0.23800, 0.49600
+    max: 0.27000, 0.23800, 0.49900
+    color: '#FFFFFF'
+    label: Sheet source pixels
+    surface: CMU3DFurnitureArtRMCRollerBedHospitalBloodSheet
+    surfaceAxis: XY
+  - min: -0.13000, -0.27000, 0.45300
+    max: 0.16000, -0.25500, 0.49600
+    color: '#B9181B'
+    label: blood drips over front sheet
+  - min: -0.06000, -0.27000, 0.42000
+    max: 0.00000, -0.25500, 0.45300
+    color: '#AA1215'
+    label: blood drips over front sheet
+  - min: 0.04000, -0.27000, 0.43500
+    max: 0.09000, -0.25500, 0.45500
+    color: '#C21E1F'
+    label: blood drips over front sheet
+  - min: -0.45500, -0.26500, 0.40900
+    max: -0.42500, -0.23500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: -0.45500, 0.23500, 0.40900
+    max: -0.42500, 0.26500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: -0.45700, -0.25500, 0.55000
+    max: -0.42300, 0.25500, 0.57700
+    color: '#535456'
+    label: end handle
+  - min: 0.42500, -0.26500, 0.40900
+    max: 0.45500, -0.23500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: 0.42500, 0.23500, 0.40900
+    max: 0.45500, 0.26500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: 0.42300, -0.25500, 0.55000
+    max: 0.45700, 0.25500, 0.57700
+    color: '#535456'
+    label: end handle
+  - min: -0.43000, -0.29200, 0.33000
+    max: 0.43000, -0.26800, 0.35000
+    color: '#9C9B98'
+    label: lowered side rail
+  - min: -0.43000, -0.29200, 0.39300
+    max: 0.43000, -0.26800, 0.41300
+    color: '#9C9B98'
+    label: lowered side rail
+  - min: -0.43000, 0.26800, 0.33000
+    max: 0.43000, 0.29200, 0.35000
+    color: '#9C9B98'
+    label: lowered side rail
+  - min: -0.43000, 0.26800, 0.39300
+    max: 0.43000, 0.29200, 0.41300
+    color: '#9C9B98'
+    label: lowered side rail
+- type: cmu3DModel
+  id: CMU3DRMCRollerBedHospitalSheet
+  label: Green-sheet hospital trolley
+  sourcePrototypes:
+  - RMCRollerBedHospitalSheet
+  status: draft
+  description: Green-sheet hospital trolley. Source-specific static draft; hidden construction and dimensions remain
+    inferred. See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/rollerbeds.rsi
+  referenceState: bigrollerhospitalsheet_down
+  sourceDirections: 1
+  folded: false
+  alternateFoldModel: CMU3DRMCRollerBedHospitalSheetFolded
+  parts:
+  - min: -0.42200, -0.23100, 0.03500
+    max: -0.34800, -0.18900, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: -0.40300, -0.23000, 0.08700
+    max: -0.36700, -0.19000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: -0.42200, 0.18900, 0.03500
+    max: -0.34800, 0.23100, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: -0.40300, 0.19000, 0.08700
+    max: -0.36700, 0.23000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: 0.34800, -0.23100, 0.03500
+    max: 0.42200, -0.18900, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: 0.36700, -0.23000, 0.08700
+    max: 0.40300, -0.19000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: 0.34800, 0.18900, 0.03500
+    max: 0.42200, 0.23100, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: 0.36700, 0.19000, 0.08700
+    max: 0.40300, 0.23000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: -0.40500, -0.22500, 0.20000
+    max: 0.40500, 0.22500, 0.23900
+    color: '#535456'
+    label: lower carriage
+  - min: -0.47700, -0.28600, 0.36000
+    max: 0.47700, 0.28600, 0.41700
+    color: '#666666'
+    label: trolley deck
+  - min: -0.43000, -0.26500, 0.41700
+    max: 0.43000, 0.26500, 0.49500
+    color: '#B1AEAB'
+    label: mattress
+  - min: 0.27000, -0.22300, 0.49400
+    max: 0.45500, 0.22300, 0.55200
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 0.55100
+    max: 0.44700, 0.21500, 0.56600
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 0.56500
+    max: 0.43600, 0.20400, 0.57400
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40900, -0.23800, 0.49600
+    max: 0.27000, 0.23800, 0.49900
+    color: '#FFFFFF'
+    label: Sheet source pixels
+    surface: CMU3DFurnitureArtRMCRollerBedHospitalSheetSheet
+    surfaceAxis: XY
+  - min: -0.45500, -0.26500, 0.40900
+    max: -0.42500, -0.23500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: -0.45500, 0.23500, 0.40900
+    max: -0.42500, 0.26500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: -0.45700, -0.25500, 0.55000
+    max: -0.42300, 0.25500, 0.57700
+    color: '#535456'
+    label: end handle
+  - min: 0.42500, -0.26500, 0.40900
+    max: 0.45500, -0.23500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: 0.42500, 0.23500, 0.40900
+    max: 0.45500, 0.26500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: 0.42300, -0.25500, 0.55000
+    max: 0.45700, 0.25500, 0.57700
+    color: '#535456'
+    label: end handle
+  - min: -0.43000, -0.29200, 0.33000
+    max: 0.43000, -0.26800, 0.35000
+    color: '#9C9B98'
+    label: lowered side rail
+  - min: -0.43000, -0.29200, 0.39300
+    max: 0.43000, -0.26800, 0.41300
+    color: '#9C9B98'
+    label: lowered side rail
+  - min: -0.43000, 0.26800, 0.33000
+    max: 0.43000, 0.29200, 0.35000
+    color: '#9C9B98'
+    label: lowered side rail
+  - min: -0.43000, 0.26800, 0.39300
+    max: 0.43000, 0.29200, 0.41300
+    color: '#9C9B98'
+    label: lowered side rail
+- type: cmu3DModel
+  id: CMU3DRMCRollerBedHospitalSheet2
+  label: Medical-cross hospital trolley
+  sourcePrototypes:
+  - RMCRollerBedHospitalSheet2
+  status: draft
+  description: Medical-cross hospital trolley. Source-specific static draft; hidden construction and dimensions
+    remain inferred. See SOURCES_FURNITURE.md.
+  referenceRsi: _RMC14/Structures/Furniture/rollerbeds.rsi
+  referenceState: bigrollerhospitalsheet2_down
+  sourceDirections: 1
+  folded: false
+  alternateFoldModel: CMU3DRMCRollerBedHospitalSheet2Folded
+  parts:
+  - min: -0.42200, -0.23100, 0.03500
+    max: -0.34800, -0.18900, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: -0.40300, -0.23000, 0.08700
+    max: -0.36700, -0.19000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: -0.42200, 0.18900, 0.03500
+    max: -0.34800, 0.23100, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: -0.40300, 0.19000, 0.08700
+    max: -0.36700, 0.23000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: 0.34800, -0.23100, 0.03500
+    max: 0.42200, -0.18900, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: 0.36700, -0.23000, 0.08700
+    max: 0.40300, -0.19000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: 0.34800, 0.18900, 0.03500
+    max: 0.42200, 0.23100, 0.10900
+    color: '#2E2E2F'
+    label: caster wheel
+    shape: CylinderY
+  - min: 0.36700, 0.19000, 0.08700
+    max: 0.40300, 0.23000, 0.37000
+    color: '#535456'
+    label: caster upright
+  - min: -0.40500, -0.22500, 0.20000
+    max: 0.40500, 0.22500, 0.23900
+    color: '#535456'
+    label: lower carriage
+  - min: -0.47700, -0.28600, 0.36000
+    max: 0.47700, 0.28600, 0.41700
+    color: '#666666'
+    label: trolley deck
+  - min: -0.43000, -0.26500, 0.41700
+    max: 0.43000, 0.26500, 0.49500
+    color: '#B1AEAB'
+    label: mattress
+  - min: 0.27000, -0.22300, 0.49400
+    max: 0.45500, 0.22300, 0.55200
+    color: '#B9B3A4'
+    label: pillow
+  - min: 0.27800, -0.21500, 0.55100
+    max: 0.44700, 0.21500, 0.56600
+    color: '#C3BDB0'
+    label: pillow upper cushion
+  - min: 0.28900, -0.20400, 0.56500
+    max: 0.43600, 0.20400, 0.57400
+    color: '#CCC6BA'
+    label: pillow face
+  - min: -0.40900, -0.23800, 0.49600
+    max: 0.27000, 0.23800, 0.49900
+    color: '#FFFFFF'
+    label: Sheet source pixels
+    surface: CMU3DFurnitureArtRMCRollerBedHospitalSheet2Sheet
+    surfaceAxis: XY
+  - min: -0.45500, -0.26500, 0.40900
+    max: -0.42500, -0.23500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: -0.45500, 0.23500, 0.40900
+    max: -0.42500, 0.26500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: -0.45700, -0.25500, 0.55000
+    max: -0.42300, 0.25500, 0.57700
+    color: '#535456'
+    label: end handle
+  - min: 0.42500, -0.26500, 0.40900
+    max: 0.45500, -0.23500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: 0.42500, 0.23500, 0.40900
+    max: 0.45500, 0.26500, 0.57000
+    color: '#4A4B4D'
+    label: end handle post
+  - min: 0.42300, -0.25500, 0.55000
+    max: 0.45700, 0.25500, 0.57700
+    color: '#535456'
+    label: end handle
+  - min: -0.43000, -0.29200, 0.33000
+    max: 0.43000, -0.26800, 0.35000
+    color: '#9C9B98'
+    label: lowered side rail
+  - min: -0.43000, -0.29200, 0.39300
+    max: 0.43000, -0.26800, 0.41300
+    color: '#9C9B98'
+    label: lowered side rail
+  - min: -0.43000, 0.26800, 0.33000
+    max: 0.43000, 0.29200, 0.35000
+    color: '#9C9B98'
+    label: lowered side rail
+  - min: -0.43000, 0.26800, 0.39300
+    max: 0.43000, 0.29200, 0.41300
+    color: '#9C9B98'
+    label: lowered side rail

@@ -48,7 +48,7 @@ public sealed partial class CMUWeatherCommand : LocalizedCommands
         {
             weather = args[1];
             if (!_proto.TryIndex(weather, out var weatherPrototype) ||
-                !weatherPrototype.HasComponent<WeatherStatusEffectComponent>(_componentFactory))
+                !weatherPrototype.HasComp<WeatherStatusEffectComponent>(_componentFactory))
             {
                 shell.WriteError(Loc.GetString("cmd-weather-error-unknown-proto"));
                 return;
@@ -91,7 +91,7 @@ public sealed partial class CMUWeatherCommand : LocalizedCommands
             var options = new List<CompletionOption>();
             foreach (var proto in _proto.EnumeratePrototypes<EntityPrototype>())
             {
-                if (!proto.HasComponent<WeatherStatusEffectComponent>(_componentFactory))
+                if (!proto.HasComp<WeatherStatusEffectComponent>(_componentFactory))
                     continue;
 
                 options.Add(new CompletionOption(proto.ID, proto.Name));

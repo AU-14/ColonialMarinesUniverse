@@ -39,9 +39,22 @@ public abstract partial class SharedMoverController
     {
         if (!args.CanMove)
         {
-            // Remove from active mover query when entity cannot move
-            RemCompDeferred<ActiveInputMoverComponent>(ent);
-            return;
+            // CMU14 Begin: do not resume an old tile slide after being carried, unbuckled, or unstunned.
+            if (TileMovementQuery.TryComp(ent, out var tileMovement))
+            {
+                tileMovement.SlideActive = false;
+                tileMovement.FailureSlideActive = false;
+                tileMovement.WasWeightlessLastTick = false;
+                tileMovement.MovementKeyInitialDownTime = null;
+                tileMovement.CurrentSlideMoveButtons = MoveButtons.None;
+                tileMovement.LastTickLocalCoordinates = null;
+                Dirty(ent, tileMovement);
+            }
+            // CMU14 End
+
+            // CMU14: blocked movers still need relative/camera rotation updates (SS14 45953).
+            // RemCompDeferred<ActiveInputMoverComponent>(ent);
+            // return;
         }
 
         UpdateMoverStatus((ent, ent.Comp));

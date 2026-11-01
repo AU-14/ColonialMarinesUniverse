@@ -26,6 +26,10 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.LineEdit;
+// cmu edit start
+using Content.Client.Gameplay;
+using Robust.Client.State;
+// cmu edit end
 
 namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 
@@ -134,6 +138,11 @@ public partial class ChatBox : UIWidget
         ChatInput.Input.OnFocusExit += OnFocusExit;
         ChatInput.ChannelSelector.OnChannelSelect += OnChannelSelect;
         ChatInput.FilterButton.Popup.OnChannelFilter += OnChannelFilter;
+        // cmu edit start
+        ChatInput.SearchButton.OnToggled += OnSearchToggled;
+        ChatInput.SearchInput.OnTextChanged += OnSearchTextChanged;
+        ChatInput.SearchInput.OnFocusExit += OnSearchFocusExit;
+        // cmu edit end
         ChatInput.FilterButton.Popup.OnNewHighlights += OnNewHighlights;
         ChatInput.FilterButton.Popup.OnTabSelected += OnSettingsTabSelected;
         ChatInput.FilterButton.Popup.OnTabAdded += OnSettingsTabAdded;
@@ -225,12 +234,14 @@ public partial class ChatBox : UIWidget
         _controller.SendMessage(this, SelectedChannel);
 
         // cmu edit start
-        // Snap back to Local after talking on another channel, or to Dead chat as a ghost.
-        var home = (_controller.SelectableChannels & ChatSelectChannel.Local) != 0
-            ? ChatSelectChannel.Local
-            : (_controller.SelectableChannels & ChatSelectChannel.Dead) != 0
-                ? ChatSelectChannel.Dead
-                : ChatSelectChannel.None;
+        // Snap back to Local after talking on another channel, or to Dead chat as a ghost. In the lobby, OOC.
+        var home = IoCManager.Resolve<IStateManager>().CurrentState is not GameplayStateBase
+            ? ChatSelectChannel.OOC
+            : (_controller.SelectableChannels & ChatSelectChannel.Local) != 0
+                ? ChatSelectChannel.Local
+                : (_controller.SelectableChannels & ChatSelectChannel.Dead) != 0
+                    ? ChatSelectChannel.Dead
+                    : ChatSelectChannel.None;
         if (hadText &&
             home != ChatSelectChannel.None &&
             sentOn != home &&
@@ -252,7 +263,7 @@ public partial class ChatBox : UIWidget
         if (LegacyPresentation)
         {
             var visible = IsMessageVisibleInLegacy(msg);
-            if (visible)
+            if (visible && MatchesSearch(msg)) // cmu edit
                 AddLegacyLine(msg);
 
             if (fromHistory || !visible)
@@ -267,6 +278,9 @@ public partial class ChatBox : UIWidget
 
         if (fromHistory)
         {
+            if (!MatchesSearch(msg)) // cmu edit
+                return;
+
             if (IsMessageVisibleInActiveTab(msg))
                 AddLine(msg, Contents, _primaryRepeatQueue);
 
@@ -288,16 +302,78 @@ public partial class ChatBox : UIWidget
         var shownInActive = IsMessageVisibleInActiveTab(msg);
         var shownInSecondary = IsMessageVisibleInSecondaryTab(msg);
 
-        if (shownInActive)
+        // cmu edit start
+        var matchesSearch = MatchesSearch(msg);
+        if (shownInActive && matchesSearch)
             AddLine(msg, Contents, _primaryRepeatQueue);
 
-        if (shownInSecondary)
+        if (shownInSecondary && matchesSearch)
             AddLine(msg, SecondaryContents, _secondaryRepeatQueue);
+        // cmu edit end
 
         if (!shownInActive && !shownInSecondary)
             UpdateInactiveTabUnreads(msg);
         // CMU14 End
     }
+
+    // cmu edit start
+    private string _searchText = string.Empty;
+
+    private void OnSearchToggled(BaseButton.ButtonToggledEventArgs args)
+    {
+        ChatInput.SearchInput.Visible = args.Pressed;
+        if (args.Pressed)
+        {
+            ChatInput.SearchInput.GrabKeyboardFocus();
+            return;
+        }
+
+        CloseSearch();
+    }
+
+    private void OnSearchFocusExit(LineEdit.LineEditEventArgs args)
+    {
+        // Clicking the magnifier also takes focus away; let its toggle close the box instead.
+        if (UserInterfaceManager.CurrentlyHovered == ChatInput.SearchButton)
+            return;
+
+        ChatInput.SearchButton.Pressed = false;
+        CloseSearch();
+    }
+
+    private void CloseSearch()
+    {
+        ChatInput.SearchInput.Visible = false;
+        ChatInput.SearchInput.Text = string.Empty;
+        SetSearch(string.Empty);
+    }
+
+    private void OnSearchTextChanged(LineEdit.LineEditEventArgs args)
+    {
+        SetSearch(args.Text);
+    }
+
+    private void SetSearch(string text)
+    {
+        text = text.Trim();
+        if (text == _searchText)
+            return;
+
+        _searchText = text;
+        Repopulate();
+    }
+
+    /// <summary>Whether a message contains the chat search text, ignoring case and markup.</summary>
+    private bool MatchesSearch(ChatMessage message)
+    {
+        if (_searchText.Length == 0)
+            return true;
+
+        return message.Message.Contains(_searchText, StringComparison.OrdinalIgnoreCase) ||
+               FormattedMessage.RemoveMarkupPermissive(message.WrappedMessage)
+                   .Contains(_searchText, StringComparison.OrdinalIgnoreCase);
+    }
+    // cmu edit end
 
     private void OnHighlightsUpdated(string highlights)
     {
@@ -318,7 +394,7 @@ public partial class ChatBox : UIWidget
 
             foreach (var message in _controller.History)
             {
-                if (IsMessageVisibleInLegacy(message.Item2))
+                if (IsMessageVisibleInLegacy(message.Item2) && MatchesSearch(message.Item2)) // cmu edit
                     AddLegacyLine(message.Item2);
             }
 
@@ -331,7 +407,7 @@ public partial class ChatBox : UIWidget
 
         foreach (var message in _controller.History)
         {
-            if (IsMessageVisibleInActiveTab(message.Item2))
+            if (IsMessageVisibleInActiveTab(message.Item2) && MatchesSearch(message.Item2)) // cmu edit
                 AddLine(message.Item2, Contents, _primaryRepeatQueue);
         }
 
@@ -691,7 +767,7 @@ public partial class ChatBox : UIWidget
         var tab = GetSecondaryTab();
         foreach (var message in _controller.History)
         {
-            if (IsMessageVisibleInTab(tab, message.Item2))
+            if (IsMessageVisibleInTab(tab, message.Item2) && MatchesSearch(message.Item2)) // cmu edit
                 AddLine(message.Item2, SecondaryContents, _secondaryRepeatQueue);
         }
 
@@ -1762,6 +1838,11 @@ public partial class ChatBox : UIWidget
         ChatInput.Input.OnFocusExit -= OnFocusExit;
         ChatInput.ChannelSelector.OnChannelSelect -= OnChannelSelect;
         ChatInput.FilterButton.Popup.OnChannelFilter -= OnChannelFilter;
+        // cmu edit start
+        ChatInput.SearchButton.OnToggled -= OnSearchToggled;
+        ChatInput.SearchInput.OnTextChanged -= OnSearchTextChanged;
+        ChatInput.SearchInput.OnFocusExit -= OnSearchFocusExit;
+        // cmu edit end
         ChatInput.FilterButton.Popup.OnNewHighlights -= OnNewHighlights;
         ChatInput.FilterButton.Popup.OnTabSelected -= OnSettingsTabSelected;
         ChatInput.FilterButton.Popup.OnTabAdded -= OnSettingsTabAdded;

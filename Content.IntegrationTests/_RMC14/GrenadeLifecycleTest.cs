@@ -12,6 +12,8 @@ namespace Content.IntegrationTests._RMC14;
 [TestFixture]
 public sealed class GrenadeLifecycleTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId RMCGrenadeBlastM12Prototype = "RMCGrenadeBlastM12";
+
     [Test]
     public async Task BlastM12HasFlickeringPrimedVisual()
     {
@@ -21,7 +23,7 @@ public sealed class GrenadeLifecycleTest
         await client.WaitAssertion(() =>
         {
             var prototypes = client.ResolveDependency<IPrototypeManager>();
-            var prototype = prototypes.Index<EntityPrototype>("RMCGrenadeBlastM12");
+            var prototype = prototypes.Index<EntityPrototype>(RMCGrenadeBlastM12Prototype);
 
             Assert.That(
                 prototype.TryComp<TimerTriggerVisualsComponent>(out _, client.EntMan.ComponentFactory),

@@ -49,10 +49,15 @@ namespace Content.Shared.Ghost.Roles
         public GhostRoleInfo[] GhostRoles { get; }
         public ForceInterestInfo[] Forces { get; }
 
-        public GhostRolesEuiState(GhostRoleInfo[] ghostRoles, ForceInterestInfo[]? forces = null)
+        /// <summary>If set, ghosts may call in a random minor third party from this menu.</summary>
+        public GhostThirdPartyCallState? ThirdPartyCall { get; } // CMU14
+
+        public GhostRolesEuiState(GhostRoleInfo[] ghostRoles, ForceInterestInfo[]? forces = null,
+            GhostThirdPartyCallState? thirdPartyCall = null) // CMU14
         {
             GhostRoles = ghostRoles;
             Forces = forces ?? [];
+            ThirdPartyCall = thirdPartyCall; // CMU14
         }
     }
 

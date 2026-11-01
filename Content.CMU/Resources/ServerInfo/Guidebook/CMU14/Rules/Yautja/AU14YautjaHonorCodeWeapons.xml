@@ -1,0 +1,34 @@
+<Document>
+  # Weapons and Tools
+
+  Which tools you may use depends on the prey in front of you. See [textlink="Prey" link="AU14YautjaHonorCodePrey"] for how prey is classified.
+
+  ## Against worthy prey
+  <Box>
+    <GuideEntityEmbed Entity="CMUYautjaCombistick"/>
+    <GuideEntityEmbed Entity="CMUYautjaSmartDisc"/>
+    <GuideEntityEmbed Entity="CMUYautjaHuntingTrap"/>
+  </Box>
+  - All Yautja melee weapons.
+  - Smart-discs and harpoons. When engaging a single target, use at most one of each, unless the target is dishonorable.
+  - Hunting traps.
+  - The non-lethal plasma caster, without stun-hitting (hitting prey while they're down and unable to resist). It should only be used when fighting more than one worthy prey.
+
+  ## Against dishonorable and temporarily dishonorable prey
+  <Box>
+    <GuideEntityEmbed Entity="CMUYautjaPlasmaCaster"/>
+    <GuideEntityEmbed Entity="CMUYautjaPlasmaRifle"/>
+    <GuideEntityEmbed Entity="CMUYautjaSpikeLauncher"/>
+  </Box>
+  Everything above, plus:
+  - The plasma rifle.
+  - The plasma pistol.
+  - Cloaked combat.
+  - The spike launcher.
+  - Multiple harpoons and multiple smart-discs.
+  - The lethal and non-lethal plasma caster, with stun-hitting allowed. Use your own initiative here.
+  - The hunting bow, explosive and non-explosive.
+
+  ## Prey weaponry
+  Weapons thrown at you can be thrown back, whether they were aimed at you and missed or you caught one mid-air. When a thrown explosive lands in a lodge you are in, you may also throw it outside or towards prey.
+</Document>

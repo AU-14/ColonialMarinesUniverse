@@ -381,6 +381,33 @@
       amount: 2
     - id: AU14PacketGrenadeHighExplosiveUPPFilled
 
+- type: entity
+  parent: RMCGunCaseBase
+  id: RuMCRifleAK4047Case
+  name: AK4047 case
+  description: Case for the AK4047
+  components:
+  - type: Storage
+    grid:
+    - 0,0,13,1
+    whitelist:
+      tags:
+      - RMCWeaponRifleAK4047
+      - RMCMagazineRifleAK4047
+      - RMCMagazineRifleAK4047AP
+      - RuMCMagazineRifleAK4047bakelite
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRifleAK4047
+    - id: RMCMagazineRifleAK4047
+    - id: RMCMagazineRifleAK4047
+    - id: RMCMagazineRifleAK4047
+    - id: RMCMagazineRifleAK4047
+    - id: RuMCMagazineRifleAK4047bakelite
+    - id: RuMCMagazineRifleAK4047bakelite
+    - id: RuMCMagazineRifleAK4047bakeliteLarge
+    - id: RuMCMagazineRifleAK4047APbakelite
+
 #- type: entity
 #  parent: RMCGunCaseBase
 #  id: RuMCRPG_36Case

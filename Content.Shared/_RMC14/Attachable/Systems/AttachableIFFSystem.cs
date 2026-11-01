@@ -92,7 +92,7 @@ public sealed partial class AttachableIFFSystem : EntitySystem
         CheckPreventFriendlyFire(ent.Owner, ref args);
     }
 
-    private void CheckPreventFriendlyFire(EntityUid weapon, ref AttemptShootEvent args)
+    public void CheckPreventFriendlyFire(EntityUid weapon, ref AttemptShootEvent args) // CMU14: public for squad optic IFF
     {
         if (args.Cancelled ||
             args.ToCoordinates is not { } toCoordinates ||

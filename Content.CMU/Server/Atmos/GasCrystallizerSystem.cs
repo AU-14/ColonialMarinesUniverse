@@ -56,7 +56,7 @@ public sealed partial class GasCrystallizerSystem : EntitySystem
 
             var output = Spawn(recipe.Output, Transform(entity).Coordinates);
             if (TryComp<StackComponent>(output, out var stack))
-                _stack.SetCount(output, recipe.OutputAmount, stack);
+                _stack.SetCount((output, stack), recipe.OutputAmount);
             _stack.TryMergeToContacts(output);
 
             entity.Comp.NextBatch = _timing.CurTime + TimeSpan.FromSeconds(entity.Comp.BatchDelay);

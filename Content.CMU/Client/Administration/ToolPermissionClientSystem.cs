@@ -18,11 +18,11 @@ namespace Content.Client.CMU14.Administration;
 /// changes them live) so tool buttons can pre-check without a round trip, and drives the Host-only
 /// Tool Permissions manager window. The server re-validates everything.
 /// </summary>
-public sealed class ToolPermissionClientSystem : EntitySystem
+public sealed partial class ToolPermissionClientSystem : EntitySystem
 {
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IClientGameStateManager _gameStates = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IClientGameStateManager _gameStates = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     private readonly HashSet<string> _myTools = new();
     private bool _requestPending;

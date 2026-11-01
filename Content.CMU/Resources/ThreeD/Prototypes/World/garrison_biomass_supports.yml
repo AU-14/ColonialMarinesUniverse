@@ -1,0 +1,102 @@
+# Independent edge brackets and hazard paint; source offsets are intentional.
+- type: cmu3DModel
+  id: CMU3DBiomassLeft
+  label: Turbine left edge brackets
+  status: draft
+  sourcePrototypes:
+  - RMCPropTurbineStrutsLeft
+  referencePrototype: RMCPropTurbineStrutsLeft
+  referenceRsi: _RMC14/Structures/Props/biomass_turbine.rsi
+  referenceState: support_struts_l
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Two small cast-metal edge brackets at the exact source pixel offsets. The far bracket is six pixels
+    wide and the near bracket five; their L silhouettes are real opaque volumes. Left and right variants occupy
+    opposite edges of a shared tile and leave the middle clear. Attachment height .45-.62 tiles is inferred to meet
+    the turbine side lugs; no floor pier is invented. Static source pose; original CC-BY-SA-3.0 artwork. See SOURCES_BIOMASS_TURBINE.md.
+  parts:
+  - label: cast edge bracket 1
+    min: -0.5000000, 0.9375000, 0.4500000
+    max: -0.3125000, 1.0937500, 0.6200000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassLeftArt0
+    surfaceAxis: XY
+  - label: cast edge bracket 2
+    min: -0.4375000, 0.8750000, 0.4500000
+    max: -0.3125000, 0.9375000, 0.6200000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassLeftArt1
+    surfaceAxis: XY
+  - label: cast edge bracket 3
+    min: -0.5000000, -1.0625000, 0.4500000
+    max: -0.3437500, -0.9062500, 0.6200000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassLeftArt2
+    surfaceAxis: XY
+  - label: cast edge bracket 4
+    min: -0.4687500, -1.1250000, 0.4500000
+    max: -0.3437500, -1.0625000, 0.6200000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassLeftArt3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DBiomassRight
+  label: Turbine right edge brackets
+  status: draft
+  sourcePrototypes:
+  - RMCPropTurbineStrutsRight
+  referencePrototype: RMCPropTurbineStrutsRight
+  referenceRsi: _RMC14/Structures/Props/biomass_turbine.rsi
+  referenceState: support_struts_r
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Two small cast-metal edge brackets at the exact source pixel offsets. The far bracket is six pixels
+    wide and the near bracket five; their L silhouettes are real opaque volumes. Left and right variants occupy
+    opposite edges of a shared tile and leave the middle clear. Attachment height .45-.62 tiles is inferred to meet
+    the turbine side lugs; no floor pier is invented. Static source pose; original CC-BY-SA-3.0 artwork. See SOURCES_BIOMASS_TURBINE.md.
+  parts:
+  - label: cast edge bracket 1
+    min: 0.3125000, 0.9375000, 0.4500000
+    max: 0.5000000, 1.0937500, 0.6200000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassRightArt0
+    surfaceAxis: XY
+  - label: cast edge bracket 2
+    min: 0.3125000, 0.8750000, 0.4500000
+    max: 0.4375000, 0.9375000, 0.6200000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassRightArt1
+    surfaceAxis: XY
+  - label: cast edge bracket 3
+    min: 0.3437500, -1.0625000, 0.4500000
+    max: 0.5000000, -0.9062500, 0.6200000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassRightArt2
+    surfaceAxis: XY
+  - label: cast edge bracket 4
+    min: 0.3437500, -1.1250000, 0.4500000
+    max: 0.4687500, -1.0625000, 0.6200000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassRightArt3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DBiomassBorder
+  label: Turbine floor warning border
+  status: draft
+  sourcePrototypes:
+  - RMCPropTurbineStrutsBorder
+  referencePrototype: RMCPropTurbineStrutsBorder
+  referenceRsi: _RMC14/Structures/Props/biomass_turbine.rsi
+  referenceState: biomass_turbine_border
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Original transparent warning-border pixels as thin floor paint; keeps its open center, curved end
+    outline and narrow side markings. This is not a solid platform or a raised railing. Static source pose; original
+    CC-BY-SA-3.0 artwork. See SOURCES_BIOMASS_TURBINE.md.
+  parts:
+  - label: original floor hazard paint
+    min: -0.5000000, -1.5000000, 0.0080000
+    max: 0.5000000, 1.5000000, 0.0120000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassBorderArt0
+    surfaceAxis: XY

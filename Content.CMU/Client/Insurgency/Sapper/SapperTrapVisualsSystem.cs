@@ -18,6 +18,7 @@ namespace Content.Client.CMU14.Insurgency.Sapper;
 /// </summary>
 public sealed partial class SapperTrapVisualsSystem : EntitySystem
 {
+    [Dependency] private SpriteSystem _sprites = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -39,7 +40,7 @@ public sealed partial class SapperTrapVisualsSystem : EntitySystem
             var shown = !trap.Deployed || localFriendly || nearLocal;
             var alpha = shown ? 1f : trap.HiddenAlpha;
             if (System.Math.Abs(sprite.Color.A - alpha) > 0.01f)
-                sprite.Color = sprite.Color.WithAlpha(alpha);
+                _sprites.SetColor((uid, sprite), sprite.Color.WithAlpha(alpha));
         }
     }
 }

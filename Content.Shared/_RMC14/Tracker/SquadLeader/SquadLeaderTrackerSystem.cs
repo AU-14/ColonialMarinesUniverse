@@ -459,6 +459,11 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
 
     private bool CanChangeFireteamMember(EntityUid user, EntityUid target, bool add, EntityUid? trackerOwner = null)
     {
+        // cmu edit start: auxiliary squads have no fireteams
+        if (add && CMUInAuxiliarySquad(target))
+            return false;
+        // cmu edit end
+
         // Allow direct squad leaders immediately.
         if (HasComp<SquadLeaderComponent>(user))
         {
@@ -544,6 +549,9 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         if (!Resolve(squad, ref squad.Comp, false))
             return;
 
+        // cmu edit start: rebuilding the fireteams used to wipe their nicknames
+        var cmuNicknames = CMUSaveFireteamNicknames(squad.Comp.Fireteams);
+        // cmu edit end
         Array.Clear(squad.Comp.Fireteams.Fireteams);
         squad.Comp.Fireteams.Unassigned.Clear();
         if (_squad.TryGetSquadLeader((squad, squad.Comp), out var leader))
@@ -561,6 +569,10 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         {
             AddFireteamMember(squad.Comp.Fireteams, member);
         }
+
+        // cmu edit start
+        CMURestoreFireteamNicknames(squad.Comp.Fireteams, cmuNicknames);
+        // cmu edit end
     }
 
     private void AddFireteamMember(FireteamData fireteamData, EntityUid member)
@@ -709,7 +721,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
                 var trackingComponent = _factory.GetComponent(trackerMode.Component).GetType();
                 var targetName = "";
 
-                if (EntityManager.TryGetComponent(trackableUid, trackingComponent, out _))
+                if (TryComp(trackableUid, trackingComponent, out _))
                 {
                     if (!_net.IsClient)
                         targetName = Name(trackableUid);
@@ -895,7 +907,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
                 if (trackerMode.Component != null)
                 {
                     var trackingComponent = _factory.GetComponent(trackerMode.Component).GetType();
-                    if (EntityManager.TryGetComponent(trackableUid, trackingComponent, out _))
+                    if (TryComp(trackableUid, trackingComponent, out _))
                     {
                         SetTarget((uid, tracker), trackableUid);
 

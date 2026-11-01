@@ -28,7 +28,7 @@ public sealed partial class SharedStructuralScannerSystem : EntitySystem
         ent.Comp.Enabled = !ent.Comp.Enabled;
         Dirty(ent);
 
-        _popup.PopupClient(
+        _popup.PopupEntity(
             Loc.GetString(ent.Comp.Enabled ? "au-scanner-on" : "au-scanner-off"),
             ent,
             args.User);

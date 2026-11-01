@@ -15,8 +15,8 @@ namespace Content.Client.CMU14.Roles.Ranks;
 
 public sealed partial class PlatoonRankPreferenceWindow : DefaultWindow
 {
-    [Dependency] private  IPrototypeManager _prototypeManager = default!;
-    [Dependency] private  IResourceCache _resourceCache = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private readonly TabContainer _tabs;
     private readonly Dictionary<string, string?> _selections = new();
@@ -265,7 +265,7 @@ public sealed partial class PlatoonRankPreferenceWindow : DefaultWindow
 
     private static string LocalizeOrLiteral(string value)
     {
-        return Loc.TryGetString(value, out var localized)
+        return IoCManager.Resolve<ILocalizationManager>().TryGetString(value, out var localized)
             ? localized
             : value;
     }
@@ -278,7 +278,7 @@ public sealed partial class PlatoonRankPreferenceWindow : DefaultWindow
         if (!_prototypeManager.TryIndex((string)entProtoId, out EntityPrototype? proto))
             return null;
 
-        var textures = SpriteComponent.GetPrototypeTextures(proto, _resourceCache, out _).ToList();
+        var textures = IoCManager.Resolve<IEntityManager>().System<SpriteSystem>().GetPrototypeTextures(proto).ToList();
         return textures.Count > 0 ? textures[0].Default : null;
     }
 

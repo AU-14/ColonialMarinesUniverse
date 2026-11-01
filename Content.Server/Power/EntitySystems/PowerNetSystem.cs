@@ -129,7 +129,7 @@ namespace Content.Server.Power.EntitySystems
 
         private void PowerConsumerInit(EntityUid uid, PowerConsumerComponent component, ComponentInit args)
         {
-            _powerNetConnector.BaseNetConnectorInit(component);
+            _powerNetConnector.BaseNetConnectorInit(uid, component);
             AllocLoad(component.NetworkLoad);
         }
 
@@ -150,7 +150,7 @@ namespace Content.Server.Power.EntitySystems
 
         private void PowerSupplierInit(EntityUid uid, PowerSupplierComponent component, ComponentInit args)
         {
-            _powerNetConnector.BaseNetConnectorInit(component);
+            _powerNetConnector.BaseNetConnectorInit(uid, component);
             AllocSupply(component.NetworkSupply);
         }
 

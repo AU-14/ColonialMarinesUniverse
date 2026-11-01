@@ -24,7 +24,7 @@ public sealed class MohawkFlightAlignmentTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/midway.yml"), out var loaded), Is.True);
+                new ResPath("/Maps/CMU14/Dropships/Mohawk/midway.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             netShip = entities.GetNetEntity(ship);
             netLower = entities.GetNetEntity(entities.GetComponent<MultiDeckDropshipComponent>(ship).Decks[-1]);
@@ -32,7 +32,7 @@ public sealed class MohawkFlightAlignmentTest
             pair.Server.PlayerMan.SetAttachedEntity(pair.Server.PlayerMan.Sessions.Single(), viewer);
             var destination = entities.SpawnEntity(null, new EntityCoordinates(maps.CreateMap(), 20, 20));
             entities.AddComponent<DropshipDestinationComponent>(destination);
-            var nav = entities.EntityQuery<DropshipNavigationComputerComponent>()
+            var nav = entities.QueryEntities<DropshipNavigationComputerComponent>()
                 .Single(c => entities.GetComponent<TransformComponent>(c.Owner).GridUid == ship);
             Assert.That(entities.System<SharedDropshipSystem>().FlyTo((nav.Owner, nav), destination, null,
                 startupTime: 0.5f, hyperspaceTime: 30f), Is.True);

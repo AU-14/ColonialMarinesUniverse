@@ -78,7 +78,7 @@ public abstract partial class SharedRMCOrbitalDeployerSystem : EntitySystem
                     continue;
 
                 var msg = Loc.GetString("rmc-sentry-too-close", ("defense", defense));
-                _popup.PopupPredictedCursor(msg, user, PopupType.SmallCaution);
+                _popup.PopupCursor(msg, user, PopupType.SmallCaution);
                 return false;
             }
         }
@@ -162,7 +162,7 @@ public abstract partial class SharedRMCOrbitalDeployerSystem : EntitySystem
             hover.GroundMap is not { } groundMap ||
             !TryComp(groundMap, out MapGridComponent? groundGrid))
         {
-            _popup.PopupPredictedCursor(Loc.GetString("cmu-gunship-lag14-requires-stable-hover"),
+            _popup.PopupCursor(Loc.GetString("cmu-gunship-lag14-requires-stable-hover"),
                 user,
                 PopupType.SmallCaution);
             return false;
@@ -172,7 +172,7 @@ public abstract partial class SharedRMCOrbitalDeployerSystem : EntitySystem
         var tile = _map.WorldToTile(groundMap, groundGrid, worldPosition);
         if (!_map.TryGetTileRef(groundMap, groundGrid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
         {
-            _popup.PopupPredictedCursor(Loc.GetString("cmu-gunship-lag14-no-ground-below"), user, PopupType.SmallCaution);
+            _popup.PopupCursor(Loc.GetString("cmu-gunship-lag14-no-ground-below"), user, PopupType.SmallCaution);
             return false;
         }
 
@@ -181,7 +181,7 @@ public abstract partial class SharedRMCOrbitalDeployerSystem : EntitySystem
                                          CollisionGroup.HighImpassable;
         if (_turf.IsTileBlocked(tileRef, blockMask))
         {
-            _popup.PopupPredictedCursor(Loc.GetString("cmu-gunship-lag14-area-obstructed"), user, PopupType.SmallCaution);
+            _popup.PopupCursor(Loc.GetString("cmu-gunship-lag14-area-obstructed"), user, PopupType.SmallCaution);
             return false;
         }
 

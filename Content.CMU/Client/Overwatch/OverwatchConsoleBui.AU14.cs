@@ -46,6 +46,9 @@ public sealed partial class OverwatchConsoleBui
 
             button.OnPressed += _ => SendMessage(new AU14CallsignOpenDirectoryMsg());
             container.AddChild(button);
+
+            // CMU14: same look as the other tab buttons beside it.
+            Content.Client.CMU14.Overwatch.CMUOverwatchCrt.SetLit(button, false);
         }
     }
 }

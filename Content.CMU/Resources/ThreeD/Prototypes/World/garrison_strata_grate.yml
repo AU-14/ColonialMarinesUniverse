@@ -1,0 +1,321 @@
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface001
+  atlasIndex: 833
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface001.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface002
+  atlasIndex: 834
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface002.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface003
+  atlasIndex: 835
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface003.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface004
+  atlasIndex: 836
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface004.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface005
+  atlasIndex: 837
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface005.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface006
+  atlasIndex: 838
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface006.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface007
+  atlasIndex: 839
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface007.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface008
+  atlasIndex: 840
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface008.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface009
+  atlasIndex: 841
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface009.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface010
+  atlasIndex: 842
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface010.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface011
+  atlasIndex: 843
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface011.png
+- type: cmu3DSurface
+  id: CMU3DStrataGrateSurface012
+  atlasIndex: 844
+  texture: /Textures/CMU14/ThreeD/Garrison/StrataGrate/CMU3DStrataGrateSurface012.png
+- type: cmu3DModel
+  id: CMU3DStrataCatwalk
+  label: Strata recessed metal grate
+  status: draft
+  sourcePrototypes:
+  - RMCCatwalkStrata
+  referenceRsi: _RMC14/Structures/catwalk.rsi
+  referenceState: strata_catwalk
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Source-matched Strata floor grate with separate perimeter, inner lip and open metal web. All original top pixels
+    and through-openings are retained. The walking surface is flush at local Z=0; inferred frame/web depths extend .0625/.03125
+    tiles below. Saved rotations and positions are unchanged. Hidden side/underside material is inferred from edge texels;
+    destruction/debris and native visual review remain open.
+  parts:
+  - label: north perimeter
+    min: -0.5, 0.34375, -0.0625
+    max: 0.5, 0.5, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface001
+    surfaceAxis: XY
+  - label: south perimeter
+    min: -0.5, -0.5, -0.0625
+    max: 0.5, -0.34375, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface002
+    surfaceAxis: XY
+  - label: west perimeter
+    min: -0.5, -0.34375, -0.0625
+    max: -0.34375, 0.34375, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface003
+    surfaceAxis: XY
+  - label: east perimeter
+    min: 0.34375, -0.34375, -0.0625
+    max: 0.5, 0.34375, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface004
+    surfaceAxis: XY
+  - label: north inner lip
+    min: -0.34375, 0.3125, -0.03125
+    max: 0.34375, 0.34375, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface005
+    surfaceAxis: XY
+  - label: south inner lip
+    min: -0.34375, -0.34375, -0.03125
+    max: 0.34375, -0.3125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface006
+    surfaceAxis: XY
+  - label: west inner lip
+    min: -0.34375, -0.3125, -0.03125
+    max: -0.3125, 0.3125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface007
+    surfaceAxis: XY
+  - label: east inner lip
+    min: 0.3125, -0.3125, -0.03125
+    max: 0.34375, 0.3125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface008
+    surfaceAxis: XY
+  - label: open grate web 1
+    min: -0.28125, 0.28125, -0.03125
+    max: -0.21875, 0.3125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface009
+    surfaceAxis: XY
+  - label: open grate web 2
+    min: -0.15625, 0.28125, -0.03125
+    max: -0.09375, 0.3125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface009
+    surfaceAxis: XY
+  - label: open grate web 3
+    min: -0.03125, 0.28125, -0.03125
+    max: 0.03125, 0.3125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface009
+    surfaceAxis: XY
+  - label: open grate web 4
+    min: 0.09375, 0.28125, -0.03125
+    max: 0.15625, 0.3125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface009
+    surfaceAxis: XY
+  - label: open grate web 5
+    min: 0.21875, 0.28125, -0.03125
+    max: 0.28125, 0.3125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface009
+    surfaceAxis: XY
+  - label: open grate web 6
+    min: -0.3125, 0.21875, -0.03125
+    max: 0.3125, 0.28125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface010
+    surfaceAxis: XY
+  - label: open grate web 7
+    min: -0.28125, 0.15625, -0.03125
+    max: -0.21875, 0.21875, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 8
+    min: -0.15625, 0.15625, -0.03125
+    max: -0.09375, 0.21875, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 9
+    min: -0.03125, 0.15625, -0.03125
+    max: 0.03125, 0.21875, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 10
+    min: 0.09375, 0.15625, -0.03125
+    max: 0.15625, 0.21875, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 11
+    min: 0.21875, 0.15625, -0.03125
+    max: 0.28125, 0.21875, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 12
+    min: -0.3125, 0.09375, -0.03125
+    max: 0.3125, 0.15625, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface010
+    surfaceAxis: XY
+  - label: open grate web 13
+    min: -0.28125, 0.03125, -0.03125
+    max: -0.21875, 0.09375, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 14
+    min: -0.15625, 0.03125, -0.03125
+    max: -0.09375, 0.09375, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 15
+    min: -0.03125, 0.03125, -0.03125
+    max: 0.03125, 0.09375, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 16
+    min: 0.09375, 0.03125, -0.03125
+    max: 0.15625, 0.09375, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 17
+    min: 0.21875, 0.03125, -0.03125
+    max: 0.28125, 0.09375, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 18
+    min: -0.3125, -0.03125, -0.03125
+    max: 0.3125, 0.03125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface010
+    surfaceAxis: XY
+  - label: open grate web 19
+    min: -0.28125, -0.09375, -0.03125
+    max: -0.21875, -0.03125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 20
+    min: -0.15625, -0.09375, -0.03125
+    max: -0.09375, -0.03125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 21
+    min: -0.03125, -0.09375, -0.03125
+    max: 0.03125, -0.03125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 22
+    min: 0.09375, -0.09375, -0.03125
+    max: 0.15625, -0.03125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 23
+    min: 0.21875, -0.09375, -0.03125
+    max: 0.28125, -0.03125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 24
+    min: -0.3125, -0.15625, -0.03125
+    max: 0.3125, -0.09375, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface010
+    surfaceAxis: XY
+  - label: open grate web 25
+    min: -0.28125, -0.21875, -0.03125
+    max: -0.21875, -0.15625, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 26
+    min: -0.15625, -0.21875, -0.03125
+    max: -0.09375, -0.15625, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 27
+    min: -0.03125, -0.21875, -0.03125
+    max: 0.03125, -0.15625, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 28
+    min: 0.09375, -0.21875, -0.03125
+    max: 0.15625, -0.15625, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 29
+    min: 0.21875, -0.21875, -0.03125
+    max: 0.28125, -0.15625, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface011
+    surfaceAxis: XY
+  - label: open grate web 30
+    min: -0.3125, -0.28125, -0.03125
+    max: 0.3125, -0.21875, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface010
+    surfaceAxis: XY
+  - label: open grate web 31
+    min: -0.28125, -0.3125, -0.03125
+    max: -0.21875, -0.28125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface012
+    surfaceAxis: XY
+  - label: open grate web 32
+    min: -0.15625, -0.3125, -0.03125
+    max: -0.09375, -0.28125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface012
+    surfaceAxis: XY
+  - label: open grate web 33
+    min: -0.03125, -0.3125, -0.03125
+    max: 0.03125, -0.28125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface012
+    surfaceAxis: XY
+  - label: open grate web 34
+    min: 0.09375, -0.3125, -0.03125
+    max: 0.15625, -0.28125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface012
+    surfaceAxis: XY
+  - label: open grate web 35
+    min: 0.21875, -0.3125, -0.03125
+    max: 0.28125, -0.28125, 0
+    color: '#FFFFFFFF'
+    surface: CMU3DStrataGrateSurface012
+    surfaceAxis: XY

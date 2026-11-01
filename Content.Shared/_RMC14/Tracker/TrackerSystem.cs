@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems; // CMU14
 using Content.Shared.Movement.Components;
 using Robust.Shared.Map;
 
@@ -6,6 +7,7 @@ namespace Content.Shared._RMC14.Tracker;
 public sealed partial class TrackerSystem : EntitySystem
 {
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; // CMU14
 
     public static readonly short CenterSeverity = 1;
     private static readonly Dictionary<Direction, short> AlertSeverity = new()
@@ -32,7 +34,8 @@ public sealed partial class TrackerSystem : EntitySystem
     public short GetAlertSeverity(EntityUid ent, MapCoordinates tracked)
     {
         var pos = _transform.GetMapCoordinates(ent);
-        if (pos.MapId != tracked.MapId)
+        // CMU14: floors of a z-level stack share world coordinates, so track across them.
+        if (pos.MapId != tracked.MapId && !_zLevels.IsSameZNetwork(pos.MapId, tracked.MapId))
             return CenterSeverity;
 
         var vec = tracked.Position - pos.Position;

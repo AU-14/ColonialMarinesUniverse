@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Origin;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Preferences;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
@@ -20,6 +21,11 @@ public sealed partial class OriginSystem : EntitySystem
     /// </summary>
     public void ApplyOrigin(EntityUid mob, HumanoidCharacterProfile profile)
     {
+        // Yautja speech follows their species rules; the human profile's origin
+        // accents and items must not carry over to the spawned hunter.
+        if (HasComp<YautjaComponent>(mob))
+            return;
+
         if (profile.Origin == null)
             return;
 

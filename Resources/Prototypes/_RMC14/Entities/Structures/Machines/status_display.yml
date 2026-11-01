@@ -28,31 +28,37 @@
           Green: { visible: false }
           Blue: { state: bluealert, visible: true }
           Red: { state: redalert, visible: true }
+          Black: { state: redalert, visible: true } # CMU14: darkened ship
           Delta: { state: evac, visible: true }
         enum.RMCAlertLevelDisplayVisualLayers.HourTens:
           Green: { visible: true }
           Blue: { visible: false }
           Red: { visible: false }
+          Black: { visible: false } # CMU14: darkened ship
           Delta: { visible: false }
         enum.RMCAlertLevelDisplayVisualLayers.HourOnes:
           Green: { visible: true }
           Blue: { visible: false }
           Red: { visible: false }
+          Black: { visible: false } # CMU14: darkened ship
           Delta: { visible: false }
         enum.RMCAlertLevelDisplayVisualLayers.Separator:
           Green: { visible: true }
           Blue: { visible: false }
           Red: { visible: false }
+          Black: { visible: false } # CMU14: darkened ship
           Delta: { visible: false }
         enum.RMCAlertLevelDisplayVisualLayers.MinuteTens:
           Green: { visible: true }
           Blue: { visible: false }
           Red: { visible: false }
+          Black: { visible: false } # CMU14: darkened ship
           Delta: { visible: false }
         enum.RMCAlertLevelDisplayVisualLayers.MinuteOnes:
           Green: { visible: true }
           Blue: { visible: false }
           Red: { visible: false }
+          Black: { visible: false } # CMU14: darkened ship
           Delta: { visible: false }
   - type: RMCAlertLevelDisplay
   - type: WallMount

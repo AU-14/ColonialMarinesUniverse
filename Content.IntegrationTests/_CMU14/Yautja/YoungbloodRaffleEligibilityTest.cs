@@ -18,9 +18,10 @@ public sealed class YoungbloodRaffleEligibilityTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = true, InLobby = true, Dirty = true };
 
-    [TestCase("AU14JobGOVFORSquadRifleman", "youngblood_three_inexperienced")]
-    [TestCase("AU14JobOPFORSquadRifleman", "youngblood_solo")]
-    public async Task CurrentSquadPlaytimeAllowsJoiningTheYoungbloodRaffle(string tracker, string call)
+    [TestCase("AU14JobGOVFORSquadRifleman", "CMJobXenoDrone", "youngblood_three_inexperienced")]
+    [TestCase("AU14JobOPFORSquadRifleman", "CMJobXenoDrone", "youngblood_solo")]
+    [TestCase("AU14JobGOVFORSquadRifleman", "CMU14JobPathogenPopper", "youngblood_solo")]
+    public async Task CurrentSquadPlaytimeAllowsJoiningTheYoungbloodRaffle(string tracker, string xenoTracker, string call)
     {
         var map = await Pair.CreateTestMap();
         EntityUid role = default;
@@ -39,7 +40,7 @@ public sealed class YoungbloodRaffleEligibilityTest : GameTest
             Assert.That(query.MoveNext(out role, out _, out _), Is.True);
             var playtime = Server.ResolveDependency<PlayTimeTrackingManager>();
             playtime.AddTimeToTracker(ServerSession!, tracker, TimeSpan.FromHours(5) - TimeSpan.FromMinutes(1));
-            playtime.AddTimeToTracker(ServerSession!, "CMJobXenoDrone", TimeSpan.FromHours(5));
+            playtime.AddTimeToTracker(ServerSession!, xenoTracker, TimeSpan.FromHours(5));
         });
         await Pair.RunTicksSync(5);
         await Server.WaitAssertion(() =>

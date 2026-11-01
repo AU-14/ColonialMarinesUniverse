@@ -109,8 +109,12 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
         bool hivebroken,
         Entity<HiveComponent>? hive)
     {
-        // CMU14: language grants must also admit their listeners through the recipient filter.
-        if (listener is { } hearer && _language.CanUnderstand(hearer, _chatSystem.GetCurrentLanguageForSpeech(source)))
+        // CMU14: language grants admit their listeners through this filter, but the hivebroken
+        // allowlist wins. Converted xenos speak Common, so an unguarded shortcut leaks
+        // hivebroken chat to ordinary humans.
+        if (listener is { } hearer
+            && !hivebroken
+            && _language.CanUnderstand(hearer, _chatSystem.GetCurrentLanguageForSpeech(source)))
             return true;
 
         if (!hivebroken)

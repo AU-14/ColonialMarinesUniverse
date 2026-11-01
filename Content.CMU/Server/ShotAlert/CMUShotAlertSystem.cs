@@ -8,7 +8,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.ShotAlert;
 
-public sealed class CMUShotAlertSystem : EntitySystem
+public sealed partial class CMUShotAlertSystem : EntitySystem
 {
     [Dependency] private AreaSystem _areas = default!;
     [Dependency] private IGameTiming _timing = default!;

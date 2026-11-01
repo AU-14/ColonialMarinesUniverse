@@ -142,7 +142,7 @@ public abstract partial class SharedRMCTelephoneSystem : EntitySystem
         StopSound(ent);
 
         _audio.PlayPredicted(RemoteHangupSound, ent, args.Attacker);
-        _popup.PopupClient(Loc.GetString("rmc-dropship-launch-alarm-xeno-shutdown", ("console", ent)), args.Attacker, args.Attacker);
+        _popup.PopupEntity(Loc.GetString("rmc-dropship-launch-alarm-xeno-shutdown", ("console", ent)), args.Attacker, args.Attacker);
     }
 
     private void OnRotaryPhoneDialingInteractUsing(Entity<RotaryPhoneDialingComponent> ent, ref InteractUsingEvent args)
@@ -263,6 +263,13 @@ public abstract partial class SharedRMCTelephoneSystem : EntitySystem
                 }
             }
         }
+
+        // cmu edit start: lets a phone refuse the call, like a payphone the caller can't pay
+        var cmuAttempt = new Content.Shared.CMU14.Telephone.CMUPhoneCallAttemptEvent(user, target);
+        RaiseLocalEvent(ent, ref cmuAttempt);
+        if (cmuAttempt.Cancelled)
+            return;
+        // cmu edit end
 
         // Emit the popup on a successful call.
         // Check for the marine component because we don't want walls calling phones.

@@ -1,0 +1,9 @@
+# Original planter details; see SOURCES_REMAINING_PLANTS.md.
+- type: cmu3DSurface
+  id: CMU3DPlantArtWovenPlanter
+  atlasIndex: 278
+  texture: /Textures/CMU14/ThreeD/Plants/CMU3DPlantArtWovenPlanter.png
+- type: cmu3DSurface
+  id: CMU3DPlantArtBlueWhitePlanter
+  atlasIndex: 279
+  texture: /Textures/CMU14/ThreeD/Plants/CMU3DPlantArtBlueWhitePlanter.png

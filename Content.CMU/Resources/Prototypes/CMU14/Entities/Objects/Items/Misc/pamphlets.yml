@@ -10,6 +10,22 @@
     addComps:
     - type: ANPRCRadioUser
 
+# grants FOGO-ATGM crew training; ships two per kit so both crew can read one after another pamphlet
+- type: entity
+  parent: CMPamphlet
+  id: CMUPamphletATGM
+  name: FOGO-ATGM crew instructional pamphlet
+  description: A pamphlet used to quickly impart vital knowledge. This one covers assembling, loading, spotting for and firing the wire-guided FOGO-ATGM system.
+  components:
+  - type: Sprite
+    state: pamphlet_loader
+  - type: SkillPamphlet
+    addSkills:
+      CMUSkillATGM: 1
+    skillCap:
+      CMUSkillATGM: 1
+    bypassLimit: true
+
 # ├──[ Languages ]───────────────────────────────────────────────────┤
 - type: entity
   parent: CMPamphletLanguage
@@ -381,15 +397,6 @@
   components:
   - type: SkillPamphlet
     language: Swedish
-
-- type: entity
-  parent: CMPamphletLanguage
-  id: AU14PamphletLanguageBrazilian
-  name: Treatise of the Verdant Empire
-  description: This appears to be a chronicle of the vast forests, diverse peoples, and vibrant dialects of Brazil.
-  components:
-  - type: SkillPamphlet
-    language: Brazilian
 
 - type: entity
   parent: CMPamphletLanguage

@@ -194,7 +194,7 @@ public sealed class CMUReconFeedbackMessage(string localizationKey) : BoundUserI
 
 [Serializable, NetSerializable]
 public readonly record struct CMUReconContact(int Depth, TacticalMapBlip Blip, string? Name = null,
-    NetEntity? CameraTarget = null, NetEntity? XenoWatchTarget = null);
+    NetEntity? CameraTarget = null, NetEntity? XenoWatchTarget = null, bool IsOperator = false);
 
 [Serializable, NetSerializable]
 public sealed class CMUReconXenoWatchMessage(int generation, NetEntity target) : BoundUserInterfaceMessage
@@ -239,4 +239,5 @@ public readonly record struct CMUReconLabel(Vector2i Tile, int Depth, string Tex
 
 [Serializable, NetSerializable]
 public readonly record struct CMUReconOrder(int Id, Vector2i Tile, int Depth, CMUReconOrderKind Kind,
-    Vector2[]? Waypoints = null, CMUReconInk Ink = CMUReconInk.Yellow, float Width = 3, string? Text = null, Color? Color = null);
+    Vector2[]? Waypoints = null, CMUReconInk Ink = CMUReconInk.Yellow, float Width = 3, string? Text = null, Color? Color = null,
+    bool Shared = false);

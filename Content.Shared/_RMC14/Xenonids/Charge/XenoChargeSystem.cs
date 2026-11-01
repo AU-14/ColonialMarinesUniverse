@@ -1,3 +1,6 @@
+using Content.Shared.Vehicle.Components;
+using Content.Shared.Vehicle;
+using Content.Shared._RMC14.Vehicle;
 using System.Numerics;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Damage;
@@ -7,6 +10,7 @@ using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Actions;
 using Content.Shared._RMC14.Xenonids.Animation;
@@ -52,6 +56,10 @@ namespace Content.Shared._RMC14.Xenonids.Charge;
 
 public sealed partial class XenoChargeSystem : EntitySystem
 {
+    [Dependency] private Content.Shared._RMC14.Vehicle.VehicleSystem _rmcVehicles = default!;
+    [Dependency] private VehicleWheelSystem _vehicleWheels = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
+    [Dependency] private GridVehicleMoverSystem _gridVehicleMover = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
@@ -79,6 +87,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private SharedDestructibleSystem _destruct = default!;
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
@@ -375,7 +384,8 @@ public sealed partial class XenoChargeSystem : EntitySystem
             if (!_xeno.CanAbilityAttackTarget(xeno, slower))
                 continue;
 
-            _slow.TrySlowdown(slower, xeno.Comp.SlowTime, ignoreDurationModifier: true);
+            if (!_yautjaSlow.TryApply(slower, xeno.Comp.YautjaSlow)) // CMU14
+                _slow.TrySlowdown(slower, xeno.Comp.SlowTime, ignoreDurationModifier: true);
         }
 
         RemCompDeferred<XenoChargingComponent>(xeno);
@@ -429,7 +439,24 @@ public sealed partial class XenoChargeSystem : EntitySystem
         }
 
         var finalDamage = _xeno.TryApplyXenoSlashDamageMultiplier(targetId, structDamage);
-        var damage = _damageable.TryChangeDamage(targetId, finalDamage, origin: xeno, tool: xeno);
+        // CMU14: retain cursor charge movement and route chassis hits through hardpoint integrity.
+        var isVehicle = HasComp<VehicleWheelSlotsComponent>(targetId);
+        DamageSpecifier? damage;
+        if (isVehicle)
+        {
+            damage = _hardpoints.DamageHardpoint(targetId, targetId, xeno.Comp.VehicleDamage.GetTotal().Float())
+                ? xeno.Comp.VehicleDamage
+                : null;
+            if (_net.IsServer)
+            {
+                if (savedChargeDir is { } direction && !_vehicleWheels.HasAnyFunctionalWheel(targetId))
+                    _gridVehicleMover.TryShoveVehicle(targetId, xeno, direction);
+                if (TryComp(targetId, out GridVehicleMoverComponent? mover))
+                    _rmcVehicles.DoInteriorCrashEffect(targetId, mover.MaxSpeed, mover.MaxSpeed);
+            }
+        }
+        else
+            damage = _damageable.TryChangeDamage(targetId, finalDamage, origin: xeno, tool: xeno);
 
         if (damage?.GetTotal() > FixedPoint2.Zero && !TerminatingOrDeleted(targetId))
         {
@@ -451,7 +478,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
             }
         }
 
-        if (!isValidTarget)
+        if (!isValidTarget || isVehicle)
             return;
 
         _rmcPulling.TryStopAllPullsFromAndOn(targetId);

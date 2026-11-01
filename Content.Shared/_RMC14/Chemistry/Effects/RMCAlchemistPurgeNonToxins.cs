@@ -29,7 +29,7 @@ public sealed partial class RMCAlchemistPurgeNonToxins : EntityEffectBase<RMCAlc
 public sealed partial class RMCAlchemistPurgeNonToxinsEntityEffectSystem
     : EntityEffectSystem<MetaDataComponent, RMCAlchemistPurgeNonToxins>
 {
-    [Dependency] private readonly RMCReagentSystem _reagent = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
 
     protected override void Effect(
         Entity<MetaDataComponent> entity,

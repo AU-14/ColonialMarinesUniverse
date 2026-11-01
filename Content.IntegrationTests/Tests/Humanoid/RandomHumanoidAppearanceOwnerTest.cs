@@ -200,7 +200,7 @@ public sealed partial class RandomHumanoidAppearanceOrderProbeComponent : Compon
     public List<Marking> HairAtVoice = new();
 }
 
-public sealed class RandomHumanoidAppearanceOrderProbeSystem : EntitySystem
+public sealed partial class RandomHumanoidAppearanceOrderProbeSystem : EntitySystem
 {
     [Dependency] private INetManager _net = default!;
 

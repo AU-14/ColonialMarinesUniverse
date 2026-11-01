@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components; // CMU14
 using Content.Shared.Popups;
 using Robust.Shared.Player;
 using Content.Server.NPC.HTN;
@@ -93,13 +94,12 @@ public sealed partial class XenoParasiteSystem : SharedXenoParasiteSystem
             Loc.GetString("rmc-xeno-parasite-larva-claim-message"));
     }
 
+    // CMU14 method: validate completed claims through the infection even if its parasite has been deleted.
     private void OnLarvaClaimChoice(XenoParasiteLarvaClaimChoiceEvent ev)
     {
         if (!TryGetEntity(ev.Ghost, out var ghost) ||
-            !TryGetEntity(ev.Parasite, out var parasite) ||
             !TryGetEntity(ev.Victim, out var victim) ||
-            !TryComp(ghost.Value, out ActorComponent? actor) ||
-            !TryComp<XenoParasiteComponent>(parasite.Value, out var parasiteComp))
+            !TryComp(ghost.Value, out ActorComponent? actor))
         {
             return;
         }
@@ -107,7 +107,7 @@ public sealed partial class XenoParasiteSystem : SharedXenoParasiteSystem
         if (actor.PlayerSession.AttachedEntity != ghost.Value)
             return;
 
-        if (!TrySetLarvaClaimChoice((parasite.Value, parasiteComp), victim.Value, actor.PlayerSession.UserId, ev.Claim))
+        if (!TrySetLarvaClaimChoice(ev.Parasite, victim.Value, actor.PlayerSession.UserId, ev.Claim))
             return;
 
         if (!ev.Claim ||
@@ -135,6 +135,17 @@ public sealed partial class XenoParasiteSystem : SharedXenoParasiteSystem
     private bool TryClaimLarva(Entity<VictimInfectedComponent> victim, EntityUid spawned)
     {
         if (!TryGetLarvaClaimUser(victim, out var userId))
+            return false;
+
+        // CMU14: the queue got there first. without this the per-tick retry kicked the queued player back out
+        // of the larva as soon as the infector ghosted
+        if (TryComp(spawned, out MindContainerComponent? larvaMind) && larvaMind.HasMind)
+        {
+            ClearInfectorUser(victim);
+            return false;
+        }
+
+        if (_larvaQueue.IsOfferedToQueue(spawned))
             return false;
 
         if (!_player.TryGetSessionById(userId, out var session))

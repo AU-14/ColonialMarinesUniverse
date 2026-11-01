@@ -11,6 +11,8 @@ namespace Content.IntegrationTests.CMU14.Xenonids;
 [TestOf(typeof(SharedXenoHiveSystem))]
 public sealed class HiveAllianceTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<FactionIconPrototype> CMUXenoHiveAllyPrototype = "CMUXenoHiveAlly";
+
     private EntityUid _hive;
     private EntityUid _otherHive;
     private EntityUid _xeno;
@@ -160,12 +162,12 @@ public sealed class HiveAllianceTest : GameTest
             Assert.That(CEntMan.HasComponent<StatusIconComponent>(clientTarget), Is.True);
             var icons = new GetStatusIconsEvent(new List<StatusIconData>());
             CEntMan.EventBus.RaiseLocalEvent(clientTarget, ref icons);
-            Assert.That(icons.StatusIcons.Contains(CProtoMan.Index<FactionIconPrototype>("CMUXenoHiveAlly")),
+            Assert.That(icons.StatusIcons.Contains(CProtoMan.Index<FactionIconPrototype>(CMUXenoHiveAllyPrototype)),
                 Is.EqualTo(allied && viewerAllied), "Only the allied hive should see the marker.");
 
             var ownIcons = new GetStatusIconsEvent(new List<StatusIconData>());
             CEntMan.EventBus.RaiseLocalEvent(clientXeno, ref ownIcons);
-            Assert.That(ownIcons.StatusIcons.Contains(CProtoMan.Index<FactionIconPrototype>("CMUXenoHiveAlly")),
+            Assert.That(ownIcons.StatusIcons.Contains(CProtoMan.Index<FactionIconPrototype>(CMUXenoHiveAllyPrototype)),
                 Is.False, "Hive members already have their own xeno HUD indicators.");
         });
     }

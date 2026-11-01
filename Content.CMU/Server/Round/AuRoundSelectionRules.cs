@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Voting;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Threats;
+using Content.Shared.Maps;
 
 namespace Content.Server.CMU14.Round;
 
@@ -9,7 +10,7 @@ internal static class AuRoundSelectionRules
 {
     public static bool IsExplicitlyWhitelistedForGamemode(ThirdPartyPrototype proto, string gamemode)
     {
-        return ContainsIgnoreCase(proto.whitelistedgamemodes, gamemode);
+        return ContainsIgnoreCase(proto.WhitelistedGamemodes, gamemode);
     }
 
     public static bool IsThirdPartyAllowed(
@@ -23,8 +24,8 @@ internal static class AuRoundSelectionRules
         if (ContainsIgnoreCase(proto.BlacklistedGamemodes, currentGamemode))
             return false;
 
-        if (proto.whitelistedgamemodes.Count > 0 &&
-            !ContainsIgnoreCase(proto.whitelistedgamemodes, currentGamemode))
+        if (proto.WhitelistedGamemodes.Count > 0 &&
+            !ContainsIgnoreCase(proto.WhitelistedGamemodes, currentGamemode))
             return false;
 
         if (proto.MaxPlayers < playerCount || proto.MinPlayers > playerCount)
@@ -51,6 +52,22 @@ internal static class AuRoundSelectionRules
         return true;
     }
 
+    /// <summary>
+    ///     Whether a planet can be voted at this population. Its game map's minPlayers/maxPlayers apply as well as the
+    ///     planet's own limits, where 0 means unset; mappers set the population lock on the game map.
+    /// </summary>
+    public static bool IsPlanetInPopulationRange(RMCPlanetMapPrototypeComponent planet, GameMapPrototype? map, int playerCount)
+    {
+        if ((planet.MinPlayers > 0 && playerCount < planet.MinPlayers) ||
+            (planet.MaxPlayers > 0 && playerCount > planet.MaxPlayers))
+        {
+            return false;
+        }
+
+        var players = (uint) Math.Max(0, playerCount);
+        return map == null || (players >= map.MinPlayers && players <= map.MaxPlayers);
+    }
+
     public static VoteOptions BuildPlanetVoteOptions(
         string presetId,
         IReadOnlyList<RMCPlanetMapPrototypeComponent> planets,
@@ -67,7 +84,7 @@ internal static class AuRoundSelectionRules
 
         return new VoteOptions
         {
-            Title = "Select Planet",
+            Title = Loc.GetString("au14-vote-title-select-planet"),
             Options = options,
             Duration = duration,
             CarryoverEnabled = true,

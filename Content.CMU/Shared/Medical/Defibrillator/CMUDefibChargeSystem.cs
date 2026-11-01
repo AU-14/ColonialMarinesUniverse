@@ -30,7 +30,7 @@ namespace Content.Shared.CMU14.Medical.Defibrillator;
 /// More energy heals more on a revival shock, making it more likely to bring someone back, but burns the chest;
 /// less energy is gentler and less effective. AEDs pick their energy automatically and can't be tuned.
 /// </summary>
-public sealed class CMUDefibChargeSystem : EntitySystem
+public sealed partial class CMUDefibChargeSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBodySystem _body = default!;
@@ -230,7 +230,7 @@ public sealed class CMUDefibChargeSystem : EntitySystem
 
         if (!_skills.HasAllSkills(user, AdjustSkill))
         {
-            _popup.PopupClient(Loc.GetString("cmu-defib-charge-no-skill"), defib, user);
+            _popup.PopupEntity(Loc.GetString("cmu-defib-charge-no-skill"), defib, user);
             return;
         }
 
@@ -251,7 +251,7 @@ public sealed class CMUDefibChargeSystem : EntitySystem
         Dirty(defib, charge);
 
         _audio.PlayPredicted(AdjustSound, defib, user);
-        _popup.PopupClient(Loc.GetString("cmu-defib-charge-set", ("joules", joules)), defib, user);
+        _popup.PopupEntity(Loc.GetString("cmu-defib-charge-set", ("joules", joules)), defib, user);
     }
 
     private void OnExamined(Entity<DefibrillatorComponent> ent, ref ExaminedEvent args)

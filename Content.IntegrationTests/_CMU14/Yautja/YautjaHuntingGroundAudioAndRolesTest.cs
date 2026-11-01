@@ -127,7 +127,7 @@ public sealed class YautjaHuntingGroundAudioAndRolesTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.EntMan.ComponentFactory;
             var consoles = prototypes.EnumeratePrototypes<EntityPrototype>()
-                .Where(prototype => prototype.TryGetComponent<YautjaHuntConsoleComponent>(out var component, factory) &&
+                .Where(prototype => prototype.TryComp<YautjaHuntConsoleComponent>(out var component, factory) &&
                                     component!.Kind == YautjaHuntConsoleKind.HuntGround)
                 .ToArray();
 
@@ -136,7 +136,7 @@ public sealed class YautjaHuntingGroundAudioAndRolesTest
             var options = new List<YautjaHuntCallOption>();
             foreach (var console in consoles)
             {
-                Assert.That(console.TryGetComponent<YautjaHuntConsoleComponent>(out var component, factory), Is.True, console.ID);
+                Assert.That(console.TryComp<YautjaHuntConsoleComponent>(out var component, factory), Is.True, console.ID);
                 options.AddRange(component!.HuntCallOptions);
             }
 

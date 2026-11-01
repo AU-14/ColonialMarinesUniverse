@@ -319,6 +319,7 @@
   name: freezer crate
   description: A freezer crate.
   components:
+  - type: CMUBloodRefrigerator # CMU14: keeps blood and plasma fresh
   - type: Sprite
     sprite: _RMC14/Structures/Storage/Crates/freezer.rsi
     layers:

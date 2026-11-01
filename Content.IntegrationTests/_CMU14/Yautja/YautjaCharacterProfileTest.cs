@@ -7,6 +7,7 @@ using Content.Client.Humanoid;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
+using Content.Server.Database;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Armor;
@@ -31,6 +32,9 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaCharacterProfileTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMaskAccessory02BronzePrototype = "CMUYautjaMaskAccessory02Bronze";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMaskOrnamentPrototype = "CMUYautjaMaskOrnament";
+
     [Test]
     public void YautjaProfileCopiesWithoutChangingNormalSpecies()
     {
@@ -90,13 +94,37 @@ public sealed class YautjaCharacterProfileTest
     }
 
     [Test]
+    public void ExplicitSkinChoiceIsDistinguishableFromTheDefaultProfile()
+    {
+        var untouched = YautjaCharacterProfile.Default;
+        var explicitGreen = YautjaCharacterProfile.Default.WithSkinColor(YautjaSkinColor.Green);
+        var explicitRed = YautjaCharacterProfile.Default.WithSkinColor(YautjaSkinColor.Red);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(untouched.SkinColorSelected, Is.False,
+                "the default profile has not had a colour chosen");
+            Assert.That(untouched.SkinColor, Is.EqualTo(YautjaSkinColor.Green),
+                "the default profile still uses the Green sentinel");
+            Assert.That(explicitGreen.SkinColorSelected, Is.True,
+                "an explicit Green pick is a choice");
+            Assert.That(explicitGreen.SkinColor, Is.EqualTo(YautjaSkinColor.Green));
+            Assert.That(explicitRed.SkinColorSelected, Is.True);
+            Assert.That(explicitRed.SkinColor, Is.EqualTo(YautjaSkinColor.Red));
+            Assert.That(explicitGreen.Clone().SkinColorSelected, Is.True,
+                "the choice survives a clone");
+            Assert.That(explicitRed.Clone().SkinColor, Is.EqualTo(YautjaSkinColor.Red));
+        });
+    }
+
+    [Test]
     public void DefaultYautjaProfileMatchesCmss13PickerDefaults()
     {
         var yautja = YautjaCharacterProfile.Default;
 
         Assert.Multiple(() =>
         {
-            Assert.That(yautja.Name, Is.EqualTo("Неизвестно"));
+            Assert.That(yautja.Name, Is.EqualTo("Unknown"));
             Assert.That(yautja.Age, Is.EqualTo(100));
             Assert.That(yautja.QuillStyle, Is.EqualTo(YautjaQuillStyle.Standard));
             Assert.That(yautja.SkinColor, Is.EqualTo(YautjaSkinColor.Green));
@@ -190,14 +218,12 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(YautjaCharacterProfile.SkinColorOrder,
                 Is.EqualTo(new[]
                 {
-                    YautjaSkinColor.Green,
                     YautjaSkinColor.Tan,
+                    YautjaSkinColor.Green,
                     YautjaSkinColor.Purple,
                     YautjaSkinColor.Blue,
                     YautjaSkinColor.Red,
                     YautjaSkinColor.Black,
-                    Enum.Parse<YautjaSkinColor>("Gray"),
-                    Enum.Parse<YautjaSkinColor>("White"),
                 }));
             Assert.That(YautjaCharacterProfile.EyeColorOrder,
                 Is.EqualTo(new[]
@@ -220,8 +246,6 @@ public sealed class YautjaCharacterProfileTest
         });
     }
 
-    [TestCase("Gray", 128, 128, 128, "cmu-yautja-profile-skin-color-gray")]
-    [TestCase("White", 255, 255, 255, "cmu-yautja-profile-skin-color-white")]
     public void NewSkinPresetRoundTripsThroughAppearance(
         string enumName,
         byte red,
@@ -247,60 +271,33 @@ public sealed class YautjaCharacterProfileTest
     }
 
     [Test]
-    public async Task AchromaticSkinPresetsDesaturateWarmBodySprites()
+    public void LegacyAchromaticSkinColorsSanitiseToABakedTone()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var client = pair.Client;
-
-        await client.WaitPost(() =>
+        // Gray and White were cut from the CM-SS13 PRED_SKIN_COLOR set: only six pre-coloured body variants ship, and the
+        // picker/randomizers only ever offered those six. A profile saved before the cut can still carry the raw RGB
+        // value, so the sanitiser has to land it on the nearest baked tone instead of leaving an untextured body.
+        Assert.Multiple(() =>
         {
-            var entMan = client.EntMan;
-            foreach (var skinColor in new[] { YautjaSkinColor.Gray, YautjaSkinColor.White })
+            Assert.That(YautjaCharacterProfile.SkinColorOrder, Has.Length.EqualTo(YautjaCharacterProfile.SkinToneColors.Length),
+                "the selectable palette and the baked tone colours must stay one-to-one");
+
+            foreach (var legacy in new[]
+                     {
+                         new Color((byte) 128, (byte) 128, (byte) 128),
+                         new Color((byte) 255, (byte) 255, (byte) 255),
+                     })
             {
-                var dummy = entMan.Spawn("CMUMobYautjaDummy");
-                try
-                {
-                    var profile = HumanoidCharacterProfile.DefaultWithSpecies("Yautja");
-                    profile.Appearance = profile.Appearance.WithSkinColor(
-                        YautjaCharacterProfile.GetSkinColorColor(skinColor));
-                    YautjaTestAppearance.Apply(entMan, dummy, profile);
+                var stored = YautjaCharacterProfile.Default
+                    .WithAppearance(YautjaCharacterProfile.Default.Appearance.WithSkinColor(legacy));
+                var sanitized = stored.Clone();
 
-                    var sprite = entMan.GetComponent<SpriteComponent>(dummy);
-                    Assert.That(sprite.LayerMapTryGet(HumanoidVisualLayers.Chest, out var chestLayer), Is.True);
-                    var chest = (SpriteComponent.Layer) sprite[chestLayer];
-                    Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"),
-                        $"{skinColor} must neutralize the warm source texture instead of inheriting its yellow cast.");
-
-                    YautjaTestAppearance.Apply(entMan,
-                        dummy,
-                        HumanoidCharacterProfile.DefaultWithSpecies("Human"));
-
-                    Assert.That(chest.ShaderPrototype, Is.Null,
-                        "The Yautja skin shader must not leak when a preview dummy is reused for another species.");
-
-                    YautjaTestAppearance.Apply(entMan,
-                        dummy,
-                        HumanoidCharacterProfile.DefaultWithSpecies("Yautja"));
-                    YautjaTestAppearance.Apply(entMan, dummy,
-                        HumanoidCharacterProfile.DefaultWithSpecies("Yautja").WithCharacterAppearance(
-                            profile.Appearance.WithSkinColor(YautjaCharacterProfile.GetSkinColorColor(skinColor))));
-                    Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"));
-
-                    YautjaTestAppearance.Apply(entMan,
-                        dummy,
-                        HumanoidCharacterProfile.DefaultWithSpecies("WorkingJoe"));
-
-                    Assert.That(chest.ShaderPrototype, Is.Null,
-                        "The Yautja skin shader must also be cleared for species whose body sprites do not match skin color.");
-                }
-                finally
-                {
-                    entMan.DeleteEntity(dummy);
-                }
+                Assert.That(YautjaCharacterProfile.SkinColorOrder, Does.Contain(sanitized.SkinColor),
+                    $"legacy skin {legacy} must snap to one of the six baked tones");
+                Assert.That(sanitized.Appearance.SkinColor,
+                    Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(sanitized.SkinColor)),
+                    $"legacy skin {legacy} must be replaced by the baked tone, not kept as a raw colour");
             }
         });
-
-        await pair.CleanReturnAsync();
     }
 
     [Test]
@@ -348,9 +345,9 @@ public sealed class YautjaCharacterProfileTest
             var cache = client.ResolveDependency<IResourceCache>();
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.EntMan.ComponentFactory;
-            var accessory = prototypes.Index<EntityPrototype>("CMUYautjaMaskAccessory02Bronze");
+            var accessory = prototypes.Index<EntityPrototype>(CMUYautjaMaskAccessory02BronzePrototype);
 
-            Assert.That(accessory.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
+            Assert.That(accessory.TryComp<SpriteComponent>(out var sprite, factory), Is.True);
             var state = sprite!.AllLayers.First().RsiState.Name;
             var rsiPath = new ResPath("/Textures/CMU14/Yautja/mask_accessories_onmob.rsi");
 
@@ -386,7 +383,7 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(onMobResource!.RSI.Size, Is.EqualTo(new Vector2i(32, 64)),
                 "CMSS13 mask accessories use a separate on-mob accessory DMI for WEAR_FACE overlays.");
 
-            var basePrototype = prototypes.Index<EntityPrototype>("CMUYautjaMaskOrnament");
+            var basePrototype = prototypes.Index<EntityPrototype>(CMUYautjaMaskOrnamentPrototype);
             Assert.Multiple(() =>
             {
                 Assert.That(basePrototype.Name, Is.EqualTo("Mask Ornament"));
@@ -401,7 +398,7 @@ public sealed class YautjaCharacterProfileTest
                 {
                     Assert.That(prototype.Name, Is.EqualTo("Mask Ornament"), row.Id);
                     Assert.That(prototype.Description, Is.EqualTo("An ornate addition to your mask."), row.Id);
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                     Assert.That(sprite!.BaseRSI?.Path,
                         Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/mask_accessories.rsi")),
                         $"{row.Id} maps CMSS13 icons/obj/items/hunter/pred_mask_accessories.dmi.");
@@ -472,11 +469,11 @@ public sealed class YautjaCharacterProfileTest
                         $"{row.Id} inherits the CMSS13 source item name from /obj/item/clothing/mask/gas/yautja/hunter; post_vendor_spawn_hook only changes icon_state.");
                     Assert.That(prototype.Description, Is.EqualTo(row.Description),
                         $"{row.Id} inherits the CMSS13 source description from /obj/item/clothing/mask/gas/yautja/hunter; post_vendor_spawn_hook only changes icon_state.");
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(rsiPath),
                         $"{row.Id} maps CMSS13 pred_mask.dmi icon_state {row.State}.");
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("icon"), row.Id);
-                    Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
+                    Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
                     Assert.That(clothing!.RsiPath, Is.EqualTo($"CMU14/Yautja/masks/{row.State}.rsi"),
                         $"{row.Id} maps CMSS13 item_state_slots WEAR_FACE {row.State}.");
                     Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True,
@@ -537,10 +534,10 @@ public sealed class YautjaCharacterProfileTest
                 {
                     Assert.That(prototype.Name, Is.EqualTo(row.Name), row.Id);
                     Assert.That(prototype.Description, Is.EqualTo(row.Description), row.Id);
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(rsiPath), row.Id);
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("icon"), row.Id);
-                    Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
+                    Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
                     Assert.That(clothing!.RsiPath, Is.EqualTo($"CMU14/Yautja/masks/{row.Rsi}.rsi"), row.Id);
                     Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True, row.Id);
                     Assert.That(resource!.RSI.Size, Is.EqualTo(row.RsiSize), row.Id);
@@ -1057,6 +1054,40 @@ public sealed class YautjaCharacterProfileTest
             100);
     }
 
+    // CM-SS13 has six predator skins: code/__DEFINES/pred.dm:11 PRED_SKIN_COLOR = tan, green, purple, blue, red,
+    // black. The colours themselves are not constants - /datum/pred_picker samples the centre pixel of each
+    // "[colour]_torso_pred_m" state in the species icobase (icons/mob/humans/species/r_predator.dmi). These are
+    // those samples, so the picker has to offer the reference skins first, in reference order, with reference colour.
+    [Test]
+    public void YautjaSkinPaletteMatchesCmss13PredSkinColors()
+    {
+        var reference = new (YautjaSkinColor Kind, string Name, byte R, byte G, byte B)[]
+        {
+            (YautjaSkinColor.Tan, "tan", 166, 153, 100),
+            (YautjaSkinColor.Green, "green", 120, 125, 101),
+            (YautjaSkinColor.Purple, "purple", 136, 119, 144),
+            (YautjaSkinColor.Blue, "blue", 125, 139, 150),
+            (YautjaSkinColor.Red, "red", 105, 57, 59),
+            (YautjaSkinColor.Black, "black", 72, 69, 77),
+        };
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(YautjaCharacterProfile.SkinColorOrder.Take(reference.Length).Select(kind => kind),
+                Is.EqualTo(reference.Select(row => row.Kind)),
+                "the picker lists the CM-SS13 skins first, in PRED_SKIN_COLOR order");
+
+            foreach (var row in reference)
+            {
+                var color = YautjaCharacterProfile.GetSkinColorColor(row.Kind);
+                Assert.That(
+                    ((byte) MathF.Round(color.R * 255f), (byte) MathF.Round(color.G * 255f), (byte) MathF.Round(color.B * 255f)),
+                    Is.EqualTo((row.R, row.G, row.B)),
+                    $"{row.Name} must be the {row.Name}_torso_pred_m colour from r_predator.dmi");
+            }
+        });
+    }
+
     private sealed record SpecialMaskRow(
         string Id,
         string Name,
@@ -1068,4 +1099,32 @@ public sealed class YautjaCharacterProfileTest
         int Bio,
         int Explosion,
         int AntiHug);
+
+    [Test]
+    public void SkinChoiceSurvivesTheSavedProfileRoundTrip()
+    {
+        // A profile saved without ever picking a tone must come back as "not picked", so the spawn randomiser still
+        // runs; a deliberate pick - including the default green, which is otherwise indistinguishable from untouched -
+        // must come back as picked and stay put.
+        var saved = YautjaProfileSerializer.SerializeYautjaProfile(YautjaCharacterProfile.Default);
+        var loaded = YautjaProfileSerializer.DeserializeYautjaProfile(saved);
+
+        var pickedGreen = YautjaProfileSerializer.SerializeYautjaProfile(
+            YautjaCharacterProfile.Default.WithSkinColor(YautjaSkinColor.Green));
+        var loadedGreen = YautjaProfileSerializer.DeserializeYautjaProfile(pickedGreen);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(loaded.SkinColorSelected, Is.False,
+                "loading a saved profile is not the player choosing a colour");
+            Assert.That(loaded.Appearance.SkinColor,
+                Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green)),
+                "the saved colour is still restored");
+
+            Assert.That(loadedGreen.SkinColorSelected, Is.True,
+                "an explicitly chosen tone is remembered as chosen");
+            Assert.That(loadedGreen.Appearance.SkinColor,
+                Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green)));
+        });
+    }
 }

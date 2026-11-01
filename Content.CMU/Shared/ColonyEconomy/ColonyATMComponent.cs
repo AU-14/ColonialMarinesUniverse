@@ -1,5 +1,8 @@
 // Content.Shared/CMU14/ColonyEconomy/SubmissionStorageComponent.cs
+using Content.Shared.DoAfter;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ColonyEconomy;
 
@@ -7,10 +10,75 @@ namespace Content.Shared.CMU14.ColonyEconomy;
 public sealed partial class ColonyAtmComponent : Component
 {
     /// <summary>
-    ///     The ID card entity that was swiped on this ATM.
-    ///     Set when a player uses an ID card on the machine, cleared when the UI closes.
+    ///     Container the ATM keeps an inserted ID card in for the whole session. The card stays in the
+    ///     machine until it is ejected, including after its owner walks away from the screen.
     /// </summary>
-    public EntityUid? SwipedCard;
+    public const string CardSlotId = "colony_atm_card";
+
+    /// <summary>
+    ///     Container the cash tray holds paid-out notes in. Like the card, they stay in the machine
+    ///     until someone takes them - or, left too long, the machine draws them back in.
+    /// </summary>
+    public const string CashTrayId = "colony_atm_cash";
+
+    /// <summary>Digits in a card PIN.</summary>
+    public const int PinLength = 4;
+
+    /// <summary>Longest amount or account number the keypad accepts.</summary>
+    public const int MaxAmountDigits = 9;
+
+    /// <summary>
+    ///     Who pushed the card currently in the slot into it. They get it back instantly from the
+    ///     screen; anyone else - or them, once they have walked away - has to pull it out.
+    /// </summary>
+    public EntityUid? CardInsertedBy;
+
+    /// <summary>When the current card went in, so the operator's screen can play the insertion once.</summary>
+    public TimeSpan? CardInsertedAt;
+
+    /// <summary>When cash last came out of the dispenser.</summary>
+    public TimeSpan? CashDispensedAt;
+
+    /// <summary>When cash was last fed into the machine.</summary>
+    public TimeSpan? CashDepositedAt;
+
+    /// <summary>How many dollars the last of those two moved, so the slot shows a wad that thick.</summary>
+    public int CashAmount;
+
+    /// <summary>The account the cash waiting in the tray came out of; it goes back there if left.</summary>
+    public int CashAccount;
+
+    /// <summary>When the cash waiting in the tray is drawn back in and paid back into its account.</summary>
+    public TimeSpan? CashRetractAt;
+
+    /// <summary>How long paid-out cash waits in the tray before the machine takes it back.</summary>
+    [DataField]
+    public TimeSpan CashRetractDelay = TimeSpan.FromSeconds(10);
+
+    /// <summary>When anyone last pressed anything on the machine.</summary>
+    public TimeSpan LastActivity;
+
+    /// <summary>How long a card can sit signed in with nobody touching the machine before it signs out.</summary>
+    [DataField]
+    public TimeSpan IdleSignOut = TimeSpan.FromSeconds(10);
+
+    /// <summary>How long pulling out a card takes for anyone but its inserter at the screen.</summary>
+    [DataField]
+    public TimeSpan TakeCardDelay = TimeSpan.FromSeconds(2);
+
+    // The machine's own sounds: the card drawn in and pushed out, and the note counter, whose run the
+    // cash slot's animation is timed to (atm_pixel_art.py reads atm_cash.wav for that).
+    [DataField]
+    public SoundSpecifier InsertSound = new SoundPathSpecifier("/Audio/CMU14/ColonyEconomy/atm_card_in.wav");
+
+    [DataField]
+    public SoundSpecifier EjectSound = new SoundPathSpecifier("/Audio/CMU14/ColonyEconomy/atm_card_out.wav");
+
+    [DataField]
+    public SoundSpecifier DispenseSound = new SoundPathSpecifier("/Audio/CMU14/ColonyEconomy/atm_cash.wav");
+
+    [DataField]
+    public SoundSpecifier DepositSound = new SoundPathSpecifier("/Audio/CMU14/ColonyEconomy/atm_cash.wav");
 
     /// <summary>
     ///     Whether the correct PIN has been entered for the current session.
@@ -63,3 +131,7 @@ public sealed partial class ColonyAtmComponent : Component
     /// </summary>
     public List<SkimmedAccount> RecentLogins = new();
 }
+
+/// <summary>Someone other than the card's inserter finished pulling it out of the ATM.</summary>
+[Serializable, NetSerializable]
+public sealed partial class ColonyAtmTakeCardDoAfterEvent : SimpleDoAfterEvent;

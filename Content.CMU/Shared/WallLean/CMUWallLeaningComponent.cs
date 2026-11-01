@@ -15,6 +15,7 @@ public sealed partial class CMUWallLeaningComponent : Component
     [DataField, AutoNetworkedField]
     public bool BehindWall;
 
+    /// <summary>Where the leaner stands, in the frame of the wall's grid.</summary>
     [DataField]
     public Vector2 Position;
 

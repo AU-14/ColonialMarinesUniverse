@@ -254,11 +254,11 @@ ent-CMUYautjaHealingGun = healing gun
 ent-CMUYautjaAlienHealthAnalyzer = alien health analyzer
     .desc = A bio-scanner tuned for alien physiology and battlefield triage.
 
-ent-CMUYautjaAutoInjector = yautja autoinjector
-    .desc = An alien autoinjector loaded with a strong trauma and burn treatment cocktail.
+ent-CMUYautjaAutoInjector = unusual crystal
+    .desc = A strange glowing crystal with a spike at one end.
 
-ent-CMUYautjaThrallAutoInjector = yautja autoinjector
-    .desc = An alien autoinjector loaded with a strong trauma and burn treatment cocktail adapted for Yautja thralls.
+ent-CMUYautjaThrallAutoInjector = orange unusual crystal
+    .desc = A strange glowing crystal with a spike at one end.
 
 ent-CMUYautjaHerbalCase = herbs case
     .desc = A small case packed with Yautja trauma poultices and burn salves.
@@ -447,6 +447,9 @@ ent-CMUYautjaRelayBeacon = relay beacon
 ent-CMUYautjaSimpleRelayBeacon = simple relay beacon
     .desc = A device covered in sacred text. It whirrs and beeps every couple of seconds.
 
+ent-CMUYautjaYoungbloodRelayBeacon = youngblood relay beacon
+    .desc = A device covered in sacred text, attuned to young hunters. It whirrs and beeps every couple of seconds.
+
 ent-CMUYautjaFalconDrone = falcon drone
     .desc = An agile drone used by Yautja to survey the hunting grounds.
 
@@ -497,6 +500,9 @@ ent-CMUYautjaHoundObservationPadInternalCamera = Hellhound Observation Interface
 
 ent-CMUYautjaHivebreaker = hivebreaker
     .desc = A device used by fallen Yautja to break a Xenomorph Hivemind and enthrall a serpent.
+
+ent-CMUWeYuHivebreaker = salvaged hivebreaker
+    .desc = A recovered Yautja hivebreaker, its alien interlocks cut out and rewired by Weyland-Yutani. Breaks a serpent's link to the Hivemind and binds it to whoever holds the device.
 
 ent-CMUYautjaTemporaryLandingZoneFolded = temporary landing zone
     .desc = PLACEHOLDER
@@ -1190,7 +1196,7 @@ ent-CMUYautjaSnareArrow = snare arrow
     .desc = A bow launched snare.
 
 ent-CMUYautjaQuiverStrap = quiver strap
-    .desc = A strap that can hold a bow with a quiver for arrows.
+    .desc = A strap that holds up to eight bows and arrows in total, with room for one hunting bow and seven arrows.
 
 ent-CMUYautjaArrowProjectile = arrow
 
@@ -1991,7 +1997,7 @@ ent-CMUYautjaStructureYautjaMachinesMixer1Nopower = yautja mixer1 nopower
     .desc = An ancient Yautja hunting-ground structure.
 
 ent-CMUYautjaStructureYautjaMachinesDispenser = Chemical dispenser
-    .desc = A complex machine for mixing elements into chemicals. A Wey-Yu product.
+    .desc = A hunter-built machine that draws elements from its reserves and blends them into chemicals.
 
 ent-CMUYautjaStructureYautjaMachinesBeaker1 = yautja +beaker1
     .desc = An ancient Yautja hunting-ground structure.

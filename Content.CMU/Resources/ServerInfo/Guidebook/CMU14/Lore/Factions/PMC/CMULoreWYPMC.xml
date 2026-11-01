@@ -1,0 +1,32 @@
+<Document>
+  # Weyland-Yutani PMC
+
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/WEYLANDPMCHeader.png" MaxHeight="64"/>
+
+  The [bold]Weyland-Yutani PMC[/bold], nicknamed the "Whiteshields", are soldiers owned and operated by the Company itself. They are dispatched through [bold]Whiteguard Solutions[/bold], a Company subsidiary, and carry modern military weapons and equipment on par with any national army, and usually better, since the Company can afford to spend far more on each soldier than a government can.
+
+  Most of the time they guard Weyland-Yutani facilities, escort Company science teams and handle security and containment. Colonial governments also hire them, because they tend to get the job done faster than the local military. Their work is never limited to one kind of job, and many of their deployments are "shadow missions" kept quiet even from the governments the Company works alongside.
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearWYPMCPartyContractor" Caption="Contractor"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearWYPMCPartyMedic" Caption="Medic"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearWYPMCPartyLeader" Caption="Leader"/>
+  </Box>
+
+  ## Recruitment
+  - Few apply their way in. Most recruits are veterans with personal contacts high in the Company, or soldiers who caught a superior's eye and were hand-picked.
+  - The Company values skill in the field and a willingness to follow directives without question, whatever a soldier's own morals. In return, PMCs are very well paid, and there is never a shortage of work.
+
+  ## Rumors
+  - Whispers speak of even better equipped and more carefully selected units within the Company's employ. Weyland-Yutani refuses to comment.
+  - One such rumor is the special task force "Royal", said to exist to capture anomalies linked to alien and supernatural life.
+
+  ## Whiteout
+  When every other containment protocol has failed, The Company may answer with [bold]Whiteout[/bold]: a fireteam of covertly produced AI-driven combat androids built for one purpose, total sanitization. They exist to erase an outbreak and every trace of it, including witnesses and anyone else in the way.
+  - Whiteout units feel no mercy and follow no rules of war.
+  - Each unit wears heavy armor and carries some of the most powerful weapons money can buy, with pulse rifles and heavy incinerators as standard.
+  - Their deployment is very rare. Seeing one means the Company has already written off everyone in the area.
+
+  ## Playable Units
+  - [textlink="WY PMC 'Whiteshields'" link="CMUGuideLorePlatoonWEYU"]
+</Document>

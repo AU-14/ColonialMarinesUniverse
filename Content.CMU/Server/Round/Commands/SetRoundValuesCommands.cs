@@ -44,7 +44,7 @@ namespace Content.Server.CMU14.Round.Commands
             platoonSys.SelectedOpforPlatoon = platoon;
             sysMan.GetEntitySystem<AuRoundSystem>().StopVoteSequence();
             sysMan.GetEntitySystem<GameTicker>().UpdateInfoText();
-            shell.WriteLine($"Opfor platoon set to: {platoon.Name} ({platoon.ID})");
+            shell.WriteLine($"Opfor platoon set to: {Loc.GetString(platoon.Name)} ({platoon.ID})");
         }
 
         public CompletionResult GetCompletion(IConsoleShell _, string[] args)
@@ -85,7 +85,7 @@ namespace Content.Server.CMU14.Round.Commands
             platoonSys.SelectedGovforPlatoon = platoon;
             sysMan.GetEntitySystem<AuRoundSystem>().StopVoteSequence();
             sysMan.GetEntitySystem<GameTicker>().UpdateInfoText();
-            shell.WriteLine($"Govfor platoon set to: {platoon.Name} ({platoon.ID})");
+            shell.WriteLine($"Govfor platoon set to: {Loc.GetString(platoon.Name)} ({platoon.ID})");
         }
 
         public CompletionResult GetCompletion(IConsoleShell _, string[] args)

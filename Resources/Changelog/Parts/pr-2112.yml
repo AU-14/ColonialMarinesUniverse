@@ -1,0 +1,33 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Scavengers recover dropped rifles and avoid repeated exposed-cover, suppression
+    and idle wielding loops.
+  type: Fix
+- message: Scavengers coordinate covering fire, hold useful firing positions and assign
+    limited flank responders.
+  type: Tweak
+- message: Scavengers retain safe movement on contact, fire while travelling or queueing,
+    and yield in narrow passages.
+  type: Fix
+- message: Added breacher, skirmisher, machinegunner and veteran scavengers, plus
+    raider and fireteam compositions.
+  type: Add
+- message: Added specialist weapons, finite rocket launchers, backup switching and
+    physical shotgun reloads.
+  type: Add
+- message: Added field medics with covered casualty extraction, treatment and native
+    eligible revival.
+  type: Add
+- message: Improved smoke screens, grenade targeting and squad explosive discipline.
+  type: Tweak
+- message: Scavengers cross RMC water at native speed and maintain body clearance
+    on long routes and corners.
+  type: Fix
+- message: Expedition LZ openings issue a short GOVFOR ARES priority assignment.
+  type: Tweak
+- message: Added expedition command autocomplete and expanded squad, traffic, combat
+    and medical diagnostics.
+  type: Admin
+time: '2026-10-09T11:02:52.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2112

@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using Content.Client.CMU14.Lobby;
 using Content.Client.LateJoin;
 using Content.Shared.Roles;
@@ -8,6 +9,8 @@ namespace Content.IntegrationTests.Tests.Lobby;
 [TestFixture]
 public sealed class LobbyRoleTabsTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DepartmentPrototype> AU14DepartmentThreatPrototype = "AU14DepartmentThreat";
+
     [Test]
     public async Task LobbyHasDedicatedHuntTabAndThreatDepartmentIsNotColonist()
     {
@@ -27,14 +30,14 @@ public sealed class LobbyRoleTabsTest
                 Assert.That(lobby.JoinHuntButton.VisibleInTree, Is.False);
 
                 var prototypes = client.ResolveDependency<IPrototypeManager>();
-                var threat = prototypes.Index<DepartmentPrototype>("AU14DepartmentThreat");
+                var threat = prototypes.Index<DepartmentPrototype>(AU14DepartmentThreatPrototype);
                 Assert.That(threat.Faction, Is.EqualTo("hunt"));
                 Assert.That(LateJoinGui.DepartmentMatchesFilter(threat, "colonists"), Is.False);
                 Assert.That(LateJoinGui.DepartmentMatchesFilter(threat, "hunt"), Is.True);
             }
             finally
             {
-                lobby.Dispose();
+                lobby.Release();
             }
         });
 

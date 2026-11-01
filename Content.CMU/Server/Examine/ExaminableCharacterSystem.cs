@@ -1,34 +1,20 @@
-using Content.Server.Chat.Managers;
-using Content.Shared.CCVar;
-using Content.Shared.Chat;
-using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.VirtualItem;
-using Robust.Shared.Configuration;
-using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Examine
 {
-    // Sends a detailed equipment breakdown to the examiner's chat log. Deliberately does not
+    // Builds a detailed equipment breakdown for the examiner's chat log. Deliberately does not
     // touch the examine tooltip (args.PushMarkup/PushText) - this is chat-only, toggleable via
-    // CCVars.ExamineLogInChat.
+    // CCVars.ExamineLogInChat. The examine system sends it together with the rest of the examine text.
     public sealed partial class ExaminableCharacterSystem : EntitySystem
     {
         [Dependency] private  InventorySystem _inventorySystem = default!;
         [Dependency] private  SharedHandsSystem _handsSystem = default!;
         [Dependency] private  IdentitySystem _identitySystem = default!;
         [Dependency] private  EntityManager _entityManager = default!;
-        [Dependency] private  IChatManager _chatManager = default!;
-        [Dependency] private  INetConfigurationManager _netConfigManager = default!;
-
-        // Neutral gray chat highlight, same treatment as system messages get.
-        private static readonly ChatDisplayMetadata ExamineChatDisplay = new(
-            ChatDisplayKind.System,
-            accentColor: Color.FromHex("#a0a0a0"),
-            backgroundColorOverride: Color.FromHex("#1e1e1e"));
 
         private static readonly Dictionary<string, string> SlotLabels = new()
         {
@@ -48,20 +34,13 @@ namespace Content.Server.CMU14.Examine
             { "suitstorage", "suitstorage-" }
         };
 
-        public override void Initialize()
+        /// <summary>
+        /// The equipment breakdown for the examiner's chat log: name, what they're wearing and what they're holding.
+        /// The examine system sends it along with the rest of the examine text.
+        /// </summary>
+        public string BuildBreakdown(EntityUid uid, EntityUid examiner)
         {
-            SubscribeLocalEvent<ExaminableCharacterComponent, ExaminedEvent>(HandleExamine);
-        }
-
-        private void HandleExamine(EntityUid uid, ExaminableCharacterComponent comp, ExaminedEvent args)
-        {
-            if (!TryComp<ActorComponent>(args.Examiner, out var actorComponent))
-                return;
-
-            if (!_netConfigManager.GetClientCVar(actorComponent.PlayerSession.Channel, CCVars.ExamineLogInChat))
-                return;
-
-            var selfaware = (args.Examiner == args.Examined);
+            var selfaware = examiner == uid;
             var logLines = new List<string>();
 
             string canseeloc = "examine-can-see";
@@ -139,8 +118,7 @@ namespace Content.Server.CMU14.Examine
                 }
             }
 
-            var combinedLog = string.Join("\n", logLines);
-            _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, actorComponent.PlayerSession.Channel, recordReplay: false, display: ExamineChatDisplay);
+            return string.Join("\n", logLines);
         }
     }
 }

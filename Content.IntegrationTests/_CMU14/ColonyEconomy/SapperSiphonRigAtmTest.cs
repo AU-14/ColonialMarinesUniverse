@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.CMU14.Insurgency.Sapper;
+using Content.Server.CMU14.Insurgency.Sapper;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Insurgency.Sapper;
@@ -15,12 +16,13 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
 {
     private const string SiphonRig = "AU14SapperSiphonRig";
 
-    /// <summary>Swipes a new card at the target ATM, logs in with its PIN and walks away.</summary>
+    /// <summary>Puts a new card in the target ATM, logs in with its PIN, takes the card back and walks away.</summary>
     private async Task<(int Account, int Pin)> LogInAndLeave()
     {
-        var (_, pin, account) = await SwipeNewCard(100);
+        var (_, pin, account) = await InsertNewCard(100);
         await Type(pin.ToString());
         Assert.That(AtmComp.PinAuthenticated, "Login failed");
+        await Type("6", enter: false);              // 6) EXIT, card back in hand
         await CloseBui(ColonyAtmUi.Key);
         return (account, pin);
     }
@@ -62,11 +64,11 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
     public async Task SameCardAtTheSameAtmIsRememberedOnce()
     {
         await SpawnTarget(Atm);
-        var (_, pin, account) = await SwipeNewCard(100);
+        var (_, pin, account) = await InsertNewCard(100);
         await Type(pin.ToString());
-        await CloseBui(ColonyAtmUi.Key);
+        await Type("6", enter: false);              // 6) EXIT, card back in hand
 
-        await Interact();                            // the same card again
+        await Interact();                            // the same card into the same ATM again
         await Type(pin.ToString());
         await CloseBui(ColonyAtmUi.Key);
 
@@ -79,13 +81,15 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
         // ATM one: Alice. ATM two: Alice again and Bob.
         await SpawnTarget(Atm);
         var firstAtm = Target!.Value;
-        var (_, alicePin, alice) = await SwipeNewCard(100);
+        var (_, alicePin, alice) = await InsertNewCard(100);
         await Type(alicePin.ToString());
+        await Type("6", enter: false);              // 6) EXIT, Alice's card back in hand
         await CloseBui(ColonyAtmUi.Key);
 
         var secondAtm = await SpawnTarget(Atm);
-        await Interact();                            // Alice's card is still in hand
+        await Interact();                            // Alice's card into the second ATM
         await Type(alicePin.ToString());
+        await Type("6", enter: false);
         await CloseBui(ColonyAtmUi.Key);
         var (bob, bobPin) = await LogInAndLeave();
 
@@ -146,9 +150,10 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
     public async Task RepairedAtmWorksButShowsTheSkimmer()
     {
         await SpawnTarget(Atm);
-        var (_, firstPin, _) = await SwipeNewCard(100);
+        var (_, firstPin, _) = await InsertNewCard(100);
         Assert.That(ClientAtmState().Tampered, Is.False, "An untouched ATM showed the skimmer");
         await Type(firstPin.ToString());
+        await Type("6", enter: false);              // 6) EXIT, card back in hand
         await CloseBui(ColonyAtmUi.Key);
 
         await HoldRig();
@@ -160,7 +165,7 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
             SEntMan.GetComponent<SapperAtmHackedComponent>(STarget!.Value).RecoverAt = STiming.CurTime + TimeSpan.FromSeconds(1));
         await RunSeconds(2);
 
-        var (card, pin, _) = await SwipeNewCard(100);
+        var (card, pin, _) = await InsertNewCard(100);
         await Type(pin.ToString());
         await Type("1", enter: false);              // 1) WITHDRAW
         await Type("40");
@@ -170,6 +175,47 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
         {
             Assert.That(ClientAtmState().Tampered, "The repaired ATM does not show the skimmer");
             Assert.That(Comp<IdCardComponent>(card).AccountBalance, Is.EqualTo(60), "The repaired ATM did not pay out");
+        });
+    }
+
+    /// <summary>
+    ///     Whoever bled the machine can leave a line on its out-of-order screen - kept to one line and
+    ///     clamped - and it is gone once the machine repairs itself.
+    /// </summary>
+    [Test]
+    public async Task SappersMessageShowsUntilTheAtmRepairs()
+    {
+        await SpawnTarget(Atm);
+        var rig = await HoldRig();
+        await Interact();
+        Assert.That(SEntMan.HasComponent<SapperAtmHackedComponent>(STarget), "The ATM was not hacked");
+
+        var hacking = SEntMan.System<SapperAtmHackingSystem>();
+        var tooLong = "WE WERE HERE\n" + new string('X', 100);
+        await Server.WaitPost(() => hacking.SetAtmMessage(STarget!.Value, SPlayer, tooLong, rig.MaxAtmMessageLength));
+
+        var message = SEntMan.GetComponent<SapperAtmHackedComponent>(STarget!.Value).Message;
+        Assert.Multiple(() =>
+        {
+            Assert.That(message, Does.StartWith("WE WERE HERE X"), "The message was not kept to one line");
+            Assert.That(message!.Length, Is.LessThanOrEqualTo(rig.MaxAtmMessageLength), "The message was not clamped");
+        });
+
+        await Activate();                            // a passer-by clicks the dead machine
+        Assert.That(ClientAtmState().OutOfServiceMessage, Is.EqualTo(message), "The screen does not show the message");
+
+        await Server.WaitPost(() =>
+            SEntMan.GetComponent<SapperAtmHackedComponent>(STarget!.Value).RecoverAt = STiming.CurTime);
+        await RunSeconds(1);
+        Assert.That(SEntMan.HasComponent<SapperAtmHackedComponent>(STarget), Is.False, "The ATM never repaired itself");
+
+        // An answer that only comes back after the repair is dropped.
+        await Server.WaitPost(() => hacking.SetAtmMessage(STarget!.Value, SPlayer, "TOO LATE", rig.MaxAtmMessageLength));
+        await Activate();
+        Assert.Multiple(() =>
+        {
+            Assert.That(ClientAtmState().OutOfService, Is.False);
+            Assert.That(ClientAtmState().OutOfServiceMessage, Is.Null, "The message outlived the repair");
         });
     }
 

@@ -8,6 +8,9 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaHealthHudTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMaskPrototype = "CMUYautjaMask";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaPoweredHelmetPrototype = "CMUYautjaPoweredHelmet";
+
     [Test]
     public async Task YautjaMaskShowsBiologicalBarsAndBiologicalOrXenoIcons()
     {
@@ -19,10 +22,10 @@ public sealed class YautjaHealthHudTest
             {
                 var prototypes = server.ResolveDependency<IPrototypeManager>();
                 var factory = server.EntMan.ComponentFactory;
-                var mask = prototypes.Index<EntityPrototype>("CMUYautjaMask");
+                var mask = prototypes.Index<EntityPrototype>(CMUYautjaMaskPrototype);
 
-                Assert.That(mask.TryGetComponent<ShowHealthBarsComponent>(out var bars, factory), Is.True);
-                Assert.That(mask.TryGetComponent<ShowHealthIconsComponent>(out var icons, factory), Is.True);
+                Assert.That(mask.TryComp<ShowHealthBarsComponent>(out var bars, factory), Is.True);
+                Assert.That(mask.TryComp<ShowHealthIconsComponent>(out var icons, factory), Is.True);
 
                 Assert.Multiple(() =>
                 {
@@ -50,10 +53,10 @@ public sealed class YautjaHealthHudTest
             {
                 var prototypes = server.ResolveDependency<IPrototypeManager>();
                 var factory = server.EntMan.ComponentFactory;
-                var helmet = prototypes.Index<EntityPrototype>("CMUYautjaPoweredHelmet");
+                var helmet = prototypes.Index<EntityPrototype>(CMUYautjaPoweredHelmetPrototype);
 
-                Assert.That(helmet.TryGetComponent<ShowHealthBarsComponent>(out var bars, factory), Is.True);
-                Assert.That(helmet.TryGetComponent<ShowHealthIconsComponent>(out var icons, factory), Is.True);
+                Assert.That(helmet.TryComp<ShowHealthBarsComponent>(out var bars, factory), Is.True);
+                Assert.That(helmet.TryComp<ShowHealthIconsComponent>(out var icons, factory), Is.True);
 
                 Assert.Multiple(() =>
                 {

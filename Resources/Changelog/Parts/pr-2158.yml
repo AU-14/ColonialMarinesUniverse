@@ -1,0 +1,9 @@
+author: PoltavskaPraca
+category: CMU
+changes:
+- message: stuff thrown into asrs now despawns, same for the vehicle elevator
+  type: Add
+- message: pilots now have access to the vehicle vendor
+  type: Add
+time: '2026-10-11T21:52:38.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2158

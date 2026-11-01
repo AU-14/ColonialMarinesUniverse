@@ -17,11 +17,11 @@ public sealed class YautjaWornWeaponVisualTest
     private static readonly (string Id, string Sprite, string State)[] BackWeapons =
     [
         ("CMUYautjaClanSword", "CMU14/Yautja/pred_gear_worn.rsi", "clansword"),
-        ("CMUYautjaRendingSword", "CMU14/Yautja/pred_gear_custom_worn.rsi", "rending_sword"),
-        ("CMUYautjaPiercingSword", "CMU14/Yautja/pred_gear_custom_worn.rsi", "piercing_sword"),
+        ("CMUYautjaRendingSword", "CMU14/Yautja/pred_gear_worn.rsi", "clansword_alt"),
+        ("CMUYautjaPiercingSword", "CMU14/Yautja/pred_gear_worn.rsi", "clansword_alt2"),
         ("CMUYautjaSeveringSword", "CMU14/Yautja/pred_gear_worn.rsi", "clansword_alt3"),
-        ("CMUYautjaDualWarScythe", "CMU14/Yautja/pred_gear_custom_worn.rsi", "dual_war_scythe"),
-        ("CMUYautjaDoubleWarScythe", "CMU14/Yautja/pred_gear_custom_worn.rsi", "double_war_scythe"),
+        ("CMUYautjaDualWarScythe", "CMU14/Yautja/pred_gear_worn.rsi", "predscythe"),
+        ("CMUYautjaDoubleWarScythe", "CMU14/Yautja/pred_gear_worn.rsi", "predscythe_alt"),
         ("CMUYautjaCruelStaff", "CMU14/Yautja/pred_gear_custom_worn.rsi", "cruel_staff"),
         ("CMUYautjaCombistick", "CMU14/Yautja/pred_gear_worn.rsi", "combistick"),
         ("CMUYautjaWarAxe", "CMU14/Yautja/pred_gear_worn.rsi", "war_axe"),
@@ -104,7 +104,7 @@ public sealed class YautjaWornWeaponVisualTest
             foreach (var (id, expectedSprite, expectedState) in BackWeapons)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, id);
+                Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, id);
                 Assert.That(clothing!.Slots & SlotFlags.BACK, Is.EqualTo(SlotFlags.BACK),
                     $"{id} must be wearable in the backpack slot.");
 
@@ -161,7 +161,7 @@ public sealed class YautjaWornWeaponVisualTest
             foreach (var id in HeldWeapons)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<ItemComponent>(out var item, factory), Is.True, id);
+                Assert.That(prototype.TryComp<ItemComponent>(out var item, factory), Is.True, id);
                 Assert.That(item!.RsiPath, Is.Not.Null, $"{id} must define an in-hand RSI.");
                 Assert.That(item.HeldPrefix, Is.Not.Null, $"{id} must define an in-hand prefix.");
 
@@ -197,7 +197,7 @@ public sealed class YautjaWornWeaponVisualTest
             foreach (var (id, expectedPrefix) in BackGuns)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, id);
+                Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, id);
                 Assert.That(clothing!.Slots & SlotFlags.BACK, Is.EqualTo(SlotFlags.BACK),
                     $"{id} must be wearable on the back.");
                 Assert.That(clothing.RsiPath, Is.EqualTo("CMU14/Yautja/pred_guns_back.rsi"), id);

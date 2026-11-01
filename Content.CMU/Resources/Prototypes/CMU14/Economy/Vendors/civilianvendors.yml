@@ -29,6 +29,7 @@
       - id: RMCShoesLaceupBrown
       - id: RMCShoesLaceup
       - id: RMCShoesLeather
+      - id: CMUBoxStompers
     - name: Work Wear
       choices: { CMUcivilianworkwear: 1 }
       entries:
@@ -50,6 +51,10 @@
       - id: CMJumpsuitLiaison
       - id: CMJumpsuitLiaisonBlazer
       - id: CMJumpsuitLiaisonCharcoal
+      - id: RMCJumpsuitLiaisonBlackSuitskirt
+      - id: RMCJumpsuitLiaisonCharcoalSuitskirt
+      - id: RMCJumpsuitLiaisonFieldSuitskirt
+      - id: RMCJumpsuitLiaisonSkirt
     - name: Ties
       choices: { CMUcivilianclothestie: 1 }
       entries:
@@ -132,6 +137,12 @@
       - id: AU14CivFedoraBrown
       - id: AU14CivFedoraGray
       - id: AU14HeadCommandoBeanie
+      - id: CMUCivBoonieHatTan
+      - id: CMUCivBoonieHatGreen
+      - id: CMUCivWorkCapTan
+      - id: CMUCivWorkCapGreen
+      - id: CMUCivSunCapTan
+      - id: CMUCivSunCapGreen
     - name: Glasses
       choices: { CMUcivilianclothesglasses: 2 }
       entries:
@@ -258,6 +269,10 @@
   - type: CMAutomatedVendor
     jobs: [ AU14JobCivilianNurse, AU14JobCivilianPhysician, AU14JobCivilianHeadPhysician, AU14JobCLFPhysician, AU14JobCLFSurgeon ]
     sections:
+    - name: cmu-vendor-section-pressurized-canisters
+      entries:
+      - id: RMCPouchReagentCanister
+        amount: 1
     - name: Shoes
       choices: { CMUcivilianmedicalshoes: 1 }
       entries:
@@ -273,6 +288,7 @@
       - id: RMCShoesLaceupBrown
       - id: RMCShoesLaceup
       - id: RMCShoesLeather
+      - id: CMUBoxStompers
     - name: Work Wear
       choices: { CMUcivilianmedicalworkwear: 1 }
       entries:
@@ -322,8 +338,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedicBag
       - id: AU14BeltMedicBagBlack
+        recommended: true
+      - id: CMBeltMedicBag
     - name: Medical Equipment
       entries:
       - id: AU14CMDefibrillator
@@ -346,6 +363,10 @@
   - type: CMAutomatedVendor
     jobs: [ AU14JobCivilianEmergencyResponseOfficer, AU14JobCLFPhysician, AU14JobCLFSurgeon ]
     sections:
+    - name: cmu-vendor-section-pressurized-canisters
+      entries:
+      - id: RMCPouchReagentCanister
+        amount: 1
     - name: Shoes
       choices: { CMUcivilianmedicalshoes: 1 }
       entries:
@@ -411,6 +432,8 @@
       - id: RMCFireAxe
       - id: CMFireExtinguisher
       - id: CMFireExtinguisherPortable
+      - id: CMUFieldGasTankOxygenFilled
+      - id: CMUMaskSCBA
       - id: RMCRadioHandheldColonyOff
 
 - type: entity
@@ -520,3 +543,7 @@
       - id: RMCFlashlightPen
       - id: AU14CMDefibrillator
       - id: RMCSynthResetKey
+    - name: Synthetic Supplies
+      entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2

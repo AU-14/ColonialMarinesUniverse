@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/311e8f06c0eae7c6a0ab71ba04943c93c55850eb/icons/obj/items/chemistry.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/medical_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/medical_lefthand.dmi; static layer composition for CMU 3D review, see SOURCES_SUPPLIES.md.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "CMPillCanisterBicaridine"
+    },
+    {
+      "name": "CMPillCanisterDexalin"
+    },
+    {
+      "name": "CMPillCanisterDylovene"
+    },
+    {
+      "name": "CMPillCanisterInaprovaline"
+    },
+    {
+      "name": "CMPillCanisterKelotane"
+    }
+  ]
+}

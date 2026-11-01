@@ -133,9 +133,15 @@
     onIcon:
       sprite: _RMC14/Objects/Clothing/helmet_visors.rsi
       state: hud_sight_down
+  # CMU14 start - squad optic can be switched down even with icons from a headset, and grants trackers and grenade rings
+  - type: ToggleVisor
+    ignoreRedundancy: true
   - type: ComponentToggler
     components:
     - type: GrantMarineIcons
+    - type: CMUSquadVisorActive
+  - type: CMUSquadOptic # can't be used with a smartgun
+  # CMU14 end
 
 - type: entity
   parent: RMCVisorSquad

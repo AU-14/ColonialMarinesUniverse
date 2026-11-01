@@ -57,7 +57,7 @@ public sealed partial class GunIDLockSystem : EntitySystem
         if (args.Performer != ent.Comp.User)
         {
             var popup = Loc.GetString("rmc-id-lock-unauthorized");
-            _popup.PopupClient(popup, args.Performer, args.Performer, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.Performer, args.Performer, PopupType.SmallCaution);
             return;
         }
 
@@ -65,7 +65,7 @@ public sealed partial class GunIDLockSystem : EntitySystem
         {
             ent.Comp.Locked = false;
             var popup = Loc.GetString("rmc-id-lock-toggle-lock", ("action", Loc.GetString("rmc-id-lock-toggle-off")), ("gun", ent.Owner));
-            _popup.PopupClient(popup, args.Performer, args.Performer, PopupType.Small);
+            _popup.PopupEntity(popup, args.Performer, args.Performer, PopupType.Small);
             _audio.PlayPredicted(ent.Comp.ToggleSound, ent, args.Performer);
             _actions.SetIcon(ent.Comp.Action.Value, ent.Comp.UnlockedIcon);
         }
@@ -73,7 +73,7 @@ public sealed partial class GunIDLockSystem : EntitySystem
         {
             ent.Comp.Locked = true;
             var popup = Loc.GetString("rmc-id-lock-toggle-lock", ("action", Loc.GetString("rmc-id-lock-toggle-on")), ("gun", ent.Owner));
-            _popup.PopupClient(popup, args.Performer, args.Performer, PopupType.Small);
+            _popup.PopupEntity(popup, args.Performer, args.Performer, PopupType.Small);
             _audio.PlayPredicted(ent.Comp.ToggleSound, ent, args.Performer);
             _actions.SetIcon(ent.Comp.Action.Value, ent.Comp.LockedIcon);
         }
@@ -108,7 +108,7 @@ public sealed partial class GunIDLockSystem : EntitySystem
             return;
 
         var popup = Loc.GetString("rmc-shoot-id-lock-unauthorized");
-        _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(popup, args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnExamine(Entity<GunIDLockComponent> ent, ref ExaminedEvent args)
@@ -155,7 +155,7 @@ public sealed partial class GunIDLockSystem : EntitySystem
         _cmuReferences.Watch(ent, user); // CMU14
         Dirty(ent);
         var popup = Loc.GetString("rmc-id-lock-authorization", ("gun", ent.Owner));
-        _popup.PopupClient(popup, user, PopupType.Medium);
+        _popup.PopupSelf(popup, user, PopupType.Medium);
     }
 
     private void RegisterNewUserCombat(Entity<GunIDLockComponent> ent, EntityUid user)
@@ -164,7 +164,7 @@ public sealed partial class GunIDLockSystem : EntitySystem
         _cmuReferences.Watch(ent, user); // CMU14
         Dirty(ent);
         var popup = Loc.GetString("rmc-id-lock-authorization-combat", ("gun", ent.Owner));
-        _popup.PopupClient(popup, user, user, PopupType.Small);
+        _popup.PopupEntity(popup, user, user, PopupType.Small);
     }
 
     private void ClearUser(Entity<GunIDLockComponent> ent)

@@ -113,28 +113,28 @@ public sealed partial class DesignerConstructNodeSystem : EntitySystem
         // Only xenomorphs can use design nodes.
         if (!_xenoQuery.HasComponent(user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-designnode-human-interact"), node, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-designnode-human-interact"), node, user, PopupType.SmallCaution);
             return;
         }
 
         // Only plasma-using castes should be able to donate effort to construct nodes.
         if (!_plasmaQuery.HasComponent(user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-designnode-no-plasma"), node, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-designnode-no-plasma"), node, user, PopupType.SmallCaution);
             return;
         }
 
         // Bound nodes should only be usable by the same hive as the designer who placed them.
         if (node.Comp.BoundXeno is { } boundXeno && !_hiveSystem.FromSameHive(user, boundXeno))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-use-node-wrong-hive"), node, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-use-node-wrong-hive"), node, user, PopupType.SmallCaution);
             return;
         }
 
         // Only construct-type nodes can be interacted with to build walls
         if (node.Comp.NodeType != DesignNodeType.Construct)
         {
-            _popup.PopupClient("This design node cannot be used to build walls.", node, user, PopupType.SmallCaution);
+            _popup.PopupEntity("This design node cannot be used to build walls.", node, user, PopupType.SmallCaution);
             return;
         }
 
@@ -142,7 +142,7 @@ public sealed partial class DesignerConstructNodeSystem : EntitySystem
         // IMPORTANT: this is weeds-in-general (any Xeno weeds), not "hive weeds".
         if (node.Comp.BoundWeed is not { } boundWeed || !Exists(boundWeed) || !HasComp<Content.Shared._RMC14.Xenonids.Weeds.XenoWeedsComponent>(boundWeed))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-node-needs-weed"), node, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-node-needs-weed"), node, user, PopupType.SmallCaution);
             return;
         }
 
@@ -272,7 +272,7 @@ public sealed partial class DesignerConstructNodeSystem : EntitySystem
         _weedbound.RegisterWeedboundStructure(spawned, boundWeed);
 
         Del(nodeUid);
-        _popup.PopupClient(Loc.GetString("rmc-xeno-designer-infuse-node"), user, user, PopupType.Small);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-infuse-node"), user, user, PopupType.Small);
     }
 
     // Some castes build thick walls/doors from construct nodes.

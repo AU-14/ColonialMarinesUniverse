@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "other-ghosts taken from funky-station at https://github.com/funky-station/funky-station/pull/906 (by duston). Ported by troy.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "other-ghosts"
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+[
+  {
+    "label": "AU14VehicleCivArmoredTruck | AU14VehicleCivArmoredTruck",
+    "parts": 59,
+    "triangles": 1528
+  },
+  {
+    "label": "AU14VehicleCivBlueCargoTruck | AU14VehicleCivBlueCargoTruck",
+    "parts": 56,
+    "triangles": 1076
+  },
+  {
+    "label": "AU14VehicleCivBlueTruck | AU14VehicleCivBlueTruck",
+    "parts": 46,
+    "triangles": 956
+  },
+  {
+    "label": "AU14VehicleCivBrownBarrelsTruck | AU14VehicleCivBrownBarrelsTruck",
+    "parts": 59,
+    "triangles": 1528
+  },
+  {
+    "label": "AU14VehicleCivBrownCargoTruck | AU14VehicleCivBrownCargoTruck",
+    "parts": 56,
+    "triangles": 1076
+  },
+  {
+    "label": "AU14VehicleCivCivTruck1 | AU14VehicleCivCivTruck1",
+    "parts": 46,
+    "triangles": 956
+  },
+  {
+    "label": "AU14VehicleCivCivTruck2 | AU14VehicleCivCivTruck2",
+    "parts": 56,
+    "triangles": 1076
+  },
+  {
+    "label": "AU14VehicleCivCivTruck3 | AU14VehicleCivCivTruck3",
+    "parts": 59,
+    "triangles": 1528
+  },
+  {
+    "label": "AU14VehicleCivCopMonoSupron | AU14VehicleCivCopMonoSupron",
+    "parts": 54,
+    "triangles": 1048
+  },
+  {
+    "label": "AU14VehicleCivEMSAmbulance | AU14VehicleCivEMSAmbulance",
+    "parts": 57,
+    "triangles": 1088
+  },
+  {
+    "label": "AU14VehicleCivGarbageTruck | AU14VehicleCivGarbageTruck",
+    "parts": 50,
+    "triangles": 1000
+  },
+  {
+    "label": "AU14VehicleCivHSVan | AU14VehicleCivHSVan",
+    "parts": 48,
+    "triangles": 980
+  },
+  {
+    "label": "AU14VehicleCivMedTruck | AU14VehicleCivMedTruck",
+    "parts": 51,
+    "triangles": 1016
+  },
+  {
+    "label": "AU14VehicleCivTruck | AU14VehicleCivTruck",
+    "parts": 46,
+    "triangles": 956
+  },
+  {
+    "label": "AU14VehicleCivVan | AU14VehicleCivVan",
+    "parts": 48,
+    "triangles": 980
+  },
+  {
+    "label": "AU14VehicleCivturquiseCargo | AU14VehicleCivturquiseCargo",
+    "parts": 56,
+    "triangles": 1076
+  },
+  {
+    "label": "CMUCargoCarrier | CMUCargoCarrier",
+    "parts": 20,
+    "triangles": 700
+  },
+  {
+    "label": "CMUCargoCarrier | cargo_open",
+    "parts": 20,
+    "triangles": 700
+  },
+  {
+    "label": "CMUFighterGround | CMUFighterGround, CMUFighterGroundLoaded",
+    "parts": 35,
+    "triangles": 1856
+  },
+  {
+    "label": "CMUFighterGround | jetfighter",
+    "parts": 29,
+    "triangles": 1628
+  },
+  {
+    "label": "CMUFighterGround | vtolmode",
+    "parts": 33,
+    "triangles": 1884
+  },
+  {
+    "label": "VehicleAPC | VehicleAPC",
+    "parts": 47,
+    "triangles": 1536
+  },
+  {
+    "label": "VehicleAPCCommand | VehicleAPCCommand",
+    "parts": 47,
+    "triangles": 1536
+  },
+  {
+    "label": "VehicleAPCMed | VehicleAPCMed",
+    "parts": 47,
+    "triangles": 1536
+  },
+  {
+    "label": "VehicleAPCPMC | VehicleAPCPMC",
+    "parts": 47,
+    "triangles": 1536
+  },
+  {
+    "label": "VehicleAev | VehicleAev",
+    "parts": 68,
+    "triangles": 2052
+  },
+  {
+    "label": "VehicleBlackfootDoorGunVariant | VehicleBlackfoot, VehicleBlackfootDoorGunVariant, VehicleBlackfootRecon, VehicleBlackfootTransport",
+    "parts": 40,
+    "triangles": 1500
+  },
+  {
+    "label": "VehicleBoxVan | VehicleBoxVan",
+    "parts": 48,
+    "triangles": 980
+  },
+  {
+    "label": "VehicleCLFVan | VehicleCLFVan",
+    "parts": 52,
+    "triangles": 1024
+  },
+  {
+    "label": "VehicleCMBPoliceVan | VehicleCMBPoliceVan",
+    "parts": 51,
+    "triangles": 1016
+  },
+  {
+    "label": "VehicleHumvee | VehicleHumvee, VehicleHumveeARC",
+    "parts": 52,
+    "triangles": 1120
+  },
+  {
+    "label": "VehicleHumveeMedical | VehicleHumveeMedical",
+    "parts": 56,
+    "triangles": 1064
+  },
+  {
+    "label": "VehicleHumveeTransport | VehicleHumveeTransport",
+    "parts": 54,
+    "triangles": 1040
+  },
+  {
+    "label": "VehiclePizzaVan | VehiclePizzaVan",
+    "parts": 50,
+    "triangles": 1004
+  },
+  {
+    "label": "VehicleSPPAPC | VehicleSPPAPC",
+    "parts": 47,
+    "triangles": 1536
+  },
+  {
+    "label": "VehicleSPPTank | VehicleSPPTank, VehicleSPPTankCommand",
+    "parts": 70,
+    "triangles": 2180
+  },
+  {
+    "label": "VehicleSPPVan | VehicleSPPVan",
+    "parts": 52,
+    "triangles": 1020
+  },
+  {
+    "label": "VehicleSPPVanArmed | VehicleSPPVanArmed",
+    "parts": 53,
+    "triangles": 1084
+  },
+  {
+    "label": "VehicleSPPVanLogistics | VehicleSPPVanLogistics",
+    "parts": 52,
+    "triangles": 1020
+  },
+  {
+    "label": "VehicleSPPVanMedical | VehicleSPPVanMedical",
+    "parts": 58,
+    "triangles": 1092
+  },
+  {
+    "label": "VehicleSPPVanPrisoner | VehicleSPPVanPrisoner",
+    "parts": 66,
+    "triangles": 1188
+  },
+  {
+    "label": "VehicleTank | VehicleTank",
+    "parts": 70,
+    "triangles": 2180
+  },
+  {
+    "label": "VehicleTankPMC | VehicleTankPMC",
+    "parts": 70,
+    "triangles": 2180
+  },
+  {
+    "label": "VehicleTankTWE | VehicleTankTWE",
+    "parts": 70,
+    "triangles": 2180
+  },
+  {
+    "label": "VehicleVan | VehicleVan",
+    "parts": 49,
+    "triangles": 988
+  }
+]

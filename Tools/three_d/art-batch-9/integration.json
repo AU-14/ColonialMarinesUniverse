@@ -1,0 +1,18 @@
+{
+  "importedModels": 637,
+  "importedSurfaces": 1021,
+  "totalModels": 1676,
+  "totalSurfaces": 3013,
+  "sourceAndTextureFilesByteIdentical": true,
+  "regeneratedGlbGeometryAndTexturePixelsIdentical": true,
+  "originalCanonicalDefinitionsUnchanged": true,
+  "sourceCommit": "6e37a4d0a7d9433838c393a82c02422cb704dd5a",
+  "archiveSha256": "a53e859adfbad70427aba3668ac89dcb22372adf82ecea29c17bb994cf008cf7",
+  "sourceNoteWhitespaceNormalized": true,
+  "verification": {
+    "deterministicExport": "1676 GLBs verified",
+    "modelTests": "26 passed",
+    "fullPythonSuite": "315 run, 3 errors from missing historical review fixtures; no assertion failures",
+    "khronosGltf": "1676 assets; zero errors, 10 embedded PNG metadata warnings across 2 new assets"
+  }
+}

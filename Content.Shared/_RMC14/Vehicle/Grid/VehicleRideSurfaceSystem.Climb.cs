@@ -196,7 +196,7 @@ public sealed partial class VehicleRideSurfaceSystem
             "rmc-vehicle-ride-climb-others",
             ("user", Identity.Entity(user, EntityManager)),
             ("vehicle", vehicleIdentity));
-        _popup.PopupPredicted(selfMessage, othersMessage, user, user);
+        _popup.PopupEntity(selfMessage, othersMessage, user, user);
 
         return true;
     }
@@ -230,7 +230,7 @@ public sealed partial class VehicleRideSurfaceSystem
             "rmc-vehicle-ride-climb-down-others",
             ("user", Identity.Entity(user, EntityManager)),
             ("vehicle", vehicleIdentity));
-        _popup.PopupPredicted(selfMessage, othersMessage, user, user);
+        _popup.PopupEntity(selfMessage, othersMessage, user, user);
 
         return true;
     }

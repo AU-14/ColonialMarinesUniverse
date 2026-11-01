@@ -81,7 +81,7 @@ public sealed partial class RMCFoldingBarricadeLinkingSystem : EntitySystem
 
         if (!ent.Comp.Linkable)
         {
-            _popup.PopupClient(Loc.GetString("rmc-folding-barricade-link-no-points", ("barricade", ent.Owner)),
+            _popup.PopupEntity(Loc.GetString("rmc-folding-barricade-link-no-points", ("barricade", ent.Owner)),
                 ent,
                 args.User,
                 PopupType.SmallCaution);
@@ -90,7 +90,7 @@ public sealed partial class RMCFoldingBarricadeLinkingSystem : EntitySystem
 
         if (!_skills.HasSkill(args.User, ent.Comp.Skill, ent.Comp.RequiredSkillLevel))
         {
-            _popup.PopupClient(Loc.GetString("rmc-skills-no-training", ("target", ent.Owner)),
+            _popup.PopupEntity(Loc.GetString("rmc-skills-no-training", ("target", ent.Owner)),
                 ent,
                 args.User,
                 PopupType.SmallCaution);
@@ -106,7 +106,7 @@ public sealed partial class RMCFoldingBarricadeLinkingSystem : EntitySystem
             ? "rmc-folding-barricade-link-set"
             : "rmc-folding-barricade-link-removed";
 
-        _popup.PopupPredicted(Loc.GetString(message, ("barricade", ent.Owner)), ent, args.User);
+        _popup.PopupBroadcast(Loc.GetString(message, ("barricade", ent.Owner)), ent, args.User);
         _audio.PlayPredicted(ent.Comp.ToggleSound, ent, args.User);
         UpdateSelfAndNearby(ent);
     }
@@ -264,7 +264,7 @@ public sealed partial class RMCFoldingBarricadeLinkingSystem : EntitySystem
     private void UpdateAnchoredAt(Entity<MapGridComponent> grid, EntityCoordinates coordinates)
     {
         var tile = _map.LocalToTile(grid, grid, coordinates);
-        var anchored = _map.GetAnchoredEntitiesEnumerator(grid, grid, tile);
+        var anchored = _map.GetAnchoredEntities(grid, grid, tile);
         while (anchored.MoveNext(out var anchoredUid))
         {
             if (_linkingQuery.TryGetComponent(anchoredUid, out var linking))
@@ -315,7 +315,7 @@ public sealed partial class RMCFoldingBarricadeLinkingSystem : EntitySystem
         var facing = xform.LocalRotation.GetCardinalDir();
         var adjacent = xform.Coordinates.Offset(direction);
         var tile = _map.LocalToTile(gridUid, grid, adjacent);
-        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        var anchored = _map.GetAnchoredEntities(gridUid, grid, tile);
         while (anchored.MoveNext(out var anchoredUid))
         {
             if (anchoredUid == ent.Owner ||

@@ -8,13 +8,13 @@
   roundComponents:
   - type: Skills
     skills:
-      RMCSkillFireman: 1
+      RMCSkillFireman: 2
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1
-      RMCSkillMedical: 3
+      RMCSkillMedical: 4
       RMCSkillResearch: 1
-      RMCSkillSurgery: 2
-      RMCSkillFirearms: 2
+      RMCSkillSurgery: 3
+      RMCSkillFirearms: 1
   - type: JobPrefix
     prefix: au14-job-prefix-physician
   - type: TacticalMapIcon
@@ -29,11 +29,12 @@
   requirements:
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMedical
-    time: 18000 # 5 hours
+    time: 10800 # 3 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
     - NonResuscitable
+    - CMUFearOfBlood
   ranks:
     RMCRankCivilianDoctor: []
   icon: "AU14JobIconColonyPhysician"
@@ -74,8 +75,11 @@
   - CivilianPhysicianSpecializationAU14
   - MedBackpackAU14
   - MedJumpsuitAU14
+  - CivJumpsuitAU14
   - MedHatsAU14
+  - CivHatsAU14
   - MedJacketAU14
+  - CivJacketAU14
   - MedGlovesAU14
   - CivFootwearAU14
   - MedMaskAU14

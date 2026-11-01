@@ -122,7 +122,8 @@ public sealed class TribalAppearanceTest : GameTest
             Assert.That(applied, Is.Empty);
         }
 
-        Assert.That(_body.TryGetOrgansWithComponent<VisualOrganComponent>(uid, out var visualOrgans), Is.True);
+        var visualOrgans = _body.EnumerateOrgans<VisualOrganComponent>(uid).Select(organ => new Robust.Shared.GameObjects.Entity<VisualOrganComponent>(organ.Owner, organ.Comp2)).ToList();
+        Assert.That(visualOrgans.Count > 0, Is.True);
         Assert.That(visualOrgans, Is.Not.Empty);
         foreach (var (_, organ) in visualOrgans)
             Assert.That(organ.Profile.SkinColor, Is.EqualTo(TribalAppearanceSystem.TribalSkin));

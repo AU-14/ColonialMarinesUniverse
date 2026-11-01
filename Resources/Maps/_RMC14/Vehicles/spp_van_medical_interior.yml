@@ -1,17 +1,19 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 264.0.2-fix-physics
+  engineVersion: v290.0.0
   forkId: ""
   forkVersion: ""
-  time: 03/20/2026 16:22:02
-  entityCount: 68
+  time: 10/15/2026 08:34:40
+  entityCount: 70
 maps:
 - 1
 grids:
 - 3
 orphans: []
-nullspace: []
+nullspace:
+- 59
+- 60
 tilemap:
   4: Space
   10: RMCFloorVehicleInteriorDarkSterileGreen11
@@ -38,13 +40,15 @@ entities:
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
+    - type: ChunkContainer
+      chunkEntities: []
   - uid: 3
     components:
     - type: MetaData
       name: grid
     - type: Transform
-      pos: -3.6090617,-1.1084068
       parent: 1
+      pos: -3.6090617,-1.1084068
     - type: MapGrid
       chunks:
         0,0:
@@ -65,9 +69,9 @@ entities:
           version: 7
     - type: Broadphase
     - type: Physics
-      bodyStatus: InAir
       fixedRotation: False
       bodyType: Dynamic
+      bodyStatus: InAir
     - type: Fixtures
       fixtures: {}
     - type: OccluderTree
@@ -77,186 +81,466 @@ entities:
     - type: ImplicitRoof
     - type: GridPathfinding
     - type: Gravity
+      inherent: True
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
-      inherent: True
       enabled: True
-    - type: DecalGrid
-      chunkCollection:
-        version: 2
-        nodes:
-        - node:
-            angle: 1.5707963267948966 rad
-            color: '#FFFFFFFF'
-            id: CMDecalStriped3
-          decals:
-            14: 2,-1
-        - node:
-            angle: 4.71238898038469 rad
-            color: '#FFFFFFFF'
-            id: CMDecalStriped3
-          decals:
-            13: 2,0
-        - node:
-            angle: 4.71238898038469 rad
-            color: '#FFFFFFFF'
-            id: TriageDir
-          decals:
-            11: 2,-1
-            12: 2,0
     - type: MapAtmosphere
       space: False
       mixture:
-        volume: 2500
-        immutable: True
         temperature: 293.15
-        moles:
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
+        volume: 2500
+        moles: {}
+        immutable: True
     - type: GridAtmosphere
       version: 2
       data:
         chunkSize: 4
     - type: GasTileOverlay
-- proto: CMIV
+    - type: ChunkContainer
+      chunkEntities:
+      - 59
+      - 60
+    - type: TileHistory
+      chunkHistory: {}
+- proto: AU14VehicleRadioSet
+  entities:
+  - uid: 500
+    components:
+    - type: Transform
+      parent: 3
+      pos: 3.5,-0.5
+- proto: ChunkEntity
+  entities:
+  - uid: 59
+    components:
+    - type: ChunkEntity
+      root: 3
+      chunk: 0,-1
+    - type: DecalChunk
+      maxDecalId: 14
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: CMDecalStriped3
+            color: '#FFFFFFFF'
+            angle: 1.5707963267948966 rad
+          decals:
+            14: 2,-1
+        - node:
+            id: TriageDir
+            color: '#FFFFFFFF'
+            angle: 4.71238898038469 rad
+          decals:
+            11: 2,-1
+  - uid: 60
+    components:
+    - type: ChunkEntity
+      root: 3
+    - type: DecalChunk
+      maxDecalId: 13
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: CMDecalStriped3
+            color: '#FFFFFFFF'
+            angle: 4.71238898038469 rad
+          decals:
+            13: 2,0
+        - node:
+            id: TriageDir
+            color: '#FFFFFFFF'
+            angle: 4.71238898038469 rad
+          decals:
+            12: 2,0
+- proto: CMChairComfyTeal
   entities:
   - uid: 12
     components:
     - type: Transform
-      pos: 1.3089392,-0.38482797
       parent: 3
-  - uid: 13
-    components:
-    - type: Transform
-      pos: 1.1957777,1.0813464
-      parent: 3
-- proto: CMPortableSurgicalBed
+      pos: 0.5,0.5
+- proto: CMIV
   entities:
   - uid: 14
     components:
     - type: Transform
-      pos: 1.4713006,0.57458115
       parent: 3
-- proto: RMCSeatVehiclePassenger
+      pos: 1.4831214,0.5527319
+- proto: CMOperatingTable
   entities:
-  - uid: 43
+  - uid: 10
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 3.469657,-0.37143576
       parent: 3
+      pos: 0.5,-0.5
+- proto: CMPortableSurgicalBed
+  entities:
+  - uid: 11
+    components:
+    - type: Transform
+      parent: 3
+      pos: 1.5352049,-0.39518476
 - proto: RMCBarricadeHandrail
   entities:
   - uid: 16
     components:
     - type: Transform
+      parent: 3
       rot: -1.5707963267948966 rad
       pos: 2.5,0.5
-      parent: 3
-- proto: RMCRollerBedHospitalSheet2
-  entities:
-  - uid: 10
-    components:
-    - type: Transform
-      pos: 0.5481708,0.6937667
-      parent: 3
-  - uid: 11
-    components:
-    - type: Transform
-      pos: 0.5481708,-0.34399092
-      parent: 3
-- proto: RMCSeatArmored
-  entities:
-  - uid: 15
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 1.5451012,-0.114225745
-      parent: 3
 - proto: RMCSeatArmoredDriver
   entities:
   - uid: 49
     components:
     - type: Transform
+      parent: 3
       rot: 1.5707963267948966 rad
       pos: 3.375499,0.56760055
-      parent: 3
     - type: PointLight
-      energy: 2
       radius: 10
+      energy: 2
+    missingComponents:
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
+- proto: RMCSurgicalTray
+  entities:
+  - uid: 15
+    components:
+    - type: Transform
+      parent: 3
+      pos: 1.5346861,-0.5089313
+- proto: RMCWallInvisibleBulletBlocker
+  entities:
+  - uid: 17
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 2.5,-1.5
+  - uid: 18
+    components:
+    - type: Transform
+      parent: 3
+      pos: 3.3876042,2.2453423
+  - uid: 19
+    components:
+    - type: Transform
+      parent: 3
+      pos: 2.1563978,2.2453423
+  - uid: 20
+    components:
+    - type: Transform
+      parent: 3
+      pos: 2.7843304,2.2453423
+  - uid: 21
+    components:
+    - type: Transform
+      parent: 3
+      pos: 0.79069924,2.2453423
+  - uid: 22
+    components:
+    - type: Transform
+      parent: 3
+      pos: 1.5416272,2.2453423
+  - uid: 23
+    components:
+    - type: Transform
+      parent: 3
+      pos: -0.716239,2.4635797
+  - uid: 24
+    components:
+    - type: Transform
+      parent: 3
+      pos: -0.009784222,2.2453423
+  - uid: 25
+    components:
+    - type: Transform
+      parent: 3
+      pos: -0.7064042,1.6470695
+  - uid: 28
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: -0.5,-1.5
+  - uid: 29
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 0.5,-1.5
+  - uid: 30
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 1.5,-1.5
+  - uid: 31
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 3.5,-1.5
+  - uid: 33
+    components:
+    - type: Transform
+      parent: 3
+      pos: 4.5,-0.5
+  - uid: 34
+    components:
+    - type: Transform
+      parent: 3
+      pos: 4.5,0.5
+  - uid: 35
+    components:
+    - type: Transform
+      parent: 3
+      pos: 4.178675,2.2453423
+  - uid: 42
+    components:
+    - type: Transform
+      parent: 3
+      pos: 4.5,1.5
+  - uid: 63
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 5,2
+- proto: RMCWallInvisibleBulletLightBlocker
+  entities:
+  - uid: 26
+    components:
+    - type: Transform
+      parent: 3
+      pos: 4.5,2.5
+  - uid: 27
+    components:
+    - type: Transform
+      parent: 3
+      pos: 4.5,-1.5
+  - uid: 32
+    components:
+    - type: Transform
+      parent: 3
+      pos: 5.5,-1.5
+  - uid: 36
+    components:
+    - type: Transform
+      parent: 3
+      pos: 5.5,-0.5
+  - uid: 37
+    components:
+    - type: Transform
+      parent: 3
+      pos: 5.5,0.5
+  - uid: 38
+    components:
+    - type: Transform
+      parent: 3
+      pos: 5.5,1.5
+  - uid: 39
+    components:
+    - type: Transform
+      parent: 3
+      pos: 5.5,2.5
+  - uid: 44
+    components:
+    - type: Transform
+      parent: 3
+      pos: -1.5,-1.5
+  - uid: 45
+    components:
+    - type: Transform
+      parent: 3
+      pos: -1.5,-0.5
+  - uid: 46
+    components:
+    - type: Transform
+      parent: 3
+      pos: -1.5,0.5
+  - uid: 47
+    components:
+    - type: Transform
+      parent: 3
+      pos: -1.5,1.5
+  - uid: 48
+    components:
+    - type: Transform
+      parent: 3
+      pos: -1.5,2.5
+  - uid: 50
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: -1.5,-2.5
+  - uid: 51
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: -0.5,-2.5
+  - uid: 52
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 0.5,-2.5
+  - uid: 53
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 1.5,-2.5
+  - uid: 54
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 2.5,-2.5
+  - uid: 55
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 3.5,-2.5
+  - uid: 56
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 4.5,-2.5
+  - uid: 57
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 5.5,-2.5
+  - uid: 64
+    components:
+    - type: Transform
+      parent: 3
+      pos: -1.5,3.5
+  - uid: 65
+    components:
+    - type: Transform
+      parent: 3
+      pos: 1.5,3.5
+  - uid: 66
+    components:
+    - type: Transform
+      parent: 3
+      pos: 0.5,3.5
+  - uid: 67
+    components:
+    - type: Transform
+      parent: 3
+      pos: -0.5,3.5
+  - uid: 68
+    components:
+    - type: Transform
+      parent: 3
+      pos: 2.5,3.5
+  - uid: 69
+    components:
+    - type: Transform
+      parent: 3
+      pos: 3.5,3.5
+  - uid: 70
+    components:
+    - type: Transform
+      parent: 3
+      pos: 4.5,3.5
+  - uid: 71
+    components:
+    - type: Transform
+      parent: 3
+      pos: 5.5,3.5
 - proto: VehicleExitArea
   entities:
   - uid: 40
     components:
     - type: Transform
-      pos: -0.5,-0.5
       parent: 3
+      pos: -0.5,-0.5
   - uid: 41
     components:
     - type: Transform
-      pos: -0.5,0.5
       parent: 3
+      pos: -0.5,0.5
+- proto: VehicleInteriorArmorChairOld
+  entities:
+  - uid: 13
+    components:
+    - type: Transform
+      parent: 3
+      rot: 1.5707963267948966 rad
+      pos: 3.3594081,-0.38752794
+    missingComponents:
+    - Tag
 - proto: VehicleInteriorBloodVendor
   entities:
   - uid: 8
     components:
     - type: Transform
-      pos: 1.026619,1.3054649
       parent: 3
-- proto: VehicleInteriorExtinguisher
+      pos: 1.026619,1.3054649
+    missingComponents:
+    - Tag
+- proto: VehicleInteriorExtinguisherFull
   entities:
-  - uid: 59
+  - uid: 43
     components:
     - type: Transform
-      pos: 3.3015993,1.221884
       parent: 3
-    - type: Physics
-      canCollide: False
-    - type: Fixtures
-      fixtures: {}
+      pos: 3.2500384,1.5344336
+    - type: Openable
+      opened: False
 - proto: VehicleInteriorMedVendor
   entities:
   - uid: 9
     components:
     - type: Transform
-      pos: 0.3408079,1.3054649
       parent: 3
+      pos: 0.3408079,1.3054649
+    missingComponents:
+    - Tag
 - proto: VehicleInteriorNanomed
   entities:
   - uid: 4
     components:
     - type: Transform
-      pos: 1.636384,1.5545635
       parent: 3
+      pos: 1.636384,1.5545635
+- proto: VehicleInteriorWallPhone
+  entities:
   - uid: 58
     components:
     - type: Transform
-      pos: 3.6398478,1.2195121
       parent: 3
+      pos: 3.5781581,1.3416388
+    - type: Fixtures
+      fixtures: {}
 - proto: VehicleSPPVanChassisLogistics
   entities:
   - uid: 7
     components:
     - type: Transform
-      pos: 2.2541947,0.25335085
       parent: 3
+      pos: 2.2541947,0.25335085
 - proto: VehicleSPPVanExteriorDoorUnique
   entities:
   - uid: 2
     components:
     - type: Transform
-      pos: 2.5086117,1.5218416
       parent: 3
+      pos: 2.5086117,1.5218416
     - type: VehicleExit
       entryIndex: 1
     missingComponents:
@@ -266,8 +550,8 @@ entities:
   - uid: 5
     components:
     - type: Transform
-      pos: 2.5,-0.5
       parent: 3
+      pos: 2.5,-0.5
     - type: VehicleExit
       entryIndex: 2
     - type: Fixtures
@@ -279,263 +563,9 @@ entities:
   - uid: 6
     components:
     - type: Transform
+      parent: 3
       pos: 3.491043,1.4869711
-      parent: 3
     missingComponents:
+    - Tag
     - InteractionTransparency
-- proto: RMCWallInvisibleBulletBlocker
-  entities:
-  - uid: 17
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 2.5,-1.5
-      parent: 3
-  - uid: 18
-    components:
-    - type: Transform
-      pos: 3.3876042,2.2453423
-      parent: 3
-  - uid: 19
-    components:
-    - type: Transform
-      pos: 2.1563978,2.2453423
-      parent: 3
-  - uid: 20
-    components:
-    - type: Transform
-      pos: 2.7843304,2.2453423
-      parent: 3
-  - uid: 21
-    components:
-    - type: Transform
-      pos: 0.79069924,2.2453423
-      parent: 3
-  - uid: 22
-    components:
-    - type: Transform
-      pos: 1.5416272,2.2453423
-      parent: 3
-  - uid: 23
-    components:
-    - type: Transform
-      pos: -0.716239,2.4635797
-      parent: 3
-  - uid: 24
-    components:
-    - type: Transform
-      pos: -0.009784222,2.2453423
-      parent: 3
-  - uid: 25
-    components:
-    - type: Transform
-      pos: -0.7064042,1.6470695
-      parent: 3
-  - uid: 28
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -0.5,-1.5
-      parent: 3
-  - uid: 29
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 0.5,-1.5
-      parent: 3
-  - uid: 30
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 1.5,-1.5
-      parent: 3
-  - uid: 31
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 3.5,-1.5
-      parent: 3
-  - uid: 33
-    components:
-    - type: Transform
-      pos: 4.5,-0.5
-      parent: 3
-  - uid: 34
-    components:
-    - type: Transform
-      pos: 4.5,0.5
-      parent: 3
-  - uid: 35
-    components:
-    - type: Transform
-      pos: 4.178675,2.2453423
-      parent: 3
-  - uid: 42
-    components:
-    - type: Transform
-      pos: 4.5,1.5
-      parent: 3
-  - uid: 63
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 5,2
-      parent: 3
-- proto: RMCWallInvisibleBulletLightBlocker
-  entities:
-  - uid: 26
-    components:
-    - type: Transform
-      pos: 4.5,2.5
-      parent: 3
-  - uid: 27
-    components:
-    - type: Transform
-      pos: 4.5,-1.5
-      parent: 3
-  - uid: 32
-    components:
-    - type: Transform
-      pos: 5.5,-1.5
-      parent: 3
-  - uid: 36
-    components:
-    - type: Transform
-      pos: 5.5,-0.5
-      parent: 3
-  - uid: 37
-    components:
-    - type: Transform
-      pos: 5.5,0.5
-      parent: 3
-  - uid: 38
-    components:
-    - type: Transform
-      pos: 5.5,1.5
-      parent: 3
-  - uid: 39
-    components:
-    - type: Transform
-      pos: 5.5,2.5
-      parent: 3
-  - uid: 44
-    components:
-    - type: Transform
-      pos: -1.5,-1.5
-      parent: 3
-  - uid: 45
-    components:
-    - type: Transform
-      pos: -1.5,-0.5
-      parent: 3
-  - uid: 46
-    components:
-    - type: Transform
-      pos: -1.5,0.5
-      parent: 3
-  - uid: 47
-    components:
-    - type: Transform
-      pos: -1.5,1.5
-      parent: 3
-  - uid: 48
-    components:
-    - type: Transform
-      pos: -1.5,2.5
-      parent: 3
-  - uid: 50
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -1.5,-2.5
-      parent: 3
-  - uid: 51
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -0.5,-2.5
-      parent: 3
-  - uid: 52
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 0.5,-2.5
-      parent: 3
-  - uid: 53
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 1.5,-2.5
-      parent: 3
-  - uid: 54
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 2.5,-2.5
-      parent: 3
-  - uid: 55
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 3.5,-2.5
-      parent: 3
-  - uid: 56
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 4.5,-2.5
-      parent: 3
-  - uid: 57
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 5.5,-2.5
-      parent: 3
-  - uid: 64
-    components:
-    - type: Transform
-      pos: -1.5,3.5
-      parent: 3
-  - uid: 65
-    components:
-    - type: Transform
-      pos: 1.5,3.5
-      parent: 3
-  - uid: 66
-    components:
-    - type: Transform
-      pos: 0.5,3.5
-      parent: 3
-  - uid: 67
-    components:
-    - type: Transform
-      pos: -0.5,3.5
-      parent: 3
-  - uid: 68
-    components:
-    - type: Transform
-      pos: 2.5,3.5
-      parent: 3
-  - uid: 69
-    components:
-    - type: Transform
-      pos: 3.5,3.5
-      parent: 3
-  - uid: 70
-    components:
-    - type: Transform
-      pos: 4.5,3.5
-      parent: 3
-  - uid: 71
-    components:
-    - type: Transform
-      pos: 5.5,3.5
-      parent: 3
-- proto: AU14VehicleRadioSet
-  entities:
-  - uid: 500
-    components:
-    - type: Transform
-      pos: 3.5,-0.5
-      parent: 3
 ...

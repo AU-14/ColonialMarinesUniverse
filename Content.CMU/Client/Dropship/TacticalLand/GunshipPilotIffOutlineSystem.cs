@@ -22,6 +22,7 @@ namespace Content.Client.CMU14.Dropship.TacticalLand;
 /// </summary>
 public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
 {
+    private const string HighlightShaderId = "cmu-gunship-pilot-iff";
     private static readonly ProtoId<ShaderPrototype> OutlineShader = "RMCAuraOutline";
     private static readonly TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(500);
     private static readonly Color FriendlyColor = new(0.14f, 1f, 0.25f, 0.95f);
@@ -33,6 +34,7 @@ public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
     private static readonly ProtoId<NpcFactionPrototype> ColonistFaction = "AUColonist";
 
     [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private SpriteSystem _sprites = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private IPlayerManager _player = default!;
@@ -46,7 +48,7 @@ public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
     private ShaderInstance _friendlyShader = default!;
     private ShaderInstance _neutralShader = default!;
     private ShaderInstance _hostileShader = default!;
-    private readonly Dictionary<EntityUid, HighlightState> _highlighted = new();
+    private readonly Dictionary<EntityUid, SpriteComponent> _highlighted = new();
     private readonly HashSet<EntityUid> _seen = new();
     private readonly List<EntityUid> _remove = new();
     private readonly HashSet<EntProtoId<IFFFactionComponent>> _pilotIff = new();
@@ -283,32 +285,20 @@ public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
 
     private void ApplyHighlight(EntityUid uid, SpriteComponent sprite, ShaderInstance shader)
     {
-        if (!_highlighted.TryGetValue(uid, out var state))
-        {
-            state = new HighlightState(sprite, sprite.PostShader);
-            _highlighted.Add(uid, state);
-        }
-        else if (!IsPilotShader(sprite.PostShader))
-        {
-            // Preserve an effect applied by another client visual system while
-            // the pilot HUD was running so it can be restored afterwards.
-            state = state with { OriginalShader = sprite.PostShader };
-            _highlighted[uid] = state;
-        }
-
-        if (sprite.PostShader == shader)
+        _highlighted[uid] = sprite;
+        if (_sprites.TryGetPostShader(sprite, HighlightShaderId, out var current) && current.Shader == shader)
             return;
 
-        sprite.PostShader = shader;
+        // Own one post-shader entry so other visual systems keep their effects.
+        _sprites.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(HighlightShaderId, shader));
     }
 
     private void RestoreHighlight(EntityUid uid)
     {
-        if (!_highlighted.Remove(uid, out var state) || TerminatingOrDeleted(uid))
+        if (!_highlighted.Remove(uid, out var sprite) || TerminatingOrDeleted(uid))
             return;
 
-        if (IsPilotShader(state.Sprite.PostShader))
-            state.Sprite.PostShader = state.OriginalShader;
+        _sprites.RemovePostShader(sprite, HighlightShaderId);
     }
 
     private void ClearHighlights()
@@ -319,12 +309,4 @@ public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
             RestoreHighlight(uid);
     }
 
-    private bool IsPilotShader(ShaderInstance? shader)
-    {
-        return shader == _friendlyShader || shader == _neutralShader || shader == _hostileShader;
-    }
-
-    private sealed record HighlightState(
-        SpriteComponent Sprite,
-        ShaderInstance? OriginalShader);
 }

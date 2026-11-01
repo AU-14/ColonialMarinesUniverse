@@ -22,7 +22,6 @@ public sealed partial class PainShockSystem : SharedPainShockSystem
     private static readonly string[] ModeratePainReflections =
     {
         "cmu-medical-pain-reflection-moderate-1",
-        "cmu-medical-pain-reflection-moderate-2",
         "cmu-medical-pain-reflection-moderate-3",
     };
 
@@ -44,7 +43,6 @@ public sealed partial class PainShockSystem : SharedPainShockSystem
     {
         "cmu-medical-pain-relief-1",
         "cmu-medical-pain-relief-2",
-        "cmu-medical-pain-relief-3",
     };
 
     public override void Update(float frameTime)

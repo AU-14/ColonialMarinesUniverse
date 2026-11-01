@@ -1,0 +1,5 @@
+# Source pixels and attribution: SOURCES_MACHINERY_DEBRIS.md.
+- type: cmu3DSurface
+  id: CMU3DMachineryArtGreenMonitor
+  atlasIndex: 238
+  texture: /Textures/CMU14/ThreeD/Machinery/CMU3DMachineryArtGreenMonitor.png

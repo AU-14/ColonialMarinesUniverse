@@ -15,6 +15,10 @@ namespace Content.IntegrationTests.Tests.Construction;
 [TestFixture]
 public sealed class ToolsConstructionMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ConstructionPrototype> CMBarricadeMetalPrototype = "CMBarricadeMetal";
+    private static readonly Robust.Shared.Prototypes.ProtoId<ConstructionPrototype> CMChairPrototype = "CMChair";
+    private static readonly Robust.Shared.Prototypes.ProtoId<ConstructionGraphPrototype> CMSeatPrototype = "CMSeat";
+
     private static readonly string[] ToolQualities =
     [
         "Anchoring",
@@ -37,9 +41,9 @@ public sealed class ToolsConstructionMergeRegressionTest : GameTest
     {
         await Server.WaitAssertion(() =>
         {
-            var rmcConstruction = SProtoMan.Index<ConstructionPrototype>("CMBarricadeMetal");
-            var inheritedConstruction = SProtoMan.Index<ConstructionPrototype>("CMChair");
-            var inheritedGraph = SProtoMan.Index<ConstructionGraphPrototype>("CMSeat");
+            var rmcConstruction = SProtoMan.Index<ConstructionPrototype>(CMBarricadeMetalPrototype);
+            var inheritedConstruction = SProtoMan.Index<ConstructionPrototype>(CMChairPrototype);
+            var inheritedGraph = SProtoMan.Index<ConstructionGraphPrototype>(CMSeatPrototype);
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(rmcConstruction.Parents, Does.Contain("RMC"));

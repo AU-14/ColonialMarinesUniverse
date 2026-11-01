@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System.Collections.Generic;
 using Content.IntegrationTests.Fixtures.Attributes;
 using Content.IntegrationTests.Utility;
@@ -118,7 +118,7 @@ public sealed partial class AntagGhostRoleTest : AntagTest
         // Take the ghost role and ensure we take it!
         Assert.That(_ghostRole.Takeover(ServerSession!, role.Identifier), Is.True);
         Assert.That(ServerSession!.AttachedEntity, Is.Not.Null);
-        var antag = SProtoMan.Index(spawner.Definition);
+        var antag = SProtoMan.Index(spawner.Definition!.Value);
         SAssertAntagInitialized(antag, ServerSession);
 
         // Ensure we spawned in the correct location

@@ -57,7 +57,7 @@ public sealed partial class BiomorphConstructionSystem : EntitySystem
 
         if (ent.Comp.BuildChoice is not { } choice)
         {
-            _popup.PopupClient(Loc.GetString("biomorph-secrete-no-choice"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("biomorph-secrete-no-choice"), ent, ent);
 
             return;
         }
@@ -66,7 +66,7 @@ public sealed partial class BiomorphConstructionSystem : EntitySystem
         // useDelay. Other structures (walls, etc.) are gated only by the action.
         if (choice == ent.Comp.NestProto && ent.Comp.NextNestAt is { } nestReady && _timing.CurTime < nestReady)
         {
-            _popup.PopupClient(Loc.GetString("biomorph-secrete-nest-cooldown"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("biomorph-secrete-nest-cooldown"), ent, ent);
 
             return;
         }

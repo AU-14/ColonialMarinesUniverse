@@ -5,11 +5,11 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.CMU14.Atmos;
 
-public sealed class CMUWideAirtightSystem : EntitySystem
+public sealed partial class CMUWideAirtightSystem : EntitySystem
 {
-    [Dependency] private readonly AirtightSystem _airtight = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private AirtightSystem _airtight = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly List<EntityUid> _tileEnts = new();
 
@@ -17,7 +17,6 @@ public sealed class CMUWideAirtightSystem : EntitySystem
     {
         SubscribeLocalEvent<CMUWideAirtightComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CMUWideAirtightComponent, AnchorStateChangedEvent>(OnAnchorChanged);
-        SubscribeLocalEvent<CMUWideAirtightComponent, ReAnchorEvent>(OnReAnchor);
         SubscribeLocalEvent<CMUWideAirtightComponent, AirtightChanged>(OnDoorAirtightChanged);
         SubscribeLocalEvent<CMUWideAirtightComponent, ComponentShutdown>(OnShutdown);
     }
@@ -28,11 +27,6 @@ public sealed class CMUWideAirtightSystem : EntitySystem
     // Map loading sets anchored without raising this, so MapInit covers placed doors;
     // every runtime transition (admin move, construction, deconstruction) lands here
     private void OnAnchorChanged(Entity<CMUWideAirtightComponent> ent, ref AnchorStateChangedEvent args)
-        => Reseal(ent);
-
-    // Grid merges move anchored entities between grids without an anchor state change;
-    // AirtightSystem covers the same event for the door's own tile
-    private void OnReAnchor(Entity<CMUWideAirtightComponent> ent, ref ReAnchorEvent args)
         => Reseal(ent);
 
     // Side tiles follow the anchor tile: whatever the door's own airtight does, the

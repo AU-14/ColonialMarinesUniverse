@@ -40,6 +40,8 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         public Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> Reports = [];
     }
 
+    [Dependency] private Content.Server.CMU14.Threats.Mobs.Wendigo.Lab.CMUWendigoResearchUnlockSystem _wendigoUnlock = default!;
+
     private readonly Dictionary<string, FactionResearch> _factions = new(StringComparer.OrdinalIgnoreCase);
     public FactionResearch GetResearch(string faction)
     {
@@ -59,7 +61,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     private int _nextContractId;
 
     [ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan XClearanceLockout = TimeSpan.FromMinutes(60);
+    public TimeSpan XClearanceLockout = TimeSpan.FromMinutes(40);
 
     [Dependency] private ServerReagentGeneratorSystem _generator = default!;
     [Dependency] private IGameTiming _timer = default!;
@@ -107,6 +109,9 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     }
 
     protected override void OnResearchBalanceChanged(string faction) => UpdateFactionUI(faction);
+
+    protected override void OnClearanceChanged(string faction, int oldClearance, int newClearance) =>
+        _wendigoUnlock.OnClearanceChanged(faction, oldClearance, newClearance);
 
     private void UpdateFactionUI(string faction, bool announce = false)
     {
@@ -211,19 +216,52 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         }
     }
 
-    public void LegalizeChem(GeneratedReagentData chem)
+    /// <summary>
+    /// Turns a contract offer into a live reagent and reaction. Returns false, registering nothing,
+    /// when no non-colliding recipe could be generated for it.
+    /// </summary>
+    public bool LegalizeChem(GeneratedReagentData chem)
     {
+        HashSet<string> str = chem.RecipeHint == string.Empty ? [] : [chem.RecipeHint];
+        if (!_generator.GenerateRecipe(ref chem, str))
+        {
+            // The hint reagent may be what collides. Hard contracts retry with a different precious metal or
+            // botanical so they keep their guaranteed premium reactant; other tiers retry without a hint.
+            var retried = false;
+            if (chem.GenTier >= 3)
+            {
+                var premium = _generator.ChemicalGenClassesList["H1"]
+                    .Concat(_generator.ChemicalGenClassesList[SharedReagentGeneratorSystem.PreciousMetalPool])
+                    .Where(id => id != chem.RecipeHint)
+                    .ToList();
+                for (var attempt = 0; attempt < 3 && premium.Count > 0 && !retried; attempt++)
+                {
+                    var hint = _random.PickAndTake(premium);
+                    if (_generator.GenerateRecipe(ref chem, [hint]))
+                    {
+                        chem.RecipeHint = hint;
+                        retried = true;
+                    }
+                }
+            }
+            if (!retried && (str.Count == 0 || chem.GenTier >= 3 || !_generator.GenerateRecipe(ref chem, [])))
+            {
+                _sawmill.Error($"Could not generate a non-colliding recipe for research chemical {chem.ID}; contract dropped.");
+                return false;
+            }
+            if (!retried)
+                chem.RecipeHint = chem.Recipe.Keys.First();
+        }
         _generator.ChemicalGenClassesList["TAU"].Add(chem.ID);
         foreach (var ef in chem.Effects)
         {
             _generator.CheckGeneratedProperties(ef.Key);
         }
-        HashSet<string> str = [chem.RecipeHint];
-        _generator.GenerateRecipe(ref chem, str);
         var ev = new GenerateReagentEvent(chem);
         RaiseLocalEvent(ev);
         RaiseNetworkEvent(ev);
         _generator.ProceduralReagentData.Add(chem.ID, chem);
+        return true;
     }
 
     /// <summary>
@@ -231,9 +269,16 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     /// </summary>
     public EntityUid? IssueAdminContract(EntityUid source, GeneratedReagentData chem)
     {
-        LegalizeChem(chem);
+        if (!LegalizeChem(chem))
+            return null;
         return PrintContract(source, chem.ID, true);
     }
+
+    /// <summary>
+    /// Sample data paid for the first scan of a simulator-made chemical. Kept at the minimum simulation cost (1)
+    /// so that simulate-then-scan can never be a net gain; contract and xeno scans are the real income.
+    /// </summary>
+    public static int SampleDataForSimulated(ReagentPrototype proto) => 1;
 
     public void CompleteChemical(ReagentPrototype proto, string faction, EntityUid? scanner)
     {
@@ -242,7 +287,13 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         // Chemical definitions are global, but each faction earns its own first-scan reward.
         if (_generator.IdentifiedChemicals.TryAdd(proto.ID, proto.Reward))
             RaiseNetworkEvent(new IdentifyChemicalEvent(proto.ID, proto.Reward));
-        UpdateClearance(GetCredits(faction) + proto.Reward, -1, faction);
+        if (proto.Class < ReagentClass.Special)
+        {
+            // Simulator-made chemical: a flat sample-data reward (see SampleDataForSimulated), no credits or cash.
+            UpdateSampleData(GetSampleData(faction) + SampleDataForSimulated(proto), faction);
+            return;
+        }
+        UpdateClearance(GetCredits(faction) + proto.Reward, -1, faction, GetSampleData(faction) + proto.Reward);
         if (faction != string.Empty)
         {
             if (string.Equals(faction, "corporate", StringComparison.OrdinalIgnoreCase))
@@ -311,6 +362,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             nextUpdate: research.NextReroll,
             lastTime: research.LastTime,
             credits: GetCredits(faction),
+            sampleData: GetSampleData(faction),
             clearance: GetClearance(faction),
             upgradecost: UpgradeCost(faction),
             xLockedUntil: xLockedUntil,
@@ -346,10 +398,22 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     public bool PickChem(string id, Entity<ResearchDataTerminalComponent>? ent = null)
     {
         var faction = ent?.Comp.Faction ?? "corporate";
+        var research = GetResearch(faction);
+        var nextReroll = research.NextReroll;
+        var lastTime = research.LastTime;
         if (!TryReserveContract(faction, id, out var reagent))
             return false;
 
-        LegalizeChem(reagent);
+        if (!LegalizeChem(reagent))
+        {
+            // Give the offer slot and the reroll timer back rather than leaving the faction locked on a dead contract.
+            research.Picked = false;
+            research.NextReroll = nextReroll;
+            research.LastTime = lastTime;
+            research.Selectable.Add(reagent);
+            UpdateFactionUI(faction);
+            return false;
+        }
         if (ent is { } terminal)
             PrintContract(terminal, reagent.ID);
         return true;
@@ -570,21 +634,19 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             {
                 case 1:
                     data.ScanPointYield = 3;
-                    if (roll <= 60)
-                        data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList["C1"]);
-                    else
-                        data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList["C2"]);
+                    data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList["C1"]);
                     break;
                 case 2:
                     data.ScanPointYield = 5;
-                    if (roll <= 40)
-                        data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList["C2"]);
-                    else
-                        data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList["C3"]);
+                    data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList[roll <= 50 ? "C2" : "C3"]);
                     break;
                 case 3:
+                    // Hard contracts always pin either a botanical or a precious metal.
                     data.ScanPointYield = 7;
-                    data.RecipeHint = _random.Pick(_generator.ChemicalGenClassesList["H1"]);
+                    var precious = _generator.ChemicalGenClassesList[SharedReagentGeneratorSystem.PreciousMetalPool];
+                    data.RecipeHint = roll <= 60 || precious.Count == 0
+                        ? _random.Pick(_generator.ChemicalGenClassesList["H1"])
+                        : _random.Pick(precious);
                     break;
                 default:
                     data.ScanPointYield = 3;

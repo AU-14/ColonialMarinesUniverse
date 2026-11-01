@@ -86,6 +86,6 @@ public sealed partial class RMCSynthItemRestrictionSystem : EntitySystem
 
     private void Popup(Entity<RMCSynthItemRestrictionComponent> ent, EntityUid user)
     {
-        _popup.PopupClient(Loc.GetString(ent.Comp.DenyPopup, ("item", ent.Owner), ("user", user)), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString(ent.Comp.DenyPopup, ("item", ent.Owner), ("user", user)), user, user, PopupType.SmallCaution);
     }
 }

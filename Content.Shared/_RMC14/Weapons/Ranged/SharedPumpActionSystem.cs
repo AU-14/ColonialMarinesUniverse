@@ -82,7 +82,7 @@ public abstract partial class SharedPumpActionSystem : EntitySystem
 
         if (ammo.Count <= 0)
         {
-            _popup.PopupClient(Loc.GetString("cm-gun-no-ammo-message"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-gun-no-ammo-message"), user, user);
             return true;
         }
 

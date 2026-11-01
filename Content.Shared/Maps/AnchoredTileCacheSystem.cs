@@ -10,7 +10,7 @@ namespace Content.Shared.Maps;
 /// values are deliberately not cached: callers still observe current height, immunity,
 /// damage and permission state. Invalidating a snapshot cannot change an active reader.
 /// </summary>
-public sealed class AnchoredTileCacheSystem : EntitySystem
+public sealed partial class AnchoredTileCacheSystem : EntitySystem
 {
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedMapSystem _map = default!;
@@ -33,11 +33,9 @@ public sealed class AnchoredTileCacheSystem : EntitySystem
 
     public override void Initialize()
     {
-        // Anchor events can precede installation of the destination transform.
-        // Other invalidations have a known grid/tile and can preserve unrelated entries.
+        // Grid transfers now raise normal unanchor/move/anchor events.
         _transform.OnGlobalMoveEvent += OnMove;
         SubscribeLocalEvent<TransformComponent, AnchorStateChangedEvent>(OnAnchor);
-        SubscribeLocalEvent<TransformComponent, ReAnchorEvent>(OnReanchor);
         SubscribeLocalEvent<TransformComponent, ComponentShutdown>(OnShutdown);
         // Transform startup raises AnchorStateChangedEvent for initially anchored entities too.
         // MapInit does not need a second invalidation or an additional lifecycle subscription.
@@ -86,13 +84,11 @@ public sealed class AnchoredTileCacheSystem : EntitySystem
     {
         if (args.Anchored)
         {
-            // The usual path has already installed membership at the current position.
-            // Direct anchoring to another grid raises this event before installing its
-            // destination transform; only that ambiguous case needs the global fallback.
+            // Preserve the conservative fallback for incomplete client state application.
             if (ent.Comp.GridUid is { } gridUid && TryComp(gridUid, out MapGridComponent? grid))
             {
                 var tile = _map.CoordinatesToTile(gridUid, grid, ent.Comp.Coordinates);
-                var query = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+                var query = _map.GetAnchoredEntities(gridUid, grid, tile);
                 while (query.MoveNext(out var uid))
                 {
                     if (uid != ent.Owner) continue;
@@ -104,12 +100,6 @@ public sealed class AnchoredTileCacheSystem : EntitySystem
             return;
         }
         InvalidatePosition(ent.Comp);
-    }
-
-    private void OnReanchor(Entity<TransformComponent> ent, ref ReAnchorEvent args)
-    {
-        InvalidateGrid(args.OldGrid);
-        InvalidateGrid(args.Grid);
     }
 
     private void OnShutdown(Entity<TransformComponent> ent, ref ComponentShutdown args)
@@ -173,7 +163,7 @@ public sealed class AnchoredTileCacheSystem : EntitySystem
 
         CacheMisses++;
         _scratch.Clear();
-        var query = _map.GetAnchoredEntitiesEnumerator(grid, grid.Comp, tile);
+        var query = _map.GetAnchoredEntities(grid, grid.Comp, tile);
         while (query.MoveNext(out var uid)) _scratch.Add(uid.Value);
         var cached = _scratch.ToImmutableArray();
         _scratch.Clear();

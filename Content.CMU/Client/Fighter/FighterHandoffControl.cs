@@ -10,8 +10,10 @@ namespace Content.Client.CMU14.Fighter;
 /// <summary>Atmospheric cover at the map handoff, behind all usable cockpit controls.</summary>
 public sealed class FighterHandoffControl : Control
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ShaderPrototype> CMUFighterCloudsPrototype = "CMUFighterClouds";
+
     private readonly ShaderInstance _shader = IoCManager.Resolve<IPrototypeManager>()
-        .Index<ShaderPrototype>("CMUFighterClouds").InstanceUnique();
+        .Index<ShaderPrototype>(CMUFighterCloudsPrototype).InstanceUnique();
     private readonly IClyde _clyde = IoCManager.Resolve<IClyde>();
     private IRenderTexture? _texture;
     private FighterGroundState? _previous;
@@ -57,6 +59,7 @@ public sealed class FighterHandoffControl : Control
         handle.DrawTextureRect(_texture.Texture, PixelSizeBox, Color.White.WithAlpha(_opacity * .55f));
     }
 
+    [Obsolete("Retained for CMUControlLifetime.Release cleanup.")]
     protected override void Dispose(bool disposing)
     {
         if (disposing) { _texture?.Dispose(); _shader.Dispose(); }

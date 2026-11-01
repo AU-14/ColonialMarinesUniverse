@@ -57,14 +57,12 @@
     # - type: JobPrefix
     #   prefix: au14-job-prefix-govformoCMBCIU
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMedical
-    time: 36000 # 10 hours
+    time: 10800 # 3 hours
   - !type:AgeRequirement
     requiredAge: 30
   - !type:TraitsRequirement
@@ -75,9 +73,18 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -118,7 +125,7 @@
   id: AU14GearGOVFOROfficerMedical
   equipment:
     id: AU14IDCardGOVFOROfficerMedical
-    ears: AU14HeadsetGovforCommand
+    ears: CMUHeadsetGovforMedicalCommand
   inhand:
     - AU14KitJOMedicalOfficerKit
 
@@ -126,7 +133,7 @@
   id: AU14GearOPFOROfficerMedical
   equipment:
     id: AU14IDCardOPFOROfficerMedical
-    ears: AU14HeadsetOpforCommand
+    ears: CMUHeadsetOpforMedicalCommand
   inhand:
     - AU14KitJOMedicalOfficerKit
 
@@ -150,7 +157,7 @@
     shoes: CMBootsBlack
     head: CMHeadCapPeakedFormal
     jumpsuit: CMJumpsuitCMO
-    ears: AU14HeadsetGovforCommand
+    ears: CMUHeadsetGovforMedicalCommand
 
 - type: startingGear
   id: AU14GearOPFOROfficerMedicalDummy
@@ -158,7 +165,7 @@
     shoes: CMBootsBlack
     head: CMHeadCapPeakedFormal
     jumpsuit: CMJumpsuitCMO
-    ears: AU14HeadsetOpforCommand
+    ears: CMUHeadsetOpforMedicalCommand
 
 # ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
 - type: entity
@@ -202,14 +209,12 @@
   id: AU14JobGOVFOROfficerMedicalUPP
   roundForce: UPP
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMedical
-    time: 36000 # 10 hours
+    time: 10800 # 3 hours
   name: Chief Medical Officer
   spawnMenuRoleName: CMO (UPP)
   ranks:
@@ -224,14 +229,12 @@
   id: AU14JobGOVFOROfficerMedicalWYPMC
   roundForce: WYPMC
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMedical
-    time: 36000 # 10 hours
+    time: 10800 # 3 hours
   name: PMC Chief Medical Officer
   spawnMenuRoleName: CMO (WYPMC)
   ranks:

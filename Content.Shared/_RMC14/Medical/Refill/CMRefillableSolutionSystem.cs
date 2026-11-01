@@ -10,6 +10,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -28,6 +29,7 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -41,6 +43,8 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedDoAfterSystem _doafter = default!;
+
+    private readonly HashSet<Entity<CMSolutionRefillerComponent>> _refillers = new();
 
     public override void Initialize()
     {
@@ -104,7 +108,7 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
         args.Handled = true;
         if (!_whitelist.IsValid(ent.Comp.Whitelist, fillable))
         {
-            _popup.PopupClient(Loc.GetString("cm-refillable-solution-cannot-refill", ("user", ent.Owner), ("target", fillable)), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cm-refillable-solution-cannot-refill", ("user", ent.Owner), ("target", fillable)), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -114,7 +118,7 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
         var solutionComp = solution.Value.Comp.Solution;
         if (solutionComp.AvailableVolume == FixedPoint2.Zero)
         {
-            _popup.PopupClient(Loc.GetString("cm-refillable-solution-full", ("target", fillable)), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("cm-refillable-solution-full", ("target", fillable)), args.User, args.User);
             return;
         }
 
@@ -140,13 +144,39 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
             var ev = new RefilledSolutionEvent();
             RaiseLocalEvent(args.Used, ref ev);
 
-            _popup.PopupClient(Loc.GetString("cm-refillable-solution-whirring-noise", ("user", ent.Owner), ("target", fillable)), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("cm-refillable-solution-whirring-noise", ("user", ent.Owner), ("target", fillable)), args.User, args.User);
             _audio.PlayPredicted(ent.Comp.RefillSound, ent.Owner, args.User);
         }
         else
         {
-            _popup.PopupClient(Loc.GetString("cm-refillable-solution-cannot-refill", ("user", ent.Owner), ("target", fillable)), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cm-refillable-solution-cannot-refill", ("user", ent.Owner), ("target", fillable)), args.User, args.User, PopupType.SmallCaution);
         }
+    }
+
+    public bool TryDrainRefiller(EntityCoordinates coords, float range, ProtoId<ReagentPrototype> reagent, FixedPoint2 amount, out FixedPoint2 drained)
+    {
+        drained = FixedPoint2.Zero;
+
+        _refillers.Clear();
+        _entityLookup.GetEntitiesInRange(coords, range, _refillers);
+        foreach (var refiller in _refillers)
+        {
+            if (!refiller.Comp.Reagents.Contains(reagent) || refiller.Comp.Current <= FixedPoint2.Zero)
+                continue;
+
+            var take = FixedPoint2.Min(refiller.Comp.Current, amount - drained);
+            if (take <= FixedPoint2.Zero)
+                continue;
+
+            refiller.Comp.Current -= take;
+            drained += take;
+            Dirty(refiller);
+
+            if (drained >= amount)
+                break;
+        }
+
+        return drained > FixedPoint2.Zero;
     }
 
     private void OnRefillSolutionOnStoreInserted(Entity<RMCRefillSolutionOnStoreComponent> ent, ref EntInsertedIntoContainerMessage args)
@@ -273,7 +303,7 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
                     ? "comp-solution-transfer-fill-fully"
                     : "comp-solution-transfer-fill-normal";
 
-                _popup.PopupPredicted(Loc.GetString(msg, ("owner", args.Target), ("amount", transferred), ("target", uid)), uid, args.User);
+                _popup.PopupBroadcast(Loc.GetString(msg, ("owner", args.Target), ("amount", transferred), ("target", uid)), uid, args.User);
                 return;
             }
         }
@@ -340,7 +370,7 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
             return;
         }
         //TODO RMC immovable
-        _popup.PopupClient(Loc.GetString("rmc-refillsolution-flush-start", ("time", ent.Comp.FlushTime.TotalSeconds)), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-refillsolution-flush-start", ("time", ent.Comp.FlushTime.TotalSeconds)), user, user, PopupType.SmallCaution);
         _doafter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, ent.Comp.FlushTime, new ContainerFlushDoAfterEvent(), ent, target: ent)
         {
             BreakOnMove = true,
@@ -395,7 +425,7 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
     private void TryFlushSolution(Entity<RMCFlushableSolutionComponent> ent, EntityUid user)
     {
         //TODO RMC immovable
-        _popup.PopupClient(Loc.GetString("rmc-refillsolution-flush-start", ("time", ent.Comp.FlushTime.TotalSeconds)), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-refillsolution-flush-start", ("time", ent.Comp.FlushTime.TotalSeconds)), user, user, PopupType.SmallCaution);
         _doafter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, ent.Comp.FlushTime, new ContainerFlushDoAfterEvent(), ent, target: ent)
         {
             BreakOnMove = true,
@@ -434,7 +464,7 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
         var tankSolution = tankSolutionComp.Value.Comp.Solution;
         if (penSolution.AvailableVolume == FixedPoint2.Zero)
         {
-            _popup.PopupClient(Loc.GetString("cm-refillable-solution-full", ("target", args.Used)), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("cm-refillable-solution-full", ("target", args.Used)), args.User, args.User);
             return;
         }
 
@@ -456,7 +486,7 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
 
         if (notEnough)
         {
-            _popup.PopupClient(Loc.GetString("rmc-smart-refill-not-enough", ("tank", ent.Owner)), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-smart-refill-not-enough", ("tank", ent.Owner)), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -472,6 +502,6 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
         Dirty(ent);
         var ev = new RefilledSolutionEvent();
         RaiseLocalEvent(args.Used, ref ev);
-        _popup.PopupClient(Loc.GetString("cm-refillable-solution-whirring-noise", ("user", ent.Owner), ("target", args.Used)), args.User, args.User);
+        _popup.PopupEntity(Loc.GetString("cm-refillable-solution-whirring-noise", ("user", ent.Owner), ("target", args.Used)), args.User, args.User);
     }
 }

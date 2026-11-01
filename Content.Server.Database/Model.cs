@@ -49,6 +49,8 @@ namespace Content.Server.Database
         public DbSet<RoleWhitelist> RoleWhitelists { get; set; } = null!;
         public DbSet<YautjaClan> YautjaClans { get; set; } = null!;
         public DbSet<YautjaClanMember> YautjaClanMembers { get; set; } = null!;
+        public DbSet<YautjaClanPetition> YautjaClanPetitions { get; set; } = null!; // CMU14
+        public DbSet<YautjaClanSect> YautjaClanSects { get; set; } = null!; // CMU14
         public DbSet<BanTemplate> BanTemplate { get; set; } = null!;
         public DbSet<IPIntelCache> IPIntelCache { get; set; } = null!;
         public DbSet<CustomVoteLog> CustomVoteLog { get; set; } = null!;
@@ -133,6 +135,25 @@ namespace Content.Server.Database
             modelBuilder.Entity<Profile>()
                 .Property(p => p.Build)
                 .HasDefaultValue(string.Empty);
+
+            // CMU14
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.BloodType)
+                .HasDefaultValue(string.Empty);
+
+            // cmu edit start
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.Religion)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.ArmorFlavorText)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.HelmetFlavorText)
+                .HasDefaultValue(string.Empty);
+            // cmu edit end
 
             modelBuilder.Entity<Profile>()
                 .Property(p => p.HideMetaInformation)
@@ -671,6 +692,13 @@ namespace Content.Server.Database
         public string Height { get; set; } = string.Empty;
         public int Weight { get; set; } = 160;
         public string Build { get; set; } = string.Empty;
+        public string BloodType { get; set; } = string.Empty; // CMU14
+        // cmu edit start
+        public bool FoxtrotSquadOptIn { get; set; }
+        public string Religion { get; set; } = string.Empty;
+        public string ArmorFlavorText { get; set; } = string.Empty;
+        public string HelmetFlavorText { get; set; } = string.Empty;
+        // cmu edit end
         public bool HideMetaInformation { get; set; }
     }
 

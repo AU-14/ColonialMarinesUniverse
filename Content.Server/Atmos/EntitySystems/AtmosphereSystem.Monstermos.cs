@@ -6,6 +6,8 @@ using Content.Server.Doors.Systems;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Database;
+using Content.Shared._RMC14.Dropship; // CMU14
+using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Random;
@@ -569,7 +571,10 @@ namespace Content.Server.Atmos.EntitySystems
 
             // CMU14: map grids cannot move, even when a saved map has dynamic shuttle physics.
             // Impulses on the map accumulate invalid velocity that entities inherit when changing grids.
-            if (GridImpulse && tileCount > 0 && !HasComp<MapComponent>(owner))
+            // CMU14: dropships only move by flight. a parked one getting shoved by a vent dragged its decks
+            // and everyone standing on them around (multi-deck sync follows the cabin)
+            if (GridImpulse && tileCount > 0 && !HasComp<MapComponent>(owner) &&
+                !HasComp<DropshipComponent>(owner) && !HasComp<DropshipDeckComponent>(owner))
             {
                 var direction = ((Vector2)_depressurizeTiles[tileCount - 1].GridIndices - tile.GridIndices).Normalized();
 

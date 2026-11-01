@@ -40,6 +40,8 @@ public readonly record struct YautjaRankSpawnPolicy(YautjaSpawnKind SpawnKind, b
 
 public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPredatorRoundComponent>
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaPredatorRoundPrototype = "CMUYautjaPredatorRound";
+
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private MobStateSystem _mobState = default!;
@@ -171,7 +173,7 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
             return true;
         }
 
-        if (!GameTicker.StartGameRule("CMUYautjaPredatorRound", out var ruleUid) ||
+        if (!GameTicker.StartGameRule(CMUYautjaPredatorRoundPrototype, out var ruleUid) ||
             !TryComp(ruleUid, out YautjaPredatorRoundComponent? component))
         {
             message = Loc.GetString("cmu-yautja-admin-editor-hunt-initialize-failed");

@@ -149,6 +149,7 @@
   name: reagent jug
   description: A large jug made of non-reactive plastic, capable of carrying large amounts of diverse chemicals to wherever they are needed. Holds 500 units.
   components:
+  - type: CMUSpillWhenStoredOpen # CMU14: spills in storage without a lid
   - type: Sprite
     sprite: _RMC14/Objects/Chemistry/reagent_jug.rsi
     layers:

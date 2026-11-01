@@ -33,7 +33,7 @@ public sealed class FighterAirCombatTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var terrain = Server.Transform(map.GridCoords.EntityId).MapUid!.Value;
-            var origin = Server.Transform(map.GridCoords.EntityId).WorldPosition;
+            var origin = SEntMan.System<SharedTransformSystem>().GetWorldPosition(map.GridCoords.EntityId);
             _blue = System.CreateAircraft(terrain, origin);
             _red = System.CreateAircraft(terrain, origin);
             foreach (var aircraft in new[] { _blue, _red })

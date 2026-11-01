@@ -21,19 +21,19 @@ using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Weapons.Ranged.Backblast;
 
-public sealed class CMUBackblastSystem : EntitySystem
+public sealed partial class CMUBackblastSystem : EntitySystem
 {
-    [Dependency] private readonly CMUChemicalMedicalSystem _chemicalMedical = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedDeafnessSystem _deafness = default!;
-    [Dependency] private readonly SharedDrunkSystem _drunk = default!;
-    [Dependency] private readonly SharedRMCFlammableSystem _flammable = default!;
-    [Dependency] private readonly RMCSizeStunSystem _sizeStun = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly StutteringSystem _stutter = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private CMUChemicalMedicalSystem _chemicalMedical = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDeafnessSystem _deafness = default!;
+    [Dependency] private SharedDrunkSystem _drunk = default!;
+    [Dependency] private SharedRMCFlammableSystem _flammable = default!;
+    [Dependency] private RMCSizeStunSystem _sizeStun = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Blunt = "Blunt";
     private static readonly ProtoId<DamageTypePrototype> Heat = "Heat";

@@ -25,4 +25,8 @@ public sealed partial class K9GrabbedComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool Escaping;
+
+    // CMU14: set when the dog itself drops the pull, so the pull-stopped handler lets go instead of biting back on
+    [DataField]
+    public bool DogLetGo;
 }

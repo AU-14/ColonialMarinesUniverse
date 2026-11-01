@@ -41,6 +41,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     AU14RankSeniorOrbitalManager:
     - !type:RoleTimeRequirement
@@ -93,6 +95,7 @@
   points: 7
   groups:
   - CivSatchelAU14
+  - CMUCorporateSkirts
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14

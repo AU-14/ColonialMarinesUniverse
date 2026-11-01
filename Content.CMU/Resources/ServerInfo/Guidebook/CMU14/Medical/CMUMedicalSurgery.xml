@@ -1,7 +1,7 @@
 <Document>
   # Surgery
 
-  Some injuries can only be fixed by operating: compound and shattered fractures, internal bleeding, damaged organs, eschar and severed limbs.
+  Some injuries can only be fixed by operating: compound and shattered fractures, internal bleeding, damaged organs, eschar, severed limbs and the bleeding stumps they leave.
 
   <Box>
     <GuideEntityEmbed Entity="CMScalpel" Caption="Scalpel"/>
@@ -34,7 +34,7 @@
 
   ### Drugs Instead
   If you don't have a tank, drugs will do:
-  - [bold]Soporific[/bold]: 8 units or more puts the patient to sleep, and it's a strong painkiller as well.
+  - [bold]Soporific[/bold]: a strong painkiller that leaves the patient heavily dazed. It doesn't put them to sleep.
   - [bold]Oxycodone[/bold] also works. It kills pain well enough to operate, but the patient stays awake, and it makes them [color=#FFA500]loopy[/color]: their vision blurs and darkens at the edges. Over 20 units they start acting drunk and hallucinating, and it begins to poison them.
   - Tramadol, sleen and fentanyl are also strong enough. Paracetamol isn't.
 
@@ -91,12 +91,12 @@
 
   - [textlink="Organ Surgery" link="CMUGuideSurgeryOrgans"]: suturing, removing and replacing organs, the brain and eyes, and embryo removal.
 
-  - [textlink="Limb Surgery" link="CMUGuideSurgeryLimbs"]: amputation, reattachment and replacement limbs.
+  - [textlink="Limb Surgery" link="CMUGuideSurgeryLimbs"]: closing stumps, amputation, reattachment and replacement limbs.
 
   ## After Surgery
   - The patient is left [bold]recovering from surgery[/bold] for a while and can't run.
   - After setting a bone, put a cast on within 5 minutes. See [textlink="Fractures" link="CMUGuideMedicalBones"].
 
   ## The Autodoc
-  The [bold]autodoc pod[/bold] operates by itself. A trained surgeon queues procedures from its console, and the pod carries them out on the patient inside. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"], which also covers the body scanner that can make your surgery twice as fast.
+  The [bold]autodoc pod[/bold] operates by itself. Anyone, trained or not, queues procedures from its console, and the pod carries them out on the patient inside. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"], which also covers the body scanner that can make your surgery twice as fast.
 </Document>

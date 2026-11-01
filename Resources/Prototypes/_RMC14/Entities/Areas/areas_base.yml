@@ -1,9 +1,12 @@
-﻿# PORTING CHEATSHEET
+# PORTING CHEATSHEET
+# CMU14: cumulative ceiling tiers. Each tier also blocks every lower-tier action.
 # 0: Block nothing
-# 1: Block mortar placement, lasing, medevac
-# 2: Block CAS signals, supply drops, fultoning, mortar fire
-# 3: Block CAS
-# 4: Block OB
+# 1: Block mortar placement, lasing, medevac, paradropping
+# 2: Additionally block supply drops, fultoning, mortar fire
+# 3: Additionally block CAS
+# 4: Additionally block OB (all aerial actions blocked)
+# The strongest false permission determines the tier for legacy areas.
+# See Docs/ceiling-tiers.md for mapping guidance.
 
 - type: entity
   abstract: true
@@ -47,7 +50,9 @@
     CAS: true
     fulton: true
     lasing: true
-    mortar: true
+    # CMU14: mortar: true (obsolete field)
+    mortarPlacement: true
+    mortarFire: true
     medevac: true
     OB: true
     supplyDrop: true
@@ -66,14 +71,16 @@
   name: glass
 
 - type: entity
-  parent: RMCAreaBase
+  # CMU14: parent: RMCAreaBase
+  parent: RMCAreaProtectionZero
   abstract: true
   id: RMCAreaProtectionOne
   name: protection 1
   components:
   - type: Area
     lasing: false
-    mortar: false
+    # CMU14: mortar: false (obsolete field)
+    mortarPlacement: false
     medevac: false
     paradropping: false
 
@@ -84,7 +91,8 @@
   name: metal
 
 - type: entity
-  parent: RMCAreaBase
+  # CMU14: parent: RMCAreaBase
+  parent: RMCAreaProtectionOne
   abstract: true
   id: RMCAreaProtectionTwo
   name: protection 2
@@ -92,6 +100,7 @@
   - type: Area
     fulton: false
     supplyDrop: false
+    mortarFire: false # CMU14: tier 2 stops incoming mortar fire.
 
 - type: entity
   parent: RMCAreaProtectionTwo
@@ -106,7 +115,8 @@
   name: underground metal allow cas
 
 - type: entity
-  parent: RMCAreaBase
+  # CMU14: parent: RMCAreaBase
+  parent: RMCAreaProtectionTwo
   abstract: true
   id: RMCAreaProtectionThree
   name: protection 3
@@ -127,7 +137,8 @@
   name: underground metal block cas
 
 - type: entity
-  parent: RMCAreaBase
+  # CMU14: parent: RMCAreaBase
+  parent: RMCAreaProtectionThree
   abstract: true
   id: RMCAreaProtectionFour
   name: protection 4

@@ -19,8 +19,8 @@ namespace Content.Server.CMU14.Construction;
 /// </summary>
 public sealed partial class AU14MaterialShortfallSystem : EntitySystem
 {
-    [Dependency] private  IPrototypeManager _prototypes = default!;
-    [Dependency] private  IComponentFactory _componentFactory = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
 
     public override void Initialize()
     {
@@ -54,7 +54,7 @@ public sealed partial class AU14MaterialShortfallSystem : EntitySystem
                 }
 
                 if (!_prototypes.TryIndex<EntityPrototype>(prototype, out var entity)
-                    || !entity.TryGetComponent<StackComponent>(out var stack, _componentFactory)
+                    || !entity.TryComp<StackComponent>(out var stack, _componentFactory)
                     || stack.StackTypeId != stackType)
                     continue;
 
@@ -112,6 +112,6 @@ public sealed partial class AU14ExactStackRefundAction : IGraphAction
         var coordinates = entityManager.GetComponent<TransformComponent>(uid).Coordinates;
         var stackUid = entityManager.SpawnEntity(_prototype, coordinates);
         var stack = entityManager.GetComponent<StackComponent>(stackUid);
-        entityManager.EntitySysManager.GetEntitySystem<StackSystem>().SetCount(stackUid, _amount, stack);
+        entityManager.EntitySysManager.GetEntitySystem<StackSystem>().SetCount((stackUid, stack), _amount);
     }
 }

@@ -199,7 +199,7 @@ namespace Content.Server.GameTicking
             // After planet map is loaded, spawn selected ships for govfor and opfor
             if (_auRoundSystem != null)
             {
-                var govforShipId = _auRoundSystem.GetSelectedGovforShip();
+                var govforShipId = _auRoundSystem.ResolveGovforShip(CurrentPreset ?? Preset); // cmu edit: falls back to the platoon's ship if no vote ran
                 if (!string.IsNullOrEmpty(govforShipId) && _prototypeManager.TryIndex<GameMapPrototype>(govforShipId, out var govforShipProto))
                 {
                     var govforGrids = LoadGameMap(govforShipProto, out var _, new DeserializationOptions { InitializeMaps = true });
@@ -216,7 +216,7 @@ namespace Content.Server.GameTicking
                         }
                     }
                 }
-                var opforShipId = _auRoundSystem.GetSelectedOpforShip();
+                var opforShipId = _auRoundSystem.ResolveOpforShip(CurrentPreset ?? Preset); // cmu edit: falls back to the platoon's ship if no vote ran
                 if (!string.IsNullOrEmpty(opforShipId) && _prototypeManager.TryIndex<GameMapPrototype>(opforShipId, out var opforShipProto))
                 {
                     var opforGrids = LoadGameMap(opforShipProto, out var _, new DeserializationOptions { InitializeMaps = true });
@@ -686,6 +686,7 @@ namespace Content.Server.GameTicking
             // Grab the great big book of all the Minds, we'll need them for this.
             var allMinds = EntityQueryEnumerator<MindComponent>();
             var pvsOverride = _cfg.GetCVar(CCVars.RoundEndPVSOverrides);
+            var cmuOverrideRequests = 0; // CMU14: record effective visibility behavior at the transition.
             while (allMinds.MoveNext(out var mindId, out var mind))
             {
                 // TODO don't list redundant observer roles?
@@ -719,6 +720,7 @@ namespace Content.Server.GameTicking
                 if (TryGetEntity(mind.OriginalOwnedEntity, out var entity) && pvsOverride)
                 {
                     _pvsOverride.AddGlobalOverride(entity.Value);
+                    cmuOverrideRequests++; // CMU14
                 }
 
                 var roles = _roles.MindGetAllRoleInfo(mindId);
@@ -727,10 +729,14 @@ namespace Content.Server.GameTicking
                 {
                     // Note that contentPlayerData?.Name sticks around after the player is disconnected.
                     // This is as opposed to ply?.Name which doesn't.
-                    PlayerOOCName = contentPlayerData?.Name ?? "(IMPOSSIBLE: REGISTERED MIND WITH NO OWNER)",
+                    // cmu edit start: players can hide their username from the round-end summary
+                    PlayerOOCName = _cmuRoundEndAnonymity.IsHidden(userId)
+                        ? Loc.GetString("cmu-round-end-hidden-username")
+                        : contentPlayerData?.Name ?? "(IMPOSSIBLE: REGISTERED MIND WITH NO OWNER)",
+                    // cmu edit end
                     // Character name takes precedence over current entity name
                     PlayerICName = playerIcName,
-                    PlayerGuid = userId,
+                    PlayerGuid = _cmuRoundEndAnonymity.IsHidden(userId) ? null : userId, // cmu edit: don't leak the account of a hidden player
                     PlayerNetEntity = GetNetEntity(entity),
                     Role = antag
                         ? roles.First(role => role.Antagonist).Name
@@ -743,6 +749,10 @@ namespace Content.Server.GameTicking
                 };
                 listOfPlayerInfo.Add(playerEndRoundInfo);
             }
+
+            // CMU14: explicit config can enable the costly legacy behavior despite the default.
+            _sawmill.Info($"Round-end visibility: globalBodyOverrides={pvsOverride} " +
+                $"overrideRequests={cmuOverrideRequests} scoreboardEntries={listOfPlayerInfo.Count}");
 
             // This ordering mechanism isn't great (no ordering of minds) but functions
             var listOfPlayerInfoFinal = listOfPlayerInfo.OrderBy(pi => pi.PlayerOOCName).ToArray();
@@ -894,7 +904,7 @@ namespace Content.Server.GameTicking
                 : Preset != null
                     ? Loc.GetString(Preset.ModeTitle)
                     : string.Empty;
-            var govfor = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name ?? string.Empty;
+            var govfor = _platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoon ? Loc.GetString(govforPlatoon.Name) : string.Empty; // CMU14: Hardcode localization
 
             return new RoundStatusWebhookData(
                 RoundId,

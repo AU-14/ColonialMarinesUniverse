@@ -19,7 +19,7 @@
 - type: entity
   parent: RMCMaskSWAT
   id: RuMCM40GasMask
-  name: М40 gas mask
+  name: M40 gas mask
   description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air.
   components:
   - type: Sprite

@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Medical.CPR;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Atmos.Components;
+using Content.Shared.CMU14.GasMask;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Foldable;
 using Content.Shared.Inventory;
@@ -14,9 +15,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Medical.CPR;
 
-public sealed class CMUCPRMaskSystem : EntitySystem
+public sealed partial class CMUCPRMaskSystem : EntitySystem
 {
     [Dependency] private FoldableSystem _foldable = default!;
+    [Dependency] private SharedGasMaskSystem _gasMask = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
@@ -45,6 +47,10 @@ public sealed class CMUCPRMaskSystem : EntitySystem
         {
             return;
         }
+
+        // Someone breathing from internals is getting air through the mask already, so it can stay on.
+        if (_gasMask.IsBreathingInternals(ent))
+            return;
 
         args.Cancelled = true;
 

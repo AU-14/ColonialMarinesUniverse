@@ -1,11 +1,4 @@
 - type: trait
-  id: CMUTileMovement
-  name: trait-cmu-tile-movement-name
-  description: trait-cmu-tile-movement-desc
-  components:
-  - type: CMUTileMovement
-
-- type: trait
   id: CMUHeavyweightDrunk
   name: cmu-trait-heavyweight-name
   description: cmu-trait-heavyweight-desc
@@ -14,3 +7,17 @@
   components:
   - type: LightweightDrunk
     boozeStrengthMultiplier: 0.5
+
+- type: trait
+  id: CMUIronTeeth
+  name: cmu-trait-iron-teeth-name
+  description: cmu-trait-iron-teeth-desc
+  category: CMUQuirks
+  components:
+  - type: CMUIronTeeth
+
+# Joining a job that doesn't allow some of your traits just leaves those traits off.
+- type: trait
+  id: CMUAutoIgnoreTraits
+  name: cmu-trait-auto-ignore-name
+  description: cmu-trait-auto-ignore-desc

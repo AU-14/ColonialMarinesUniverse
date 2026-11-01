@@ -306,12 +306,12 @@ public abstract partial class SharedSynthSystem : EntitySystem
                     if (!selfRepair)
                         return;
 
-                    _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+                    _popup.PopupEntity(selfMsg, othersMsg, user, user);
                 }
             }
             else
             {
-                _popup.PopupClient(Loc.GetString("rmc-repairable-not-damaged", ("target", synth)), user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-repairable-not-damaged", ("target", synth)), user, user, PopupType.SmallCaution);
             }
         }
         else if (HasComp<RMCCableCoilComponent>(used))
@@ -328,7 +328,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
                     if (!selfRepair)
                         return;
 
-                    _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+                    _popup.PopupEntity(selfMsg, othersMsg, user, user);
                 }
             }
             // No damage: leave InteractUsing unhandled so AfterInteract can open synth surgery dispatch.
@@ -355,7 +355,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
 
             var selfMsg = Loc.GetString("rmc-synth-repair-brute-finish-self", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
             var othersMsg = Loc.GetString("rmc-synth-repair-brute-finish", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
         }
         else if (HasComp<RMCCableCoilComponent>(args.Used) && _stack.TryUse(args.Used.Value, 1))
         {
@@ -364,7 +364,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
 
             var selfMsg = Loc.GetString("rmc-synth-repair-burn-finish-self", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
             var othersMsg = Loc.GetString("rmc-synth-repair-burn-finish", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
         }
     }
 
@@ -390,7 +390,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
         if (args.Handled)
         {
             var msg = Loc.GetString(ent.Comp.Popup, ("user", args.User), ("used", args.Used), ("target", args.Target));
-            _popup.PopupClient(msg, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, args.User, args.User, PopupType.SmallCaution);
         }
     }
 
@@ -424,7 +424,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
         synthComp.NextUnableUsePopup = time + UnableUsePopupCooldown;
 
         var msg = Loc.GetString("rmc-species-synth-programming-prevents-use", ("user", synth), ("tool", tool));
-        _popup.PopupClient(msg, synth, synth, PopupType.SmallCaution);
+        _popup.PopupEntity(msg, synth, synth, PopupType.SmallCaution);
     }
 }
 

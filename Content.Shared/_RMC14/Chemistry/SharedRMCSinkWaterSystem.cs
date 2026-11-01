@@ -35,7 +35,7 @@ public sealed partial class SharedRMCSinkWaterSystem : EntitySystem
         if (availableSpace <= FixedPoint2.Zero)
         {
             var fullMessage = Loc.GetString("rmc-sink-container-full", ("container", args.Used));
-            _popup.PopupClient(fullMessage, sink, args.User);
+            _popup.PopupEntity(fullMessage, sink, args.User);
             return;
         }
 
@@ -48,6 +48,6 @@ public sealed partial class SharedRMCSinkWaterSystem : EntitySystem
         _solution.TryAddSolution(targetSolution.Value, waterSolution);
 
         var message = Loc.GetString("rmc-sink-fill-container", ("user", args.User), ("container", args.Used), ("sink", sink));
-        _popup.PopupPredicted(message, args.User, args.User);
+        _popup.PopupBroadcast(message, args.User, args.User);
     }
 }

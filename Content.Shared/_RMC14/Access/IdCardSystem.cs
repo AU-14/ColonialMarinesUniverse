@@ -64,7 +64,7 @@ public sealed partial class IdCardSystem : EntitySystem
             return;
         _idCard.TryChangeOriginalOwner(args.Used, args.Target, idCard);
         var popupMessage = $"{Name(args.User)} bound an ID to {Name(args.Target)}.";
-        _popup.PopupPredicted(popupMessage, args.Target, args.User, PopupType.Small);
+        _popup.PopupBroadcast(popupMessage, args.Target, args.User, PopupType.Small);
         _adminLogger.Add(LogType.RMCIdModify,
             LogImpact.High,
             $"{ToPrettyString(args.User):player} has bound the ID {ToPrettyString(args.Used):entity} to {ToPrettyString(args.Target):player}");
@@ -88,7 +88,7 @@ public sealed partial class IdCardSystem : EntitySystem
         _idCard.TryChangeOriginalOwner(ent, args.User, ent.Comp);
         args.Handled = true;
         var popupMessage = $"Bound ID to yourself.";
-        _popup.PopupClient(popupMessage, args.User, PopupType.Small);
+        _popup.PopupSelf(popupMessage, args.User, PopupType.Small);
         _adminLogger.Add(LogType.RMCIdModify,
             LogImpact.Medium,
             $"{ToPrettyString(args.User):player} has bound the ID {ToPrettyString(ent):entity} to themselves.");

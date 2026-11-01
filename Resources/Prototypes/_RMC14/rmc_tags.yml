@@ -218,3 +218,6 @@
   id: RMCDataDisk
 - type: Tag
   id: RMCStraightRazor
+
+- type: Tag
+  id: VialBox

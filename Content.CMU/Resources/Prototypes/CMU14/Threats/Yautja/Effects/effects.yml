@@ -1,5 +1,9 @@
 - type: entity
-  parent: RMCEffectXenoTelegraphGreen
+  parent: XenoAcidStrong
+  id: CMUYautjaCleanserAcid
+  categories: [ HideSpawnMenu ]
+
+- type: entity
   id: CMUYautjaLeapWarning
   categories: [ HideSpawnMenu ]
   components:
@@ -7,8 +11,3 @@
     lifetime: 1.2
   - type: Sprite
     color: "#0B5226"
-
-- type: entity
-  parent: XenoAcidStrong
-  id: CMUYautjaCleanserAcid
-  categories: [ HideSpawnMenu ]

@@ -149,7 +149,7 @@ public sealed partial class VehicleDeploySystem : EntitySystem
         if (!TryComp(vehicle, out VehicleComponent? vehicleComp) ||
             vehicleComp.Operator != ent.Owner)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-deploy-not-driver"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-deploy-not-driver"), ent.Owner, ent.Owner, PopupType.SmallCaution);
             return;
         }
 
@@ -159,7 +159,7 @@ public sealed partial class VehicleDeploySystem : EntitySystem
         var deployingTo = !deployable.Deployed;
         if (deployingTo && !TryGetVehicleTurret(vehicle, out _))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-deploy-requires-turret"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-deploy-requires-turret"), ent.Owner, ent.Owner, PopupType.SmallCaution);
             return;
         }
 
@@ -187,7 +187,7 @@ public sealed partial class VehicleDeploySystem : EntitySystem
 
         var popupKey = deployingTo ? "rmc-vehicle-deploy-start" : "rmc-vehicle-undeploy-start";
         var startMsg = Loc.GetString(popupKey);
-        _popup.PopupClient(startMsg, ent.Owner, ent.Owner, PopupType.Small);
+        _popup.PopupEntity(startMsg, ent.Owner, ent.Owner, PopupType.Small);
         SendDeployChat(ent.Owner, vehicle, startMsg);
     }
 
@@ -391,7 +391,7 @@ public sealed partial class VehicleDeploySystem : EntitySystem
                     if (deployer != null)
                     {
                         var finishMsg = Loc.GetString(popupKey);
-                        _popup.PopupClient(finishMsg, deployer.Value, deployer.Value, PopupType.Small);
+                        _popup.PopupEntity(finishMsg, deployer.Value, deployer.Value, PopupType.Small);
                         SendDeployChat(deployer.Value, vehicle, finishMsg);
                     }
                     else

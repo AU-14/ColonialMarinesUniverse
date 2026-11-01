@@ -1,17 +1,21 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 264.0.2-fix-physics
+  engineVersion: v290.0.0
   forkId: ""
   forkVersion: ""
-  time: 04/26/2026 05:52:39
-  entityCount: 73
+  time: 10/16/2026 00:08:40
+  entityCount: 81
 maps:
 - 1
 grids:
 - 2
 orphans: []
-nullspace: []
+nullspace:
+- 78
+- 79
+- 80
+- 81
 tilemap:
   1: Space
   0: FloorMetalDiamond
@@ -54,13 +58,15 @@ entities:
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
+    - type: ChunkContainer
+      chunkEntities: []
   - uid: 2
     components:
     - type: MetaData
       name: grid
     - type: Transform
-      pos: -2.3698623,-0.8207964
       parent: 1
+      pos: -2.3698623,-0.8207964
     - type: MapGrid
       chunks:
         0,0:
@@ -81,30 +87,20 @@ entities:
           version: 7
     - type: Broadphase
     - type: Physics
-      bodyStatus: InAir
       fixedRotation: False
       bodyType: Dynamic
+      bodyStatus: InAir
     - type: Fixtures
       fixtures: {}
     - type: MapAtmosphere
       space: False
       mixture:
-        volume: 2500
-        immutable: True
         temperature: 293.15
+        volume: 2500
         moles:
-        - 21.8124
-        - 81.1594
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
+          Oxygen: 21.8124
+          Nitrogen: 81.1594
+        immutable: True
     - type: OccluderTree
     - type: SpreaderGrid
     - type: Shuttle
@@ -112,188 +108,308 @@ entities:
     - type: ImplicitRoof
     - type: GridPathfinding
     - type: Gravity
+      inherent: True
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
-      inherent: True
       enabled: True
-    - type: DecalGrid
-      chunkCollection:
-        version: 2
-        nodes:
-        - node:
-            color: '#FFFFFFFF'
-            id: Doc1
-          decals:
-            8: -1.2207592,0.51991177
-        - node:
-            color: '#FFFFFFFF'
-            id: Doc2
-          decals:
-            9: -1.2207592,-0.47566366
-        - node:
-            color: '#FFFFFFFF'
-            id: TriageBottom
-          decals:
-            3: -1,-1
-            4: 0,-1
-        - node:
-            color: '#FFFFFFFF'
-            id: TriageBottomRight
-          decals:
-            6: 0,1
-        - node:
-            angle: 1.5707963267948966 rad
-            color: '#FFFFFFFF'
-            id: TriageDir
-          decals:
-            7: 0,0
-        - node:
-            color: '#FFFFFFFF'
-            id: TriageTop
-          decals:
-            1: -1,1
-            2: 0,1
-        - node:
-            color: '#FFFFFFFF'
-            id: TriageTopRight
-          decals:
-            5: 0,-1
     - type: GridAtmosphere
       version: 2
       data:
         chunkSize: 4
     - type: GasTileOverlay
-- proto: CMChairComfy
+    - type: ChunkContainer
+      chunkEntities:
+      - 78
+      - 79
+      - 80
+      - 81
+    - type: TileHistory
+      chunkHistory: {}
+- proto: AU14VehicleRadioSet
+  entities:
+  - uid: 32
+    components:
+    - type: Transform
+      parent: 2
+      pos: 0.5,3.5
+- proto: ChunkEntity
+  entities:
+  - uid: 78
+    components:
+    - type: ChunkEntity
+      root: 2
+      chunk: -1,0
+    - type: DecalChunk
+      maxDecalId: 8
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: Doc1
+            color: '#FFFFFFFF'
+          decals:
+            8: -1.2207592,0.51991177
+        - node:
+            id: TriageTop
+            color: '#FFFFFFFF'
+          decals:
+            1: -1,1
+  - uid: 79
+    components:
+    - type: ChunkEntity
+      root: 2
+      chunk: -1,-1
+    - type: DecalChunk
+      maxDecalId: 9
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: Doc2
+            color: '#FFFFFFFF'
+          decals:
+            9: -1.2207592,-0.47566366
+        - node:
+            id: TriageBottom
+            color: '#FFFFFFFF'
+          decals:
+            3: -1,-1
+  - uid: 80
+    components:
+    - type: ChunkEntity
+      root: 2
+      chunk: 0,-1
+    - type: DecalChunk
+      maxDecalId: 5
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: TriageBottom
+            color: '#FFFFFFFF'
+          decals:
+            4: 0,-1
+        - node:
+            id: TriageTopRight
+            color: '#FFFFFFFF'
+          decals:
+            5: 0,-1
+  - uid: 81
+    components:
+    - type: ChunkEntity
+      root: 2
+    - type: DecalChunk
+      maxDecalId: 7
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: TriageBottomRight
+            color: '#FFFFFFFF'
+          decals:
+            6: 0,1
+        - node:
+            id: TriageDir
+            color: '#FFFFFFFF'
+            angle: 1.5707963267948966 rad
+          decals:
+            7: 0,0
+        - node:
+            id: TriageTop
+            color: '#FFFFFFFF'
+          decals:
+            2: 0,1
+- proto: CMChairComfyTeal
+  entities:
+  - uid: 59
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: -0.5,0.5
+- proto: CMIV
+  entities:
+  - uid: 40
+    components:
+    - type: Transform
+      parent: 2
+      pos: -1.5,1.5
+- proto: CMOperatingTable
   entities:
   - uid: 41
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
+      parent: 2
       pos: -1.5,0.5
-      parent: 2
-- proto: CMDefibrillator
+- proto: CMPortableSurgicalBed
   entities:
-  - uid: 48
+  - uid: 54
     components:
     - type: Transform
-      pos: -1.5247638,-0.3628317
       parent: 2
-- proto: CMIV
+      pos: 0.47922802,-0.24220121
+  - uid: 60
+    components:
+    - type: Transform
+      parent: 2
+      pos: 0.47922802,1.7473822
+- proto: CMTableAlmayer
   entities:
-  - uid: 43
-    components:
-    - type: Transform
-      pos: -1.7312963,1.1379058
-      parent: 2
-- proto: CMRollerBed
-  entities:
-  - uid: 42
-    components:
-    - type: Transform
-      pos: -1.5100107,1.4771388
-      parent: 2
-- proto: RMCSeatVehiclePassenger
-  entities:
-  - uid: 44
-    components:
-    - type: Transform
-      pos: 0.2897787,2.4948378
-      parent: 2
-  - uid: 45
-    components:
-    - type: Transform
-      pos: 0.75447834,2.487463
-      parent: 2
-  - uid: 46
-    components:
-    - type: Transform
-      pos: 0.7336,-1.5028304
-      parent: 2
   - uid: 47
     components:
     - type: Transform
-      pos: 0.18038583,-1.5028306
       parent: 2
-  - uid: 50
+      pos: -1.5,-0.5
+- proto: CMUDefibrillatorCompact
+  entities:
+  - uid: 46
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 2.3090289,-0.5
       parent: 2
-  - uid: 51
+      pos: -1.565501,-0.32862616
+- proto: RMCRecharger
+  entities:
+  - uid: 58
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 2.8062158,-0.5
       parent: 2
-  - uid: 52
-    components:
-    - type: Transform
-      pos: 2.3090289,1.5
-      parent: 2
-  - uid: 53
-    components:
-    - type: Transform
-      pos: 2.811138,1.5
-      parent: 2
+      pos: -1.5,-0.5
 - proto: RMCSeatArmoredDriver
   entities:
   - uid: 26
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 3.5,-0.5
-      parent: 2
     missingComponents:
     - Corrodible
     - Damageable
-    - Destructible
-- proto: RMCSeatArmoredPortGunOperator
-  entities:
-  - uid: 31
-    components:
-    - type: Transform
-      pos: 0.5,-1.5
-      parent: 2
-    missingComponents:
-    - Corrodible
-    - Damageable
+    - Injurable
     - Destructible
 - proto: RMCSeatArmoredWeaponsOperator
   entities:
   - uid: 29
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 3.5,1.5
-      parent: 2
     missingComponents:
     - Corrodible
     - Damageable
+    - Injurable
     - Destructible
-- proto: RMCTablePrison
+- proto: RMCSeatVehiclePassenger
   entities:
-  - uid: 32
+  - uid: 42
     components:
     - type: Transform
-      pos: -1.5,-0.5
       parent: 2
+      rot: 3.141592653589793 rad
+      pos: 0.27487826,-1.4080278
+    missingComponents:
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
+  - uid: 43
+    components:
+    - type: Transform
+      parent: 2
+      rot: 3.141592653589793 rad
+      pos: 0.6915448,-1.4184443
+    missingComponents:
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
+  - uid: 44
+    components:
+    - type: Transform
+      parent: 2
+      pos: 0.2897787,2.4948378
+    missingComponents:
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
+  - uid: 45
+    components:
+    - type: Transform
+      parent: 2
+      pos: 0.75447834,2.487463
+    missingComponents:
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
+  - uid: 50
+    components:
+    - type: Transform
+      parent: 2
+      rot: 3.141592653589793 rad
+      pos: 2.3090289,-0.5
+    missingComponents:
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
+  - uid: 51
+    components:
+    - type: Transform
+      parent: 2
+      rot: 3.141592653589793 rad
+      pos: 2.8062158,-0.5
+    missingComponents:
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
+  - uid: 52
+    components:
+    - type: Transform
+      parent: 2
+      pos: 2.3090289,1.5
+    missingComponents:
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
+  - uid: 53
+    components:
+    - type: Transform
+      parent: 2
+      pos: 2.811138,1.5
+    missingComponents:
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
+- proto: RMCSurgicalTray
+  entities:
+  - uid: 31
+    components:
+    - type: Transform
+      parent: 2
+      pos: -1.5550842,-0.6515428
 - proto: VehicleAmmoLoader
   entities:
   - uid: 28
     components:
     - type: Transform
-      pos: 3.5,0.5
       parent: 2
+      pos: 3.5,0.5
     missingComponents:
+    - Tag
     - InteractionTransparency
 - proto: VehicleAPCApcRight3
   entities:
   - uid: 8
     components:
     - type: Transform
-      pos: 1.5,-1.5
       parent: 2
+      pos: 1.5,-1.5
     - type: PointLight
       radius: 100
     - type: VehicleExit
@@ -307,57 +423,57 @@ entities:
   - uid: 16
     components:
     - type: Transform
-      pos: -2.5,-0.5
       parent: 2
+      pos: -2.5,-0.5
 - proto: VehicleAPCCornerInverseL
   entities:
   - uid: 35
     components:
     - type: Transform
-      pos: -0.5,2.5
       parent: 2
+      pos: -0.5,2.5
 - proto: VehicleAPCCornerInverseR
   entities:
   - uid: 33
     components:
     - type: Transform
-      pos: 2.5,2.5
       parent: 2
+      pos: 2.5,2.5
 - proto: VehicleAPCCornerSmallL
   entities:
   - uid: 11
     components:
     - type: Transform
-      pos: -0.5,3.5
       parent: 2
+      pos: -0.5,3.5
 - proto: VehicleAPCCornerSmallR
   entities:
   - uid: 10
     components:
     - type: Transform
-      pos: 2.5,3.5
       parent: 2
+      pos: 2.5,3.5
 - proto: VehicleAPCExterior1
   entities:
   - uid: 13
     components:
     - type: Transform
-      pos: 4.5,1.5
       parent: 2
+      pos: 4.5,1.5
 - proto: VehicleAPCExterior3
   entities:
   - uid: 20
     components:
     - type: Transform
-      pos: 4.5,3.5
       parent: 2
+      pos: 4.5,3.5
 - proto: VehicleAPCExteriorDoor
   entities:
   - uid: 24
     components:
     - type: Transform
-      pos: 1.5,3.5
       parent: 2
+      pos: 1.5,3.5
     - type: VehicleExit
     missingComponents:
     - InteractionTransparency
@@ -366,36 +482,36 @@ entities:
   - uid: 17
     components:
     - type: Transform
-      pos: 4.5,-1.5
       parent: 2
+      pos: 4.5,-1.5
 - proto: VehicleAPCFront2
   entities:
   - uid: 18
     components:
     - type: Transform
-      pos: 4.5,-0.5
       parent: 2
+      pos: 4.5,-0.5
 - proto: VehicleAPCFront3
   entities:
   - uid: 39
     components:
     - type: Transform
-      pos: 4.5,0.5
       parent: 2
+      pos: 4.5,0.5
 - proto: VehicleAPCFront5
   entities:
   - uid: 19
     components:
     - type: Transform
-      pos: 4.5,2.5
       parent: 2
+      pos: 4.5,2.5
 - proto: VehicleAPCFrontRoof1
   entities:
   - uid: 9
     components:
     - type: Transform
-      pos: 3.4963846,3.3652205
       parent: 2
+      pos: 3.4963846,3.3652205
     - type: Fixtures
       fixtures: {}
 - proto: VehicleAPCFrontWheelL
@@ -403,82 +519,82 @@ entities:
   - uid: 4
     components:
     - type: Transform
-      pos: 2.5,-1.5
       parent: 2
+      pos: 2.5,-1.5
 - proto: VehicleAPCFrontWheelR
   entities:
   - uid: 6
     components:
     - type: Transform
-      pos: 3.5,-1.5
       parent: 2
+      pos: 3.5,-1.5
     - type: PointLight
-      energy: 2
       radius: 20
+      energy: 2
 - proto: VehicleAPCRear1
   entities:
   - uid: 7
     components:
     - type: Transform
-      pos: -2.5,-1.5
       parent: 2
+      pos: -2.5,-1.5
 - proto: VehicleAPCRear3
   entities:
   - uid: 15
     components:
     - type: Transform
-      pos: -2.5,2.5
       parent: 2
+      pos: -2.5,2.5
   - uid: 37
     components:
     - type: Transform
-      pos: -2.5,0.5
       parent: 2
+      pos: -2.5,0.5
   - uid: 38
     components:
     - type: Transform
-      pos: -2.5,1.5
       parent: 2
+      pos: -2.5,1.5
 - proto: VehicleAPCRear6
   entities:
   - uid: 14
     components:
     - type: Transform
-      pos: -2.5,3.5
       parent: 2
+      pos: -2.5,3.5
 - proto: VehicleAPCRearWheelL
   entities:
   - uid: 3
     components:
     - type: Transform
-      pos: -1.5,-1.5
       parent: 2
+      pos: -1.5,-1.5
 - proto: VehicleAPCRearWheelR
   entities:
   - uid: 5
     components:
     - type: Transform
-      pos: -0.5,-1.5
       parent: 2
+      pos: -0.5,-1.5
 - proto: VehicleAPCWall
   entities:
   - uid: 12
     components:
     - type: Transform
-      pos: -1.5,2.5
       parent: 2
+      pos: -1.5,2.5
   - uid: 36
     components:
     - type: Transform
-      pos: 3.5,2.5
       parent: 2
+      pos: 3.5,2.5
 - proto: VehicleAPCWallDoorFront
   entities:
   - uid: 22
     components:
     - type: Transform
-      pos: 0.5,-1.5
       parent: 2
+      pos: 0.5,-1.5
     - type: Fixtures
       fixtures: {}
     missingComponents:
@@ -488,107 +604,107 @@ entities:
   - uid: 63
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: 0.5,-2.5
-      parent: 2
   - uid: 64
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: 1.5,-2.5
-      parent: 2
   - uid: 65
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: -1.5,3.5
-      parent: 2
   - uid: 66
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: -0.5,3.5
-      parent: 2
   - uid: 67
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: 0.5,3.5
-      parent: 2
   - uid: 68
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: 1.5,3.5
-      parent: 2
   - uid: 69
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: 2.5,3.5
-      parent: 2
   - uid: 70
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: 3.5,3.5
-      parent: 2
   - uid: 71
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: -1.5,4.5
-      parent: 2
   - uid: 72
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: -0.5,4.5
-      parent: 2
   - uid: 73
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 0.5,4.5
-      parent: 2
   - uid: 74
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 1.5,4.5
-      parent: 2
   - uid: 75
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 1.5,4.5
-      parent: 2
   - uid: 76
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 2.5,4.5
-      parent: 2
   - uid: 77
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 3.5,4.5
-      parent: 2
 - proto: VehicleAPCWallViewport
   entities:
   - uid: 34
     components:
     - type: Transform
-      pos: 0.5,3.5
       parent: 2
+      pos: 0.5,3.5
 - proto: VehicleAPCWheelFrontTop2
   entities:
   - uid: 25
     components:
     - type: Transform
-      pos: 2.6250732,3.3637753
       parent: 2
+      pos: 2.6250732,3.3637753
     - type: Fixtures
       fixtures: {}
 - proto: VehicleAPCWindshieldBottom
@@ -596,8 +712,8 @@ entities:
   - uid: 23
     components:
     - type: Transform
-      pos: -1.6129854,3.3699212
       parent: 2
+      pos: -1.6129854,3.3699212
     - type: Fixtures
       fixtures: {}
 - proto: VehicleAPCWindshieldTop
@@ -605,8 +721,8 @@ entities:
   - uid: 21
     components:
     - type: Transform
-      pos: -0.61965847,3.3699212
       parent: 2
+      pos: -0.61965847,3.3699212
     - type: Fixtures
       fixtures: {}
 - proto: VehicleInteriorBloodVendor
@@ -614,87 +730,86 @@ entities:
   - uid: 27
     components:
     - type: Transform
-      pos: -1.0969443,2.3030975
       parent: 2
+      pos: -1.0969443,2.3030975
+    missingComponents:
+    - Tag
 - proto: VehicleInteriorCamera
   entities:
-  - uid: 60
+  - uid: 61
     components:
     - type: Transform
-      pos: -0.046617746,2.6447885
       parent: 2
+      rot: 1.5707963267948966 rad
+      pos: -1.904043,1.6504997
     - type: Fixtures
       fixtures: {}
-- proto: VehicleInteriorExtinguisher
+- proto: VehicleInteriorExtinguisherFull
   entities:
-  - uid: 56
+  - uid: 49
     components:
     - type: Transform
-      pos: 2.229715,2.3768435
       parent: 2
-    - type: Physics
-      canCollide: False
-    - type: Fixtures
-      fixtures: {}
+      pos: 2.2583683,2.6109972
+    - type: Openable
+      opened: False
 - proto: VehicleInteriorLocker
   entities:
   - uid: 55
     components:
     - type: Transform
-      pos: 3.4939513,2.3498034
       parent: 2
+      pos: 3.4939513,2.3498034
 - proto: VehicleInteriorMedVendor
   entities:
   - uid: 30
     components:
     - type: Transform
-      pos: -0.41095924,2.3030975
       parent: 2
+      pos: -0.41095924,2.3030975
+    missingComponents:
+    - Tag
 - proto: VehicleInteriorWallPhone
   entities:
   - uid: 57
     components:
     - type: Transform
-      pos: 2.628029,2.4284663
       parent: 2
+      pos: 2.628029,2.4284663
     - type: Fixtures
       fixtures: {}
 - proto: VehicleViewport
   entities:
-  - uid: 40
+  - uid: 48
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: 1.5,-1.5
-      parent: 2
     missingComponents:
+    - Tag
     - InteractionTransparency
 - proto: VehicleViewportUnanchored
   entities:
-  - uid: 59
+  - uid: 56
     components:
     - type: Transform
-      pos: -1.7136357,2.2514749
       parent: 2
+      pos: -1.6946723,2.218894
     - type: Fixtures
       fixtures: {}
     missingComponents:
+    - Tag
     - InteractionTransparency
   - uid: 62
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: 1.6941621,2.964356
-      parent: 2
     - type: Fixtures
       fixtures: {}
     missingComponents:
+    - Tag
     - InteractionTransparency
-- proto: AU14VehicleRadioSet
-  entities:
-  - uid: 500
-    components:
-    - type: Transform
-      pos: 0.5,2.5
-      parent: 2
 ...

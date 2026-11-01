@@ -70,7 +70,7 @@ public sealed partial class XenoRestSystem : EntitySystem
         if (HasComp<XenoRestingComponent>(user))
         {
             args.Cancelled = true;
-            _popup.PopupClient(Loc.GetString(ent.Comp.Popup), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString(ent.Comp.Popup), user, user, PopupType.SmallCaution);
         }
     }
 
@@ -118,79 +118,79 @@ public sealed partial class XenoRestSystem : EntitySystem
 
     private void OnXenoSecreteStructureAttempt(Entity<XenoRestingComponent> xeno, ref XenoSecreteStructureAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-secrete"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-secrete"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingHeadbuttAttempt(Entity<XenoRestingComponent> xeno, ref XenoHeadbuttAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-headbutt"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-headbutt"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingFortifyAttempt(Entity<XenoRestingComponent> xeno, ref XenoFortifyAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-fortify"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-fortify"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingTailSweepAttempt(Entity<XenoRestingComponent> xeno, ref XenoTailSweepAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-tail-sweep"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-tail-sweep"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingToggleCrestAttempt(Entity<XenoRestingComponent> xeno, ref XenoToggleCrestAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-toggle-crest"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-toggle-crest"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingLeapAttempt(Entity<XenoRestingComponent> xeno, ref XenoLeapAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-leap"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-leap"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingLungeAttempt(Entity<XenoRestingComponent> xeno, ref XenoLungeAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-lunge"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-lunge"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingPunchAttempt(Entity<XenoRestingComponent> xeno, ref XenoPunchAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-punch"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-punch"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingFlingAttempt(Entity<XenoRestingComponent> xeno, ref XenoFlingAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-fling"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-fling"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingChargettempt(Entity<XenoRestingComponent> xeno, ref XenoChargeAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-charge"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-charge"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingStompAttempt(Entity<XenoRestingComponent> xeno, ref XenoStompAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-stomp"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-stomp"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingGutAttempt(Entity<XenoRestingComponent> xeno, ref XenoGutAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-gut"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-gut"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingScreechAttempt(Entity<XenoRestingComponent> xeno, ref XenoScreechAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-screech"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-screech"), xeno, xeno);
         args.Cancelled = true;
     }
 

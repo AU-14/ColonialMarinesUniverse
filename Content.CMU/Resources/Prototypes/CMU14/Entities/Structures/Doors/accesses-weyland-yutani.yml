@@ -1,0 +1,1474 @@
+# Weyland-Yutani access variants for placeable human-operated door appearances.
+# Inherit the original prototype to retain its sprite and door behavior.
+
+# Station airlocks
+
+- type: entity
+  parent: Airlock
+  id: CMUWYAirlock
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockGlass
+  id: CMUWYAirlockGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockFreezer
+  id: CMUWYAirlockFreezer
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockEngineering
+  id: CMUWYAirlockEngineering
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockAtmospherics
+  id: CMUWYAirlockAtmospherics
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockCargo
+  id: CMUWYAirlockCargo
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockSalvage
+  id: CMUWYAirlockSalvage
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockHydroponics
+  id: CMUWYAirlockHydroponics
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockMedical
+  id: CMUWYAirlockMedical
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockVirology
+  id: CMUWYAirlockVirology
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockChemistry
+  id: CMUWYAirlockChemistry
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockScience
+  id: CMUWYAirlockScience
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockCommand
+  id: CMUWYAirlockCommand
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockSecurity
+  id: CMUWYAirlockSecurity
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockMaint
+  id: CMUWYAirlockMaint
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockSyndicate
+  id: CMUWYAirlockSyndicate
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockMining
+  id: CMUWYAirlockMining
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockCentralCommand
+  id: CMUWYAirlockCentralCommand
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockHatch
+  id: CMUWYAirlockHatch
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockXenoborg
+  id: CMUWYAirlockXenoborg
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockHatchMaintenance
+  id: CMUWYAirlockHatchMaintenance
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockHatchSyndicate
+  id: CMUWYAirlockHatchSyndicate
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockEngineeringGlass
+  id: CMUWYAirlockEngineeringGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockMaintGlass
+  id: CMUWYAirlockMaintGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockAtmosphericsGlass
+  id: CMUWYAirlockAtmosphericsGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockCargoGlass
+  id: CMUWYAirlockCargoGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockSalvageGlass
+  id: CMUWYAirlockSalvageGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockHydroponicsGlass
+  id: CMUWYAirlockHydroponicsGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockMedicalGlass
+  id: CMUWYAirlockMedicalGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockChemistryGlass
+  id: CMUWYAirlockChemistryGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockVirologyGlass
+  id: CMUWYAirlockVirologyGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockScienceGlass
+  id: CMUWYAirlockScienceGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockCommandGlass
+  id: CMUWYAirlockCommandGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockSecurityGlass
+  id: CMUWYAirlockSecurityGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockSyndicateGlass
+  id: CMUWYAirlockSyndicateGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockMiningGlass
+  id: CMUWYAirlockMiningGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockCentralCommandGlass
+  id: CMUWYAirlockCentralCommandGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockStandardGlass
+  id: CMUWYAirlockStandardGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockXeno
+  id: CMUWYAirlockXeno
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockGlassXeno
+  id: CMUWYAirlockGlassXeno
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockExternal
+  id: CMUWYAirlockExternal
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockExternalGlass
+  id: CMUWYAirlockExternalGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: HighSecDoor
+  id: CMUWYHighSecDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockShuttle
+  id: CMUWYAirlockShuttle
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockGlassShuttle
+  id: CMUWYAirlockGlassShuttle
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockGlassShuttleSyndicate
+  id: CMUWYAirlockGlassShuttleSyndicate
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockShuttleSyndicate
+  id: CMUWYAirlockShuttleSyndicate
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: AirlockShuttleXenoborg
+  id: CMUWYAirlockShuttleXenoborg
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+# RMC airlocks
+
+- type: entity
+  parent: CMAirlock
+  id: CMUWYCMAirlock
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockShuttle
+  id: CMUWYCMAirlockShuttle
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockCommand
+  id: CMUWYCMAirlockCommand
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockEngineer
+  id: CMUWYCMAirlockEngineer
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockMedical
+  id: CMUWYCMAirlockMedical
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockSecurity
+  id: CMUWYCMAirlockSecurity
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockMaint
+  id: CMUWYCMAirlockMaint
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockSecure
+  id: CMUWYCMAirlockSecure
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockCell
+  id: CMUWYCMAirlockCell
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockPrison
+  id: CMUWYCMAirlockPrison
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUWYRMCAirlockHybrisa
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUWYRMCAirlockHybrisaPersonal
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockRusted
+  id: CMUWYRMCAirlockRusted
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockRustedWhite
+  id: CMUWYRMCAirlockRustedWhite
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMUWYCMAirlockGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlassEngineer
+  id: CMUWYCMAirlockGlassEngineer
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlassMedical
+  id: CMUWYCMAirlockGlassMedical
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlassSecurity
+  id: CMUWYCMAirlockGlassSecurity
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUWYCMAirlockGlassHybrisa
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUWYCMAirlockGlassHybrisaPersonal
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockPrep
+  id: CMUWYCMAirlockPrep
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockPrepAlpha
+  id: CMUWYCMAirlockPrepAlpha
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockPrepBravo
+  id: CMUWYCMAirlockPrepBravo
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockPrepCharlie
+  id: CMUWYCMAirlockPrepCharlie
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockPrepDelta
+  id: CMUWYCMAirlockPrepDelta
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockStrata
+  id: CMUWYRMCAirlockStrata
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMUAirlockUPPMaints
+  id: CMUWYCMUAirlockUPPMaints
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMUAirlockUPPGrey
+  id: CMUWYCMUAirlockUPPGrey
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMUAirlockUPPGreen
+  id: CMUWYCMUAirlockUPPGreen
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMUAirlockGlassGreenUPP
+  id: CMUWYCMUAirlockGlassGreenUPP
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMUAirlockGlassGreyUPP
+  id: CMUWYCMUAirlockGlassGreyUPP
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockEvacuation
+  id: CMUWYRMCAirlockEvacuation
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockEvacuationBlack
+  id: CMUWYRMCAirlockEvacuationBlack
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockEvacuationWhite
+  id: CMUWYRMCAirlockEvacuationWhite
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockLifeboat
+  id: CMUWYRMCAirlockLifeboat
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+# RMC double doors
+
+- type: entity
+  parent: CMDoubleDoorAlmayerGlass
+  id: CMUWYCMDoubleDoorAlmayerGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorAlmayerSolid
+  id: CMUWYCMDoubleDoorAlmayerSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandGlass
+  id: CMUWYCMDoubleDoorCommandGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandSolid
+  id: CMUWYCMDoubleDoorCommandSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorEngineerGlass
+  id: CMUWYCMDoubleDoorEngineerGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorEngineerSolid
+  id: CMUWYCMDoubleDoorEngineerSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorGenericGlass
+  id: CMUWYCMDoubleDoorGenericGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUWYRMCDoubleDoorGlassHybrisa
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUWYRMCDoubleDoorSolidHybrisa
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorHybrisaMecical
+  id: CMUWYRMCDoubleDoorHybrisaMecical
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorHybrisaGlassMecical
+  id: CMUWYRMCDoubleDoorHybrisaGlassMecical
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorGenericSolid
+  id: CMUWYCMDoubleDoorGenericSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalGlass
+  id: CMUWYCMDoubleDoorMedicalGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalSolid
+  id: CMUWYCMDoubleDoorMedicalSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorPersonalGlass
+  id: CMUWYCMDoubleDoorPersonalGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorPersonalSolid
+  id: CMUWYCMDoubleDoorPersonalSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorPreparations
+  id: CMUWYCMDoubleDoorPreparations
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorPreparationsAlpha
+  id: CMUWYCMDoubleDoorPreparationsAlpha
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorPreparationsBravo
+  id: CMUWYCMDoubleDoorPreparationsBravo
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorPreparationsCharlie
+  id: CMUWYCMDoubleDoorPreparationsCharlie
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorPreparationsDelta
+  id: CMUWYCMDoubleDoorPreparationsDelta
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorSecurityGlass
+  id: CMUWYCMDoubleDoorSecurityGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorSecuritySolid
+  id: CMUWYCMDoubleDoorSecuritySolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorAlmayerGlass
+  id: CMUWYRMCDoubleDoorAlmayerGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorAlmayerSolid
+  id: CMUWYRMCDoubleDoorAlmayerSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorCommandGlass
+  id: CMUWYRMCDoubleDoorCommandGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorCommandSolid
+  id: CMUWYRMCDoubleDoorCommandSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorEngineerGlass
+  id: CMUWYRMCDoubleDoorEngineerGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorEngineerSolid
+  id: CMUWYRMCDoubleDoorEngineerSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorGenericGlass
+  id: CMUWYRMCDoubleDoorGenericGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorGenericSolid
+  id: CMUWYRMCDoubleDoorGenericSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorMedicalGlass
+  id: CMUWYRMCDoubleDoorMedicalGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorMedicalSolid
+  id: CMUWYRMCDoubleDoorMedicalSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorPersonalGlass
+  id: CMUWYRMCDoubleDoorPersonalGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorPersonalSolid
+  id: CMUWYRMCDoubleDoorPersonalSolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorPreparations
+  id: CMUWYRMCDoubleDoorPreparations
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorPreparationsAlpha
+  id: CMUWYRMCDoubleDoorPreparationsAlpha
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorPreparationsBravo
+  id: CMUWYRMCDoubleDoorPreparationsBravo
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorPreparationsCharlie
+  id: CMUWYRMCDoubleDoorPreparationsCharlie
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorPreparationsDelta
+  id: CMUWYRMCDoubleDoorPreparationsDelta
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorSecurityGlass
+  id: CMUWYRMCDoubleDoorSecurityGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorSecuritySolid
+  id: CMUWYRMCDoubleDoorSecuritySolid
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+# Windoors
+
+- type: entity
+  parent: RMCWindoorSoro
+  id: CMUWYRMCWindoorSoro
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: Windoor
+  id: CMUWYWindoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: WindoorPlasma
+  id: CMUWYWindoorPlasma
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: WindoorUranium
+  id: CMUWYWindoorUranium
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+# CMU faction doors
+
+- type: entity
+  parent: CMAirlockGovfor
+  id: CMUWYCMAirlockGovfor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGovforGlass
+  id: CMUWYCMAirlockGovforGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorGovfor
+  id: CMUWYCMDoubleDoorGovfor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorGovforGlass
+  id: CMUWYCMDoubleDoorGovforGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockCommandGovfor
+  id: CMUWYCMAirlockCommandGovfor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockCommandGovforGlass
+  id: CMUWYCMAirlockCommandGovforGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandGovfor
+  id: CMUWYCMDoubleDoorCommandGovfor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandGovforGlass
+  id: CMUWYCMDoubleDoorCommandGovforGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockSecurityGovfor
+  id: CMUWYCMAirlockSecurityGovfor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockSecurityGovforGlass
+  id: CMUWYCMAirlockSecurityGovforGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorSecurityGovfor
+  id: CMUWYCMDoubleDoorSecurityGovfor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorSecurityGovforGlass
+  id: CMUWYCMDoubleDoorSecurityGovforGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockMedicalGovfor
+  id: CMUWYCMAirlockMedicalGovfor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockMedicalGovforGlass
+  id: CMUWYCMAirlockMedicalGovforGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalGovfor
+  id: CMUWYCMDoubleDoorMedicalGovfor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalGovforGlass
+  id: CMUWYCMDoubleDoorMedicalGovforGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockEngineerGovfor
+  id: CMUWYCMAirlockEngineerGovfor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockEngineerGovforGlass
+  id: CMUWYCMAirlockEngineerGovforGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorEngineerGovfor
+  id: CMUWYCMDoubleDoorEngineerGovfor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorEngineerGovforGlass
+  id: CMUWYCMDoubleDoorEngineerGovforGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+# Material and secret doors
+
+- type: entity
+  parent: PlasmaDoor
+  id: CMUWYPlasmaDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: GoldDoor
+  id: CMUWYGoldDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: SilverDoor
+  id: CMUWYSilverDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: WoodDoor
+  id: CMUWYWoodDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: PaperDoor
+  id: CMUWYPaperDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: WebDoor
+  id: CMUWYWebDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CardDoor
+  id: CMUWYCardDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCSandstoneDoor
+  id: CMUWYRMCSandstoneDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: SolidSecretDoor
+  id: CMUWYSolidSecretDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+# Shutters and pod doors
+
+- type: entity
+  parent: ShuttersNormal
+  id: CMUWYShuttersNormal
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: ShuttersRadiation
+  id: CMUWYShuttersRadiation
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: ShuttersWindow
+  id: CMUWYShuttersWindow
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: BlastDoor
+  id: CMUWYBlastDoor
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: BlastDoorXeno
+  id: CMUWYBlastDoorXeno
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: BlastDoorXenoborg
+  id: CMUWYBlastDoorXenoborg
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: RMCShutterAlmayer
+  id: CMUWYRMCShutterAlmayer
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: RMCShutterHybrisa
+  id: CMUWYRMCShutterHybrisa
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: RMCShutterHybrisaWindow
+  id: CMUWYRMCShutterHybrisaWindow
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: RMCPodDoorAlmayer
+  id: CMUWYRMCPodDoorAlmayer
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: RMCPodDoorHybrisaWhite
+  id: CMUWYRMCPodDoorHybrisaWhite
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: RMCPodDoorHybrisaRed
+  id: CMUWYRMCPodDoorHybrisaRed
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: RMCPodDoorAlmayerBlack
+  id: CMUWYRMCPodDoorAlmayerBlack
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: RMCPodDoorAlmayerWhite
+  id: CMUWYRMCPodDoorAlmayerWhite
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: RMCPodDoorAI
+  id: CMUWYRMCPodDoorAI
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+- type: entity
+  parent: RMCPodDoorAIWhite
+  id: CMUWYRMCPodDoorAIWhite
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: Door
+    clickOpen: true
+
+# Firelocks and energy gate
+
+- type: entity
+  parent: Firelock
+  id: CMUWYFirelock
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: FirelockGlass
+  id: CMUWYFirelockGlass
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: FirelockEdge
+  id: CMUWYFirelockEdge
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: EnergyGate
+  id: CMUWYEnergyGate
+  suffix: Weyland-Yutani, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]

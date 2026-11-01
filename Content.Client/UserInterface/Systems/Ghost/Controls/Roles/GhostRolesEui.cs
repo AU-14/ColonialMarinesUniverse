@@ -20,6 +20,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
         {
             _window = new GhostRolesWindow();
             _window.OnForceInterestChanged += (id, interested) => SendMessage(new SetForceInterestMessage(id, interested));
+            _window.OnGhostCallPressed += () => SendMessage(new GhostThirdPartyCallMessage()); // CMU14
 
             _window.OnRoleRequestButtonClicked += info =>
             {
@@ -87,6 +88,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
 
             // Clearing the container before adding new roles
             _window.BeginEntryUpdate();
+
+            _window.UpdateGhostCall(ghostState.ThirdPartyCall); // CMU14
 
             var entityManager = IoCManager.Resolve<IEntityManager>();
             var sysManager = entityManager.EntitySysManager;

@@ -532,6 +532,10 @@
     range: 5
   - type: EntityTargetAction
     event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoCarrionMantleActionEvent
+    # only xenos, so a click that lands on weeds under a moving hivemate keeps targeting
+    whitelist:
+      components:
+      - Xeno
   - type: ActionBlockIfResting
   - type: ActionInRangeUnobstructed
     range: 5
@@ -955,7 +959,7 @@
   id: CMU14ActionXenoPathogenVomitBile
   parent: ActionXenoBase
   name: Vomit Bile (40)
-  description: Extinguishes a nearby hivemate or sprays volatile bile over enemies in the three tiles in front of you.
+  description: Extinguishes a hivemate or sprays volatile bile at an enemy and across three rows in front of you. Ignites enemies while you are burning.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -966,7 +970,7 @@
       state: xeno_spit
       map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
-    range: 1.8
+    range: 5.4
     checkCanAccess: false
   - type: EntityTargetAction
     targetCheckCanInteract: false

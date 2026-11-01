@@ -43,6 +43,7 @@
     outerClothing: AU14CivilianJacketTanPufferVest
   inhand:
   - CMUMobilePhone
+  - CMUPortableFax
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -63,7 +64,7 @@
   points: 7
   groups:
   - JournalistSpecializationAU14
-  - CivSatchelAU14
+  - JournalistBagAU14
   - CivFootwearAU14
   - CivJumpsuitAU14
   - PaperworkRMC

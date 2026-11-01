@@ -1,0 +1,889 @@
+# Inert crash pieces using the existing Fallujah and gunship RSIs.
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall1
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "1"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall10
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "10"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall16
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "16"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall17
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "17"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall18
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "18"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall19
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "19"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall2
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "2"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall22
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "22"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall23
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "23"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall24
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "24"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall25
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "25"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall26
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "26"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall27
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "27"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall28
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "28"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall29
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "29"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall3
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "3"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall30
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "30"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall31
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "31"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall32
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "32"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall33
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "33"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall34
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "34"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall35
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "35"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall38
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "38"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall39
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "39"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall4
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "4"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall40
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "40"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall41
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "41"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall46
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "46"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall47
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "47"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall48
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "48"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall49
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "49"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall5
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "5"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall53
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "53"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall59
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "59"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall6
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "6"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall61
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "61"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall62
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "62"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall64
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "64"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall65
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "65"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall66
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "66"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall67
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "67"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall69
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "69"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall7
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "7"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall70
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "70"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall71
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "71"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall72
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "72"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall73
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "73"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall74
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "74"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall75
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "75"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall76
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "76"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall77
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "77"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall78
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "78"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall8
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "8"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall81
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "81"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall82
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "82"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall83
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "83"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall84
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "84"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall84Flipped
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "84_flipped"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall85
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "85"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall85Flipped
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "85_flipped"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall86
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "86"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall89
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "89"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall92
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "92"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall94
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "94"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall95
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "95"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall96
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "96"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall97
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "97"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall98
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "98"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMAlamoWall99
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/alamo.rsi
+    state: "99"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall10
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "10"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall100
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "100"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall102
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "102"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall105
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "105"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall106
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "106"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall107
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "107"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall108
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "108"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall18
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "18"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall19
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "19"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall46
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "46"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall49
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "49"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall86b
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "86b"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall89b
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "89b"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall95
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "95"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall95a
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "95a"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall97a
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "97a"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall99
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "99"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionHull
+  id: CMUExpeditionWreckCMNormandyWall99a
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    state: "99a"
+    noRot: false
+    color: "#A39B91"
+
+- type: entity
+  parent: CMUExpeditionSupply
+  id: CMUExpeditionWreckSeat
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/vehicle_seats.rsi
+    state: pilot_chair
+    color: "#827F78"
+    noRot: false
+
+- type: entity
+  parent: CMUExpeditionRelay
+  id: CMUExpeditionWreckConsole
+  components:
+  - type: Sprite
+    color: "#78736C"
+    noRot: false

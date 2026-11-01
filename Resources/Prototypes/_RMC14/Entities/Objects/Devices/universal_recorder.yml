@@ -154,6 +154,11 @@
   - type: Item
     size: Small
     shape: null
+  # CMU14: a small box that took any small item was a free pocket expander, tapes only
+  - type: Storage
+    whitelist:
+      components:
+      - UniversalRecorderTape
 
 - type: entity
   parent: RMCBoxRegulationTapesEmpty

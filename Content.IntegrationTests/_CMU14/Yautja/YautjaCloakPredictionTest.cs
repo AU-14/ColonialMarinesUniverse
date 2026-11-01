@@ -219,9 +219,9 @@ public sealed class YautjaCloakPredictionTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task PredictedCloakToggleAndServerForcedDecloakStillWork(bool death)
+    [TestCase(false, YautjaInvisibilitySound.Retro)]
+    [TestCase(true, YautjaInvisibilitySound.Modern)]
+    public async Task PredictedCloakToggleAndServerForcedDecloakStillWork(bool death, YautjaInvisibilitySound preset)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -240,6 +240,9 @@ public sealed class YautjaCloakPredictionTest
             var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var bracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
             entMan.EnsureComponent<YautjaComponent>(hunter);
+            var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
+            bracerComp.InvisibilitySound = preset;
+            entMan.Dirty(bracer, bracerComp);
             Assert.That(entMan.System<InventorySystem>().TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
             server.PlayerMan.SetAttachedEntity(pair.Player!, hunter);
             hunterNet = entMan.GetNetEntity(hunter);
@@ -256,6 +259,8 @@ public sealed class YautjaCloakPredictionTest
             Assert.Multiple(() =>
             {
                 Assert.That(entMan.GetComponent<EntityTurnInvisibleComponent>(hunter).Enabled, Is.True);
+                Assert.That(entMan.GetComponent<CMUYautjaOpticalCloakComponent>(hunter).Preset, Is.EqualTo(preset),
+                    "The first predicted activation must use the saved preset, before server confirmation.");
                 Assert.That(entMan.HasComponent<EntityActiveInvisibleComponent>(hunter), Is.True);
                 Assert.That(entMan.HasComponent<ThermalCloakUserComponent>(hunter), Is.True);
             });
@@ -280,10 +285,7 @@ public sealed class YautjaCloakPredictionTest
             }
             else
             {
-                var damage = entMan.System<DamageableSystem>();
-                var damageable = entMan.GetComponent<DamageableComponent>(hunter);
-                damage.TryChangeDamage(hunter, BluntDamage(1), ignoreResistances: true);
-                Assert.That(damage.GetPositiveDamage((hunter, damageable)).GetTotal(), Is.GreaterThan(FixedPoint2.Zero));
+                entMan.System<YautjaCloakSystem>().ForceDecloak(hunter);
             }
 
             Assert.That(entMan.GetComponent<EntityTurnInvisibleComponent>(hunter).Enabled, Is.False);
@@ -300,6 +302,8 @@ public sealed class YautjaCloakPredictionTest
             Assert.Multiple(() =>
             {
                 Assert.That(entMan.GetComponent<EntityTurnInvisibleComponent>(hunter).Enabled, Is.False);
+                Assert.That(entMan.GetComponent<CMUYautjaOpticalCloakComponent>(hunter).Preset, Is.EqualTo(preset),
+                    "Forced decloak must retain the same visual preset on the replicated wearer.");
                 Assert.That(entMan.HasComponent<EntityActiveInvisibleComponent>(hunter), Is.False);
                 Assert.That(entMan.HasComponent<ThermalCloakUserComponent>(hunter), Is.False);
                 Assert.That(entMan.HasComponent<RMCNightVisionVisibleComponent>(hunter), Is.True);

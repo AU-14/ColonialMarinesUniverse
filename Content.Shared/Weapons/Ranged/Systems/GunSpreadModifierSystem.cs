@@ -10,7 +10,9 @@ public sealed partial class GunSpreadModifierSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<GunSpreadModifierComponent, GunGetAmmoSpreadEvent>(OnGunGetAmmoSpread);
-        SubscribeLocalEvent<GunSpreadModifierComponent, ExaminedEvent>(OnExamine);
+        // cmu edit start: listed under the weapon stats examine verb instead (CMUWeaponStatsSystem)
+        // SubscribeLocalEvent<GunSpreadModifierComponent, ExaminedEvent>(OnExamine);
+        // cmu edit end
     }
 
     private void OnGunGetAmmoSpread(Entity<GunSpreadModifierComponent> ent, ref GunGetAmmoSpreadEvent args)

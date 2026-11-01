@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Wall light states · Garrison Redux</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#0d171d;color:#dfe9e7}
+    body{max-width:1200px;margin:auto;padding:26px}h1{font-size:27px}p{color:#b4c6c7;line-height:1.6}a{color:#8ee1c8}
+    .controls{display:flex;gap:16px;flex-wrap:wrap;padding:20px;background:#192931;border-radius:9px}
+    label{display:flex;gap:8px;align-items:center}select{padding:8px;background:#253a43;color:inherit;border:1px solid #48616a;border-radius:5px}
+    .views{display:grid;grid-template-columns:250px 1fr;gap:20px;margin-top:22px}figure{margin:0}
+    img{width:224px;height:224px;image-rendering:pixelated;background:#17262d}figcaption{color:#adc4c2;font-size:14px;margin:12px 0}
+    canvas{width:100%;height:540px;display:block;touch-action:none;border:1px solid #30484f;border-radius:7px}
+    #error{color:#ffb3a0}.badge{color:#ffd092;font-size:13px;letter-spacing:.05em}
+    @media(max-width:700px){.views{grid-template-columns:1fr}canvas{height:390px}}
+  </style>
+</head>
+<body>
+  <div class="badge">STABLE GARRISON REDUX · SOURCE AND 3D STATES</div>
+  <h1>Wall light states</h1>
+  <p>Compare exposed bulbs and fluorescent tubes in five states, at each facing and on either side of a wall boundary.</p>
+  <div class="controls">
+    <label>Variant <select id="variant"><option value="CMU3DSmallWallLight">Warm bulb</option><option value="CMU3DSmallRedWallLight">Red bulb</option><option value="CMU3DSmallBlueWallLight">Blue bulb</option><option value="CMU3DSmallEmptyWallLight">Empty socket</option><option value="CMU3DWallTubeLight">Single tube</option><option value="CMU3DWallDoubleTubeLight">Double tube</option><option value="CMU3DWallBlueDoubleLight">Blue double tube</option></select></label>
+    <label>Light state <select id="state"><option value="1">On</option><option value="0">Off</option><option value="-empty">Empty</option><option value="-broken">Broken</option><option value="-burned">Burned</option></select></label>
+    <label>Source facing <select id="facing"><option value="0">South</option><option value="1">North</option><option value="2">East</option><option value="3">West</option></select></label>
+    <label>Mount <select id="mount"><option value="inside">Beside wall, room side</option><option value="outside">On wall tile</option></select></label>
+    <label><input id="wall" type="checkbox" checked> Show wall</label>
+  </div>
+  <p id="frame" aria-live="polite">Loading lights…</p><p id="error" role="alert" hidden></p>
+  <div class="views">
+    <figure><img id="source" alt="Original light sprite in the selected state and direction"><figcaption>Original padded sprite. Its soft halo is not a metal housing.</figcaption></figure>
+    <figure><canvas id="model" tabindex="0" aria-label="Rotatable 3D wall light. Drag or use arrow keys; scroll to zoom."></canvas><figcaption>Drag to rotate; scroll to zoom. Camera and source facing are independent.</figcaption></figure>
+  </div>
+  <p>These drafts do not cast light. Glass shading, hidden depth and mounting height remain approximate. The game’s existing light visualizer controls blinking; this comparison shows its individual poses.</p>
+  <p><a href="./">Redux map</a> · <a href="./barricade-acid.html">Barricade acid</a> · <a href="./button-animation.html">Door controls</a></p>
+  <script type="module" src="./light-states.js"></script>
+</body>
+</html>

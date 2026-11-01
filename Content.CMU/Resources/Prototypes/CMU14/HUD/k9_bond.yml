@@ -1,0 +1,6 @@
+- type: factionIcon
+  id: CMUK9Bond
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_RMC14/Objects/Clothing/Uniforms/Synthetic/k9_tags.rsi
+    state: k9_dogtags

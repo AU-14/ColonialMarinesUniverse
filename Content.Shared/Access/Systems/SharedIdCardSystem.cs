@@ -1,5 +1,6 @@
 using System.Globalization;
 using Content.Shared.Access.Components;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.Administration.Logs;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
@@ -18,6 +19,7 @@ namespace Content.Shared.Access.Systems;
 public abstract partial class SharedIdCardSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfgManager = default!;
+    [Dependency] private CMUIdBloodTypeSystem _cmuIdBloodType = default!; // CMU14
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedAccessSystem _access = default!;
@@ -401,6 +403,7 @@ public abstract partial class SharedIdCardSystem : EntitySystem
         id.OriginalOwner = player.Value;
         Dirty(uid, id);
         UpdateEntityName(uid, id);
+        _cmuIdBloodType.Stamp(uid, player.Value); // CMU14: print the owner's blood type
         return true;
     }
     //RMC14

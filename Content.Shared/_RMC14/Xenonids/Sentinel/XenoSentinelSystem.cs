@@ -152,7 +152,7 @@ public sealed partial class XenoSentinelSystem : EntitySystem
         ApplyToxicSlashSpeed(xeno, xeno.Comp.SpeedModifier, xeno.Comp.ActiveDuration);
 
         _audio.PlayPredicted(xeno.Comp.ActivateSound, xeno, xeno);
-        _popup.PopupClient(Loc.GetString("rmc-xeno-sentinel-toxic-slash-start"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-sentinel-toxic-slash-start"), xeno, xeno);
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoToxicSlashActionEvent>(xeno))
         {
             _actions.SetToggled(action.AsNullable(), true);
@@ -225,7 +225,7 @@ public sealed partial class XenoSentinelSystem : EntitySystem
             !TryComp(args.Target, out XenoIntoxicatedComponent? intoxicated) ||
             intoxicated.Stacks <= 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-sentinel-drain-sting-not-intoxicated"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-sentinel-drain-sting-not-intoxicated"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 

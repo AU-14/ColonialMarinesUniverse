@@ -21,9 +21,9 @@ namespace Content.Server.CMU14.Round.Antags.Arsonist;
 /// </summary>
 public sealed partial class ArsonistSystem : EntitySystem
 {
-    [Dependency] private readonly WantedSystem _wanted = default!;
-    [Dependency] private readonly ColonyBountySystem _colonyBounty = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private WantedSystem _wanted = default!;
+    [Dependency] private ColonyBountySystem _colonyBounty = default!;
+    [Dependency] private TagSystem _tag = default!;
 
     private static readonly ProtoId<TagPrototype> WeedTileTag = "XenoWeedTile";
 
@@ -40,7 +40,7 @@ public sealed partial class ArsonistSystem : EntitySystem
             || _tag.HasTag(uid, WeedTileTag))
             return;
 
-        var enumerator = EntityManager.AllEntityQueryEnumerator<ArsonistComponent>();
+        var enumerator = AllEntityQuery<ArsonistComponent>();
         while (enumerator.MoveNext(out var arsonistUid, out var arsonist))
         {
             if (EntityManager.GetComponentOrNull<MobStateComponent>(arsonistUid)?.CurrentState is MobState.Dead)

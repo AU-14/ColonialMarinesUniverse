@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Traits.OpiateReceptorDeficiency;
 using Content.Shared.EntityEffects;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
@@ -41,7 +42,7 @@ public sealed partial class CMUApplyPainSuppressionEffect : EntityEffectBase<CMU
 public sealed partial class CMUApplyPainSuppressionEntityEffectSystem
     : EntityEffectSystem<MetaDataComponent, CMUApplyPainSuppressionEffect>
 {
-    [Dependency] private readonly SharedPainShockSystem _pain = default!;
+    [Dependency] private SharedPainShockSystem _pain = default!;
 
     protected override void Effect(
         Entity<MetaDataComponent> entity,
@@ -52,22 +53,35 @@ public sealed partial class CMUApplyPainSuppressionEntityEffectSystem
 
         var effect = args.Effect;
         var duration = TimeSpan.FromSeconds(effect.DurationPerUnit * (float) context.Quantity.Quantity);
+        var suppression = effect.AccumulationSuppression;
+        var tiers = effect.TierSuppression;
+        var decayBonus = effect.DecayBonus;
+
+        // Opiate receptor deficiency blunts the basic painkillers, up to tramadol.
+        if (TryComp<CMUOpiateReceptorDeficiencyComponent>(entity, out var deficiency) &&
+            effect.TierSuppression <= deficiency.BasicTierLimit)
+        {
+            suppression *= deficiency.PotencyMultiplier;
+            decayBonus *= deficiency.PotencyMultiplier;
+            tiers = Math.Max(0, tiers - deficiency.TierPenalty);
+        }
+
         if (effect.Additive)
         {
             _pain.AddAdditivePainSuppressionProfile(
                 entity,
-                effect.AccumulationSuppression,
-                effect.TierSuppression,
-                effect.DecayBonus,
+                suppression,
+                tiers,
+                decayBonus,
                 duration);
         }
         else
         {
             _pain.AddPainSuppressionProfile(
                 entity,
-                effect.AccumulationSuppression,
-                effect.TierSuppression,
-                effect.DecayBonus,
+                suppression,
+                tiers,
+                decayBonus,
                 duration,
                 effect.ReductionDecreaseRate);
         }

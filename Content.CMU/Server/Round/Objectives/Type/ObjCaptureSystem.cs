@@ -53,8 +53,8 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
     {
         return faction.ToLowerInvariant() switch
         {
-            "govfor" => _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name,
-            "opfor" => _platoonSpawnRuleSystem.SelectedOpforPlatoon?.Name,
+            "govfor" => _platoonSpawnRuleSystem.SelectedGovforPlatoon is { } gp ? Loc.GetString(gp.Name) : null,
+            "opfor" => _platoonSpawnRuleSystem.SelectedOpforPlatoon is { } op ? Loc.GetString(op.Name) : null,
             _ => null
         };
     }

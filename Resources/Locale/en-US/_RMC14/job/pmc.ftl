@@ -9,7 +9,9 @@ rmc-ghost-role-information-pmc-whiteout-rules = You are a [color=orange][bold]PM
                                              You are allowed to remember knowledge about the game in general, such as how to cook, how to use objects, etc.
                                              You are absolutely [color=red]NOT[/color] allowed to remember, say, the name, appearance, etc. of your previous character.
 
-rmc-ghost-role-information-pmc-description = Ensure no damage is incurred against Weyland-Yutani. Make sure the Corporate Liaison is safe. Deny the Weyland-Yutani's involvement and do not trust the UNMC forces. Only fire if fired upon, or ordered to.
+# cmu edit start: lore names
+rmc-ghost-role-information-pmc-description = Ensure no damage is incurred against Weyland-Yutani. Make sure the Corporate Liaison is safe. Deny the Weyland-Yutani's involvement and do not trust the USCM forces. Only fire if fired upon, or ordered to.
+# cmu edit end
 
 rmc-ghost-name-pmc-standard = We-Yu PMC Operator (Neutral)
 rmc-job-name-pmc-standard = Operator

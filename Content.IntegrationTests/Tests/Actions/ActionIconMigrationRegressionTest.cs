@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 #pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
 
 using System.Reflection;
@@ -397,7 +398,7 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
             finally
             {
                 selecting.SetValue(controller, null);
-                button.Dispose();
+                button.Release();
             }
         });
 

@@ -1,0 +1,432 @@
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface001
+  atlasIndex: 724
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface001.png
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface002
+  atlasIndex: 725
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface002.png
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface003
+  atlasIndex: 726
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface003.png
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface004
+  atlasIndex: 727
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface004.png
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface005
+  atlasIndex: 728
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface005.png
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface006
+  atlasIndex: 729
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface006.png
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface007
+  atlasIndex: 730
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface007.png
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface008
+  atlasIndex: 731
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface008.png
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface009
+  atlasIndex: 732
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface009.png
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface010
+  atlasIndex: 733
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface010.png
+- type: cmu3DSurface
+  id: CMU3DStructuralFrameSurface011
+  atlasIndex: 734
+  texture: /Textures/CMU14/ThreeD/Garrison/StructuralFrames/CMU3DStructuralFrameSurface011.png
+- type: cmu3DModel
+  id: CMU3DStructuralFrameShort
+  label: Short charcoal structural lattice frame
+  status: draft
+  sourcePrototypes:
+  - RMCStructureLatticeC
+  referenceRsi: _RMC14/Structures/structure_lattice.rsi
+  referenceState: structure_lattice_c
+  sourceDirections: 1
+  description: Open steel frame reconstructed from the separate source top grid and front members, with matching side/rear
+    construction inferred for a rotatable model. Source-colored charcoal rails and empty openings remain distinct. Square
+    .875-tile footprint, two-pixel member depth and projection-derived height are inferred. Tall source padding/offset supplies
+    elevation, not ground translation. Static draft; see SOURCES_STRUCTURAL_FRAMES.md.
+  parts:
+  - label: top grid member 1
+    min: -0.406250000, 0.393750000, 0.490825881
+    max: 0.406250000, 0.437500000, 0.535825881
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface001
+    surfaceAxis: XY
+  - label: top grid member 2
+    min: -0.437500000, 0.131250000, 0.490825881
+    max: 0.437500000, 0.393750000, 0.535825881
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface002
+    surfaceAxis: XY
+  - label: top grid member 3
+    min: -0.437500000, 0.000000000, 0.490825881
+    max: -0.250000000, 0.131250000, 0.535825881
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface003
+    surfaceAxis: XY
+  - label: top grid member 4
+    min: -0.093750000, 0.000000000, 0.490825881
+    max: 0.093750000, 0.131250000, 0.535825881
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface004
+    surfaceAxis: XY
+  - label: top grid member 5
+    min: 0.250000000, 0.000000000, 0.490825881
+    max: 0.437500000, 0.131250000, 0.535825881
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface005
+    surfaceAxis: XY
+  - label: top grid member 6
+    min: -0.437500000, -0.437500000, 0.490825881
+    max: 0.437500000, 0.000000000, 0.535825881
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface006
+    surfaceAxis: XY
+  - label: front lattice member 1
+    min: -0.437500000, -0.437500000, 0.357217254
+    max: 0.437500000, -0.375000000, 0.535825881
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface007
+    surfaceAxis: XZ
+  - label: front lattice member 2
+    min: -0.437500000, -0.437500000, 0.178608627
+    max: -0.281250000, -0.375000000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: XZ
+  - label: front lattice member 3
+    min: -0.187500000, -0.437500000, 0.178608627
+    max: -0.093750000, -0.375000000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: XZ
+  - label: front lattice member 4
+    min: 0.093750000, -0.437500000, 0.178608627
+    max: 0.187500000, -0.375000000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: XZ
+  - label: front lattice member 5
+    min: 0.281250000, -0.437500000, 0.178608627
+    max: 0.437500000, -0.375000000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: XZ
+  - label: front lattice member 6
+    min: -0.437500000, -0.437500000, 0.000000000
+    max: 0.437500000, -0.375000000, 0.178608627
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface010
+    surfaceAxis: XZ
+  - label: rear lattice member 1
+    min: -0.437500000, 0.375000000, 0.357217254
+    max: 0.437500000, 0.437500000, 0.535825881
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface007
+    surfaceAxis: XZ
+  - label: rear lattice member 2
+    min: -0.437500000, 0.375000000, 0.178608627
+    max: -0.281250000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: XZ
+  - label: rear lattice member 3
+    min: -0.187500000, 0.375000000, 0.178608627
+    max: -0.093750000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: XZ
+  - label: rear lattice member 4
+    min: 0.093750000, 0.375000000, 0.178608627
+    max: 0.187500000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: XZ
+  - label: rear lattice member 5
+    min: 0.281250000, 0.375000000, 0.178608627
+    max: 0.437500000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: XZ
+  - label: rear lattice member 6
+    min: -0.437500000, 0.375000000, 0.000000000
+    max: 0.437500000, 0.437500000, 0.178608627
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface010
+    surfaceAxis: XZ
+  - label: east lattice member 1
+    min: 0.375000000, -0.437500000, 0.357217254
+    max: 0.437500000, 0.437500000, 0.535825881
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface007
+    surfaceAxis: YZ
+  - label: east lattice member 2
+    min: 0.375000000, 0.281250000, 0.178608627
+    max: 0.437500000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: YZ
+  - label: east lattice member 3
+    min: 0.375000000, 0.093750000, 0.178608627
+    max: 0.437500000, 0.187500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: YZ
+  - label: east lattice member 4
+    min: 0.375000000, -0.187500000, 0.178608627
+    max: 0.437500000, -0.093750000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: YZ
+  - label: east lattice member 5
+    min: 0.375000000, -0.437500000, 0.178608627
+    max: 0.437500000, -0.281250000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: YZ
+  - label: east lattice member 6
+    min: 0.375000000, -0.437500000, 0.000000000
+    max: 0.437500000, 0.437500000, 0.178608627
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface010
+    surfaceAxis: YZ
+  - label: west lattice member 1
+    min: -0.437500000, -0.437500000, 0.357217254
+    max: -0.375000000, 0.437500000, 0.535825881
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface007
+    surfaceAxis: YZ
+  - label: west lattice member 2
+    min: -0.437500000, 0.281250000, 0.178608627
+    max: -0.375000000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: YZ
+  - label: west lattice member 3
+    min: -0.437500000, 0.093750000, 0.178608627
+    max: -0.375000000, 0.187500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: YZ
+  - label: west lattice member 4
+    min: -0.437500000, -0.187500000, 0.178608627
+    max: -0.375000000, -0.093750000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: YZ
+  - label: west lattice member 5
+    min: -0.437500000, -0.437500000, 0.178608627
+    max: -0.375000000, -0.281250000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: YZ
+  - label: west lattice member 6
+    min: -0.437500000, -0.437500000, 0.000000000
+    max: -0.375000000, 0.437500000, 0.178608627
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface010
+    surfaceAxis: YZ
+- type: cmu3DModel
+  id: CMU3DStructuralFrameTall
+  label: Tall charcoal structural lattice frame
+  status: draft
+  sourcePrototypes:
+  - RMCStructureLatticeDoubleC
+  referenceRsi: _RMC14/Structures/double_structure_lattice.rsi
+  referenceState: structure_lattice_c
+  sourceDirections: 1
+  description: Open steel frame reconstructed from the separate source top grid and front members, with matching side/rear
+    construction inferred for a rotatable model. Source-colored charcoal rails and empty openings remain distinct. Square
+    .875-tile footprint, two-pixel member depth and projection-derived height are inferred. Tall source padding/offset supplies
+    elevation, not ground translation. Static draft; see SOURCES_STRUCTURAL_FRAMES.md.
+  parts:
+  - label: top grid member 1
+    min: -0.406250000, 0.393750000, 0.937347449
+    max: 0.406250000, 0.437500000, 0.982347449
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface001
+    surfaceAxis: XY
+  - label: top grid member 2
+    min: -0.437500000, 0.131250000, 0.937347449
+    max: 0.437500000, 0.393750000, 0.982347449
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface002
+    surfaceAxis: XY
+  - label: top grid member 3
+    min: -0.437500000, 0.000000000, 0.937347449
+    max: -0.250000000, 0.131250000, 0.982347449
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface003
+    surfaceAxis: XY
+  - label: top grid member 4
+    min: -0.093750000, 0.000000000, 0.937347449
+    max: 0.093750000, 0.131250000, 0.982347449
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface004
+    surfaceAxis: XY
+  - label: top grid member 5
+    min: 0.250000000, 0.000000000, 0.937347449
+    max: 0.437500000, 0.131250000, 0.982347449
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface005
+    surfaceAxis: XY
+  - label: top grid member 6
+    min: -0.437500000, -0.437500000, 0.937347449
+    max: 0.437500000, 0.000000000, 0.982347449
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface006
+    surfaceAxis: XY
+  - label: front lattice member 1
+    min: -0.437500000, -0.437500000, 0.357217254
+    max: 0.437500000, -0.375000000, 0.982347449
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface011
+    surfaceAxis: XZ
+  - label: front lattice member 2
+    min: -0.437500000, -0.437500000, 0.178608627
+    max: -0.281250000, -0.375000000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: XZ
+  - label: front lattice member 3
+    min: -0.187500000, -0.437500000, 0.178608627
+    max: -0.093750000, -0.375000000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: XZ
+  - label: front lattice member 4
+    min: 0.093750000, -0.437500000, 0.178608627
+    max: 0.187500000, -0.375000000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: XZ
+  - label: front lattice member 5
+    min: 0.281250000, -0.437500000, 0.178608627
+    max: 0.437500000, -0.375000000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: XZ
+  - label: front lattice member 6
+    min: -0.437500000, -0.437500000, 0.000000000
+    max: 0.437500000, -0.375000000, 0.178608627
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface010
+    surfaceAxis: XZ
+  - label: rear lattice member 1
+    min: -0.437500000, 0.375000000, 0.357217254
+    max: 0.437500000, 0.437500000, 0.982347449
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface011
+    surfaceAxis: XZ
+  - label: rear lattice member 2
+    min: -0.437500000, 0.375000000, 0.178608627
+    max: -0.281250000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: XZ
+  - label: rear lattice member 3
+    min: -0.187500000, 0.375000000, 0.178608627
+    max: -0.093750000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: XZ
+  - label: rear lattice member 4
+    min: 0.093750000, 0.375000000, 0.178608627
+    max: 0.187500000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: XZ
+  - label: rear lattice member 5
+    min: 0.281250000, 0.375000000, 0.178608627
+    max: 0.437500000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: XZ
+  - label: rear lattice member 6
+    min: -0.437500000, 0.375000000, 0.000000000
+    max: 0.437500000, 0.437500000, 0.178608627
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface010
+    surfaceAxis: XZ
+  - label: east lattice member 1
+    min: 0.375000000, -0.437500000, 0.357217254
+    max: 0.437500000, 0.437500000, 0.982347449
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface011
+    surfaceAxis: YZ
+  - label: east lattice member 2
+    min: 0.375000000, 0.281250000, 0.178608627
+    max: 0.437500000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: YZ
+  - label: east lattice member 3
+    min: 0.375000000, 0.093750000, 0.178608627
+    max: 0.437500000, 0.187500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: YZ
+  - label: east lattice member 4
+    min: 0.375000000, -0.187500000, 0.178608627
+    max: 0.437500000, -0.093750000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: YZ
+  - label: east lattice member 5
+    min: 0.375000000, -0.437500000, 0.178608627
+    max: 0.437500000, -0.281250000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: YZ
+  - label: east lattice member 6
+    min: 0.375000000, -0.437500000, 0.000000000
+    max: 0.437500000, 0.437500000, 0.178608627
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface010
+    surfaceAxis: YZ
+  - label: west lattice member 1
+    min: -0.437500000, -0.437500000, 0.357217254
+    max: -0.375000000, 0.437500000, 0.982347449
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface011
+    surfaceAxis: YZ
+  - label: west lattice member 2
+    min: -0.437500000, 0.281250000, 0.178608627
+    max: -0.375000000, 0.437500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: YZ
+  - label: west lattice member 3
+    min: -0.437500000, 0.093750000, 0.178608627
+    max: -0.375000000, 0.187500000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: YZ
+  - label: west lattice member 4
+    min: -0.437500000, -0.187500000, 0.178608627
+    max: -0.375000000, -0.093750000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface009
+    surfaceAxis: YZ
+  - label: west lattice member 5
+    min: -0.437500000, -0.437500000, 0.178608627
+    max: -0.375000000, -0.281250000, 0.357217254
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface008
+    surfaceAxis: YZ
+  - label: west lattice member 6
+    min: -0.437500000, -0.437500000, 0.000000000
+    max: -0.375000000, 0.437500000, 0.178608627
+    color: '#FFFFFFFF'
+    surface: CMU3DStructuralFrameSurface010
+    surfaceAxis: YZ

@@ -107,6 +107,7 @@ public sealed partial class InsurgencyFactionApplySystem : EntitySystem
         // server-owned copy that can no longer be changed through the caller's object graph.
         var runtimeDefinition = CloneFactionDefinition(definition);
         InsurgencyFactionValidator.Sanitize(runtimeDefinition);
+        EnsureAntiArmorAccess(runtimeDefinition);
         _activeFaction = runtimeDefinition;
         _activeGeneration++;
 

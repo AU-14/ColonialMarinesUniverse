@@ -1,0 +1,32 @@
+- type: entity
+  parent: CMFirstAidKitFilled
+  id: CMUFirstAidKitFilledDexalin
+  suffix: Filled, Dexalin
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHealthAnalyzer
+    - id: CMTricordrazineAutoInjectorNoSkill
+    - id: CMInaprovalineAutoInjector
+    - id: CMGauze10
+    - id: CMOintment10
+    - id: CMUDexalinAutoInjector
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMUDexalinAutoInjector
+  name: dexalin autoinjector
+  description: An autoinjector loaded with 3 uses of Dexalin, a common oxygen deprivation medicine.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+        reagents:
+        - ReagentId: CMDexalin
+          Quantity: 45
+  - type: CMRefillableSolution
+    reagents:
+      CMDexalin: 45
+  - type: IconLabel
+    labelTextLocId: rmc-dexalin-container-label-text

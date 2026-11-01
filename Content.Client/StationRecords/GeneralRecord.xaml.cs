@@ -26,6 +26,10 @@ public sealed partial class GeneralRecord : Control
             ("fingerprint", record.Fingerprint ?? Loc.GetString("generic-not-available-shorthand")));
         Dna.Text = Loc.GetString("general-station-record-console-record-dna",
             ("dna", record.DNA ?? Loc.GetString("generic-not-available-shorthand")));
+        // cmu edit start
+        Religion.Text = Loc.GetString("cmu-general-station-record-console-record-religion",
+            ("religion", Content.Client.CMU14.Religion.CMUReligionNames.Describe(prototypeManager, record.Religion)));
+        // cmu edit end
 
         if (canDelete && id != null)
         {

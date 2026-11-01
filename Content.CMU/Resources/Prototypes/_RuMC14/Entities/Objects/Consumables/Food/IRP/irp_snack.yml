@@ -2,7 +2,7 @@
   abstract: true
   parent: RuMCIRPComponentBase
   id: RuMCIRPSnackComponentBase
-  description: Пакет для различных снеков.
+  description: A pouch of assorted snacks.
   components:
   - type: Sprite
     state: pack
@@ -53,7 +53,7 @@
   abstract: true
   parent: RuMCIRPComponentBase
   id: RuMCIRPGalletComponentBase
-  description: Пакет для галет.
+  description: A pouch of hardtack crackers.
   components:
   - type: Sprite
     state: gallet_pack

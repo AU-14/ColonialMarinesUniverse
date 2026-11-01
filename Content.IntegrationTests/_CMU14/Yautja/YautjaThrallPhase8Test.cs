@@ -692,10 +692,6 @@ public sealed class YautjaThrallPhase8Test
         EntityUid thrall = default;
         EntityUid masterBracer = default;
         EntityUid thrallBracer = default;
-        EntityUid thrallObservedMaster = default;
-        EntityUid thrallObservedThrall = default;
-        EntityUid thrallObservedMasterBracer = default;
-        EntityUid thrallObservedThrallBracer = default;
         EntityUid? previousAttached = null;
         CultureInfo? previousCulture = null;
 
@@ -1256,7 +1252,7 @@ public sealed class YautjaThrallPhase8Test
                 Assert.That(
                     entMan.System<YautjaThrallSystem>().TryToggleLinkedThrallSelfDestruct((masterBracer, entMan.GetComponent<YautjaBracerComponent>(masterBracer)), master),
                     Is.True);
-                AcceptRemoteThrallSelfDestructDialog(entMan, thrall);
+                AcceptRemoteThrallSelfDestructDialog(entMan, master);
                 Assert.That(thrallBracerComp.SelfDestructArmed, Is.True);
             });
 
@@ -1320,7 +1316,7 @@ public sealed class YautjaThrallPhase8Test
     }
 
     [Test]
-    public async Task RemoteThrallSelfDestructRequiresThrallConsentLikeCmss13TguiAlert()
+    public async Task RemoteThrallSelfDestructAsksTheMasterNotTheThrall()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -1352,18 +1348,19 @@ public sealed class YautjaThrallPhase8Test
                 Assert.That(
                     entMan.System<YautjaThrallSystem>().TryToggleLinkedThrallSelfDestruct((noMasterBracer, entMan.GetComponent<YautjaBracerComponent>(noMasterBracer)), noMaster),
                     Is.True,
-                    "CMSS13 self_destruct_thrall() opens a tgui_alert on the thrall after guard checks.");
-                AssertRemoteThrallSelfDestructDialog(entMan, noThrall);
+                    "The master gets the confirm, the thrall must not be able to refuse.");
+                AssertRemoteThrallSelfDestructDialog(entMan, noMaster);
+                Assert.That(entMan.HasComponent<DialogComponent>(noThrall), Is.False);
                 Assert.That(noThrallBracerComp.SelfDestructArmed, Is.False,
-                    "CMSS13 self_destruct_thrall() must not arm until the thrall accepts the alert.");
+                    "Nothing arms until the master answers Yes.");
 
-                entMan.EventBus.RaiseLocalEvent(noThrall, new DialogOptionBuiMsg(1)
+                entMan.EventBus.RaiseLocalEvent(noMaster, new DialogOptionBuiMsg(1)
                 {
-                    Actor = noThrall,
+                    Actor = noMaster,
                     UiKey = DialogUiKey.Key,
                 });
                 Assert.That(noThrallBracerComp.SelfDestructArmed, Is.False,
-                    "CMSS13 self_destruct_thrall() returns when the thrall chooses No.");
+                    "The master choosing No cancels.");
 
                 SpawnLinkedThrall(entMan, map.GridCoords.Offset(new Vector2(4, 0)), out yesMaster, out yesMasterBracer, out yesThrall, out yesThrallBracer);
                 var yesThrallBracerComp = entMan.GetComponent<YautjaThrallBracerComponent>(yesThrallBracer);
@@ -1372,15 +1369,15 @@ public sealed class YautjaThrallPhase8Test
                 Assert.That(
                     entMan.System<YautjaThrallSystem>().TryToggleLinkedThrallSelfDestruct((yesMasterBracer, entMan.GetComponent<YautjaBracerComponent>(yesMasterBracer)), yesMaster),
                     Is.True);
-                AssertRemoteThrallSelfDestructDialog(entMan, yesThrall);
+                AssertRemoteThrallSelfDestructDialog(entMan, yesMaster);
 
-                entMan.EventBus.RaiseLocalEvent(yesThrall, new DialogOptionBuiMsg(0)
+                entMan.EventBus.RaiseLocalEvent(yesMaster, new DialogOptionBuiMsg(0)
                 {
-                    Actor = yesThrall,
+                    Actor = yesMaster,
                     UiKey = DialogUiKey.Key,
                 });
                 Assert.That(yesThrallBracerComp.SelfDestructArmed, Is.True,
-                    "CMSS13 self_destruct_thrall() arms only after the thrall answers Yes.");
+                    "The master answering Yes arms the thrall's bracer.");
             });
         }
         finally
@@ -1672,7 +1669,7 @@ public sealed class YautjaThrallPhase8Test
                     entMan.System<YautjaThrallSystem>().TryToggleLinkedThrallSelfDestruct((masterBracer, entMan.GetComponent<YautjaBracerComponent>(masterBracer)), master),
                     Is.True,
                     "CMSS13 self_destruct_thrall() uses master.hunter_data.thrall and should not require the local link-bracer action when the thrall is wearing a bracer.");
-                AcceptRemoteThrallSelfDestructDialog(entMan, thrall);
+                AcceptRemoteThrallSelfDestructDialog(entMan, master);
                 Assert.That(thrallBracerComp.SelfDestructArmed, Is.True);
             });
 
@@ -1723,7 +1720,7 @@ public sealed class YautjaThrallPhase8Test
                 Assert.That(
                     thralls.TryToggleLinkedThrallSelfDestruct((masterBracer, entMan.GetComponent<YautjaBracerComponent>(masterBracer)), master),
                     Is.True);
-                AcceptRemoteThrallSelfDestructDialog(entMan, thrall);
+                AcceptRemoteThrallSelfDestructDialog(entMan, master);
                 var armedAt = thrallBracerComp.SelfDestructAt;
 
                 Assert.That(
@@ -1771,7 +1768,7 @@ public sealed class YautjaThrallPhase8Test
                 Assert.That(
                     entMan.System<YautjaThrallSystem>().TryToggleLinkedThrallSelfDestruct((masterBracer, entMan.GetComponent<YautjaBracerComponent>(masterBracer)), master),
                     Is.True);
-                AcceptRemoteThrallSelfDestructDialog(entMan, thrall);
+                AcceptRemoteThrallSelfDestructDialog(entMan, master);
             });
 
             await pair.RunTicksSync(5);
@@ -1848,9 +1845,9 @@ public sealed class YautjaThrallPhase8Test
         return thrall;
     }
 
-    private static void AssertRemoteThrallSelfDestructDialog(IEntityManager entMan, EntityUid thrall)
+    private static void AssertRemoteThrallSelfDestructDialog(IEntityManager entMan, EntityUid master)
     {
-        Assert.That(entMan.TryGetComponent(thrall, out DialogComponent? dialog), Is.True);
+        Assert.That(entMan.TryGetComponent(master, out DialogComponent? dialog), Is.True);
         Assert.Multiple(() =>
         {
             Assert.That(dialog!.Title, Is.EqualTo("Self Destruct Thrall"));
@@ -1859,12 +1856,12 @@ public sealed class YautjaThrallPhase8Test
         });
     }
 
-    private static void AcceptRemoteThrallSelfDestructDialog(IEntityManager entMan, EntityUid thrall)
+    private static void AcceptRemoteThrallSelfDestructDialog(IEntityManager entMan, EntityUid master)
     {
-        AssertRemoteThrallSelfDestructDialog(entMan, thrall);
-        entMan.EventBus.RaiseLocalEvent(thrall, new DialogOptionBuiMsg(0)
+        AssertRemoteThrallSelfDestructDialog(entMan, master);
+        entMan.EventBus.RaiseLocalEvent(master, new DialogOptionBuiMsg(0)
         {
-            Actor = thrall,
+            Actor = master,
             UiKey = DialogUiKey.Key,
         });
     }

@@ -1,4 +1,5 @@
 using Content.Server.Administration;
+using Content.Server.Administration.Logs; // CMU14: teleport links in admin notifications
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.DeviceNetwork.Systems;
@@ -51,6 +52,7 @@ public sealed partial class FaxSystem : EntitySystem
     [Dependency] private QuickDialogSystem _quickDialog = default!;
     [Dependency] private UserInterfaceSystem _userInterface = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!; // CMU14: teleport links in admin notifications
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private FaxecuteSystem _faxecute = default!;
     [Dependency] private EmagSystem _emag = default!;
@@ -654,6 +656,12 @@ public sealed partial class FaxSystem : EntitySystem
     private void NotifyAdmins(string faxName, EntityUid faxReceiver)
     {
         _chat.SendAdminAnnouncement(Loc.GetString("fax-machine-chat-notify", ("fax", faxName), ("faxReceiver", ToPrettyString(faxReceiver))));
-        _audioSystem.PlayGlobal("/Audio/Machines/high_tech_confirm.ogg", Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false, AudioParams.Default.AddVolume(-8f));
+
+        // CMU14: teleport links to the receiving machine
+        if (_adminLog.CreateTpLinks(Loc.GetString("fax-machine-chat-notify-teleport-header"),
+                [(faxReceiver, Name(faxReceiver))], out var tpLinks))
+            _chat.SendAdminAnnouncementNoFormatOrEscape(tpLinks);
+
+        _audioSystem.PlayGlobal(new ResolvedPathSpecifier("/Audio/Machines/high_tech_confirm.ogg"), Filter.Empty().AddPlayers(_adminManager.ActiveAdminsWithFlag(Content.Shared.Administration.AdminFlags.AdminAlerts)), false, AudioParams.Default.AddVolume(-8f)); // cmu edit
     }
 }

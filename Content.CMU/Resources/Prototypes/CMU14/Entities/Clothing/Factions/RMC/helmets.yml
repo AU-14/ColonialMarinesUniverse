@@ -67,8 +67,7 @@
   - type: IntegratedVisors
     startToggled: true
     visorsToAdd:
-    - AU14VisorMedicalAdvancedIntegratedRMC
-    - AU14VisorSquadIntegratedRMC
+    - CMUVisorMedicalSquadIntegrated
 
 - type: entity
   parent: RMCMarineHelmetBase

@@ -29,9 +29,9 @@ public sealed partial class HealOrganEffect : EntityEffectBase<HealOrganEffect>
 
 public sealed partial class HealOrganEntityEffectSystem : EntityEffectSystem<MetaDataComponent, HealOrganEffect>
 {
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly CMUMedicalBodyIndexSystem _medicalIndex = default!;
-    [Dependency] private readonly SharedOrganHealthSystem _organHealth = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private SharedOrganHealthSystem _organHealth = default!;
 
     protected override void Effect(Entity<MetaDataComponent> entity, ref EntityEffectEvent<HealOrganEffect> args)
     {

@@ -1,0 +1,90 @@
+# Pick the medication you're allergic to. Up to two allergies (drug or food) per character; Drug Allergy: Random and the
+# food allergies are in the same section.
+
+- type: trait
+  id: CMUDrugAllergyInaprovaline
+  name: cmu-trait-drug-allergy-inaprovaline-name
+  description: cmu-trait-drug-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddDrugAllergySpecial
+    allergen: CMInaprovaline
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUDrugAllergyParacetamol
+  name: cmu-trait-drug-allergy-paracetamol-name
+  description: cmu-trait-drug-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddDrugAllergySpecial
+    allergen: CMUParacetamol
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUDrugAllergyTramadol
+  name: cmu-trait-drug-allergy-tramadol-name
+  description: cmu-trait-drug-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddDrugAllergySpecial
+    allergen: CMUTramadol
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUDrugAllergyOxycodone
+  name: cmu-trait-drug-allergy-oxycodone-name
+  description: cmu-trait-drug-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddDrugAllergySpecial
+    allergen: CMUOxycodone
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUDrugAllergyFentanyl
+  name: cmu-trait-drug-allergy-fentanyl-name
+  description: cmu-trait-drug-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddDrugAllergySpecial
+    allergen: CMUFentanyl
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUDrugAllergyImidazoline
+  name: cmu-trait-drug-allergy-imidazoline-name
+  description: cmu-trait-drug-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddDrugAllergySpecial
+    allergen: CMImidazoline
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUDrugAllergyLeporazine
+  name: cmu-trait-drug-allergy-leporazine-name
+  description: cmu-trait-drug-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddDrugAllergySpecial
+    allergen: CMLeporazine
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUDrugAllergyEthylredoxrazine
+  name: cmu-trait-drug-allergy-ethylredoxrazine-name
+  description: cmu-trait-drug-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddDrugAllergySpecial
+    allergen: CMEthylredoxrazine
+  traitGear: CMUEpinephrineAutoInjector

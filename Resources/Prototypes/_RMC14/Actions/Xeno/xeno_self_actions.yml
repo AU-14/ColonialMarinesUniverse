@@ -754,6 +754,9 @@
     range: 5
   - type: EntityTargetAction
     event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoCarrionMantleActionEvent
+    whitelist: # CMU14: only xenos, so a click that lands on weeds under a moving hivemate keeps targeting
+      components:
+      - Xeno
   - type: ActionBlockIfResting
   - type: ActionInRangeUnobstructed
     range: 5

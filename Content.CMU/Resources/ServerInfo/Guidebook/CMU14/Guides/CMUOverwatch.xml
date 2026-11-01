@@ -1,0 +1,24 @@
+<Document>
+  # Overwatch
+
+  The overwatch console lets command keep track of a squad: who is alive, how hurt they are, where they are, and what they can see.
+
+  ## Picking a Squad
+  - Open the console and pick a squad at the top. The tabs on the left switch between the squad monitor, supply drop, orbital bombardment, fireteams and, on some consoles, the comms net directory.
+  - The header shows [bold]SUPPLY DROP[/bold] readiness: [color=green]READY[/color], [color=red]NO CRATE[/color] or [color=#FFA500]RECHARGING[/color] with the time left.
+
+  ## Squad Monitor
+  - Marines are grouped into [bold]Squad Lead[/bold], each [bold]Fireteam[/bold] (with its nickname), [bold]Unassigned[/bold] and [bold]Tripod Cameras[/bold].
+  - Each row shows the marine's radio callsign, rank and name, a health bar with their health, whether they are unconscious, dead or SSD, then their role, location and distance from the squad leader.
+  - [bold]CAM[/bold] opens their helmet camera in the [bold]Camera Feeds[/bold] window. Up to four cameras can be open at once; press CAM again to close one. Feeds close when you close the console.
+  - [bold]HIDE[/bold] hides a marine from the list, and [bold]SL[/bold] makes them squad leader (greyed out for the current one).
+  - Your filters (location, show dead, show hidden, squad info) are kept when you close and reopen the console.
+
+  ## Fireteams
+  - Each fireteam card has a nickname box and its members. [bold]LEAD[/bold] makes someone the fireteam leader, [bold]1 / 2 / 3[/bold] moves them to that fireteam and [bold]OUT[/bold] takes them out of it.
+  - [bold]AUTO LEADERS[/bold] turns automatic squad and fireteam leader assignment on or off for that squad. Off, nobody is promoted unless you or the squad leader choose them. Marines are still sorted into fireteams.
+
+  ## Supply Drop and Orbital Bombardment
+  - Enter coordinates and launch, or [bold]Save[/bold] them for later. Each tab keeps its own saved coordinates, with a comment for each.
+  - Click a saved entry's arrow to load it back into that tab.
+</Document>

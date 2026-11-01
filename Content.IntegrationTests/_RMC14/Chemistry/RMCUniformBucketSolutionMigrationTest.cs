@@ -13,6 +13,8 @@ namespace Content.IntegrationTests._RMC14.Chemistry;
 [TestOf(typeof(SolutionComponent))]
 public sealed class RMCUniformBucketSolutionMigrationTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId RMCBucketJanitorialPrototype = "RMCBucketJanitorial";
+
     private static readonly string[] Uniforms =
     [
         "JumpsuitMarine",
@@ -79,7 +81,7 @@ public sealed class RMCUniformBucketSolutionMigrationTest : GameTest
                 Assert.That(drainable!.Value.Owner, Is.EqualTo(bucket), prototypeId);
             }
 
-            var janitorial = SProtoMan.Index<EntityPrototype>("RMCBucketJanitorial");
+            var janitorial = SProtoMan.Index<EntityPrototype>(RMCBucketJanitorialPrototype);
             Assert.That(janitorial.TryComp<SolutionTransferComponent>(out var transfer, SEntMan.ComponentFactory),
                 Is.True);
             Assert.Multiple(() =>
@@ -106,7 +108,9 @@ public sealed class RMCUniformBucketSolutionMigrationTest : GameTest
         Assert.Multiple(() =>
         {
             Assert.That(prototype.TryComp<SolutionComponent>(out _, factory), Is.True, prototype.ID);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
             Assert.That(prototype.TryComp<SolutionContainerManagerComponent>(out _, factory), Is.False, prototype.ID);
+#pragma warning restore CS0612
             Assert.That(prototype.TryComp<SolutionManagerComponent>(out _, factory), Is.False, prototype.ID);
             Assert.That(enumerated, Has.Length.EqualTo(1), prototype.ID);
             Assert.That(enumerated[0].Id, Is.EqualTo(solutionId), prototype.ID);
@@ -127,7 +131,9 @@ public sealed class RMCUniformBucketSolutionMigrationTest : GameTest
         Assert.Multiple(() =>
         {
             Assert.That(solutionEntity!.Value.Owner, Is.EqualTo(owner), prototypeId);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
             Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(owner), Is.False, prototypeId);
+#pragma warning restore CS0612
             Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(owner), Is.False, prototypeId);
             AssertSolution(solution!, capacity, reagent, quantity, prototypeId);
         });

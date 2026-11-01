@@ -28,7 +28,7 @@ namespace Content.Client.CMU14.Interface;
 ///     still.
 ///     </para>
 /// </remarks>
-public sealed class CrtScanlineOverlay : Control
+public sealed partial class CrtScanlineOverlay : Control
 {
     /// <summary>
     ///     Peak darkening at full intensity. Matches the coefficient the shader's scanline term uses,
@@ -36,7 +36,7 @@ public sealed class CrtScanlineOverlay : Control
     /// </summary>
     private const float Darkening = 0.85f;
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     public CrtScanlineOverlay()
     {

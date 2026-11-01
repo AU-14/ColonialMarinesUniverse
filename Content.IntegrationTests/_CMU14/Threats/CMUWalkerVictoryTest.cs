@@ -9,6 +9,8 @@ namespace Content.IntegrationTests.CMU14.Threats;
 [TestFixture]
 public sealed class CMUWalkerVictoryTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> GOVFORPrototype = "GOVFOR";
+
     public override PoolSettings PoolSettings => new() { Connected = false };
 
     [Test]
@@ -20,7 +22,7 @@ public sealed class CMUWalkerVictoryTest : GameTest
             SEntMan.SpawnEntity("CMUPathogenHive", map.GridCoords);
             var human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var injector = SEntMan.SpawnEntity("CMU14XenoNeomorph", map.GridCoords);
-            Server.System<NpcFactionSystem>().AddFaction(human, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(human, GOVFORPrototype);
             var state = SEntMan.GetComponent<MobStateComponent>(human);
             var rules = Server.System<ThreatRuleHelper>();
             Assert.That(rules.IsEliminated(human, state), Is.False);

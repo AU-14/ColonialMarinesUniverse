@@ -23,6 +23,9 @@ namespace Content.IntegrationTests.Tests.Roles;
 [TestFixture]
 public sealed class RoleSuccessorMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CaptainPrototype = "Captain";
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMCommandingOfficerPrototype = "CMCommandingOfficer";
+
     private static readonly ProtoId<JobPrototype> Alpha = "RoleMergeAlpha";
     private static readonly ProtoId<JobPrototype> Beta = "RoleMergeBeta";
     private static readonly ProtoId<JobPrototype> Allowed = "RoleMergeAllowed";
@@ -385,8 +388,8 @@ public sealed class RoleSuccessorMergeRegressionTest : GameTest
         AssertJobFields(alpha);
 
         var defaultWeights = prototypes.Index<JobWeightPrototype>(JobWeightPrototype.Default);
-        var captain = prototypes.Index<JobPrototype>("Captain");
-        var omittedForkJob = prototypes.Index<JobPrototype>("CMCommandingOfficer");
+        var captain = prototypes.Index<JobPrototype>(CaptainPrototype);
+        var omittedForkJob = prototypes.Index<JobPrototype>(CMCommandingOfficerPrototype);
         Assert.Multiple(() =>
         {
             Assert.That(defaultWeights.Weights.ContainsKey(omittedForkJob.ID), Is.False,

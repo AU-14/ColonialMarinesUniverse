@@ -8,7 +8,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared.CMU14.Fighter;
 
 /// <summary>The physical cockpit owns the aircraft's position in the airspace over a terrain map.</summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true), AutoGenerateComponentPause]
 public sealed partial class FighterAircraftComponent : Component
 {
     [DataField, AutoNetworkedField] public EntityUid? GroundEntity;
@@ -21,7 +21,7 @@ public sealed partial class FighterAircraftComponent : Component
     [DataField, AutoNetworkedField] public EntityUid TerrainMap;
     [DataField, AutoNetworkedField] public EntityUid ViewMap;
     [DataField, AutoNetworkedField] public Vector2 Position;
-    [DataField, AutoNetworkedField] public Vector2 Home;
+    [DataField] public Vector2 Home;
     [DataField, AutoNetworkedField] public float Heading;
     [DataField, AutoNetworkedField] public float Speed = 12f;
     [DataField, AutoNetworkedField] public float TargetSpeed = 12f;
@@ -30,16 +30,16 @@ public sealed partial class FighterAircraftComponent : Component
     [DataField, AutoNetworkedField] public bool Flying;
     [DataField, AutoNetworkedField] public bool ForcedRetreat;
     [DataField, AutoNetworkedField] public FighterPhase Phase;
-    [DataField, AutoNetworkedField] public Vector2 Entry;
-    [DataField, AutoNetworkedField] public Vector2 Exit;
-    [DataField, AutoNetworkedField] public Vector2 LegStart;
-    [DataField, AutoNetworkedField] public Vector2 LegControl1;
-    [DataField, AutoNetworkedField] public Vector2 LegControl2;
-    [DataField, AutoNetworkedField] public Vector2 LegEnd;
+    [DataField] public Vector2 Entry;
+    [DataField] public Vector2 Exit;
+    [DataField] public Vector2 LegStart;
+    [DataField] public Vector2 LegControl1;
+    [DataField] public Vector2 LegControl2;
+    [DataField] public Vector2 LegEnd;
     [DataField, AutoNetworkedField] public float Progress;
     [DataField, AutoNetworkedField] public float Height = 350;
     [DataField, AutoNetworkedField] public float TargetHeight = 350;
-    [DataField, AutoNetworkedField] public Box2 Battlefield = new(-120, -120, 120, 120);
+    [DataField] public Box2 Battlefield = new(-120, -120, 120, 120);
     [DataField, AutoNetworkedField] public Vector2? Mark;
     [DataField, AutoNetworkedField] public float MarkAge;
     [DataField, AutoNetworkedField] public Vector2? TrainingImpact;
@@ -49,19 +49,66 @@ public sealed partial class FighterAircraftComponent : Component
     [DataField, AutoNetworkedField] public EntityUid? RearSeat;
     [DataField, AutoNetworkedField] public EntityUid? Hull;
     [DataField, AutoNetworkedField] public EntityUid? Canopy;
-    [DataField, AutoNetworkedField] public float MinimumSpeed = 8f;
-    [DataField, AutoNetworkedField] public float MaximumSpeed = 26f;
+    [DataField] public float MinimumSpeed = 8f;
+    [DataField] public float MaximumSpeed = 26f;
     [DataField] public float Acceleration = 4f;
-    [DataField, AutoNetworkedField] public float AirspaceRadius = 500f;
-    [DataField, AutoNetworkedField] public float MinimumSensorRange = 24f;
-    [DataField, AutoNetworkedField] public float MaximumSensorRange = 120f;
-    [DataField, AutoNetworkedField] public float MinimumDesignationRangeFactor = .95f;
-    [DataField, AutoNetworkedField] public float MaximumDesignationRangeFactor = 1.8f;
-    [DataField, AutoNetworkedField] public FighterSensorMode SensorMode;
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField] public float AirspaceRadius = 500f;
+    [DataField] public float MinimumSensorRange = 24f;
+    [DataField] public float MaximumSensorRange = 120f;
+    [DataField] public float MinimumDesignationRangeFactor = .95f;
+    [DataField] public float MaximumDesignationRangeFactor = 1.8f;
+    [DataField] public FighterSensorMode SensorMode;
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan ThermalUntil;
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan ThermalReadyAt;
+    // The delta format has 32 field slots. Group infrequently changed scalar settings;
+    // keep entity references separate so the generator translates them to network IDs.
+    [AutoNetworkedField]
+    public FighterFlightPlan FlightPlan
+    {
+        get => new(Home, Entry, Exit, LegStart, LegControl1, LegControl2, LegEnd, Battlefield);
+        set
+        {
+            Home = value.Home;
+            Entry = value.Entry;
+            Exit = value.Exit;
+            LegStart = value.LegStart;
+            LegControl1 = value.LegControl1;
+            LegControl2 = value.LegControl2;
+            LegEnd = value.LegEnd;
+            Battlefield = value.Battlefield;
+        }
+    }
+
+    [AutoNetworkedField]
+    public FighterFlightLimits FlightLimits
+    {
+        get => new(MinimumSpeed, MaximumSpeed, AirspaceRadius, MinimumSensorRange, MaximumSensorRange, MinimumDesignationRangeFactor, MaximumDesignationRangeFactor);
+        set
+        {
+            MinimumSpeed = value.MinimumSpeed;
+            MaximumSpeed = value.MaximumSpeed;
+            AirspaceRadius = value.AirspaceRadius;
+            MinimumSensorRange = value.MinimumSensorRange;
+            MaximumSensorRange = value.MaximumSensorRange;
+            MinimumDesignationRangeFactor = value.MinimumDesignationRangeFactor;
+            MaximumDesignationRangeFactor = value.MaximumDesignationRangeFactor;
+        }
+    }
+
+    [AutoNetworkedField]
+    public FighterSensors Sensors
+    {
+        get => new(SensorMode, ThermalUntil, ThermalReadyAt);
+        set
+        {
+            SensorMode = value.SensorMode;
+            ThermalUntil = value.ThermalUntil;
+            ThermalReadyAt = value.ThermalReadyAt;
+        }
+    }
+
     public float Accumulator;
     public float NetworkAccumulator;
     public float[] LegDistances = [];
@@ -69,6 +116,33 @@ public sealed partial class FighterAircraftComponent : Component
     public EntityUid? Flyby;
     public EntityUid? FlybyAudio;
 }
+
+[Serializable, NetSerializable]
+public readonly record struct FighterFlightPlan(
+    Vector2 Home,
+    Vector2 Entry,
+    Vector2 Exit,
+    Vector2 LegStart,
+    Vector2 LegControl1,
+    Vector2 LegControl2,
+    Vector2 LegEnd,
+    Box2 Battlefield);
+
+[Serializable, NetSerializable]
+public readonly record struct FighterFlightLimits(
+    float MinimumSpeed,
+    float MaximumSpeed,
+    float AirspaceRadius,
+    float MinimumSensorRange,
+    float MaximumSensorRange,
+    float MinimumDesignationRangeFactor,
+    float MaximumDesignationRangeFactor);
+
+[Serializable, NetSerializable]
+public readonly record struct FighterSensors(
+    FighterSensorMode SensorMode,
+    TimeSpan ThermalUntil,
+    TimeSpan ThermalReadyAt);
 
 /// <summary>Static terrain chart, separate from frequently changing flight state.</summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -78,7 +152,7 @@ public sealed partial class FighterChartComponent : Component
     [DataField, AutoNetworkedField] public byte[] Terrain = [];
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true), AutoGenerateComponentPause]
 public sealed partial class FighterSeatComponent : Component
 {
     [DataField, AutoNetworkedField] public bool Pilot;

@@ -9,8 +9,8 @@
       options:
 # ├──[ Tier 0 ]──────────────────────────────────────────────────────┤
       -
-        - name: Unlock Tier 1
-          description: Transitions the tree to another tier.
+        - name: cmu-tech-tier-one
+          description: cmu-tech-tier-unlock-desc
           cost: 0
           events:
           - !type:TechUnlockTierEvent
@@ -20,8 +20,8 @@
             state: upgrade
 # ├──[ Tier 1: Requisition budget ]──────────────────────────────────┤
       -
-        - name: Requisition Budget Increase
-          description: Distributes resources to requisitions for spending.
+        - name: cmu-tech-opfor-req-budget
+          description: cmu-tech-opfor-req-budget-desc
           cost: 12
           increase: 3
           repurchasable: true
@@ -29,8 +29,59 @@
           - !type:TechRequisitionsBudgetEvent
             amount: 5000
           - !type:TechAnnounceEvent
-            author:  SPECIAL ASSETS AUTHORIZED
-            message: Additional supply budget has been authorised for this operation.
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-opfor-req-budget-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_req
+        - name: cmu-tech-opfor-disk-smoke
+          description: cmu-tech-opfor-disk-smoke-desc
+          cost: 8
+          increase: 4
+          repurchasable: true
+          maxPurchases: 3
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUSmokeStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-opfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_cluster
+        - name: cmu-tech-opfor-disk-railcannon
+          description: cmu-tech-opfor-disk-railcannon-desc
+          cost: 60
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMURailcannonStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-opfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: railgun
+        - name: cmu-tech-opfor-disk-ems
+          description: cmu-tech-opfor-disk-ems-desc
+          cost: 45
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUEMSStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-opfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_incend
+        - name: cmu-tech-opfor-disk-gatling
+          description: cmu-tech-opfor-disk-gatling-desc
+          cost: 50
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUGatlingBarrage
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-opfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_he

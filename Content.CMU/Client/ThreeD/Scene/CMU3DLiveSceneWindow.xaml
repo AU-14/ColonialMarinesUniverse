@@ -1,0 +1,21 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:scene="clr-namespace:Content.Client.CMU14.ThreeD.Scene"
+               Title="{Loc cmu-3d-live-title}" MinSize="640 420" SetSize="960 680">
+  <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
+    <RichTextLabel Text="{Loc cmu-3d-live-scope}" />
+    <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+      <Button Name="Reset" Text="{Loc cmu-3d-reset}" />
+      <Button Name="Top" Text="{Loc cmu-3d-live-top}" />
+      <CheckBox Name="Inherited" Access="Public" Text="{Loc cmu-3d-live-inherited}" />
+      <CheckBox Name="Fallbacks" Access="Public" Text="{Loc cmu-3d-live-fallbacks}" Pressed="True" />
+      <CheckBox Name="Cutaway" Access="Public" Text="{Loc cmu-3d-live-cutaway}" Pressed="True" />
+    </BoxContainer>
+    <scene:CMU3DSceneControl Name="View" Access="Public" HorizontalExpand="True" VerticalExpand="True" MinSize="360 260" />
+    <RichTextLabel Name="Statistics" Access="Public" />
+    <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+      <Label Name="Selection" Access="Public" Text="{Loc cmu-3d-live-select}" HorizontalExpand="True" ClipText="True" />
+      <Button Name="Inspect" Access="Public" Text="{Loc cmu-3d-live-inspect}" Disabled="True" />
+    </BoxContainer>
+    <RichTextLabel Text="{Loc cmu-3d-live-controls}" />
+  </BoxContainer>
+</DefaultWindow>

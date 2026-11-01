@@ -1,0 +1,496 @@
+# Generate with author_elevation.py followed by author_multiz_elevation.py.
+- type: cmu3DElevation
+  id: CMU3DStableGarrisonReduxMinus1
+  regions:
+  - bounds: 116, -155, 124, -148
+    height: 0.39
+  - bounds: 116, -148, 123, -147
+    height: 0.39
+  - bounds: 128, -140, 154, -139
+    height: -0.39
+  - bounds: 158, -140, 159, -139
+    height: -0.39
+  - bounds: 161, -140, 162, -139
+    height: -0.39
+  - bounds: 128, -139, 137, -138
+    height: -0.39
+  - bounds: 128, -138, 129, -135
+    height: -0.39
+  - bounds: 132, -138, 133, -135
+    height: -0.39
+  - bounds: 136, -138, 137, -135
+    height: -0.39
+  - bounds: 138, -139, 154, -135
+    height: -0.39
+  - bounds: 224, -135, 234, -134
+    height: 0.39
+  - bounds: 128, -135, 137, -133
+    height: -0.39
+  - bounds: 223, -134, 235, -133
+    height: 0.39
+  - bounds: 222, -133, 236, -132
+    height: 0.39
+  - bounds: 223, -132, 236, -131
+    height: 0.39
+  - bounds: 128, -133, 129, -130
+    height: -0.39
+  - bounds: 132, -133, 133, -130
+    height: -0.39
+  - bounds: 136, -133, 137, -130
+    height: -0.39
+  - bounds: 228, -131, 236, -130
+    height: 0.39
+  - bounds: 128, -130, 137, -129
+    height: -0.39
+  - bounds: 138, -135, 141, -129
+    height: -0.39
+  - bounds: 158, -139, 162, -129
+    height: -0.39
+  - bounds: 228, -130, 235, -129
+    height: 0.39
+  - bounds: 228, -129, 234, -128
+    height: 0.39
+  - bounds: 138, -127, 141, -126
+    height: -0.39
+  - bounds: 228, -128, 233, -125
+    height: 0.39
+  - bounds: 228, -125, 232, -124
+    height: 0.39
+  - bounds: 197, -124, 200, -123
+    height: -0.39
+  - bounds: 229, -124, 231, -123
+    height: 0.39
+  - bounds: 137, -126, 141, -122
+    height: -0.39
+  - bounds: 196, -123, 200, -122
+    height: -0.39
+  - bounds: 195, -122, 200, -121
+    height: -0.39
+  - bounds: 138, -122, 141, -119
+    height: -0.39
+  - bounds: 142, -122, 145, -119
+    height: -0.39
+  - bounds: 137, -119, 141, -117
+    height: -0.39
+  - bounds: 138, -117, 141, -114
+    height: -0.39
+  - bounds: 142, -117, 145, -114
+    height: -0.39
+  - bounds: 194, -121, 200, -114
+    height: -0.39
+  - bounds: 158, -127, 162, -113
+    height: -0.39
+  - bounds: 196, -114, 200, -113
+    height: -0.39
+  - bounds: 142, -112, 144, -109
+    height: -0.39
+  - bounds: 137, -114, 141, -107
+    height: -0.39
+  - bounds: 182, -110, 226, -107
+    height: -0.39
+  - bounds: 228, -110, 233, -107
+    height: -0.39
+  - bounds: 138, -107, 141, -106
+    height: -0.39
+  - bounds: 183, -107, 225, -106
+    height: -0.39
+  - bounds: 229, -107, 232, -106
+    height: -0.39
+  - bounds: 184, -106, 224, -105
+    height: -0.39
+  - bounds: 230, -106, 231, -105
+    height: -0.39
+  - bounds: 163, -106, 179, -104
+    height: -0.39
+  - bounds: 208, -105, 218, -104
+    height: -0.39
+  - bounds: 142, -105, 144, -103
+    height: -0.39
+  - bounds: 163, -104, 180, -103
+    height: -0.39
+  - bounds: 207, -104, 218, -103
+    height: -0.39
+  - bounds: 187, -103, 188, -102
+    height: -0.39
+  - bounds: 192, -103, 194, -102
+    height: 0.39
+  - bounds: 139, -106, 141, -101
+    height: -0.39
+  - bounds: 172, -103, 179, -101
+    height: -0.39
+  - bounds: 186, -102, 188, -101
+    height: -0.39
+  - bounds: 191, -102, 195, -101
+    height: 0.39
+  - bounds: 206, -103, 218, -101
+    height: -0.39
+  - bounds: 185, -101, 188, -98
+    height: -0.39
+  - bounds: 206, -101, 210, -98
+    height: -0.39
+  - bounds: 212, -100, 215, -98
+    height: -0.39
+  - bounds: 138, -101, 141, -97
+    height: -0.39
+  - bounds: 186, -98, 188, -97
+    height: -0.39
+  - bounds: 191, -101, 196, -97
+    height: 0.39
+  - bounds: 207, -98, 210, -97
+    height: -0.39
+  - bounds: 137, -97, 143, -96
+    height: -0.39
+  - bounds: 191, -97, 194, -96
+    height: 0.39
+  - bounds: 208, -97, 210, -96
+    height: -0.39
+  - bounds: 137, -96, 142, -95
+    height: -0.39
+  - bounds: 163, -97, 164, -94
+    height: -0.39
+  - bounds: 166, -95, 172, -94
+    height: -0.39
+  - bounds: 168, -94, 169, -93
+    height: -0.39
+  - bounds: 170, -94, 171, -93
+    height: -0.39
+  - bounds: 195, -93, 206, -92
+    height: -0.39
+  - bounds: 212, -93, 223, -92
+    height: -0.39
+  - bounds: 194, -92, 206, -91
+    height: -0.39
+  - bounds: 212, -92, 217, -91
+    height: -0.39
+  - bounds: 127, -91, 133, -90
+    height: -0.39
+  - bounds: 201, -91, 207, -90
+    height: -0.39
+  - bounds: 211, -91, 217, -90
+    height: -0.39
+  - bounds: 128, -90, 133, -88
+    height: -0.39
+  - bounds: 127, -88, 133, -87
+    height: -0.39
+  - bounds: 136, -91, 155, -87
+    height: -0.39
+  - bounds: 194, -91, 198, -86
+    height: -0.39
+  - bounds: 198, -91, 201, -86
+    height: -0.78
+  - bounds: 201, -90, 217, -86
+    height: -0.39
+  - bounds: 217, -92, 220, -86
+    height: -0.78
+  - bounds: 220, -92, 224, -86
+    height: -0.39
+  - bounds: 195, -86, 223, -85
+    height: -0.39
+  - bounds: 196, -85, 222, -84
+    height: -0.39
+  - bounds: 197, -84, 202, -83
+    height: -0.39
+  - bounds: 216, -84, 221, -83
+    height: -0.39
+  - bounds: 271, -64, 272, -61
+    height: 0.74
+  - bounds: 265, -61, 271, -60
+    height: -0.39
+  - bounds: 272, -62, 273, -60
+    height: -0.78
+  - bounds: 276, -61, 277, -60
+    height: -0.78
+  - bounds: 265, -60, 270, -57
+    height: -0.39
+  - bounds: 272, -60, 278, -57
+    height: -0.78
+  - bounds: 266, -57, 270, -56
+    height: -0.39
+  - bounds: 272, -57, 277, -56
+    height: -0.78
+  - bounds: 267, -56, 270, -55
+    height: -0.39
+  - bounds: 270, -60, 271, -55
+    height: -0.52
+  - bounds: 271, -61, 272, -55
+    height: -0.65
+  - bounds: 272, -56, 276, -55
+    height: -0.78
+  ramps:
+  - tile: 270, -58
+    direction: -1, 0
+    bottom: -0.52
+    top: -0.39
+    sourcePrototype: AU14FlightStairs
+  - tile: 270, -59
+    direction: -1, 0
+    bottom: -0.52
+    top: -0.39
+    sourcePrototype: AU14FlightStairs
+  - tile: 270, -60
+    direction: -1, 0
+    bottom: -0.52
+    top: -0.39
+    sourcePrototype: AU14FlightStairs
+  - tile: 271, -58
+    direction: -1, 0
+    bottom: -0.65
+    top: -0.52
+    sourcePrototype: AU14FlightStairs
+  - tile: 271, -59
+    direction: -1, 0
+    bottom: -0.65
+    top: -0.52
+    sourcePrototype: AU14FlightStairs
+  - tile: 271, -60
+    direction: -1, 0
+    bottom: -0.65
+    top: -0.52
+    sourcePrototype: AU14FlightStairs
+  - tile: 119, -147
+    direction: 0, -1
+    bottom: 0.0
+    top: 0.39
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 124, -152
+    direction: -1, 0
+    bottom: 0.0
+    top: 0.39
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 129, -140
+    direction: 0, -1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 130, -140
+    direction: 0, -1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 225, -131
+    direction: 0, -1
+    bottom: 0.0
+    top: 0.39
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 226, -131
+    direction: 0, -1
+    bottom: 0.0
+    top: 0.39
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 170, -104
+    direction: 0, 1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 171, -104
+    direction: 0, 1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 190, -100
+    direction: 1, 0
+    bottom: 0.0
+    top: 0.39
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 190, -99
+    direction: 1, 0
+    bottom: 0.0
+    top: 0.39
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 203, -93
+    direction: 0, -1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 204, -93
+    direction: 0, -1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 213, -93
+    direction: 0, -1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 214, -93
+    direction: 0, -1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairs
+  - tile: 199, -119
+    direction: 1, 0
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairsTop
+  - tile: 199, -118
+    direction: 1, 0
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairsTop
+  - tile: 199, -117
+    direction: 1, 0
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: RMCAlmayerStairsTop
+  - tile: 269, -61
+    direction: 0, -1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+  - tile: 272, -60
+    direction: -1, 0
+    bottom: -0.78
+    top: -0.65
+    sourcePrototype: AU14FlightStairs
+  - tile: 267, -61
+    direction: 0, -1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+  - tile: 272, -59
+    direction: -1, 0
+    bottom: -0.78
+    top: -0.65
+    sourcePrototype: AU14FlightStairs
+  - tile: 272, -58
+    direction: -1, 0
+    bottom: -0.78
+    top: -0.65
+    sourcePrototype: AU14FlightStairs
+  - tile: 268, -61
+    direction: 0, -1
+    bottom: -0.39
+    top: 0.0
+    sourcePrototype: AU14FlightStairs
+  - tile: 270, -64
+    direction: 1, 0
+    bottom: 0.0
+    top: 0.74
+    sourcePrototype: AU14FlightStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 270, -63
+    direction: 1, 0
+    bottom: 0.0
+    top: 0.74
+    sourcePrototype: AU14FlightStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 270, -62
+    direction: 1, 0
+    bottom: 0.0
+    top: 0.74
+    sourcePrototype: AU14FlightStairs
+    geometry: true
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 0
+  - tile: 271, -64
+    direction: 1, 0
+    bottom: 0.74
+    top: 1.48
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: true
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: 0
+  - tile: 271, -63
+    direction: 1, 0
+    bottom: 0.74
+    top: 1.48
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: true
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: 0
+  - tile: 271, -62
+    direction: 1, 0
+    bottom: 0.74
+    top: 1.48
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: true
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: 0
+  - tile: 272, -64
+    direction: 1, 0
+    bottom: 1.48
+    top: 2.22
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 1
+  - tile: 272, -63
+    direction: 1, 0
+    bottom: 1.48
+    top: 2.22
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 1
+  - tile: 272, -62
+    direction: 1, 0
+    bottom: 1.48
+    top: 2.22
+    sourcePrototype: AU14FlightStairs
+    geometry: false
+    physicsCurve:
+    - 0
+    - 0
+    physicsOffset: 1
+  - tile: 273, -61
+    direction: 0, 1
+    bottom: -2.61
+    top: -0.78
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 274, -61
+    direction: 0, 1
+    bottom: -2.61
+    top: -0.78
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1
+  - tile: 275, -61
+    direction: 0, 1
+    bottom: -2.61
+    top: -0.78
+    sourcePrototype: CMUMultiZStairsFlight
+    geometry: false
+    physicsCurve:
+    - 0.1
+    - 0.575
+    - 1.05
+    - 1.05
+    physicsOffset: -1

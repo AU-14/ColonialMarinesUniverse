@@ -839,3 +839,38 @@
   - type: Sprite
     sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
     state: hemostat
+
+# ---- Stump closure ---------------------------------------------------
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepClampStumpArtery
+  name: Clamp stump artery
+  components:
+  - type: CMSurgeryStep
+    skill: 1
+    tool:
+    - type: CMHemostat
+    add:
+    - type: CMBleedersClamped
+  - type: CMUOpenStumpSurgeryCondition
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepCauterizeStump
+  name: Cauterize stump
+  components:
+  - type: CMSurgeryStep
+    skill: 1
+    tool:
+    - type: CMCautery
+    remove:
+    - type: CMBleedersClamped
+  - type: CMUOpenStumpSurgeryCondition
+  - type: CMUSurgeryStepCloseStumpEffect
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/cautery.rsi
+    state: cautery

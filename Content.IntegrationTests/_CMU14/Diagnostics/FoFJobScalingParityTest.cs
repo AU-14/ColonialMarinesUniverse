@@ -7,6 +7,8 @@ namespace Content.IntegrationTests.CMU14.Diagnostics;
 [TestFixture]
 public sealed class FoFJobScalingParityTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobScalePrototype> DefaultGovforOpforScalePrototype = "DefaultGovforOpforScale";
+
     // Force on Force scaling is single-sided by convention: entries are declared once under
     // the GOVFOR id and AddJobsRuleSystem expands them onto the OPFOR mirror at apply time,
     // so the 3-player mid-round balancer always sees symmetric faction capacity. This pins
@@ -18,7 +20,7 @@ public sealed class FoFJobScalingParityTest : GameTest
     {
         await Server.WaitAssertion(() =>
         {
-            var scale = SProtoMan.Index<JobScalePrototype>("DefaultGovforOpforScale");
+            var scale = SProtoMan.Index<JobScalePrototype>(DefaultGovforOpforScalePrototype);
             var problems = new List<string>();
 
             foreach (var (jobId, _) in scale.Jobs)
@@ -48,7 +50,7 @@ public sealed class FoFJobScalingParityTest : GameTest
     {
         await Server.WaitAssertion(() =>
         {
-            var scale = SProtoMan.Index<JobScalePrototype>("DefaultGovforOpforScale");
+            var scale = SProtoMan.Index<JobScalePrototype>(DefaultGovforOpforScalePrototype);
             var problems = new List<string>();
 
             foreach (var (jobId, _) in scale.Jobs)

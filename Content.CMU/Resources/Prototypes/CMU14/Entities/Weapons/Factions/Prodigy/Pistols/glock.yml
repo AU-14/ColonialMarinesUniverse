@@ -4,6 +4,7 @@
   name: Glock 75 pistol
   description: Austrian legend, designed in XX century, Glock quickly became a major player on the pistol market. This version was produced on a license for Prodigy CORP for security and police forces, features an underbarrel rail for a taser.
   components:
+  - type: CMUNoSafety # no manual safety, like a real Glock
   - type: Tag
     tags:
     - Sidearm

@@ -13,17 +13,26 @@ namespace Content.Client.CMU14.Ops.Sfx;
 
 public sealed partial class ScriptedSoundSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IClientGameStateManager _gameStates = default!;
-    [Dependency] private readonly IPlayerManager _plyMan = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IClientGameStateManager _gameStates = default!;
+    [Dependency] private IPlayerManager _plyMan = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private bool _muted;
     private bool _resyncPending;
     private EntityUid? _lastResyncMap;
     private readonly Dictionary<(int Handle, string Layer), EntityUid> _loops = new();
     private readonly List<(EntityUid Entity, TimeSpan StopAt)> _scheduledStops = new();
+
+    // Hard ceiling on concurrent scripted sounds. Legit playback peaks around a
+    // dozen loop layers; anything past this is a flood, and scripted sound must
+    // never be the system that pushes an exhausted OpenAL source budget over.
+    private readonly List<EntityUid> _activePlays = new();
+    private const int MaxConcurrentPlays = 48;
+
+    // Cap episode bookkeeping: warn once going into a flood, summarize coming out.
+    private int? _suppressedPlays;
 
     public override void Initialize()
     {
@@ -89,20 +98,58 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         if (_muted)
             return;
 
+        if (!CanPlayAnother())
+        {
+            if (_suppressedPlays == null)
+            {
+                _suppressedPlays = 0;
+                Logger.GetSawmill("cmu-sfx")
+                    .Warning($"[SFX] Concurrent sound cap hit ({MaxConcurrentPlays}), dropping scripted sounds until it clears.");
+            }
+
+            _suppressedPlays++;
+            return;
+        }
+
         var played = ev.Global
             ? _audio.PlayGlobal(ev.Sound, Filter.Local(), false, ev.Params)
             : ev.AnchorCoords is { } coords
-                ? _audio.PlayPvs(ev.Sound, EntityManager.GetCoordinates(coords), ev.Params)
+                ? _audio.PlayPvs(ev.Sound, GetCoordinates(coords), ev.Params)
                 : null;
 
         if (played is not { } stream)
             return;
+
+        _activePlays.Add(stream.Entity);
 
         if (ev.Layer != null)
             ReplaceLoop(ev.Handle, ev.Layer, stream.Entity);
 
         if (ev.DurationSeconds is { } dur)
             _scheduledStops.Add((stream.Entity, _timing.CurTime + TimeSpan.FromSeconds(dur)));
+    }
+
+    private bool CanPlayAnother()
+    {
+        // Entity lifetime is the truth: one-shots despawn on their own, loops die
+        // on replace or stop, so pruning dead entities keeps the count honest.
+        for (var i = _activePlays.Count - 1; i >= 0; i--)
+        {
+            if (TerminatingOrDeleted(_activePlays[i]))
+                _activePlays.RemoveAt(i);
+        }
+
+        if (_activePlays.Count >= MaxConcurrentPlays)
+            return false;
+
+        if (_suppressedPlays is { } suppressed)
+        {
+            _suppressedPlays = null;
+            Logger.GetSawmill("cmu-sfx")
+                .Warning($"[SFX] Concurrent sound cap cleared, {suppressed} plays were dropped while it held.");
+        }
+
+        return true;
     }
 
     private void ReplaceLoop(int handle, string layer, EntityUid entity)

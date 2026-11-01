@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Shared/Expeditions/CMUTacticalRoute.cs" Link="CMUTacticalRoute.cs" />
+    <Compile Include="../../../RobustToolbox/Robust.Shared/Utility/PriorityQueue.cs" Link="PriorityQueue.cs" />
+  </ItemGroup>
+</Project>

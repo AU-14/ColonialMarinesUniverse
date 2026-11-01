@@ -1,8 +1,14 @@
 using Content.Shared._RMC14.Inventory;
+using Content.Shared.Atmos.Components;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
+using Content.Shared.Clothing.Components;
 using Content.Shared.Examine;
+using Content.Shared.Inventory;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Containers;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.GasMask;
 
@@ -11,6 +17,18 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
     private readonly float _epsilon = 0.001f;
 
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedInternalsSystem _internals = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+
+    // same slots cmss13 checks for BLOCKGASEFFECT
+    private static readonly string[] GasBlockSlots = ["mask", "eyes", "head"];
+
+    /// <summary>How long internals keep out neurotoxin per continuous exposure.</summary>
+    public static readonly TimeSpan InternalsNeurotoxinProtection = TimeSpan.FromSeconds(9);
+
+    /// <summary>Time out of the gas after which the next exposure starts the protection timer over.</summary>
+    public static readonly TimeSpan NeurotoxinExposureGap = TimeSpan.FromSeconds(1.5);
 
     public override void Initialize()
     {
@@ -25,13 +43,76 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
         ent.Comp.Integrity = ent.Comp.BaseIntegrity;
     }
 
+    public bool IsGasBlocked(EntityUid uid)
+    {
+        foreach (var slot in GasBlockSlots)
+        {
+            if (!_inventory.TryGetSlotEntity(uid, slot, out var item) || !HasComp<GasBlockComponent>(item))
+                continue;
+
+            if (TryComp<MaskComponent>(item, out var mask) && mask.IsToggled)
+                continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
     public bool IsFilterBroken(Entity<GasMaskFilterComponent> ent)
     {
         return ent.Comp.Integrity == 0f || ent.Comp.Integrity <= _epsilon;
     }
 
+    /// <summary>
+    /// True when the entity is breathing from a connected tank that still has air in it.
+    /// A sealed air supply keeps out gases the same way a working filter does, without wearing anything down.
+    /// </summary>
+    public bool IsBreathingInternals(EntityUid uid)
+    {
+        if (!TryComp<InternalsComponent>(uid, out var internals) || !_internals.AreInternalsWorking(internals))
+            return false;
+
+        return TryComp<GasTankComponent>(internals.GasTankEntity, out var tank) && tank.Air.TotalMoles > 0;
+    }
+
+    /// <summary>
+    /// Records that neurotoxin reached the entity and returns true if their internals still keep it out.
+    /// Internals hold for <see cref="InternalsNeurotoxinProtection"/> of continuous exposure; stepping out of the gas
+    /// for longer than <see cref="NeurotoxinExposureGap"/> starts a fresh exposure.
+    /// </summary>
+    public bool TryBlockNeurotoxinWithInternals(EntityUid uid)
+    {
+        if (!IsBreathingInternals(uid))
+            return false;
+
+        var now = _timing.CurTime;
+        if (!TryComp<InternalsNeurotoxinComponent>(uid, out var exposure))
+        {
+            exposure = AddComp<InternalsNeurotoxinComponent>(uid);
+            exposure.ExposureStart = now;
+        }
+        else if (now - exposure.LastExposure > NeurotoxinExposureGap)
+        {
+            exposure.ExposureStart = now;
+        }
+
+        exposure.LastExposure = now;
+        return now - exposure.ExposureStart < InternalsNeurotoxinProtection;
+    }
+
     public void DamageFilter(EntityUid uid, GasMaskFilterComponent comp, GasMaskFilterDamageComponent dam)
     {
+        if (dam.OrbitalGas)
+        {
+            // A body can overlap several cloud tiles; charge only once per exposure tick.
+            if (comp.LastOrbitalGasDamage is { } last && _timing.CurTime - last < TimeSpan.FromSeconds(1))
+                return;
+            comp.LastOrbitalGasDamage = _timing.CurTime;
+            DamageFilter(uid, comp, comp.BaseIntegrity / comp.OrbitalGasProtectionSeconds);
+            return;
+        }
+
         float newhp = comp.Integrity;
         newhp -= dam.Neurotoxin
             ? dam.Damage * comp.NeurotoxinDamageMultiplier

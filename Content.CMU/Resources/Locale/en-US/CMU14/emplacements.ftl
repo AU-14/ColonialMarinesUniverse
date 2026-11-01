@@ -10,6 +10,14 @@ emplacement-mount-CMUMachineGunM2CDropshipLoaded-name = M2C heavy machine gun
 emplacement-mount-CMUMachineGunM2CDropshipLoaded-description = The disassembled M2C HMG, with its telescopic tripods folded up and unable to fire.
 emplacement-mount-CMUMachineGunM2CDropshipLoaded-description-mounted = A dropship-mounted M2C heavy machine gun. The M2C 'Chimp' HB is a modified M2 HB reconfigured to fire 10x28 Caseless Tungsten rounds for USCM use.
 
-emplacement-mount-RMCSmartGunMountedStatic-name = ML66D mount
-emplacement-mount-RMCSmartGunMountedStatic-description = A foldable mount for the ML66D, provides stability to the ML66D.
+emplacement-mount-RMCSmartGunMountedStatic-name = M56D mount
+emplacement-mount-RMCSmartGunMountedStatic-description = A foldable mount for the M56D, provides stability to the M56D.
 emplacement-mount-RMCSmartGunMountedStatic-description-mounted = A deployable, heavy machine gun. It fires specialized tungsten rounds for increased armor penetration.
+
+emplacement-mount-RuMCMachineGunUTES-C-name = UTES-C heavy machine gun
+emplacement-mount-RuMCMachineGunUTES-C-description = The disassembled UTES-C HMG, with its telescopic tripods folded up and unable to fire.
+emplacement-mount-RuMCMachineGunUTES-C-description-mounted = A deployable UPP 12.7x108mm heavy machine gun on its tripod. Slow to set up and murder on the back, but once it's down it puts out a wall of heavy rounds.
+
+emplacement-mount-CMUATGMLauncher-name = MGM-120B FOGO-ATGM
+emplacement-mount-CMUATGMLauncher-description = Forward Observer Guided Operation Antitank Guided Missile. Built by the ISCS and distributed amongst the sector to fight against the growing number of long range vehicle heavy insurgencies. This Wire Guided ATGM has served as a staple for the local Neroid military forces ever since.
+emplacement-mount-CMUATGMLauncher-description-mounted = A deployed wire-guided anti-tank missile launcher. The gunner fires it; a second crewman with the linked finder steers the missile onto the target. Slow to set up, slower to reload, and it hits like a freight train.

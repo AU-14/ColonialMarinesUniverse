@@ -1,0 +1,13 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed a startup crash introduced by expedition gunfire perception.
+  type: Fix
+- message: Expedition specialists retain their primary weapons when switching to a
+    sidearm.
+  type: Fix
+- message: Expedition combatants seek shelter or create distance when their ammunition
+    is exhausted.
+  type: Fix
+time: '2026-10-09T15:59:45.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2123

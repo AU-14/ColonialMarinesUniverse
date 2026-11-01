@@ -90,7 +90,9 @@ public sealed partial class NPCSteeringSystem
                     if (!_doorQuery.TryGetComponent(ent, out var door))
                         continue;
 
-                    if (!door.BumpOpen && (component.Flags & PathFlags.Interact) != 0x0)
+                    // CMU14: swarms stop at interaction range, before they can bump resin doors.
+                    // if (!door.BumpOpen && (component.Flags & PathFlags.Interact) != 0x0)
+                    if ((!door.BumpOpen || IsSwarmLesser(uid)) && (component.Flags & PathFlags.Interact) != 0x0)
                     {
                         if (door.State != DoorState.Opening)
                         {

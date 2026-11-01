@@ -43,6 +43,6 @@ public sealed partial class RMCDamagePopupSystem : EntitySystem
             DamagePopupType.Hit => "!",
             _ => "Invalid type",
         };
-        _popupSystem.PopupClient(msg, target, origin);
+        _popupSystem.PopupEntity(msg, target, origin);
     }
 }

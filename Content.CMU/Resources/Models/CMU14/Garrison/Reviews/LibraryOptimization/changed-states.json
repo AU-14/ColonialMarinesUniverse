@@ -1,0 +1,1353 @@
+[
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default",
+    "before": 32,
+    "after": 21
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl/frames/0",
+    "before": 32,
+    "after": 21
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl/unpoweredFrames/0",
+    "before": 30,
+    "after": 20
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl0/frames/0",
+    "before": 32,
+    "after": 21
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl0/unpoweredFrames/0",
+    "before": 30,
+    "after": 20
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/frames/0",
+    "before": 32,
+    "after": 21
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/frames/1",
+    "before": 32,
+    "after": 21
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/frames/2",
+    "before": 32,
+    "after": 21
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/unpoweredFrames/0",
+    "before": 30,
+    "after": 20
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/unpoweredFrames/1",
+    "before": 30,
+    "after": 20
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/unpoweredFrames/2",
+    "before": 30,
+    "after": 20
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-denied/frames/0",
+    "before": 32,
+    "after": 21
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-denied/frames/1",
+    "before": 32,
+    "after": 21
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-denied/unpoweredFrames/0",
+    "before": 30,
+    "after": 20
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-denied/unpoweredFrames/1",
+    "before": 30,
+    "after": 20
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-p/frames/0",
+    "before": 30,
+    "after": 20
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-p/unpoweredFrames/0",
+    "before": 30,
+    "after": 20
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-open/frames/0",
+    "before": 45,
+    "after": 32
+  },
+  {
+    "id": "CMU3DOrangeDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-open/unpoweredFrames/0",
+    "before": 52,
+    "after": 35
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl/frames/0",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl/unpoweredFrames/0",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl0/frames/0",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl0/unpoweredFrames/0",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/frames/0",
+    "before": 56,
+    "after": 30
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/frames/1",
+    "before": 59,
+    "after": 30
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/frames/2",
+    "before": 56,
+    "after": 30
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/frames/3",
+    "before": 53,
+    "after": 28
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/frames/4",
+    "before": 50,
+    "after": 22
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/frames/5",
+    "before": 53,
+    "after": 28
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/frames/6",
+    "before": 56,
+    "after": 30
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/unpoweredFrames/0",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/unpoweredFrames/1",
+    "before": 57,
+    "after": 32
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/unpoweredFrames/2",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/unpoweredFrames/3",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/unpoweredFrames/4",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/unpoweredFrames/5",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl1/unpoweredFrames/6",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-denied/frames/0",
+    "before": 56,
+    "after": 30
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-denied/frames/1",
+    "before": 56,
+    "after": 30
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-denied/unpoweredFrames/0",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-denied/unpoweredFrames/1",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-p/frames/0",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-p/unpoweredFrames/0",
+    "before": 56,
+    "after": 31
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-open/frames/0",
+    "before": 45,
+    "after": 32
+  },
+  {
+    "id": "CMU3DRedDoorButton",
+    "file": "World/garrison_architecture.yml",
+    "pose": "default/doorButtonStates/doorctrl-open/unpoweredFrames/0",
+    "before": 71,
+    "after": 39
+  },
+  {
+    "id": "CMU3DBedsheetBrown",
+    "file": "World/garrison_bedsheets.yml",
+    "pose": "default",
+    "before": 20,
+    "after": 16
+  },
+  {
+    "id": "CMU3DBedsheetGray",
+    "file": "World/garrison_bedsheets.yml",
+    "pose": "default",
+    "before": 20,
+    "after": 16
+  },
+  {
+    "id": "CMU3DBedsheetGreen",
+    "file": "World/garrison_bedsheets.yml",
+    "pose": "default",
+    "before": 20,
+    "after": 16
+  },
+  {
+    "id": "CMU3DBedsheetWhite",
+    "file": "World/garrison_bedsheets.yml",
+    "pose": "default",
+    "before": 20,
+    "after": 16
+  },
+  {
+    "id": "CMU3DAU14CCAFUniformWorldCloud",
+    "file": "World/garrison_clothing_final_cloud.yml",
+    "pose": "default",
+    "before": 57,
+    "after": 56
+  },
+  {
+    "id": "CMU3DRMCCoatSnowSurvivorWorldCloud",
+    "file": "World/garrison_clothing_final_cloud.yml",
+    "pose": "default",
+    "before": 50,
+    "after": 47
+  },
+  {
+    "id": "CMU3DRMCPropVehicleMonoSupronCopDestroyed",
+    "file": "World/garrison_compact_cars.yml",
+    "pose": "default",
+    "before": 81,
+    "after": 79
+  },
+  {
+    "id": "CMU3DRMCPropVehicleMonoSupronPurpleDestroyed",
+    "file": "World/garrison_compact_cars.yml",
+    "pose": "default",
+    "before": 79,
+    "after": 77
+  },
+  {
+    "id": "CMU3DMultiMonitorBigCloudSouth",
+    "file": "World/garrison_console_factory_cloud.yml",
+    "pose": "default",
+    "before": 37,
+    "after": 28
+  },
+  {
+    "id": "CMU3DMultiMonitorBigCloudNorth",
+    "file": "World/garrison_console_factory_cloud.yml",
+    "pose": "default",
+    "before": 37,
+    "after": 28
+  },
+  {
+    "id": "CMU3DMultiMonitorBigCloudEast",
+    "file": "World/garrison_console_factory_cloud.yml",
+    "pose": "default",
+    "before": 37,
+    "after": 29
+  },
+  {
+    "id": "CMU3DMultiMonitorBigCloudWest",
+    "file": "World/garrison_console_factory_cloud.yml",
+    "pose": "default",
+    "before": 37,
+    "after": 28
+  },
+  {
+    "id": "CMU3DTelecomProcessorCloud",
+    "file": "World/garrison_console_factory_cloud.yml",
+    "pose": "default",
+    "before": 27,
+    "after": 26
+  },
+  {
+    "id": "CMU3DTelecomReceiverCloud",
+    "file": "World/garrison_console_factory_cloud.yml",
+    "pose": "default",
+    "before": 23,
+    "after": 22
+  },
+  {
+    "id": "CMU3DMachineFrameReadyCloud",
+    "file": "World/garrison_console_factory_cloud.yml",
+    "pose": "default",
+    "before": 68,
+    "after": 52
+  },
+  {
+    "id": "CMU3DCMMemorialMaintainersDecorFinalCloud",
+    "file": "World/garrison_decor_final_cloud.yml",
+    "pose": "default",
+    "before": 14,
+    "after": 13
+  },
+  {
+    "id": "CMU3DFoodBowlBigCloud",
+    "file": "World/garrison_food_cloud.yml",
+    "pose": "default",
+    "before": 50,
+    "after": 26
+  },
+  {
+    "id": "CMU3DFoodRiceEggCloud",
+    "file": "World/garrison_food_cloud.yml",
+    "pose": "default",
+    "before": 113,
+    "after": 89
+  },
+  {
+    "id": "CMU3DFoodRicePuddingCloud",
+    "file": "World/garrison_food_cloud.yml",
+    "pose": "default",
+    "before": 79,
+    "after": 55
+  },
+  {
+    "id": "CMU3DFoodSaladKimchiCloud",
+    "file": "World/garrison_food_cloud.yml",
+    "pose": "default",
+    "before": 81,
+    "after": 57
+  },
+  {
+    "id": "CMU3DFoodSoupBisqueCloud",
+    "file": "World/garrison_food_cloud.yml",
+    "pose": "default",
+    "before": 78,
+    "after": 54
+  },
+  {
+    "id": "CMU3DFoodSoupChiliHotCloud",
+    "file": "World/garrison_food_cloud.yml",
+    "pose": "default",
+    "before": 84,
+    "after": 60
+  },
+  {
+    "id": "CMU3DFoodPlateCloud",
+    "file": "World/garrison_food_cloud.yml",
+    "pose": "default",
+    "before": 50,
+    "after": 38
+  },
+  {
+    "id": "CMU3DFoodMealSashimiExtraCloud",
+    "file": "World/garrison_food_extra_cloud.yml",
+    "pose": "default",
+    "before": 118,
+    "after": 102
+  },
+  {
+    "id": "CMU3DHandAU14CassetteTapeRisingSunCloud",
+    "file": "World/garrison_hand_tools_cloud.yml",
+    "pose": "default",
+    "before": 45,
+    "after": 37
+  },
+  {
+    "id": "CMU3DHandAU14CassetteTapeRisingSunCloud",
+    "file": "World/garrison_hand_tools_cloud.yml",
+    "pose": "default/spriteStates/cassette_rising_sun/frames/0",
+    "before": 45,
+    "after": 37
+  },
+  {
+    "id": "CMU3DFireExtinguisher",
+    "file": "World/garrison_hardware.yml",
+    "pose": "default",
+    "before": 24,
+    "after": 20
+  },
+  {
+    "id": "CMU3DHybrisaExtinguisherCabinet",
+    "file": "World/garrison_hardware.yml",
+    "pose": "default",
+    "before": 32,
+    "after": 28
+  },
+  {
+    "id": "CMU3DSmallFloodlight",
+    "file": "World/garrison_hardware.yml",
+    "pose": "default",
+    "before": 40,
+    "after": 39
+  },
+  {
+    "id": "CMU3DTallFloodlight",
+    "file": "World/garrison_hardware.yml",
+    "pose": "default",
+    "before": 46,
+    "after": 45
+  },
+  {
+    "id": "CMU3DRMCVendorColaSPPInheritedMiscCloud",
+    "file": "World/garrison_inherited_misc_cloud.yml",
+    "pose": "default",
+    "before": 32,
+    "after": 28
+  },
+  {
+    "id": "CMU3DRMCVendorNutriCoDrinkInheritedMiscCloud",
+    "file": "World/garrison_inherited_misc_cloud.yml",
+    "pose": "default",
+    "before": 58,
+    "after": 54
+  },
+  {
+    "id": "CMU3DRMCWeYaClipboardInheritedMiscCloud",
+    "file": "World/garrison_inherited_misc_cloud.yml",
+    "pose": "default",
+    "before": 12,
+    "after": 10
+  },
+  {
+    "id": "CMU3DRMCMedalPlatinumInsigniaExtraCloud",
+    "file": "World/garrison_insignia_extra_cloud.yml",
+    "pose": "default",
+    "before": 14,
+    "after": 11
+  },
+  {
+    "id": "CMU3DRMCMedalPlatinumInsigniaExtraCloud",
+    "file": "World/garrison_insignia_extra_cloud.yml",
+    "pose": "default/spriteStates/icon/frames/0",
+    "before": 14,
+    "after": 11
+  },
+  {
+    "id": "CMU3DRMCMedalPlatinumInsigniaExtraCloud",
+    "file": "World/garrison_insignia_extra_cloud.yml",
+    "pose": "default/spriteStates/icon/frames/1",
+    "before": 14,
+    "after": 11
+  },
+  {
+    "id": "CMU3DRMCMedalPlatinumInsigniaExtraCloud",
+    "file": "World/garrison_insignia_extra_cloud.yml",
+    "pose": "default/spriteStates/icon/frames/2",
+    "before": 14,
+    "after": 11
+  },
+  {
+    "id": "CMU3DRMCMedalPlatinumInsigniaExtraCloud",
+    "file": "World/garrison_insignia_extra_cloud.yml",
+    "pose": "default/spriteStates/icon/frames/3",
+    "before": 14,
+    "after": 11
+  },
+  {
+    "id": "CMU3DRMCMedalPlatinumInsigniaExtraCloud",
+    "file": "World/garrison_insignia_extra_cloud.yml",
+    "pose": "default/spriteStates/icon/frames/4",
+    "before": 14,
+    "after": 11
+  },
+  {
+    "id": "CMU3DRMCMedalPlatinumInsigniaExtraCloud",
+    "file": "World/garrison_insignia_extra_cloud.yml",
+    "pose": "default/spriteStates/icon/frames/5",
+    "before": 14,
+    "after": 11
+  },
+  {
+    "id": "CMU3DRMCMedalPlatinumInsigniaExtraCloud",
+    "file": "World/garrison_insignia_extra_cloud.yml",
+    "pose": "default/spriteStates/icon/frames/6",
+    "before": 14,
+    "after": 11
+  },
+  {
+    "id": "CMU3DRMCMedalPlatinumInsigniaExtraCloud",
+    "file": "World/garrison_insignia_extra_cloud.yml",
+    "pose": "default/spriteStates/icon/frames/7",
+    "before": 14,
+    "after": 11
+  },
+  {
+    "id": "CMU3DHospitalPrivacyScreen",
+    "file": "World/garrison_interiors.yml",
+    "pose": "default",
+    "before": 33,
+    "after": 32
+  },
+  {
+    "id": "CMU3DLooseFloorBoard3",
+    "file": "World/garrison_loose_planks.yml",
+    "pose": "default",
+    "before": 32,
+    "after": 31
+  },
+  {
+    "id": "CMU3DLooseFloorBoard4",
+    "file": "World/garrison_loose_planks.yml",
+    "pose": "default",
+    "before": 31,
+    "after": 29
+  },
+  {
+    "id": "CMU3DLooseFloorBoard18",
+    "file": "World/garrison_loose_planks.yml",
+    "pose": "default",
+    "before": 29,
+    "after": 27
+  },
+  {
+    "id": "CMU3DLooseFloorBoard19",
+    "file": "World/garrison_loose_planks.yml",
+    "pose": "default",
+    "before": 22,
+    "after": 21
+  },
+  {
+    "id": "CMU3DLooseFloorBoard23",
+    "file": "World/garrison_loose_planks.yml",
+    "pose": "default",
+    "before": 30,
+    "after": 26
+  },
+  {
+    "id": "CMU3DLooseAU14CivilianPrisonJumpsuit",
+    "file": "World/garrison_loose_uniforms.yml",
+    "pose": "default",
+    "before": 44,
+    "after": 41
+  },
+  {
+    "id": "CMU3DLooseAU14CivilianPrisonJumpsuit",
+    "file": "World/garrison_loose_uniforms.yml",
+    "pose": "default/spriteStates/icon/frames/0",
+    "before": 44,
+    "after": 41
+  },
+  {
+    "id": "CMU3DLooseAU14CivilianKellandMiningClothes",
+    "file": "World/garrison_loose_uniforms.yml",
+    "pose": "default",
+    "before": 40,
+    "after": 37
+  },
+  {
+    "id": "CMU3DLooseAU14CivilianKellandMiningClothes",
+    "file": "World/garrison_loose_uniforms.yml",
+    "pose": "default/spriteStates/icon/frames/0",
+    "before": 40,
+    "after": 37
+  },
+  {
+    "id": "CMU3DLooseRMCSwatCMBUniform",
+    "file": "World/garrison_loose_uniforms.yml",
+    "pose": "default",
+    "before": 44,
+    "after": 39
+  },
+  {
+    "id": "CMU3DLooseRMCSwatCMBUniform",
+    "file": "World/garrison_loose_uniforms.yml",
+    "pose": "default/spriteStates/icon/frames/0",
+    "before": 44,
+    "after": 39
+  },
+  {
+    "id": "CMU3DAU14CivilianHazardVestKellandMiningCorporation",
+    "file": "World/garrison_loose_workwear.yml",
+    "pose": "default",
+    "before": 37,
+    "after": 35
+  },
+  {
+    "id": "CMU3DAU14CivilianHazardVestKellandMiningCorporation",
+    "file": "World/garrison_loose_workwear.yml",
+    "pose": "default/spriteStates/icon/frames/0",
+    "before": 37,
+    "after": 35
+  },
+  {
+    "id": "CMU3DRMCMachinePropBig2",
+    "file": "World/garrison_machinery_debris.yml",
+    "pose": "default",
+    "before": 95,
+    "after": 93
+  },
+  {
+    "id": "CMU3DDropshipNavigationCloudEast",
+    "file": "World/garrison_machinery_extra_cloud.yml",
+    "pose": "default",
+    "before": 21,
+    "after": 17
+  },
+  {
+    "id": "CMU3DDropshipNavigationCloudWest",
+    "file": "World/garrison_machinery_extra_cloud.yml",
+    "pose": "default",
+    "before": 21,
+    "after": 17
+  },
+  {
+    "id": "CMU3DBlueCanisterCloud",
+    "file": "World/garrison_machinery_extra_cloud.yml",
+    "pose": "default",
+    "before": 35,
+    "after": 31
+  },
+  {
+    "id": "CMU3DCommsMastGovforCloud",
+    "file": "World/garrison_machinery_extra_cloud.yml",
+    "pose": "default",
+    "before": 62,
+    "after": 60
+  },
+  {
+    "id": "CMU3DSensorTowerCloud",
+    "file": "World/garrison_machinery_extra_cloud.yml",
+    "pose": "default",
+    "before": 80,
+    "after": 77
+  },
+  {
+    "id": "CMU3DMaterialLeisureTomDrumsCloud",
+    "file": "World/garrison_material_leisure_cloud.yml",
+    "pose": "default",
+    "before": 90,
+    "after": 74
+  },
+  {
+    "id": "CMU3DAutodocPodCloudSouth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 70,
+    "after": 59
+  },
+  {
+    "id": "CMU3DAutodocPodCloudSouth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/autodoc_open/frames/0",
+    "before": 70,
+    "after": 59
+  },
+  {
+    "id": "CMU3DAutodocPodCloudNorth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 70,
+    "after": 59
+  },
+  {
+    "id": "CMU3DAutodocPodCloudNorth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/autodoc_open/frames/0",
+    "before": 70,
+    "after": 59
+  },
+  {
+    "id": "CMU3DAutodocPodCloudEast",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 70,
+    "after": 59
+  },
+  {
+    "id": "CMU3DAutodocPodCloudEast",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/autodoc_open/frames/0",
+    "before": 70,
+    "after": 59
+  },
+  {
+    "id": "CMU3DAutodocPodCloudWest",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 70,
+    "after": 59
+  },
+  {
+    "id": "CMU3DAutodocPodCloudWest",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/autodoc_open/frames/0",
+    "before": 70,
+    "after": 59
+  },
+  {
+    "id": "CMU3DBodyScannerPodCloudSouth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DBodyScannerPodCloudSouth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/body_scanner_open/frames/0",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DBodyScannerPodCloudNorth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DBodyScannerPodCloudNorth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/body_scanner_open/frames/0",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DBodyScannerPodCloudEast",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DBodyScannerPodCloudEast",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/body_scanner_open/frames/0",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DBodyScannerPodCloudWest",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DBodyScannerPodCloudWest",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/body_scanner_open/frames/0",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DHyperSleepChamberCloudSouth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DHyperSleepChamberCloudSouth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/open/frames/0",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DHyperSleepChamberCloudNorth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DHyperSleepChamberCloudNorth",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/open/frames/0",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DHyperSleepChamberCloudEast",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DHyperSleepChamberCloudEast",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/open/frames/0",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DHyperSleepChamberCloudWest",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DHyperSleepChamberCloudWest",
+    "file": "World/garrison_medical_cloud.yml",
+    "pose": "default/spriteStates/open/frames/0",
+    "before": 87,
+    "after": 82
+  },
+  {
+    "id": "CMU3DRMCStasisBagUsedMedicalSmallCloud",
+    "file": "World/garrison_medical_small_cloud.yml",
+    "pose": "default",
+    "before": 52,
+    "after": 51
+  },
+  {
+    "id": "CMU3DRMCStasisBagUsedMedicalSmallCloud",
+    "file": "World/garrison_medical_small_cloud.yml",
+    "pose": "default/spriteStates/bodybag_used/frames/0",
+    "before": 52,
+    "after": 51
+  },
+  {
+    "id": "CMU3DFoldingChair",
+    "file": "World/garrison_models.yml",
+    "pose": "default",
+    "before": 29,
+    "after": 27
+  },
+  {
+    "id": "CMU3DPottedPlant2",
+    "file": "World/garrison_plants.yml",
+    "pose": "default",
+    "before": 70,
+    "after": 67
+  },
+  {
+    "id": "CMU3DPottedPlant28",
+    "file": "World/garrison_plants.yml",
+    "pose": "default",
+    "before": 45,
+    "after": 44
+  },
+  {
+    "id": "CMU3DPottedPlant0",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 94,
+    "after": 93
+  },
+  {
+    "id": "CMU3DPottedPlant10",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 73,
+    "after": 72
+  },
+  {
+    "id": "CMU3DPottedPlant11",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 49,
+    "after": 33
+  },
+  {
+    "id": "CMU3DPottedPlant18",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 59,
+    "after": 43
+  },
+  {
+    "id": "CMU3DPottedPlant19",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 100,
+    "after": 84
+  },
+  {
+    "id": "CMU3DPottedPlant23",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 100,
+    "after": 84
+  },
+  {
+    "id": "CMU3DPottedPlant24",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 98,
+    "after": 81
+  },
+  {
+    "id": "CMU3DPottedPlant4",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 98,
+    "after": 82
+  },
+  {
+    "id": "CMU3DPottedPlant5",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 81,
+    "after": 65
+  },
+  {
+    "id": "CMU3DPottedPlant7",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 60,
+    "after": 44
+  },
+  {
+    "id": "CMU3DPottedPlant8",
+    "file": "World/garrison_remaining_plants.yml",
+    "pose": "default",
+    "before": 51,
+    "after": 35
+  },
+  {
+    "id": "CMU3DCoffeeMachineCloud",
+    "file": "World/garrison_room_props_cloud.yml",
+    "pose": "default",
+    "before": 70,
+    "after": 62
+  },
+  {
+    "id": "CMU3DCoffeeMachineCloud",
+    "file": "World/garrison_room_props_cloud.yml",
+    "pose": "default/spriteStates/coffee_empty_on/frames/0",
+    "before": 70,
+    "after": 62
+  },
+  {
+    "id": "CMU3DBasketballHoopAltCloudSouth",
+    "file": "World/garrison_room_props_cloud.yml",
+    "pose": "default",
+    "before": 84,
+    "after": 76
+  },
+  {
+    "id": "CMU3DBasketballHoopAltCloudSouth",
+    "file": "World/garrison_room_props_cloud.yml",
+    "pose": "default/spriteStates/hoop_alt/frames/0",
+    "before": 84,
+    "after": 76
+  },
+  {
+    "id": "CMU3DBasketballHoopAltCloudNorth",
+    "file": "World/garrison_room_props_cloud.yml",
+    "pose": "default",
+    "before": 84,
+    "after": 76
+  },
+  {
+    "id": "CMU3DBasketballHoopAltCloudNorth",
+    "file": "World/garrison_room_props_cloud.yml",
+    "pose": "default/spriteStates/hoop_alt/frames/0",
+    "before": 84,
+    "after": 76
+  },
+  {
+    "id": "CMU3DBasketballHoopAltCloudEast",
+    "file": "World/garrison_room_props_cloud.yml",
+    "pose": "default",
+    "before": 84,
+    "after": 76
+  },
+  {
+    "id": "CMU3DBasketballHoopAltCloudEast",
+    "file": "World/garrison_room_props_cloud.yml",
+    "pose": "default/spriteStates/hoop_alt/frames/0",
+    "before": 84,
+    "after": 76
+  },
+  {
+    "id": "CMU3DBasketballHoopAltCloudWest",
+    "file": "World/garrison_room_props_cloud.yml",
+    "pose": "default",
+    "before": 84,
+    "after": 76
+  },
+  {
+    "id": "CMU3DBasketballHoopAltCloudWest",
+    "file": "World/garrison_room_props_cloud.yml",
+    "pose": "default/spriteStates/hoop_alt/frames/0",
+    "before": 84,
+    "after": 76
+  },
+  {
+    "id": "CMU3DBeerLiteCan",
+    "file": "World/garrison_shield_drinks.yml",
+    "pose": "default",
+    "before": 22,
+    "after": 18
+  },
+  {
+    "id": "CMU3DBeerLiteCan",
+    "file": "World/garrison_shield_drinks.yml",
+    "pose": "default/spriteStates/icon/frames/0",
+    "before": 22,
+    "after": 18
+  },
+  {
+    "id": "CMU3DDecorFloorSkeleton",
+    "file": "World/garrison_skeleton_books.yml",
+    "pose": "default",
+    "before": 104,
+    "after": 101
+  },
+  {
+    "id": "CMU3DDecorFloorSkeletonOver",
+    "file": "World/garrison_skeleton_books.yml",
+    "pose": "default",
+    "before": 104,
+    "after": 101
+  },
+  {
+    "id": "CMU3DCarrotRoot",
+    "file": "World/garrison_smallprops.yml",
+    "pose": "default",
+    "before": 108,
+    "after": 107
+  },
+  {
+    "id": "CMU3DDrinkIceGlass",
+    "file": "World/garrison_solution_glasses.yml",
+    "pose": "default/solutionAppearance/layers/13",
+    "before": 4,
+    "after": 3
+  },
+  {
+    "id": "CMU3DWeyuDumpster",
+    "file": "World/garrison_storage.yml",
+    "pose": "default",
+    "before": 69,
+    "after": 66
+  },
+  {
+    "id": "CMU3DWoodenCoatStand",
+    "file": "World/garrison_storage.yml",
+    "pose": "default",
+    "before": 36,
+    "after": 34
+  },
+  {
+    "id": "CMU3DPizzaGalaxyBoxCloud",
+    "file": "World/garrison_storage_cloud.yml",
+    "pose": "default",
+    "before": 15,
+    "after": 13
+  },
+  {
+    "id": "CMU3DPizzaRandomBoxCloud",
+    "file": "World/garrison_storage_cloud.yml",
+    "pose": "default",
+    "before": 15,
+    "after": 13
+  },
+  {
+    "id": "CMU3DFoodPizzaBoxCloud",
+    "file": "World/garrison_storage_cloud.yml",
+    "pose": "default",
+    "before": 15,
+    "after": 13
+  },
+  {
+    "id": "CMU3DContainerVerticalBottomCloud",
+    "file": "World/garrison_structural_vehicle_cloud.yml",
+    "pose": "default",
+    "before": 40,
+    "after": 39
+  },
+  {
+    "id": "CMU3DTopologyCargoLoweredStudyCloud",
+    "file": "World/garrison_topology_studies_cloud.yml",
+    "pose": "default",
+    "before": 99,
+    "after": 95
+  },
+  {
+    "id": "CMU3DAU14CivilianBaristaClothesWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 42,
+    "after": 41
+  },
+  {
+    "id": "CMU3DAU14CivilianBoilerSuitCyanWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 56,
+    "after": 55
+  },
+  {
+    "id": "CMU3DAU14CivilianBoilerSuitDarkBlueSynthWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 56,
+    "after": 55
+  },
+  {
+    "id": "CMU3DAU14CivilianBoilerSuitGrayWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 56,
+    "after": 55
+  },
+  {
+    "id": "CMU3DAU14CivilianBoilerSuitWhiteWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 56,
+    "after": 55
+  },
+  {
+    "id": "CMU3DAU14CivilianWorkwearBlueWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 53,
+    "after": 52
+  },
+  {
+    "id": "CMU3DAU14CivilianWorkwearGreenWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 53,
+    "after": 52
+  },
+  {
+    "id": "CMU3DAU14CivilianWorkwearPinkWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 53,
+    "after": 52
+  },
+  {
+    "id": "CMU3DAU14CivilianWorkwearYellowWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 53,
+    "after": 52
+  },
+  {
+    "id": "CMU3DAU14LACNUniformCoatWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 46,
+    "after": 44
+  },
+  {
+    "id": "CMU3DCMJumpsuitColonistWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 58,
+    "after": 57
+  },
+  {
+    "id": "CMU3DCMJumpsuitLiaisonFieldWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 53,
+    "after": 52
+  },
+  {
+    "id": "CMU3DRMCJumpsuitBlueWorkwearWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 53,
+    "after": 52
+  },
+  {
+    "id": "CMU3DRMCJumpsuitKhakiWorkwearJacketlessWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 53,
+    "after": 52
+  },
+  {
+    "id": "CMU3DRMCJumpsuitLiaisonGreenWorkwearWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 53,
+    "after": 52
+  },
+  {
+    "id": "CMU3DRMCJumpsuitLiaisonGreyWorkwearWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 53,
+    "after": 52
+  },
+  {
+    "id": "CMU3DRMCJumpsuitSunRidersWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 53,
+    "after": 52
+  },
+  {
+    "id": "CMU3DRMCMarineUniformDressGeneralWorldCloud",
+    "file": "World/garrison_uniforms_extra_cloud.yml",
+    "pose": "default",
+    "before": 45,
+    "after": 43
+  },
+  {
+    "id": "CMU3DConveyorBelt",
+    "file": "World/garrison_utilities.yml",
+    "pose": "default",
+    "before": 42,
+    "after": 40
+  },
+  {
+    "id": "CMU3DTripodLamp",
+    "file": "World/garrison_utilities.yml",
+    "pose": "default",
+    "before": 13,
+    "after": 12
+  },
+  {
+    "id": "CMU3DSteelHandcuffs",
+    "file": "World/garrison_smallprops.yml",
+    "pose": "default",
+    "before": 117,
+    "after": 85
+  }
+]

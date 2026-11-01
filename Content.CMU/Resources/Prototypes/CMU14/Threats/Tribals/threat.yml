@@ -9,7 +9,7 @@
   id: TribalsThreatCF
   lorePrimer: AU14PrimerThreatTribals
   roundstartspawns: tribalsParty
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - DistressSignal
   winconditions:
   - KillAllTribeRule
@@ -46,6 +46,6 @@
   weight: 5
   minplayers: 0
   maxplayers: 200
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
   announcearrival: "Native warriors have been spotted in the area of operation."

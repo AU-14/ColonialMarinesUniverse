@@ -165,37 +165,6 @@
   components:
   - type: Sprite
     sprite: _RuMC14/Clothing/UPP/pouches/medical.rsi
-  - type: Storage
-    maxItemSize: Large
-    grid:
-    - 0,0,13,1 #7 slots
-    whitelist:
-      tags:
-      - DiscreteHealthAnalyzer
-      - Dropper
-      - Pill
-      - Bottle
-      - Syringe
-      - PillCanister
-      - CMTraumaKit
-      - CMBurnKit
-      - CMOintment
-      - Brutepack
-      - CMBloodPack
-      #      - TODO RMC14 splint
-      - RMCPenlight
-      - CMAutoInjector
-      - CMFireExtinguisherPortable
-      - RMCSyringeCase
-      - CMSurgicalLine
-      - CMSynthGraft
-      - PillPacket
-      - Hypospray
-      components:
-      - Hypospray
-      - CMUSplintItem
-      - SpawnItemsOnUse
-  - type: FixedItemSizeStorage
 
 - type: entity
   parent: RuMCUPPPouchIFAK
@@ -206,13 +175,15 @@
   components:
   - type: StorageFill
     contents:
+    # same kit as AU14PouchIFAKFill, keep them in step
     - id: AU14HemostaticGauzePacket
-    - id: AU14HemostaticGauzePacket
+    - id: CMOintment10
     - id: AU14Tourniquet
     - id: CMPacketPillsTricordrazine
     - id: AU14PacketPillsTramadol
+    - id: AU14FirstAidAutoInjectorNoSkill
     - id: CMUSplintItem
-    - id: CMUSplintItem
+    - id: CMUMaskCPR
 
 - type: entity
   parent: RMCPouchFlare

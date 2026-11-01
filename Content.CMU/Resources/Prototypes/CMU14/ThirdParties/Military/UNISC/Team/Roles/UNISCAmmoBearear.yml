@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMJobBase
   id: AU14JobUNISCAmmoBearer
   icon: AU14JobIconGovRifleman
@@ -28,7 +28,7 @@
     currentLanguage: English
     defaultLanguage: English
 
-  name: United Nations Interstellar Space Corps Ammo Bearer
+  name: Ammo Bearer
   description: au14-unisc-description
   playTimeTracker: AU14JobUNISCAmmoBearer
   ranks:

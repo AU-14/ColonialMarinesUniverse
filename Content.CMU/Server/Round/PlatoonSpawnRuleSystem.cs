@@ -1,12 +1,16 @@
 using System.Linq;
+using Content.Server.Camera;
 using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.Ops.ForceOnForce;
 using Content.Shared.CMU14.Dropship.MultiDeck;
+using Content.Shared.Camera;
 using Content.Shared._RMC14.Dropship.Weapon;
+using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.CMU14.Callsigns;
 using Content.Server.CMU14.VendorMarker;
+using Robust.Shared.Log;
 using Robust.Shared.Prototypes;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Maps;
@@ -21,7 +25,9 @@ using Content.Shared.GameTicking.Components;
 using Robust.Shared.EntitySerialization.Systems;
 using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
+using Content.Shared._RMC14.Vendors;
 using Content.Shared._RMC14.Ladder;
+
 using Content.Shared.CMU14;
 
 namespace Content.Server.CMU14.Round;
@@ -41,6 +47,20 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private FactionSwapSystem _factionSwap = default!;
     [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
+    [Dependency] private CameraNetworkSystem _cameraNetworks = default!;
+
+    private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.platoon");
+
+    // Mohawk fit camera network seeds. Loaded dropships get a Govfor/Opfor
+    // variant appended so opposing factions' transports never share a network.
+    private static readonly HashSet<ProtoId<CameraNetworkPrototype>> DropshipCameraNetworkSeeds =
+        new() { "CMUMohawkOmaha", "CMUMohawkMidway" };
+
+    private static readonly Dictionary<string, string> ShipFactionCameraSuffixes = new()
+    {
+        ["govfor"] = "Govfor",
+        ["opfor"] = "Opfor",
+    };
 
     // Store selected platoons in the system
     private PlatoonPrototype? _selectedGovforPlatoon;
@@ -95,6 +115,18 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         SelectedGovforPlatoon = govPlatoon;
         SelectedOpforPlatoon = opPlatoon;
 
+        // Each side gets its platoon's intel list however the platoon was picked (vote, planet default or admin),
+        // not only when it won a vote.
+        ApplyPlatoonTechTrees();
+
+        // --- SHIP FACTION TAGGING ---
+        // Ships load as faction-less game maps, and every shipside system (hospital
+        // emergency console, faction terminals, requisition markers, the
+        // summoned-third-party pad) keys off ShipFactionComponent. Tag the round's
+        // voted ships now that the votes have concluded.
+        TagShipFaction("govfor");
+        TagShipFaction("opfor");
+
         // --- SHIP VENDOR MARKER LOGIC ---
         if ((planetComp.GovforInShip || planetComp.OpforInShip))
         {
@@ -146,6 +178,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                             // SpawnEntity has no rotation parameter, so spawn attached to keep the marker's rotation
                             var spawned = _entityManager.SpawnAttachedTo(vendorProto.ID, transform.Coordinates, rotation: transform.LocalRotation);
                             SetRequisitionsVendorAccess(spawned, markerComp.Class, shipFaction.Faction);
+                            SetVendorRadioFaction(spawned, shipFaction.Faction);
                             if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawned, out var spawnedPhone))
                             {
                                 if (!string.IsNullOrEmpty(shipFaction.Faction))
@@ -198,6 +231,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 continue;
             var spawnedEnt = _entityManager.SpawnAttachedTo(vendorProto.ID, transform.Coordinates, rotation: transform.LocalRotation);
             SetRequisitionsVendorAccess(spawnedEnt, markerComp.Class, markerComp.Govfor ? "govfor" : "opfor");
+            SetVendorRadioFaction(spawnedEnt, faction);
             if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawnedEnt, out var spawnedPhone2))
             {
                 spawnedPhone2.Faction = markerComp.Govfor ? "govfor" : "opfor";
@@ -342,6 +376,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             Dirty(grid, shipFaction);
         }
 
+        SplitShipCameraNetworks(grid, faction);
+
         // Single-deck gunships also contain prebuilt controls and pilot seats. Reassign
         // these before the initial flight, just like consoles created from markers.
         var accessPrefix = faction == "opfor" ? "AU14AccessOpfor" : "AU14AccessGovfor";
@@ -388,6 +424,37 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
         if (faction == "opfor" && planetComp.OpforInShip)
             OffsetLaddersOnGrid(grid, 100);
+    }
+
+    // Split a ship's Mohawk camera networks by faction so it never sees the enemy
+    // transport's cameras; unknown factions log and skip, which leaks nothing cross-faction.
+    private void SplitShipCameraNetworks(EntityUid grid, string faction)
+    {
+        if (!ShipFactionCameraSuffixes.TryGetValue(faction, out var suffix))
+        {
+            _sawmill.Error("Unknown ship faction {Faction}, leaving camera networks on the shared Mohawk seeds", faction);
+            return;
+        }
+
+        var children = Transform(grid).ChildEnumerator;
+        while (children.MoveNext(out var child))
+        {
+            if (TryComp<CameraNetworkMemberComponent>(child, out var member))
+                _cameraNetworks.SetMemberNetworks(child, FactionDropshipCameraNetworks(member.Networks, suffix));
+            if (TryComp<CameraNetworkReceiverComponent>(child, out var receiver))
+                _cameraNetworks.SetReceiverNetworks(child, FactionDropshipCameraNetworks(receiver.Networks, suffix));
+        }
+    }
+
+    private static HashSet<ProtoId<CameraNetworkPrototype>> FactionDropshipCameraNetworks(
+        HashSet<ProtoId<CameraNetworkPrototype>> networks,
+        string suffix)
+    {
+        var result = new HashSet<ProtoId<CameraNetworkPrototype>>();
+        foreach (var network in networks)
+            result.Add(DropshipCameraNetworkSeeds.Contains(network) ? $"{network}{suffix}" : network);
+
+        return result;
     }
 
     private void SpawnShuttleConsoleMarkers(
@@ -632,6 +699,33 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         return false;
     }
 
+    /// <summary>
+    ///     Tags the round's voted ship for one side with its faction, using the grids
+    ///     its game map loaded with. Ships have no faction of their own; shipside
+    ///     systems resolve everything through ShipFactionComponent.
+    /// </summary>
+    private void TagShipFaction(string faction)
+    {
+        var shipId = faction == "govfor"
+            ? _auRoundSystem.ResolveGovforShip(null)
+            : _auRoundSystem.ResolveOpforShip(null);
+        if (string.IsNullOrEmpty(shipId) || !_auRoundSystem.TryGetLoadedShipGrids(shipId, out var grids))
+            return;
+
+        foreach (var grid in grids)
+        {
+            if (TerminatingOrDeleted(grid) ||
+                TryComp<ShipFactionComponent>(grid, out var existing) && !string.IsNullOrEmpty(existing.Faction))
+                continue;
+
+            var shipFaction = EnsureComp<ShipFactionComponent>(grid);
+            shipFaction.Faction = faction;
+            Dirty(grid, shipFaction);
+
+            SplitShipCameraNetworks(grid, faction);
+        }
+    }
+
     private bool TrySpawnFactionTerminal(PlatoonMarkerClass markerClass, string faction, TransformComponent transform)
     {
         var suffix = faction switch
@@ -657,8 +751,46 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         return true;
     }
 
+    private void SetVendorRadioFaction(EntityUid vendor, string faction)
+    {
+        var radio = faction switch
+        {
+            "govfor" => "ANPRC117GRadioFilled",
+            "opfor" => "ANPRC117GRadioOPFORFilled",
+            _ => null,
+        };
+        if (radio == null || !TryComp<CMAutomatedVendorComponent>(vendor, out var stock))
+            return;
+
+        // Platoon vendors can serve either side. Vend the matching radio and its installed fill card.
+        var changed = false;
+        foreach (var section in stock.Sections)
+        {
+            foreach (var entry in section.Entries)
+            {
+                if (entry.Id.Id is not ("ANPRC117GRadioFilled" or "ANPRC117GRadioOPFORFilled") ||
+                    entry.Id.Id == radio)
+                    continue;
+
+                entry.Id = radio;
+                changed = true;
+            }
+        }
+
+        if (changed)
+            Dirty(vendor, stock);
+    }
+
     private void SetRequisitionsVendorAccess(EntityUid vendor, PlatoonMarkerClass markerClass, string faction)
     {
+        // spec kit limit is counted per side off this, multi-deck ships can't rely on the grid's faction
+        if (markerClass == PlatoonMarkerClass.SWeapons &&
+            TryComp<CMAutomatedVendorComponent>(vendor, out var automatedVendor))
+        {
+            automatedVendor.Faction = faction;
+            Dirty(vendor, automatedVendor);
+        }
+
         if (markerClass is not (PlatoonMarkerClass.ReqVend or PlatoonMarkerClass.SWeapons) ||
             !TryComp<AccessReaderComponent>(vendor, out var accessReader))
         {
@@ -685,5 +817,17 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         // Clear selections on rule end/restart so they don't persist across restarts
         SelectedGovforPlatoon = null;
         SelectedOpforPlatoon = null;
+        ApplyPlatoonTechTrees();
+    }
+
+    /// <summary>
+    ///     Points each side's intel console at its platoon's faction list, or back to the default when there's no
+    ///     platoon (so a list never carries over into the next round).
+    /// </summary>
+    private void ApplyPlatoonTechTrees()
+    {
+        var intel = EntityManager.System<IntelSystem>();
+        intel.SetTeamTechTreeOverride(Team.GovFor, SelectedGovforPlatoon?.TechTree);
+        intel.SetTeamTechTreeOverride(Team.OpFor, SelectedOpforPlatoon?.TechTree);
     }
 }

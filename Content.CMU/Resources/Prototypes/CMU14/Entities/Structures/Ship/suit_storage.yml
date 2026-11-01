@@ -1,0 +1,57 @@
+# Suit storage units from cm13, stocked with pressure suits and helmets. The suits carry their own air.
+- type: entity
+  parent: SuitStorageBase
+  id: CMUSuitStorageUnitBase
+  abstract: true
+  name: suit storage unit
+  description: An industrial unit made to hold space suits. It comes with a built-in UV cauterization mechanism.
+  components:
+  # Bolted to the deck: always anchored, and no wrench gets it loose.
+  - type: Transform
+    noRot: true
+    anchored: true
+  - type: RemoveComponents
+    components:
+    - type: Anchorable
+    - type: MovedByPressure
+  - type: Sprite
+    sprite: CMU14/Structures/Storage/suit_storage_cm13.rsi
+    layers:
+    - state: closed
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+  # The cm13 sprites draw the whole unit open or shut, so the base layer swaps instead of a door overlay.
+  - type: EntityStorageVisuals
+    stateBaseClosed: closed
+    stateBaseOpen: open
+
+- type: entity
+  parent: CMUSuitStorageUnitBase
+  id: CMUSuitStorageUnitCompression
+  suffix: Compression suit
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSuitEVACivilian
+      amount: 10
+    - id: RMCHelmetEVACivilian
+      amount: 10
+
+- type: entity
+  parent: CMUSuitStorageUnitBase
+  id: CMUSuitStorageUnitCompressionUSCM
+  suffix: Compression suit, MK.35
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovfor"], ["AU14AccessOpfor"]]
+  - type: StorageFill
+    contents:
+    - id: RMCSuitEVAUNMC
+      amount: 10
+    - id: RMCHelmetEVAUNMC
+      amount: 10

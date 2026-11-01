@@ -29,7 +29,9 @@ public sealed class RMCBloodPuddleSolutionMigrationTest : GameTest
             Assert.Multiple(() =>
             {
                 Assert.That(prototype.TryComp<SolutionComponent>(out _, factory), Is.True);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(prototype.TryComp<SolutionContainerManagerComponent>(out _, factory), Is.False);
+#pragma warning restore CS0612
                 Assert.That(_solutions.TryGetSolution(prototype, SolutionName, out _), Is.True);
             });
 
@@ -38,7 +40,9 @@ public sealed class RMCBloodPuddleSolutionMigrationTest : GameTest
             Assert.Multiple(() =>
             {
                 Assert.That(solutionEntity!.Value.Owner, Is.EqualTo(puddle));
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(puddle), Is.False);
+#pragma warning restore CS0612
             });
         });
     }

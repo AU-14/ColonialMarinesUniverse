@@ -1,0 +1,5 @@
+- type: entity
+  parent: CMMaskGasMedical
+  id: CMUMaskGasEmergency
+  name: emergency gas mask
+  description: A poorly fitting cheap mask that can be connected to an air supply. It cannot take any gas mask filters.

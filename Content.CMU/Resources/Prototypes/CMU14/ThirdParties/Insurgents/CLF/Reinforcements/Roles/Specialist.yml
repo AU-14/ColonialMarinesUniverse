@@ -67,7 +67,7 @@
   equipment:
     head: RMCHeadMilitiaBucket
     mask: RMCCombatUtilityKnifeA
-    ears: RMCHeadsetDistressCLF
+    ears: AU14HeadsetCLF
     eyes: RMCGlassesM4SPRBattleSight
     jumpsuit: RMCJumpsuitCLFWebbingMAR50
     outerClothing: RMCCoatMilitia

@@ -18,6 +18,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaResistanceParityTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageModifierSetPrototype> CMUYautjaPrototype = "CMUYautja";
+
     [Test]
     public async Task YautjaDamageModifierSetMatchesCmss13SpeciesValues()
     {
@@ -28,7 +30,7 @@ public sealed class YautjaResistanceParityTest
             await server.WaitAssertion(() =>
             {
                 var prototypes = server.ResolveDependency<IPrototypeManager>();
-                var modifiers = prototypes.Index<DamageModifierSetPrototype>("CMUYautja").Coefficients;
+                var modifiers = prototypes.Index<DamageModifierSetPrototype>(CMUYautjaPrototype).Coefficients;
 
                 Assert.That(modifiers, Has.Count.EqualTo(5));
                 Assert.That(modifiers["Blunt"], Is.EqualTo(0.28f));
@@ -70,6 +72,7 @@ public sealed class YautjaResistanceParityTest
             var flammable = server.EntMan.GetComponent<FlammableComponent>(hunter);
             var initialStacks = flammable.FireStacks;
             flammable.NextUpdate = server.ResolveDependency<IGameTiming>().CurTime;
+            server.System<FlammableSystem>().RefreshUpdateSnapshot();
             server.System<FlammableSystem>().Update(0);
             Assert.Multiple(() =>
             {
@@ -101,14 +104,19 @@ public sealed class YautjaResistanceParityTest
                 Assert.That(server.EntMan.HasComponent<StaminaComponent>(yautja), Is.False);
                 Assert.That(server.EntMan.HasComponent<RMCStaminaComponent>(yautja), Is.False);
 
+                // CM-SS13 combines the species divisor with the skill term (life_helpers.dm:177-183):
+                // 3s / stun_reduction 1.5 = 2s, then x (1 - Endurance skill) = 0.84 -> 1.68s.
+                var expected = TimeSpan.FromSeconds(1.68);
+
                 var stun = new RMCStatusEffectTimeEvent("Stun", TimeSpan.FromSeconds(3));
                 server.EntMan.EventBus.RaiseLocalEvent(yautja, ref stun);
-                Assert.That(stun.Duration, Is.EqualTo(TimeSpan.FromSeconds(2)));
+                Assert.That(stun.Duration, Is.EqualTo(expected),
+                    "stun is divided by stun_reduction 1.5 and then reduced by the hunter's Endurance skill.");
 
                 var unconscious = new RMCStatusEffectTimeEvent("Unconscious", TimeSpan.FromSeconds(3));
                 server.EntMan.EventBus.RaiseLocalEvent(yautja, ref unconscious);
-                Assert.That(unconscious.Duration, Is.EqualTo(TimeSpan.Zero),
-                    "Regular Yautja retain CMU's unconsciousness immunity.");
+                Assert.That(unconscious.Duration, Is.EqualTo(expected),
+                    "CM-SS13 reduces a hunter's knockout with stun_reduction 1.5 instead of immunising them.");
             });
         }
         finally

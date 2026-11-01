@@ -5,6 +5,7 @@
   components:
   - type: SkillPreset
     skills:
+      CMUSkillAircrew: 1
       RMCSkillConstruction: 1
       RMCSkillCqc: 1
       RMCSkillEndurance: 1
@@ -30,6 +31,7 @@
   components:
   - type: SkillPreset
     skills:
+      CMUSkillAircrew: 1
       RMCSkillConstruction: 2
       RMCSkillCqc: 1
       RMCSkillEndurance: 1

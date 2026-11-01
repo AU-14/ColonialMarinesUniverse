@@ -269,6 +269,10 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         if (_actions.Contains(action))
             return;
 
+        // CMU14: swarm commands are selected from their single menu action.
+        if (IsSwarmMenuCommand(action))
+            return;
+
         _actions.Add(action);
         RefreshVehicleHotbarOverride(forceUpdate: true);
     }

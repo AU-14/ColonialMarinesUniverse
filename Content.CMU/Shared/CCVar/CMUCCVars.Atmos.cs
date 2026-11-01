@@ -5,7 +5,7 @@ namespace Content.Shared.CCVar;
 public sealed partial class CCVars
 {
     /// <summary>
-    /// How many generations ordinary tile fires creep outward from where they were lit.
+    /// How many generations AU14 tile fires creep outward from where they were lit.
     /// Each generation spawns one adjacent fire that gets one less, so reach is depth - 1
     /// tiles. 0 disables creeping for fires that do not carry their own depth in YAML.
     /// </summary>
@@ -31,10 +31,11 @@ public sealed partial class CCVars
     /// <summary>
     /// Master switch for the day-night temperature driver
     /// (CMUDayNightAtmosphereComponent on the map entity). Maps without the
-    /// component are never affected.
+    /// component are never affected. Default off: the driver needs slow,
+    /// observed testing on a live server before it runs by default.
     /// </summary>
     public static readonly CVarDef<bool> CMUDayNightAtmosTemp =
-        CVarDef.Create("cmu.atmos.day_night_temp", true, CVar.SERVERONLY);
+        CVarDef.Create("cmu.atmos.day_night_temp", false, CVar.SERVERONLY);
 
     /// <summary>
     /// Client preference: show temperatures in Fahrenheit instead of Celsius.
@@ -42,4 +43,12 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> CMUTemperatureFahrenheit =
         CVarDef.Create("cmu.temperature.fahrenheit", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Master switch for weather hazards: damage, radiation and ignition
+    /// applied to mobs under weather effects. Weather visuals keep running
+    /// with this off; only the gameplay effects stop.
+    /// </summary>
+    public static readonly CVarDef<bool> CMUWeatherHazards =
+        CVarDef.Create("cmu.atmos.weather_hazards", true, CVar.SERVERONLY);
 }

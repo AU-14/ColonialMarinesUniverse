@@ -70,6 +70,41 @@ public static class CMUCharacterName
         return string.Join(' ', parts);
     }
 
+    /// <summary>
+    /// The name without its nickname or artificial womb tag, keeping everything else in order, so
+    /// "Pvt. Shannona A.W. 'Ace' Stroha" becomes "Pvt. Shannona Stroha".
+    /// </summary>
+    public static string StripNickname(string name)
+    {
+        // Rosters repeatedly receive already-normalized names. Keep the parser for names that
+        // can contain a nickname/tag or need space normalization, without splitting the common case.
+        if (name.Length == 0 || name[0] != ' ' && name[^1] != ' ' &&
+            !name.Contains('\'') && !name.Contains("A.W", StringComparison.OrdinalIgnoreCase) &&
+            !name.Contains("  ", StringComparison.Ordinal))
+        {
+            return name;
+        }
+
+        var tokens = new List<string>(name.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        tokens.RemoveAll(IsArtificialWombToken);
+
+        var start = tokens.FindIndex(t => t.StartsWith('\''));
+        if (start >= 0)
+        {
+            for (var i = start; i < tokens.Count; i++)
+            {
+                var token = tokens[i];
+                if (!token.EndsWith('\'') || i == start && token.Length < 2)
+                    continue;
+
+                tokens.RemoveRange(start, i - start + 1);
+                break;
+            }
+        }
+
+        return tokens.Count > 0 ? string.Join(' ', tokens) : name;
+    }
+
     public static string LimitNickname(string nickname)
     {
         var words = nickname.Replace("'", string.Empty).Split(' ', StringSplitOptions.RemoveEmptyEntries);

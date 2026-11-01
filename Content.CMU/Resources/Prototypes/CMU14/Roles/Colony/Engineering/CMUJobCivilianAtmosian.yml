@@ -49,7 +49,7 @@
     head: RMCHardhatOrange
     jumpsuit: AU14CivilianWeYuEngineerClothes
     outerClothing: CMUArmorFirefighter
-    mask: CMMaskGas
+    mask: CMUMaskGas
     suitstorage: RMCGasTankOxygenFilled
     shoes: RMCBootsCorporate
     pocket1: CMUAtmosScanner

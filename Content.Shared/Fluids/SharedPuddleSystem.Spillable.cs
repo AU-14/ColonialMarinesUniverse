@@ -171,22 +171,7 @@ public abstract partial class SharedPuddleSystem
                 + $"from {ToPrettyString(entity.Owner):entity} onto {ToPrettyString(hit):target}");
 
             Reactive.DoEntityReaction(hit, splitSolution, ReactionMethod.Touch);
-
-            Popups.PopupEntity(Loc.GetString("spill-melee-hit-attacker",
-                    ("amount", totalSplit / hitCount),
-                    ("spillable", entity.Owner),
-                    ("target", Identity.Entity(hit, EntityManager, args.User))),
-                hit,
-                args.User);
-            Popups.PopupEntity(
-                Loc.GetString("spill-melee-hit-others",
-                    ("attacker", Identity.Entity(args.User, EntityManager)),
-                    ("spillable", entity.Owner),
-                    ("target", Identity.Entity(hit, EntityManager))),
-                hit,
-                Filter.PvsExcept(args.User),
-                true,
-                PopupType.SmallCaution);
+            // CMU14: no popups when splashing someone with an attack
         }
     }
 

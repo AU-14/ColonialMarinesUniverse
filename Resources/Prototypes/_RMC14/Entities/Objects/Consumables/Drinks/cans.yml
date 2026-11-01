@@ -33,7 +33,7 @@
 - type: entity
   parent: CMDrinkCanBase
   id: CMDrinkCanCola
-  name: Coca Cola
+  name: coca-cola # cmu edit
   description: A classic cola with a taste that's been around for centuries. Nobody can beat it.
   components:
   - type: Sprite
@@ -50,7 +50,7 @@
 - type: entity
   parent: CMDrinkCanBase
   id: CMDrinkCanMountainWind
-  name: Mountain Dew
+  name: mountain dew # cmu edit
   description: Do the Dew.
   components:
   - type: Sprite
@@ -67,7 +67,7 @@
 - type: entity
   parent: CMDrinkCanBase
   id: CMDrinkCanThirteenLoko
-  name:  Fourteen loko
+  name: fourteen loko # cmu edit
   description: Consumption of Fourteen Loko may result in seizures, blindness, drunkenness, or even death. Please Drink Responsibly.
   components:
   - type: Sprite
@@ -86,7 +86,7 @@
 - type: entity
   parent: CMDrinkCanBase
   id: CMDrinkCanDrGibb
-  name: Dr Pepper
+  name: dr. pepper # cmu edit
   description: A delicious mixture of 42 different flavors of chemicals that you can't pronounce.
   components:
   - type: Sprite
@@ -103,7 +103,7 @@
 - type: entity
   parent: CMDrinkCanBase
   id: CMDrinkCanStarkist
-  name: Sunkist
+  name: sunkist # cmu edit
   description: Sunkist orange soda, now with 0.00001% real orange juice!
   components:
   - type: Sprite
@@ -120,7 +120,7 @@
 - type: entity
   parent: CMDrinkCanBase
   id: CMDrinkCanSpaceUp
-  name: Seven Up
+  name: seven-up # cmu edit
   description: Cures any and all stomach issues, or your money back.
   components:
   - type: Sprite
@@ -137,7 +137,7 @@
 - type: entity
   parent: CMDrinkCanBase
   id: CMDrinkCanLemonLime
-  name: lemon-lime
+  name: sprite # cmu edit
   description: You wanted ORANGE. It gave you Lemon Lime.
   components:
   - type: Sprite

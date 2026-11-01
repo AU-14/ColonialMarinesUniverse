@@ -4,14 +4,19 @@ using Content.Shared.Trigger.Systems;
 using System.Numerics;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
+using Content.Shared.Doors.Components;
+using Content.Server.Destructible;
+using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
@@ -27,13 +32,12 @@ namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
 {
-    private const string YautjaInterferenceStatus = "YautjaInterference";
-
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private FlammableSystem _flammable = default!;
     [Dependency] private HardpointSystem _hardpoints = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private ExplosionSystem _explosions = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedStunSystem _stun = default!;
@@ -49,11 +53,18 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         SubscribeLocalEvent<YautjaCasterImmobilizerProjectileComponent, ProjectileHitEvent>(OnCasterImmobilizerHit);
         SubscribeLocalEvent<YautjaCasterStunProjectileComponent, ProjectileHitEvent>(OnCasterStunHit);
         SubscribeLocalEvent<YautjaCasterSingleLethalProjectileComponent, AttemptTriggerEvent>(OnCasterSingleLethalBeforeTrigger);
+        SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, AttemptTriggerEvent>(OnCasterEradicatorAttemptTrigger);
+        SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, TriggerEvent>(OnCasterEradicatorTriggered);
         SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, ProjectileFixedDistanceStopEvent>(OnCasterEradicatorStop);
         SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, ProjectileHitEvent>(OnCasterEradicatorHit);
         SubscribeLocalEvent<YautjaIncendiaryPlasmaProjectileComponent, ProjectileHitEvent>(OnIncendiaryPlasmaHit);
         SubscribeLocalEvent<YautjaPlasmaRifleBoltComponent, ProjectileHitEvent>(OnPlasmaRifleBoltHit);
     }
+
+    // CMU14: the ordinary airlock destruction threshold (Resources/Prototypes/_RMC14/Entities/Structures/Doors/
+    // Airlocks/airlocks.yml). Doors at or below this are breached like CM-SS13's ex_act qdel; the reinforced
+    // maintenance hatch (1200) is above it and survives.
+    private const float CasterEradicatorDoorBreachThreshold = 1000f;
 
     private void OnCasterStunHit(Entity<YautjaCasterStunProjectileComponent> ent, ref ProjectileHitEvent args)
     {
@@ -95,10 +106,79 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
 
     private void OnCasterEradicatorHit(Entity<YautjaCasterEradicatorProjectileComponent> ent, ref ProjectileHitEvent args)
     {
+        if (!ent.Comp.Triggered && !TerminatingOrDeleted(ent.Owner))
+        {
+            ent.Comp.Triggered = true;
+            var trigger = new TriggerEvent(ent.Owner);
+            RaiseLocalEvent(ent.Owner, ref trigger);
+        }
+
         if (!_vehicleTopology.TryGetVehicle(args.Target, out var vehicle))
             return;
 
         ApplyCasterEradicatorVehicleImpact(ent, vehicle);
+    }
+
+    /// <summary>
+    /// CMU14: TriggerOnCollide raises one AttemptTriggerEvent per colliding fixture, and ExplodeOnTriggerSystem
+    /// explodes unconditionally, so a wall impact could detonate this bolt several times in a single tick. Latch on
+    /// the first attempt so exactly one explosion happens.
+    /// </summary>
+    private void OnCasterEradicatorAttemptTrigger(Entity<YautjaCasterEradicatorProjectileComponent> ent, ref AttemptTriggerEvent args)
+    {
+        if (ent.Comp.Triggered)
+        {
+            args.Cancelled = true;
+            return;
+        }
+
+        ent.Comp.Triggered = true;
+    }
+
+    /// <summary>
+    /// CMU14: the eradicator's explosion, not the projectile, is what breaks doors - CM-SS13 destroys them through
+    /// its blast (door.dm ex_act qdels above EXPLOSION_THRESHOLD_LOW rather than removing HP). This runs when the
+    /// trigger fires, i.e. at the moment of detonation, and sweeps the doors inside the blast radius so a shot that
+    /// lands beside a door still breaches it.
+    /// </summary>
+    private void OnCasterEradicatorTriggered(Entity<YautjaCasterEradicatorProjectileComponent> ent, ref TriggerEvent args)
+    {
+        var coordinates = _transform.GetMapCoordinates(ent);
+
+        foreach (var door in _lookup.GetEntitiesInRange<AirlockComponent>(coordinates, ent.Comp.DoorBreachRadius))
+            TryBreachCasterEradicatorDoor(door);
+
+        foreach (var door in _lookup.GetEntitiesInRange<DoorComponent>(coordinates, ent.Comp.DoorBreachRadius))
+            TryBreachCasterEradicatorDoor(door);
+    }
+
+    /// <summary>
+    /// CMU14: destroys a door whose destruction threshold is at or below the ordinary airlock value, mirroring
+    /// CM-SS13's qdel-on-explosion rule. Reinforced doors need more damage than that and are left alone.
+    /// </summary>
+    private void TryBreachCasterEradicatorDoor(EntityUid target)
+    {
+        if (!HasComp<AirlockComponent>(target) && !HasComp<DoorComponent>(target))
+            return;
+
+        if (!TryComp<DestructibleComponent>(target, out var destructible))
+            return;
+
+        // A door may declare several thresholds (e.g. an early "denied" state plus the destruction one), so the
+        // destruction threshold is the highest damage value, not the lowest.
+        var threshold = 0f;
+        foreach (var thresholdEntry in destructible.Thresholds)
+        {
+            if (thresholdEntry.Trigger is not DamageTrigger damageTrigger)
+                continue;
+
+            threshold = MathF.Max(threshold, damageTrigger.Damage.Float());
+        }
+
+        if (threshold > CasterEradicatorDoorBreachThreshold)
+            return;
+
+        QueueDel(target);
     }
 
     private void ApplyCasterEradicatorVehicleImpact(
@@ -189,6 +269,12 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
 
     private void OnPlasmaRifleBoltHit(Entity<YautjaPlasmaRifleBoltComponent> ent, ref ProjectileHitEvent args)
     {
+        if (IsHuman(args.Target) && !HasComp<SynthComponent>(args.Target) && !_mobState.IsDead(args.Target))
+        {
+            ApplyCasterKnockdown(args.Target, ent.Comp.HumanKnockdownTime);
+            return;
+        }
+
         if (!HasComp<XenoComponent>(args.Target) ||
             !TryComp(ent, out ProjectileComponent? projectile) ||
             !projectile.Damage.DamageDict.TryGetValue(ent.Comp.XenoExtraDamageType, out var baseDamage) ||
@@ -206,11 +292,12 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         };
 
         _damage.TryChangeDamage(args.Target, extraDamage, true, origin: args.Shooter, tool: ent);
-        _status.TryAddStatusEffect(args.Target, YautjaInterferenceStatus, ent.Comp.XenoInterferenceDuration, true);
     }
 
     private void DoCasterImmobilizerAreaStun(Entity<YautjaCasterImmobilizerProjectileComponent> ent)
     {
+        _audio.PlayPvs(ent.Comp.StunSound, ent.Owner);
+
         var coordinates = _transform.GetMapCoordinates(ent);
         foreach (var target in _lookup.GetEntitiesInRange<MobStateComponent>(coordinates, ent.Comp.StunRange))
         {

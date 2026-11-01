@@ -1,0 +1,2357 @@
+- type: cmu3DModel
+  id: CMU3DWorldAU14WeaponRifleM16A1Cloud
+  label: M16A1 carry-handle world prop
+  status: draft
+  sourcePrototypes:
+  - AU14WeaponRifleM16A1
+  referencePrototype: AU14WeaponRifleM16A1
+  referenceRsi: /Textures/CMU14/Weapons/Guns/Civilian/aum1648x32.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Separate stock, receiver, open carry handle, grip, curved guard, magazine,
+    rounded fore-end and exterior barrel retain the source silhouette and colors.
+    Exterior-only stylized, nonfunctional loose-world prop; muzzle faces +X in the
+    default source. Includes audited deterministic starting attachment and ItemMapper
+    composition where applicable. Hidden sides, thickness and support pose are inferred.
+    Firing, reload, held/worn, rigging, alternate attachment states and runtime visuals
+    unsupported. No native/map/fidelity approval.
+  parts:
+  - label: tapered shoulder stock upper
+    min: -0.581394, -0.0375, 0.01
+    max: -0.309231, 0.0625, 0.085
+    color: '#292926'
+    yaw: 2.6324348689864974
+  - label: sloping stock lower cheek
+    min: -0.559054, -0.059375, 0.013
+    max: -0.315946, 0.003125, 0.078
+    color: '#292926'
+    yaw: 17.969139740157026
+  - label: rubber butt pad
+    min: -0.59375, -0.11875, 0.008
+    max: -0.559375, 0.05, 0.091
+    color: '#121212'
+  - label: stock ridge
+    min: -0.5625, 0.010156, 0.0855
+    max: -0.33125, 0.027344, 0.0945
+    color: '#515151'
+    yaw: 0.0
+    shape: CylinderX
+  - label: receiver lower solid
+    min: -0.3125, -0.042188, 0.02
+    max: 0.03125, 0.03125, 0.098
+    color: '#292926'
+  - label: upper receiver ridge
+    min: -0.28125, 0.010938, 0.036
+    max: 0.03125, 0.0625, 0.12
+    color: '#515151'
+  - label: slanted pistol grip
+    min: -0.336872, -0.144531, 0.012
+    max: -0.197503, -0.074219, 0.083
+    color: '#292926'
+    yaw: -109.65382405805329
+  - label: grip edge
+    min: -0.323124, -0.13625, 0.08
+    max: -0.253439, -0.123125, 0.09
+    color: '#515151'
+    yaw: -109.65382405805333
+    shape: CylinderX
+  - label: open trigger guard member 1
+    min: -0.237424, -0.080469, 0.0325
+    max: -0.181326, -0.061719, 0.0675
+    color: '#121212'
+    yaw: -77.12499844038757
+    shape: CylinderX
+  - label: open trigger guard member 2
+    min: -0.203156, -0.109375, 0.0325
+    max: -0.124969, -0.090625, 0.0675
+    color: '#121212'
+    yaw: -2.290610042638562
+    shape: CylinderX
+  - label: open trigger guard member 3
+    min: -0.140305, -0.085156, 0.0325
+    max: -0.08157, -0.066406, 0.0675
+    color: '#121212'
+    yaw: 61.389540334034805
+    shape: CylinderX
+  - label: open trigger guard rounded join 1
+    min: -0.2125, -0.107812, 0.0325
+    max: -0.19375, -0.089062, 0.0675
+    color: '#121212'
+    shape: Ellipsoid
+  - label: open trigger guard rounded join 2
+    min: -0.134375, -0.110938, 0.0325
+    max: -0.115625, -0.092187, 0.0675
+    color: '#121212'
+    shape: Ellipsoid
+  - label: visible stylized trigger
+    min: -0.194637, -0.053906, 0.054
+    max: -0.16005, -0.041406, 0.066
+    color: '#515151'
+    yaw: -108.43494882292207
+    shape: CylinderX
+  - label: magazine shell
+    min: -0.130449, -0.161719, 0.008
+    max: 0.027324, -0.075781, 0.097
+    color: '#292926'
+    yaw: -82.03038960567861
+  - label: magazine base shoe
+    min: -0.0875, -0.2125, 0.004
+    max: -0.003125, -0.184375, 0.101
+    color: '#121212'
+  - label: magazine highlight
+    min: -0.101344, -0.12375, 0.097
+    max: 0.007594, -0.109062, 0.105
+    color: '#515151'
+    yaw: -81.75367918553147
+    shape: CylinderX
+  - label: rounded handguard
+    min: 0.024823, -0.042969, 0.0065
+    max: 0.368927, 0.058594, 0.1215
+    color: '#292926'
+    yaw: 2.602562202499806
+    shape: CylinderX
+  - label: handguard upper ridge
+    min: 0.040608, 0.017187, 0.115
+    max: 0.365642, 0.034375, 0.123
+    color: '#515151'
+    yaw: 0.8263241397292391
+    shape: CylinderX
+  - label: exterior barrel
+    min: 0.353125, -0.003906, 0.039
+    max: 0.553125, 0.035156, 0.087
+    color: '#292926'
+    yaw: 0.0
+    shape: CylinderX
+  - label: front barrel collar
+    min: 0.434375, -0.014844, 0.0295
+    max: 0.475, 0.046094, 0.0985
+    color: '#121212'
+    yaw: 0.0
+    shape: CylinderX
+  - label: front sight silhouette member 1
+    min: 0.408048, 0.046094, 0.053
+    max: 0.470077, 0.063281, 0.075
+    color: '#515151'
+    yaw: 49.085616779974785
+    shape: CylinderX
+  - label: front sight silhouette member 2
+    min: 0.435287, 0.039844, 0.053
+    max: 0.495963, 0.057031, 0.075
+    color: '#515151'
+    yaw: -78.11134196037206
+    shape: CylinderX
+  - label: front sight silhouette rounded join 1
+    min: 0.450781, 0.069531, 0.053
+    max: 0.467969, 0.086719, 0.075
+    color: '#515151'
+    shape: Ellipsoid
+  - label: carry handle open frame member 1
+    min: -0.285738, 0.084375, 0.0545
+    max: -0.200199, 0.1125, 0.1095
+    color: '#292926'
+    yaw: 80.53767779197433
+    shape: CylinderX
+  - label: carry handle open frame member 2
+    min: -0.236696, 0.134375, 0.0545
+    max: -0.155491, 0.1625, 0.1095
+    color: '#292926'
+    yaw: 11.09372301155786
+    shape: CylinderX
+  - label: carry handle open frame member 3
+    min: -0.159125, 0.121875, 0.0545
+    max: -0.01275, 0.15, 0.1095
+    color: '#292926'
+    yaw: -16.113418233089302
+    shape: CylinderX
+  - label: carry handle open frame member 4
+    min: -0.062598, 0.051562, 0.0545
+    max: 0.037598, 0.079687, 0.1095
+    color: '#292926'
+    yaw: -86.4236656250026
+    shape: CylinderX
+  - label: carry handle open frame rounded join 1
+    min: -0.25, 0.126563, 0.0545
+    max: -0.221875, 0.154687, 0.1095
+    color: '#292926'
+    shape: Ellipsoid
+  - label: carry handle open frame rounded join 2
+    min: -0.170313, 0.142188, 0.0545
+    max: -0.142187, 0.170312, 0.1095
+    color: '#292926'
+    shape: Ellipsoid
+  - label: carry handle open frame rounded join 3
+    min: -0.029688, 0.101562, 0.0545
+    max: -0.001562, 0.129687, 0.1095
+    color: '#292926'
+    shape: Ellipsoid
+  - label: carry handle top highlight
+    min: -0.221875, 0.135156, 0.108
+    max: -0.15, 0.149219, 0.116
+    color: '#515151'
+    yaw: 0.0
+    shape: CylinderX
+  - label: red selector accent
+    min: -0.215625, -0.020312, 0.099
+    max: -0.165625, -0.001563, 0.105
+    color: '#531515'
+  - label: source receiver face
+    min: -0.25, -0.03125, 0.097
+    max: -0.03125, 0.03125, 0.123
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt000
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldAU14WeaponRifleAR10Cloud
+  label: AR10 wood-stock world prop
+  status: draft
+  sourcePrototypes:
+  - AU14WeaponRifleAR10
+  referencePrototype: AU14WeaponRifleAR10
+  referenceRsi: /Textures/CMU14/Weapons/Guns/Civilian/auar1064x32.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Separate stock, receiver, open carry handle, grip, curved guard, magazine,
+    rounded fore-end and exterior barrel retain the source silhouette and colors.
+    Exterior-only stylized, nonfunctional loose-world prop; muzzle faces +X in the
+    default source. Includes audited deterministic starting attachment and ItemMapper
+    composition where applicable. Hidden sides, thickness and support pose are inferred.
+    Firing, reload, held/worn, rigging, alternate attachment states and runtime visuals
+    unsupported. No native/map/fidelity approval.
+  parts:
+  - label: tapered shoulder stock upper
+    min: -0.987644, -0.0375, 0.01
+    max: -0.715481, 0.0625, 0.085
+    color: '#5C2C21'
+    yaw: 2.6324348689864974
+  - label: sloping stock lower cheek
+    min: -0.965304, -0.059375, 0.013
+    max: -0.7221960000000001, 0.003125, 0.078
+    color: '#5C2C21'
+    yaw: 17.969139740157026
+  - label: rubber butt pad
+    min: -1.0, -0.11875, 0.008
+    max: -0.965625, 0.05, 0.091
+    color: '#121212'
+  - label: stock ridge
+    min: -0.96875, 0.010156, 0.0855
+    max: -0.7375, 0.027344, 0.0945
+    color: '#94583A'
+    yaw: 0.0
+    shape: CylinderX
+  - label: receiver lower solid
+    min: -0.71875, -0.042188, 0.02
+    max: -0.375, 0.03125, 0.098
+    color: '#292926'
+  - label: upper receiver ridge
+    min: -0.6875, 0.010938, 0.036
+    max: -0.375, 0.0625, 0.12
+    color: '#474643'
+  - label: slanted pistol grip
+    min: -0.7431220000000001, -0.144531, 0.012
+    max: -0.603753, -0.074219, 0.083
+    color: '#5C2C21'
+    yaw: -109.65382405805329
+  - label: grip edge
+    min: -0.729374, -0.13625, 0.08
+    max: -0.659689, -0.123125, 0.09
+    color: '#94583A'
+    yaw: -109.65382405805333
+    shape: CylinderX
+  - label: open trigger guard member 1
+    min: -0.643674, -0.080469, 0.0325
+    max: -0.587576, -0.061719, 0.0675
+    color: '#121212'
+    yaw: -77.12499844038757
+    shape: CylinderX
+  - label: open trigger guard member 2
+    min: -0.609406, -0.109375, 0.0325
+    max: -0.531219, -0.090625, 0.0675
+    color: '#121212'
+    yaw: -2.290610042638562
+    shape: CylinderX
+  - label: open trigger guard member 3
+    min: -0.546555, -0.085156, 0.0325
+    max: -0.48782000000000003, -0.066406, 0.0675
+    color: '#121212'
+    yaw: 61.389540334034805
+    shape: CylinderX
+  - label: open trigger guard rounded join 1
+    min: -0.61875, -0.107812, 0.0325
+    max: -0.6, -0.089062, 0.0675
+    color: '#121212'
+    shape: Ellipsoid
+  - label: open trigger guard rounded join 2
+    min: -0.540625, -0.110938, 0.0325
+    max: -0.521875, -0.092187, 0.0675
+    color: '#121212'
+    shape: Ellipsoid
+  - label: visible stylized trigger
+    min: -0.600887, -0.053906, 0.054
+    max: -0.5663, -0.041406, 0.066
+    color: '#474643'
+    yaw: -108.43494882292207
+    shape: CylinderX
+  - label: magazine shell
+    min: -0.536699, -0.161719, 0.008
+    max: -0.378926, -0.075781, 0.097
+    color: '#292926'
+    yaw: -82.03038960567861
+  - label: magazine base shoe
+    min: -0.49375, -0.2125, 0.004
+    max: -0.409375, -0.184375, 0.101
+    color: '#121212'
+  - label: magazine highlight
+    min: -0.507594, -0.12375, 0.097
+    max: -0.398656, -0.109062, 0.105
+    color: '#474643'
+    yaw: -81.75367918553147
+    shape: CylinderX
+  - label: rounded handguard
+    min: -0.381427, -0.042969, 0.0065
+    max: -0.037322999999999995, 0.058594, 0.1215
+    color: '#5C2C21'
+    yaw: 2.602562202499806
+    shape: CylinderX
+  - label: handguard upper ridge
+    min: -0.365642, 0.017187, 0.115
+    max: -0.04060799999999998, 0.034375, 0.123
+    color: '#94583A'
+    yaw: 0.8263241397292391
+    shape: CylinderX
+  - label: exterior barrel
+    min: -0.05312499999999998, -0.003906, 0.039
+    max: 0.14687499999999998, 0.035156, 0.087
+    color: '#292926'
+    yaw: 0.0
+    shape: CylinderX
+  - label: front barrel collar
+    min: 0.02812500000000001, -0.014844, 0.0295
+    max: 0.06874999999999998, 0.046094, 0.0985
+    color: '#121212'
+    yaw: 0.0
+    shape: CylinderX
+  - label: front sight silhouette member 1
+    min: 0.0017980000000000218, 0.046094, 0.053
+    max: 0.06382700000000002, 0.063281, 0.075
+    color: '#474643'
+    yaw: 49.085616779974785
+    shape: CylinderX
+  - label: front sight silhouette member 2
+    min: 0.02903699999999998, 0.039844, 0.053
+    max: 0.08971299999999999, 0.057031, 0.075
+    color: '#474643'
+    yaw: -78.11134196037206
+    shape: CylinderX
+  - label: front sight silhouette rounded join 1
+    min: 0.04453099999999999, 0.069531, 0.053
+    max: 0.061719000000000024, 0.086719, 0.075
+    color: '#474643'
+    shape: Ellipsoid
+  - label: carry handle open frame member 1
+    min: -0.691988, 0.084375, 0.0545
+    max: -0.606449, 0.1125, 0.1095
+    color: '#292926'
+    yaw: 80.53767779197433
+    shape: CylinderX
+  - label: carry handle open frame member 2
+    min: -0.642946, 0.134375, 0.0545
+    max: -0.561741, 0.1625, 0.1095
+    color: '#292926'
+    yaw: 11.09372301155786
+    shape: CylinderX
+  - label: carry handle open frame member 3
+    min: -0.565375, 0.121875, 0.0545
+    max: -0.419, 0.15, 0.1095
+    color: '#292926'
+    yaw: -16.113418233089302
+    shape: CylinderX
+  - label: carry handle open frame member 4
+    min: -0.468848, 0.051562, 0.0545
+    max: -0.368652, 0.079687, 0.1095
+    color: '#292926'
+    yaw: -86.4236656250026
+    shape: CylinderX
+  - label: carry handle open frame rounded join 1
+    min: -0.65625, 0.126563, 0.0545
+    max: -0.628125, 0.154687, 0.1095
+    color: '#292926'
+    shape: Ellipsoid
+  - label: carry handle open frame rounded join 2
+    min: -0.5765629999999999, 0.142188, 0.0545
+    max: -0.5484370000000001, 0.170312, 0.1095
+    color: '#292926'
+    shape: Ellipsoid
+  - label: carry handle open frame rounded join 3
+    min: -0.435938, 0.101562, 0.0545
+    max: -0.407812, 0.129687, 0.1095
+    color: '#292926'
+    shape: Ellipsoid
+  - label: carry handle top highlight
+    min: -0.628125, 0.135156, 0.108
+    max: -0.55625, 0.149219, 0.116
+    color: '#474643'
+    yaw: 0.0
+    shape: CylinderX
+  - label: red selector accent
+    min: -0.621875, -0.020312, 0.099
+    max: -0.571875, -0.001563, 0.105
+    color: '#5C2C21'
+  - label: source receiver face
+    min: -0.65625, -0.03125, 0.097
+    max: -0.4375, 0.03125, 0.123
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt001
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldWeaponSMGMP5Cloud
+  label: MP5 fixed-stock world prop
+  status: draft
+  sourcePrototypes:
+  - WeaponSMGMP5
+  referencePrototype: WeaponSMGMP5
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/SMGs/mp5.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Source-driven blue-gray housing with separate curved stick magazine.
+    ItemMapper starting magazine is included; the compact variant retains its default
+    collapsed stock overlay. Random attachments and alternate stock/magazine forms
+    are excluded. Exterior-only stylized, nonfunctional loose-world prop; muzzle faces
+    +X in the default source. Includes audited deterministic starting attachment and
+    ItemMapper composition where applicable. Hidden sides, thickness and support pose
+    are inferred. Firing, reload, held/worn, rigging, alternate attachment states
+    and runtime visuals unsupported. No native/map/fidelity approval.
+  parts:
+  - label: fixed stock upper cheek
+    min: -0.471875, -0.0125, 0.018
+    max: -0.196875, 0.05625, 0.092
+    color: '#1F2527'
+    yaw: 0.0
+  - label: sloping fixed stock lower
+    min: -0.460051, -0.053125, 0.018
+    max: -0.199324, 0.003125, 0.085
+    color: '#1F2527'
+    yaw: 13.869686438505036
+  - label: rubber stock butt
+    min: -0.5, -0.096875, 0.01
+    max: -0.4625, 0.046875, 0.093
+    color: '#101417'
+  - label: stock bright edge
+    min: -0.46875, 0.024688, 0.0925
+    max: -0.24375, 0.037812, 0.1015
+    color: '#535F68'
+    yaw: 0.0
+    shape: CylinderX
+  - label: receiver upper core
+    min: -0.21875, -0.029687, 0.02
+    max: 0.125, 0.06875, 0.107
+    color: '#1F2527'
+  - label: receiver raised spine
+    min: -0.196875, 0.0375, 0.063
+    max: 0.15625, 0.071875, 0.126
+    color: '#535F68'
+  - label: rounded dark foregrip
+    min: 0.09371, -0.032813, 0.009
+    max: 0.340665, 0.064062, 0.119
+    color: '#1F2527'
+    yaw: 1.450216290933449
+    shape: CylinderX
+  - label: foregrip upper ridge
+    min: 0.103122, 0.04375, 0.119
+    max: 0.318753, 0.057813, 0.127
+    color: '#535F68'
+    yaw: -0.41517954114484046
+    shape: CylinderX
+  - label: short exterior barrel
+    min: 0.328125, 0.003906, 0.0475
+    max: 0.48125, 0.039844, 0.0885
+    color: '#535F68'
+    yaw: 0.0
+    shape: CylinderX
+  - label: barrel shoulder
+    min: 0.36875, -0.009375, 0.04
+    max: 0.4, 0.053125, 0.1
+    color: '#101417'
+    yaw: 0.0
+    shape: CylinderX
+  - label: front sight post
+    min: 0.321875, 0.03125, 0.047
+    max: 0.351562, 0.109375, 0.092
+    color: '#1F2527'
+  - label: rear sight exterior member 1
+    min: -0.219436, 0.084687, 0.071
+    max: -0.161814, 0.109062, 0.101
+    color: '#535F68'
+    yaw: 77.47119229084853
+    shape: CylinderX
+  - label: rear sight exterior member 2
+    min: -0.184614, 0.115937, 0.071
+    max: -0.143511, 0.140312, 0.101
+    color: '#535F68'
+    yaw: 8.746162262555197
+    shape: CylinderX
+  - label: rear sight exterior rounded join 1
+    min: -0.196562, 0.112812, 0.071
+    max: -0.172187, 0.137188, 0.101
+    color: '#535F68'
+    shape: Ellipsoid
+  - label: angled pistol grip
+    min: -0.201127, -0.125, 0.008
+    max: -0.061373, -0.0625, 0.085
+    color: '#1F2527'
+    yaw: -116.56505117707799
+  - label: grip pale seam
+    min: -0.188876, -0.117188, 0.085
+    max: -0.123624, -0.101562, 0.093
+    color: '#535F68'
+    yaw: -106.69924423399348
+    shape: CylinderX
+  - label: open guard member 1
+    min: -0.125588, -0.082031, 0.035
+    max: -0.021287, -0.064844, 0.059
+    color: '#101417'
+    yaw: -81.3843518158359
+    shape: CylinderX
+  - label: open guard member 2
+    min: -0.065625, -0.133594, 0.035
+    max: -0.025, -0.116406, 0.059
+    color: '#101417'
+    yaw: 0.0
+    shape: CylinderX
+  - label: open guard member 3
+    min: -0.067404, -0.078906, 0.035
+    max: 0.045529, -0.061719, 0.059
+    color: '#101417'
+    yaw: 75.57922687248903
+    shape: CylinderX
+  - label: open guard rounded join 1
+    min: -0.074219, -0.133594, 0.035
+    max: -0.057031, -0.116406, 0.059
+    color: '#101417'
+    shape: Ellipsoid
+  - label: open guard rounded join 2
+    min: -0.033594, -0.133594, 0.035
+    max: -0.016406, -0.116406, 0.059
+    color: '#101417'
+    shape: Ellipsoid
+  - label: curved stick magazine exterior member 1
+    min: -0.047651, -0.113281, 0.0135
+    max: 0.066401, -0.042969, 0.0985
+    color: '#1F2527'
+    yaw: -80.53767779197436
+    shape: CylinderX
+  - label: curved stick magazine exterior member 2
+    min: -0.010613, -0.211719, 0.0135
+    max: 0.079363, -0.141406, 0.0985
+    color: '#1F2527'
+    yaw: -69.67686317033706
+    shape: CylinderX
+  - label: curved stick magazine exterior member 3
+    min: 0.034346, -0.286719, 0.0135
+    max: 0.118779, -0.216406, 0.0985
+    color: '#1F2527'
+    yaw: -51.009005957494615
+    shape: CylinderX
+  - label: curved stick magazine exterior rounded join 1
+    min: -0.016406, -0.169531, 0.0135
+    max: 0.053906, -0.099219, 0.0985
+    color: '#1F2527'
+    shape: Ellipsoid
+  - label: curved stick magazine exterior rounded join 2
+    min: 0.014844, -0.253906, 0.0135
+    max: 0.085156, -0.183594, 0.0985
+    color: '#1F2527'
+    shape: Ellipsoid
+  - label: magazine pressed bright seam member 1
+    min: -0.032243, -0.104375, 0.0925
+    max: 0.057243, -0.089375, 0.0995
+    color: '#535F68'
+    yaw: -77.90524292298788
+    shape: CylinderX
+  - label: magazine pressed bright seam member 2
+    min: -0.005049, -0.18875, 0.0925
+    max: 0.083174, -0.17375, 0.0995
+    color: '#535F68'
+    yaw: -67.06789956241033
+    shape: CylinderX
+  - label: magazine pressed bright seam member 3
+    min: 0.046189, -0.25125, 0.0925
+    max: 0.103811, -0.23625, 0.0995
+    color: '#535F68'
+    yaw: -49.398705354995435
+    shape: CylinderX
+  - label: magazine pressed bright seam rounded join 1
+    min: 0.014375, -0.148125, 0.0925
+    max: 0.029375, -0.133125, 0.0995
+    color: '#535F68'
+    shape: Ellipsoid
+  - label: magazine pressed bright seam rounded join 2
+    min: 0.04875, -0.229375, 0.0925
+    max: 0.06375, -0.214375, 0.0995
+    color: '#535F68'
+    shape: Ellipsoid
+  - label: magazine base flange
+    min: 0.074948, -0.29375, 0.0115
+    max: 0.121927, -0.265625, 0.0985
+    color: '#101417'
+    yaw: 3.8140748342904085
+    shape: CylinderX
+  - label: selector red detail
+    min: -0.11875, -0.045312, 0.102
+    max: -0.075, -0.025, 0.11
+    color: '#602D36'
+  - label: exact upper receiver markings
+    min: -0.1875, 0.0, 0.103
+    max: -0.03125, 0.0625, 0.129
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt002
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldRMCWeaponSMGMP5AltCloud
+  label: MP5 compact collapsed-stock world prop
+  status: draft
+  sourcePrototypes:
+  - RMCWeaponSMGMP5Alt
+  referencePrototype: RMCWeaponSMGMP5Alt
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/SMGs/mp5alt.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Source-driven blue-gray housing with separate curved stick magazine.
+    ItemMapper starting magazine is included; the compact variant retains its default
+    collapsed stock overlay. Random attachments and alternate stock/magazine forms
+    are excluded. Exterior-only stylized, nonfunctional loose-world prop; muzzle faces
+    +X in the default source. Includes audited deterministic starting attachment and
+    ItemMapper composition where applicable. Hidden sides, thickness and support pose
+    are inferred. Firing, reload, held/worn, rigging, alternate attachment states
+    and runtime visuals unsupported. No native/map/fidelity approval.
+  parts:
+  - label: collapsed stock heel
+    min: -0.4375, -0.10625, 0.018
+    max: -0.396875, 0.0875, 0.077
+    color: '#101417'
+  - label: folded stock side member
+    min: -0.403168, 0.04375, 0.008
+    max: -0.174957, 0.08125, 0.037
+    color: '#535F68'
+    yaw: -1.5693548047490082
+  - label: receiver upper core
+    min: -0.34375, -0.029687, 0.02
+    max: 0.0, 0.06875, 0.107
+    color: '#1F2527'
+  - label: receiver raised spine
+    min: -0.321875, 0.0375, 0.063
+    max: 0.03125, 0.071875, 0.126
+    color: '#535F68'
+  - label: rounded dark foregrip
+    min: -0.03129, -0.032813, 0.009
+    max: 0.215665, 0.064062, 0.119
+    color: '#1F2527'
+    yaw: 1.450216290933449
+    shape: CylinderX
+  - label: foregrip upper ridge
+    min: -0.021878, 0.04375, 0.119
+    max: 0.193753, 0.057813, 0.127
+    color: '#535F68'
+    yaw: -0.41517954114484046
+    shape: CylinderX
+  - label: short exterior barrel
+    min: 0.203125, 0.003906, 0.0475
+    max: 0.35625, 0.039844, 0.0885
+    color: '#535F68'
+    yaw: 0.0
+    shape: CylinderX
+  - label: barrel shoulder
+    min: 0.24375, -0.009375, 0.04
+    max: 0.275, 0.053125, 0.1
+    color: '#101417'
+    yaw: 0.0
+    shape: CylinderX
+  - label: front sight post
+    min: 0.196875, 0.03125, 0.047
+    max: 0.226562, 0.109375, 0.092
+    color: '#1F2527'
+  - label: rear sight exterior member 1
+    min: -0.344436, 0.084687, 0.071
+    max: -0.286814, 0.109062, 0.101
+    color: '#535F68'
+    yaw: 77.47119229084853
+    shape: CylinderX
+  - label: rear sight exterior member 2
+    min: -0.309614, 0.115937, 0.071
+    max: -0.268511, 0.140312, 0.101
+    color: '#535F68'
+    yaw: 8.746162262555197
+    shape: CylinderX
+  - label: rear sight exterior rounded join 1
+    min: -0.321562, 0.112812, 0.071
+    max: -0.297187, 0.137188, 0.101
+    color: '#535F68'
+    shape: Ellipsoid
+  - label: angled pistol grip
+    min: -0.326127, -0.125, 0.008
+    max: -0.186373, -0.0625, 0.085
+    color: '#1F2527'
+    yaw: -116.56505117707799
+  - label: grip pale seam
+    min: -0.313876, -0.117188, 0.085
+    max: -0.248624, -0.101562, 0.093
+    color: '#535F68'
+    yaw: -106.69924423399348
+    shape: CylinderX
+  - label: open guard member 1
+    min: -0.250588, -0.082031, 0.035
+    max: -0.146287, -0.064844, 0.059
+    color: '#101417'
+    yaw: -81.3843518158359
+    shape: CylinderX
+  - label: open guard member 2
+    min: -0.190625, -0.133594, 0.035
+    max: -0.15, -0.116406, 0.059
+    color: '#101417'
+    yaw: 0.0
+    shape: CylinderX
+  - label: open guard member 3
+    min: -0.192404, -0.078906, 0.035
+    max: -0.079471, -0.061719, 0.059
+    color: '#101417'
+    yaw: 75.57922687248903
+    shape: CylinderX
+  - label: open guard rounded join 1
+    min: -0.199219, -0.133594, 0.035
+    max: -0.182031, -0.116406, 0.059
+    color: '#101417'
+    shape: Ellipsoid
+  - label: open guard rounded join 2
+    min: -0.158594, -0.133594, 0.035
+    max: -0.141406, -0.116406, 0.059
+    color: '#101417'
+    shape: Ellipsoid
+  - label: curved stick magazine exterior member 1
+    min: -0.141401, -0.113281, 0.0135
+    max: -0.027349, -0.042969, 0.0985
+    color: '#1F2527'
+    yaw: -80.53767779197436
+    shape: CylinderX
+  - label: curved stick magazine exterior member 2
+    min: -0.104363, -0.211719, 0.0135
+    max: -0.014387, -0.141406, 0.0985
+    color: '#1F2527'
+    yaw: -69.67686317033706
+    shape: CylinderX
+  - label: curved stick magazine exterior member 3
+    min: -0.059404, -0.286719, 0.0135
+    max: 0.025029, -0.216406, 0.0985
+    color: '#1F2527'
+    yaw: -51.009005957494615
+    shape: CylinderX
+  - label: curved stick magazine exterior rounded join 1
+    min: -0.110156, -0.169531, 0.0135
+    max: -0.039844, -0.099219, 0.0985
+    color: '#1F2527'
+    shape: Ellipsoid
+  - label: curved stick magazine exterior rounded join 2
+    min: -0.078906, -0.253906, 0.0135
+    max: -0.008594, -0.183594, 0.0985
+    color: '#1F2527'
+    shape: Ellipsoid
+  - label: magazine pressed bright seam member 1
+    min: -0.125993, -0.104375, 0.0925
+    max: -0.036507, -0.089375, 0.0995
+    color: '#535F68'
+    yaw: -77.90524292298788
+    shape: CylinderX
+  - label: magazine pressed bright seam member 2
+    min: -0.098799, -0.18875, 0.0925
+    max: -0.010576, -0.17375, 0.0995
+    color: '#535F68'
+    yaw: -67.06789956241033
+    shape: CylinderX
+  - label: magazine pressed bright seam member 3
+    min: -0.047561, -0.25125, 0.0925
+    max: 0.010061, -0.23625, 0.0995
+    color: '#535F68'
+    yaw: -49.398705354995435
+    shape: CylinderX
+  - label: magazine pressed bright seam rounded join 1
+    min: -0.079375, -0.148125, 0.0925
+    max: -0.064375, -0.133125, 0.0995
+    color: '#535F68'
+    shape: Ellipsoid
+  - label: magazine pressed bright seam rounded join 2
+    min: -0.045, -0.229375, 0.0925
+    max: -0.03, -0.214375, 0.0995
+    color: '#535F68'
+    shape: Ellipsoid
+  - label: magazine base flange
+    min: -0.018802, -0.29375, 0.0115
+    max: 0.028177, -0.265625, 0.0985
+    color: '#101417'
+    yaw: 3.8140748342904085
+    shape: CylinderX
+  - label: selector red detail
+    min: -0.24375, -0.045312, 0.102
+    max: -0.2, -0.025, 0.11
+    color: '#6B1B1B'
+  - label: exact upper receiver markings
+    min: -0.3125, 0.0, 0.103
+    max: -0.15625, 0.0625, 0.129
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt003
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldAU14WeaponRevolverM2019Cloud
+  label: M2019 silver-shroud world prop
+  status: draft
+  sourcePrototypes:
+  - AU14WeaponRevolverM2019
+  referencePrototype: AU14WeaponRevolverM2019
+  referenceRsi: /Textures/CMU14/Weapons/Guns/Civilian/blaster.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Rounded upper shroud, side cylinder, pale metal ribs, brown shaped
+    grip, paired orange details and a genuine large trigger-guard opening follow the
+    icon. Exterior-only stylized, nonfunctional loose-world prop; muzzle faces +X
+    in the default source. Includes audited deterministic starting attachment and
+    ItemMapper composition where applicable. Hidden sides, thickness and support pose
+    are inferred. Firing, reload, held/worn, rigging, alternate attachment states
+    and runtime visuals unsupported. No native/map/fidelity approval.
+  parts:
+  - label: curved brown grip
+    min: -0.377306, -0.164062, 0.011
+    max: -0.166444, -0.064063, 0.097
+    color: '#5C361B'
+    yaw: -96.80905017961345
+  - label: grip pale inlay
+    min: -0.319677, -0.114063, 0.097
+    max: -0.189698, -0.082813, 0.105
+    color: '#AB875F'
+    yaw: -99.68878656036685
+    shape: CylinderX
+  - label: grip lower flared heel
+    min: -0.3125, -0.275, 0.016
+    max: -0.196875, -0.20625, 0.108
+    color: '#232325'
+  - label: heel metal edge
+    min: -0.302458, -0.260156, 0.1035
+    max: -0.200667, -0.239844, 0.1145
+    color: '#6E6F74'
+    yaw: -17.87869659584133
+    shape: CylinderX
+  - label: upper receiver lower body
+    min: -0.25, -0.03125, 0.023
+    max: 0.25, 0.0625, 0.117
+    color: '#232325'
+  - label: silver upper shroud
+    min: -0.21875, 0.05, 0.037
+    max: 0.3125, 0.1375, 0.143
+    color: '#434346'
+  - label: upper barrel exterior
+    min: -0.06875, 0.057813, 0.0475
+    max: 0.328125, 0.129688, 0.1605
+    color: '#434346'
+    yaw: 0.0
+    shape: CylinderX
+  - label: forward barrel cuff
+    min: 0.246875, 0.04375, 0.0405
+    max: 0.328125, 0.14375, 0.1655
+    color: '#6E6F74'
+    yaw: 0.0
+    shape: CylinderX
+  - label: rounded side cylinder
+    min: -0.203125, 0.009375, 0.0075
+    max: -0.10625, 0.146875, 0.1625
+    color: '#6E6F74'
+    yaw: 0.0
+    shape: CylinderX
+  - label: cylinder central raised rib
+    min: -0.207812, 0.074219, 0.16
+    max: -0.092187, 0.091406, 0.17
+    color: '#A2A3A9'
+    yaw: -90.0
+    shape: CylinderX
+  - label: open lower trigger guard member 1
+    min: -0.240805, -0.103906, 0.0415
+    max: -0.11857, -0.080469, 0.0885
+    color: '#434346'
+    yaw: -94.3987053549955
+    shape: CylinderX
+  - label: open lower trigger guard member 2
+    min: -0.184565, -0.160156, 0.0415
+    max: -0.06856, -0.136719, 0.0885
+    color: '#434346'
+    yaw: 4.635463426902604
+    shape: CylinderX
+  - label: open lower trigger guard member 3
+    min: -0.086311, -0.122656, 0.0415
+    max: -0.007439, -0.099219, 0.0885
+    color: '#434346'
+    yaw: 56.30993247402012
+    shape: CylinderX
+  - label: open lower trigger guard member 4
+    min: -0.051562, -0.063281, 0.0415
+    max: 0.001563, -0.039844, 0.0885
+    color: '#434346'
+    yaw: 90.0
+    shape: CylinderX
+  - label: open lower trigger guard rounded join 1
+    min: -0.196094, -0.164844, 0.0415
+    max: -0.172656, -0.141406, 0.0885
+    color: '#434346'
+    shape: Ellipsoid
+  - label: open lower trigger guard rounded join 2
+    min: -0.080469, -0.155469, 0.0415
+    max: -0.057031, -0.132031, 0.0885
+    color: '#434346'
+    shape: Ellipsoid
+  - label: open lower trigger guard rounded join 3
+    min: -0.036719, -0.089844, 0.0415
+    max: -0.013281, -0.066406, 0.0885
+    color: '#434346'
+    shape: Ellipsoid
+  - label: trigger accent
+    min: -0.158452, -0.063437, 0.068
+    max: -0.085298, -0.049062, 0.088
+    color: '#A2A3A9'
+    yaw: -109.98310652189993
+    shape: CylinderX
+  - label: twin orange accent left
+    min: 0.0, -0.05625, 0.113
+    max: 0.03125, -0.03125, 0.123
+    color: '#DF7126'
+  - label: twin orange accent right
+    min: 0.0625, -0.05625, 0.113
+    max: 0.09375, -0.03125, 0.123
+    color: '#DF7126'
+  - label: original silver shroud reflection
+    min: -0.03125, 0.0625, 0.135
+    max: 0.21875, 0.125, 0.161
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt004
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldRMCWeaponLauncherM81Cloud
+  label: M81 closed long-tube world prop
+  status: draft
+  sourcePrototypes:
+  - RMCWeaponLauncherM81
+  referencePrototype: RMCWeaponLauncherM81
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/GrenadeLaunchers/m81.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Wide cylindrical exterior and distinct rear stock strut, butt, grip
+    and raised sight silhouettes. Only the source base ground pose is shown; breech
+    opening and loading are unsupported. Exterior-only stylized, nonfunctional loose-world
+    prop; muzzle faces +X in the default source. Includes audited deterministic starting
+    attachment and ItemMapper composition where applicable. Hidden sides, thickness
+    and support pose are inferred. Firing, reload, held/worn, rigging, alternate attachment
+    states and runtime visuals unsupported. No native/map/fidelity approval.
+  parts:
+  - label: closed large tube exterior
+    min: -0.1875, 0.021094, 0.008
+    max: 0.446875, 0.153906, 0.158
+    color: '#383838'
+    yaw: 0.0
+    shape: CylinderX
+  - label: tube rear collar
+    min: -0.19375, 0.010938, 0.002
+    max: -0.125, 0.164063, 0.162
+    color: '#060806'
+    yaw: 0.0
+    shape: CylinderX
+  - label: tube muzzle exterior rim
+    min: 0.403125, 0.015625, 0.0055
+    max: 0.453125, 0.159375, 0.1605
+    color: '#060806'
+    yaw: 0.0
+    shape: CylinderX
+  - label: tube upper reflective band
+    min: -0.125, 0.106563, 0.158
+    max: 0.403125, 0.130938, 0.17
+    color: '#736762'
+    yaw: 0.0
+    shape: CylinderX
+  - label: lower receiver
+    min: -0.171875, -0.034375, 0.019
+    max: 0.271875, 0.034375, 0.085
+    color: '#383838'
+    yaw: 0.0
+  - label: short stock strut
+    min: -0.3625, 0.075, 0.037
+    max: -0.190625, 0.11875, 0.092
+    color: '#736762'
+    yaw: 0.0
+  - label: vertical stock butt
+    min: -0.4, -0.078125, 0.014
+    max: -0.35, 0.109375, 0.11
+    color: '#060806'
+  - label: butt metal insert
+    min: -0.43125, 0.010938, 0.107
+    max: -0.3125, 0.032813, 0.119
+    color: '#867872'
+    yaw: -90.0
+    shape: CylinderX
+  - label: brown grip
+    min: -0.131098, -0.132812, 0.008
+    max: -0.018902, -0.064062, 0.092
+    color: '#736762'
+    yaw: -102.87500155961243
+  - label: small trigger guard member 1
+    min: -0.064102, -0.071875, 0.0355
+    max: -0.001523, -0.053125, 0.0645
+    color: '#060806'
+    yaw: -87.13759477388821
+    shape: CylinderX
+  - label: small trigger guard member 2
+    min: -0.03125, -0.103125, 0.0355
+    max: 0.034375, -0.084375, 0.0645
+    color: '#060806'
+    yaw: 0.0
+    shape: CylinderX
+  - label: small trigger guard member 3
+    min: 0.001066, -0.064062, 0.0355
+    max: 0.080184, -0.045312, 0.0645
+    color: '#060806'
+    yaw: 80.90972307917771
+    shape: CylinderX
+  - label: small trigger guard rounded join 1
+    min: -0.040625, -0.103125, 0.0355
+    max: -0.021875, -0.084375, 0.0645
+    color: '#060806'
+    shape: Ellipsoid
+  - label: small trigger guard rounded join 2
+    min: 0.025, -0.103125, 0.0355
+    max: 0.04375, -0.084375, 0.0645
+    color: '#060806'
+    shape: Ellipsoid
+  - label: tall source rear sight stem
+    min: 0.05625, 0.220937, 0.059
+    max: 0.21875, 0.235313, 0.083
+    color: '#1E2328'
+    yaw: 90.0
+    shape: CylinderX
+  - label: source front sight stem
+    min: 0.360938, 0.163125, 0.06
+    max: 0.451562, 0.1775, 0.084
+    color: '#1E2328'
+    yaw: 90.0
+    shape: CylinderX
+  - label: tube source reflection strip
+    min: -0.09375, 0.0625, 0.14
+    max: 0.34375, 0.125, 0.166
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt005
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldWeaponRifleM5SPRCloud
+  label: M5SPR desert world prop with default flare attachment
+  status: draft
+  sourcePrototypes:
+  - WeaponRifleM5SPR
+  referencePrototype: WeaponRifleM5SPR
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Rifles/m4spr_custom/desert.rsi
+  referenceState: bolt-open
+  sourceDirections: 1
+  placement: surface
+  description: Tan rounded stock, metal rail, distinct magazine and grip, fixed barrel
+    layer, and deterministic starting flaregun_a underbarrel overlay at the sum of
+    both authored offsets. The source bolt-open artwork is the declared default layer;
+    no reload sequence is inferred. Exterior-only stylized, nonfunctional loose-world
+    prop; muzzle faces +X in the default source. Includes audited deterministic starting
+    attachment and ItemMapper composition where applicable. Hidden sides, thickness
+    and support pose are inferred. Firing, reload, held/worn, rigging, alternate attachment
+    states and runtime visuals unsupported. No native/map/fidelity approval.
+  parts:
+  - label: sculpted tan stock core
+    min: -0.46875, -0.078125, 0.017
+    max: -0.15625, 0.09375, 0.115
+    color: '#795D49'
+    shape: Ellipsoid
+  - label: stock upper gray cheek
+    min: -0.40625, 0.06875, 0.027
+    max: -0.175, 0.14375, 0.139
+    color: '#7C7C7C'
+    shape: Ellipsoid
+  - label: stock lower gray heel
+    min: -0.34375, -0.125, 0.017
+    max: -0.209375, -0.021875, 0.105
+    color: '#7C7C7C'
+    shape: Ellipsoid
+  - label: rear dark butt rim
+    min: -0.55625, -0.009375, 0.0105
+    max: -0.4125, 0.028125, 0.1155
+    color: '#1B1B1B'
+    yaw: -90.0
+    shape: CylinderX
+  - label: tan receiver
+    min: -0.21875, -0.04375, 0.02
+    max: 0.4375, 0.0625, 0.118
+    color: '#795D49'
+  - label: upper dark receiver rail
+    min: -0.125, 0.0625, 0.045
+    max: 0.6875, 0.11875, 0.135
+    color: '#1B1B1B'
+  - label: upper rail highlight
+    min: -0.09375, 0.089062, 0.133
+    max: 0.65625, 0.110937, 0.141
+    color: '#7C7C7C'
+    yaw: 0.0
+    shape: CylinderX
+  - label: raised rail tooth 46
+    min: -0.0625, 0.078125, 0.131
+    max: -0.034375, 0.11875, 0.151
+    color: '#7C7C7C'
+  - label: raised rail tooth 49
+    min: 0.03125, 0.078125, 0.131
+    max: 0.059375, 0.11875, 0.151
+    color: '#7C7C7C'
+  - label: raised rail tooth 52
+    min: 0.125, 0.078125, 0.131
+    max: 0.153125, 0.11875, 0.151
+    color: '#7C7C7C'
+  - label: raised rail tooth 55
+    min: 0.21875, 0.078125, 0.131
+    max: 0.246875, 0.11875, 0.151
+    color: '#7C7C7C'
+  - label: raised rail tooth 58
+    min: 0.3125, 0.078125, 0.131
+    max: 0.340625, 0.11875, 0.151
+    color: '#7C7C7C'
+  - label: raised rail tooth 61
+    min: 0.40625, 0.078125, 0.131
+    max: 0.434375, 0.11875, 0.151
+    color: '#7C7C7C'
+  - label: raised rail tooth 64
+    min: 0.5, 0.078125, 0.131
+    max: 0.528125, 0.11875, 0.151
+    color: '#7C7C7C'
+  - label: raised rail tooth 67
+    min: 0.59375, 0.078125, 0.131
+    max: 0.621875, 0.11875, 0.151
+    color: '#7C7C7C'
+  - label: black pistol grip
+    min: -0.129418, -0.167188, 0.01
+    max: 0.060668, -0.089063, 0.1
+    color: '#1B1B1B'
+    yaw: -99.46232220802563
+  - label: open trigger guard member 1
+    min: -0.011825, -0.092969, 0.0375
+    max: 0.080575, -0.074219, 0.0665
+    color: '#1B1B1B'
+    yaw: -86.12147549715225
+    shape: CylinderX
+  - label: open trigger guard member 2
+    min: 0.0375, -0.139062, 0.0375
+    max: 0.125, -0.120312, 0.0665
+    color: '#1B1B1B'
+    yaw: 0.0
+    shape: CylinderX
+  - label: open trigger guard member 3
+    min: 0.091955, -0.092969, 0.0375
+    max: 0.189295, -0.074219, 0.0665
+    color: '#1B1B1B'
+    yaw: 71.27421215472744
+    shape: CylinderX
+  - label: open trigger guard rounded join 1
+    min: 0.028125, -0.139062, 0.0375
+    max: 0.046875, -0.120312, 0.0665
+    color: '#1B1B1B'
+    shape: Ellipsoid
+  - label: open trigger guard rounded join 2
+    min: 0.115625, -0.139062, 0.0375
+    max: 0.134375, -0.120312, 0.0665
+    color: '#1B1B1B'
+    shape: Ellipsoid
+  - label: lower receiver step
+    min: 0.15625, -0.134375, 0.018
+    max: 0.59375, -0.03125, 0.078
+    color: '#484848'
+  - label: short source magazine
+    min: 0.40625, -0.1375, 0.008
+    max: 0.46875, -0.0625, 0.072
+    color: '#1B1B1B'
+  - label: tan barrel shroud
+    min: 0.40625, -0.036719, 0.015
+    max: 0.696875, 0.061719, 0.123
+    color: '#795D49'
+    yaw: 0.0
+    shape: CylinderX
+  - label: exterior muzzle
+    min: 0.6875, -0.010156, 0.043
+    max: 0.8625, 0.035156, 0.095
+    color: '#484848'
+    yaw: 0.0
+    shape: CylinderX
+  - label: muzzle collar
+    min: 0.753125, -0.01875, 0.0355
+    max: 0.796875, 0.04375, 0.1045
+    color: '#1B1B1B'
+    yaw: 0.0
+    shape: CylinderX
+  - label: front sight block
+    min: 0.665625, 0.03125, 0.056
+    max: 0.73125, 0.1375, 0.13
+    color: '#1B1B1B'
+  - label: default underbarrel flare attachment
+    min: 0.403125, -0.165625, 0.005
+    max: 0.76875, -0.096875, 0.097
+    color: '#484848'
+    yaw: 0.0
+    shape: CylinderX
+  - label: flare attachment front casing
+    min: 0.678125, -0.209375, 0.008
+    max: 0.7875, -0.053125, 0.11
+    color: '#1B1B1B'
+  - label: flare attachment orange band
+    min: 0.65, -0.175, 0.09
+    max: 0.671875, -0.0875, 0.105
+    color: '#9E3622'
+  - label: flare attachment grip
+    min: 0.388657, -0.210156, 0.007
+    max: 0.461343, -0.167969, 0.072
+    color: '#1B1B1B'
+    yaw: -115.46334506187159
+  - label: original receiver tan detail
+    min: 0.15625, -0.03125, 0.096
+    max: 0.4375, 0.03125, 0.122
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt006
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldRMCWeaponLMGM60Cloud
+  label: M60 long-barrel world prop with folded bipod
+  status: draft
+  sourcePrototypes:
+  - RMCWeaponLMGM60
+  referencePrototype: RMCWeaponLMGM60
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/LMGs/m60.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Four declared Sprite layers retain the separate fixed stock and barrel,
+    plus the deterministic inactive bipod_a overlay. Large ribbed shroud, dark stock,
+    brown magazine box and gold accent remain distinct. Exterior-only stylized, nonfunctional
+    loose-world prop; muzzle faces +X in the default source. Includes audited deterministic
+    starting attachment and ItemMapper composition where applicable. Hidden sides,
+    thickness and support pose are inferred. Firing, reload, held/worn, rigging, alternate
+    attachment states and runtime visuals unsupported. No native/map/fidelity approval.
+  parts:
+  - label: fixed shoulder stock upper
+    min: -0.740672, -0.039063, 0.012
+    max: -0.274953, 0.073437, 0.104
+    color: '#222222'
+    yaw: 1.1534504511053698
+  - label: tapered shoulder stock lower
+    min: -0.724576, -0.098437, 0.012
+    max: -0.316049, -0.010938, 0.095
+    color: '#222222'
+    yaw: 13.71734631836033
+  - label: rubber butt
+    min: -0.775, -0.175, 0.008
+    max: -0.73125, 0.0375, 0.11
+    color: '#161616'
+  - label: stock highlight
+    min: -0.718806, 0.010156, 0.103
+    max: -0.328069, 0.030469, 0.113
+    color: '#4F4F4F'
+    yaw: 1.3748347805694086
+    shape: CylinderX
+  - label: receiver lower core
+    min: -0.4375, -0.03125, 0.02
+    max: 0.09375, 0.09375, 0.137
+    color: '#222222'
+  - label: upper receiver top cover
+    min: -0.34375, 0.078125, 0.045
+    max: 0.05625, 0.140625, 0.152
+    color: '#363636'
+  - label: rounded ribbed handguard
+    min: 0.0, -0.040625, 0.01
+    max: 0.46875, 0.115625, 0.166
+    color: '#222222'
+    yaw: 0.0
+    shape: CylinderX
+  - label: raised handguard transverse rib 49
+    min: -0.03125, 0.027812, 0.144
+    max: 0.09375, 0.047187, 0.158
+    color: '#4F4F4F'
+    yaw: -90.0
+    shape: CylinderX
+  - label: raised handguard transverse rib 51
+    min: 0.03125, 0.027812, 0.144
+    max: 0.15625, 0.047187, 0.158
+    color: '#4F4F4F'
+    yaw: -90.0
+    shape: CylinderX
+  - label: raised handguard transverse rib 53
+    min: 0.09375, 0.027812, 0.144
+    max: 0.21875, 0.047187, 0.158
+    color: '#4F4F4F'
+    yaw: -90.0
+    shape: CylinderX
+  - label: raised handguard transverse rib 55
+    min: 0.15625, 0.027812, 0.144
+    max: 0.28125, 0.047187, 0.158
+    color: '#4F4F4F'
+    yaw: -90.0
+    shape: CylinderX
+  - label: raised handguard transverse rib 57
+    min: 0.21875, 0.027812, 0.144
+    max: 0.34375, 0.047187, 0.158
+    color: '#4F4F4F'
+    yaw: -90.0
+    shape: CylinderX
+  - label: raised handguard transverse rib 59
+    min: 0.28125, 0.027812, 0.144
+    max: 0.40625, 0.047187, 0.158
+    color: '#4F4F4F'
+    yaw: -90.0
+    shape: CylinderX
+  - label: raised handguard transverse rib 61
+    min: 0.34375, 0.027812, 0.144
+    max: 0.46875, 0.047187, 0.158
+    color: '#4F4F4F'
+    yaw: -90.0
+    shape: CylinderX
+  - label: long exterior barrel
+    min: 0.4375, 0.057813, 0.0555
+    max: 0.95625, 0.104688, 0.1105
+    color: '#363636'
+    yaw: 0.0
+    shape: CylinderX
+  - label: underbarrel structural rod
+    min: 0.459375, -0.005469, 0.052
+    max: 0.69375, 0.017969, 0.082
+    color: '#363636'
+    yaw: 0.0
+    shape: CylinderX
+  - label: tall front sight member 1
+    min: 0.659574, 0.159375, 0.0775
+    max: 0.843551, 0.18125, 0.1025
+    color: '#4F4F4F'
+    yaw: 69.10223450116119
+    shape: CylinderX
+  - label: tall front sight member 2
+    min: 0.784375, 0.245312, 0.0775
+    max: 0.8125, 0.267187, 0.1025
+    color: '#4F4F4F'
+    yaw: 0.0
+    shape: CylinderX
+  - label: tall front sight member 3
+    min: 0.726562, 0.159375, 0.0775
+    max: 0.898438, 0.18125, 0.1025
+    color: '#4F4F4F'
+    yaw: -90.0
+    shape: CylinderX
+  - label: tall front sight rounded join 1
+    min: 0.773438, 0.245312, 0.0775
+    max: 0.795312, 0.267187, 0.1025
+    color: '#4F4F4F'
+    shape: Ellipsoid
+  - label: tall front sight rounded join 2
+    min: 0.801563, 0.245312, 0.0775
+    max: 0.823437, 0.267187, 0.1025
+    color: '#4F4F4F'
+    shape: Ellipsoid
+  - label: top carry handle open frame member 1
+    min: -0.096875, 0.184375, 0.0715
+    max: 0.034375, 0.209375, 0.1125
+    color: '#363636'
+    yaw: 90.0
+    shape: CylinderX
+  - label: top carry handle open frame member 2
+    min: -0.03125, 0.25, 0.0715
+    max: 0.121875, 0.275, 0.1125
+    color: '#363636'
+    yaw: 0.0
+    shape: CylinderX
+  - label: top carry handle open frame member 3
+    min: 0.112336, 0.228125, 0.0715
+    max: 0.172039, 0.253125, 0.1125
+    color: '#363636'
+    yaw: -47.121096396661365
+    shape: CylinderX
+  - label: top carry handle open frame member 4
+    min: 0.110704, 0.159375, 0.0715
+    max: 0.204921, 0.184375, 0.1125
+    color: '#363636'
+    yaw: -95.71059313749973
+    shape: CylinderX
+  - label: top carry handle open frame rounded join 1
+    min: -0.04375, 0.25, 0.0715
+    max: -0.01875, 0.275, 0.1125
+    color: '#363636'
+    shape: Ellipsoid
+  - label: top carry handle open frame rounded join 2
+    min: 0.109375, 0.25, 0.0715
+    max: 0.134375, 0.275, 0.1125
+    color: '#363636'
+    shape: Ellipsoid
+  - label: top carry handle open frame rounded join 3
+    min: 0.15, 0.20625, 0.0715
+    max: 0.175, 0.23125, 0.1125
+    color: '#363636'
+    shape: Ellipsoid
+  - label: dark grip
+    min: -0.433556, -0.178125, 0.008
+    max: -0.222694, -0.10625, 0.095
+    color: '#161616'
+    yaw: -96.80905017961338
+  - label: brown magazine box
+    min: -0.25, -0.290625, 0.005
+    max: -0.125, -0.0125, 0.148
+    color: '#4D3F29'
+  - label: magazine base
+    min: -0.25625, -0.30625, 0.004
+    max: -0.109375, -0.265625, 0.151
+    color: '#1A1713'
+  - label: magazine gold top accent
+    min: -0.21875, 0.015625, 0.15
+    max: -0.15625, 0.078125, 0.17
+    color: '#AE7C27'
+    yaw: 0.0
+    shape: CylinderX
+  - label: brown magazine molded rib 26.3
+    min: -0.23125, -0.08125, 0.1445
+    max: -0.1375, -0.0625, 0.1535
+    color: '#6A593C'
+    yaw: 0.0
+    shape: CylinderX
+  - label: brown magazine molded rib 28.7
+    min: -0.23125, -0.15625, 0.1445
+    max: -0.1375, -0.1375, 0.1535
+    color: '#6A593C'
+    yaw: 0.0
+    shape: CylinderX
+  - label: brown magazine molded rib 31.1
+    min: -0.23125, -0.23125, 0.1445
+    max: -0.1375, -0.2125, 0.1535
+    color: '#6A593C'
+    yaw: 0.0
+    shape: CylinderX
+  - label: folded default bipod frame member 1
+    min: 0.524983, -0.021562, 0.0385
+    max: 0.668767, 0.005938, 0.0815
+    color: '#4F4F4F'
+    yaw: -1.2453642667683629
+    shape: CylinderX
+  - label: folded default bipod frame member 2
+    min: 0.636967, -0.073125, 0.0385
+    max: 0.747408, -0.045625, 0.0815
+    color: '#4F4F4F'
+    yaw: -64.88516511385544
+    shape: CylinderX
+  - label: folded default bipod frame member 3
+    min: 0.53125, -0.123125, 0.0385
+    max: 0.715625, -0.095625, 0.0815
+    color: '#4F4F4F'
+    yaw: 180.0
+    shape: CylinderX
+  - label: folded default bipod frame member 4
+    min: 0.476468, -0.071562, 0.0385
+    max: 0.579782, -0.044062, 0.0815
+    color: '#4F4F4F'
+    yaw: 93.46822925891719
+    shape: CylinderX
+  - label: folded default bipod frame rounded join 1
+    min: 0.655, -0.023125, 0.0385
+    max: 0.6825, 0.004375, 0.0815
+    color: '#4F4F4F'
+    shape: Ellipsoid
+  - label: folded default bipod frame rounded join 2
+    min: 0.701875, -0.123125, 0.0385
+    max: 0.729375, -0.095625, 0.0815
+    color: '#4F4F4F'
+    shape: Ellipsoid
+  - label: folded default bipod frame rounded join 3
+    min: 0.5175, -0.123125, 0.0385
+    max: 0.545, -0.095625, 0.0815
+    color: '#4F4F4F'
+    shape: Ellipsoid
+  - label: bipod upper attachment
+    min: 0.527561, -0.021875, 0.0355
+    max: 0.597439, 0.015625, 0.0845
+    color: '#363636'
+    yaw: -26.56505117707799
+    shape: CylinderX
+  - label: original receiver upper detail
+    min: -0.375, 0.0, 0.13
+    max: -0.15625, 0.0625, 0.156
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt007
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldRMCWeaponRifleABR40TacticalCloud
+  label: ABR40 tactical purple-stock world prop
+  status: draft
+  sourcePrototypes:
+  - RMCWeaponRifleABR40Tactical
+  referencePrototype: RMCWeaponRifleABR40Tactical
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Rifles/abr40tac.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Purple fixed stock and receiver, narrow connecting wrist, open guard,
+    metallic barrel and source red accent retain this distinct compact silhouette.
+    Stock comes from the declared abr40stock_tac source layer. Exterior-only stylized,
+    nonfunctional loose-world prop; muzzle faces +X in the default source. Includes
+    audited deterministic starting attachment and ItemMapper composition where applicable.
+    Hidden sides, thickness and support pose are inferred. Firing, reload, held/worn,
+    rigging, alternate attachment states and runtime visuals unsupported. No native/map/fidelity
+    approval.
+  parts:
+  - label: purple stock upper
+    min: -0.803174, -0.05, 0.012
+    max: -0.356201, 0.065625, 0.106
+    color: '#3E394E'
+    yaw: -1.2018330644521082
+  - label: stock lower wedge
+    min: -0.727788, -0.139062, 0.015
+    max: -0.387837, -0.026562, 0.102
+    color: '#3E394E'
+    yaw: 18.768060066843383
+  - label: butt sloped edge
+    min: -0.898127, -0.127344, 0.008
+    max: -0.670623, -0.085156, 0.112
+    color: '#17151E'
+    yaw: -69.07549825507886
+  - label: purple cheek highlight
+    min: -0.75, -0.01875, 0.102
+    max: -0.53125, 0.01875, 0.114
+    color: '#5C576B'
+    yaw: 0.0
+    shape: CylinderX
+  - label: narrow stock neck
+    min: -0.411821, -0.003125, 0.025
+    max: -0.153804, 0.059375, 0.085
+    color: '#17151E'
+    yaw: 16.898648694038243
+  - label: dark receiver block
+    min: -0.25625, -0.021875, 0.025
+    max: 0.03125, 0.115625, 0.114
+    color: '#17151E'
+  - label: purple receiver casing
+    min: -0.0625, 0.01875, 0.043
+    max: 0.359375, 0.125, 0.121
+    color: '#3E394E'
+  - label: long silver barrel edge
+    min: 0.15625, 0.072188, 0.061
+    max: 0.490625, 0.115312, 0.121
+    color: '#484848'
+    yaw: 0.0
+    shape: CylinderX
+  - label: muzzle exterior collar
+    min: 0.428125, 0.064062, 0.0535
+    max: 0.490625, 0.123438, 0.1205
+    color: '#7C7C7C'
+    yaw: 0.0
+    shape: CylinderX
+  - label: receiver purple ridge
+    min: -0.046875, 0.096094, 0.12
+    max: 0.240625, 0.113281, 0.13
+    color: '#5C576B'
+    yaw: 0.0
+    shape: CylinderX
+  - label: open rear grip and guard member 1
+    min: -0.213165, -0.005469, 0.038
+    max: -0.124335, 0.024219, 0.082
+    color: '#292929'
+    yaw: -140.71059313749967
+    shape: CylinderX
+  - label: open rear grip and guard member 2
+    min: -0.21331, -0.057031, 0.038
+    max: -0.14919, -0.027344, 0.082
+    color: '#292929'
+    yaw: -46.974934010882
+    shape: CylinderX
+  - label: open rear grip and guard member 3
+    min: -0.159505, -0.077344, 0.038
+    max: -0.084245, -0.047656, 0.082
+    color: '#292929'
+    yaw: 4.7636416907262475
+    shape: CylinderX
+  - label: open rear grip and guard member 4
+    min: -0.095582, -0.046094, 0.038
+    max: -0.013793, -0.016406, 0.082
+    color: '#292929'
+    yaw: 43.4518423010219
+    shape: CylinderX
+  - label: open rear grip and guard rounded join 1
+    min: -0.217969, -0.033594, 0.038
+    max: -0.188281, -0.003906, 0.082
+    color: '#292929'
+    shape: Ellipsoid
+  - label: open rear grip and guard rounded join 2
+    min: -0.174219, -0.080469, 0.038
+    max: -0.144531, -0.050781, 0.082
+    color: '#292929'
+    shape: Ellipsoid
+  - label: open rear grip and guard rounded join 3
+    min: -0.099219, -0.074219, 0.038
+    max: -0.069531, -0.044531, 0.082
+    color: '#292929'
+    shape: Ellipsoid
+  - label: red selector marking
+    min: -0.09375, -0.003125, 0.115
+    max: -0.046875, 0.028125, 0.123
+    color: '#A3384A'
+  - label: flat source magazine underside
+    min: 0.0625, -0.025, 0.016
+    max: 0.265625, 0.021875, 0.08
+    color: '#17151E'
+  - label: source purple receiver stripe
+    min: 0.0, 0.03125, 0.101
+    max: 0.28125, 0.09375, 0.127
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt008
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldRMCWeaponRevolver38MagnumCloud
+  label: .38 Magnum silver world prop
+  status: draft
+  sourcePrototypes:
+  - RMCWeaponRevolver38Magnum
+  referencePrototype: RMCWeaponRevolver38Magnum
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Pistols/magnum38.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Long reflective exterior barrel, distinct rounded side cylinder, gray-green
+    swept grip, small hammer silhouette and actual open guard follow the source pixels.
+    Exterior-only stylized, nonfunctional loose-world prop; muzzle faces +X in the
+    default source. Includes audited deterministic starting attachment and ItemMapper
+    composition where applicable. Hidden sides, thickness and support pose are inferred.
+    Firing, reload, held/worn, rigging, alternate attachment states and runtime visuals
+    unsupported. No native/map/fidelity approval.
+  parts:
+  - label: dark swept grip
+    min: -0.444395, -0.19375, 0.012
+    max: -0.243105, -0.084375, 0.114
+    color: '#282E2D'
+    yaw: -117.75854060106003
+  - label: rounded grip heel
+    min: -0.43125, -0.265625, 0.01
+    max: -0.309375, -0.18125, 0.111
+    color: '#181B1A'
+    shape: Ellipsoid
+  - label: grip outer contour
+    min: -0.433041, -0.158594, 0.114
+    max: -0.304459, -0.138281, 0.124
+    color: '#545353'
+    yaw: -115.94229548987171
+    shape: CylinderX
+  - label: rounded silver frame
+    min: -0.259375, -0.034375, 0.0155
+    max: -0.05625, 0.096875, 0.1525
+    color: '#5E5B5B'
+    yaw: 0.0
+    shape: CylinderX
+  - label: side cylinder casing
+    min: -0.18125, -0.0125, 0.011
+    max: -0.08125, 0.1375, 0.171
+    color: '#9B9998'
+    yaw: 0.0
+    shape: CylinderX
+  - label: raised cylinder light face
+    min: -0.1875, 0.00625, 0.15
+    max: -0.109375, 0.115625, 0.171
+    color: '#D4D3D2'
+  - label: long silver barrel
+    min: -0.059375, 0.05, 0.06
+    max: 0.434375, 0.11875, 0.14
+    color: '#9B9998'
+    yaw: 0.0
+    shape: CylinderX
+  - label: top barrel bright ridge
+    min: -0.025, 0.091406, 0.141
+    max: 0.403125, 0.108594, 0.149
+    color: '#D4D3D2'
+    yaw: 0.0
+    shape: CylinderX
+  - label: lower barrel underlug
+    min: -0.084375, 0.020313, 0.05
+    max: 0.21875, 0.060938, 0.11
+    color: '#5E5B5B'
+    yaw: 0.0
+    shape: CylinderX
+  - label: front sight
+    min: 0.35, 0.109375, 0.083
+    max: 0.40625, 0.14375, 0.126
+    color: '#1B1B1B'
+  - label: rear exterior hammer spur
+    min: -0.356618, 0.08125, 0.087
+    max: -0.243382, 0.103125, 0.127
+    color: '#5E5B5B'
+    yaw: 152.0205256115199
+    shape: CylinderX
+  - label: open trigger guard member 1
+    min: -0.281767, -0.0725, 0.0435
+    max: -0.205733, -0.0525, 0.0845
+    color: '#5E5B5B'
+    yaw: -80.53767779197442
+    shape: CylinderX
+  - label: open trigger guard member 2
+    min: -0.2375, -0.11, 0.0435
+    max: -0.134375, -0.09, 0.0845
+    color: '#5E5B5B'
+    yaw: 0.0
+    shape: CylinderX
+  - label: open trigger guard member 3
+    min: -0.151936, -0.077188, 0.0435
+    max: -0.073064, -0.057188, 0.0845
+    color: '#5E5B5B'
+    yaw: 56.309932474020215
+    shape: CylinderX
+  - label: open trigger guard rounded join 1
+    min: -0.2475, -0.11, 0.0435
+    max: -0.2275, -0.09, 0.0845
+    color: '#5E5B5B'
+    shape: Ellipsoid
+  - label: open trigger guard rounded join 2
+    min: -0.144375, -0.11, 0.0435
+    max: -0.124375, -0.09, 0.0845
+    color: '#5E5B5B'
+    shape: Ellipsoid
+  - label: trigger
+    min: -0.209375, -0.044844, 0.055
+    max: -0.16875, -0.030156, 0.081
+    color: '#1B1B1B'
+    yaw: -112.61986494804044
+    shape: CylinderX
+  - label: source silver barrel facet
+    min: 0.03125, 0.0625, 0.125
+    max: 0.34375, 0.125, 0.151
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt009
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldRMCWeaponBoltActionRifleCloud
+  label: Hunting rifle wood world prop with default scope and stock
+  status: draft
+  sourcePrototypes:
+  - RMCWeaponBoltActionRifle
+  referencePrototype: RMCWeaponBoltActionRifle
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Rifles/hunting.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: The raw barrel sprite is incomplete without its starting huntingstock
+    and huntingscope overlays. Both are included at their declared offsets with empty
+    suffix overrides. Separate swept wood stock, fore-end, steel receiver, scope tube
+    and barrel retain the composed default appearance. Exterior-only stylized, nonfunctional
+    loose-world prop; muzzle faces +X in the default source. Includes audited deterministic
+    starting attachment and ItemMapper composition where applicable. Hidden sides,
+    thickness and support pose are inferred. Firing, reload, held/worn, rigging, alternate
+    attachment states and runtime visuals unsupported. No native/map/fidelity approval.
+  parts:
+  - label: wood butt upper stock
+    min: -0.959477, -0.142188, 0.015
+    max: -0.574898, -0.001563, 0.115
+    color: '#5C2C21'
+    yaw: -1.8626209493066719
+  - label: wood lower stock taper
+    min: -0.958911, -0.184375, 0.012
+    max: -0.622339, -0.084375, 0.105
+    color: '#5C2C21'
+    yaw: 15.068488159492215
+  - label: stock dark butt end
+    min: -0.996875, -0.2625, 0.01
+    max: -0.959375, -0.05, 0.119
+    color: '#200C04'
+  - label: curved wood wrist
+    min: -0.645325, -0.104688, 0.019
+    max: -0.45155, -0.001563, 0.097
+    color: '#5C2C21'
+    yaw: 37.79394299861674
+  - label: wood wrist highlight
+    min: -0.608155, -0.048438, 0.0955
+    max: -0.45122, -0.023438, 0.1065
+    color: '#8C4D36'
+    yaw: 35.27242144859841
+    shape: CylinderX
+  - label: wooden fore-end
+    min: -0.468755, -0.046094, 0.02
+    max: 0.03438, 0.055469, 0.104
+    color: '#5C2C21'
+    yaw: 0.3558698306218709
+  - label: wood stock warm glint
+    min: -0.9125, -0.075469, 0.115
+    max: -0.634375, -0.049531, 0.127
+    color: '#AE6F58'
+    yaw: 0.0
+    shape: CylinderX
+  - label: wood fore-end highlight
+    min: -0.40625, 0.009844, 0.1035
+    max: -0.028125, 0.033906, 0.1145
+    color: '#AE6F58'
+    yaw: 0.0
+    shape: CylinderX
+  - label: exterior steel barrel
+    min: -0.06875, 0.052812, 0.0575
+    max: 0.484375, 0.097187, 0.1185
+    color: '#484848'
+    yaw: 0.0
+    shape: CylinderX
+  - label: barrel bright line
+    min: 0.0, 0.083594, 0.112
+    max: 0.421875, 0.097656, 0.12
+    color: '#B4B2A9'
+    yaw: 0.0
+    shape: CylinderX
+  - label: receiver bolt housing exterior
+    min: -0.403125, 0.025, 0.067
+    max: -0.025, 0.08125, 0.135
+    color: '#252525'
+  - label: scope mount supports member 1
+    min: -0.379688, 0.08125, 0.0625
+    max: -0.320313, 0.103125, 0.1075
+    color: '#252525'
+    yaw: 90.0
+    shape: CylinderX
+  - label: scope mount supports member 2
+    min: -0.35, 0.110937, 0.0625
+    max: -0.125, 0.132812, 0.1075
+    color: '#252525'
+    yaw: 0.0
+    shape: CylinderX
+  - label: scope mount supports member 3
+    min: -0.154687, 0.08125, 0.0625
+    max: -0.095313, 0.103125, 0.1075
+    color: '#252525'
+    yaw: -90.0
+    shape: CylinderX
+  - label: scope mount supports rounded join 1
+    min: -0.360938, 0.110937, 0.0625
+    max: -0.339063, 0.132812, 0.1075
+    color: '#252525'
+    shape: Ellipsoid
+  - label: scope mount supports rounded join 2
+    min: -0.135938, 0.110937, 0.0625
+    max: -0.114062, 0.132812, 0.1075
+    color: '#252525'
+    shape: Ellipsoid
+  - label: default miniscope tube
+    min: -0.35625, 0.109375, 0.07
+    max: -0.096875, 0.159375, 0.152
+    color: '#484848'
+    yaw: 0.0
+    shape: CylinderX
+  - label: scope end casing 36.7
+    min: -0.353125, 0.101563, 0.0665
+    max: -0.326562, 0.167188, 0.1555
+    color: '#252525'
+    yaw: 0.0
+    shape: CylinderX
+  - label: scope end casing 44.2
+    min: -0.11875, 0.101563, 0.0665
+    max: -0.092187, 0.167188, 0.1555
+    color: '#252525'
+    yaw: 0.0
+    shape: CylinderX
+  - label: scope top reflection
+    min: -0.309375, 0.144063, 0.145
+    max: -0.14375, 0.155938, 0.153
+    color: '#B4B2A9'
+    yaw: 0.0
+    shape: CylinderX
+  - label: small open trigger guard member 1
+    min: -0.435113, -0.073438, 0.041
+    max: -0.364887, -0.054688, 0.071
+    color: '#252525'
+    yaw: -57.72435568542244
+    shape: CylinderX
+  - label: small open trigger guard member 2
+    min: -0.38125, -0.103125, 0.041
+    max: -0.30625, -0.084375, 0.071
+    color: '#252525'
+    yaw: 0.0
+    shape: CylinderX
+  - label: small open trigger guard member 3
+    min: -0.329812, -0.067187, 0.041
+    max: -0.251438, -0.048437, 0.071
+    color: '#252525'
+    yaw: 66.5014343240479
+    shape: CylinderX
+  - label: small open trigger guard rounded join 1
+    min: -0.390625, -0.103125, 0.041
+    max: -0.371875, -0.084375, 0.071
+    color: '#252525'
+    shape: Ellipsoid
+  - label: small open trigger guard rounded join 2
+    min: -0.315625, -0.103125, 0.041
+    max: -0.296875, -0.084375, 0.071
+    color: '#252525'
+    shape: Ellipsoid
+  - label: short flush magazine underside
+    min: -0.25, -0.0625, 0.015
+    max: -0.178125, -0.03125, 0.082
+    color: '#252525'
+  - label: source wooden fore-end
+    min: -0.40625, -0.03125, 0.087
+    max: -0.1875, 0.03125, 0.113
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt010
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldRMCWeaponRifleM54CMK1Cloud
+  label: M54C Mk1 desert world prop with default compact attachments
+  status: draft
+  sourcePrototypes:
+  - RMCWeaponRifleM54CMK1
+  referencePrototype: RMCWeaponRifleM54CMK1
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Rifles/m54cmk1.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Source tan arched frame with a true central opening, separate magazine
+    and grip, collapsed m54c-col_a stock, and grenade-mk1_a underbarrel exterior are
+    included. No actual mechanism or launch behavior is represented. Exterior-only
+    stylized, nonfunctional loose-world prop; muzzle faces +X in the default source.
+    Includes audited deterministic starting attachment and ItemMapper composition
+    where applicable. Hidden sides, thickness and support pose are inferred. Firing,
+    reload, held/worn, rigging, alternate attachment states and runtime visuals unsupported.
+    No native/map/fidelity approval.
+  parts:
+  - label: lower receiver tan body
+    min: -0.390625, -0.059375, 0.02
+    max: 0.184375, 0.05, 0.125
+    color: '#795D49'
+  - label: upper receiver metallic inset
+    min: -0.25, 0.045312, 0.074
+    max: 0.0625, 0.089062, 0.134
+    color: '#7C7C7C'
+    yaw: 0.0
+    shape: CylinderX
+  - label: tan open carry arch member 1
+    min: -0.409443, 0.080469, 0.0475
+    max: -0.265557, 0.132031, 0.1305
+    color: '#795D49'
+    yaw: 55.61965527615512
+    shape: CylinderX
+  - label: tan open carry arch member 2
+    min: -0.299329, 0.153906, 0.0475
+    max: -0.216296, 0.205469, 0.1305
+    color: '#795D49'
+    yaw: 19.798876354524904
+    shape: CylinderX
+  - label: tan open carry arch member 3
+    min: -0.21875, 0.167969, 0.0475
+    max: 0.053125, 0.219531, 0.1305
+    color: '#795D49'
+    yaw: 0.0
+    shape: CylinderX
+  - label: tan open carry arch member 4
+    min: 0.040607, 0.128906, 0.0475
+    max: 0.175018, 0.180469, 0.1305
+    color: '#795D49'
+    yaw: -35.53767779197438
+    shape: CylinderX
+  - label: tan open carry arch member 5
+    min: 0.127995, 0.044531, 0.0475
+    max: 0.222005, 0.096094, 0.1305
+    color: '#795D49'
+    yaw: -74.57783868126137
+    shape: CylinderX
+  - label: tan open carry arch rounded join 1
+    min: -0.322656, 0.139844, 0.0475
+    max: -0.271094, 0.191406, 0.1305
+    color: '#795D49'
+    shape: Ellipsoid
+  - label: tan open carry arch rounded join 2
+    min: -0.244531, 0.167969, 0.0475
+    max: -0.192969, 0.219531, 0.1305
+    color: '#795D49'
+    shape: Ellipsoid
+  - label: tan open carry arch rounded join 3
+    min: 0.027344, 0.167969, 0.0475
+    max: 0.078906, 0.219531, 0.1305
+    color: '#795D49'
+    shape: Ellipsoid
+  - label: tan open carry arch rounded join 4
+    min: 0.136719, 0.089844, 0.0475
+    max: 0.188281, 0.141406, 0.1305
+    color: '#795D49'
+    shape: Ellipsoid
+  - label: carry arch pale ridge member 1
+    min: -0.275304, 0.163281, 0.118
+    max: -0.202821, 0.183594, 0.128
+    color: '#B59576'
+    yaw: 7.431407971172534
+    shape: CylinderX
+  - label: carry arch pale ridge member 2
+    min: -0.203125, 0.167969, 0.118
+    max: 0.0375, 0.188281, 0.128
+    color: '#B59576'
+    yaw: 0.0
+    shape: CylinderX
+  - label: carry arch pale ridge member 3
+    min: 0.027187, 0.136719, 0.118
+    max: 0.132188, 0.157031, 0.128
+    color: '#B59576'
+    yaw: -36.52885536698521
+    shape: CylinderX
+  - label: carry arch pale ridge rounded join 1
+    min: -0.213281, 0.167969, 0.118
+    max: -0.192969, 0.188281, 0.128
+    color: '#B59576'
+    shape: Ellipsoid
+  - label: carry arch pale ridge rounded join 2
+    min: 0.027344, 0.167969, 0.118
+    max: 0.047656, 0.188281, 0.128
+    color: '#B59576'
+    shape: Ellipsoid
+  - label: collapsed stock horizontal member
+    min: -0.490625, 0.025, 0.028
+    max: -0.371875, 0.06875, 0.098
+    color: '#423A2F'
+    yaw: 0.0
+    shape: CylinderX
+  - label: collapsed stock butt plate
+    min: -0.525, -0.115625, 0.014
+    max: -0.484375, 0.065625, 0.095
+    color: '#292929'
+  - label: short pistol grip
+    min: -0.313232, -0.1375, 0.011
+    max: -0.202393, -0.059375, 0.095
+    color: '#292929'
+    yaw: -111.50143432404785
+  - label: open trigger guard member 1
+    min: -0.225619, -0.079375, 0.0465
+    max: -0.161881, -0.058125, 0.0815
+    color: '#423A2F'
+    yaw: -78.69006752597983
+    shape: CylinderX
+  - label: open trigger guard member 2
+    min: -0.1875, -0.110625, 0.0465
+    max: -0.08125, -0.089375, 0.0815
+    color: '#423A2F'
+    yaw: 0.0
+    shape: CylinderX
+  - label: open trigger guard member 3
+    min: -0.100564, -0.079375, 0.0465
+    max: -0.030686, -0.058125, 0.0815
+    color: '#423A2F'
+    yaw: 63.43494882292201
+    shape: CylinderX
+  - label: open trigger guard rounded join 1
+    min: -0.198125, -0.110625, 0.0465
+    max: -0.176875, -0.089375, 0.0815
+    color: '#423A2F'
+    shape: Ellipsoid
+  - label: open trigger guard rounded join 2
+    min: -0.091875, -0.110625, 0.0465
+    max: -0.070625, -0.089375, 0.0815
+    color: '#423A2F'
+    shape: Ellipsoid
+  - label: wide tan magazine
+    min: -0.03125, -0.2375, 0.011
+    max: 0.125, -0.054688, 0.134
+    color: '#795D49'
+  - label: magazine bottom
+    min: -0.021875, -0.265625, 0.005
+    max: 0.11875, -0.21875, 0.14
+    color: '#423A2F'
+  - label: magazine pale edge
+    min: -0.060938, -0.174219, 0.1305
+    max: 0.048437, -0.147656, 0.1395
+    color: '#B59576'
+    yaw: -90.0
+    shape: CylinderX
+  - label: barrel outer shroud
+    min: 0.178125, -0.00625, 0.03
+    max: 0.428125, 0.0875, 0.142
+    color: '#292929'
+    yaw: 0.0
+    shape: CylinderX
+  - label: short muzzle
+    min: 0.40625, 0.022656, 0.054
+    max: 0.490625, 0.071094, 0.112
+    color: '#484848'
+    yaw: 0.0
+    shape: CylinderX
+  - label: external underbarrel mount
+    min: 0.183782, -0.039062, 0.035
+    max: 0.316218, -0.004687, 0.1
+    color: '#423A2F'
+    yaw: -19.290046219188717
+  - label: starting underslung launcher casing
+    min: 0.2625, -0.098437, 0.016
+    max: 0.50625, -0.020312, 0.124
+    color: '#423A2F'
+    yaw: 0.0
+    shape: CylinderX
+  - label: underbarrel pale front ring
+    min: 0.39375, -0.1, 0.015
+    max: 0.4375, -0.01875, 0.125
+    color: '#795D49'
+    yaw: 0.0
+    shape: CylinderX
+  - label: source red selector
+    min: 0.03125, -0.053125, 0.122
+    max: 0.078125, -0.028125, 0.129
+    color: '#B95A53'
+  - label: receiver source tan plate
+    min: -0.34375, -0.03125, 0.102
+    max: -0.125, 0.03125, 0.128
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt011
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldRMCWeaponLauncherDisposableCloud
+  label: Disposable olive-tube world prop
+  status: draft
+  sourcePrototypes:
+  - RMCWeaponLauncherDisposable
+  referencePrototype: RMCWeaponLauncherDisposable
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/RocketLaunchers/m5a1_disposable.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Olive cylindrical exterior with multiple dark rings, pale end band,
+    open top loop, red accents and angled lower grip. No projectile or functional
+    internal detail is modeled; spent/active appearances are unsupported. Exterior-only
+    stylized, nonfunctional loose-world prop; muzzle faces +X in the default source.
+    Includes audited deterministic starting attachment and ItemMapper composition
+    where applicable. Hidden sides, thickness and support pose are inferred. Firing,
+    reload, held/worn, rigging, alternate attachment states and runtime visuals unsupported.
+    No native/map/fidelity approval.
+  parts:
+  - label: olive outer tube
+    min: -0.39375, -0.0625, 0.007
+    max: 0.46875, 0.0625, 0.161
+    color: '#6A6C47'
+    yaw: 0.0
+    shape: CylinderX
+  - label: tube bright long band
+    min: -0.3375, 0.014062, 0.159
+    max: 0.4625, 0.042187, 0.171
+    color: '#909364'
+    yaw: 0.0
+    shape: CylinderX
+  - label: exterior tube collar 34.3
+    min: -0.428125, -0.075, 0.005
+    max: -0.3875, 0.075, 0.163
+    color: '#212728'
+    yaw: 0.0
+    shape: CylinderX
+  - label: exterior tube collar 46.4
+    min: -0.05, -0.075, 0.005
+    max: -0.009375, 0.075, 0.163
+    color: '#26261C'
+    yaw: 0.0
+    shape: CylinderX
+  - label: exterior tube collar 49
+    min: 0.03125, -0.070312, 0.005
+    max: 0.06875, 0.070312, 0.163
+    color: '#26261C'
+    yaw: 0.0
+    shape: CylinderX
+  - label: exterior tube collar 59.7
+    min: 0.365625, -0.071875, 0.005
+    max: 0.40625, 0.071875, 0.163
+    color: '#26261C'
+    yaw: 0.0
+    shape: CylinderX
+  - label: exterior tube collar 62.0
+    min: 0.4375, -0.073438, 0.005
+    max: 0.49375, 0.073438, 0.163
+    color: '#424431'
+    yaw: 0.0
+    shape: CylinderX
+  - label: tan end band
+    min: 0.44375, -0.042188, 0.009
+    max: 0.4875, 0.042188, 0.175
+    color: '#B8A389'
+    yaw: 0.0
+    shape: CylinderX
+  - label: small top carry loop member 1
+    min: -0.26838, 0.081563, 0.0815
+    max: -0.215995, 0.099688, 0.1145
+    color: '#484848'
+    yaw: 72.64597536373866
+    shape: CylinderX
+  - label: small top carry loop member 2
+    min: -0.234375, 0.106562, 0.0815
+    max: -0.140625, 0.124687, 0.1145
+    color: '#484848'
+    yaw: 0.0
+    shape: CylinderX
+  - label: small top carry loop member 3
+    min: -0.167537, 0.075312, 0.0815
+    max: -0.104338, 0.093437, 0.1145
+    color: '#484848'
+    yaw: -81.46923439005195
+    shape: CylinderX
+  - label: small top carry loop rounded join 1
+    min: -0.243437, 0.106563, 0.0815
+    max: -0.225313, 0.124687, 0.1145
+    color: '#484848'
+    shape: Ellipsoid
+  - label: small top carry loop rounded join 2
+    min: -0.149687, 0.106563, 0.0815
+    max: -0.131563, 0.124687, 0.1145
+    color: '#484848'
+    shape: Ellipsoid
+  - label: small red top accent
+    min: -0.153125, 0.078125, 0.109
+    max: -0.128125, 0.10625, 0.119
+    color: '#B24040'
+  - label: source angled lower grip member 1
+    min: 0.077376, -0.10625, 0.026
+    max: 0.172624, -0.071875, 0.082
+    color: '#212728'
+    yaw: -48.99091309842979
+    shape: CylinderX
+  - label: source angled lower grip member 2
+    min: 0.146542, -0.165625, 0.026
+    max: 0.212833, -0.13125, 0.082
+    color: '#212728'
+    yaw: -45.0
+    shape: CylinderX
+  - label: source angled lower grip member 3
+    min: 0.194374, -0.215625, 0.026
+    max: 0.283751, -0.18125, 0.082
+    color: '#212728'
+    yaw: -36.469234390051895
+    shape: CylinderX
+  - label: source angled lower grip rounded join 1
+    min: 0.139063, -0.142188, 0.026
+    max: 0.173437, -0.107812, 0.082
+    color: '#212728'
+    shape: Ellipsoid
+  - label: source angled lower grip rounded join 2
+    min: 0.185938, -0.189063, 0.026
+    max: 0.220312, -0.154687, 0.082
+    color: '#212728'
+    shape: Ellipsoid
+  - label: red lower switch
+    min: 0.078125, -0.10625, 0.074
+    max: 0.13125, -0.078125, 0.091
+    color: '#B24040'
+  - label: original olive tube highlights
+    min: 0.09375, -0.03125, 0.146
+    max: 0.34375, 0.03125, 0.172
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt012
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWorldRMCWeaponPistolB92FSCloud
+  label: B92FS dark-slide world prop
+  status: draft
+  sourcePrototypes:
+  - RMCWeaponPistolB92FS
+  referencePrototype: RMCWeaponPistolB92FS
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Pistols/b92fs.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Distinct upper slide, short muzzle, angled grip, magazine heel, source
+    serrations and open square guard. Only declared base plus mag-0 ground composition
+    is represented; slide/reload/fire actions remain unsupported. Exterior-only stylized,
+    nonfunctional loose-world prop; muzzle faces +X in the default source. Includes
+    audited deterministic starting attachment and ItemMapper composition where applicable.
+    Hidden sides, thickness and support pose are inferred. Firing, reload, held/worn,
+    rigging, alternate attachment states and runtime visuals unsupported. No native/map/fidelity
+    approval.
+  parts:
+  - label: dark upper slide
+    min: -0.296875, 0.01875, 0.035
+    max: 0.353125, 0.125, 0.13
+    color: '#36363B'
+  - label: slide upper bevel
+    min: -0.25, 0.1, 0.059
+    max: 0.340625, 0.134375, 0.147
+    color: '#605B60'
+  - label: short muzzle tip
+    min: 0.3375, 0.045313, 0.047
+    max: 0.39375, 0.117188, 0.133
+    color: '#24272C'
+    yaw: 0.0
+    shape: CylinderX
+  - label: lower receiver bridge
+    min: -0.296875, -0.046875, 0.026
+    max: 0.03125, 0.03125, 0.112
+    color: '#24272C'
+  - label: backward slanted grip
+    min: -0.340444, -0.239063, 0.012
+    max: -0.084556, -0.107813, 0.106
+    color: '#24272C'
+    yaw: -98.42696902148064
+  - label: textured grip inset
+    min: -0.294936, -0.225, 0.103
+    max: -0.126939, -0.146875, 0.113
+    color: '#1D1F24'
+    yaw: -99.63753811293101
+  - label: magazine floorplate
+    min: -0.290625, -0.321875, 0.005
+    max: -0.153125, -0.28125, 0.116
+    color: '#17191E'
+  - label: backstrap highlight
+    min: -0.323209, -0.196875, 0.1015
+    max: -0.173666, -0.18125, 0.1105
+    color: '#36363B'
+    yaw: -100.84030545433055
+    shape: CylinderX
+  - label: open square trigger guard member 1
+    min: -0.164313, -0.0775, 0.0435
+    max: -0.076312, -0.05375, 0.0825
+    color: '#06080D'
+    yaw: -83.88449643371465
+    shape: CylinderX
+  - label: open square trigger guard member 2
+    min: -0.115625, -0.12125, 0.0435
+    max: 0.015625, -0.0975, 0.0825
+    color: '#06080D'
+    yaw: 0.0
+    shape: CylinderX
+  - label: open square trigger guard member 3
+    min: -0.029687, -0.075938, 0.0435
+    max: 0.060937, -0.052188, 0.0825
+    color: '#06080D'
+    yaw: 90.0
+    shape: CylinderX
+  - label: open square trigger guard rounded join 1
+    min: -0.1275, -0.12125, 0.0435
+    max: -0.10375, -0.0975, 0.0825
+    color: '#06080D'
+    shape: Ellipsoid
+  - label: open square trigger guard rounded join 2
+    min: 0.00375, -0.12125, 0.0435
+    max: 0.0275, -0.0975, 0.0825
+    color: '#06080D'
+    shape: Ellipsoid
+  - label: small trigger
+    min: -0.104144, -0.050313, 0.0535
+    max: -0.055231, -0.037188, 0.0725
+    color: '#36363B'
+    yaw: -116.56505117707782
+    shape: CylinderX
+  - label: front sight
+    min: 0.29375, 0.125, 0.077
+    max: 0.34375, 0.146875, 0.123
+    color: '#06080D'
+  - label: rear sight
+    min: -0.278125, 0.125, 0.079
+    max: -0.240625, 0.146875, 0.145
+    color: '#06080D'
+  - label: slide rear serration 41
+    min: -0.21875, 0.04375, 0.13
+    max: -0.205625, 0.096875, 0.138
+    color: '#605B60'
+  - label: slide rear serration 42.1
+    min: -0.184375, 0.04375, 0.13
+    max: -0.17125, 0.096875, 0.138
+    color: '#605B60'
+  - label: slide rear serration 43.2
+    min: -0.15, 0.04375, 0.13
+    max: -0.136875, 0.096875, 0.138
+    color: '#605B60'
+  - label: source slide face
+    min: -0.0625, 0.03125, 0.118
+    max: 0.25, 0.09375, 0.144
+    color: '#FFFFFF'
+    surface: CMU3DWeaponWorldCloudArt013
+    surfaceAxis: XY

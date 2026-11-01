@@ -382,6 +382,11 @@ public abstract partial class SharedGunSystem
         if (!args.IsInDetailsRange)
             return;
 
+        // cmu edit start: a magazine shows its rounds, a gun loaded straight up only with an ammo counter
+        if (!CMUShowsAmmoCount(ent))
+            return;
+        // cmu edit end
+
         args.PushMarkup(Loc.GetString("gun-magazine-examine", ("color", AmmoExamineColor), ("count", GetBallisticShots(ent.Comp))));
     }
 
@@ -455,7 +460,7 @@ public abstract partial class SharedGunSystem
             {
                 ent.Comp.UnspawnedCount--;
                 DirtyField(ent.AsNullable(), nameof(BallisticAmmoProviderComponent.UnspawnedCount));
-                ammoEntity = Spawn(ent.Comp.Proto, args.Coordinates);
+                ammoEntity = PredictedSpawnAttachedTo(ent.Comp.Proto, args.Coordinates); // CMU14: predict chambered rounds.
                 if (TryComp(ammoEntity.Value, out StackComponent? stack))
                     _stack.SetCount((ammoEntity.Value, stack), 1);
             }

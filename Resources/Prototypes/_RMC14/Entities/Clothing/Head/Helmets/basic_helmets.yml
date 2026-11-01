@@ -26,6 +26,9 @@
         - CassettePlayer
         - CassetteTape
         tags:
+        # cmu edit start
+        - CMUCassettePouch
+        # cmu edit end
         #       - TODO RMC14 cards
         - Slice
         #       - TODO RMC14 glasses (eyewear)
@@ -42,6 +45,7 @@
   - type: ContainerContainer
     containers:
       storagebase: !type:Container
+        occludes: false # CMU14: lights stored in a worn helmet shine out of it
         ents: [ ]
   - type: UserInterface
     interfaces:

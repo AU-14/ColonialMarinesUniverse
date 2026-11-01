@@ -1,0 +1,34 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Queen swarms now summon 15 lessers on a 15-minute cooldown through a single
+    command menu.
+  type: Tweak
+- message: Added passive swarm orders and hive alliance controls for eligible queens.
+  type: Add
+- message: Lessers navigate doors and ignore friendly bodies when steering, and stop
+    targeting nested or devoured hosts.
+  type: Fix
+- message: Swarm summon feedback is visible while using the queen's eye.
+  type: Fix
+- message: Lessers spread attacks across nearby enemies and breach barricades blocking
+    pursuit.
+  type: Tweak
+- message: AI lesser deaths no longer flood hive chat.
+  type: Fix
+- message: Lessers spread out in open areas while squeezing through narrow passages.
+  type: Tweak
+- message: Reduced redundant client physics contacts for AI lesser swarms.
+  type: Fix
+- message: Queen swarms default to Distress Signal only, with a per-queen VV override.
+  type: Tweak
+- message: Reduced Despoiler ability damage by 30%, and Acid Barrage damage by 40%.
+  type: Tweak
+- message: Reaper Flesh Bloom activates about 30% faster.
+  type: Tweak
+- message: Lesser swarms move 35% slower.
+  type: Tweak
+- message: Lesser swarms follow orders up and down stairs between linked z-levels.
+  type: Fix
+time: '2026-10-17T00:04:03.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2199

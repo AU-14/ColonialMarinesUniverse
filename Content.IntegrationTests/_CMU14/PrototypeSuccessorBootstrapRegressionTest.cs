@@ -59,6 +59,27 @@ namespace Content.IntegrationTests._CMU14;
 [TestOf(typeof(EmitSoundOnTriggerComponent))]
 public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId RMCWeYaThermosPrototype = "RMCWeYaThermos";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUOverlayWaterPrototype = "CMUOverlayWater";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMWelderPrototype = "CMWelder";
+    private static readonly Robust.Shared.Prototypes.EntProtoId AU14MaintenanceJackSpecialPrototype = "AU14MaintenanceJackSpecial";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMHydroponicsTrayPrototype = "CMHydroponicsTray";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMXenoParasitePrototype = "CMXenoParasite";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMToiletEmptyPrototype = "CMToiletEmpty";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUMobCarpInvasivePrototype = "CMUMobCarpInvasive";
+    private static readonly Robust.Shared.Prototypes.EntProtoId VehicleWheelchairPrototype = "VehicleWheelchair";
+    private static readonly Robust.Shared.Prototypes.EntProtoId VehicleJanicartPrototype = "VehicleJanicart";
+    private static readonly Robust.Shared.Prototypes.EntProtoId VehicleKeyJanicartPrototype = "VehicleKeyJanicart";
+    private static readonly Robust.Shared.Prototypes.ProtoId<SoundCollectionPrototype> VulpkaninGrowlsPrototype = "VulpkaninGrowls";
+    private static readonly Robust.Shared.Prototypes.ProtoId<SoundCollectionPrototype> VulpkaninBarksPrototype = "VulpkaninBarks";
+    private static readonly Robust.Shared.Prototypes.ProtoId<SoundCollectionPrototype> VulpkaninSnarlsPrototype = "VulpkaninSnarls";
+    private static readonly Robust.Shared.Prototypes.ProtoId<SoundCollectionPrototype> VulpkaninWhinesPrototype = "VulpkaninWhines";
+    private static readonly Robust.Shared.Prototypes.ProtoId<SoundCollectionPrototype> VulpkaninHowlsPrototype = "VulpkaninHowls";
+    private static readonly Robust.Shared.Prototypes.ProtoId<EmotePrototype> HowlPrototype = "Howl";
+    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> DevPrototype = "Dev";
+    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> PlasmaPrototype = "Plasma";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMApcPrototype = "CMApc";
+
     private static readonly string[] StandardPaintableDoors =
     {
         "RMCAirlockEvacuation",
@@ -118,7 +139,7 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
     public void ThermosAndDisposalPrototypesPreserveForkBehavior()
     {
         var factory = SEntMan.ComponentFactory;
-        var thermos = SProtoMan.Index<EntityPrototype>("RMCWeYaThermos");
+        var thermos = SProtoMan.Index<EntityPrototype>(RMCWeYaThermosPrototype);
         Assert.Multiple(() =>
         {
             Assert.That(thermos.TryComp<RMCFlaskComponent>(out _, factory), Is.True);
@@ -219,7 +240,7 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
                 "the fork organ-healing companion effect must remain alongside upstream eye damage");
         });
 
-        var water = SProtoMan.Index<EntityPrototype>("CMUOverlayWater");
+        var water = SProtoMan.Index<EntityPrototype>(CMUOverlayWaterPrototype);
         Assert.That(water.TryComp<TileEntityEffectComponent>(out var tileEffect, SEntMan.ComponentFactory), Is.True);
         Assert.That(tileEffect!.Effects.OfType<Extinguish>().Single().FireStacksAdjustment, Is.EqualTo(-1.5f));
     }
@@ -229,9 +250,9 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
     public void ForkToolsAndHydroponicsUseCurrentCollectionAndTrayContracts()
     {
         var factory = SEntMan.ComponentFactory;
-        var welder = SProtoMan.Index<EntityPrototype>("CMWelder");
-        var jack = SProtoMan.Index<EntityPrototype>("AU14MaintenanceJackSpecial");
-        var tray = SProtoMan.Index<EntityPrototype>("CMHydroponicsTray");
+        var welder = SProtoMan.Index<EntityPrototype>(CMWelderPrototype);
+        var jack = SProtoMan.Index<EntityPrototype>(AU14MaintenanceJackSpecialPrototype);
+        var tray = SProtoMan.Index<EntityPrototype>(CMHydroponicsTrayPrototype);
 
         Assert.That(welder.TryComp<ToolComponent>(out var welderTool, factory), Is.True);
         Assert.That(jack.TryComp<MultipleToolComponent>(out var multipleTool, factory), Is.True);
@@ -258,14 +279,14 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
     public void RemovedForkComponentsUseTheirBehaviorPreservingSuccessors()
     {
         var factory = SEntMan.ComponentFactory;
-        var parasite = SProtoMan.Index<EntityPrototype>("CMXenoParasite");
+        var parasite = SProtoMan.Index<EntityPrototype>(CMXenoParasitePrototype);
         Assert.That(parasite.TryComp<RelayedReplacementAccentComponent>(out var accent, factory), Is.True);
 
-        var toilet = SProtoMan.Index<EntityPrototype>("CMToiletEmpty");
+        var toilet = SProtoMan.Index<EntityPrototype>(CMToiletEmptyPrototype);
         Assert.That(toilet.TryComp<RummageableComponent>(out var rummageable, factory), Is.True);
         Assert.That(rummageable!.Table, Is.TypeOf<NestedSelector>());
 
-        var invasiveCarp = SProtoMan.Index<EntityPrototype>("CMUMobCarpInvasive");
+        var invasiveCarp = SProtoMan.Index<EntityPrototype>(CMUMobCarpInvasivePrototype);
         Assert.That(invasiveCarp.TryComp<PermanentStatusEffectsComponent>(out var permanent, factory), Is.True);
 
         Assert.Multiple(() =>
@@ -317,8 +338,8 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
     public void DuplicatePrototypeSuccessorsPreserveVehicleVulpAndMapAuthority()
     {
         var factory = SEntMan.ComponentFactory;
-        var wheelchair = SProtoMan.Index<EntityPrototype>("VehicleWheelchair");
-        var janicart = SProtoMan.Index<EntityPrototype>("VehicleJanicart");
+        var wheelchair = SProtoMan.Index<EntityPrototype>(VehicleWheelchairPrototype);
+        var janicart = SProtoMan.Index<EntityPrototype>(VehicleJanicartPrototype);
 
         Assert.That(wheelchair.TryComp<VehicleComponent>(out var baseVehicleComponent, factory), Is.True);
         Assert.That(janicart.TryComp<VehicleComponent>(out var janicartVehicle, factory), Is.True);
@@ -331,10 +352,10 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
             Assert.That(janicart.Components, Contains.Key("VehicleHandBlocker"));
             Assert.That(janicart.Components, Contains.Key("GravityAffected"));
             Assert.That(janicart.Components, Contains.Key("SpriteMovement"));
-            Assert.That(SProtoMan.HasIndex<EntityPrototype>("VehicleKeyJanicart"), Is.True);
+            Assert.That(SProtoMan.HasIndex<EntityPrototype>(VehicleKeyJanicartPrototype), Is.True);
         });
 
-        var growls = SProtoMan.Index<SoundCollectionPrototype>("VulpkaninGrowls");
+        var growls = SProtoMan.Index<SoundCollectionPrototype>(VulpkaninGrowlsPrototype);
         Assert.Multiple(() =>
         {
             Assert.That(growls.PickFiles, Has.Count.EqualTo(6));
@@ -344,16 +365,16 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
             Assert.That(growls.PickFiles.Skip(3).Select(path => path.ToString()),
                 Is.EqualTo(Enumerable.Range(4, 3)
                     .Select(i => $"/Audio/Voice/Vulpkanin/dog_growl{i}.ogg")));
-            Assert.That(SProtoMan.Index<SoundCollectionPrototype>("VulpkaninBarks").PickFiles,
+            Assert.That(SProtoMan.Index<SoundCollectionPrototype>(VulpkaninBarksPrototype).PickFiles,
                 Has.All.Matches<Robust.Shared.Utility.ResPath>(path =>
                     path.ToString().StartsWith("/Audio/_RMC14/Voice/Vulpkanin/")));
-            Assert.That(SProtoMan.Index<SoundCollectionPrototype>("VulpkaninSnarls").PickFiles,
+            Assert.That(SProtoMan.Index<SoundCollectionPrototype>(VulpkaninSnarlsPrototype).PickFiles,
                 Has.All.Matches<Robust.Shared.Utility.ResPath>(path =>
                     path.ToString().StartsWith("/Audio/_RMC14/Voice/Vulpkanin/")));
-            Assert.That(SProtoMan.Index<SoundCollectionPrototype>("VulpkaninWhines").PickFiles,
+            Assert.That(SProtoMan.Index<SoundCollectionPrototype>(VulpkaninWhinesPrototype).PickFiles,
                 Has.All.Matches<Robust.Shared.Utility.ResPath>(path =>
                     path.ToString().StartsWith("/Audio/_RMC14/Voice/Vulpkanin/")));
-            Assert.That(SProtoMan.Index<SoundCollectionPrototype>("VulpkaninHowls").PickFiles,
+            Assert.That(SProtoMan.Index<SoundCollectionPrototype>(VulpkaninHowlsPrototype).PickFiles,
                 Has.Count.EqualTo(1));
         });
 
@@ -361,10 +382,10 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
         AssertForkVulpEmote("Snarl", "rmc-emote-name-snarl", "snarled", "snarling");
         AssertForkVulpEmote("Whine", "rmc-emote-name-whine", "whined", "whining");
         AssertForkVulpEmote("Growl", "rmc-emote-name-growl", "growled", "growling");
-        Assert.That(SProtoMan.HasIndex<EmotePrototype>("Howl"), Is.True);
+        Assert.That(SProtoMan.HasIndex<EmotePrototype>(HowlPrototype), Is.True);
 
-        var dev = SProtoMan.Index<GameMapPrototype>("Dev");
-        var plasma = SProtoMan.Index<GameMapPrototype>("Plasma");
+        var dev = SProtoMan.Index<GameMapPrototype>(DevPrototype);
+        var plasma = SProtoMan.Index<GameMapPrototype>(PlasmaPrototype);
         Assert.Multiple(() =>
         {
             Assert.That(dev.MapName, Is.EqualTo("Dev"));
@@ -480,7 +501,7 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
     public void ThermosAndFlightMarkersKeepTheirSpriteStates()
     {
         var factory = CEntMan.ComponentFactory;
-        var thermos = CProtoMan.Index<EntityPrototype>("RMCWeYaThermos");
+        var thermos = CProtoMan.Index<EntityPrototype>(RMCWeYaThermosPrototype);
         Assert.That(thermos.TryComp<SpriteComponent>(out var thermosSprite, factory), Is.True);
         Assert.That(thermosSprite!.AllLayers.Single().RsiState.Name, Is.EqualTo("icon"));
         Assert.That(thermos.TryComp<GenericVisualizerComponent>(out var visualizer, factory), Is.True);
@@ -499,7 +520,7 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
     public void CmuHydroponicsTrayUsesEveryCurrentWarningVisual()
     {
         var factory = CEntMan.ComponentFactory;
-        var tray = CProtoMan.Index<EntityPrototype>("CMHydroponicsTray");
+        var tray = CProtoMan.Index<EntityPrototype>(CMHydroponicsTrayPrototype);
 
         Assert.That(tray.TryComp<PlantTrayVisualsComponent>(out _, factory), Is.True);
         Assert.That(tray.TryComp<GenericVisualizerComponent>(out var visualizer, factory), Is.True);
@@ -565,7 +586,7 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
             var apc = SpawnClient("CMApc");
             AssertMappedLayers(apc, sprites, Enum.GetValues<RMCApcSpriteLayers>().Cast<Enum>());
 
-            var apcPrototype = CProtoMan.Index<EntityPrototype>("CMApc");
+            var apcPrototype = CProtoMan.Index<EntityPrototype>(CMApcPrototype);
             Assert.That(apcPrototype.TryComp<GenericVisualizerComponent>(out var apcVisualizer,
                 CEntMan.ComponentFactory), Is.True);
             var stateTargets = apcVisualizer!.Visuals[RMCApcVisualsLayers.Layer];

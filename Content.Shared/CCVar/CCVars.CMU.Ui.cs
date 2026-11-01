@@ -22,7 +22,7 @@ public sealed partial class CCVars
     /// <summary>
     ///     Opens one or more of the small CRT panels on startup so they can be looked at without
     ///     anyone clicking through the lobby to reach them. Comma-separated, any of <c>join</c>,
-    ///     <c>staffhelp</c>, <c>vote</c>, <c>ready</c> - for example
+    ///     <c>staffhelp</c>, <c>vote</c>, <c>ready</c>, <c>atm</c> - for example
     ///     <c>--cvar cmu.panel_preview=join,staffhelp</c>.
     /// </summary>
     /// <remarks>
@@ -46,7 +46,7 @@ public sealed partial class CCVars
 
     /// <summary>
     ///     Console command(s) to run once, a few seconds after connecting. Semicolon-separated.
-    ///     For example <c>--cvar cmu.startup_command=golobby</c>.
+    ///     For example <c>--cvar cmu.startup_command=golobby confirm</c>. <!-- CMU14: golobby needs confirm now -->
     /// </summary>
     /// <remarks>
     ///     <para>

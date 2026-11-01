@@ -2,6 +2,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Buckle.Components;
+using Content.Shared.CMU14.Medical.Bloodloss;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -50,7 +51,7 @@ public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
 
         if (args.NewMobState == MobState.Critical)
         {
-            if (IsWithinCrawlWindow(ent))
+            if (CanCrawl(ent))
                 TryBeginCrawl(ent);
             else
                 ShowServerPopup(ent, "cmu-crawl-crit-past-window", PopupType.SmallCaution);
@@ -69,6 +70,10 @@ public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
             return;
 
         if (!TryComp<ActiveCrawlWhileCritComponent>(ent, out var active) || !active.Started)
+            return;
+
+        // Passed out from blood loss: getting hit doesn't stop the crawl.
+        if (HasComp<CMUBloodlossUnconsciousComponent>(ent))
             return;
 
         if (!IsAbortingDamage(ent.Comp, args.Damage))
@@ -93,6 +98,24 @@ public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
         }
 
         return false;
+    }
+
+    /// <summary>Starts crawling for a mob that just passed out from blood loss, whatever their damage.</summary>
+    public void TryStartBloodlossCrawl(EntityUid uid)
+    {
+        if (!TryComp<CrawlWhileCritComponent>(uid, out var crawl) ||
+            !TryComp<MobStateComponent>(uid, out var state) ||
+            state.CurrentState != MobState.Critical)
+        {
+            return;
+        }
+
+        TryBeginCrawl((uid, crawl));
+    }
+
+    private bool CanCrawl(Entity<CrawlWhileCritComponent> ent)
+    {
+        return HasComp<CMUBloodlossUnconsciousComponent>(ent) || IsWithinCrawlWindow(ent);
     }
 
     private bool IsWithinCrawlWindow(Entity<CrawlWhileCritComponent> ent)
@@ -184,7 +207,7 @@ public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
         var query = EntityQueryEnumerator<ActiveCrawlWhileCritComponent, CrawlWhileCritComponent>();
         while (query.MoveNext(out var uid, out var active, out var crawl))
         {
-            if (!IsWithinCrawlWindow((uid, crawl)))
+            if (!CanCrawl((uid, crawl)))
             {
                 StopCrawl(uid);
                 continue;

@@ -28,12 +28,14 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
-using Robust.Shared.Prototypes;
+
 
 namespace Content.Client.Lobby
 {
     public sealed partial class LobbyState : State
     {
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaHunterPrototype = "CMUYautjaHunter";
+
         [Dependency] private IBaseClient _baseClient = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IClientConsoleHost _consoleHost = default!;
@@ -609,7 +611,7 @@ namespace Content.Client.Lobby
 
         private bool HasYautjaWhitelist()
         {
-            if (!_protoMan.TryIndex<JobPrototype>("CMUYautjaHunter", out var hunter))
+            if (!_protoMan.TryIndex<JobPrototype>(CMUYautjaHunterPrototype, out var hunter))
                 return false;
 
             return _jobRequirements.CheckWhitelist(hunter, out _);

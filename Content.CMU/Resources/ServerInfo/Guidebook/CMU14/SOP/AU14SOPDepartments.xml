@@ -8,7 +8,7 @@
 
   ## Medical
     ## Chief Medical Officer
-      - Holds complete authority over the medbay, medical preparations, research and surgery on board the ship/installation, except when overruled by the Commander.
+      - Holds complete authority over the medbay, medical preparations, research and surgery on board the ship/installation, except when overruled by the Commanding Officer.
       - May authorize or prohibit any type of research or experimentation.
     ### Medical Regulations
       - Pills must be stored in a sealed, labelled container showing either the maximum dosage before overdose or the number of units provided.
@@ -16,7 +16,7 @@
 
   ## Engineering
     ## Engineer Officer
-      - Holds complete authority over ship/installation modifications, repairs and maintenance, except when overruled by the Commander.
+      - Holds complete authority over ship/installation modifications, repairs and maintenance, except when overruled by the Commanding Officer.
     ### Engineering Regulations
       - May not dismantle or deconstruct any vital area's of the ship/installation to create modifications.
       - May not dismantle or deconstruct any area's of the ship/installation to gather materials.
@@ -24,7 +24,7 @@
 
   ## Requsitions
     ## Logistics Officer
-      - Holds complete authority over requisitions and its equipment as well as any purchases made through the ASRS, except when overruled by the Commander.
+      - Holds complete authority over requisitions and its equipment as well as any purchases made through the ASRS, except when overruled by the Commanding Officer.
     ### Requisition Regulations
       - The right to deny service to any personnel with a valid reason, such as threats, not wearing a uniform or armor etc.
       - Any equipment taken from requisitions by a non-member of requisitions without permission is treated as theft.
@@ -43,7 +43,7 @@
 
   ## Synthetics and AI
     ## APOLLO
-      - APOLLO's core may only be accessed by the Engineering Officer, Commander and Synthetics and requires approval from APOLLO.
+      - APOLLO's core may only be accessed by the Engineering Officer, Commanding Officer and Synthetics and requires approval from APOLLO.
       - Trespassing past initial security gates will result in non-lethal removal from the area.
       - Trespassing into APOLLO's core will result in immediate lethal harm.
     ### Synthetics

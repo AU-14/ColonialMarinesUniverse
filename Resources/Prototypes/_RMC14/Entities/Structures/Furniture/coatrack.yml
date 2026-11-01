@@ -23,7 +23,7 @@
         mask:
         - MachineMask
         layer:
-        - MobMask
+        - MachineLayer # CMU14: MobMask carries Impassable, which blocked clicks on anything past or under the rack
   - type: Damageable
     damageModifierSet: StructuralMarine
   - type: Injurable

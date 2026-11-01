@@ -38,6 +38,7 @@ stamp-component-stamped-name-au14-icsca = ICSC Ambassador
 stamp-component-stamped-name-au14-ccaa = CCA Ambassador
 
 stamp-component-stamped-name-au14-admin = Colony Administrator
+stamp-component-stamped-name-au14-depadmin = Deputy Administrator
 stamp-component-stamped-name-au14-fore = Foreman
 stamp-component-stamped-name-au14-heng = Head of Engineering
 stamp-component-stamped-name-au14-hos = Head of Service

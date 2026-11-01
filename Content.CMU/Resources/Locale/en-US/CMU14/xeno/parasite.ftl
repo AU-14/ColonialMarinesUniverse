@@ -1,0 +1,19 @@
+cmu-xeno-parasite-shaken-loose = {CAPITALIZE(THE($parasite))} loses its grip and slides off {THE($victim)}!
+cmu-xeno-parasite-constricts = As you reach for {THE($parasite)}, its tail tightens around {THE($victim)}'s neck. You pull your hand back, deciding that's not a good idea.
+
+cmu-xeno-parasite-hugged-1 = Something wet and leathery slaps onto your face and clamps down!
+cmu-xeno-parasite-hugged-2 = Spindly legs wrap around your head and a tail cinches around your throat!
+cmu-xeno-parasite-hugged-3 = The world goes dark as something forces itself over your face!
+cmu-xeno-parasite-hugged-4 = You feel something push its way down your throat!
+cmu-xeno-parasite-holding-1 = Something is lodged in your throat. You can't swallow.
+cmu-xeno-parasite-holding-2 = The thing on your face tightens its grip.
+cmu-xeno-parasite-holding-3 = You feel a slow, rhythmic pulsing deep in your throat.
+cmu-xeno-parasite-holding-4 = Its legs flex against your skull.
+cmu-xeno-parasite-holding-5 = Air keeps flowing into your lungs, but it isn't you doing the breathing.
+cmu-xeno-parasite-holding-6 = The tail around your neck twitches.
+cmu-xeno-parasite-holding-7 = There's a warm, heavy pressure building in your chest.
+cmu-xeno-parasite-holding-8 = You can feel its body swell and shrink against your face.
+cmu-xeno-parasite-fell-off-1 = The thing on your face goes limp and peels away. You gasp for air.
+cmu-xeno-parasite-fell-off-2 = It lets go and slides off your face. Your throat is raw.
+cmu-xeno-parasite-fell-off-3 = The legs loosen and the creature drops away. You cough hard.
+cmu-xeno-parasite-fell-off-4 = It's off your face. You can breathe on your own again, but something feels wrong inside.

@@ -401,6 +401,8 @@
       - radioGovforCharlie
       - radioGovforCommand
       - radioGovforIntel
+      - CMURadioGovforMedical
+      - radioGovforFoxtrot
       - radioGovforJTAC
       - radioGovforMILP
       opfor:
@@ -409,6 +411,8 @@
       - radioOpforCharlie
       - radioOpforCommand
       - radioOpforIntel
+      - CMURadioOpforMedical
+      - radioOpforVictor
       - radioOpforJTAC
       - radioOpforMILP
       clf:

@@ -16,6 +16,8 @@ namespace Content.IntegrationTests.Tests.Stunnable;
 [TestOf(typeof(ExaminableStatusEffectSystem))]
 public sealed class StunPresentationMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<AlertPrototype> StunPrototype = "Stun";
+
     [Test]
     public async Task SharedAlertAndExaminePresentationFollowTheLongestRemainingOwner()
     {
@@ -86,7 +88,7 @@ public sealed class StunPresentationMergeRegressionTest : GameTest
     private void AssertPresentation(EntityUid target, TimeSpan expectedEnd)
     {
         var alerts = Server.System<AlertsSystem>();
-        var alertKey = SProtoMan.Index<AlertPrototype>("Stun").AlertKey;
+        var alertKey = SProtoMan.Index<AlertPrototype>(StunPrototype).AlertKey;
         Assert.That(alerts.TryGetAlertState(target, alertKey, out var alert), Is.True);
         Assert.Multiple(() =>
         {

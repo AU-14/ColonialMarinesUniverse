@@ -45,7 +45,7 @@
 - type: entity
   parent: RMCTileFire
   id: CMUTileFirePhoronArsonist
-  suffix: Phoron, creeping
+  suffix: Phoron
   components:
   - type: Sprite
     layers:
@@ -62,9 +62,6 @@
     extinguishInstantly: false
     sprayExtinguishMultiplier: 1
     duration: 180
-  - type: CMUSpreadingFire
-    depth: 3
-    spreadEvery: 8
   - type: GenericVisualizer
     visuals:
       enum.TileFireLayers.Base:

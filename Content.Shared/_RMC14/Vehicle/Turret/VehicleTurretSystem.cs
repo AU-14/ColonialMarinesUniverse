@@ -476,6 +476,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
             ? direction.ToWorldAngle()
             : (direction.ToWorldAngle() - vehicleRot).Reduced();
 
+        desiredRotation = CMUClampYaw(targetTurret, vehicle, desiredRotation); // CMU14
         targetTurret.TargetRotation = desiredRotation;
         if (targetTurret.RotationSpeed <= 0f)
         {
@@ -503,6 +504,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
             ? worldRotation
             : (worldRotation - vehicleRot).Reduced();
 
+        desiredRotation = CMUClampYaw(targetTurret, vehicle, desiredRotation); // CMU14
         targetTurret.TargetRotation = desiredRotation;
         if (targetTurret.RotationSpeed <= 0f)
         {
@@ -744,6 +746,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         Angle desiredRotation,
         bool allowReverseDelay)
     {
+        desiredRotation = CMUClampYaw(turret, vehicle, desiredRotation); // CMU14
         var delta = Angle.ShortestDistance(turret.TargetRotation, desiredRotation);
         var deadzone = MathHelper.DegreesToRadians(MathF.Max(0f, turret.RotationInputDeadzoneDegrees));
 

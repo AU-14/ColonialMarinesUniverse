@@ -8,9 +8,9 @@
   lorePrimer: AU14PrimerThreatBiomorph
   roundstartspawns: biomorphsParty
   thirdpartyinterval: 9100
-  whitelistedgamemodes:
+  whitelistedGamemodes:
   - ColonyFall
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - DistressSignal
   winconditions:
   - KillAllColonistRule
@@ -58,9 +58,9 @@
 #   voteCooldownGroup: Biomorphs
 #   lorePrimer: AU14PrimerThreatBiomorph
 #   roundstartspawns: biomorphsPartyDistress
-#   whitelistedgamemodes:
+#   whitelistedGamemodes:
 #   - DistressSignal
-#   blacklistedgamemodes:
+#   blacklistedGamemodes:
 #   - ColonyFall
 #   winconditions:
 #   - KillAllGovforRule
@@ -120,7 +120,7 @@
   weight: 4
   minplayers: 0
   maxplayers: 250
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false
   announcearrival: "Anomalous biological signatures detected in the area of operation."
 

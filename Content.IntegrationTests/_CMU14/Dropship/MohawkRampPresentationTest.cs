@@ -18,6 +18,8 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkRampPresentationTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUMultiZStairsPrototype = "CMUMultiZStairs";
+
     [TestCase("omaha")]
     [TestCase("midway")]
     [TestCase("omaha_navy")]
@@ -34,7 +36,7 @@ public sealed class MohawkRampPresentationTest
             var entities = pair.Server.EntMan;
             entities.System<SharedMapSystem>().CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var maps = entities.System<SharedMapSystem>();
             var cabin = entities.GetComponent<MapGridComponent>(ship);
@@ -44,7 +46,7 @@ public sealed class MohawkRampPresentationTest
                 var indices = new Vector2i(x, y);
                 cabinTiles.Add(indices, maps.GetTileRef(ship, cabin, indices).Tile);
             }
-            foreach (var part in entities.EntityQuery<MohawkRampSegmentComponent>().Where(p => p.Lower))
+            foreach (var part in entities.QueryEntities<MohawkRampSegmentComponent>().Where(p => p.Comp.Lower))
                 parts.Add(entities.GetComponent<TransformComponent>(part.Owner).LocalPosition, entities.GetNetEntity(part.Owner));
             Assert.That(parts, Has.Count.EqualTo(12));
             Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true), Is.True);
@@ -59,15 +61,17 @@ public sealed class MohawkRampPresentationTest
                 var entities = pair.Server.EntMan;
                 var maps = entities.System<SharedMapSystem>();
                 var cabin = entities.GetComponent<MapGridComponent>(ship);
+                // The opening is sealed open air rather than space, so the cabin keeps its air with the ramp down.
+                var openAir = new Tile(pair.Server.ResolveDependency<ITileDefinitionManager>()["CMUFloorOpenAirSealed"].TileId);
                 foreach (var (indices, original) in cabinTiles)
                 {
                     var keepThreshold = variant.StartsWith("midway") && indices.Y == -3;
                     Assert.That(maps.GetTileRef(ship, cabin, indices).Tile,
-                        Is.EqualTo(deployed && !keepThreshold ? Tile.Empty : original),
-                        "Midway keeps its three cabin-end ramp tiles while the remaining floor lowers.");
+                        Is.EqualTo(deployed && !keepThreshold ? openAir : original),
+                        "Midway keeps its three cabin-end ramp tiles while the remaining floor lowers, and the open cells stay sealed.");
                 }
                 var stairs = (CMUZLevelHighGroundComponent) pair.Server.ResolveDependency<IPrototypeManager>()
-                    .Index<EntityPrototype>("CMUMultiZStairs").Components["CMUZLevelHighGround"].Component;
+                    .Index<EntityPrototype>(CMUMultiZStairsPrototype).Components["CMUZLevelHighGround"].Component;
                 foreach (var (position, net) in parts)
                 {
                     var uid = entities.GetEntity(net);

@@ -124,7 +124,7 @@ public abstract partial class SharedLadderSystem : EntitySystem
         if (ent.Comp.Other == null)
         {
             var msg = Loc.GetString("rmc-ladder-leads-nowhere");
-            _popup.PopupClient(msg, ent, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, ent, user, PopupType.SmallCaution);
             return;
         }
 
@@ -139,7 +139,7 @@ public abstract partial class SharedLadderSystem : EntitySystem
             if (lastUser != user)
             {
                 var msg = Loc.GetString("rmc-ladder-someone-else-climbing");
-                _popup.PopupClient(msg, ent, user, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, ent, user, PopupType.SmallCaution);
             }
 
             return;
@@ -167,7 +167,7 @@ public abstract partial class SharedLadderSystem : EntitySystem
         {
             var selfMessage = Loc.GetString("rmc-ladder-start-climbing-self");
             var othersMessage = Loc.GetString("rmc-ladder-start-climbing-others", ("user", user));
-            _popup.PopupPredicted(selfMessage, othersMessage, user, user);
+            _popup.PopupEntity(selfMessage, othersMessage, user, user);
         }
 
         if (_actorQuery.TryComp(user, out var actor))
@@ -223,7 +223,7 @@ public abstract partial class SharedLadderSystem : EntitySystem
 
         var selfMessage = Loc.GetString("rmc-ladder-finish-climbing-self");
         var othersMessage = Loc.GetString("rmc-ladder-finish-climbing-others", ("user", user));
-        _popup.PopupPredicted(selfMessage, othersMessage, user, user);
+        _popup.PopupEntity(selfMessage, othersMessage, user, user);
 
         _rmcTeleporter.HandlePulling(user, coordinates);
     }

@@ -136,7 +136,7 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
 
         if (xeno.Comp.Encased && !InPlateBashRange(xeno.Owner, args.Target, xeno.Comp.PlateBashEncasedRange))
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-bulwark-plate-bash-adjacent"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-bulwark-plate-bash-adjacent"), xeno, xeno);
             return;
         }
 
@@ -194,7 +194,7 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
 
         if (xeno.Comp.Encased)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-bulwark-tail-swing-encased"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-bulwark-tail-swing-encased"), xeno, xeno);
             return;
         }
 
@@ -251,7 +251,7 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
 
         if (!xeno.Comp.Encased)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-bulwark-reflective-shield-encase"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-bulwark-reflective-shield-encase"), xeno, xeno);
             return;
         }
 

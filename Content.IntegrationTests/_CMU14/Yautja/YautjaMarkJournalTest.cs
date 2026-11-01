@@ -4,6 +4,8 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Inventory;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -52,6 +54,32 @@ public sealed class YautjaMarkJournalTest
             Assert.That(marks.TryMark(bracer, hunter, target, YautjaMarkKind.Honored, null), Is.True);
             Assert.That(marks.TryMark(otherBracer, other, target, YautjaMarkKind.Honored, null), Is.False);
             Assert.That(marks.IsMarkedBy(target, YautjaMarkKind.Honored, hunter), Is.True);
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    // prey that died to someone else kept the mark, and the hunter could never mark anything again
+    [Test]
+    public async Task MarkingNewPreyReleasesTheOldOne()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var map = await pair.CreateTestMap();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var em = pair.Server.EntMan;
+            var (hunter, bracer) = SpawnHunter(em, map.GridCoords);
+            var oldPrey = em.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(2, 0)));
+            var newPrey = em.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(3, 0)));
+            var marks = em.System<YautjaMarkSystem>();
+            Assert.That(marks.TryMark(bracer, hunter, oldPrey, YautjaMarkKind.Prey, null), Is.True);
+            em.System<Content.Shared.Mobs.Systems.MobStateSystem>().ChangeMobState(oldPrey, Content.Shared.Mobs.MobState.Dead);
+
+            Assert.That(marks.TryMark(bracer, hunter, newPrey, YautjaMarkKind.Prey, null), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(marks.IsMarkedBy(newPrey, YautjaMarkKind.Prey, hunter), Is.True);
+                Assert.That(marks.IsMarkedBy(oldPrey, YautjaMarkKind.Prey, hunter), Is.False);
+            });
         });
         await pair.CleanReturnAsync();
     }
@@ -105,6 +133,37 @@ public sealed class YautjaMarkJournalTest
             var historical = journal.Records.Values.Single(record => record.WasMarked);
             Assert.That(historical.Target, Is.Null,
                 "deleting a marked entity must preserve its private history snapshot");
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    // ghosts carry a mind, so spectators used to show up as nearby targets
+    [Test]
+    public async Task GhostsNeverShowUpAsNearbyTargets()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var map = await pair.CreateTestMap();
+        EntityUid hunter = default;
+        EntityUid ghost = default;
+        EntityUid prey = default;
+        await pair.Server.WaitAssertion(() =>
+        {
+            var em = pair.Server.EntMan;
+            hunter = SpawnHunter(em, map.GridCoords).Hunter;
+            prey = em.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(2, 0)));
+            ghost = em.SpawnEntity("MobObserver", map.GridCoords.Offset(new System.Numerics.Vector2(1, 0)));
+            var minds = em.System<SharedMindSystem>();
+            minds.TransferTo(minds.CreateMind(null, "spectator"), ghost);
+            Assert.That(em.GetComponent<MindContainerComponent>(ghost).HasMind, Is.True);
+        });
+
+        await pair.RunSeconds(0.6f);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var journal = pair.Server.EntMan.GetComponent<YautjaHuntJournalComponent>(hunter);
+            Assert.That(journal.Visible, Does.Contain(prey));
+            Assert.That(journal.Visible, Does.Not.Contain(ghost));
+            Assert.That(journal.Records.Values.Any(record => record.Target == ghost), Is.False);
         });
         await pair.CleanReturnAsync();
     }

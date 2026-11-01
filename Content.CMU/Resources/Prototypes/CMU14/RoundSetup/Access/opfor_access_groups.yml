@@ -12,6 +12,7 @@
   - AU14AccessOpforPilot
   - AU14AccessOpforReq
   - AU14AccessOpforVehicleCrew
+  - CMUAccessKitchen # DEFAC open for business button
 
 - type: accessGroup
   parent: AU14OpforCommand
@@ -83,3 +84,17 @@
   tags:
   - AU14AccessOpfor
   - AU14AccessOpforMedical
+
+- type: accessGroup
+  id: AU14OpforCommandNoLogistics
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+  - AU14AccessOpforCommand
+  - AU14AccessOpforSecurity
+  - AU14AccessOpforFTL
+  - AU14AccessOpforMedical
+  - AU14AccessOpforEngineering
+  - AU14AccessOpforGunner
+  - AU14AccessOpforPilot
+  - AU14AccessOpforVehicleCrew

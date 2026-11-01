@@ -183,7 +183,7 @@ public abstract partial class SharedRMCLandmineSystem : EntitySystem
         if (_container.IsEntityInContainer(user))
         {
             var msg = Loc.GetString("rmc-explosive-deploy-container", ("explosive", ent));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -195,7 +195,7 @@ public abstract partial class SharedRMCLandmineSystem : EntitySystem
                 continue;
 
             var msg = Loc.GetString("rmc-mine-deploy-fail-occupied");
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 

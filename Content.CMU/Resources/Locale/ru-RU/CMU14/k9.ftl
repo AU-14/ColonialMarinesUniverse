@@ -85,10 +85,12 @@ rmc-k9-arm-grab-trip-self = Вы резко дёргаете руку {$target},
 rmc-k9-arm-grab-trip-target = {$dog} резко дёргает вас за руку и сбивает с ног!
 rmc-k9-arm-grab-trip-others = {$dog} дёргает {$target} за руку и сбивает с ног!
 rmc-k9-arm-grab-escape-attempt = Вы пытаетесь вырвать руку из стальных челюстей собаки...
+rmc-k9-arm-grab-escape-hellhound = Вы пытаетесь вырвать руку из пасти гончей...
 rmc-k9-arm-grab-escaped-self = Вам удаётся вырвать руку из пасти собаки!
 rmc-k9-arm-grab-escaped-dog = {$target} вырывает руку из вашей пасти!
 rmc-k9-arm-grab-broken-damage = От сильного урона собака разжимает челюсти!
 rmc-k9-arm-grab-xeno = Челюсти не могут надёжно зафиксировать ксеноморфа!
+rmc-k9-arm-grab-target-down = Цель уже повержена — держать нечего.
 
 # Поиск хозяина
 rmc-k9-track-master-none = У вас нет назначенного хозяина. Подойдите к морпеху и используйте «Запрос привязки».
@@ -115,24 +117,28 @@ rmc-k9-bind-success-dog-handler = Протокол синхронизирова�
 rmc-k9-bind-success-marine = Привязка установлена. {$dog} получил ваши доступы и может вас найти. Команды кинолога недоступны.
 rmc-k9-bind-success-dog-marine = Привязка установлена. Боец {$master} назначен вашим хозяином. Доступы синхронизированы.
 rmc-k9-bind-replaced-old = Привязка с {$dog} разорвана: собака перешла к кинологу {$master}.
+rmc-k9-bind-master-hellhound = Адская гончая признаёт вас своим хозяином. «Взять!» и «Эвакуация» теперь в вашем распоряжении.
+rmc-k9-bind-dog-hellhound = {$master} — ваш хозяин. Их охота — ваша охота.
 
 # Протокол защиты
-rmc-k9-protector-rage-trigger = [color=red]{$dog} фиксирует угрозу кинологу и активирует боевой защитный протокол![/color]
+rmc-k9-protector-rage-trigger = {$dog} фиксирует угрозу кинологу и активирует боевой защитный протокол!
 
 # Фас
 rmc-k9-sic-em-shout = Кинолог {$handler} указывает цель: «ФАС на {$target}!»
-rmc-k9-sic-em-dog-order = [color=orange]Приказ кинолога: АТАКОВАТЬ {$target}![/color]
+rmc-k9-sic-em-dog-order = Приказ кинолога: АТАКОВАТЬ {$target}!
 
 # Эвакуация
 rmc-k9-evacuate-shout = Кинолог {$handler} командует собакам: «УНЕСТИ {$target}!»
-rmc-k9-evacuate-dog-order = [color=cyan]Приказ кинолога: ЭВАКУИРОВАТЬ {$target}![/color]
+rmc-k9-evacuate-dog-order = Приказ кинолога: ЭВАКУИРОВАТЬ {$target}!
 
 # Хороший мальчик / Подзарядка
 rmc-k9-good-boy-popup = {$user} подбадривает {$dog}. {$dog} радостно виляет металлическим хвостом и издаёт довольный бип-буп!
+rmc-k9-good-boy-hellhound = {$user} хвалит {$dog}. {$dog} издаёт низкое довольное рычание и тянется к руке.
 
 # Сенсоры
 rmc-k9-senses-alert-growl = {$dog} фиксирует вибрацию сенсорами движения и глухо рычит в темноту!
-rmc-k9-senses-alert-master = [color=red]Сенсоры вашего K9 {$dog} обнаружили движение противника поблизости![/color]
+rmc-k9-senses-alert-master = Сенсоры вашего K9 {$dog} обнаружили движение противника поблизости!
+rmc-k9-senses-alert-silent-dog = Вы замечаете движение поблизости и замираете, не издавая ни звука.
 
 # Направления
 rmc-k9-direction-north = север

@@ -1,12 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
+using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;
+using Content.Client.CMU14.BugHelp; // CMU14: bug report window, opened from the third choice card
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Mentor;
+using Content.Shared.CMU14.BugHelp; // CMU14: promotion message from the staff window
+using Content.Shared.CCVar;
 using Content.Shared.Input;
 using Robust.Client.Audio;
 using Robust.Client.Graphics;
@@ -29,6 +33,8 @@ namespace Content.Client._RMC14.Mentor;
 public sealed partial class StaffHelpUIController : UIController, IOnSystemChanged<BwoinkSystem>
 {
     [Dependency] private AHelpUIController _aHelp = default!;
+    [Dependency] private BugHelpUIController _bugHelp = default!; // CMU14
+    [Dependency] private IClientAdminManager _adminManager = default!; // CMU14
     [Dependency] private IClyde _clyde = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private INetManager _net = default!;
@@ -49,6 +55,7 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
     private MentorHelpWindow? _mentorHelpWindow;
     private MentorWindow? _mentorWindow;
     private SoundSpecifier? _mHelpSound;
+    private bool _bwoinkSoundEnabled; // CMU14
     private bool _unread;
     private (TimeSpan Timestamp, bool Typing) _lastTypingUpdateSent;
 
@@ -69,8 +76,12 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         _net.RegisterNetMessage<MentorClaimMsg>(OnMentorClaim);
         _net.RegisterNetMessage<MentorUnclaimMsg>(OnMentorUnclaim);
         _net.RegisterNetMessage<MentorClientTeleportMsg>();
+        _net.RegisterNetMessage<BugHelpPromoteMsg>(); // CMU14
 
         _config.OnValueChanged(RMCCVars.RMCMentorHelpSound, v => _mHelpSound = new SoundPathSpecifier(v), true);
+
+        // CMU14: honor the AHelp notification sound toggle for mentorhelp too
+        _config.OnValueChanged(CCVars.BwoinkSoundEnabled, v => _bwoinkSoundEnabled = v, true);
     }
 
     private void OnMentorStatus(MentorStatusMsg msg)
@@ -157,13 +168,18 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
 
         if (other)
         {
-            _audio?.PlayGlobal(_mHelpSound, Filter.Local(), false);
+            // CMU14: honor the AHelp notification sound toggle for mentorhelp too
+            if (_mHelpSound != null && (_bwoinkSoundEnabled || !_adminManager.IsActive()))
+                _audio?.PlayGlobal(_mHelpSound, Filter.Local(), false);
             _clyde.RequestWindowAttention();
 
             if (!IsMentor)
             {
                 if (OpenWindow(ref _mentorHelpWindow,
-                        CreateMentorHelpWindow,
+                        // CMU14: CreateMentorHelpWindow takes an optional title now, so the bare
+                        // method group no longer converts to Func<MentorHelpWindow>.
+                        // CreateMentorHelpWindow,
+                        () => CreateMentorHelpWindow(),
                         () => _mentorHelpWindow = null,
                         window => window.Chat,
                         _ => _player.LocalUser))
@@ -288,9 +304,32 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
             OpenMentorOrHelpWindow();
             _staffHelpWindow.Close();
         };
+
+        // CMU14: bug report choice.
+        _staffHelpWindow.BugHelpButton.OnPressed += _ =>
+        {
+            if (_bugHelp.IsEnabled)
+            {
+                _bugHelp.OpenWindow();
+                _staffHelpWindow.Close();
+                SetAHelpButtonPressed(false);
+            }
+        };
+        _staffHelpWindow.BugHelpButton.Visible = _bugHelp.IsEnabled;
     }
 
-    private void OpenMentorOrHelpWindow()
+    // CMU14: bughelp config can flip mid-session; keep the choice card honest while the window is open.
+    public void RefreshBugHelpButton()
+    {
+        if (_staffHelpWindow != null)
+            _staffHelpWindow.BugHelpButton.Visible = _bugHelp.IsEnabled;
+    }
+
+    // CMU14: public entry for the bug report window's Talk-to-staff button. The title retitles
+    // the player chat window for the door it was opened from (mockup pane 3: "Staff Help" from
+    // the bug door); null keeps the mentor card's "Mentor Help". Staff never see it - they get
+    // the console regardless of door.
+    public void OpenMentorOrHelpWindow(string? title = null)
     {
         SetAHelpButtonPressed(false);
         _unread = false;
@@ -318,7 +357,7 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         else
         {
             if (OpenWindow(ref _mentorHelpWindow,
-                    CreateMentorHelpWindow,
+                    () => CreateMentorHelpWindow(title),
                     () => _mentorHelpWindow = null,
                     window => window.Chat,
                     _ => _player.LocalUser))
@@ -328,9 +367,13 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         }
     }
 
-    private MentorHelpWindow CreateMentorHelpWindow()
+    private MentorHelpWindow CreateMentorHelpWindow(string? title = null)
     {
         var window = new MentorHelpWindow();
+        // CMU14: retitle for the bug report door - a player asking about a stuck flamer should
+        // not land in a window titled "Mentor Help" (design §4.1, §12.6).
+        if (title != null)
+            window.Title = title;
         ApplyCrtChrome(window);
         window.ReMentorButton.OnPressed += _ => _net.ClientSendMessage(new ReMentorMsg());
         window.ReMentorButton.Visible = _canReMentor;
@@ -392,6 +435,16 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
             });
         };
 
+        // CMU14: promote the selected conversation into a bug report; the server declines with
+        // a SERVER line in this conversation when the player is offline or nothing was said.
+        window.PromoteButton.OnPressed += _ =>
+        {
+            _net.ClientSendMessage(new BugHelpPromoteMsg
+            {
+                Destination = window.SelectedPlayer,
+            });
+        };
+
         return window;
     }
 
@@ -426,6 +479,7 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
             _mentorWindow.Messages.Clear();
             _mentorWindow.Chat.Editable = true;
             _mentorWindow.TeleportButton.Visible = _mentorWindow.SelectedPlayer != default;
+            _mentorWindow.PromoteButton.Visible = _mentorWindow.SelectedPlayer != default; // CMU14
             UpdateClaimIndicator(player);
             UpdateTypingIndicator();
             if (!_messages.TryGetValue(player, out var authorMessages))

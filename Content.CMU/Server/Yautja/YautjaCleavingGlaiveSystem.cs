@@ -7,7 +7,7 @@ using Robust.Shared.Containers;
 
 namespace Content.Server.CMU14.Yautja;
 
-public sealed class YautjaCleavingGlaiveSystem : EntitySystem
+public sealed partial class YautjaCleavingGlaiveSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
@@ -35,8 +35,10 @@ public sealed class YautjaCleavingGlaiveSystem : EntitySystem
             return;
         }
 
+        // eat the click on refusal too, or the skull falls through to other interactions
         if (!CanMountSkull(args.User))
         {
+            args.Handled = true;
             _popup.PopupEntity(Loc.GetString("cmu-yautja-cleaving-glaive-skull-denied"), args.User, args.User, PopupType.SmallCaution);
             return;
         }
@@ -44,6 +46,7 @@ public sealed class YautjaCleavingGlaiveSystem : EntitySystem
         var container = EnsureContainer(ent);
         if (container.ContainedEntity != null)
         {
+            args.Handled = true;
             _popup.PopupEntity(Loc.GetString("cmu-yautja-cleaving-glaive-skull-existing", ("skull", args.Used), ("glaive", ent.Owner)), args.User, args.User, PopupType.SmallCaution);
             return;
         }

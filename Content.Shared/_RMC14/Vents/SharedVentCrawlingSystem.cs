@@ -150,7 +150,7 @@ public abstract partial class SharedVentCrawlingSystem : EntitySystem
 
         if (TryComp<WeldableComponent>(vent, out var weld) && weld.IsWelded)
         {
-            _popup.PopupPredicted(Loc.GetString("rmc-vent-crawling-welded"), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupBroadcast(Loc.GetString("rmc-vent-crawling-welded"), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -159,7 +159,7 @@ public abstract partial class SharedVentCrawlingSystem : EntitySystem
 
         if ((comp.MaxEntities != null && container.ContainedEntities.Count > comp.MaxEntities))
         {
-            _popup.PopupPredicted(Loc.GetString("rmc-vent-crawling-full"), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupBroadcast(Loc.GetString("rmc-vent-crawling-full"), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -195,7 +195,7 @@ public abstract partial class SharedVentCrawlingSystem : EntitySystem
 
         if (TryComp<WeldableComponent>(vent, out var weld) && weld.IsWelded)
         {
-            _popup.PopupPredicted(Loc.GetString("rmc-vent-crawling-welded"), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupBroadcast(Loc.GetString("rmc-vent-crawling-welded"), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -204,7 +204,7 @@ public abstract partial class SharedVentCrawlingSystem : EntitySystem
 
         if (comp.MaxEntities != null && container.ContainedEntities.Count > comp.MaxEntities)
         {
-            _popup.PopupPredicted(Loc.GetString("rmc-vent-crawling-full"), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupBroadcast(Loc.GetString("rmc-vent-crawling-full"), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -364,7 +364,7 @@ public abstract partial class SharedVentCrawlingSystem : EntitySystem
 
                 if ((ventDes.MaxEntities != null && containerDes.ContainedEntities.Count > ventDes.MaxEntities))
                 {
-                    _popup.PopupPredicted(Loc.GetString("rmc-vent-crawling-full"), uid, uid, PopupType.SmallCaution);
+                    _popup.PopupBroadcast(Loc.GetString("rmc-vent-crawling-full"), uid, uid, PopupType.SmallCaution);
                     continue;
                 }
 
@@ -376,7 +376,7 @@ public abstract partial class SharedVentCrawlingSystem : EntitySystem
                 {
                     _audio.PlayPredicted(ventDes.TravelSound, uidDes, uid);
                     crawling.NextVentCrawlSound = time + crawler.VentCrawlSoundDelay;
-                    _popup.PopupPredictedCoordinates(Loc.GetString("rmc-vent-crawling-moving"), _transform.GetMoverCoordinates(uid), uid, PopupType.SmallCaution);
+                    _popup.PopupCoordinates(Loc.GetString("rmc-vent-crawling-moving"), _transform.GetMoverCoordinates(uid), PopupType.SmallCaution);
                 }
 
                 Dirty(uid, crawling);
@@ -391,7 +391,7 @@ public abstract partial class SharedVentCrawlingSystem : EntitySystem
             {
                 if (TryComp<WeldableComponent>(container.Owner, out var weld) && weld.IsWelded)
                 {
-                    _popup.PopupPredicted(Loc.GetString("rmc-vent-crawling-welded"), uid, uid, PopupType.SmallCaution);
+                    _popup.PopupBroadcast(Loc.GetString("rmc-vent-crawling-welded"), uid, uid, PopupType.SmallCaution);
                     continue;
                 }
 

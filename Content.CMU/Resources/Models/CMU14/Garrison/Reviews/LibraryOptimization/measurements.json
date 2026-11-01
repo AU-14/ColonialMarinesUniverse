@@ -1,0 +1,228 @@
+{
+  "auditedModels": 2476,
+  "changedModels": 117,
+  "changedPoseLists": 193,
+  "defaultPartsRemoved": 736,
+  "storedPartsRemoved": 1765,
+  "verifiedBoxUnions": 631,
+  "verifiedEllipsoidContainments": 9,
+  "verifiedOpenRings": 25,
+  "azimuthsPerRing": 721,
+  "changedGlbs": 117,
+  "unrelatedExportsUnchanged": 2359,
+  "nonGeometryMetadataUnchanged": true,
+  "correctedManifestHashes": [
+    "CMU3DWornAU14CivilianFullSuitWeYuEngineerOuterClothing",
+    "CMU3DWornAU14CivilianWeYuEngineerFormanClothesJumpsuit",
+    "CMU3DWornAU14DrugDealerDrugBackpackBack",
+    "CMU3DWornCMUArmorRaiderXM40OuterClothing",
+    "CMU3DWornCMUJumpsuitRaiderWebbingBuckshotJumpsuit",
+    "CMU3DWornRMCArmorSPPFirefighterOuterClothing"
+  ],
+  "baseline": "5b143c7a3ee",
+  "worldModels": 1676,
+  "equipmentOnlyModels": 800,
+  "storedPartLists": 3663,
+  "defaultPartsBefore": 224589,
+  "defaultPartsAfter": 223853,
+  "storedPartsBefore": 250152,
+  "storedPartsAfter": 248387,
+  "affectedDefaultPartsBefore": 6640,
+  "affectedDefaultPartsAfter": 5904,
+  "pythonTestsPassed": 338,
+  "contentThreeDTestsPassed": 641,
+  "allGlbsAndManifestValidated": true,
+  "nativeFixture": {
+    "models": [
+      [
+        "CMU3DFoodBowlBigCloud",
+        [
+          -0.9,
+          0,
+          0
+        ]
+      ],
+      [
+        "CMU3DSteelHandcuffs",
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "CMU3DFoodPlateCloud",
+        [
+          0.9,
+          0,
+          0
+        ]
+      ],
+      [
+        "CMU3DFoodRiceEggCloud",
+        [
+          -0.9,
+          1,
+          0
+        ]
+      ],
+      [
+        "CMU3DMaterialLeisureTomDrumsCloud",
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      [
+        "CMU3DPottedPlant11",
+        [
+          0.9,
+          1,
+          0
+        ]
+      ]
+    ],
+    "baseline": "5b143c7a3ee",
+    "shaderSha256": "2d2b5041425a0ad98ecc4b7683df5c6b32b5384d5350b51071220c33847759f2",
+    "renderer": "NVIDIA GeForce RTX 4070 Ti SUPER/PCIe/SSE2",
+    "openGL": "3.3.0 NVIDIA 610.62",
+    "warmupDraws": 3,
+    "samplesPerVariant": 12,
+    "camera": {
+      "width": 1280,
+      "height": 720,
+      "origin": [
+        0,
+        -3.4,
+        2.6
+      ],
+      "forward": [
+        0.0,
+        0.88047105,
+        -0.47409979
+      ],
+      "right": [
+        1,
+        0,
+        0
+      ],
+      "up": [
+        -0.0,
+        0.47409979,
+        0.88047105
+      ],
+      "radius": 8,
+      "tanHalfFov": 0.414213562
+    },
+    "before": {
+      "acceptedBoxes": 469,
+      "omittedBoxes": 0,
+      "gridReferences": 652
+    },
+    "after": {
+      "acceptedBoxes": 345,
+      "omittedBoxes": 0,
+      "gridReferences": 510
+    },
+    "variants": {
+      "before": [
+        {
+          "glsl": "140",
+          "nativeSrgb": false,
+          "uniformBuffers": false,
+          "benchmarks": [
+            {
+              "name": "mixed-props-before",
+              "targetSize": [
+                1280,
+                720
+              ],
+              "surfaceFlipU": null,
+              "surfaceVScale": null,
+              "surfaceSlot": null,
+              "acceptedBoxes": 469,
+              "omittedBoxes": 0,
+              "samples": [],
+              "gpuMillisecondsMedian": 1.039872,
+              "gpuMillisecondsMax": 1.071104,
+              "gpuSamples": 12
+            }
+          ]
+        },
+        {
+          "glsl": "140",
+          "nativeSrgb": true,
+          "uniformBuffers": true,
+          "benchmarks": [
+            {
+              "name": "mixed-props-before",
+              "targetSize": [
+                1280,
+                720
+              ],
+              "surfaceFlipU": null,
+              "surfaceVScale": null,
+              "surfaceSlot": null,
+              "acceptedBoxes": 469,
+              "omittedBoxes": 0,
+              "samples": [],
+              "gpuMillisecondsMedian": 1.0158079999999998,
+              "gpuMillisecondsMax": 1.068032,
+              "gpuSamples": 12
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "glsl": "140",
+          "nativeSrgb": false,
+          "uniformBuffers": false,
+          "benchmarks": [
+            {
+              "name": "mixed-props-after",
+              "targetSize": [
+                1280,
+                720
+              ],
+              "surfaceFlipU": null,
+              "surfaceVScale": null,
+              "surfaceSlot": null,
+              "acceptedBoxes": 345,
+              "omittedBoxes": 0,
+              "samples": [],
+              "gpuMillisecondsMedian": 0.784896,
+              "gpuMillisecondsMax": 0.80896,
+              "gpuSamples": 12
+            }
+          ]
+        },
+        {
+          "glsl": "140",
+          "nativeSrgb": true,
+          "uniformBuffers": true,
+          "benchmarks": [
+            {
+              "name": "mixed-props-after",
+              "targetSize": [
+                1280,
+                720
+              ],
+              "surfaceFlipU": null,
+              "surfaceVScale": null,
+              "surfaceSlot": null,
+              "acceptedBoxes": 345,
+              "omittedBoxes": 0,
+              "samples": [],
+              "gpuMillisecondsMedian": 0.779264,
+              "gpuMillisecondsMax": 0.82944,
+              "gpuSamples": 12
+            }
+          ]
+        }
+      ]
+    },
+    "limitation": "Isolated native GPU draws, not a whole-game FPS or server benchmark."
+  }
+}

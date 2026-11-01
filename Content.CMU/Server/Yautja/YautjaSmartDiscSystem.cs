@@ -34,6 +34,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Yautja;
 
@@ -139,11 +140,12 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         if (_containers.IsEntityInContainer(ent.Owner))
             return;
 
+        EntityManager.System<CMUYautjaEffectsSystem>().Recall(CMUYautjaEffect.DiscReturn, ent, user);
         if (ent.Comp.Active)
             _toggle.TrySetActive((ent.Owner, null), false, user, false);
 
         _transform.SetCoordinates(ent.Owner, Transform(user).Coordinates);
-        _hands.TryPickupAnyHand(user, ent.Owner, checkActionBlocker: false);
+        _hands.TryPickupAnyHand(user, ent.Owner, checkActionBlocker: false, animate: false);
         _audio.PlayPredicted(bracer.Comp.RecallSound, ent.Owner, user);
     }
 
@@ -156,7 +158,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             return;
         }
 
-        if (!HasComp<YautjaComponent>(user))
+        if (!CanOperateDisc(user))
         {
             if (_random.Prob(ent.Comp.NonYautjaFiddleChance))
             {
@@ -260,7 +262,14 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             StopDisc(ent);
 
         if (!TerminatingOrDeleted(ent.Owner) && !TerminatingOrDeleted(target))
+        {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-disc-catch-self", ("disc", ent.Owner)), target, target);
+            _popup.PopupEntity(
+                Loc.GetString("cmu-yautja-disc-catch-others", ("disc", ent.Owner), ("user", target)),
+                target,
+                Filter.PvsExcept(target),
+                true);
+        }
 
         if (TryComp(ent.Owner, out ThrownItemComponent? currentThrown))
             _thrown.StopThrow(ent.Owner, currentThrown);
@@ -295,10 +304,16 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
     private void OnPickupAttempt(Entity<YautjaSmartDiscComponent> ent, ref GettingPickedUpAttemptEvent args)
     {
-        if (!ent.Comp.Active)
+        // the boomerang throw and its return leg aren't Active, so anyone could click the disc out of the air.
+        // cmss13 only lets a throw mode catch do that, and there's no throw mode catch here
+        var operatorThrown = TryComp(ent, out ThrownItemComponent? thrown) &&
+                             thrown.Thrower is { } thrower &&
+                             CanOperateDisc(thrower);
+
+        if (!ent.Comp.Active && !operatorThrown)
             return;
 
-        if (!HasComp<YautjaComponent>(args.User))
+        if (!CanOperateDisc(args.User))
         {
             args.Cancel();
             _popup.PopupEntity(Loc.GetString("cmu-yautja-disc-stolen-active"), ent.Owner, args.User, PopupType.SmallCaution);
@@ -312,7 +327,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
     {
         ClearPendingThrowActivation(ent.Comp);
 
-        if (ent.Comp.Active && HasComp<YautjaComponent>(args.User))
+        if (ent.Comp.Active && CanOperateDisc(args.User))
             _toggle.TrySetActive((ent.Owner, null), false, args.User, false);
     }
 
@@ -322,7 +337,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!HasComp<YautjaComponent>(args.User))
+        if (!CanOperateDisc(args.User))
         {
             ent.Comp.RogueTarget = args.User;
             ent.Comp.RogueActivator = args.User;
@@ -621,6 +636,20 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
         if (!TryComp(uid, out ThrownItemComponent? thrown))
         {
+            // CMU14: a disc that a wall stopped has no ThrownItemComponent, and SteerDisc/SteerBoomerangReturn
+            // run every tick, so this used to re-throw it - and spam the engine's throwing message
+            // ("smart-disc throws smart-disc") - on every tick while it was pinned. Only attempt a fresh throw
+            // once the disc has actually moved since the last attempt, so a pinned disc waits; when it can move
+            // again the position differs and the launch goes through exactly as before.
+            var position = _transform.GetMapCoordinates(uid).Position;
+            if (disc.LastThrowAttemptPosition is { } lastAttempt &&
+                (position - lastAttempt).LengthSquared() < 0.01f)
+            {
+                return false;
+            }
+
+            disc.LastThrowAttemptPosition = position;
+
             _throwing.TryThrow(
                 uid,
                 direction,
@@ -934,15 +963,8 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             return true;
         }
 
-        if (TryComp(ent.Owner, out YautjaRecallableComponent? recallable) &&
-            recallable.YautjaOwner is { } recallOwner &&
-            !TerminatingOrDeleted(recallOwner))
-        {
-            owner = recallOwner;
-            ent.Comp.YautjaOwner = recallOwner;
-            return true;
-        }
-
+        // CMU14: the gear-binding component that used to carry the owner is gone, so the disc only
+        // trusts its own field and the rogue-target path above.
         owner = default;
         return false;
     }
@@ -950,20 +972,27 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
     private bool TryGetOrSetOwner(Entity<YautjaSmartDiscComponent> ent, EntityUid user, out EntityUid owner)
     {
         owner = default;
-        if (!HasComp<YautjaComponent>(user))
+        if (!CanOperateDisc(user))
             return false;
 
-        if (!TryComp(ent.Owner, out YautjaRecallableComponent? recallable) ||
-            recallable.YautjaOwner is not { } existing ||
-            TerminatingOrDeleted(existing))
-            return false;
+        // A reconstructed interface can claim recovered gear while its operator holds it.
+        // Ownership stays on the disc so autonomous flight and recall use the same owner.
+        var researchClaim = HasComp<CMUYautjaResearchOperatorComponent>(user) &&
+                            TryComp(user, out HandsComponent? hands) &&
+                            _hands.IsHolding((user, hands), ent.Owner, out _);
+        if (ent.Comp.YautjaOwner is not { } existing || TerminatingOrDeleted(existing) || researchClaim)
+        {
+            ent.Comp.YautjaOwner = user;
+            owner = user;
+            return true;
+        }
 
         owner = existing;
-        if (owner == user)
-            ent.Comp.YautjaOwner = user;
-
         return true;
     }
+
+    private bool CanOperateDisc(EntityUid user) =>
+        HasComp<YautjaComponent>(user) || HasComp<CMUYautjaResearchOperatorComponent>(user);
 
     private void DropFromHands(EntityUid disc, EntityUid owner)
     {

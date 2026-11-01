@@ -14,6 +14,6 @@ public sealed class SporeSacVisualizerSystem : VisualizerSystem<CMUPathogenSpore
             return;
 
         var state = status == SporeSacStatus.Waiting ? "closed" : "open";
-        args.Sprite.LayerSetState(SporeSacVisualLayers.Base, state);
+        SpriteSystem.LayerSetRsiState((uid, args.Sprite), SporeSacVisualLayers.Base, state);
     }
 }

@@ -70,13 +70,13 @@ public abstract partial class CMUSharedZLevelsSystem
             ent.Comp.FaintUp = false;
             DirtyField(ent, ent.Comp, nameof(CMUZLevelViewerComponent.LookUp));
             DirtyField(ent, ent.Comp, nameof(CMUZLevelViewerComponent.FaintUp));
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-disabled"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-disabled"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
         if (HasComp<XenoNestedComponent>(ent))
         {
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-nested"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-nested"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
@@ -86,14 +86,14 @@ public abstract partial class CMUSharedZLevelsSystem
             // and simply draws nothing while one is overhead, so the mode can stay latched while moving.
             ent.Comp.FaintUp = true;
             DirtyField(ent, ent.Comp, nameof(CMUZLevelViewerComponent.FaintUp));
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-faint-up-enabled"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-faint-up-enabled"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
         // Faint -> full look up (original gates apply; on failure we stay in faint mode).
         if (HasOpaqueAbove(ent))
         {
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
@@ -103,7 +103,7 @@ public abstract partial class CMUSharedZLevelsSystem
         var ev = new CMUZLevelLookUpEnabledEvent();
         RaiseLocalEvent(ent, ev);
 
-        _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-enabled"), ent, ent, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-enabled"), ent, ent, PopupType.SmallCaution);
     }
 
     public bool TryDisableLookUp(EntityUid uid)
@@ -116,6 +116,27 @@ public abstract partial class CMUSharedZLevelsSystem
 
         viewer.LookUp = false;
         DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.LookUp));
+        return true;
+    }
+
+    /// <summary>
+    /// CMU14: ends the whole look up cycle - full mode and the faint upper ghost - for a viewer whose level is changing
+    /// under it. The faint ghost is otherwise a latched preference the renderer suppresses under a ceiling, but a
+    /// crossing that the player did not ask for (a Yautja leap aimed with look up, arriving on another deck) must not
+    /// leave the upper level ghosted over the level they end up on.
+    /// </summary>
+    public bool EndLookUpCycle(EntityUid uid)
+    {
+        if (!TryComp<CMUZLevelViewerComponent>(uid, out var viewer) ||
+            (!viewer.LookUp && !viewer.FaintUp))
+        {
+            return false;
+        }
+
+        viewer.LookUp = false;
+        viewer.FaintUp = false;
+        DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.LookUp));
+        DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.FaintUp));
         return true;
     }
 
@@ -143,7 +164,8 @@ public abstract partial class CMUSharedZLevelsSystem
             !_map.TryFindGridAt(aboveMapCoordinates, out var gridUid, out var mapAboveGrid))
             return false;
 
-        return !CMUZLevelOpeningCache.IsOpeningTile(gridUid, mapAboveGrid, worldPosition, _map, TilDefMan);
+        return _map.TryGetTileRef(gridUid, mapAboveGrid, worldPosition, out var tileRef) &&
+               !CMUZLevelOpeningCache.CanLookUpThrough(tileRef.Tile, TilDefMan);
     }
 
     public bool HasZLevelEye(CMUZLevelViewerComponent viewer, EntityUid targetMap)
@@ -364,8 +386,15 @@ public abstract partial class CMUSharedZLevelsSystem
     /// True when a cross-z shot from <paramref name="from"/> to <paramref name="to"/> crosses no floor
     /// tiles on <paramref name="map"/>, including floors on child grids such as dropship cabins.
     /// </summary>
-    public bool IsZShotPathOpen(EntityUid map, Vector2 from, Vector2 to)
+    public bool IsZShotPathOpen(EntityUid map, Vector2 from, Vector2 to, EntityUid? supportingMap = null)
     {
+        // An empty upper tile can still be supported by a wall on the lower map. Such shots
+        // must use the opening search to clear the wall before creating the projectile below.
+        if (supportingMap is { } below &&
+            _map.TryFindGridAt(below, from, out var supportGrid, out var support) &&
+            HasWallAt(supportGrid, support, _map.WorldToTile(supportGrid, support, from)))
+            return false;
+
         if (_gridQuery.TryComp(map, out var mapGrid) && !IsGridPathOpen((map, mapGrid)))
             return false;
 

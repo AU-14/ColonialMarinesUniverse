@@ -205,3 +205,6 @@ cmu-reagent-property-name-duration = Duration
 cmu-reagent-property-desc-duration = Controls the duration of a fire, using unknown means.
 cmu-reagent-property-name-encephaloprasive = Encephaloprasive
 cmu-reagent-property-desc-encephaloprasive = Drastically increases the amplitude of Gamma and Beta brain waves, allowing the host to broadcast their mind.
+
+cmu-reagent-property-name-irritating = Irritating
+cmu-reagent-property-desc-irritating = Inflames mucous membranes on contact, causing coughing, tearing and temporary blindness. Blocked by gas masks and internals. The active ingredient of tear gas.

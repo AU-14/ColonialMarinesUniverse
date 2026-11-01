@@ -9,8 +9,8 @@ public sealed class CMUBracerInjectorTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false };
 
-    [TestCase("CMUYautjaStabilisingCrystal", "CMUMobYautja")]
-    [TestCase("CMUYautjaHumanStabilisingCrystal", "CMMobHuman")]
+    [TestCase("CMUYautjaAutoInjector", "CMUMobYautja")]
+    [TestCase("CMUYautjaThrallAutoInjector", "CMMobHuman")]
     public async Task FabricatedInjectorTransfersItsMedicine(string injectorPrototype, string patientPrototype)
     {
         var map = await Pair.CreateTestMap();

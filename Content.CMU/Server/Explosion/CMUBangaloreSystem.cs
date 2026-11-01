@@ -75,14 +75,14 @@ public sealed partial class CMUBangaloreSystem : EntitySystem
     {
         if (_container.IsEntityInContainer(user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-explosive-deploy-container", ("explosive", ent)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-explosive-deploy-container", ("explosive", ent)), user, user, PopupType.SmallCaution);
             return false;
         }
 
         var coordinates = _transform.GetMoverCoordinates(user);
         if (_rmcMap.IsTileBlocked(coordinates))
         {
-            _popup.PopupClient(Loc.GetString("cmu-bangalore-deploy-fail-blocked"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-bangalore-deploy-fail-blocked"), user, user, PopupType.SmallCaution);
             return false;
         }
 

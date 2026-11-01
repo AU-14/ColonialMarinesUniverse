@@ -24,9 +24,10 @@ namespace Content.Client.CMU14.Insurgency.Sapper;
 /// </summary>
 public sealed partial class SapperSnareVisualsSystem : EntitySystem
 {
-    [Dependency] private  IPlayerManager _player = default!;
-    [Dependency] private  SharedEyeSystem _eye = default!;
-    [Dependency] private  IOverlayManager _overlay = default!;
+    [Dependency] private SpriteSystem _sprites = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     public override void Initialize()
     {
@@ -53,13 +54,13 @@ public sealed partial class SapperSnareVisualsSystem : EntitySystem
     private void OnStartup(Entity<SapperSnaredComponent> ent, ref ComponentStartup args)
     {
         if (TryComp(ent, out SpriteComponent? sprite))
-            sprite.Rotation = ent.Comp.FlipAngle;
+            _sprites.SetRotation((ent, sprite), ent.Comp.FlipAngle);
     }
 
     private void OnShutdown(Entity<SapperSnaredComponent> ent, ref ComponentShutdown args)
     {
         if (TryComp(ent, out SpriteComponent? sprite))
-            sprite.Rotation = Angle.Zero;
+            _sprites.SetRotation((ent, sprite), Angle.Zero);
 
         // Snapping the eye back the instant the snare ends avoids a lingering upside-down frame.
         if (_player.LocalEntity == ent.Owner && TryComp(ent, out EyeComponent? eye))

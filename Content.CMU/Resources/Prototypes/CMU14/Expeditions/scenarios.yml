@@ -1,0 +1,239 @@
+# Named story presets. Terrain remains seed-driven; these are alternative incidents, not a campaign sequence.
+
+- type: cmuExpeditionScenario
+  id: CMUBlackwaterReach
+  profile: CMUExpeditionWoodland
+  landform: RiverValley
+  story: CrashRecovery
+  name: cmu-expedition-blackwater-name
+  history: cmu-expedition-blackwater-history
+  briefing: cmu-expedition-blackwater-briefing
+  targetLore: cmu-expedition-blackwater-target
+  orders: CMUBlackwaterReachOrders
+  fieldNote: CMUBlackwaterReachNote
+  recorder: CMUBlackwaterReachRecorder
+
+- type: entity
+  parent: CMPaper
+  id: CMUBlackwaterReachOrders
+  components:
+  - type: Paper
+    content: cmu-expedition-blackwater-orders
+
+- type: entity
+  parent: CMPaper
+  id: CMUBlackwaterReachNote
+  components:
+  - type: Paper
+    content: cmu-expedition-blackwater-note
+
+- type: entity
+  parent: RMCFlightRecorderProp
+  id: CMUBlackwaterReachRecorder
+  components:
+  - type: RMCLoreExaminable
+    content: cmu-expedition-blackwater-recording
+
+- type: cmuExpeditionScenario
+  id: CMUReedwakeBasin
+  profile: CMUExpeditionSwampJungle
+  landform: Wetlands
+  story: SurveyCamp
+  name: cmu-expedition-reedwake-name
+  history: cmu-expedition-reedwake-history
+  briefing: cmu-expedition-reedwake-briefing
+  targetLore: cmu-expedition-reedwake-target
+  orders: CMUReedwakeBasinOrders
+  fieldNote: CMUReedwakeBasinNote
+  recorder: CMUReedwakeBasinRecorder
+
+- type: entity
+  parent: CMPaper
+  id: CMUReedwakeBasinOrders
+  components:
+  - type: Paper
+    content: cmu-expedition-reedwake-orders
+
+- type: entity
+  parent: CMPaper
+  id: CMUReedwakeBasinNote
+  components:
+  - type: Paper
+    content: cmu-expedition-reedwake-note
+
+- type: entity
+  parent: RMCFlightRecorderProp
+  id: CMUReedwakeBasinRecorder
+  components:
+  - type: RMCLoreExaminable
+    content: cmu-expedition-reedwake-recording
+
+- type: cmuExpeditionScenario
+  id: CMUAshfallScar
+  profile: CMUExpeditionBurnedWoodland
+  landform: Ridgeline
+  story: CrashRecovery
+  name: cmu-expedition-ashfall-name
+  history: cmu-expedition-ashfall-history
+  briefing: cmu-expedition-ashfall-briefing
+  targetLore: cmu-expedition-ashfall-target
+  orders: CMUAshfallScarOrders
+  fieldNote: CMUAshfallScarNote
+  recorder: CMUAshfallScarRecorder
+
+- type: entity
+  parent: CMPaper
+  id: CMUAshfallScarOrders
+  components:
+  - type: Paper
+    content: cmu-expedition-ashfall-orders
+
+- type: entity
+  parent: CMPaper
+  id: CMUAshfallScarNote
+  components:
+  - type: Paper
+    content: cmu-expedition-ashfall-note
+
+- type: entity
+  parent: RMCFlightRecorderProp
+  id: CMUAshfallScarRecorder
+  components:
+  - type: RMCLoreExaminable
+    content: cmu-expedition-ashfall-recording
+
+- type: cmuExpeditionScenario
+  id: CMUWhiteoutShelf
+  profile: CMUExpeditionTundra
+  landform: Fjord
+  story: BrokenConvoy
+  name: cmu-expedition-whiteout-name
+  history: cmu-expedition-whiteout-history
+  briefing: cmu-expedition-whiteout-briefing
+  targetLore: cmu-expedition-whiteout-target
+  orders: CMUWhiteoutShelfOrders
+  fieldNote: CMUWhiteoutShelfNote
+  recorder: CMUWhiteoutShelfRecorder
+
+- type: entity
+  parent: CMPaper
+  id: CMUWhiteoutShelfOrders
+  components:
+  - type: Paper
+    content: cmu-expedition-whiteout-orders
+
+- type: entity
+  parent: CMPaper
+  id: CMUWhiteoutShelfNote
+  components:
+  - type: Paper
+    content: cmu-expedition-whiteout-note
+
+- type: entity
+  parent: RMCFlightRecorderProp
+  id: CMUWhiteoutShelfRecorder
+  components:
+  - type: RMCLoreExaminable
+    content: cmu-expedition-whiteout-recording
+
+- type: cmuExpeditionScenario
+  id: CMUGlasswaterStrand
+  profile: CMUExpeditionBeach
+  landform: Coast
+  story: CrashRecovery
+  name: cmu-expedition-glasswater-name
+  history: cmu-expedition-glasswater-history
+  briefing: cmu-expedition-glasswater-briefing
+  targetLore: cmu-expedition-glasswater-target
+  orders: CMUGlasswaterStrandOrders
+  fieldNote: CMUGlasswaterStrandNote
+  recorder: CMUGlasswaterStrandRecorder
+
+- type: entity
+  parent: CMPaper
+  id: CMUGlasswaterStrandOrders
+  components:
+  - type: Paper
+    content: cmu-expedition-glasswater-orders
+
+- type: entity
+  parent: CMPaper
+  id: CMUGlasswaterStrandNote
+  components:
+  - type: Paper
+    content: cmu-expedition-glasswater-note
+
+- type: entity
+  parent: RMCFlightRecorderProp
+  id: CMUGlasswaterStrandRecorder
+  components:
+  - type: RMCLoreExaminable
+    content: cmu-expedition-glasswater-recording
+
+- type: cmuExpeditionScenario
+  id: CMUCairnPass
+  profile: CMUExpeditionMountain
+  landform: Highlands
+  story: BrokenConvoy
+  name: cmu-expedition-cairn-name
+  history: cmu-expedition-cairn-history
+  briefing: cmu-expedition-cairn-briefing
+  targetLore: cmu-expedition-cairn-target
+  orders: CMUCairnPassOrders
+  fieldNote: CMUCairnPassNote
+  recorder: CMUCairnPassRecorder
+
+- type: entity
+  parent: CMPaper
+  id: CMUCairnPassOrders
+  components:
+  - type: Paper
+    content: cmu-expedition-cairn-orders
+
+- type: entity
+  parent: CMPaper
+  id: CMUCairnPassNote
+  components:
+  - type: Paper
+    content: cmu-expedition-cairn-note
+
+- type: entity
+  parent: RMCFlightRecorderProp
+  id: CMUCairnPassRecorder
+  components:
+  - type: RMCLoreExaminable
+    content: cmu-expedition-cairn-recording
+
+- type: cmuExpeditionScenario
+  id: CMUHollowSignal
+  profile: CMUExpeditionWoodland
+  landform: LakeCountry
+  story: LostRelay
+  name: cmu-expedition-hollow-name
+  history: cmu-expedition-hollow-history
+  briefing: cmu-expedition-hollow-briefing
+  targetLore: cmu-expedition-hollow-target
+  orders: CMUHollowSignalOrders
+  fieldNote: CMUHollowSignalNote
+  recorder: CMUHollowSignalRecorder
+
+- type: entity
+  parent: CMPaper
+  id: CMUHollowSignalOrders
+  components:
+  - type: Paper
+    content: cmu-expedition-hollow-orders
+
+- type: entity
+  parent: CMPaper
+  id: CMUHollowSignalNote
+  components:
+  - type: Paper
+    content: cmu-expedition-hollow-note
+
+- type: entity
+  parent: RMCFlightRecorderProp
+  id: CMUHollowSignalRecorder
+  components:
+  - type: RMCLoreExaminable
+    content: cmu-expedition-hollow-recording

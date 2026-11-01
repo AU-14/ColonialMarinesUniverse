@@ -7,7 +7,7 @@ using Content.Shared.Weapons.Melee.Events;
 namespace Content.Shared.CMU14.Yautja;
 
 /// <summary>Adds a direct xeno stun to the prod's existing charged stamina hit.</summary>
-public sealed class CMUCattleProdSystem : EntitySystem
+public sealed partial class CMUCattleProdSystem : EntitySystem
 {
     [Dependency] private SharedStunSystem _stun = default!;
 

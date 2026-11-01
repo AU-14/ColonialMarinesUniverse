@@ -27,6 +27,8 @@
         RMCSkillPowerLoader: 2
         RMCSkillSurgery: 1
         RMCSkillVehicles: 1
+  # leadership alone grants nothing, the order actions only come from this comp
+  - type: MarineOrders
   - type: JobPrefix
     prefix: au-14-job-prefix-rmcrrt-commander
   - type: Language

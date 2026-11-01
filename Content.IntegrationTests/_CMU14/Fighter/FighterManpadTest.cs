@@ -48,7 +48,7 @@ public sealed class FighterManpadTest : GameTest
         await Server.WaitAssertion(() =>
         {
             _terrain = Server.Transform(map.GridCoords.EntityId).MapUid!.Value;
-            _origin = Server.Transform(map.GridCoords.EntityId).WorldPosition;
+            _origin = SEntMan.System<SharedTransformSystem>().GetWorldPosition(map.GridCoords.EntityId);
             // The operator stands outside the small test grid. Use breathable battlefield air
             // so the longer scenarios exercise aiming rather than vacuum exposure.
             var atmosphere = new GasMixture(2500) { Temperature = 293.15f };
@@ -144,7 +144,7 @@ public sealed class FighterManpadTest : GameTest
         foreach (var user in _operators)
             if (SEntMan.EntityExists(user)) SEntMan.DeleteEntity(user);
         _operators.Clear();
-        foreach (var visual in SEntMan.EntityQuery<FighterManpadVisualComponent>().ToArray())
+        foreach (var visual in SEntMan.QueryEntities<FighterManpadVisualComponent>().ToArray())
             SEntMan.DeleteEntity(visual.Owner);
     }
 
@@ -518,17 +518,17 @@ public sealed class FighterManpadTest : GameTest
             Assert.That(_combat.CoveredSectors, Is.Empty, "No coverage selection is required.");
             Assert.That(_combat.IncomingDirection.Length(), Is.EqualTo(1).Within(.001));
             Assert.That(_combat.IncomingAt - _combat.IncomingStartedAt, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            var visuals = SEntMan.EntityQuery<FighterManpadVisualComponent>().ToArray();
+            var visuals = SEntMan.QueryEntities<FighterManpadVisualComponent>().ToArray();
             Assert.That(visuals, Has.Length.EqualTo(1));
-            Assert.That(visuals[0].Launched, Is.True);
-            Assert.That(visuals[0].Direction, Is.EqualTo(-_combat.IncomingDirection));
-            Assert.That(visuals[0].ExpiresAt - visuals[0].StartedAt, Is.EqualTo(TimeSpan.FromSeconds(8)));
+            Assert.That(visuals[0].Comp.Launched, Is.True);
+            Assert.That(visuals[0].Comp.Direction, Is.EqualTo(-_combat.IncomingDirection));
+            Assert.That(visuals[0].Comp.ExpiresAt - visuals[0].Comp.StartedAt, Is.EqualTo(TimeSpan.FromSeconds(8)));
             Assert.That(SEntMan.HasComponent<TimedDespawnComponent>(visuals[0].Owner), Is.True);
             var transforms = SEntMan.System<SharedTransformSystem>();
             var muzzle = transforms.GetWorldPosition(visuals[0].Owner) - transforms.GetWorldPosition(_operator);
             Assert.That(muzzle.Length(), Is.InRange(.2f, .6f), "Ignition belongs on the shoulder tube, not the operator's feet.");
             Assert.That(muzzle.Y, Is.GreaterThan(.1f), "The north/south tube ends are drawn above the hands, even when facing south.");
-            Assert.That(visuals[0].TubeDirection, Is.EqualTo(facing.ToVec()), "Backblast must still follow the operator's facing.");
+            Assert.That(visuals[0].Comp.TubeDirection, Is.EqualTo(facing.ToVec()), "Backblast must still follow the operator's facing.");
             Assert.That(_manpad.ReadyAt - _combat.IncomingStartedAt, Is.EqualTo(TimeSpan.FromSeconds(15)));
             CleanWorld();
         });
@@ -576,7 +576,7 @@ public sealed class FighterManpadTest : GameTest
             {
                 Assert.That(_combat.Incoming, Is.False, reason);
                 Assert.That(_manpad.ReadyAt, Is.EqualTo(TimeSpan.Zero), reason);
-                Assert.That(SEntMan.EntityQuery<FighterManpadVisualComponent>(), Is.Empty, reason);
+                Assert.That(SEntMan.QueryEntities<FighterManpadVisualComponent>(), Is.Empty, reason);
             });
         }
         await Server.WaitPost(() => { SEntMan.DeleteEntity(box); CleanWorld(); });
@@ -678,7 +678,7 @@ public sealed class FighterManpadTest : GameTest
         await Advance(8.2);
         await Server.WaitAssertion(() =>
         {
-            Assert.That(SEntMan.EntityQuery<FighterManpadVisualComponent>(), Is.Empty, "Finished exhaust effects must despawn.");
+            Assert.That(SEntMan.QueryEntities<FighterManpadVisualComponent>(), Is.Empty, "Finished exhaust effects must despawn.");
             CleanWorld();
         });
     }

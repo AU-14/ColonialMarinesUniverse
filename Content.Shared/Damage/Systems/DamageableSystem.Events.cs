@@ -362,7 +362,9 @@ public record struct DamageDealtEvent(
     public DamageSpecifier? AppliedDamage;
 }
 
-[Obsolete("Will be replaced with damage-model specific events; general 'took damage' can be served by DamageDealtEvent")]
+// CMU14: this post-change event also reports healing, direct damage assignments, and body-damage projection.
+// DamageDealtEvent is the injury request and cannot replace those notifications.
+// [Obsolete("Will be replaced with damage-model specific events; general 'took damage' can be served by DamageDealtEvent")]
 public sealed class DamageChangedEvent : EntityEventArgs
 {
     /// <summary>

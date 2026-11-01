@@ -1,4 +1,5 @@
 using Content.Shared.Damage;
+using Content.Shared.CMU14.Xenos.Despoiler; // CMU14
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
@@ -17,6 +18,9 @@ public sealed partial class XenoDespoilerComponent : Component
     [DataField]
     public List<DamageSpecifier> FinishingStabBonusByTier = new();
 
+    // CMU14: each application selects its actual damage and duration tier.
+    // [DataField]
+    // public ComponentRegistry AcidComponents = new();
     [DataField]
-    public ComponentRegistry AcidComponents = new();
+    public List<CMULingeringAcidData> AcidTiers = new();
 }

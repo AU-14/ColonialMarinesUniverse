@@ -1,0 +1,28 @@
+# Respirator given to humans while they're on a map with CMUBreathingRequiredMap (see CMUMapBreathingSystem).
+# Same settings as the respirator disabled in RMC's species base.
+- type: entity
+  id: CMUMapRespiratorTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Respirator
+    damage:
+      types:
+        Asphyxiation: 1.0
+    damageRecovery:
+      types:
+        Asphyxiation: -1.0
+
+# Pressure damage given to humans while they're on a map with CMUPressureRequiredMap (see CMUMapBreathingSystem).
+# Kept light and cinematic: vacuum (which multiplies this by 4) does about 0.4 damage a second, and pressure alone stops
+# at 80 total, so it bruises and burns you while you scramble for air but never kills on its own. Suffocation is what
+# finishes off someone left out in space.
+- type: entity
+  id: CMUMapBarotraumaTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Barotrauma
+    maxDamage: 80
+    damage:
+      types:
+        Blunt: 0.075
+        Heat: 0.025

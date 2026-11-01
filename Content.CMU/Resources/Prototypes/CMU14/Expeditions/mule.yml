@@ -1,0 +1,40 @@
+# Inert set dressing for the original MULE lander layout. RSIs retain their original licenses.
+- type: entity
+  parent: CMUExpeditionSupply
+  id: CMUExpeditionMuleFlightConsole
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/dropship_nav_computer.rsi
+    state: broken
+    noRot: false
+    color: "#B2A99C"
+
+- type: entity
+  parent: CMUExpeditionSupply
+  id: CMUExpeditionMulePowerRack
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: powerb
+    noRot: false
+    color: "#9D958A"
+
+- type: entity
+  parent: CMUExpeditionSupply
+  id: CMUExpeditionMuleCargo
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/construction.rsi
+    state: icon
+    noRot: false
+    color: "#A69B87"
+
+- type: entity
+  parent: CMUExpeditionSupply
+  id: CMUExpeditionMuleToolCase
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/casedouble.rsi
+    state: base
+    noRot: false
+    color: "#979185"

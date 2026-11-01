@@ -51,27 +51,27 @@ public sealed partial class XenoRetrieveSystem : EntitySystem
         if (!_hive.FromSameHive(xeno.Owner, target))
         {
             var msg = Loc.GetString("rmc-xeno-not-same-hive");
-            _popup.PopupClient(msg, xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
         if (xeno.Owner == target)
         {
             var msg = Loc.GetString("rmc-xeno-retrieve-self");
-            _popup.PopupClient(msg, xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
         if (_mobState.IsDead(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-retrieve-dead", ("target", target)), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-retrieve-dead", ("target", target)), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
         if (Transform(target).Anchored)
         {
             var msg = Loc.GetString("rmc-xeno-retrieve-anchored");
-            _popup.PopupClient(msg, xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -82,14 +82,14 @@ public sealed partial class XenoRetrieveSystem : EntitySystem
             !_standing.IsDown(target))
         {
             var msg = Loc.GetString("rmc-xeno-retrieve-too-big", ("target", target));
-            _popup.PopupClient(msg, xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
         if (!_interaction.InRangeUnobstructed(xeno.Owner, target, xeno.Comp.Range, CollisionGroup.Impassable))
         {
             var msg = Loc.GetString("rmc-xeno-retrieve-blocked", ("target", target));
-            _popup.PopupClient(msg, xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -106,7 +106,7 @@ public sealed partial class XenoRetrieveSystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-xeno-retrieve-start-self", ("target", target));
             var othersMsg = Loc.GetString("rmc-xeno-retrieve-start-others", ("user", xeno), ("target", target));
-            _popup.PopupPredicted(selfMsg, othersMsg, xeno, xeno);
+            _popup.PopupEntity(selfMsg, othersMsg, xeno, xeno);
 
             foreach (var visual in xeno.Comp.Visuals)
             {
@@ -145,7 +145,7 @@ public sealed partial class XenoRetrieveSystem : EntitySystem
         if (!_interaction.InRangeUnobstructed(xeno.Owner, target, xeno.Comp.Range, CollisionGroup.Impassable))
         {
             var msg = Loc.GetString("rmc-xeno-retrieve-blocked", ("target", target));
-            _popup.PopupClient(msg, xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -180,7 +180,7 @@ public sealed partial class XenoRetrieveSystem : EntitySystem
 
         var selfMsg = Loc.GetString("rmc-xeno-retrieve-finish-user", ("target", target));
         var othersMsg = Loc.GetString("rmc-xeno-retrieve-finish-others", ("user", xeno), ("target", target));
-        _popup.PopupPredicted(selfMsg, othersMsg, xeno, xeno);
+        _popup.PopupEntity(selfMsg, othersMsg, xeno, xeno);
         _audio.PlayPredicted(xeno.Comp.Sound, xeno, xeno);
     }
 

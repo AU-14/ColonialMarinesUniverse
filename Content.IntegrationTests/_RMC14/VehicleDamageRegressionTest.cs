@@ -77,7 +77,6 @@ public sealed class VehicleDamageRegressionTest : GameTest
                 startingItem: VehicleDamageRegressionModule
         """;
 
-    [TestCase("CMBarricadeMetalDoor")]
     [TestCase("WallXenoResin")]
     [TestCase("DoorXenoResin")]
     [TestCase("AU14TallFloodlight")]
@@ -123,6 +122,40 @@ public sealed class VehicleDamageRegressionTest : GameTest
         await Server.WaitRunTicks(1);
         await Server.WaitAssertion(() => Assert.That(SEntMan.Deleted(obstacle), Is.True,
             "the obstacle must actually break instead of remaining under the vehicle"));
+    }
+
+    // CMU14: bug 601, rolling over crates and cades is free, they still break.
+    [TestCase("CMBarricadeMetalDoor")]
+    [TestCase("RMCCrateLarge")]
+    public async Task HeavyVehicleCrushesCadesAndCratesWithoutSelfDamage(string obstaclePrototype)
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid obstacle = default;
+        await Server.WaitAssertion(() =>
+        {
+            var vehicle = SEntMan.SpawnEntity("VehicleDamageRegressionChassis", map.GridCoords);
+            obstacle = SEntMan.SpawnEntity(obstaclePrototype, map.GridCoords.Offset(new Vector2(0.5f, 0)));
+            var mover = SEntMan.GetComponent<GridVehicleMoverComponent>(vehicle);
+            mover.CurrentSpeed = 2f;
+            var grid = SEntMan.GetComponent<TransformComponent>(vehicle).GridUid!.Value;
+            var position = SEntMan.GetComponent<TransformComponent>(vehicle).LocalPosition;
+            var collision = typeof(GridVehicleMoverSystem).GetMethod("CanOccupyTransform", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            var system = SEntMan.System<GridVehicleMoverSystem>();
+            var modules = SEntMan.System<VehicleTopologySystem>().GetMountedSlots(vehicle)
+                .Select(slot => slot.Item!.Value).ToArray();
+
+            for (var i = 0; i < 20; i++)
+            {
+                collision.Invoke(system,
+                    [vehicle, mover, grid, position, Angle.Zero, 0f, true, false, null, null, null, null]);
+            }
+
+            foreach (var module in modules)
+                Assert.That(SEntMan.GetComponent<HardpointIntegrityComponent>(module).Integrity, Is.EqualTo(100f));
+        });
+        await Server.WaitRunTicks(1);
+        await Server.WaitAssertion(() => Assert.That(SEntMan.Deleted(obstacle), Is.True,
+            "the obstacle must still break under the vehicle"));
     }
 
     [Test]

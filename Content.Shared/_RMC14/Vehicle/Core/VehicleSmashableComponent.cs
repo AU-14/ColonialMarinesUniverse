@@ -1,3 +1,4 @@
+using Content.Shared.Vehicle.Components;
 using System;
 using Content.Shared.Tag;
 using Robust.Shared.Audio;
@@ -26,6 +27,15 @@ public sealed partial class VehicleSmashableComponent : Component
 
     [DataField]
     public bool RequiresDoorUnpowered;
+
+    [DataField]
+    public VehicleWeightClass? MinDestroyWeightClass;
+
+    [DataField]
+    public VehicleWeightClass? MinContinueWeightClass;
+
+    [DataField]
+    public VehicleWeightClass? SlowdownBelowWeightClass;
 
     /// <summary>
     /// Multiplier applied to the smashing vehicle's own wheel/hull damage when it plows

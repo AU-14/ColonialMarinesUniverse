@@ -7,6 +7,8 @@
   crates:
   - AU14CrateFOBTentCrate
   - RMCCrateMortarKit
+  - CMUCrateCargoCarrier
+  - CMUCrateATGM # One free FOGO-ATGM kit, shipped like the mortar; requisition vendors no longer hand one out.
 
 - type: cmuRequisitionsRoundStartFreeCrate
   id: CMURequisitionsRoundStartFreeCrateOpfor
@@ -16,3 +18,5 @@
   crates:
   - AU14CrateFOBTentCrate
   - AU14CrateMortarKitRMC
+  - CMUCrateCargoCarrier
+  - CMUCrateATGM # Force-on-Force OPFOR starts with one FOGO-ATGM kit too, keeping the sides even.

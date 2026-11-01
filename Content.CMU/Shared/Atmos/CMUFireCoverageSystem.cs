@@ -11,9 +11,9 @@ namespace Content.Shared.CMU14.Atmos;
 /// holds no item with fire protection or ignition resistance, the suit's ignition
 /// immunity is voided and part of its burn reduction is given back.
 /// </summary>
-public sealed class CMUFireCoverageSystem : EntitySystem
+public sealed partial class CMUFireCoverageSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     public override void Initialize()
     {

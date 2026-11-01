@@ -43,6 +43,7 @@
         whitelist:
           tags:
           - Stunbaton
+          - CMUAttachmentNightVisionScope # CMU14
           components:
           - PowerCell
           - BatteryAmmoProvider

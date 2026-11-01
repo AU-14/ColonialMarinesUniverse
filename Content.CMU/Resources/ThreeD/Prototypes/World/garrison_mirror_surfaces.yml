@@ -1,0 +1,8 @@
+- type: cmu3DSurface
+  id: CMU3DRectangularWallMirrorFace
+  atlasIndex: 681
+  texture: /Textures/CMU14/ThreeD/MirrorFaces/CMU3DRectangularWallMirrorFace.png
+- type: cmu3DSurface
+  id: CMU3DOvalWallMirrorFace
+  atlasIndex: 682
+  texture: /Textures/CMU14/ThreeD/MirrorFaces/CMU3DOvalWallMirrorFace.png

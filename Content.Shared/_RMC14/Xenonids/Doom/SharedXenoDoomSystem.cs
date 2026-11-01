@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Coordinates;
@@ -28,6 +29,7 @@ public abstract partial class SharedXenoDoomSystem : EntitySystem
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private RMCDazedSystem _daze = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
@@ -143,7 +145,8 @@ public abstract partial class SharedXenoDoomSystem : EntitySystem
 
             _status.TryAddStatusEffect<RMCBlindedComponent>(mob, "Blinded", xeno.Comp.DazeTime, true);
             _daze.TryDaze(mob, xeno.Comp.DazeTime);
-            _slow.TrySuperSlowdown(mob, xeno.Comp.SlowTime, ignoreDurationModifier: true);
+            if (!_yautjaSlow.TryApply(mob, xeno.Comp.YautjaSlow)) // CMU14
+                _slow.TrySuperSlowdown(mob, xeno.Comp.SlowTime, ignoreDurationModifier: true);
 
             if (!_solution.TryGetSolution(mob.Owner, xeno.Comp.TargetSolution, out var solEnt, out var solu))
             {

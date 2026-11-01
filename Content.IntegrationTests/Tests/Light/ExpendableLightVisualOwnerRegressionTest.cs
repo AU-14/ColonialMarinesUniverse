@@ -48,7 +48,9 @@ public sealed class ExpendableLightVisualOwnerRegressionTest : GameTest
 
             AssertAirFlare("RMCAirFlare", hasSprite: false, hasAppearance: true, behaviorRunning: true, lightEnabled: true);
             AssertAirFlare("RMCAirFlareCAS", hasSprite: true, hasAppearance: true, behaviorRunning: true, lightEnabled: true);
-            AssertAirFlare("RMCAirFlareL96", hasSprite: true, hasAppearance: false, behaviorRunning: false, lightEnabled: true);
+            // cmu edit start: the flare rework (RMC-14#9465) makes the L96 air flare a normal air flare
+            AssertAirFlare("RMCAirFlareL96", hasSprite: true, hasAppearance: true, behaviorRunning: true, lightEnabled: true);
+            // cmu edit end
 
             void AssertAirFlare(
                 string prototype,

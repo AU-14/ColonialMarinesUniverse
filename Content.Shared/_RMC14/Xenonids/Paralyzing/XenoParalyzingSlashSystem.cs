@@ -48,7 +48,7 @@ public sealed partial class XenoParalyzingSlashSystem : EntitySystem
 
         Dirty(xeno, active);
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-paralyzing-slash-activate"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-paralyzing-slash-activate"), xeno, xeno);
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoParalyzingSlashActionEvent>(xeno))
         {
             _actions.SetToggled(action.AsNullable(), true);

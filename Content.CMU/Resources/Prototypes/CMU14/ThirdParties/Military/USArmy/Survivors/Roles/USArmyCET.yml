@@ -22,7 +22,7 @@
   - type: JobPrefix
     prefix: au14-job-prefix-usarmy-cet
 
-  name: au14-job-name-usarmy-cet
+  name: cmu-job-title-usarmy-cet
   description: au14-job-description-usarmy
   ranks:
     RMCRankCivilian: []

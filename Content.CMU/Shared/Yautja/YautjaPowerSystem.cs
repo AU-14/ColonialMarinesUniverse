@@ -131,15 +131,23 @@ public sealed partial class YautjaPowerSystem : EntitySystem
 
         AddAction(ent.Comp, ref args, ref ent.Comp.OpenBracerMenuAction, ent.Comp.OpenBracerMenuActionId);
         AddAction(ent.Comp, ref args, ref ent.Comp.ToggleCloakAction, ent.Comp.ToggleCloakActionId);
-        AddAction(ent.Comp, ref args, ref ent.Comp.RecallAction, ent.Comp.RecallActionId);
-        AddAction(ent.Comp, ref args, ref ent.Comp.CreateFieldRationAction, ent.Comp.CreateFieldRationActionId);
-        AddAction(ent.Comp, ref args, ref ent.Comp.CreateHuntingCanteenAction, ent.Comp.CreateHuntingCanteenActionId);
+
+        // CMU14: CM-SS13's /obj/item/clothing/gloves/yautja/hunter/equipped() does
+        // "for(var/datum/action/action in bracer_actions) give_action(user, action)" with no species check,
+        // so whoever wears the bracer gets the whole intrinsic set; the permissions live on use
+        // (check_random_function / the tech-trait gates), not on the button existing.
+        AddAction(ent.Comp, ref args, ref ent.Comp.SelfDestructAction, ent.Comp.SelfDestructActionId);
+        AddAction(ent.Comp, ref args, ref ent.Comp.TranslatorAction, ent.Comp.TranslatorActionId);
+        // CMU14: the hunter bracer's bracer_actions list also carries
+        // /datum/action/predator_action/bracer/smartdisc ("Recall nearby smart-discs", yaut_bracers.dm:303),
+        // which equipped() hands to any wearer. The action id existed but was never granted here, so the
+        // random-function case that calls call_disc_internal (yaut_bracers.dm:437) invoked a function the
+        // wearer had no button for. AddAction still honours ActionWhitelist, so variants that omit the
+        // smart disc (cf. mcaste_items.dm:8) stay without it.
+        AddAction(ent.Comp, ref args, ref ent.Comp.CallDiscAction, ent.Comp.CallDiscActionId);
 
         if (ent.Comp.EnableRaiseThrall)
             AddAction(ent.Comp, ref args, ref ent.Comp.RaiseThrallAction, ent.Comp.RaiseThrallActionId);
-
-        if (HasComp<YautjaYoungbloodComponent>(args.User))
-            AddAction(ent.Comp, ref args, ref ent.Comp.TranslatorAction, ent.Comp.TranslatorActionId);
     }
 
     private static void AddAction(
@@ -281,7 +289,7 @@ public sealed partial class YautjaPowerSystem : EntitySystem
 
         if (action.Comp.RequireMask && !HasActiveMask(args.User))
         {
-            _popup.PopupClient(Loc.GetString("cmu-yautja-mask-required"), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-mask-required"), args.User, args.User, PopupType.SmallCaution);
             args.Cancelled = true;
             return;
         }
@@ -461,7 +469,7 @@ public sealed partial class YautjaPowerSystem : EntitySystem
     {
         if (_net.IsClient || !popupOnServer)
         {
-            _popup.PopupClient(message, user, user, PopupType.MediumCaution);
+            _popup.PopupEntity(message, user, user, PopupType.MediumCaution);
             return;
         }
 

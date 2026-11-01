@@ -20,7 +20,9 @@ public sealed partial class GasTankComponent : GasMaxPressureHolderComponent
         };
 
     [DataField]
-    public SoundSpecifier? DisconnectSound;
+    // cmu edit start
+    public SoundSpecifier? DisconnectSound = new SoundPathSpecifier("/Audio/CMU14/Machines/internals_close.ogg");
+    // cmu edit end
 
     // Cancel toggles sounds if we re-toggle again.
 

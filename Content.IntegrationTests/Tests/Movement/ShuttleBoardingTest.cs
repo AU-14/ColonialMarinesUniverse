@@ -24,7 +24,7 @@ namespace Content.IntegrationTests.Tests.Movement;
 public sealed class ShuttleBoardingTest : InteractionTest
 {
     protected override string PlayerPrototype => "CMMobHuman";
-    protected override ResPath? TestMapPath => new("/Maps/CMU14/Shuttles/alamo.yml");
+    protected override ResPath? TestMapPath => new("/Maps/CMU14/Dropships/alamo.yml");
 
     [TestCase(true, false)]
     [TestCase(false, false)]
@@ -89,7 +89,7 @@ public sealed class ShuttleBoardingTest : InteractionTest
                 Server.System<ShuttleSystem>().Disable(MapData.Grid.Owner);
             if (tileMovement)
                 SEntMan.EnsureComponent<CMUTileMovementComponent>(SPlayer);
-            foreach (var door in SEntMan.EntityQuery<DoorComponent>())
+            foreach (var door in SEntMan.QueryEntities<DoorComponent>())
             {
                 if (SEntMan.GetComponent<TransformComponent>(door.Owner).GridUid == MapData.Grid.Owner)
                     Server.System<SharedDoorSystem>().StartOpening(door.Owner, door);

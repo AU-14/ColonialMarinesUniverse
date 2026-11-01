@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Content.Client.CMU14.Overlays; // CMU14: retain recently visible HUD entries across cache overflow.
 using Content.Shared.CMU14.ForceOnForce;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.CrashLand;
@@ -71,7 +72,7 @@ public sealed partial class MarineOverlay : Overlay
     private readonly EntityQuery<CrashLandingComponent> _crashLandingQuery;
     // CMU14: faction gameplay fixes.
     private readonly EntityQuery<MobStateComponent> _mobStateQuery;
-    private readonly Dictionary<EntityUid, CachedMarineIcon> _marineIconCache = new();
+    private readonly CMUOverlayCache<EntityUid, CachedMarineIcon> _marineIconCache = new(512); // CMU14: bounded per-entry eviction.
     private readonly Dictionary<SpriteSpecifier, Texture> _textureCache = new();
     private readonly HashSet<Entity<MarineComponent>> _marineCandidates = new();
 
@@ -319,11 +320,9 @@ public sealed partial class MarineOverlay : Overlay
 
         if (cached is null)
         {
-            if (_marineIconCache.Count > 512)
-                _marineIconCache.Clear();
-
+            // CMU14: evict one least-recently-used entity instead of invalidating the whole crowd.
             cached = new CachedMarineIcon();
-            _marineIconCache[uid] = cached;
+            _marineIconCache.Set(uid, cached);
         }
 
         cached.Expires = now + MarineIconCacheLifetime;

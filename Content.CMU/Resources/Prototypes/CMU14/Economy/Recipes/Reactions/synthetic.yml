@@ -1,0 +1,84 @@
+# synth blood ("milkblood"): water + latex + silicone oil + glycol, surfactant keeps it mixed, inhibitor
+# stops it eating the plumbing. all dispenser stock, and none of these mixes collide with existing recipes
+
+# dimethyldichlorosilane, hydrolysed straight to PDMS in one step
+- type: reaction
+  id: CMUSiliconeOil
+  reactants:
+    RMCSilicon:
+      amount: 1
+    RMCChlorine:
+      amount: 1
+    RMCMethane:
+      amount: 1
+    Water:
+      amount: 1
+  products:
+    CMUSiliconeOil: 4
+
+- type: reaction
+  id: CMUGlycol
+  reactants:
+    RMCEthanol:
+      amount: 1
+    RMCOxygen:
+      amount: 1
+  products:
+    CMUGlycol: 2
+
+# ammonia-stabilised, sulfur-vulcanised
+- type: reaction
+  id: CMUSyntheticLatex
+  reactants:
+    RMCMethane:
+      amount: 1
+    RMCSulfur:
+      amount: 1
+    CMUAmmonia:
+      amount: 1
+  products:
+    CMUSyntheticLatex: 3
+
+# sodium alkyl sulfate, basically soap
+- type: reaction
+  id: CMUSurfactant
+  reactants:
+    RMCSodium:
+      amount: 1
+    RMCSulphuricAcid:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+  products:
+    CMUSurfactant: 3
+
+# sodium phosphate
+- type: reaction
+  id: CMUCorrosionInhibitor
+  reactants:
+    RMCSodium:
+      amount: 1
+    RMCPhosphorus:
+      amount: 1
+    RMCOxygen:
+      amount: 1
+  products:
+    CMUCorrosionInhibitor: 3
+
+- type: reaction
+  id: CMUSynthBlood
+  reactants:
+    Water:
+      amount: 3
+    CMUSyntheticLatex:
+      amount: 2
+    CMUSiliconeOil:
+      amount: 2
+    CMUGlycol:
+      amount: 1
+    CMUSurfactant:
+      amount: 1
+    CMUCorrosionInhibitor:
+      amount: 1
+  products:
+    RMCSynthBlood: 10

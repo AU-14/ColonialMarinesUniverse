@@ -1,0 +1,665 @@
+# The songs from the old AU-14 cassettes (Cassettes/aucasettes.yml).
+
+# Blue stripe cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteBlueStripeBeastie
+  name: Beastie
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/BlueStripe/Beastie.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteBlueStripeBells
+  name: Bells
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/BlueStripe/Bells.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteBlueStripeJump
+  name: Jump
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/BlueStripe/Jump.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteBlueStripeMessage
+  name: Message
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/BlueStripe/Message.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteBlueStripeNoJoke
+  name: No Joke
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/BlueStripe/NoJoke.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteBlueStripeTricky
+  name: Tricky
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/BlueStripe/Tricky.ogg
+
+# CLF cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteCLFBlues
+  name: Merle Haggard & The Strangers - Workin' Man Blues
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/CLF/blues.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteCLFCopper
+  name: Steve Earle - Copperhead Road
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/CLF/copper.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteCLFHard
+  name: Emmylou Harris - Hard Times Come Again No More
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/CLF/hard.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteCLFPrison
+  name: Johnny Cash - Folsom Prison Blues
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/CLF/prison.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteCLFTans
+  name: The Wolfe Tones - Come Out Ye Black and Tans
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/CLF/tans.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteCLFTons
+  name: Tennessee Ernie Ford - Sixteen Tons
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/CLF/tons.ogg
+
+# Red dirt cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteFlamingBroken
+  name: Rascal Flatts - Bless the Broken Road
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Flaming/broken.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteFlamingCheat
+  name: Carrie Underwood - Before He Cheats
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Flaming/cheat.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteFlamingDirt
+  name: Brooks & Dunn - Red Dirt Road
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Flaming/dirt.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteFlamingHorse
+  name: Big & Rich - Save a Horse (Ride a Cowboy)
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Flaming/horse.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteFlamingSun
+  name: Kenny Chesney - When the Sun Goes Down
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Flaming/sun.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteFlamingYou
+  name: Keith Urban - Somebody Like You
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Flaming/you.ogg
+
+# Purple cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteGalaxyCloser
+  name: Closer
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Galaxy/Closer.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteGalaxyDrive
+  name: Drive
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Galaxy/Drive.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteGalaxyGet
+  name: Get
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Galaxy/Get.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteGalaxyLove
+  name: Love
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Galaxy/Love.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteGalaxySky
+  name: Sky
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Galaxy/Sky.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteGalaxySouthern
+  name: Southern
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Galaxy/Southern.ogg
+
+# Green cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteGreenConfusion
+  name: The Temptations - Ball of Confusion
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Green/confusion.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteGreenFree
+  name: Free
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Green/free.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteGreenParanoid
+  name: Paranoid
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Green/paranoid.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteGreenTide
+  name: The Outlaws - Green Grass and High Tides
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Green/tide.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteGreenWorld
+  name: Ten Years After - I'd Love to Change the World
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Green/world.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteGreenWorth
+  name: Buffalo Springfield - For What It's Worth
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Green/worth.ogg
+
+# Neon cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteNeonAfter
+  name: After
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Neon/After.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteNeonCop
+  name: Cop
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Neon/Cop.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteNeonHuman
+  name: Human
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Neon/Human.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteNeonRunning
+  name: Running
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Neon/Running.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteNeonShame
+  name: Shame
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Neon/Shame.ogg
+
+# Ocean cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteOceanAround
+  name: The Beach Boys - I Get Around
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Ocean/around.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteOceanBird
+  name: The Trashmen - Surfin' Bird
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Ocean/bird.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteOceanCity
+  name: Jan & Dean - Surf City
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Ocean/city.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteOceanKoko
+  name: The Beach Boys - Kokomo
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Ocean/koko.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteOceanMoto
+  name: The Belairs - Mr. Moto
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Ocean/moto.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteOceanNice
+  name: The Beach Boys - Wouldn't It Be Nice
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Ocean/nice.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteOceanSurf
+  name: Surf
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Ocean/surf.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteOceanWipe
+  name: The Surfaris - Wipe Out
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Ocean/wipe.ogg
+
+# UPP cassette
+
+- type: jukebox
+  id: CMUJukeboxCassettePartyApprovedAfghan
+  name: Afghan
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/PartyApproved/Afghan.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassettePartyApprovedAporah
+  name: Aporah
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/PartyApproved/Aporah.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassettePartyApprovedCaravan
+  name: Caravan
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/PartyApproved/Caravan.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassettePartyApprovedDushman
+  name: Dushman
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/PartyApproved/Dushman.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassettePartyApprovedLady
+  name: Lady
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/PartyApproved/Lady.ogg
+
+# Pink striped cassette
+
+- type: jukebox
+  id: CMUJukeboxCassettePinkBeat
+  name: Michael Jackson - Beat It
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Pink/beat.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassettePinkCome
+  name: Dexys Midnight Runners - Come On Eileen
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Pink/come.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassettePinkCountdown
+  name: Europe - The Final Countdown
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Pink/countdown.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassettePinkForget
+  name: Simple Minds - Don't You (Forget About Me)
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Pink/forget.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassettePinkPressure
+  name: Queen & David Bowie - Under Pressure
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Pink/pressure.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassettePinkZone
+  name: Kenny Loggins - Danger Zone
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Pink/zone.ogg
+
+# Rainbow cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteRainbowDream
+  name: Eurythmics - Sweet Dreams (Are Made of This)
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Rainbow/dream.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRainbowLove
+  name: Soft Cell - Tainted Love
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Rainbow/love.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRainbowMe
+  name: a-ha - Take On Me
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Rainbow/me.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRainbowRecord
+  name: Dead or Alive - You Spin Me Round (Like a Record)
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Rainbow/record.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRainbowRio
+  name: Duran Duran - Rio
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Rainbow/rio.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRainbowSafety
+  name: Men Without Hats - The Safety Dance
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Rainbow/safety.ogg
+
+# Red black cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedBlackHeavy
+  name: Don Felder - Heavy Metal (Takin' a Ride)
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedBlack/heavy.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedBlackHills
+  name: Iron Maiden - Run to the Hills
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedBlack/hills.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedBlackPanama
+  name: Van Halen - Panama
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedBlack/panama.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedBlackReach
+  name: Cheap Trick - Reach Out
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedBlack/reach.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedBlackRock
+  name: Scorpions - Rock You Like a Hurricane
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedBlack/rock.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedBlackRound
+  name: Ratt - Round and Round
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedBlack/round.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedBlackTrooper
+  name: Iron Maiden - The Trooper
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedBlack/trooper.ogg
+
+# Red stripe cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedStripeDeadly
+  name: Lita Ford - Kiss Me Deadly
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedStripe/deadly.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedStripeDirty
+  name: Poison - Talk Dirty to Me
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedStripe/dirty.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedStripeHeart
+  name: Mötley Crüe - Kickstart My Heart
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedStripe/heart.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedStripePie
+  name: Warrant - Cherry Pie
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedStripe/pie.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedStripeSugar
+  name: Def Leppard - Pour Some Sugar on Me
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedStripe/sugar.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRedStripeThing
+  name: Judas Priest - You've Got Another Thing Comin'
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RedStripe/thing.ogg
+
+# Rising sun cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteRisingSunCityIsDeath
+  name: City Is Death
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RisingSun/CityIsDeath.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRisingSunCosmonauts
+  name: Cosmonauts
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RisingSun/Cosmonauts.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRisingSunCult
+  name: The Orion Experience - The Cult of Dionysus
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RisingSun/Cult.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRisingSunFoundMe
+  name: Found Me
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RisingSun/FoundMe.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRisingSunHelp
+  name: Help
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RisingSun/Help.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteRisingSunMyType
+  name: My Type
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/RisingSun/MyType.ogg
+
+# TWE cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteTWEFalklands
+  name: Falklands War Song
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/TWE/Falklands.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTWEKiller
+  name: Killer
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/TWE/Killer.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTWEMalice
+  name: The Jam - Town Called Malice
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/TWE/Malice.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTWEPassenger
+  name: Iggy Pop - The Passenger
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/TWE/Passenger.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTWERakuen
+  name: The Yellow Monkey - Rakuen
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/TWE/Rakuen.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTWETactics
+  name: The Yellow Monkey - Tactics
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/TWE/Tactics.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTWELondon
+  name: London
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/TWE/london.ogg
+
+# Tan cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteTanFarFromAnyRoad
+  name: The Handsome Family - Far From Any Road
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Tan/FarFromAnyRoad.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTanItsBeenAwhile
+  name: Staind - It's Been Awhile
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Tan/ItsBeenAwhile.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTanPrayerToGod
+  name: Shellac - Prayer to God
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Tan/PrayerToGod.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTanSerenity
+  name: Godsmack - Serenity
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Tan/Serenity.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTanSouthtown
+  name: P.O.D. - Southtown
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Tan/Southtown.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTanTeenageDirtbag
+  name: Wheatus - Teenage Dirtbag
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Tan/TeenageDirtbag.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteTanWishYouWereHere
+  name: Pink Floyd - Wish You Were Here
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/Tan/WishYouWereHere.ogg
+
+# Weyland-Yutani cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteWYYMCA
+  name: Village People - Y.M.C.A.
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/WY/YMCA.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteWYEverything
+  name: Depeche Mode - Everything Counts
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/WY/everything.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteWYExit
+  name: Radiohead - Exit Music (For a Film)
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/WY/exit.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteWYSilence
+  name: Depeche Mode - Enjoy the Silence
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/WY/silence.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteWYSultan
+  name: Dire Straits - Sultans of Swing
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/WY/sultan.ogg
+
+# White cassette
+
+- type: jukebox
+  id: CMUJukeboxCassetteWhiteCats
+  name: Harry Chapin - Cat's in the Cradle
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/White/cats.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteWhiteCry
+  name: Hank Williams - I'm So Lonesome I Could Cry
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/White/cry.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteWhiteForever
+  name: Randy Travis - Forever and Ever, Amen
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/White/forever.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteWhiteLoving
+  name: George Jones - He Stopped Loving Her Today
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/White/loving.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteWhiteMorning
+  name: George Strait - Amarillo by Morning
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/White/morning.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteWhiteRing
+  name: Johnny Cash - Ring of Fire
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/White/ring.ogg
+
+- type: jukebox
+  id: CMUJukeboxCassetteWhiteSpanish
+  name: Willie Nelson & Ray Charles - Seven Spanish Angels
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/White/spanish.ogg

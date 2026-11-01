@@ -12,6 +12,9 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaLanternTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaLanternPrototype = "CMUYautjaLantern";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUActionYautjaToggleLanternPrototype = "CMUActionYautjaToggleLantern";
+
     [Test]
     public async Task YautjaLanternActionHudMatchesCmss13ToggleIconFacts()
     {
@@ -23,14 +26,14 @@ public sealed class YautjaLanternTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.EntMan.ComponentFactory;
-            var lantern = prototypes.Index<EntityPrototype>("CMUYautjaLantern");
-            var action = prototypes.Index<EntityPrototype>("CMUActionYautjaToggleLantern");
+            var lantern = prototypes.Index<EntityPrototype>(CMUYautjaLanternPrototype);
+            var action = prototypes.Index<EntityPrototype>(CMUActionYautjaToggleLanternPrototype);
 
-            Assert.That(lantern.TryGetComponent<HandheldLightComponent>(out var handheld, factory), Is.True);
+            Assert.That(lantern.TryComp<HandheldLightComponent>(out var handheld, factory), Is.True);
             Assert.That(handheld!.ToggleAction, Is.EqualTo("CMUActionYautjaToggleLantern"),
                 "CMSS13 special-cases /flashlight/lantern/yautja to use actions_yautja.dmi instead of the generic flashlight action HUD.");
 
-            Assert.That(action.TryGetComponent<ActionComponent>(out var actionComp, factory), Is.True);
+            Assert.That(action.TryComp<ActionComponent>(out var actionComp, factory), Is.True);
             Assert.Multiple(() =>
             {
                 Assert.That(actionComp!.UseDelay, Is.EqualTo(TimeSpan.FromSeconds(1)),

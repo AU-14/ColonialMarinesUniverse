@@ -119,6 +119,9 @@
       components:
       - Xeno
   - type: RMCRepairable
+  # cmu edit start: breaks down instead of being destroyed, and has to be repaired
+  - type: CMUSentryBreakable
+  # cmu edit end
   - type: RMCNameItemOnVend
     item: Sentry
   - type: RequireProjectileTarget

@@ -1,0 +1,15 @@
+- type: entity
+  parent: CMVendorChemistry
+  id: CMUVendorChemistryGovfor
+  suffix: GOVFOR
+  components:
+  - type: AccessReader
+    access: [[AU14AccessGovforMedical]]
+
+- type: entity
+  parent: CMVendorChemistry
+  id: CMUVendorChemistryOpfor
+  suffix: OPFOR
+  components:
+  - type: AccessReader
+    access: [[AU14AccessOpforMedical]]

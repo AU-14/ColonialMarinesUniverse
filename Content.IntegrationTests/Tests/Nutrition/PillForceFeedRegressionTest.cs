@@ -157,7 +157,8 @@ public sealed class PillForceFeedRegressionTest : GameTest
 
     private FixedPoint2 GetStomachQuantity(EntityUid target)
     {
-        Assert.That(_body.TryGetOrgansWithComponent<StomachComponent>(target, out var stomachs), Is.True);
+        var stomachs = _body.EnumerateOrgans<StomachComponent>(target).Select(organ => new Robust.Shared.GameObjects.Entity<StomachComponent>(organ.Owner, organ.Comp2)).ToList();
+        Assert.That(stomachs.Count > 0, Is.True);
         var stomach = stomachs.Single();
         Assert.That(_solutions.TryGetSolution(stomach.Owner, StomachSystem.DefaultSolutionName, out var solution), Is.True);
         return solution!.Value.Comp.Solution.GetTotalPrototypeQuantity(OsteoCalc);

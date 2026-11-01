@@ -42,6 +42,10 @@
                         </BoxContainer>
                     </ScrollContainer>
                 </PanelContainer>
+                <BoxContainer Name="GhostCallBox" Orientation="Vertical" SeparationOverride="4" Margin="8,0,8,4" Visible="False"> <!-- CMU14 -->
+                    <Label Name="GhostCallStatus" StyleClasses="CrtDimText" />
+                    <Button Name="GhostCallButton" /> <!-- CMU14 -->
+                </BoxContainer>
                 <Label Name="NoRolesMessage"
                        Text="{Loc 'ghost-roles-window-no-roles-available-label'}"
                        StyleClasses="CrtHeading"

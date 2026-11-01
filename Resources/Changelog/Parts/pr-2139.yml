@@ -1,0 +1,34 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Splints and casts can be removed by the patient or a medic
+  type: Fix
+- message: The surgical webbing has room for its cast
+  type: Fix
+- message: Drone operators are no longer kicked out of their drone by bleeding or
+    pain
+  type: Fix
+- message: Piloted drones speak their operator's languages
+  type: Fix
+- message: Riders get a clear button to release a seized host early
+  type: Fix
+- message: Examining Yautja gear no longer shocks or delimbs humans
+  type: Fix
+- message: Yautja clan masks block neomorph spores
+  type: Fix
+- message: Fuelled lifeboats on the USS Bush no longer crash onto the planet after
+    an early evacuation order
+  type: Fix
+- message: Crashing lifeboats land fully on the planet instead of hanging off the
+    map edge
+  type: Fix
+- message: The OPFOR advisor and platoon commander can open the rank chevron cases
+  type: Fix
+- message: The UTES-C mount shows its description
+  type: Fix
+- message: Boots! and Orrery magazines use USCM and WeYu
+  type: Fix
+- message: Russian text on UPP items and the liquidator role is translated
+  type: Fix
+time: '2026-10-10T08:43:12.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2139

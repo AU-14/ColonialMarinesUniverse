@@ -80,7 +80,7 @@ cmu-summary-detail-replicant-never = They never assumed another identity.
 
 roles-antag-serialkiller-name = Serial Killer
 roles-antag-serialkiller-objective = Kill and avoid capture
-serialkiller-role-greeting = You have an insatiable urge to kill. Find your victims and don't leave witnesses. Law enforcement has your fingerprints from previous crime scenes.
+serialkiller-role-greeting = You have an insatiable urge to kill. Find your victims and don't leave witnesses. Law enforcement has your fingerprints from previous crime scenes. With a knife or anything sharp in hand, you can butcher a body to get rid of it.
 
 roles-antag-spy-name = Corporate Spy
 roles-antag-spy-objective = Steal WY research assets and exfiltrate them with your data link.
@@ -147,8 +147,8 @@ cmu-summary-detail-none = Their work stays in the shadows.
 cmu-summary-detail-saboteur = They destroyed {$count} pieces of colony infrastructure.
 cmu-summary-detail-strike = Their petition gathered {$count}/{$goal} signatures.
 cmu-summary-detail-vigilante = {$count} mob members were on their list.
-cmu-summary-entry = {$name} ({$user}) was the {$role}. {$detail}
-cmu-summary-header = Colony Underworld:
+cmu-summary-entry = {"["}bold]{$name}[/bold] ([italic]{$user}[/italic]) was the [color=#d1b85d][bold]{$role}[/bold][/color]. {$detail}
+cmu-summary-header = {"["}bold][color=#d1b85d]Colony Underworld:[/color][/bold]
 cmu-summary-petition = A strike petition gathered {$count}/{$goal} signatures.
 cmu-vigilante-empty = The mob has no presence in this colony. Keep your eyes open; scum always crawls out eventually.
 cmu-vigilante-list = The mob's members in this colony:

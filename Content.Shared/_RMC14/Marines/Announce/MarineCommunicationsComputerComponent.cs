@@ -43,6 +43,9 @@ public sealed partial class MarineCommunicationsComputerComponent : Component
     [DataField("faction"), AutoNetworkedField]
     public string? Faction;
 
+    [DataField]
+    public LocId? AnnounceAuthor; // CMU14: admin tablets announce as High Command
+
     /*
     [DataField, AutoNetworkedField]
     public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");

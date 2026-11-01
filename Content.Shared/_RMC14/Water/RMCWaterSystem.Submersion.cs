@@ -80,6 +80,21 @@ public sealed partial class RMCWaterSystem
             : depth <= 4 ? ShallowWading : depth <= 8 ? Wading : DeepWading;
     }
 
+    // CMU14 start - fire extinguishing on water
+    /// <summary>
+    /// Returns true when the entity is lying or standing directly on uncovered water.
+    /// Entities inside containers are never on water.
+    /// </summary>
+    public bool IsOnWater(EntityUid uid)
+    {
+        var xform = Transform(uid);
+        if (xform.GridUid is not { } grid || xform.ParentUid != grid)
+            return false;
+
+        return TryGetWaterSurface(uid, out _, out var depth, out var covered) && !covered && depth > 0;
+    }
+    // CMU14 end
+
     /// <summary>
     /// Samples the tile under the mob's center, rather than immersing it when its collision box grazes water.
     /// Covered water is returned too, so clients can notice a catwalk being removed under a stationary mob.

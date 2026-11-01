@@ -164,7 +164,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
     {
         if (args.User != null && HasComp<ScopingComponent>(args.User))
         {
-            _popup.PopupClient("You cannot use the night vision optic while using optics.",
+            _popup.PopupEntity("You cannot use the night vision optic while using optics.",
                 args.User.Value,
                 args.User,
                 PopupType.SmallCaution);
@@ -274,7 +274,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
 
         if (item.Comp.Skills != null && !_skills.HasAllSkills(user, item.Comp.Skills))
         {
-            _popup.PopupClient(Loc.GetString("rmc-skills-hud-toggle"), user, user, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-skills-hud-toggle"), user, user, PopupType.MediumCaution);
             return;
         }
 
@@ -285,11 +285,14 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         if (!_timing.ApplyingState)
         {
             var defaultState = item.Comp.DefaultState;
-            if (TryComp(user, out NightVisionComponent? nightVision))
+            // CMU14: a source pending deferred removal is no longer a state to restore.
+            // if (TryComp(user, out NightVisionComponent? nightVision))
+            if (EnsureComp(user, out NightVisionComponent nightVision))
             {
-                nightVision = EnsureComp<NightVisionComponent>(user);
+                // nightVision = EnsureComp<NightVisionComponent>(user);
 
-                if (item.Comp.ExperimentalMesonFov || item.Comp.RestorePreviousState)
+                // CMU14: innate too, otherwise a visor's green filter overwrote a synth's own NV for good
+                if (item.Comp.ExperimentalMesonFov || item.Comp.RestorePreviousState || nightVision.Innate)
                 {
                     // Some equipment temporarily overrides an existing vision source and must restore it on disable.
                     item.Comp.HadNightVision = true;
@@ -297,6 +300,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
                     item.Comp.PreviousGreen = nightVision.Green;
                     // CMU Related Change
                     item.Comp.PreviousOverlay = nightVision.Overlay;
+                    item.Comp.PreviousDrawVisibleMobs = nightVision.DrawVisibleMobs;
                     item.Comp.PreviousMesons = nightVision.Mesons;
                     item.Comp.PreviousExperimentalMesonFov = nightVision.ExperimentalMesonFov;
                     item.Comp.PreviousBlockScopes = nightVision.BlockScopes;
@@ -320,6 +324,8 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
                 nightVision.Green = item.Comp.Green;
                 // CMU Related Change
                 nightVision.Overlay = item.Comp.Overlay;
+                // CMU14: while the item is active it owns the silhouette pass, which is what the bio-mask visor adds.
+                nightVision.DrawVisibleMobs = true;
                 nightVision.Mesons = item.Comp.Mesons;
                 nightVision.ExperimentalMesonFov = item.Comp.ExperimentalMesonFov;
                 nightVision.BlockScopes = item.Comp.BlockScopes;
@@ -331,21 +337,16 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
             else
             {
                 item.Comp.HadNightVision = false;
-                nightVision = new NightVisionComponent()
-                {
-                    State = defaultState,
-                    Green = item.Comp.Green,
-                    // CMU Related Change
-                    Overlay = item.Comp.Overlay,
-                    Mesons = item.Comp.Mesons,
-                    ExperimentalMesonFov = item.Comp.ExperimentalMesonFov,
-                    BlockScopes = item.Comp.BlockScopes,
-                    Tint = item.Comp.Tint,
-                    NoiseStrength = item.Comp.NoiseStrength,
-                    VignetteStrength = item.Comp.VignetteStrength,
-                };
-
-                AddComp(user, nightVision, true);
+                // CMU14: EnsureComp already created the replacement component.
+                nightVision.State = defaultState;
+                nightVision.Green = item.Comp.Green;
+                nightVision.Overlay = item.Comp.Overlay;
+                nightVision.Mesons = item.Comp.Mesons;
+                nightVision.ExperimentalMesonFov = item.Comp.ExperimentalMesonFov;
+                nightVision.BlockScopes = item.Comp.BlockScopes;
+                nightVision.Tint = item.Comp.Tint;
+                nightVision.NoiseStrength = item.Comp.NoiseStrength;
+                nightVision.VignetteStrength = item.Comp.VignetteStrength;
                 Dirty(user, nightVision);
             }
         }
@@ -403,13 +404,15 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
 
         if (TryComp(user, out NightVisionComponent? nightVision))
         {
-            if ((item.Comp.ExperimentalMesonFov || item.Comp.RestorePreviousState) && item.Comp.HadNightVision)
+            // CMU14: HadNightVision is only set when the previous state got saved, innate included
+            if (item.Comp.HadNightVision)
             {
                 // Restore the previous component state so innate synth night vision survives item toggles.
                 nightVision.State = item.Comp.PreviousState;
                 nightVision.Green = item.Comp.PreviousGreen;
                 // CMU Related Change
                 nightVision.Overlay = item.Comp.PreviousOverlay;
+                nightVision.DrawVisibleMobs = item.Comp.PreviousDrawVisibleMobs;
                 nightVision.Mesons = item.Comp.PreviousMesons;
                 nightVision.ExperimentalMesonFov = item.Comp.PreviousExperimentalMesonFov;
                 nightVision.BlockScopes = item.Comp.PreviousBlockScopes;
