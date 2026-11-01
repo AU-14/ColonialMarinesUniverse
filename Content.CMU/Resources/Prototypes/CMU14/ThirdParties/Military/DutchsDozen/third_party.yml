@@ -26,6 +26,8 @@
   minplayers: 0
   maxplayers: -1
   announcearrival: cmu-dutchs-dozen-arrival
+  # cmss13 sends it as marine_announcement(arrival_message, "Intercepted Transmission:")
+  announcearrivaltitle: cmu-dutchs-dozen-arrival-title
 
 - type: partySpawn
   id: CMUDutchsDozenFullSpawn

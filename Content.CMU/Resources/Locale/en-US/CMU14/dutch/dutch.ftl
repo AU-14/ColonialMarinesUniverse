@@ -2,6 +2,7 @@
 cmu-dutchs-dozen-party-name = Dutch's Dozen
 cmu-dutchs-dozen-full-party-name = Dutch's Dozen - Full Strength
 cmu-dutchs-dozen-arrival = 'We're here to kick ass and kill Yautja. Mainly kill Yautja.
+cmu-dutchs-dozen-arrival-title = Intercepted Transmission:
 
 cmu-radio-dutchs-dozen = Dutch
 
