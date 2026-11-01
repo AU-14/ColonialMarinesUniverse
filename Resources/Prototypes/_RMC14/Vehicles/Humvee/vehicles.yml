@@ -6,6 +6,7 @@
   components:
   - type: RMCNightVisionVisible # CMU14
     priority: -2
+  - type: CMUVehicleBlastPenetration # CMU14: heavy ordnance replicates inside the cabin; grenades can't breach the armour.
   - type: Vehicle
     movementKind: Grid
     transferDamage: false
