@@ -227,6 +227,7 @@
   id: WeYuBloodbursting
   name: reagent-name-weyu-bloodbursting-chem
   desc: reagent-desc-weyu-bloodbursting-chem
+  color: "#000000"
   physicalDesc: unidentifiable
   class: Special
   reward: 0
