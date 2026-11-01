@@ -149,7 +149,7 @@ public sealed class OctoberEighteenVehicleRegressionTest : GameTest
             var areas = SEntMan.EnsureComponent<AreaGridComponent>(map.Grid.Owner);
             for (var x = -2; x <= 3; x++)
             for (var y = -2; y <= 2; y++)
-                SEntMan.System<AreaSystem>().ReplaceArea(areas, new Vector2i(x, y), "RMCAreaProtectionZero");
+                SEntMan.System<AreaSystem>().ReplaceArea(areas, new Vector2i(x, y), "RMCAreaKutjevoExterior");
 
             // two tile ship parked on its own map
             maps.CreateMap(out var shipMap);
