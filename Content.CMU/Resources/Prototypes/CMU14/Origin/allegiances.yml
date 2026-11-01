@@ -35,6 +35,12 @@
   roundStart: true
 
 - type: Allegiance
+  id: Prodigy
+  name: allegiance-prodigy-name
+  description: allegiance-prodigy-description
+  roundStart: true
+
+- type: Allegiance
   id: TWE
   name: allegiance-twe-name
   description: allegiance-twe-description

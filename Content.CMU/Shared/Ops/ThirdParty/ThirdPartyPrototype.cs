@@ -81,7 +81,7 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     public ProtoId<PartySpawnPrototype> PartySpawn { get; private set; }
 
     [DataField("announcearrival")]
-    public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict zone.";
+    public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict.";
 
     /// <summary>
     ///     Announced when a scheduled party goes ready and starts gathering ghost volunteers,
