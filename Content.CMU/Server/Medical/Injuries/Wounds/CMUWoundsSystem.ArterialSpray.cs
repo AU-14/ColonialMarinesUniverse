@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.CMU14.Decals;
 using Content.Server.Fluids.EntitySystems;
 using Content.Shared.Body.Components;
 using Content.Shared.Chemistry.Components;
@@ -74,6 +75,9 @@ public sealed partial class CMUWoundsSystem
             {
                 break;
             }
+
+            if (!_decalFloor.HasFloor(target))
+                continue;
 
             landing = target;
             var splatAt = _transform.ToCoordinates(target).Offset(new Vector2(-0.5f, -0.5f));

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Actions;
@@ -13,6 +14,7 @@ namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 public abstract partial class CMUSharedZLevelsSystem
 {
     [Dependency] protected ITileDefinitionManager TilDefMan = default!;
+    [Dependency] private CMUVehicleZViewSystem _vehicleView = default!;
 
     private readonly List<(Vector2 Center, float Distance)> _distanceOpeningCandidates = new();
     private readonly List<Entity<MapGridComponent>> _openingGridScratch = new();
@@ -91,7 +93,7 @@ public abstract partial class CMUSharedZLevelsSystem
         }
 
         // Faint -> full look up (original gates apply; on failure we stay in faint mode).
-        if (HasOpaqueAbove(ent))
+        if (HasOpaqueAbove(_vehicleView.GetViewSource(ent)))
         {
             _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
             return;
@@ -119,6 +121,12 @@ public abstract partial class CMUSharedZLevelsSystem
         return true;
     }
 
+    // client-side only, not networked
+    public void SetLocalView(Entity<CMUZLevelViewerComponent> ent, bool lookUp, bool faintUp)
+    {
+        ent.Comp.LookUp = lookUp;
+        ent.Comp.FaintUp = faintUp;
+    }
     /// <summary>
     /// CMU14: ends the whole look up cycle - full mode and the faint upper ghost - for a viewer whose level is changing
     /// under it. The faint ghost is otherwise a latched preference the renderer suppresses under a ceiling, but a

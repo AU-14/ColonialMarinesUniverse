@@ -226,13 +226,13 @@ cmu-fighter-eject-cancel = Stay aboard
 cmu-fighter-eject-confirm = Confirm ejection
 cmu-fighter-eject-fired = EJECT! Parachute deploying!
 ent-CMUFighterManpad = EMBLR MANPAD
-    .desc = A shoulder-fired anti-air launcher. Load an EMBLR 70mm rocket, wield it with both hands and use Aim at airspace to intercept hostile aircraft crossing your sector. Lowering or dropping it cancels the lock. Reload after each launch.
-ent-CMUActionManpadAim = Aim at airspace
-    .desc = Raise the wielded MANPAD to cover your current sector. Automatically acquire and fire at hostile aircraft. Toggle again to lower it and cancel acquisition.
+    .desc = A shoulder-fired anti-air launcher. Load an EMBLR 70mm rocket, wield it with both hands and use Scan high altitude to intercept hostile aircraft crossing your sector. Lowering or dropping it cancels the lock. Reload after each launch. Use Scan low altitude to lock onto a gunship or a Blackfoot.
+ent-CMUActionManpadAim = Scan high altitude
+    .desc = Raise the wielded MANPAD and search your sector for hostile aircraft. The launch is automatic. Toggle again to lower it. Cannot be used together with the low altitude scan.
 cmu-manpad-requires-wield = Hold the MANPAD in your active hand and wield it with both hands first.
 cmu-manpad-aiming = MANPAD raised. Watching your sector for hostile aircraft.
 cmu-manpad-lowered = MANPAD lowered. Acquisition cancelled.
-cmu-manpad-examine-safe = [color=gray]Lowered. Wield it and use Aim at airspace to cover your sector.[/color]
+cmu-manpad-examine-safe = [color=gray]Lowered. Wield it and use Scan high altitude to cover your sector.[/color]
 cmu-manpad-examine-aimed = [color=orange]Aimed at the sky. Covering the operator's current sector.[/color]
 cmu-manpad-iff-unknown = Cannot authenticate your faction. MANPAD remains safe.
 cmu-manpad-empty = MANPAD empty. Load an EMBLR 70mm rocket before aiming.
@@ -248,7 +248,7 @@ cmu-manpad-radar-sector = YOUR SECTOR { $sector } · { $count } contacts
 cmu-manpad-radar-outside = OUTSIDE AO · { $count } contacts
 cmu-manpad-radar-empty = EMPTY · load an EMBLR 70mm rocket
 cmu-manpad-radar-cycling = LAUNCHER CYCLING · { $seconds }s
-cmu-manpad-radar-lowered = LOWERED · use Aim at airspace to engage
+cmu-manpad-radar-lowered = LOWERED · use Scan high altitude to engage
 cmu-manpad-radar-lock = ACQUIRING · launch in { $seconds }s
 cmu-manpad-radar-scanning = AIMED · watching your sector
 cmu-manpad-radar-legend = Green: friendly · red: target · yellow: unknown
