@@ -45,8 +45,8 @@ public sealed partial class FighterCockpitControl
         NearStall.Lit = _selectedSpeed < slowBoundary;
         Cruise.Lit = _selectedSpeed >= slowBoundary && _selectedSpeed <= fastBoundary;
         Afterburner.Lit = _selectedSpeed > fastBoundary;
-        HeightLabel.Text = Loc.GetString("cmu-fighter-height", ("height", MathF.Round(_selectedHeight)));
-        SpeedLabel.Text = Loc.GetString("cmu-fighter-speed", ("speed", MathF.Round(_selectedSpeed, 1)));
+        HeightLabel.Text = Loc.GetString("cmu-fighter-hud-height", ("height", MathF.Round(_selectedHeight)));
+        SpeedLabel.Text = Loc.GetString("cmu-fighter-hud-speed", ("speed", MathF.Round(_selectedSpeed, 1)));
         NearStall.ToolTip = Loc.GetString("cmu-fighter-speed", ("speed", aircraft.MinimumSpeed));
         Cruise.ToolTip = Loc.GetString("cmu-fighter-speed", ("speed", cruise));
         Afterburner.ToolTip = Loc.GetString("cmu-fighter-speed", ("speed", aircraft.MaximumSpeed));

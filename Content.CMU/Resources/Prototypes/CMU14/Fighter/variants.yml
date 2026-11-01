@@ -1,0 +1,266 @@
+# The supplied artwork is kept at its original size and orientation.
+
+- type: entity
+  parent: CMUFighterGround
+  id: CMUFighterGroundUPP
+  components:
+  - type: FighterGround
+    takeoffTime: 7
+    landingTime: 6.5
+  - type: CMUFighterAppearance
+    airframe: CMUFighterUPP
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/uppjet.rsi
+    state: mig_base
+    rotation: 180
+  - type: Fixtures
+    fixtures:
+      fuselage:
+        shape:
+          !type:PolygonShape
+          vertices: ["0.21328,-3.45313", "-0.19297,-3.45313", "-0.47734,0.91406", "-0.31484,2.70156", "0.33516,2.70156", "0.49766,0.91406"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      leftWing:
+        shape:
+          !type:PolygonShape
+          vertices: ["0.37578,-0.71094", "0.39609,1.05625", "2.18359,1.50313", "2.18359,1.03594"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      rightWing:
+        shape:
+          !type:PolygonShape
+          vertices: ["-0.37578,-0.71094", "-2.18359,1.03594", "-2.18359,1.50313", "-0.39609,1.05625"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      leftTail:
+        shape:
+          !type:PolygonShape
+          vertices: ["0.33516,1.625", "0.13203,2.49844", "1.02578,2.96563", "1.24922,2.7625"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      rightTail:
+        shape:
+          !type:PolygonShape
+          vertices: ["-0.33516,1.625", "-1.24922,2.7625", "-1.02578,2.96563", "-0.13203,2.49844"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      tail:
+        shape:
+          !type:PolygonShape
+          vertices: ["0.13203,2.29531", "-0.13203,2.29531", "-0.01016,3.49375", "0.03047,3.49375"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+
+- type: entity
+  parent: CMUFighterGroundUPP
+  id: CMUFighterGroundUPPLoaded
+  suffix: Fully equipped, mixed missiles
+  components:
+  - type: FighterGround
+    startingMissiles:
+    - RMCDropshipAttachmentAmmoRocketWidowmaker
+    - RMCDropshipAttachmentAmmoRocketKeeper
+    - RMCDropshipAttachmentAmmoRocketHarpoon
+    - RMCDropshipAttachmentAmmoRocketNapalm
+    - RMCDropshipAttachmentAmmoRocketBanshee
+    - RMCDropshipAttachmentAmmoRocketThermobaric
+    startingGauAmmo: RMCDropshipAttachmentAmmoGAU
+
+- type: entity
+  parent: CMUFighterHull
+  id: CMUFighterHullUPP
+  components:
+  - type: AmbientSound
+    sound:
+      path: /Audio/CMU14/Fighter/upp/cockpit.ogg
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/uppjet.rsi
+    state: mig_base
+    rotation: 180
+
+- type: entity
+  parent: CMUFighterCanopy
+  id: CMUFighterCanopyUPP
+  components:
+  - type: CMUFighterAppearance
+    airframe: CMUFighterUPP
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/uppjet.rsi
+    rotation: 180
+    layers:
+    - state: mig_base
+      shader: CMUFighterCockpitFrameUPP
+    - state: glass
+      color: "#FFFFFF38"
+
+- type: entity
+  parent: CMUFighterPilotSeat
+  id: CMUFighterPilotSeatUPP
+  components:
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/upppilotseats.rsi
+    state: frontseat
+    rotation: 180
+
+- type: entity
+  parent: CMUFighterObserverSeat
+  id: CMUFighterObserverSeatUPP
+  components:
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/upppilotseats.rsi
+    state: rearseat
+    rotation: 180
+
+- type: entity
+  parent: CMUFighterFlyby
+  id: CMUFighterFlybyUPP
+  components:
+  - type: CMUFighterAppearance
+    airframe: CMUFighterUPP
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/uppjet.rsi
+    state: mig_base
+    rotation: 0
+
+- type: entity
+  parent: CMUFighterGround
+  id: CMUFighterGroundSwept
+  components:
+  - type: FighterGround
+    takeoffTime: 5.5
+    landingTime: 5.5
+  - type: CMUFighterAppearance
+    airframe: CMUFighterSwept
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/sweptjet.rsi
+    state: folded
+    rotation: 0
+  - type: Fixtures
+    fixtures:
+      fuselage:
+        shape:
+          !type:PolygonShape
+          vertices: ["-0.20313,1.7875", "0.20313,1.7875", "0.58906,-0.18281", "0.22344,-1.84844", "-0.22344,-1.84844", "-0.58906,-0.18281"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      nose:
+        shape:
+          !type:PolygonShape
+          vertices: ["-0.22344,-1.84844", "0.22344,-1.84844", "0.02031,-3.53438", "-0.02031,-3.53438"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      tailLeft:
+        shape:
+          !type:PolygonShape
+          vertices: ["-1.19844,3.43281", "-0.77187,3.10781", "-0.34531,1.34062", "-0.60938,0.02031", "-0.83281,0.10156", "-1.27969,3.02656"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      tailRight:
+        shape:
+          !type:PolygonShape
+          vertices: ["1.19844,3.43281", "1.27969,3.02656", "0.83281,0.10156", "0.60938,0.02031", "0.34531,1.34062", "0.77187,3.10781"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      foldedWings:
+        shape:
+          !type:PolygonShape
+          vertices: ["-0.67031,2.21406", "0.67031,2.21406", "0.65,0.83281", "0.38594,-0.52813", "-0.38594,-0.52813", "-0.65,0.83281"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      leftWing:
+        shape:
+          !type:PolygonShape
+          vertices: ["-2.72188,2.29531", "-2.55938,2.39688", "-0.56875,0.56875", "-0.67031,-0.325", "-2.4375,1.86875"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      rightWing:
+        shape:
+          !type:PolygonShape
+          vertices: ["2.72188,2.29531", "2.4375,1.86875", "0.67031,-0.325", "0.56875,0.56875", "2.55938,2.39688"]
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+
+- type: entity
+  parent: CMUFighterGroundSwept
+  id: CMUFighterGroundSweptLoaded
+  suffix: Fully equipped, mixed missiles
+  components:
+  - type: FighterGround
+    startingMissiles:
+    - RMCDropshipAttachmentAmmoRocketWidowmaker
+    - RMCDropshipAttachmentAmmoRocketKeeper
+    - RMCDropshipAttachmentAmmoRocketHarpoon
+    - RMCDropshipAttachmentAmmoRocketNapalm
+    - RMCDropshipAttachmentAmmoRocketBanshee
+    - RMCDropshipAttachmentAmmoRocketThermobaric
+    startingGauAmmo: RMCDropshipAttachmentAmmoGAU
+
+- type: entity
+  parent: CMUFighterHull
+  id: CMUFighterHullSwept
+  components:
+  - type: AmbientSound
+    sound:
+      path: /Audio/CMU14/Fighter/swept/cockpit.ogg
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/sweptjet.rsi
+    state: flight
+    rotation: 0
+
+- type: entity
+  parent: CMUFighterCanopy
+  id: CMUFighterCanopySwept
+  components:
+  - type: CMUFighterAppearance
+    airframe: CMUFighterSwept
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/sweptjet.rsi
+    rotation: 0
+    layers:
+    - state: flight
+      shader: CMUFighterCockpitFrameSwept
+    - state: glass
+      color: "#FFFFFF38"
+
+- type: entity
+  parent: CMUFighterPilotSeat
+  id: CMUFighterPilotSeatSwept
+  components:
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/sweptpilotseats.rsi
+    state: seat
+    rotation: 0
+
+- type: entity
+  parent: CMUFighterObserverSeat
+  id: CMUFighterObserverSeatSwept
+  components:
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/sweptpilotseats.rsi
+    state: seat
+    rotation: 0
+
+- type: entity
+  parent: CMUFighterFlyby
+  id: CMUFighterFlybySwept
+  components:
+  - type: CMUFighterAppearance
+    airframe: CMUFighterSwept
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/sweptjet.rsi
+    state: flight
+    rotation: 180

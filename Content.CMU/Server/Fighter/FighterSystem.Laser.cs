@@ -11,15 +11,6 @@ public sealed partial class FighterSystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
 
-    private void WarnLaserStrike(EntityUid uid)
-    {
-        if (!TryComp(uid, out FighterLaserComponent? laser)) return;
-        laser.Incoming = true;
-        laser.IncomingAt = _timing.CurTime;
-        Dirty(uid, laser);
-        _fighterAudio.PlayGround(laser.IncomingSound, Transform(uid).Coordinates, 24, -4);
-    }
-
     private void OnLaserShutdown(Entity<FighterLaserComponent> laser, ref ComponentShutdown args)
     {
         // Timed despawn can run after our update. Clear entity references before

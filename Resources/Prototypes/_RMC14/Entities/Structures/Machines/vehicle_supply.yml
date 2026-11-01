@@ -36,14 +36,22 @@
   - type: VehicleSupplyConsole
     vehicles:
 
-    # CMU14: fighter and portable faction-owned VTOL pad.
-    - name: Two-seat VTOL fighter
-      vehicle: CMUFighterGround
+    # CMU14: fighters launch from clear ground without a staging pad.
+    - vehicle: CMUFighterGround
       group: vehicle-fighter
-      bundle:
-      - CMUFighterLandingPadFolded
       hardpoints:
-      - CMUFighterLandingPadFolded
+      - RMCDropshipAttachmentRocketPod
+      - RMCDropshipAttachmentAmmoGAU
+      - RMCDropshipAttachmentAmmoRocketMiniMike
+      - RMCDropshipAttachmentAmmoRocketKeeper
+      - RMCDropshipAttachmentAmmoRocketWidowmaker
+      - RMCDropshipAttachmentAmmoRocketHarpoon
+      - RMCDropshipAttachmentAmmoRocketNapalm
+
+    # CMU14: UPP and BEAR use their own airframe with the shared fighter allowance.
+    - vehicle: CMUFighterGroundUPP
+      group: vehicle-fighter
+      hardpoints:
       - RMCDropshipAttachmentRocketPod
       - RMCDropshipAttachmentAmmoGAU
       - RMCDropshipAttachmentAmmoRocketMiniMike

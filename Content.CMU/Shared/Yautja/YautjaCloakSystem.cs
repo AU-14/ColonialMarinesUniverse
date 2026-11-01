@@ -395,13 +395,13 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     {
         // Claim the sprite during local prediction too, so the generic invisibility shader cannot flash first.
         var optical = EnsureComp<CMUYautjaOpticalCloakComponent>(user);
+        optical.Preset = preset;
         // Action prediction may replay the toggle. Only the server starts the presentation clock.
         if (!_net.IsServer)
             return;
         optical.From = CMUYautjaPresentation.CloakCoverage(optical, _timing.CurTime);
         optical.Enabled = enabled;
         optical.StartedAt = _timing.CurTime;
-        optical.Preset = preset;
         Dirty(user, optical);
     }
 

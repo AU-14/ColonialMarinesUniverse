@@ -147,10 +147,10 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             var enemy = CreateDepot(map.GridCoords.Offset(new Vector2(60, 0)), "opfor");
             Queue(first, "CMUFighterGround");
             Queue(second, "CMUFighterGround");
-            Queue(enemy, "CMUFighterGround");
+            Queue(enemy, "CMUFighterGroundUPP");
             Assert.That(first.Lift.Comp.PendingVehicle, Is.EqualTo("CMUFighterGround"));
             Assert.That(second.Lift.Comp.PendingVehicle, Is.Empty);
-            Assert.That(enemy.Lift.Comp.PendingVehicle, Is.EqualTo("CMUFighterGround"));
+            Assert.That(enemy.Lift.Comp.PendingVehicle, Is.EqualTo("CMUFighterGroundUPP"));
             Complete(first);
             ResetLift(second);
             Assert.That(State(second).Available.Select(entry => entry.Id), Does.Not.Contain("CMUFighterGround"));
