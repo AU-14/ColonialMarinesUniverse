@@ -1768,6 +1768,7 @@ public sealed partial class HardpointSystem : EntitySystem
 
         UpdateHardpointUi(vehicle);
         HandleHardpointDamageSideEffects(vehicle, hardpoint, amount, integrity, wasFunctional);
+        CMUOnHardpointDamaged(vehicle, hardpoint, previous - integrity.Integrity); // CMU14: VBIED damage trigger
         return true;
     }
 
