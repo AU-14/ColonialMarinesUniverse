@@ -12,6 +12,7 @@ public class CMUMachineButton : Button
     private CMUIconLabelRow? _iconRow;
     private Color _accent = CMUMachineUiStyle.ButtonColor;
     private bool _secondary;
+    private Color? _iconColor;
 
     private readonly CMUBevelStyleBox _box = new()
     {
@@ -56,6 +57,16 @@ public class CMUMachineButton : Button
         {
             _secondary = value;
             StyleBoxOverride = value ? _secondaryBox : _box;
+            UpdateStyle();
+        }
+    }
+
+    public Color? IconColor
+    {
+        get => _iconColor;
+        set
+        {
+            _iconColor = value;
             UpdateStyle();
         }
     }
@@ -107,8 +118,8 @@ public class CMUMachineButton : Button
             return;
 
         _iconRow.Label.FontColorOverride = text;
-        _iconRow.Icon.IdleColor = text;
-        _iconRow.Icon.HoverColor = DrawMode == DrawModeEnum.Disabled ? text : CMUIcons.Hover;
+        _iconRow.Icon.IdleColor = _iconColor ?? text;
+        _iconRow.Icon.HoverColor = DrawMode == DrawModeEnum.Disabled ? _iconColor ?? text : CMUIcons.Hover;
     }
 
     private void UpdateSecondaryStyle()
@@ -131,7 +142,7 @@ public class CMUMachineButton : Button
             return;
 
         _iconRow.Label.FontColorOverride = text;
-        _iconRow.Icon.IdleColor = text;
-        _iconRow.Icon.HoverColor = text;
+        _iconRow.Icon.IdleColor = _iconColor ?? text;
+        _iconRow.Icon.HoverColor = _iconColor ?? text;
     }
 }

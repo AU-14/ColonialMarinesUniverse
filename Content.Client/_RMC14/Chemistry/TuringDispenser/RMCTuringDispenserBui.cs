@@ -159,12 +159,13 @@ public sealed partial class RMCTuringDispenserBui : BoundUserInterface, IRefresh
 
         _window.SetAutoRun(comp.AutoRun);
         _window.SetSmartLink(comp.SmartLink);
-        _window.SetOutputMode(comp.OutputMode switch
+        var (outputText, outputIcon) = comp.OutputMode switch
         {
-            TuringDispenserOutputMode.SmartFridge => "Outputting to: SMARTFRIDGE",
-            TuringDispenserOutputMode.Centrifuge => "Outputting to: CENTRIFUGE",
-            _ => "Outputting to: CONTAINER",
-        });
+            TuringDispenserOutputMode.SmartFridge => ("Outputting to: SMARTFRIDGE", CMUIcons.Box),
+            TuringDispenserOutputMode.Centrifuge => ("Outputting to: CENTRIFUGE", CMUIcons.Industry),
+            _ => ("Outputting to: CONTAINER", CMUIcons.Flask),
+        };
+        _window.SetOutputMode(outputText, outputIcon);
 
         _window.SetSpinBoxValues(comp.Multiplier.Float(), comp.CycleLimit);
     }

@@ -30,13 +30,13 @@ public sealed partial class ChemSimulatorWindow : DefaultWindow
         CreditsLabel.FontOverride = cache.GetFont("/Fonts/NotoSans/NotoSans-Bold.ttf", 10);
 
         SimulateButton.SetIcon(CMUIcons.Radiation, Loc.GetString("research-sim-ui-simulate"));
-        OverrideButton.SetIcon(CMUIcons.Server, Loc.GetString("research-sim-ui-override"));
-        EjectTargetButton.SetIcon(CMUIcons.Eject, Loc.GetString("research-sim-ui-eject-targ"));
-        EjectReferenceButton.SetIcon(CMUIcons.Eject, Loc.GetString("research-sim-ui-eject-ref"));
+        OverrideButton.SetIcon(CMUIcons.HardDrive, Loc.GetString("research-sim-ui-override"));
+        EjectTargetButton.SetIcon(CMUIcons.FileImport, Loc.GetString("research-sim-ui-eject-targ"));
+        EjectReferenceButton.SetIcon(CMUIcons.FileImport, Loc.GetString("research-sim-ui-eject-ref"));
         AmplifyButton.SetIcon(CMUIcons.SquarePlus, Loc.GetString("research-sim-ui-amplify"));
         SuppressButton.SetIcon(CMUIcons.SquareMinus, Loc.GetString("research-sim-ui-suppress"));
-        AddButton.SetIcon(CMUIcons.ArrowRightLong, Loc.GetString("research-sim-ui-add"));
-        RelateButton.SetIcon(CMUIcons.ArrowsRotate, Loc.GetString("research-sim-ui-relate"));
+        AddButton.SetIcon(CMUIcons.ArrowRight, Loc.GetString("research-sim-ui-add"));
+        RelateButton.SetIcon(CMUIcons.Repeat, Loc.GetString("research-sim-ui-relate"));
         FinalizeButton.SetIcon(CMUIcons.FloppyDisk, Loc.GetString("research-sim-ui-finalize"));
     }
 

@@ -72,8 +72,12 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
         var targetItem = GetSlotItem("target");
         var referenceItem = GetSlotItem("reference");
 
-        _window.EjectTargetButton.Disabled = targetItem == null || locked;
-        _window.EjectReferenceButton.Disabled = referenceItem == null || locked;
+        var canEjectTarget = targetItem != null && !locked;
+        var canEjectReference = referenceItem != null && !locked;
+        _window.EjectTargetButton.Disabled = !canEjectTarget;
+        _window.EjectReferenceButton.Disabled = !canEjectReference;
+        _window.EjectTargetButton.SetIcon(canEjectTarget ? CMUIcons.Eject : CMUIcons.FileImport);
+        _window.EjectReferenceButton.SetIcon(canEjectReference ? CMUIcons.Eject : CMUIcons.FileImport);
 
         SetModeButton(_window.AmplifyButton, state.Mode == ChemSimulatorMode.Amplify);
         SetModeButton(_window.SuppressButton, state.Mode == ChemSimulatorMode.Suppress);
@@ -169,15 +173,17 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
             var name = propertyId;
             var description = string.Empty;
             string? categoryIcon = null;
+            Color? categoryColor = null;
             if (_prototype.TryIndex<ReagentPropertyPrototype>(propertyId, out var proto))
             {
                 name = proto.LocalizedName;
                 description = proto.LocalizedDescription;
-                categoryIcon = proto.Hint switch
+                (categoryIcon, categoryColor) = proto.Hint switch
                 {
-                    ReagentPropertyHintEnum.Positive => CMUIcons.SquarePlus,
-                    ReagentPropertyHintEnum.Negative => CMUIcons.SquareMinus,
-                    _ => null,
+                    ReagentPropertyHintEnum.Positive => (CMUIcons.CirclePlus, NoticeSuccessColor),
+                    ReagentPropertyHintEnum.Negative => (CMUIcons.CircleMinus, NoticeDangerColor),
+                    ReagentPropertyHintEnum.Neutral => (CMUIcons.CircleDot, ButtonTextColor),
+                    _ => ((string?) null, (Color?) null),
                 };
             }
 
@@ -202,9 +208,10 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
                 box.AddChild(button);
             }
 
-            var iconRow = button.SetIcon(categoryIcon ?? CMUIcons.SquarePlus,
+            var iconRow = button.SetIcon(categoryIcon ?? CMUIcons.CircleDot,
                 Loc.GetString("research-sim-ui-property", ("NAME", name), ("LEVEL", level)));
             iconRow.Icon.Visible = categoryIcon != null;
+            button.IconColor = categoryColor;
             button.ToggleMode = selectable;
             button.Pressed = propertyId == selectedId;
             button.Disabled = selectable && conflicting && !state.Override;
