@@ -76,6 +76,8 @@
       enum.XenoParasiteGhostUI.Key:
         type: XenoParasiteGhostBui
         requireInputValidation: false
+        # Ghost claim prompts must survive the ghost standing inside a wall; the default 2 range closes them.
+        interactionRange: 0
       enum.DialogUiKey.Key:
         type: DialogBui
       enum.BlightCoreUiKey.Vote:
