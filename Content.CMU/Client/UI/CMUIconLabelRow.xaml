@@ -1,0 +1,9 @@
+<controls:CMUIconLabelRow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.UI"
+    Orientation="Horizontal"
+    VerticalAlignment="Center"
+    SeparationOverride="6">
+    <controls:CMUIconRect Name="Icon" Access="Public" />
+    <Label Name="Label" Access="Public" VerticalAlignment="Center" FontColorOverride="#000000" />
+</controls:CMUIconLabelRow>
