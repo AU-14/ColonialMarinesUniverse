@@ -156,8 +156,11 @@ public sealed partial class CMUManpadLowAltitudeTargetingSystem : EntitySystem
                 continue;
             }
 
-            if (!CMUZLevelOpeningCache.IsOpeningTile(map, grid, position, _map, _tileDefinitions))
+            if (_map.TryGetTileRef(map, grid, position, out var tileRef)
+                && !CMUZLevelOpeningCache.CanLookUpThrough(tileRef.Tile, _tileDefinitions))
+            {
                 return false;
+            }
         }
 
         return true;

@@ -30,6 +30,13 @@ public sealed class CMUVehicleZViewSystem : EntitySystem
         _zLevels.TryDisableLookUp(ent);
     }
 
+    /// <summary>A roof over the hull blocks looking up from inside, as it does on foot.</summary>
+    public bool IsLookUpBlocked(EntityUid user)
+    {
+        var source = GetViewSource(user);
+        return source != user && _zLevels.HasOpaqueAbove(source);
+    }
+
     /// <summary>The vehicle while the user's eye is on its hull, otherwise the user.</summary>
     public EntityUid GetViewSource(EntityUid user)
     {

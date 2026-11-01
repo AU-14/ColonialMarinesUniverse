@@ -112,7 +112,7 @@ public sealed partial class CMUZLevelAimSystem : EntitySystem
             return TryAimAtLevel(user, map, -1, cursor, out aim, out _) ? -1 : 0;
 
         // looking up draws the level above over everything, same as the old look-up shots
-        if (TryComp<CMUZLevelViewerComponent>(user, out var viewer) && viewer.LookUp)
+        if (TryComp<CMUZLevelViewerComponent>(user, out var viewer) && viewer.LookUp && !_vehicleView.IsLookUpBlocked(user))
             return TryAimAtLevel(user, map, 1, cursor, out aim, out _) ? 1 : 0;
 
         if (!_config.GetCVar(CMUZLevelsCVars.LookAim) ||

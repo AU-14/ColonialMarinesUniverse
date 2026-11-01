@@ -589,6 +589,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         if (TryComp<CMUZLevelViewerComponent>(shooter, out var viewer) &&
             viewer.LookUp &&
+            !_vehicleView.IsLookUpBlocked(shooter) &&
             (!requireReadyGunForLookUp || HasReadyGun(shooter) || CanAimAcrossZWithoutGun(shooter)))
         {
             return 1;
