@@ -29,7 +29,7 @@ public sealed partial class FighterGroundComponent : Component
     /// <summary>Missiles installed on successive pylons when this airframe first creates its cockpit.</summary>
     [DataField] public List<EntProtoId> StartingMissiles = [];
     [DataField] public EntProtoId? StartingGauAmmo;
-    [DataField] public TimeSpan TakeoffTime = TimeSpan.FromSeconds(8);
+    [DataField] public TimeSpan TakeoffTime = TimeSpan.FromSeconds(6);
     [DataField] public TimeSpan LandingTime = TimeSpan.FromSeconds(6);
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan StartedAt;
@@ -39,9 +39,11 @@ public sealed partial class FighterGroundComponent : Component
     public TimeSpan TouchdownAt;
     [DataField] public EntityCoordinates? LaunchCoordinates;
     [DataField] public Angle LaunchRotation;
-    [DataField, AutoNetworkedField] public EntityUid? TaxiPad;
     [DataField, AutoNetworkedField] public FighterInput TaxiInput;
-    [DataField] public float PadSearchRange = 12;
+    [DataField, AutoNetworkedField] public float TransitionDistance;
+    public EntityCoordinates? TransitionStart;
+    public bool TouchdownPlayed;
+    public bool EngineRunning;
     /// <summary>A recovery site blocked this long (a dropship parked on it, say) is given up for the nearest clear spot.</summary>
     [DataField] public TimeSpan LandingDivertDelay = TimeSpan.FromSeconds(20);
     [DataField] public int LandingDivertRange = 10;
@@ -50,13 +52,4 @@ public sealed partial class FighterGroundComponent : Component
     public EntityUid? CockpitTransitionAudio;
     public EntityUid? VtolVisual;
     public bool SwappingSeat;
-    public Vector2 TaxiLastPosition;
-    public TimeSpan TaxiProgressAt;
-}
-
-/// <summary>A deployed fighter staging and recovery point.</summary>
-[RegisterComponent]
-public sealed partial class FighterLandingPadComponent : Component
-{
-    [DataField] public float Radius = 3.5f;
 }
