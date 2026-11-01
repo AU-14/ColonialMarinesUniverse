@@ -103,7 +103,8 @@ public sealed partial class AdminSystem : EntitySystem
                 continue;
 
             if (!_playerManager.TryGetPlayerData(id, out var playerData))
-                return;
+                //return; // CMU14: one disconnected player must not abort the rebuild and strand the rest on stale last-round entries
+                continue;
 
             _playerManager.TryGetSessionById(id, out var session);
             _playerList[id] = GetPlayerInfo(playerData, session);
