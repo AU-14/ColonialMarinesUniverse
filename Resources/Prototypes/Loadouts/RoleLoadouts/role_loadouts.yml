@@ -34,14 +34,14 @@
 # Silicons
 - type: roleLoadout
   id: JobBorg
-  groups:
+  groups: []
   # - RMCLoadoutGroupPins # CMU14: moved to CMUGlobalLoadout.
   nameDataset: NamesBorg
   canCustomizeName: true
 
 - type: roleLoadout
   id: JobStationAi
-  groups:
+  groups: []
   # - RMCLoadoutGroupPins # CMU14: moved to CMUGlobalLoadout.
   nameDataset: NamesAI
   canCustomizeName: true

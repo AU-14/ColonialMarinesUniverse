@@ -14,6 +14,22 @@ namespace Content.IntegrationTests.CMU14.Preferences;
 [TestFixture]
 public sealed class GlobalLoadoutTest
 {
+    [TestCase("JobBorg", "NamesBorg")]
+    [TestCase("JobStationAi", "NamesAI")]
+    public async Task SiliconLoadoutsRemainValidWithoutJobSpecificPins(string role, string nameDataset)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
+            var loadout = prototypes.Index<RoleLoadoutPrototype>(role);
+            Assert.That(loadout.Groups, Is.Empty);
+            Assert.That(loadout.CanCustomizeName, Is.True);
+            Assert.That(loadout.NameDataset?.Id, Is.EqualTo(nameDataset));
+        });
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task PinsBelongOnlyToGlobalLoadoutAndAreFree()
     {
