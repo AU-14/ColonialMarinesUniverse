@@ -1,5 +1,7 @@
+using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Yautja;
 using Content.Server.GameTicking;
+using Content.Server.GameTicking.Presets;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.GameTicking;
 
@@ -101,6 +103,68 @@ public sealed class YautjaHuntRollTest
                 cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, false);
                 cfg.SetCVar(YautjaPredatorRoundCVars.InsurgencyChance, YautjaPredatorRoundCVars.InsurgencyChance.DefaultValue);
                 cfg.SetCVar(YautjaPredatorRoundCVars.DistressSignalChance, YautjaPredatorRoundCVars.DistressSignalChance.DefaultValue);
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LobbyRollHappensRightAfterTheGamemodeVoteNotAfterTheWholeSequence()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            InLobby = true,
+            Dirty = true,
+            DummyTicker = false,
+        });
+        var server = pair.Server;
+        var ticker = server.System<GameTicker>();
+        var round = server.System<YautjaPredatorRoundSystem>();
+        var auRound = server.System<AuRoundSystem>();
+        var prototypes = server.ProtoMan;
+        var cfg = server.CfgMan;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                cfg.SetCVar(YautjaPredatorRoundCVars.InsurgencyChance, 1f);
+                ticker.SetGamePreset("Insurgency");
+                auRound.StartVoteSequence();
+                cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, true);
+            });
+            await pair.RunTicksSync(5);
+
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(auRound.IsAwaitingPresetVote(), Is.True);
+                Assert.That(round.HuntActive, Is.False, "the gamemode vote is still open, nothing to roll on yet");
+            });
+
+            // what the gamemode vote finishing does: ticker preset + the AU sequence's selected preset.
+            // the planet/platoon votes are still to come, so the sequence keeps running
+            await server.WaitPost(() =>
+            {
+                ticker.SetGamePreset("Insurgency");
+                auRound.SetPreset(prototypes.Index<GamePresetPrototype>("Insurgency"));
+            });
+            await pair.RunTicksSync(5);
+
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(auRound.IsVoteSequenceRunning(), Is.True);
+                Assert.That(round.HuntActive, Is.True, "the hunt should roll as soon as the gamemode is known");
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                auRound.StopVoteSequence();
+                cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, false);
+                cfg.SetCVar(YautjaPredatorRoundCVars.InsurgencyChance, YautjaPredatorRoundCVars.InsurgencyChance.DefaultValue);
             });
         }
 

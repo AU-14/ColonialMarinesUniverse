@@ -81,8 +81,9 @@ public sealed partial class YautjaPredatorRoundSystem
             return;
         }
 
-        // gamemode vote still going, the preset isn't final yet
-        if (_auRound.IsVoteSequenceRunning())
+        // gamemode vote still going, the preset isn't final yet. don't wait for the planet/platoon votes
+        // though, whitelisted players need the notice while there's still lobby time to ready up
+        if (_auRound.IsAwaitingPresetVote())
             return;
 
         var presetId = GameTicker.Preset?.ID;
