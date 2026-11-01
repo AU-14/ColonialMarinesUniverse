@@ -13,7 +13,7 @@ public sealed class CMUCavernFieldTest
     [Test]
     public void CavernsSpanLevelsHaveWideChambersAndTerminateAboveBedrock()
     {
-        var field = new CMUCavernField(12345, new CMUCavernSettings());
+        var field = new CMUCavernField(12345, new CMUCavernSettings { Variant = CMUCavernVariant.PillarCathedral });
         var widest = 0;
         var tallest = 0;
         for (var x = -96; x < 96; x++)
@@ -39,9 +39,9 @@ public sealed class CMUCavernFieldTest
     }
 
     [Test]
-    public void NeighbouringRegionsConnectAcrossNegativeChunkCoordinates()
+    public void NeighbouringRegionsConnectAcrossNegativeChunkCoordinates([Values] CMUCavernVariant variant)
     {
-        var field = new CMUCavernField(12345, new CMUCavernSettings());
+        var field = new CMUCavernField(12345, new CMUCavernSettings { Variant = variant });
         var open = new HashSet<Vector2i>();
         for (var x = -96; x < 96; x++)
         for (var y = -96; y < 96; y++)

@@ -176,6 +176,61 @@ public sealed class CMUCavernGenerationTest : GameTest
     }
 
     [Test]
+    public async Task FloodedGeologyPlacesWaterOnGroundButNotInTheShaftAbove()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var settings = SEntMan.EnsureComponent<ZBuildableMapComponent>(map.MapUid);
+            settings.Caverns = new CMUCavernSettings { StartDepth = -1, Variant = CMUCavernVariant.FloodedFork };
+            settings.DepthBiomes.Clear();
+            settings.StoneOreVeins.Clear();
+            settings.StoneDeposits.Clear();
+            SEntMan.EnsureComponent<CMUCavernWorldComponent>(map.MapUid).Seed = 12345;
+            var field = new CMUCavernField(12345, settings.Caverns);
+            var site = (from x in Enumerable.Range(0, 96)
+                        from y in Enumerable.Range(0, 96)
+                        from depth in Enumerable.Range(2, 5).Select(d => -d)
+                        let tile = new Vector2i(x, y)
+                        where field.IsOpen(tile, depth) && !field.IsOpen(tile, depth - 1) &&
+                              field.IsOpen(tile, depth + 1) && field.SceneryAt(tile, depth) == CMUCavernScenery.Water
+                        select (tile, depth)).First();
+            var building = Server.System<ZLevelBuildingSystem>();
+            Assert.That(building.EnsureNeighborLevel(map.MapUid, -1, map.Grid.Owner, Vector2.Zero, out var first, out var grid), Is.True);
+            var stone = SEntMan.EnsureComponent<ZGeneratedStoneComponent>(first);
+            stone.StoneGrid = grid;
+            building.EnsureChunkAt((first, stone), first, site.tile);
+            var maps = Server.System<SharedMapSystem>();
+            var levels = new List<EntityUid>();
+            var current = first;
+            for (var depth = -1; depth >= -7; depth--)
+            {
+                levels.Add(current);
+                var slice = SEntMan.GetComponent<ZGeneratedStoneComponent>(current);
+                var sliceGrid = SEntMan.GetComponent<MapGridComponent>(slice.StoneGrid);
+                if (depth == site.depth)
+                {
+                    var water = false;
+                    foreach (var entity in maps.GetAnchoredEntities(slice.StoneGrid, sliceGrid, site.tile))
+                        water |= SEntMan.GetComponent<MetaDataComponent>(entity).EntityPrototype?.ID == "CMUCavernWater";
+                    Assert.That(water, Is.True, "The generated environment must use its flooded profile.");
+                    Assert.That(maps.GetTileRef(slice.StoneGrid, sliceGrid, site.tile).Tile.IsEmpty, Is.False);
+                }
+                if (depth == site.depth + 1)
+                {
+                    Assert.That(maps.GetTileRef(slice.StoneGrid, sliceGrid, site.tile).Tile.IsEmpty, Is.True);
+                    Assert.That(maps.GetAnchoredEntities(slice.StoneGrid, sliceGrid, site.tile).MoveNext(), Is.False,
+                        "Liquid and decoration must not float in a natural shaft.");
+                }
+                if (depth > -7)
+                    current = SEntMan.GetComponent<CMUZLevelMapComponent>(current).MapBelow!.Value;
+            }
+            foreach (var level in levels)
+                SEntMan.DeleteEntity(level);
+        });
+    }
+
+    [Test]
     public async Task ExplorationGeneratesNearbyChunksGraduallyAndIgnoresGhosts()
     {
         var map = await Pair.CreateTestMap();

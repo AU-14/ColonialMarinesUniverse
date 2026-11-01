@@ -20,9 +20,10 @@ separator; the next group begins below it. Floor height follows the chamber
 shape, producing shelves around a lower floor. Separators give shaft digging a
 purpose and bound how much terrain must be prepared below a natural opening.
 
-These are initial geometry values, not a final balance decision. There are no
-new cave creatures, biomes, underground structures or traversal tools in this
-pass. Existing depth-specific rock, ores, water and lava are retained. Natural
+These are initial geometry values, not a final balance decision. Eight geological
+variants now change cavern shape and scenery. There are no new cave creatures,
+underground structures or traversal tools in this pass. Existing depth-specific
+rock and ores are retained; cavern liquids follow the local geology. Natural
 routes can bypass a digging-tool gate; tool requirements still apply when
 cutting rock, but should not be treated as an absolute access lock.
 
@@ -49,7 +50,9 @@ cutting rock, but should not be treated as an absolute access lock.
   Server memory can still grow with the total explored area. Existing networking
   and visibility systems handle what clients receive; no engine code was changed.
 
-`ZBuildableMap.caverns` configures `startDepth`, `regionSize` and `bandHeight`.
+`ZBuildableMap.caverns` configures `startDepth`, `regionSize`, `bandHeight` and an
+optional `variant` override (for example `PillarCathedral`). Without the override,
+each geological region selects a seeded variant, independent of chunk boundaries.
 Setting `caverns: null` retains independent legacy layers. Mapper-authored station
 levels use the existing localized generation path and are not hollowed out by
 the new volume. These settings should be selected before a round generates its
@@ -91,7 +94,7 @@ visual readability, transport difficulty, worst-case generation stalls and
 memory growth over a long round. Unit/integration timings are diagnostic, not a
 server capacity claim.
 
-### Verified in this pass
+### Verified in the first cavern pass
 
 The shared, server and client projects compiled through the repository test
 wrapper. Two geometry tests and 30 cavern/construction/structural integration
@@ -110,3 +113,63 @@ measurement. Preparation now moves terrain/entity work into the existing digging
 delay. The synchronous fallback is still used for unprepared direct placement
 or boundary arrival and can still produce a burst. These single-run observations
 do not establish a maximum frame time or player capacity.
+
+## Geological variants
+
+The shape families are inspired by the Colony Industry
+[ambient caverns design](https://github.com/TheHellFireo/CMU-Colony-Industry/blob/main/Content.CMU/Design/AmbientCaverns.md).
+Their implementation here samples a continuous multi-level volume, rather than
+creating the reference implementation's finite single-grid cave all at once.
+The region seed varies orientation, bends, proportions and placement. Regional
+galleries connect independently of those local shapes.
+
+| Variant | Generated terrain and appearance | Expedition decisions |
+| --- | --- | --- |
+| Braided Galleries | Three winding galleries, cross-links, amber mineral growths | Mark junctions and establish a main haul route through the loops. |
+| Flooded Fork | A trunk splits toward two broad basins; water and limestone outcrops | Choose dry ledges or accept slower wading; bridge gaps before moving machinery. |
+| Pillar Cathedral | A broad chamber, several Z-levels of open height, rock columns and pale crystals | Descend from the rim, build bridges and survey exposed walls. |
+| Lava Tubes | Winding conduits, widened pockets, side spurs and exposed lava | Keep equipment and people off the lava; establish a protected crossing. |
+| Leaking Cavern | Offset drainage galleries, narrow fingers, small pools and outcrops | Follow branching shelves and plan passages around wet ground. |
+| Biological Dead Zone | Lobed chambers and crooked links; dead roots and fungal caps | Explore connected pockets; dead growth is scenery, not a harvestable crop. |
+| Thermal Springs | Overlapping basins with rock peninsulas and mineral water | Place staging areas on dry rock; wading slows movement. |
+| Vent Labyrinth | Angular fault corridors, switchbacks and a tall chimney; dormant vents | Mark the route through repeated intersections and secure vertical access. |
+
+Only natural floors receive liquid/scenery; open shafts never receive floating
+props. Water slows movement and uses the existing water interactions. Lava uses
+the existing ignition behavior. Mineral springs currently behave as tinted
+water. Vents, roots, fungi and crystals are non-blocking scenery; ore is supplied
+by the independent ore-vein/deposit system. Decorative props are sparse (at most
+one candidate per four-by-four cell), with no per-prop update loop or point light.
+Liquid patches follow continuous noise, leaving dry centres along regional
+galleries. This does not guarantee a walkable route across every vertical drop.
+
+The reference project's telegraphed gas/steam eruptions, treatment tools, staged
+passage obstructions and buried discoveries are not included in this pass.
+They can build on the new geology after traversal and resource balance are
+reviewed. No new art was copied: local RSI assets retain their original metadata.
+
+The interactive terrain atlas samples the compiled `CMUCavernField` at two seeds
+across Z-2 through Z-10. Its top-down plans and cross-sections are actual sampler
+output. Its close-up uses native asset frames with schematic wall edges; it is
+not an in-game screenshot and does not reproduce lighting, smoothing or ore
+rolls. The loading view illustrates queue order, not measured elapsed time.
+
+### Variant verification
+
+The same focused commands above passed with nine geometry cases and 31
+integration cases, and rebuilt the shared, server and client content projects.
+
+- `CavernsSpanLevelsHaveWideChambersAndTerminateAboveBedrock` samples the cathedral
+  volume to check chamber width, vertical continuity and the solid cover/separator.
+- `NeighbouringRegionsConnectAcrossNegativeChunkCoordinates` traverses the
+  generated geometry for each of the eight variants.
+- `FloodedGeologyPlacesWaterOnGroundButNotInTheShaftAbove` uses real chunk
+  generation to check a liquid entity on the floor and an empty shaft above it.
+- Existing cavern tests cover falls, preserved edits, staged exploration,
+  observer exclusion and collapse boundaries. Structural lifecycle and tile
+  application checks remain green.
+
+The atlas was checked in Edge at 780, 360 and 320 pixels, in light and dark
+appearance, with all variants, all four views and the loading control. No script
+errors or horizontal overflow were found. Full multiplayer visual playtesting
+and long-round performance measurements remain outstanding.

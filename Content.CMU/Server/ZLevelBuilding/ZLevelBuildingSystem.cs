@@ -138,6 +138,15 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         foreach (var decor in tier != null ? tier.CaveDecor : settings.StoneCaveDecor)
             ids.Add(decor.Entity.Id);
 
+        if (settings.Caverns != null)
+        {
+            foreach (var scenery in Enum.GetValues<CMUCavernScenery>())
+            {
+                if (CavernSceneryPrototype(scenery) is { } prototype)
+                    ids.Add(prototype);
+            }
+        }
+
         return ids;
     }
 
@@ -447,7 +456,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
             below.Comp.NoiseSeed = cavern == null ? _random.Next(1, int.MaxValue) :
                 Math.Max(1, cavern.TileSeed(Vector2i.Zero, depth));
         var caveNoise = cavern == null ? MakeNoise(below.Comp.NoiseSeed, caves) : null;
-        var waterNoise = MakeNoise(below.Comp.NoiseSeed, water);
+        var waterNoise = cavern == null ? MakeNoise(below.Comp.NoiseSeed, water) : null;
         // RUMC End
 
         // Tile changes are batched before entities are anchored. Setting each tile separately rebuilds
@@ -506,6 +515,13 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
                 if (opening)
                     continue;
 
+                if (cavern != null && natural)
+                {
+                    if (CavernSceneryPrototype(cavern.SceneryAt(index, depth)) is { } scenery)
+                        spawns.Add((scenery, coords));
+                    continue;
+                }
+
                 // RUMC Caves Begin: a pool where the water noise is high, an empty cave where the cave noise is.
                 // RUMC: the rock was spawned everywhere here (kept): Spawn(settings.StoneRockEntity, coords);
                 if ((cavern == null || natural) && waterNoise != null && water != null &&
@@ -543,6 +559,21 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         SpawnOreVeins(below.Comp.StoneGrid, grid, GetEffectiveOreVeins(settings, mapUid), origin, size, rockEntity);
         SpawnDeposits(below.Comp.StoneGrid, grid, below.Comp.NaturalCaves, tier != null ? tier.Deposits : settings.StoneDeposits, origin, size);
     }
+
+    private static string? CavernSceneryPrototype(CMUCavernScenery scenery) => scenery switch
+    {
+        CMUCavernScenery.Water => "CMUCavernWater",
+        CMUCavernScenery.Lava => "CMUCavernLava",
+        CMUCavernScenery.Spring => "CMUCavernSpring",
+        CMUCavernScenery.Mineral => "CMUCavernMineral",
+        CMUCavernScenery.Crystal => "CMUCavernCrystal",
+        CMUCavernScenery.Stalagmite => "CMUCavernStalagmite",
+        CMUCavernScenery.DeadRoots => "CMUCavernDeadRoots",
+        CMUCavernScenery.DeadFungi => "CMUCavernDeadFungi",
+        CMUCavernScenery.Vent => "CMUCavernVent",
+        CMUCavernScenery.Pebbles => "CMUCavernPebbles",
+        _ => null,
+    };
 
     // RUMC method
     // Lays deposits (the ore, and the oil) on the floor of the caves of a fresh chunk, each with its chance for the chunk, on a cave tile where nothing lies

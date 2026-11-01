@@ -19,13 +19,17 @@ public sealed partial class CMUCavernSettings
     /// <summary>Includes one solid separator below each group of connected vertical chambers.</summary>
     [DataField]
     public int BandHeight = 7;
+
+    /// <summary>Null mixes geological regions. An override is useful for authored maps and previews.</summary>
+    [DataField]
+    public CMUCavernVariant? Variant;
 }
 
 /// <summary>
 /// Samples the same chamber/tunnel volume at every depth. No entities, chunk history or random stream are
 /// consulted, so discovering a different entrance cannot change an existing cavern or its continuation.
 /// </summary>
-public sealed class CMUCavernField
+public sealed partial class CMUCavernField
 {
     private readonly int _seed;
     private readonly CMUCavernSettings _settings;
@@ -71,14 +75,16 @@ public sealed class CMUCavernField
             {
                 var region = cell + new Vector2i(x, y);
                 var center = Center(region, top, bottom, size);
-                var radiusX = size * (0.29f + Sample(region, top, 3) * 0.14f);
-                var radiusY = size * (0.29f + Sample(region, top, 4) * 0.14f);
-                var radiusZ = (top - bottom) * 0.47f;
                 var offset = point - center;
-                var shape = offset.X * offset.X / (radiusX * radiusX) +
-                            offset.Y * offset.Y / (radiusY * radiusY) +
-                            offset.Z * offset.Z / (radiusZ * radiusZ);
-                if (shape < roughness)
+                var scale = size / 96f;
+                var local = new Vector3(offset.X / scale, offset.Y / scale, offset.Z);
+                if ((Hash(region, top, 9) & 1) != 0)
+                    local = new Vector3(local.Y, local.X, local.Z);
+                if ((Hash(region, top, 9) & 2) != 0)
+                    local.X = -local.X;
+                if (MathF.Abs(local.X) < 50 && MathF.Abs(local.Y) < 50 &&
+                    InRegion(local, RegionVariant(region, top), (top - bottom) * 0.47f, roughness,
+                        Sample(region, top, 3)))
                     return true;
 
                 if (InTunnel(point, center, Center(region + new Vector2i(1, 0), top, bottom, size), size) ||
