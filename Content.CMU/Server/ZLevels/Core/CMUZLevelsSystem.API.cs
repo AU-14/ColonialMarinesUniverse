@@ -104,6 +104,8 @@ public sealed partial class CMUZLevelsSystem
     private void OnZMapShutdown(Entity<CMUZLevelMapComponent> ent, ref ComponentShutdown args)
     {
         RemoveZMapMembership(ent);
+        var ev = new CMUZLevelMapLeftNetworkEvent(ent.Owner);
+        RaiseLocalEvent(ref ev);
     }
 
     private bool RemoveZMapMembership(Entity<CMUZLevelMapComponent> ent)
@@ -226,3 +228,11 @@ public sealed partial class CMUZLevelsSystem
 /// </summary>
 [ByRefEvent]
 public readonly record struct CMUZLevelNetworkUpdatedEvent(Entity<CMUZLevelsNetworkComponent> Network);
+
+/// <summary>
+/// Raised when a map's ZLevelMap component shuts down (deletion or explicit
+/// removal), after membership cleanup ran. Membership may already be gone:
+/// network teardown clears it before removing the member components.
+/// </summary>
+[ByRefEvent]
+public readonly record struct CMUZLevelMapLeftNetworkEvent(EntityUid Map);

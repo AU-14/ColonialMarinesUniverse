@@ -955,7 +955,7 @@ public sealed class YautjaBowTest
                         "CMSS13 bow uses an internal one-shot magazine without burst/full-auto modes.");
                     Assert.That(bowGun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto),
                         "CMSS13 bow exposes only normal single-shot firing.");
-                    Assert.That(bowGun.FireRate, Is.EqualTo(10f / 7f).Within(0.0001f),
+                    Assert.That(bowGun.FireRate, Is.EqualTo(10f / 5f).Within(0.0001f),
                         "CMSS13 bow set_gun_config_values() sets fire_delay = FIRE_DELAY_TIER_7.");
                     Assert.That(bowGun.MinAngle.Degrees, Is.EqualTo(0).Within(0.0001),
                         "CMSS13 bow scatter = 0.");
@@ -3231,7 +3231,10 @@ public sealed class YautjaBowTest
                         Assert.That(actionIds, Is.EquivalentTo(new[]
                         {
                             "CMUActionYautjaToggleWristBlades",
-                        }), "CMSS13 soldier bracer replaces the inherited bracer_actions list instead of keeping normal hunter bracer actions.");
+                            "CMUActionYautjaOpenBracerMenu",
+                            "CMUActionYautjaSelfDestruct",
+                            "CMUActionYautjaTranslator",
+                        }), "Soldier bracers retain utility actions without granting normal hunter combat equipment.");
                     }
 
                     if (prototypes.HasIndex<EntityPrototype>(CMUYautjaPoweredArmorPrototype))
@@ -3239,12 +3242,14 @@ public sealed class YautjaBowTest
                         var poweredArmor = SpawnAndTrack(entMan, "CMUYautjaPoweredArmor", spawned);
                         var speedTier = entMan.GetComponent<RMCArmorSpeedTierComponent>(poweredArmor);
                         var speed = entMan.GetComponent<ClothingSpeedModifierComponent>(poweredArmor);
-                        Assert.That(speedTier.SpeedTier, Is.EqualTo("heavy"),
-                            "CMSS13 powered armor slowdown = SLOWDOWN_ARMOR_LOWHEAVY uses the local heavy speed tier.");
-                        Assert.That(speed.WalkModifier, Is.EqualTo(0.64f),
-                            "Local SLOWDOWN_ARMOR_LOWHEAVY mapping.");
-                        Assert.That(speed.SprintModifier, Is.EqualTo(0.64f),
-                            "Local SLOWDOWN_ARMOR_LOWHEAVY mapping.");
+                        var fullArmor = SpawnAndTrack(entMan, "CMUYautjaHeavyClanArmor", spawned);
+                        var fullSpeed = entMan.GetComponent<ClothingSpeedModifierComponent>(fullArmor);
+                        Assert.That(speedTier.SpeedTier, Is.EqualTo(entMan.GetComponent<RMCArmorSpeedTierComponent>(fullArmor).SpeedTier),
+                            "CMSS13 powered armor keeps the full hunter armor's slowdown, so it shares its speed tier.");
+                        Assert.That(speed.WalkModifier, Is.EqualTo(fullSpeed.WalkModifier),
+                            "CMSS13 powered armor slowdown = SLOWDOWN_ARMOR_LOWHEAVY, same 0.75 as the full hunter armor.");
+                        Assert.That(speed.SprintModifier, Is.EqualTo(fullSpeed.SprintModifier),
+                            "CMSS13 powered armor slowdown = SLOWDOWN_ARMOR_LOWHEAVY, same 0.75 as the full hunter armor.");
                     }
 
                     if (prototypes.HasIndex<EntityPrototype>(CMUYautjaPoweredHelmetPrototype))
@@ -5181,7 +5186,8 @@ public sealed class YautjaBowTest
                         storageSystem.CanInsert(quiver, extraArrow, out var reason, storage),
                         Is.False,
                         "CMSS13 quiver has storage_slots = 8, so a ninth bow/arrow item must be rejected.");
-                    Assert.That(reason, Is.EqualTo("rmc-storage-limit-cant-fit"));
+                    Assert.That(reason, Is.EqualTo("cmu-quiver-full"),
+                        "The quiver's LimitedStorage limit names its own full-popup, report 1085.");
                     Assert.That(
                         storageSystem.Insert(quiver, extraArrow, out _, storageComp: storage, playSound: false),
                         Is.False);
@@ -8716,7 +8722,7 @@ public sealed class YautjaBowTest
                 "CMUYautjaLoadoutVendor",
                 "CMUYautjaArmorBundle",
                 "CMUYautjaArmor",
-                ["CMUYautjaClanArmor", "CMUYautjaMask", "CMUYautjaMaskAccessory01Ebony", "CMUYautjaClanGreaves"]),
+                ["CMUYautjaClanArmor", "CMUYautjaMask", "CMUYautjaClanGreaves"]),
             new MandatoryBundleRow(
                 "CMUYautjaYoungbloodLoadoutVendor",
                 "CMUYautjaYoungbloodHuntingEquipmentBundle",
@@ -8726,7 +8732,7 @@ public sealed class YautjaBowTest
                 "CMUYautjaYoungbloodLoadoutVendor",
                 "CMUYautjaArmorBundle",
                 "CMUYautjaArmor",
-                ["CMUYautjaClanArmor", "CMUYautjaMask", "CMUYautjaMaskAccessory01Ebony", "CMUYautjaClanGreaves"]),
+                ["CMUYautjaClanArmor", "CMUYautjaMask", "CMUYautjaClanGreaves"]),
             new MandatoryBundleRow(
                 "CMUYautjaStrandedLoadoutVendor",
                 "CMUYautjaStrandedHuntingEquipmentBundle",
@@ -9668,6 +9674,40 @@ public sealed class YautjaBowTest
             foreach (var uid in new[] { hunter, disc })
             {
                 if (uid != default && !entMan.Deleted(uid))
+                    entMan.DeleteEntity(uid);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HumansCantGrabAYautjaThrownSmartDiscOutOfTheAir()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var hands = entMan.System<SharedHandsSystem>();
+            var hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            var marine = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
+            var disc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(1, 0)));
+
+            var thrown = entMan.EnsureComponent<ThrownItemComponent>(disc);
+            thrown.Thrower = hunter;
+            Assert.That(entMan.GetComponent<YautjaSmartDiscComponent>(disc).Active, Is.False, "the boomerang throw isn't the hunting mode");
+            Assert.That(hands.TryPickupAnyHand(marine, disc), Is.False,
+                "cmss13 only lets a throw mode catch take a flying disc, a plain click shouldn't");
+
+            entMan.RemoveComponent<ThrownItemComponent>(disc);
+            Assert.That(hands.TryPickupAnyHand(marine, disc), Is.True, "a disc lying on the floor is still loot");
+
+            foreach (var uid in new[] { hunter, marine, disc })
+            {
+                if (!entMan.Deleted(uid))
                     entMan.DeleteEntity(uid);
             }
         });
@@ -12250,8 +12290,10 @@ public sealed class YautjaBowTest
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto | SelectiveFire.Burst),
                         "CMSS13 plasma carbine keeps burst fire: set_burst_amount(BURST_AMOUNT_TIER_2) and set_burst_delay(FIRE_DELAY_TIER_11).");
-                    Assert.That(gun.BurstFireRate, Is.EqualTo(10f / 11f).Within(0.0001f),
+                    Assert.That(gun.BurstFireRate, Is.EqualTo(10f / 2.5f).Within(0.0001f),
                         "CMSS13 plasma carbine burst delay is FIRE_DELAY_TIER_11.");
+                    Assert.That(gun.ShotsPerBurst, Is.EqualTo(2),
+                        "CMSS13 plasma carbine set_burst_amount(BURST_AMOUNT_TIER_2).");
                     Assert.That(ammo.Prototype, Is.EqualTo("CMUYautjaPlasmaRifleBolt"));
                     Assert.That(ammo.FireCost, Is.EqualTo(1));
                     Assert.That(battery.MaxCharge, Is.EqualTo(40),
@@ -12304,7 +12346,7 @@ public sealed class YautjaBowTest
                         Assert.That(fireModes.CurrentFireMode, Is.EqualTo(0));
                         Assert.That(ammo.Prototype, Is.EqualTo("CMUYautjaPlasmaRifleBolt"));
                         Assert.That(ammo.FireCost, Is.EqualTo(1));
-                        Assert.That(gun.FireRate, Is.EqualTo(10f / 8f).Within(0.0001f),
+                        Assert.That(gun.FireRate, Is.EqualTo(10f / 4f).Within(0.0001f),
                             "CMSS13 plasma carbine incendiary mode sets fire_delay = FIRE_DELAY_TIER_8.");
                     });
                 }
@@ -12540,12 +12582,12 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(gun.FireRate, Is.EqualTo(10f / 9f).Within(0.0001f),
+                    Assert.That(gun.FireRate, Is.EqualTo(10f / 3.5f).Within(0.0001f),
                         "CMSS13 plasma carbine set_gun_config_values() starts at FIRE_DELAY_TIER_9 before unique-action mode changes.");
                     AssertRangedGunStats(entMan,
                         carbine,
-                        10f / 9f,
-                        15,
+                        10f / 3.5f,
+                        4,
                         10,
                         1.5,
                         1.4,
@@ -15094,7 +15136,6 @@ public sealed class YautjaBowTest
                 {
                     "CMUYautjaClanArmor",
                     "CMUYautjaMask",
-                    "CMUYautjaMaskAccessory01Ebony",
                     "CMUYautjaClanGreaves",
                 }));
             }
@@ -17497,6 +17538,9 @@ public sealed class YautjaBowTest
         yield return new FireIntensityResistanceRow("CMUYautjaClanArmor", standard);
         yield return new FireIntensityResistanceRow("CMUYautjaClanArmorScalable", standard);
         yield return new FireIntensityResistanceRow("CMUYautjaHeavyClanArmor", heavy);
+        // the military caste power armor is a hunter/full subtype in cmss13
+        yield return new FireIntensityResistanceRow("CMUYautjaPoweredArmor", heavy);
+        yield return new FireIntensityResistanceRow("CMUYautjaPoweredArmorEnforcer", heavy);
 
         yield return new FireIntensityResistanceRow("CMUYautjaMask", standard);
         yield return new FireIntensityResistanceRow("CMUYautjaMaskScalable", standard);

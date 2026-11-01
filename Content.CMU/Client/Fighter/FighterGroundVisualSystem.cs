@@ -25,6 +25,9 @@ public sealed partial class FighterGroundVisualSystem : EntitySystem
     private readonly HashSet<EntityUid> _visibleCrew = [];
     private readonly List<EntityUid> _restoreCrew = [];
 
+    private CMUFighterAirframePrototype Airframe(EntityUid entity) =>
+        ProtoMan.Index(CompOrNull<CMUFighterAppearanceComponent>(entity)?.Airframe ?? CMUFighterAirframePrototype.Default);
+
     public override void Initialize()
     {
         UpdatesAfter.Add(typeof(FighterClientSystem));
@@ -50,15 +53,17 @@ public sealed partial class FighterGroundVisualSystem : EntitySystem
                 (FighterFlight.MaximumHeight - FighterFlight.MinimumHeight), 0, 1);
             _sprites.SetColor(uid, flyby.Crashing ? Color.FromHex("#88776A") : Color.Black.WithAlpha(.32f - altitude * .25f));
             _sprites.SetScale(uid, new Vector2((.5f + altitude * .25f) * FighterGroundComponent.SizeMultiplier));
-            // Keep the south-facing source art aligned with the north-facing flight transform.
-            _sprites.SetRotation(uid, new Angle(Math.PI + (flyby.Crashing ? Math.Sin(_timing.CurTime.TotalSeconds * 8) * .22 : 0)));
+            // Align each airframe's source art with the north-facing flight transform.
+            _sprites.SetRotation(uid, Airframe(uid).SpriteRotation + new Angle(Math.PI + (flyby.Crashing ? Math.Sin(_timing.CurTime.TotalSeconds * 8) * .22 : 0)));
         }
         _visibleCrew.Clear();
         var query = EntityQueryEnumerator<FighterGroundComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var ground, out _))
         {
-            _sprites.LayerSetRsiState(uid, 0, ground.State == FighterGroundState.Grounded ? "folded" : "vtolmode");
-            FighterVtolPresentation.Hull(ground, _timing.CurTime, out var offset, out var scale, out var opacity);
+            var definition = Airframe(uid);
+            var state = ground.State == FighterGroundState.Grounded ? definition.GroundState : definition.VtolState;
+            _sprites.LayerSetRsiState(uid, 0, state);
+            FighterVtolPresentation.Hull(ground, definition, _timing.CurTime, out var offset, out var scale, out var opacity);
             offset += GroundElevationOffset(uid);
             _sprites.SetOffset(uid, offset);
             _sprites.SetScale(uid, new Vector2(FighterGroundComponent.SpriteScale * scale));
@@ -71,7 +76,7 @@ public sealed partial class FighterGroundVisualSystem : EntitySystem
                 _sprites.SetScale(entity, new Vector2(FighterGroundComponent.SpriteScale * scale));
                 _sprites.SetColor(entity, color);
                 if (part == ground.Canopy)
-                    _sprites.LayerSetRsiState(entity, 0, ground.State == FighterGroundState.Grounded ? "folded" : "vtolmode");
+                    _sprites.LayerSetRsiState(entity, 0, state);
                 if (TryComp(entity, out FighterSeatComponent? seat) && seat.Occupant is { } crew && TryComp(crew, out SpriteComponent? sprite))
                 {
                     _visibleCrew.Add(crew);
@@ -99,7 +104,7 @@ public sealed partial class FighterGroundVisualSystem : EntitySystem
                     _sprites.SetOffset(uid, Vector2.Zero);
                     _sprites.SetColor(uid, Color.White);
                     if (part == aircraft.Canopy)
-                        _sprites.LayerSetRsiState(uid, 0, "jetfighter");
+                        _sprites.LayerSetRsiState(uid, 0, Airframe(uid).FlightState);
                 }
         RestoreCrewSprites();
         var mounts = EntityQueryEnumerator<FighterHardpointComponent, SpriteComponent, TransformComponent>();
@@ -111,7 +116,7 @@ public sealed partial class FighterGroundVisualSystem : EntitySystem
             var opacity = 1f;
             if (onGround)
             {
-                FighterVtolPresentation.Hull(ground!, _timing.CurTime, out offset, out scale, out opacity);
+                FighterVtolPresentation.Hull(ground!, Airframe(xform.ParentUid), _timing.CurTime, out offset, out scale, out opacity);
                 offset += GroundElevationOffset(xform.ParentUid);
                 offset = AttachmentOffset(xform.ParentUid, (uid, sprite), offset, scale);
             }

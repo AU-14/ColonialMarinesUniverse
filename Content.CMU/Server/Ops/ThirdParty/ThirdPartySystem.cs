@@ -140,7 +140,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             // The ghost-menu entry alone never reaches players who do not open it.
             if (!string.IsNullOrWhiteSpace(party.AnnounceInbound))
-                _chat.DispatchGlobalAnnouncement(party.AnnounceInbound, string.Empty, false,
+                _chat.DispatchGlobalAnnouncement(LocalizeAnnouncement(party.AnnounceInbound), string.Empty, false,
                     colorOverride: Color.DarkOrange);
         }
 
@@ -261,6 +261,13 @@ public sealed partial class ThirdPartySystem : EntitySystem
         string? entryMethod = overrideDropship.HasValue
             ? overrideDropship.Value ? "shuttle" : "ground"
             : string.IsNullOrWhiteSpace(party.EntryMethod) ? "ground" : party.EntryMethod;
+        // Presets can force shuttle entry; ground spawn puts parties inside enemy lines unprepared.
+        // Admin overrides keep precedence.
+        var groundEntryForbidden = _auRoundSystem.SelectedPreset is { ThirdPartyForceShuttle: true };
+        if (groundEntryForbidden
+            && !overrideDropship.HasValue
+            && string.Equals(entryMethod, "ground", StringComparison.OrdinalIgnoreCase))
+            entryMethod = "shuttle";
         _sawmill.Debug($"[ThirdPartySystem] Entry method: {entryMethod} (overrideDropship={overrideDropship})");
         if (_sawmill.Level <= LogLevel.Debug)
         {
@@ -834,7 +841,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
         if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
         {
-            _chat.DispatchGlobalAnnouncement(party.AnnounceArrival, string.Empty, false,
+            _chat.DispatchGlobalAnnouncement(LocalizeAnnouncement(party.AnnounceArrival), string.Empty, false,
                 colorOverride: Color.DarkOrange);
             _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
         }
@@ -842,6 +849,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
         _auRoundSystem.MarkThirdPartySpawned(party);
         yield return ForceDeploymentStep.Completed;
     }
+
+    // announcements are raw English on most parties, a loc id is used when one exists
+    private string LocalizeAnnouncement(string announcement)
+        => Loc.TryGetString(announcement, out var localized) ? localized : announcement;
 
     private static IReadOnlyDictionary<string, int> GetSpawnBodies(
         ThreatMarkerType markerType,

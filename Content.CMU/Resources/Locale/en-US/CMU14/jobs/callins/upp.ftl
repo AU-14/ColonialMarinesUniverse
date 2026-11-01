@@ -39,3 +39,9 @@ cmu-ghost-name-upptd-patrol-rifleman = Territorial Defense Rifleman
 cmu-ghost-name-upptd-patrol-loader = Territorial Defense Loader
 cmu-upptd-patrol-description = Your UPP Territorial Defense patrol has been sent in to support the UPP forces in the area. Link up with them and follow their orders.
 cmu-upptd-patrol-rules = You are a member of the UPP Territorial Defense. You are ALLIED to the UPP, NEUTRAL to civilians and HOSTILE to the UPP's enemies.
+
+# UPP Ministry of Space Security Team
+au14-mssthirdparty-greeting = You are an informal collaborator of the UPP Ministry of Space Security.
+
+    Blend in with the colonists. Your earpiece reaches your handler on UPPSOF (:h or :7).
+au-14-job-name-mssthirdparty-informal-collaborator = MSS Informal Collaborator

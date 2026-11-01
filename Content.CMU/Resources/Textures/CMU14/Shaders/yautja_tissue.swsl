@@ -1,0 +1,13 @@
+uniform highp float pool;
+uniform highp vec4 blood;
+
+void fragment() {
+    highp vec4 source = zTexture(UV);
+    // The reference palette is indexed by the original sprite's sRGB brightness.
+    highp vec3 pigment = zToSrgb(source).rgb;
+    highp float value = (pigment.r + pigment.g + pigment.b) / 3.0;
+    highp vec3 tissue = (vec3(65.0, 9.0, 17.0) + value * vec3(123.0, 53.0, 48.0)) / 255.0;
+    tissue = zFromSrgb(vec4(tissue, 1.0)).rgb;
+    if (blood.g > blood.r) tissue = blood.rgb * (0.3 + value * 0.7);
+    COLOR = vec4(mix(tissue, blood.rgb, pool), source.a);
+}

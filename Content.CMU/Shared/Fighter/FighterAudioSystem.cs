@@ -20,6 +20,9 @@ public sealed partial class FighterAudioSystem : EntitySystem
     public static AudioParams Exterior(float range = 55, float volume = -2) => AudioParams.Default
         .WithVolume(volume).WithMaxDistance(range).WithReferenceDistance(6).WithRolloffFactor(.85f);
 
+    public static SoundSpecifier Engine(CMUFighterAirframePrototype airframe, string cue) =>
+        new SoundPathSpecifier($"/Audio/CMU14/Fighter/{airframe.SoundSet}/{cue}.ogg");
+
     public static SoundSpecifier Release(FighterWeaponKind kind, bool cockpit = false) => new SoundPathSpecifier(kind switch
     {
         FighterWeaponKind.Gau => cockpit ? "/Audio/CMU14/Fighter/gau-cockpit.ogg" : "/Audio/CMU14/Fighter/gau-ground.ogg",

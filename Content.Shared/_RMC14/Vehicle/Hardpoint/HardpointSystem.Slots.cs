@@ -43,11 +43,9 @@ public sealed partial class HardpointSystem
     {
         location = default;
 
-        if (!TryComp(owner, out HardpointStateComponent? state) ||
-            !TryComp(owner, out ItemSlotsComponent? itemSlots))
-        {
+        if (!TryComp(owner, out HardpointStateComponent? state)
+            || !TryComp(owner, out ItemSlotsComponent? itemSlots))
             return false;
-        }
 
         foreach (var slot in hardpoints.Slots)
         {
@@ -117,6 +115,62 @@ public sealed partial class HardpointSystem
 
         foreach (var slot in hardpoints.Slots)
         {
+            if (!_itemSlots.TryGetSlot((owner, itemSlots), slot.Id, out var itemSlot)
+                || itemSlot.Item is not { } installed)
+                continue;
+
+            if (!TryComp(installed, out HardpointSlotsComponent? childSlots))
+                continue;
+
+            var path = parentPath?.Append(slot.Id) ?? new VehicleSlotPath(slot.Id);
+            if (TryFindEmptyInstallLocation(installed, childSlots, item, out location, path))
+                return true;
+        }
+
+        return false;
+    }
+
+    // CMU14 method: an empty slot whose type shape the item matches, but which IsValidHardpoint
+    // refuses (compatibility id or whitelist). Used to give fit refusals a popup.
+    internal bool TryFindIncompatibleEmptyLocation(
+        EntityUid owner,
+        HardpointSlotsComponent hardpoints,
+        EntityUid item,
+        [NotNullWhen(true)] out HardpointSlotLocation location)
+    {
+        return TryFindIncompatibleEmptyLocation(owner, hardpoints, item, out location, parentPath: null);
+    }
+
+    private bool TryFindIncompatibleEmptyLocation(
+        EntityUid owner,
+        HardpointSlotsComponent hardpoints,
+        EntityUid item,
+        [NotNullWhen(true)] out HardpointSlotLocation location,
+        VehicleSlotPath? parentPath)
+    {
+        location = default;
+
+        if (!TryComp(owner, out HardpointStateComponent? state) ||
+            !TryComp(owner, out ItemSlotsComponent? itemSlots))
+        {
+            return false;
+        }
+
+        foreach (var slot in hardpoints.Slots)
+        {
+            if (!IsShapeValidHardpoint(item, hardpoints, slot))
+                continue;
+
+            if (!_itemSlots.TryGetSlot((owner, itemSlots), slot.Id, out var itemSlot) || itemSlot.HasItem)
+                continue;
+
+            var path = parentPath?.Append(slot.Id) ?? new VehicleSlotPath(slot.Id);
+            location = new HardpointSlotLocation(owner, hardpoints, state, itemSlots, slot, itemSlot, path);
+            return true;
+        }
+
+        foreach (var slot in hardpoints.Slots)
+        {
             if (!_itemSlots.TryGetSlot((owner, itemSlots), slot.Id, out var itemSlot) ||
                 itemSlot.Item is not { } installed)
             {
@@ -127,7 +181,7 @@ public sealed partial class HardpointSystem
                 continue;
 
             var path = parentPath?.Append(slot.Id) ?? new VehicleSlotPath(slot.Id);
-            if (TryFindEmptyInstallLocation(installed, childSlots, item, out location, path))
+            if (TryFindIncompatibleEmptyLocation(installed, childSlots, item, out location, path))
                 return true;
         }
 

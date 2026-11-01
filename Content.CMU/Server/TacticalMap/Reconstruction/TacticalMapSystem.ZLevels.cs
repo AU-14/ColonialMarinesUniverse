@@ -7,7 +7,7 @@ public sealed partial class TacticalMapSystem
 {
     // Linked floors share the battlefield's authorized feeds. Their own grid still supplies
     // the tile coordinates, and the reconstruction resolves each contact's actual depth.
-    private bool TryGetTrackingMap(EntityUid grid, out Entity<TacticalMapComponent> map)
+    public bool TryGetTrackingMap(EntityUid grid, out Entity<TacticalMapComponent> map)
     {
         var owner = grid;
         if (TryComp<CMUZLevelMapComponent>(grid, out var level) &&

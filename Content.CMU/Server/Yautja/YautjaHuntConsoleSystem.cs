@@ -16,8 +16,10 @@ using Content.Shared.Ghost.Components;
 using Content.Shared.Ghost.Roles.Raffles;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Inventory;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
+using Content.Shared.Radio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
@@ -39,6 +41,7 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedDoorSystem _door = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
@@ -371,9 +374,10 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
             ? _random.Next(minCount, maxCount + 1)
             : maxCount;
         var spawnedCount = 0;
+        var tierCounts = new int[option.Tiers.Count];
         for (var i = 0; i < count; i++)
         {
-            var spawned = TrySpawnPrey(ent.Comp, option, coordinates, blooding);
+            var spawned = TrySpawnPrey(ent.Comp, option, coordinates, blooding, tierCounts);
             if (spawned == null)
                 continue;
 
@@ -445,9 +449,12 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         YautjaHuntConsoleComponent console,
         YautjaHuntCallOption option,
         MapCoordinates coordinates,
-        bool blooding)
+        bool blooding,
+        int[] tierCounts)
     {
-        var entry = PickSpawnEntry(option.Spawns);
+        var entry = option.Tiers.Count > 0
+            ? PickTierEntry(option.Tiers, tierCounts)
+            : PickSpawnEntry(option.Spawns);
         if (entry == null)
         {
             entry = new YautjaHuntSpawnEntry
@@ -461,7 +468,9 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
             if (!_prototype.HasIndex<RandomHumanoidSettingsPrototype>(settings))
                 return null;
 
-            return _randomHumanoid.SpawnRandomHumanoid(settings, _transform.ToCoordinates(coordinates), string.Empty);
+            var humanoid = _randomHumanoid.SpawnRandomHumanoid(settings, _transform.ToCoordinates(coordinates), string.Empty);
+            StripHeadset(humanoid);
+            return humanoid;
         }
 
         if (entry.EntityPrototype is { } prototype)
@@ -469,7 +478,31 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
             if (!_prototype.HasIndex<EntityPrototype>(prototype))
                 return null;
 
-            return Spawn(prototype, coordinates);
+            var spawned = Spawn(prototype, coordinates);
+            StripHeadset(spawned);
+            return spawned;
+        }
+
+        return null;
+    }
+
+    // The preserve is its own game: prey may keep handheld shortwaves but never a worn headset reaching round comms.
+    private void StripHeadset(EntityUid prey)
+    {
+        if (_inventory.TryGetSlotEntity(prey, "ears", out var worn)
+            && HasComp<HeadsetComponent>(worn))
+            Del(worn.Value);
+    }
+
+    private YautjaHuntSpawnEntry? PickTierEntry(List<YautjaHuntSpawnTier> tiers, int[] tierCounts)
+    {
+        for (var i = 0; i < tiers.Count; i++)
+        {
+            if (tiers[i].Max > 0 && tierCounts[i] >= tiers[i].Max)
+                continue;
+
+            tierCounts[i]++;
+            return PickSpawnEntry(tiers[i].Spawns);
         }
 
         return null;

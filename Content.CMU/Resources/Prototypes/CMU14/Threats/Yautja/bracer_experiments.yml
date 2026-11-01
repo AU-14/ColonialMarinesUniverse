@@ -1,0 +1,595 @@
+# Scientific access to a recovered bracer. Reagents are consumed only after completed tool work.
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaDiagnostic
+  name: cmu-yautja-experiment-diagnostic
+  response: cmu-yautja-experiment-diagnostic-response
+  clue: cmu-yautja-experiment-diagnostic-clue
+  lore: cmu-yautja-experiment-diagnostic-lore
+  tool: Screwing
+  reagent: RMCEthanol
+  visual: Scan
+  color: "#FF6341"
+  coreColor: "#FFE6A8"
+  material: Projection
+  lightEnergy: 0.45
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_bracer.wav
+    params:
+      volume: -6
+  heat: 0
+  charge: 0
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_vision.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_bracer.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaTranslator
+  name: cmu-yautja-experiment-translator
+  response: cmu-yautja-experiment-translator-response
+  clue: cmu-yautja-experiment-translator-clue
+  lore: cmu-yautja-experiment-translator-lore
+  tool: Pulsing
+  property: Psychostimulating
+  propertyLevel: 3
+  visual: Glyphs
+  color: "#FF9B4A"
+  coreColor: "#FFE5A8"
+  material: Projection
+  lightEnergy: 0.4
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_translator.ogg
+    params:
+      volume: -6
+  heat: 1
+  charge: 0
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Voice/Clicks/pred_click01.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_translator.ogg
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaSolvent
+  name: cmu-yautja-experiment-solvent
+  response: cmu-yautja-experiment-solvent-response
+  clue: cmu-yautja-experiment-solvent-clue
+  lore: cmu-yautja-experiment-solvent-lore
+  tool: Screwing
+  reagent: RMCSulphuricAcid
+  visual: Solvent
+  color: "#BCD680"
+  coreColor: "#E4F5B1"
+  material: Vapor
+  lightEnergy: 0.35
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_attach.wav
+    params:
+      volume: -6
+  heat: -2
+  charge: 0
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/HealthShard/prd_health_twist_air_02.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_attach.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaCoolant
+  name: cmu-yautja-experiment-coolant
+  response: cmu-yautja-experiment-coolant-response
+  clue: cmu-yautja-experiment-coolant-clue
+  lore: cmu-yautja-experiment-coolant-lore
+  tool: Anchoring
+  reagent: Water
+  visual: Coolant
+  color: "#8EBBD4"
+  coreColor: "#E7F8FF"
+  material: Cryogenic
+  lightEnergy: 0.4
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_cloakoff.wav
+    params:
+      volume: -6
+  heat: -5
+  charge: 0
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_cloakoff.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/HealthShard/prd_health_twist_air_02.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaBridge
+  name: cmu-yautja-experiment-bridge
+  response: cmu-yautja-experiment-bridge-response
+  clue: cmu-yautja-experiment-bridge-clue
+  lore: cmu-yautja-experiment-bridge-lore
+  tool: Pulsing
+  reagent: RMCCopper
+  visual: Bridge
+  color: "#83BFFF"
+  coreColor: "#E4F6FF"
+  material: Discharge
+  lightEnergy: 0.9
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/apc_power_drain.wav
+    params:
+      volume: -6
+  heat: 1
+  charge: 0
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/apc_power_drain.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_attach.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaCapacitor
+  name: cmu-yautja-experiment-capacitor
+  response: cmu-yautja-experiment-capacitor-response
+  clue: cmu-yautja-experiment-capacitor-clue
+  lore: cmu-yautja-experiment-capacitor-lore
+  tool: Anchoring
+  property: Electrogenetic
+  propertyLevel: 3
+  visual: Capacitor
+  color: "#64ACFF"
+  coreColor: "#EFFAFF"
+  material: Plasma
+  lightEnergy: 1.1
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/apc_power_drain.wav
+    params:
+      volume: -6
+  heat: 2
+  charge: 450
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_on.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_off.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaPrism
+  name: cmu-yautja-experiment-prism
+  response: cmu-yautja-experiment-prism-response
+  clue: cmu-yautja-experiment-prism-clue
+  lore: cmu-yautja-experiment-prism-lore
+  tool: Screwing
+  reagent: RMCSilver
+  visual: Prism
+  color: "#FFB16A"
+  coreColor: "#FFF0CC"
+  material: Optical
+  lightEnergy: 0.5
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_vision.wav
+    params:
+      volume: -6
+  heat: 1
+  charge: 0
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_vision.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_cloakoff.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaVeil
+  name: cmu-yautja-experiment-veil
+  response: cmu-yautja-experiment-veil-response
+  clue: cmu-yautja-experiment-veil-clue
+  lore: cmu-yautja-experiment-veil-lore
+  tool: Pulsing
+  property: Hypometabolic
+  propertyLevel: 2
+  visual: Veil
+  color: "#8DCBDF"
+  coreColor: "#DDF4FF"
+  material: Optical
+  lightEnergy: 0.3
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_cloakon.wav
+    params:
+      volume: -6
+  heat: 2
+  charge: -60
+  duration: 12
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_cloakon.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_cloakoff.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaEcho
+  name: cmu-yautja-experiment-echo
+  response: cmu-yautja-experiment-echo-response
+  clue: cmu-yautja-experiment-echo-clue
+  lore: cmu-yautja-experiment-echo-lore
+  tool: Screwing
+  property: Psychostimulating
+  propertyLevel: 2
+  visual: Echo
+  color: "#DC8C48"
+  coreColor: "#FFE0A4"
+  material: Projection
+  lightEnergy: 0.35
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_translator.ogg
+    params:
+      volume: -6
+  heat: 1
+  charge: 0
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Voice/Clicks/pred_click05.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_translator.ogg
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaRadar
+  name: cmu-yautja-experiment-radar-name
+  response: cmu-yautja-experiment-radar-response
+  clue: cmu-yautja-experiment-radar-clue
+  lore: cmu-yautja-experiment-radar-lore
+  tool: Pulsing
+  property: Focusing
+  propertyLevel: 3
+  visual: Radar
+  color: "#FF6847"
+  coreColor: "#FFD69B"
+  material: Thermal
+  lightEnergy: 0.5
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_vision.wav
+    params:
+      volume: -6
+  heat: 1
+  charge: -40
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_vision.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_bracer.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaBio
+  name: cmu-yautja-experiment-bio
+  response: cmu-yautja-experiment-bio-response
+  clue: cmu-yautja-experiment-bio-clue
+  lore: cmu-yautja-experiment-bio-lore
+  tool: Screwing
+  property: Neuroinhibiting
+  propertyLevel: 2
+  visual: Pulse
+  color: "#B8D563"
+  coreColor: "#EEFFB2"
+  material: Thermal
+  lightEnergy: 0.4
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_bracer.wav
+    params:
+      volume: -6
+  heat: 1
+  charge: 0
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_bracer.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/HealthShard/prd_health_twist_01.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaCatalyst
+  name: cmu-yautja-experiment-catalyst
+  response: cmu-yautja-experiment-catalyst-response
+  clue: cmu-yautja-experiment-catalyst-clue
+  lore: cmu-yautja-experiment-catalyst-lore
+  tool: Welding
+  reagent: CMBicaridine
+  visual: Catalyst
+  color: "#E2A55E"
+  coreColor: "#FFF0B6"
+  material: Vapor
+  lightEnergy: 0.6
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_attach.wav
+    params:
+      volume: -6
+  heat: 2
+  charge: -200
+  duration: 12
+  output: CMUYautjaStabilizerGel
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Medical/heal_gun.ogg
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/HealthShard/prd_health_twist_air_02.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaDecoy
+  name: cmu-yautja-experiment-decoy
+  response: cmu-yautja-experiment-decoy-response
+  clue: cmu-yautja-experiment-decoy-clue
+  lore: cmu-yautja-experiment-decoy-lore
+  tool: Pulsing
+  property: Hallucinogenic
+  propertyLevel: 2
+  visual: Decoy
+  color: "#70B5E4"
+  coreColor: "#CEF2FF"
+  material: Projection
+  lightEnergy: 0.55
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_cloakon.wav
+    params:
+      volume: -6
+  heat: 2
+  charge: -100
+  duration: 12
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_cloakon.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_cloakoff.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaTether
+  name: cmu-yautja-experiment-tether
+  response: cmu-yautja-experiment-tether-response
+  clue: cmu-yautja-experiment-tether-clue
+  lore: cmu-yautja-experiment-tether-lore
+  tool: Anchoring
+  reagent: CMUSiliconeOil
+  visual: Tether
+  color: "#F16A3B"
+  coreColor: "#FFD3A0"
+  material: Magnetic
+  lightEnergy: 0.55
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_attach.wav
+    params:
+      volume: -6
+  heat: 2
+  charge: 0
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_attach.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_bracer.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaOrbit
+  name: cmu-yautja-experiment-orbit
+  response: cmu-yautja-experiment-orbit-response
+  clue: cmu-yautja-experiment-orbit-clue
+  lore: cmu-yautja-experiment-orbit-lore
+  tool: Anchoring
+  property: Hyperdensificating
+  propertyLevel: 1
+  visual: Orbit
+  color: "#EDAD60"
+  coreColor: "#FFF0B8"
+  material: Magnetic
+  lightEnergy: 0.7
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_bracer.wav
+    params:
+      volume: -6
+  heat: 2
+  charge: -50
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_attach.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_off.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaPlasma
+  name: cmu-yautja-experiment-plasma
+  response: cmu-yautja-experiment-plasma-response
+  clue: cmu-yautja-experiment-plasma-clue
+  lore: cmu-yautja-experiment-plasma-lore
+  tool: Welding
+  property: Hyperthermic
+  propertyLevel: 3
+  visual: Plasma
+  color: "#FF5134"
+  coreColor: "#FFF0C6"
+  material: Plasma
+  lightEnergy: 1.3
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/apc_power_drain.wav
+    params:
+      volume: -6
+  heat: 3
+  charge: -150
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_off.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaFlash
+  name: cmu-yautja-experiment-flash
+  response: cmu-yautja-experiment-flash-response
+  clue: cmu-yautja-experiment-flash-clue
+  lore: cmu-yautja-experiment-flash-lore
+  tool: Screwing
+  reagent: RMCPhosphorus
+  visual: Flash
+  color: "#FFE5B4"
+  coreColor: "#FFFFFF"
+  material: Optical
+  lightEnergy: 1.2
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_vision.wav
+    params:
+      volume: -6
+  heat: 2
+  charge: -80
+  duration: 8
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_cloakoff.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaStatic
+  name: cmu-yautja-experiment-static
+  response: cmu-yautja-experiment-static-response
+  clue: cmu-yautja-experiment-static-clue
+  lore: cmu-yautja-experiment-static-lore
+  tool: Pulsing
+  property: Disrupting
+  propertyLevel: 2
+  visual: Static
+  color: "#F56E3A"
+  coreColor: "#FFF0B8"
+  material: Discharge
+  lightEnergy: 0.85
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/predator_cloak_warning_01.wav
+    params:
+      volume: -6
+  heat: 3
+  charge: -100
+  duration: 12
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/predator_cloak_warning_01.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_bracer.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaContainment
+  name: cmu-yautja-experiment-containment
+  response: cmu-yautja-experiment-containment-response
+  clue: cmu-yautja-experiment-containment-clue
+  lore: cmu-yautja-experiment-containment-lore
+  tool: Anchoring
+  property: Anticorrosive
+  propertyLevel: 2
+  visual: Containment
+  color: "#EEA862"
+  coreColor: "#FFE9B5"
+  material: Magnetic
+  lightEnergy: 0.8
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/self_destruct_doafter.wav
+    params:
+      volume: -6
+  heat: -2
+  charge: -250
+  duration: 18
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/apc_power_drain.wav
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_off.wav
+    params:
+      volume: -11
+
+- type: cmuYautjaExperiment
+  id: CMUYautjaRoot
+  name: cmu-yautja-experiment-root
+  response: cmu-yautja-experiment-root-response
+  clue: cmu-yautja-experiment-root-clue
+  lore: cmu-yautja-experiment-root-lore
+  tool: Pulsing
+  property: Neuroshielding
+  propertyLevel: 1
+  visual: Root
+  color: "#EE5039"
+  coreColor: "#FFE2AA"
+  material: Projection
+  lightEnergy: 0.75
+  sound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_translator.ogg
+    params:
+      volume: -6
+  heat: 2
+  charge: -500
+  duration: 30
+  researchReward: 25
+  releaseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_translator.ogg
+    params:
+      volume: -8
+  collapseSound:
+    path: /Audio/CMU14/Yautja/Equipment/pred_attach.wav
+    params:
+      volume: -11

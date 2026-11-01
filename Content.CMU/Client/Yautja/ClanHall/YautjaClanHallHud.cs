@@ -216,7 +216,12 @@ internal sealed class HudTag : Control
     public Color Fill
     {
         get => _fill;
-        set => _fill = value;
+        set
+        {
+            _fill = value;
+            if (_outline)
+                _label.FontColorOverride = value;
+        }
     }
 
     // secondary info: outlined in the colour, text in the colour, no fill
@@ -383,7 +388,8 @@ internal class HudButton : ContainerButton
 }
 
 // a list row with no chrome: just text. the cursor puts a bracket on it, selection keeps it lit
-internal sealed class HudRow : ContainerButton
+[Virtual]
+internal class HudRow : ContainerButton
 {
     private bool _selected;
 
@@ -516,6 +522,11 @@ internal sealed class HudBar : Control
         _fill = Math.Clamp(fill, 0, 1);
         MinSize = new Vector2(120, 10);
         VerticalAlignment = VAlignment.Center;
+    }
+
+    public float Fill
+    {
+        set => _fill = Math.Clamp(value, 0, 1);
     }
 
     protected override void Draw(DrawingHandleScreen handle)

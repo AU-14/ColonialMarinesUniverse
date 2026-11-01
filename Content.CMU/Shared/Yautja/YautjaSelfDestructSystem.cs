@@ -7,6 +7,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
+using Content.Shared.CMU14.Ghost;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
@@ -431,6 +432,10 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
             if (nearby.Owner == user || TerminatingOrDeleted(nearby.Owner)) // wearer is gibbed above
                 continue;
 
+            // a lobby observer's ghost carries a hidden body to look like their character, it isn't really there
+            if (HasComp<CMUGhostAppearanceStandInComponent>(nearby.Owner))
+                continue;
+
             _body.GibBody(nearby.Owner, true, nearby.Comp, launchGibs: false, splatModifier: bracer.Comp.SelfDestructGibSplatModifier);
         }
 
@@ -548,7 +553,8 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
     private bool CanUseSelfDestructCommon(Entity<YautjaBracerComponent> bracer, EntityUid user)
     {
-        if (!HasComp<YautjaComponent>(user) || bracer.Comp.User != user)
+        if (!(HasComp<YautjaComponent>(user) || HasComp<CMUYautjaResearchOperatorComponent>(user)) ||
+            bracer.Comp.User != user)
         {
             // CMU14: CM-SS13's remote_kill_internal (yaut_bracers.dm:1157-1162) distinguishes the two:
             // a non-Yautja gets "This button is not for you.", an enthralled user gets the thrall notice.
@@ -580,6 +586,13 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         if (_mobState.IsDead(user))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-dead"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        // cmss13 blocks it past crit too, you have to pop it while the vitals warning is up
+        if (_mobState.IsCritical(user))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-critical"), user, user, PopupType.SmallCaution);
             return false;
         }
 

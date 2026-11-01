@@ -7,7 +7,6 @@
   longRange: true
 
   radioPrefix: ":"
-  tower: true
   faction: "FactionYautja"
 - type: radioChannel
   id: CMUYautjaOverseer
@@ -18,7 +17,6 @@
   longRange: true
 
   radioPrefix: "#"
-  tower: true
   faction: "FactionYautja"
 - type: radioChannel
   id: CMUYautjaBadBlood
@@ -29,7 +27,6 @@
   longRange: true
 
   radioPrefix: "#"
-  tower: true
   faction: "FactionYautja"
 - type: entity
   parent: EncryptionKey
@@ -572,7 +569,6 @@
   frequency: 154.4
   color: "#a88762"
   longRange: true
-  tower: true
   faction: "FactionYautja"
 
 - type: radioChannel
@@ -583,7 +579,6 @@
   frequency: 154.5
   color: "#8db7d4"
   longRange: true
-  tower: true
   faction: "FactionYautja"
 
 - type: entity
@@ -726,9 +721,6 @@
   - type: Clothing
     slots:
     - ears
-    clothingVisuals:
-      ears:
-      - state: falcon_drone
   - type: YautjaFalconDrone
   - type: ActiveListener
   - type: YautjaTechItem
@@ -740,10 +732,6 @@
   components:
   - type: Sprite
     state: falcon_drone_badblood
-  - type: Clothing
-    clothingVisuals:
-      ears:
-      - state: falcon_drone_badblood
   - type: YautjaFalconDrone
     deployedPrototype: CMUYautjaFalconDroneBadBloodDeployed
 
@@ -788,6 +776,7 @@
   components:
   - type: Sprite
     drawdepth: OverMobs
+    scale: 0.8, 0.8
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     layers:
     - state: falcon_drone_active
@@ -807,15 +796,14 @@
           radius: 0.2
         density: 10
         hard: true
+        # cmss13 falcon is a hologram with PASS_ALL, it drifts through doors and tables without opening them.
+        # walls still stop it
         mask:
-        - MobMask
+        - Impassable
         layer:
         - MobLayer
   - type: Climbing
   - type: ActiveInputMover
-  - type: Tag
-    tags:
-    - DoorBumpOpener
   - type: YautjaFalconDroneDeployed
   - type: CMUZLevelAutoTransition
   - type: YautjaFalconHudIcon

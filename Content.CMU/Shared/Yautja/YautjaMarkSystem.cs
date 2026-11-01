@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Examine;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Mind.Components;
@@ -232,7 +233,42 @@ public sealed partial class YautjaMarkSystem : EntitySystem
     public bool TryMark(Entity<YautjaBracerComponent> bracer, EntityUid hunter, EntityUid target,
         YautjaMarkKind kind, string? reason)
     {
-        if (_net.IsClient || !CanUsePanel(bracer, hunter) || !IsDefined(kind) || Deleted(target) ||
+        if (_net.IsClient || !CanUsePanel(bracer, hunter))
+            return false;
+
+        return TryApplyMark(hunter, target, kind, reason);
+    }
+
+    // cmss13 thralls get mark_for_hunt / remove_from_hunt as species verbs, no bracer panel, prey mark only.
+    // clicking your own prey again lets it go, same as the yautja action
+    public bool TryToggleThrallPrey(EntityUid thrall, EntityUid target)
+    {
+        if (_net.IsClient || !HasComp<YautjaThrallHeroComponent>(thrall) || _mob.IsIncapacitated(thrall))
+            return false;
+
+        if (IsMarkedBy(target, YautjaMarkKind.Prey, thrall))
+            return RemoveMark(target, YautjaMarkKind.Prey, thrall, showPreyRemoved: true, actor: thrall);
+
+        return TryApplyMark(thrall, target, YautjaMarkKind.Prey, null);
+    }
+
+    public void ClearPreyMarks(EntityUid hunter)
+    {
+        var prey = new List<EntityUid>();
+        var query = EntityQueryEnumerator<YautjaMarkComponent>();
+        while (query.MoveNext(out var uid, out var mark))
+        {
+            if (mark.Marks.TryGetValue(YautjaMarkKind.Prey, out var owner) && owner == hunter)
+                prey.Add(uid);
+        }
+
+        foreach (var uid in prey)
+            RemoveMark(uid, YautjaMarkKind.Prey, hunter, cleanupOnly: true);
+    }
+
+    private bool TryApplyMark(EntityUid hunter, EntityUid target, YautjaMarkKind kind, string? reason)
+    {
+        if (!IsDefined(kind) || Deleted(target) ||
             hunter == target || IsBadBloodHonorRestricted(hunter, kind, popup: true))
             return false;
 
@@ -527,7 +563,8 @@ public sealed partial class YautjaMarkSystem : EntitySystem
 
     private bool IsSentient(EntityUid target)
     {
-        if (HasComp<EntityActiveInvisibleComponent>(target))
+        // ghosts carry a mind too, keep spectators off the nearby list
+        if (HasComp<EntityActiveInvisibleComponent>(target) || HasComp<GhostComponent>(target))
             return false;
         return HasComp<HumanoidProfileComponent>(target) || HasComp<XenoComponent>(target) ||
                TryComp(target, out MindContainerComponent? mind) && mind.HasMind;

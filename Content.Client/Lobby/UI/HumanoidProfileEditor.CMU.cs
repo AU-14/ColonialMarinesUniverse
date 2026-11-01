@@ -364,6 +364,8 @@ public sealed partial class HumanoidProfileEditor
         DistressSignalTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-government-jobs-tab"));
         DistressSignalTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-threat-roles-tab"));
         DistressSignalTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
+        ForceOnForceTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-military-jobs-tab"));
+        ForceOnForceTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-colony-jobs-tab"));
     }
 
     private void UpdateCmuControls()
