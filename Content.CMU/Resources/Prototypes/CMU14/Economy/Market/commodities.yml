@@ -1,0 +1,339 @@
+# what the submission points buy. prices are per unit at a quiet market, the live price
+# moves with supply and demand (SubmissionMarketSystem). crops are priced so one tray earns
+# about $300 an hour at base stats whatever is planted (growth time over yield)
+
+- type: cmuCommodityCategory
+  id: CMUCommodityCategoryFruit
+  name: cmu-commodity-category-fruit
+  order: 1
+
+- type: cmuCommodityCategory
+  id: CMUCommodityCategoryVegetable
+  name: cmu-commodity-category-vegetable
+  order: 2
+
+- type: cmuCommodityCategory
+  id: CMUCommodityCategoryFieldCrop
+  name: cmu-commodity-category-field-crop
+  order: 3
+
+- type: cmuCommodityCategory
+  id: CMUCommodityCategoryMaterial
+  name: cmu-commodity-category-material
+  order: 4
+
+- type: cmuCommodityCategory
+  id: CMUCommodityCategorySalvage
+  name: cmu-commodity-category-salvage
+  order: 5
+
+- type: cmuCommodity
+  id: CMUCommoditySteelOre
+  name: cmu-commodity-steel-ore
+  icon: SteelOre1
+  categories:
+  - CMUCommodityCategoryMaterial
+  prices:
+    SteelOre: 5
+
+- type: cmuCommodity
+  id: CMUCommodityWood
+  name: cmu-commodity-wood
+  icon: Log
+  categories:
+  - CMUCommodityCategoryMaterial
+  prices:
+    AUwood: 8
+
+- type: cmuCommodity
+  id: CMUCommodityCotton
+  name: cmu-commodity-cotton
+  icon: CottonBol
+  categories:
+  - CMUCommodityCategoryFieldCrop
+  prices:
+    CottonBoll: 6.5
+
+- type: cmuCommodity
+  id: CMUCommodityGrain
+  name: cmu-commodity-grain
+  icon: WheatBushel
+  categories:
+  - CMUCommodityCategoryFieldCrop
+  prices:
+    Wheat: 5.25
+    Oat: 5.25
+    Rice: 5.25
+    MeatWheat: 5.25
+
+- type: cmuCommodity
+  id: CMUCommoditySugarcane
+  name: cmu-commodity-sugarcane
+  icon: Sugarcane
+  categories:
+  - CMUCommodityCategoryFieldCrop
+  prices:
+    Sugarcane: 4
+
+- type: cmuCommodity
+  id: CMUCommodityPapercane
+  name: cmu-commodity-papercane
+  icon: Papercane
+  categories:
+  - CMUCommodityCategoryFieldCrop
+  prices:
+    Papercane: 4
+
+- type: cmuCommodity
+  id: CMUCommodityFlower
+  name: cmu-commodity-flower
+  icon: FoodPoppy
+  categories:
+  - CMUCommodityCategoryFieldCrop
+  prices:
+    Flower: 7.25
+
+- type: cmuCommodity
+  id: CMUCommodityApple
+  name: cmu-commodity-apple
+  icon: FoodApple
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Apple: 4
+
+- type: cmuCommodity
+  id: CMUCommodityLemon
+  name: cmu-commodity-lemon
+  icon: FoodLemon
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Lemon: 4
+
+- type: cmuCommodity
+  id: CMUCommodityLime
+  name: cmu-commodity-lime
+  icon: FoodLime
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Lime: 4
+
+- type: cmuCommodity
+  id: CMUCommodityOrange
+  name: cmu-commodity-orange
+  icon: FoodOrange
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Orange: 4
+
+- type: cmuCommodity
+  id: CMUCommodityPineapple
+  name: cmu-commodity-pineapple
+  icon: FoodPineapple
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Pineapple: 4
+
+- type: cmuCommodity
+  id: CMUCommodityBanana
+  name: cmu-commodity-banana
+  icon: FoodBanana
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Banana: 6.25
+
+- type: cmuCommodity
+  id: CMUCommodityGrape
+  name: cmu-commodity-grape
+  icon: FoodGrape
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Grape: 6.25
+
+- type: cmuCommodity
+  id: CMUCommodityBerries
+  name: cmu-commodity-berries
+  icon: FoodBerries
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Berries: 3
+
+- type: cmuCommodity
+  id: CMUCommodityCherry
+  name: cmu-commodity-cherry
+  icon: FoodCherry
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Cherry: 2.5
+
+- type: cmuCommodity
+  id: CMUCommodityCocoa
+  name: cmu-commodity-cocoa
+  icon: FoodCocoaPod
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Cocoa: 2
+
+- type: cmuCommodity
+  id: CMUCommodityWatermelon
+  name: cmu-commodity-watermelon
+  icon: FoodWatermelon
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Watermelon: 25
+
+- type: cmuCommodity
+  id: CMUCommodityPea
+  name: cmu-commodity-pea
+  icon: FoodPeaPod
+  categories:
+  - CMUCommodityCategoryVegetable
+  prices:
+    Pea: 5.75
+
+- type: cmuCommodity
+  id: CMUCommoditySoybeans
+  name: cmu-commodity-soybeans
+  icon: FoodSoybeans
+  categories:
+  - CMUCommodityCategoryVegetable
+  prices:
+    Soybeans: 6.75
+
+- type: cmuCommodity
+  id: CMUCommodityCabbage
+  name: cmu-commodity-cabbage
+  icon: FoodCabbage
+  categories:
+  - CMUCommodityCategoryVegetable
+  prices:
+    Cabbage: 6.75
+
+- type: cmuCommodity
+  id: CMUCommodityCarrot
+  name: cmu-commodity-carrot
+  icon: FoodCarrot
+  categories:
+  - CMUCommodityCategoryVegetable
+  prices:
+    Carrot: 7.25
+
+- type: cmuCommodity
+  id: CMUCommodityPotato
+  name: cmu-commodity-potato
+  icon: FoodPotato
+  categories:
+  - CMUCommodityCategoryVegetable
+  prices:
+    Potato: 7.25
+
+- type: cmuCommodity
+  id: CMUCommodityGarlic
+  name: cmu-commodity-garlic
+  icon: FoodGarlic
+  categories:
+  - CMUCommodityCategoryVegetable
+  prices:
+    Garlic: 7.25
+
+- type: cmuCommodity
+  id: CMUCommodityChili
+  name: cmu-commodity-chili
+  icon: FoodChiliPepper
+  categories:
+  - CMUCommodityCategoryVegetable
+  prices:
+    Chili: 7.75
+
+- type: cmuCommodity
+  id: CMUCommodityEggplant
+  name: cmu-commodity-eggplant
+  icon: FoodEggplant
+  categories:
+  - CMUCommodityCategoryVegetable
+  - CMUCommodityCategoryFruit
+  prices:
+    Eggplant: 7.75
+
+- type: cmuCommodity
+  id: CMUCommodityTomato
+  name: cmu-commodity-tomato
+  icon: FoodTomato
+  categories:
+  - CMUCommodityCategoryVegetable
+  - CMUCommodityCategoryFruit
+  prices:
+    Tomato: 8.5
+
+- type: cmuCommodity
+  id: CMUCommodityOnion
+  name: cmu-commodity-onion
+  icon: FoodOnion
+  categories:
+  - CMUCommodityCategoryVegetable
+  prices:
+    Onion: 9
+
+- type: cmuCommodity
+  id: CMUCommodityCorn
+  name: cmu-commodity-corn
+  icon: FoodCorn
+  categories:
+  - CMUCommodityCategoryVegetable
+  prices:
+    Corn: 11.75
+
+- type: cmuCommodity
+  id: CMUCommodityPumpkin
+  name: cmu-commodity-pumpkin
+  icon: FoodPumpkin
+  categories:
+  - CMUCommodityCategoryVegetable
+  - CMUCommodityCategoryFruit
+  prices:
+    Pumpkin: 11.75
+
+- type: cmuCommodity
+  id: CMUCommoditySalvage
+  name: cmu-commodity-salvage
+  icon: ScrapSteel
+  categories:
+  - CMUCommodityCategorySalvage
+  prices:
+    SalvageTier1: 2
+    SalvageTier2: 4
+    SalvageTier3: 6
+    SalvageTier4: 9
+    SalvageTier5: 14
+
+- type: cmuCommodity
+  id: CMUCommodityOtherFruit
+  name: cmu-commodity-other-fruit
+  icon: RMCFoodMango
+  categories:
+  - CMUCommodityCategoryFruit
+  prices:
+    Fruit: 3
+  # generic tag, only when nothing above matched
+  fallback: true
+
+- type: cmuCommodity
+  id: CMUCommodityOtherVegetable
+  name: cmu-commodity-other-vegetable
+  icon: FoodMushroom
+  categories:
+  - CMUCommodityCategoryVegetable
+  prices:
+    Vegetable: 3
+  # generic tag, only when nothing above matched
+  fallback: true

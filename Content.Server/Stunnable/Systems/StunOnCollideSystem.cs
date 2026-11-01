@@ -1,4 +1,5 @@
 using Content.Server.Stunnable.Components;
+using Content.Shared.CMU14.Combat; // CMU14
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Tag;
@@ -19,6 +20,7 @@ internal sealed partial class StunOnCollideSystem : EntitySystem
     [Dependency] private MovementModStatusSystem _movementMod = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private CMUStunImmunitySystem _cmuStunImmunity = default!; // CMU14
 
     public override void Initialize()
     {
@@ -33,8 +35,11 @@ internal sealed partial class StunOnCollideSystem : EntitySystem
         if (_entityWhitelist.IsWhitelistPass(ent.Comp.Blacklist, target))
             return;
 
-        // CMU14 - Yautja are immune to taser projectiles.
+        // CMU14 - Yautja and CMU stun-immune mobs are immune to taser projectiles.
         if (HasComp<YautjaComponent>(target) && _tag.HasTag(ent.Owner, TaserTag))
+            return;
+
+        if (_cmuStunImmunity.IsImmune(target, ent.Owner))
             return;
 
         _stunSystem.TryKnockdown(target, ent.Comp.KnockdownAmount, ent.Comp.Refresh, ent.Comp.AutoStand, ent.Comp.Drop, true);
