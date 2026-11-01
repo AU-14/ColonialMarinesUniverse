@@ -286,13 +286,13 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
 
             if (unlock)
             {
-                _lock.Unlock(uid, null, lockComp);
+                _lock.Unlock(uid, null, lockComp, playSound: false);
             }
             else
             {
                 if (TryComp<EntityStorageComponent>(uid, out var storage))
                     _entityStorage.CloseStorage((uid, storage));
-                _lock.Lock(uid, null, lockComp);
+                _lock.Lock(uid, null, lockComp, playSound: false);
             }
         }
 
