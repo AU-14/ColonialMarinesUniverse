@@ -503,7 +503,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return true;
 
         if (TryComp(entity, out XenoComponent? xeno))
-            return xeno.Role == LesserDroneRole;
+            return xeno.Role == LesserDroneRole || xeno.Role == PopperRole;
 
         return false;
     }

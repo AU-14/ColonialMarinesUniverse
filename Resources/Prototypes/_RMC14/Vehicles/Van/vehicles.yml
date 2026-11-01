@@ -5,6 +5,8 @@
   description: A rugged transport van.
   components:
   - type: CMUVBIEDRiggable # CMU14: civilian vehicles can be rigged as car bombs
+  - type: CMUVehicleBlastPenetration # CMU14: soft-skinned cabin, even grenades blast through into the interior.
+    defaultIntensity: 10
   - type: Vehicle
     movementKind: Grid
     transferDamage: false
@@ -229,6 +231,8 @@
   description: A rugged transport van fitted with a box body.
   components:
   - type: CMUVBIEDRiggable # CMU14: civilian vehicles can be rigged as car bombs
+  - type: CMUVehicleBlastPenetration # CMU14: soft-skinned cabin, even grenades blast through into the interior.
+    defaultIntensity: 10
   - type: Vehicle
     movementKind: Grid
     transferDamage: false
