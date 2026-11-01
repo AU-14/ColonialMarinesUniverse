@@ -101,8 +101,12 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
                 continue;
             }
 
-            RemComp<CMULegLossDownedComponent>(restored);
-            _standing.Stand(restored);
+            // CMU14: crit, pain knockdown, rest or a bed can cancel this stand; keep the marker and
+            // retry so the patient rises as soon as the canceller clears instead of staying floored
+            if (_standing.Stand(restored))
+                RemComp<CMULegLossDownedComponent>(restored);
+            else
+                _deferredLegRestore.Enqueue(restored);
         }
 
         while (_deferredHeadSever.TryDequeue(out var body))
