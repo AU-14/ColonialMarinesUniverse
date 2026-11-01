@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Numerics;
 using Robust.Shared.Maths;
 
@@ -88,7 +89,7 @@ public sealed partial class CMUCavernField
         var widths = new float[points.Count - 1];
         for (var i = 0; i < widths.Length; i++)
             widths[i] = kind == CMUCavernPassageKind.Keyhole && i == 1 ? Math.Max(1.6f, 1.9f * scale) : width;
-        return new CMUCavernPassage(kind, points.AsReadOnly(), Array.AsReadOnly(widths), height, destination, blind);
+        return new CMUCavernPassage(kind, points.ToImmutableArray(), widths.ToImmutableArray(), height, destination, blind);
     }
 
     private static bool InPassage(Vector3 point, CMUCavernPassage passage)

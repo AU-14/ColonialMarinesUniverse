@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Numerics;
 using Robust.Shared.Maths;
 
@@ -89,7 +90,7 @@ public sealed partial class CMUCavernField
             }
         }
 
-        var result = new CMUCavernRegionPlan(chambers, passages.AsReadOnly());
+        var result = new CMUCavernRegionPlan(chambers.ToImmutableArray(), passages.ToImmutableArray());
         _regions[(region, top)] = result;
         return result;
     }
