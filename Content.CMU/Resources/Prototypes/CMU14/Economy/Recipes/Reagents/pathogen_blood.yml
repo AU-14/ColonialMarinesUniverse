@@ -234,10 +234,10 @@
   overdose: 10
   metabolisms:
     Bloodstream:
-      metabolismrate: 0.1
+      metabolismRate: 0.1
       effects:
       - !type:Bloodbursting
-        embyroSpawn: CMU14XenoBloodburster
+        embryoSpawn: CMU14XenoBloodburster
         requiresOverdose: true
         burstDelay: 40
 
