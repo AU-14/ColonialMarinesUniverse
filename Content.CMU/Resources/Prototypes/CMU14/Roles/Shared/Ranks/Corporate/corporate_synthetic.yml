@@ -2,16 +2,16 @@
   id: AU14RankCorporateSyntheticGrade1
   name: Utilitarian Corporate Synthetic
   prefix: Util. Syn.
-  paygrade: WYS1
+  paygrade: WYS2
 
 - type: rank
   id: AU14RankCorporateSyntheticGrade2
   name: Assistant Corporate Synthetic
   prefix: Assist. Syn.
-  paygrade: WYS2
+  paygrade: WYS3
 
 - type: rank
   id: AU14RankCorporateSyntheticGrade3
   name: Administrative Corporate Synthetic
   prefix: Administ. Syn.
-  paygrade: WYS3
+  paygrade: WYS4
