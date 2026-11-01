@@ -11,8 +11,8 @@
     visibleToClf: true
     visibleToXenos: true
     visibleAsXenoStructure: true
-  - type: CMUGamemodeBlacklist
-    blacklistedGamemodes:
+  - type: DestroyOnPreset
+    presets:
     - ForceOnForce
     - Insurgency
 
