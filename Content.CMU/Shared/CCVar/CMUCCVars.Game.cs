@@ -30,6 +30,10 @@ public sealed partial class CCVars
     public static readonly CVarDef<int> FoFHotspotTicksToWin =
         CVarDef.Create("cmu.fof.hotspot_ticks_to_win", 0, CVar.SERVERONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// Master switch for the evac destruct show: MU/TH/UR narration, sirens, the Delta alert and the scuttle itself.
+    /// Off, evacuation still runs but no self-destruct sequence ever arms.
+    /// </summary>
     public static readonly CVarDef<bool> EnableEvacSfx =
         CVarDef.Create("cmu.game.enable_evac_sfx", false, CVar.SERVERONLY | CVar.ARCHIVE);
 

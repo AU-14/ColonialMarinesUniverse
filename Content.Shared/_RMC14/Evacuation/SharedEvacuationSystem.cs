@@ -558,7 +558,13 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
         progress.Enabled = !progress.Enabled;
         progress.EnabledAt = progress.Enabled ? _timing.CurTime : null;
-        progress.SelfDestructAt = progress.Enabled ? _timing.CurTime + progress.SelfDestructDelay : null;
+        // CMU14 Begin: enable_evac_sfx is the master switch for the destruct show.
+        // With it off there is no narrated countdown, so Delta and the scuttle never arm.
+        // progress.SelfDestructAt = progress.Enabled ? _timing.CurTime + progress.SelfDestructDelay : null;
+        progress.SelfDestructAt = progress.Enabled && _config.GetCVar(CCVars.EnableEvacSfx)
+            ? _timing.CurTime + progress.SelfDestructDelay
+            : null;
+        // CMU14 End
         progress.SelfDestructed = false;
         Dirty(map.Value, progress);
 
