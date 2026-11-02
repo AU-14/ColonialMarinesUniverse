@@ -16072,5 +16072,158 @@
   id: 930
   time: '2026-10-30T23:42:30.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2386
+- author: maertayn
+  changes:
+  - message: Strip (long range) headsets from preserve spawns
+    type: Fix
+  id: 931
+  time: '2026-10-31T03:44:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2389
+- author: Vixting
+  changes:
+  - message: Removed carry over votes being halved
+    type: Remove
+  id: 932
+  time: '2026-10-31T12:53:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2392
+- author: toot521
+  changes:
+  - message: Grom Rapid Response Unit Squad and Team to UPP Ambassador Callins
+    type: Add
+  - message: Ministry of Space Security Informal Collaborator Team to UPP Ambassador
+      Callins
+    type: Add
+  - message: Grom Survs from UPP Ambassador Console
+    type: Remove
+  id: 933
+  time: '2026-10-31T12:55:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2378
+- author: rokudara-sen
+  changes:
+  - message: Remote thrall self-destruct asks the hunter to confirm instead of the
+      thrall.
+    type: Fix
+  - message: Blooded thralls lose yautja tech when their master is gone.
+    type: Fix
+  - message: Thrown smart discs can't be snatched out of the air by non-yautja.
+    type: Fix
+  - message: Serpent hunts are capped like cmss13, small hunts roll at most one big
+      xeno.
+    type: Tweak
+  - message: Yautja can eat raw meat without getting sick.
+    type: Fix
+  - message: The falcon drone no longer opens doors and deploys quietly.
+    type: Fix
+  - message: Hunter ship lockers no longer trap you in the walls.
+    type: Fix
+  - message: Ghosts no longer appear in the hunt journal's nearby targets.
+    type: Fix
+  - message: Rending and piercing swords and war scythes look right on your back.
+    type: Fix
+  - message: A yautja self-destruct no longer gibs nearby ghosts.
+    type: Fix
+  - message: Hunter ship lockers no longer hold random station items.
+    type: Tweak
+  - message: The hunter ship's spare gear crates are stocked with weapons, armour
+      and supplies.
+    type: Add
+  - message: The bracer translator shows a typing indicator while you use it.
+    type: Tweak
+  - message: 'Military Caste power armor matches cmss13: more fire resistant, as fast
+      as full hunter armor, and blocks pounces from the front.'
+    type: Tweak
+  id: 934
+  time: '2026-10-31T14:45:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2393
+- author: rokudara-sen
+  changes:
+  - message: The hunting bracer window is redesigned with tabs, live states and a
+      tracker scope.
+    type: Tweak
+  - message: The bracer gear tracker finds gear on other levels of the same area.
+    type: Fix
+  id: 935
+  time: '2026-10-31T14:45:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2394
+- author: byondsucks
+  changes:
+  - message: Point blank shots now have double accuracy
+    type: Tweak
+  id: 936
+  time: '2026-11-01T02:17:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2398
+- author: ILoveDespoiler
+  changes:
+  - message: Fixed raw text display when examining a Xeno with AP.
+    type: Fix
+  id: 937
+  time: '2026-11-01T02:17:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2401
+- author: rokudara-sen
+  changes:
+  - message: Submission points pay the same for an item everywhere, crops are rebalanced
+      so every crop is worth growing, and salvage, wood and steel pay less.
+    type: Tweak
+  - message: Submission point prices now move with supply and demand, and off-world
+      buyers sometimes want one thing badly or are flooded with it.
+    type: Add
+  - message: Use a submission point with an empty hand to see what it buys and what
+      it pays right now.
+    type: Add
+  - message: Submission points no longer swallow items they don't pay for.
+    type: Fix
+  id: 938
+  time: '2026-11-01T05:41:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2301
+- author: ILoveDespoiler
+  changes:
+  - message: Added two new Chemical properties, Bloodbursting and Mycotoxigenic.
+    type: Add
+  - message: Added Mycohemolymph and Sporoplasm fluids as drawable solutions from
+      every Neomorph, with unique properties compared to Neomorph Blood and Plasma.
+      Research rejoice!
+    type: Add
+  id: 939
+  time: '2026-11-01T05:41:44.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2374
+- author: TheHellFireo
+  changes:
+  - message: Fixed Yautja cloak transitions and Butcher presentation under thermal
+      vision.
+    type: Fix
+  - message: Reworked bracer inspection around the real item on the floor, with clearer
+      physical clues and a compact procedure menu.
+    type: Tweak
+  - message: Bracer research now mixes eight standard-chemical procedures with twelve
+      generated-compound procedures.
+    type: Tweak
+  - message: Fixed bracer contact/menu interaction and granted research access to
+      Wey-Yu scientists and corporate liaison variants.
+    type: Fix
+  id: 940
+  time: '2026-11-01T09:21:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2395
+- author: TheHellFireo
+  changes:
+  - message: Added the UPP fighter for UPP and BEAR, plus an admin-spawnable swept-wing
+      fighter.
+    type: Add
+  - message: Fighters now use short takeoffs and landings that adapt to available
+      space, with new airframe effects and sounds.
+    type: Tweak
+  - message: Removed fighter VTOL pads and their supply bundles.
+    type: Remove
+  - message: Reworked the fighter cockpit with a larger shared camera/airspace display
+      and visible flight, weapon and mission controls.
+    type: Tweak
+  - message: All fighter strikes show a laser 2.3 seconds before impact and warn 1
+      second before impact.
+    type: Tweak
+  - message: Reduced fighter camera rendering outside its panel and repeated roof
+      lookups in lighting and weather overlays.
+    type: Tweak
+  id: 941
+  time: '2026-11-01T14:55:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2406
 Name: CMU
 Order: -1

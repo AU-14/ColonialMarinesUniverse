@@ -1,0 +1,42 @@
+- type: job
+  parent: AU14UPPGROMRifleman
+  id: AU14UPPGROMRRUPRifleman
+  description: au14-uppgrom-rru-description
+  spawnMenuRoleName: UPP GROM Rifleman (Rapid Response Unit)
+  startingGear: AU14GearUPPGROMRRUPRifleman
+  greeting: au14-uppgrom-rru-greeting
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14UPPGROMRRURifleman
+  name: UPP GROM Rifleman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadGROM
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-govforsquadrifleman
+    description: au14-uppgrom-description
+    reregister: false
+    job: AU14UPPGROMRRUPRifleman
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMRRUPRifleman
+  equipment:
+    id: AU14IDCardUPPGROMRifleman
+    outerClothing: CMUUPPArmorFull
+    jumpsuit: AU14FatiguesUPPGROM
+    shoes: RMCBootsSPPFilled
+    head: AU14Altyn
+    belt: AU14BeltHolsterPistolUPPFull
+    pocket1: RuMCUPPPouchIFAKFill
+    pocket2: CMUUPPPouchMagazineUPPFull
+    back: CMUUPPNavalInfantrySatchelFull
+    ears: RMCHeadsetGROM
+    suitstorage: AU14WeaponRifleAG80Filled

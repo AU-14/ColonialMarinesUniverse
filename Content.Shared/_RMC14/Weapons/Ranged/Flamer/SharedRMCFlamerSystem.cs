@@ -464,13 +464,15 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         Dirty(chain, chainComp);
     }
 
+    // CMU14 method: preview callers may reuse a buffer; gameplay keeps independent paths.
     public bool TryGetPreviewTiles(
         Entity<RMCFlamerAmmoProviderComponent> flamer,
         EntityCoordinates fromCoordinates,
         EntityCoordinates toCoordinates,
-        [NotNullWhen(true)] out List<LineTile>? tiles)
+        [NotNullWhen(true)] out List<LineTile>? tiles,
+        List<LineTile>? buffer = null)
     {
-        return CanShootFlamer(flamer, fromCoordinates, toCoordinates, out tiles, out _, out _, out _);
+        return CanShootFlamer(flamer, fromCoordinates, toCoordinates, out tiles, out _, out _, out _, buffer);
     }
 
     public bool TryGetFuelColor(Entity<RMCFlamerAmmoProviderComponent> flamer, out Color color)
@@ -483,15 +485,18 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         return true;
     }
 
+    // CMU14 method: clear preview storage even when validation rejects this frame's shot.
     private bool CanShootFlamer(
         Entity<RMCFlamerAmmoProviderComponent> flamer,
         EntityCoordinates fromCoordinates,
         EntityCoordinates toCoordinates,
         [NotNullWhen(true)] out List<LineTile>? tiles,
         [NotNullWhen(true)] out Entity<SolutionComponent>? solution,
-        out Content.Shared.CMU14.Chemistry.Fuel.CMUFireSpec spec, // CMU14
-        [NotNullWhen(true)] out Entity<RMCFlamerTankComponent>? tank)
+        out Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfile fuel, // CMU14
+        [NotNullWhen(true)] out Entity<RMCFlamerTankComponent>? tank,
+        List<LineTile>? buffer = null)
     {
+        buffer?.Clear();
         tiles = null;
         spec = default; // CMU14
         if (!TryGetTankSolution(flamer, out solution, out tank))

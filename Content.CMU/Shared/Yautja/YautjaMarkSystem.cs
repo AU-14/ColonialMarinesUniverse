@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Examine;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Mind.Components;
@@ -562,7 +563,8 @@ public sealed partial class YautjaMarkSystem : EntitySystem
 
     private bool IsSentient(EntityUid target)
     {
-        if (HasComp<EntityActiveInvisibleComponent>(target))
+        // ghosts carry a mind too, keep spectators off the nearby list
+        if (HasComp<EntityActiveInvisibleComponent>(target) || HasComp<GhostComponent>(target))
             return false;
         return HasComp<HumanoidProfileComponent>(target) || HasComp<XenoComponent>(target) ||
                TryComp(target, out MindContainerComponent? mind) && mind.HasMind;

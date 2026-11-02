@@ -112,7 +112,7 @@ Permanent coverage can be rerun with the isolated repository wrapper:
 ```powershell
 powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMUClimbContactResetTest|FullyQualifiedName~ClimbMergeRegressionTest|FullyQualifiedName~ClimbingTest'
 powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMUZAudioLifecycleTest|FullyQualifiedName~CMUClientTransientAudioTest|FullyQualifiedName~CMUItemStainTest'
-powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~MetabolismSnapshotReuseTest|FullyQualifiedName~MetabolizerScheduleTest|FullyQualifiedName~ClientAssemblyPassesSandboxWithoutLoadingPrototypes'
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~MetabolismSnapshotReuseTest|FullyQualifiedName~MetabolizerScheduleTest|FullyQualifiedName~ContentAssembliesPassSandboxWithoutLoadingPrototypes'
 ```
 
 `git diff --check` and UTF-8/LF checks passed. Existing compiler/analyzer warnings

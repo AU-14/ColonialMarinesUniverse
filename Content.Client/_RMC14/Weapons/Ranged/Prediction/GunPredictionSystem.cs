@@ -241,7 +241,10 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
     // the fly-by sensor overlapping walls/lights was being reported as a hit
     private HashSet<EntityUid> GetProjectileHardContacts(EntityUid uid)
     {
-        var result = new HashSet<EntityUid>();
+        // CMU14 Begin: this scratch result is only consumed by the current projectile's update.
+        var result = _cmuProjectileContacts;
+        result.Clear();
+        // CMU14 End
         var contacts = _physics.GetContacts(uid);
         while (contacts.MoveNext(out var contact))
         {

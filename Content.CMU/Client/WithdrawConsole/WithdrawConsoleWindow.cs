@@ -146,7 +146,7 @@ public sealed class WithdrawConsoleWindow : DefaultWindow
         root.AddChild(controls);
 
         // Reading surface, so no roll bar or grain.
-        var tube = new Control { HorizontalExpand = true, VerticalExpand = true };
+        var tube = new CrtScreenContainer { HorizontalExpand = true, VerticalExpand = true };
         tube.AddChild(screen);
         tube.AddChild(new CrtScreenControl
         {

@@ -12,11 +12,13 @@ public sealed partial class FighterSystem
     private void BeginVtolEffects(Entity<FighterGroundComponent> ground, Entity<FighterAircraftComponent> aircraft, bool landing)
     {
         FinishVtolEffects(ground, FighterVtolOutcome.Aborted);
-        // Attach to the pad's grid, never to the hull that leaves the map on takeoff.
+        // Retain the emission history after the hull leaves the ground map.
         var uid = SpawnAttachedTo("CMUFighterVtolWash", Transform(ground).Coordinates);
         // Nozzle sockets use north-forward; the vehicle chassis uses south-forward.
         _transform.SetWorldRotation(uid, _transform.GetWorldRotation(ground) + new Angle(Math.PI));
         var visual = Comp<FighterVtolVisualComponent>(uid);
+        visual.Airframe = Airframe(aircraft).ID;
+        visual.RollDistance = ground.Comp.TransitionDistance;
         visual.Landing = landing;
         visual.StartedAt = ground.Comp.StartedAt;
         visual.EndsAt = ground.Comp.EndsAt;
@@ -34,7 +36,13 @@ public sealed partial class FighterSystem
         Comp<TimedDespawnComponent>(uid).Lifetime = (float) (visual.EndsAt - visual.StartedAt).TotalSeconds + FighterVtolVisualComponent.ResidueSeconds;
         Dirty(uid, visual);
         ground.Comp.VtolVisual = uid;
-        var sound = new SoundPathSpecifier(landing ? "/Audio/CMU14/Fighter/vtol-descent.wav" : "/Audio/CMU14/Fighter/vtol-takeoff.wav");
+        if (landing)
+        {
+            ground.Comp.TouchdownPlayed = false;
+            ground.Comp.TouchdownAt = ground.Comp.StartedAt + (ground.Comp.EndsAt - ground.Comp.StartedAt) * Airframe(aircraft).TouchdownPoint;
+            Dirty(ground);
+        }
+        var sound = FighterAudioSystem.Engine(Airframe(aircraft), landing ? "landing" : "takeoff");
         ground.Comp.TransitionAudio = _fighterAudio.PlayGround(sound, Transform(uid).Coordinates, 55, -2);
         // Both crew now sit in the ground hull during these transitions and hear
         // the same exterior source. A second source on the empty cockpit map is redundant.
@@ -51,10 +59,5 @@ public sealed partial class FighterSystem
         visual.FinishedAt = _timing.CurTime;
         Comp<TimedDespawnComponent>(uid).Lifetime = FighterVtolVisualComponent.ResidueSeconds;
         Dirty(uid, visual);
-        if (outcome != FighterVtolOutcome.Touchdown) return;
-        ground.Comp.TouchdownAt = _timing.CurTime;
-        Dirty(ground);
-        var sound = new SoundPathSpecifier("/Audio/CMU14/Fighter/vtol-touchdown.wav");
-        _fighterAudio.PlayGround(sound, Transform(uid).Coordinates, 35, -2);
     }
 }

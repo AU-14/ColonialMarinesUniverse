@@ -16,7 +16,7 @@ using Robust.Shared.Maths;
 
 namespace Content.Client._RMC14.Weapons.Ranged.Flamer;
 
-public sealed class RMCFlamerPreviewOverlay : Overlay
+public sealed partial class RMCFlamerPreviewOverlay : Overlay // CMU14: owned preview scratch storage.
 {
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 
@@ -53,8 +53,14 @@ public sealed class RMCFlamerPreviewOverlay : Overlay
         _xformQ = ents.GetEntityQuery<TransformComponent>();
     }
 
+    // CMU14 method: recalculate live obstacles using reusable scratch storage.
     protected override void Draw(in OverlayDrawArgs args)
     {
+        _cmuTilesByGrid.Clear();
+        _cmuPreviewTiles.Clear();
+        foreach (var set in _cmuTileSets)
+            set.Tiles.Clear();
+
         var player = _player.LocalEntity;
         if (player == null)
             return;
@@ -96,14 +102,14 @@ public sealed class RMCFlamerPreviewOverlay : Overlay
         var fromCoordinates = xform.Coordinates;
         var toCoordinates = _transform.ToCoordinates(player.Value, mousePos);
 
-        if (!_flamer.TryGetPreviewTiles((gunUid, flamer), fromCoordinates, toCoordinates, out var tiles))
+        if (!_flamer.TryGetPreviewTiles((gunUid, flamer), fromCoordinates, toCoordinates, out var tiles, _cmuPreviewTiles))
             return;
 
         var baseColor = _flamer.TryGetFuelColor((gunUid, flamer), out var fuelColor) ? fuelColor : FallbackColor;
         baseColor = baseColor.WithAlpha(1f);
         var outlineColor = baseColor.WithAlpha(OutlineAlpha);
 
-        var tilesByGrid = new Dictionary<EntityUid, TileSet>();
+        var tilesByGrid = _cmuTilesByGrid;
         foreach (var tile in tiles)
         {
             if (tile.Coordinates.MapId != args.MapId)
@@ -115,7 +121,11 @@ public sealed class RMCFlamerPreviewOverlay : Overlay
             var indices = _mapSystem.CoordinatesToTile(gridUid, grid, tile.Coordinates);
             if (!tilesByGrid.TryGetValue(gridUid, out var set))
             {
-                set = new TileSet(grid);
+                var index = tilesByGrid.Count;
+                if (index == _cmuTileSets.Count)
+                    _cmuTileSets.Add(new TileSet());
+                set = _cmuTileSets[index];
+                set.TileSize = grid.TileSize;
                 tilesByGrid.Add(gridUid, set);
             }
 
@@ -128,16 +138,17 @@ public sealed class RMCFlamerPreviewOverlay : Overlay
         var handle = args.WorldHandle;
         foreach (var (gridUid, set) in tilesByGrid)
         {
-            var tileSize = set.Grid.TileSize;
+            var tileSize = set.TileSize;
             var tileSizeVec = new Vector2(tileSize, tileSize);
+            var matrix = _transform.GetWorldMatrix(gridUid);
 
             foreach (var indices in set.Tiles)
             {
                 var baseLocal = new Vector2(indices.X * tileSize, indices.Y * tileSize);
-                var p00 = _transform.ToMapCoordinates(new EntityCoordinates(gridUid, baseLocal)).Position;
-                var p10 = _transform.ToMapCoordinates(new EntityCoordinates(gridUid, baseLocal + new Vector2(tileSize, 0f))).Position;
-                var p11 = _transform.ToMapCoordinates(new EntityCoordinates(gridUid, baseLocal + tileSizeVec)).Position;
-                var p01 = _transform.ToMapCoordinates(new EntityCoordinates(gridUid, baseLocal + new Vector2(0f, tileSize))).Position;
+                var p00 = Vector2.Transform(baseLocal, matrix);
+                var p10 = Vector2.Transform(baseLocal + new Vector2(tileSize, 0f), matrix);
+                var p11 = Vector2.Transform(baseLocal + tileSizeVec, matrix);
+                var p01 = Vector2.Transform(baseLocal + new Vector2(0f, tileSize), matrix);
 
                 if (!set.Tiles.Contains(new Vector2i(indices.X, indices.Y + 1)))
                     DrawLine(handle, p01, p11, outlineColor);
@@ -175,14 +186,10 @@ public sealed class RMCFlamerPreviewOverlay : Overlay
         handle.DrawLine(from - offset, to - offset, color);
     }
 
+    // CMU14 class: pooled geometry contains no retained grid component references.
     private sealed class TileSet
     {
-        public readonly MapGridComponent Grid;
+        public float TileSize;
         public readonly HashSet<Vector2i> Tiles = new();
-
-        public TileSet(MapGridComponent grid)
-        {
-            Grid = grid;
-        }
     }
 }

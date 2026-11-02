@@ -405,7 +405,7 @@
 - type: platoon
   id: BEAR
   vehicleSupplyCatalog:
-  - CMUFighterGround
+  - CMUFighterGroundUPP
   - VehicleSPPTank
   - VehicleSPPAPC
   - VehicleSPPVan
@@ -747,7 +747,7 @@
 - type: platoon
   id: UPP
   vehicleSupplyCatalog:
-  - CMUFighterGround
+  - CMUFighterGroundUPP
   - VehicleSPPTank
   - VehicleSPPAPC
   - VehicleSPPVan

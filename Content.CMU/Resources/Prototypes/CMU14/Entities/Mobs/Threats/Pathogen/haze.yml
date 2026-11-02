@@ -33,6 +33,24 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood  
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUPathogenMycohemolymph
+        Quantity: 300
+      - ReagentId: CMUPathogenSporoplasmSpore
+        Quantity: 300
+  - type: SolutionRegeneration
+    generated:
+      reagents:
+      - ReagentId: CMUPathogenMycohemolymph
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmSpore
+        Quantity: 1
   - type: Xeno
     role: CMU14JobPathogenHaze
     tier: 1
@@ -92,6 +110,7 @@
   - type: CMUXenoDirectSporeInfect
     plasmaCost: 50
     embryoSpawn: CMU14XenoBloodburster
+    protectionBypassChance: 0.5
   - type: CMUSporeCloudOnDeath
     cloudPrototype: CMUPathogenSporeCloud
   - type: XenoEnergy
