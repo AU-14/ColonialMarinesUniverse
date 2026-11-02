@@ -31,6 +31,9 @@ namespace Content.Server._RMC14.Announce
             if (!_aresCore.TryGetMarineARES(out var ares) || ares == null)
                 return;
 
+            if (IsCMULateJoinAnnouncementExcluded(mob)) // CMU14
+                return;
+
             var aresUid = ares.Value.Owner;
             var fullRankName = _chevron.GetAnnouncementFullName(mob, jobId);
             var rankName = _chevron.GetAnnouncementShortName(mob, jobId);

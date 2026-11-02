@@ -19762,6 +19762,10 @@ public sealed class YautjaSmokeTest
         {
             ["CMUYautjaEssentials"] = 1,
             ["CMUYautjaArmor"] = 1,
+            // thrall rack rows: cmss13 YAUTJA_CAN_BUY_UNIFORM / _MASK / _SHOES
+            ["CMUYautjaUniform"] = 1,
+            ["CMUYautjaMask"] = 1,
+            ["CMUYautjaShoes"] = 1,
             ["CMUYautjaPrimary"] = 1,
             ["CMUYautjaBracer"] = 1,
             ["CMUYautjaSupport"] = 2,
