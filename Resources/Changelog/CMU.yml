@@ -16499,5 +16499,57 @@
   id: 956
   time: '2026-11-02T19:30:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2431
+- author: TheHellFireo
+  changes:
+  - message: Pit and retractable ladders now show the correct downward sprite at their
+      upper ends.
+    type: Fix
+  id: 957
+  time: '2026-11-02T21:41:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2434
+- author: TheHellFireo
+  changes:
+  - message: Ladders warn and keep you in place if their exit has no secure footing,
+      instead of dropping you into a shaft.
+    type: Fix
+  id: 958
+  time: '2026-11-02T21:42:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2437
+- author: RomiGur
+  changes:
+  - message: EMBLR MANPAD can lock onto and shoot down gunships and Blackfoots
+    type: Add
+  - message: Shot-down Blackfoots fall, crash and leave a wreck
+    type: Add
+  - message: Vehicle crew can look up and shoot across Z-levels
+    type: Add
+  - message: Crews of cooked-off tanks and crashed Blackfoots are thrown out on fire
+    type: Tweak
+  - message: Blood, scorch and explosion decals no longer appear over holes in the
+      floor
+    type: Fix
+  id: 959
+  time: '2026-11-02T22:12:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2403
+- author: TheHellFireo
+  changes:
+  - message: Right-click mining and industry tools or machines and choose Help for
+      illustrated controls, crafting and setup guides.
+    type: Add
+  - message: Open Mining & Industry in the Guidebook for a searchable crafting recipe
+      planner; click materials to see their recipes.
+    type: Add
+  - message: Ghosts can use Mining map to view underground terrain they explore in
+      3D.
+    type: Add
+  - message: Cave survey maps pan continuously across recorded terrain instead of
+      using sector buttons.
+    type: Tweak
+  - message: Tab-complete cavern settings, biome names and presets with cmu_caverns
+      before Insurgency.
+    type: Add
+  id: 960
+  time: '2026-11-02T22:17:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2436
 Name: CMU
 Order: -1
