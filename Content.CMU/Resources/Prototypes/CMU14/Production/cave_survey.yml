@@ -2,6 +2,10 @@
   parent: BaseItem
   id: CMUCaveSurveyMap
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
     state: paper
@@ -55,3 +59,11 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CMUOpenCaveSurveyActionEvent
+
+- type: entity
+  parent: CMUActionCaveSurvey
+  id: CMUActionGhostCaveSurvey
+  components:
+  - type: Action
+    checkCanInteract: false
+    checkConsciousness: false

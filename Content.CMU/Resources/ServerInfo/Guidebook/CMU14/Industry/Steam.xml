@@ -1,0 +1,37 @@
+<Document>
+  # Steam workshop
+
+  [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Equipment recipes" link="CMUGuideIndustryRecipes"]
+
+  <Box>
+    <GuideEntityEmbed Entity="RUMCBrassPump" Caption="WATER"/>
+    <GuideEntityEmbed Entity="RUMCBoiler" Caption="STEAM"/>
+    <GuideEntityEmbed Entity="RUMCSteamDrill" Caption="ORE"/>
+  </Box>
+  [bold]Water → pump → liquid pipe → boiler → gas pipe → machine.[/bold]
+
+  ## Place and connect
+  - Right-click portable machinery → [bold]Pick up[/bold]. Free both hands, then click a reachable clear floor tile to place it. Operate it after placing it.
+  - Place a water pump on suitable water. Supply the boiler through its water port; load fuel in the boiler window.
+  - [bold]Liquid pipes:[/bold] use a screwdriver on the pipe, then on another pipe or the machine. Choose a port if prompted. Repeat a connection to disconnect it; click the selected pipe again to cancel.
+  - [bold]Steam pipes:[/bold] use the gas-pipe network. Place and wrench compatible pipe ends together. Liquid pipes do not carry the boiler's atmospheric steam.
+
+  ## Open machine → fill slots → collect
+  Click a placed machine with an empty hand to open its window. Hold an ingredient and click its input slot to insert it; use an empty hand on an occupied slot to retrieve it. Matching stacks can be topped up. Machines process automatically when their requirements are met.
+
+  <Box>
+    <GuideEntityEmbed Entity="RUMCSteamPress" Caption="INGOT → SHEET"/>
+    <GuideEntityEmbed Entity="RUMCSteamGrinder" Caption="ORE → POWDER"/>
+    <GuideEntityEmbed Entity="RUMCBrassCondenser" Caption="COOL LIQUIDS"/>
+  </Box>
+  - [bold]Drill:[/bold] place over a deposit or supported rock floor. Supply steam or electricity and empty the output slots. It extracts material; use a handheld tool to open a shaft.
+  - [bold]Press:[/bold] insert the correct reusable mold and ingots. The solid-fuel version takes fuel; the steam version takes steam.
+  - [bold]Grinder:[/bold] load materials and supply power/steam. Collect powder and byproducts from its output slots.
+  - [bold]Steam smelter:[/bold] load ore/powder and the required mold. Use its regulator and route liquids/byproducts through the indicated ports.
+  - [bold]Condenser:[/bold] supply the material fluid and coolant to their ports, plus any solid material the recipe needs in its slot. The brass model needs steady coolant; the electric model also needs power.
+  - [bold]Steam generator:[/bold] connect steam, then take electricity from its HV connection.
+
+  [bold]Stopped?[/bold] Check placement → water/fuel/steam → inputs and mold → output room. Examine the machine for its status.
+
+  [textlink="Next: power and oil" link="CMUGuideIndustryElectric"]
+</Document>

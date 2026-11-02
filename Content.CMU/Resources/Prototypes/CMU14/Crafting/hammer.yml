@@ -5,6 +5,10 @@
   name: hammer
   description: A plain hammer with a wooden handle. Good for nailing and for beating metal into shape.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryForge
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Tools/hammer.rsi
     state: icon
