@@ -1,0 +1,16 @@
+cmu-vendor-heading = СКЛАД ВЫДАЧИ
+cmu-vendor-search = Поиск снаряжения...
+cmu-vendor-low-only = Мало на складе
+cmu-vendor-reagents = Реагенты
+cmu-vendor-empty = По заданным фильтрам предметы не найдены.
+cmu-vendor-footer = Нажмите на предмет для выдачи. Ограничения доступа и лимиты сохраняются.
+cmu-vendor-summary = Предметов: { $total }, закончились: { $empty }
+cmu-vendor-out-status = НЕТ: { $count }
+cmu-vendor-low-status = МАЛО: { $count }
+cmu-vendor-ready = В НАЛИЧИИ
+cmu-vendor-details = Описание предмета
+cmu-vendor-out = НЕТ НА СКЛАДЕ
+cmu-vendor-low = МАЛО
+cmu-vendor-in-stock = В НАЛИЧИИ
+cmu-vendor-points = Осталось очков: { $count }
+cmu-vendor-faction-points = Победные очки { $faction }: { $count }
