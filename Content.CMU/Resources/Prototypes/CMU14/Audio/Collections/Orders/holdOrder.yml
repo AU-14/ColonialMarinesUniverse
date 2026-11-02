@@ -39,7 +39,6 @@
 - type: soundCollection
   id: AU14FemaleHoldOrder
   files:   # None as of yet. Will be using these as placeholder for now.
-  - /Audio/CMU14/Voice/UpdatedVoice/Female/Classic/Warcry/femalewarcry6.ogg
   - /Audio/CMU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_1.ogg
   - /Audio/CMU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_2.ogg
   - /Audio/CMU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_3.ogg
