@@ -12,6 +12,7 @@
   - AU14AccessGovforPilot
   - AU14AccessGovforReq
   - AU14AccessGovforVehicleCrew
+  - CMUAccessKitchen # DEFAC open for business button
 
 - type: accessGroup
   parent: AU14GovforCommand # NOTE: AA inheritance for MPs

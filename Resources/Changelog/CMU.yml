@@ -16072,5 +16072,356 @@
   id: 930
   time: '2026-10-30T23:42:30.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2386
+- author: maertayn
+  changes:
+  - message: Strip (long range) headsets from preserve spawns
+    type: Fix
+  id: 931
+  time: '2026-10-31T03:44:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2389
+- author: Vixting
+  changes:
+  - message: Removed carry over votes being halved
+    type: Remove
+  id: 932
+  time: '2026-10-31T12:53:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2392
+- author: toot521
+  changes:
+  - message: Grom Rapid Response Unit Squad and Team to UPP Ambassador Callins
+    type: Add
+  - message: Ministry of Space Security Informal Collaborator Team to UPP Ambassador
+      Callins
+    type: Add
+  - message: Grom Survs from UPP Ambassador Console
+    type: Remove
+  id: 933
+  time: '2026-10-31T12:55:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2378
+- author: rokudara-sen
+  changes:
+  - message: Remote thrall self-destruct asks the hunter to confirm instead of the
+      thrall.
+    type: Fix
+  - message: Blooded thralls lose yautja tech when their master is gone.
+    type: Fix
+  - message: Thrown smart discs can't be snatched out of the air by non-yautja.
+    type: Fix
+  - message: Serpent hunts are capped like cmss13, small hunts roll at most one big
+      xeno.
+    type: Tweak
+  - message: Yautja can eat raw meat without getting sick.
+    type: Fix
+  - message: The falcon drone no longer opens doors and deploys quietly.
+    type: Fix
+  - message: Hunter ship lockers no longer trap you in the walls.
+    type: Fix
+  - message: Ghosts no longer appear in the hunt journal's nearby targets.
+    type: Fix
+  - message: Rending and piercing swords and war scythes look right on your back.
+    type: Fix
+  - message: A yautja self-destruct no longer gibs nearby ghosts.
+    type: Fix
+  - message: Hunter ship lockers no longer hold random station items.
+    type: Tweak
+  - message: The hunter ship's spare gear crates are stocked with weapons, armour
+      and supplies.
+    type: Add
+  - message: The bracer translator shows a typing indicator while you use it.
+    type: Tweak
+  - message: 'Military Caste power armor matches cmss13: more fire resistant, as fast
+      as full hunter armor, and blocks pounces from the front.'
+    type: Tweak
+  id: 934
+  time: '2026-10-31T14:45:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2393
+- author: rokudara-sen
+  changes:
+  - message: The hunting bracer window is redesigned with tabs, live states and a
+      tracker scope.
+    type: Tweak
+  - message: The bracer gear tracker finds gear on other levels of the same area.
+    type: Fix
+  id: 935
+  time: '2026-10-31T14:45:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2394
+- author: byondsucks
+  changes:
+  - message: Point blank shots now have double accuracy
+    type: Tweak
+  id: 936
+  time: '2026-11-01T02:17:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2398
+- author: ILoveDespoiler
+  changes:
+  - message: Fixed raw text display when examining a Xeno with AP.
+    type: Fix
+  id: 937
+  time: '2026-11-01T02:17:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2401
+- author: rokudara-sen
+  changes:
+  - message: Submission points pay the same for an item everywhere, crops are rebalanced
+      so every crop is worth growing, and salvage, wood and steel pay less.
+    type: Tweak
+  - message: Submission point prices now move with supply and demand, and off-world
+      buyers sometimes want one thing badly or are flooded with it.
+    type: Add
+  - message: Use a submission point with an empty hand to see what it buys and what
+      it pays right now.
+    type: Add
+  - message: Submission points no longer swallow items they don't pay for.
+    type: Fix
+  id: 938
+  time: '2026-11-01T05:41:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2301
+- author: ILoveDespoiler
+  changes:
+  - message: Added two new Chemical properties, Bloodbursting and Mycotoxigenic.
+    type: Add
+  - message: Added Mycohemolymph and Sporoplasm fluids as drawable solutions from
+      every Neomorph, with unique properties compared to Neomorph Blood and Plasma.
+      Research rejoice!
+    type: Add
+  id: 939
+  time: '2026-11-01T05:41:44.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2374
+- author: TheHellFireo
+  changes:
+  - message: Fixed Yautja cloak transitions and Butcher presentation under thermal
+      vision.
+    type: Fix
+  - message: Reworked bracer inspection around the real item on the floor, with clearer
+      physical clues and a compact procedure menu.
+    type: Tweak
+  - message: Bracer research now mixes eight standard-chemical procedures with twelve
+      generated-compound procedures.
+    type: Tweak
+  - message: Fixed bracer contact/menu interaction and granted research access to
+      Wey-Yu scientists and corporate liaison variants.
+    type: Fix
+  id: 940
+  time: '2026-11-01T09:21:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2395
+- author: TheHellFireo
+  changes:
+  - message: Added the UPP fighter for UPP and BEAR, plus an admin-spawnable swept-wing
+      fighter.
+    type: Add
+  - message: Fighters now use short takeoffs and landings that adapt to available
+      space, with new airframe effects and sounds.
+    type: Tweak
+  - message: Removed fighter VTOL pads and their supply bundles.
+    type: Remove
+  - message: Reworked the fighter cockpit with a larger shared camera/airspace display
+      and visible flight, weapon and mission controls.
+    type: Tweak
+  - message: All fighter strikes show a laser 2.3 seconds before impact and warn 1
+      second before impact.
+    type: Tweak
+  - message: Reduced fighter camera rendering outside its panel and repeated roof
+      lookups in lighting and weather overlays.
+    type: Tweak
+  id: 941
+  time: '2026-11-01T14:55:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2406
+- author: ILoveDespoiler
+  changes:
+  - message: Conditors and Overmind can now direct infect.
+    type: Add
+  - message: Neomorphs Direct Infect now has better odds to bypass Gasmasks.
+    type: Add
+  - message: Pathogen Walkers are now provided Night Vision via their head mushroom.
+    type: Add
+  - message: Poppers have a base 20% chance to bypass protection on infect.
+    type: Tweak
+  - message: Haze now has a 50% chance to bypass protection on infect.
+    type: Tweak
+  - message: Conditor has gained the ability to direct infect, with a 90% protection
+      bypass rate.
+    type: Tweak
+  - message: Overmind has gained the ability to direct infect, with a 100% protection
+      bypass rate.
+    type: Tweak
+  - message: Overmind can properly use the mycotoxin inject.
+    type: Fix
+  - message: Becoming a Popper does not remove you from the Larva Queue
+    type: Fix
+  - message: Fixed the Overmind having no defined RMCSize. It now has Queen level
+      size, meaning it cannot be stunlocked by shotguns, etc.
+    type: Fix
+  id: 942
+  time: '2026-11-01T20:28:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2317
+- author: Vixting
+  changes:
+  - message: Added new UI to simulator, turing & centrifuge
+    type: Add
+  id: 943
+  time: '2026-11-01T21:08:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2411
+- author: ErinBaking
+  changes:
+  - message: New Lobby Art
+    type: Add
+  id: 944
+  time: '2026-11-01T21:09:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2415
+- author: Mensla
+  changes:
+  - message: Changed fridges and soda dispensers to be moveable.
+    type: Tweak
+  id: 945
+  time: '2026-11-01T21:12:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2416
+- author: ILoveDespoiler
+  changes:
+  - message: Overminds now leave corpses upon death when killed normal and via blight
+      core destruction.
+    type: Tweak
+  id: 946
+  time: '2026-11-01T21:25:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2402
+- author: Berkin101
+  changes:
+  - message: Role Equivalence Page (Guidebook)
+    type: Add
+  id: 947
+  time: '2026-11-01T21:26:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2271
+- author: TheHellFireo
+  changes:
+  - message: Prevent blocking-item prediction rollback from modifying the component
+      collection during restoration.
+    type: Fix
+  - message: Reduce recurring HUD, inventory, hotbar, diagnostic and gameplay update
+      work.
+    type: Code
+  id: 948
+  time: '2026-11-02T04:09:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2419
+- author: Dongo4
+  changes:
+  - message: Hyperthrottling now grants the ability to speak and understand all languages
+      while a chemical containing this property is being metabolized.
+    type: Tweak
+  id: 949
+  time: '2026-11-02T13:56:08.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2429
+- author: rokudara-sen
+  changes:
+  - message: Random Yautja hunts only happen on Insurgency, Distress Signal and Force
+      on Force now, with a dice roll each round instead of every few rounds. Insurgency
+      hunts are half as likely.
+    type: Tweak
+  - message: Hunts are set up in the lobby now, whitelisted players can ready up for
+      the hunt and start on the Hunter Ship.
+    type: Add
+  - message: Only whitelisted players see the Join Hunt button and get told when a
+      hunt is on.
+    type: Tweak
+  - message: Ancients and staff have their own hunt slot on top of the normal hunter
+      cap.
+    type: Add
+  - message: Stranded Yautja, a rare whitelisted Yautja stuck on the colony who starts
+      in a small hut with a one-way pad down.
+    type: Add
+  - message: Staff can send Elder Overseer messages to the Yautja with yautjaannounce.
+    type: Admin
+  - message: Admins can call in Dutch's Dozen, the mercenaries who hunt Yautja. Their
+      EMP grenades break cloak and drain bracers.
+    type: Admin
+  - message: The mark menu and the other bracer windows got a new look.
+    type: Tweak
+  - message: Ghosts no longer show up in the mark menu.
+    type: Fix
+  - message: Yautja and thralls aren't forced into the panic roll when on fire anymore,
+      and their own roll is quick like in CM13.
+    type: Fix
+  - message: The translator typing bubble is back, and goes away when the translator
+      closes.
+    type: Fix
+  - message: Yautja no longer get playtime medals.
+    type: Fix
+  - message: Updated the Yautja Honor Code guidebook.
+    type: Tweak
+  id: 950
+  time: '2026-11-02T13:58:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2413
+- author: rokudara-sen
+  changes:
+  - message: 'The predator smart disc now matches cmss13: it slashes for 15-25 through
+      armour every 2 seconds with a small knockdown chance, does full damage to humans,
+      and lasts 16 seconds.'
+    type: Tweak
+  - message: The hunting smart disc can be shot down.
+    type: Add
+  - message: A bracer shield no longer speeds up a scimitar held in the other hand.
+    type: Fix
+  id: 951
+  time: '2026-11-02T13:59:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2428
+- author: TheHellFireo
+  changes:
+  - message: 'Colony industry: mining, forging, steam/electric production, farming,
+      automation and trade.'
+    type: Add
+  - message: Multi-level caverns below Z-2 with mixed biomes, varied passages and
+      dead ends.
+    type: Add
+  - message: Build cave stairs/ladders and share explored terrain through round-only
+      3D survey maps.
+    type: Add
+  - message: Fixed gravity and construction landings in generated caves.
+    type: Fix
+  - message: Added pre-round Insurgency cavern seeds, biome presets and previews.
+    type: Admin
+  - message: 'New to mining? Quick illustrated guide: https://github.com/AU-14/ColonialMarinesUniverse/blob/9a3e39c40aceee85d185f6dca84f87ba3b8466c1/Content.CMU/Docs/Industry/quickstart.md'
+    type: Add
+  id: 952
+  time: '2026-11-02T14:04:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2421
+- author: TheHellFireo
+  changes:
+  - message: Added a FOB rework with two deployable support-gun platforms, heavy sentries,
+      guided rocket launchers, sensors, electric fences, lights, a backup generator
+      and service terminal.
+    type: Add
+  - message: FOBs start with 8 minutes of support reserve and can bank 12. Repair
+      either of two marked relays to restore up to 6 minutes; repairs take 30 seconds
+      for trained engineers or 45 seconds otherwise.
+    type: Add
+  - message: Command radio announces each new relay pair with both names and coordinates,
+      so patrols know which objectives are available.
+    type: Add
+  - message: Relay missions expire after 8 minutes. Completing one offers a new pair
+      after 5 minutes, and resolved sites rest for 10 minutes. Objectives reach farther
+      from the LZ at 60 and 90 minutes into the round.
+    type: Add
+  - message: Support takes 10 seconds to start, spends at least 60 seconds of reserve
+      per activation, and needs 30 seconds before restarting. Guns use finite ammunition
+      and warn before firing.
+    type: Add
+  - message: Added physical starter shipments, two extra purchasable weaponry crates
+      and three extra support crates per faction, relay map markers, reserve warnings,
+      gun status and FOB guidebook instructions.
+    type: Add
+  - message: Added relay sites and 40-tile equipment deployment areas around all primary
+      LZs on selectable Distress Signal maps.
+    type: Map
+  - message: Direct FOB rockets barely crit healthy, unshielded T3s. Shields still
+      absorb damage; wounded T3s and smaller castes can be killed.
+    type: Tweak
+  - message: In FOB-enabled Distress Signal rounds, evacuation requires normal contested
+      boarding and takeoff; the reserve grants no protected escape.
+    type: Tweak
+  - message: The FOB rework is enabled by default for validated Distress Signal rounds.
+      Set cmu.fob.reserve_enabled to false before round start to opt out; changes
+      during a round apply next round. Per-round reports record reserve, relay, equipment
+      and evacuation activity.
+    type: Admin
+  id: 953
+  time: '2026-11-02T14:04:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2423
 Name: CMU
 Order: -1

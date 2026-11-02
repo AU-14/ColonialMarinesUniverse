@@ -300,6 +300,9 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
         if (TerminatingOrDeleted(overmind))
             return;
 
+        if (_mobState.IsDead(overmind))  
+            return;
+
         if (_hive.GetHive(overmind) is not { } hive)
             return;
 
@@ -337,25 +340,23 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
         }
 
         PopupToHive(hive, Loc.GetString("cmu14-blight-core-destroyed-overmind-died"));
-        QueueDel(overmind);
+
+        _mobState.ChangeMobState(overmind, MobState.Dead);
     }
 
-    private void OnOvermindDeath(Entity<CMUXenoOvermindComponent> overmind, ref MobStateChangedEvent args)
-    {
-        if (args.NewMobState != MobState.Dead)
-            return;
-
-        if (overmind.Comp.LinkedCore is { } coreUid && TryComp(coreUid, out CMUBlightCoreComponent? core))
-        {
-            core.CurrentOvermind = null;
+    private void OnOvermindDeath(Entity<CMUXenoOvermindComponent> overmind, ref MobStateChangedEvent args)  
+    {  
+        if (args.NewMobState != MobState.Dead)  
+            return;  
+      
+        if (overmind.Comp.LinkedCore is { } coreUid && TryComp(coreUid, out CMUBlightCoreComponent? core))  
+        {  
+            core.CurrentOvermind = null;  
             Dirty(coreUid, core);
         }
-
+        
         if (_hive.GetHive(overmind.Owner) is { } hive)
-            PopupToHive(hive, Loc.GetString("cmu14-blight-core-overmind-died"));
-
-        if (!TerminatingOrDeleted(overmind.Owner))
-            QueueDel(overmind.Owner);
+            PopupToHive(hive, Loc.GetString("cmu14-blight-core-overmind-died")); 
     }
 
     public override void Update(float frameTime)

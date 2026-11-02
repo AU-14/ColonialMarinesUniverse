@@ -37,6 +37,28 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood  
+    solution:  
+      maxVol: 600
+      reagents:  
+      - ReagentId: CMUPathogenRoyalMycohemolymph  
+        Quantity: 200
+      - ReagentId: CMUPathogenSporoplasmRoyal
+        Quantity: 200
+      - ReagentId: CMUPathogenSporoplasmMycotoxin
+        Quantity: 200
+  - type: SolutionRegeneration  
+    generated:  
+      reagents:  
+      - ReagentId: CMUPathogenRoyalMycohemolymph  
+        Quantity: 1  
+      - ReagentId: CMUPathogenSporoplasmRoyal 
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmMycotoxin
+        Quantity: 1
   - type: Xeno
     role: CMU14JobPathogenOvermind
     tier: 4
@@ -55,6 +77,7 @@
     - CMU14ActionXenoPathogenPsychicRadiance
     - CMU14ActionXenoPathogenGiveOrder
     - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenDirectSporeInfect
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 2.0
@@ -65,6 +88,9 @@
   - type: XenoPheromones
     pheromonesMultiplier: 4
   - type: CMUXenoBlightWave
+  - type: CMUXenoMycotoxinInject
+    plasmaCost: 150
+    range: 3.0
   - type: CMUXenoOvermind
     eyeFormActions:
     - CMU14ActionXenoPathogenHeal
@@ -131,6 +157,8 @@
   - type: CMArmor
     explosionArmor: 25
     xenoArmor: 15
+  - type: RMCSize
+    size: Immobile
   - type: XenoConstruction
     buildDelay: 1
     canBuild:
@@ -152,6 +180,10 @@
     chance: 0.50
     stunMin: 3
     stunMax: 4
+  - type: CMUXenoDirectSporeInfect
+    plasmaCost: 50
+    embryoSpawn: CMU14XenoBloodburster
+    protectionBypassChance: 1.0
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/CMU14/Interface/neo_blips.rsi
@@ -190,6 +222,9 @@
     message: cmu-xeno-death-overmind
     color: "#8a8c50"
   - type: DropshipHijacker
+  - type: RMCGibOnDeath
+    gibChance: 0
+    damageGibMultiplier: 0
 
 - type: entity
   parent: CMU14XenoOvermindBase

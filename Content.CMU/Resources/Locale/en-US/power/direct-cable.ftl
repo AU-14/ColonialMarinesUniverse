@@ -1,0 +1,11 @@
+direct-cable-linker-first-point = You attach one end of the cable to { THE($target) }.
+direct-cable-linker-cancelled = You detach the cable.
+direct-cable-linker-source-lost = The other end of the cable is no longer there.
+direct-cable-linker-incompatible = These networks aren't compatible with each other.
+direct-cable-linker-already-linked = These are already connected by a direct cable.
+direct-cable-linker-too-far = That's too far away to run a cable.
+direct-cable-linker-not-enough-cable = You don't have enough cable left.
+direct-cable-linker-success = You connect { THE($source) } to { THE($target) } with a cable.
+direct-cable-linker-disconnect-verb = Disconnect direct cable
+direct-cable-linker-disconnect-verb-needs-cutters = You need wirecutters to do this.
+direct-cable-linker-disconnected = The direct cable connections are cut.

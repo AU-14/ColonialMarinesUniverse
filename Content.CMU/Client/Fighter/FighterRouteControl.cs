@@ -30,7 +30,7 @@ public sealed class FighterRouteControl : Control
     public Vector2 Entry;
     public Vector2 Exit;
     public bool HasDraft => Entry != _receivedEntry || Exit != _receivedExit;
-    private static readonly Color[] TerrainColors = [Color.FromHex("#182726"), Color.FromHex("#778579"), Color.FromHex("#386774"), Color.FromHex("#47633C"), Color.FromHex("#ABA780")];
+    private static readonly Color[] TerrainColors = [Color.FromHex("#0C1015"), Color.FromHex("#778579"), Color.FromHex("#386774"), Color.FromHex("#47633C"), Color.FromHex("#ABA780")];
 
     public FighterRouteControl()
     {
@@ -121,13 +121,13 @@ public sealed class FighterRouteControl : Control
             }
         }
         if (CoverageMode) DrawCoverage(h, a);
-        else h.DrawCircle((Vector2) PixelSize / 2, a.AirspaceRadius * scale, new Color(.32f, .42f, .36f), false);
-        var green = new Color(.72f, .92f, .62f);
-        h.DrawLine(Project(Entry), Project(Exit), green);
-        h.DrawCircle(Project(Entry), 6, green, false);
-        h.DrawRect(UIBox2.FromDimensions(Project(Exit) - new Vector2(5), new Vector2(10)), green, false);
-        h.DrawString(_font, Project(Entry) + new Vector2(9, -7), Loc.GetString("cmu-fighter-entry-short"), green);
-        h.DrawString(_font, Project(Exit) + new Vector2(9, 14), Loc.GetString("cmu-fighter-exit-short"), green);
+        else h.DrawCircle((Vector2) PixelSize / 2, a.AirspaceRadius * scale, Color.FromHex("#47515E"), false);
+        var ink = Color.FromHex("#E6ECF4");
+        h.DrawLine(Project(Entry), Project(Exit), ink);
+        h.DrawCircle(Project(Entry), 6, ink, false);
+        h.DrawRect(UIBox2.FromDimensions(Project(Exit) - new Vector2(5), new Vector2(10)), ink, false);
+        h.DrawString(_font, Project(Entry) + new Vector2(9, -7), Loc.GetString("cmu-fighter-entry-short"), ink);
+        h.DrawString(_font, Project(Exit) + new Vector2(9, 14), Loc.GetString("cmu-fighter-exit-short"), ink);
         if (a.Flying && a.Phase != FighterPhase.Pass)
         {
             var previous = Project(FighterFlight.Curve(a, 0));
@@ -141,8 +141,8 @@ public sealed class FighterRouteControl : Control
         var position = Project(a.Position);
         var forward = FighterFlight.Forward(a.Heading) * new Vector2(1, -1);
         var right = new Vector2(-forward.Y, forward.X);
-        h.DrawLine(position + forward * 11, position - forward * 7 + right * 6, green);
-        h.DrawLine(position + forward * 11, position - forward * 7 - right * 6, green);
+        h.DrawLine(position + forward * 11, position - forward * 7 + right * 6, ink);
+        h.DrawLine(position + forward * 11, position - forward * 7 - right * 6, ink);
         if (a.Mark is { } mark)
             h.DrawRect(UIBox2.FromDimensions(Project(mark) - new Vector2(6), new Vector2(12)), Color.Yellow, false);
         if (!CoverageMode && _weapons != null && _seat != null)
@@ -163,7 +163,7 @@ public sealed class FighterRouteControl : Control
                 h.DrawString(_font, marker + new Vector2(8, -8), flare.Name, color);
             }
         }
-        h.DrawString(_font, new Vector2(8, 18), Loc.GetString("cmu-fighter-north"), green);
+        h.DrawString(_font, new Vector2(8, 18), Loc.GetString("cmu-fighter-north"), ink);
         h.DrawCircle(Project(FighterFlight.HoldingPoint(a)), 7, Color.Gray, false);
     }
 

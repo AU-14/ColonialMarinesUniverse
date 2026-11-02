@@ -581,6 +581,10 @@ namespace Content.Shared.Cuffs
             if (HasComp<DisarmProneComponent>(target))
                 cuffTime = 0.0f; // cuff them instantly.
 
+            // CMU14: cooperative surrender halves the normal restraint delay.
+            if (HasComp<Content.Shared.CMU14.Surrender.CMUSurrenderComponent>(target))
+                cuffTime *= 0.5f;
+
             var doAfterEventArgs = new DoAfterArgs(EntityManager, user, cuffTime, new AddCuffDoAfterEvent(), handcuff, target, handcuff)
             {
                 BreakOnMove = true,

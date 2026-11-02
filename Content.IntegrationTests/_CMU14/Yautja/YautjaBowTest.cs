@@ -3242,12 +3242,14 @@ public sealed class YautjaBowTest
                         var poweredArmor = SpawnAndTrack(entMan, "CMUYautjaPoweredArmor", spawned);
                         var speedTier = entMan.GetComponent<RMCArmorSpeedTierComponent>(poweredArmor);
                         var speed = entMan.GetComponent<ClothingSpeedModifierComponent>(poweredArmor);
-                        Assert.That(speedTier.SpeedTier, Is.EqualTo("heavy"),
-                            "CMSS13 powered armor slowdown = SLOWDOWN_ARMOR_LOWHEAVY uses the local heavy speed tier.");
-                        Assert.That(speed.WalkModifier, Is.EqualTo(0.64f),
-                            "Local SLOWDOWN_ARMOR_LOWHEAVY mapping.");
-                        Assert.That(speed.SprintModifier, Is.EqualTo(0.64f),
-                            "Local SLOWDOWN_ARMOR_LOWHEAVY mapping.");
+                        var fullArmor = SpawnAndTrack(entMan, "CMUYautjaHeavyClanArmor", spawned);
+                        var fullSpeed = entMan.GetComponent<ClothingSpeedModifierComponent>(fullArmor);
+                        Assert.That(speedTier.SpeedTier, Is.EqualTo(entMan.GetComponent<RMCArmorSpeedTierComponent>(fullArmor).SpeedTier),
+                            "CMSS13 powered armor keeps the full hunter armor's slowdown, so it shares its speed tier.");
+                        Assert.That(speed.WalkModifier, Is.EqualTo(fullSpeed.WalkModifier),
+                            "CMSS13 powered armor slowdown = SLOWDOWN_ARMOR_LOWHEAVY, same 0.75 as the full hunter armor.");
+                        Assert.That(speed.SprintModifier, Is.EqualTo(fullSpeed.SprintModifier),
+                            "CMSS13 powered armor slowdown = SLOWDOWN_ARMOR_LOWHEAVY, same 0.75 as the full hunter armor.");
                     }
 
                     if (prototypes.HasIndex<EntityPrototype>(CMUYautjaPoweredHelmetPrototype))
@@ -9183,8 +9185,6 @@ public sealed class YautjaBowTest
                 var smartDisc = entMan.GetComponent<YautjaSmartDiscComponent>(disc);
                 var embeddable = entMan.GetComponent<EmbeddableProjectileComponent>(disc);
                 var thrownDamage = entMan.GetComponent<DamageOtherOnHitComponent>(disc);
-                var staminaCollide = entMan.GetComponent<StaminaDamageOnCollideComponent>(disc);
-                var staminaEmbed = entMan.GetComponent<StaminaDamageOnEmbedComponent>(disc);
 
                 Assert.Multiple(() =>
                 {
@@ -9194,24 +9194,22 @@ public sealed class YautjaBowTest
                         "CMSS13 smartdisc source description.");
                     Assert.That(item.Size.Id, Is.EqualTo("Tiny"),
                         "CMSS13 smartdisc w_class = SIZE_TINY.");
-                    Assert.That(smartDisc.ActiveTime, Is.EqualTo(TimeSpan.FromSeconds(30)),
-                        "CMSS13 smartdisc det_time = 30 before prime().");
+                    Assert.That(smartDisc.ActiveTime, Is.EqualTo(TimeSpan.FromSeconds(16)),
+                        "CMSS13 spawned hostile smartdisc lifetime = 8 Life ticks of 2 seconds.");
                     Assert.That(smartDisc.SearchRange, Is.EqualTo(7f),
                         "CMSS13 spawned hostile smartdisc ListTargets(7) target search radius.");
                     Assert.That(smartDisc.HitRange, Is.EqualTo(1f),
                         "CMSS13 spawned hostile smartdisc attacks adjacent targets with get_dist(src, target_mob) <= 1.");
                     Assert.That(smartDisc.MaxHits, Is.EqualTo(8),
                         "CMSS13 spawned hostile smartdisc lifetime = 8 local mapping.");
-                    Assert.That(smartDisc.HitDelay, Is.EqualTo(TimeSpan.FromSeconds(1)),
-                        "CMSS13 spawned hostile smartdisc turns_per_move = 1 local hit cadence mapping.");
+                    Assert.That(smartDisc.HitDelay, Is.EqualTo(TimeSpan.FromSeconds(2)),
+                        "CMSS13 spawned hostile smartdisc attacks at most once per 2 second Life tick.");
                     Assert.That(embeddable.EmbedOnThrow, Is.False,
                         "CMSS13 smartdisc embeddable = FALSE.");
                     Assert.That(DamageTotal(thrownDamage.Damage), Is.EqualTo((FixedPoint2) 25),
                         "CMSS13 smartdisc throwforce = 25.");
-                    Assert.That(staminaCollide.Damage, Is.EqualTo(25f),
-                        "CMSS13 smartdisc throwforce has no separate stamina payload; keep local collide stamina aligned to throwforce.");
-                    Assert.That(staminaEmbed.Damage, Is.EqualTo(0f),
-                        "CMSS13 smartdisc embeddable = FALSE means no embed stamina payload.");
+                    Assert.That(entMan.HasComponent<StaminaDamageOnCollideComponent>(disc), Is.False,
+                        "CMSS13 smartdisc throwforce has no stamina payload.");
                     Assert.That(entMan.GetComponent<ItemThrowRangeComponent>(disc).Range, Is.EqualTo(14f),
                         "CMSS13 boomerang throws back toward the user with range 12.");
                     Assert.That(entMan.TryGetComponent<MeleeWeaponComponent>(disc, out var melee), Is.True,
@@ -9672,6 +9670,40 @@ public sealed class YautjaBowTest
             foreach (var uid in new[] { hunter, disc })
             {
                 if (uid != default && !entMan.Deleted(uid))
+                    entMan.DeleteEntity(uid);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HumansCantGrabAYautjaThrownSmartDiscOutOfTheAir()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var hands = entMan.System<SharedHandsSystem>();
+            var hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            var marine = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
+            var disc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(1, 0)));
+
+            var thrown = entMan.EnsureComponent<ThrownItemComponent>(disc);
+            thrown.Thrower = hunter;
+            Assert.That(entMan.GetComponent<YautjaSmartDiscComponent>(disc).Active, Is.False, "the boomerang throw isn't the hunting mode");
+            Assert.That(hands.TryPickupAnyHand(marine, disc), Is.False,
+                "cmss13 only lets a throw mode catch take a flying disc, a plain click shouldn't");
+
+            entMan.RemoveComponent<ThrownItemComponent>(disc);
+            Assert.That(hands.TryPickupAnyHand(marine, disc), Is.True, "a disc lying on the floor is still loot");
+
+            foreach (var uid in new[] { hunter, marine, disc })
+            {
+                if (!entMan.Deleted(uid))
                     entMan.DeleteEntity(uid);
             }
         });
@@ -17502,6 +17534,9 @@ public sealed class YautjaBowTest
         yield return new FireIntensityResistanceRow("CMUYautjaClanArmor", standard);
         yield return new FireIntensityResistanceRow("CMUYautjaClanArmorScalable", standard);
         yield return new FireIntensityResistanceRow("CMUYautjaHeavyClanArmor", heavy);
+        // the military caste power armor is a hunter/full subtype in cmss13
+        yield return new FireIntensityResistanceRow("CMUYautjaPoweredArmor", heavy);
+        yield return new FireIntensityResistanceRow("CMUYautjaPoweredArmorEnforcer", heavy);
 
         yield return new FireIntensityResistanceRow("CMUYautjaMask", standard);
         yield return new FireIntensityResistanceRow("CMUYautjaMaskScalable", standard);

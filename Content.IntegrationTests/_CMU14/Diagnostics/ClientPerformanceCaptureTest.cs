@@ -75,7 +75,7 @@ public sealed class ClientPerformanceCaptureTest
     }
 
     [Test]
-    public async Task ClientAssemblyPassesSandboxWithoutLoadingPrototypes()
+    public async Task ContentAssembliesPassSandboxWithoutLoadingPrototypes()
     {
         using var client = new RobustIntegrationTest.ClientIntegrationInstance(new RobustIntegrationTest.ClientIntegrationOptions
         {
@@ -91,6 +91,7 @@ public sealed class ClientPerformanceCaptureTest
         });
         await client.WaitIdleAsync();
         await client.CheckSandboxed(typeof(CMUClientPerformanceSystem).Assembly);
+        await client.CheckSandboxed(typeof(Content.Shared.Entry.EntryPoint).Assembly);
     }
 
     [Test]

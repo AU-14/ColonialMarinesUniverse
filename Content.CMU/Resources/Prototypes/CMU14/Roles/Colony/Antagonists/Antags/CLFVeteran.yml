@@ -69,6 +69,8 @@
   id: CLFVeteranRole
   name: roles-antag-clfveteran-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-clfveteran-objective
 
 - type: startingGear

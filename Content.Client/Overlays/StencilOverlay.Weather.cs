@@ -1,6 +1,5 @@
 using System.Numerics;
 using Content.Shared._RMC14.Weather;
-using Content.Shared.Light.Components;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Weather;
 using Robust.Client.Graphics;
@@ -27,12 +26,7 @@ public sealed partial class StencilOverlay
         var stencil = _gridStencil.GetTileStencil(args,
             "weather-blocked",
             "weather-blocked-grid-stencil",
-            (grid, tile) =>
-            {
-                _entManager.TryGetComponent(grid.Owner, out RoofComponent? roofComp);
-                // Ignored tiles for stencil.
-                return !_weather.CanWeatherAffect((grid.Owner, grid.Comp, roofComp), tile);
-            },
+            CreateWeatherStencilPredicate(worldBounds), // CMU14: batch entity-roof checks for this stencil.
             ignoreEmpty: false,
             queryExpansion: 1f,
             tileOffset: tileOffset,

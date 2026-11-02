@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 05/06/2026 02:14:18
-  entityCount: 34729
+  entityCount: 34750
 maps:
 - 1
 grids:
@@ -344,6 +344,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMUFobMap
+      sites: [1468, 1469]
     - type: MetaData
       name: Raijin (LV-670)
     - type: Transform
@@ -71898,6 +71900,49 @@ entities:
   entities:
   - uid: 1468
     components:
+    - type: CMUFobSite
+      id: Airstrip
+      utilityExclusions:
+      - "28.65,-37.35,41.35,-15.65"
+      - "28.15,-34.85,40.85,-18.15"
+      - "28.15,-34.85,40.85,-16.15"
+      relays:
+      - anchor: 34730
+        tier: Near
+        approach: East
+      - anchor: 34731
+        tier: Near
+        approach: East
+      - anchor: 34732
+        tier: Near
+        approach: South
+      - anchor: 34733
+        tier: Near
+        approach: South
+      - anchor: 34734
+        tier: Intermediate
+        approach: East
+      - anchor: 34735
+        tier: Intermediate
+        approach: East
+      - anchor: 34736
+        tier: Intermediate
+        approach: South
+      - anchor: 34737
+        tier: Intermediate
+        approach: South
+      - anchor: 34738
+        tier: Far
+        approach: East
+      - anchor: 34739
+        tier: Far
+        approach: East
+      - anchor: 34740
+        tier: Far
+        approach: South
+      - anchor: 34741
+        tier: Far
+        approach: South
     - type: DropshipDestination
       forceOnForceFaction: govfor
     - type: MetaData
@@ -71907,6 +71952,49 @@ entities:
       parent: 1
   - uid: 1469
     components:
+    - type: CMUFobSite
+      id: Aerodrome
+      utilityExclusions:
+      - "15.65,-217.35,28.35,-195.65"
+      - "15.15,-214.85,27.85,-198.15"
+      - "15.15,-214.85,27.85,-196.15"
+      relays:
+      - anchor: 34742
+        tier: Near
+        approach: North
+      - anchor: 34743
+        tier: Near
+        approach: North
+      - anchor: 34744
+        tier: Near
+        approach: East
+      - anchor: 34745
+        tier: Near
+        approach: East
+      - anchor: 34746
+        tier: Intermediate
+        approach: North
+      - anchor: 34740
+        tier: Intermediate
+        approach: North
+      - anchor: 34747
+        tier: Intermediate
+        approach: East
+      - anchor: 34748
+        tier: Intermediate
+        approach: East
+      - anchor: 34736
+        tier: Far
+        approach: North
+      - anchor: 34737
+        tier: Far
+        approach: North
+      - anchor: 34749
+        tier: Far
+        approach: East
+      - anchor: 34750
+        tier: Far
+        approach: East
     - type: DropshipDestination
       forceOnForceFaction: opfor
     - type: MetaData
@@ -254096,4 +254184,153 @@ entities:
       kind: Ground
       id: trijent.ground.relay
       displayName: Trijent Ground Relay
+- proto: CMUFobRelayMarker
+  entities:
+  - uid: 34730
+    components:
+    - type: Transform
+      parent: 1
+      pos: 98.5,-50.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-northwest-valley
+  - uid: 34731
+    components:
+    - type: Transform
+      parent: 1
+      pos: 102.5,-19.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-labs-valley
+  - uid: 34732
+    components:
+    - type: Transform
+      parent: 1
+      pos: 8.5,-96.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-western-dam-caves
+  - uid: 34733
+    components:
+    - type: Transform
+      parent: 1
+      pos: 46.5,-108.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-west-tunnel
+  - uid: 34734
+    components:
+    - type: Transform
+      parent: 1
+      pos: 111.5,-48.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-north-dam-riverbank
+  - uid: 34735
+    components:
+    - type: Transform
+      parent: 1
+      pos: 149.5,-60.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-dam-east-valley
+  - uid: 34736
+    components:
+    - type: Transform
+      parent: 1
+      pos: 18.5,-115.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-telecomms-valley-north
+  - uid: 34737
+    components:
+    - type: Transform
+      parent: 1
+      pos: 77.5,-112.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-south-tunnel-junction
+  - uid: 34738
+    components:
+    - type: Transform
+      parent: 1
+      pos: 175.5,-51.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-wilderness-road
+  - uid: 34739
+    components:
+    - type: Transform
+      parent: 1
+      pos: 181.5,-83.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-crashsite-approach
+  - uid: 34740
+    components:
+    - type: Transform
+      parent: 1
+      pos: 86.5,-150.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-south-tunnel-entrance
+  - uid: 34741
+    components:
+    - type: Transform
+      parent: 1
+      pos: 100.5,-156.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-hydro-valley-north
+  - uid: 34742
+    components:
+    - type: Transform
+      parent: 1
+      pos: 76.5,-173.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-cargo-valley-east
+  - uid: 34743
+    components:
+    - type: Transform
+      parent: 1
+      pos: 81.5,-182.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-container-yard
+  - uid: 34744
+    components:
+    - type: Transform
+      parent: 1
+      pos: 93.5,-212.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-treatment-south-approach
+  - uid: 34745
+    components:
+    - type: Transform
+      parent: 1
+      pos: 120.5,-209.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-treatment-east-approach
+  - uid: 34746
+    components:
+    - type: Transform
+      parent: 1
+      pos: 87.5,-157.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-hydro-valley-west
+  - uid: 34747
+    components:
+    - type: Transform
+      parent: 1
+      pos: 137.5,-182.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-hydroponics-loading-approach
+  - uid: 34748
+    components:
+    - type: Transform
+      parent: 1
+      pos: 143.5,-202.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-southeast-riverbank
+  - uid: 34749
+    components:
+    - type: Transform
+      parent: 1
+      pos: 104.5,-119.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-dam-southern-riverbank
+  - uid: 34750
+    components:
+    - type: Transform
+      parent: 1
+      pos: 99.5,-131.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-raijin-relay-dam-valley-south
 ...

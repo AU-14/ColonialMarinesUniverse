@@ -1,0 +1,26 @@
+- type: entity
+  parent: CMUMobYautja
+  id: CMUMobYautjaStranded
+  name: Yautja Stranded
+  suffix: Yautja, Stranded, Event
+  components:
+  - type: YautjaStranded
+  - type: Yautja
+    npcFaction: CMUYautjaStranded
+  - type: NpcFactionMember
+    factions:
+    - CMUYautjaStranded
+  - type: Loadout
+    prototypes:
+    - CMUYautjaStrandedSpawnGear
+  # cmss13 stranded bracers skip the minimap setup, nobody tracks them and they don't see the hunt
+  - type: RemoveComponents
+    components:
+    - type: TacticalMapTracked
+    - type: YautjaMapTracked
+    - type: TacticalMapIcon
+      icon: # required fields here and below, the values are ignored
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: leader
+    - type: TacticalMapUser
+      actionId: CMUActionYautjaOpenTacticalMap

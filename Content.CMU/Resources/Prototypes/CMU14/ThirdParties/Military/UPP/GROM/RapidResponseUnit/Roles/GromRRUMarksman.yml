@@ -1,0 +1,42 @@
+- type: job
+  parent: AU14UPPGROMMarksman
+  id: AU14UPPGROMRRUMarksman
+  description: au14-uppgrom-rru-description
+  spawnMenuRoleName: UPP GROM Marksman (Rapid Response Unit)
+  startingGear: AU14GearUPPGROMRRUMarksman
+  greeting: au14-uppgrom-rru-greeting
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14UPPGROMRRUMarksman
+  name: UPP GROM Marksman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadGROM
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-govforspecialist-marksmanRMC
+    description: au14-uppgrom-rru-description
+    reregister: false
+    job: AU14UPPGROMRRUMarksman
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMRRUMarksman
+  equipment:
+    id: AU14IDCardUPPGROMMarksman
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPP
+    shoes: RMCBootsSPPFilled
+    head: AU14UPPBoonie
+    belt: AU14BeltHolsterPistolUPPRRU
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14MagazinePouchUPPRRUType88
+    back: AU14UPPRRUMarksmanSatchel
+    ears: RMCHeadsetGROM
+    suitstorage: RMCType88SniperRifle

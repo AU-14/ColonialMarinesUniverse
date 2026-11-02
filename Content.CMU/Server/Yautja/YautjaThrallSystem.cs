@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Atmos;
 using Content.Server.Chat.Managers;
 using Content.Server.CMU14.Round.Objectives;
 using Content.Server.Electrocution;
@@ -130,7 +131,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         SubscribeLocalEvent<YautjaThrallComponent, IsEquippingTargetAttemptEvent>(OnThrallEquipAttempt);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<YautjaComponent, EntityTerminatingEvent>(OnMasterTerminating);
-        SubscribeLocalEvent<YautjaThrallComponent, YautjaThrallSelfDestructConfirmEvent>(OnThrallSelfDestructConfirm);
+        SubscribeLocalEvent<YautjaComponent, YautjaThrallSelfDestructConfirmEvent>(OnThrallSelfDestructConfirm);
         SubscribeLocalEvent<YautjaHivebrokenXenoComponent, RefreshNameModifiersEvent>(OnHivebrokenRefreshName);
 
         SubscribeLocalEvent<YautjaBracerComponent, YautjaLinkThrallBracerActionEvent>(OnLinkThrallBracer);
@@ -360,6 +361,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         RestoreHivebrokenXeno(ent.Owner, ent.Comp);
         ClearThrallLinks(ent.Owner, ent.Comp);
         RemCompDeferred<YautjaTechAuthorizedComponent>(ent.Owner);
+        if (!HasComp<YautjaComponent>(ent.Owner))
+            RemCompDeferred<CMUHunterFireRollComponent>(ent.Owner);
     }
 
     private void OnLinkThrallBracer(Entity<YautjaBracerComponent> ent, ref YautjaLinkThrallBracerActionEvent args)
@@ -547,16 +550,16 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         return true;
     }
 
-    private void OnThrallSelfDestructConfirm(Entity<YautjaThrallComponent> ent, ref YautjaThrallSelfDestructConfirmEvent args)
+    private void OnThrallSelfDestructConfirm(Entity<YautjaComponent> ent, ref YautjaThrallSelfDestructConfirmEvent args)
     {
         if (!TryGetEntity(args.Master, out var master) ||
+            master.Value != ent.Owner ||
+            !_mob.IsAlive(ent.Owner) ||
             !TryGetEntity(args.ThrallBracer, out var bracerId) ||
             !TryComp(bracerId, out YautjaThrallBracerComponent? bracer) ||
-            ent.Comp.Master != master.Value ||
-            bracer.User != ent.Owner ||
-            !TryFindThrall(master.Value, out var currentThrall) ||
-            currentThrall.Owner != ent.Owner ||
-            !TryGetWornThrallBracer(ent.Owner, out var wornBracer) ||
+            !TryFindThrall(ent.Owner, out var thrall) ||
+            bracer.User != thrall.Owner ||
+            !TryGetWornThrallBracer(thrall.Owner, out var wornBracer) ||
             wornBracer.Owner != bracerId)
         {
             return;
@@ -565,7 +568,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         if (bracer.SelfDestructArmed)
             return;
 
-        ArmThrallSelfDestruct((bracerId.Value, bracer), master.Value, ent.Owner);
+        ArmThrallSelfDestruct((bracerId.Value, bracer), ent.Owner, thrall.Owner);
     }
 
     private void OnGetThrallBracerActions(Entity<YautjaThrallBracerComponent> ent, ref GetItemActionsEvent args)
@@ -884,6 +887,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         var thrall = EnsureComp<YautjaThrallComponent>(target);
         thrall.Master = master;
         thrall.Reason = reason ?? string.Empty;
+        EnsureComp<CMUHunterFireRollComponent>(target);
         thrall.Blooded = false;
         thrall.BloodedBy = null;
         thrall.BloodingReason = string.Empty;
@@ -1055,6 +1059,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         thrall.BloodingReason = string.Empty;
         thrall.TechAuthorized = false;
         Dirty(target, thrall);
+        // the flag alone isn't enough, surgery and tech items check the component. a deleted master used to leave it behind
+        RemCompDeferred<YautjaTechAuthorizedComponent>(target);
     }
 
     private void CleanupThrallBracerLink(Entity<YautjaThrallBracerComponent> bracer, bool clearReciprocal)
@@ -1819,9 +1825,10 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             new(Loc.GetString("cmu-yautja-self-destruct-confirm-no")),
         };
 
+        // cmss13 sends this alert to the thrall, who can just press No. The question is the master's.
         _dialog.OpenOptions(
-            thrall,
-            thrall,
+            master,
+            master,
             Loc.GetString("cmu-yautja-thrall-self-destruct-dialog-title"),
             options,
             Loc.GetString("cmu-yautja-thrall-self-destruct-confirm", ("species", ThrallSelfDestructSpeciesName(thrall))),

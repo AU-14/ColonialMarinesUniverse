@@ -235,7 +235,10 @@
     - id: CMWirecutter
     - id: RMCCableCoil30
     - id: CMMultitool
-    - id: CMEntrenchingTool
+    # RUMC: the entrenching tool gives its place in the belt to the hand saw and the hammer (kept, switched off):
+    # - id: CMEntrenchingTool
+    - id: RUMCHandSaw
+    - id: RUMCHammer
 
 # LACN versions of the combat toolbelt and construction rig, drawn like the LACN toolbelt rig.
 - type: entity
