@@ -9,7 +9,6 @@ namespace Content.Server.CMU14.CaveSurvey;
 
 public sealed partial class CMUCaveSurveySystem
 {
-    public const int ViewSize = 64;
     private const int ViewLevels = 8;
     private int _generation;
     private readonly Dictionary<EntityUid, int> _viewGenerations = new();
@@ -33,7 +32,7 @@ public sealed partial class CMUCaveSurveySystem
     private void OnView(Entity<CMUCaveSurveyAccessComponent> ent, ref CMUCaveSurveyViewMessage args)
     {
         if (args.Actor != ent.Owner || !_ui.IsUiOpen(ent.Owner, Key, args.Actor) || args.RequestId < 0 ||
-            Math.Abs((long) args.Origin.X) > 1_000_000 || Math.Abs((long) args.Origin.Y) > 1_000_000 ||
+            Math.Abs((long) args.Focus.X) > 1_000_000 || Math.Abs((long) args.Focus.Y) > 1_000_000 ||
             args.MinDepth is < -4096 or > -8 ||
             !TryComp<CMUCaveSurveyMemoryComponent>(ent, out var memory) || memory.Worlds.Count == 0 ||
             _timing.CurTime < memory.NextRequest) return;
@@ -44,7 +43,7 @@ public sealed partial class CMUCaveSurveySystem
             memory.SelectedWorld = worlds[(Array.IndexOf(worlds, memory.SelectedWorld) + 1) % worlds.Length];
         }
         memory.LastViewRequest = args.RequestId;
-        if (!memory.Worlds.TryGetValue(memory.SelectedWorld, out var data)) return;
+        if (!memory.Worlds.TryGetValue(memory.SelectedWorld, out var data) || !data.TryGetBounds(out var min, out var max)) return;
 
         Vector2? operatorPosition = null;
         var operatorDepth = 0;
@@ -54,7 +53,7 @@ public sealed partial class CMUCaveSurveySystem
             operatorPosition = _transform.GetWorldPosition(ent);
             operatorDepth = level.Depth;
         }
-        var origin = args.Origin;
+        var focus = args.Focus;
         var minDepth = args.MinDepth;
         if (args.Center || args.NextWorld)
         {
@@ -64,13 +63,22 @@ public sealed partial class CMUCaveSurveySystem
                 center = new Vector2i((int) MathF.Floor(position.X), (int) MathF.Floor(position.Y));
                 depth = operatorDepth;
             }
-            origin = new Vector2i(CMUCaveSurveyData.FloorDiv(center.X, ViewSize), CMUCaveSurveyData.FloorDiv(center.Y, ViewSize)) * ViewSize;
+            focus = center;
             minDepth = CMUCaveSurveyData.FloorDiv(depth, ViewLevels) * ViewLevels;
         }
 
         const int size = CMUReconGeometry.ChunkSize;
+        // Present one continuous footprint. Very large surveys slide the renderer's bounded window
+        // with the camera; these internal chunk boundaries are not player-facing map pages.
+        min = new Vector2i(CMUCaveSurveyData.FloorDiv(min.X, size) - 1, CMUCaveSurveyData.FloorDiv(min.Y, size) - 1) * size;
+        max = new Vector2i(CMUCaveSurveyData.FloorDiv(max.X - 1, size) + 2, CMUCaveSurveyData.FloorDiv(max.Y - 1, size) + 2) * size;
+        var width = Math.Min(max.X - min.X, CMUReconGeometry.MaxSize);
+        var height = Math.Min(max.Y - min.Y, CMUReconGeometry.MaxSize);
+        var origin = new Vector2i(
+            Math.Clamp(CMUCaveSurveyData.FloorDiv(focus.X - width / 2, size) * size, min.X, max.X - width),
+            Math.Clamp(CMUCaveSurveyData.FloorDiv(focus.Y - height / 2, size) * size, min.Y, max.Y - height));
         var cells = new Dictionary<(int Level, int X, int Y), byte[]>();
-        foreach (var sample in data.Section(origin, ViewSize, minDepth, ViewLevels))
+        foreach (var sample in data.Section(origin, new Vector2i(width, height), minDepth, ViewLevels))
         {
             var relative = sample.Tile - origin;
             var chunk = (sample.Depth - minDepth, relative.X / size, relative.Y / size);
@@ -80,7 +88,7 @@ public sealed partial class CMUCaveSurveySystem
         var chunks = cells.Select(p => new CMUReconChunk(p.Key.Level, p.Key.X, p.Key.Y, p.Value, Revision: data.Version)).ToArray();
         var generation = ++_generation;
         _viewGenerations[ent.Owner] = generation;
-        var scene = new CMUReconSnapshotMessage(generation, origin, minDepth, ViewLevels, [], [], false, ViewSize, ViewSize)
+        var scene = new CMUReconSnapshotMessage(generation, origin, minDepth, ViewLevels, [], [], false, width, height)
         {
             RequestId = args.RequestId,
             AtlasId = -generation,
@@ -97,7 +105,7 @@ public sealed partial class CMUCaveSurveySystem
             if (levels.TryGetValue(0, out var ground) && ground is { } root && Exists(root)) name = Name(root);
         }
         _ui.ServerSendUiMessage(ent.Owner, Key,
-            new CMUCaveSurveySectionMessage(args.RequestId, GetNetEntity(memory.SelectedWorld), name, data.BlockCount), args.Actor);
+            new CMUCaveSurveySectionMessage(args.RequestId, GetNetEntity(memory.SelectedWorld), name, data.BlockCount, min, max), args.Actor);
         _outgoing.Enqueue(new Delivery { Actor = ent.Owner, Generation = generation, Chunks = chunks });
     }
 

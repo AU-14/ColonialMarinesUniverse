@@ -17,7 +17,6 @@ public sealed class CMUCaveSurveyBui(EntityUid owner, Enum uiKey) : RMCPopOutBui
 {
     protected override CMUReconstructionWindow? Window { get; set; }
     private int _requestId;
-    private Vector2i _origin;
     private int _minDepth = -8;
     private CMUCaveSurveyViewMessage? _pending;
     private CancellationTokenSource? _retry;
@@ -29,9 +28,8 @@ public sealed class CMUCaveSurveyBui(EntityUid owner, Enum uiKey) : RMCPopOutBui
         Window = this.CreatePopOutableWindow<CMUReconstructionWindow>();
         Window.CenterOnOpening = true;
         Window.CavePosition = LocalPosition;
-        Window.ConfigureCaveSurvey((offset, depth) =>
+        Window.ConfigureCaveSurvey(() => Request(false), depth =>
         {
-            _origin += offset;
             _minDepth = Math.Clamp(_minDepth + depth, -4096, -8);
             Request(false);
         }, () => Request(true), () => Request(false), () => Request(true, true),
@@ -43,9 +41,11 @@ public sealed class CMUCaveSurveyBui(EntityUid owner, Enum uiKey) : RMCPopOutBui
     private void Request(bool center, bool nextWorld = false)
     {
         StopRetry();
+        var focus = Window?.SurveyView.CaptureCamera().Center ?? Vector2.Zero;
         _pending = new CMUCaveSurveyViewMessage
         {
-            Origin = _origin, MinDepth = _minDepth, Center = center, NextWorld = nextWorld,
+            Focus = new Vector2i((int) MathF.Floor(focus.X), (int) MathF.Floor(focus.Y)),
+            MinDepth = _minDepth, Center = center, NextWorld = nextWorld,
             RequestId = _requestId = EntMan.System<CMUReconstructionCacheSystem>().NextRequestId(),
         };
         Window?.BeginCaveViewRequest(_requestId, center);
@@ -61,7 +61,6 @@ public sealed class CMUCaveSurveyBui(EntityUid owner, Enum uiKey) : RMCPopOutBui
         {
             if (scene.RequestId != _requestId) return;
             StopRetry();
-            _origin = scene.Origin;
             _minDepth = scene.MinDepth;
         }
         if (message is CMUCaveSurveySectionMessage section)

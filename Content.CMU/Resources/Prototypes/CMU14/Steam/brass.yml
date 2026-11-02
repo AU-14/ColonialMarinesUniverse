@@ -44,6 +44,8 @@
     color: "#d4b24a"
   - type: GuideHelp
     guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
     - Pipes
     - PipeNetworks
 

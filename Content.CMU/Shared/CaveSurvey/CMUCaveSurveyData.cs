@@ -108,19 +108,35 @@ public sealed class CMUCaveSurveyData
         return false;
     }
 
-    /// <summary>Enumerates just the requested section; never allocates the whole explored world.</summary>
-    public IEnumerable<CMUCaveSurveySample> Section(Vector2i origin, int size, int minDepth, int levels)
+    public bool TryGetBounds(out Vector2i min, out Vector2i max)
     {
-        for (var depth = minDepth; depth < minDepth + levels; depth++)
-        for (var y = FloorDiv(origin.Y, BlockSize); y <= FloorDiv(origin.Y + size - 1, BlockSize); y++)
-        for (var x = FloorDiv(origin.X, BlockSize); x <= FloorDiv(origin.X + size - 1, BlockSize); x++)
+        min = new Vector2i(int.MaxValue, int.MaxValue);
+        max = new Vector2i(int.MinValue, int.MinValue);
+        foreach (var (block, _) in _blocks.Keys)
         {
-            if (!_blocks.TryGetValue((new Vector2i(x, y), depth), out var cells)) continue;
+            min = new Vector2i(Math.Min(min.X, block.X), Math.Min(min.Y, block.Y));
+            max = new Vector2i(Math.Max(max.X, block.X), Math.Max(max.Y, block.Y));
+        }
+        if (_blocks.Count == 0) return false;
+        min *= BlockSize;
+        max = (max + Vector2i.One) * BlockSize;
+        return true;
+    }
+
+    /// <summary>Visits only recorded blocks, including when a large view spans mostly unknown terrain.</summary>
+    public IEnumerable<CMUCaveSurveySample> Section(Vector2i origin, Vector2i size, int minDepth, int levels)
+    {
+        foreach (var ((block, depth), cells) in _blocks)
+        {
+            var start = block * BlockSize;
+            if (depth < minDepth || depth >= minDepth + levels ||
+                start.X >= origin.X + size.X || start.Y >= origin.Y + size.Y ||
+                start.X + BlockSize <= origin.X || start.Y + BlockSize <= origin.Y) continue;
             for (var i = 0; i < 16; i++)
             {
                 if (cells[i].Revision == 0) continue;
-                var tile = new Vector2i(x * BlockSize + i % BlockSize, y * BlockSize + i / BlockSize);
-                if (tile.X < origin.X || tile.Y < origin.Y || tile.X >= origin.X + size || tile.Y >= origin.Y + size) continue;
+                var tile = start + new Vector2i(i % BlockSize, i / BlockSize);
+                if (tile.X < origin.X || tile.Y < origin.Y || tile.X >= origin.X + size.X || tile.Y >= origin.Y + size.Y) continue;
                 yield return new(tile, depth, cells[i].Material);
             }
         }

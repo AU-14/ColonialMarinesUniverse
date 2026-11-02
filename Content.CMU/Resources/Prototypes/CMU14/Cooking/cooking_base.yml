@@ -200,6 +200,10 @@
   parent: BaseStorageItem
   abstract: true
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryProducts
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
   - type: Appearance
@@ -394,6 +398,10 @@
   abstract: true
   description: "A bowl for a good soup."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryProducts
+    - CMUGuideIndustry
   - type: Item
     shape:
     - 0,0,1,0
@@ -446,6 +454,10 @@
   abstract: true
   description: "A plate for a good meal."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryProducts
+    - CMUGuideIndustry
   - type: Item
     shape:
     - 0,0,1,0
@@ -497,6 +509,10 @@
   parent: RUMCSteamMachineBase
   id: RUMCStoveBase
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryProducts
+    - CMUGuideIndustry
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -587,6 +603,10 @@
   name: kitchen stove with an oven
   description: "A compact kitchen stove with an oven, as handy as a microwave and as good as an oven: it runs on power, takes up to two vessels, and cooks while its door is shut."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryProducts
+    - CMUGuideIndustry
   - type: PortableStructure
   - type: NodeContainer
     examinable: true

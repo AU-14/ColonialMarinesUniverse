@@ -2,6 +2,10 @@
   abstract: true
   id: RUMCGrinderBase
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: PortableStructure
   - type: Sprite
     sprite: Structures/Machines/seed_extractor.rsi
