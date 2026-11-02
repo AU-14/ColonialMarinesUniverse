@@ -383,6 +383,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         ent.Comp.YautjaOwner = owner;
         ent.Comp.Hits = 0;
         ent.Comp.ActiveUntil = _timing.CurTime + ent.Comp.ActiveTime;
+        ent.Comp.IdleSince = _timing.CurTime;
         ent.Comp.NextRetarget = _timing.CurTime;
         ent.Comp.NextHit = _timing.CurTime;
         ent.Comp.CurrentTarget = null;
@@ -422,6 +423,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         ent.Comp.NextRetarget = TimeSpan.Zero;
         ent.Comp.NextHit = TimeSpan.Zero;
         ent.Comp.ActiveUntil = TimeSpan.Zero;
+        ent.Comp.IdleSince = TimeSpan.Zero;
 
         if (TryComp(ent.Owner, out ThrownItemComponent? thrown))
             _thrown.StopThrow(ent.Owner, thrown);
@@ -495,6 +497,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
                 {
                     disc.CurrentTarget = null;
                     disc.NextRetarget = _timing.CurTime + disc.RetargetDelay;
+                    StopIfIdle(ent, owner);
                     continue;
                 }
 
@@ -507,15 +510,25 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
                 if (disc.ReturningToOwner)
                     SteerDisc(uid, disc, physics, owner, owner);
 
+                StopIfIdle(ent, owner);
                 continue;
             }
 
+            disc.IdleSince = _timing.CurTime;
             TryStrikeNearbyTarget(uid, disc);
             if (!disc.Active)
                 continue;
 
             SteerDisc(uid, disc, physics, owner, currentTarget);
         }
+    }
+
+    private void StopIfIdle(Entity<YautjaSmartDiscComponent> ent, EntityUid owner)
+    {
+        if (_timing.CurTime < ent.Comp.IdleSince + ent.Comp.IdleTimeout)
+            return;
+
+        _toggle.TrySetActive((ent.Owner, null), false, owner, false);
     }
 
     private void TryActivatePendingThrow(Entity<YautjaSmartDiscComponent> ent)
@@ -715,6 +728,12 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
     {
         if (_timing.CurTime < disc.NextHit || !IsValidTarget((uid, disc), target))
             return false;
+
+        if (_random.Prob(disc.LoseSwingChance))
+        {
+            disc.NextHit = _timing.CurTime + disc.HitDelay;
+            return false;
+        }
 
         var amount = _random.NextFloat(disc.StrikeDamageMin, disc.StrikeDamageMax);
         var damage = new DamageSpecifier(_prototypes.Index(disc.StrikeDamageType), FixedPoint2.New(amount));
@@ -923,6 +942,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         ent.Comp.Active = true;
         ent.Comp.Hits = 0;
         ent.Comp.ActiveUntil = _timing.CurTime + ent.Comp.ActiveTime;
+        ent.Comp.IdleSince = _timing.CurTime;
         ent.Comp.NextRetarget = _timing.CurTime;
         ent.Comp.NextHit = _timing.CurTime;
         ent.Comp.CurrentTarget = target;

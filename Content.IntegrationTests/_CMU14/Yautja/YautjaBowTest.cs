@@ -9194,16 +9194,16 @@ public sealed class YautjaBowTest
                         "CMSS13 smartdisc source description.");
                     Assert.That(item.Size.Id, Is.EqualTo("Tiny"),
                         "CMSS13 smartdisc w_class = SIZE_TINY.");
-                    Assert.That(smartDisc.ActiveTime, Is.EqualTo(TimeSpan.FromSeconds(30)),
-                        "CMSS13 smartdisc det_time = 30 before prime().");
+                    Assert.That(smartDisc.ActiveTime, Is.EqualTo(TimeSpan.FromSeconds(16)),
+                        "CMSS13 spawned hostile smartdisc lifetime = 8 Life ticks of 2 seconds.");
                     Assert.That(smartDisc.SearchRange, Is.EqualTo(7f),
                         "CMSS13 spawned hostile smartdisc ListTargets(7) target search radius.");
                     Assert.That(smartDisc.HitRange, Is.EqualTo(1f),
                         "CMSS13 spawned hostile smartdisc attacks adjacent targets with get_dist(src, target_mob) <= 1.");
                     Assert.That(smartDisc.MaxHits, Is.EqualTo(8),
                         "CMSS13 spawned hostile smartdisc lifetime = 8 local mapping.");
-                    Assert.That(smartDisc.HitDelay, Is.EqualTo(TimeSpan.FromSeconds(1)),
-                        "CMSS13 spawned hostile smartdisc turns_per_move = 1 local hit cadence mapping.");
+                    Assert.That(smartDisc.HitDelay, Is.EqualTo(TimeSpan.FromSeconds(2)),
+                        "CMSS13 spawned hostile smartdisc attacks at most once per 2 second Life tick.");
                     Assert.That(embeddable.EmbedOnThrow, Is.False,
                         "CMSS13 smartdisc embeddable = FALSE.");
                     Assert.That(DamageTotal(thrownDamage.Damage), Is.EqualTo((FixedPoint2) 25),

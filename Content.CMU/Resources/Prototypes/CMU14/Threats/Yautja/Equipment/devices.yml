@@ -530,8 +530,8 @@
     spinVelocity: 24
     maxHits: 8
     hitRange: 1
-    hitDelay: 1
-    activeTime: 30
+    hitDelay: 2
+    activeTime: 16
     retargetDelay: 0.35
   - type: Corrodible
     isCorrodible: false

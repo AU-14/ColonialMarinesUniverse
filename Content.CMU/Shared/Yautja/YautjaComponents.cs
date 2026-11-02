@@ -1506,16 +1506,16 @@ public sealed partial class YautjaSmartDiscComponent : Component
     public Vector2? LastThrowAttemptPosition;
 
     [DataField]
-    public int MaxHits = 3;
+    public int MaxHits = 8;
 
     [DataField]
     public float HitRange = 0.7f;
 
     [DataField]
-    public TimeSpan HitDelay = TimeSpan.FromSeconds(0.45);
+    public TimeSpan HitDelay = TimeSpan.FromSeconds(2);
 
     [DataField]
-    public TimeSpan ActiveTime = TimeSpan.FromSeconds(8);
+    public TimeSpan ActiveTime = TimeSpan.FromSeconds(16);
 
     [DataField]
     public TimeSpan RetargetDelay = TimeSpan.FromSeconds(0.35);
@@ -1547,8 +1547,19 @@ public sealed partial class YautjaSmartDiscComponent : Component
     [DataField]
     public TimeSpan KnockdownTime = TimeSpan.FromSeconds(6);
 
+    // AttackTarget's prob(20) drops the mob back to idle and it loses the swing
+    [DataField]
+    public float LoseSwingChance = 0.2f;
+
+    // time_idle > 3 on a 2 second Life tick
+    [DataField]
+    public TimeSpan IdleTimeout = TimeSpan.FromSeconds(8);
+
     [DataField]
     public SoundSpecifier HitSound = new SoundPathSpecifier("/Audio/Weapons/star_hit.ogg");
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public TimeSpan IdleSince;
 
     [ViewVariables(VVAccess.ReadWrite)]
     public bool Active;
