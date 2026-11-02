@@ -574,8 +574,15 @@ internal sealed class HudColumns : Container
     protected override Vector2 ArrangeOverride(Vector2 finalSize)
     {
         var leftWidth = MathF.Max(0, finalSize.X - _rightWidth - Gap);
-        _left.Arrange(UIBox2.FromDimensions(0, 0, leftWidth, _left.DesiredSize.Y));
-        _right.Arrange(UIBox2.FromDimensions(leftWidth + Gap, 0, _rightWidth, _right.DesiredSize.Y));
+        _left.Arrange(UIBox2.FromDimensions(0, 0, leftWidth, ColumnHeight(_left, finalSize.Y)));
+        _right.Arrange(UIBox2.FromDimensions(leftWidth + Gap, 0, _rightWidth, ColumnHeight(_right, finalSize.Y)));
         return finalSize;
+    }
+
+    // a column holding a scroll list desires 0 height, so without the stretch the mark menu's target list
+    // got arranged at 0px and showed nothing
+    private static float ColumnHeight(Control column, float rowHeight)
+    {
+        return column.VerticalExpand ? rowHeight : column.DesiredSize.Y;
     }
 }
