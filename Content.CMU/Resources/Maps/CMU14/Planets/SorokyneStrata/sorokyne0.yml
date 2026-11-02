@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/16/2026 22:52:10
-  entityCount: 31160
+  entityCount: 31172
 maps:
 - 1
 grids:
@@ -145,6 +145,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMUFobMap
+      sites: [1003]
     - type: MetaData
       name: Mapping LV-976 Sorokyne Strata
     - type: Transform
@@ -53500,6 +53502,52 @@ entities:
   entities:
   - uid: 1003
     components:
+    - type: CMUFobSite
+      id: Sorokyne
+      utilityExclusions:
+      - "4.65,97.65,17.35,119.35"
+      - "5.15,100.15,17.85,116.85"
+      - "5.15,100.15,17.85,118.85"
+      - "8.65,43.65,21.35,65.35"
+      - "8.15,46.15,20.85,62.85"
+      - "8.15,46.15,20.85,64.85"
+      relays:
+      - anchor: 1000000010
+        tier: Near
+        approach: South
+      - anchor: 1000000011
+        tier: Near
+        approach: South
+      - anchor: 1000000012
+        tier: Near
+        approach: North
+      - anchor: 1000000013
+        tier: Near
+        approach: North
+      - anchor: 1000000014
+        tier: Intermediate
+        approach: South
+      - anchor: 1000000015
+        tier: Intermediate
+        approach: South
+      - anchor: 1000000016
+        tier: Intermediate
+        approach: North
+      - anchor: 1000000017
+        tier: Intermediate
+        approach: North
+      - anchor: 1000000018
+        tier: Far
+        approach: South
+      - anchor: 1000000019
+        tier: Far
+        approach: South
+      - anchor: 1000000020
+        tier: Far
+        approach: North
+      - anchor: 1000000021
+        tier: Far
+        approach: North
     - type: MetaData
       name: 'LZ1: Sorokyne Strata'
     - type: DropshipDestination
@@ -210649,4 +210697,90 @@ entities:
       kind: Ground
       id: sorokyne.ground.relay
       displayName: Sorokyne Strata Ground Relay
+- proto: CMUFobRelayMarker
+  entities:
+  - uid: 1000000010
+    components:
+    - type: Transform
+      parent: 1
+      pos: 15.5,42.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-marsh-crash-south
+  - uid: 1000000011
+    components:
+    - type: Transform
+      parent: 1
+      pos: 44.5,43.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-marsh-center
+  - uid: 1000000012
+    components:
+    - type: Transform
+      parent: 1
+      pos: 65.5,64.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-telecomms-vehicle-yard
+  - uid: 1000000013
+    components:
+    - type: Transform
+      parent: 1
+      pos: 82.5,85.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-flight-control-approach
+  - uid: 1000000014
+    components:
+    - type: Transform
+      parent: 1
+      pos: 38.5,15.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-near-south-landing
+  - uid: 1000000015
+    components:
+    - type: Transform
+      parent: 1
+      pos: 67.5,15.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-relay-marshes
+  - uid: 1000000016
+    components:
+    - type: Transform
+      parent: 1
+      pos: 95.5,105.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-outpost-decks
+  - uid: 1000000017
+    components:
+    - type: Transform
+      parent: 1
+      pos: 97.5,124.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-north-outpost-west
+  - uid: 1000000018
+    components:
+    - type: Transform
+      parent: 1
+      pos: 107.5,44.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-parts-storage-caves
+  - uid: 1000000019
+    components:
+    - type: Transform
+      parent: 1
+      pos: 126.5,53.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-south-outpost-east
+  - uid: 1000000020
+    components:
+    - type: Transform
+      parent: 1
+      pos: 125.5,127.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-north-outpost-east
+  - uid: 1000000021
+    components:
+    - type: Transform
+      parent: 1
+      pos: 147.5,122.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-sorokyne-relay-northeast-outpost-passage
 ...

@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/14/2026 09:35:04
-  entityCount: 40197
+  entityCount: 40212
 maps:
 - 1
 grids:
@@ -300,6 +300,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMUFobMap
+      sites: [861, 862]
     - type: MetaData
       name: Mapping LV-327 Port Nereid
     - type: Transform
@@ -63837,6 +63839,52 @@ entities:
   entities:
   - uid: 861
     components:
+    - type: CMUFobSite
+      id: Spaceport
+      utilityExclusions:
+      - "86.65,44.65,99.35,66.35"
+      - "86.15,47.15,98.85,63.85"
+      - "86.15,47.15,98.85,65.85"
+      - "47.65,-2.35,60.35,19.35"
+      - "47.15,0.15,59.85,16.85"
+      - "47.15,0.15,59.85,18.85"
+      relays:
+      - anchor: 1000000005
+        tier: Near
+        approach: East
+      - anchor: 1000000006
+        tier: Near
+        approach: East
+      - anchor: 1000000007
+        tier: Near
+        approach: West
+      - anchor: 1000000008
+        tier: Near
+        approach: West
+      - anchor: 1000000009
+        tier: Intermediate
+        approach: East
+      - anchor: 1000000010
+        tier: Intermediate
+        approach: East
+      - anchor: 1000000011
+        tier: Intermediate
+        approach: West
+      - anchor: 1000000012
+        tier: Intermediate
+        approach: West
+      - anchor: 1000000013
+        tier: Far
+        approach: East
+      - anchor: 1000000014
+        tier: Far
+        approach: East
+      - anchor: 1000000015
+        tier: Far
+        approach: West
+      - anchor: 1000000016
+        tier: Far
+        approach: West
     - type: MetaData
       name: Port Neroid Spaceport
     - type: Transform
@@ -63844,6 +63892,55 @@ entities:
       parent: 1
   - uid: 862
     components:
+    - type: CMUFobSite
+      id: CargoDepot
+      utilityExclusions:
+      - "-9.35,23.65,3.35,45.35"
+      - "-9.85,26.15,2.85,42.85"
+      - "-9.85,26.15,2.85,44.85"
+      - "47.65,-2.35,60.35,19.35"
+      - "47.15,0.15,59.85,16.85"
+      - "47.15,0.15,59.85,18.85"
+      - "6.65,20.65,19.35,42.35"
+      - "6.15,23.15,18.85,39.85"
+      - "6.15,23.15,18.85,41.85"
+      relays:
+      - anchor: 1000000017
+        tier: Near
+        approach: East
+      - anchor: 1000000018
+        tier: Near
+        approach: East
+      - anchor: 1000000019
+        tier: Near
+        approach: West
+      - anchor: 1000000007
+        tier: Near
+        approach: West
+      - anchor: 1000000005
+        tier: Intermediate
+        approach: East
+      - anchor: 1000000006
+        tier: Intermediate
+        approach: East
+      - anchor: 1000000011
+        tier: Intermediate
+        approach: West
+      - anchor: 1000000012
+        tier: Intermediate
+        approach: West
+      - anchor: 1000000009
+        tier: Far
+        approach: East
+      - anchor: 1000000010
+        tier: Far
+        approach: East
+      - anchor: 1000000015
+        tier: Far
+        approach: West
+      - anchor: 1000000016
+        tier: Far
+        approach: West
     - type: MetaData
       name: AC-170 Cargo Depot West
     - type: Transform
@@ -272367,4 +272464,111 @@ entities:
       kind: Ground
       id: port-nereid.ground.relay
       displayName: Port Nereid Ground Relay
+- proto: CMUFobRelayMarker
+  entities:
+  - uid: 1000000005
+    components:
+    - type: Transform
+      parent: 1
+      pos: 77.5,119.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-medical-north-approach
+  - uid: 1000000006
+    components:
+    - type: Transform
+      parent: 1
+      pos: 112.5,116.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-northeast-jungle-south
+  - uid: 1000000007
+    components:
+    - type: Transform
+      parent: 1
+      pos: 24.5,103.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-habitation-west-road
+  - uid: 1000000008
+    components:
+    - type: Transform
+      parent: 1
+      pos: 37.5,118.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-habitation-north-road
+  - uid: 1000000009
+    components:
+    - type: Transform
+      parent: 1
+      pos: 107.5,131.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-northeast-jungle-road
+  - uid: 1000000010
+    components:
+    - type: Transform
+      parent: 1
+      pos: 125.5,137.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-port-north-approach
+  - uid: 1000000011
+    components:
+    - type: Transform
+      parent: 1
+      pos: 19.5,133.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-northwest-jungle-east
+  - uid: 1000000012
+    components:
+    - type: Transform
+      parent: 1
+      pos: 32.5,144.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-processor-southwest
+  - uid: 1000000013
+    components:
+    - type: Transform
+      parent: 1
+      pos: 115.5,145.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-disposals-north
+  - uid: 1000000014
+    components:
+    - type: Transform
+      parent: 1
+      pos: 132.5,154.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-east-perimeter
+  - uid: 1000000015
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,134.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-northwest-jungle-west
+  - uid: 1000000016
+    components:
+    - type: Transform
+      parent: 1
+      pos: -7.5,149.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-western-processor-approach
+  - uid: 1000000017
+    components:
+    - type: Transform
+      parent: 1
+      pos: 54.5,-2.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-south-jungle-clearing
+  - uid: 1000000018
+    components:
+    - type: Transform
+      parent: 1
+      pos: 65.5,-2.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-southeast-jungle-coast
+  - uid: 1000000019
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,109.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-port-nereid-relay-habitation-southwest
 ...

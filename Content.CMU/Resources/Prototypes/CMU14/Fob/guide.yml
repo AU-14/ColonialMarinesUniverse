@@ -1,0 +1,5 @@
+# Deliberately not linked into the ordinary guide tree. Enabled equipment exposes this entry.
+- type: guideEntry
+  id: CMUFobGuide
+  name: cmu-fob-guide-title
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUFobRelayPilot.xml"

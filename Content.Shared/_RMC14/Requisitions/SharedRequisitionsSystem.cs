@@ -273,6 +273,7 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _purchasesMap = null;
+        _roundPurchases.Clear(); // CMU14: replacing consoles never resets faction-wide purchase limits.
     }
 
     public void CreateSpecialDelivery(EntProtoId proto, string faction = "") // CMU14

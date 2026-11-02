@@ -1,0 +1,200 @@
+- type: entity
+  id: CMUFobGunMount
+  name: UH-02 systems platform
+  description: A deployable support-gun platform. Two platforms may operate within the selected LZ deployment area.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/weapons_platform.rsi
+    state: platform_off
+    drawdepth: FloorObjects
+    layers:
+    - state: platform_off
+      map: [platform, fob-body]
+    - state: platform
+      map: [fob-effect]
+      visible: false
+      shader: unshaded
+  - type: CMUFobPresentation
+    device: Platform
+  - type: CMUFobGunMount
+  - type: Item
+    size: Ginormous
+  - type: PowerLoaderGrabbable
+    virtualRight: RMCVirtualDropshipGearRight
+    virtualLeft: RMCVirtualDropshipGearLeft
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFobVisuals.Stowed:
+        fob-effect:
+          True: { state: platform_undeployed }
+          False: { state: platform }
+        platform:
+          True: { state: platform_undeployed }
+          False: { state: platform_off }
+
+# Explicit composition excludes the normal sentry's homing, HTN, upgrades and remote control ports.
+- type: entity
+  id: CMUFobSupportGun
+  name: UH-46 heavy sentry gun
+  description: A magazine-fed support gun for a deployed FOB platform. Requires an active FOB reserve, warns before firing, and tracks targets in every direction.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Fixtures
+    fixtures:
+      sentry:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 20
+        hard: true
+        layer: [MidImpassable, BulletImpassable]
+        mask: [MidImpassable, BulletImpassable]
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/weapons_platform.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - state: platform_off
+      map: [base]
+      visible: false
+    - sprite: _CMU14/Structures/Fob/sentry.rsi
+      state: sentry
+      map: [sentry]
+      visible: false
+    - sprite: _CMU14/Structures/Fob/sentry.rsi
+      state: sentry
+      map: [fob-effect]
+      color: "#ffbc40"
+      shader: unshaded
+      visible: false
+    - sprite: _CMU14/Structures/Fob/sentry.rsi
+      state: sentry_undeployed
+      map: [stowed]
+      visible: true
+  - type: CMUFobPresentation
+    device: HeavyGun
+    bodyLayer: sentry
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFobGunVisuals.Installed:
+        fob-effect:
+          True: { state: sentry }
+          False: { state: sentry_undeployed }
+        base:
+          True: { visible: true }
+          False: { visible: false }
+        sentry:
+          True: { visible: true }
+          False: { visible: false }
+        stowed:
+          True: { visible: false }
+          False: { visible: true }
+      enum.SentryLayers.Layer:
+        base:
+          Off: { state: platform_off }
+          On: { state: platform }
+        sentry:
+          Off: { state: sentry }
+          On: { state: sentry }
+  - type: CMUFobSupportGun
+    halfArc: 180
+  - type: Item
+    size: Ginormous
+  - type: PowerLoaderGrabbable
+    virtualRight: RMCVirtualDropshipGearRight
+    virtualLeft: RMCVirtualDropshipGearLeft
+  - type: Sentry
+    mode: Off
+    isLocked: true
+    startingMagazine: null
+    upgrades: null
+    maxDeviation: 180
+  - type: SentryTargeting
+  - type: Gun
+    fireRate: 2.5
+    selectedMode: FullAuto
+    availableModes: [FullAuto]
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
+  - type: MagazineAmmoProvider
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+  - type: GunIFF
+    enabled: true
+    intrinsic: true
+  - type: UserIFF
+    factions: []
+  - type: EntityIFF
+  - type: RequireProjectileTarget
+  - type: RMCWeaponAccuracy
+  - type: NoRotateOnInteract
+  - type: NoRotateOnMove
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: CMUSentryBreakable
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: RMCHealthExaminable
+    speciesType: Mechanical
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Blunt: 40
+
+- type: entity
+  parent: CMUFobGunMount
+  id: CMUFobPlatformModule
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      equipment:
+        shape: !type:PhysShapeCircle
+          radius: 0.3
+        hard: false
+        layer: [LowImpassable]
+  - type: Appearance
+    data:
+      enum.CMUFobVisuals.Stowed: true
+
+- type: entity
+  parent: CMUFobSupportGun
+  id: CMUFobHeavyModule
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  # Requisitions prepares cargo in nullspace; entity-relative fills work there too.
+  - type: EntityTableContainerFill
+    containers:
+      gun_magazine:
+        id: CMUFob30mmMagazine

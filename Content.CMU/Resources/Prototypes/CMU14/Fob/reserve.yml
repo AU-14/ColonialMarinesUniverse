@@ -1,0 +1,7 @@
+- type: entity
+  id: CMUFobNetwork
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    gridTraversal: false
+  - type: CMUFobNetwork

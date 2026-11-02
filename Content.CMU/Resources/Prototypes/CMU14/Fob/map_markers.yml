@@ -1,0 +1,9 @@
+# Authored remote relay objectives. Deployable FOB hardware uses the selected LZ radius.
+- type: entity
+  parent: MarkerBase
+  id: CMUFobRelayMarker
+  name: FOB relay site
+  components:
+  - type: Sprite
+    state: green
+  - type: CMUFobMapAnchor
