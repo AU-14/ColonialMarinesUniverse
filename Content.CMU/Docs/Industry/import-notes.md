@@ -1,5 +1,7 @@
 # RussianCM industry import
 
+For the basics, use the [illustrated player quickstart](quickstart.md).
+
 Read [gameplay and design](gameplay-design.md) for the player-facing explanation
 and [equipment and translated research](upstream-equipment-and-research.md) for
 the equipment catalog and source links.

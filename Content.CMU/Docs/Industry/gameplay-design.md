@@ -1,5 +1,7 @@
 # Imported industry: gameplay and design
 
+Just starting? Read the [illustrated player quickstart](quickstart.md).
+
 This describes the RussianCM systems imported into CMU, before our gameplay
 rework. It distinguishes implemented mechanics from suggested player roles and
 design interpretation. Exact equipment translations, prototype IDs, example
