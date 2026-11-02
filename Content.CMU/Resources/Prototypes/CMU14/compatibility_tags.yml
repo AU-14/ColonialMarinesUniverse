@@ -2,6 +2,21 @@
 # Keep this list alphabetical and remove an entry when its final consumer migrates.
 
 - type: Tag
+  id: AU14PartCapacitor
+
+- type: Tag
+  id: AU14PartManipulator
+
+- type: Tag
+  id: AU14PartMatterBin
+
+- type: Tag
+  id: AU14PartMicroLaser
+
+- type: Tag
+  id: AU14PartScanningModule
+
+- type: Tag
   id: Briefcase
 
 - type: Tag

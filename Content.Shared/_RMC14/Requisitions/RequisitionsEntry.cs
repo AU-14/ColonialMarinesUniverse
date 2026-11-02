@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Prototypes;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Requisitions;
@@ -28,6 +28,10 @@ public sealed partial class RequisitionsEntry
     /// </summary>
     [DataField]
     public int MaxStock;
+
+    // CMU14: whole-crate purchases shared across a faction's terminals, without replenishment.
+    [DataField]
+    public int RoundLimit;
 
     /// <summary>
     /// Starting stock for limited ASRS entries. A negative value starts the entry at <see cref="MaxStock"/>.

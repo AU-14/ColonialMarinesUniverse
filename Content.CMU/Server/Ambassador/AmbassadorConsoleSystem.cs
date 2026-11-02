@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.WorldMarket; // RUMC: the world map
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Server.Radio;
@@ -8,6 +9,7 @@ using Content.Server.Stack;
 using Content.Shared.CMU14.Ambassador;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.WorldMarket; // RUMC: the world map
 using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.Stacks;
@@ -39,6 +41,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     [Dependency] private ColonyEconomy.AdminConsoleSystem _adminConsole = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private WorldMarketSystem _worldMarket = default!; // RUMC: the world map
     [Dependency] private IGameTiming _timing = default!;
 
     private static readonly TimeSpan UiRefreshInterval = TimeSpan.FromSeconds(1);
@@ -65,6 +68,15 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         SubscribeLocalEvent<AmbassadorConsoleComponent, AmbassadorToggleCommsJamBuiMsg>(OnToggleCommsJam);
         SubscribeLocalEvent<AmbassadorConsoleComponent, AmbassadorOpenThirdPartyBuiMsg>(OnOpenThirdParty);
         SubscribeLocalEvent<AmbassadorConsoleComponent, AmbassadorScanRadarBuiMsg>(OnScanRadar);
+        SubscribeLocalEvent<AmbassadorConsoleComponent, AmbassadorOpenMapBuiMsg>(OnOpenMap); // RUMC: the world map
+        SubscribeLocalEvent<AmbassadorConsoleComponent, GiftCityMessage>(OnGiftCity); // RUMC: the world map
+        SubscribeLocalEvent<AmbassadorConsoleComponent, CityActionMessage>(OnCityAction); // RUMC: the world map
+        SubscribeLocalEvent<AmbassadorConsoleComponent, AmbassadorOpenMotherBuiMsg>(OnOpenMother); // RUMC: the exchange with the mother faction
+        SubscribeLocalEvent<AmbassadorConsoleComponent, MotherOrderMessage>(OnMotherOrder); // RUMC: the exchange with the mother faction
+        SubscribeLocalEvent<AmbassadorConsoleComponent, MotherSubsidyMessage>(OnMotherSubsidy); // RUMC: the exchange with the mother faction
+        SubscribeLocalEvent<AmbassadorConsoleComponent, MotherReportMessage>(OnMotherReport); // RUMC: the exchange with the mother faction
+        SubscribeLocalEvent<AmbassadorConsoleComponent, ZoneClaimMessage>(OnZoneClaim); // RUMC: the world map
+        SubscribeLocalEvent<AmbassadorConsoleComponent, MapCommandMessage>(OnMapCommand); // RUMC: the world map
         SubscribeLocalEvent<AmbassadorConsoleComponent, EntInsertedIntoContainerMessage>(OnCashInserted);
         SubscribeLocalEvent<AmbassadorConsoleComponent, InteractUsingEvent>(OnInteractUsing);
 
@@ -137,6 +149,8 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        ProcessDeliveries(); // RUMC: the transports of the mother faction
+
         // the economy panel reads other consoles (taxes, tariffs), so open UIs still get a slow refresh
         var refreshUi = _timing.CurTime >= _nextUiRefresh;
         if (refreshUi)
@@ -162,6 +176,14 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
                 comp.ReplenishTimer -= comp.ReplenishInterval;
                 comp.Budget += comp.ReplenishAmount;
             }
+
+            // RUMC: what the faction has built in the cities of the map brings money (or costs it)
+            if (_worldMarket.ClaimIncome(comp.FactionName) is var cityIncome && cityIncome != 0f)
+                comp.Budget = Math.Max(0f, comp.Budget + cityIncome);
+
+            // RUMC: crates that the missions of the mother faction have given are put down at the console
+            foreach (var crate in _worldMarket.ClaimCrates(comp.FactionName))
+                Spawn(crate, Transform(uid).Coordinates);
             if (comp.EmbargoActive)
             {
                 comp.EmbargoTimer += frameTime;
@@ -343,12 +365,228 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
 
     private void UpdateUiState(EntityUid uid, AmbassadorConsoleComponent comp)
     {
+        // RUMC: a faction whose console is open is on the line
+        if (_ui.IsUiOpen(uid, AmbassadorConsoleUi.Key) || _ui.IsUiOpen(uid, AmbassadorWorldMapUi.Key) || _ui.IsUiOpen(uid, AmbassadorMotherUi.Key) || _ui.IsUiOpen(uid, AmbassadorThirdPartyUi.Key))
+            _worldMarket.MarkOnline(comp.FactionName);
+
         // nobody's looking, OnUiOpened rebuilds it on open anyway
         if (_ui.IsUiOpen(uid, AmbassadorConsoleUi.Key))
             SetConsoleState(uid, comp);
 
         if (_ui.IsUiOpen(uid, AmbassadorThirdPartyUi.Key))
             SetThirdPartyState(uid, comp);
+
+        // RUMC: the world map
+        if (_ui.IsUiOpen(uid, AmbassadorWorldMapUi.Key))
+            SetWorldMapState(uid, comp);
+
+        // RUMC: the exchange with the mother faction
+        if (_ui.IsUiOpen(uid, AmbassadorMotherUi.Key))
+            SetMotherState(uid, comp);
+    }
+
+    // RUMC: the window of the exchange with the mother faction: the money and the points of influence, and what can be ordered.
+    private void SetMotherState(EntityUid uid, AmbassadorConsoleComponent comp)
+    {
+        _ui.SetUiState(uid, AmbassadorMotherUi.Key,
+            new AmbassadorMotherState(comp.Budget, _worldMarket.PointsOf(comp.FactionName), WorldMarketSystem.MoneyPerPoint, _worldMarket.TrustOf(comp.FactionName),
+                _worldMarket.StipendSeconds(), _worldMarket.StipendAmount(comp.FactionName), _worldMarket.BuildTasks(comp.FactionName), _worldMarket.BuildOffers(comp.FactionName, DropPoints(comp.FactionName))));
+    }
+
+    // RUMC: the places that a transport of the mother faction can be put down at: the consoles of the faction.
+    private List<TargetEntry> DropPoints(string faction)
+    {
+        var points = new List<TargetEntry>();
+        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
+        while (query.MoveNext(out var id, out var console))
+        {
+            if (console.FactionName != faction)
+                continue;
+
+            var position = Transform(id).LocalPosition;
+            points.Add(new TargetEntry(id.Id.ToString(), $"{Loc.GetString("rumc-mother-drop-point")} {points.Count + 1} ({(int) position.X}, {(int) position.Y})"));
+        }
+
+        return points;
+    }
+
+    // RUMC: the transports that are on their way: what arrives is put down at the console that it was sent to
+    private readonly List<(TimeSpan At, EntityUid Point, string Offer, string Faction)> _deliveries = new();
+
+    private void ProcessDeliveries()
+    {
+        if (_deliveries.Count == 0)
+            return;
+
+        var now = _timing.CurTime;
+        for (var i = _deliveries.Count - 1; i >= 0; i--)
+        {
+            var delivery = _deliveries[i];
+            if (delivery.At > now)
+                continue;
+
+            _deliveries.RemoveAt(i);
+            if (!Exists(delivery.Point) || !_proto.TryIndex<WorldMotherOfferPrototype>(delivery.Offer, out var offer))
+                continue;
+
+            var at = Transform(delivery.Point).Coordinates;
+            if (offer.Crate is { } crate)
+            {
+                for (var n = 0; n < offer.Amount; n++)
+                    Spawn(crate, at);
+            }
+
+            if (offer.Party is { } partyId && _proto.TryIndex(partyId, out var party) && _proto.TryIndex(party.PartySpawn, out var spawn))
+                _thirdParty.SpawnThirdParty(party, spawn, false);
+
+            AnnounceStatus(Loc.GetString("rumc-mother-delivery", ("name", Loc.GetString(offer.Name))), delivery.Faction);
+        }
+    }
+
+    // RUMC: the exchange with the mother faction
+    private void OnOpenMother(EntityUid uid, AmbassadorConsoleComponent comp, AmbassadorOpenMotherBuiMsg msg)
+    {
+        _ui.TryToggleUi(uid, AmbassadorMotherUi.Key, msg.Actor);
+        SetMotherState(uid, comp);
+    }
+
+    // RUMC: an order of the mother faction, paid in points of influence: a company or workers are called in as a third party, food and medicine are put down at the console, a holiday from a
+    // tax is put on. Several of the same can be ordered.
+    private void OnMotherOrder(EntityUid uid, AmbassadorConsoleComponent comp, MotherOrderMessage msg)
+    {
+        if (!_proto.TryIndex<WorldMotherOfferPrototype>(msg.Offer, out var offer) || _worldMarket.OfferBlocked(comp.FactionName, offer) != null)
+            return;
+
+        switch (offer.Group)
+        {
+            case MotherOfferGroup.Pmc:
+            case MotherOfferGroup.Workers:
+            case MotherOfferGroup.Support:
+                // A party that is the same for all but belongs to whoever calls it has one for each faction.
+                var calledParty = offer.Parties.TryGetValue(comp.FactionName, out var byFaction) ? byFaction : offer.Party;
+                if (calledParty is not { } partyId || !_proto.TryIndex(partyId, out var party) || !_proto.TryIndex(party.PartySpawn, out var spawn))
+                    return;
+
+                if (!_worldMarket.TrySpendPoints(comp.FactionName, _worldMarket.OfferCost(comp.FactionName, offer)))
+                    return;
+
+                _thirdParty.SpawnThirdParty(party, spawn, false);
+                break;
+
+            case MotherOfferGroup.Food:
+            case MotherOfferGroup.Medicine:
+                if (offer.Crate is not { } crate || !_worldMarket.TrySpendPoints(comp.FactionName, _worldMarket.OfferCost(comp.FactionName, offer)))
+                    return;
+
+                var at = Transform(uid).Coordinates;
+                for (var i = 0; i < offer.Amount; i++)
+                    Spawn(crate, at);
+
+                break;
+
+            case MotherOfferGroup.Tax:
+                if (!_worldMarket.TrySpendPoints(comp.FactionName, _worldMarket.OfferCost(comp.FactionName, offer)))
+                    return;
+
+                _worldMarket.ApplyTaxBreak(comp.FactionName, offer);
+                break;
+
+            case MotherOfferGroup.Transport:
+                // An evacuation takes people out of a city in trouble; the rest is put down at one of the consoles of the faction after the time that it takes.
+                if (offer.Evacuation)
+                {
+                    if (!_worldMarket.EvacuateCity(comp.FactionName, msg.Target, _worldMarket.OfferCost(comp.FactionName, offer)))
+                        return;
+
+                    break;
+                }
+
+                if (!int.TryParse(msg.Target, out var raw))
+                    return;
+
+                var point = new EntityUid(raw);
+                if (!Exists(point) || !TryComp<AmbassadorConsoleComponent>(point, out var pointConsole) || pointConsole.FactionName != comp.FactionName)
+                    return;
+
+                if (!_worldMarket.TrySpendPoints(comp.FactionName, _worldMarket.OfferCost(comp.FactionName, offer)))
+                    return;
+
+                _deliveries.Add((_timing.CurTime + TimeSpan.FromSeconds(offer.DelaySeconds), point, offer.ID, comp.FactionName));
+                break;
+        }
+
+        _worldMarket.NoteMotherOrder(comp.FactionName, offer);
+        UpdateAllFactionUi(comp);
+    }
+
+    // RUMC: the report that the mother faction asked for is sent
+    private void OnMotherReport(EntityUid uid, AmbassadorConsoleComponent comp, MotherReportMessage msg)
+    {
+        if (_worldMarket.SubmitReport(comp.FactionName))
+            UpdateAllFactionUi(comp);
+    }
+
+    // RUMC: what the faction does with the other factions and the cities (pacts, secret strikes, bids, joint works, support of a good thing, hiring a company against a threat), paid from the
+    // budget of the console
+    private void OnMapCommand(EntityUid uid, AmbassadorConsoleComponent comp, MapCommandMessage msg)
+    {
+        if (_worldMarket.MapCommand(comp.FactionName, msg.Kind, msg.A, msg.B, msg.C, msg.N, comp.Budget) is not { } cost)
+            return;
+
+        comp.Budget -= cost;
+        UpdateAllFactionUi(comp);
+    }
+
+    // RUMC: the faction marks a region of the map as its interest
+    private void OnZoneClaim(EntityUid uid, AmbassadorConsoleComponent comp, ZoneClaimMessage msg)
+    {
+        if (_worldMarket.ClaimZone(comp.FactionName, msg.Latitude, msg.Longitude))
+            UpdateAllFactionUi(comp);
+    }
+
+    // RUMC: points of influence changed for money (the subsidy of the mother faction) at the set rate
+    private void OnMotherSubsidy(EntityUid uid, AmbassadorConsoleComponent comp, MotherSubsidyMessage msg)
+    {
+        if (_worldMarket.Subsidy(comp.FactionName, msg.Points) is not { } money)
+            return;
+
+        comp.Budget += money;
+        UpdateAllFactionUi(comp);
+    }
+
+    // RUMC: the window of the world map: the budget of the console and the cities with the favour of the colony in each.
+    private void SetWorldMapState(EntityUid uid, AmbassadorConsoleComponent comp)
+    {
+        var cities = _worldMarket.BuildCities(comp.FactionName, comp.Budget, out var seed, out var roads);
+        _ui.SetUiState(uid, AmbassadorWorldMapUi.Key, new AmbassadorWorldMapState(comp.Budget, _worldMarket.PointsOf(comp.FactionName), comp.FactionName, seed, cities, roads,
+            _worldMarket.BuildZones(comp.FactionName), _worldMarket.ZoneCost(comp.FactionName), _worldMarket.BuildMapExtras(comp.FactionName, comp.Budget)));
+    }
+
+    // RUMC: the world map
+    private void OnOpenMap(EntityUid uid, AmbassadorConsoleComponent comp, AmbassadorOpenMapBuiMsg msg)
+    {
+        _ui.TryToggleUi(uid, AmbassadorWorldMapUi.Key, msg.Actor);
+        SetWorldMapState(uid, comp);
+    }
+
+    // RUMC: something done for a city of the map (dig wells, mend roads...), paid from the budget of the console
+    private void OnCityAction(EntityUid uid, AmbassadorConsoleComponent comp, CityActionMessage msg)
+    {
+        if (_worldMarket.DoCityAction(comp.FactionName, msg.City, msg.Action, comp.Budget) is not { } cost)
+            return;
+
+        comp.Budget -= cost;
+        UpdateAllFactionUi(comp);
+    }
+
+    // RUMC: a gift to a city of the map, paid from the budget of the console
+    private void OnGiftCity(EntityUid uid, AmbassadorConsoleComponent comp, GiftCityMessage msg)
+    {
+        if (_worldMarket.GiftCity(comp.FactionName, msg.City, comp.Budget) is not { } cost)
+            return;
+
+        comp.Budget -= cost;
+        UpdateAllFactionUi(comp);
     }
 
     private void SetConsoleState(EntityUid uid, AmbassadorConsoleComponent comp)
@@ -411,6 +649,14 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     private void OnWithdraw(EntityUid uid, AmbassadorConsoleComponent comp, AmbassadorWithdrawBuiMsg msg)
     {
         if (msg.Amount <= 0 || msg.Amount > comp.Budget) return;
+
+        // RUMC: the first part of the account cannot be taken out as cash.
+        if (comp.Budget - msg.Amount < comp.WithdrawFloor)
+        {
+            _popup.PopupEntity(Loc.GetString("rumc-ambassador-withdraw-locked", ("floor", (int) comp.WithdrawFloor)), uid, msg.Actor);
+            return;
+        }
+
         comp.Budget -= msg.Amount;
         _stack.SpawnMultipleNextToOrDrop(CashPrototype, (int) msg.Amount, uid);
         UpdateAllFactionUi(comp);

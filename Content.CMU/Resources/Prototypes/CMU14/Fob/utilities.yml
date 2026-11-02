@@ -1,0 +1,284 @@
+# CMSS13 PR 9293 equipment, with CMU reserve power and damageable defenses.
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: CMUFobUtility
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      equipment:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.35,-0.35,0.35,0.35"
+        hard: false
+        layer: [MidImpassable]
+        mask: [MidImpassable]
+  - type: Appearance
+  - type: CMUFobPresentation
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: Corrodible
+    structure: true
+    timeToApply: 4
+  - type: RMCHealthExaminable
+    speciesType: Mechanical
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Blunt: 50
+
+- type: entity
+  parent: CMUFobUtility
+  id: CMUFobIlluminator
+  components:
+  - type: PowerLoaderGrabbable
+    virtualRight: RMCVirtualDropshipGearRight
+    virtualLeft: RMCVirtualDropshipGearLeft
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/illuminator.rsi
+    state: floodlight_undeployed
+    layers:
+    - state: floodlight_undeployed
+      map: [fob-body]
+    - state: floodlight_undeployed
+      map: [fob-effect]
+      visible: false
+      shader: unshaded
+    offset: 0, 1
+    noRot: true
+    drawdepth: Mobs
+  - type: PointLight
+    enabled: false
+    radius: 12
+    energy: 2
+    color: "#fff3da"
+  - type: CMUFobPresentation
+    device: Light
+    powerOnSound: /Audio/_RMC14/Machines/suitlight_on.ogg
+    powerOffSound: /Audio/_RMC14/Machines/suitlight_off.ogg
+  - type: CMUFobEquipment
+    kind: Illuminator
+    stowedState: floodlight_undeployed
+    offState: floodlight_off
+    onState: floodlight
+
+- type: entity
+  parent: CMUFobUtility
+  id: CMUFobSensor
+  components:
+  - type: CMUFobPresentation
+    device: Sensor
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/sensor.rsi
+    state: sensor_undeployed
+    layers:
+    - state: sensor_undeployed
+      map: [fob-body]
+    - state: sensor_undeployed
+      map: [fob-effect]
+      visible: false
+      shader: unshaded
+    noRot: true
+    drawdepth: FloorObjects
+  - type: CMUFobEquipment
+    kind: Sensor
+    stowedState: sensor_undeployed
+    offState: sensor
+    onState: sensor
+  - type: Fixtures
+    fixtures:
+      equipment:
+        shape: !type:PhysShapeCircle
+          radius: 0.2
+        hard: false
+        layer: [LowImpassable]
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 80
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  parent: CMUFobUtility
+  id: CMUFobFence
+  components:
+  - type: CMUFobPresentation
+    device: Fence
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/electric_fence.rsi
+    state: fence_stack
+    layers:
+    - state: fence_stack
+      map: [fob-body]
+    - state: fence_stack
+      map: [fob-effect]
+      visible: false
+      shader: unshaded
+    noRot: true
+    drawdepth: Walls
+  - type: CMUFobEquipment
+    kind: Fence
+    stowedState: fence_stack
+    offState: fence0_off
+    onState: fence0
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 120
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  parent: CMUFobUtility
+  id: CMUFobGenerator
+  components:
+  - type: PowerLoaderGrabbable
+    virtualRight: RMCVirtualDropshipGearRight
+    virtualLeft: RMCVirtualDropshipGearLeft
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/backup_generator.rsi
+    state: backup_generator
+    layers:
+    - state: backup_generator
+      map: [fob-body]
+    - state: backup_generator
+      map: [fob-effect]
+      visible: false
+      shader: unshaded
+    noRot: true
+    drawdepth: Mobs
+  - type: CMUFobPresentation
+    device: Generator
+  - type: AmbientSound
+    enabled: false
+    range: 5
+    volume: -12
+    sound:
+      path: /Audio/_RMC14/Machines/fuel_pump_active.ogg
+  - type: CMUFobEquipment
+    kind: Generator
+    stowedState: backup_generator
+    offState: backup_generator
+    onState: backup_generator_on
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUFobCrateBase
+  abstract: true
+  components:
+  - type: CMUFobInstructions
+  - type: CMUFobPresentation
+    device: Crate
+  - type: Icon
+    sprite: _CMU14/Structures/Fob/crates.rsi
+    state: fob_crate
+  - type: EntityStorage
+    capacity: 120
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/crates.rsi
+    state: fob_crate
+    layers:
+    - state: fob_crate
+      map: ["enum.StorageVisualLayers.Base", fob-crate-base]
+    - state: fob_crate
+      map: ["enum.StorageVisualLayers.Door", fob-body]
+    - state: fob_crate
+      map: [fob-effect]
+      visible: false
+      shader: unshaded
+    - sprite: _RMC14/Structures/Storage/Crates/basic.rsi
+      state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      state: invoice
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: EntityStorageVisuals
+    stateDoorOpen: fob_crate
+    stateDoorClosed: fob_crate
+
+- type: stack
+  id: CMUFobFence
+  name: cmu-fob-fence-stack
+  spawn: CMUFobFenceStack
+  maxCount: 10
+
+- type: entity
+  parent: CMUFobFence
+  id: CMUFobFenceStack
+  components:
+  - type: Stack
+    stackType: CMUFobFence
+    count: 1
+
+- type: entity
+  parent: CMUFobFenceStack
+  id: CMUFobFenceStack10
+  suffix: 10
+  components:
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: CMUFobCrateBase
+  id: CMUFobWeaponryCrate
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUFobPlatformModule
+      amount: 2
+    - id: CMUFobHeavyModule
+      amount: 2
+    - id: CMUFobRocketModule
+    - id: CMUFob30mmMagazine
+      amount: 2
+    - id: CMUFobRocketMagazine
+
+- type: entity
+  parent: CMUFobCrateBase
+  id: CMUFobSupportCrate
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUFobIlluminator
+      amount: 2
+    - id: CMUFobFenceStack10
+      amount: 3
+    - id: CMWrench
+    - id: CMScrewdriver
+    - id: CMWirecutter
+    - id: CMWelder
+    - id: CMMultitool
+    - id: RMCCableCoil
+
+- type: entity
+  parent: CMUFobCrateBase
+  id: CMUFobMonitoringCrate
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUFobControlModule
+    - id: CMUFobGenerator
+    - id: CMUFobSensor
+      amount: 6

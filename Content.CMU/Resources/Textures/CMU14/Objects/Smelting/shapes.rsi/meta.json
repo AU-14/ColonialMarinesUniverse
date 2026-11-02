@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created for Colonial Marines Universe",
+  "size": {
+    "x": 19,
+    "y": 22
+  },
+  "states": [
+    {
+      "name": "blank_shape"
+    },
+    {
+      "name": "sheet_shape"
+    },
+    {
+      "name": "ingots_shape"
+    },
+    {
+      "name": "brass_blank_shape"
+    },
+    {
+      "name": "brass_sheet_shape"
+    },
+    {
+      "name": "brass_ingots_shape"
+    }
+  ]
+}

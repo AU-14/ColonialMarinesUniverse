@@ -1,0 +1,190 @@
+# The first digging tools, made by hand of what lies about: a shovel and a pickaxe of wood, and of stone. They are made to get down to the clay and to the stone and to the ores in them, and not to last:
+# every block of clay or of stone they dig (a wall mined, a pit dug) costs one use. The wooden ones are gone after two blocks, the stone ones last three times as long.
+# The shovel digs the ground and the clay, the pickaxe the stone (the layer asks for the tool, not for the metal).
+
+- type: entity
+  parent: BaseItem
+  id: RUMCWoodenShovel
+  name: wooden shovel
+  description: "A shovel carved of wood. Good for the ground and the clay, but it will not last: two blocks, and it is gone."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/wooden_shovel.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/wooden_shovel.rsi
+    size: Normal
+  - type: MeleeWeapon
+    wideAnimationRotation: 45
+    damage:
+      types:
+        Blunt: 9
+    soundHit:
+      collection: MetalThud
+  - type: Shovel
+    speedModifier: 0.6
+  - type: PitDiggingTool
+    digTimeMultiplier: 2
+  - type: BreaksAfterUses
+    usesLeft: 2
+  - type: PhysicalComposition
+    materialComposition:
+      Wood: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCWoodenPickaxe
+  name: wooden pickaxe
+  description: "A pickaxe of hard wood. It gets through the soft rock, but it will not last: two blocks, and it is gone."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/wooden_pickaxe.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/wooden_pickaxe.rsi
+    size: Large
+  - type: Clothing
+    quickEquip: false
+    sprite: CMU14/Objects/Tools/wooden_pickaxe.rsi
+    slots:
+    - Belt
+  - type: MeleeWeapon
+    attackRate: 0.6
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Slash: 6
+        Blunt: 14
+    soundHit:
+      path: /Audio/Weapons/smash.ogg
+  - type: Tag
+    tags:
+    - Pickaxe
+  - type: PitDiggingTool
+    digTimeMultiplier: 2
+  - type: BreaksAfterUses
+    usesLeft: 2
+  - type: PhysicalComposition
+    materialComposition:
+      Wood: 100
+
+- type: entity
+  parent: BaseItem
+  id: RUMCStoneShovel
+  name: stone shovel
+  description: "A shovel with a blade of flaked stone. It digs better than the wooden one and lasts six blocks."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/stone_shovel.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/stone_shovel.rsi
+    size: Normal
+  - type: MeleeWeapon
+    wideAnimationRotation: 45
+    damage:
+      types:
+        Blunt: 12
+    soundHit:
+      collection: MetalThud
+  - type: Shovel
+    speedModifier: 0.8
+  - type: PitDiggingTool
+    digTimeMultiplier: 1.6
+  - type: BreaksAfterUses
+    usesLeft: 6
+  - type: PhysicalComposition
+    materialComposition:
+      Wood: 25
+
+- type: entity
+  parent: BaseItem
+  id: RUMCStonePickaxe
+  name: stone pickaxe
+  description: "A pickaxe with a head of flaked stone. It breaks the rock better than the wooden one and lasts six blocks."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/stone_pickaxe.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/stone_pickaxe.rsi
+    size: Large
+  - type: Clothing
+    quickEquip: false
+    sprite: CMU14/Objects/Tools/stone_pickaxe.rsi
+    slots:
+    - Belt
+  - type: MeleeWeapon
+    attackRate: 0.65
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Slash: 9
+        Blunt: 20
+    soundHit:
+      path: /Audio/Weapons/smash.ogg
+  - type: Tag
+    tags:
+    - Pickaxe
+  - type: PitDiggingTool
+    digTimeMultiplier: 1.6
+  - type: BreaksAfterUses
+    usesLeft: 6
+  - type: PhysicalComposition
+    materialComposition:
+      Wood: 25
+
+# Made by hand: the wood is cut and the stone is flaked, no tool is wanted.
+- type: craftRecipe
+  id: RUMCCraftBranchesFromPlanks
+  name: au14-craft-recipe-branches
+  output: RUMCBranch
+  outputCount: 2
+  time: 3
+  consumables:
+  - stack: RMCWood
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftWoodenShovel
+  name: au14-craft-recipe-wooden-shovel
+  output: RUMCWoodenShovel
+  time: 6
+  consumables:
+  - stack: RMCWood
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftWoodenPickaxe
+  name: au14-craft-recipe-wooden-pickaxe
+  output: RUMCWoodenPickaxe
+  time: 6
+  consumables:
+  - stack: RMCWood
+    amount: 2
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftStoneShovel
+  name: au14-craft-recipe-stone-shovel
+  output: RUMCStoneShovel
+  time: 8
+  minigames: [Rhythm]
+  consumables:
+  - stack: RUMCStone
+    amount: 4
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftStonePickaxe
+  name: au14-craft-recipe-stone-pickaxe
+  output: RUMCStonePickaxe
+  time: 8
+  minigames: [Rhythm]
+  consumables:
+  - stack: RUMCStone
+    amount: 5
+  - stack: RUMCBranch
+    amount: 1
