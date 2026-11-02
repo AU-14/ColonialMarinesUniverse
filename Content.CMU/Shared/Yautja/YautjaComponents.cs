@@ -3122,8 +3122,9 @@ public sealed partial class YautjaSourceShieldBlockComponent : Component
 [RegisterComponent]
 public sealed partial class YautjaShieldHeldPrefixComponent : Component
 {
-    [DataField(required: true)]
-    public string Lowered = string.Empty;
+    // null leaves the plain inhand-left/right states, the bracer shield has no prefix when lowered
+    [DataField]
+    public string? Lowered;
 
     [DataField(required: true)]
     public string Readied = string.Empty;

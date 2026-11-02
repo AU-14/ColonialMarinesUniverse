@@ -826,6 +826,8 @@
     kind: Shield
 
   - type: YautjaShieldBash
+  - type: YautjaShieldHeldPrefix
+    readied: ready
   - type: YautjaSourceShieldBlock
     shieldType: Directional
     readiedBlock: VeryHigh
