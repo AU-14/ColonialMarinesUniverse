@@ -502,7 +502,6 @@ public sealed class CMUAutocompressorTest : GameTest
     private async Task RunCase(Action<Scene> test)
     {
         var map = await Pair.CreateTestMap();
-        var spawned = new List<EntityUid>();
         try
         {
             await Server.WaitAssertion(() =>
@@ -510,7 +509,6 @@ public sealed class CMUAutocompressorTest : GameTest
                 EntityUid Spawn(string prototype)
                 {
                     var uid = SEntMan.SpawnEntity(prototype, map.GridCoords);
-                    spawned.Add(uid);
                     return uid;
                 }
                 var user = Spawn("CMMobHuman");
@@ -525,12 +523,7 @@ public sealed class CMUAutocompressorTest : GameTest
         }
         finally
         {
-            await Server.WaitPost(() =>
-            {
-                foreach (var uid in spawned)
-                    SEntMan.DeleteEntity(uid);
-            });
-            await map.CleanUp();
+            await Server.WaitPost(() => SEntMan.DeleteEntity(map.MapUid));
         }
     }
 
