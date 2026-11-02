@@ -7,6 +7,7 @@ using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.Interface;
 
@@ -35,12 +36,19 @@ public sealed partial class CrtScanlineOverlay : Control
     ///     so a surface wearing this and a surface wearing the full pass read as the same tube.
     /// </summary>
     private const float Darkening = 0.85f;
+    private static readonly ProtoId<ShaderPrototype> ShaderId = "CMUCrtScanlines";
 
     [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+
+    private readonly ShaderInstance _shader;
+    private float _height;
+    private float _pitch;
 
     public CrtScanlineOverlay()
     {
         IoCManager.InjectDependencies(this);
+        _shader = _prototypes.Index(ShaderId).InstanceUnique();
 
         MouseFilter = MouseFilterMode.Ignore;
         CanKeyboardFocus = false;
@@ -66,11 +74,21 @@ public sealed partial class CrtScanlineOverlay : Control
         var pitch = MathF.Max(_cfg.GetCVar(CCVars.CMUCrtEffectPitch), 2f);
         var color = Color.Black.WithAlpha(Math.Clamp(Darkening * intensity, 0f, 1f));
 
-        for (var y = 0f; y < size.Y; y += pitch)
+        if (_height != size.Y)
         {
-            handle.DrawRect(
-                new UIBox2(0, y, size.X, y + 1),
-                color);
+            _height = size.Y;
+            _shader.SetParameter("height", _height);
         }
+
+        if (_pitch != pitch)
+        {
+            _pitch = pitch;
+            _shader.SetParameter("pitch", pitch);
+        }
+
+        var shader = handle.GetShader();
+        handle.UseShader(_shader);
+        handle.DrawRect(new UIBox2(0, 0, size.X, size.Y), color);
+        handle.UseShader(shader);
     }
 }

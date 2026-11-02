@@ -116,9 +116,10 @@ public sealed partial class WheelchairSystem : EntitySystem
         RemCompDeferred<ActiveWheelchairPilotComponent>(active);
     }
 
+    // CMU14 method: valid pilots need no removal collection.
     public override void Update(float frameTime)
     {
-        var toRemove = new List<Entity<ActiveWheelchairPilotComponent>>();
+        List<Entity<ActiveWheelchairPilotComponent>>? toRemove = null;
         
         var pilots = EntityQueryEnumerator<ActiveWheelchairPilotComponent>();
         while (pilots.MoveNext(out var uid, out var active))
@@ -127,10 +128,13 @@ public sealed partial class WheelchairSystem : EntitySystem
                 buckle.BuckledTo == null ||
                 !HasComp<WheelchairComponent>(buckle.BuckledTo))
             {
-                toRemove.Add((uid, active));
+                (toRemove ??= new()).Add((uid, active));
             }
         }
         
+        if (toRemove == null)
+            return;
+
         foreach (var pilot in toRemove)
         {
             RemCompDeferred<ActiveWheelchairPilotComponent>(pilot);

@@ -66,6 +66,7 @@ public sealed partial class OverwatchConsoleBui
 
     private void CMUSetupSquadView(OverwatchSquad squad, OverwatchSquadView monitor)
     {
+        CMUAddCommsDirectoryButton(monitor);
         var weapons = new CMUShipWeaponPicker();
         weapons.OnSelected += (weapon, bearing) => SendMessage(new CMUShipWeaponSelectBuiMsg(weapon, bearing));
         monitor.OrbitalBombardment.AddChild(weapons);

@@ -9,6 +9,12 @@
   - type: Sprite
     sprite: _RMC14/Structures/Storage/Lockers/fridge.rsi
   - type: AntiRottingContainer
+  - type: Transform # CMU14
+    anchored: true
+  - type: Physics
+    bodyType: Static # CMU14: match the serialized Physics field name.
+  - type: Anchorable
+    flags: [Anchorable, Unanchorable]
 
 - type: entity
   parent: CMLockerFridge

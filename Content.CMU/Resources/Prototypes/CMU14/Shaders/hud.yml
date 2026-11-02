@@ -1,0 +1,10 @@
+- type: shader
+  id: CMUCachedDrawing
+  kind: canvas
+  light_mode: unshaded
+  blend_mode: premultiplied
+
+- type: shader
+  id: CMUCrtScanlines
+  kind: source
+  path: /Textures/CMU14/Shaders/crt_scanlines.swsl

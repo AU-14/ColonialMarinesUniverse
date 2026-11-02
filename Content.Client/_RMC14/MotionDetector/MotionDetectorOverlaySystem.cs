@@ -36,6 +36,7 @@ public sealed partial class MotionDetectorOverlaySystem : EntitySystem
         _overlay.RemoveOverlay<MotionDetectorOverlay>();
     }
 
+    // CMU14 method: reuse equipment scratch storage; keep scan and equipment data live.
     public void DrawBlips<T>(DrawingHandleWorld handle, ref TimeSpan last, List<(Vector2 Pos, bool QueenEye)> blips, Texture texture, Texture queenEyeTexture) where T : IComponent, IDetectorComponent
     {
         if (_player.LocalEntity is not { } player)
@@ -54,23 +55,8 @@ public sealed partial class MotionDetectorOverlaySystem : EntitySystem
             (vpWidth, vpHeight) = (vpHeight, vpWidth);
         }
 
-        var hands = _entity.System<HandsSystem>();
-        var inventory = _entity.System<InventorySystem>();
         var time = _timing.CurTime;
-
-        var ents = hands.EnumerateHeld(player).ToList();
-        if (inventory.TryGetContainerSlotEnumerator(player, out var inv))
-        {
-            while (inv.NextItem(out var item))
-            {
-                ents.Add(item);
-
-                if (_entity.HasComponent<PropagateDetectorsComponent>(item) &&
-                    _entity.TryGetComponent<StorageComponent>(item, out var itemStorage))
-                    foreach (var deepItem in itemStorage.StoredItems.Keys)
-                        ents.Add(deepItem);
-            }
-        }
+        var ents = CMUGetDetectorItems(player);
 
         foreach (var held in ents)
         {

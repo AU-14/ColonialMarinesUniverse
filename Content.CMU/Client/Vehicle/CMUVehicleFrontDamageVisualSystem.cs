@@ -12,6 +12,7 @@ public sealed class CMUVehicleFrontDamageVisualSystem : EntitySystem
 {
     [Dependency] private CMUVehicleFrontDamageSystem _frontDamage = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    private readonly Dictionary<(string Prefix, int Level), string> _stateNames = new();
 
     public override void FrameUpdate(float frameTime)
     {
@@ -38,7 +39,18 @@ public sealed class CMUVehicleFrontDamageVisualSystem : EntitySystem
             return;
 
         _sprite.LayerSetVisible(ent.AsNullable(), index, level > 0);
-        if (level > 0 && _sprite.LayerGetRsiState(ent.AsNullable(), index) != state + level)
-            _sprite.LayerSetRsiState(ent.AsNullable(), index, state + level);
+        if (level <= 0)
+            return;
+
+        if (!_stateNames.TryGetValue((state, level), out var name))
+        {
+            if (_stateNames.Count >= 256)
+                _stateNames.Clear();
+            name = state + level;
+            _stateNames.Add((state, level), name);
+        }
+
+        if (_sprite.LayerGetRsiState(ent.AsNullable(), index) != name)
+            _sprite.LayerSetRsiState(ent.AsNullable(), index, name);
     }
 }
