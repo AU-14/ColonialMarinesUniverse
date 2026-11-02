@@ -769,42 +769,25 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         return true;
     }
 
+    // CMU14 method: build leader positions once, only when a tracker is due.
     public override void Update(float frameTime)
     {
         if (_net.IsClient)
             return;
 
-        _squadLeaders.Clear();
-        var squadLeaders = EntityQueryEnumerator<SquadLeaderComponent, SquadMemberComponent, RMCTrackableComponent>();
-        while (squadLeaders.MoveNext(out var uid, out _, out var member, out _))
-        {
-            if (member.Squad is not { } squad)
-                continue;
-
-            _squadLeaders.TryAdd(squad, _transform.GetMapCoordinates(uid));
-        }
-
-        Array.Clear(_fireteamLeaders);
-        var fireteamLeaders = EntityQueryEnumerator<FireteamLeaderComponent, FireteamMemberComponent, SquadMemberComponent>();
-        while (fireteamLeaders.MoveNext(out var uid, out _, out var fireteamMember, out var squadMember))
-        {
-            if (squadMember.Squad is not { } squad)
-                continue;
-
-            if (fireteamMember.Fireteam < 0 || fireteamMember.Fireteam >= _fireteamLeaders.Length)
-                continue;
-
-            ref var leaders = ref _fireteamLeaders[fireteamMember.Fireteam];
-            leaders ??= new Dictionary<EntityUid, MapCoordinates>();
-            leaders[squad] = _transform.GetMapCoordinates(uid);
-        }
-
+        var leadersReady = false;
         var time = _timing.CurTime;
         var query = EntityQueryEnumerator<SquadLeaderTrackerComponent>();
         while (query.MoveNext(out var uid, out var tracker))
         {
             if (time < tracker.UpdateAt)
                 continue;
+
+            if (!leadersReady)
+            {
+                RefreshCMULeaderPositions();
+                leadersReady = true;
+            }
 
             tracker.UpdateAt = time + tracker.UpdateEvery;
             var targetSquadName = "";

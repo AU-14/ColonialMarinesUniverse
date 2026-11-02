@@ -251,7 +251,7 @@ internal static class RosterUi
     /// <summary>The screen again, through the tube. Reading surface, so no roll bar or grain.</summary>
     public static Control Tube(PanelContainer screen)
     {
-        var tube = new Control { HorizontalExpand = true, VerticalExpand = true };
+        var tube = new CrtScreenContainer { HorizontalExpand = true, VerticalExpand = true };
         tube.AddChild(screen);
         tube.AddChild(new CrtScreenControl
         {

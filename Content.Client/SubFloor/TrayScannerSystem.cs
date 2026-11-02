@@ -44,6 +44,7 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
         Subs.ItemStatus<TrayScannerComponent>(OnCollectItemStatus);
     }
 
+    // CMU14 method: reuse scratch sets, including when only fading old reveals out.
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -61,7 +62,9 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
         var playerMap = playerXform.MapID;
         var range = 0f;
         var mode = TrayScannerMode.All;
-        HashSet<Entity<SubFloorHideComponent>> inRange;
+        var inRange = _cmuScannerInRange;
+        inRange.Clear();
+        _cmuScannerCandidates.Clear();
 
         // TODO: Should probably sub to player attached changes / inventory changes but inventory's
         // API is extremely skrungly. If this ever shows up on dottrace ping me and laugh.
@@ -78,11 +81,9 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
             break;
         }
 
-        inRange = new HashSet<Entity<SubFloorHideComponent>>();
-
         if (canSee)
         {
-            var entitiesInRange = new HashSet<Entity<SubFloorHideComponent>>();
+            var entitiesInRange = _cmuScannerCandidates;
             _lookup.GetEntitiesInRange(playerMap, playerPos, range, entitiesInRange, flags: Flags);
 
             foreach (var (uid, comp) in entitiesInRange)
@@ -172,6 +173,9 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
                 }, TRayAnimationKey);
             }
         }
+
+        inRange.Clear();
+        _cmuScannerCandidates.Clear();
     }
 
     private void SetRevealed(EntityUid uid, bool value)
