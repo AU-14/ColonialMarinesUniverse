@@ -18,7 +18,6 @@ public sealed class YautjaTranslatorWindow : DefaultWindow
     private int _maxLength = 160;
 
     public event Action<string>? OnSend;
-    public event Action? OnTyping;
 
     public YautjaTranslatorWindow()
     {
@@ -69,11 +68,7 @@ public sealed class YautjaTranslatorWindow : DefaultWindow
             MinHeight = 64,
             Placeholder = new Rope.Leaf(Loc.GetString("cmu-yautja-translator-placeholder")),
         };
-        _messageEdit.OnTextChanged += args =>
-        {
-            UpdateLimit(Rope.Collapse(args.TextRope));
-            OnTyping?.Invoke();
-        };
+        _messageEdit.OnTextChanged += args => UpdateLimit(Rope.Collapse(args.TextRope));
         root.AddChild(YautjaBracerUiStyle.Wrap(_messageEdit, YautjaBracerUiStyle.DeepCard, YautjaBracerUiStyle.MutedBorder, new Thickness(5), new Thickness(1)));
 
         _sendButton = BuildSendButton(

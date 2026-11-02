@@ -1,4 +1,3 @@
-using Content.Client.Chat.TypingIndicator;
 using Content.Shared.CMU14.Yautja;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
@@ -18,17 +17,7 @@ public sealed class YautjaTranslatorBui : BoundUserInterface
     {
         base.Open();
         _window = this.CreateWindow<YautjaTranslatorWindow>();
-
-        // people around a hunter standing still at the translator should see the same bubble as chat typing
-        var typing = EntMan.System<TypingIndicatorSystem>();
-        typing.ClientChangedChatFocus(true);
-        _window.OnTyping += typing.ClientChangedChatText;
-        _window.OnClose += () => typing.ClientChangedChatFocus(false);
-        _window.OnSend += message =>
-        {
-            SendMessage(new YautjaTranslatorSendMessageMsg(message));
-            typing.ClientSubmittedChatText();
-        };
+        _window.OnSend += message => SendMessage(new YautjaTranslatorSendMessageMsg(message));
 
         if (State is YautjaTranslatorBuiState state)
             _window.UpdateState(state);

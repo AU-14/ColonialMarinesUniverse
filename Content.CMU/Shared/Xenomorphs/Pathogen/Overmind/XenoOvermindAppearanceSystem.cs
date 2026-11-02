@@ -27,18 +27,15 @@ public sealed partial class CMUXenoOvermindAppearanceSystem : EntitySystem
         UpdateSprite(ent);
     }
 
-    private void OnMobStateChanged(Entity<CMUXenoOvermindAppearanceComponent> ent, ref MobStateChangedEvent args)
-    {
-        if (args.NewMobState == MobState.Dead)
-        {
-            // No dead sprite - just play the disappear animation.
-            // BlightCoreSystem will delete the entity after the transition window elapses.
-            var comp = ent.Comp;
-            comp.InTransition = true;
-            comp.TransitionEndsAt = _timing.CurTime + comp.TransitionDuration;
-            Dirty(ent);
-            _appearance.SetData(ent, OvermindVisuals.VisualState, OvermindVisualState.Dying);
-        }
+    private void OnMobStateChanged(Entity<CMUXenoOvermindAppearanceComponent> ent, ref MobStateChangedEvent args)  
+    {  
+        if (args.NewMobState != MobState.Dead)  
+            return;  
+  
+        // Corpse persists  
+        ent.Comp.InTransition = false;  
+        Dirty(ent);  
+        _appearance.SetData(ent, OvermindVisuals.VisualState, OvermindVisualState.Dead);  
     }
 
     /// <summary>

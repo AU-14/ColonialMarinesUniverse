@@ -153,7 +153,7 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
             break;
         }
 
-        if (protItem != null && !_random.Prob(0.1f))
+        if (protItem != null && !_random.Prob(xeno.Comp.ProtectionBypassChance)) // CMU14, direct infect chance is now defined per caste
         {
             _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-direct-spore-infect-blocked"),
