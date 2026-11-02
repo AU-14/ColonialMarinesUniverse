@@ -102,8 +102,17 @@ public sealed partial class ClickableSystem : EntitySystem
             // Check the layer's texture, if it has one
             if (layer.Texture != null)
             {
-                // Convert to image coordinates
-                var imagePos = (Vector2i)(localPos * EyeManager.PixelsPerMeter * new Vector2(1, -1) + layer.Texture.Size / 2f);
+                // CMU14: texture parts move, rotate and scale independently, just like RSI layers.
+                layer.GetLayerDrawMatrix(RsiDirection.South, out var textureMatrix);
+                Matrix3x2.Invert(textureMatrix, out var inverseTextureMatrix);
+                var textureLocal = Vector2.Transform(localPos, inverseTextureMatrix);
+                // Stock white has no resource alpha map. Use its exact quad, before rounding to pixels:
+                // the crate interior stretches this one-pixel texture over most of the open case.
+                var halfSize = layer.Texture.Size / (2f * EyeManager.PixelsPerMeter);
+                if (layer.Texture == _clickMapManager.CMUSolidTexture
+                    && MathF.Abs(textureLocal.X) <= halfSize.X && MathF.Abs(textureLocal.Y) <= halfSize.Y)
+                    return true;
+                var imagePos = (Vector2i)(textureLocal * EyeManager.PixelsPerMeter * new Vector2(1, -1) + layer.Texture.Size / 2f);
 
                 if (_clickMapManager.IsOccluding(layer.Texture, imagePos))
                     return true;

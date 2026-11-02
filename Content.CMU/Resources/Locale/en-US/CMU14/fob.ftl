@@ -38,7 +38,7 @@ ent-CMUFobSupportGun = FOB support gun
     .desc = A magazine-fed support gun for a deployed FOB platform. Requires an active FOB reserve, warns before firing, and tracks targets in every direction.
 cmu-fob-gun-starting = FOB support starting in {$seconds} seconds. Keep clear of the firing arcs!
 cmu-fob-gun-acquiring = The support gun sounds a targeting warning!
-cmu-fob-gun-restart = This gun requires repair if broken, then a new activation at the FOB control. Repair never restores ammunition.
+cmu-fob-gun-restart = Activate at the FOB control.
 cmu-fob-gun-examine = Tracks targets through 360 degrees. An engineer or squad leader can replace its empty drum.
 cmu-fob-round-stock = Round allowance: { $current }/{ $max } remaining; no restock
 cmu-fob-launcher-examine = Targets through any powered sensor in this FOB. Rockets track their original target until it moves more than 11 tiles from the spotting sensor, enters a roofed area or loses its sensor; they then strike its last tracked position. An engineer or squad leader can replace an empty cassette.
@@ -83,8 +83,9 @@ cmu-fob-guide-relays = [bold]Repair either relay[/bold]
     Movement, damage, incapacitation or losing the tool interrupts repair. Only one worker can repair a relay. Completing either alternative removes both markers and adds up to 6 minutes, capped by bank capacity. At a full bank the job is not consumed. There is no return-trip delivery or need to garrison the relay afterward.
     The next pair is offered 5 minutes after success. Offers expire after 8 minutes, then retry after 30 seconds. Later pairs reach farther inland. No available route means no free reserve.
 cmu-fob-guide-guns = [bold]Breachable support guns[/bold]
+    The front status panel stays visible in the dark: three green segments mean active, a red dash means off, chasing amber segments mean startup, and pulsing amber segments mean target acquisition. Amber pause bars mean reloading, a red hollow box means empty, and a red X means broken. A folded gun has no lit panel.
     Each UH-46 heavy sentry tracks through 360 degrees within six tiles and uses a finite 30mm drum. Walls, closed doors and concealed targets prevent fire. An engineer or squad leader may rotate a gun with a screwdriver while support is off, or replace an empty drum through an interruptible reload.
-    Wrench a gun to remove its module while support is off, then use a powerloader to clear it and install a module on the empty UH-02 platform. Ammunition stays inside the removed gun. Empty platforms and terminals can also be folded with a wrench and relocated within 40 tiles of the selected LZ center, outside the landing footprint. Moving them does not create more weapon slots or reserve.
+    Wrench a gun to remove its module while support is off, then use a powerloader to clear it and install a module on the empty UH-02 platform. Ammunition stays inside the removed gun. Wrenching a deployed platform detaches its gun and folds the base while support is off. Move both physical parts, wrench the same platform down again, and reinstall the gun with a powerloader; its existing slot is reused even when both slots are allocated. Platforms and terminals can be relocated within 40 tiles of the selected LZ center, outside the landing footprint. Moving them does not create more weapon slots or reserve.
     The UH-99 rocket module replaces one heavy gun, never adds a third platform. Any powered UE-04 sensor in this FOB can spot a target within seven tiles and clear sight, in any direction from the launcher. A three-second warning precedes every launch. Its twelve-rocket cassette is finite. Each rocket homes on the original target at twelve tiles per second. After launch, walls do not break tracking, but terrain can intercept the missile. If the target moves more than eleven tiles from the original sensor, goes under a roof, or the sensor loses power or is destroyed, tracking ends permanently and the rocket strikes the last tracked position. Losing sight during acquisition still cancels the launch. Replacing a module requires a fresh support activation.
     A direct rocket hit can critically injure a healthy, unshielded T3. Active shields still absorb damage. Wounded T3s and smaller xenos can be killed. Nearby splash remains much weaker than a direct hit.
     Guns take damage even when powered. Broken wrecks do not block movement or shots. Use the normal cutters, welder, cable, screwdriver and tuner repair sequence, then activate support again. Repairing or replacing equipment never refills ammunition or reserve. A broken control takes a 20-second screwdriver or lit-welder repair; it returns in standby.
@@ -95,10 +96,13 @@ cmu-fob-guide-extraction = [bold]Evacuation is still contested[/bold]
     Defend a route, carry casualties aboard and use normal piloting access, startup and flight. Remaining reserve may cover a retreat, but cannot clear ramps, eject enemies, protect passengers, accelerate departure or declare survivors safe.
     Empty reserve does not lock departure. Marines left groundside remain there, and active support keeps spending reserve. Normal boarding and applicable hijack rules still apply.
 
+cmu-fob-crate-wrench = Use a wrench to open the crate.
+cmu-fob-crate-open = Wrench open
+
 cmu-fob-guide-equipment = [bold]Deployable equipment[/bold]
-    Retrieve the one-time weaponry, support and monitoring crates through shipside requisitions. Requisitions can also buy two additional weaponry crates at 4,000 points each and three additional support crates at 1,500 each, shared across all friendly carrier terminals for the whole round. These limits do not replenish and the kits cannot be bought piecemeal. Transport the hardware aboard the dropship. The first friendly landing selects the FOB's LZ. All deployable FOB hardware can be placed on clear ground within 40 tiles of that LZ's center, outside its reserved dropship landing footprint. Wrench down the platforms and terminal wherever you choose inside that area, then install gun modules with a powerloader. Support must be off while assembling or changing modules. There are only two active weapon slots.
+    Retrieve the one-time weaponry, support and monitoring crates through shipside requisitions. Bring a wrench: opening each crate takes two seconds of uninterrupted work. The support crate's included wrench is inside, so it cannot open the first shipment for you. Requisitions can also buy two additional weaponry crates at 4,000 points each and three additional support crates at 1,500 each, shared across all friendly carrier terminals for the whole round. These limits do not replenish and the kits cannot be bought piecemeal. Transport the hardware aboard the dropship. The first friendly landing selects the FOB's LZ. All deployable FOB hardware can be placed on clear ground within 40 tiles of that LZ's center, outside its reserved dropship landing footprint. Wrench down the platforms and terminal wherever you choose inside that area, then install gun modules with a powerloader. Support must be off while assembling or changing modules. There are only two active weapon slots.
     The crates also supply two UE-92 illuminators, six UE-04 sensors, three stacks of ten UE-02 fence sections and one UE-11 generator. Put a fence stack down and wrench it to deploy one section; split and merge unused stacks normally. Recovered sections remain separate and retain damage. Put units on clear ground within 40 tiles of the selected LZ center and deploy with a wrench. Engineers or squad leaders operate these devices. Floodlights and generators use powerloader transport; sensors and folded fences can be carried by hand.
-    Support must be off to fold machinery. Use cutters for fences and a wrench for the other units. Sensors never obstruct movement or intercept rockets. Powered fences shock nearby xeno attackers but always take normal damage; destroying one opens a breach. Loss of reserve or the control disables the powered utilities.
+    Support must be off to fold machinery. Use cutters for fences and a wrench for the other units. Sensors never obstruct movement or intercept rockets. Powered fences shock and briefly stun living creatures that touch or attack them at close range, including friendly marines. Each section can shock once every two seconds. Fences always take normal damage; destroying one opens a breach. Loss of reserve or the control disables the powered utilities.
     Wrench down the UE-11, then activate it with an empty hand. Ten seconds of interruptible work adds up to two minutes to the existing reserve. The FOB can use this backup charge only once, even if the generator is moved or replaced. It does not bypass startup warnings or change evacuation rules.
 
 cmu-fob-guide-feedback = [bold]Equipment feedback[/bold]
@@ -114,7 +118,7 @@ ent-CMUFobIlluminator = UE-92 area illuminator
 ent-CMUFobSensor = UE-04 grid sensor
     .desc = A portable laser sensor for the UH-99 launcher. Deploy with a wrench. It needs an active reserve and a clear view of its target.
 ent-CMUFobFence = UE-02 deployable fence
-    .desc = A folded electric fence. Wrench to deploy, cutters to fold while support is off. Powered coils shock attackers, but the mesh can always be breached.
+    .desc = A folded electric fence. Wrench to deploy, cutters to fold while support is off. Powered coils shock and briefly stun on contact, including friendly marines. The mesh can always be breached.
 ent-CMUFobGenerator = UE-11 generator unit
     .desc = A one-use backup generator. Wrench it down, then activate it to add up to two minutes to the existing reserve. Only one backup charge is available per FOB.
 ent-CMUFobRocketLauncher = UH-99 smart rocket launcher
@@ -138,7 +142,7 @@ cmu-fob-equipment-deployed = Deployed. Requires the selected FOB's active reserv
 cmu-fob-equipment-stowed = Stowed. Put it on clear ground near the selected FOB and use a wrench to deploy it.
 
 cmu-fob-job-unavailable = No relay mission available. Retrying route selection in {$time}. Stored reserve is unchanged.
-cmu-fob-platform-site-required = Place the platform on clear ground within 40 tiles of the selected LZ center and outside its landing footprint. Switch support off and remove its gun before folding. Only two platforms can be registered.
+cmu-fob-platform-site-required = Place the platform on clear ground within 40 tiles of the selected LZ center and outside its landing footprint. Switch support off before folding. Redeploy the same platform to reuse its allocated slot. Only two platforms can be registered.
 cmu-fob-fence-stack = electric fence sections
 ent-CMUFobFenceStack = folded UE-02 fence sections
     .desc = Up to ten electric fence sections. Put the stack down and use a wrench to deploy one section. Unused sections can be split or merged.
@@ -311,3 +315,8 @@ cmu-fob-lv624-relay-southeast-barrens-north = Southeast barrens north relay
 cmu-fob-lv624-relay-temple-approach = Temple approach relay
 cmu-fob-lv624-relay-central-barrens-south = Central barrens south relay
 cmu-fob-lv624-relay-containers-approach = Containers approach relay
+
+cmu-fob-platform-deployed = With support off, wrench to detach the gun and pack the platform.
+cmu-fob-platform-folded = Wrench to deploy this platform within the FOB area.
+cmu-fob-platform-pack-denied = Switch support off and stand beside the platform with engineering or squad-leader access.
+cmu-fob-module-install = Use a powerloader to install this gun on a deployed UH-02 platform.

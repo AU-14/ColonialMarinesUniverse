@@ -20,8 +20,9 @@ The scheduler retries after 30 seconds without granting reserve and clears the w
 Relay contacts never enter the map's shared live or published sensor buckets. Personal map data is
 owner-only and checks the Marine's server-side faction. Computer markers use private messages to
 authorized faction viewers, not the console's PVS-replicated component. Reconstruction contacts use
-the same faction check and the relay's actual ground map. Xenos and other factions receive no mission
-overlay, even if they have sensors or a foreign map-view flag.
+the same case-insensitive faction check and the relay's actual map and depth. Objectives come directly
+from the active FOB network, so another registered tactical map or a linked floor cannot suppress them.
+Xenos and other factions receive no mission overlay, even if they have sensors or a foreign map-view flag.
 
 Reserve warnings occur at or below 120 seconds, 60 seconds and zero. Each threshold is consumed once;
 only replenishment to at least 135/75 seconds rearms the corresponding warning. Any positive repair

@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Numerics;
-using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Construction;
 using Content.Shared.CMU14.Fob;
 using Content.Shared.Audio;
@@ -19,6 +18,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
+using Content.Shared.Stunnable;
 using Content.Shared.Tools.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
@@ -35,6 +35,7 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
 {
     [Dependency] private SharedAmbientSoundSystem _ambient = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private CollisionWakeSystem _collisionWake = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private RMCConstructionSystem _construction = default!;
     [Dependency] private CMUFobInteractionSystem _controls = default!;
@@ -52,6 +53,7 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
     [Dependency] private CMUFobReserveSystem _reserve = default!;
     [Dependency] private SharedRoofSystem _roof = default!;
     [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedToolSystem _tools = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -244,9 +246,7 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
                 var equipment = Comp<CMUFobEquipmentComponent>(section);
                 equipment.Deployed = true;
                 equipment.Network = bank;
-                if (TryComp<FixturesComponent>(section, out var sectionFixtures))
-                    foreach (var fixture in sectionFixtures.Fixtures.Values)
-                        _physics.SetHard(section, fixture, true);
+                UpdateDeploymentCollision((section, equipment));
                 EnsureComp<CMUFobInstructionsComponent>(section);
                 UpdateVisuals((section, equipment));
                 _effects.Play(section, CMUFobPresentationCue.Deploy);
@@ -256,13 +256,20 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
             if (!args.Deploy) _transform.Unanchor(ent);
             ent.Comp.Deployed = args.Deploy;
             ent.Comp.Network = args.Deploy ? bank.Owner : null;
-            if (TryComp<FixturesComponent>(ent, out var fixtures))
-                foreach (var fixture in fixtures.Fixtures.Values)
-                    _physics.SetHard(ent, fixture, ent.Comp.Kind != CMUFobEquipmentKind.Sensor && args.Deploy);
+            UpdateDeploymentCollision(ent);
             EnsureComp<CMUFobInstructionsComponent>(ent);
             _effects.Play(ent, args.Deploy ? CMUFobPresentationCue.Deploy : CMUFobPresentationCue.Pack);
         }
         UpdateVisuals(ent);
+    }
+
+    private void UpdateDeploymentCollision(Entity<CMUFobEquipmentComponent> ent)
+    {
+        // Portable items may stop colliding when asleep; deployed structures must stay in the broadphase.
+        _collisionWake.SetEnabled(ent, !ent.Comp.Deployed);
+        if (TryComp<FixturesComponent>(ent, out var fixtures))
+            foreach (var fixture in fixtures.Fixtures.Values)
+                _physics.SetHard(ent, fixture, ent.Comp.Deployed && ent.Comp.Kind != CMUFobEquipmentKind.Sensor);
     }
 
     private void OnPickup(Entity<CMUFobEquipmentComponent> ent, ref GettingPickedUpAttemptEvent args)
@@ -282,9 +289,10 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
     private void Shock(Entity<CMUFobEquipmentComponent> ent, EntityUid target)
     {
         if (ent.Comp.Kind != CMUFobEquipmentKind.Fence || !IsPowered(ent) || _timing.CurTime < ent.Comp.NextShock
-            || !HasComp<XenoComponent>(target) || !TryComp<MobStateComponent>(target, out var mob) || mob.CurrentState == MobState.Dead) return;
+            || !TryComp<MobStateComponent>(target, out var mob) || mob.CurrentState == MobState.Dead) return;
         ent.Comp.NextShock = _timing.CurTime + TimeSpan.FromSeconds(2);
         _damage.TryChangeDamage(target, ent.Comp.ShockDamage, origin: ent);
+        _stun.TryUpdateStunDuration(target, ent.Comp.ShockStunDuration, visualized: true);
         _effects.Play(ent, CMUFobPresentationCue.Shock);
     }
 

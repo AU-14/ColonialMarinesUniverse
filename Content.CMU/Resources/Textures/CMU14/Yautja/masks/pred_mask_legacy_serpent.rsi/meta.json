@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprites by DimDim, from cmss13-devs/cmss13 PR #12174 (unmerged), taken from https://github.com/realforest2001/forest-cm13/blob/08d99ee337e61795b2dae54b7925ed1a6c13c436/icons/obj/items/hunter/pred_mask.dmi. License per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    }
+  ]
+}
