@@ -8236,7 +8236,9 @@ public sealed class YautjaBowTest
                     "CMUYautjaCapePoncho",
                     "CMUYautjaCapeDamaged",
                     "CMUYautjaCapeFull",
+                    "CMUYautjaCapeBoneFull",
                     "CMUYautjaCapeCeremonial",
+                    "CMUYautjaCapeBoneCeremonial",
                 }));
                 AssertVendorRow(capes, "CMUYautjaCapeDamaged", "Damaged-Cape", replaceSlot: SlotFlags.BACK);
                 AssertVendorRow(capes, "CMUYautjaCapeFull", "Full-Cape", replaceSlot: SlotFlags.BACK);
@@ -13753,6 +13755,7 @@ public sealed class YautjaBowTest
                     "CMUYautjaCapeThird",
                     "CMUYautjaCapeHalf",
                     "CMUYautjaCapePoncho",
+                    "CMUYautjaCapeBoneThird",
                 }));
             }
             finally
