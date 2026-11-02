@@ -70,6 +70,19 @@ public sealed partial class VendingMachineMenu : FancyWindow
         FooterText.FontOverride = kit.Small;
         FooterText.FontColorOverride = CrtTerminalPalette.TextDim;
 
+        // CMU14: without the actual capture tube, this is merely a dark stylesheet.
+        // Move the existing functional list into the same CRT rendering path as
+        // Requisitions Stock; scrolling and item clicks remain on the live source.
+        Contents.RemoveChild(Surface);
+        kit.Root.AddChild(Surface);
+        Surface.VerticalExpand = true;
+        Contents.AddChild(kit.Tube);
+        if (kit.Tube.GetChild(1) is CrtScreenControl crt)
+        {
+            crt.Roll = false;
+            crt.Grain = false;
+        }
+
         // CMU14 End
         VendingContents.SearchBar = SearchBar;
         VendingContents.DataFilterCondition += DataFilterCondition;
