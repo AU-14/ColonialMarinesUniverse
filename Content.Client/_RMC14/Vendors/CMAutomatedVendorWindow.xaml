@@ -2,7 +2,7 @@
 <controls:CMAutomatedVendorWindow
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Vendors"
-    MinSize="620 520">
+    MinSize="720 540">
     <PanelContainer Name="Background" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="10">
             <PanelContainer Name="HeaderStrip" HorizontalExpand="True">
