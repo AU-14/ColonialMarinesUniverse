@@ -1,6 +1,6 @@
 # Contested evacuation
 
-The default-off `cmu.fob.reserve_enabled` flag enables this policy only when the round selects
+The default-on `cmu.fob.reserve_enabled` flag enables this policy only when the round selects
 Distress Signal and the selected colony's authored FOB configuration validates. Changing the CVar during a round
 does not switch the policy. An invalid/missing layout or another preset retains existing behavior.
 
@@ -60,7 +60,7 @@ notification to verify FOB cleanup without starting a full live round.
 | --- | --- |
 | No protected return, hijack/dropdown lock, countdown result or forged stalemate in the enabled pilot | `ContestedEvacuationRejectsStaleWithdrawalLocksReturnAndStalemate` |
 | Decision survives flag changes, bank/map destruction; cleanup releases it | Same test, across those state transitions |
-| Default-off and other presets retain their inherited special-return path | `ContestedEvacuationLeavesLegacyReturnOutsidePilot` |
+| Flag-off and other presets retain their inherited special-return path | `ContestedEvacuationLeavesLegacyReturnOutsidePilot` |
 | Invalid configuration cannot activate the policy | `InvalidAuthoredLayoutRetainsLegacyWithoutPartialDeployment` |
 | Active and exhausted banks permit ordinary authorized launch with the same startup | `ContestedEvacuationUsesNormalBoardingFlightAndReserve` |
 | Navigation access, queen hijack UI, passenger damage and hostile boarding remain effective | Same test through the real flight/access/UI/damage systems |
@@ -81,5 +81,5 @@ powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.Int
 The build reports repository analyzer and dependency advisory warnings.
 
 Live multi-client combat, occupied Alamo/Mohawk arrivals and an entire queen-decline round outcome
-still require manual verification before enabling the pilot. Automated extraction checks are not
+still require manual verification in live play. Automated extraction checks are not
 evidence that either LZ is balanced against a coordinated assault.

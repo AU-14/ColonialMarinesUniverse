@@ -1,6 +1,6 @@
 # Distress Signal FOB map support
 
-`cmu.fob.reserve_enabled` defaults to **false**, is server-only, and is latched at round start.
+`cmu.fob.reserve_enabled` defaults to **true**, is server-only, and is latched at round start.
 All nine currently selectable `DistressSignal.supportedPlanets` entries are authored. Commented-out
 planets and other presets are not enabled. Only primary Marine destinations select a FOB; tactical,
 third-party-only and non-primary pads do not. Force-on-Force faction overrides do not apply in Distress Signal.
@@ -332,9 +332,9 @@ all three relay tiers. Existing FOB regressions cover flag-off/other-preset beha
 repair interruption and evacuation. `RelayInsideDeploymentAreaRejectsLayoutAndRetainsLegacy` covers a bad
 placement failing closed. Successful checks do not replace live multiplayer balance trials on each map.
 
-Keep the flag off until staff select a trial round. Observe patrol round-trip times, build patterns,
-reserve starvation, gun ammunition use and boarding pressure. Use the existing per-round FOB trial report
-and test all ships' ramps and ground-level footprints before a general rollout.
+The feature is enabled by default. Set `cmu.fob.reserve_enabled` to `false` before round start to opt out.
+Observe patrol round-trip times, build patterns, reserve starvation, gun ammunition use and boarding pressure.
+Use the existing per-round FOB trial report and test all ships' ramps and ground-level footprints during live play.
 
 Verified on 2026-11-01: Shared, Client, Server and integration builds succeeded. Sixty unique FOB/sentry
 scenarios passed across the full run and focused rerun, covering all sixteen primary LZs, with no engine

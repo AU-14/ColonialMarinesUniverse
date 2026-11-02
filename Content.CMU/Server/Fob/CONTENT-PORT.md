@@ -1,6 +1,6 @@
 # CMSS13 FOB equipment port
 
-Source: [CMSS13 PR 9293](https://github.com/cmss13-devs/cmss13/pull/9293), final head `2cb8bdbb3e2ae072e3a46293856adddceec334d1`, and its linked design proposal. Original FOB artwork is credited to Thwomper. The PR was closed without merging. This content uses the existing default-off `cmu.fob.reserve_enabled` pilot.
+Source: [CMSS13 PR 9293](https://github.com/cmss13-devs/cmss13/pull/9293), final head `2cb8bdbb3e2ae072e3a46293856adddceec334d1`, and its linked design proposal. Original FOB artwork is credited to Thwomper. The PR was closed without merging. This content uses the default-on `cmu.fob.reserve_enabled` pilot.
 
 | Original equipment | CMU entity | Function |
 | --- | --- | --- |

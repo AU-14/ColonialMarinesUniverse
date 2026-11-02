@@ -1,6 +1,6 @@
 # Physical supply and free deployment
 
-The validated, default-off Distress Signal pilot grants one set of three crates through the friendly carrier's normal requisitions elevator. Raise the lift to receive them. The allocation waits for space if the lift already has too many orders. Existing requisitions access applies. Replacing an elevator, cycling it, making another landing or selecting the alternate LZ cannot reissue the free allocation.
+The validated Distress Signal FOB system is enabled by default and grants one set of three crates through the friendly carrier's normal requisitions elevator. Raise the lift to receive them. The allocation waits for space if the lift already has too many orders. Existing requisitions access applies. Replacing an elevator, cycling it, making another landing or selecting the alternate LZ cannot reissue the free allocation.
 
 The FOB catalog additionally sells **two weaponry crates at 4,000 points each** and **three support crates at 1,500 each** per friendly faction per round. These purchases contain the same hardware and ammunition as the starter crates. The monitoring crate remains a one-time grant. Allowances are shared across carrier terminals, survive console replacement/catalog rebuilding, never replenish, and reset at round cleanup. Failed checkouts do not spend an allowance. Round-limited kits stay whole crates rather than entering the itemized catalog. The two deployed-platform limit and single backup charge remain unchanged.
 
@@ -26,7 +26,7 @@ Free placement deliberately replaces the original fixed-sector layout. Map valid
 
 ## Verification
 
-On 2026-11-02, the additional-purchase and homing update built Shared, Client and Server. All ten relevant regression cases passed across focused runs: both default-off/enabled purchase cases, four missile cases, warning cancellation, disabled/unregistered firing, finite ammunition and 360-degree heavy tracking. The purchase scenarios exercise rejected payment, real checkout charges, shared limits across replacement consoles and catalog rebuilds. The missile scenarios launch from a distant sensor behind the gun, retain the original target through blocked sight, apply direct plus blast damage, and commit permanently to the last position after range, roofing or sensor loss.
+On 2026-11-02, the additional-purchase and homing update built Shared, Client and Server. All ten relevant regression cases passed across focused runs: both flag-off/enabled purchase cases, four missile cases, warning cancellation, disabled/unregistered firing, finite ammunition and 360-degree heavy tracking. The purchase scenarios exercise rejected payment, real checkout charges, shared limits across replacement consoles and catalog rebuilds. The missile scenarios launch from a distant sensor behind the gun, retain the original target through blocked sight, apply direct plus blast damage, and commit permanently to the last position after range, roofing or sensor loss.
 
 ```powershell
 powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~SensorRocketKeepsOriginalTargetThenCommitsToLastPosition'
@@ -41,9 +41,9 @@ On 2026-11-01, Shared, Client, Server and integration tests built. The focused r
 powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMUFob|FullyQualifiedName~DropshipSentryRegressionTest'
 ```
 
-The new cases exercise actual requisitions delivery and assembly at both Nexus and Robotics, rejected alternate-faction/default-off delivery, duplicate shipment prevention, terminal range rejection, platform relocation and the two-slot budget, blocked fence deployment, and damage-preserving recovery. Existing flight tests verify that the logical bank stays groundside during departure. Modules use entity-relative magazine fills so cargo preparation in nullspace cannot deliver empty weapons.
+The new cases exercise actual requisitions delivery and assembly at both Nexus and Robotics, rejected alternate-faction/flag-off delivery, duplicate shipment prevention, terminal range rejection, platform relocation and the two-slot budget, blocked fence deployment, and damage-preserving recovery. Existing flight tests verify that the logical bank stays groundside during departure. Modules use entity-relative magazine fills so cargo preparation in nullspace cannot deliver empty weapons.
 
-Log: `.codex/logs/test-20261101-125911-430.log`. The geometry recheck found clear candidate space at both LZs and confirmed relay separation. Sprite-state/guide references, all 168 imported source frames, UTF-8/LF formatting and `git diff --check` passed. Repository build warnings remain. Occupied live multiplayer layouts and combat balance are not verified by these checks; `cmu.fob.reserve_enabled` remains false by default.
+Log: `.codex/logs/test-20261101-125911-430.log`. The geometry recheck found clear candidate space at both LZs and confirmed relay separation. Sprite-state/guide references, all 168 imported source frames, UTF-8/LF formatting and `git diff --check` passed. Repository build warnings remain. Occupied live multiplayer layouts and combat balance are not verified by these checks. Set `cmu.fob.reserve_enabled` to false before round start to retain legacy behavior.
 
 The subsequent 2026-11-01 balance adjustment doubled the starting reserve (4→8 minutes), capacity (6→12), relay reward (3→6) and one-use backup (1→2). The five-minute successful-mission interval is unchanged, so consistently successful patrols can sustain support power; finite ammunition and destructible hardware remain independent limits. The player guide and equipment descriptions match the new values.
 

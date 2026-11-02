@@ -1,6 +1,6 @@
 # Player information and trial reporting
 
-All runtime behavior follows the existing round-latched, default-off `cmu.fob.reserve_enabled` flag.
+All runtime behavior follows the existing round-latched, default-on `cmu.fob.reserve_enabled` flag.
 The validated Distress Signal pilot enables one shipside supply delivery. First friendly landing selects the 40-tile deployment area and spawns remote relay objectives; players transport and assemble the support equipment.
 
 ## Player information
@@ -96,8 +96,7 @@ instructions are included in the [2026-11-01 completion verification](LOGISTICS.
 | Actual flight generates an observation without closing the bank | `ContestedEvacuationUsesNormalBoardingFlightAndReserve` |
 | Standalone localized guide parses with the real client document parser | Real `DocumentParsingManager` and Fluent loader in a temporary client harness (removed after validation) |
 
-Live readability, radio audibility and crowded multi-client map views still need playtesting before
-the default-off flag is enabled for ordinary rounds.
+Live readability, radio audibility and crowded multi-client map views still need playtesting.
 
 Validation on 2026-10-27: the affected Shared, Server and Client projects built, and the focused
 FOB/tactical-map regression run passed **41 tests, zero failed or skipped**:

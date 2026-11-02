@@ -13,9 +13,9 @@ finite ammunition, powerloader module swaps and deliberate CMU balance adaptatio
 See [physical supply and free deployment](LOGISTICS.md) for the three shipside crates, 40-tile
 deployment radius, platform relocation and recoverable fence stacks.
 
-`cmu.fob.reserve_enabled` defaults to `false` and is sampled on `RoundStartingEvent`.
-Changing it during a round only affects a subsequent round. A completed round closes its networks;
-round cleanup removes them and permits a fresh starting reserve.
+`cmu.fob.reserve_enabled` defaults to `true` and is sampled on `RoundStartingEvent`.
+Set it to `false` before round start to opt out. Changing it during a round only affects a subsequent round.
+A completed round closes its networks; round cleanup removes them and permits a fresh starting reserve.
 
 ## Integration contract
 
@@ -151,7 +151,7 @@ nonzero durations. It covers:
 | Worker lock and competing alternatives | `FasterAlternativeCancelsOtherRepairAndOperatorsCannotStack` |
 | Actual client UI, training, faction and reach checks | `ControlUiEnforcesTrainingTimersAndRechecksFactionAndReach` |
 | Broken control, repair and replacement preserve the bank | `BrokenControlStopsSupportAndRepairOrReplacementNeverRefillsIt` |
-| Default-off equipment cannot open or repair | `DisabledEquipmentCannotCreateBanksOpenControlsOrStartRepairs` |
+| Flag-off equipment cannot open or repair | `DisabledEquipmentCannotCreateBanksOpenControlsOrStartRepairs` |
 | Disabled/unregistered weapons cannot fire through forced modes | `DisabledAndUnregisteredWeaponsRejectForcedFiring` |
 | Two-slot budget, startup/acquisition warning, real shots and ammo exhaustion | `TwoMountsWarnBeforeFiringAndExhaustFiniteAmmoWithoutRefills` |
 | Range, wall/door LOS, burrow/vent, map and IFF loss restart acquisition | `GeometryConcealmentAndIffLossRequireFreshAcquisition` |
@@ -180,5 +180,8 @@ Map entity IDs/references, sprite assets, UTF-8/LF and final diff checks passed.
 The test harness also logged a caught antag-pity lookup error for its missing `cmu_antag_pity` table;
 all cases passed. This feature does not change antag-pity or database code.
 
-Visual and multi-client combat playtesting remains necessary
-before enabling a playable pilot; automated geometry tests do not establish fair map coverage or balance.
+The default-on follow-up rebuilt the content projects and passed five focused cases covering round-latched
+configuration, explicit opt-out, other presets and first-landing activation, with zero failures or skips.
+
+Visual and multi-client combat playtesting remains necessary; automated geometry tests do not establish
+fair map coverage or balance.

@@ -32,7 +32,7 @@ public sealed partial class CMUFobMapTest
             var category = computer.Categories.FindIndex(c => c.Entries.Any(e => e.Crate.Id == "CMUFobWeaponryCrate"));
             if (!enabled)
             {
-                Assert.That(category, Is.EqualTo(-1), "Default-off rounds cannot buy FOB hardware.");
+                Assert.That(category, Is.EqualTo(-1), "Disabled rounds cannot buy FOB hardware.");
                 return;
             }
             Assert.That(category, Is.GreaterThanOrEqualTo(0));

@@ -1,6 +1,6 @@
 # FOB equipment presentation
 
-All added feedback is gated by the round-latched, default-off FOB reserve flag. Deployment uses a
+All added feedback is gated by the round-latched, default-on FOB reserve flag. Deployment uses a
 40-tile radius; shrinking the radius does not move authored relays or landing exclusions.
 
 | Equipment | Feedback |

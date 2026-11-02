@@ -1,6 +1,6 @@
 # FOB weapon damage snapshot
 
-Updated 2026-11-02 after the direct-rocket damage increase. The feature remains default off.
+Updated 2026-11-02 after the direct-rocket damage increase. The feature is enabled by default for validated Distress Signal rounds.
 
 ## Warhead behavior
 

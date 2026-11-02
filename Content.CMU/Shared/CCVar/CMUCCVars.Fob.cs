@@ -9,5 +9,5 @@ public sealed partial class CCVars
     /// equipment, legacy-defense replacement, contested evacuation, player information and trial reporting.
     /// </summary>
     public static readonly CVarDef<bool> CMUFobReserveEnabled =
-        CVarDef.Create("cmu.fob.reserve_enabled", false, CVar.SERVERONLY);
+        CVarDef.Create("cmu.fob.reserve_enabled", true, CVar.SERVERONLY);
 }
