@@ -16,6 +16,7 @@ cmu-fob-relay-repaired = Relay repaired. Added {$seconds} seconds to the FOB res
 cmu-fob-relay-examine-active = This relay is assigned for repair. Use a screwdriver or lit, fueled welder; completed work transfers reserve immediately.
 cmu-fob-relay-examine-inactive = No repair reward is currently available at this relay.
 cmu-fob-relay-location = {$name} ({$x}, {$y})
+cmu-fob-relay-announcement = FOB relay pair available: {$first} OR {$second}. Repair either relay to replenish support reserve.
 cmu-fob-reserve = Stored support time: {$time}
 cmu-fob-state-standby = Standby — reserve is preserved.
 cmu-fob-state-starting = Starting support — reserve is draining.
@@ -77,6 +78,7 @@ cmu-fob-guide-reserve = [bold]Local control[/bold]
     Warnings occur at 2 minutes, 1 minute and depletion. Nearby Marines see a local warning; the command-radio call uses normal comms and can be blocked or jammed. Replenishment must rise 15 seconds above a warning threshold to rearm it.
 cmu-fob-guide-relays = [bold]Repair either relay[/bold]
     The faction map marks two alternatives for one reward. The local panel gives their names, coordinates, expiry and actual available reward. Use a screwdriver or lit welder in your active hand: construction skill 3 takes 30 seconds; other faction Marines take 45. A welder must remain lit and fueled throughout the repair.
+    Each new pair is announced once on command radio with both relay names and coordinates. Normal comms outages and jamming can block the call; the map and terminal still show the objectives.
     Movement, damage, incapacitation or losing the tool interrupts repair. Only one worker can repair a relay. Completing either alternative removes both markers and adds up to 6 minutes, capped by bank capacity. At a full bank the job is not consumed. There is no return-trip delivery or need to garrison the relay afterward.
     The next pair is offered 5 minutes after success. Offers expire after 8 minutes, then retry after 30 seconds. Later pairs reach farther inland. No available route means no free reserve.
 cmu-fob-guide-guns = [bold]Breachable support guns[/bold]

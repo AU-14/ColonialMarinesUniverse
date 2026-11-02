@@ -25,6 +25,27 @@ public sealed partial class CMUFobReserveSystem
     private static readonly SoundSpecifier ReserveWarning = new SoundPathSpecifier("/Audio/Effects/double_beep.ogg");
     private static readonly ProtoId<RadioChannelPrototype> CommandChannel = "radioGovforCommand";
 
+    /// <summary>The terminal and radio use the same named world-tile coordinates.</summary>
+    public string GetRelayLocation(EntityUid? uid)
+    {
+        if (uid is not { } relay || !Exists(relay))
+            return string.Empty;
+        var position = _transform.GetWorldPosition(relay);
+        return Loc.GetString("cmu-fob-relay-location", ("name", Name(relay)),
+            ("x", (int) MathF.Floor(position.X)), ("y", (int) MathF.Floor(position.Y)));
+    }
+
+    private void AnnounceRelayPair(Entity<CMUFobNetworkComponent> network, EntityUid first, EntityUid second)
+    {
+        if (network.Comp.Faction != "govfor")
+            return;
+
+        var message = Loc.GetString("cmu-fob-relay-announcement",
+            ("first", GetRelayLocation(first)), ("second", GetRelayLocation(second)));
+        // Only a successful offer calls this; ordinary comms rules apply without retrying blocked messages.
+        _radio.SendRadioMessage(network, message, CommandChannel, network, null);
+    }
+
     private void BeginTrial(Entity<CMUFobNetworkComponent> network, EntityUid site, string? siteId)
     {
         var trial = AddComp<CMUFobTrialComponent>(network);

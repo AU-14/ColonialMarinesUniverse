@@ -9,6 +9,10 @@ The owning faction's tactical map shows both offered relay alternatives with the
 reward. Completion, expiry and network closure remove both alternatives, including stale published
 views. The local panel provides relay names, coordinates, expiry and the actual capped reward.
 An offered relay stays assigned when the bank is full; completion waits for available capacity.
+Each successful pair offer, including the first pair and replacements after completion or expiry, sends
+one command-radio announcement naming both relays and their world-tile coordinates. Coordinates use the
+same formatter as the terminal. Failed offers and scheduler retries send no announcement. Normal tower,
+range and jamming rules still apply; a blocked transmission is not retried, while map markers remain available.
 When no legal pair exists, the panel explicitly reports unavailable relay routes and a retry countdown.
 Server diagnostics include eligible endpoints, candidate pairs and per-endpoint rejection reasons.
 The scheduler retries after 30 seconds without granting reserve and clears the warning on recovery.
@@ -85,11 +89,23 @@ before tuning reserve values or enabling the feature for ordinary rounds.
 
 ## Verification
 
+The 2026-11-02 relay-announcement change built Shared, Client, Server and integration projects and passed
+four focused cases with zero failures or skips: new-pair announcements, reserve warnings, private map
+markers and control UI access. The announcement test observes actual radio-send events and checks both
+names, translated world coordinates, negative-coordinate flooring, duplicate/rejected-offer suppression,
+replacement announcements and normal missing-tower rejection. The test harness still logs its unrelated
+missing `cmu_antag_pity` table; no FOB runtime errors were reported.
+
+```sh
+dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --filter "FullyQualifiedName~InformationRelayOffersAnnounceLocationsOnceWithoutBypassingComms|FullyQualifiedName~InformationWarningsRespectPauseRearmAndCommsWithoutRepeating|FullyQualifiedName~InformationRelayMarkersStayPrivateAndBothDisappearOnResolution|FullyQualifiedName~ControlUiEnforcesTrainingTimersAndRechecksFactionAndReach"
+```
+
 The unavailable-relay state, retry recovery, corrected repair/tool guidance and new supply/deployment
 instructions are included in the [2026-11-01 completion verification](LOGISTICS.md#verification).
 
 | Requirement | Evidence |
 | --- | --- |
+| New-pair command callouts with both names/world coordinates, no duplicate or early announcements, normal comms rejection | `InformationRelayOffersAnnounceLocationsOnceWithoutBypassingComms` |
 | Warning thresholds, pause, hysteresis, no repeats and normal comms rejection | `InformationWarningsRespectPauseRearmAndCommsWithoutRepeating` |
 | Faction privacy, clean sensor sources, no PVS console leak and immediate removal | `InformationRelayMarkersStayPrivateAndBothDisappearOnResolution` |
 | Real gunfire/damage, breakage and empty replacement reflected in status/report | `InformationGunStatusAndTrialReportFollowShotsBreakageAndReplacement` |

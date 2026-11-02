@@ -430,15 +430,6 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
 
     private static int Seconds(TimeSpan time) => Math.Max(0, (int) Math.Ceiling(time.TotalSeconds));
 
-    private string RelayLabel(EntityUid? uid)
-    {
-        if (uid is not { } relay || !Exists(relay))
-            return string.Empty;
-        var position = _transform.GetWorldPosition(relay);
-        return Loc.GetString("cmu-fob-relay-location", ("name", Name(relay)),
-            ("x", (int) MathF.Floor(position.X)), ("y", (int) MathF.Floor(position.Y)));
-    }
-
     private void UpdateControl(Entity<CMUFobControlComponent> control)
     {
         _appearance.SetData(control, CMUFobVisuals.Stowed, !Transform(control).Anchored);
@@ -474,7 +465,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
             Seconds((comp.StartupEndsAt ?? now) - now),
             Seconds((noRelayPair ? retryAt : comp.JobExpiresAt ?? comp.NextJobAt) - now),
             Seconds(TimeSpan.FromTicks(Math.Min(comp.RelayReward.Ticks, (comp.Capacity - remaining).Ticks))),
-            RelayLabel(comp.FirstRelay), RelayLabel(comp.SecondRelay), _defense.GetGunStatus(network),
+            _reserve.GetRelayLocation(comp.FirstRelay), _reserve.GetRelayLocation(comp.SecondRelay), _defense.GetGunStatus(network),
             comp.State == CMUFobReserveState.Standby && remaining > TimeSpan.Zero && now >= comp.RestartAvailableAt,
             comp.DepletesAt != null && now >= comp.MinimumActiveUntil, noRelayPair));
     }

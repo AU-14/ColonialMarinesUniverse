@@ -268,6 +268,7 @@ public sealed partial class CMUFobReserveSystem : EntitySystem
         Comp<CMUFobTrialComponent>(network).Offers++;
         TrialLog(network, "relay_offered", new { generation, first = first.Id, second = second.Id });
         MarkersChanged();
+        AnnounceRelayPair(network, first, second);
         Log.Info($"FOB {network.Comp.Faction} offered relay job {generation}: {first}, {second}.");
         return true;
     }
