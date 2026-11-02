@@ -82,6 +82,8 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
 
         foreach (var layer in animation.Layers)
             SpriteSystem.LayerSetVisible(layer, false);
+        foreach (var layer in animation.StatusLayers)
+            SpriteSystem.LayerSetVisible(layer, false);
         if (SpriteSystem.LayerExists(ent.Owner, ent.Comp.EffectLayer))
             SpriteSystem.LayerSetVisible((ent.Owner, sprite), ent.Comp.EffectLayer, false);
 
@@ -268,6 +270,11 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
     private void DrawIndicator(Entity<CMUFobPresentationComponent> ent, SpriteComponent sprite, CMUFobAnimationComponent animation,
         RSI.State source, Angle yaw, float age, ref int index)
     {
+        if (ent.Comp.Device is CMUFobDeviceAnimation.HeavyGun or CMUFobDeviceAnimation.Rocket)
+        {
+            DrawGunStatus(ent, sprite, animation, age);
+            return;
+        }
         if (animation.Status is CMUFobPresentationStatus.Off or CMUFobPresentationStatus.Broken or CMUFobPresentationStatus.Spent
             || ent.Comp.Device == CMUFobDeviceAnimation.Crate)
             return;
@@ -277,8 +284,6 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
             return;
         var pixel = ent.Comp.Device switch
         {
-            CMUFobDeviceAnimation.HeavyGun => new Vector2(32, 26),
-            CMUFobDeviceAnimation.Rocket => new Vector2(26, 40),
             CMUFobDeviceAnimation.Relay => new Vector2(13, 27),
             CMUFobDeviceAnimation.Terminal => new Vector2(16, 36),
             CMUFobDeviceAnimation.Light => new Vector2(16, 12),
@@ -301,7 +306,8 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
     private SpriteComponent.Layer GetLayer(Entity<CMUFobPresentationComponent> ent, SpriteComponent sprite, CMUFobAnimationComponent animation, int index)
     {
         while (animation.Layers.Count <= index)
-            animation.Layers.Add(SpriteSystem.AddBlankLayer((ent, sprite)));
+            animation.Layers.Add(SpriteSystem.AddBlankLayer((ent, sprite),
+                animation.StatusLayers.Count > 0 ? SpriteSystem.LayerMapGet((ent, sprite), GunStatusLayer.Panel) : null));
         return animation.Layers[index];
     }
 

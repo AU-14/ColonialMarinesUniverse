@@ -28,6 +28,13 @@ shortens a warning or affects reserve/ammunition. The enabled FOB guns suppress
 their inherited muzzle flash because their own shot cue supplies the aligned flash or launcher effects.
 Other guns retain their existing effects. Status lights replace the previous full-body tint pulses.
 
+Both installed guns have a 15-by-7-pixel status panel on the front of the foundation. It stays upright
+while the turret traverses and uses unshaded layers so map lighting cannot hide it. Three solid green
+segments mean active; a red dash means off. Startup chases amber segments, acquisition pulses all three,
+and reload shows amber pause bars. An empty gun shows a red hollow box and a broken gun a red X.
+Shape and motion distinguish the states as well as colour. Folded guns hide the panel. The panel reads
+the existing server-published state and does not change when the gun is allowed to fire.
+
 In-game review should check legibility against bright/dark terrain, directional recoil with camera
 rotation, and sound levels around a fully assembled FOB. Colours supplement the existing terminal,
 examine text, warning messages and sound cues; they are not the only way to identify a state.
