@@ -20,7 +20,7 @@
     key: enum.AmbassadorConsoleUi.Key
   - type: AmbassadorConsole
     budget: 500
-    replenishAmount: 10
+    replenishAmount: 2
     replenishInterval: 60
   - type: UserInterface
     interfaces:
@@ -28,6 +28,10 @@
         type: AmbassadorConsoleBui
       enum.AmbassadorThirdPartyUi.Key:
         type: AmbassadorThirdPartyBui
+      enum.AmbassadorWorldMapUi.Key: # RUMC: the window of the world map
+        type: AmbassadorWorldMapBui
+      enum.AmbassadorMotherUi.Key: # RUMC: the window of the exchange with the mother faction
+        type: AmbassadorMotherBui
   - type: ItemSlots
     slots:
       CashSlot:
@@ -58,7 +62,7 @@
   - type: AmbassadorConsole
     factionName: UPP
     budget: 500
-    replenishAmount: 10
+    replenishAmount: 2
     replenishInterval: 60
     callableParties:
       UPPGROMRRUSquad: 7000
@@ -88,7 +92,7 @@
   - type: AmbassadorConsole
     factionName: United Americas
     budget: 500
-    replenishAmount: 10
+    replenishAmount: 2
     replenishInterval: 60
     callableParties:
       MarineSecurityGuard: 2000
@@ -112,7 +116,7 @@
   - type: AmbassadorConsole
     factionName: Three World Empire
     budget: 500
-    replenishAmount: 10
+    replenishAmount: 2
     replenishInterval: 60
     callableParties:
       RMCRRT: 11000
@@ -136,7 +140,7 @@
   - type: AmbassadorConsole
     factionName: Independent Core System Colonies
     budget: 500
-    replenishAmount: 10
+    replenishAmount: 2
     replenishInterval: 60
     callableParties:
       Freelancers: 7000

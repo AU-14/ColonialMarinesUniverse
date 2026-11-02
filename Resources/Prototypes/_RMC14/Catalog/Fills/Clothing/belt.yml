@@ -12,6 +12,11 @@
     - id: CMWirecutter
     - id: RMCCableCoil30
     - id: CMMultitool
+    # CMU14 Begin: the hand saw, the hammer and the shovel in the belt of the toolkit
+    - id: RUMCHandSaw
+    - id: RUMCHammer
+    - id: AU14ToolShovel
+    # CMU14 End
 
 - type: entity
   parent: CMBeltUtilityCombat
