@@ -181,9 +181,6 @@
           radius: 0.3
         hard: false
         layer: [LowImpassable]
-  - type: Appearance
-    appearanceDataInit:
-      enum.CMUFobVisuals.Stowed: !type:Bool true
 
 - type: entity
   parent: CMUFobSupportGun

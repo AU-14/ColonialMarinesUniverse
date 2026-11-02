@@ -67,6 +67,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
         SubscribeLocalEvent<CMUFobRepairableComponent, ComponentShutdown>(OnRepairShutdown);
         SubscribeLocalEvent<CMUFobRepairableComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CMUFobRelayComponent, CMUFobRelayChangedEvent>(OnRelayChanged);
+        SubscribeLocalEvent<CMUFobControlComponent, MapInitEvent>(OnControlMapInit);
         SubscribeLocalEvent<CMUFobControlComponent, ActivatableUIOpenAttemptEvent>(OnOpenAttempt);
         SubscribeLocalEvent<CMUFobControlComponent, BoundUIOpenedEvent>(OnOpened);
         SubscribeLocalEvent<CMUFobControlComponent, ComponentShutdown>(OnControlShutdown);
@@ -76,6 +77,12 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _controls.Clear());
         Subs.BuiEvents<CMUFobControlComponent>(CMUFobControlUiKey.Key, subs =>
             subs.Event<CMUFobControlMessage>(OnControlMessage));
+    }
+
+    private void OnControlMapInit(Entity<CMUFobControlComponent> control, ref MapInitEvent args)
+    {
+        // This engine cannot deserialize boxed Boolean appearance defaults from YAML.
+        _appearance.SetData(control, CMUFobVisuals.Stowed, !Transform(control).Anchored);
     }
 
     private bool CanInteract(EntityUid target, EntityUid user, string faction)

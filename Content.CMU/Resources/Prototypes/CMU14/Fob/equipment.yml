@@ -130,6 +130,3 @@
     anchored: false
   - type: Physics
     bodyType: Dynamic
-  - type: Appearance
-    appearanceDataInit:
-      enum.CMUFobVisuals.Stowed: !type:Bool true

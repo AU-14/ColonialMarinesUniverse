@@ -23,8 +23,15 @@ public sealed partial class CMUFobDefenseSystem
     {
         SubscribeLocalEvent<CMUFobSupportGunComponent, PowerLoaderInteractEvent>(OnModuleInstall);
         SubscribeLocalEvent<CMUFobSupportGunComponent, GettingPickedUpAttemptEvent>(OnModulePickup);
+        SubscribeLocalEvent<CMUFobGunMountComponent, MapInitEvent>(OnPlatformMapInit);
         SubscribeLocalEvent<CMUFobGunMountComponent, InteractUsingEvent>(OnPlatformWrench,
             before: [typeof(SentrySystem), typeof(CMUSentryRepairSystem)]);
+    }
+
+    private void OnPlatformMapInit(Entity<CMUFobGunMountComponent> mount, ref MapInitEvent args)
+    {
+        // This engine cannot deserialize boxed Boolean appearance defaults from YAML.
+        _appearance.SetData(mount, CMUFobVisuals.Stowed, !Transform(mount).Anchored);
     }
 
     private void OnPlatformWrench(Entity<CMUFobGunMountComponent> mount, ref InteractUsingEvent args)
