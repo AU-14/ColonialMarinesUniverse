@@ -206,6 +206,6 @@
   suffix: Deployable, Down
   components:
   - type: Sprite
-    sprite: CMU14/Structures/deployableladder.rsi
+    sprite: _RMC14/Structures/ladder.rsi
     drawdepth: WallTops
-    state: deployed
+    state: ladderdown

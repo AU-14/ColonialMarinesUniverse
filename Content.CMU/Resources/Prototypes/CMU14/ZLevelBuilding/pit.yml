@@ -58,9 +58,9 @@
   id: RUMCPitLadderDown
   components:
   - type: Sprite
-    sprite: CMU14/Structures/pit_ladder.rsi
+    sprite: _RMC14/Structures/ladder.rsi
     drawdepth: WallTops
-    state: ladder
+    state: ladderdown
   - type: CMUZLevelFallThrough
   - type: ZDestroyedOnCollapse
 
