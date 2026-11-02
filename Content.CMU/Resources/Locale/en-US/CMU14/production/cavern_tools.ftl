@@ -18,3 +18,15 @@ cmu-caverns-preview-seed = Set a numeric seed before previewing, for example: cm
 cmu-caverns-preview-depth = Preview depth must be from Z-3 through Z-4096.
 cmu-caverns-preview = Pending seed {$seed}, geology plan for the band containing Z{$depth}. Primary biomes in a 5x5 region window around the origin; each region is {$size} tiles wide. Columns X=-2 to 2; rows Y=2 to -2. This does not generate terrain or show the solid separator.
 cmu-caverns-preview-legend = {$legend}. Counts include satellite chambers, which can have different biomes. Repeat the seed AND generation settings to reproduce this world.
+cmu-caverns-complete-setting = Choose a setting. Changes apply to Insurgency before the round starts and before terrain is generated.
+cmu-caverns-complete-status = Show the seed, settings and biome weights.
+cmu-caverns-complete-seed = Positive integer for a repeatable world, or random.
+cmu-caverns-complete-preset = Choose a biome mix: Balanced, Dry, Flooded, Volcanic or Biological.
+cmu-caverns-complete-biome = Choose a biome, then enter its relative weight.
+cmu-caverns-complete-weight = Relative weight 0–1000: 0 disables this biome; higher values make it more common. Not a percentage.
+cmu-caverns-complete-variant = Force one biome, or mixed to use the biome weights.
+cmu-caverns-complete-layout = Force one chamber shape, or mixed for varied shapes.
+cmu-caverns-complete-size = Region spacing in tiles: 48–160. Any integer in this range is allowed.
+cmu-caverns-complete-height = Cavern band height: 4–9 Z-levels.
+cmu-caverns-complete-preview = Preview a depth from -3 to -4096 without generating terrain. Set a numeric seed first.
+cmu-caverns-complete-reset = Restore the default settings and random seed.

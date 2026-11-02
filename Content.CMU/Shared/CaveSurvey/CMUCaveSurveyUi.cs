@@ -1,6 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Content.Shared.Actions;
+using Content.Shared.Ghost.Components;
 
 namespace Content.Shared.CMU14.CaveSurvey;
 
@@ -22,7 +23,7 @@ public struct CMUOpenCaveSurveyEvent
 [Serializable, NetSerializable]
 public sealed class CMUCaveSurveyViewMessage : BoundUserInterfaceMessage
 {
-    public Vector2i Origin;
+    public Vector2i Focus;
     public int MinDepth = -8;
     public bool Center = true;
     public bool NextWorld;
@@ -33,12 +34,15 @@ public sealed class CMUCaveSurveyViewMessage : BoundUserInterfaceMessage
 public sealed class CMUCaveSurveySurfaceMessage : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
-public sealed class CMUCaveSurveySectionMessage(int requestId, NetEntity world, string name, int blocks) : BoundUserInterfaceMessage
+public sealed class CMUCaveSurveySectionMessage(int requestId, NetEntity world, string name, int blocks,
+    Vector2i min, Vector2i max) : BoundUserInterfaceMessage
 {
     public int RequestId = requestId;
     public NetEntity World = world;
     public string Name = name;
     public int Blocks = blocks;
+    public Vector2i Min = min;
+    public Vector2i Max = max;
 }
 
 public sealed partial class CMUOpenCaveSurveyActionEvent : InstantActionEvent;
@@ -58,16 +62,22 @@ public sealed partial class CMUCaveSurveyAccessSystem : EntitySystem
     {
         if (args.Handled) return;
         args.Handled = true;
-        var open = new CMUOpenCaveSurveyEvent();
-        OnOpen(ent, ref open);
+        Toggle(ent);
     }
 
     private void OnOpen(Entity<CMUCaveSurveyAccessComponent> ent, ref CMUOpenCaveSurveyEvent args)
     {
+        // Observers have a separate mining action; keep their colony tactical map available.
+        if (HasComp<GhostComponent>(ent)) return;
         args.Handled = true;
-        if (_ui.IsUiOpen(ent.Owner, CMUCaveSurveyUiKey.Key, ent.Owner))
-            _ui.CloseUi(ent.Owner, CMUCaveSurveyUiKey.Key, ent.Owner);
+        Toggle(ent);
+    }
+
+    private void Toggle(EntityUid actor)
+    {
+        if (_ui.IsUiOpen(actor, CMUCaveSurveyUiKey.Key, actor))
+            _ui.CloseUi(actor, CMUCaveSurveyUiKey.Key, actor);
         else
-            _ui.TryOpenUi(ent.Owner, CMUCaveSurveyUiKey.Key, ent.Owner);
+            _ui.TryOpenUi(actor, CMUCaveSurveyUiKey.Key, actor);
     }
 }

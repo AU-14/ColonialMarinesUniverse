@@ -11,6 +11,7 @@ using Content.Shared.Doors;
 using Content.Shared.Doors.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Systems;
@@ -41,6 +42,7 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
     private const int MaxWorlds = 4;
     private const int ObserversPerTick = 8;
     private static readonly EntProtoId SurveyAction = "CMUActionCaveSurvey";
+    private static readonly EntProtoId GhostSurveyAction = "CMUActionGhostCaveSurvey";
     private static readonly CMUCaveSurveyUiKey Key = CMUCaveSurveyUiKey.Key;
     private readonly Queue<EntityUid> _observers = new();
     private readonly List<CMUCaveSurveySample> _samples = new(16);
@@ -52,8 +54,10 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
     {
         SubscribeLocalEvent<CMUCaveSurveyMapComponent, UseInHandEvent>(OnRead);
         SubscribeLocalEvent<CMUCaveSurveyMapComponent, GetVerbsEvent<AlternativeVerb>>(OnMapVerbs);
+        SubscribeLocalEvent<GhostComponent, PlayerAttachedEvent>(OnGhostAttached);
         Subs.BuiEvents<CMUCaveSurveyAccessComponent>(Key, subs =>
         {
+            subs.Event<BoundUIOpenedEvent>(OnOpened);
             subs.Event<CMUCaveSurveyViewMessage>(OnView);
             subs.Event<CMUCaveSurveySurfaceMessage>(OnSurface);
             subs.Event<BoundUIClosedEvent>((Entity<CMUCaveSurveyAccessComponent> e, ref BoundUIClosedEvent m) => _viewGenerations.Remove(e.Owner));
@@ -99,7 +103,11 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
     /// <summary>Small, wall-clipped observations of existing terrain. This never invokes generation.</summary>
     public void Observe(EntityUid actor)
     {
-        if (!Exists(actor) || !_mob.IsAlive(actor) || HasComp<Content.Shared.Ghost.Components.GhostComponent>(actor)) return;
+        if (!Exists(actor)) return;
+        if (HasComp<GhostComponent>(actor))
+            GrantAccess(actor);
+        else if (!_mob.IsAlive(actor))
+            return;
         var xform = Transform(actor);
         if (xform.MapUid is not { } map || !TryComp<CMUZLevelMapComponent>(map, out var level) || level.Depth >= 0 ||
             !TryComp<MapGridComponent>(xform.GridUid ?? map, out var grid)) return;
@@ -194,10 +202,23 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
     private void GrantAccess(EntityUid actor)
     {
         if (HasComp<CMUCaveSurveyAccessComponent>(actor)) return;
+        var ghost = HasComp<GhostComponent>(actor);
         EnsureComp<CMUCaveSurveyAccessComponent>(actor);
-        _ui.SetUi(actor, Key, new InterfaceData("CMUCaveSurveyBui"));
-        if (!HasComp<TacticalMapUserComponent>(actor))
-            EnsureComp<CMUCaveSurveyMemoryComponent>(actor).Action = _actions.AddAction(actor, SurveyAction);
+        // Ghosts cannot pass normal interaction checks. This UI only reads their own observations.
+        _ui.SetUi(actor, Key, new InterfaceData("CMUCaveSurveyBui", requireInputValidation: !ghost));
+        if (ghost || !HasComp<TacticalMapUserComponent>(actor))
+            EnsureComp<CMUCaveSurveyMemoryComponent>(actor).Action = _actions.AddAction(actor, ghost ? GhostSurveyAction : SurveyAction);
+    }
+
+    private void OnGhostAttached(Entity<GhostComponent> ent, ref PlayerAttachedEvent args) => GrantAccess(ent);
+
+    private void OnOpened(Entity<CMUCaveSurveyAccessComponent> ent, ref BoundUIOpenedEvent args)
+    {
+        if (args.Actor != ent.Owner || !HasComp<GhostComponent>(ent)) return;
+        Observe(ent);
+        if (TryComp<CMUCaveSurveyMemoryComponent>(ent, out var memory) && memory.Worlds.Count > 0) return;
+        _ui.CloseUi(ent.Owner, Key, ent.Owner);
+        _popup.PopupEntity(Loc.GetString("cmu-survey-visit-underground"), ent, ent);
     }
 
     public void Open(EntityUid actor)
@@ -207,7 +228,7 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
         _ui.TryOpenUi(actor, Key, actor);
     }
 
-    private bool CanUseMap(EntityUid actor, EntityUid map) => Exists(actor) && Exists(map) && _mob.IsAlive(actor) &&
+    private bool CanUseMap(EntityUid actor, EntityUid map) => Exists(actor) && Exists(map) && !HasComp<GhostComponent>(actor) && _mob.IsAlive(actor) &&
         HasComp<CMUCaveSurveyMapComponent>(map) && _interaction.InRangeAndAccessible(actor, map);
 
     private void OnRead(Entity<CMUCaveSurveyMapComponent> ent, ref UseInHandEvent args)

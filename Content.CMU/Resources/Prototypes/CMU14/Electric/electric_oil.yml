@@ -41,6 +41,10 @@
   name: oil pump
   description: A pump that goes down into a deposit of crude oil and brings it up into its tank. Set it on a deposit, give it power, and join a pipe to its outlet with a screwdriver.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: NodeContainer
     examinable: true
     nodes:
@@ -95,6 +99,10 @@
   name: oil tank
   description: A big tank for liquids, two tiles wide, made for oil and fuel. Pour a canister into it, draw from it with a container in the hand using the right click, or join pipes to its inlet and outlet with a screwdriver. It takes any liquid.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Oil/tank_wide.rsi
     state: off
@@ -151,6 +159,10 @@
   name: oil barrel
   description: A barrel of oil or fuel, small enough to roll. Pour into it, draw from it with a container in the hand using the right click, or join pipes with a screwdriver.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Electric/items.rsi
     state: OilBarrel
@@ -187,6 +199,10 @@
   name: fuel canister
   description: A canister for fuel. Pour it into a generator, or draw it full from a tank with the right click.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Electric/items.rsi
     state: FuelCanister
@@ -215,6 +231,10 @@
   name: diesel generator
   description: A generator that burns diesel. Pour diesel into it from a canister (or pipe it in), join a high voltage cable, and it makes power for as long as the fuel lasts.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Oil/generator.rsi
     noRot: true
@@ -274,6 +294,10 @@
   name: gas turbine
   description: A turbine that burns the gas of the refinery, benzene or naphtha. Join the pipes with the fuel to its inlets (or pour it in), join a high voltage cable, and it makes power for as long as the fuel lasts.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Oil/generator.rsi
     noRot: true
@@ -339,6 +363,10 @@
   name: distillation tower
   description: A tower that splits crude oil into naphtha, light fuel, heavy fuel and gas, each coming out of a port of its own. Join the pipe with the oil to the inlet.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Oil/tower.rsi
     noRot: true
@@ -392,6 +420,10 @@
   name: fuel blender
   description: Mixes light and heavy fuel into diesel in the right proportion.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Oil/blender.rsi
     noRot: true
@@ -435,6 +467,10 @@
   name: steam cracker
   description: Breaks naphtha and gas apart with steam into ethylene, the gas that plastic is made of.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Oil/cracker.rsi
     noRot: true
@@ -478,6 +514,10 @@
   name: polymerizer
   description: Turns ethylene into plastic pellets. The pellets are pressed into sheets in the bending machine.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Oil/polymerizer.rsi
     noRot: true
