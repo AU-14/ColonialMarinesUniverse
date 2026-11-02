@@ -2085,8 +2085,9 @@
     sprite: CMU14/Yautja/masks/pred_mask_elite_anubys.rsi
     layers:
     - state: icon
+  # cmss13 draws this mask from a 64x64 sheet, the 32x32 copy cut the top off
   - type: Clothing
-    sprite: CMU14/Yautja/masks/pred_mask_elite_anubys.rsi
+    sprite: CMU14/Yautja/masks/pred_mask_elite_anubys_worn.rsi
     slots:
     - Mask
     - Suitstorage
@@ -2133,8 +2134,9 @@
     sprite: CMU14/Yautja/masks/pred_mask_elite_ronin.rsi
     layers:
     - state: icon
+  # cmss13 draws this mask from a 64x64 sheet, the 32x32 copy cut the top off
   - type: Clothing
-    sprite: CMU14/Yautja/masks/pred_mask_elite_ronin.rsi
+    sprite: CMU14/Yautja/masks/pred_mask_elite_ronin_worn.rsi
     slots:
     - Mask
     - Suitstorage

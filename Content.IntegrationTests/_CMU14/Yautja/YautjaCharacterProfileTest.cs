@@ -538,8 +538,9 @@ public sealed class YautjaCharacterProfileTest
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(rsiPath), row.Id);
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("icon"), row.Id);
                     Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
-                    Assert.That(clothing!.RsiPath, Is.EqualTo($"CMU14/Yautja/masks/{row.Rsi}.rsi"), row.Id);
-                    Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True, row.Id);
+                    var wornRsi = row.WornRsi ?? row.Rsi;
+                    Assert.That(clothing!.RsiPath, Is.EqualTo($"CMU14/Yautja/masks/{wornRsi}.rsi"), row.Id);
+                    Assert.That(cache.TryGetResource<RSIResource>(new ResPath($"/Textures/CMU14/Yautja/masks/{wornRsi}.rsi"), out var resource), Is.True, row.Id);
                     Assert.That(resource!.RSI.Size, Is.EqualTo(row.RsiSize), row.Id);
                     Assert.That(resource.RSI.TryGetState("equipped-MASK", out _), Is.True, row.Id);
                 });
@@ -1015,10 +1016,11 @@ public sealed class YautjaCharacterProfileTest
 
         yield return HunterSpecialMask("CMUYautjaMaskEliteCleopatra", hunterName, hunterDescription, "pred_mask_elite_cleopatra");
         yield return HunterSpecialMask("CMUYautjaMaskElitePlated", hunterName, hunterDescription, "pred_mask_elite_plated");
-        yield return HunterSpecialMask("CMUYautjaMaskUniqueAnubys", hunterName, hunterDescription, "pred_mask_elite_anubys");
+        // cmss13 draws these two from pred_gear64.dmi, so the worn sprite is its own 64x64 RSI
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueAnubys", hunterName, hunterDescription, "pred_mask_elite_anubys", new Vector2i(64, 64), "pred_mask_elite_anubys_worn");
         yield return HunterSpecialMask("CMUYautjaMaskUniqueCleopatra", hunterName, hunterDescription, "pred_mask_elite_cleopatra");
         yield return HunterSpecialMask("CMUYautjaMaskUniquePlated", hunterName, hunterDescription, "pred_mask_elite_plated");
-        yield return HunterSpecialMask("CMUYautjaMaskUniqueRonin", hunterName, hunterDescription, "pred_mask_elite_ronin");
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueRonin", hunterName, hunterDescription, "pred_mask_elite_ronin", new Vector2i(64, 64), "pred_mask_elite_ronin_worn");
 
         foreach (var material in new[] { "Bone", "Crimson", "Ebony", "Gold", "Silver" })
             yield return new SpecialMaskRow(
@@ -1039,7 +1041,8 @@ public sealed class YautjaCharacterProfileTest
         string name,
         string description,
         string rsi,
-        Vector2i? rsiSize = null)
+        Vector2i? rsiSize = null,
+        string? wornRsi = null)
     {
         return new SpecialMaskRow(
             id,
@@ -1051,7 +1054,8 @@ public sealed class YautjaCharacterProfileTest
             30,
             25,
             10,
-            100);
+            100,
+            wornRsi);
     }
 
     // CM-SS13 has six predator skins: code/__DEFINES/pred.dm:11 PRED_SKIN_COLOR = tan, green, purple, blue, red,
@@ -1098,7 +1102,8 @@ public sealed class YautjaCharacterProfileTest
         int Bullet,
         int Bio,
         int Explosion,
-        int AntiHug);
+        int AntiHug,
+        string? WornRsi = null);
 
     [Test]
     public void SkinChoiceSurvivesTheSavedProfileRoundTrip()
