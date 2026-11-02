@@ -56,6 +56,7 @@ public sealed partial class TemporarySpeedModifiersSystem : EntitySystem
         args.SprintModifier = newModifier;
     }
 
+    // CMU14 method: remove expired entries in place without changing refresh or prediction timing.
     public override void Update(float frameTime)
     {
         var time = _timing.CurTime;
@@ -63,22 +64,18 @@ public sealed partial class TemporarySpeedModifiersSystem : EntitySystem
 
         while (speedModsQuery.MoveNext(out var uid, out var speedModsComponent))
         {
-            var toRemove = new List<(TimeSpan ExpiresAt, float Walk, float Sprint)>();
-
-            foreach (var modifier in speedModsComponent.Modifiers)
+            var removed = false;
+            for (var i = speedModsComponent.Modifiers.Count - 1; i >= 0; i--)
             {
+                var modifier = speedModsComponent.Modifiers[i];
                 if (modifier.ExpiresAt > time)
                     continue;
 
-                toRemove.Add(modifier);
+                speedModsComponent.Modifiers.RemoveAt(i);
+                removed = true;
             }
 
-            foreach (var modifier in toRemove)
-            {
-                speedModsComponent.Modifiers.Remove(modifier);
-            }
-
-            if (toRemove.Count > 0)
+            if (removed)
                 Dirty(uid, speedModsComponent);
 
             if (speedModsComponent.Modifiers.Count <= 0)

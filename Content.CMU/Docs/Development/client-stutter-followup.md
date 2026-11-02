@@ -97,7 +97,7 @@ To rerun the permanent coverage through the isolated repository wrapper:
 
 ```powershell
 powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMUZAudioLifecycleTest'
-powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMUGhostAppearanceClientTest|FullyQualifiedName~CMUVehicleAudioAdmissionTest|FullyQualifiedName~ClientAssemblyPassesSandboxWithoutLoadingPrototypes'
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMUGhostAppearanceClientTest|FullyQualifiedName~CMUVehicleAudioAdmissionTest|FullyQualifiedName~ContentAssembliesPassSandboxWithoutLoadingPrototypes'
 ```
 
 Meaningful regression coverage:

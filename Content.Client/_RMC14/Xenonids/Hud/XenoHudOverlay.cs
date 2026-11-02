@@ -58,14 +58,6 @@ public sealed partial class XenoHudOverlay : Overlay
     private static readonly Rsi[] ShieldIcons = CreateBarIcons("xenoshield");
     private static readonly Rsi[] EnergyIcons = CreateBarIcons("xenoenergy");
     private static readonly Rsi[] EnergyCapIcons = CreateBarIcons("cap");
-    private static readonly Rsi[] HypertensionIcons =
-    [
-        new(RsiPathHypertension, "level_0"),
-        new(RsiPathHypertension, "level_1"),
-        new(RsiPathHypertension, "level_2"),
-        new(RsiPathHypertension, "level_3"),
-        new(RsiPathHypertension, "level_4"),
-    ];
     // CMU14 End
 
     private static readonly Rsi[] AcidStackIcons =
@@ -182,6 +174,7 @@ public sealed partial class XenoHudOverlay : Overlay
                 isGhost = true;
             isXeno = true;
         }
+        _hudGeometry.Clear(); // CMU14: share geometry only within this viewport draw.
         var handle = args.WorldHandle;
         var eyeRot = args.Viewport.Eye?.Rotation ?? default;
 
@@ -220,25 +213,17 @@ public sealed partial class XenoHudOverlay : Overlay
         handle.SetTransform(Matrix3x2.Identity);
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawBars(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix, bool skipInvisible = false) // CMU14
     {
         var handle = args.WorldHandle;
         var xenos = _entity.AllEntityQueryEnumerator<XenoComponent, SpriteComponent, TransformComponent>();
         while (xenos.MoveNext(out var uid, out var xeno, out var sprite, out var xform))
         {
-            if (xform.MapID != args.MapId)
-                continue;
-
-            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
-                continue;
-
             if (skipInvisible && _invisQuery.HasComp(uid)) // CMU14
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -260,6 +245,7 @@ public sealed partial class XenoHudOverlay : Overlay
         }
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawDeadIcon(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var icon = _healthIcons.GetDeadIcon().Icon;
@@ -282,10 +268,7 @@ public sealed partial class XenoHudOverlay : Overlay
             if (_invisQuery.HasComp(uid))
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -303,6 +286,7 @@ public sealed partial class XenoHudOverlay : Overlay
         }
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawAcidStacks(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var handle = args.WorldHandle;
@@ -310,19 +294,10 @@ public sealed partial class XenoHudOverlay : Overlay
             .AllEntityQueryEnumerator<VictimXenoAcidStacksComponent, SpriteComponent, TransformComponent>();
         while (stacks.MoveNext(out var uid, out var comp, out var sprite, out var xform))
         {
-            if (xform.MapID != args.MapId)
-                continue;
-
-            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
-                continue;
-
             if (_invisQuery.HasComp(uid))
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -342,6 +317,7 @@ public sealed partial class XenoHudOverlay : Overlay
         }
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawIntoxicatedStacks(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var handle = args.WorldHandle;
@@ -349,19 +325,10 @@ public sealed partial class XenoHudOverlay : Overlay
             .AllEntityQueryEnumerator<XenoIntoxicatedComponent, SpriteComponent, TransformComponent>();
         while (stacks.MoveNext(out var uid, out var comp, out var sprite, out var xform))
         {
-            if (xform.MapID != args.MapId)
-                continue;
-
-            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
-                continue;
-
             if (_invisQuery.HasComp(uid))
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -390,6 +357,7 @@ public sealed partial class XenoHudOverlay : Overlay
         }
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawRank(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var handle = args.WorldHandle;
@@ -399,19 +367,10 @@ public sealed partial class XenoHudOverlay : Overlay
             if (comp.Rank < 2 || _xenoMaturingQuery.HasComp(uid))
                 continue;
 
-            if (xform.MapID != args.MapId)
-                continue;
-
-            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
-                continue;
-
             if (_invisQuery.HasComp(uid))
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -442,6 +401,7 @@ public sealed partial class XenoHudOverlay : Overlay
         return icons;
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawMarkedIcons(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var handle = args.WorldHandle;
@@ -450,19 +410,10 @@ public sealed partial class XenoHudOverlay : Overlay
 
         while (stacks.MoveNext(out var uid, out var comp, out var sprite, out var xform))
         {
-            if (xform.MapID != args.MapId)
-                continue;
-
-            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
-                continue;
-
             if (_invisQuery.HasComp(uid))
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -480,6 +431,7 @@ public sealed partial class XenoHudOverlay : Overlay
         }
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawYellowMarkedIcons(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var handle = args.WorldHandle;
@@ -488,19 +440,10 @@ public sealed partial class XenoHudOverlay : Overlay
 
         while (stacks.MoveNext(out var uid, out _, out var sprite, out var xform))
         {
-            if (xform.MapID != args.MapId)
-                continue;
-
-            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
-                continue;
-
             if (_invisQuery.HasComp(uid))
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -518,6 +461,7 @@ public sealed partial class XenoHudOverlay : Overlay
         }
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawSlow(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var handle = args.WorldHandle;
@@ -526,22 +470,13 @@ public sealed partial class XenoHudOverlay : Overlay
 
         while (slows.MoveNext(out var uid, out var comp, out var sprite, out var xform))
         {
-            if (xform.MapID != args.MapId)
-                continue;
-
-            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
-                continue;
-
             if (_invisQuery.HasComp(uid))
                 continue;
 
             if (_xenoQuery.HasComp(uid))
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -559,6 +494,7 @@ public sealed partial class XenoHudOverlay : Overlay
         }
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawStun(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var handle = args.WorldHandle;
@@ -567,22 +503,13 @@ public sealed partial class XenoHudOverlay : Overlay
 
         while (slows.MoveNext(out var uid, out var comp, out var sprite, out var xform))
         {
-            if (xform.MapID != args.MapId)
-                continue;
-
-            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
-                continue;
-
             if (_invisQuery.HasComp(uid))
                 continue;
 
             if (_xenoQuery.HasComp(uid))
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -600,25 +527,17 @@ public sealed partial class XenoHudOverlay : Overlay
         }
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawInfectedIcon(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var handle = args.WorldHandle;
         var infected = _entity.AllEntityQueryEnumerator<VictimInfectedComponent, SpriteComponent, TransformComponent>();
         while (infected.MoveNext(out var uid, out var comp, out var sprite, out var xform))
         {
-            if (xform.MapID != args.MapId)
-                continue;
-
-            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
-                continue;
-
             if (_invisQuery.HasComp(uid))
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -638,6 +557,7 @@ public sealed partial class XenoHudOverlay : Overlay
         }
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void DrawSynthIcon(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var handle = args.WorldHandle;
@@ -647,19 +567,10 @@ public sealed partial class XenoHudOverlay : Overlay
             if (!ShouldDrawSynthIcon(comp))
                 continue;
 
-            if (xform.MapID != args.MapId)
-                continue;
-
-            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
-                continue;
-
             if (_invisQuery.HasComp(uid))
                 continue;
 
-            var bounds = _sprite.GetLocalBounds((uid, sprite));
-            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-
-            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+            if (!TryGetHudGeometry(uid, sprite, xform, args.MapId, args.WorldAABB, out var bounds, out var worldPos))
                 continue;
 
             var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
@@ -682,6 +593,7 @@ public sealed partial class XenoHudOverlay : Overlay
         return !synth.HideXenoSynthIcon;
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void UpdateHealth(Entity<XenoComponent, SpriteComponent, MobStateComponent?> ent, DrawingHandleWorld handle)
     {
         var (uid, xeno, sprite, mobState) = ent;
@@ -742,6 +654,7 @@ public sealed partial class XenoHudOverlay : Overlay
         handle.DrawTexture(texture, position);
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void UpdatePlasma(Entity<XenoComponent, SpriteComponent> ent, DrawingHandleWorld handle)
     {
         var (uid, xeno, sprite) = ent;
@@ -767,6 +680,7 @@ public sealed partial class XenoHudOverlay : Overlay
         handle.DrawTexture(texture, position);
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void UpdateHypertension(Entity<XenoComponent, SpriteComponent> ent, DrawingHandleWorld handle)
     {
         var (uid, xeno, sprite) = ent;
@@ -774,11 +688,7 @@ public sealed partial class XenoHudOverlay : Overlay
             return;
 
         var level = Math.Clamp(hyper.Stacks, 0, hyper.MaxStacks);
-        // CMU14 Begin: retain lookup behavior for custom prototypes beyond the bundled states.
-        var icon = level < HypertensionIcons.Length
-            ? HypertensionIcons[level]
-            : new Rsi(RsiPathHypertension, $"level_{level}");
-        // CMU14 End
+        var icon = GetHypertensionIcon(level); // CMU14: cache custom prototype levels too.
         var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
         var bounds = _sprite.GetLocalBounds((uid, sprite));
@@ -788,6 +698,7 @@ public sealed partial class XenoHudOverlay : Overlay
         handle.DrawTexture(texture, new Vector2(xOffset, yOffset));
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void UpdateShields(Entity<XenoComponent, SpriteComponent> ent, DrawingHandleWorld handle)
     {
         var (uid, xeno, sprite) = ent;
@@ -837,6 +748,7 @@ public sealed partial class XenoHudOverlay : Overlay
         UpdatePurpleBar(ent, handle, comp.Current, comp.Max, comp.GenerationCap);
     }
 
+    // CMU14 method: reuse HUD descriptors and geometry without changing category visibility.
     private void UpdatePurpleBar(Entity<XenoComponent, SpriteComponent> ent, DrawingHandleWorld handle, double energy, double max, int? generationCap)
     {
         var (uid, xeno, sprite) = ent;

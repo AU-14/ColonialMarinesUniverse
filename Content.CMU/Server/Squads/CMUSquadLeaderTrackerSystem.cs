@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Tracker;
 using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared.Alert;
 using Content.Shared.CMU14.Squads;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -30,6 +31,7 @@ public sealed partial class CMUSquadLeaderTrackerSystem : EntitySystem
     private TimeSpan _nextUpdate;
     private HashSet<EntityUid> _shown = new();
     private HashSet<EntityUid> _stillShown = new();
+    private readonly Dictionary<EntityUid, (string Alert, MapCoordinates? Leader)> _squadUpdates = new();
 
     public override void Update(float frameTime)
     {
@@ -38,6 +40,7 @@ public sealed partial class CMUSquadLeaderTrackerSystem : EntitySystem
             return;
 
         _nextUpdate = time + UpdateEvery;
+        _squadUpdates.Clear();
 
         var query = EntityQueryEnumerator<SquadLeaderTrackerComponent, SquadMemberComponent>();
         while (query.MoveNext(out var uid, out _, out var member))
@@ -51,16 +54,26 @@ public sealed partial class CMUSquadLeaderTrackerSystem : EntitySystem
                 continue;
             }
 
-            var alert = AlertPrefix + Name(squad);
-            if (!_prototypes.HasIndex<AlertPrototype>(alert))
-                alert = AlertPrefix;
+            // The squad's leader search and world position are shared by all its members this update.
+            if (!_squadUpdates.TryGetValue(squad, out var update))
+            {
+                var alert = AlertPrefix + Name(squad);
+                if (!_prototypes.HasIndex<AlertPrototype>(alert))
+                    alert = AlertPrefix;
+
+                MapCoordinates? position = _squad.TryGetSquadLeader((squad, team), out var leader)
+                    ? _transform.GetMapCoordinates(leader)
+                    : null;
+                update = (alert, position);
+                _squadUpdates.Add(squad, update);
+            }
 
             // With no squad leader the arrow shows as off.
             short severity = 0;
-            if (_squad.TryGetSquadLeader((squad, team), out var leader))
-                severity = _tracker.GetAlertSeverity(uid, _transform.GetMapCoordinates(leader));
+            if (update.Leader is { } leaderPosition)
+                severity = _tracker.GetAlertSeverity(uid, leaderPosition);
 
-            _alerts.ShowAlert(uid, alert, severity);
+            _alerts.ShowAlert(uid, update.Alert, severity);
             _stillShown.Add(uid);
         }
 

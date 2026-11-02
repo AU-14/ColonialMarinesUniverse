@@ -54,7 +54,7 @@ public sealed class CrtConsoleKit
         screen.AddChild(Root);
 
         // Reading surface, so no roll bar or grain.
-        Tube = new Control { HorizontalExpand = true, VerticalExpand = true };
+        Tube = new CrtScreenContainer { HorizontalExpand = true, VerticalExpand = true };
         Tube.AddChild(screen);
         Tube.AddChild(new CrtScreenControl
         {
