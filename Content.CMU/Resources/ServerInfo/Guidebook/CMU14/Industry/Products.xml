@@ -1,0 +1,26 @@
+<Document>
+  # Food, goods & trade
+
+  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+
+  <Box>
+    <GuideEntityEmbed Entity="RUMCCookingPot" Caption="FEED"/>
+    <GuideEntityEmbed Entity="RUMCMarketStall" Caption="SELL"/>
+    <GuideEntityEmbed Entity="RUMCLogisticsConsole" Caption="SHIP"/>
+  </Box>
+
+  ## A colony runs on more than ore
+  Grow ingredients, prepare food and use the appropriate cooking vessel and heat source. Sewing, tanning, canning and assembly turn workshop supplies into useful finished goods.
+
+  [textlink="Kitchen basics" link="CMUGuideCooking"] · [textlink="Find pots, bowls and workshop equipment" link="CMUGuideIndustryRecipes"]
+
+  ## Make something someone needs
+  Ask the colony for an order before filling a warehouse. Tools, parts, food and clothing all give your workshop a purpose. Market stalls support local selling; the administration and citizen consoles handle colony requests and trade services.
+
+  ## Shipping is physical
+  Use the logistics console for the colony's outside trade. Orders travel by shuttle: keep the landing area and cargo route clear, and load or unload the actual goods. Check the order and destination before sending cargo.
+
+  [bold]Small goal:[/bold] equip one miner, feed one crew, or finish one order. A working supply chain beats a room full of idle machines.
+
+  [textlink="Back to the recipe finder" link="CMUGuideIndustryRecipes"]
+</Document>

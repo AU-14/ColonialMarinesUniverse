@@ -1,0 +1,31 @@
+<Document>
+  # From ore to metal
+
+  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+
+  <Box>
+    <GuideEntityEmbed Entity="RUMCSmeltery" Caption="HEAT"/>
+    <GuideEntityEmbed Entity="RUMCCrucible" Caption="MELT"/>
+    <GuideEntityEmbed Entity="RUMCAnvil" Caption="SHAPE"/>
+  </Box>
+
+  ## The smith's loop
+  - [bold]Prepare:[/bold] collect ore, fuel and a suitable mold. A hammer or grinder breaks raw materials into powders where a recipe needs them.
+  - [bold]Melt:[/bold] fuel and ignite the furnace; heat the crucible and its metal.
+  - [bold]Cast:[/bold] handle hot work with tongs and pour into the right mold. Let the casting cool before taking it.
+  - [bold]Forge:[/bold] put a suitable hot workpiece on the anvil, choose its recipe and follow the required tool sequence. Reheat it if it gets too cold.
+
+  <GuideEntityEmbed Entity="RUMCForgeTongs" Caption="Hot metal? Bring tongs."/>
+
+  ## What should I make first?
+  [bold]Sheets + parts → pipes and machinery.[/bold] Brass gets an early workshop moving; iron and steel carry it further. Stone hammer, tongs and chisel let you start before you have metal tools.
+
+  [textlink="Find furnace, crucible and tool recipes" link="CMUGuideIndustryRecipes"]
+
+  ## Upgrade the production line
+  [bold]Ore → powder → metal → parts.[/bold] Washing, separation and machine recipes add other routes. Check each machine's recipe before feeding it: powder, ingots and sheets are different inputs.
+
+  Molds used by machines are reusable unless that recipe says otherwise. Keep an output space free and clear slag when it builds up.
+
+  [textlink="Next: power your first steam machine" link="CMUGuideIndustrySteam"]
+</Document>

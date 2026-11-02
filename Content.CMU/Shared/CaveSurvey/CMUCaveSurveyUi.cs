@@ -1,6 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Content.Shared.Actions;
+using Content.Shared.Ghost.Components;
 
 namespace Content.Shared.CMU14.CaveSurvey;
 
@@ -58,16 +59,22 @@ public sealed partial class CMUCaveSurveyAccessSystem : EntitySystem
     {
         if (args.Handled) return;
         args.Handled = true;
-        var open = new CMUOpenCaveSurveyEvent();
-        OnOpen(ent, ref open);
+        Toggle(ent);
     }
 
     private void OnOpen(Entity<CMUCaveSurveyAccessComponent> ent, ref CMUOpenCaveSurveyEvent args)
     {
+        // Observers have a separate mining action; keep their colony tactical map available.
+        if (HasComp<GhostComponent>(ent)) return;
         args.Handled = true;
-        if (_ui.IsUiOpen(ent.Owner, CMUCaveSurveyUiKey.Key, ent.Owner))
-            _ui.CloseUi(ent.Owner, CMUCaveSurveyUiKey.Key, ent.Owner);
+        Toggle(ent);
+    }
+
+    private void Toggle(EntityUid actor)
+    {
+        if (_ui.IsUiOpen(actor, CMUCaveSurveyUiKey.Key, actor))
+            _ui.CloseUi(actor, CMUCaveSurveyUiKey.Key, actor);
         else
-            _ui.TryOpenUi(ent.Owner, CMUCaveSurveyUiKey.Key, ent.Owner);
+            _ui.TryOpenUi(actor, CMUCaveSurveyUiKey.Key, actor);
     }
 }

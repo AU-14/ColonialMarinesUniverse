@@ -1,0 +1,28 @@
+<Document>
+  # Power & oil
+
+  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+
+  <Box>
+    <GuideEntityEmbed Entity="RUMCSteamGenerator" Caption="POWER"/>
+    <GuideEntityEmbed Entity="RUMCOilPump" Caption="EXTRACT"/>
+    <GuideEntityEmbed Entity="RUMCDistillationTower" Caption="REFINE"/>
+  </Box>
+
+  ## One machine at a time
+  [bold]Generation → cables and distribution → machine → output storage.[/bold]
+
+  Make or obtain a generator, establish power, then add one processing machine. Supply its listed items and fluids; select the recipe or circuit it needs. Expand after that first machine runs reliably.
+
+  Motors, circuits, cables and machine casing parts are the building blocks. Use the [textlink="recipe finder" link="CMUGuideIndustryRecipes"] to plan them before building the whole factory.
+
+  ## Oil becomes more than fuel
+  [bold]Oil deposit → pump → distillation → fuel and chemical processing.[/bold]
+
+  Distillation splits crude into several products. Plan tanks and outlets for the byproducts as well as the product you want. Further processing makes fuels and polymer materials.
+
+  ## Less carrying, more making
+  Conveyors, filters and machine input/output settings move materials between stages. Keep outputs clear: a powered machine can still stop when it has nowhere to put its product.
+
+  [textlink="Colony power and distribution" link="CMUGuideEngPower"] · [textlink="Build useful finished goods" link="CMUGuideIndustryProducts"]
+</Document>

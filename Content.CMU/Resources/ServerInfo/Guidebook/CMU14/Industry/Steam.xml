@@ -1,0 +1,27 @@
+<Document>
+  # Make steam work
+
+  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+
+  ## Your first powered chain
+  <Box>
+    <GuideEntityEmbed Entity="RUMCBrassPump" Caption="WATER"/>
+    <GuideEntityEmbed Entity="RUMCBoiler" Caption="STEAM"/>
+    <GuideEntityEmbed Entity="RUMCSteamDrill" Caption="ORE"/>
+  </Box>
+
+  [bold]Pump on water → liquid pipe → fueled boiler → gas pipe → machine.[/bold]
+
+  - Carry portable equipment with [bold]both hands[/bold]. Click a reachable clear floor tile to place and anchor it.
+  - Put a pump on suitable water. Dry ground is not a water supply.
+  - Use a screwdriver on a [bold]liquid pipe[/bold], then its destination, to connect liquid ports.
+  - Supply the boiler with water and fuel. Route its steam through [bold]gas pipes[/bold]. These are a different network from liquid pipes.
+  - Put a drill over a deposit and leave room for its output. Presses, grinders and smelters use the same steam stage.
+
+  ## Nothing happening?
+  [bold]Check in this order:[/bold] anchored machine → source water and fuel → correct pipe network → required input or mold → output space.
+
+  A generator turns steam into electricity. A drill turns a deposit into resources. Pick the machine for the job, then keep it fed.
+
+  [textlink="Find pump, boiler and machine recipes" link="CMUGuideIndustryRecipes"] · [textlink="Next: electricity and oil" link="CMUGuideIndustryElectric"]
+</Document>

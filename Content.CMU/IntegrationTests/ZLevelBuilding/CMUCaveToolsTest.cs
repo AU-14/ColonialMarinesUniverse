@@ -4,6 +4,7 @@ using Robust.Client.UserInterface;
 using Content.Server.CMU14.CaveSurvey;
 using Content.Server.CMU14.ZLevelBuilding;
 using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.Actions;
 using Content.Shared.CMU14.CaveSurvey;
 using Content.Shared.CMU14.TacticalMap.Reconstruction;
 using Content.Shared.CMU14.ZLevelBuilding;
@@ -12,17 +13,20 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Wall;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.CMU.ZLevelBuilding;
 
 public sealed class CMUCaveToolsTest : GameTest
 {
-    [Test]
-    public async Task PersonalSurveyStreamsOnlyObservedCellsAndTracksItsOwner()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task PersonalSurveyStreamsOnlyObservedCellsAndTracksItsOwner(bool ghost)
     {
         EntityUid map = default;
         EntityUid network = default;
         EntityUid actor = default;
+        NetEntity actionNet = default;
         var session = Pair.Player!;
         var original = session.AttachedEntity;
         try
@@ -39,13 +43,24 @@ public sealed class CMUCaveToolsTest : GameTest
                 var createdNetwork = levels.CreateZNetwork();
                 network = createdNetwork.Owner;
                 Assert.That(levels.TryAddMapsIntoZNetwork(createdNetwork, new() { [map] = -3 }), Is.True);
-                actor = SEntMan.SpawnEntity("MobHuman", new EntityCoordinates(map, new Vector2(0.5f)));
+                actor = SEntMan.SpawnEntity(ghost ? "MobObserver" : "MobHuman", new EntityCoordinates(map, new Vector2(0.5f)));
                 Server.PlayerMan.SetAttachedEntity(session, actor);
                 Server.System<CMUCaveSurveySystem>().Observe(actor);
+                if (ghost)
+                {
+                    var actions = Server.System<SharedActionsSystem>();
+                    actionNet = SEntMan.GetNetEntity(actions.GetActions(actor).Single(a => actions.GetEvent(a) is CMUOpenCaveSurveyActionEvent));
+                }
             });
             await Pair.RunUntilSynced();
-            await Server.WaitPost(() => Server.System<CMUCaveSurveySystem>().Open(actor));
-            await Pair.RunSeconds(1);
+            if (ghost)
+                await Client.WaitPost(() => CEntMan.RaisePredictiveEvent(new RequestPerformActionEvent(actionNet,
+                    Client.ResolveDependency<IGameTiming>().CurTick)));
+            else
+                await Server.WaitPost(() => Server.System<CMUCaveSurveySystem>().Open(actor));
+
+            // A predicted action can open the window before the server subscribes it; allow its request retry.
+            await Pair.RunSeconds(2);
             await Client.WaitAssertion(() =>
             {
                 var view = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single().SurveyView;
@@ -64,6 +79,25 @@ public sealed class CMUCaveToolsTest : GameTest
                 var scene = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single().SurveyView.Scene!;
                 Assert.That(scene.OperatorPosition!.Value.X, Is.EqualTo(2.5f).Within(0.1f), "Navigation must follow the owner without requesting a new terrain snapshot.");
             });
+            if (ghost)
+            {
+                await Server.WaitAssertion(() =>
+                {
+                    var colonyMap = new CMUOpenCaveSurveyEvent();
+                    SEntMan.EventBus.RaiseLocalEvent(actor, ref colonyMap);
+                    Assert.That(colonyMap.Handled, Is.False, "The observer's normal tactical action must still open the colony map.");
+                    var paper = SEntMan.SpawnEntity("CMUCaveSurveyMap", SEntMan.GetComponent<TransformComponent>(actor).Coordinates);
+                    try
+                    {
+                        Assert.That(Server.System<CMUCaveSurveySystem>().WriteMap(actor, paper), Is.False,
+                            "Private ghost observations must never be transcribed onto a physical map.");
+                    }
+                    finally
+                    {
+                        SEntMan.DeleteEntity(paper);
+                    }
+                });
+            }
         }
         finally
         {

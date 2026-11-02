@@ -1,0 +1,13 @@
+<Document>
+  # Crafting recipe finder
+
+  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+
+  [bold]What are we building?[/bold] Search for an item or a material, select a recipe, then choose how many crafts to pack for. Every hand-crafting recipe is visible here, even if you do not yet have its materials or skills.
+
+  <CMUGuideCraftingRecipes/>
+
+  [bold]Ready to make it?[/bold] Carry the supplies and right-click yourself → Craft. The planner shows base quantities; crafting challenges can change the result. Machine and anvil recipes are selected at their own equipment.
+
+  [textlink="First workshop" link="CMUGuideIndustryStart"] · [textlink="Forge" link="CMUGuideIndustryForge"] · [textlink="Steam" link="CMUGuideIndustrySteam"] · [textlink="Electricity" link="CMUGuideIndustryElectric"]
+</Document>

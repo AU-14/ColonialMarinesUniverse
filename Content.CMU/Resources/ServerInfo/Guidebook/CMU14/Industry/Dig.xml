@@ -1,0 +1,38 @@
+<Document>
+  # Dig, build & map
+
+  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+
+  ## Pick the tool for the layer you enter
+  <Box>
+    <GuideEntityEmbed Entity="RMCShovel" Caption="Z-1 and Z-2"/>
+    <GuideEntityEmbed Entity="RUMCWoodenPickaxe" Caption="Z-3 to Z-9"/>
+    <GuideEntityEmbed Entity="RUMCJackhammer" Caption="Z-10 and deeper"/>
+  </Box>
+
+  [bold]Hold tool → aim at nearby clear floor → [keybind="UseItemInHand"] → stay still.[/bold] Right-click the tool to switch between digging down and digging up. Walls, furniture and protected supports can block the route.
+
+  Large caverns begin at [bold]Z-3[/bold]. They can span several levels. Watch your step; the floor you see below may be a long way down.
+
+  ## Leave yourself an exit
+  <Box>
+    <GuideEntityEmbed Entity="RUMCRopeCoil" Caption="Quick return"/>
+    <GuideEntityEmbed Entity="CMUDeployableZLevelLadder" Caption="Portable ladder"/>
+  </Box>
+
+  - Right-click a pit → [bold]Build[/bold]: one rope coil, or 25 steel for a ladder.
+  - Open construction with [keybind="OpenCraftingMenu"] → [bold]Z-Level (Experimental)[/bold] for portable ladders and stairs.
+  - A portable ladder needs a supporting wall or beam and an opening above. It cannot drill through a ceiling.
+  - Support wide excavations with beams or pillars. Digging away the roof's support can cause a cave-in.
+
+  ## Bring back knowledge, too
+  <GuideEntityEmbed Entity="CMUCaveSurveyMap" Caption="Explore → transcribe → share"/>
+
+  Nearby visible terrain is recorded as you explore underground. Make a [bold]cave survey map[/bold] from one paper in the construction menu; use [bold]Transcribe survey[/bold], then pass it to another explorer to read.
+
+  Reading maps combines their observations in the 3D tactical survey. Overlaps use the [bold]newest observation[/bold]. Survey knowledge lasts for this round.
+
+  [bold]Spectating?[/bold] Visit an underground level, then use your [bold]Mining map[/bold] action. Hit [bold]Refresh[/bold] after exploring further. A ghost's observations stay private; the normal tactical map still works separately.
+
+  [textlink="Make spare tools" link="CMUGuideIndustryRecipes"] · [textlink="Process your ore" link="CMUGuideIndustryForge"]
+</Document>

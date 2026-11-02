@@ -55,3 +55,11 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CMUOpenCaveSurveyActionEvent
+
+- type: entity
+  parent: CMUActionCaveSurvey
+  id: CMUActionGhostCaveSurvey
+  components:
+  - type: Action
+    checkCanInteract: false
+    checkConsciousness: false
