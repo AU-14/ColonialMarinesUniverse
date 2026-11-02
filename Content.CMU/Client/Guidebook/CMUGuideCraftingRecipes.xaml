@@ -1,0 +1,27 @@
+<BoxContainer xmlns="https://spacestation14.io" Orientation="Vertical" SeparationOverride="8" HorizontalExpand="True">
+    <Button Name="Back" Text="{Loc cmu-industry-recipes-back}" HorizontalAlignment="Left" Visible="False" />
+    <Label Text="{Loc cmu-industry-recipes-search}" />
+    <LineEdit Name="Search" PlaceHolder="{Loc cmu-industry-recipes-placeholder}" HorizontalExpand="True" />
+    <ItemList Name="Recipes" MinHeight="150" MaxHeight="150" HorizontalExpand="True" />
+    <Label Name="MatchCount" />
+    <BoxContainer Name="Details" Orientation="Vertical" SeparationOverride="8">
+        <BoxContainer Orientation="Horizontal" SeparationOverride="12">
+            <TextureRect Name="OutputIcon" MinSize="64 64" MaxSize="64 64" Stretch="KeepAspectCentered" />
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4">
+                <RichTextLabel Name="RecipeName" HorizontalExpand="True" />
+                <Label Name="OutputCount" />
+                <Label Name="RecipeTime" />
+            </BoxContainer>
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+            <Label Text="{Loc cmu-industry-recipes-batches}" VerticalAlignment="Center" />
+            <OptionButton Name="Batches" />
+        </BoxContainer>
+        <Label Text="{Loc cmu-industry-recipes-ingredients}" StyleClasses="LabelHeading" />
+        <RichTextLabel Text="{Loc cmu-industry-recipes-ingredient-hint}" HorizontalExpand="True" />
+        <BoxContainer Name="Ingredients" Orientation="Vertical" SeparationOverride="4" />
+        <RichTextLabel Name="Tools" HorizontalExpand="True" />
+        <RichTextLabel Name="Skills" HorizontalExpand="True" />
+        <RichTextLabel Name="Minigames" HorizontalExpand="True" />
+    </BoxContainer>
+</BoxContainer>

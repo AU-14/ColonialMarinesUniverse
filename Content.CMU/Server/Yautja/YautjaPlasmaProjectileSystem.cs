@@ -4,6 +4,7 @@ using Content.Shared.Trigger.Systems;
 using System.Numerics;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Atmos.Components;
@@ -15,6 +16,7 @@ using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
@@ -35,6 +37,7 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private FlammableSystem _flammable = default!;
     [Dependency] private HardpointSystem _hardpoints = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private ExplosionSystem _explosions = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedStunSystem _stun = default!;
@@ -266,6 +269,12 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
 
     private void OnPlasmaRifleBoltHit(Entity<YautjaPlasmaRifleBoltComponent> ent, ref ProjectileHitEvent args)
     {
+        if (IsHuman(args.Target) && !HasComp<SynthComponent>(args.Target) && !_mobState.IsDead(args.Target))
+        {
+            ApplyCasterKnockdown(args.Target, ent.Comp.HumanKnockdownTime);
+            return;
+        }
+
         if (!HasComp<XenoComponent>(args.Target) ||
             !TryComp(ent, out ProjectileComponent? projectile) ||
             !projectile.Damage.DamageDict.TryGetValue(ent.Comp.XenoExtraDamageType, out var baseDamage) ||

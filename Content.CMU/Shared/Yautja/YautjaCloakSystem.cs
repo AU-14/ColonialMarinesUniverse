@@ -10,7 +10,6 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Atmos.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Examine;
-using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Light.Components;
@@ -42,7 +41,6 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
-    [Dependency] private SharedHideableHumanoidLayersSystem _humanoidLayers = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private INetManager _net = default!;
@@ -72,13 +70,35 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         SubscribeLocalEvent<YautjaBracerComponent, EntGotInsertedIntoContainerMessage>(OnBracerInsertedIntoContainer);
 
         SubscribeLocalEvent<YautjaComponent, VaporHitEvent>(OnVaporHit);
+        SubscribeLocalEvent<CMUYautjaResearchOperatorComponent, VaporHitEvent>(OnVaporHit);
         SubscribeLocalEvent<YautjaComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CMUYautjaResearchOperatorComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<YautjaComponent, XenoDevouredEvent>(OnDevour);
+        SubscribeLocalEvent<CMUYautjaResearchOperatorComponent, XenoDevouredEvent>(OnDevour);
         SubscribeLocalEvent<YautjaComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
+        SubscribeLocalEvent<CMUYautjaResearchOperatorComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
         SubscribeLocalEvent<YautjaComponent, ExamineAttemptEvent>(OnExamineAttempt);
+        SubscribeLocalEvent<CMUYautjaResearchOperatorComponent, ExamineAttemptEvent>(OnExamineAttempt);
         SubscribeLocalEvent<YautjaComponent, GetMobFootstepVolumeEvent>(OnFootstepVolume);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnAnyDamageChanged);
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
+        SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentStartup>(OnInvisibilityStartup);
+        SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentShutdown>(OnInvisibilityShutdown);
+    }
+
+    private void OnInvisibilityStartup(Entity<EntityActiveInvisibleComponent> ent, ref ComponentStartup args)
+    {
+        // Another cloak may take over during the reverse sweep. Return its shader ownership immediately.
+        if (_net.IsServer && TryComp<CMUYautjaOpticalCloakComponent>(ent, out var optical) && !optical.Enabled)
+            RemComp<CMUYautjaOpticalCloakComponent>(ent);
+    }
+
+    private void OnInvisibilityShutdown(Entity<EntityActiveInvisibleComponent> ent, ref ComponentShutdown args)
+    {
+        // A worn thermal harness can also end invisibility without using the bracer action.
+        if (_net.IsServer && !TerminatingOrDeleted(ent) &&
+            TryComp<CMUYautjaOpticalCloakComponent>(ent, out var optical) && optical.Enabled)
+            SetOpticalTransition(ent, optical.Preset, false);
     }
 
     public override void Update(float frameTime)
@@ -282,6 +302,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             if (HasComp<EntityActiveInvisibleComponent>(user))
                 return false;
 
+            SetOpticalTransition(user, bracer.Comp.InvisibilitySound, true);
             var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
             // CMU14: ThermalCloakSystem.OnAttemptShoot refuses any gun while RestrictWeapons is set, and the bracer
             // used to set it for every wearer. Cloak no longer locks weapons at all - the bracer's
@@ -311,9 +332,10 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             if (bracer.Comp.CloakBlockFriendlyFire)
                 EnsureComp<EntityIFFComponent>(user);
 
-            ToggleLayers(user, bracer.Comp.CloakedHideLayers, false);
+            // Keep every layer in the composed sprite. The optical sweep conceals equipment and
+            // hair together; toggling occlusion would change its silhouette before the sweep arrives.
             HideFromContextMenu(user);
-            SpawnCloakEffects(user, bracer.Comp.CloakEffect);
+            // The optical post-shader draws the activation seam on the actual body silhouette.
 
             var popupOthers = Loc.GetString("rmc-cloak-activate-others", ("user", YautjaDisplayName(user)));
             _popup.PopupEntity(Loc.GetString("rmc-cloak-activate-self"), popupOthers, user, user, PopupType.Medium);
@@ -326,6 +348,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
         if (!enabling && TryComp<EntityActiveInvisibleComponent>(user, out var invisible))
         {
+            SetOpticalTransition(user, bracer.Comp.InvisibilitySound, false);
             var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
             // CMU14: ThermalCloakSystem.OnAttemptShoot refuses any gun while RestrictWeapons is set, and the bracer
             // used to set it for every wearer. Cloak no longer locks weapons at all - the bracer's
@@ -348,9 +371,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
                 : Loc.GetString("rmc-cloak-deactivate-others", ("user", YautjaDisplayName(user)));
             _popup.PopupEntity(selfPopup, otherPopup, user, user, PopupType.Medium);
 
-            ToggleLayers(user, bracer.Comp.CloakedHideLayers, true);
             RestoreContextMenu(user);
-            SpawnCloakEffects(user, bracer.Comp.UncloakEffect);
 
             if (bracer.Comp.CloakHideNightVision)
                 EnsureComp<RMCNightVisionVisibleComponent>(user);
@@ -368,6 +389,20 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private void SetOpticalTransition(EntityUid user, YautjaInvisibilitySound preset, bool enabled)
+    {
+        // Claim the sprite during local prediction too, so the generic invisibility shader cannot flash first.
+        var optical = EnsureComp<CMUYautjaOpticalCloakComponent>(user);
+        optical.Preset = preset;
+        // Action prediction may replay the toggle. Only the server starts the presentation clock.
+        if (!_net.IsServer)
+            return;
+        optical.From = CMUYautjaPresentation.CloakCoverage(optical, _timing.CurTime);
+        optical.Enabled = enabled;
+        optical.StartedAt = _timing.CurTime;
+        Dirty(user, optical);
     }
 
     private void HideFromContextMenu(EntityUid user)
@@ -428,12 +463,12 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             args.Damage = new DamageSpecifier();
     }
 
-    private void OnVaporHit(Entity<YautjaComponent> ent, ref VaporHitEvent args)
+    private void OnVaporHit<T>(Entity<T> ent, ref VaporHitEvent args) where T : Component
     {
         ForceDecloak(ent.Owner);
     }
 
-    private void OnMobStateChanged(Entity<YautjaComponent> ent, ref MobStateChangedEvent args)
+    private void OnMobStateChanged<T>(Entity<T> ent, ref MobStateChangedEvent args) where T : Component
     {
         if (args.NewMobState != MobState.Dead)
             return;
@@ -441,17 +476,17 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         ForceDecloak(ent.Owner);
     }
 
-    private void OnDevour(Entity<YautjaComponent> ent, ref XenoDevouredEvent args)
+    private void OnDevour<T>(Entity<T> ent, ref XenoDevouredEvent args) where T : Component
     {
         ForceDecloak(ent.Owner);
     }
 
-    private void OnParasiteInfect(Entity<YautjaComponent> ent, ref XenoParasiteInfectEvent args)
+    private void OnParasiteInfect<T>(Entity<T> ent, ref XenoParasiteInfectEvent args) where T : Component
     {
         ForceDecloak(ent.Owner);
     }
 
-    private void OnExamineAttempt(Entity<YautjaComponent> ent, ref ExamineAttemptEvent args)
+    private void OnExamineAttempt<T>(Entity<T> ent, ref ExamineAttemptEvent args) where T : Component
     {
         if (args.Cancelled ||
             !TryComp(ent, out EntityTurnInvisibleComponent? cloak) ||
@@ -565,14 +600,6 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         };
     }
 
-    private void ToggleLayers(EntityUid user, HashSet<HumanoidVisualLayers> layers, bool showLayers)
-    {
-        foreach (var layer in layers)
-        {
-            _humanoidLayers.SetPermanentLayerOcclusion(user, layer, !showLayers);
-        }
-    }
-
     private void SpawnCloakEffects(EntityUid user, EntProtoId effect)
     {
         if (_net.IsClient)
@@ -603,6 +630,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     private bool CanUseYautjaCloak(EntityUid user)
     {
         return HasComp<YautjaComponent>(user) ||
+               HasComp<CMUYautjaResearchOperatorComponent>(user) ||
                (TryComp(user, out YautjaThrallComponent? thrall) && thrall.Blooded && thrall.TechAuthorized);
     }
 

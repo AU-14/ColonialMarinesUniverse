@@ -467,31 +467,79 @@ public sealed class YautjaFalconRuntimeTest
     }
 
     [Test]
-    public async Task FalconDroneUsesOneDedicatedShoulderSpriteLayerLikeCmss13()
+    public async Task FalconDeploymentAndRecallKeepTheControllerAndPhysicalItem()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
         var client = pair.Client;
-
-        await client.WaitAssertion(() =>
+        var map = await pair.CreateTestMap();
+        EntityUid hunter = default;
+        EntityUid bracer = default;
+        EntityUid falcon = default;
+        EntityUid drone = default;
+        EntityUid? previous = null;
+        try
         {
-            var prototypes = client.ResolveDependency<IPrototypeManager>();
-
-            foreach (var (id, state) in new[]
-                     {
-                         ("CMUYautjaFalconDrone", "falcon_drone"),
-                         ("CMUYautjaFalconDroneBadBlood", "falcon_drone_badblood"),
-                     })
+            await server.WaitPost(() =>
             {
-                var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.Components.TryGetValue("Clothing", out var clothing), Is.True, id);
-                var clothingComponent = (ClothingComponent) clothing.Component;
-                var layers = clothingComponent.ClothingVisuals["ears"];
-                Assert.That(layers, Has.Count.EqualTo(1),
-                    $"{id} must define the source item_icons shoulder layer instead of reusing the world sprite.");
-                Assert.That(layers[0].State, Is.EqualTo(state), id);
-            }
-        });
-
+                var session = server.PlayerMan.Sessions.Single();
+                previous = session.AttachedEntity;
+                hunter = SpawnControllingHunter(server.EntMan, server.EntMan.System<InventorySystem>(),
+                    map.GridCoords, uid => server.PlayerMan.SetAttachedEntity(session, uid),
+                    out bracer, out falcon, out drone);
+            });
+            await pair.RunTicksSync(5);
+            await client.WaitAssertion(() =>
+            {
+                var uid = client.EntMan.GetEntity(server.EntMan.GetNetEntity(drone));
+                var motion = client.EntMan.GetComponent<CMUYautjaMotionComponent>(uid);
+                Assert.That(motion.Controller,
+                    Is.EqualTo(client.EntMan.GetEntity(server.EntMan.GetNetEntity(hunter))),
+                    "The deployment must be anchored to the actual controller's back.");
+                Assert.That(motion.Kind, Is.EqualTo(CMUYautjaEffect.FalconDeploy));
+            });
+            await server.WaitAssertion(() =>
+            {
+                var actions = server.EntMan.System<Content.Shared._RMC14.Actions.SharedRMCActionsSystem>()
+                    .GetActionsWithEvent<YautjaFalconRecallActionEvent>(hunter).ToArray();
+                var recall = new YautjaFalconRecallActionEvent { Performer = hunter, Action = actions.Single() };
+                server.EntMan.EventBus.RaiseLocalEvent(hunter, recall);
+                Assert.That(recall.Handled, Is.True);
+            });
+            await pair.RunTicksSync(5);
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(server.EntMan.Deleted(drone), Is.True);
+                Assert.That(server.EntMan.Deleted(falcon), Is.False);
+                Assert.That(server.EntMan.HasComponent<YautjaFalconControllerComponent>(hunter), Is.False);
+                Assert.That(server.EntMan.GetComponent<EyeComponent>(hunter).Target, Is.EqualTo(hunter));
+            });
+            await client.WaitAssertion(() =>
+            {
+                var query = client.EntMan.EntityQueryEnumerator<CMUYautjaEffectComponent>();
+                var recalled = false;
+                while (query.MoveNext(out var effect))
+                {
+                    if (effect.Kind != CMUYautjaEffect.FalconRecall)
+                        continue;
+                    recalled = true;
+                    Assert.That(effect.Item,
+                        Is.EqualTo(client.EntMan.GetEntity(server.EntMan.GetNetEntity(falcon))));
+                }
+                Assert.That(recalled, Is.True, "The recall must survive deletion of the deployed drone.");
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                server.PlayerMan.SetAttachedEntity(server.PlayerMan.Sessions.Single(), previous);
+                DeleteAll(server.EntMan, hunter, bracer, falcon, drone);
+                var query = server.EntMan.EntityQueryEnumerator<CMUYautjaEffectComponent>();
+                while (query.MoveNext(out var uid, out _))
+                    server.EntMan.QueueDeleteEntity(uid);
+            });
+        }
         await pair.CleanReturnAsync();
     }
 

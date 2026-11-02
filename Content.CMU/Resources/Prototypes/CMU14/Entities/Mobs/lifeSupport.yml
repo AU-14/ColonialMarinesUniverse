@@ -1,0 +1,33 @@
+# Component source for CMULifeSupportComponent. Values mirror the disabled blocks
+# in Resources/Prototypes/_RMC14/Entities/Mobs/Species/base.yml so dev tests match
+# the eventual species flip. Playtest toggle: the cmulifesupport command.
+- type: entity
+  abstract: true
+  id: CMUMobLifeSupport
+  save: false
+  components:
+  - type: TemperatureDamage
+    heatDamageThreshold: 1073.15 # 800 C, phoron fire territory
+    coldDamageThreshold: -150
+    heatDamage:
+      types:
+        Heat: 5
+  - type: Respirator
+    damage:
+      types:
+        Asphyxiation: 1.0
+    damageRecovery:
+      types:
+        Asphyxiation: -1.0
+  - type: Barotrauma
+    damage:
+      types:
+        Blunt: 0.50
+        Heat: 0.1
+  - type: DamageMobState
+    critDamage:
+      types:
+        Asphyxiation: 1
+    nonDeadDamage:
+      types:
+        Asphyxiation: -0.33

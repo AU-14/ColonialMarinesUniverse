@@ -1,0 +1,609 @@
+# The parts of the electric age: wire, rods, rubber, boards, circuits, motors and the rest. The sprites are cut from the game's own and recolored
+# (Textures/CMU14/Objects/Electric/items.rsi). All of them are stacks, so that the machines and the crafts can count them.
+
+- type: stack
+  id: RUMCGoldWire
+  name: fine gold wire
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: GoldWire }
+  spawn: RUMCGoldWireItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCGoldWireItem
+  name: fine gold wire
+  description: "A thin gold wire that does not corrode."
+  components:
+  - type: Stack
+    stackType: RUMCGoldWire
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: GoldWire
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCSilverWire
+  name: fine silver wire
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: SilverWire }
+  spawn: RUMCSilverWireItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSilverWireItem
+  name: fine silver wire
+  description: "A thin silver wire, the best conductor there is."
+  components:
+  - type: Stack
+    stackType: RUMCSilverWire
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: SilverWire
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCIronRod
+  name: steel rod
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: IronRod }
+  spawn: RUMCIronRodItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCIronRodItem
+  name: steel rod
+  description: "A turned steel rod."
+  components:
+  - type: Stack
+    stackType: RUMCIronRod
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: IronRod
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCMagneticRod
+  name: magnetic rod
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: MagneticRod }
+  spawn: RUMCMagneticRodItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCMagneticRodItem
+  name: magnetic rod
+  description: "A steel rod that has been magnetized. The heart of every electric motor."
+  components:
+  - type: Stack
+    stackType: RUMCMagneticRod
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: MagneticRod
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCRawRubber
+  name: raw rubber
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: RawRubber }
+  spawn: RUMCRawRubberItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCRawRubberItem
+  name: raw rubber
+  description: "Sticky raw rubber extracted from resin. It is vulcanized with cinnabar into rubber sheets."
+  components:
+  - type: Stack
+    stackType: RUMCRawRubber
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: RawRubber
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCRubberSheet
+  name: rubber sheet
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: RubberSheet }
+  spawn: RUMCRubberSheetItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCRubberSheetItem
+  name: rubber sheet
+  description: "A sheet of vulcanized rubber. It insulates."
+  components:
+  - type: Stack
+    stackType: RUMCRubberSheet
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: RubberSheet
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCSiliconIngot
+  name: silicon ingot
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: SiliconIngot }
+  spawn: RUMCSiliconIngotItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSiliconIngotItem
+  name: silicon ingot
+  description: "Pure silicon smelted from quartz or sand."
+  components:
+  - type: Stack
+    stackType: RUMCSiliconIngot
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: SiliconIngot
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCSiliconWafer
+  name: silicon wafer
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: SiliconWafer }
+  spawn: RUMCSiliconWaferItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSiliconWaferItem
+  name: silicon wafer
+  description: "A thin wafer of silicon for diodes."
+  components:
+  - type: Stack
+    stackType: RUMCSiliconWafer
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: SiliconWafer
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCGemDiamond
+  name: diamond
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: GemDiamond }
+  spawn: RUMCGemDiamondItem
+  maxCount: 20
+
+- type: entity
+  parent: BaseItem
+  id: RUMCGemDiamondItem
+  name: diamond
+  description: "A cut diamond: clear and hard."
+  components:
+  - type: Stack
+    stackType: RUMCGemDiamond
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: GemDiamond
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCGemEmerald
+  name: emerald
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: GemEmerald }
+  spawn: RUMCGemEmeraldItem
+  maxCount: 20
+
+- type: entity
+  parent: BaseItem
+  id: RUMCGemEmeraldItem
+  name: emerald
+  description: "A cut emerald."
+  components:
+  - type: Stack
+    stackType: RUMCGemEmerald
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: GemEmerald
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCGemRuby
+  name: ruby
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: GemRuby }
+  spawn: RUMCGemRubyItem
+  maxCount: 20
+
+- type: entity
+  parent: BaseItem
+  id: RUMCGemRubyItem
+  name: ruby
+  description: "A cut ruby."
+  components:
+  - type: Stack
+    stackType: RUMCGemRuby
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: GemRuby
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCGemAlexandrite
+  name: alexandrite
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: GemAlexandrite }
+  spawn: RUMCGemAlexandriteItem
+  maxCount: 20
+
+- type: entity
+  parent: BaseItem
+  id: RUMCGemAlexandriteItem
+  name: alexandrite
+  description: "A cut alexandrite. It plays blue in the lamp and red in the daylight."
+  components:
+  - type: Stack
+    stackType: RUMCGemAlexandrite
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: GemAlexandrite
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCLensDiamond
+  name: diamond lens
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: LensDiamond }
+  spawn: RUMCLensDiamondItem
+  maxCount: 20
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLensDiamondItem
+  name: diamond lens
+  description: "A lens ground of a diamond. It engraves the finest patterns."
+  components:
+  - type: Stack
+    stackType: RUMCLensDiamond
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: LensDiamond
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCLensEmerald
+  name: emerald lens
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: LensEmerald }
+  spawn: RUMCLensEmeraldItem
+  maxCount: 20
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLensEmeraldItem
+  name: emerald lens
+  description: "A lens ground of an emerald."
+  components:
+  - type: Stack
+    stackType: RUMCLensEmerald
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: LensEmerald
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCLensRuby
+  name: ruby lens
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: LensRuby }
+  spawn: RUMCLensRubyItem
+  maxCount: 20
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLensRubyItem
+  name: ruby lens
+  description: "A lens ground of a ruby: the red light of a laser comes out of it."
+  components:
+  - type: Stack
+    stackType: RUMCLensRuby
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: LensRuby
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCLensAlexandrite
+  name: alexandrite lens
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: LensAlexandrite }
+  spawn: RUMCLensAlexandriteItem
+  maxCount: 20
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLensAlexandriteItem
+  name: alexandrite lens
+  description: "A lens ground of an alexandrite."
+  components:
+  - type: Stack
+    stackType: RUMCLensAlexandrite
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: LensAlexandrite
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCGalvanizedSheet
+  name: galvanized steel sheet
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: GalvanizedSheet }
+  spawn: RUMCGalvanizedSheetItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCGalvanizedSheetItem
+  name: galvanized steel sheet
+  description: "A steel sheet with a coat of zinc that keeps the rust off. Tin cans are made of it."
+  components:
+  - type: Stack
+    stackType: RUMCGalvanizedSheet
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: GalvanizedSheet
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCChromedSheet
+  name: chrome-plated steel sheet
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: ChromedSheet }
+  spawn: RUMCChromedSheetItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCChromedSheetItem
+  name: chrome-plated steel sheet
+  description: "A steel sheet with a bright coat of chrome. It does not rust and does not stain."
+  components:
+  - type: Stack
+    stackType: RUMCChromedSheet
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: ChromedSheet
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCTinCan
+  name: tin can
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: TinCan }
+  spawn: RUMCTinCanItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCTinCanItem
+  name: tin can
+  description: "An empty can of galvanized steel, ready to be filled and sealed."
+  components:
+  - type: Stack
+    stackType: RUMCTinCan
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: TinCan
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCPlasticPellets
+  name: plastic pellets
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: PlasticPellets }
+  spawn: RUMCPlasticPelletsItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCPlasticPelletsItem
+  name: plastic pellets
+  description: "Granules of plastic, the stuff that is pressed into sheets."
+  components:
+  - type: Stack
+    stackType: RUMCPlasticPellets
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: PlasticPellets
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCSulfurPowder
+  name: sulfur powder
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: SulfurPowder }
+  spawn: RUMCSulfurPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSulfurPowderItem
+  name: sulfur powder
+  description: "Yellow sulfur powder. Rubber is vulcanized with it, and acid is made of it."
+  components:
+  - type: Stack
+    stackType: RUMCSulfurPowder
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: SulfurPowder
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCMachineHull
+  name: machine casing parts
+  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: MachineHull }
+  spawn: RUMCMachineHullItem
+  maxCount: 10
+
+- type: entity
+  parent: BaseItem
+  id: RUMCMachineHullItem
+  name: machine casing parts
+  description: "Plates and frames of sheet steel that the casing of a machine of the first tier is made of."
+  components:
+  - type: Stack
+    stackType: RUMCMachineHull
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: MachineHull
+  - type: Item
+    size: Small
+
+# ---------------------------------------------------------------- liquids
+
+- type: reagent
+  id: RUMCHydrochloricAcid
+  name: reagent-name-au14-hydrochloric-acid
+  group: Elements
+  desc: reagent-desc-au14-hydrochloric-acid
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#d8e8a0"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+- type: reagent
+  id: RUMCCrudeOil
+  name: reagent-name-au14-crude-oil
+  group: Elements
+  desc: reagent-desc-au14-crude-oil
+  physicalDesc: reagent-physical-desc-oily
+  flavor: bitter
+  color: "#1c1a14"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+- type: reagent
+  id: RUMCNaphtha
+  name: reagent-name-au14-naphtha
+  group: Elements
+  desc: reagent-desc-au14-naphtha
+  physicalDesc: reagent-physical-desc-oily
+  flavor: bitter
+  color: "#c0a860"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+- type: reagent
+  id: RUMCLightFuel
+  name: reagent-name-au14-light-fuel
+  group: Elements
+  desc: reagent-desc-au14-light-fuel
+  physicalDesc: reagent-physical-desc-oily
+  flavor: bitter
+  color: "#8a7a30"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+- type: reagent
+  id: RUMCHeavyFuel
+  name: reagent-name-au14-heavy-fuel
+  group: Elements
+  desc: reagent-desc-au14-heavy-fuel
+  physicalDesc: reagent-physical-desc-oily
+  flavor: bitter
+  color: "#3a2c14"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+- type: reagent
+  id: RUMCDiesel
+  name: reagent-name-au14-diesel
+  group: Elements
+  desc: reagent-desc-au14-diesel
+  physicalDesc: reagent-physical-desc-oily
+  flavor: bitter
+  color: "#a08a2a"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+- type: reagent
+  id: RUMCRefineryGas
+  name: reagent-name-au14-refinery-gas
+  group: Elements
+  desc: reagent-desc-au14-refinery-gas
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#c8d0d8"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+- type: reagent
+  id: RUMCEthylene
+  name: reagent-name-au14-ethylene
+  group: Elements
+  desc: reagent-desc-au14-ethylene
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#d8e0c0"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+- type: reagent
+  id: RUMCFertilizer
+  name: reagent-name-au14-fertilizer
+  group: Elements
+  desc: reagent-desc-au14-fertilizer
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#7fa84a"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+- type: reagent
+  id: RUMCGlue
+  name: reagent-name-au14-glue
+  group: Elements
+  desc: reagent-desc-au14-glue
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#d8c890"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+- type: reagent
+  id: RUMCSolderMelt
+  name: reagent-name-au14-solder-melt
+  group: Elements
+  desc: reagent-desc-au14-solder-melt
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#b8bcc4"
+  boilingPoint: 300.0
+  meltingPoint: 20.0

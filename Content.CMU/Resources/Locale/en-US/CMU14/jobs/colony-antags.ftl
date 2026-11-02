@@ -80,7 +80,7 @@ cmu-summary-detail-replicant-never = They never assumed another identity.
 
 roles-antag-serialkiller-name = Serial Killer
 roles-antag-serialkiller-objective = Kill and avoid capture
-serialkiller-role-greeting = You have an insatiable urge to kill. Find your victims and don't leave witnesses. Law enforcement has your fingerprints from previous crime scenes.
+serialkiller-role-greeting = You have an insatiable urge to kill. Find your victims and don't leave witnesses. Law enforcement has your fingerprints from previous crime scenes. With a knife or anything sharp in hand, you can butcher a body to get rid of it.
 
 roles-antag-spy-name = Corporate Spy
 roles-antag-spy-objective = Steal WY research assets and exfiltrate them with your data link.

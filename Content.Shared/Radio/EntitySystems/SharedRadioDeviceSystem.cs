@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.Chat;
+using Content.Shared.CMU14.Radio; // CMU14
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -75,6 +76,10 @@ public abstract partial class SharedRadioDeviceSystem : EntitySystem
     [SubscribeLocalEvent]
     private void OnActivateSpeaker(Entity<RadioSpeakerComponent> ent, ref ActivateInWorldEvent args)
     {
+        // CMU14: the microphone owns the combined handheld mode cycle.
+        if (HasComp<CMURadioListenOnlyComponent>(ent) && HasComp<RadioMicrophoneComponent>(ent))
+            return;
+
         if (!args.Complex)
             return;
 
@@ -152,7 +157,8 @@ public abstract partial class SharedRadioDeviceSystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp, false))
             return;
 
-        SetMicrophoneEnabled(ent, user, !ent.Comp.Enabled, quiet);
+        if (!CMUTryCycleHandheld((ent.Owner, ent.Comp), user, quiet)) // CMU14
+            SetMicrophoneEnabled(ent, user, !ent.Comp.Enabled, quiet);
     }
 
     /// <summary>
@@ -253,7 +259,8 @@ public abstract partial class SharedRadioDeviceSystem : EntitySystem
     [SubscribeLocalEvent]
     private void OnAttemptListen(Entity<RadioMicrophoneComponent> ent, ref ListenAttemptEvent args)
     {
-        if (ent.Comp.PowerRequired && !_power.IsPowered(ent.Owner)
+        if (!ent.Comp.Enabled || // CMU14: listener removal is deferred; listen-only must stop transmitting immediately.
+            ent.Comp.PowerRequired && !_power.IsPowered(ent.Owner)
             || ent.Comp.UnobstructedRequired && !_interaction.InRangeUnobstructed(args.Source, ent.Owner, 0))
         {
             args.Cancel();

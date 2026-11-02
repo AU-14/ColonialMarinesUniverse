@@ -483,10 +483,11 @@ public abstract partial class SharedRMCTuringDispenserSystem : EntitySystem
         ent.Comp.FlushedContainers.Add(container);
 
         var baseName = MetaData(container).EntityPrototype?.Name ?? "vial";
+        // CMU14: fluent bottle names
         if (split.Contents.Count == 1 && _rmcReagent.TryIndex(split.Contents[0].Reagent.Prototype, out var reagentProto))
-            _metaData.SetEntityName(container, $"{baseName} ({reagentProto.LocalizedName})");
+            _metaData.SetEntityName(container, Loc.GetString("cmu-turing-dispenser-bottle-named", ("base", baseName), ("reagent", reagentProto.LocalizedName)));
         else if (split.Contents.Count > 1)
-            _metaData.SetEntityName(container, $"{baseName} (mixed)");
+            _metaData.SetEntityName(container, Loc.GetString("cmu-turing-dispenser-bottle-mixed", ("base", baseName)));
     }
 
     private bool TryGetTargetSolution(
@@ -686,7 +687,8 @@ public abstract partial class SharedRMCTuringDispenserSystem : EntitySystem
                     ? reagentProto.LocalizedName
                     : entry.Reagent.Id;
 
-                comp.Error = $"{name} NOT FOUND";
+                // CMU14: fluent error text
+                comp.Error = Loc.GetString("cmu-turing-dispenser-error-not-found", ("reagent", name));
                 comp.NextStuckRetry = time + comp.StuckRetryDelay;
                 SetStatus(ent, TuringDispenserStatus.Stuck);
                 break;

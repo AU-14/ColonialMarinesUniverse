@@ -76,6 +76,7 @@
       - !type:Bonemending
         potency: 6
         requiresSet: false
+        mendsShattered: true
       - !type:Aiding
         potency: 1
       - !type:Antihallucinogenic
@@ -117,6 +118,7 @@
       - !type:Bonemending
         potency: 6
         requiresSet: false
+        mendsShattered: true
       - !type:Aiding
         potency: 1
       - !type:Antihallucinogenic

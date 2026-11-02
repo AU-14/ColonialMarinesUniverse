@@ -51,6 +51,16 @@ rmc-xeno-tracker-target-HiveLeader = Hive Leader
 rmc-xeno-tracker-target-Tunnel = Tunnel
 rmc-xeno-tracker-target-HiveCore = Hive Core
 
+# CMU14
+rmc-xeno-hive-leader-none = There are no Xenomorph leaders. Overwatch a Xenomorph to make it a leader.
+rmc-xeno-hive-leader-max-promoted = You can't have more than { $max } promoted leaders.
+rmc-xeno-hive-leader-demote-user = You've demoted { $target } from Hive Leader.
+rmc-xeno-hive-leader-demote-target = { $name } has demoted you from Hive Leader. Your leadership rights and abilities have waned.
+rmc-xeno-hive-leader-promote-user = You've selected { $target } as a Hive Leader.
+rmc-xeno-hive-leader-promote-target = { $name } has selected you as a Hive Leader. The other Xenomorphs must listen to you. You will also act as a beacon for the Queen's pheromones.
+rmc-xeno-hive-leader-watch-title = Watch with leader?
+rmc-xeno-hive-leader-watch-confirm = Target
+
 rmc-xeno-ui-ovi-needed-label = [bold][color=red]The Queen must be in their\novipositor for you to gain points![/color][/bold]
 rmc-xeno-ui-evolution-points = Evolution points: { $points } / { $maxPoints }
 rmc-ui-xeno-strain-confirm = Confirm

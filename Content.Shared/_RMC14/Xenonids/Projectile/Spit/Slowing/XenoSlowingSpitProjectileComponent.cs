@@ -38,4 +38,8 @@ public sealed partial class XenoSlowingSpitProjectileComponent : Component
     /// </summary>
     [DataField]
     public bool KnocksDownNeuroImmune;
+
+    // CMU14: cmss13 bone chips only slow ishuman_strict and xenos, so preds still take the damage but not the slow
+    [DataField]
+    public bool SlowsYautja = true;
 }

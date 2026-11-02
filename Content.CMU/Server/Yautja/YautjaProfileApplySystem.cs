@@ -54,6 +54,9 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         ["CMUYautjaCapeQuarter"] = "back",
         ["CMUYautjaCapePoncho"] = "back",
         ["CMUYautjaCapeDamaged"] = "back",
+        ["CMUYautjaCapeBoneFull"] = "back",
+        ["CMUYautjaCapeBoneThird"] = "back",
+        ["CMUYautjaCapeBoneCeremonial"] = "back",
     };
 
     public override void Initialize()
@@ -229,9 +232,15 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
                 return;
             case "CMUYautjaMask":
                 ReplaceVended(ent, slot, profile.MaskPrototype, args.Item);
+                if (_inventory.TryGetSlotEntity(ent, slot, out var wornMask))
+                    ApplyMaskAccessory(wornMask.Value, profile);
+
                 return;
             case "CMUYautjaMaskScalable":
                 ApplyVendedProfileVisuals(ent, slot, profile.MaskPrototype, args.Item);
+                if (_inventory.TryGetSlotEntity(ent, slot, out var wornScalableMask))
+                    ApplyMaskAccessory(wornScalableMask.Value, profile);
+
                 return;
             case "CMUYautjaClanGreaves":
                 ReplaceVended(ent, slot, profile.GreavesPrototype, args.Item);
@@ -246,6 +255,9 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
             case "CMUYautjaCapeQuarter":
             case "CMUYautjaCapePoncho":
             case "CMUYautjaCapeDamaged":
+            case "CMUYautjaCapeBoneFull":
+            case "CMUYautjaCapeBoneThird":
+            case "CMUYautjaCapeBoneCeremonial":
                 ApplyVendedCapeColor(ent, slot, profile, args.Item);
                 return;
             default:
@@ -325,7 +337,10 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
     private void ApplyCapeColor(EntityUid cape, YautjaCharacterProfile profile)
     {
         var capeComp = EnsureComp<YautjaCapeComponent>(cape);
-        capeComp.Color = YautjaCharacterProfile.Default.CapeColor;
+        if (!capeComp.Recolorable)
+            return;
+
+        capeComp.Color = profile.CapeColor;
         Dirty(cape, capeComp);
     }
 

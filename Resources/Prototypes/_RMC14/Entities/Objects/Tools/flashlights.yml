@@ -11,6 +11,7 @@
   - type: HandheldLight
     blinkingBehaviourId: blinking
     radiatingBehaviourId: radiating
+  - type: CMUHelmetMountedLight # CMU14: toggleable while stored in a worn helmet
   - type: LightBehaviour
     behaviours:
       - !type:FadeBehaviour

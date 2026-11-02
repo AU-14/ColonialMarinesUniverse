@@ -63,6 +63,8 @@
   id: SerialKillerRole
   name: roles-antag-serialkiller-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-serialkiller-objective
 
 - type: startingGear
@@ -71,3 +73,18 @@
     back:
     - AUPaperSerialKiller
     - RMCLighter
+
+- type: entity
+  id: CMUActionButcherCorpse
+  name: Butcher
+  description: Carve up a human corpse you're standing next to with a knife or something sharp in hand. Take it apart limb by limb, or skin it down to nothing.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Yautja.YautjaButcherActionEvent
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Weapons/Melee/Kitchen/cleaver.rsi
+      state: icon
+      map: [enum.ActionVisuals.Icon]

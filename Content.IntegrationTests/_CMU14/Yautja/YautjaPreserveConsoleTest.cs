@@ -14,6 +14,7 @@ using Content.Shared.Doors.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared.Gravity;
 using Content.Shared.Physics;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
@@ -84,10 +85,16 @@ public sealed class YautjaPreserveConsoleTest
             await server.WaitPost(() =>
             {
                 var entMan = server.EntMan;
-                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-                prey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2, 0)));
-                hunterEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(1, 0)));
-                preyEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(3, 0)));
+                var mapSystem = entMan.System<SharedMapSystem>();
+                mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(1, 0), map.Tile.Tile);
+                mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(2, 0), map.Tile.Tile);
+                mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(3, 0), map.Tile.Tile);
+                entMan.EnsureComponent<GravityComponent>(map.Grid).Enabled = true;
+
+                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+                prey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
+                hunterEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(1.5f, 0.5f)));
+                preyEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(3.5f, 0.5f)));
                 entMan.EnsureComponent<YautjaComponent>(hunter);
 
                 entMan.EventBus.RaiseLocalEvent(hunterEdge, new InteractHandEvent(hunter, hunterEdge));

@@ -5,7 +5,7 @@ meta:
   forkId: cmu14
   forkVersion: huntership-port-visual-1to1
   time: "2026-06-03T17:16:10.789Z"
-  entityCount: 5407
+  entityCount: 5410
 maps:
 - 100001
 grids:
@@ -28698,3 +28698,20 @@ entities:
       parent: 100002
     - type: YautjaHuntSpawnPoint
       kind: Youngblood
+- proto: CMUYautjaRope
+  entities:
+  - uid: 105408
+    components:
+    - type: Transform
+      pos: 40.5,22.5
+      parent: 100002
+  - uid: 105409
+    components:
+    - type: Transform
+      pos: 40.5,22.5
+      parent: 100002
+  - uid: 105410
+    components:
+    - type: Transform
+      pos: 40.5,22.5
+      parent: 100002

@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.EntityReferences;
+using Content.Shared.Damage.Systems;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Ghost;
@@ -21,6 +22,13 @@ public sealed partial class CMUGhostAppearanceSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUGhostAppearanceComponent, ReferencedEntityTerminatingEvent>(OnSourceTerminating);
+        SubscribeLocalEvent<CMUGhostAppearanceStandInComponent, BeforeDamageChangedEvent>(OnStandInBeforeDamage);
+    }
+
+    // the stand-in is a real body riding on the ghost, so explosions near a ghost used to gib it and spill the job gear
+    private void OnStandInBeforeDamage(Entity<CMUGhostAppearanceStandInComponent> ent, ref BeforeDamageChangedEvent args)
+    {
+        args.Cancelled = true;
     }
 
     private void OnSourceTerminating(Entity<CMUGhostAppearanceComponent> ent, ref ReferencedEntityTerminatingEvent args)

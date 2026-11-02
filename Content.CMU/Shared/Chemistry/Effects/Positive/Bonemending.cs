@@ -15,14 +15,19 @@ public sealed partial class Bonemending : RMCChemicalEffect
     [DataField]
     public bool RequiresSet = true;
 
+    // cmss13 has no shattered bones, thwei there knits any break, so the yautja crystals mend those too
+    [DataField]
+    public bool MendsShattered;
+
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
-        => $"Restores [color=green]{PotencyPerSecond * 4}[/color] bone integrity to splinted or cast non-shattered fractures.\n" +
+        => $"Restores [color=green]{PotencyPerSecond * 4}[/color] bone integrity to " +
+           $"{(RequiresSet ? "splinted or cast " : string.Empty)}{(MendsShattered ? string.Empty : "non-shattered ")}fractures.\n" +
            "Overdoses cause malunion in an existing fracture.\n" +
            "Critical overdoses worsen an existing fracture by one severity.";
 
     protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
         => system.Bone
-            .ChemicallyMendFractures(args.TargetEntity, potency * 4f, RequiresSet);
+            .ChemicallyMendFractures(args.TargetEntity, potency * 4f, RequiresSet, MendsShattered);
 
     protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
         => system.Bone.ApplyChemicalMalunion(args.TargetEntity);

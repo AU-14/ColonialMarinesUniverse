@@ -405,7 +405,7 @@
 - type: platoon
   id: BEAR
   vehicleSupplyCatalog:
-  - CMUFighterGround
+  - CMUFighterGroundUPP
   - VehicleSPPTank
   - VehicleSPPAPC
   - VehicleSPPVan
@@ -417,6 +417,7 @@
   # The platoon's own satchel in place of the standard one.
   startingGearOverrides:
     CMSatchelMarine: RuMCUPPNavalInfantrySatchel
+  showInVote: false
   lorePrimer: RuMCPrimerPlatoonBEAR
   Allegiance: UPP
   languages:
@@ -746,7 +747,7 @@
 - type: platoon
   id: UPP
   vehicleSupplyCatalog:
-  - CMUFighterGround
+  - CMUFighterGroundUPP
   - VehicleSPPTank
   - VehicleSPPAPC
   - VehicleSPPVan

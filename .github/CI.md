@@ -29,6 +29,10 @@ workaround remains in CI to serialize the engine's PLINQ prototype loading; the
 explicit NUnit worker limit still permits test concurrency. Test result artifacts include TRX
 timings, and a test that stops progressing for five minutes aborts its test host.
 
+The mapping/station/shuttle/round shard uses two workers to bound concurrent
+map and round-start pairs, including replacements for pairs discarded after failures.
+Its test selection and five-minute inactivity watchdog remain unchanged.
+
 Normal CI sets `NUnit.ExplicitMode=None` for unit and integration tests. Timing
 benchmarks are explicitly selected experiments; deterministic allocation,
 cache, scheduling, and networking regressions still run in normal CI, including

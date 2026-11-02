@@ -75,6 +75,7 @@
     - AU14AccessGovforJuniorOfficer
     - AU14AccessGovforReq
     - AU14AccessGovforVehicleCrew
+    - CMUAccessKitchen # DEFAC open for business button
     - AU14AccessOpfor # opfor & opforsquad are identical
     - AU14AccessOpforSquad
     - AU14AccessOpforCommand

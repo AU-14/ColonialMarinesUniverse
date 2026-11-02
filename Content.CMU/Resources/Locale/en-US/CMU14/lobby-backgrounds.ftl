@@ -16,3 +16,5 @@ cmu-lobby-background-cmu14lobbyworkingjoes-title = Working Joes
 cmu-lobby-background-cmu14lobbyworkingjoes-artist = TerracottaTone
 cmu-lobby-background-cmu14lobbyxenowar-title = Xeno War
 cmu-lobby-background-cmu14lobbyxenowar-artist = Dragon-V0942, commissioned by ak105intow
+cmu-lobby-background-au14HijackChaos-title = HijackChaos
+cmu-lobby-background-au14HijackChaos-artist = ErinBaking

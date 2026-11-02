@@ -17,11 +17,11 @@ public sealed class YautjaWornWeaponVisualTest
     private static readonly (string Id, string Sprite, string State)[] BackWeapons =
     [
         ("CMUYautjaClanSword", "CMU14/Yautja/pred_gear_worn.rsi", "clansword"),
-        ("CMUYautjaRendingSword", "CMU14/Yautja/pred_gear_custom_worn.rsi", "rending_sword"),
-        ("CMUYautjaPiercingSword", "CMU14/Yautja/pred_gear_custom_worn.rsi", "piercing_sword"),
+        ("CMUYautjaRendingSword", "CMU14/Yautja/pred_gear_worn.rsi", "clansword_alt"),
+        ("CMUYautjaPiercingSword", "CMU14/Yautja/pred_gear_worn.rsi", "clansword_alt2"),
         ("CMUYautjaSeveringSword", "CMU14/Yautja/pred_gear_worn.rsi", "clansword_alt3"),
-        ("CMUYautjaDualWarScythe", "CMU14/Yautja/pred_gear_custom_worn.rsi", "dual_war_scythe"),
-        ("CMUYautjaDoubleWarScythe", "CMU14/Yautja/pred_gear_custom_worn.rsi", "double_war_scythe"),
+        ("CMUYautjaDualWarScythe", "CMU14/Yautja/pred_gear_worn.rsi", "predscythe"),
+        ("CMUYautjaDoubleWarScythe", "CMU14/Yautja/pred_gear_worn.rsi", "predscythe_alt"),
         ("CMUYautjaCruelStaff", "CMU14/Yautja/pred_gear_custom_worn.rsi", "cruel_staff"),
         ("CMUYautjaCombistick", "CMU14/Yautja/pred_gear_worn.rsi", "combistick"),
         ("CMUYautjaWarAxe", "CMU14/Yautja/pred_gear_worn.rsi", "war_axe"),

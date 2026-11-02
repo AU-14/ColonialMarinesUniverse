@@ -1,0 +1,14 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Admins can call the Yautja Military Caste as an ERT. They arrive on their
+    own shuttle with an Enforcer leading Soldiers.
+  type: Admin
+- message: Military Caste bracers have their bracer menu, self-destruct and translator
+    again.
+  type: Fix
+- message: Military Caste kits match CM13, with a plasma carbine, strong xeno restraints
+    and knife greaves.
+  type: Tweak
+time: '2026-10-30T11:08:46.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2370

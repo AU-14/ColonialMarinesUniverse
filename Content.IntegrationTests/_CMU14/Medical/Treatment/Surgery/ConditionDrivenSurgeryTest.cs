@@ -2395,6 +2395,61 @@ public sealed class ConditionDrivenSurgeryTest
     }
 
     [Test]
+    public async Task CauterizeSurgeryClampsDrugHeldInternalBleeding()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var flow = entMan.System<CMUSurgeryFlowSystem>();
+            var wounds = entMan.System<SharedCMUWoundsSystem>();
+
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                entMan.EnsureComponent<BypassSkillChecksComponent>(surgeon);
+                entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(human);
+
+                var arm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Right);
+                OpenSoftTissue(entMan, arm);
+                wounds.SeedInternalBleed(arm, "blunt", 0.5f);
+                wounds.SuppressInternalBleedFor(arm, TimeSpan.FromSeconds(30));
+
+                var held = entMan.GetComponent<CMUInternalBleedingSuppressedComponent>(arm);
+                Assert.That(entMan.HasComponent<InternalBleedingComponent>(arm), Is.False);
+                Assert.That(held.ExpiresAt, Is.Not.Null);
+
+                var armed = ArmStep(
+                    flow,
+                    surgeon,
+                    human,
+                    arm,
+                    "CMUSurgeryCauterizeInternalBleeding",
+                    BodyPartType.Arm,
+                    BodyPartSymmetry.Right,
+                    "drug-held");
+                CompleteExpectedStep(entMan, flow, human, surgeon, armed, "fix_o_vein", "drug-held");
+
+                AssertAwaitingClosure(entMan, human, arm, "drug-held");
+                Assert.That(entMan.HasComponent<InternalBleedingComponent>(arm), Is.False);
+                var clamped = entMan.GetComponent<CMUInternalBleedingSuppressedComponent>(arm);
+                Assert.That(clamped.ExpiresAt, Is.Null);
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+                entMan.DeleteEntity(surgeon);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task ReattachingRoboticArmDoesNotRegrowMissingHand()
     {
         await using var pair = await PoolManager.GetServerClient();

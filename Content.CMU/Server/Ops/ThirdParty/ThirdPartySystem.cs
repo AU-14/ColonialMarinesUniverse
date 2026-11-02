@@ -6,6 +6,7 @@ using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Threats;
 using Content.Server.CMU14.VendorMarker;
 using Content.Server.Chat.Systems;
+using Content.Shared.Chat;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Server.CMU14.Roles; // CMU14
@@ -52,6 +53,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private Content.Server.Chat.Managers.IChatManager _chatManager = default!;
     [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IServerPreferencesManager _preferences = default!;
@@ -140,7 +142,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             // The ghost-menu entry alone never reaches players who do not open it.
             if (!string.IsNullOrWhiteSpace(party.AnnounceInbound))
-                _chat.DispatchGlobalAnnouncement(party.AnnounceInbound, string.Empty, false,
+                _chat.DispatchGlobalAnnouncement(LocalizeAnnouncement(party.AnnounceInbound), string.Empty, false,
                     colorOverride: Color.DarkOrange);
         }
 
@@ -261,6 +263,13 @@ public sealed partial class ThirdPartySystem : EntitySystem
         string? entryMethod = overrideDropship.HasValue
             ? overrideDropship.Value ? "shuttle" : "ground"
             : string.IsNullOrWhiteSpace(party.EntryMethod) ? "ground" : party.EntryMethod;
+        // Presets can force shuttle entry; ground spawn puts parties inside enemy lines unprepared.
+        // Admin overrides keep precedence.
+        var groundEntryForbidden = _auRoundSystem.SelectedPreset is { ThirdPartyForceShuttle: true };
+        if (groundEntryForbidden
+            && !overrideDropship.HasValue
+            && string.Equals(entryMethod, "ground", StringComparison.OrdinalIgnoreCase))
+            entryMethod = "shuttle";
         _sawmill.Debug($"[ThirdPartySystem] Entry method: {entryMethod} (overrideDropship={overrideDropship})");
         if (_sawmill.Level <= LogLevel.Debug)
         {
@@ -832,9 +841,18 @@ public sealed partial class ThirdPartySystem : EntitySystem
             AssignMinds(memberPlayers, spawnedGrunts, ThirdPartyMemberJobId.Id, "member");
         }
 
-        if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
+        if (!string.IsNullOrWhiteSpace(party.AnnounceArrival) && party.AnnounceArrivalTitle is { } arrivalTitle)
         {
-            _chat.DispatchGlobalAnnouncement(party.AnnounceArrival, string.Empty, false,
+            var arrival = LocalizeAnnouncement(party.AnnounceArrival);
+            var wrapped = Loc.GetString("cmu-third-party-titled-arrival",
+                ("title", FormattedMessage.EscapeText(Loc.GetString(arrivalTitle))),
+                ("message", FormattedMessage.EscapeText(arrival)));
+            _chatManager.ChatMessageToAll(ChatChannel.Radio, arrival, wrapped, default, false, true, Color.DarkOrange);
+            _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
+        }
+        else if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
+        {
+            _chat.DispatchGlobalAnnouncement(LocalizeAnnouncement(party.AnnounceArrival), string.Empty, false,
                 colorOverride: Color.DarkOrange);
             _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
         }
@@ -842,6 +860,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
         _auRoundSystem.MarkThirdPartySpawned(party);
         yield return ForceDeploymentStep.Completed;
     }
+
+    // announcements are raw English on most parties, a loc id is used when one exists
+    private string LocalizeAnnouncement(string announcement)
+        => Loc.TryGetString(announcement, out var localized) ? localized : announcement;
 
     private static IReadOnlyDictionary<string, int> GetSpawnBodies(
         ThreatMarkerType markerType,

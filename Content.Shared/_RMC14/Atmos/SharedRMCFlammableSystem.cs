@@ -943,6 +943,23 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
                 stepping.ArmorMultiplier *= mod.DebuffModifier;
         }
 
+        // CMU14 Begin: fireproof wearers get their fire protection on the per-meter
+        // walking tick too; previously only the standing tick applied it, so every new
+        // fire tile stepped hit at full strength (AU-14 PR #2296).
+        var canIgnite = CanBeIgnited(uid, fireEntity, ignite.Intensity);
+        var fireProtection = 1f;
+        if (!canIgnite)
+        {
+            var ev = new GetFireProtectionEvent();
+            RaiseLocalEvent(uid, ref ev);
+
+            if (_inventoryQuery.TryComp(uid, out var inv))
+                _inventory.RelayEvent((uid, inv), ref ev);
+
+            fireProtection = ev.Multiplier;
+        }
+        // CMU14 End
+
         var coords = _transform.GetMoverCoordinates(uid);
         if (stepping.LastPosition is { } last &&
             last.TryDistance(EntityManager, _transform, coords, out var distance))
@@ -952,8 +969,8 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             {
                 stepping.Distance = 0;
                 if (CanFireBypassImmunity(fireEntity, uid))
-                    // CMU14: fire growth and synthetic resistance.
-                    DamageFromFire(uid, tile * ignite.Intensity, penetrating: ignite.FirePenetrating);
+                    // CMU14: fire growth and synthetic resistance; walking ticks take fire protection.
+                    DamageFromFire(uid, tile * ignite.Intensity * fireProtection, penetrating: ignite.FirePenetrating);
             }
         }
 
@@ -961,7 +978,8 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             return;
 
         // Check for ignition immunity before igniting
-        var canIgnite = CanBeIgnited(uid, fireEntity, ignite.Intensity);
+        // CMU14: read above the walking tick so fire protection can reuse it
+        //var canIgnite = CanBeIgnited(uid, fireEntity, ignite.Intensity);
 
         if (canIgnite)
         {
@@ -983,16 +1001,19 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         {
             // Damaging entities that are immune to being ignited but NOT immune to the fire's damage
             // Same update rate as FlammableSystem
-            var ev = new GetFireProtectionEvent();
-            RaiseLocalEvent(uid, ref ev);
+            // CMU14: fire protection is read once above the walking tick and reused here
+            //var ev = new GetFireProtectionEvent();
+            //RaiseLocalEvent(uid, ref ev);
 
-            if (_inventoryQuery.TryComp(uid, out var inv))
-                _inventory.RelayEvent((uid, inv), ref ev);
+            // CMU14
+            //if (_inventoryQuery.TryComp(uid, out var inv))
+            //    _inventory.RelayEvent((uid, inv), ref ev);
 
             if (ent.Comp.UpdateAt <= timing)
             {
                 // CMU14: fire growth and synthetic resistance.
-                DamageFromFire(uid, ignite.Intensity / 5f * flammable.Damage * ev.Multiplier, interruptsDoAfters: false, penetrating: ignite.FirePenetrating);
+                // CMU14
+                DamageFromFire(uid, ignite.Intensity / 5f * flammable.Damage * fireProtection, interruptsDoAfters: false, penetrating: ignite.FirePenetrating);
                 ent.Comp.UpdateAt = timing + ent.Comp.UpdateTime;
             }
         }

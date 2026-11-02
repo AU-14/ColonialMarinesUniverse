@@ -1,3 +1,4 @@
+using System.Globalization;
 using Content.Shared.CMU14.Yautja;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -24,8 +25,8 @@ public sealed partial class YautjaClanHallWindow
     private Label _roundInfo = default!;
     private LineEdit _slots = default!;
     private HudButton _randomToggle = default!;
-    private LineEdit _randomMin = default!;
-    private LineEdit _randomMax = default!;
+    private LineEdit _insurgencyChance = default!;
+    private LineEdit _distressChance = default!;
     private Label _randomInfo = default!;
     private bool _randomEnabled;
     private bool _roundFilled;
@@ -162,19 +163,22 @@ public sealed partial class YautjaClanHallWindow
             _randomToggle.Selected = _randomEnabled;
         };
         random.AddChild(_randomToggle);
-        random.AddChild(Caption(Loc.GetString("cmu-yautja-hall-round-every")));
-        _randomMin = Hud.LineEdit();
-        _randomMin.MinWidth = 50;
-        random.AddChild(_randomMin);
-        random.AddChild(Caption("-"));
-        _randomMax = Hud.LineEdit();
-        _randomMax.MinWidth = 50;
-        random.AddChild(_randomMax);
-        random.AddChild(Caption(Loc.GetString("cmu-yautja-hall-round-rounds")));
+        random.AddChild(Caption(Loc.GetString("cmu-yautja-hall-round-insurgency")));
+        _insurgencyChance = Hud.LineEdit();
+        _insurgencyChance.MinWidth = 50;
+        random.AddChild(_insurgencyChance);
+        random.AddChild(Caption(Loc.GetString("cmu-yautja-hall-round-distress")));
+        _distressChance = Hud.LineEdit();
+        _distressChance.MinWidth = 50;
+        random.AddChild(_distressChance);
         random.AddChild(Button("cmu-yautja-hall-set", () =>
         {
-            if (int.TryParse(_randomMin.Text.Trim(), out var min) && int.TryParse(_randomMax.Text.Trim(), out var max))
-                Request(new YautjaClanHallRoundRandomMessage(_randomEnabled, min, max));
+            // typed as percent, sent as 0-1
+            if (TryParsePercent(_insurgencyChance.Text, out var insurgency) &&
+                TryParsePercent(_distressChance.Text, out var distress))
+            {
+                Request(new YautjaClanHallRoundRandomMessage(_randomEnabled, insurgency, distress));
+            }
         }));
         settings.Body.AddChild(random);
         _randomInfo = Hud.Write(string.Empty, _body, Hud.Muted);
@@ -204,7 +208,7 @@ public sealed partial class YautjaClanHallWindow
             ("initialized", round.Initialized ? "true" : "false"),
             ("slots", round.ActiveHunterSlots));
         _randomInfo.Text = round.RandomEnabled
-            ? Loc.GetString("cmu-yautja-hall-round-random-left", ("rounds", round.RandomRoundsRemaining))
+            ? Loc.GetString("cmu-yautja-hall-round-random-info")
             : string.Empty;
 
         // fill the inputs once, not on every refresh someone else causes
@@ -213,9 +217,28 @@ public sealed partial class YautjaClanHallWindow
 
         _roundFilled = true;
         _slots.Text = round.HunterSlots.ToString();
-        _randomMin.Text = round.RandomMinimumRounds.ToString();
-        _randomMax.Text = round.RandomMaximumRounds.ToString();
+        _insurgencyChance.Text = FormatPercent(round.InsurgencyChance);
+        _distressChance.Text = FormatPercent(round.DistressSignalChance);
         _randomEnabled = round.RandomEnabled;
         _randomToggle.Selected = _randomEnabled;
+    }
+
+    private static string FormatPercent(float chance)
+    {
+        return (chance * 100f).ToString("0.#", CultureInfo.InvariantCulture);
+    }
+
+    private static bool TryParsePercent(string text, out float chance)
+    {
+        chance = 0f;
+        var trimmed = text.Trim().TrimEnd('%').Replace(',', '.');
+        if (!float.TryParse(trimmed, NumberStyles.Float, CultureInfo.InvariantCulture, out var percent) ||
+            percent is < 0f or > 100f)
+        {
+            return false;
+        }
+
+        chance = percent / 100f;
+        return true;
     }
 }

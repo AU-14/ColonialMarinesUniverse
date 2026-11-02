@@ -2,8 +2,11 @@ using System.Linq;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
+using Content.Shared.CMU14.Ghost;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Inventory;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -131,6 +134,81 @@ public sealed class YautjaMarkJournalTest
             var historical = journal.Records.Values.Single(record => record.WasMarked);
             Assert.That(historical.Target, Is.Null,
                 "deleting a marked entity must preserve its private history snapshot");
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    // ghosts carry a mind, so spectators used to show up as nearby targets
+    [Test]
+    public async Task GhostsNeverShowUpAsNearbyTargets()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var map = await pair.CreateTestMap();
+        EntityUid hunter = default;
+        EntityUid ghost = default;
+        EntityUid prey = default;
+        await pair.Server.WaitAssertion(() =>
+        {
+            var em = pair.Server.EntMan;
+            hunter = SpawnHunter(em, map.GridCoords).Hunter;
+            prey = em.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(2, 0)));
+            ghost = em.SpawnEntity("MobObserver", map.GridCoords.Offset(new System.Numerics.Vector2(1, 0)));
+            var minds = em.System<SharedMindSystem>();
+            minds.TransferTo(minds.CreateMind(null, "spectator"), ghost);
+            Assert.That(em.GetComponent<MindContainerComponent>(ghost).HasMind, Is.True);
+        });
+
+        await pair.RunSeconds(0.6f);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var journal = pair.Server.EntMan.GetComponent<YautjaHuntJournalComponent>(hunter);
+            Assert.That(journal.Visible, Does.Contain(prey));
+            Assert.That(journal.Visible, Does.Not.Contain(ghost));
+            Assert.That(journal.Records.Values.Any(record => record.Target == ghost), Is.False);
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    // a ghost carries a hidden body dressed as the player's character so it has something to look like. that body
+    // is a living humanoid with the character's name, so it showed up in the mark menu as if it were the ghost
+    [Test]
+    public async Task GhostStandInBodiesNeverShowUpAsNearbyTargets()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var map = await pair.CreateTestMap();
+        EntityUid hunter = default;
+        Entity<YautjaBracerComponent> bracer = default;
+        EntityUid standIn = default;
+        EntityUid carried = default;
+        EntityUid prey = default;
+        await pair.Server.WaitAssertion(() =>
+        {
+            var em = pair.Server.EntMan;
+            (hunter, bracer) = SpawnHunter(em, map.GridCoords);
+            prey = em.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(2, 0)));
+            var ghost = em.SpawnEntity("MobObserver", map.GridCoords.Offset(new System.Numerics.Vector2(1, 0)));
+
+            // the tagged stand-in, as the profile system builds it, and a plain humanoid riding the same ghost
+            standIn = em.SpawnEntity("CMMobHuman", new EntityCoordinates(ghost, System.Numerics.Vector2.Zero));
+            em.EnsureComponent<CMUGhostAppearanceStandInComponent>(standIn);
+            carried = em.SpawnEntity("CMMobHuman", new EntityCoordinates(ghost, System.Numerics.Vector2.Zero));
+        });
+
+        await pair.RunSeconds(0.6f);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var em = pair.Server.EntMan;
+            var journal = em.GetComponent<YautjaHuntJournalComponent>(hunter);
+            Assert.Multiple(() =>
+            {
+                Assert.That(journal.Visible, Does.Contain(prey));
+                Assert.That(journal.Visible, Does.Not.Contain(standIn));
+                Assert.That(journal.Visible, Does.Not.Contain(carried));
+                Assert.That(journal.Records.Values.Any(record => record.Target == standIn || record.Target == carried),
+                    Is.False);
+                Assert.That(em.System<YautjaMarkSystem>().TryMark(bracer, hunter, standIn, YautjaMarkKind.Prey, null),
+                    Is.False, "a ghost's stand-in body must not take a mark");
+            });
         });
         await pair.CleanReturnAsync();
     }

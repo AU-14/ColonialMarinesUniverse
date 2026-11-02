@@ -169,7 +169,8 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
             return;
         }
 
-        if (!HasComp<YautjaComponent>(args.User))
+        // cmss13 checks TRAIT_SUPER_STRONG here, which linked thralls get too
+        if (!HasComp<YautjaComponent>(args.User) && !HasComp<YautjaThrallHeroComponent>(args.User))
         {
             args.Handled = true;
             _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-not-strong"), args.User, args.User);

@@ -105,6 +105,14 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public float PoisonClearanceMultiplier = 1.5f;
 
+    // raw prey meat is food for yautja, cmss13 has no food poisoning on them. swapped on the bite instead of an
+    // Animal metabolizer, that one would also make chocolate and onions poison them
+    [DataField]
+    public ProtoId<ReagentPrototype> RawMeatReagent = "UncookedAnimalProteins";
+
+    [DataField]
+    public ProtoId<ReagentPrototype> RawMeatDigestsAs = "Protein";
+
     [DataField]
     public float AlcoholClearanceMultiplier = 2f;
 
@@ -311,6 +319,9 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public float HuntingLeapSpeed = 30f;
 
+    [DataField]
+    public TimeSpan HuntingLeapMinimumFlightTime = TimeSpan.FromSeconds(0.6);
+
     private static List<ProtoId<EmotePrototype>> GetDefaultAllowedEmotes()
     {
         var emotes = new List<ProtoId<EmotePrototype>>();
@@ -393,6 +404,25 @@ public sealed partial class YautjaCapeComponent : Component
 {
     [DataField, AutoNetworkedField]
     public Color Color = YautjaCharacterProfile.Default.CapeColor;
+
+    /// <summary>
+    /// Bone capes are drawn in their own colours and never take the cloth tint.
+    /// </summary>
+    [DataField]
+    public bool Recolorable = true;
+}
+
+/// <summary>
+/// cmss13 lets a pred wear the cape on the armour as an accessory so the back slot stays free.
+/// Use a cape on the armour to fasten it; the cape keeps its colour and draws on the armour.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class YautjaCapeMountComponent : Component
+{
+    [DataField]
+    public string ContainerId = "cmu-yautja-cape-mount";
+
+    public ContainerSlot? Container;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
@@ -777,7 +807,7 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     [DataField]
     public SoundSpecifier CloakOffSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/pred_cloakoff_modern.wav");
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public YautjaInvisibilitySound InvisibilitySound = YautjaInvisibilitySound.Modern;
 
     [DataField]
@@ -830,13 +860,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
 
     [DataField]
     public EntProtoId UncloakEffect = "RMCEffectUncloak";
-
-    [DataField]
-    public HashSet<HumanoidVisualLayers> CloakedHideLayers = new()
-    {
-        HumanoidVisualLayers.Hair,
-        HumanoidVisualLayers.Eyes,
-    };
 
     [DataField]
     public SoundSpecifier RecallSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Equipment/pred_attach.wav");
@@ -992,6 +1015,10 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
 
     [DataField]
     public bool RequiresYautjaWearer;
+
+    // CMU14: cmss13 keeps the clan mask visor yautja-only, CMU lets any human run it off a worn bracer
+    [DataField]
+    public bool AllowAnyWearer;
 
     [DataField]
     public float ZoomLevel = 0.45f;
@@ -1498,16 +1525,16 @@ public sealed partial class YautjaSmartDiscComponent : Component
     public Vector2? LastThrowAttemptPosition;
 
     [DataField]
-    public int MaxHits = 3;
+    public int MaxHits = 8;
 
     [DataField]
     public float HitRange = 0.7f;
 
     [DataField]
-    public TimeSpan HitDelay = TimeSpan.FromSeconds(0.45);
+    public TimeSpan HitDelay = TimeSpan.FromSeconds(2);
 
     [DataField]
-    public TimeSpan ActiveTime = TimeSpan.FromSeconds(8);
+    public TimeSpan ActiveTime = TimeSpan.FromSeconds(16);
 
     [DataField]
     public TimeSpan RetargetDelay = TimeSpan.FromSeconds(0.35);
@@ -1521,11 +1548,54 @@ public sealed partial class YautjaSmartDiscComponent : Component
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public float NonYautjaFiddleChance = 0.75f;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public float HumanDamageMultiplier = 0.7f;
+    // cmss13's active disc is a simple mob: rand(15, 25) brute per slash through attack_animal, which
+    // never checks armour
+    [DataField]
+    public ProtoId<DamageTypePrototype> StrikeDamageType = "Slash";
+
+    [DataField]
+    public float StrikeDamageMin = 15f;
+
+    [DataField]
+    public float StrikeDamageMax = 25f;
+
+    [DataField]
+    public float KnockdownChance = 0.05f;
+
+    // WEAKEN 3, each unit is 2 seconds there
+    [DataField]
+    public TimeSpan KnockdownTime = TimeSpan.FromSeconds(6);
+
+    // AttackTarget's prob(20) drops the mob back to idle and it loses the swing
+    [DataField]
+    public float LoseSwingChance = 0.2f;
+
+    // time_idle > 3 on a 2 second Life tick
+    [DataField]
+    public TimeSpan IdleTimeout = TimeSpan.FromSeconds(8);
+
+    [DataField]
+    public float Health = 60f;
+
+    // separate fixture so only the active disc stops bullets, the one lying on the floor doesn't
+    [DataField]
+    public string ShootableFixture = "shootable";
 
     [DataField]
     public SoundSpecifier HitSound = new SoundPathSpecifier("/Audio/Weapons/star_hit.ogg");
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public float DamageTaken;
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public TimeSpan IdleSince;
+
+    // bullets that already rolled their pass-through chance, so a bullet rolls once and not every physics step
+    [ViewVariables]
+    public HashSet<EntityUid> RolledProjectiles = new();
+
+    [ViewVariables]
+    public HashSet<EntityUid> MissedProjectiles = new();
 
     [ViewVariables(VVAccess.ReadWrite)]
     public bool Active;
@@ -2044,9 +2114,9 @@ public sealed partial class YautjaHuntConsoleComponent : Component
             HuntCall("mixed_group", "cmu-yautja-hunt-call-mixed-group", 6, 1.4f, MixedPrey()),
             HuntCall("mixed_large", "cmu-yautja-hunt-call-mixed-large", 8, 1.6f, MixedPrey()),
             HuntCall("mixed_larger", "cmu-yautja-hunt-call-mixed-larger", 12, 1.8f, MixedPrey()),
-            HuntCall("serpents_small", "cmu-yautja-hunt-call-serpents-small", 4, 1f, SerpentPrey()),
-            HuntCall("serpents_group", "cmu-yautja-hunt-call-serpents-group", 6, 1.2f, SerpentPrey()),
-            HuntCall("serpents_large", "cmu-yautja-hunt-call-serpents-large", 8, 1.4f, SerpentPrey()),
+            SerpentCall("serpents_small", "cmu-yautja-hunt-call-serpents-small", 4, 1f, maxT3: 1, maxT2: 1),
+            SerpentCall("serpents_group", "cmu-yautja-hunt-call-serpents-group", 6, 1.2f, maxT3: 3, maxT2: 1),
+            SerpentCall("serpents_large", "cmu-yautja-hunt-call-serpents-large", 8, 1.4f, maxT3: 3, maxT2: 3),
             HuntCall("tribal_small", "cmu-yautja-hunt-call-tribal-small", 8, 1f, TribalPrey()),
             HuntCall("tribal_group", "cmu-yautja-hunt-call-tribal-group", 12, 1.2f, TribalPrey()),
             HuntCall("tribal_large", "cmu-yautja-hunt-call-tribal-large", 15, 1.4f, TribalPrey()),
@@ -2129,15 +2199,35 @@ public sealed partial class YautjaHuntConsoleComponent : Component
         };
     }
 
-    private static List<YautjaHuntSpawnEntry> SerpentPrey()
+    // cmss13 /datum/emergency_call/pred/xeno: up to max_xeno_t3 of prae/rav/despoiler, then up to max_xeno_t2
+    // lurker/warrior, everyone after that is a warrior. without the caps a small group could roll four ravagers
+    private static YautjaHuntCallOption SerpentCall(
+        string id,
+        string displayName,
+        int spawnCount,
+        float cooldownMultiplier,
+        int maxT3,
+        int maxT2)
     {
-        return new List<YautjaHuntSpawnEntry>
+        var call = HuntCall(id, displayName, spawnCount, cooldownMultiplier, new List<YautjaHuntSpawnEntry>());
+        call.Tiers = new List<YautjaHuntSpawnTier>
         {
-            Entity("CMXenoWarrior", 3),
-            Entity("CMXenoLurker", 2),
-            Entity("CMXenoPraetorian"),
-            Entity("CMXenoRavager"),
+            new()
+            {
+                Max = maxT3,
+                Spawns = { Entity("CMXenoPraetorian"), Entity("CMXenoRavager"), Entity("RMCXenoDespoiler") },
+            },
+            new()
+            {
+                Max = maxT2,
+                Spawns = { Entity("CMXenoLurker"), Entity("CMXenoWarrior") },
+            },
+            new()
+            {
+                Spawns = { Entity("CMXenoWarrior") },
+            },
         };
+        return call;
     }
 
     private static List<YautjaHuntSpawnEntry> TribalPrey()
@@ -2224,6 +2314,21 @@ public sealed partial class YautjaHuntCallOption
 
     [DataField]
     public float CooldownMultiplier = 1f;
+
+    [DataField]
+    public List<YautjaHuntSpawnEntry> Spawns = new();
+
+    // filled in order, each member goes to the first tier that isn't full. used instead of Spawns when set
+    [DataField]
+    public List<YautjaHuntSpawnTier> Tiers = new();
+}
+
+[DataDefinition]
+public sealed partial class YautjaHuntSpawnTier
+{
+    // 0 means no cap, the filler tier
+    [DataField]
+    public int Max;
 
     [DataField]
     public List<YautjaHuntSpawnEntry> Spawns = new();
@@ -3079,8 +3184,9 @@ public sealed partial class YautjaSourceShieldBlockComponent : Component
 [RegisterComponent]
 public sealed partial class YautjaShieldHeldPrefixComponent : Component
 {
-    [DataField(required: true)]
-    public string Lowered = string.Empty;
+    // null leaves the plain inhand-left/right states, the bracer shield has no prefix when lowered
+    [DataField]
+    public string? Lowered;
 
     [DataField(required: true)]
     public string Readied = string.Empty;
@@ -3464,6 +3570,10 @@ public sealed partial class YautjaPlasmaRifleBoltComponent : Component
 
     [DataField]
     public float XenoExtraDamageMultiplier = 0.75f;
+
+    // cmss13 debilitate weaken 2 (x20 ds), humans only, yautja and synths shrug it off
+    [DataField]
+    public TimeSpan HumanKnockdownTime = TimeSpan.FromSeconds(4);
 }
 
 [RegisterComponent]

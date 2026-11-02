@@ -367,7 +367,8 @@ namespace Content.Shared.Preferences
                 "insurgency" => "Insurgency",
                 "colonyfall" => "ColonyFall",
                 "distresssignal" => "DistressSignal",
-                // CMU14: Force on Force roles, hijacking, announcements and identification.
+                // CMU14: Force on Force keeps its own preference store; military and colony
+                // role preferences are edited on the Force on Force tab directly.
                 "forceonforce" => "ForceOnForce",
                 _ => gamemode.Trim()
             };
@@ -1011,11 +1012,12 @@ namespace Content.Shared.Preferences
         public IReadOnlyDictionary<ProtoId<JobPrototype>, JobPriority> GetJobPrioritiesForGamemode(string? gamemode)
         {
             var key = NormalizePreferenceGamemode(gamemode);
-            if (string.IsNullOrEmpty(key) ||
-                !_gamemodeJobPriorities.TryGetValue(key, out var priorities))
-            {
+            // CMU14
+            if (string.IsNullOrEmpty(key))
                 return _jobPriorities;
-            }
+
+            if (!_gamemodeJobPriorities.TryGetValue(key, out var priorities))
+                return _jobPriorities;
 
             return NormalizeJobPriorities(priorities);
         }

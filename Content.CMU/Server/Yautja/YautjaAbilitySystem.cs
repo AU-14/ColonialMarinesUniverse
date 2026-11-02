@@ -58,6 +58,9 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
         SubscribeLocalEvent<YautjaLeapingComponent, CMUZLevelMoveEvent>(OnLeapCrossedDeck);
         SubscribeLocalEvent<YautjaLeapingComponent, ComponentRemove>(OnLeapComponentRemoved);
         SubscribeLocalEvent<YautjaComponent, YautjaButcherActionEvent>(OnButcher);
+        SubscribeLocalEvent<YautjaButcherAbilityComponent, MapInitEvent>(OnButcherAbilityMapInit);
+        SubscribeLocalEvent<YautjaButcherAbilityComponent, ComponentShutdown>(OnButcherAbilityShutdown);
+        SubscribeLocalEvent<YautjaButcherAbilityComponent, YautjaButcherActionEvent>(OnAbilityButcher);
         SubscribeLocalEvent<YautjaComponent, YautjaMarkForHuntActionEvent>(OnMarkForHunt);
     }
 
@@ -76,6 +79,24 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
     }
 
     private void OnButcher(Entity<YautjaComponent> ent, ref YautjaButcherActionEvent args)
+    {
+        if (args.Handled || args.Performer != ent.Owner || _mob.IsIncapacitated(ent.Owner))
+            return;
+
+        args.Handled = _trophies.TryOpenButcherDialog(ent.Owner);
+    }
+
+    private void OnButcherAbilityMapInit(Entity<YautjaButcherAbilityComponent> ent, ref MapInitEvent args)
+    {
+        _actions.AddAction(ent.Owner, ref ent.Comp.Action, ent.Comp.ActionId);
+    }
+
+    private void OnButcherAbilityShutdown(Entity<YautjaButcherAbilityComponent> ent, ref ComponentShutdown args)
+    {
+        _actions.RemoveAction(ent.Owner, ent.Comp.Action);
+    }
+
+    private void OnAbilityButcher(Entity<YautjaButcherAbilityComponent> ent, ref YautjaButcherActionEvent args)
     {
         if (args.Handled || args.Performer != ent.Owner || _mob.IsIncapacitated(ent.Owner))
             return;

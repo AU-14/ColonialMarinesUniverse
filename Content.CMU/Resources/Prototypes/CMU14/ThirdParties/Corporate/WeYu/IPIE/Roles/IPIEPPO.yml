@@ -29,9 +29,9 @@
       - SquadPMC
   - type: NpcFactionMember
     factions:
-    - GOVFOR
+    - AUWeYu
   - type: Marine
-    Faction: govfor
+    Faction: weyu
 
   name: cmu-job-title-ipie-ppo
   description: au14-ipie-ppo-description

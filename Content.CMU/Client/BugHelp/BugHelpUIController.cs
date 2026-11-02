@@ -1,0 +1,76 @@
+using Content.Client.Lobby.UI;
+using Content.Client._RMC14.Mentor;
+using Content.Client.Stylesheets;
+using Content.Shared.CMU14.BugHelp;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controllers;
+using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.IoC;
+using Robust.Shared.Network;
+
+namespace Content.Client.CMU14.BugHelp;
+
+/// <summary>
+/// Owns the bug report window: player-bound, so a plain UI controller over raw net messages —
+/// the same shape as the mentor help controller, no BoundUserInterface involved.
+/// </summary>
+public sealed class BugHelpUIController : UIController
+{
+    [Dependency] private readonly INetManager _net = default!;
+
+    private BugHelpWindow? _window;
+    private bool _isEnabled;
+
+    public bool IsEnabled => _isEnabled;
+
+    public override void Initialize()
+    {
+        _net.RegisterNetMessage<BugHelpOpenMsg>(OnOpen);
+        _net.RegisterNetMessage<BugHelpSubmitMsg>();
+        _net.RegisterNetMessage<BugHelpConfigMsg>(OnConfig);
+    }
+
+    private void OnConfig(BugHelpConfigMsg message)
+    {
+        _isEnabled = message.Enabled;
+        UIManager.GetUIController<StaffHelpUIController>().RefreshBugHelpButton();
+    }
+
+    private void OnOpen(BugHelpOpenMsg message)
+    {
+        OpenWindow();
+    }
+
+    public void OpenWindow()
+    {
+        if (_window is { IsOpen: true })
+            return;
+
+        _window = new BugHelpWindow();
+        _window.Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetNano;
+        CrtLobbyTheme.ApplyWindow(_window, useCrtTypography: false);
+        _window.OnClose += () => _window = null;
+        _window.TalkToStaffButton.OnPressed += _ =>
+        {
+            // StaffHelpUIController injects this controller, so resolve it lazily to avoid a
+            // constructor loop. "Staff Help" is the mockup's title for this door (pane 3).
+            UIManager.GetUIController<StaffHelpUIController>().OpenMentorOrHelpWindow("Staff Help");
+            _window.Close();
+        };
+        _window.OnSubmit += window =>
+        {
+            var submission = window.Collect();
+            _net.ClientSendMessage(new BugHelpSubmitMsg
+            {
+                Category = submission.Category,
+                WhatHappened = submission.WhatHappened,
+                Expected = submission.Expected,
+                Steps = submission.Steps,
+                ItemQuery = submission.ItemQuery,
+                ExamineText = submission.ExamineText,
+            });
+            window.Close();
+        };
+        _window.OpenCentered();
+    }
+}

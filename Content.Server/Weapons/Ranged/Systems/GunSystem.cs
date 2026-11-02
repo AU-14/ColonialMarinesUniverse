@@ -84,6 +84,15 @@ public sealed partial class GunSystem : SharedGunSystem
             ? TransformSystem.WithEntityId(fromCoordinates, gridUid)
             : new EntityCoordinates(_map.GetMapOrInvalid(fromMap.MapId), fromMap.Position);
 
+        // CMU14 Begin: a map removed during firing cannot host a projectile.
+        if (!fromEnt.EntityId.Valid)
+        {
+            Log.Warning($"Tried to fire gun {ToPrettyString(gun)} at entity coordinates with an invalid EntityUid.");
+            userImpulse = false;
+            return null;
+        }
+        // CMU14 End
+
         toMap = fromMap.Position + angle.ToVec() * mapDirection.Length();
         mapDirection = toMap - fromMap.Position;
         var gunVelocity = Physics.GetMapLinearVelocity(fromEnt);

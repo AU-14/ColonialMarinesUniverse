@@ -937,6 +937,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             return false;
         }
         var precise = agent.State == CMUExpeditionAgentState.Peeking;
+        // A tactical action must stop at the same stance its completion check accepts.
+        var arrivalRange = agent.State == CMUExpeditionAgentState.PlanMove ? PlanMoveArrivalRange : ArrivalRange;
         var seekingShelter = agent.CoverAnchor != null &&
             agent.State is CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo;
         // Native steering can oscillate around a tiny sub-tile radius. Stop as soon as the actual
@@ -949,7 +951,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             _transform.InRange(transform.Coordinates, destination, 0.55f) && BodyFits(uid, transform.Coordinates) &&
             ShelteredFromKnownThreats(uid, agent, transform.Coordinates);
         if (clearStance || shelteredStop || !seekingShelter &&
-            _transform.InRange(transform.Coordinates, destination, precise ? 0.12f : ArrivalRange))
+            _transform.InRange(transform.Coordinates, destination, precise ? 0.12f : arrivalRange))
         {
             _steering.Unregister(uid);
             // Cancel travel momentum at a deliberate cover stop; otherwise a short arrival radius

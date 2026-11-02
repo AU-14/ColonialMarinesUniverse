@@ -60,7 +60,8 @@ public sealed class VehicleSupplyLoadoutTest
                 {
                     // Fighter pylons are serviced with a power loader, rather than ItemSlots loadouts.
                     Assert.That(entry.LoadoutCategories, Is.Empty);
-                    Assert.That(entry.Bundle.Select(id => id.Id), Does.Contain("CMUFighterLandingPadFolded"));
+                    // CMU14: fighters no longer require or receive a landing pad.
+                    // Assert.That(entry.Bundle.Select(id => id.Id), Does.Contain("CMUFighterLandingPadFolded"));
                     Assert.That(entry.Hardpoints.Select(id => id.Id), Is.SupersetOf(new[]
                     {
                         "RMCDropshipAttachmentRocketPod", "RMCDropshipAttachmentAmmoGAU",

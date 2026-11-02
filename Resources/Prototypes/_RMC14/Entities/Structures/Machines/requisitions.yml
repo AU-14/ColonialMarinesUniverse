@@ -106,7 +106,7 @@
     - OrderSender
   - type: GuideHelp
     guides:
-    - Cargo
+    - RMCRequisitions # CMU14: the base SS14 Cargo guide does not match CMU; link the requisitions guide
   - type: CargoSellBlacklist
   - type: ApcPowerReceiver
     powerLoad: 0
@@ -312,7 +312,7 @@
     faction: opfor
 
 - type: entity
-  parent: [ CMASRSConsole, CMUASRSColonyJeepKits ] # CMU14: colony jeep kits
+  parent: [ CMASRSConsole, CMUASRSColonyJeepKits ]
   id: CMASRSConsoleColony
   name: ASRS console (Colony)
   components:

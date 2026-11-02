@@ -27,6 +27,7 @@ public sealed partial class RoofOverlay : Overlay
 
     private List<Entity<MapGridComponent>> _grids = new();
     private readonly HashSet<Vector2i> _entityRoofTiles = new(); // CMU14
+    private readonly Dictionary<Vector2i, Color> _entityRoofColors = new(); // CMU14
 
     public override OverlaySpace Space => OverlaySpace.BeforeLighting;
 
@@ -120,9 +121,9 @@ public sealed partial class RoofOverlay : Overlay
 
                     var tileEnumerator = _mapSystem.GetTilesIntersecting(grid.Owner, grid, bounds);
                     var roofEnt = (grid.Owner, grid.Comp, roof);
-                    // CMU14: only tiles near entity roofs need the expensive exact lookup.
+                    // CMU14: batch proven roof coverage; retain exact checks for fixture edges and containers.
                     var localBounds = _xformSystem.GetInvWorldMatrix(grid.Owner).TransformBox(bounds.CalcBoundingBox());
-                    _roof.GetEntityRoofTiles(grid, localBounds, _entityRoofTiles);
+                    _roof.GetEntityRoofColors(roofEnt, localBounds, _entityRoofColors, _entityRoofTiles);
 
                     // Due to stencilling we essentially draw on unrooved tiles
                     while (tileEnumerator.MoveNext(out var tileRef))
@@ -130,7 +131,10 @@ public sealed partial class RoofOverlay : Overlay
                         if (_turf.IsSpace(tileRef))
                             continue;
 
-                        var color = _roof.GetColor(roofEnt, tileRef.GridIndices, _entityRoofTiles.Contains(tileRef.GridIndices)); // CMU14
+                        // CMU14
+                        var index = tileRef.GridIndices;
+                        var color = _roof.GetColor(roofEnt, index, _entityRoofTiles.Contains(index),
+                            _entityRoofColors.TryGetValue(index, out var entityColor) ? entityColor : null);
 
                         if (color == null)
                         {

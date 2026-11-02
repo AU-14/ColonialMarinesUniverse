@@ -64,6 +64,7 @@ public sealed partial class FighterCockpitControl : LayoutContainer
         SetAnchorAndMarginPreset(_sight, LayoutPreset.Wide);
         SetAnchorAndMarginPreset(_exteriorClouds, LayoutPreset.Wide);
         ViewPanel.PanelOverride = ConsolePanel();
+        FlightPanel.PanelOverride = ConsolePanel();
         LoadoutPanel.PanelOverride = ConsolePanel();
         ControlsPanel.PanelOverride = ConsolePanel();
         AltitudeSwitch.PanelOverride = ConsolePanel();
@@ -142,8 +143,8 @@ public sealed partial class FighterCockpitControl : LayoutContainer
 
     private static StyleBoxFlat ConsolePanel() => new()
     {
-        BackgroundColor = Color.FromHex("#0B1410"),
-        BorderColor = Color.FromHex("#5C6854"),
+        BackgroundColor = Color.FromHex("#0C0F13"),
+        BorderColor = Color.FromHex("#303741"),
         BorderThickness = new Thickness(1),
     };
 
@@ -157,16 +158,13 @@ public sealed partial class FighterCockpitControl : LayoutContainer
         TargetingTab.ToolTip = Loc.GetString(_airspace ? "cmu-fighter-shared-sight" : "cmu-fighter-targeting-ground");
         Scene.Visible = CameraControl;
         ExteriorScene.Visible = _airspace;
-        RouteEditing.Visible = !_spectating && !_chart.CoverageMode && _pilotRole == true;
-        Launch.Visible = !_spectating && !_chart.CoverageMode && _pilotRole == true;
+        RouteEditing.Visible = true;
         CoverageHelp.Visible = !_spectating && _chart.CoverageMode;
-        RouteTitle.Text = Loc.GetString(_chart.CoverageMode ? "cmu-fighter-cover-title" : "cmu-fighter-airspace");
         InvalidateMeasure();
     }
 
     public void ShowRoute(bool visible, bool coverage = false)
     {
-        // The chart now lives in a persistent left-hand display, not a popup.
         if (visible) _targeting = false;
         _chart.CoverageMode = visible && coverage && _airspace;
         RefreshPanels();
@@ -180,40 +178,57 @@ public sealed partial class FighterCockpitControl : LayoutContainer
 
     protected override Vector2 ArrangeOverride(Vector2 finalSize)
     {
-        // Keep both work areas docked and leave the aircraft unobstructed between them.
+        // Dock the shared display above the flight controls to form the corner L.
         const float margin = 12;
-        var rightWidth = Math.Min(340, finalSize.X * .31f);
-        var leftWidth = Math.Min(520, finalSize.X * .38f);
-        var rightStart = finalSize.X - rightWidth - margin;
-        SetMarginLeft(ControlsPanel, rightStart);
-        SetMarginRight(ControlsPanel, finalSize.X - margin);
-        SetMarginTop(ControlsPanel, margin);
-        var controlsHeight = Math.Min(ControlsContent.DesiredSize.Y + 2, Math.Max(1, finalSize.Y - margin * 2));
-        SetMarginBottom(ControlsPanel, margin + controlsHeight);
+        // The game viewport briefly has no size while attaching or resizing it.
+        // Do not turn that transient size into negative panel constraints.
+        if (finalSize.X <= margin * 2 || finalSize.Y <= margin * 2)
+            return finalSize;
+        const float footerHeight = 166;
+        var barWidth = Math.Min(1280, finalSize.X - margin * 2);
+        var leftWidth = Math.Min(400, barWidth * .37f);
+        var missionWidth = Math.Min(164, barWidth * .19f);
+        var footerTop = Math.Max(margin, finalSize.Y - footerHeight - margin);
+        FlightPanel.MinWidth = FlightPanel.MaxWidth = leftWidth;
+        ControlsPanel.MinWidth = ControlsPanel.MaxWidth = missionWidth;
+        SetMarginLeft(BottomBar, margin);
+        SetMarginRight(BottomBar, margin + barWidth);
+        SetMarginTop(BottomBar, footerTop);
+        SetMarginBottom(BottomBar, finalSize.Y - margin);
         SetMarginLeft(LeftColumn, margin);
         SetMarginRight(LeftColumn, margin + leftWidth);
-        SetMarginTop(LeftColumn, margin);
-        SetMarginBottom(LeftColumn, finalSize.Y - margin);
+        SetMarginTop(LeftColumn, Math.Max(margin, footerTop - 600));
+        SetMarginBottom(LeftColumn, footerTop);
 
-        var middleWidth = Math.Max(1, rightStart - leftWidth - margin * 3);
-        var height = Math.Min(finalSize.Y * .55f, middleWidth * 335 / 266);
+        var middleWidth = Math.Max(1, finalSize.X - leftWidth - margin * 3);
+        var height = Math.Max(1, Math.Min(420, Math.Min((footerTop - margin) * .72f, middleWidth * 335 / 266)));
         var width = height * 266 / 335;
-        var center = (leftWidth + margin + rightStart) / 2;
+        var center = (leftWidth + finalSize.X) / 2;
+        var top = margin + (footerTop - margin - height) / 2;
         SetMarginLeft(Ship, center - width / 2);
         SetMarginRight(Ship, center + width / 2);
-        SetMarginTop(Ship, finalSize.Y - margin - height);
-        SetMarginBottom(Ship, finalSize.Y - margin);
+        SetMarginTop(Ship, top);
+        SetMarginBottom(Ship, top + height);
         return base.ArrangeOverride(finalSize);
     }
 
     private static void FillViewport(ScalingViewport viewport)
     {
-        var dimension = viewport.PixelSize.X * 540 >= viewport.PixelSize.Y * 960
-            ? ScalingViewportIgnoreDimension.Vertical
-            : ScalingViewportIgnoreDimension.Horizontal;
+        var pixels = viewport.PixelSize;
+        if (pixels.X <= 0 || pixels.Y <= 0)
+            return;
+
+        // Keep the existing pixels-per-metre and zoom, but render only the part of
+        // the 960x540 view that fits this panel. The old fill discarded the rest.
+        var ratio = Math.Max(pixels.X / 960f, pixels.Y / 540f);
+        var wide = pixels.X * 540 >= pixels.Y * 960;
+        var size = wide
+            ? new Vector2i(960, Math.Max(1, (int) Math.Ceiling(960d * pixels.Y / pixels.X)))
+            : new Vector2i(Math.Max(1, (int) Math.Ceiling(540d * pixels.X / pixels.Y)), 540);
+        if (viewport.ViewportSize != size) viewport.ViewportSize = size;
+        var dimension = wide ? ScalingViewportIgnoreDimension.Vertical : ScalingViewportIgnoreDimension.Horizontal;
         if (viewport.IgnoreDimension != dimension) viewport.IgnoreDimension = dimension;
-        var renderScale = Math.Clamp((int) Math.Ceiling(Math.Max(viewport.PixelSize.X / 960f,
-            viewport.PixelSize.Y / 540f)), 1, 2);
+        var renderScale = Math.Clamp((int) Math.Ceiling(ratio), 1, 2);
         if (viewport.FixedRenderScale != renderScale) viewport.FixedRenderScale = renderScale;
     }
 
@@ -232,7 +247,7 @@ public sealed partial class FighterCockpitControl : LayoutContainer
             _nextReadouts = TimeSpan.Zero;
             RoleTitle.Text = Loc.GetString(_spectating
                 ? seat.Pilot ? "cmu-fighter-spectating-pilot" : "cmu-fighter-spectating-wso"
-                : seat.Pilot ? "cmu-fighter-pilot-controls" : "cmu-fighter-observer-controls");
+                : seat.Pilot ? "cmu-fighter-pilot" : "cmu-fighter-observer");
             _chart.CoverageMode = false;
             ShowOptics((_spectating || !seat.Pilot) && _airspace);
         }
@@ -290,8 +305,12 @@ public sealed partial class FighterCockpitControl : LayoutContainer
         var phase = Loc.GetString(aircraft.GroundState == FighterGroundState.Airborne
             ? "cmu-fighter-console-phase-" + aircraft.Phase.ToString().ToLowerInvariant()
             : "cmu-fighter-ground-" + aircraft.GroundState.ToString().ToLowerInvariant());
-        FlightDisplay.Text = groundScene ? phase : Loc.GetString("cmu-fighter-console-flight",
+        FlightDisplay.Text = phase;
+        FlightDisplay.ToolTip = Loc.GetString("cmu-fighter-console-flight",
             ("phase", phase), ("height", MathF.Round(aircraft.Height)), ("speed", MathF.Round(aircraft.Speed)));
+        CrewStatus.Text = Loc.GetString("cmu-fighter-hud-crew",
+            ("pilot", Loc.GetString(pilotCrew == null ? "cmu-fighter-console-empty" : seat.Pilot ? "cmu-fighter-console-you" : "cmu-fighter-console-crewed")),
+            ("wso", Loc.GetString(observerCrew == null ? "cmu-fighter-console-empty" : !seat.Pilot ? "cmu-fighter-console-you" : "cmu-fighter-console-crewed")));
         FlightDisplay.Emphasis = 0;
         if (effects != null)
             foreach (var cue in effects.Cues)
@@ -301,8 +320,7 @@ public sealed partial class FighterCockpitControl : LayoutContainer
 
         var locked = seat.SensorLock != null;
         var inRange = FighterFlight.SensorInRange(aircraft, point, seat);
-        SensorStatus.Text = Loc.GetString("cmu-fighter-sensor-status",
-            ("mode", Loc.GetString(!inRange ? "cmu-fighter-sensor-out-of-range" : locked ? "cmu-fighter-sensor-locked" : "cmu-fighter-sensor-following")),
+        SensorStatus.Text = Loc.GetString("cmu-fighter-hud-range",
             ("distance", MathF.Round(Vector2.Distance(aircraft.Position, point))),
             ("range", MathF.Round(seat.Target != null ? FighterFlight.DesignationRange(aircraft) : FighterFlight.SensorRange(aircraft))));
         SensorStatus.Warning = !inRange;
@@ -310,22 +328,21 @@ public sealed partial class FighterCockpitControl : LayoutContainer
             : !available ? "cmu-fighter-standby" : obscured ? "cmu-fighter-obscured" : "cmu-fighter-clear");
         Feed.Warning = obscured;
         var incoming = weapons?.Targets.Any(target => target.Id == seat.Target && target.Incoming && now < target.ExpiresAt) == true;
-        Observation.Text = Loc.GetString(incoming ? "cmu-fighter-missile-incoming" : weapons?.Targets.Count > 0 ? "cmu-fighter-targets-help" : "cmu-fighter-targets-empty");
+        Observation.Text = Loc.GetString(incoming ? "cmu-fighter-missile-incoming" : weapons?.Targets.Count > 0 ? "cmu-fighter-hud-targets-help" : "cmu-fighter-hud-targets-empty");
         Observation.Warning = incoming;
         Launch.Disabled = !seat.Pilot || aircraft.Flying || aircraft.ForcedRetreat || _chart.HasDraft ||
             aircraft.GroundState != FighterGroundState.Airborne;
         Return.Text = Loc.GetString(_grounded ? "cmu-fighter-takeoff" : aircraft.GroundEntity != null ? "cmu-fighter-land" : "cmu-fighter-return");
         Return.Disabled = !seat.Pilot || aircraft.ForcedRetreat || (!_grounded && (aircraft.GroundEntity != null
             ? aircraft.GroundState != FighterGroundState.Airborne : aircraft.Phase is not (FighterPhase.Approach or FighterPhase.Pass)));
-        Return.StatusColor = Color.FromHex("#8FCAAF");
         Leave.Text = Loc.GetString(_grounded ? "cmu-fighter-unbuckle" : "cmu-fighter-eject");
         Leave.StatusColor = _grounded ? null : Color.FromHex("#E98065");
         EjectPanel.Visible = !_grounded && seat.EjectConfirmUntil > now;
         EjectWarning.Text = Loc.GetString(seat.Pilot ? "cmu-fighter-eject-both-warning" : "cmu-fighter-eject-self-warning");
-        Entry.Disabled = Exit.Disabled = !seat.Pilot || aircraft.Flying;
+        Entry.Disabled = Exit.Disabled = !seat.Pilot || aircraft.Flying || _chart.CoverageMode;
         Entry.Lit = _chart.EditEntry;
         Exit.Lit = !_chart.EditEntry;
-        Apply.Disabled = !seat.Pilot || aircraft.Flying || !_chart.HasDraft;
+        Apply.Disabled = !seat.Pilot || aircraft.Flying || !_chart.HasDraft || _chart.CoverageMode;
         Mark.Disabled = !_airspace || obscured;
         Laser.Disabled = !_airspace || aircraft.ForcedRetreat || obscured && seat.Laser == null;
         Laser.Lit = seat.Laser != null;
@@ -369,22 +386,23 @@ public sealed partial class FighterCockpitControl : LayoutContainer
         {
             if (slot.Slot < 0 || slot.Slot >= _weapons.Count) continue;
             var button = _weapons[slot.Slot];
-            button.Text = slot.Slot == FighterWeaponsComponent.GauSlot ? Loc.GetString("cmu-fighter-kind-gau") :
-                Loc.GetString("cmu-fighter-slot", ("number", slot.Slot + 1),
-                    ("kind", Loc.GetString("cmu-fighter-kind-" + slot.Kind.ToString().ToLowerInvariant())));
+            button.Text = slot.Slot == FighterWeaponsComponent.GauSlot ? Loc.GetString("cmu-fighter-kind-gau") : slot.Name;
+            button.Tag = slot.Slot == FighterWeaponsComponent.GauSlot ? Loc.GetString("cmu-fighter-hud-gun")
+                : Loc.GetString("cmu-fighter-hud-pylon", ("number", slot.Slot + 1));
+            button.Detail = slot.Rounds.ToString();
             button.Lit = slot.Slot == seat.WeaponSlot;
             button.Disabled = !seat.Pilot && slot.Kind is FighterWeaponKind.Gau or FighterWeaponKind.Rockets;
             button.ToolTip = button.Disabled ? Loc.GetString("cmu-fighter-fire-pilotonly") : slot.Name;
         }
         var status = FighterWeapons.Status(aircraft, weapons, seat, weapon, flare, now);
         var strafing = seat.Pilot && weapon?.Kind is FighterWeaponKind.Gau or FighterWeaponKind.Rockets;
-        RunAssist.Visible = strafing && _airspace;
-        PrepareRun.Disabled = aircraft.Flying || aircraft.ForcedRetreat || flare is not { Laser: false, CanStrike: true };
-        QueueFire.Disabled = !seat.FireQueued && !FighterRunAssist.CanQueue(aircraft, seat, weapon, flare);
+        RunAssist.Visible = !_spectating;
+        PrepareRun.Disabled = !strafing || !_airspace || aircraft.Flying || aircraft.ForcedRetreat || flare is not { Laser: false, CanStrike: true };
+        QueueFire.Disabled = !_airspace || !seat.FireQueued && !FighterRunAssist.CanQueue(aircraft, seat, weapon, flare);
         QueueFire.Lit = seat.FireQueued;
-        QueueFire.Text = Loc.GetString(seat.FireQueued ? "cmu-fighter-cancel-queue" : "cmu-fighter-queue-fire");
+        QueueFire.Text = Loc.GetString(seat.FireQueued ? "cmu-fighter-cancel-queue" : "cmu-fighter-hud-queue");
         WeaponName.Text = weapon == null ? Loc.GetString("cmu-fighter-empty-pylon") :
-            Loc.GetString("cmu-fighter-weapon-brief", ("name", weapon.Name), ("rounds", weapon.Rounds));
+            Loc.GetString("cmu-fighter-hud-weapon", ("name", weapon.Name), ("rounds", weapon.Rounds));
         WeaponName.ToolTip = weapon == null ? null : Loc.GetString("cmu-fighter-weapon-status", ("name", weapon.Name),
             ("rounds", weapon.Rounds), ("target", flare?.Name ?? "—"));
         FireStatus.Text = status == FighterFireStatus.Locking
@@ -407,7 +425,7 @@ public sealed partial class FighterCockpitControl : LayoutContainer
         {
             if (!_targets.TryGetValue(target.Id, out var button))
             {
-                button = new FighterCockpitButton { MinHeight = 28, MaxHeight = 32 };
+                button = new FighterCockpitButton { MinHeight = 28, MaxHeight = 28, HorizontalExpand = true };
                 var id = target.Id;
                 button.OnPressed += _ => { _selectTarget(id); ShowOptics(true); };
                 TargetList.AddChild(button);
@@ -419,7 +437,7 @@ public sealed partial class FighterCockpitControl : LayoutContainer
             button.Text = name;
             button.ToolTip = Loc.GetString("cmu-fighter-fire-" + targetStatus.ToString().ToLowerInvariant());
             button.Lit = seat.Target == target.Id;
-            button.StatusColor = targetStatus == FighterFireStatus.Ready ? Color.LimeGreen : Color.Orange;
+            button.StatusColor = targetStatus == FighterFireStatus.Ready ? Color.FromHex("#E6ECF4") : Color.FromHex("#DAB476");
         }
     }
 }

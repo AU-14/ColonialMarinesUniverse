@@ -322,6 +322,7 @@ public sealed partial class HumanoidProfileEditor
     {
         // CMU14: shared FoF role priorities.
         yield return FoFJobList;
+        yield return FoFColonyJobList;
         yield return InsurgencyGovernmentJobList;
         yield return InsurgencyInsurgentJobList;
         yield return InsurgencyCivilianJobList;
@@ -390,27 +391,21 @@ public sealed partial class HumanoidProfileEditor
         JobPrototype job,
         string departmentName)
     {
-        // CMU14: shared FoF role priorities.
+        // CMU14: one govfor guard feeds the FoF, Insurgency and Distress Signal military lists.
         if (department.Faction == "govfor")
         {
             var (key, title) = GetMilitaryJobSegment(job);
-            // CMU14: faction gameplay fixes.
             yield return (FoFJobList, GamemodeForceOnForce, $"fof-{key}", title);
-        }
-
-        if (department.Faction == "govfor")
-        {
-            var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);
             yield return (
                 InsurgencyGovernmentJobList,
                 GamemodeInsurgency,
-                $"insurgency-govfor-{segmentKey}",
-                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", segmentTitle)));
+                $"insurgency-govfor-{key}",
+                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", title)));
             yield return (
                 DistressGovernmentJobList,
                 GamemodeDistressSignal,
-                $"distress-govfor-{segmentKey}",
-                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", segmentTitle)));
+                $"distress-govfor-{key}",
+                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", title)));
             yield break;
         }
 
@@ -438,6 +433,11 @@ public sealed partial class HumanoidProfileEditor
                 InsurgencyCivilianJobList,
                 GamemodeInsurgency,
                 $"insurgency-civilian-{department.ID}",
+                title);
+            yield return (
+                FoFColonyJobList,
+                GamemodeForceOnForce,
+                $"fof-colony-{department.ID}",
                 title);
             yield return (
                 ColonyCivilianJobList,
@@ -592,7 +592,9 @@ public sealed partial class HumanoidProfileEditor
         };
 
         var antagsByCategory = _prototypeManager.EnumerateCM<AntagPrototype>()
-            .Where(antag => antag.SetPreference)
+            // CMU14: an antag blacklisted for this gamemode is hidden from its preference tab.
+            .Where(antag => antag.SetPreference
+                && !antag.BlacklistedGamemodes.Contains(gamemode, StringComparer.OrdinalIgnoreCase))
             .GroupBy(antag => string.IsNullOrEmpty(antag.Category)
                 ? Loc.GetString("humanoid-profile-editor-antag-category-uncategorized")
                 : Loc.GetString(antag.Category))
