@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared.Administration.Logs;
+using Content.Shared.CMU14.Ghost;
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Ghost.Components;
@@ -415,7 +416,7 @@ public sealed partial class YautjaMarkSystem : EntitySystem
 
     private bool CanMarkTarget(EntityUid target, YautjaMarkKind kind)
     {
-        if (_mob.IsDead(target))
+        if (_mob.IsDead(target) || IsSpectator(target))
             return false;
         var humanoid = HasComp<HumanoidProfileComponent>(target);
         var human = humanoid && !HasComp<YautjaComponent>(target);
@@ -564,15 +565,28 @@ public sealed partial class YautjaMarkSystem : EntitySystem
     private bool IsSentient(EntityUid target)
     {
         // ghosts carry a mind too, keep spectators off the nearby list
-        if (HasComp<EntityActiveInvisibleComponent>(target) || HasComp<GhostComponent>(target))
+        if (HasComp<EntityActiveInvisibleComponent>(target) || IsSpectator(target))
             return false;
         return HasComp<HumanoidProfileComponent>(target) || HasComp<XenoComponent>(target) ||
                TryComp(target, out MindContainerComponent? mind) && mind.HasMind;
     }
 
+    // a ghost, or anything a ghost carries. observers from the lobby carry a hidden body dressed as their
+    // character so the ghost has something to look like, and that body is a full humanoid with the character's
+    // name, so it walked straight into the nearby list
+    public bool IsSpectator(EntityUid target)
+    {
+        if (HasComp<GhostComponent>(target) || HasComp<CMUGhostAppearanceStandInComponent>(target))
+            return true;
+
+        return Transform(target).ParentUid is { Valid: true } parent && HasComp<GhostComponent>(parent);
+    }
+
     private YautjaHuntRecord? EnsureVisibleRecord(EntityUid hunter, EntityUid target,
         YautjaHuntJournalComponent journal)
     {
+        if (IsSpectator(target))
+            return null;
         if (journal.Targets.TryGetValue(target, out var id) && journal.Records.TryGetValue(id, out var existing))
             return existing;
         if (!IsSentient(target) || !_examine.CanExamine(hunter, target) ||
@@ -655,6 +669,8 @@ public sealed partial class YautjaMarkSystem : EntitySystem
             journal.Page = 0;
             selected = journal.Recent.Where(journal.Records.ContainsKey).Select(id => journal.Records[id]);
         }
+        // a record taken before the spectator filter, or of something that became one, never goes to the panel
+        selected = selected.Where(record => record.Target is not { } live || Deleted(live) || !IsSpectator(live));
         var entries = selected.Select(record => new YautjaMarkPanelEntry(record.Id, record.Name, record.IsXeno,
             new List<YautjaMarkKind>(record.LastKnownMarks), new List<YautjaMarkKind>(record.LastOwnedMarks),
             record.Target is { } target && !Deleted(target) && !_mob.IsDead(target))).ToList();

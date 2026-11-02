@@ -53,14 +53,9 @@ public static class YautjaProfileEditorLayout
         new(YautjaProfileEditorCategory.Description, "cmu-yautja-lobby-category-description"),
     ];
 
-    public static bool IsUniqueSetLocked(YautjaCharacterProfile profile, YautjaUniqueSet unique)
-    {
-        return unique != YautjaUniqueSet.None && !YautjaRankResolver.CanUseUnique(profile);
-    }
-
     public static bool IsUniqueSetLocked(YautjaProfileCapabilities capabilities, YautjaUniqueSet unique)
     {
-        return unique != YautjaUniqueSet.None && !capabilities.CanUseUnique;
+        return !capabilities.CanUseUniqueSet(unique);
     }
 
     public static bool IsLegacySetLocked(YautjaProfileCapabilities capabilities, YautjaLegacySet legacy)

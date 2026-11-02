@@ -21,12 +21,16 @@
   - type: ActivatableUI
     key: enum.AdminConsoleUi.Key
   - type: AdminConsole
+  - type: ColonyGovernmentConsole # RUMC: the window of the government of the colony
+  - type: Anchorable # RUMC: the console is unanchored and anchored again with a wrench
   - type: UserInterface
     interfaces:
       enum.AdminConsoleUi.Key:
         type: AdminConsoleBui
       enum.AdminConsoleThirdPartyUi.Key:
         type: AdminConsoleThirdPartyBui
+      enum.ColonyGovernmentUi.Key: # RUMC: the window of the government of the colony
+        type: ColonyGovernmentBui
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
     access: [["AU14AccessColonyAdministrator"]]

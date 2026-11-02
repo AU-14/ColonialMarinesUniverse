@@ -81,7 +81,8 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
 
         foreach (var wall in _walls)
         {
-            QueueDel(wall);
+            // QueueDel(wall); // CMU14: preserve ore destruction drops.
+            DeleteExplosionTarget(wall);
         }
 
         if (ent.Comp.Whitelist != null &&
@@ -89,7 +90,8 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
             Transform(ent).ParentUid is { Valid: true } parent &&
             _entityWhitelist.IsWhitelistPass(ent.Comp.Whitelist, parent))
         {
-            QueueDel(parent);
+            // QueueDel(parent); // CMU14: preserve ore destruction drops.
+            DeleteExplosionTarget(parent);
         }
     }
 
@@ -222,7 +224,8 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         }
 
         if (!TerminatingOrDeleted(ent))
-            QueueDel(ent);
+            // QueueDel(ent); // CMU14: preserve ore destruction drops.
+            DeleteExplosionTarget(ent);
     }
 
     private void OnMobGibbedByExplosionReceived(Entity<MobGibbedByExplosionTypeComponent> ent, ref ExplosionReceivedEvent args)

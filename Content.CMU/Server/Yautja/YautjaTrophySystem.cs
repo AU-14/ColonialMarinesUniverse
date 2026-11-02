@@ -657,6 +657,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             "spitter" when kind == YautjaTrophyKind.XenoSkull => "CMUYautjaSpitterSkullTrophy",
             "runner" when kind == YautjaTrophyKind.XenoSkull => "CMUYautjaRunnerSkullTrophy",
             "drone" when kind == YautjaTrophyKind.XenoSkull => "CMUYautjaDroneSkullTrophy",
+            "abomination" when kind == YautjaTrophyKind.XenoSkull => "CMUYautjaAbominationSkullTrophy",
             "queen" => "CMUYautjaQueenPeltTrophy",
             "king" => "CMUYautjaKingPeltTrophy",
             "crusher" => "CMUYautjaCrusherPeltTrophy",
@@ -678,12 +679,16 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             "runner" => "CMUYautjaRunnerPeltTrophy",
             "drone" => "CMUYautjaDronePeltTrophy",
             "larva" => "CMUYautjaLarvaPeltTrophy",
+            "abomination" => "CMUYautjaAbominationPeltTrophy",
             _ => fallback,
         };
     }
 
     private static string? GetXenoTrophyCaste(string prototypeId)
     {
+        // grown abomination only, the predalien larva still gives a larva pelt like cmss13
+        if (prototypeId.Contains("Abomination", StringComparison.OrdinalIgnoreCase))
+            return "abomination";
         if (prototypeId.Contains("Queen", StringComparison.OrdinalIgnoreCase))
             return "queen";
         if (prototypeId.Contains("King", StringComparison.OrdinalIgnoreCase))
