@@ -256,10 +256,10 @@
       visible: false
       color: "#38312e"
       map: [ burn ]
-  - type: SolutionContainerManager
-    solutions:
-      cooker:
-        maxVol: 150
+  - type: Solution
+    id: cooker
+    solution:
+      maxVol: 150
   - type: FoodHolder
     foodType: Soup
     solutionId: cooker
@@ -310,10 +310,10 @@
         Blunt: 6
     soundHit:
       path: "/Audio/Weapons/smash.ogg"
-  - type: SolutionContainerManager
-    solutions:
-      cooker:
-        maxVol: 100
+  - type: Solution
+    id: cooker
+    solution:
+      maxVol: 100
   - type: FoodHolder
     foodType: Meal
     solutionId: cooker
@@ -366,10 +366,10 @@
     maxItemSize: Small
     grid:
     - 0,0,2,2
-  - type: SolutionContainerManager
-    solutions:
-      cooker:
-        maxVol: 50
+  - type: Solution
+    id: cooker
+    solution:
+      maxVol: 50
   - type: FoodCooker
     foodType: Pie
     solutionId: cooker
@@ -397,10 +397,10 @@
   - type: Item
     shape:
     - 0,0,1,0
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 30
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
   - type: FoodHolder
     foodType: Soup
     solutionId: food
@@ -449,10 +449,10 @@
   - type: Item
     shape:
     - 0,0,1,0
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
   - type: FoodHolder
     foodType: Meal
     solutionId: food

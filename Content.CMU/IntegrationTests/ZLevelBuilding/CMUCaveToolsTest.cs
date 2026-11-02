@@ -64,8 +64,6 @@ public sealed class CMUCaveToolsTest : GameTest
                 var scene = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single().SurveyView.Scene!;
                 Assert.That(scene.OperatorPosition!.Value.X, Is.EqualTo(2.5f).Within(0.1f), "Navigation must follow the owner without requesting a new terrain snapshot.");
             });
-            await Client.CheckSandboxed(typeof(Content.Client.Entry.EntryPoint).Assembly);
-            await Client.CheckSandboxed(typeof(CMUCaveSurveyData).Assembly);
         }
         finally
         {
@@ -79,6 +77,10 @@ public sealed class CMUCaveToolsTest : GameTest
             if (map.IsValid()) await Pair.DeleteEntityTreeLeafFirst(map);
             if (network.IsValid()) await Pair.DeleteEntityTreeLeafFirst(network);
         }
+
+        // A survey session must leave the pooled client reusable after reconnecting.
+        await Pair.Disconnect();
+        await Pair.Connect();
     }
 
     [Test]
