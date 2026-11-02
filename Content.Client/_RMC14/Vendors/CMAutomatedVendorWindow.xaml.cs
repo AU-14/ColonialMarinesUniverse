@@ -1,4 +1,4 @@
-// CMU14 class: redesigned CRT vendor presentation (upstream UI class retained).
+// CMU14 class: shared, navigable CRT inventory presentation for automated vendors.
 using System.Numerics;
 using Content.Client.CMU14.Interface;
 using Content.Client.CMU14.Yautja;
@@ -10,25 +10,30 @@ using Robust.Client.UserInterface.XAML;
 
 namespace Content.Client._RMC14.Vendors;
 
-/// <summary>
-/// Shared CRT inventory shell for automated vendors. Item availability and purchases remain
-/// managed by CMAutomatedVendorBui and the server-side vendor system.
-/// </summary>
 [GenerateTypedNameReferences]
 public sealed partial class CMAutomatedVendorWindow : DefaultWindow
 {
     private readonly CrtConsoleKit _kit = new();
+    private readonly List<Button> _categoryButtons = new();
+    private readonly List<string> _categoryNames = new();
     private bool _yautjaTheme;
+
+    /// <summary>-1 shows all sections; otherwise only the indexed section is visible.</summary>
+    public int SelectedCategory { get; private set; } = -1;
+
+    public event Action? OnCategoryChanged;
 
     public CMAutomatedVendorWindow()
     {
         RobustXamlLoader.Load(this);
 
-        MinSize = new Vector2(440, 500);
-        SetSize = new Vector2(560, 700);
+        Title = Loc.GetString("cmu-vendor-heading");
+        MinSize = new Vector2(620, 520);
+        SetSize = new Vector2(800, 735);
 
         Background.PanelOverride = new StyleBoxFlat { BackgroundColor = CrtTerminalPalette.Surface0 };
         HeaderStrip.PanelOverride = Strip(CrtTerminalPalette.Surface3);
+        NavigationStrip.PanelOverride = Strip(CrtTerminalPalette.Surface1);
         StockPanel.PanelOverride = Strip(CrtTerminalPalette.Surface1);
         ReagentsStrip.PanelOverride = Strip(CrtTerminalPalette.Surface2);
         FooterStrip.PanelOverride = Strip(CrtTerminalPalette.Surface1);
@@ -40,23 +45,104 @@ public sealed partial class CMAutomatedVendorWindow : DefaultWindow
         SummaryLabel.FontColorOverride = CrtTerminalPalette.TextDim;
         StatusLabel.FontOverride = _kit.Bold;
         StatusLabel.FontColorOverride = CrtTerminalPalette.Accent;
+        PointsLabel.FontOverride = _kit.Small;
+        PointsLabel.FontColorOverride = CrtTerminalPalette.Accent;
 
         Search.PlaceHolder = Loc.GetString("cmu-vendor-search");
+        AvailableOnly.Text = Loc.GetString("cmu-vendor-available-only");
+        AvailableOnly.ToggleMode = true;
         LowStockOnly.Text = Loc.GetString("cmu-vendor-low-only");
         LowStockOnly.ToggleMode = true;
+        CmuButtonStyles.Apply(AvailableOnly, CmuButtonStyles.Variant.Neutral);
         CmuButtonStyles.Apply(LowStockOnly, CmuButtonStyles.Variant.Neutral);
+        AvailableOnly.Label.FontOverride = _kit.Small;
         LowStockOnly.Label.FontOverride = _kit.Small;
 
-        PointsLabel.FontOverride = _kit.Bold;
-        PointsLabel.FontColorOverride = CrtTerminalPalette.Accent;
+        CategoryHeading.Text = Loc.GetString("cmu-vendor-categories");
+        CategoryHeading.FontOverride = _kit.Bold;
+        CategoryHeading.FontColorOverride = CrtTerminalPalette.Accent;
+        ResultCount.FontOverride = _kit.Small;
+        ResultCount.FontColorOverride = CrtTerminalPalette.TextDim;
+
         ReagentsTitle.Text = Loc.GetString("cmu-vendor-reagents");
         ReagentsTitle.FontOverride = _kit.Small;
         ReagentsTitle.FontColorOverride = CrtTerminalPalette.TextDim;
+
         EmptyLabel.Text = Loc.GetString("cmu-vendor-empty");
         EmptyLabel.FontColorOverride = CrtTerminalPalette.TextDim;
         FooterLabel.Text = Loc.GetString("cmu-vendor-footer");
         FooterLabel.FontOverride = _kit.Small;
         FooterLabel.FontColorOverride = CrtTerminalPalette.TextDim;
+
+        // CMU14: the CRT palette alone does not apply a shader. The source must be
+        // a child of the capture tube for scanlines to appear (as in Requisitions Stock).
+        Contents.RemoveChild(Background);
+        _kit.Root.AddChild(Background);
+        Background.VerticalExpand = true;
+        Contents.AddChild(_kit.Tube);
+        if (_kit.Tube.GetChild(1) is CrtScreenControl crt)
+        {
+            crt.Roll = false;
+            crt.Grain = false;
+        }
+    }
+
+    /// <summary>Only rebuild this menu when the vendor's section structure changes.</summary>
+    public void SetCategories(IReadOnlyList<string> names)
+    {
+        _categoryNames.Clear();
+        _categoryNames.AddRange(names);
+        if (SelectedCategory >= names.Count)
+            SelectedCategory = -1;
+
+        CategoryButtons.RemoveAllChildren();
+        _categoryButtons.Clear();
+        for (var index = -1; index < names.Count; index++)
+        {
+            var category = index;
+            var label = index == -1 ? Loc.GetString("cmu-vendor-all-categories") : names[index];
+            var button = _kit.Button(label);
+            button.HorizontalExpand = true;
+            button.Label.ClipText = true;
+            button.ToolTip = label;
+            button.OnPressed += _ =>
+            {
+                if (SelectedCategory == category)
+                    return;
+
+                SelectedCategory = category;
+                HighlightCategories();
+                OnCategoryChanged?.Invoke();
+            };
+            _categoryButtons.Add(button);
+            CategoryButtons.AddChild(button);
+        }
+
+        HighlightCategories();
+    }
+
+    private void HighlightCategories()
+    {
+        for (var index = 0; index < _categoryButtons.Count; index++)
+        {
+            var selected = SelectedCategory == index - 1;
+            var button = _categoryButtons[index];
+            button.StyleBoxOverride = new StyleBoxFlat
+            {
+                BackgroundColor = _yautjaTheme
+                    ? (selected ? YautjaBracerUiStyle.Row : YautjaBracerUiStyle.DeepCard)
+                    : (selected ? CrtTerminalPalette.Surface4 : CrtTerminalPalette.Surface2),
+                BorderColor = _yautjaTheme ? YautjaBracerUiStyle.MutedBorder : CrtTerminalPalette.Line,
+                BorderThickness = new Thickness(selected ? 1 : 0),
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
+                ContentMarginTopOverride = 7,
+                ContentMarginBottomOverride = 7,
+            };
+            button.Label.FontColorOverride = _yautjaTheme
+                ? (selected ? YautjaBracerUiStyle.Text : YautjaBracerUiStyle.Muted)
+                : (selected ? CrtTerminalPalette.TextBright : CrtTerminalPalette.Text);
+        }
     }
 
     public void UpdateInventorySummary(int total, int low, int empty)
@@ -64,30 +150,17 @@ public sealed partial class CMAutomatedVendorWindow : DefaultWindow
         SummaryLabel.Text = Loc.GetString("cmu-vendor-summary", ("total", total), ("empty", empty));
         StatusLabel.Text = empty > 0
             ? Loc.GetString("cmu-vendor-out-status", ("count", empty))
-            : low > 0
-                ? Loc.GetString("cmu-vendor-low-status", ("count", low))
+            : low > 0 ? Loc.GetString("cmu-vendor-low-status", ("count", low))
                 : Loc.GetString("cmu-vendor-ready");
         StatusLabel.FontColorOverride = _yautjaTheme
             ? (empty > 0 ? YautjaBracerUiStyle.HotRed : low > 0 ? YautjaBracerUiStyle.Amber : YautjaBracerUiStyle.Red)
             : (empty > 0 ? CrtTerminalPalette.Alert : low > 0 ? CrtTerminalPalette.Caution : CrtTerminalPalette.Accent);
     }
 
-    public void UseYautjaTheme()
+    public void UpdateShownCount(int shown, int total)
     {
-        _yautjaTheme = true;
-        Background.PanelOverride = new StyleBoxFlat { BackgroundColor = YautjaBracerUiStyle.WindowBg };
-        HeaderStrip.PanelOverride = Strip(YautjaBracerUiStyle.Row);
-        StockPanel.PanelOverride = Strip(YautjaBracerUiStyle.Surface);
-        ReagentsStrip.PanelOverride = Strip(YautjaBracerUiStyle.Card);
-        FooterStrip.PanelOverride = Strip(YautjaBracerUiStyle.Card);
-        Heading.FontColorOverride = YautjaBracerUiStyle.Text;
-        SummaryLabel.FontColorOverride = YautjaBracerUiStyle.Muted;
-        PointsLabel.FontColorOverride = YautjaBracerUiStyle.HotRed;
-        EmptyLabel.FontColorOverride = YautjaBracerUiStyle.Muted;
-        FooterLabel.FontColorOverride = YautjaBracerUiStyle.Dim;
-        ReagentsTitle.FontColorOverride = YautjaBracerUiStyle.Muted;
-        LowStockOnly.StyleBoxOverride = YautjaBracerUiStyle.Flat(YautjaBracerUiStyle.DeepCard, YautjaBracerUiStyle.MutedBorder);
-        LowStockOnly.Label.FontColorOverride = YautjaBracerUiStyle.Text;
+        ResultCount.Text = Loc.GetString("cmu-vendor-showing", ("shown", shown), ("total", total));
+        EmptyLabel.Visible = shown == 0;
     }
 
     public void SetNothingFound(bool empty)
@@ -98,6 +171,33 @@ public sealed partial class CMAutomatedVendorWindow : DefaultWindow
     public void SetReagentsVisible(bool visible)
     {
         ReagentsStrip.Visible = visible;
+    }
+
+    public void UseYautjaTheme()
+    {
+        _yautjaTheme = true;
+        Background.PanelOverride = new StyleBoxFlat { BackgroundColor = YautjaBracerUiStyle.WindowBg };
+        HeaderStrip.PanelOverride = Strip(YautjaBracerUiStyle.Row);
+        NavigationStrip.PanelOverride = Strip(YautjaBracerUiStyle.Surface);
+        StockPanel.PanelOverride = Strip(YautjaBracerUiStyle.Surface);
+        ReagentsStrip.PanelOverride = Strip(YautjaBracerUiStyle.Card);
+        FooterStrip.PanelOverride = Strip(YautjaBracerUiStyle.Card);
+        Heading.FontColorOverride = YautjaBracerUiStyle.Text;
+        SummaryLabel.FontColorOverride = YautjaBracerUiStyle.Muted;
+        PointsLabel.FontColorOverride = YautjaBracerUiStyle.HotRed;
+        CategoryHeading.FontColorOverride = YautjaBracerUiStyle.HotRed;
+        ResultCount.FontColorOverride = YautjaBracerUiStyle.Muted;
+        EmptyLabel.FontColorOverride = YautjaBracerUiStyle.Muted;
+        FooterLabel.FontColorOverride = YautjaBracerUiStyle.Dim;
+        ReagentsTitle.FontColorOverride = YautjaBracerUiStyle.Muted;
+        AvailableOnly.StyleBoxOverride = YautjaBracerUiStyle.Flat(YautjaBracerUiStyle.DeepCard, YautjaBracerUiStyle.MutedBorder);
+        LowStockOnly.StyleBoxOverride = YautjaBracerUiStyle.Flat(YautjaBracerUiStyle.DeepCard, YautjaBracerUiStyle.MutedBorder);
+        AvailableOnly.Label.FontColorOverride = YautjaBracerUiStyle.Text;
+        LowStockOnly.Label.FontColorOverride = YautjaBracerUiStyle.Text;
+        if (_kit.Tube.GetChild(1) is CrtScreenControl crt)
+            crt.Phosphor = YautjaBracerUiStyle.HotRed;
+
+        HighlightCategories();
     }
 
     private static StyleBoxFlat Strip(Color color)
