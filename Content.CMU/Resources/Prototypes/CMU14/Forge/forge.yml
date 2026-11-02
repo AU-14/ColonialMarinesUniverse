@@ -4,6 +4,10 @@
   name: crucible
   description: A heavy clay crucible for melting metal. Drop ore or scrap in, set it in a lit fire, and once it's glowing hot pour it out into a mold.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryForge
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Smelting/crucible.rsi
     noRot: true
@@ -79,6 +83,10 @@
   name: ingot mold
   description: A simple sand mold. Pour molten copper, zinc, iron or glass from a crucible into it and give it a moment to cool, and it casts a copper ingot, a zinc ingot, an iron ingot or a sheet of glass. Copper and zinc melted together, equal parts of each, cast a brass ingot. Iron is only hot enough in the crucible of a stone smeltery.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryForge
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Smelting/mold.rsi
     noRot: true
@@ -173,6 +181,10 @@
   name: forge tongs
   description: Long-handled iron tongs for handling a red-hot crucible without cooking your hands.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryForge
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Smelting/tongs.rsi
     state: tongs
@@ -203,6 +215,10 @@
   name: smithing hammer
   description: A heavy hammer for working hot metal on an anvil.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryForge
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Smelting/hammer.rsi
     state: hammer
@@ -242,6 +258,10 @@
   name: chisel
   description: A sharp chisel for detailing worked metal on an anvil.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryForge
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Smelting/chisel.rsi
     state: chisel
@@ -281,6 +301,10 @@
   name: clay smeltery
   description: A furnace of baked clay built to take a crucible. Feed it fuel and light it, then work it with forge tongs. It heats up to 1500 degrees.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryForge
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Production/Smelting/smeltery.rsi
@@ -326,6 +350,10 @@
   name: stone smeltery
   description: A furnace of dressed stone built to take a crucible. Feed it fuel and light it, then work it with forge tongs. It heats up to 2000 degrees.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryForge
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Production/Smelting/smeltery.rsi
@@ -371,6 +399,10 @@
   name: anvil
   description: A solid steel anvil for forging hot metal. Set a heated ingot on it with tongs, then click it to pick what to make.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryForge
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Production/Smelting/anvil.rsi

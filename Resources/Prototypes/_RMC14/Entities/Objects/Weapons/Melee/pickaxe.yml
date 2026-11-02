@@ -5,6 +5,10 @@
   description: It's a pickaxe. Notched to perfection, for jamming it into rocks.
   suffix: RMC
   components:
+  - type: GuideHelp # CMU14: contextual mining and industry instructions
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Clothing
     quickEquip: false
     slots:

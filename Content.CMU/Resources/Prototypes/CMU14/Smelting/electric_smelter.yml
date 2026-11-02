@@ -4,6 +4,10 @@
   name: electric smelter
   description: An automated furnace wired into the grid - load it with raw materials, dial in a temperature, and it alloys them together on its own.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Smelting/electric_smelter.rsi
     state: icon

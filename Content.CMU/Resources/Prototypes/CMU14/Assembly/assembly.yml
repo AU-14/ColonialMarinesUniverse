@@ -4,6 +4,10 @@
   name: assembly blueprint
   description: Activate it in hand to program which recipe it unlocks, then seat it in an assembly machine's blueprint slot.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
     state: paper
@@ -23,6 +27,10 @@
   name: assembly speed module
   description: Seated in an assembly machine's upgrade slot, this cuts how long every cycle takes.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
   - type: Sprite
     sprite: Objects/Tools/drill.rsi
     state: drill_bolt
@@ -38,6 +46,10 @@
   name: assembly efficiency module
   description: Seated in an assembly machine's upgrade slot, this cuts how much battery charge every cycle costs.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
   - type: Sprite
     sprite: Objects/Tools/drill.rsi
     state: drill_screw
@@ -53,6 +65,10 @@
   name: assembly machine
   description: A programmable fabricator - seat a programmed blueprint and a charged cell, then feed it exactly what it asks for.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Structures/assembly_machine.rsi
     noRot: true

@@ -150,6 +150,10 @@
   name: industry start crate
   description: A sealed crate with what is needed to begin the industry, a steel pump and pipes, a steel boiler, an industrial steam generator, drill and press and smelter and two molds. Open it with a crowbar.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: CrateOpenable
     spawn:
     - id: RUMCSteelPump

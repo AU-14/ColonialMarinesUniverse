@@ -64,12 +64,15 @@ public sealed class CMUCaveSurveyDataTest
             new(new Vector2i(-1, -1), -1, CMUReconMaterial.Empty),
             new(new Vector2i(0, -1), -1, CMUReconMaterial.Ground),
             new(new Vector2i(-1, -1), -9, CMUReconMaterial.Water),
+            new(new Vector2i(-5, -33), -3, CMUReconMaterial.Rock),
+            new(new Vector2i(-5, -32), -3, CMUReconMaterial.Ground),
         ], 3);
-        var section = data.Section(new Vector2i(-64, -64), 64, -8, 8).ToArray();
+        var section = data.Section(new Vector2i(-64, -32), new Vector2i(64, 32), -8, 8).ToArray();
         Assert.That(section, Is.EquivalentTo(new[]
         {
             new CMUCaveSurveySample(new Vector2i(-64, -1), -8, CMUReconMaterial.Stairs),
             new CMUCaveSurveySample(new Vector2i(-1, -1), -1, CMUReconMaterial.Empty),
+            new CMUCaveSurveySample(new Vector2i(-5, -32), -3, CMUReconMaterial.Ground),
         }));
     }
 }
