@@ -251,6 +251,10 @@
   name: solar panel
   description: A frame of glass over silicon cells that makes current out of the sun. Face it toward the sun and keep it clear of shade.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: PowerSupplier
     supplyRampTolerance: 500
     supplyRampRate: 500

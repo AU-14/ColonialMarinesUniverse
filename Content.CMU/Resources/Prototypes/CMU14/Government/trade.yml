@@ -6,6 +6,10 @@
   name: market stall
   description: "A table for the goods of a trader. The owner needs a trade licence: click the stall with a thing in your hand to put it on, then set the price in the window of the stall. A buyer sees the prices and buys at once."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryProducts
+    - CMUGuideIndustry
   - type: PlaceableSurface
     isPlaceable: false
   - type: MarketStall

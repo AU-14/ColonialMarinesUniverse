@@ -6,6 +6,10 @@
   id: RUMCElectricToolBase
   abstract: true
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: ContainerContainer
     containers:
       cell_slot: !type:ContainerSlot { }
@@ -181,6 +185,10 @@
   parent: [ RUMCElectricToolBase, RMCShovel ]
   id: RUMCElectricShovel
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Tools/Electric/shovel.rsi
     state: icon
@@ -204,6 +212,10 @@
   parent: [ RUMCElectricToolBase, RMCPickaxe ]
   id: RUMCElectricPickaxe
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Tools/Electric/pickaxe.rsi
     state: icon
