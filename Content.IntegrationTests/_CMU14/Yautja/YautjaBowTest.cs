@@ -2209,10 +2209,7 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     AssertVisibleLayer(sprites, clientSnare.Value, sprite, "snare-trap", "arrow_trap_active", true);
-                    AssertVisibleLayer(sprites, clientSnare.Value, sprite, "tail", "tail", false);
-                    AssertVisibleLayer(sprites, clientSnare.Value, sprite, "rod", "rod", false);
-                    AssertVisibleLayer(sprites, clientSnare.Value, sprite, "tip", "tip", false);
-                    AssertVisibleLayer(sprites, clientSnare.Value, sprite, "mark", "solution1", false);
+                    AssertVisibleLayer(sprites, clientSnare.Value, sprite, "base", "arrow_trap", false);
                 });
             });
         }
