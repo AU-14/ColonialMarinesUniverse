@@ -38,6 +38,28 @@ public sealed class YautjaRankAccessTest
         Assert.That(profile.Unique, Is.EqualTo(YautjaUniqueSet.None));
     }
 
+    // cmss13 #12174 keeps the Praetorian xenobone set for clan leaders; the other new elite sets follow the elite rule.
+    [TestCase(YautjaRank.Blooded, YautjaUniqueSet.SeekerAdept, false)]
+    [TestCase(YautjaRank.Elite, YautjaUniqueSet.SeekerAdept, true)]
+    [TestCase(YautjaRank.Elite, YautjaUniqueSet.Defender, true)]
+    [TestCase(YautjaRank.Elite, YautjaUniqueSet.Praetorian, false)]
+    [TestCase(YautjaRank.Elder, YautjaUniqueSet.Praetorian, false)]
+    [TestCase(YautjaRank.Leader, YautjaUniqueSet.Praetorian, true)]
+    [TestCase(YautjaRank.Ancient, YautjaUniqueSet.Praetorian, true)]
+    public void PraetorianSetIsLeaderOnly(YautjaRank rank, YautjaUniqueSet unique, bool allowed)
+    {
+        var capabilities = new YautjaProfileCapabilities(rank, YautjaRankResolver.CanUseUnique(rank), false);
+        var profile = YautjaCharacterProfile.Default
+            .WithUnique(unique)
+            .SanitizeForCapabilities(capabilities);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(capabilities.CanUseUniqueSet(unique), Is.EqualTo(allowed));
+            Assert.That(profile.Unique, Is.EqualTo(allowed ? unique : YautjaUniqueSet.None));
+        });
+    }
+
     [Test]
     public void InvalidRankFallsBackToBlooded()
     {

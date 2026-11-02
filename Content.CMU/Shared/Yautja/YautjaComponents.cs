@@ -404,7 +404,14 @@ public sealed partial class YautjaCapeComponent : Component
 {
     [DataField, AutoNetworkedField]
     public Color Color = YautjaCharacterProfile.Default.CapeColor;
+
+    /// <summary>
+    /// Bone capes are drawn in their own colours and never take the cloth tint.
+    /// </summary>
+    [DataField]
+    public bool Recolorable = true;
 }
+
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class YautjaBracerProfileVisualComponent : Component

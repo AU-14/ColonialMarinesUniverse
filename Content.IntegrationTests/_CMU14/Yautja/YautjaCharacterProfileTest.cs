@@ -164,7 +164,14 @@ public sealed class YautjaCharacterProfileTest
                     YautjaCapeStyle.Quarter,
                     YautjaCapeStyle.Poncho,
                     YautjaCapeStyle.Damaged,
+                    YautjaCapeStyle.BoneFull,
+                    YautjaCapeStyle.BoneThird,
+                    YautjaCapeStyle.BoneCeremonial,
                 }));
+            Assert.That(YautjaCharacterProfile.Default.WithCapeStyle(YautjaCapeStyle.BoneCeremonial).CapePrototype,
+                Is.EqualTo("CMUYautjaCapeBoneCeremonial"));
+            Assert.That(YautjaCharacterProfile.IsCapeRecolorable(YautjaCapeStyle.BoneThird), Is.False);
+            Assert.That(YautjaCharacterProfile.IsCapeRecolorable(YautjaCapeStyle.Poncho), Is.True);
             Assert.That(YautjaCharacterProfile.GetCapeDisplayName(YautjaCapeStyle.Poncho),
                 Is.EqualTo("cmu-yautja-profile-cape-poncho"));
             Assert.That(YautjaCharacterProfile.Default.WithCapeStyle(YautjaCapeStyle.Damaged).CapePrototype,
@@ -190,6 +197,11 @@ public sealed class YautjaCharacterProfileTest
                     YautjaBracerMaterial.Swamp,
                     YautjaBracerMaterial.Enforcer,
                     YautjaBracerMaterial.Collector,
+                    YautjaBracerMaterial.Shadow,
+                    YautjaBracerMaterial.Knight,
+                    YautjaBracerMaterial.Seeker,
+                    YautjaBracerMaterial.Serpent,
+                    YautjaBracerMaterial.Xenobone,
                 }));
             Assert.That(YautjaCharacterProfile.GetBracerDisplayName(YautjaBracerMaterial.Silver),
                 Is.EqualTo("cmu-yautja-profile-bracer-silver-clan"));
@@ -201,6 +213,20 @@ public sealed class YautjaCharacterProfileTest
                 Is.EqualTo("cmu-yautja-profile-bracer-collector-legacy"));
             Assert.That(YautjaCharacterProfile.Default.WithLegacy(YautjaLegacySet.Enforcer).BracerPrototype,
                 Is.EqualTo("CMUYautjaBracerLegacyEnforcer"));
+            Assert.That(YautjaCharacterProfile.Default.WithLegacy(YautjaLegacySet.Shadow).BracerPrototype,
+                Is.EqualTo("CMUYautjaBracerLegacyShadow"));
+            Assert.That(YautjaCharacterProfile.GetBracerDisplayName(YautjaBracerMaterial.Xenobone),
+                Is.EqualTo("cmu-yautja-profile-bracer-xenobone-elite"));
+            // cmss13 #12174: seeker and xenobone elite sets bring their own bracers over the picked material.
+            Assert.That(YautjaCharacterProfile.Default.WithBracer(YautjaBracerMaterial.Silver)
+                    .WithUnique(YautjaUniqueSet.SeekerAdept).BracerPrototype,
+                Is.EqualTo("CMUYautjaBracerLegacySeeker"));
+            Assert.That(YautjaCharacterProfile.Default.WithBracer(YautjaBracerMaterial.Silver)
+                    .WithUnique(YautjaUniqueSet.Praetorian).BracerPrototype,
+                Is.EqualTo("CMUYautjaBracerXenobone"));
+            Assert.That(YautjaCharacterProfile.Default.WithBracer(YautjaBracerMaterial.Silver)
+                    .WithUnique(YautjaUniqueSet.Ronin).BracerPrototype,
+                Is.EqualTo("CMUYautjaBracerSilver"));
         });
     }
 
@@ -1021,6 +1047,17 @@ public sealed class YautjaCharacterProfileTest
         yield return HunterSpecialMask("CMUYautjaMaskUniqueCleopatra", hunterName, hunterDescription, "pred_mask_elite_cleopatra");
         yield return HunterSpecialMask("CMUYautjaMaskUniquePlated", hunterName, hunterDescription, "pred_mask_elite_plated");
         yield return HunterSpecialMask("CMUYautjaMaskUniqueRonin", hunterName, hunterDescription, "pred_mask_elite_ronin", new Vector2i(64, 64), "pred_mask_elite_ronin_worn");
+
+        // cmss13 #12174 sets; the 64px ones come from pred_mask64.dmi
+        yield return HunterSpecialMask("CMUYautjaMaskLegacyShadow", hunterName, hunterDescription, "pred_mask_legacy_collector_dark");
+        yield return HunterSpecialMask("CMUYautjaMaskLegacyKnight", hunterName, hunterDescription, "pred_mask_legacy_knight");
+        yield return HunterSpecialMask("CMUYautjaMaskLegacySeeker", hunterName, hunterDescription, "pred_mask_legacy_seeker", new Vector2i(64, 64), "pred_mask_legacy_seeker_worn");
+        yield return HunterSpecialMask("CMUYautjaMaskLegacySerpent", hunterName, hunterDescription, "pred_mask_legacy_serpent", new Vector2i(64, 64), "pred_mask_legacy_serpent_worn");
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueSeekerInitiate", hunterName, hunterDescription, "pred_mask_elite_seeker_a");
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueSeekerAdept", hunterName, hunterDescription, "pred_mask_elite_seeker_b");
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueDefender", hunterName, hunterDescription, "pred_mask_elite_xenobone_d", new Vector2i(64, 64), "pred_mask_elite_xenobone_d_worn");
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueWarrior", hunterName, hunterDescription, "pred_mask_elite_xenobone_w", new Vector2i(64, 64), "pred_mask_elite_xenobone_w_worn");
+        yield return HunterSpecialMask("CMUYautjaMaskUniquePraetorian", hunterName, hunterDescription, "pred_mask_lead_xenobone_p", new Vector2i(64, 64), "pred_mask_lead_xenobone_p_worn");
 
         foreach (var material in new[] { "Bone", "Crimson", "Ebony", "Gold", "Silver" })
             yield return new SpecialMaskRow(

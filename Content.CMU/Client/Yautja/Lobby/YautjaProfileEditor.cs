@@ -583,10 +583,11 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
 
             var preview = YautjaCharacterProfile.Default.WithUnique(unique).ArmorPrototype;
             var locked = YautjaProfileEditorLayout.IsUniqueSetLocked(_capabilities, unique);
+            var lockRank = unique == YautjaUniqueSet.Praetorian ? YautjaRank.Leader : YautjaRank.Elite;
             var tooltip = locked
                 ? Loc.GetString(
                     "cmu-yautja-lobby-locked-rank",
-                    ("rank", Loc.GetString(YautjaRankMetadata.For(YautjaRank.Elite).LocalizedName)))
+                    ("rank", Loc.GetString(YautjaRankMetadata.For(lockRank).LocalizedName)))
                 : Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique));
             AddEntitySelector(_uniqueGrid,
                 group,
@@ -751,11 +752,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             {
                 var capturedMaterial = material;
                 var locked = YautjaProfileEditorLayout.IsBracerLocked(_capabilities, material);
-                var tooltip = locked && material is
-                    YautjaBracerMaterial.Dragon or
-                    YautjaBracerMaterial.Swamp or
-                    YautjaBracerMaterial.Enforcer or
-                    YautjaBracerMaterial.Collector
+                var tooltip = locked && YautjaCharacterProfile.IsLegacyBracer(material)
                     ? Loc.GetString("cmu-yautja-lobby-locked-legacy")
                     : locked
                         ? Loc.GetString(
@@ -765,7 +762,8 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                 AddStaticBracerSelector(grid,
                     group,
                     material,
-                    yautja.Legacy == YautjaLegacySet.None && yautja.BracerMaterial == material,
+                    yautja.Legacy == YautjaLegacySet.None &&
+                    (YautjaCharacterProfile.UniqueBracer(yautja.Unique) ?? yautja.BracerMaterial) == material,
                     tooltip,
                     () => Mutate(profile => profile.WithBracer(capturedMaterial).WithLegacy(YautjaLegacySet.None), true),
                     Loc.GetString(YautjaCharacterProfile.GetBracerMaterialDisplayName(material)),
@@ -777,7 +775,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
 
             rows.AddChild(new Label
             {
-                Text = section.Title,
+                Text = Loc.GetString(section.Title),
                 FontColorOverride = Color.FromHex("#d6bf94"),
             });
             rows.AddChild(grid);
@@ -834,13 +832,15 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             var tooltip = locked
                 ? Loc.GetString("cmu-yautja-lobby-locked-leader-ancient")
                 : Loc.GetString(YautjaCharacterProfile.GetCapeDisplayName(style));
+            var label = Loc.GetString(YautjaCharacterProfile.GetCapeDisplayName(style));
             AddEntitySelector(_capeGrid,
                 group,
                 prototype,
                 yautja.CapeStyle == style,
                 tooltip,
                 () => Mutate(profile => profile.WithCapeStyle(style), true),
-                disabled: locked);
+                label,
+                locked);
         }
     }
 
@@ -1063,6 +1063,11 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             YautjaBracerMaterial.Swamp => "bracer1_swamp",
             YautjaBracerMaterial.Enforcer => "bracer1_enforcer",
             YautjaBracerMaterial.Collector => "bracer1_collector",
+            YautjaBracerMaterial.Shadow => "bracer1_shadow",
+            YautjaBracerMaterial.Knight => "bracer1_knight",
+            YautjaBracerMaterial.Seeker => "bracer1_seeker",
+            YautjaBracerMaterial.Serpent => "bracer1_serpent",
+            YautjaBracerMaterial.Xenobone => "bracer1_xenobone",
             _ => "bracer1_ebony",
         };
     }
@@ -1326,6 +1331,13 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                 YautjaBracerMaterial.Swamp,
                 YautjaBracerMaterial.Enforcer,
                 YautjaBracerMaterial.Collector,
+                YautjaBracerMaterial.Shadow,
+                YautjaBracerMaterial.Knight,
+                YautjaBracerMaterial.Seeker,
+                YautjaBracerMaterial.Serpent,
+            ]),
+            ("cmu-yautja-profile-material-group-elite", [
+                YautjaBracerMaterial.Xenobone,
             ]),
         ];
     }

@@ -55,12 +55,18 @@ public static class YautjaProfileEditorLayout
 
     public static bool IsUniqueSetLocked(YautjaCharacterProfile profile, YautjaUniqueSet unique)
     {
-        return unique != YautjaUniqueSet.None && !YautjaRankResolver.CanUseUnique(profile);
+        if (unique == YautjaUniqueSet.None)
+            return false;
+
+        if (unique == YautjaUniqueSet.Praetorian)
+            return profile.ClanRank is not (YautjaRank.Leader or YautjaRank.Ancient);
+
+        return !YautjaRankResolver.CanUseUnique(profile);
     }
 
     public static bool IsUniqueSetLocked(YautjaProfileCapabilities capabilities, YautjaUniqueSet unique)
     {
-        return unique != YautjaUniqueSet.None && !capabilities.CanUseUnique;
+        return !capabilities.CanUseUniqueSet(unique);
     }
 
     public static bool IsLegacySetLocked(YautjaProfileCapabilities capabilities, YautjaLegacySet legacy)

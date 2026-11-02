@@ -2216,3 +2216,82 @@ ent-CMUHunterShipYautjaVendorDinnerware = dinnerplate dispenser
     .desc = A kitchen and restaurant equipment vendor.
 
 ent-CMUSkillPresetYautjaWarrior = Yautja Warrior
+
+ent-CMUYautjaArmorLegacyShadow = shadow legacy clan armor
+
+ent-CMUYautjaGreavesLegacyShadow = shadow legacy clan greaves
+
+ent-CMUYautjaMaskLegacyShadow = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorLegacyKnight = knight legacy clan armor
+
+ent-CMUYautjaGreavesLegacyKnight = knight legacy clan greaves
+
+ent-CMUYautjaMaskLegacyKnight = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorLegacySeeker = seeker legacy clan armor
+
+ent-CMUYautjaGreavesLegacySeeker = seeker legacy clan greaves
+
+ent-CMUYautjaMaskLegacySeeker = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorLegacySerpent = serpent legacy clan armor
+
+ent-CMUYautjaGreavesLegacySerpent = serpent legacy clan greaves
+
+ent-CMUYautjaMaskLegacySerpent = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorUniqueSeekerInitiate = seeker initiate unique clan armor
+
+ent-CMUYautjaGreavesUniqueSeekerInitiate = seeker initiate unique clan greaves
+
+ent-CMUYautjaMaskUniqueSeekerInitiate = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorUniqueSeekerAdept = seeker adept unique clan armor
+
+ent-CMUYautjaGreavesUniqueSeekerAdept = seeker adept unique clan greaves
+
+ent-CMUYautjaMaskUniqueSeekerAdept = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorUniqueDefender = defender xenobone unique clan armor
+
+ent-CMUYautjaGreavesUniqueDefender = defender xenobone unique clan greaves
+
+ent-CMUYautjaMaskUniqueDefender = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorUniqueWarrior = warrior xenobone unique clan armor
+
+ent-CMUYautjaGreavesUniqueWarrior = warrior xenobone unique clan greaves
+
+ent-CMUYautjaMaskUniqueWarrior = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorUniquePraetorian = praetorian xenobone unique clan armor
+
+ent-CMUYautjaGreavesUniquePraetorian = praetorian xenobone unique clan greaves
+
+ent-CMUYautjaMaskUniquePraetorian = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaBracerLegacyShadow = shadow legacy bracers
+
+ent-CMUYautjaBracerLegacyKnight = knight legacy bracers
+
+ent-CMUYautjaBracerLegacySeeker = seeker legacy bracers
+
+ent-CMUYautjaBracerLegacySerpent = serpent legacy bracers
+
+ent-CMUYautjaBracerXenobone = xenobone elite bracers
+
+ent-CMUYautjaCapeBoneFull = yautja bone cape
+
+ent-CMUYautjaCapeBoneThird = yautja bone third-cape
+
+ent-CMUYautjaCapeBoneCeremonial = yautja ceremonial bone cape

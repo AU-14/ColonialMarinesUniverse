@@ -99,8 +99,25 @@ public sealed class YautjaProfileCapabilities
     public bool CanUseCape(YautjaCapeStyle style)
     {
         return Enum.IsDefined(style) &&
-               (style != YautjaCapeStyle.Ceremonial ||
+               (style is not (YautjaCapeStyle.Ceremonial or YautjaCapeStyle.BoneCeremonial) ||
                 Rank is YautjaRank.Leader or YautjaRank.Ancient);
+    }
+
+    /// <summary>
+    /// cmss13 #12174 locks the Praetorian set to clan leaders (can_use_pred_specials higher_lock); every other
+    /// elite set follows the usual elite rule.
+    /// </summary>
+    public bool CanUseUniqueSet(YautjaUniqueSet unique)
+    {
+        if (!Enum.IsDefined(unique))
+            return false;
+
+        return unique switch
+        {
+            YautjaUniqueSet.None => true,
+            YautjaUniqueSet.Praetorian => CanUseUnique && Rank is YautjaRank.Leader or YautjaRank.Ancient,
+            _ => CanUseUnique,
+        };
     }
 
     public bool CanUseBracer(YautjaBracerMaterial material)
@@ -113,10 +130,8 @@ public sealed class YautjaProfileCapabilities
             YautjaBracerMaterial.Bronze or
             YautjaBracerMaterial.Crimson or
             YautjaBracerMaterial.Bone => Rank >= YautjaRank.Elite,
-            YautjaBracerMaterial.Dragon or
-            YautjaBracerMaterial.Swamp or
-            YautjaBracerMaterial.Enforcer or
-            YautjaBracerMaterial.Collector => CanUseLegacy,
+            YautjaBracerMaterial.Xenobone => CanUseUnique,
+            _ when YautjaCharacterProfile.IsLegacyBracer(material) => CanUseLegacy,
             _ => true,
         };
     }

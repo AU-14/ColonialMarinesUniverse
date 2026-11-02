@@ -1366,6 +1366,10 @@
         name: Poncho
         maxPerUser: 1
         replaceSlot: back
+      - id: CMUYautjaCapeBoneThird
+        name: Bone Third-Cape
+        maxPerUser: 1
+        replaceSlot: back
     - name: Spare Equipment
       entries:
       - id: CMUYautjaFalconDrone
@@ -2728,8 +2732,16 @@
         name: Full-Cape
         maxPerUser: 1
         replaceSlot: back
+      - id: CMUYautjaCapeBoneFull
+        name: Bone Full-Cape
+        maxPerUser: 1
+        replaceSlot: back
       - id: CMUYautjaCapeCeremonial
         name: Ceremonial Cape
+        maxPerUser: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeBoneCeremonial
+        name: Ceremonial Bone Cape
         maxPerUser: 1
         replaceSlot: back
     - name: Spare Equipment
@@ -3603,3 +3615,90 @@
         name: Oxygen Tank
         points: 5
         maxPerUser: 4
+
+# Bracers by DimDim from cmss13 PR #12174 (never merged upstream).
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacyShadow
+  name: shadow legacy bracers
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer_shadow
+  - type: Icon
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer1_shadow
+  - type: Clothing
+    sprite: CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-shadow
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacyKnight
+  name: knight legacy bracers
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer_knight
+  - type: Icon
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer1_knight
+  - type: Clothing
+    sprite: CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-knight
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacySeeker
+  name: seeker legacy bracers
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer_seeker
+  - type: Icon
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer1_seeker
+  - type: Clothing
+    sprite: CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-seeker
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacySerpent
+  name: serpent legacy bracers
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer_serpent
+  - type: Icon
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer1_serpent
+  - type: Clothing
+    sprite: CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-serpent
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerXenobone
+  name: xenobone elite bracers
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer_xenobone
+  - type: Icon
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer1_xenobone
+  - type: Clothing
+    sprite: CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-xenobone

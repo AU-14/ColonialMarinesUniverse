@@ -28,6 +28,9 @@ public sealed partial class YautjaCapeVisualsSystem : EntitySystem
 
     private void UpdateVisuals(Entity<YautjaCapeComponent> ent)
     {
+        if (!ent.Comp.Recolorable)
+            return;
+
         if (TryComp(ent, out SpriteComponent? sprite))
             _sprite.SetColor((ent.Owner, sprite), ent.Comp.Color);
     }

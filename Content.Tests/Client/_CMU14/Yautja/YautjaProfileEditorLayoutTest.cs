@@ -90,6 +90,9 @@ public sealed class YautjaProfileEditorLayoutTest
     [TestCase(YautjaRank.Leader, YautjaCapeStyle.Ceremonial, false)]
     [TestCase(YautjaRank.Ancient, YautjaCapeStyle.Ceremonial, false)]
     [TestCase(YautjaRank.Blooded, YautjaCapeStyle.Full, false)]
+    [TestCase(YautjaRank.Elder, YautjaCapeStyle.BoneCeremonial, true)]
+    [TestCase(YautjaRank.Leader, YautjaCapeStyle.BoneCeremonial, false)]
+    [TestCase(YautjaRank.Blooded, YautjaCapeStyle.BoneFull, false)]
     public void CeremonialCapeRequiresLeaderOrAncient(
         YautjaRank rank,
         YautjaCapeStyle cape,
@@ -112,6 +115,9 @@ public sealed class YautjaProfileEditorLayoutTest
     [TestCase(YautjaRank.Ancient, false, YautjaBracerMaterial.Dragon, true)]
     [TestCase(YautjaRank.Blooded, true, YautjaBracerMaterial.Dragon, false)]
     [TestCase(YautjaRank.Ancient, true, YautjaBracerMaterial.Collector, false)]
+    [TestCase(YautjaRank.Ancient, false, YautjaBracerMaterial.Shadow, true)]
+    [TestCase(YautjaRank.Blooded, true, YautjaBracerMaterial.Serpent, false)]
+    [TestCase(YautjaRank.Ancient, true, YautjaBracerMaterial.Xenobone, true)]
     public void BracersFollowRankAndLegacyWhitelist(
         YautjaRank rank,
         bool canUseLegacy,

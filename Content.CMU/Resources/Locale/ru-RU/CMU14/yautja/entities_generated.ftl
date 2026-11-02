@@ -2228,3 +2228,82 @@ ent-CMUHunterShipYautjaVendorDinnerware = тарелка раздатчик
     .desc = kitchen и restaurant снаряжение торговый автомат.
 
 ent-CMUSkillPresetYautjaWarrior = яутжа воин
+
+ent-CMUYautjaArmorLegacyShadow = теневой наследный клановый броня
+
+ent-CMUYautjaGreavesLegacyShadow = теневой наследный клановый поножи
+
+ent-CMUYautjaMaskLegacyShadow = клановый маска
+    .desc = Красиво оформленная металлическая маска, одновременно изысканная и функциональная.
+
+ent-CMUYautjaArmorLegacyKnight = рыцарский наследный клановый броня
+
+ent-CMUYautjaGreavesLegacyKnight = рыцарский наследный клановый поножи
+
+ent-CMUYautjaMaskLegacyKnight = клановый маска
+    .desc = Красиво оформленная металлическая маска, одновременно изысканная и функциональная.
+
+ent-CMUYautjaArmorLegacySeeker = искательский наследный клановый броня
+
+ent-CMUYautjaGreavesLegacySeeker = искательский наследный клановый поножи
+
+ent-CMUYautjaMaskLegacySeeker = клановый маска
+    .desc = Красиво оформленная металлическая маска, одновременно изысканная и функциональная.
+
+ent-CMUYautjaArmorLegacySerpent = змеиный наследный клановый броня
+
+ent-CMUYautjaGreavesLegacySerpent = змеиный наследный клановый поножи
+
+ent-CMUYautjaMaskLegacySerpent = клановый маска
+    .desc = Красиво оформленная металлическая маска, одновременно изысканная и функциональная.
+
+ent-CMUYautjaArmorUniqueSeekerInitiate = посвящённый искатель уникальный клановый броня
+
+ent-CMUYautjaGreavesUniqueSeekerInitiate = посвящённый искатель уникальный клановый поножи
+
+ent-CMUYautjaMaskUniqueSeekerInitiate = клановый маска
+    .desc = Красиво оформленная металлическая маска, одновременно изысканная и функциональная.
+
+ent-CMUYautjaArmorUniqueSeekerAdept = искатель-адепт уникальный клановый броня
+
+ent-CMUYautjaGreavesUniqueSeekerAdept = искатель-адепт уникальный клановый поножи
+
+ent-CMUYautjaMaskUniqueSeekerAdept = клановый маска
+    .desc = Красиво оформленная металлическая маска, одновременно изысканная и функциональная.
+
+ent-CMUYautjaArmorUniqueDefender = ксенокостный защитник уникальный клановый броня
+
+ent-CMUYautjaGreavesUniqueDefender = ксенокостный защитник уникальный клановый поножи
+
+ent-CMUYautjaMaskUniqueDefender = клановый маска
+    .desc = Красиво оформленная металлическая маска, одновременно изысканная и функциональная.
+
+ent-CMUYautjaArmorUniqueWarrior = ксенокостный воин уникальный клановый броня
+
+ent-CMUYautjaGreavesUniqueWarrior = ксенокостный воин уникальный клановый поножи
+
+ent-CMUYautjaMaskUniqueWarrior = клановый маска
+    .desc = Красиво оформленная металлическая маска, одновременно изысканная и функциональная.
+
+ent-CMUYautjaArmorUniquePraetorian = ксенокостный преторианец уникальный клановый броня
+
+ent-CMUYautjaGreavesUniquePraetorian = ксенокостный преторианец уникальный клановый поножи
+
+ent-CMUYautjaMaskUniquePraetorian = клановый маска
+    .desc = Красиво оформленная металлическая маска, одновременно изысканная и функциональная.
+
+ent-CMUYautjaBracerLegacyShadow = теневой наследные наручи
+
+ent-CMUYautjaBracerLegacyKnight = рыцарский наследные наручи
+
+ent-CMUYautjaBracerLegacySeeker = искательский наследные наручи
+
+ent-CMUYautjaBracerLegacySerpent = змеиный наследные наручи
+
+ent-CMUYautjaBracerXenobone = ксенокостные элитные наручи
+
+ent-CMUYautjaCapeBoneFull = костяной плащ яутжа
+
+ent-CMUYautjaCapeBoneThird = костяной треть-плащ яутжа
+
+ent-CMUYautjaCapeBoneCeremonial = церемониальный костяной плащ яутжа

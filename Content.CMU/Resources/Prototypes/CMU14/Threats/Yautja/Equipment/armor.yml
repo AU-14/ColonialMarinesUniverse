@@ -1913,3 +1913,234 @@
     sprite: CMU14/Yautja/greaves_unique_ronin.rsi
   - type: Clothing
     sprite: CMU14/Yautja/greaves_unique_ronin.rsi
+
+# Sets by DimDim from cmss13 PR #12174 (never merged upstream).
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorLegacyShadow
+  name: shadow legacy clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_legacy_shadow.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_legacy_shadow.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorLegacyKnight
+  name: knight legacy clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_legacy_knight.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_legacy_knight.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorLegacySeeker
+  name: seeker legacy clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_legacy_seeker.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_legacy_seeker.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorLegacySerpent
+  name: serpent legacy clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_legacy_serpent.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_legacy_serpent.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorUniqueSeekerInitiate
+  name: seeker initiate unique clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_unique_seeker_initiate.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_unique_seeker_initiate.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorUniqueSeekerAdept
+  name: seeker adept unique clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_unique_seeker_adept.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_unique_seeker_adept.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorUniqueDefender
+  name: defender xenobone unique clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_unique_defender.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_unique_defender.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorUniqueWarrior
+  name: warrior xenobone unique clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_unique_warrior.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_unique_warrior.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorUniquePraetorian
+  name: praetorian xenobone unique clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_unique_praetorian.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_unique_praetorian.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesLegacyShadow
+  name: shadow legacy clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_legacy_shadow.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_legacy_shadow.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesLegacyKnight
+  name: knight legacy clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_legacy_knight.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_legacy_knight.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesLegacySeeker
+  name: seeker legacy clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_legacy_seeker.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_legacy_seeker.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesLegacySerpent
+  name: serpent legacy clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_legacy_serpent.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_legacy_serpent.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesUniqueSeekerInitiate
+  name: seeker initiate unique clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_unique_seeker_initiate.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_unique_seeker_initiate.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesUniqueSeekerAdept
+  name: seeker adept unique clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_unique_seeker_adept.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_unique_seeker_adept.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesUniqueDefender
+  name: defender xenobone unique clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_unique_defender.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_unique_defender.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesUniqueWarrior
+  name: warrior xenobone unique clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_unique_warrior.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_unique_warrior.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesUniquePraetorian
+  name: praetorian xenobone unique clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_unique_praetorian.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_unique_praetorian.rsi
+
+# Bone capes by DimDim from cmss13 PR #12174: drawn in their own colours, never tinted.
+
+- type: entity
+  parent: CMUYautjaCapeFull
+  id: CMUYautjaCapeBoneFull
+  name: yautja bone cape
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/cape_full_bone.rsi
+    state: icon
+    color: "#FFFFFF"
+  - type: Clothing
+    sprite: CMU14/Yautja/cape_full_bone.rsi
+  - type: YautjaCape
+    color: "#FFFFFF"
+    recolorable: false
+
+- type: entity
+  parent: CMUYautjaCapeFull
+  id: CMUYautjaCapeBoneThird
+  name: yautja bone third-cape
+  suffix: Bone Third
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/cape_third_bone.rsi
+    state: icon
+    color: "#FFFFFF"
+  - type: Clothing
+    sprite: CMU14/Yautja/cape_third_bone.rsi
+  - type: YautjaCape
+    color: "#FFFFFF"
+    recolorable: false
+
+- type: entity
+  parent: CMUYautjaCapeFull
+  id: CMUYautjaCapeBoneCeremonial
+  name: yautja ceremonial bone cape
+  suffix: Bone Ceremonial
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/cape_ceremonial_bone.rsi
+    state: icon
+    color: "#FFFFFF"
+  - type: Clothing
+    sprite: CMU14/Yautja/cape_ceremonial_bone.rsi
+  - type: YautjaCape
+    color: "#FFFFFF"
+    recolorable: false
