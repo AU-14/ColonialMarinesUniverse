@@ -1,8 +1,19 @@
+# RUMC: the bags are a stack now, so that one bag may be taken out of many (a barricade takes one, a wall several).
+# The one concrete of the game: the concrete mixer makes these bags, the concrete barricade is poured from one, and
+# the concrete walls, supports and slabs are built from several (the reinforced bag is in electric_civil.yml).
+- type: stack
+  id: AU14ConcreteBag
+  name: concrete bags
+  icon: { sprite: CMU14/Items/cement.rsi, state: cementbag1 }
+  spawn: AU14ConcreteBag
+  maxCount: 10
+
 - type: entity
   parent: BaseItem
   id: AU14ConcreteBag
   name: concrete bag
-  description: A heavy bag of dry concrete mix. Pour it onto a concrete barricade frame to finish the barricade.
+  # RUMC was: description: A heavy bag of dry concrete mix. Pour it onto a concrete barricade frame to finish the barricade.
+  description: A heavy bag of dry concrete mix. Pour it onto a concrete barricade frame to finish the barricade, or hold it and pick a concrete wall to build from the bags.
   components:
   - type: Sprite
     sprite: CMU14/Items/cement.rsi
@@ -18,6 +29,22 @@
         cementbag4: ""
   - type: Item
     size: Large
+  # RUMC Stack Begin: the bag is a stack of one, made of concrete, and builds the concrete wall from the construction menu
+  - type: Stack
+    stackType: AU14ConcreteBag
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCConcrete: 100
+  - type: RMCConstructionItem
+    buildable:
+    - RUMCConcreteWallBuild
+  - type: UserInterface
+    interfaces:
+      enum.RMCConstructionUiKey.Key:
+        type: RMCConstructionBui
+  # RUMC End
   - type: Tag
     tags:
     - AU14ConcreteBag

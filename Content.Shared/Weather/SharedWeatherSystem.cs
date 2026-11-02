@@ -27,6 +27,7 @@ public abstract partial class SharedWeatherSystem : EntitySystem
     [Dependency] private CMUSharedZLevelsSystem _zLevel = default!;
 
     [Dependency] private EntityQuery<BlockWeatherComponent> _blockQuery = default!;
+    [Dependency] private EntityQuery<Content.Shared.CMU14.ZLevelBuilding.ZGeneratedStoneComponent> _stoneQuery = default!; // CMU14: the generated stone levels are underground
     [Dependency] private EntityQuery<WeatherStatusEffectComponent> _weatherQuery = default!;
 
     public static readonly TimeSpan StartupTime = TimeSpan.FromSeconds(15);
@@ -36,6 +37,10 @@ public abstract partial class SharedWeatherSystem : EntitySystem
     public bool CanWeatherAffect(Entity<MapGridComponent?, RoofComponent?> ent, TileRef tileRef, bool? roofed = null)
     {
         if (!Resolve(ent, ref ent.Comp1))
+            return false;
+
+        // CMU14: The generated stone levels are underground. There is no sky over a mine, so no weather reaches it.
+        if (Transform(ent.Owner).MapUid is { } mapUid && _stoneQuery.HasComp(mapUid))
             return false;
 
         // RMC14: Area grids use their local weather settings instead of tile weather flags.

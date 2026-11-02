@@ -1,0 +1,825 @@
+# Veins of ore. Every vein is a wall with an overlay in the colour of its ore (Structures/ore_veins.rsi) and an
+# ore that drops when it is mined, built the way the vanilla veins are. The metals and most of the crystals lie in
+# the stone layer; the gold and silver lie there rarely, and also in the black stone layer, which holds the
+# titanium, the platinum, the uranium and the gems.
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinIron
+  suffix: Iron
+  description: An ore vein rich with iron.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreIron
+  - type: Sprite
+    layers:
+    - state: ore_iron
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinCopper
+  suffix: Copper
+  description: An ore vein rich with copper.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreCopper
+  - type: Sprite
+    layers:
+    - state: ore_copper
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinAluminum
+  suffix: Aluminum
+  description: An ore vein rich with aluminum.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreAluminum
+  - type: Sprite
+    layers:
+    - state: ore_aluminum
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinLead
+  suffix: Lead
+  description: An ore vein rich with lead.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreLead
+  - type: Sprite
+    layers:
+    - state: ore_lead
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinSilver
+  suffix: Silver
+  description: An ore vein rich with silver.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreSilver
+  - type: Sprite
+    layers:
+    - state: ore_silver
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinGold
+  suffix: Gold
+  description: An ore vein rich with gold.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreGold
+  - type: Sprite
+    layers:
+    - state: ore_gold
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinChrome
+  suffix: Chrome
+  description: An ore vein rich with chrome.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreChrome
+  - type: Sprite
+    layers:
+    - state: ore_chrome
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinCobalt
+  suffix: Cobalt
+  description: An ore vein rich with cobalt.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreCobalt
+  - type: Sprite
+    layers:
+    - state: ore_cobalt
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinTungsten
+  suffix: Tungsten
+  description: An ore vein rich with tungsten.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreTungsten
+  - type: Sprite
+    layers:
+    - state: ore_tungsten
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinTitanium
+  suffix: Titanium
+  description: An ore vein rich with titanium.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreTitanium
+  - type: Sprite
+    layers:
+    - state: ore_titanium
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinPlatinum
+  suffix: Platinum
+  description: An ore vein rich with platinum.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOrePlatinum
+  - type: Sprite
+    layers:
+    - state: ore_platinum
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinUranium
+  suffix: Uranium
+  description: An ore vein rich with uranium.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreUranium
+  - type: Sprite
+    layers:
+    - state: ore_uranium
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinIron, RUMCRockWall ]
+  id: RUMCRockWallIron
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinCopper, RUMCRockWall ]
+  id: RUMCRockWallCopper
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinAluminum, RUMCRockWall ]
+  id: RUMCRockWallAluminum
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinLead, RUMCRockWall ]
+  id: RUMCRockWallLead
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinSilver, RUMCRockWall ]
+  id: RUMCRockWallSilver
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinGold, RUMCRockWall ]
+  id: RUMCRockWallGold
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinChrome, RUMCRockWall ]
+  id: RUMCRockWallChrome
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinCobalt, RUMCRockWall ]
+  id: RUMCRockWallCobalt
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinTungsten, RUMCRockWall ]
+  id: RUMCRockWallTungsten
+  name: stone wall
+
+# The crystals are items, not stacks, so each of them has its own ore entry.
+- type: ore
+  id: RUMCOreSaltpeter
+  oreEntity: RUMCSaltpeterCrystal
+  minOreYield: 1
+  maxOreYield: 2
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinSaltpeter
+  suffix: Saltpeter
+  description: An ore vein rich with saltpeter.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreSaltpeter
+  - type: Sprite
+    layers:
+    - state: ore_saltpeter
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinSaltpeter, RUMCRockWall ]
+  id: RUMCRockWallSaltpeter
+  name: stone wall
+
+- type: ore
+  id: RUMCOreCinnabar
+  oreEntity: RUMCCinnabarCrystal
+  minOreYield: 1
+  maxOreYield: 2
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinCinnabar
+  suffix: Cinnabar
+  description: An ore vein rich with cinnabar.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreCinnabar
+  - type: Sprite
+    layers:
+    - state: ore_cinnabar
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinCinnabar, RUMCRockWall ]
+  id: RUMCRockWallCinnabar
+  name: stone wall
+
+- type: ore
+  id: RUMCOreAsbestos
+  oreEntity: RUMCAsbestosCrystal
+  minOreYield: 1
+  maxOreYield: 2
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinAsbestos
+  suffix: Asbestos
+  description: An ore vein rich with asbestos.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreAsbestos
+  - type: Sprite
+    layers:
+    - state: ore_asbestos
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinAsbestos, RUMCRockWall ]
+  id: RUMCRockWallAsbestos
+  name: stone wall
+
+- type: ore
+  id: RUMCOreFluorite
+  oreEntity: RUMCFluoriteCrystal
+  minOreYield: 1
+  maxOreYield: 2
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinFluorite
+  suffix: Fluorite
+  description: An ore vein rich with fluorite.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreFluorite
+  - type: Sprite
+    layers:
+    - state: ore_fluorite
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinFluorite, RUMCRockWall ]
+  id: RUMCRockWallFluorite
+  name: stone wall
+
+- type: ore
+  id: RUMCOreBeryllium
+  oreEntity: RUMCBerylliumCrystal
+  minOreYield: 1
+  maxOreYield: 2
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinBeryllium
+  suffix: Beryllium
+  description: An ore vein rich with beryllium.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreBeryllium
+  - type: Sprite
+    layers:
+    - state: ore_beryllium
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinBeryllium, RUMCRockWall ]
+  id: RUMCRockWallBeryllium
+  name: stone wall
+
+- type: ore
+  id: RUMCOreColtan
+  oreEntity: RUMCColtanCrystal
+  minOreYield: 1
+  maxOreYield: 2
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinColtan
+  suffix: Coltan
+  description: An ore vein rich with coltan.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreColtan
+  - type: Sprite
+    layers:
+    - state: ore_coltan
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinColtan, RUMCRockWall ]
+  id: RUMCRockWallColtan
+  name: stone wall
+
+- type: ore
+  id: RUMCOrePhosphorus
+  oreEntity: RUMCPhosphorusCrystal
+  minOreYield: 1
+  maxOreYield: 2
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinPhosphorus
+  suffix: Phosphorus
+  description: An ore vein rich with phosphorus.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOrePhosphorus
+  - type: Sprite
+    layers:
+    - state: ore_phosphorus
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinPhosphorus, RUMCRockWall ]
+  id: RUMCRockWallPhosphorus
+  name: stone wall
+
+- type: ore
+  id: RUMCOreTrimorid
+  oreEntity: RUMCTrimoridCrystal
+  minOreYield: 1
+  maxOreYield: 2
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinTrimorid
+  suffix: Trimorid
+  description: An ore vein rich with trimorid.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreTrimorid
+  - type: Sprite
+    layers:
+    - state: ore_trimorid
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinTrimorid, RUMCRockWall ]
+  id: RUMCRockWallTrimorid
+  name: stone wall
+
+- type: ore
+  id: RUMCOreLaxanite
+  oreEntity: RUMCLaxaniteCrystal
+  minOreYield: 1
+  maxOreYield: 2
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinLaxanite
+  suffix: Laxanite
+  description: An ore vein rich with laxanite.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreLaxanite
+  - type: Sprite
+    layers:
+    - state: ore_laxanite
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinLaxanite, RUMCRockWall ]
+  id: RUMCRockWallLaxanite
+  name: stone wall
+
+- type: ore
+  id: RUMCOreLaytoite
+  oreEntity: RUMCLaytoiteCrystal
+  minOreYield: 1
+  maxOreYield: 2
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinLaytoite
+  suffix: Laytoite
+  description: An ore vein rich with laytoite.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreLaytoite
+  - type: Sprite
+    layers:
+    - state: ore_laytoite
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinLaytoite, RUMCRockWall ]
+  id: RUMCRockWallLaytoite
+  name: stone wall
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinQuartz
+  suffix: Quartz
+  description: An ore vein rich with quartz.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreQuartz
+  - type: Sprite
+    layers:
+    - state: ore_quartz
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinQuartz, RUMCRockWall ]
+  id: RUMCRockWallQuartz
+  name: stone wall
+
+# The gems are single blocks of the black stone layer, and each gives exactly one gem.
+- type: ore
+  id: RUMCOreRawDiamond
+  oreEntity: RUMCRawDiamondCrystal
+  minOreYield: 1
+  maxOreYield: 1
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinRawDiamond
+  suffix: Raw diamond
+  description: An ore vein rich with raw diamond.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreRawDiamond
+  - type: Sprite
+    layers:
+    - state: ore_rawdiamond
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: ore
+  id: RUMCOreEmerald
+  oreEntity: RUMCEmeraldCrystal
+  minOreYield: 1
+  maxOreYield: 1
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinEmerald
+  suffix: Emerald
+  description: An ore vein rich with emerald.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreEmerald
+  - type: Sprite
+    layers:
+    - state: ore_emerald
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: ore
+  id: RUMCOreRuby
+  oreEntity: RUMCRubyCrystal
+  minOreYield: 1
+  maxOreYield: 1
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinRuby
+  suffix: Ruby
+  description: An ore vein rich with ruby.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreRuby
+  - type: Sprite
+    layers:
+    - state: ore_ruby
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: ore
+  id: RUMCOreAlexandrite
+  oreEntity: RUMCAlexandriteCrystal
+  minOreYield: 1
+  maxOreYield: 1
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinAlexandrite
+  suffix: Alexandrite
+  description: An ore vein rich with alexandrite.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreAlexandrite
+  - type: Sprite
+    layers:
+    - state: ore_alexandrite
+      sprite: CMU14/Structures/ore_veins.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+# The black stone layer: the same overlays on the dark wall.
+- type: entity
+  parent: [ RUMCBaseVeinSilver, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallSilver
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinGold, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallGold
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinTitanium, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallTitanium
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinPlatinum, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallPlatinum
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinUranium, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallUranium
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinRawDiamond, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallRawDiamond
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinEmerald, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallEmerald
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinRuby, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallRuby
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinAlexandrite, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallAlexandrite
+  name: black stone wall
+
+# A pool in the stone layer: shallow water that slows whoever wades through it and is never read as an open cavern.
+- type: entity
+  parent: FloorWaterEntity
+  id: RUMCCaveWater
+  name: underground water
+  description: Cold, still water that has gathered in the rock.
+  components:
+  - type: ZLoadBearingTerrain
+
+# A lake of lava in the black stone layer. It burns whoever steps in, and like the pools it is never read as an open cavern.
+- type: entity
+  parent: FloorLavaEntity
+  id: RUMCCaveLava
+  name: lava
+  description: Molten rock welling up from far below. Do not step in it.
+  components:
+  - type: ZLoadBearingTerrain
+
+# The floor of the black stone layer: the basalt of the stone layer, darkened.
+- type: tile
+  parent: BaseFloorPlanet
+  id: RUMCFloorBlackBasalt
+  name: tiles-au14-black-basalt-floor
+  sprite: /Textures/CMU14/Production/Tiles/BlackBasalt/cave.png
+  edgeSpritePriority: 5
+  edgeSprites:
+    SouthEast: /Textures/CMU14/Production/Tiles/BlackBasalt/single_edge_SE.png
+    NorthEast: /Textures/CMU14/Production/Tiles/BlackBasalt/single_edge_NE.png
+    NorthWest: /Textures/CMU14/Production/Tiles/BlackBasalt/single_edge_NW.png
+    SouthWest: /Textures/CMU14/Production/Tiles/BlackBasalt/single_edge_SW.png
+    South: /Textures/CMU14/Production/Tiles/BlackBasalt/double_edge_S.png
+    East: /Textures/CMU14/Production/Tiles/BlackBasalt/double_edge_E.png
+    North: /Textures/CMU14/Production/Tiles/BlackBasalt/double_edge_N.png
+    West: /Textures/CMU14/Production/Tiles/BlackBasalt/double_edge_W.png
+
+# More veins of the stone layer: platinum, and the gems (very rare there); and the black stone layer has the ores of the stone layer as well.
+
+- type: entity
+  parent: [ RUMCBaseVeinPlatinum, RUMCRockWall ]
+  id: RUMCRockWallPlatinum
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinRawDiamond, RUMCRockWall ]
+  id: RUMCRockWallRawDiamond
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinEmerald, RUMCRockWall ]
+  id: RUMCRockWallEmerald
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinRuby, RUMCRockWall ]
+  id: RUMCRockWallRuby
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinAlexandrite, RUMCRockWall ]
+  id: RUMCRockWallAlexandrite
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinIron, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallIron
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinCopper, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallCopper
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinAluminum, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallAluminum
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinLead, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallLead
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinChrome, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallChrome
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinCobalt, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallCobalt
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinTungsten, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallTungsten
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinQuartz, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallQuartz
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinSaltpeter, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallSaltpeter
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinCinnabar, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallCinnabar
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinAsbestos, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallAsbestos
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinFluorite, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallFluorite
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinBeryllium, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallBeryllium
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinColtan, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallColtan
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinPhosphorus, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallPhosphorus
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinTrimorid, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallTrimorid
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinLaxanite, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallLaxanite
+  name: black stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinLaytoite, RUMCBlackRockWall ]
+  id: RUMCBlackRockWallLaytoite
+  name: black stone wall
+
+# Coking coal: a vein of the coal that gives coke straight from the rock, so that the first coke of the electric stage does not wait for a pyrolysis oven (which needs a circuit, which needs a resistor, which needs coke).
+- type: ore
+  id: RUMCOreCokeCoal
+  oreEntity: RUMCCokeCoal1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinCokeCoal
+  suffix: Coking coal
+  description: An ore vein rich with coking coal.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreCokeCoal
+  - type: Sprite
+    layers:
+    - state: rock_coal
+      sprite: Structures/Walls/stone-ore.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinCokeCoal, RUMCRockWall ]
+  id: RUMCRockWallCokeCoal
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinCokeCoal, RUMCClayWall ]
+  id: RUMCClayWallCokeCoal
+  name: clay wall

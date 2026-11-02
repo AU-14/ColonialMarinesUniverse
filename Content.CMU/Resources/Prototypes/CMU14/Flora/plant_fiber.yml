@@ -1,0 +1,28 @@
+# Plant fiber: cut from the bushes with a knife.
+- type: stack
+  id: RUMCPlantFiber
+  name: plant fiber
+  icon: { sprite: CMU14/Flora/plant_fiber.rsi, state: fiber }
+  spawn: RUMCPlantFiber1
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCPlantFiber1
+  name: plant fiber
+  description: "Tough green fibers stripped from a bush."
+  components:
+  - type: Stack
+    stackType: RUMCPlantFiber
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Flora/plant_fiber.rsi
+    state: fiber
+  - type: Item
+    size: Small
+  - type: Flamability
+    chance: 1.0
+    rate: 0.4
+    range: 0.8
+    spread: 0.8
+    destroyAnyway: true

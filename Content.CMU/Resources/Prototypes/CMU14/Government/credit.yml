@@ -1,0 +1,69 @@
+# The credit of the city (see ColonyLenderPrototype and ColonyInvestmentPrototype). A lender lends up to a limit that goes with the credit rating (half of its sum at nought, one and a half at a
+# hundred) and is paid back in instalments with the interest of the whole term; a lender that asks less wants a better rating. The investments pay or fail by chance, and the chance goes a little
+# with the rating.
+
+- type: colonyLender
+  id: RUMCLenderCityBank
+  name: rumc-lender-city-bank-name
+  description: rumc-lender-city-bank-desc
+  maxAmount: 6000
+  minRating: 0
+  interestPercent: 14
+  instalments: 6
+  cycleSeconds: 300
+
+- type: colonyLender
+  id: RUMCLenderTradingHouse
+  name: rumc-lender-trading-house-name
+  description: rumc-lender-trading-house-desc
+  maxAmount: 12000
+  minRating: 30
+  interestPercent: 10
+  instalments: 8
+  cycleSeconds: 360
+
+- type: colonyLender
+  id: RUMCLenderMetropolis
+  name: rumc-lender-metropolis-name
+  description: rumc-lender-metropolis-desc
+  maxAmount: 20000
+  minRating: 55
+  interestPercent: 6
+  instalments: 10
+  cycleSeconds: 420
+
+# ---------------------------------------------------------------- Investments
+
+- type: colonyInvestment
+  id: RUMCInvestmentMarket
+  name: rumc-investment-market-name
+  description: rumc-investment-market-desc
+  cost: 4000
+  durationSeconds: 360
+  successChance: 0.85
+  payoutMultiplier: 1.5
+  salvageMultiplier: 0.4
+  incomePerMinute: 25
+
+- type: colonyInvestment
+  id: RUMCInvestmentPort
+  name: rumc-investment-port-name
+  description: rumc-investment-port-desc
+  cost: 9000
+  durationSeconds: 600
+  successChance: 0.75
+  payoutMultiplier: 1.7
+  salvageMultiplier: 0.3
+  incomePerMinute: 80
+
+- type: colonyInvestment
+  id: RUMCInvestmentMine
+  name: rumc-investment-mine-name
+  description: rumc-investment-mine-desc
+  cost: 6000
+  durationSeconds: 480
+  successChance: 0.6
+  payoutMultiplier: 2.4
+  salvageMultiplier: 0.15
+  incomePerMinute: 60
+  ratingOnFailure: -6

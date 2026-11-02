@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Provided by the project author for the stone layer; black_stone is the same sprite darkened",
+  "size": {
+    "x": 42,
+    "y": 27
+  },
+  "states": [
+    {
+      "name": "stone"
+    },
+    {
+      "name": "black_stone"
+    }
+  ]
+}

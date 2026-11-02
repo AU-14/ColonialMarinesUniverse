@@ -1,0 +1,37 @@
+ent-RUMCKitFastenersItem = комплект крепежа
+    .desc = Коробка болтов, винтов и шестерён.
+ent-RUMCKitWiringItem = комплект проводки
+    .desc = Коробка проводов, изолированного кабеля и индукторов.
+ent-RUMCKitElectronicsItem = комплект электроники
+    .desc = Коробка плат, ламп, резисторов, диодов, транзисторов и конденсаторов.
+ent-RUMCKitSimpleCircuitsItem = набор простых схем
+    .desc = Набор простых схем. Нужен каждой машине электрической эпохи: он заменяет первую плату.
+ent-RUMCKitDriveItem = комплект привода
+    .desc = Коробка электромоторов и конвейерных модулей.
+ent-RUMCKitHydraulicsItem = комплект гидравлики
+    .desc = Коробка поршней и помп.
+ent-RUMCKitHeatingItem = комплект нагрева
+    .desc = Коробка нагревательных катушек.
+
+au14-craft-recipe-kitfasteners = Комплект крепежа
+au14-craft-recipe-kitwiring = Комплект проводки
+au14-craft-recipe-kitelectronics = Комплект электроники
+au14-craft-recipe-kitsimplecircuits = Набор простых схем
+au14-craft-recipe-kitdrive = Комплект привода
+au14-craft-recipe-kithydraulics = Комплект гидравлики
+au14-craft-recipe-kitheating = Комплект нагрева
+ent-RUMCKitChipICItem = набор логических чипов
+    .desc = Коробка простых логических чипов, выгравированных на кремнии рубиновой линзой.
+ent-RUMCKitChipULPICItem = набор маломощных чипов
+    .desc = Коробка чипов сверхмалой мощности, выгравированных на кремнии александритовой линзой.
+ent-RUMCKitChipRAMItem = набор чипов памяти
+    .desc = Коробка чипов памяти, выгравированных на кремнии изумрудной линзой.
+ent-RUMCKitChipCPUItem = набор процессорных чипов
+    .desc = Коробка процессорных чипов, выгравированных на кремнии алмазной линзой.
+ent-RUMCKitQualityBoardsItem = набор качественных плат
+    .desc = Коробка плат второй ступени: фенольных, пластиковых и плат хороших схем.
+ent-RUMCKitQualityPartsItem = набор качественных деталей конструкций
+    .desc = Коробка деталей машин второй ступени: алюминиевых корпусов и моторов с серебряной обмоткой.
+
+au14-craft-recipe-kitqualityparts-hull = Качественные детали: корпус
+au14-craft-recipe-kitqualityparts-motor = Качественные детали: мотор

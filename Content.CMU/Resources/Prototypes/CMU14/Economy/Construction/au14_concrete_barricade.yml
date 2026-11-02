@@ -21,11 +21,15 @@
     edges:
     - to: built
       steps:
-      - tag: AU14ConcreteBag
-        name: construction-graph-tag-au14-concrete-bag
-        icon:
-          sprite: CMU14/Items/cement.rsi
-          state: cementbag1
+      # RUMC was (kept): the step took the whole stack of bags, so it is now a material step:
+      # - tag: AU14ConcreteBag
+      #   name: construction-graph-tag-au14-concrete-bag
+      #   icon:
+      #     sprite: CMU14/Items/cement.rsi
+      #     state: cementbag1
+      # RUMC: one bag out of a stack of them (a tag step would take the whole stack).
+      - material: AU14ConcreteBag
+        amount: 1
         doAfter: 10
     # Take an unpoured frame back apart for its rods.
     - to: start

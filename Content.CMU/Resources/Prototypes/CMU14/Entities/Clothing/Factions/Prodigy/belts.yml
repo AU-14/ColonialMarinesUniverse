@@ -66,7 +66,10 @@
     - id: CMWirecutter
     - id: RMCCableCoil30
     - id: CMMultitool
-    - id: CMEntrenchingTool
+    # RUMC: the entrenching tool gives its place in the belt to the hand saw and the hammer (kept, switched off):
+    # - id: CMEntrenchingTool
+    - id: RUMCHandSaw
+    - id: RUMCHammer
     - id: AU14SynthResetKeyProdigy
     - id: RMCMK80
     - id: CMMagazinePistolMK80

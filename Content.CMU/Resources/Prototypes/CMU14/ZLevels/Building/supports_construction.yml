@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Building overhaul (z-level): construction recipes for the tiered structural beams used to build UP.
 # Place a beam on the level BELOW your construction to hold up the floor above it. Quality (reach) and cost go
-# wood < metal < plasteel. All live in the ZLevel spawnlist; isCM is required for the menu to enumerate them.
+# wood < metal < plasteel. RUMC: they live in the main list (the AU14 spawnlist, the "Flooring" category) next to the plating, not in the ZLevel one; isCM is required for the menu to enumerate them.
 
 # --- Wood (lowest quality, shortest span) ---
 - type: constructionGraph
@@ -31,12 +31,12 @@
   graph: AU14SupportBeamWoodGraph
   startNode: start
   targetNode: beam
-  category: construction-category-structures
+  category: Flooring # RUMC: was construction-category-structures; the beams are in the main list with the plating (the "Flooring" category)
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
   isCM: true
-  spawnlist: ZLevel
+  spawnlist: AU14 # RUMC: was ZLevel; the beams are in the main list with the plating
   # NOTE: this fork's ConstructionPrototype has no "icon" field - the menu derives the recipe icon from the
   # target entity's sprite. The 1-tile beam entity (AU14NavalisSupportBeamBrown1Tile) already carries the
   # half-scale sprite, so the menu icon renders as a single tile without an override here.
@@ -69,12 +69,12 @@
   graph: AU14SupportBeamMetalGraph
   startNode: start
   targetNode: beam
-  category: construction-category-structures
+  category: Flooring # RUMC: was construction-category-structures; the beams are in the main list with the plating (the "Flooring" category)
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
   isCM: true
-  spawnlist: ZLevel
+  spawnlist: AU14 # RUMC: was ZLevel; the beams are in the main list with the plating
   # No icon override (see the wood beam note above): the menu icon comes from the target entity's sprite.
   conditions:
   - !type:TileNotBlocked
@@ -105,12 +105,12 @@
   graph: AU14SupportBeamPlasteelGraph
   startNode: start
   targetNode: beam
-  category: construction-category-structures
+  category: Flooring # RUMC: was construction-category-structures; the beams are in the main list with the plating (the "Flooring" category)
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
   isCM: true
-  spawnlist: ZLevel
+  spawnlist: AU14 # RUMC: was ZLevel; the beams are in the main list with the plating
   # No icon override (see the wood beam note above): the menu icon comes from the target entity's sprite.
   conditions:
   - !type:TileNotBlocked

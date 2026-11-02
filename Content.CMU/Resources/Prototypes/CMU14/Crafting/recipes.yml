@@ -1,0 +1,503 @@
+# Recipes of the crafting radial menu (right-click yourself -> Craft).
+# The menu only lists the recipes whose skills you have and whose consumables you carry; picking one crafts it on its own.
+# skills: skill and the level it needs.
+# tools: tool qualities you must carry; they are never used up.
+# consumables: an entity ("item") or an amount of a stack type ("stack"); they are used up when the craft is done.
+
+- type: craftRecipe
+  id: RUMCCraftStonePowder
+  name: au14-craft-recipe-stone-powder
+  output: RUMCStonePowderItem
+  outputCount: 1
+  time: 4
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCStone
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBlackStonePowder
+  name: au14-craft-recipe-black-stone-powder
+  output: RUMCBlackStonePowderItem
+  outputCount: 1
+  time: 4
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBlackStone
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftSand
+  name: au14-craft-recipe-sand
+  output: RUMCSandItem
+  outputCount: 4
+  time: 3
+  skills:
+    RMCSkillConstruction: 1
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCStonePowder
+    amount: 4
+
+# The furnaces come out of the craft already in the hands: set them down by clicking a tile.
+- type: craftRecipe
+  id: RUMCCraftClaySmeltery
+  name: au14-craft-recipe-clay-smeltery
+  output: RUMCSmeltery
+  time: 10
+  minigames: [Hold]
+  consumables:
+  - stack: RUMCClay
+    amount: 30
+
+- type: craftRecipe
+  id: RUMCCraftStoneSmeltery
+  name: au14-craft-recipe-stone-smeltery
+  output: RUMCStoneSmeltery
+  time: 10
+  minigames: [Rhythm]
+  consumables:
+  - stack: RUMCStone
+    amount: 30
+
+# The empty mold, cut with a chisel and a hammer, becomes the shape of a sheet.
+- type: craftRecipe
+  id: RUMCCraftSheetMold
+  name: au14-craft-recipe-sheet-mold
+  output: RUMCMoldSheet
+  time: 8
+  minigames: [Trace]
+  tools:
+  - Chiseling
+  - Hammering
+  consumables:
+  - item: RUMCMoldEmpty
+
+# The empty mold, cut with a chisel and a hammer, becomes the shape of three ingots.
+- type: craftRecipe
+  id: RUMCCraftIngotsMold
+  name: au14-craft-recipe-ingots-mold
+  output: RUMCMoldIngots
+  time: 8
+  minigames: [Trace]
+  tools:
+  - Chiseling
+  - Hammering
+  consumables:
+  - item: RUMCMoldEmpty
+
+# Rough tools of stone fragments, for those who have no iron yet.
+- type: craftRecipe
+  id: RUMCCraftStoneTongs
+  name: au14-craft-recipe-stone-tongs
+  output: RUMCStoneTongs
+  time: 6
+  consumables:
+  - stack: RUMCStone
+    amount: 6
+
+- type: craftRecipe
+  id: RUMCCraftStoneHammer
+  name: au14-craft-recipe-stone-hammer
+  output: RUMCStoneHammer
+  time: 6
+  consumables:
+  - stack: RUMCStone
+    amount: 8
+
+- type: craftRecipe
+  id: RUMCCraftStoneChisel
+  name: au14-craft-recipe-stone-chisel
+  output: RUMCStoneChisel
+  time: 6
+  consumables:
+  - stack: RUMCStone
+    amount: 4
+
+# The crucible is baked of clay.
+- type: craftRecipe
+  id: RUMCCraftCrucible
+  name: au14-craft-recipe-crucible
+  output: RUMCCrucible
+  time: 8
+  minigames: [Hold]
+  consumables:
+  - stack: RUMCClay
+    amount: 10
+
+# The brass tools: brass ingots and a stick, worked with a smithing hammer.
+- type: craftRecipe
+  id: RUMCCraftBrassPickaxe
+  name: au14-craft-recipe-brass-pickaxe
+  output: RUMCBrassPickaxe
+  time: 10
+  minigames: [Rhythm, Drill]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassIngot
+    amount: 3
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBrassShovel
+  name: au14-craft-recipe-brass-shovel
+  output: RUMCBrassShovel
+  time: 8
+  minigames: [Rhythm]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassIngot
+    amount: 2
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBrassSword
+  name: au14-craft-recipe-brass-sword
+  output: RUMCBrassSword
+  time: 10
+  minigames: [Rhythm, Polish]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassIngot
+    amount: 3
+  - stack: RUMCBranch
+    amount: 1
+
+# The steel tools: sheets of metal (CMSteel) and a stick, worked with a smithing hammer, as the brass ones are. They are the pickaxe and the
+# shovel of the colony, the ones that come in the crate of work tools.
+- type: craftRecipe
+  id: RUMCCraftSteelPickaxe
+  name: au14-craft-recipe-steel-pickaxe
+  output: AU14ToolPickaxe
+  time: 10
+  minigames: [Rhythm, Drill]
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 4
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftSteelShovel
+  name: au14-craft-recipe-steel-shovel
+  output: AU14ToolShovel
+  time: 8
+  minigames: [Rhythm]
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 3
+  - stack: RUMCBranch
+    amount: 1
+
+# The brass molds are cut from the empty one like the iron ones.
+- type: craftRecipe
+  id: RUMCCraftBrassSheetMold
+  name: au14-craft-recipe-brass-sheet-mold
+  output: RUMCBrassMoldSheet
+  time: 8
+  minigames: [Trace]
+  tools:
+  - Chiseling
+  - Hammering
+  consumables:
+  - item: RUMCBrassMoldEmpty
+
+- type: craftRecipe
+  id: RUMCCraftBrassIngotsMold
+  name: au14-craft-recipe-brass-ingots-mold
+  output: RUMCBrassMoldIngots
+  time: 8
+  minigames: [Trace]
+  tools:
+  - Chiseling
+  - Hammering
+  consumables:
+  - item: RUMCBrassMoldEmpty
+
+# Cloth is woven by hand of cotton.
+- type: craftRecipe
+  id: RUMCCraftCloth
+  name: au14-craft-recipe-cloth
+  output: MaterialCloth1
+  outputCount: 1
+  time: 4
+  minigames: [Stitch]
+  consumables:
+  - stack: Cotton
+    amount: 3
+
+# ---------------------------------------------------------------- brass pipes and mechanisms
+# Every brass mechanism is built of brass sheets and brass parts, hammered together. The boiler needs wood as well, for its firebox.
+
+# The ordinary gas pipes of brass.
+- type: craftRecipe
+  id: RUMCCraftBrassGasPipeHalf
+  name: au14-craft-recipe-brass-gas-pipe-half
+  output: RUMCBrassGasPipeHalf
+  time: 5
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 1
+  - stack: RUMCBrassParts
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBrassGasPipeStraight
+  name: au14-craft-recipe-brass-gas-pipe-straight
+  output: RUMCBrassGasPipeStraight
+  time: 5
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 1
+  - stack: RUMCBrassParts
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBrassGasPipeBend
+  name: au14-craft-recipe-brass-gas-pipe-bend
+  output: RUMCBrassGasPipeBend
+  time: 5
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 1
+  - stack: RUMCBrassParts
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBrassGasPipeTJunction
+  name: au14-craft-recipe-brass-gas-pipe-tjunction
+  output: RUMCBrassGasPipeTJunction
+  time: 6
+  minigames: [Rhythm]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 2
+  - stack: RUMCBrassParts
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBrassGasPipeFourway
+  name: au14-craft-recipe-brass-gas-pipe-fourway
+  output: RUMCBrassGasPipeFourway
+  time: 7
+  minigames: [Rhythm]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 2
+  - stack: RUMCBrassParts
+    amount: 2
+
+# The brass water pipes (the liquid pipes).
+- type: craftRecipe
+  id: RUMCCraftBrassWaterPipe
+  name: au14-craft-recipe-brass-water-pipe
+  output: RUMCBrassPipe
+  time: 5
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 1
+  - stack: RUMCBrassParts
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBrassWaterPipeDown
+  name: au14-craft-recipe-brass-water-pipe-down
+  output: RUMCBrassPipeDown
+  time: 6
+  minigames: [Rhythm]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 1
+  - stack: RUMCBrassParts
+    amount: 2
+
+# The mechanisms.
+- type: craftRecipe
+  id: RUMCCraftBrassPump
+  name: au14-craft-recipe-brass-pump
+  output: RUMCBrassPump
+  time: 12
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 3
+  - stack: RUMCBrassParts
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftFluidBarrel
+  name: au14-craft-recipe-fluid-barrel
+  output: RUMCFluidBarrel
+  time: 12
+  minigames: [Rhythm, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 4
+  - stack: RUMCBrassParts
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBrassCondenser
+  name: au14-craft-recipe-brass-condenser
+  output: RUMCBrassCondenser
+  time: 15
+  minigames: [Rhythm, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 6
+  - stack: RUMCBrassParts
+    amount: 4
+
+# The boiler has a firebox, so it takes wood as well.
+- type: craftRecipe
+  id: RUMCCraftBoiler
+  name: au14-craft-recipe-boiler
+  output: RUMCBoiler
+  time: 15
+  minigames: [Rhythm, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 6
+  - stack: RUMCBrassParts
+    amount: 4
+  - stack: RMCWood
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftSteamGenerator
+  name: au14-craft-recipe-steam-generator
+  output: RUMCSteamGenerator
+  time: 18
+  minigames: [Rhythm, Hold, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 6
+  - stack: RUMCBrassParts
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftSteamSmelter
+  name: au14-craft-recipe-steam-smelter
+  output: RUMCSteamSmelter
+  time: 18
+  minigames: [Rhythm, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 6
+  - stack: RUMCBrassParts
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftSteamPress
+  name: au14-craft-recipe-steam-press
+  output: RUMCSteamPress
+  time: 20
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 6
+  - stack: RUMCBrassParts
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftSteamDrill
+  name: au14-craft-recipe-steam-drill
+  output: RUMCSteamDrill
+  time: 18
+  minigames: [Rhythm, Drill, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 6
+  - stack: RUMCBrassParts
+    amount: 4
+
+# The steel water pipes (the liquid pipes): the same as the brass ones, of sheets of metal. They were forged at the anvil, and crafted of a sheet and a steel
+# ring, which only the electric extruder makes; now they are crafted by hand of sheets alone, so that the pipes need no electricity.
+- type: craftRecipe
+  id: RUMCCraftSteelWaterPipe
+  name: au14-craft-recipe-steel-water-pipe
+  output: RUMCSteelPipe
+  time: 5
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftSteelWaterPipeDown
+  name: au14-craft-recipe-steel-water-pipe-down
+  output: RUMCSteelPipeDown
+  time: 6
+  minigames: [Rhythm]
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 3
+
+# The steel water pump is crafted by hand, of two machine hulls (it was forged at the anvil of an iron ingot).
+- type: craftRecipe
+  id: RUMCCraftSteelPump
+  name: au14-craft-recipe-steel-pump
+  output: RUMCSteelPump
+  time: 12
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+
+# Rope, twisted out of plant fiber cut from the bushes: the coil that is let down a pit.
+- type: craftRecipe
+  id: RUMCCraftRope
+  name: au14-craft-recipe-rope
+  output: RUMCRopeCoil
+  time: 8
+  minigames: [Stitch]
+  consumables:
+  - stack: RUMCPlantFiber
+    amount: 6

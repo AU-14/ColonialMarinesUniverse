@@ -1,0 +1,260 @@
+# The defences of the colony: sharpened stakes, a palisade (a wall of the stakes) and spikes of steel set on the floor (a trap for whoever falls onto them: the place for them is the floor of a level under a pit).
+
+# ---------------------------------------------------------------- the stake
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCSharpStake
+  name: sharpened stake
+  icon: { sprite: CMU14/Objects/Tools/sharp_stake.rsi, state: icon }
+  spawn: RUMCSharpStake
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSharpStake
+  name: sharpened stake
+  description: "A stake with its end sharpened and fire-hardened. A palisade is made of them."
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Tools/sharp_stake.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCSharpStake
+    count: 1
+  - type: MeleeWeapon
+    damage:
+      types:
+        Piercing: 6
+
+# A branch, or a plank, made by hand into stakes.
+- type: craftRecipe
+  id: RUMCCraftSharpStakeFromBranch
+  name: au14-craft-recipe-stake-branch
+  output: RUMCSharpStake
+  time: 3
+  consumables:
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftSharpStakesFromPlank
+  name: au14-craft-recipe-stakes-plank
+  output: RUMCSharpStake
+  outputCount: 3
+  time: 4
+  consumables:
+  - stack: RMCWood
+    amount: 1
+
+# ---------------------------------------------------------------- the spikes
+# Spikes of steel set on the floor with their points up. They are built on any floor (the floor of the level under a pit is the place for them): they do not stand in the way, but whoever falls onto them is
+# run through, and the higher the fall the worse. A fall of one level does 80 damage, a fall of two levels twice that, and every part of the body is wounded.
+- type: entity
+  parent: BaseStructure
+  id: RUMCSpikes
+  name: spikes
+  description: Steel spikes set on the floor close together with their points up. Whoever falls onto them is run through, and the higher the fall the worse.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/pit_spikes.rsi
+    state: spikes
+    drawdepth: FloorObjects
+    noRot: true
+  - type: Icon
+    sprite: CMU14/Structures/pit_spikes.rsi
+    state: spikes
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: FallSpikes
+    damage:
+      types:
+        Piercing: 60
+        Slash: 20
+  - type: Damageable
+    damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMSheetMetal1:
+            min: 1
+            max: 3
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: RUMCSpikesGraph
+    node: built
+
+- type: constructionGraph
+  id: RUMCSpikesGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      # CM steel, the sheet of the colony.
+      - material: CMSteel
+        amount: 4
+        doAfter: 4
+  - node: built
+    entity: RUMCSpikes
+    edges:
+    # Taken down: unbolted and pried apart, and the steel comes back (a part of it).
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 3
+      - !type:DeleteEntity
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: construction
+  id: RUMCSpikesRecipe
+  name: spikes
+  description: Steel spikes set on the floor with their points up. Whoever falls onto them is run through, the harder the higher the fall.
+  graph: RUMCSpikesGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# ---------------------------------------------------------------- the palisade
+# A wall of sharpened stakes lashed together with a plank: it stops whoever goes at it and burns, and it is cut down with an axe like any wood.
+- type: entity
+  parent: BaseStructure
+  id: RUMCPalisade
+  name: palisade
+  description: A wall of sharpened stakes set close together and lashed with planks. Nothing gets through it without cutting or burning it.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/palisade.rsi
+    state: palisade_a
+    drawdepth: WallTops
+    offset: 0,0.125
+    noRot: true
+  - type: Icon
+    sprite: CMU14/Structures/palisade.rsi
+    state: palisade_a
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 500
+  - type: Damageable
+    damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          RUMCSharpStake:
+            min: 2
+            max: 4
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: RUMCPalisadeGraph
+    node: built
+
+- type: constructionGraph
+  id: RUMCPalisadeGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RUMCSharpStake
+        amount: 6
+        doAfter: 3
+      - material: RMCWood
+        amount: 1
+        doAfter: 2
+  - node: built
+    entity: RUMCPalisade
+    edges:
+    # Taken down: pried apart, and the stakes come back (a part of them).
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: RUMCSharpStake
+        amount: 4
+      - !type:DeleteEntity
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: construction
+  id: RUMCPalisadeRecipe
+  name: palisade
+  description: A wall of sharpened stakes lashed with planks. It stops whoever goes at it.
+  graph: RUMCPalisadeGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked

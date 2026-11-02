@@ -21,6 +21,14 @@ public sealed partial class AdminConsoleComponent : Component
     [DataField("incomeTaxPercent")]
     public float IncomeTaxPercent = 0f;
 
+    // RUMC: the tax on the parcels sold through the trade platforms
+    /// <summary>
+    ///     Current colony-wide tax on the parcels sold through the trade platforms, in percent (0–50).
+    ///     That share of the payout goes to the colony budget, the rest to the seller.
+    /// </summary>
+    [DataField("tradeTaxPercent")]
+    public float TradeTaxPercent = 0f;
+
     /// <summary>
     ///     Map of third-party prototype ID → cost deducted from colony budget.
     /// </summary>

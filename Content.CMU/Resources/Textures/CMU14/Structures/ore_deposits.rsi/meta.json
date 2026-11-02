@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "license": "CLA",
+  "copyright": "Deposits of ore by Astrolaris (StarHorizon), darkened for the stone and the dark stone",
+  "size": {
+    "x": 16,
+    "y": 16
+  },
+  "states": [
+    {
+      "name": "stone1"
+    },
+    {
+      "name": "dark1"
+    },
+    {
+      "name": "stone2"
+    },
+    {
+      "name": "dark2"
+    },
+    {
+      "name": "stone3"
+    },
+    {
+      "name": "dark3"
+    },
+    {
+      "name": "stone4"
+    },
+    {
+      "name": "dark4"
+    },
+    {
+      "name": "stone5"
+    },
+    {
+      "name": "dark5"
+    },
+    {
+      "name": "stone6"
+    },
+    {
+      "name": "dark6"
+    },
+    {
+      "name": "stone7"
+    },
+    {
+      "name": "dark7"
+    },
+    {
+      "name": "stone8"
+    },
+    {
+      "name": "dark8"
+    },
+    {
+      "name": "stone9"
+    },
+    {
+      "name": "dark9"
+    },
+    {
+      "name": "stone10"
+    },
+    {
+      "name": "dark10"
+    }
+  ]
+}

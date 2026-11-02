@@ -1,0 +1,185 @@
+# The factory floor: the automation kit, and the conveyor belts made of it. A belt is put down from a stack in the hand and carries what lies on it the way it faces; the
+# machines with their ports on put what they make on a belt that leads away from them and take what they need from a belt that leads to them. The sprites are cut from a
+# belt sheet supplied for the project (Textures/CMU14/Objects/Automation/conveyor.rsi): the brown belt is the slow one, the teal one the fast one.
+
+- type: stack
+  id: RUMCKitAutomation
+  name: automation kit
+  spawn: RUMCKitAutomationItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitAutomationItem
+  name: automation kit
+  description: "A box of the drives, the little circuits and the wiring that make a belt, a sorter or a hand for the factory floor."
+  components:
+  - type: Stack
+    stackType: RUMCKitAutomation
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#e08a3c"
+  - type: Item
+    size: Small
+
+- type: craftRecipe
+  id: RUMCCraftKitAutomation
+  name: au14-craft-recipe-kitautomation
+  output: RUMCKitAutomationItem
+  outputCount: 2
+  time: 16
+  minigames: [Center, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+  - stack: RUMCKitFasteners
+    amount: 1
+
+# ---------------------------------------------------------------- the belts in the hand
+
+- type: stack
+  id: RUMCConveyorBelt
+  name: conveyor belt
+  icon: { sprite: CMU14/Objects/Automation/conveyor.rsi, state: icon_slow }
+  spawn: RUMCConveyorBeltItem
+  maxCount: 20
+
+- type: entity
+  parent: BaseItem
+  id: RUMCConveyorBeltItem
+  name: conveyor belt
+  description: "A tile of belt. Click the floor to put one down; use it in the hand to turn the way it will carry."
+  components:
+  - type: Stack
+    stackType: RUMCConveyorBelt
+    count: 1
+  - type: BeltPlacer
+    belt: RUMCConveyorBeltTile
+  - type: Sprite
+    sprite: CMU14/Objects/Automation/conveyor.rsi
+    state: icon_slow
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCConveyorBeltFast
+  name: fast conveyor belt
+  icon: { sprite: CMU14/Objects/Automation/conveyor.rsi, state: icon_fast }
+  spawn: RUMCConveyorBeltFastItem
+  maxCount: 20
+
+- type: entity
+  parent: BaseItem
+  id: RUMCConveyorBeltFastItem
+  name: fast conveyor belt
+  description: "A tile of the fast belt. Click the floor to put one down; use it in the hand to turn the way it will carry."
+  components:
+  - type: Stack
+    stackType: RUMCConveyorBeltFast
+    count: 1
+  - type: BeltPlacer
+    belt: RUMCConveyorBeltTileFast
+  - type: Sprite
+    sprite: CMU14/Objects/Automation/conveyor.rsi
+    state: icon_fast
+  - type: Item
+    size: Small
+
+# ---------------------------------------------------------------- the belts on the floor
+
+- type: entity
+  id: RUMCConveyorBeltTile
+  name: conveyor belt
+  description: "Carries what lies on it the way it faces. Right-click it to turn it, or to take it up."
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Rotatable
+    rotateWhileAnchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: CMU14/Objects/Automation/conveyor.rsi
+    state: belt_slow
+    drawdepth: HighFloorObjects
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      conveyor:
+        shape: !type:PolygonShape
+          vertices:
+          - -0.50,-0.50
+          - 0.50,-0.50
+          - 0.50,0.50
+          - -0.50,0.50
+        layer:
+        - ConveyorMask
+        hard: false
+  - type: Conveyor
+    speed: 1.5
+  - type: ConveyorBelt
+    item: RUMCConveyorBeltItem
+
+- type: entity
+  parent: RUMCConveyorBeltTile
+  id: RUMCConveyorBeltTileFast
+  name: fast conveyor belt
+  description: "Carries what lies on it the way it faces, twice as quick. Right-click it to turn it, or to take it up."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Automation/conveyor.rsi
+    state: belt_fast
+    drawdepth: HighFloorObjects
+  - type: Conveyor
+    speed: 3
+  - type: ConveyorBelt
+    item: RUMCConveyorBeltFastItem
+
+# ---------------------------------------------------------------- the crafts
+
+- type: craftRecipe
+  id: RUMCCraftConveyorBelt
+  name: au14-craft-recipe-conveyorbelt
+  output: RUMCConveyorBeltItem
+  outputCount: 4
+  time: 12
+  minigames: [Stitch, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitAutomation
+    amount: 1
+  - stack: CMSteel
+    amount: 2
+  - stack: RUMCRubberSheet
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftConveyorBeltFast
+  name: au14-craft-recipe-conveyorbeltfast
+  output: RUMCConveyorBeltFastItem
+  outputCount: 4
+  time: 14
+  minigames: [Center, Stitch]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitAutomation
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: CMSteel
+    amount: 2
+  - stack: RUMCRubberSheet
+    amount: 1

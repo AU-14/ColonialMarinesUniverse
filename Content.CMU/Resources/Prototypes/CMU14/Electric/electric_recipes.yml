@@ -1,0 +1,4231 @@
+# What the machines of the electric age make, and the crafts by hand that start the stage off.
+# A recipe with a circuit is made only while that circuit is set in the window of the machine.
+
+- type: cmuMachineRecipe
+  id: RUMCMRWiremillWireCopper
+  machine: wiremill
+  inputs:
+    RUMCCopperIngot: 1
+  outputs:
+    RUMCKitWiring: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRWiremillWireGold
+  machine: wiremill
+  inputs:
+    RUMCGoldIngot: 1
+  outputs:
+    RUMCGoldWire: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRWiremillWireSilver
+  machine: wiremill
+  inputs:
+    RUMCSilverIngot: 1
+  outputs:
+    RUMCSilverWire: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderSheetIron
+  machine: bender
+  inputs:
+    RUMCIronIngot: 1
+  outputs:
+    CMSteel: 1
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderSheetCopper
+  machine: bender
+  inputs:
+    RUMCCopperIngot: 1
+  outputs:
+    RUMCCopperSheet: 1
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderSheetLead
+  machine: bender
+  inputs:
+    RUMCLeadIngot: 1
+  outputs:
+    RUMCLeadSheet: 1
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderSheetZinc
+  machine: bender
+  inputs:
+    RUMCZincIngot: 1
+  outputs:
+    RUMCZincSheet: 1
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderSheetBrass
+  machine: bender
+  inputs:
+    RUMCBrassIngot: 1
+  outputs:
+    RUMCBrassSheet: 1
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderSheetGold
+  machine: bender
+  inputs:
+    RUMCGoldIngot: 1
+  outputs:
+    RUMCGoldSheet: 1
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderSheetSilver
+  machine: bender
+  inputs:
+    RUMCSilverIngot: 1
+  outputs:
+    RUMCSilverSheet: 1
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRLatheIronRod
+  machine: lathe
+  inputs:
+    CMSteel: 1
+  outputs:
+    RUMCIronRod: 1
+  circuit: 1
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRLatheIronBolts
+  machine: lathe
+  inputs:
+    CMSteel: 1
+  outputs:
+    RUMCKitFasteners: 2
+  circuit: 2
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRCutterIronBolt
+  machine: cutter
+  inputs:
+    RUMCIronRod: 1
+  outputs:
+    RUMCKitFasteners: 4
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRCutterSiliconWafer
+  machine: cutter
+  inputs:
+    RUMCSiliconIngot: 1
+  outputs:
+    RUMCSiliconWafer: 4
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRPolarizerMagneticRod
+  machine: polarizer
+  inputs:
+    RUMCIronRod: 1
+  outputs:
+    RUMCMagneticRod: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRExtractorResinFromBranches
+  machine: extractor
+  inputs:
+    RUMCBranch: 4
+  fluidOutputs:
+    RUMCResin: 10
+  duration: 6
+
+# The extractor presses resin out of planks too: two planks give what four branches do.
+- type: cmuMachineRecipe
+  id: RUMCMRExtractorResinFromPlanks
+  machine: extractor
+  inputs:
+    RMCWood: 2
+  fluidOutputs:
+    RUMCResin: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRExtractorRawRubber
+  machine: extractor
+  outputs:
+    RUMCRawRubber: 2
+  fluidInputs:
+    RUMCResin: 20
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRMixerSolder
+  machine: mixer
+  inputs:
+    RUMCLeadIngot: 1
+    RUMCZincIngot: 1
+  fluidOutputs:
+    RUMCSolderMelt: 40
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRMixerRubberSheet
+  machine: mixer
+  inputs:
+    RUMCRawRubber: 2
+    RUMCCinnabarPowder: 1
+  outputs:
+    RUMCRubberSheet: 2
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRReactorGlue
+  machine: reactor
+  fluidInputs:
+    RUMCResin: 10
+    Water: 10
+  fluidOutputs:
+    RUMCGlue: 20
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRReactorRubberSheet
+  machine: reactor
+  inputs:
+    RUMCRawRubber: 4
+    RUMCCinnabarPowder: 1
+  outputs:
+    RUMCRubberSheet: 6
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerResistor
+  machine: assembler
+  inputs:
+    RUMCCokeCoal: 1
+    RUMCKitWiring: 2
+    RUMCRubberSheet: 1
+  outputs:
+    RUMCKitElectronics: 4
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerResinBoard
+  machine: assembler
+  inputs:
+    RMCWood: 1
+    RUMCRubberSheet: 1
+    RUMCKitWiring: 2
+  outputs:
+    RUMCKitElectronics: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerPhenolicBoard
+  machine: assembler
+  inputs:
+    RMCWood: 2
+    RUMCSilverWire: 2
+  outputs:
+    RUMCKitQualityBoards: 1
+  fluidInputs:
+    RUMCGlue: 20
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerDiode
+  machine: assembler
+  inputs:
+    RUMCSiliconWafer: 1
+    RUMCKitWiring: 2
+    RUMCRubberSheet: 1
+  outputs:
+    RUMCKitElectronics: 2
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerBasicCircuit
+  machine: assembler
+  inputs:
+    RUMCKitElectronics: 4
+  outputs:
+    RUMCKitSimpleCircuits: 1
+  fluidInputs:
+    RUMCSolderMelt: 10
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerMotor
+  machine: assembler
+  inputs:
+    RUMCMagneticRod: 1
+    RUMCIronRod: 2
+    RUMCKitWiring: 3
+  outputs:
+    RUMCKitDrive: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerPiston
+  machine: assembler
+  inputs:
+    CMSteel: 2
+    RUMCIronRod: 3
+    RUMCKitFasteners: 2
+  outputs:
+    RUMCKitHydraulics: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerPump
+  machine: assembler
+  inputs:
+    RUMCRubberSheet: 1
+    CMSteel: 1
+    RUMCIronRod: 2
+    RUMCKitFasteners: 2
+  outputs:
+    RUMCKitHydraulics: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerConveyor
+  machine: assembler
+  inputs:
+    RUMCRubberSheet: 2
+    RUMCIronRod: 2
+    RUMCKitWiring: 1
+  outputs:
+    RUMCKitDrive: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerHeatingCoil
+  machine: assembler
+  inputs:
+    RUMCKitWiring: 8
+    RUMCIronRod: 1
+  outputs:
+    RUMCKitHeating: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerMachineHull
+  machine: assembler
+  inputs:
+    CMSteel: 6
+  outputs:
+    RUMCMachineHull: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSiliconFromQuartz
+  machine: blastfurnace
+  inputs:
+    RUMCQuartzPowder: 2
+    RUMCCokeCoal: 1
+  outputs:
+    RUMCSiliconIngot: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSiliconFromSand
+  machine: blastfurnace
+  inputs:
+    RUMCSand: 3
+    RUMCCokeCoal: 1
+  outputs:
+    RUMCSiliconIngot: 1
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRCircuitassemblerBasicCircuit
+  machine: circuitassembler
+  inputs:
+    RUMCKitElectronics: 4
+  outputs:
+    RUMCKitSimpleCircuits: 2
+  fluidInputs:
+    RUMCSolderMelt: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderSheetAluminum
+  machine: bender
+  inputs:
+    RUMCAluminumIngot: 1
+  outputs:
+    RMCAluminum: 1
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyCableLV
+  machine: assembler
+  inputs:
+    RUMCKitWiring: 5
+  outputs:
+    RMCCable: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyCableMV
+  machine: assembler
+  inputs:
+    RUMCKitWiring: 5
+    RUMCRubberSheet: 2
+  outputs:
+    CableMV: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyCableHV
+  machine: assembler
+  inputs:
+    RUMCKitWiring: 5
+    RUMCRubberSheet: 4
+    RUMCSilverWire: 2
+  outputs:
+    CableHV: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyLightBulb
+  machine: assembler
+  inputs:
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 1
+  itemOutputs:
+    LightBulb: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyLightTube
+  machine: assembler
+  inputs:
+    RUMCKitElectronics: 2
+    RUMCKitWiring: 1
+  itemOutputs:
+    LightTube: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyCellSmall
+  machine: assembler
+  inputs:
+    RUMCLeadSheet: 1
+    RUMCZincSheet: 1
+    RUMCRubberSheet: 1
+  itemOutputs:
+    PowerCellSmall: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyCellMedium
+  machine: assembler
+  inputs:
+    RUMCLeadSheet: 2
+    RUMCZincSheet: 2
+    RUMCRubberSheet: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    PowerCellMedium: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyCellHigh
+  machine: assembler
+  inputs:
+    RUMCLeadSheet: 3
+    RUMCZincSheet: 3
+    RUMCRubberSheet: 2
+    RUMCSilverWire: 2
+  itemOutputs:
+    PowerCellHigh: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyCellHyper
+  machine: assembler
+  inputs:
+    RUMCLeadSheet: 4
+    RUMCZincSheet: 4
+    RUMCRubberSheet: 3
+    RUMCGoldWire: 2
+  itemOutputs:
+    PowerCellHyper: 1
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyApcModule
+  machine: assembler
+  inputs:
+    RUMCKitSimpleCircuits: 1
+    RUMCKitWiring: 2
+    RUMCKitElectronics: 1
+  itemOutputs:
+    CMAPCElectronics: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyCapacitor
+  machine: assembler
+  inputs:
+    RUMCKitWiring: 1
+    RUMCRubberSheet: 1
+    CMSteel: 1
+  itemOutputs:
+    CMStockPartCapacitor: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyManipulator
+  machine: assembler
+  inputs:
+    RUMCKitDrive: 1
+    RUMCIronRod: 2
+  itemOutputs:
+    CMStockPartManipulatorMicro: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyMicroLaser
+  machine: assembler
+  inputs:
+    RUMCKitElectronics: 3
+    RUMCLensRuby: 1
+  itemOutputs:
+    CMStockPartMicroLaser: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyScanModule
+  machine: assembler
+  inputs:
+    RUMCSiliconWafer: 2
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    CMStockPartScanningModule: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyMatterBin
+  machine: assembler
+  inputs:
+    CMSteel: 4
+    RUMCRubberSheet: 1
+  itemOutputs:
+    CMStockPartMatterBin: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashIron
+  machine: washer
+  inputs:
+    RUMCIronOre: 1
+  outputs:
+    RUMCIronPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashAluminum
+  machine: washer
+  inputs:
+    RUMCAluminumOre: 1
+  outputs:
+    RUMCAluminumPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashChrome
+  machine: washer
+  inputs:
+    RUMCChromeOre: 1
+  outputs:
+    RUMCChromePowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashCobalt
+  machine: washer
+  inputs:
+    RUMCCobaltOre: 1
+  outputs:
+    RUMCCobaltPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashCopper
+  machine: washer
+  inputs:
+    RUMCCopperOre: 1
+  outputs:
+    RUMCCopperPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashGold
+  machine: washer
+  inputs:
+    RUMCGoldOre: 1
+  outputs:
+    RUMCGoldPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashLead
+  machine: washer
+  inputs:
+    RUMCLeadOre: 1
+  outputs:
+    RUMCLeadPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashSilver
+  machine: washer
+  inputs:
+    RUMCSilverOre: 1
+  outputs:
+    RUMCSilverPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashTitanium
+  machine: washer
+  inputs:
+    RUMCTitaniumOre: 1
+  outputs:
+    RUMCTitaniumPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashTungsten
+  machine: washer
+  inputs:
+    RUMCTungstenOre: 1
+  outputs:
+    RUMCTungstenPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashPlatinum
+  machine: washer
+  inputs:
+    RUMCPlatinumOre: 1
+  outputs:
+    RUMCPlatinumPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashUranium
+  machine: washer
+  inputs:
+    RUMCUraniumOre: 1
+  outputs:
+    RUMCUraniumPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashZinc
+  machine: washer
+  inputs:
+    RUMCZincOre: 1
+  outputs:
+    RUMCZincPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashSaltpeter
+  machine: washer
+  inputs:
+    RUMCSaltpeterCrystal: 1
+  outputs:
+    RUMCSaltpeterPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashCinnabar
+  machine: washer
+  inputs:
+    RUMCCinnabarCrystal: 1
+  outputs:
+    RUMCCinnabarPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashAsbestos
+  machine: washer
+  inputs:
+    RUMCAsbestosCrystal: 1
+  outputs:
+    RUMCAsbestosPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashFluorite
+  machine: washer
+  inputs:
+    RUMCFluoriteCrystal: 1
+  outputs:
+    RUMCFluoritePowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashBeryllium
+  machine: washer
+  inputs:
+    RUMCBerylliumCrystal: 1
+  outputs:
+    RUMCBerylliumPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashColtan
+  machine: washer
+  inputs:
+    RUMCColtanCrystal: 1
+  outputs:
+    RUMCColtanPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashAlexandrite
+  machine: washer
+  inputs:
+    RUMCAlexandriteCrystal: 1
+  outputs:
+    RUMCAlexandritePowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashRawDiamond
+  machine: washer
+  inputs:
+    RUMCRawDiamondCrystal: 1
+  outputs:
+    RUMCRawDiamondPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashEmerald
+  machine: washer
+  inputs:
+    RUMCEmeraldCrystal: 1
+  outputs:
+    RUMCEmeraldPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashRuby
+  machine: washer
+  inputs:
+    RUMCRubyCrystal: 1
+  outputs:
+    RUMCRubyPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashPhosphorus
+  machine: washer
+  inputs:
+    RUMCPhosphorusCrystal: 1
+  outputs:
+    RUMCPhosphorusPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashTrimorid
+  machine: washer
+  inputs:
+    RUMCTrimoridCrystal: 1
+  outputs:
+    RUMCTrimoridPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashLaxanite
+  machine: washer
+  inputs:
+    RUMCLaxaniteCrystal: 1
+  outputs:
+    RUMCLaxanitePowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashLaytoite
+  machine: washer
+  inputs:
+    RUMCLaytoiteCrystal: 1
+  outputs:
+    RUMCLaytoitePowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRWasherWashQuartz
+  machine: washer
+  inputs:
+    RUMCQuartzCrystal: 1
+  outputs:
+    RUMCQuartzPowder: 4
+    RUMCStonePowder: 1
+  fluidInputs:
+    Water: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineIron
+  machine: thermalcentrifuge
+  inputs:
+    RUMCIronPowder: 6
+  outputs:
+    RUMCIronPowder: 6
+    RUMCChromePowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineAluminum
+  machine: thermalcentrifuge
+  inputs:
+    RUMCAluminumPowder: 6
+  outputs:
+    RUMCAluminumPowder: 6
+    RUMCTitaniumPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineChrome
+  machine: thermalcentrifuge
+  inputs:
+    RUMCChromePowder: 6
+  outputs:
+    RUMCChromePowder: 6
+    RUMCIronPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineCobalt
+  machine: thermalcentrifuge
+  inputs:
+    RUMCCobaltPowder: 6
+  outputs:
+    RUMCCobaltPowder: 6
+    RUMCIronPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineCopper
+  machine: thermalcentrifuge
+  inputs:
+    RUMCCopperPowder: 6
+  outputs:
+    RUMCCopperPowder: 6
+    RUMCGoldPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineGold
+  machine: thermalcentrifuge
+  inputs:
+    RUMCGoldPowder: 6
+  outputs:
+    RUMCGoldPowder: 6
+    RUMCCopperPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineLead
+  machine: thermalcentrifuge
+  inputs:
+    RUMCLeadPowder: 6
+  outputs:
+    RUMCLeadPowder: 6
+    RUMCSilverPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineSilver
+  machine: thermalcentrifuge
+  inputs:
+    RUMCSilverPowder: 6
+  outputs:
+    RUMCSilverPowder: 6
+    RUMCLeadPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineTitanium
+  machine: thermalcentrifuge
+  inputs:
+    RUMCTitaniumPowder: 6
+  outputs:
+    RUMCTitaniumPowder: 6
+    RUMCAluminumPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineTungsten
+  machine: thermalcentrifuge
+  inputs:
+    RUMCTungstenPowder: 6
+  outputs:
+    RUMCTungstenPowder: 6
+    RUMCTitaniumPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefinePlatinum
+  machine: thermalcentrifuge
+  inputs:
+    RUMCPlatinumPowder: 6
+  outputs:
+    RUMCPlatinumPowder: 6
+    RUMCGoldPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineZinc
+  machine: thermalcentrifuge
+  inputs:
+    RUMCZincPowder: 6
+  outputs:
+    RUMCZincPowder: 6
+    RUMCLeadPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRThermalcentrifugeRefineUranium
+  machine: thermalcentrifuge
+  inputs:
+    RUMCUraniumPowder: 6
+  outputs:
+    RUMCUraniumPowder: 6
+    RUMCLeadPowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRSeparatorStoneIron
+  machine: separator
+  inputs:
+    RUMCStonePowder: 8
+  outputs:
+    RUMCIronPowder: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSeparatorBlackStoneChrome
+  machine: separator
+  inputs:
+    RUMCBlackStonePowder: 8
+  outputs:
+    RUMCChromePowder: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltIron
+  machine: blastfurnace
+  inputs:
+    RUMCIronPowder: 3
+    RUMCCokeCoal: 1
+  outputs:
+    RUMCIronIngot: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltAluminum
+  machine: blastfurnace
+  inputs:
+    RUMCAluminumPowder: 3
+  outputs:
+    RUMCAluminumIngot: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltChrome
+  machine: blastfurnace
+  inputs:
+    RUMCChromePowder: 3
+  outputs:
+    RUMCChromeIngot: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltCobalt
+  machine: blastfurnace
+  inputs:
+    RUMCCobaltPowder: 3
+  outputs:
+    RUMCCobaltIngot: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltCopper
+  machine: blastfurnace
+  inputs:
+    RUMCCopperPowder: 3
+  outputs:
+    RUMCCopperIngot: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltGold
+  machine: blastfurnace
+  inputs:
+    RUMCGoldPowder: 3
+  outputs:
+    RUMCGoldIngot: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltLead
+  machine: blastfurnace
+  inputs:
+    RUMCLeadPowder: 3
+  outputs:
+    RUMCLeadIngot: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltSilver
+  machine: blastfurnace
+  inputs:
+    RUMCSilverPowder: 3
+  outputs:
+    RUMCSilverIngot: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltTitanium
+  machine: blastfurnace
+  inputs:
+    RUMCTitaniumPowder: 3
+  outputs:
+    RUMCTitaniumIngot: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltTungsten
+  machine: blastfurnace
+  inputs:
+    RUMCTungstenPowder: 3
+  outputs:
+    RUMCTungstenIngot: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltPlatinum
+  machine: blastfurnace
+  inputs:
+    RUMCPlatinumPowder: 3
+  outputs:
+    RUMCPlatinumIngot: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlastfurnaceSmeltZinc
+  machine: blastfurnace
+  inputs:
+    RUMCZincPowder: 3
+  outputs:
+    RUMCZincIngot: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRSifterSiftDiamond
+  machine: sifter
+  inputs:
+    RUMCRawDiamondCrystal: 1
+  outputs:
+    RUMCGemDiamond: 1
+    RUMCRawDiamondPowder: 1
+    RUMCStonePowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAutoclaveGrowDiamond
+  machine: autoclave
+  inputs:
+    RUMCRawDiamondPowder: 6
+  outputs:
+    RUMCGemDiamond: 1
+  fluidInputs:
+    Water: 20
+  duration: 24
+
+- type: cmuMachineRecipe
+  id: RUMCMRCutterLensDiamond
+  machine: cutter
+  inputs:
+    RUMCGemDiamond: 1
+  outputs:
+    RUMCLensDiamond: 2
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSifterSiftEmerald
+  machine: sifter
+  inputs:
+    RUMCEmeraldCrystal: 1
+  outputs:
+    RUMCGemEmerald: 1
+    RUMCEmeraldPowder: 1
+    RUMCStonePowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAutoclaveGrowEmerald
+  machine: autoclave
+  inputs:
+    RUMCEmeraldPowder: 6
+  outputs:
+    RUMCGemEmerald: 1
+  fluidInputs:
+    Water: 20
+  duration: 24
+
+- type: cmuMachineRecipe
+  id: RUMCMRCutterLensEmerald
+  machine: cutter
+  inputs:
+    RUMCGemEmerald: 1
+  outputs:
+    RUMCLensEmerald: 2
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSifterSiftRuby
+  machine: sifter
+  inputs:
+    RUMCRubyCrystal: 1
+  outputs:
+    RUMCGemRuby: 1
+    RUMCRubyPowder: 1
+    RUMCStonePowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAutoclaveGrowRuby
+  machine: autoclave
+  inputs:
+    RUMCRubyPowder: 6
+  outputs:
+    RUMCGemRuby: 1
+  fluidInputs:
+    Water: 20
+  duration: 24
+
+- type: cmuMachineRecipe
+  id: RUMCMRCutterLensRuby
+  machine: cutter
+  inputs:
+    RUMCGemRuby: 1
+  outputs:
+    RUMCLensRuby: 2
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSifterSiftAlexandrite
+  machine: sifter
+  inputs:
+    RUMCAlexandriteCrystal: 1
+  outputs:
+    RUMCGemAlexandrite: 1
+    RUMCAlexandritePowder: 1
+    RUMCStonePowder: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAutoclaveGrowAlexandrite
+  machine: autoclave
+  inputs:
+    RUMCAlexandritePowder: 6
+  outputs:
+    RUMCGemAlexandrite: 1
+  fluidInputs:
+    Water: 20
+  duration: 24
+
+- type: cmuMachineRecipe
+  id: RUMCMRCutterLensAlexandrite
+  machine: cutter
+  inputs:
+    RUMCGemAlexandrite: 1
+  outputs:
+    RUMCLensAlexandrite: 2
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRElectrolyzerWater
+  machine: electrolyzer
+  fluidInputs:
+    Water: 20
+  fluidOutputs:
+    Hydrogen: 20
+    Oxygen: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRElectrolyzerCinnabar
+  machine: electrolyzer
+  inputs:
+    RUMCCinnabarPowder: 4
+  outputs:
+    RUMCSulfurPowder: 2
+  fluidOutputs:
+    Mercury: 20
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRReactorRubberOfSulfur
+  machine: reactor
+  inputs:
+    RUMCRawRubber: 4
+    RUMCSulfurPowder: 1
+  outputs:
+    RUMCRubberSheet: 8
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRMixerRubberOfSulfur
+  machine: mixer
+  inputs:
+    RUMCRawRubber: 2
+    RUMCSulfurPowder: 1
+  outputs:
+    RUMCRubberSheet: 3
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRReactorSulfuricAcid
+  machine: reactor
+  inputs:
+    RUMCSulfurPowder: 1
+  fluidInputs:
+    Oxygen: 30
+    Water: 30
+  fluidOutputs:
+    SulfuricAcid: 30
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRArcfurnaceGlassOfSand
+  machine: arcfurnace
+  inputs:
+    RUMCSand: 4
+  outputs:
+    CMGlass: 3
+  fluidInputs:
+    Oxygen: 10
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRArcfurnaceGlassOfQuartz
+  machine: arcfurnace
+  inputs:
+    RUMCQuartzPowder: 3
+  outputs:
+    CMGlass: 2
+  fluidInputs:
+    Oxygen: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRArcfurnaceBrass
+  machine: arcfurnace
+  inputs:
+    RUMCCopperIngot: 2
+    RUMCZincIngot: 2
+  outputs:
+    RUMCBrassIngot: 3
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRChembathPaper
+  machine: chembath
+  inputs:
+    RMCWood: 1
+  outputs:
+    Paper: 2
+  fluidInputs:
+    Water: 20
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRChembathCardboard
+  machine: chembath
+  inputs:
+    RMCWood: 1
+  outputs:
+    RMCSheetCardboard: 3
+  fluidInputs:
+    Water: 10
+  circuit: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRChembathEtchedBoard
+  machine: chembath
+  inputs:
+    RMCWood: 1
+    RUMCSilverWire: 1
+  outputs:
+    RUMCKitQualityBoards: 1
+  fluidInputs:
+    RUMCGlue: 10
+    SulfuricAcid: 5
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRCentrifugeSlag
+  machine: centrifuge
+  outputs:
+    RUMCStonePowder: 4
+    RUMCIronPowder: 1
+  fluidInputs:
+    RUMCSlag: 20
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRCentrifugeResin
+  machine: centrifuge
+  outputs:
+    RUMCRawRubber: 1
+  fluidInputs:
+    RUMCResin: 30
+  fluidOutputs:
+    RUMCGlue: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRCentrifugeCinnabar
+  machine: centrifuge
+  inputs:
+    RUMCCinnabarPowder: 3
+  outputs:
+    RUMCSulfurPowder: 1
+  fluidOutputs:
+    Mercury: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRCompressorStone
+  machine: compressor
+  inputs:
+    RUMCStonePowder: 4
+  outputs:
+    RUMCStone: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRCompressorBlackStone
+  machine: compressor
+  inputs:
+    RUMCBlackStonePowder: 4
+  outputs:
+    RUMCBlackStone: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRCompressorWood
+  machine: compressor
+  inputs:
+    RUMCBranch: 4
+  outputs:
+    RMCWood: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRSolidifierCopper
+  machine: solidifier
+  outputs:
+    RUMCCopperIngot: 1
+  fluidInputs:
+    Copper: 30
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSolidifierZinc
+  machine: solidifier
+  outputs:
+    RUMCZincIngot: 1
+  fluidInputs:
+    RUMCZincMelt: 30
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSolidifierBrass
+  machine: solidifier
+  outputs:
+    RUMCBrassIngot: 1
+  fluidInputs:
+    Copper: 15
+    RUMCZincMelt: 15
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSolidifierGlass
+  machine: solidifier
+  outputs:
+    CMGlass: 1
+  fluidInputs:
+    RUMCSiliconMelt: 30
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRExtruderIronRod
+  machine: extruder
+  inputs:
+    CMSteel: 1
+  outputs:
+    RUMCIronRod: 2
+  circuit: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRExtruderFasteners
+  machine: extruder
+  inputs:
+    CMSteel: 1
+  outputs:
+    RUMCKitFasteners: 6
+  circuit: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRCutterGlassTube
+  machine: cutter
+  inputs:
+    CMGlass: 1
+  outputs:
+    RUMCKitElectronics: 2
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMREngraverEngraveIC
+  machine: engraver
+  inputs:
+    RUMCSiliconWafer: 1
+  catalysts:
+    RUMCLensRuby: 1
+  outputs:
+    RUMCKitChipIC: 2
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMREngraverEngraveULPIC
+  machine: engraver
+  inputs:
+    RUMCSiliconWafer: 1
+  catalysts:
+    RUMCLensAlexandrite: 1
+  outputs:
+    RUMCKitChipULPIC: 2
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMREngraverEngraveRAM
+  machine: engraver
+  inputs:
+    RUMCSiliconWafer: 1
+  catalysts:
+    RUMCLensEmerald: 1
+  outputs:
+    RUMCKitChipRAM: 2
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMREngraverEngraveCPU
+  machine: engraver
+  inputs:
+    RUMCSiliconWafer: 1
+  catalysts:
+    RUMCLensDiamond: 1
+  outputs:
+    RUMCKitChipCPU: 2
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerTransistor
+  machine: assembler
+  inputs:
+    RUMCSiliconWafer: 1
+    RUMCGoldWire: 1
+    RUMCRubberSheet: 1
+  outputs:
+    RUMCKitElectronics: 4
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerCapacitor
+  machine: assembler
+  inputs:
+    RMCAluminum: 1
+    RUMCRubberSheet: 1
+  outputs:
+    RUMCKitElectronics: 2
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerMachineHullMV
+  machine: assembler
+  inputs:
+    RMCAluminum: 8
+    RUMCKitChipULPIC: 1
+  outputs:
+    RUMCKitQualityParts: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerMotorMV
+  machine: assembler
+  inputs:
+    RUMCKitDrive: 1
+    RUMCKitWiring: 2
+    RMCAluminum: 2
+    RUMCSilverWire: 2
+  outputs:
+    RUMCKitQualityParts: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRDistillationOil
+  machine: distillation
+  fluidInputs:
+    RUMCCrudeOil: 100
+  fluidOutputs:
+    RUMCNaphtha: 20
+    RUMCLightFuel: 40
+    RUMCHeavyFuel: 30
+    RUMCRefineryGas: 10
+  duration: 20
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlenderDiesel
+  machine: blender
+  fluidInputs:
+    RUMCLightFuel: 30
+    RUMCHeavyFuel: 20
+  fluidOutputs:
+    RUMCDiesel: 50
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRBlenderDieselOfNaphtha
+  machine: blender
+  fluidInputs:
+    RUMCNaphtha: 20
+    RUMCHeavyFuel: 20
+  fluidOutputs:
+    RUMCDiesel: 35
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRCrackerEthyleneOfNaphtha
+  machine: cracker
+  fluidInputs:
+    RUMCNaphtha: 30
+    Water: 30
+  fluidOutputs:
+    RUMCEthylene: 20
+    RUMCRefineryGas: 10
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRCrackerEthyleneOfGas
+  machine: cracker
+  fluidInputs:
+    RUMCRefineryGas: 40
+    Water: 20
+  fluidOutputs:
+    RUMCEthylene: 15
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRPolymerizerPlastic
+  machine: polymerizer
+  outputs:
+    RUMCPlasticPellets: 3
+  fluidInputs:
+    RUMCEthylene: 30
+    Water: 10
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderPlasticSheet
+  machine: bender
+  inputs:
+    RUMCPlasticPellets: 4
+  outputs:
+    RMCPlastic: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRElectrolyzerBrine
+  machine: electrolyzer
+  fluidInputs:
+    TableSalt: 30
+    Water: 30
+  fluidOutputs:
+    Chlorine: 15
+    Hydrogen: 15
+    SodiumHydroxide: 15
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRReactorHydrochloricAcid
+  machine: reactor
+  fluidInputs:
+    Hydrogen: 20
+    Chlorine: 20
+  fluidOutputs:
+    RUMCHydrochloricAcid: 30
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRDistillationWoodTar
+  machine: distillation
+  fluidInputs:
+    RUMCResin: 40
+  fluidOutputs:
+    Benzene: 15
+    RUMCRefineryGas: 5
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerPlasticBoard
+  machine: assembler
+  inputs:
+    RMCPlastic: 1
+    RUMCCopperSheet: 1
+  outputs:
+    RUMCKitQualityBoards: 2
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRChembathPlasticBoardEtched
+  machine: chembath
+  inputs:
+    RMCPlastic: 1
+    RUMCCopperSheet: 1
+  outputs:
+    RUMCKitQualityBoards: 4
+  fluidInputs:
+    RUMCHydrochloricAcid: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRPyrolysisCokeFromWood
+  machine: pyrolysis
+  inputs:
+    RMCWood: 4
+  outputs:
+    RUMCCokeCoal: 2
+  fluidOutputs:
+    RUMCResin: 10
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRPyrolysisCokeFromBranches
+  machine: pyrolysis
+  inputs:
+    RUMCBranch: 8
+  outputs:
+    RUMCCokeCoal: 1
+  fluidOutputs:
+    RUMCResin: 6
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRPyrolysisCokeFromCoal
+  machine: pyrolysis
+  inputs:
+    Coal: 3
+  outputs:
+    RUMCCokeCoal: 2
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRGalvanicGalvanize
+  machine: galvanic
+  inputs:
+    CMSteel: 1
+    RUMCZincPowder: 1
+  outputs:
+    RUMCGalvanizedSheet: 1
+  fluidInputs:
+    Water: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRGalvanicChrome
+  machine: galvanic
+  inputs:
+    CMSteel: 1
+    RUMCChromePowder: 1
+  outputs:
+    RUMCChromedSheet: 1
+  fluidInputs:
+    Water: 10
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRFertilizerFertilizer
+  machine: fertilizer
+  inputs:
+    RUMCSaltpeterPowder: 2
+    RUMCPhosphorusPowder: 1
+  fluidInputs:
+    Water: 20
+  fluidOutputs:
+    RUMCFertilizer: 40
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRCanneryCans
+  machine: cannery
+  inputs:
+    RUMCGalvanizedSheet: 1
+  outputs:
+    RUMCTinCan: 4
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRCanneryBeans
+  machine: cannery
+  inputs:
+    RUMCTinCan: 1
+  itemOutputs:
+    FoodTinBeans: 1
+  fluidInputs:
+    Nutriment: 30
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRCanneryMeat
+  machine: cannery
+  inputs:
+    RUMCTinCan: 1
+  itemOutputs:
+    FoodTinMRE: 1
+  fluidInputs:
+    Protein: 30
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRCanneryPeaches
+  machine: cannery
+  inputs:
+    RUMCTinCan: 1
+  itemOutputs:
+    FoodTinPeaches: 1
+  fluidInputs:
+    Nutriment: 20
+    Sugar: 10
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRJewelerGoldRing
+  machine: jeweler
+  inputs:
+    RUMCGoldIngot: 1
+  itemOutputs:
+    GoldRing: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRJewelerGoldRingDiamond
+  machine: jeweler
+  inputs:
+    RUMCGoldIngot: 1
+    RUMCGemDiamond: 1
+  itemOutputs:
+    GoldRingDiamond: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRJewelerGoldRingGemRuby
+  machine: jeweler
+  inputs:
+    RUMCGoldIngot: 1
+    RUMCGemRuby: 1
+  itemOutputs:
+    GoldRingGem: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRJewelerGoldRingGemEmerald
+  machine: jeweler
+  inputs:
+    RUMCGoldIngot: 1
+    RUMCGemEmerald: 1
+  itemOutputs:
+    GoldRingGem: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRJewelerGoldRingGemAlexandrite
+  machine: jeweler
+  inputs:
+    RUMCGoldIngot: 1
+    RUMCGemAlexandrite: 1
+  itemOutputs:
+    GoldRingGem: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRJewelerSilverRing
+  machine: jeweler
+  inputs:
+    RUMCSilverIngot: 1
+  itemOutputs:
+    SilverRing: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRJewelerSilverRingDiamond
+  machine: jeweler
+  inputs:
+    RUMCSilverIngot: 1
+    RUMCGemDiamond: 1
+  itemOutputs:
+    SilverRingDiamond: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRJewelerSilverRingGemRuby
+  machine: jeweler
+  inputs:
+    RUMCSilverIngot: 1
+    RUMCGemRuby: 1
+  itemOutputs:
+    SilverRingGem: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRJewelerSilverRingGemEmerald
+  machine: jeweler
+  inputs:
+    RUMCSilverIngot: 1
+    RUMCGemEmerald: 1
+  itemOutputs:
+    SilverRingGem: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRJewelerSilverRingGemAlexandrite
+  machine: jeweler
+  inputs:
+    RUMCSilverIngot: 1
+    RUMCGemAlexandrite: 1
+  itemOutputs:
+    SilverRingGem: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderSteelTiles
+  machine: bender
+  inputs:
+    CMSteel: 1
+  outputs:
+    RMCTileSteel: 4
+  circuit: 2
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRLatheMetalRods
+  machine: lathe
+  inputs:
+    CMSteel: 1
+  outputs:
+    CMRodMetal: 2
+  circuit: 3
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRArcfurnacePlasteel
+  machine: arcfurnace
+  inputs:
+    CMSteel: 4
+    RUMCCokeCoal: 1
+  outputs:
+    CMPlasteel: 3
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerReinforcedGlass
+  machine: assembler
+  inputs:
+    CMGlass: 1
+    CMRodMetal: 1
+  outputs:
+    CMGlassReinforced: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerColonyHeadset
+  machine: assembler
+  inputs:
+    RUMCKitSimpleCircuits: 1
+    CMSteel: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    CMHeadsetColony: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerHandheldRadio
+  machine: assembler
+  inputs:
+    RUMCKitSimpleCircuits: 1
+    CMSteel: 2
+    RUMCKitWiring: 4
+    RUMCKitElectronics: 1
+  itemOutputs:
+    CMRadioHandheld: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerMultitool
+  machine: assembler
+  inputs:
+    RUMCKitSimpleCircuits: 1
+    RUMCChromedSheet: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    CMMultitool: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerDefibrillator
+  machine: assembler
+  inputs:
+    RUMCKitQualityBoards: 1
+    RUMCKitElectronics: 4
+    RUMCKitWiring: 2
+    CMSteel: 2
+  itemOutputs:
+    CMDefibrillatorEmpty: 1
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRReactorGunpowder
+  machine: reactor
+  inputs:
+    RUMCSaltpeterPowder: 3
+    RUMCSulfurPowder: 1
+    RUMCCokeCoal: 1
+  outputs:
+    Gunpowder: 5
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRMixerFlares
+  machine: mixer
+  inputs:
+    RUMCSaltpeterPowder: 1
+    RUMCSulfurPowder: 1
+    Paper: 1
+  itemOutputs:
+    CMFlare: 3
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerCellNuclear
+  machine: assembler
+  inputs:
+    RUMCLeadSheet: 1
+    RUMCUraniumPowder: 1
+    RUMCRubberSheet: 1
+    RUMCKitSimpleCircuits: 1
+  itemOutputs:
+    PowerCellSmallNuclear: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerCellMicroreactor
+  machine: assembler
+  inputs:
+    RUMCLeadSheet: 3
+    RUMCUraniumPowder: 2
+    RUMCRubberSheet: 2
+    RUMCKitSimpleCircuits: 1
+  itemOutputs:
+    PowerCellMicroreactor: 1
+  duration: 14
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerCellLeadAcid
+  machine: assembler
+  inputs:
+    RUMCLeadSheet: 3
+    RUMCRubberSheet: 1
+  itemOutputs:
+    RUMCCellLeadAcid: 1
+  fluidInputs:
+    SulfuricAcid: 20
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerCellSilverZinc
+  machine: assembler
+  inputs:
+    RUMCZincSheet: 2
+    RUMCSilverWire: 4
+    RUMCRubberSheet: 1
+  itemOutputs:
+    RUMCCellSilverZinc: 1
+  fluidInputs:
+    SodiumHydroxide: 15
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerCellCobalt
+  machine: assembler
+  inputs:
+    RUMCCobaltIngot: 2
+    RUMCSilverWire: 2
+    RMCPlastic: 1
+    RUMCKitSimpleCircuits: 1
+  itemOutputs:
+    RUMCCellCobalt: 1
+  fluidInputs:
+    RUMCHydrochloricAcid: 15
+  duration: 16
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaAntiseptic
+  machine: pharma
+  inputs:
+    RUMCSulfurPowder: 1
+  outputs:
+    CMUAntiseptic: 10
+  fluidInputs:
+    RUMCHydrochloricAcid: 10
+    Water: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaCoagulant
+  machine: pharma
+  inputs:
+    RUMCPhosphorusPowder: 1
+    RUMCSaltpeterPowder: 1
+  outputs:
+    CMUCoagulantPowder: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaBurnGel
+  machine: pharma
+  outputs:
+    CMUBurnGel: 10
+  fluidInputs:
+    RUMCGlue: 10
+    Water: 20
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaTissueSealant
+  machine: pharma
+  outputs:
+    CMUTissueSealant: 10
+  fluidInputs:
+    RUMCGlue: 20
+    RUMCEthylene: 10
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaTraumaFoam
+  machine: pharma
+  outputs:
+    CMUTraumaFoam: 10
+  fluidInputs:
+    RUMCEthylene: 20
+    Water: 10
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaPlainGauze
+  machine: pharma
+  inputs:
+    Cloth: 1
+  outputs:
+    CMUPlainGauze: 4
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaPlainDressing
+  machine: pharma
+  inputs:
+    Cloth: 2
+    Paper: 1
+  outputs:
+    CMUPlainTraumaDressing: 3
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaHemostaticGauze
+  machine: pharma
+  inputs:
+    CMUPlainGauze: 6
+    CMUCoagulantPowder: 1
+  outputs:
+    CMUHemostaticGauze: 6
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaHemostaticDressing
+  machine: pharma
+  inputs:
+    CMUPlainTraumaDressing: 4
+    CMUCoagulantPowder: 1
+  outputs:
+    CMUHemostaticTraumaDressing: 4
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaAntisepticGauze
+  machine: pharma
+  inputs:
+    CMUPlainGauze: 6
+    CMUAntiseptic: 1
+  outputs:
+    CMUAntisepticGauze: 6
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaAntisepticDressing
+  machine: pharma
+  inputs:
+    CMUPlainTraumaDressing: 4
+    CMUAntiseptic: 1
+  outputs:
+    CMUAntisepticTraumaDressing: 4
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaBurnGelGauze
+  machine: pharma
+  inputs:
+    CMUPlainGauze: 6
+    CMUBurnGel: 1
+  outputs:
+    CMUBurnGelGauze: 6
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaBurnGelDressing
+  machine: pharma
+  inputs:
+    CMUPlainTraumaDressing: 4
+    CMUBurnGel: 1
+  outputs:
+    CMUBurnTraumaDressing: 4
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaSealingGauze
+  machine: pharma
+  inputs:
+    CMUPlainGauze: 6
+    CMUTissueSealant: 1
+  outputs:
+    CMUSealingGauze: 6
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaSealingDressing
+  machine: pharma
+  inputs:
+    CMUPlainTraumaDressing: 4
+    CMUTissueSealant: 1
+  outputs:
+    CMUSealingTraumaDressing: 4
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaCompressionGauze
+  machine: pharma
+  inputs:
+    CMUPlainGauze: 6
+    CMUTraumaFoam: 1
+  outputs:
+    CMUCompressionGauze: 6
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaCompressionDressing
+  machine: pharma
+  inputs:
+    CMUPlainTraumaDressing: 4
+    CMUTraumaFoam: 1
+  outputs:
+    CMUCompressionTraumaDressing: 4
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRConcreteConcrete
+  machine: concrete
+  inputs:
+    RUMCStonePowder: 3
+    RUMCSand: 3
+  outputs:
+    AU14ConcreteBag: 4
+  fluidInputs:
+    Water: 20
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRConcreteReinforcedConcrete
+  machine: concrete
+  inputs:
+    AU14ConcreteBag: 4
+    CMRodMetal: 2
+  outputs:
+    AU14ReinforcedConcreteBag: 4
+  fluidInputs:
+    Water: 10
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingCloth
+  machine: sewing
+  inputs:
+    Cotton: 3
+  outputs:
+    Cloth: 4
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingSandbag
+  machine: sewing
+  inputs:
+    Cloth: 3
+  itemOutputs:
+    CMSandbagEmpty10: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingHescoKit
+  machine: sewing
+  inputs:
+    Cloth: 7
+  itemOutputs:
+    AU14HescoKit: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBackpack
+  machine: sewing
+  inputs:
+    Cloth: 14
+  itemOutputs:
+    CMBackpack: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBackpackMedical
+  machine: sewing
+  inputs:
+    Cloth: 14
+  itemOutputs:
+    CMBackpackMedical: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBackpackEngineer
+  machine: sewing
+  inputs:
+    Cloth: 14
+  itemOutputs:
+    CMBackpackEngineer: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingSatchel
+  machine: sewing
+  inputs:
+    Cloth: 14
+  itemOutputs:
+    RMCSatchelNorm: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBeltUtility
+  machine: sewing
+  inputs:
+    Cloth: 14
+  itemOutputs:
+    CMBeltUtility: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBeltMedicBag
+  machine: sewing
+  inputs:
+    Cloth: 14
+  itemOutputs:
+    CMBeltMedicBag: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBeltMarine
+  machine: sewing
+  inputs:
+    Cloth: 14
+  itemOutputs:
+    CMBeltMarine: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingPouchGeneralLarge
+  machine: sewing
+  inputs:
+    Cloth: 20
+  itemOutputs:
+    RMCPouchGeneralLarge: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingPouchMagazine
+  machine: sewing
+  inputs:
+    Cloth: 20
+  itemOutputs:
+    RMCPouchMagazine: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingWebbingDropPouch
+  machine: sewing
+  inputs:
+    Cloth: 20
+  itemOutputs:
+    AU14WebbingDropPouch: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBeltUtilityGeneral
+  machine: sewing
+  inputs:
+    Cloth: 20
+  itemOutputs:
+    RMCBeltUtilityGeneral: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingJumpsuitSteward
+  machine: sewing
+  inputs:
+    Cloth: 20
+  itemOutputs:
+    RMCJumpsuitSteward: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingJumpsuitMaintTech
+  machine: sewing
+  inputs:
+    Cloth: 20
+  itemOutputs:
+    CMJumpsuitMaintTech: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingJumpsuitDutch
+  machine: sewing
+  inputs:
+    Cloth: 20
+  itemOutputs:
+    RMCJumpsuitDutch: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingJumpsuitChaplain
+  machine: sewing
+  inputs:
+    Cloth: 20
+  itemOutputs:
+    RMCJumpsuitChaplain: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingJumpsuitScientist
+  machine: sewing
+  inputs:
+    Cloth: 20
+  itemOutputs:
+    RMCJumpsuitCivilianScientist: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingStrawHat
+  machine: sewing
+  inputs:
+    Cloth: 7
+  itemOutputs:
+    ClothingHeadHatStrawHat: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingUshanka
+  machine: sewing
+  inputs:
+    Cloth: 7
+  itemOutputs:
+    CMHeadCapSPPUshankaCivilian: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingCargoCap
+  machine: sewing
+  inputs:
+    Cloth: 7
+  itemOutputs:
+    RMCHeadCapCargo: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingRedBandana
+  machine: sewing
+  inputs:
+    Cloth: 7
+  itemOutputs:
+    ClothingHeadBandRed: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingRastaHat
+  machine: sewing
+  inputs:
+    Cloth: 7
+  itemOutputs:
+    ClothingHeadRastaHat: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBlackScarf
+  machine: sewing
+  inputs:
+    Cloth: 7
+  itemOutputs:
+    RMCMaskScarfBlack: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingKeffiyeh
+  machine: sewing
+  inputs:
+    Cloth: 7
+  itemOutputs:
+    RMCMaskKeffiyehBlack: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingSmock
+  machine: sewing
+  inputs:
+    Cloth: 7
+  itemOutputs:
+    RMCMaskSmockBlack: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRTanneryTanGoliathHide
+  machine: tannery
+  inputs:
+    GoliathHide: 1
+    RUMCChromePowder: 1
+  outputs:
+    RUMCLeather: 3
+  fluidInputs:
+    Water: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRTanneryTanBearHide
+  machine: tannery
+  inputs:
+    RUMCChromePowder: 1
+  itemInputs:
+    MaterialHideBear: 1
+  outputs:
+    RUMCLeather: 4
+  fluidInputs:
+    Water: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRTanneryTanCorgiHide
+  machine: tannery
+  inputs:
+    RUMCChromePowder: 1
+  itemInputs:
+    MaterialHideCorgi: 1
+  outputs:
+    RUMCLeather: 2
+  fluidInputs:
+    Water: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRTanneryLeatherGloves
+  machine: tannery
+  inputs:
+    RUMCLeather: 3
+  itemOutputs:
+    RMCHandsLeatherBlack: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRTanneryLeatherBoots
+  machine: tannery
+  inputs:
+    RUMCLeather: 4
+  itemOutputs:
+    RMCShoesLeather: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorElectricScrewdriver
+  machine: fabricator
+  inputs:
+    RUMCKitDrive: 1
+    RUMCIronRod: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    RUMCElectricScrewdriver: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorElectricWrench
+  machine: fabricator
+  inputs:
+    RUMCKitDrive: 1
+    RUMCChromedSheet: 1
+    RUMCKitFasteners: 2
+    RUMCKitWiring: 1
+  itemOutputs:
+    RUMCElectricWrench: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorElectricWirecutters
+  machine: fabricator
+  inputs:
+    RUMCKitDrive: 1
+    RUMCChromedSheet: 1
+    RUMCIronRod: 2
+    RUMCKitWiring: 1
+  itemOutputs:
+    RUMCElectricWirecutters: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorElectricCrowbar
+  machine: fabricator
+  inputs:
+    RUMCKitDrive: 1
+    RUMCIronRod: 3
+    RUMCKitFasteners: 1
+    RUMCKitWiring: 1
+  itemOutputs:
+    RUMCElectricCrowbar: 1
+  duration: 9
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorElectricHammer
+  machine: fabricator
+  inputs:
+    RUMCKitHydraulics: 1
+    RUMCIronRod: 2
+    RUMCKitDrive: 1
+    RUMCKitWiring: 1
+  itemOutputs:
+    RUMCElectricHammer: 1
+  duration: 9
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorPowerDrill
+  machine: fabricator
+  inputs:
+    RUMCKitDrive: 2
+    RUMCChromedSheet: 1
+    RUMCKitFasteners: 1
+    RUMCKitSimpleCircuits: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    RUMCPowerDrill: 1
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorElectricShovel
+  machine: fabricator
+  inputs:
+    RUMCKitDrive: 1
+    RUMCChromedSheet: 2
+    RUMCIronRod: 2
+    RUMCKitFasteners: 1
+    RUMCKitWiring: 1
+  itemOutputs:
+    RUMCElectricShovel: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorElectricPickaxe
+  machine: fabricator
+  inputs:
+    RUMCKitDrive: 1
+    RUMCKitHydraulics: 1
+    RUMCChromedSheet: 2
+    RUMCIronRod: 3
+    RUMCKitWiring: 1
+  itemOutputs:
+    RUMCElectricPickaxe: 1
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorProspector
+  machine: fabricator
+  inputs:
+    RUMCKitSimpleCircuits: 2
+    RUMCLensEmerald: 1
+    RUMCKitWiring: 3
+    RUMCChromedSheet: 1
+  itemOutputs:
+    RUMCProspector: 1
+  duration: 14
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorJackhammer
+  machine: fabricator
+  inputs:
+    RUMCKitDrive: 2
+    RUMCKitHydraulics: 2
+    RUMCChromedSheet: 2
+    RUMCIronRod: 3
+    RUMCKitFasteners: 2
+    RUMCKitSimpleCircuits: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    RUMCJackhammer: 1
+  duration: 16
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorElectricWelder
+  machine: fabricator
+  inputs:
+    RUMCChromedSheet: 1
+    RUMCKitHeating: 1
+    RUMCKitWiring: 4
+  itemOutputs:
+    RUMCElectricWelder: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorDefibrillator
+  machine: fabricator
+  inputs:
+    RUMCKitQualityBoards: 1
+    RUMCKitElectronics: 4
+    RUMCKitWiring: 2
+    CMSteel: 2
+  itemOutputs:
+    CMDefibrillatorEmpty: 1
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorHandheldRadio
+  machine: fabricator
+  inputs:
+    RUMCKitSimpleCircuits: 1
+    CMSteel: 2
+    RUMCKitWiring: 4
+    RUMCKitElectronics: 1
+  itemOutputs:
+    CMRadioHandheld: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorColonyHeadset
+  machine: fabricator
+  inputs:
+    RUMCKitSimpleCircuits: 1
+    CMSteel: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    CMHeadsetColony: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorMultitool
+  machine: fabricator
+  inputs:
+    RUMCKitSimpleCircuits: 1
+    RUMCChromedSheet: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    CMMultitool: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorScrewdriver
+  machine: fabricator
+  inputs:
+    RUMCIronRod: 1
+    RUMCRubberSheet: 1
+  itemOutputs:
+    CMScrewdriver: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorWrench
+  machine: fabricator
+  inputs:
+    RUMCIronRod: 2
+    RUMCKitFasteners: 1
+  itemOutputs:
+    CMWrench: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorCrowbar
+  machine: fabricator
+  inputs:
+    RUMCIronRod: 3
+  itemOutputs:
+    CMCrowbar: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorWirecutter
+  machine: fabricator
+  inputs:
+    RUMCIronRod: 1
+    RUMCKitFasteners: 1
+    RUMCRubberSheet: 1
+  itemOutputs:
+    CMWirecutter: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorWelder
+  machine: fabricator
+  inputs:
+    RUMCGalvanizedSheet: 1
+    RUMCIronRod: 2
+    RUMCRubberSheet: 1
+  itemOutputs:
+    CMWelder: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorShovel
+  machine: fabricator
+  inputs:
+    CMSteel: 2
+    RUMCIronRod: 1
+    RMCWood: 1
+  itemOutputs:
+    RMCShovel: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorFireAxe
+  machine: fabricator
+  inputs:
+    CMSteel: 3
+    RUMCIronRod: 2
+    RMCWood: 2
+  itemOutputs:
+    RMCFireAxe: 1
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorRake
+  machine: fabricator
+  inputs:
+    CMSteel: 1
+    RUMCIronRod: 2
+    RMCWood: 1
+  itemOutputs:
+    RUMCRake: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRArcfurnacePlasteelIngot
+  machine: arcfurnace
+  inputs:
+    RUMCIronIngot: 2
+    RUMCPlatinumIngot: 1
+  outputs:
+    RUMCPlasteelIngot: 3
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRArcfurnaceWeaponSteelIngot
+  machine: arcfurnace
+  inputs:
+    RUMCIronIngot: 3
+    RUMCChromeIngot: 1
+    RUMCCokeCoal: 1
+  outputs:
+    RUMCWeaponSteelIngot: 3
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRArcfurnacePlastitanIngot
+  machine: arcfurnace
+  inputs:
+    RUMCPlasteelIngot: 2
+    RUMCTitaniumIngot: 1
+  outputs:
+    RUMCPlastitanIngot: 3
+  duration: 14
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleResistor
+  machine: recycler
+  inputs:
+    RUMCKitElectronics: 4
+  outputs:
+    RUMCKitWiring: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleVacuumTube
+  machine: recycler
+  inputs:
+    RUMCKitElectronics: 1
+  outputs:
+    RUMCKitWiring: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleDiode
+  machine: recycler
+  inputs:
+    RUMCKitElectronics: 2
+  outputs:
+    RUMCKitWiring: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleMotor
+  machine: recycler
+  inputs:
+    RUMCKitDrive: 1
+  outputs:
+    RUMCIronRod: 1
+    RUMCKitWiring: 3
+    RUMCRubberSheet: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecyclePiston
+  machine: recycler
+  inputs:
+    RUMCKitHydraulics: 1
+  outputs:
+    CMSteel: 1
+    RUMCIronRod: 1
+    RUMCKitFasteners: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleHeatingCoil
+  machine: recycler
+  inputs:
+    RUMCKitHeating: 1
+  outputs:
+    RUMCKitWiring: 4
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleMachineHull
+  machine: recycler
+  inputs:
+    RUMCMachineHull: 1
+  outputs:
+    CMSteel: 4
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyCableLV
+  machine: recycler
+  inputs:
+    RMCCable: 10
+  outputs:
+    RUMCKitWiring: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyCableMV
+  machine: recycler
+  inputs:
+    CableMV: 10
+  outputs:
+    RUMCKitWiring: 2
+    RUMCRubberSheet: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyCableHV
+  machine: recycler
+  inputs:
+    CableHV: 10
+  outputs:
+    RUMCKitWiring: 2
+    RUMCRubberSheet: 2
+    RUMCSilverWire: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyLightTube
+  machine: recycler
+  itemInputs:
+    LightTube: 1
+  outputs:
+    RUMCKitElectronics: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyCellMedium
+  machine: recycler
+  itemInputs:
+    PowerCellMedium: 1
+  outputs:
+    RUMCLeadSheet: 1
+    RUMCZincSheet: 1
+    RUMCKitWiring: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyCellHigh
+  machine: recycler
+  itemInputs:
+    PowerCellHigh: 1
+  outputs:
+    RUMCLeadSheet: 1
+    RUMCZincSheet: 1
+    RUMCRubberSheet: 1
+    RUMCSilverWire: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyCellHyper
+  machine: recycler
+  itemInputs:
+    PowerCellHyper: 1
+  outputs:
+    RUMCLeadSheet: 2
+    RUMCZincSheet: 2
+    RUMCRubberSheet: 1
+    RUMCGoldWire: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyApcModule
+  machine: recycler
+  itemInputs:
+    CMAPCElectronics: 1
+  outputs:
+    RUMCKitWiring: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyManipulator
+  machine: recycler
+  itemInputs:
+    CMStockPartManipulatorMicro: 1
+  outputs:
+    RUMCIronRod: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyMicroLaser
+  machine: recycler
+  itemInputs:
+    CMStockPartMicroLaser: 1
+  outputs:
+    RUMCKitElectronics: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyScanModule
+  machine: recycler
+  itemInputs:
+    CMStockPartScanningModule: 1
+  outputs:
+    RUMCSiliconWafer: 1
+    RUMCKitWiring: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyMatterBin
+  machine: recycler
+  itemInputs:
+    CMStockPartMatterBin: 1
+  outputs:
+    CMSteel: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleMachineHullMV
+  machine: recycler
+  inputs:
+    RUMCKitQualityParts: 1
+  outputs:
+    RMCAluminum: 3
+    RUMCKitWiring: 1
+    RUMCSilverWire: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleColonyHeadset
+  machine: recycler
+  itemInputs:
+    CMHeadsetColony: 1
+  outputs:
+    RUMCKitWiring: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleHandheldRadio
+  machine: recycler
+  itemInputs:
+    CMRadioHandheld: 1
+  outputs:
+    CMSteel: 1
+    RUMCKitWiring: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleMultitool
+  machine: recycler
+  itemInputs:
+    CMMultitool: 1
+  outputs:
+    RUMCKitWiring: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleFlashlight
+  machine: recycler
+  itemInputs:
+    FlashlightLantern: 1
+  outputs:
+    RUMCKitWiring: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleDefibrillator
+  machine: recycler
+  itemInputs:
+    CMDefibrillatorEmpty: 1
+  outputs:
+    RUMCKitElectronics: 2
+    RUMCKitWiring: 1
+    CMSteel: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRRecyclerRecycleCellMicroreactor
+  machine: recycler
+  itemInputs:
+    PowerCellMicroreactor: 1
+  outputs:
+    RUMCLeadSheet: 1
+    RUMCUraniumPowder: 1
+    RUMCRubberSheet: 1
+  duration: 4
+
+# Rubber before the grid: the steam press vulcanizes raw rubber (from the steam extractor) by itself, with no cinnabar. The mixer and the reactor still
+# make more sheets of the same rubber when cinnabar or sulfur is added.
+- type: cmuPressRecipe
+  id: RUMCPressRubberSheet
+  inputs:
+    RUMCRawRubber: 2
+  result: RUMCRubberSheet
+  resultAmount: 2
+  duration: 8
+
+- type: anvilRecipe
+  id: RUMCAnvilIronSteelSheet
+  name: au14-anvil-recipe-iron-steel-sheet
+  icon:
+    sprite: _RMC14/Objects/Materials/Sheets/metal.rsi
+    state: metal
+  output: CMSheetMetal1
+  outputCount: 1
+  ingot: RUMCIronIngot
+  steps:
+  - Hammering
+  - Hammering
+  - Hammering
+
+- type: anvilRecipe
+  id: RUMCAnvilIronRod
+  name: au14-anvil-recipe-iron-rod
+  icon:
+    sprite: CMU14/Objects/Materials/forged_parts.rsi
+    state: forged_parts
+  output: RUMCIronRodItem
+  outputCount: 1
+  ingot: RUMCIronIngot
+  steps:
+  - Hammering
+  - Hammering
+  - Hammering
+
+# ---------------------------------------------------------------- crafts by hand
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyCableLV
+  name: au14-craft-recipe-electriccolonycablelv
+  output: RMCCableCoil
+  outputCount: 10
+  time: 12
+  minigames: [Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitWiring
+    amount: 5
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyCableMV
+  name: au14-craft-recipe-electriccolonycablemv
+  output: CableMVStack1
+  outputCount: 10
+  time: 12
+  minigames: [Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitWiring
+    amount: 5
+  - stack: RUMCRubberSheet
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyCableHV
+  name: au14-craft-recipe-electriccolonycablehv
+  output: CableHVStack1
+  outputCount: 10
+  time: 16
+  minigames: [Trace, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitWiring
+    amount: 5
+  - stack: RUMCRubberSheet
+    amount: 4
+  - stack: RUMCSilverWire
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyLightBulb
+  name: au14-craft-recipe-electriccolonylightbulb
+  output: LightBulb
+  outputCount: 1
+  time: 8
+  minigames: [Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitElectronics
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyLightTube
+  name: au14-craft-recipe-electriccolonylighttube
+  output: LightTube
+  outputCount: 1
+  time: 8
+  minigames: [Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitElectronics
+    amount: 2
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyCellSmall
+  name: au14-craft-recipe-electriccolonycellsmall
+  output: PowerCellSmall
+  outputCount: 1
+  time: 12
+  minigames: [Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCLeadSheet
+    amount: 1
+  - stack: RUMCZincSheet
+    amount: 1
+  - stack: RUMCRubberSheet
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyCellMedium
+  name: au14-craft-recipe-electriccolonycellmedium
+  output: PowerCellMedium
+  outputCount: 1
+  time: 16
+  minigames: [Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCLeadSheet
+    amount: 2
+  - stack: RUMCZincSheet
+    amount: 2
+  - stack: RUMCRubberSheet
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyCellHigh
+  name: au14-craft-recipe-electriccolonycellhigh
+  output: PowerCellHigh
+  outputCount: 1
+  time: 20
+  minigames: [Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCLeadSheet
+    amount: 3
+  - stack: RUMCZincSheet
+    amount: 3
+  - stack: RUMCRubberSheet
+    amount: 2
+  - stack: RUMCSilverWire
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyCellHyper
+  name: au14-craft-recipe-electriccolonycellhyper
+  output: PowerCellHyper
+  outputCount: 1
+  time: 24
+  minigames: [Hold, Trace, Polish]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCLeadSheet
+    amount: 4
+  - stack: RUMCZincSheet
+    amount: 4
+  - stack: RUMCRubberSheet
+    amount: 3
+  - stack: RUMCGoldWire
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyApcModule
+  name: au14-craft-recipe-electriccolonyapcmodule
+  output: CMAPCElectronics
+  outputCount: 1
+  time: 16
+  minigames: [Trace, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 2
+  - stack: RUMCKitElectronics
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyCapacitor
+  name: au14-craft-recipe-electriccolonycapacitor
+  output: CMStockPartCapacitor
+  outputCount: 1
+  time: 12
+  minigames: [Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitWiring
+    amount: 1
+  - stack: RUMCRubberSheet
+    amount: 1
+  - stack: CMSteel
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyManipulator
+  name: au14-craft-recipe-electriccolonymanipulator
+  output: CMStockPartManipulatorMicro
+  outputCount: 1
+  time: 16
+  minigames: [Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCIronRod
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyMicroLaser
+  name: au14-craft-recipe-electriccolonymicrolaser
+  output: CMStockPartMicroLaser
+  outputCount: 1
+  time: 16
+  minigames: [Polish, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitElectronics
+    amount: 3
+  - stack: RUMCLensRuby
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyScanModule
+  name: au14-craft-recipe-electriccolonyscanmodule
+  output: CMStockPartScanningModule
+  outputCount: 1
+  time: 16
+  minigames: [Trace, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCSiliconWafer
+    amount: 2
+  - stack: RUMCKitElectronics
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftElectricColonyMatterBin
+  name: au14-craft-recipe-electriccolonymatterbin
+  output: CMStockPartMatterBin
+  outputCount: 1
+  time: 16
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 4
+  - stack: RUMCRubberSheet
+    amount: 1
+
+# What a machine of the electric stage makes can be crafted by hand as well, for more of the same stuff: the chrome-plated sheet, the gear and the silver and
+# the gold wire. (The machines give more of them, and the plating bath needs water and power.)
+- type: craftRecipe
+  id: RUMCCraftElectricChromedSheet
+  name: au14-craft-recipe-electricchromedsheet
+  output: RUMCChromedSheetItem
+  outputCount: 1
+  time: 10
+  minigames: [Hold, Polish]
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 1
+  - stack: RUMCChromePowder
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftElectricSilverWire
+  name: au14-craft-recipe-electricsilverwire
+  output: RUMCSilverWireItem
+  outputCount: 1
+  time: 8
+  minigames: [Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCSilverIngot
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftElectricGoldWire
+  name: au14-craft-recipe-electricgoldwire
+  output: RUMCGoldWireItem
+  outputCount: 1
+  time: 8
+  minigames: [Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCGoldIngot
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftElectricMagneticRod
+  name: au14-craft-recipe-electricmagneticrod
+  output: RUMCMagneticRodItem
+  outputCount: 1
+  time: 6
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronRod
+    amount: 1
+  - stack: RUMCCobaltPowder
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftElectricMachineHull
+  name: au14-craft-recipe-electricmachinehull
+  output: RUMCMachineHullItem
+  outputCount: 1
+  time: 12
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 6
+
+- type: craftRecipe
+  id: RUMCCraftBuildWiremill
+  name: au14-craft-recipe-buildwiremill
+  output: RUMCWiremill
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildBender
+  name: au14-craft-recipe-buildbender
+  output: RUMCBender
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildLathe
+  name: au14-craft-recipe-buildlathe
+  output: RUMCLathe
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildCutter
+  name: au14-craft-recipe-buildcutter
+  output: RUMCCutter
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildPolarizer
+  name: au14-craft-recipe-buildpolarizer
+  output: RUMCPolarizer
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildExtractor
+  name: au14-craft-recipe-buildextractor
+  output: RUMCExtractor
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildMixer
+  name: au14-craft-recipe-buildmixer
+  output: RUMCMixer
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildChemicalReactor
+  name: au14-craft-recipe-buildchemicalreactor
+  output: RUMCChemicalReactor
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 2
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricAssembler
+  name: au14-craft-recipe-buildelectricassembler
+  output: RUMCElectricAssembler
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 4
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 2
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricBlastFurnace
+  name: au14-craft-recipe-buildelectricblastfurnace
+  output: RUMCElectricBlastFurnace
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHeating
+    amount: 4
+  - stack: RUMCKitSimpleCircuits
+    amount: 3
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildOreWasher
+  name: au14-craft-recipe-buildorewasher
+  output: RUMCOreWasher
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildThermalCentrifuge
+  name: au14-craft-recipe-buildthermalcentrifuge
+  output: RUMCThermalCentrifuge
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitHeating
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 2
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildMagneticSeparator
+  name: au14-craft-recipe-buildmagneticseparator
+  output: RUMCMagneticSeparator
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCMagneticRod
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildSifter
+  name: au14-craft-recipe-buildsifter
+  output: RUMCSifter
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildAutoclave
+  name: au14-craft-recipe-buildautoclave
+  output: RUMCAutoclave
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildPyrolysisOven
+  name: au14-craft-recipe-buildpyrolysisoven
+  output: RUMCPyrolysisOven
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHeating
+    amount: 2
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildGalvanicBath
+  name: au14-craft-recipe-buildgalvanicbath
+  output: RUMCGalvanicBath
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitHeating
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildRecycler
+  name: au14-craft-recipe-buildrecycler
+  output: RUMCRecycler
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildFertilizerMixer
+  name: au14-craft-recipe-buildfertilizermixer
+  output: RUMCFertilizerMixer
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildCannery
+  name: au14-craft-recipe-buildcannery
+  output: RUMCCannery
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildJewelersBench
+  name: au14-craft-recipe-buildjewelersbench
+  output: RUMCJewelersBench
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCGoldWire
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildLaserEngraver
+  name: au14-craft-recipe-buildlaserengraver
+  output: RUMCLaserEngraver
+  outputCount: 1
+  time: 20
+  minigames: [Polish, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCLensRuby
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 2
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectrolyzer
+  name: au14-craft-recipe-buildelectrolyzer
+  output: RUMCElectrolyzer
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 3
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildArcFurnace
+  name: au14-craft-recipe-buildarcfurnace
+  output: RUMCArcFurnace
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHeating
+    amount: 3
+  - stack: RUMCKitWiring
+    amount: 3
+  - stack: RUMCKitSimpleCircuits
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildChemicalBath
+  name: au14-craft-recipe-buildchemicalbath
+  output: RUMCChemicalBath
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCGalvanizedSheet
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildCentrifuge
+  name: au14-craft-recipe-buildcentrifuge
+  output: RUMCCentrifuge
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildCompressor
+  name: au14-craft-recipe-buildcompressor
+  output: RUMCCompressor
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildFluidSolidifier
+  name: au14-craft-recipe-buildfluidsolidifier
+  output: RUMCFluidSolidifier
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitHeating
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildExtruder
+  name: au14-craft-recipe-buildextruder
+  output: RUMCExtruder
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildPharmaMachine
+  name: au14-craft-recipe-buildpharmamachine
+  output: RUMCPharmaMachine
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildConcreteMixer
+  name: au14-craft-recipe-buildconcretemixer
+  output: RUMCConcreteMixer
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildSewingMachine
+  name: au14-craft-recipe-buildsewingmachine
+  output: RUMCSewingMachine
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildTannery
+  name: au14-craft-recipe-buildtannery
+  output: RUMCTannery
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildFabricator
+  name: au14-craft-recipe-buildfabricator
+  output: RUMCFabricator
+  outputCount: 1
+  time: 20
+  minigames: [Center, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 4
+  - stack: RUMCKitHydraulics
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 3
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildCircuitAssembler
+  name: au14-craft-recipe-buildcircuitassembler
+  output: RUMCCircuitAssembler
+  outputCount: 1
+  time: 20
+  minigames: [Rhythm, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 3
+  - stack: RUMCKitSimpleCircuits
+    amount: 3
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildSteamExtractor
+  name: au14-craft-recipe-buildsteamextractor
+  output: RUMCSteamExtractor
+  outputCount: 1
+  time: 18
+  minigames: [Rhythm, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 6
+  - stack: RUMCBrassParts
+    amount: 4
+  - stack: RMCWood
+    amount: 2
+
+# The industrial steam extractor is built of two machine hulls and wood, with no brass in it.
+- type: craftRecipe
+  id: RUMCCraftBuildIndustrialSteamExtractor
+  name: au14-craft-recipe-buildindustrialsteamextractor
+  output: RUMCIndustrialSteamExtractor
+  outputCount: 1
+  time: 18
+  minigames: [Rhythm, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+  - stack: RMCWood
+    amount: 2

@@ -1,0 +1,17 @@
+# How the city is run (see ColonyQuota.cs): the plan of the metropolis. The townsfolk are real people, so nothing is announced; it is all in the console of the administration.
+
+# ---------------------------------------------------------------- The quota of the metropolis: a plan in money, paid into out of the budget (see ColonyQuota.cs). Nothing is announced; it is all in the console of the administration
+
+- type: colonyQuota
+  id: RUMCQuotaMetropolis
+  name: rumc-quota-metropolis-name
+  description: rumc-quota-metropolis-desc
+  amount: 1000
+  durationSeconds: 1200
+  pauseSeconds: 300
+  grantPercent: 150
+  finePercent: 20
+  successAttitude: 3
+  failureAttitude: -4
+  growthPercent: 20
+  maxGrowths: 5

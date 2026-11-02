@@ -1,9 +1,11 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Copyright (c) 2026 wray-git
 # SPDX-License-Identifier: AGPL-3.0-only
-# Building overhaul (z-level): construction recipes for the z-level staircases.
-# One graph per stair, in the ZLevel spawnlist, differing by the direction they lead (up / down).
-# Each costs 50 metal + 50 plasteel. isCM is required for the menu to enumerate them.
+# RUMC was: Building overhaul (z-level): construction recipes for the z-level staircases.
+# RUMC was: One graph per stair, in the ZLevel spawnlist, differing by the direction they lead (up / down).
+# RUMC was: Each costs 50 metal + 50 plasteel. isCM is required for the menu to enumerate them.
+# Building overhaul (z-level): the construction graphs of the z-level staircases (the stair entities in z_stairs.yml point at them).
+# There are no recipes for them any more: the stairs are not built from the menu, they come with the maps and with the steps of a pit.
 
 - type: constructionGraph
   id: AU14ZStairUpGraph
@@ -43,38 +45,39 @@
   - node: stair
     entity: AU14ZStairDown
 
-- type: construction
-  id: AU14ZStairUp
-  name: z-level stairs (up)
-  description: A staircase leading up one z-level, with a standing platform laid on the level above and a support beam here.
-  graph: AU14ZStairUpGraph
-  startNode: start
-  targetNode: stair
-  category: construction-category-structures
-  objectType: Structure
-  placementMode: SnapgridCenter
-  canRotate: true
-  isCM: true
-  spawnlist: ZLevel
-  conditions:
-  - !type:TileNotBlocked
-  # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
-  - !type:ZBuildAllowed
-
-- type: construction
-  id: AU14ZStairDown
-  name: z-level stairs (down)
-  description: A staircase leading down one z-level, with a support beam reflected on the level below.
-  graph: AU14ZStairDownGraph
-  startNode: start
-  targetNode: stair
-  category: construction-category-structures
-  objectType: Structure
-  placementMode: SnapgridCenter
-  canRotate: true
-  isCM: true
-  spawnlist: ZLevel
-  conditions:
-  - !type:TileNotBlocked
-  # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
-  - !type:ZBuildAllowed
+# RUMC: the recipes of the stairs are switched off, not deleted (the graphs above stay): the stairs come with the maps and with the steps of a pit, not from the menu.
+# - type: construction
+#   id: AU14ZStairUp
+#   name: z-level stairs (up)
+#   description: A staircase leading up one z-level, with a standing platform laid on the level above and a support beam here.
+#   graph: AU14ZStairUpGraph
+#   startNode: start
+#   targetNode: stair
+#   category: construction-category-structures
+#   objectType: Structure
+#   placementMode: SnapgridCenter
+#   canRotate: true
+#   isCM: true
+#   spawnlist: ZLevel
+#   conditions:
+#   - !type:TileNotBlocked
+#   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
+#   - !type:ZBuildAllowed
+#
+# - type: construction
+#   id: AU14ZStairDown
+#   name: z-level stairs (down)
+#   description: A staircase leading down one z-level, with a support beam reflected on the level below.
+#   graph: AU14ZStairDownGraph
+#   startNode: start
+#   targetNode: stair
+#   category: construction-category-structures
+#   objectType: Structure
+#   placementMode: SnapgridCenter
+#   canRotate: true
+#   isCM: true
+#   spawnlist: ZLevel
+#   conditions:
+#   - !type:TileNotBlocked
+#   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
+#   - !type:ZBuildAllowed

@@ -211,6 +211,9 @@
       - RMCCircuitboard
       - RMCSynthResetKey
       - MaintenanceJack
+      # CMU14: the hand saw and the hammer go into the belt
+      - RUMCHandSaw
+      - RUMCHammer
       components:
       - Welder
       - PowerCell
@@ -323,6 +326,9 @@
       - RMCNailgunCompact
       - RMCNailgunTactical
       - RMCSynthResetKey
+      # CMU14: the hand saw and the hammer go into the belt
+      - RUMCHandSaw
+      - RUMCHammer
       #      - # TODO analyzer
       components:
       - Welder

@@ -1,0 +1,44 @@
+# A plain hammer: the tool of the hand crafts (the quality Hammering). It is made with bare hands, so that the first hammer needs no hammer.
+- type: entity
+  parent: BaseItem
+  id: RUMCHammer
+  name: hammer
+  description: A plain hammer with a wooden handle. Good for nailing and for beating metal into shape.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/hammer.rsi
+    state: icon
+  - type: Item
+    size: Normal
+  - type: Tag
+    tags:
+    - RUMCHammer
+  - type: Tool
+    qualities:
+    - Hammering
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 5
+    soundHit:
+      collection: MetalThud
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 50
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+
+- type: Tag
+  id: RUMCHammer
+
+- type: craftRecipe
+  id: RUMCCraftHammer
+  name: au14-craft-recipe-hammer
+  output: RUMCHammer
+  time: 6
+  consumables:
+  - stack: RMCWood
+    amount: 1
+  - stack: CMSteel
+    amount: 1

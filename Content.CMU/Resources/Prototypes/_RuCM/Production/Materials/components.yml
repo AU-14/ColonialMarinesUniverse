@@ -1,0 +1,52 @@
+- type: material
+  id: RuMCWoodComponentMaterial
+  stackEntity: RuMCWoodComponent
+  name: wooden parts
+  icon: { sprite: _RuMC/Textures/Production/Materials/components.rsi, state: wood-components }
+  price: 0.00133
+
+
+- type: stack
+  id: RuMCWoodComponentStack
+  name: wooden parts
+  icon: { sprite: _RuMC/Textures/Production/Materials/components.rsi, state: wood-components }
+  spawn: RuMCWoodComponent
+  maxCount: 10
+
+- type: entity
+  abstract: true
+  parent: SheetMetalBase
+  id: RuMCComponentBase
+  components:
+    - type: Stack
+      count: 10
+    - type: Sprite
+      sprite: _RuMC/Textures/Production/Materials/components.rsi
+    - type: Item
+      size: Normal
+      sprite: _RuMC/Textures/Production/Materials/components.rsi
+
+- type: entity
+  parent: RuMCComponentBase
+  id: RuMCWoodComponent
+  name: wooden parts
+  description: Wooden parts carved on a tabletop using a kitchen knife. They can be used to build simple machines.
+  suffix: Filled
+  components:
+    - type: Material
+    - type: PhysicalComposition
+      materialComposition:
+        CMSteel: 3750
+    - type: Stack
+      count: 10
+      stackType: RuMCWoodComponentStack
+      baseLayer: base
+      layerStates:
+        - wood-components
+        - wood-components
+        - wood-components
+        - wood-components
+    - type: Sprite
+      layers:
+        - state: wood-components
+          map: ["base"]

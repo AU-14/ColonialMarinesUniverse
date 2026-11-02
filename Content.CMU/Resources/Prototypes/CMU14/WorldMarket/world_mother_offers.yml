@@ -1,0 +1,423 @@
+# What an ambassador can order of the mother faction for the points of influence (see WorldMotherOfferPrototype). The points are earned in the cities of the map (the steps of favour there) and
+# can be changed for money at a set rate (WorldMarketSystem.MoneyPerPoint).
+
+# ---- private military companies: the faction that they come from is the header of the list; as many as there are points. A company with a home (the name that the console has) is
+# ordered by that faction (and, for twice the price, by one that has a pact with it); the rest (a corporation) are for everyone.
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcUpBearStorm
+  home: UPP
+  name: rumc-mother-pmc-upbearstorm-name
+  description: rumc-mother-pmc-upbearstorm-desc
+  group: Pmc
+  faction: rumc-mother-faction-upp
+  party: CHTORM_PMC_BEAR
+  cost: 2
+  order: 0
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcUpBearEscort
+  home: UPP
+  name: rumc-mother-pmc-upbearescort-name
+  description: rumc-mother-pmc-upbearescort-desc
+  group: Pmc
+  faction: rumc-mother-faction-upp
+  party: SKALA_PMC_BEAR
+  cost: 1
+  order: 1
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcUpGrom
+  home: UPP
+  name: rumc-mother-pmc-upgrom-name
+  description: rumc-mother-pmc-upgrom-desc
+  group: Pmc
+  faction: rumc-mother-faction-upp
+  party: UPPGROMAlt2
+  cost: 1
+  order: 2
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcUpLiquidators
+  home: UPP
+  name: rumc-mother-pmc-upliquidators-name
+  description: rumc-mother-pmc-upliquidators-desc
+  group: Pmc
+  faction: rumc-mother-faction-upp
+  party: Liquidators
+  cost: 1
+  order: 3
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcVaiSp
+  home: United Americas
+  name: rumc-mother-pmc-vaisp-name
+  description: rumc-mother-pmc-vaisp-desc
+  group: Pmc
+  faction: rumc-mother-faction-vai
+  party: VAISP
+  cost: 1
+  order: 7
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcVaiPo
+  home: United Americas
+  name: rumc-mother-pmc-vaipo-name
+  description: rumc-mother-pmc-vaipo-desc
+  group: Pmc
+  faction: rumc-mother-faction-vai
+  party: VAIPO
+  cost: 2
+  order: 8
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcVaiSo
+  home: United Americas
+  name: rumc-mother-pmc-vaiso-name
+  description: rumc-mother-pmc-vaiso-desc
+  group: Pmc
+  faction: rumc-mother-faction-vai
+  party: VAISO
+  cost: 2
+  order: 9
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcProdigyParty
+  name: rumc-mother-pmc-prodigyparty-name
+  description: rumc-mother-pmc-prodigyparty-desc
+  group: Pmc
+  faction: rumc-mother-faction-prodigy
+  party: ProdigyPARTY
+  cost: 2
+  order: 10
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcProdigyTars
+  name: rumc-mother-pmc-prodigytars-name
+  description: rumc-mother-pmc-prodigytars-desc
+  group: Pmc
+  faction: rumc-mother-faction-prodigy
+  party: ProdigyTARSParty
+  cost: 2
+  order: 11
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcTweRrt
+  home: Three World Empire
+  name: rumc-mother-pmc-twerrt-name
+  description: rumc-mother-pmc-twerrt-desc
+  group: Pmc
+  faction: rumc-mother-faction-twe
+  party: RMCRRT
+  cost: 3
+  order: 12
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcTweSas
+  home: Three World Empire
+  name: rumc-mother-pmc-twesas-name
+  description: rumc-mother-pmc-twesas-desc
+  group: Pmc
+  faction: rumc-mother-faction-twe
+  party: SAS
+  cost: 2
+  order: 13
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcTweNspa
+  home: Three World Empire
+  name: rumc-mother-pmc-twenspa-name
+  description: rumc-mother-pmc-twenspa-desc
+  group: Pmc
+  faction: rumc-mother-faction-twe
+  party: NSPAInvestigationParty
+  cost: 1
+  order: 14
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcUaGuard
+  home: United Americas
+  name: rumc-mother-pmc-uaguard-name
+  description: rumc-mother-pmc-uaguard-desc
+  group: Pmc
+  faction: rumc-mother-faction-ua
+  party: MarineSecurityGuard
+  cost: 1
+  order: 15
+
+# ---- food
+
+- type: worldMotherOffer
+  id: RUMCMotherFoodRations
+  name: rumc-mother-food-rations-name
+  description: rumc-mother-food-rations-desc
+  group: Food
+  crate: RMCCrateFoodMRE
+  amount: 4
+  cost: 1
+  order: 0
+
+- type: worldMotherOffer
+  id: RUMCMotherFoodKitchen
+  name: rumc-mother-food-kitchen-name
+  description: rumc-mother-food-kitchen-desc
+  group: Food
+  crate: RMCCrateFoodIngredients
+  amount: 3
+  cost: 1
+  order: 1
+
+- type: worldMotherOffer
+  id: RUMCMotherFoodPizza
+  name: rumc-mother-food-pizza-name
+  description: rumc-mother-food-pizza-desc
+  group: Food
+  crate: RMCCrateFoodPizza
+  amount: 3
+  cost: 1
+  order: 2
+
+# ---- medicine
+
+- type: worldMotherOffer
+  id: RUMCMotherMedFirstAid
+  name: rumc-mother-med-firstaid-name
+  description: rumc-mother-med-firstaid-desc
+  group: Medicine
+  crate: RMCCrateMedicalFirstAid
+  amount: 4
+  cost: 1
+  order: 0
+
+- type: worldMotherOffer
+  id: RUMCMotherMedStasis
+  name: rumc-mother-med-stasis-name
+  description: rumc-mother-med-stasis-desc
+  group: Medicine
+  crate: RMCCrateMedicalStasisBag
+  amount: 3
+  cost: 1
+  order: 1
+
+- type: worldMotherOffer
+  id: RUMCMotherMedSurgery
+  name: rumc-mother-med-surgery-name
+  description: rumc-mother-med-surgery-desc
+  group: Medicine
+  crate: RMCCrateMedicalSurgery
+  amount: 2
+  cost: 2
+  order: 2
+
+# ---- workers
+
+- type: worldMotherOffer
+  id: RUMCMotherWorkersSmall
+  name: rumc-mother-workers-small-name
+  description: rumc-mother-workers-small-desc
+  group: Workers
+  party: MigratingCivs
+  cost: 1
+  order: 0
+
+- type: worldMotherOffer
+  id: RUMCMotherWorkersMedium
+  name: rumc-mother-workers-medium-name
+  description: rumc-mother-workers-medium-desc
+  group: Workers
+  party: MigratingCivsMedium
+  cost: 2
+  order: 1
+
+- type: worldMotherOffer
+  id: RUMCMotherWorkersLarge
+  name: rumc-mother-workers-large-name
+  description: rumc-mother-workers-large-desc
+  group: Workers
+  party: MigratingCivsLarge
+  cost: 3
+  order: 2
+
+# ---- holidays from taxes (for the whole colony, for a time)
+
+- type: worldMotherOffer
+  id: RUMCMotherTaxSales
+  name: rumc-mother-tax-sales-name
+  description: rumc-mother-tax-sales-desc
+  group: Tax
+  tax: Sales
+  taxPoints: 5
+  durationSeconds: 600
+  cost: 2
+  order: 0
+
+- type: worldMotherOffer
+  id: RUMCMotherTaxIncome
+  name: rumc-mother-tax-income-name
+  description: rumc-mother-tax-income-desc
+  group: Tax
+  tax: Income
+  taxPoints: 5
+  durationSeconds: 600
+  cost: 2
+  order: 1
+
+- type: worldMotherOffer
+  id: RUMCMotherTaxTrade
+  name: rumc-mother-tax-trade-name
+  description: rumc-mother-tax-trade-desc
+  group: Tax
+  tax: Trade
+  taxPoints: 5
+  durationSeconds: 600
+  cost: 2
+  order: 2
+
+- type: worldMotherOffer
+  id: RUMCMotherTaxDuty
+  name: rumc-mother-tax-duty-name
+  description: rumc-mother-tax-duty-desc
+  group: Tax
+  tax: Duty
+  taxPoints: 3
+  durationSeconds: 600
+  cost: 2
+  order: 3
+
+# ---- transports: they come to a console of the faction after a time (an evacuation takes people out of a city that is in trouble)
+
+- type: worldMotherOffer
+  id: RUMCMotherTransportSupplies
+  name: rumc-mother-transport-supplies-name
+  description: rumc-mother-transport-supplies-desc
+  group: Transport
+  crate: RMCCrateFoodMRE
+  amount: 6
+  cost: 1
+  delaySeconds: 60
+  order: 0
+
+- type: worldMotherOffer
+  id: RUMCMotherTransportMedical
+  name: rumc-mother-transport-medical-name
+  description: rumc-mother-transport-medical-desc
+  group: Transport
+  crate: RMCCrateMedicalFirstAid
+  amount: 4
+  party: ICRCReliefParty
+  cost: 2
+  delaySeconds: 90
+  order: 1
+
+- type: worldMotherOffer
+  id: RUMCMotherTransportEvac
+  name: rumc-mother-transport-evac-name
+  description: rumc-mother-transport-evac-desc
+  group: Transport
+  evacuation: true
+  cost: 2
+  order: 2
+
+# ---- the nameless mercenaries: one look for all the ambassadors, but they belong to the faction that called them (a party for each faction)
+
+- type: worldMotherOffer
+  id: RUMCMotherPmcMercs
+  name: rumc-mother-pmc-mercs-name
+  description: rumc-mother-pmc-mercs-desc
+  group: Pmc
+  faction: rumc-mother-faction-mercs
+  parties:
+    UPP: RUMCMercsUPP
+    Three World Empire: RUMCMercsTWE
+    United Americas: RUMCMercsUA
+    Independent Core System Colonies: RUMCMercsICSC
+  cost: 2
+  order: 0
+
+# ---- medics, engineers and the organizations: the unarmed medics and engineers of a faction are ordered by it (and by its allies); the Red Cross and the UN by everyone
+
+- type: worldMotherOffer
+  id: RUMCMotherSupportMedicsUPP
+  name: rumc-mother-support-medics-upp-name
+  description: rumc-mother-support-medics-upp-desc
+  group: Support
+  faction: rumc-mother-faction-upp
+  home: UPP
+  party: RUMCMedicsUPP
+  cost: 1
+  order: 0
+
+- type: worldMotherOffer
+  id: RUMCMotherSupportEngineersUPP
+  name: rumc-mother-support-engineers-upp-name
+  description: rumc-mother-support-engineers-upp-desc
+  group: Support
+  faction: rumc-mother-faction-upp
+  home: UPP
+  party: RUMCEngineersUPP
+  cost: 1
+  order: 1
+
+- type: worldMotherOffer
+  id: RUMCMotherSupportMedicsTWE
+  name: rumc-mother-support-medics-twe-name
+  description: rumc-mother-support-medics-twe-desc
+  group: Support
+  faction: rumc-mother-faction-twe
+  home: Three World Empire
+  party: RUMCMedicsTWE
+  cost: 1
+  order: 2
+
+- type: worldMotherOffer
+  id: RUMCMotherSupportEngineersTWE
+  name: rumc-mother-support-engineers-twe-name
+  description: rumc-mother-support-engineers-twe-desc
+  group: Support
+  faction: rumc-mother-faction-twe
+  home: Three World Empire
+  party: RUMCEngineersTWE
+  cost: 1
+  order: 3
+
+- type: worldMotherOffer
+  id: RUMCMotherSupportMedicsUA
+  name: rumc-mother-support-medics-ua-name
+  description: rumc-mother-support-medics-ua-desc
+  group: Support
+  faction: rumc-mother-faction-ua
+  home: United Americas
+  party: RUMCMedicsUA
+  cost: 1
+  order: 4
+
+- type: worldMotherOffer
+  id: RUMCMotherSupportEngineersUA
+  name: rumc-mother-support-engineers-ua-name
+  description: rumc-mother-support-engineers-ua-desc
+  group: Support
+  faction: rumc-mother-faction-ua
+  home: United Americas
+  party: RUMCEngineersUA
+  cost: 1
+  order: 5
+
+- type: worldMotherOffer
+  id: RUMCMotherSupportRedCross
+  name: rumc-mother-support-redcross-name
+  description: rumc-mother-support-redcross-desc
+  group: Support
+  faction: rumc-mother-faction-orgs
+  party: ICRCReliefParty
+  cost: 2
+  order: 20
+
+- type: worldMotherOffer
+  id: RUMCMotherSupportUN
+  name: rumc-mother-support-un-name
+  description: rumc-mother-support-un-desc
+  group: Support
+  faction: rumc-mother-faction-orgs
+  party: UNISCTeamParty
+  cost: 3
+  order: 21

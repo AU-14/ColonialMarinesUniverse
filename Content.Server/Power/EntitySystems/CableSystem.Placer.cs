@@ -1,5 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Power.Components;
+using Content.Shared.CMU14.Cables; // CMU14: the layer of a cable (on the top of a tile, or under it)
 using Content.Shared.Database;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
@@ -34,7 +35,9 @@ public sealed partial class CableSystem
         var snapPos = _map.TileIndicesFor((gridUid, grid), args.ClickLocation);
         var tileDef = (ContentTileDefinition)_tileManager[_map.GetTileRef(gridUid, grid, snapPos).Tile.TypeId];
 
-        if ((!component.OverTile && !tileDef.IsSubFloor) || !tileDef.Sturdy)
+        // CMU14: a cable is laid on the top layer of any sturdy tile; a screwdriver tucks it under the tile later.
+        // CMU14: the original condition is kept here: if ((!component.OverTile && !tileDef.IsSubFloor) || !tileDef.Sturdy)
+        if (!tileDef.Sturdy)
             return;
 
         foreach (var anchored in _map.GetAnchoredEntities((gridUid, grid), snapPos))
@@ -49,7 +52,11 @@ public sealed partial class CableSystem
         if (TryComp<StackComponent>(placer, out var stack) && !_stack.TryUse((placer.Owner, stack), 1))
             return;
 
-        var newCable = Spawn(component.CablePrototypeId, _map.GridTileToLocal(gridUid, grid, snapPos));
+        // CMU14: the layer is chosen before the cable starts, so that the floor does not block anchoring it.
+        // CMU14: the original line is kept here: var newCable = Spawn(component.CablePrototypeId, _map.GridTileToLocal(gridUid, grid, snapPos));
+        var newCable = EntityManager.CreateEntityUninitialized(component.CablePrototypeId, _map.GridTileToLocal(gridUid, grid, snapPos));
+        AddComp<CableLayerComponent>(newCable).Buried = false;
+        EntityManager.InitializeAndStartEntity(newCable);
         _adminLogger.Add(LogType.Construction, LogImpact.Low,
             $"{ToPrettyString(args.User):player} placed {ToPrettyString(newCable):cable} at {Transform(newCable).Coordinates}");
         args.Handled = true;

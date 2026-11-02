@@ -1,3 +1,5 @@
+using Content.Server.CMU14.ZLevelBuilding.Pit; // RUMC: the hatch of a pit
+using Content.Shared.CMU14.ZLevelBuilding.Pit; // RUMC: the hatch of a pit
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.DoAfter;
@@ -23,6 +25,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private HatchSystem _hatch = default!; // RUMC: opens the hatch that is shut over a ladder of a pit
 
     private EntityQuery<CMUZLevelLadderComponent> _ladderQuery;
     private EntityQuery<MapGridComponent> _gridQuery;
@@ -110,6 +113,10 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
 
     private void StartClimb(Entity<CMUZLevelLadderComponent> ent, EntityUid user, int offset)
     {
+        // RUMC: a hatch that is shut over the ladder is pushed open first, and the climb waits for the next try
+        if (TryOpenClosedHatch(ent, user))
+            return;
+
         var delay = HasComp<GhostComponent>(user) ? TimeSpan.Zero : ent.Comp.Delay;
         var doAfter = new DoAfterArgs(EntityManager, user, delay, new CMUZLevelLadderDoAfterEvent(offset), ent, ent, ent)
         {
@@ -148,6 +155,25 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
 
         if (Transform(user).Anchored)
             args.Cancel();
+
+        // RUMC: the same while the climb is under way: a hatch that was shut meanwhile cancels it
+        if (TryOpenClosedHatch(ent, user))
+            args.Cancel();
+    }
+
+    // RUMC method
+    private bool TryOpenClosedHatch(Entity<CMUZLevelLadderComponent> ent, EntityUid user)
+    {
+        // A ghost passes through; it never pushes a hatch open.
+        if (HasComp<GhostComponent>(user))
+            return false;
+
+        if (!TryComp<HatchLinkComponent>(ent, out var link) || !TryComp<HatchComponent>(link.Hatch, out var hatch) || hatch.Open)
+            return false;
+
+        _hatch.SetOpen((link.Hatch, hatch), true);
+        _popup.PopupClient(Loc.GetString("au14-hatch-pushed-open"), ent, user);
+        return true;
     }
 
     private void OnDoAfter(Entity<CMUZLevelLadderComponent> ent, ref CMUZLevelLadderDoAfterEvent args)

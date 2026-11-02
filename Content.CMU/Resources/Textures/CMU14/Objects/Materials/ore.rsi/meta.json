@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Iron, gold, silver, platinum, uranium and diamond ore taken from the Hunter Ship mining props (CMSS13); the other metals are the iron ore repainted, one tint per metal",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "iron"
+    },
+    {
+      "name": "iron-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "iron-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "aluminum"
+    },
+    {
+      "name": "aluminum-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "aluminum-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "chrome"
+    },
+    {
+      "name": "chrome-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "chrome-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "cobalt"
+    },
+    {
+      "name": "cobalt-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "cobalt-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "copper"
+    },
+    {
+      "name": "copper-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "copper-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "gold"
+    },
+    {
+      "name": "gold-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "gold-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "lead"
+    },
+    {
+      "name": "lead-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "lead-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "silver"
+    },
+    {
+      "name": "silver-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "silver-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "titanium"
+    },
+    {
+      "name": "titanium-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "titanium-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "tungsten"
+    },
+    {
+      "name": "tungsten-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "tungsten-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "platinum"
+    },
+    {
+      "name": "platinum-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "platinum-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "uranium"
+    },
+    {
+      "name": "uranium-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "uranium-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "diamond"
+    },
+    {
+      "name": "diamond-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "diamond-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "zinc"
+    },
+    {
+      "name": "zinc-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "zinc-inhand-right",
+      "directions": 4
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+
+- type: anvilRecipe
+  id: RUMCAnvilEmptyMold
+  name: au14-anvil-recipe-empty-mold
+  icon:
+    sprite: CMU14/Objects/Smelting/shapes.rsi
+    state: blank_shape
+  output: RUMCMoldEmpty
+  outputCount: 1
+  steps:
+  - Hammering
+  - Hammering
+  - Hammering
+  - Hammering
+
+# The parts of every brass mechanism are forged of a brass ingot.
+- type: anvilRecipe
+  id: RUMCAnvilBrassParts
+  name: au14-anvil-recipe-brass-parts
+  icon:
+    sprite: CMU14/Objects/Materials/forged_parts.rsi
+    state: forged_parts
+  output: RUMCBrassPartsItem
+  outputCount: 1
+  ingot: RUMCBrassIngot
+  steps:
+  - Hammering
+  - Hammering
+  - Hammering
+  - Hammering
+  - Hammering
+
+# A sheet of brass is beaten out of a brass ingot, so that the first sheets do not wait for a press (the press itself is built of brass sheets).
+- type: anvilRecipe
+  id: RUMCAnvilBrassSheet
+  name: au14-anvil-recipe-brass-sheet
+  icon:
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    state: brass
+  output: RUMCBrassSheet
+  outputCount: 1
+  ingot: RUMCBrassIngot
+  steps:
+  - Hammering
+  - Hammering
+  - Hammering
+  - Hammering

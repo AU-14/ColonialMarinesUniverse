@@ -1,0 +1,121 @@
+# The first axes, made by hand of what lies about: an axe of wood and an axe of stone, and a striker of two stones to light a fire with. They are made to start the work before there is
+# any metal, and not to last: every blow at a tree or at a log costs the axe a use (the wooden one is gone after twenty-five, the stone one after sixty), every strike of the striker costs it one.
+
+- type: entity
+  parent: BaseItem
+  id: RUMCWoodenAxe
+  name: wooden axe
+  description: "An axe all of hard wood, its edge fire-hardened. It fells a tree and splits a log, but it will not last: some twenty-five blows, and it is gone."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/wooden_axe.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/wooden_axe.rsi
+    size: Normal
+  - type: Clothing
+    quickEquip: false
+    sprite: CMU14/Objects/Tools/wooden_axe.rsi
+    slots:
+    - Belt
+  - type: MeleeWeapon
+    attackRate: 0.8
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Slash: 5
+        Blunt: 5
+    soundHit:
+      collection: MetalThud
+  - type: Tag
+    tags:
+    - RUMCAxe
+  - type: BreaksAfterUses
+    usesLeft: 25
+  - type: PhysicalComposition
+    materialComposition:
+      Wood: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCStoneAxe
+  name: stone axe
+  description: "An axe with a head of flaked stone lashed to a haft. It fells a tree and splits a log better than the wooden one and lasts some sixty blows."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/stone_axe.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/stone_axe.rsi
+    size: Normal
+  - type: Clothing
+    quickEquip: false
+    sprite: CMU14/Objects/Tools/stone_axe.rsi
+    slots:
+    - Belt
+  - type: MeleeWeapon
+    attackRate: 0.9
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Slash: 9
+        Blunt: 6
+    soundHit:
+      collection: MetalThud
+  - type: Tag
+    tags:
+    - RUMCAxe
+  - type: BreaksAfterUses
+    usesLeft: 60
+  - type: PhysicalComposition
+    materialComposition:
+      Wood: 25
+
+# Two stones struck together: a spark that lights a fire (a campfire, a stove with fuel) or a thing that burns. Not every strike catches, and the stones wear down.
+- type: entity
+  parent: BaseItem
+  id: RUMCFlintStriker
+  name: flint striker
+  description: "Two stones to strike a spark from. Hold it to a campfire or a stove with fuel in it, or to something that burns, and strike. Not every strike catches, and the stones wear down."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/flint_striker.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/flint_striker.rsi
+    size: Tiny
+  - type: IgnitionSource
+  - type: FlintStriker
+  - type: BreaksAfterUses
+    usesLeft: 20
+
+# Made by hand, no tool is wanted.
+- type: craftRecipe
+  id: RUMCCraftWoodenAxe
+  name: au14-craft-recipe-wooden-axe
+  output: RUMCWoodenAxe
+  time: 6
+  consumables:
+  - stack: RMCWood
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftStoneAxe
+  name: au14-craft-recipe-stone-axe
+  output: RUMCStoneAxe
+  time: 8
+  minigames: [Rhythm]
+  consumables:
+  - stack: RUMCStone
+    amount: 3
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftFlintStriker
+  name: au14-craft-recipe-flint-striker
+  output: RUMCFlintStriker
+  time: 3
+  consumables:
+  - stack: RUMCStone
+    amount: 2

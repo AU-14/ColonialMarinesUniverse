@@ -121,9 +121,10 @@ public sealed partial class ZStairSystem : EntitySystem
         Vector2 stairWorld,
         Vector2 beamWorld)
     {
-        if (!_building.EnsureNeighborLevel(mapUid, 1, gridUid, stairWorld, out _, out var upperGrid))
+        if (!_building.EnsureNeighborLevel(mapUid, 1, gridUid, stairWorld, out var destinationMap, out var upperGrid))
             return;
 
+        _building.PrepareCavernConstruction(destinationMap, stairWorld, ent.Comp.PlatformRadius, clearRock: true);
         var laid = LayPlatformRingWithShaft(upperGrid, stairWorld, ent.Comp.ReflectFloorTile, ent.Comp.PlatformRadius);
 
         // Link the beam to this stair + its platform so destroying the beam collapses both.

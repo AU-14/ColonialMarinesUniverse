@@ -1,0 +1,108 @@
+# THE FORMULA OF THE COST OF A MACHINE, one for every craft of a machine of the menu:
+#   brass machine of the steam age ....... 6 brass sheets + 4 brass parts (+ 2 planks if it has a firebox or presses wood: boiler, solid-fuel press, extractor)
+#   industrial machine (steel) ........... 2 machine hulls (+ the same 2 planks)
+#   electric machine ..................... 1 machine hull + its working parts (motor, pump, piston, heating coil...) + a circuit + 1 insulated cable
+# What tells one machine from another is its working parts; the shell costs the same everywhere.
+
+# The industrial versions of the brass machines of the steam age: the same machines in steel, built of two machine hulls (the casing parts that the
+# electric machines are made on, which are beaten of sheets of metal) with a smithing hammer and no brass in them. The industrial steam extractor is with the other recipes of the extractor (Electric/electric_recipes.yml).
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialSteelBoiler
+  name: au14-craft-recipe-industrial-boiler
+  output: RUMCSteelBoiler
+  time: 18
+  minigames: [Rhythm, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+  - stack: RMCWood
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSteamGenerator
+  name: au14-craft-recipe-industrial-steam-generator
+  output: RUMCIndustrialSteamGenerator
+  time: 18
+  minigames: [Rhythm, Hold, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSteamSmelter
+  name: au14-craft-recipe-industrial-steam-smelter
+  output: RUMCIndustrialSteamSmelter
+  time: 18
+  minigames: [Rhythm, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSteamPress
+  name: au14-craft-recipe-industrial-steam-press
+  output: RUMCIndustrialSteamPress
+  time: 18
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSteamDrill
+  name: au14-craft-recipe-industrial-steam-drill
+  output: RUMCIndustrialSteamDrill
+  time: 18
+  minigames: [Rhythm, Drill, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSolidFuelPress
+  name: au14-craft-recipe-industrial-solid-fuel-press
+  output: RUMCIndustrialSolidFuelPress
+  time: 18
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+  - stack: RMCWood
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSteamGrinder
+  name: au14-craft-recipe-industrial-steam-grinder
+  output: RUMCIndustrialSteamGrinder
+  time: 18
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialCondenser
+  name: au14-craft-recipe-industrial-condenser
+  output: RUMCIndustrialCondenser
+  time: 18
+  minigames: [Rhythm, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2

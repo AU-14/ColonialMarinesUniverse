@@ -1,0 +1,208 @@
+# Wood: the heavy log a felled tree gives, the firewood an axe knocks off it, the saw that makes planks of a log, and the trees themselves.
+
+- type: Tag
+  id: RUMCAxe
+
+# What makes planks of a log: a saw made for it. The axes of the game have the plain sawing quality too, so the log asks for this one.
+- type: tool
+  id: RUMCLogSawing
+  name: tool-quality-au14-log-sawing-name
+  toolName: tool-quality-au14-log-sawing-tool-name
+  spawn: RUMCHandSaw
+  icon: { sprite: CMU14/Objects/Tools/hand_saw.rsi, state: saw }
+
+# ---------------------------------------------------------------- the log, the firewood, the saw
+# A felled tree gives a log. It is heavy: it takes both hands and slows the one who carries it. A saw makes planks of it.
+- type: entity
+  parent: [ BaseItem, BaseSlicingRefinable ]
+  id: RUMCWoodLog
+  name: log
+  description: A heavy log of a felled tree. It takes both hands and slows whoever carries it. Saw it into planks.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/log.rsi
+    state: log
+  - type: Item
+    size: Huge
+    sprite: CMU14/Objects/Materials/log.rsi
+    inhandVisuals:
+      left: []
+      right: []
+  - type: MultiHandedItem
+    handsNeeded: 2
+  - type: HeldSpeedModifier
+    walkModifier: 0.6
+    sprintModifier: 0.55
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 8
+  - type: LogSplittable
+  - type: ToolRefinable
+    qualityNeeded: RUMCLogSawing
+    refineTime: 6
+    verbText: au14-log-saw-verb
+    verbDefaultTooltip: au14-log-saw-tooltip
+    toolMissingQualityTooltip: au14-log-saw-missing
+    popupForUser: au14-log-saw-success
+    popupForOther: au14-log-saw-success-others
+    refineResult:
+    - id: RMCPlankWood10
+  - type: Flamability
+    chance: 1.0
+    rate: 0.4
+    range: 0.8
+    spread: 0.9
+  - type: Tag
+    tags:
+    - AUwood
+
+- type: stack
+  id: RUMCFirewood
+  name: firewood
+  icon: { sprite: CMU14/Objects/Materials/firewood.rsi, state: firewood }
+  spawn: RUMCFirewood1
+  maxCount: 30
+
+# The firewood: a piece, two, and a pile of three and more; what an axe knocks off a tree.
+- type: entity
+  parent: BaseItem
+  id: RUMCFirewood1
+  name: firewood
+  description: A split billet of wood for the fire. It burns in a campfire or a stove.
+  components:
+  - type: Stack
+    stackType: RUMCFirewood
+    count: 1
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/firewood.rsi
+    layers:
+    - state: firewood
+      map: [ "base" ]
+  - type: StackLevels
+    layer: base
+    states:
+    - firewood
+    - firewood_2
+    - firewood_3
+  - type: Appearance
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/firewood.rsi
+    inhandVisuals:
+      left: []
+      right: []
+  - type: CampfireFuel
+    fuelAmount: 1
+  - type: Flamability
+    chance: 1.0
+    rate: 0.4
+    range: 0.8
+    spread: 0.8
+    destroyAnyway: true
+
+# The hand saw: it makes planks of a log. The colony cargo sells it (a crate of saws), and the assembly bench makes it.
+- type: entity
+  parent: BaseItem
+  id: RUMCHandSaw
+  name: hand saw
+  description: A broad hand saw with a steel blade. Hold it to a log and it makes planks.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Tools/hand_saw.rsi
+    state: saw
+  - type: Item
+    size: Small
+    sprite: CMU14/Objects/Tools/hand_saw.rsi
+    inhandVisuals:
+      left: []
+      right: []
+  - type: Tag
+    tags:
+    - RUMCHandSaw
+  - type: Tool
+    qualities:
+    - Sawing
+    - RUMCLogSawing
+    useSound:
+      path: /Audio/Items/Culinary/chop.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 6
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+
+- type: Tag
+  id: RUMCHandSaw
+
+# The crate of saws that the colony cargo sells.
+- type: entity
+  parent: RMCCrateConstruction
+  id: RUMCCrateHandSaws
+  name: hand saws crate
+  description: Three hand saws for the woodcutters of the colony.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RUMCHandSaw
+      amount: 3
+
+# ---------------------------------------------------------------- the trees
+- type: ore
+  id: RUMCOreLogsLarge
+  oreEntity: RUMCWoodLog
+  minOreYield: 2
+  maxOreYield: 4
+
+# The birch: the only tree of ours. It falls at its health and leaves a stump, and gives logs when it does.
+- type: entity
+  parent: RMCBaseTree
+  id: RUMCTreeBirch
+  name: birch
+  description: A tall white birch. Its crown is high and its trunk is slim.
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Overdoors
+    sprite: CMU14/Structures/Flora/Trees/birch.rsi
+    state: tree
+    offset: 0,2.76
+  - type: OreVein
+    currentOre: RUMCOreLogsLarge
+    oreChance: 1.0
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.15,-0.3,0.15,0.2"
+        density: 2000
+        layer:
+        - WallLayer
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/tree_fell.ogg
+          params:
+            volume: 5
+            variation: 0.05
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          RMCStump2:
+            min: 1
+            max: 1
+          RUMCPlantFiber1:
+            min: 5
+            max: 6
+        offset: 0
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]

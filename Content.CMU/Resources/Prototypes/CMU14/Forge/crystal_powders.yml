@@ -1,0 +1,379 @@
+- type: stack
+  id: RUMCSaltpeterPowder
+  name: saltpeter powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: saltpeter }
+  spawn: RUMCSaltpeterPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSaltpeterPowderItem
+  name: saltpeter powder
+  description: Finely ground saltpeter dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: saltpeter
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCSaltpeterPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCCinnabarPowder
+  name: cinnabar powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: cinnabar }
+  spawn: RUMCCinnabarPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCCinnabarPowderItem
+  name: cinnabar powder
+  description: Finely ground cinnabar dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: cinnabar
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCCinnabarPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCAsbestosPowder
+  name: asbestos powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: asbestos }
+  spawn: RUMCAsbestosPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCAsbestosPowderItem
+  name: asbestos powder
+  description: Finely ground asbestos dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: asbestos
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCAsbestosPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCFluoritePowder
+  name: fluorite powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: fluorite }
+  spawn: RUMCFluoritePowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCFluoritePowderItem
+  name: fluorite powder
+  description: Finely ground fluorite dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: fluorite
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCFluoritePowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCBerylliumPowder
+  name: beryllium powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: beryllium }
+  spawn: RUMCBerylliumPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCBerylliumPowderItem
+  name: beryllium powder
+  description: Finely ground beryllium dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: beryllium
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCBerylliumPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCColtanPowder
+  name: coltan powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: coltan }
+  spawn: RUMCColtanPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCColtanPowderItem
+  name: coltan powder
+  description: Finely ground coltan dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: coltan
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCColtanPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCAlexandritePowder
+  name: alexandrite powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: alexandrite }
+  spawn: RUMCAlexandritePowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCAlexandritePowderItem
+  name: alexandrite powder
+  description: Finely ground alexandrite dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: alexandrite
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCAlexandritePowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCRawDiamondPowder
+  name: diamond dust
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: diamond }
+  spawn: RUMCRawDiamondPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCRawDiamondPowderItem
+  name: diamond dust
+  description: Finely ground diamond dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: diamond
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCRawDiamondPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCEmeraldPowder
+  name: emerald powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: emerald }
+  spawn: RUMCEmeraldPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCEmeraldPowderItem
+  name: emerald powder
+  description: Finely ground emerald dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: emerald
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCEmeraldPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCRubyPowder
+  name: ruby powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: ruby }
+  spawn: RUMCRubyPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCRubyPowderItem
+  name: ruby powder
+  description: Finely ground ruby dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: ruby
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCRubyPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCPhosphorusPowder
+  name: phosphorus powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: phosphorus }
+  spawn: RUMCPhosphorusPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCPhosphorusPowderItem
+  name: phosphorus powder
+  description: Finely ground phosphorus dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: phosphorus
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCPhosphorusPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCTrimoridPowder
+  name: trimorid powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: trimorid }
+  spawn: RUMCTrimoridPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCTrimoridPowderItem
+  name: trimorid powder
+  description: Finely ground trimorid dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: trimorid
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCTrimoridPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCLaxanitePowder
+  name: laxanite powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: laxanite }
+  spawn: RUMCLaxanitePowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLaxanitePowderItem
+  name: laxanite powder
+  description: Finely ground laxanite dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: laxanite
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCLaxanitePowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCLaytoitePowder
+  name: laytoite powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: laytoite }
+  spawn: RUMCLaytoitePowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLaytoitePowderItem
+  name: laytoite powder
+  description: Finely ground laytoite dust, still glowing faintly.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: laytoite
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCLaytoitePowder
+    count: 1
+  - type: PointLight
+    radius: 0.8
+    energy: 0.4
+    castShadows: false
+    color: "#8ce6dc"
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: stack
+  id: RUMCQuartzPowder
+  name: quartz powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: quartz }
+  spawn: RUMCQuartzPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCQuartzPowderItem
+  name: quartz powder
+  description: Finely ground quartz dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: quartz
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCQuartzPowder
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCCrystal

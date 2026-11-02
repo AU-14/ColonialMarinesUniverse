@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Drawn for the project by the user",
+  "size": {
+    "x": 36,
+    "y": 35
+  },
+  "states": [
+    {
+      "name": "firewood"
+    },
+    {
+      "name": "firewood_2"
+    },
+    {
+      "name": "firewood_3"
+    }
+  ]
+}

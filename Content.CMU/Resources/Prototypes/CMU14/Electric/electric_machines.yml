@@ -1,0 +1,1188 @@
+# The machines of the electric age. Every one is the same machine (RecipeMachine) of a different kind: what it makes is written in
+# electric_recipes.yml. The sprites are taken from the game's own machines (Textures/CMU14/Production/Electric).
+
+- type: entity
+  abstract: true
+  id: RUMCRecipeMachineBase
+  components:
+  - type: PortableStructure
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      direct:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Direct
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RecipeMachineVisuals.Working:
+        on:
+          True: { visible: true }
+          False: { visible: false }
+        off:
+          True: { visible: false }
+          False: { visible: true }
+  - type: ItemSlots
+    slots:
+      input1: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input2: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input3: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input4: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      output1: { insertOnInteract: false }
+      output2: { insertOnInteract: false }
+      output3: { insertOnInteract: false }
+      output4: { insertOnInteract: false }
+  - type: ContainerContainer
+    containers:
+      input1: !type:ContainerSlot
+      input2: !type:ContainerSlot
+      input3: !type:ContainerSlot
+      input4: !type:ContainerSlot
+      output1: !type:ContainerSlot
+      output2: !type:ContainerSlot
+      output3: !type:ContainerSlot
+      output4: !type:ContainerSlot
+  - type: WindowMachine
+    stackSlots: [ input1, input2, input3, input4 ]
+    outputSlots: [ output1, output2, output3, output4 ]
+  - type: AutoPorts
+  - type: UserInterface
+    interfaces:
+      enum.RecipeMachineUiKey.Key:
+        type: RecipeMachineBui
+  - type: ActivatableUI
+    key: enum.RecipeMachineUiKey.Key
+
+- type: entity
+  abstract: true
+  id: RUMCFluidMachineBase
+  components:
+  - type: FluidTank
+    capacity: 200
+  - type: FluidFillable
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+  - type: UserInterface
+    interfaces:
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
+
+- type: entity
+  abstract: true
+  id: RUMCFabricatorBase
+  components:
+  - type: PortableStructure
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      direct:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Direct
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RecipeMachineVisuals.Working:
+        on:
+          True: { visible: true }
+          False: { visible: false }
+        off:
+          True: { visible: false }
+          False: { visible: true }
+  - type: ItemSlots
+    slots:
+      input1: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input2: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input3: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input4: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input5: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input6: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input7: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input8: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input9: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input10: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input11: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input12: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input13: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input14: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input15: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input16: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input17: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      input18: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      output1: { insertOnInteract: false }
+  - type: ContainerContainer
+    containers:
+      input1: !type:ContainerSlot
+      input2: !type:ContainerSlot
+      input3: !type:ContainerSlot
+      input4: !type:ContainerSlot
+      input5: !type:ContainerSlot
+      input6: !type:ContainerSlot
+      input7: !type:ContainerSlot
+      input8: !type:ContainerSlot
+      input9: !type:ContainerSlot
+      input10: !type:ContainerSlot
+      input11: !type:ContainerSlot
+      input12: !type:ContainerSlot
+      input13: !type:ContainerSlot
+      input14: !type:ContainerSlot
+      input15: !type:ContainerSlot
+      input16: !type:ContainerSlot
+      input17: !type:ContainerSlot
+      input18: !type:ContainerSlot
+      output1: !type:ContainerSlot
+  - type: WindowMachine
+    stackSlots: [ input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16, input17, input18 ]
+    outputSlots: [ output1 ]
+  - type: AutoPorts
+  - type: UserInterface
+    interfaces:
+      enum.RecipeMachineUiKey.Key:
+        type: RecipeMachineBui
+  - type: ActivatableUI
+    key: enum.RecipeMachineUiKey.Key
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCWiremill
+  name: wiremill
+  description: "Draws ingots into fine wire, twice as much as hands could."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/wiremill.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 600
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: wiremill
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCBender
+  name: bending machine
+  description: "Presses ingots into sheets. On circuit 2 it presses steel into floor tiles."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/bender.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 600
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: bender
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCLathe
+  name: lathe
+  description: "Turns a sheet of steel into rods (circuit 1), straight into fasteners (circuit 2), into metal rods for building (circuit 3)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/lathe.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 600
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: lathe
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCCutter
+  name: cutting machine
+  description: "Cuts rods into fasteners, glass into tubes and silicon into wafers."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/cutter.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 700
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: cutter
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCPolarizer
+  name: polarizer
+  description: "Magnetizes steel rods."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/polarizer.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 500
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: polarizer
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCExtractor
+  name: extractor
+  description: "Presses resin out of wood and turns resin into raw rubber."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/extractor.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 700
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: extractor
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCMixer
+  name: mixer
+  description: "Mixes metals into alloys and solder, raw rubber with cinnabar into rubber sheets, and flares out of saltpeter, sulfur and paper."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/mixer.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 700
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: mixer
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCChemicalReactor
+  name: chemical reactor
+  description: "Boils glue out of resin, vulcanizes rubber better than the mixer does, and cooks gunpowder."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/reactor.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 900
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: reactor
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: water_in
+      kind: Water
+      rate: 8
+    - id: hydrogen_in
+      kind: Hydrogen
+      rate: 8
+    - id: chlorine_in
+      kind: Chlorine
+      rate: 8
+    - id: oxygen_in
+      kind: Oxygen
+      rate: 8
+    - id: resin_in
+      kind: RUMCResin
+      rate: 8
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCElectricAssembler
+  name: assembler
+  description: "Assembles motors, boards, circuits and every other part of the electric age out of smaller ones, and radios, multitools, flashlights, defibrillators and reinforced glass for the colony."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/assembler.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 900
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: assembler
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: solder_in
+      kind: RUMCSolderMelt
+      rate: 8
+    - id: glue_in
+      kind: RUMCGlue
+      rate: 8
+    - id: sulfuric_in
+      kind: SulfuricAcid
+      rate: 8
+    - id: caustic_in
+      kind: SodiumHydroxide
+      rate: 8
+    - id: hydrochloric_in
+      kind: RUMCHydrochloricAcid
+      rate: 8
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCElectricBlastFurnace
+  name: electric blast furnace
+  description: "A furnace of heating coils: it smelts silicon out of quartz or sand and coke."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/blastfurnace.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 120
+  - type: PowerState
+    idlePowerDraw: 120
+    workingPowerDraw: 2400
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: blastfurnace
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCOreWasher
+  name: ore washer
+  description: "Washes ore in water: the stone is carried off and more of the ore comes out as powder than the grinder gets."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/washer.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 500
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: washer
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCThermalCentrifuge
+  name: thermal centrifuge
+  description: "Spins hot metal powder apart and sorts out the other metal that was in the ore. It eats a lot of power."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/thermalcentrifuge.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 1200
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: thermalcentrifuge
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCMagneticSeparator
+  name: electromagnetic separator
+  description: "Picks the metal that is left in the stone dust out of it."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/separator.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 600
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: separator
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCSifter
+  name: sifter
+  description: "Sorts a crystal into the gem in it without crushing it, and a little powder and stone dust come with it."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/sifter.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 600
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: sifter
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCAutoclave
+  name: autoclave
+  description: "Grows a gem back out of its powder in water, slowly. It is what to do with the powder of a crystal that was crushed."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/autoclave.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 700
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: autoclave
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCPyrolysisOven
+  name: pyrolysis oven
+  description: "Cooks wood, branches and coal without air into coke, and the tar that comes off it is resin."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/pyrolysis.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 800
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: pyrolysis
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCGalvanicBath
+  name: galvanic bath
+  description: "Coats a steel sheet with zinc or chrome out of its powder in water, with current."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/galvanic.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 700
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: galvanic
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCRecycler
+  name: recycler
+  description: "Takes parts and finished things apart and gives back half of the material they were made of. It takes any item."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/recycler.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 1500
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: recycler
+  - type: ItemSlots
+    slots:
+      input1: { whitelist: { components: [ Item ] }, insertOnInteract: false }
+      input2: { whitelist: { components: [ Item ] }, insertOnInteract: false }
+      input3: { whitelist: { components: [ Item ] }, insertOnInteract: false }
+      input4: { whitelist: { components: [ Item ] }, insertOnInteract: false }
+      output1: { insertOnInteract: false }
+      output2: { insertOnInteract: false }
+      output3: { insertOnInteract: false }
+      output4: { insertOnInteract: false }
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCFertilizerMixer
+  name: fertilizer mixer
+  description: "Dissolves saltpeter and phosphorus in water into a fertilizer that plants take up. Pipe it to an automatic tray."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/fertilizer.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 500
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: fertilizer
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCCannery
+  name: cannery
+  description: "Rolls cans out of galvanized steel and fills them with nutrient paste or protein, then seals them."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/cannery.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 600
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: cannery
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: nutriment_in
+      kind: Nutriment
+      rate: 8
+    - id: protein_in
+      kind: Protein
+      rate: 8
+    - id: sugar_in
+      kind: Sugar
+      rate: 8
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCJewelersBench
+  name: jeweler's machine
+  description: "Casts gold and silver into rings and sets gems in them."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/jeweler.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 500
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: jeweler
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCLaserEngraver
+  name: laser engraver
+  description: "Burns the pattern of a chip into a silicon wafer. The lens in the slot decides which: ruby, alexandrite, emerald or diamond. The lens is not used up."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/engraver.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 1200
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: engraver
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCElectrolyzer
+  name: electrolyzer
+  description: "Splits water into hydrogen and oxygen with current, and cinnabar into sulfur and mercury."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/electrolyzer.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 1400
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: electrolyzer
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: salt_in
+      kind: TableSalt
+      rate: 8
+    - id: water_in
+      kind: Water
+      rate: 8
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCArcFurnace
+  name: arc furnace
+  description: "Smelts glass out of sand and quartz with an arc and a breath of oxygen, and alloys brass, steel of iron sheets and coke, plasteel of steel and coke, and the alloys of the steel family and the heat-resistant one."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/arcfurnace.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 120
+  - type: PowerState
+    idlePowerDraw: 120
+    workingPowerDraw: 2200
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: arcfurnace
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCChemicalBath
+  name: chemical bath
+  description: "Soaks wood into paper (or, on circuit 1, into cardboard), and etches circuit boards with acid."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/chembath.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 700
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: chembath
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: water_in
+      kind: Water
+      rate: 8
+    - id: glue_in
+      kind: RUMCGlue
+      rate: 8
+    - id: sulfuric_in
+      kind: SulfuricAcid
+      rate: 8
+    - id: hydrochloric_in
+      kind: RUMCHydrochloricAcid
+      rate: 8
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCCentrifuge
+  name: centrifuge
+  description: "Spins mixtures apart: slag into powder, resin into rubber and glue, cinnabar into sulfur."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/centrifuge.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 800
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: centrifuge
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: slag_in
+      kind: RUMCSlag
+      rate: 8
+    - id: resin_in
+      kind: RUMCResin
+      rate: 8
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCCompressor
+  name: compressor
+  description: "Presses powder back into stone, and branches into planks."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/compressor.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 700
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: compressor
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCFluidSolidifier
+  name: fluid solidifier
+  description: "Lets a molten metal or glass set into ingots and sheets, without a mold."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/solidifier.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 600
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: solidifier
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: copper_in
+      kind: Copper
+      rate: 8
+    - id: zinc_in
+      kind: RUMCZincMelt
+      rate: 8
+    - id: silicon_in
+      kind: RUMCSiliconMelt
+      rate: 8
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCExtruder
+  name: extruder
+  description: "Presses a sheet of steel into rods (circuit 1) or into a box of fasteners (circuit 2)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/extruder.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 900
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: extruder
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCPharmaMachine
+  name: pharmaceutical machine
+  description: "Makes the field-medicine ingredients out of the chemistry (antiseptic, coagulant, burn gel, tissue sealant, trauma foam), plain gauze and dressings out of cloth, and mixes them into the prepared ones."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/pharma.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 800
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: pharma
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: water_in
+      kind: Water
+      rate: 8
+    - id: glue_in
+      kind: RUMCGlue
+      rate: 8
+    - id: ethylene_in
+      kind: RUMCEthylene
+      rate: 8
+    - id: hydrochloric_in
+      kind: RUMCHydrochloricAcid
+      rate: 8
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCConcreteMixer
+  name: concrete mixer
+  description: "Mixes stone dust and sand with water into bags of concrete, and casts reinforced ones around metal rods. Build walls of the bags."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/concrete.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 900
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: concrete
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCSewingMachine
+  name: sewing machine
+  description: "Makes cloth out of cotton, and sews bags, belts, pouches, clothes and sandbags out of cloth, for less cloth than the tailor's table takes."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/sewing.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 500
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: sewing
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCTannery
+  name: tannery
+  description: "Tans hides in water with chrome powder into leather, and cuts leather into boots and gloves."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/tannery.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 700
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: tannery
+  - type: ItemSlots
+    slots:
+      input1: { whitelist: { components: [ Item ] }, insertOnInteract: false }
+      input2: { whitelist: { components: [ Item ] }, insertOnInteract: false }
+      input3: { whitelist: { components: [ Item ] }, insertOnInteract: false }
+      input4: { whitelist: { components: [ Item ] }, insertOnInteract: false }
+      output1: { insertOnInteract: false }
+      output2: { insertOnInteract: false }
+      output3: { insertOnInteract: false }
+      output4: { insertOnInteract: false }
+
+- type: entity
+  parent: [ RUMCFabricatorBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCFabricator
+  name: complex assembly bench
+  description: "A bench with eighteen slots for materials and one for the finished thing: it assembles the complex hand things out of many parts at once, the electric tools above all."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/fabricator.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 1500
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: fabricator
+    inputSlots: 18
+    outputSlots: 1
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCCircuitAssembler
+  name: circuit assembler
+  description: "The machine that makes circuits properly: cheaper sets of simple circuits and the good circuits."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/circuitassembler.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 1200
+  - type: ActivatableUIRequiresPower
+  - type: RecipeMachine
+    kind: circuitassembler
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, RUMCSteamMachineBase ]
+  id: RUMCSteamExtractor
+  name: steam extractor
+  description: "An extractor driven by steam. It presses resin out of wood and turns resin into raw rubber, which is how rubber is had before the grid. Join a gas pipe with steam to it."
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/steamextractor.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: RecipeMachine
+    kind: extractor
+    steamPerSecond: 0.3
+  - type: NodeContainer
+    nodes:
+      steam:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Fourway
+  - type: SteamPort
+
+# The concrete mixer as the colony orders it from requisitions: the machine alone in a crate. It still wants power and a water pipe.
+- type: entity
+  parent: RMCCrateConstruction
+  id: RUMCCrateConcreteMixer
+  name: concrete mixer crate
+  description: A concrete mixer for the builders of the colony. It wants power and a pipe with water.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RUMCConcreteMixer

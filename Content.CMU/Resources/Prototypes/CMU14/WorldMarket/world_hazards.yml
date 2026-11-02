@@ -1,0 +1,48 @@
+# The hazards of the world map (see WorldHazardPrototype): a storm on the sea routes, and threats on the roads and the lands that a private military company can be hired against.
+
+- type: worldHazard
+  id: RUMCHazardStorm
+  name: rumc-hazard-storm-name
+  description: rumc-hazard-storm-desc
+  weather: true
+  durationSeconds: 240
+  radius: 14
+  weight: 2
+  closesSea: true
+  incomeFactor: 0.8
+
+- type: worldHazard
+  id: RUMCHazardBandits
+  name: rumc-hazard-bandits-name
+  description: rumc-hazard-bandits-desc
+  durationSeconds: 300
+  radius: 8
+  weight: 1.2
+  closesLand: true
+  incomeFactor: 0.6
+  removeCost: 900
+  removeInfluence: 8
+
+- type: worldHazard
+  id: RUMCHazardPlague
+  name: rumc-hazard-plague-name
+  description: rumc-hazard-plague-desc
+  durationSeconds: 360
+  radius: 9
+  weight: 0.8
+  closesLand: true
+  incomeFactor: 0.5
+  removeCost: 1100
+  removeInfluence: 10
+
+- type: worldHazard
+  id: RUMCHazardWildfire
+  name: rumc-hazard-wildfire-name
+  description: rumc-hazard-wildfire-desc
+  durationSeconds: 270
+  radius: 9
+  weight: 1
+  closesLand: true
+  incomeFactor: 0.7
+  removeCost: 700
+  removeInfluence: 7
