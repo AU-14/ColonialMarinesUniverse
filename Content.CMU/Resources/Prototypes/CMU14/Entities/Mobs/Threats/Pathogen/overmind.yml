@@ -222,6 +222,9 @@
     message: cmu-xeno-death-overmind
     color: "#8a8c50"
   - type: DropshipHijacker
+  - type: RMCGibOnDeath
+    gibChance: 0
+    damageGibMultiplier: 0
 
 - type: entity
   parent: CMU14XenoOvermindBase
