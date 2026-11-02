@@ -274,6 +274,7 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
     private void OnExamined(Entity<CMUFobSupportGunComponent> gun, ref ExaminedEvent args)
     {
         args.PushMarkup(Loc.GetString(!_reserve.Enabled ? "cmu-fob-disabled"
+            : gun.Comp.Mount == null ? "cmu-fob-module-install"
             : gun.Comp.RequiresRestart ? "cmu-fob-gun-restart"
             : gun.Comp.HalfArc.Degrees >= 180 ? "cmu-fob-gun-examine" : "cmu-fob-launcher-examine"));
         args.PushMarkup(Loc.GetString("cmu-fob-gun-ammo", ("count", _guns.GetAmmoCount(gun))));
