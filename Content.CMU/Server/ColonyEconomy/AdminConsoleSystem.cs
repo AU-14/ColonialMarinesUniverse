@@ -24,6 +24,8 @@ public sealed partial class AdminConsoleSystem : EntitySystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private Robust.Shared.Timing.IGameTiming _timing = default!;
+    [Dependency] private Content.Server.CMU14.Government.ColonyGovernmentSystem _government = default!; // RUMC: the reforms and the treaties make the calls cheaper
+    [Dependency] private Content.Server.CMU14.WorldMarket.WorldMarketSystem _worldMarket = default!; // RUMC: the holidays from taxes that the ambassadors order
 
     public override void Initialize()
     {
@@ -32,8 +34,10 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         SubscribeLocalEvent<AdminConsoleComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleSetTaxBuiMsg>(OnSetTax);
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleSetIncomeTaxBuiMsg>(OnSetIncomeTax);
+        SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleSetTradeTaxBuiMsg>(OnSetTradeTax); // RUMC: the tax on the parcels sold through the trade platforms
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleCallThirdPartyBuiMsg>(OnCallThirdParty);
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleOpenThirdPartyBuiMsg>(OnOpenThirdParty);
+        SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleOpenGovernmentBuiMsg>(OnOpenGovernment); // RUMC: the window of the government of the colony
     }
 
     /// <summary>
@@ -50,6 +54,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
 
             comp.SalesTaxPercent = other.SalesTaxPercent;
             comp.IncomeTaxPercent = other.IncomeTaxPercent;
+            comp.TradeTaxPercent = other.TradeTaxPercent; // RUMC: a new console takes the trade tax of the one that is already there
             return;
         }
     }
@@ -58,13 +63,20 @@ public sealed partial class AdminConsoleSystem : EntitySystem
     public float GetSalesTax()
     {
         var query = EntityQueryEnumerator<AdminConsoleComponent>();
-        return query.MoveNext(out _, out var comp) ? comp.SalesTaxPercent / 100f : 0f;
+        return query.MoveNext(out _, out var comp) ? Math.Max(0f, comp.SalesTaxPercent - _worldMarket.TaxBreakPoints(Content.Shared.CMU14.WorldMarket.WorldTaxKind.Sales)) / 100f : 0f; // RUMC: minus the holiday
+    }
+
+    // RUMC: the trade tax as a share (0 to 0.5), for the platforms that take it from a sale
+    public float GetTradeTax()
+    {
+        var query = EntityQueryEnumerator<AdminConsoleComponent>();
+        return query.MoveNext(out _, out var comp) ? Math.Max(0f, comp.TradeTaxPercent - _worldMarket.TaxBreakPoints(Content.Shared.CMU14.WorldMarket.WorldTaxKind.Trade)) / 100f : 0f; // RUMC: minus the holiday
     }
 
     public float GetIncomeTax()
     {
         var query = EntityQueryEnumerator<AdminConsoleComponent>();
-        return query.MoveNext(out _, out var comp) ? comp.IncomeTaxPercent / 100f : 0f;
+        return query.MoveNext(out _, out var comp) ? Math.Max(0f, comp.IncomeTaxPercent - _worldMarket.TaxBreakPoints(Content.Shared.CMU14.WorldMarket.WorldTaxKind.Income)) / 100f : 0f; // RUMC: minus the holiday
     }
 
     /// <summary>
@@ -112,6 +124,12 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         _ui.TryToggleUi(uid, AdminConsoleThirdPartyUi.Key, msg.Actor);
     }
 
+    // RUMC: the window of the government of the colony (the reforms and the foreign policy)
+    private void OnOpenGovernment(EntityUid uid, AdminConsoleComponent comp, AdminConsoleOpenGovernmentBuiMsg msg)
+    {
+        _ui.TryToggleUi(uid, Content.Shared.CMU14.Government.ColonyGovernmentUi.Key, msg.Actor);
+    }
+
     private void OnSetTax(EntityUid uid, AdminConsoleComponent comp, AdminConsoleSetTaxBuiMsg msg)
     {
         var clamped = Math.Clamp(msg.TaxPercent, 0f, 50f);
@@ -128,6 +146,31 @@ public sealed partial class AdminConsoleSystem : EntitySystem
             _chat.DispatchFilteredAnnouncement(
                 ColonyAnnouncements.Recipients(EntityManager),
                 Loc.GetString("admin-console-sales-tax-announcement", ("percent", $"{clamped:F0}")),
+                sender: Loc.GetString("admin-console-announcement-sender"),
+                playSound: true,
+                announcementSound: sound);
+        }
+
+        UpdateAllUi();
+    }
+
+    // RUMC: sets the trade tax on every console, so that all show one value, and announces a change to the colony
+    private void OnSetTradeTax(EntityUid uid, AdminConsoleComponent comp, AdminConsoleSetTradeTaxBuiMsg msg)
+    {
+        var clamped = Math.Clamp(msg.TaxPercent, 0f, 50f);
+        var oldTax = comp.TradeTaxPercent;
+
+        // Sync to ALL admin consoles so every terminal shows the same value
+        var query = EntityQueryEnumerator<AdminConsoleComponent>();
+        while (query.MoveNext(out _, out var c))
+            c.TradeTaxPercent = clamped;
+
+        if (Math.Abs(oldTax - clamped) > 0.01f)
+        {
+            var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
+            _chat.DispatchFilteredAnnouncement(
+                ColonyAnnouncements.Recipients(EntityManager),
+                Loc.GetString("admin-console-trade-tax-announcement", ("percent", $"{clamped:F0}")),
                 sender: Loc.GetString("admin-console-announcement-sender"),
                 playSound: true,
                 announcementSound: sound);
@@ -164,6 +207,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
     {
         if (!comp.CallableParties.TryGetValue(msg.ThirdPartyId, out var cost))
             return;
+        cost = cost * (100 - _government.CallDiscountPercent()) / 100f; // RUMC: the reforms and the treaties of the government of the colony make a call cheaper
         if (comp.CalledParties.Contains(msg.ThirdPartyId))
             return;
         if (comp.CalledParties.Count >= comp.MaxCallIns || _timing.CurTime < comp.NextCallInAt)
@@ -199,14 +243,15 @@ public sealed partial class AdminConsoleSystem : EntitySystem
     {
         var econ = BuildEconomyStatus();
         _ui.SetUiState(uid, AdminConsoleUi.Key,
-            new AdminConsoleBuiState(comp.SalesTaxPercent, comp.IncomeTaxPercent, _colonyBudget.GetBudget(), econ));
+            // RUMC: the trade tax is given to the window too; the call that was here: new AdminConsoleBuiState(comp.SalesTaxPercent, comp.IncomeTaxPercent, _colonyBudget.GetBudget(), econ));
+            new AdminConsoleBuiState(comp.SalesTaxPercent, comp.IncomeTaxPercent, _colonyBudget.GetBudget(), econ, comp.TradeTaxPercent));
 
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)
         {
             if (_proto.TryIndex<ThirdPartyPrototype>(id, out var proto) &&
                 _auRound.IsThirdPartyAllowedForCurrentContext(proto))
-                thirdParties[id] = (proto.DisplayName ?? proto.ID, cost);
+                thirdParties[id] = (proto.DisplayName ?? proto.ID, cost * (100 - _government.CallDiscountPercent()) / 100f); // RUMC: the same cheaper cost as the call itself
         }
         _ui.SetUiState(uid, AdminConsoleThirdPartyUi.Key,
             new AdminConsoleThirdPartyBuiState(_colonyBudget.GetBudget(), thirdParties, comp.CalledParties)

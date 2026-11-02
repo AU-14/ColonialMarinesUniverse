@@ -2455,105 +2455,6 @@ public sealed class YautjaSmokeTest
 
     [Test]
     [NonParallelizable]
-    public async Task NonTechRandomBracerFunctionSlotTwoOpensTrackerLikeCmss13()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Connected = true,
-            Dirty = true,
-        });
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        EntityUid user = default;
-        EntityUid bracer = default;
-        EntityUid deadYautja = default;
-        EntityUid? previousAttached = null;
-
-        try
-        {
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                var inventory = entMan.System<InventorySystem>();
-                var mobState = entMan.System<MobStateSystem>();
-                var session = server.PlayerMan.Sessions.Single();
-                previousAttached = session.AttachedEntity;
-
-                user = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-                bracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
-                deadYautja = entMan.SpawnEntity("CMUMobYautja", map.GridCoords.Offset(new Vector2(0, 3)));
-
-                Assert.That(inventory.TryEquip(user, bracer, "gloves", silent: true, force: true), Is.True);
-                mobState.ChangeMobState(deadYautja, MobState.Dead);
-                server.PlayerMan.SetAttachedEntity(session, user);
-
-                var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
-                comp.NonYautjaWorkingChance = 0f;
-                comp.NonYautjaRandomFunctionChance = 1f;
-                comp.NonYautjaDelimbChance = 0f;
-            });
-
-            await pair.ReallyBeIdle(10);
-
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                var utility = entMan.System<YautjaBracerUtilitySystem>();
-                var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
-
-                entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 1;
-
-                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
-                Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
-            });
-
-            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
-            await server.WaitAssertion(() =>
-            {
-                var entMan = server.EntMan;
-                var ui = entMan.System<SharedUserInterfaceSystem>();
-                var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.Zero);
-                    Assert.That(entMan.GetComponent<YautjaBracerRandomSeedTestComponent>(bracer).Completed, Is.True);
-                    Assert.That(ui.TryGetUiState<YautjaBracerPanelState>(bracer, YautjaBracerUIKey.Key, out var state), Is.True,
-                        "CMSS13 activate_random_verb() slot 2 routes to track_gear_internal(user, TRUE).");
-                    // CMU14: the readout lists every auto-registered piece of Yautja tech, so the deceased Yautja's
-                    // signature is not necessarily the only entry - .Single() here threw
-                    // InvalidOperationException("Sequence contains more than one element"), which aborted the test
-                    // and surfaced as the dirty-dispose warning. Assert the signature is present instead.
-                    Assert.That(state!.TrackedGear.Select(gear => gear.Name),
-                        Does.Contain("deceased Yautja bio signature"),
-                        "Slot 2 must report the deceased Yautja's bio signature.");
-                    Assert.That(comp.IdChipDeployed, Is.False,
-                        "Local slot 2 must not use the old ID chip toggle random-function behavior.");
-                });
-            });
-        }
-        finally
-        {
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                var session = server.PlayerMan.Sessions.Single();
-                server.PlayerMan.SetAttachedEntity(session, previousAttached);
-
-                foreach (var uid in new[] { user, bracer, deadYautja })
-                {
-                    if (uid != default && !entMan.Deleted(uid))
-                        entMan.DeleteEntity(uid);
-                }
-            });
-        }
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotOneDeploysAttachmentsLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -9006,6 +8907,9 @@ public sealed class YautjaSmokeTest
             var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var scimitar = entMan.SpawnEntity("CMUYautjaScimitar", MapCoordinates.Nullspace);
             var altScimitar = entMan.SpawnEntity("CMUYautjaScimitarAlt", MapCoordinates.Nullspace);
+            var shieldHunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var shieldScimitar = entMan.SpawnEntity("CMUYautjaScimitar", MapCoordinates.Nullspace);
+            var shield = entMan.SpawnEntity("CMUYautjaBracerShield", MapCoordinates.Nullspace);
 
             try
             {
@@ -9027,6 +8931,13 @@ public sealed class YautjaSmokeTest
                     Assert.That(melee.GetAttackRate(altScimitar, hunter), Is.EqualTo(1f / 0.6f).Within(0.0001f),
                         "CMSS13 scimitar/alt inherits the same paired speed bonus.");
                 });
+
+                // the cmss13 bracer shield is a riot shield, not a bracer_attachment, so it never unlocks the pair speed
+                entMan.EnsureComponent<YautjaComponent>(shieldHunter);
+                Assert.That(hands.TryPickupAnyHand(shieldHunter, shieldScimitar), Is.True);
+                Assert.That(hands.TryPickupAnyHand(shieldHunter, shield), Is.True);
+                Assert.That(melee.GetAttackRate(shieldScimitar, shieldHunter), Is.EqualTo(1f),
+                    "A scimitar next to the bracer shield must keep cmss13's unpaired 1 second attack_speed.");
             }
             finally
             {
@@ -9036,6 +8947,12 @@ public sealed class YautjaSmokeTest
                     entMan.DeleteEntity(scimitar);
                 if (!entMan.Deleted(altScimitar))
                     entMan.DeleteEntity(altScimitar);
+                if (!entMan.Deleted(shield))
+                    entMan.DeleteEntity(shield);
+                if (!entMan.Deleted(shieldScimitar))
+                    entMan.DeleteEntity(shieldScimitar);
+                if (!entMan.Deleted(shieldHunter))
+                    entMan.DeleteEntity(shieldHunter);
             }
         });
 

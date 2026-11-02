@@ -1,0 +1,15 @@
+au14-craft-recipe-ingot-mold = Песчаная форма
+au14-craft-recipe-forge-hammer = Кузнечный молот
+au14-craft-recipe-forge-tongs = Кузнечные щипцы
+au14-craft-recipe-forge-chisel = Зубило
+au14-craft-recipe-anvil = Наковальня
+au14-craft-recipe-solid-fuel-press = Пресс на твёрдом топливе
+au14-craft-recipe-steam-grinder = Паровая дробилка
+au14-craft-recipe-industrial-boiler = Стальной бойлер
+au14-craft-recipe-industrial-steam-generator = Промышленный паровой генератор
+au14-craft-recipe-industrial-steam-smelter = Промышленная паровая плавильня
+au14-craft-recipe-industrial-steam-press = Промышленный паровой пресс
+au14-craft-recipe-industrial-steam-drill = Промышленный паровой бур
+au14-craft-recipe-industrial-solid-fuel-press = Промышленный пресс на твёрдом топливе
+au14-craft-recipe-industrial-steam-grinder = Промышленный паровой измельчитель
+au14-craft-recipe-industrial-condenser = Промышленный конденсатор
