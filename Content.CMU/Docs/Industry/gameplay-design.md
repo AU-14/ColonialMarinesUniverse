@@ -83,6 +83,72 @@ transformer, an assembler, a lathe and colony APC ingredients. Open the sealed
 crates with a crowbar and anchor the consoles with a wrench. These entry points
 are defined in the [starting kits](../../Resources/Prototypes/CMU14/Trade/trade.yml).
 
+## Player quickstart: tools, digging and machinery
+
+**Right-click your character → Craft** opens the hand-crafting menu. Carry the
+materials in your hands or worn storage; supplies lying on the floor do not
+count. Recipes appear when their material and skill requirements are met. Carry
+the required tool as well, such as a hammer for metalwork. Some recipes include
+a short crafting minigame.
+
+| Starting craft | Materials | Extra tool |
+| --- | --- | --- |
+| Branches (two) | One wood plank | None |
+| Wooden shovel | Two wood planks | None |
+| Wooden pickaxe | Two wood planks + one branch | None |
+| Stone hammer / tongs / chisel | Eight / six / four stone fragments, respectively | None |
+| Steel shovel / pickaxe | Three / four steel sheets, respectively, + one branch | Hammer |
+| Clay / stone smeltery | Thirty clay / stone, respectively | None |
+| Crucible | Ten clay | None |
+
+Wooden digging tools last only two digging uses; stone ones last six. Bring
+replacements or upgrade to metal. These are recipe entry points, not a promise
+that every faction or map supplies the starting resources.
+
+To dig a shaft, hold the appropriate tool, point at nearby clear floor, press
+**Z** (the default Use item in hand key), and stay still during the action.
+Right-click the tool to switch digging up or down. The layer being entered
+determines the requirement: shovel for Z-1/-2, pickaxe for Z-3 through Z-9, and
+jackhammer for blackstone at Z-10 and below. Natural openings can bypass these
+rock-cutting requirements. Multi-level caverns begin at Z-3 and can open into
+deep drops.
+
+Right-click a dug pit → **Build** to add a rope (one coil), ladder (25 steel),
+hatch (35 steel), or steps (50 steel). The separate **G → Z-Level (Experimental)**
+construction page offers a portable ladder (10 steel + 5 plasteel), up/down
+stairs (50 steel + 50 plasteel each), and a cave survey map (one paper). Portable
+ladders need an open space above and a supporting wall or beam; they do not bore
+through ceilings. Build a return route before moving equipment down.
+
+Portable machinery takes both hands to carry. Click a reachable clear floor tile
+other than the tile under your feet to place and anchor it. Drills can be placed
+over deposits and pumps over suitable water. Unanchored equipment cannot operate.
+
+| Equipment family | First use |
+| --- | --- |
+| Furnaces, crucibles, molds, tongs, hammers and anvils | Fuel the furnace, melt and cast metal, then forge sheets and parts. Handle hot work with the appropriate tools. |
+| Water pumps and liquid pipes | Place the pump on water. Use a screwdriver on a pipe and then its destination to connect liquid ports. |
+| Boilers, steam drills, presses, grinders, smelters and generators | Feed water and fuel to the boiler; use gas pipes to carry its steam. Place drills on deposits and leave output space. |
+| Electric drills, ore washers, separators, furnaces and fabricators | Supply electricity and recipe inputs. Select the required recipe/circuit and provide liquid connections where needed. |
+| Oil pumps, distillation, cracking and polymer machinery | Extract crude, refine fuel, and make plastic. Liquid pipes carry the different process fluids. |
+| Belts, filters and machine ports | Configure input/output sides and filters, then connect the machines to crates or belts. A blocked output can stop production. |
+| Farming, cooking, canning, sewing, tanning, medical and assembly machines | Turn crops, chemicals and factory parts into food, clothing, tools, electronics and supplies. |
+| Solar, steam, geothermal and fuel generators; batteries, transformers and APCs | Establish power generation and distribution appropriate to the site and available fuel. |
+
+A brass pump starts at three brass sheets + two brass parts; a boiler uses six
+brass sheets + four brass parts + two wood planks. An anvil can produce the brass
+sheets and parts before electric production is available. Steel/industrial
+alternatives and cargo starter kits offer other entry points. The
+[equipment catalog](upstream-equipment-and-research.md) explains the individual
+machines and their processing chains.
+
+Exploring underground automatically records nearby visible terrain. Craft a
+survey map, use **Transcribe survey**, and pass it to another explorer to read.
+Reading combines their knowledge with yours in the 3D tactical survey; the most
+recent observation wins where maps overlap. The map and recordings last for
+the current round. See [field surveys](mining-rework.md#explore-write-share) for
+navigation and copying behavior.
+
 ## Water, steam and power
 
 The brass pump draws 2 liquid units per second into a 50-unit tank; the steel

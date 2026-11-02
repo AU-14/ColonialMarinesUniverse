@@ -177,6 +177,9 @@
   name: retractable ladder
   description: A portable ladder that can be deployed against objects to traverse z-levels.
   components:
+  - type: Construction
+    graph: CMUCavernLadderGraph
+    node: ladder
   - type: Sprite
     sprite: CMU14/Structures/deployableladder.rsi
     state: icon

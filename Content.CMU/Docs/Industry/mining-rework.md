@@ -1,8 +1,8 @@
 # Mining rework: cavern exploration
 
 The agreed direction keeps active exploration, safe mine construction, manual
-extraction, and industrial production. Underground generation is the first
-implementation pass. The other accepted mining changes below remain planned.
+extraction, and industrial production. Underground generation, construction access
+and field surveys are implemented here. The other accepted mining changes below remain planned.
 
 ## What the underground should feel like
 
@@ -21,8 +21,8 @@ shape, producing shelves around a lower floor. Separators give shaft digging a
 purpose and bound how much terrain must be prepared below a natural opening.
 
 These are initial geometry values, not a final balance decision. Eight geological
-variants now change cavern shape and scenery. There are no new cave creatures,
-underground structures or traversal tools in this pass. Existing depth-specific
+variants now change cavern shape and scenery. There are no new cave creatures or
+authored underground structures. Construction and survey tools are described below. Existing depth-specific
 rock and ores are retained; cavern liquids follow the local geology. Natural
 routes can bypass a digging-tool gate; tool requirements still apply when
 cutting rock, but should not be treated as an absolute access lock.
@@ -126,9 +126,9 @@ galleries connect independently of those local shapes.
 
 | Variant | Generated terrain and appearance | Expedition decisions |
 | --- | --- | --- |
-| Braided Galleries | Three winding galleries, cross-links, amber mineral growths | Mark junctions and establish a main haul route through the loops. |
+| Braided Galleries | Three winding galleries, cross-links, ochre crusts and shale | Mark junctions and establish a main haul route through the loops. |
 | Flooded Fork | A trunk splits toward two broad basins; water and limestone outcrops | Choose dry ledges or accept slower wading; bridge gaps before moving machinery. |
-| Pillar Cathedral | A broad chamber, several Z-levels of open height, rock columns and pale crystals | Descend from the rim, build bridges and survey exposed walls. |
+| Pillar Cathedral | A broad chamber, several Z-levels of open height, rock columns and calcite fans | Descend from the rim, build bridges and survey exposed walls. |
 | Lava Tubes | Winding conduits, widened pockets, side spurs and exposed lava | Keep equipment and people off the lava; establish a protected crossing. |
 | Leaking Cavern | Offset drainage galleries, narrow fingers, small pools and outcrops | Follow branching shelves and plan passages around wet ground. |
 | Biological Dead Zone | Lobed chambers and crooked links; dead roots and fungal caps | Explore connected pockets; dead growth is scenery, not a harvestable crop. |
@@ -138,7 +138,7 @@ galleries connect independently of those local shapes.
 Only natural floors receive liquid/scenery; open shafts never receive floating
 props. Water slows movement and uses the existing water interactions. Lava uses
 the existing ignition behavior. Mineral springs currently behave as tinted
-water. Vents, roots, fungi and crystals are non-blocking scenery; ore is supplied
+water. Vents, roots, fungi and mineral crusts are non-blocking scenery; ore is supplied
 by the independent ore-vein/deposit system. Decorative props are sparse (at most
 one candidate per four-by-four cell), with no per-prop update loop or point light.
 Liquid patches follow continuous noise, leaving dry centres along regional
@@ -196,12 +196,13 @@ for mapper control and comparing samples in the atlas.
 | Spiral | A winding gallery wrapping outward to a terminal chamber. |
 | Broken gallery | Offset rooms linked by an angular route with a blind finger. |
 
-Each region contains two to four chambers. Satellite chambers select a different
-geological family from the primary chamber unless a mapper forces one family.
+Each region contains two to four chambers. With the default balanced recipe,
+satellite chambers select a different geological family from the primary chamber
+unless a mapper forces one family. Custom biome palettes can repeat a family.
 Their positions, elevations, scale, aspect ratio, full-angle rotation and shape
 parameters vary independently. Occasional oversized primary chambers provide
 large openings among smaller pockets. Scenery follows the nearest local chamber,
-so water, dead growth, crystals and other environments can meet inside one region.
+so water, dead growth, mineral crusts and other environments can meet inside one region.
 
 The previous mandatory east/north grid has been replaced with connected mazes
 over groups of sixteen regions. Each group starts as a seeded spanning tree,
@@ -258,3 +259,172 @@ includes constructing the sampler and selecting floor scenery, but excludes
 world entity creation, physics, networking and client rendering. It is not a
 server frame-time or player-capacity guarantee. A multiplayer exploration session
 and long-round memory/performance measurements remain necessary.
+
+## Cavern tools and field surveys
+
+### Before an Insurgency round
+
+Use the admin console in the lobby. The overrides affect Insurgency, reset with
+the round, and cannot change once terrain has been generated. They never reroll
+an active cave or erase player construction. Caverns still begin at **Z-3**, below
+the two authored underground levels.
+
+```text
+cmu_caverns status
+cmu_caverns seed 12345
+cmu_caverns preset volcanic
+cmu_caverns biome ThermalSprings 2
+cmu_caverns biome LavaTubes 0
+cmu_caverns preview -5
+cmu_caverns size 120
+cmu_caverns height 7
+cmu_caverns variant mixed
+cmu_caverns layout mixed
+cmu_caverns reset
+```
+
+`seed random` selects a fresh seed when each world first generates. Status also
+prints the resolved seeds of generated worlds and the pending biome weights.
+`preset balanced` keeps all eight biomes; `dry`, `flooded`, `volcanic`, and
+`biological` select themed mixtures. The biological preset uses the existing
+dead-root/fungal geology; it does not add living vegetation or creatures.
+`biome <name> <weight>` adjusts a biome's relative frequency, with zero disabling
+it. Missing entries in a preset are disabled. For example, a weight of 4 has four
+times the selection probability of a weight of 1; these are chamber probabilities,
+not exact percentages of floor area. Main and satellite chambers both respect
+the palette. At least one biome must stay enabled.
+
+The numeric seed determines placement, chamber geometry and connections. The
+palette determines which biomes occur and how common they are. Reproducing a world
+requires the same seed **and** size, height, palette and layout settings. Weighted
+satellite chambers can repeat their region's main biome; layouts and dimensions
+still vary independently. `variant` remains a single-biome debugging override;
+choosing a preset or editing a biome clears that override.
+
+With a numeric seed selected, `preview [depth]` prints primary biomes for 25
+regions around the origin, plus counts including their satellite chambers.
+It samples the same generation plans without creating any world tiles, so
+previewing does not lock the settings. It describes the cavern band, not a
+walkable slice or a guarantee that all chambers are accessible from one entrance.
+
+Region size accepts 48–160 tiles;
+band height accepts 4–9 levels and includes its solid bottom separator. Keep
+geology and layout mixed for the full variety. The command's help lists all
+eight geology names and ten layouts for deliberate overrides.
+
+### Building routes
+
+The construction menu's **Z-Level (Experimental)** page includes up stairs,
+down stairs, deployable ladders, and survey maps. Each stair uses the existing
+50 steel + 50 plasteel graph. A portable ladder costs 10 steel + 5 plasteel.
+
+Up stairs prepare the upper cave chunk, excavate a small landing, and leave a
+shaft over the stair. Down stairs prepare the lower landing and provide a return
+stair. Preparation includes landing tiles across chunk edges and preserves
+player-built structures. Support beams retain their existing collapse behavior.
+Ladders need solid ground below, an open shaft above, and an adjacent supporting
+wall or beam. They do not drill through ceilings. Generated cave maps have
+inherent planetary gravity, so machinery does not need a gravity generator.
+
+New floor scenery uses several combinations per geological family: shale,
+limestone knobs, calcite fans, sediment, volcanic clinker, ochre and iron crusts,
+dead roots and collapsed fungi. Crystal formations are no longer selected by
+the generator. Decorative props remain non-blocking, with at most one per 4×4
+geological cell; pools retain their existing movement and heat effects.
+
+### Explore, write, share
+
+1. A living player underground automatically records a local 4×4 footprint.
+   Rock and closed doors hide cells behind them. Only already materialized terrain
+   is recorded; surveying never generates new chunks. Stationary explorers refresh
+   their immediate surroundings every two seconds to notice excavation or building.
+2. Make a **cave survey map** from one sheet of paper. Use its **Transcribe survey**
+   verb to copy your observations into it. Rewriting adds newer observations while
+   preserving other areas already on the paper.
+3. Use the map in hand, or its **Read survey** verb. Its knowledge joins your own
+   and opens the 3D survey. The tactical-map action also opens remembered cave
+   knowledge; **Colony map** returns to the ordinary tactical view. Characters
+   without a tactical-map action receive a survey action.
+4. Page north/south/east/west through 64×64 sections, or deeper/shallower through
+   groups of eight floors. Orbit, zoom, isolate floors, and center on your location
+   using the reconstruction controls. **Refresh** loads the latest recordings.
+
+Newest means the time a person actually observed each cell. Writing, copying,
+or reading a map does not make its old information newer. Observed empty shafts
+can replace old walls. Disjoint areas combine, overlapping cells retain their
+latest observation, and different worlds and depths never overwrite each other.
+A paper map stays frozen until someone transcribes into it again; past readers
+do not receive remote updates. Personal knowledge belongs to the character.
+Maps and knowledge last only the current round.
+
+The automatic colony reconstruction excludes generated cave levels. There is
+no unexplored cave atlas behind the personal survey. Surveys include coarse
+terrain and traversal structures, not live people, inventories or ore contents.
+
+### Resource limits
+
+Recording processes at most eight players per server tick, from a queue refreshed
+at most four times per second. Each observation reads sixteen cells and performs
+short visibility checks within that footprint. Stored 4×4 blocks are immutable;
+physical maps share those blocks until later observations replace them. Movement
+does not broadcast survey geometry.
+
+Each character or map can retain four worlds and up to 8,192 blocks per world
+(up to 131,072 known cells, fewer when blocks are only partly observed). At the
+limit, existing blocks can still be updated; new blocks are refused with a
+visible warning. Copy requests are throttled. The viewer requests one bounded
+section and sends at most eight 16×16 chunks per server tick across viewers,
+with at most four per viewer per pass. These are workload and memory limits,
+not a measured multiplayer capacity guarantee.
+
+A local data-model benchmark with 2,145 populated blocks and 10,000 warmed-up
+4×4 observations measured 3.20 microseconds median and 4.10 microseconds at the
+95th percentile, allocating 1,296 bytes per observation. Copying the block index
+for a frozen map averaged 0.025 ms; enumerating a 64×64×8 section with 4,096 known
+cells averaged 0.227 ms. These measurements exclude terrain lookup, visibility,
+ECS events, serialization, rendering, and long-round garbage collection effects.
+
+### Verification (2 November 2026)
+
+The repository test wrapper built Content.Shared, Content.Server and Content.Client
+successfully. The geometry/survey-data run passed all 16 tests. The combined
+gameplay run passed seven tests and hit a test-pool cleanup assertion in the
+remaining gravity/falling test. That test passed when rerun alone, giving eight
+passing gameplay checks across the runs. The pool cleanup issue remains separate
+from the implemented feature; no engine or fixture workaround was added.
+
+Commands executed from the industry-import checkout:
+
+```powershell
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.Tests -Filter 'FullyQualifiedName~CMUCaveSurveyDataTest|FullyQualifiedName~CMUCavernFieldTest'
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMUCaveToolsTest|FullyQualifiedName~CMUCavernGenerationTest|FullyQualifiedName~GeneratedCavesDoNotExpandOrDisableTheAutomaticColonyAtlas'
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~OpeningHasGeneratedGroundBelowAndRevisitingRetainsChanges'
+```
+
+Coverage includes frozen map copies, observation ordering, negative-coordinate
+clipping, wall occlusion, distinct worlds, access restrictions, networked survey
+geometry, owner-position tracking, client/shared sandbox compatibility, colony
+atlas exclusion, gravity and falling, gradual exploration, scenery placement,
+and cave stairs/ladders across a chunk boundary. Native sprite states and license
+metadata were checked; `git diff --check` passed. The new pre-round console controls
+and visual appearance have not been exercised in the user's live game. No
+multiplayer load-capacity claim is made from the small data-model benchmark.
+
+The later biome-seed update passed all 14 `CMUCavernFieldTest` cases and three
+focused integration checks, with no failures or skips. The same test wrapper
+rebuilt the shared, server and client projects successfully:
+
+```powershell
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.Tests -Filter 'FullyQualifiedName~CMUCavernFieldTest'
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMUCavernBiomeConfigTest|FullyQualifiedName~FloodedGeologyPlacesWaterOnGroundButNotInTheShaftAbove|FullyQualifiedName~PersonalSurveyStreamsOnlyObservedCellsAndTracksItsOwner'
+```
+
+| Requirement | Evidence |
+| --- | --- |
+| Weights affect all chamber biomes; disabled entries stay absent; discovery order and cache eviction preserve the seed result | `BiomePaletteControlsEveryChamberAndIsStableAcrossDiscoveryOrder` |
+| Lobby previews leave settings editable; world creation freezes the chosen seed and palette | `PreviewLeavesPaletteEditableButGeneratedWorldLocksItsRecipe` |
+| Weighted geology produces liquid on the actual cave floor, not in the shaft above | `FloodedGeologyPlacesWaterOnGroundButNotInTheShaftAbove` |
+| Client/server surveying and client/shared sandbox loading remain valid | `PersonalSurveyStreamsOnlyObservedCellsAndTracksItsOwner` |
+
+The lobby controls have now been exercised in an automated real-lobby fixture.
+The user's live game was not restarted or repositioned during this update.

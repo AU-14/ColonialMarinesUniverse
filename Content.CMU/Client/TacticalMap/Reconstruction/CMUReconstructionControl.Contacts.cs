@@ -13,6 +13,7 @@ public sealed partial class CMUReconstructionControl
     [Dependency] private IGameTiming _timing = default!;
     public bool ShowContacts = true;
     public bool ShowNames;
+    public bool ShowOperatorPosition;
     public CMUReconContact[] TrackedContacts = [];
     public Action<NetEntity>? OnCameraRequested;
     public Action<NetEntity>? OnXenoWatchRequested;
@@ -67,6 +68,14 @@ public sealed partial class CMUReconstructionControl
                     size + new Vector2(6, 4) * UIScale), Color.FromHex("#0B141DE8"));
                 handle.DrawString(_font, label, name, UIScale, Color.White);
             }
+        }
+
+        if (ShowOperatorPosition && scene.OperatorPosition is { } position &&
+            scene.OperatorDepth == scene.MinDepth + _selectedLevel)
+        {
+            operatorPoint = Project(new Vector3(position - (Vector2) scene.Origin,
+                _selectedLevel * CMUReconGeometry.LevelHeight + 0.4f));
+            handle.DrawCircle(operatorPoint.Value, 3 * UIScale, Color.Cyan);
         }
 
         // Draw above the other contacts so overlapping icons cannot hide the operator's pulse.

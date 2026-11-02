@@ -30,12 +30,22 @@ public enum CMUCavernScenery : byte
     DeadFungi,
     Vent,
     Pebbles,
+    Shale,
+    Calcite,
+    Limestone,
+    Silt,
+    RootTangle,
+    FungalMat,
+    IronCrust,
+    Scoria,
 }
 
 public sealed partial class CMUCavernField
 {
     private CMUCavernVariant RegionVariant(Vector2i region, int top) =>
-        _settings.Variant ?? (CMUCavernVariant) (Hash(region, top, 17) % 8);
+        _settings.Variant ?? (_biomeWeights == null
+            ? (CMUCavernVariant) (Hash(region, top, 17) % 8)
+            : WeightedBiome(region, top, 17));
 
     /// <summary>Geology follows local chambers, allowing several environments within one region.</summary>
     public CMUCavernVariant VariantAt(Vector2i tile, int depth)
@@ -92,17 +102,65 @@ public sealed partial class CMUCavernField
         if (slot != Hash(cell, depth, 37) % 16)
             return CMUCavernScenery.None;
 
+        var detail = Hash(cell, depth, 41) % 4;
         return variant switch
         {
-            CMUCavernVariant.BraidedGalleries => CMUCavernScenery.Mineral,
-            CMUCavernVariant.FloodedFork => CMUCavernScenery.Stalagmite,
-            CMUCavernVariant.PillarCathedral => CMUCavernScenery.Crystal,
-            CMUCavernVariant.LavaTubes => CMUCavernScenery.Pebbles,
-            CMUCavernVariant.LeakingCavern => CMUCavernScenery.Stalagmite,
-            CMUCavernVariant.BiologicalDeadZone => (Hash(cell, depth, 41) & 1) == 0
-                ? CMUCavernScenery.DeadRoots : CMUCavernScenery.DeadFungi,
-            CMUCavernVariant.ThermalSprings => CMUCavernScenery.Mineral,
-            CMUCavernVariant.VentLabyrinth => CMUCavernScenery.Vent,
+            CMUCavernVariant.BraidedGalleries => detail switch
+            {
+                0 => CMUCavernScenery.Mineral,
+                1 => CMUCavernScenery.Shale,
+                2 => CMUCavernScenery.IronCrust,
+                _ => CMUCavernScenery.Pebbles,
+            },
+            CMUCavernVariant.FloodedFork => detail switch
+            {
+                0 => CMUCavernScenery.Stalagmite,
+                1 => CMUCavernScenery.Silt,
+                2 => CMUCavernScenery.Limestone,
+                _ => CMUCavernScenery.Pebbles,
+            },
+            CMUCavernVariant.PillarCathedral => detail switch
+            {
+                0 => CMUCavernScenery.Calcite,
+                1 => CMUCavernScenery.Limestone,
+                2 => CMUCavernScenery.Stalagmite,
+                _ => CMUCavernScenery.Shale,
+            },
+            CMUCavernVariant.LavaTubes => detail switch
+            {
+                0 => CMUCavernScenery.Scoria,
+                1 => CMUCavernScenery.Vent,
+                2 => CMUCavernScenery.Shale,
+                _ => CMUCavernScenery.Pebbles,
+            },
+            CMUCavernVariant.LeakingCavern => detail switch
+            {
+                0 => CMUCavernScenery.Stalagmite,
+                1 => CMUCavernScenery.Calcite,
+                2 => CMUCavernScenery.Silt,
+                _ => CMUCavernScenery.Limestone,
+            },
+            CMUCavernVariant.BiologicalDeadZone => detail switch
+            {
+                0 => CMUCavernScenery.DeadRoots,
+                1 => CMUCavernScenery.DeadFungi,
+                2 => CMUCavernScenery.RootTangle,
+                _ => CMUCavernScenery.FungalMat,
+            },
+            CMUCavernVariant.ThermalSprings => detail switch
+            {
+                0 => CMUCavernScenery.Mineral,
+                1 => CMUCavernScenery.Calcite,
+                2 => CMUCavernScenery.IronCrust,
+                _ => CMUCavernScenery.Silt,
+            },
+            CMUCavernVariant.VentLabyrinth => detail switch
+            {
+                0 => CMUCavernScenery.Vent,
+                1 => CMUCavernScenery.Scoria,
+                2 => CMUCavernScenery.IronCrust,
+                _ => CMUCavernScenery.Shale,
+            },
             _ => CMUCavernScenery.None,
         };
     }

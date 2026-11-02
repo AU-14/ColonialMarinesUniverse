@@ -15,6 +15,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Ghost;
 using Content.Shared.Ghost.Components;
+using Content.Shared.Gravity;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Procedural; // RUMC: the noise features of the layers
@@ -231,6 +232,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         // grid entity leaves the level invisible to DistanceToGround/HasTileAbove, so stairs and falling
         // silently stop working the moment a player stands on a lazily created level.
         EnsureComp<MapGridComponent>(newMapUid);
+        SetGeneratedGravity(newMapUid);
 
         if (!_zLevels.TryAddMapsIntoZNetwork(network.Value, new Dictionary<EntityUid, int> { [newMapUid] = depth - 1 }))
         {
@@ -347,6 +349,8 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
             // Map-grid, not a child grid: the CMU z-movement code only sees tiles/high-grounds on the map
             // entity's own MapGridComponent (see CreateStoneBelow).
             EnsureComp<MapGridComponent>(newMap);
+            if (depth + direction < 0)
+                SetGeneratedGravity(newMap);
 
             if (!_zLevels.TryAddMapsIntoZNetwork(network.Value, new Dictionary<EntityUid, int> { [newMap] = depth + direction }))
             {
@@ -384,6 +388,8 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
 
         if (TryComp<ZGeneratedStoneComponent>(belowMap, out var existing) && _gridQuery.HasComponent(existing.StoneGrid))
         {
+            if (!existing.LocalizedToAuthoredLevel)
+                SetGeneratedGravity(belowMap);
             below = (belowMap, existing);
             return true;
         }
@@ -412,9 +418,26 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         var stone = EnsureComp<ZGeneratedStoneComponent>(belowMap);
         stone.StoneGrid = stoneGrid;
         stone.LocalizedToAuthoredLevel = localized;
+        if (!localized)
+            SetGeneratedGravity(belowMap);
         Dirty(belowMap, stone);
         below = (belowMap, stone);
         return true;
+    }
+
+    private void SetGeneratedGravity(EntityUid map)
+    {
+        var gravity = EnsureComp<GravityComponent>(map);
+        if (gravity.Inherent && gravity.Enabled)
+            return;
+        var changed = !gravity.Enabled;
+        gravity.Inherent = true;
+        gravity.Enabled = true;
+        Dirty(map, gravity);
+        if (!changed)
+            return;
+        var ev = new GravityChangedEvent(map, true);
+        RaiseLocalEvent(map, ref ev, true);
     }
 
     /// <summary>
@@ -572,6 +595,14 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         CMUCavernScenery.DeadFungi => "CMUCavernDeadFungi",
         CMUCavernScenery.Vent => "CMUCavernVent",
         CMUCavernScenery.Pebbles => "CMUCavernPebbles",
+        CMUCavernScenery.Shale => "CMUCavernShale",
+        CMUCavernScenery.Calcite => "CMUCavernCalcite",
+        CMUCavernScenery.Limestone => "CMUCavernLimestone",
+        CMUCavernScenery.Silt => "CMUCavernSilt",
+        CMUCavernScenery.RootTangle => "CMUCavernRootTangle",
+        CMUCavernScenery.FungalMat => "CMUCavernFungalMat",
+        CMUCavernScenery.IronCrust => "CMUCavernIronCrust",
+        CMUCavernScenery.Scoria => "CMUCavernScoria",
         _ => null,
     };
 
@@ -916,6 +947,9 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         var tier = GetBiomeTier(settings, GetDepth(levelMapUid));
         if ((tier != null ? tier.Water : settings.StoneWater) != null)
             ids.Add(tier?.WaterEntity ?? settings.WaterEntity);
+
+        if (settings.Caverns != null)
+            ids.AddRange(["CMUCavernWater", "CMUCavernLava", "CMUCavernSpring"]);
 
         return ids;
     }

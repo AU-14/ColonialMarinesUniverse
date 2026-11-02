@@ -1,0 +1,57 @@
+- type: entity
+  parent: BaseItem
+  id: CMUCaveSurveyMap
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/bureaucracy.rsi
+    state: paper
+    color: "#DDD2AD"
+  - type: Item
+    size: Tiny
+  - type: CMUCaveSurveyMap
+  - type: Construction
+    graph: CMUCaveSurveyMapGraph
+    node: map
+
+- type: construction
+  id: CMUCaveSurveyMap
+  name: cmu-survey-map-name
+  description: cmu-survey-map-desc
+  graph: CMUCaveSurveyMapGraph
+  startNode: start
+  targetNode: map
+  category: construction-category-tools
+  objectType: Item
+  isCM: true
+  spawnlist: ZLevel
+
+- type: constructionGraph
+  id: CMUCaveSurveyMapGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: map
+      steps:
+      - tag: Paper
+        name: construction-graph-tag-paper
+        icon:
+          sprite: Objects/Misc/bureaucracy.rsi
+          state: paper
+        doAfter: 2
+  - node: map
+    entity: CMUCaveSurveyMap
+
+- type: entity
+  id: CMUActionCaveSurvey
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: Objects/Misc/bureaucracy.rsi
+      state: paper
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUOpenCaveSurveyActionEvent

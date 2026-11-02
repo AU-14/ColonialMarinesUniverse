@@ -4,6 +4,8 @@ using Content.Server.CMU14.ZLevelBuilding;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.Gravity;
+using Content.Server.Gravity;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
@@ -20,6 +22,7 @@ public sealed class CMUCavernGenerationTest : GameTest
     bodyType: Dynamic
   - type: CMUZPhysics
     bounciness: 0
+  - type: GravityAffected
 ";
 
     [Test]
@@ -87,6 +90,9 @@ public sealed class CMUCavernGenerationTest : GameTest
             Assert.That(maps.GetTileRef(floorMap, SEntMan.GetComponent<MapGridComponent>(floorMap), landing).Tile.IsEmpty, Is.False);
             body = SEntMan.SpawnEntity("CMUTestCavernFallingBody",
                 maps.GridTileToLocal(upper, SEntMan.GetComponent<MapGridComponent>(upper), landing));
+            Server.System<GravitySystem>().RefreshGravity(upper);
+            Assert.That(Server.System<SharedGravitySystem>().EntityGridOrMapHaveGravity((body, SEntMan.GetComponent<TransformComponent>(body))), Is.True,
+                "Cave gravity is planetary and must survive generator refreshes.");
             var zPhysics = SEntMan.GetComponent<CMUZPhysicsComponent>(body);
             Assert.That(Server.System<CMUZLevelsSystem>().DistanceToGround((body, zPhysics), out _, 8), Is.GreaterThan(1f),
                 "The ordinary fall system must see through multiple slices to generated ground.");
@@ -182,7 +188,11 @@ public sealed class CMUCavernGenerationTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var settings = SEntMan.EnsureComponent<ZBuildableMapComponent>(map.MapUid);
-            settings.Caverns = new CMUCavernSettings { StartDepth = -1, Variant = CMUCavernVariant.FloodedFork };
+            settings.Caverns = new CMUCavernSettings
+            {
+                StartDepth = -1,
+                BiomeWeights = new() { [CMUCavernVariant.FloodedFork] = 1 },
+            };
             settings.DepthBiomes.Clear();
             settings.StoneOreVeins.Clear();
             settings.StoneDeposits.Clear();

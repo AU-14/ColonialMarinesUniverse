@@ -24,6 +24,10 @@ public sealed partial class CMUCavernSettings
     [DataField]
     public CMUCavernVariant? Variant;
 
+    /// <summary>Relative biome frequencies. Null keeps the original mixed recipe; omitted entries are disabled.</summary>
+    [DataField]
+    public Dictionary<CMUCavernVariant, int>? BiomeWeights;
+
     /// <summary>Optional structural recipe override; null mixes all ten layouts within each region.</summary>
     [DataField]
     public CMUCavernLayout? Layout;
@@ -45,6 +49,7 @@ public sealed partial class CMUCavernField
     {
         _seed = seed;
         _settings = settings;
+        _biomeWeights = ReadBiomeWeights(settings.BiomeWeights);
         _roughness = new FastNoiseLite(seed);
         _roughness.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
         _roughness.SetFrequency(0.045f);

@@ -8,4 +8,6 @@ public sealed partial class CMUCavernWorldComponent : Component
 {
     [DataField]
     public int Seed;
+
+    public CMUCavernSettings? Settings;
 }

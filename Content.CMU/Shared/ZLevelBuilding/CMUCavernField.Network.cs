@@ -46,8 +46,7 @@ public sealed partial class CMUCavernField
                     (Sample(region, top, salt + 3) - 0.5f) * 1.3f);
                 breadth = 0.22f + Sample(region, top, salt + 1) * 0.27f;
             }
-            var variant = i == 0 ? family : _settings.Variant ??
-                (CMUCavernVariant) (((int) family + 1 + Hash(region, top, salt + 4) % 7) % 8);
+            var variant = i == 0 ? family : SatelliteBiome(region, top, salt + 4, family);
             chambers[i] = new CMUCavernChamber(position,
                 new Vector2(breadth, breadth * (0.7f + Sample(region, top, salt + 5) * 0.5f)) * scale,
                 MathF.Cos(angle), MathF.Sin(angle),

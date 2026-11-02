@@ -32,11 +32,13 @@
     color: "#A7C6CE"
 
 - type: entity
-  parent: CMUCavernCrystal
+  parent: CMUCavernPebbles
   id: CMUCavernMineral
   components:
   - type: Sprite
-    scale: 0.55, 0.55
+    sprite: Objects/Decoration/Flora/flora_stalagmite.rsi
+    state: grey_stalagmite6
+    scale: 0.8, 0.3
     color: "#D6AC68"
 
 - type: entity

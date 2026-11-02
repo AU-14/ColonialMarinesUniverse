@@ -9,6 +9,28 @@ namespace Content.Server.CMU14.ZLevelBuilding;
 
 public sealed partial class ZLevelBuildingSystem
 {
+    /// <summary>Construction checks must inspect materialized terrain, never the empty space of an unloaded chunk.</summary>
+    public void PrepareCavernConstruction(EntityUid map, System.Numerics.Vector2 position, int radius = 1, bool clearRock = false)
+    {
+        if (!TryComp<ZGeneratedStoneComponent>(map, out var stone) || stone.LocalizedToAuthoredLevel ||
+            !_gridQuery.TryComp(stone.StoneGrid, out var grid) || !TryComp<MapComponent>(map, out var mapComp))
+            return;
+
+        var tile = _map.TileIndicesFor(stone.StoneGrid, grid, new MapCoordinates(position, mapComp.MapId));
+        var size = Math.Max(2, GetLevelSettings(map).ChunkSize);
+        for (var x = FloorDiv(tile.X - radius, size); x <= FloorDiv(tile.X + radius, size); x++)
+        for (var y = FloorDiv(tile.Y - radius, size); y <= FloorDiv(tile.Y + radius, size); y++)
+            EnsureChunkAt((map, stone), map, new Vector2i(x, y) * size);
+
+        if (clearRock)
+        {
+            var rocks = GetGeneratedRockIds(GetLevelSettings(map), map);
+            for (var x = -radius; x <= radius; x++)
+            for (var y = -radius; y <= radius; y++)
+                ClearRockAt((stone.StoneGrid, grid), tile + new Vector2i(x, y), rocks);
+        }
+    }
+
     private const int StreamChunksPerTick = 2;
     private readonly Queue<(EntityUid Map, Vector2i Chunk)> _generationQueue = new();
     private readonly HashSet<(EntityUid Map, Vector2i Chunk)> _queuedChunks = new();
@@ -110,6 +132,9 @@ public sealed partial class ZLevelBuildingSystem
 
         var source = GetSourceMapForStone(level.Owner);
         var world = EnsureComp<CMUCavernWorldComponent>(source);
+        if (world.Settings == null)
+            EntityManager.System<CMUCavernConfigSystem>().Apply(world, caverns);
+        caverns = world.Settings!;
         if (world.Seed == 0)
             world.Seed = _random.Next(1, int.MaxValue);
 

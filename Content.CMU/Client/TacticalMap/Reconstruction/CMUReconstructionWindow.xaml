@@ -8,10 +8,23 @@
     </PanelContainer.PanelOverride>
     <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="8">
       <BoxContainer Orientation="Horizontal" SeparationOverride="10">
-        <Label Text="{Loc cmu-recon-heading}" FontColorOverride="#C6E9E9" HorizontalExpand="True" />
+        <Label Name="Heading" Text="{Loc cmu-recon-heading}" FontColorOverride="#C6E9E9" HorizontalExpand="True" />
         <Label Name="Progress" FontColorOverride="#829DA9" />
         <Label Name="Feed" Text="{Loc cmu-recon-feed}" FontColorOverride="#75C8BA" />
       </BoxContainer>
+      <BoxContainer Name="CaveNavigation" Orientation="Horizontal" SeparationOverride="6" Visible="False">
+        <Button Name="CaveWest" Text="←" ToolTip="{Loc cmu-survey-west}" />
+        <Button Name="CaveNorth" Text="↑" ToolTip="{Loc cmu-survey-north}" />
+        <Button Name="CaveSouth" Text="↓" ToolTip="{Loc cmu-survey-south}" />
+        <Button Name="CaveEast" Text="→" ToolTip="{Loc cmu-survey-east}" />
+        <Button Name="CaveDeeper" Text="{Loc cmu-survey-deeper}" />
+        <Button Name="CaveShallower" Text="{Loc cmu-survey-shallower}" />
+        <Button Name="CaveCenter" Text="{Loc cmu-survey-here}" />
+        <Button Name="CaveRefresh" Text="{Loc cmu-survey-refresh}" />
+        <Button Name="CaveWorld" Text="{Loc cmu-survey-world}" />
+        <Button Name="CaveSurface" Text="{Loc cmu-survey-surface}" />
+      </BoxContainer>
+      <Label Name="CaveInfo" Visible="False" />
       <BoxContainer Orientation="Horizontal" VerticalExpand="True" SeparationOverride="10">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="6">
           <BoxContainer Orientation="Horizontal" SeparationOverride="6">
@@ -29,7 +42,7 @@
         </BoxContainer>
         <ScrollContainer SetWidth="168" HScrollEnabled="False">
           <BoxContainer Orientation="Vertical" SeparationOverride="7" Margin="0,2,4,0">
-            <Label Text="{Loc cmu-recon-map}" FontColorOverride="#77CABD" />
+            <Label Name="MapHeading" Text="{Loc cmu-recon-map}" FontColorOverride="#77CABD" />
             <OptionButton Name="MapSelection" Disabled="True" />
             <BoxContainer Name="LayerSelector" Orientation="Vertical" SeparationOverride="7" Visible="False">
               <Label Text="{Loc cmu-recon-layer}" FontColorOverride="#77CABD" />

@@ -166,6 +166,49 @@ public sealed class CMUCavernFieldTest
             Assert.That((b.IsOpen(p, -5), b.IsOpen(p, -7), b.SceneryAt(p, -7)), Is.EqualTo(expected[p]));
     }
 
+    [Test]
+    public void BiomePaletteControlsEveryChamberAndIsStableAcrossDiscoveryOrder()
+    {
+        var weights = new Dictionary<CMUCavernVariant, int>
+        {
+            [CMUCavernVariant.LavaTubes] = 20,
+            [CMUCavernVariant.FloodedFork] = 1,
+            [CMUCavernVariant.PillarCathedral] = 0,
+        };
+        var first = new CMUCavernField(12345, new CMUCavernSettings { BiomeWeights = weights });
+        var second = new CMUCavernField(12345, new CMUCavernSettings
+        {
+            BiomeWeights = weights.Reverse().ToDictionary(p => p.Key, p => p.Value),
+        });
+        var changedSeed = new CMUCavernField(54321, new CMUCavernSettings { BiomeWeights = weights });
+        // A field has already captured its palette. Changing the input must not reroll uncached areas.
+        weights[CMUCavernVariant.LavaTubes] = 0;
+        var expected = new Dictionary<Vector2i, CMUCavernChamber[]>();
+        for (var x = -5; x <= 5; x++)
+        for (var y = -5; y <= 5; y++)
+        {
+            var region = new Vector2i(x, y);
+            expected[region] = first.GetRegionPlan(region, -5).Chambers.ToArray();
+        }
+        var biomes = expected.Values.SelectMany(chambers => chambers).Select(c => c.Variant).ToArray();
+        Assert.That(biomes.Distinct(), Is.EquivalentTo(new[]
+        {
+            CMUCavernVariant.LavaTubes, CMUCavernVariant.FloodedFork,
+        }), "Disabled and omitted biomes must never leak into main or satellite chambers.");
+        Assert.That(biomes.Count(b => b == CMUCavernVariant.LavaTubes),
+            Is.GreaterThan(biomes.Count(b => b == CMUCavernVariant.FloodedFork) * 3),
+            "Weights must affect frequency rather than merely enabling biomes.");
+        foreach (var (region, chambers) in expected.Reverse())
+        {
+            Assert.That(second.GetRegionPlan(region, -5).Chambers, Is.EqualTo(chambers));
+            Assert.That(first.GetRegionPlan(region, -5).Chambers, Is.EqualTo(chambers),
+                "Cache eviction and discovery order cannot reroll the palette or chamber geometry.");
+        }
+        Assert.That(expected.Any(p => !changedSeed.GetRegionPlan(p.Key, -5).Chambers
+            .Select(c => c.Variant).SequenceEqual(p.Value.Select(c => c.Variant))), Is.True,
+            "Changing the seed must change biome placement even with the same palette.");
+    }
+
     private static (int X, int Y, int Z) Voxel(Vector3 p) =>
         ((int) MathF.Floor(p.X), (int) MathF.Floor(p.Y), (int) MathF.Round(p.Z));
 }
