@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Atmos;
 using Content.Server.Chat.Managers;
 using Content.Server.CMU14.Round.Objectives;
 using Content.Server.Electrocution;
@@ -360,6 +361,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         RestoreHivebrokenXeno(ent.Owner, ent.Comp);
         ClearThrallLinks(ent.Owner, ent.Comp);
         RemCompDeferred<YautjaTechAuthorizedComponent>(ent.Owner);
+        if (!HasComp<YautjaComponent>(ent.Owner))
+            RemCompDeferred<CMUHunterFireRollComponent>(ent.Owner);
     }
 
     private void OnLinkThrallBracer(Entity<YautjaBracerComponent> ent, ref YautjaLinkThrallBracerActionEvent args)
@@ -884,6 +887,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         var thrall = EnsureComp<YautjaThrallComponent>(target);
         thrall.Master = master;
         thrall.Reason = reason ?? string.Empty;
+        EnsureComp<CMUHunterFireRollComponent>(target);
         thrall.Blooded = false;
         thrall.BloodedBy = null;
         thrall.BloodingReason = string.Empty;

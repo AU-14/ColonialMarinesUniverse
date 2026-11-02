@@ -1,0 +1,138 @@
+# The agreements of the city with the other cities of the map (see ColonyAccordPrototype): a city must think well enough of this one (the gifts and the help in troubles win it), and some need the other
+# city to be a thing. Two can be in force at once.
+
+- type: colonyAccord
+  id: RUMCAccordTradeUnion
+  name: rumc-accord-trade-union-name
+  description: rumc-accord-trade-union-desc
+  moneyCost: 3000
+  durationSeconds: 1500
+  minRelation: 40
+  requires: TradeHub
+  incomePerMinute: 70
+  dutyCut: 3
+  relationShift: 5
+
+- type: colonyAccord
+  id: RUMCAccordMutualAid
+  name: rumc-accord-mutual-aid-name
+  description: rumc-accord-mutual-aid-desc
+  moneyCost: 1500
+  durationSeconds: 1800
+  minRelation: 30
+  callDiscountPercent: 10
+  relationShift: 8
+
+- type: colonyAccord
+  id: RUMCAccordJointWorks
+  name: rumc-accord-joint-works-name
+  description: rumc-accord-joint-works-desc
+  moneyCost: 5000
+  durationSeconds: 1500
+  minRelation: 55
+  incomePerMinute: 120
+  relationShift: 10
+
+- type: colonyAccord
+  id: RUMCAccordArmsSupply
+  name: rumc-accord-arms-supply-name
+  description: rumc-accord-arms-supply-desc
+  moneyCost: 2500
+  durationSeconds: 1500
+  minRelation: 40
+  requires: ArmsMarket
+  callDiscountPercent: 15
+  relationShift: 5
+
+# ---------------------------------------------------------------- Licences (see ColonyLicensePrototype)
+
+- type: colonyLicense
+  id: RUMCLicenseWeapon
+  name: rumc-license-weapon-name
+  description: rumc-license-weapon-desc
+  fee: 400
+  durationSeconds: 1800
+  card: RUMCCityLicenseCardWeapon
+
+- type: colonyLicense
+  id: RUMCLicenseTrade
+  name: rumc-license-trade-name
+  description: rumc-license-trade-desc
+  fee: 250
+  durationSeconds: 1800
+  card: RUMCCityLicenseCardTrade
+
+- type: colonyLicense
+  id: RUMCLicenseMining
+  name: rumc-license-mining-name
+  description: rumc-license-mining-desc
+  fee: 350
+  durationSeconds: 1800
+  card: RUMCCityLicenseCardMining
+
+- type: colonyLicense
+  id: RUMCLicenseNightWork
+  name: rumc-license-night-work-name
+  description: rumc-license-night-work-desc
+  fee: 150
+  durationSeconds: 1200
+  card: RUMCCityLicenseCardNightWork
+
+
+# The cards that are printed for a licence: what it is for and whose it is is told when it is looked at. Each licence has a sprite of its own, and the deed of a plot has one too.
+- type: entity
+  parent: BaseItem
+  id: RUMCCityLicenseCard
+  name: city license card
+  description: A card of a licence given by the administration. Look at it closely to read what it says.
+  components:
+  - type: Sprite
+    sprite: CMU14/Government/license_cards.rsi
+    state: trade
+  - type: Item
+    size: Tiny
+  - type: CityLicenseCard
+
+- type: entity
+  parent: RUMCCityLicenseCard
+  id: RUMCCityLicenseCardWeapon
+  components:
+  - type: Sprite
+    state: weapon
+
+- type: entity
+  parent: RUMCCityLicenseCard
+  id: RUMCCityLicenseCardTrade
+  components:
+  - type: Sprite
+    state: trade
+
+- type: entity
+  parent: RUMCCityLicenseCard
+  id: RUMCCityLicenseCardMining
+  components:
+  - type: Sprite
+    state: mining
+
+- type: entity
+  parent: RUMCCityLicenseCard
+  id: RUMCCityLicenseCardNightWork
+  components:
+  - type: Sprite
+    state: night_work
+
+- type: entity
+  parent: RUMCCityLicenseCard
+  id: RUMCCityLicenseCardBuild
+  components:
+  - type: Sprite
+    state: build
+
+- type: entity
+  parent: RUMCCityLicenseCard
+  id: RUMCCityDeedCard
+  name: plot deed
+  description: A deed of a plot of the city. Look at it closely to read whose it is and where.
+  components:
+  - type: Sprite
+    state: deed

@@ -1,4 +1,6 @@
 using Content.Shared.CMU14.ZLevels.Core;
+using Content.Server.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared.Atmos;
@@ -28,6 +30,7 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private ZLevelBuildingSystem _building = default!;
 
     private static readonly TimeSpan SupportCheckInterval = TimeSpan.FromSeconds(1);
 
@@ -216,6 +219,8 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
         }
 
         var worldPosition = _transform.GetWorldPosition(user);
+        _building.PrepareCavernConstruction(map, worldPosition);
+        _building.PrepareCavernConstruction(upperMap.Value, worldPosition);
         var tile = _map.WorldToTile(map, grid, worldPosition);
         if (!_map.TryGetTileRef(map, grid, tile, out var lowerTile) ||
             CMUZLevelOpeningCache.IsFallThroughTile(lowerTile.Tile, _tile))
@@ -253,7 +258,10 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
         MapGridComponent upperGrid,
         Vector2i tile)
     {
-        if (TryComp<RoofComponent>(currentMap, out var roof) &&
+        // Generated cave roof flags mean coverage by ANY level above, including distant bedrock.
+        // Only the immediately adjacent ceiling determines whether a ladder fits inside a cavern.
+        var generated = TryComp<ZGeneratedStoneComponent>(currentMap.Owner, out var stone) && !stone.LocalizedToAuthoredLevel;
+        if (!generated && TryComp<RoofComponent>(currentMap, out var roof) &&
             HasDirectRoofFlag(roof, tile))
         {
             return true;

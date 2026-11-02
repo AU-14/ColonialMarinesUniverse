@@ -1,0 +1,141 @@
+# The brass tools: a pickaxe, a shovel and a sword. They are made of a brass ingot and a stick, with a smithing hammer, and they work
+# slower than the steel ones: they hit less often and less hard, and dig through a floor half as slow again.
+
+- type: entity
+  parent: RMCPickaxe
+  id: RUMCBrassPickaxe
+  name: brass pickaxe
+  description: A pickaxe of brass. It is slower than the steel one but mines the same rock.
+  suffix: ""
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/brass_pickaxe.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/brass_pickaxe.rsi
+    size: Large
+  - type: MeleeWeapon
+    attackRate: 0.5
+    damage:
+      types:
+        Slash: 10
+        Blunt: 19
+  - type: PitDiggingTool
+    digTimeMultiplier: 1.5
+
+- type: entity
+  parent: RMCShovel
+  id: RUMCBrassShovel
+  name: brass shovel
+  description: A shovel of brass. It digs slower than the steel one.
+  suffix: ""
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/brass_shovel.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/brass_shovel.rsi
+    size: Normal
+  - type: RMCShovel
+    speedMultiplier: 0.8
+  - type: UseDelay
+    delay: 0.45
+  - type: PitDiggingTool
+    digTimeMultiplier: 1.5
+
+- type: entity
+  parent: BaseSword
+  id: RUMCBrassSword
+  name: brass sword
+  description: A sword of brass. It is slower and blunter than a steel blade.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/brass_sword.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/brass_sword.rsi
+    size: Normal
+  - type: MeleeWeapon
+    attackRate: 0.8
+    damage:
+      types:
+        Slash: 12
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+  - type: DisarmMalus
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCBrass: 200
+
+# The molds of brass: the empty one is forged of a brass ingot, the others are cut from it with a chisel and a hammer.
+- type: entity
+  parent: BaseItem
+  id: RUMCBrassMoldEmpty
+  name: brass mold
+  description: A blank plate of brass, waiting to be cut into a shape. Forged on an anvil from a brass ingot, then worked with a chisel and a hammer.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Smelting/shapes.rsi
+    state: brass_blank_shape
+  - type: Item
+    size: Small
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCBrass: 100
+
+- type: entity
+  parent: BaseItem
+  id: RUMCBrassMoldSheet
+  name: brass sheet mold
+  description: A brass plate with the hollow of a sheet cut into it. Seated in a press or in the steam smelter with an ingot, it presses the ingot into a sheet.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Smelting/shapes.rsi
+    state: brass_sheet_shape
+  - type: Item
+    size: Small
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCBrass: 100
+  - type: PressMold
+    shape: sheet
+
+- type: entity
+  parent: BaseItem
+  id: RUMCBrassMoldIngots
+  name: brass ingot mold for three
+  description: A brass plate with the hollows of three ingots cut into it. Seated in the steam smelter with ore for three ingots, it makes three ingots at once.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Smelting/shapes.rsi
+    state: brass_ingots_shape
+  - type: Item
+    size: Small
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCBrass: 100
+  - type: PressMold
+    shape: ingots
+
+# A stick: a branch will do. Scraping stones off a wall asks for one.
+- type: Tag
+  id: RUMCStick
+
+# Forging a brass mold takes a brass ingot.
+- type: anvilRecipe
+  id: RUMCAnvilBrassEmptyMold
+  name: au14-anvil-recipe-brass-empty-mold
+  icon:
+    sprite: CMU14/Objects/Smelting/shapes.rsi
+    state: brass_blank_shape
+  output: RUMCBrassMoldEmpty
+  outputCount: 1
+  ingot: RUMCBrassIngot
+  steps:
+  - Hammering
+  - Hammering
+  - Hammering
+  - Hammering

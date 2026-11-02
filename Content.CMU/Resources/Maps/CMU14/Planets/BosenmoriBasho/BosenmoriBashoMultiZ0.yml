@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/22/2026 09:27:06
-  entityCount: 28513
+  entityCount: 28530
 maps:
 - 1
 grids:
@@ -441,6 +441,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMUFobMap
+      sites: [42276, 42277]
     - type: MetaData
       name: Mapping Bosenmori Basho
     - type: Transform
@@ -99764,6 +99766,49 @@ entities:
   entities:
   - uid: 42276
     components:
+    - type: CMUFobSite
+      id: WesternPad
+      utilityExclusions:
+      - "31.65,32.65,44.35,54.35"
+      - "31.15,35.15,43.85,51.85"
+      - "31.15,35.15,43.85,53.85"
+      relays:
+      - anchor: 56424
+        tier: Near
+        approach: West
+      - anchor: 56425
+        tier: Near
+        approach: West
+      - anchor: 56426
+        tier: Near
+        approach: East
+      - anchor: 56427
+        tier: Near
+        approach: East
+      - anchor: 56428
+        tier: Intermediate
+        approach: West
+      - anchor: 56429
+        tier: Intermediate
+        approach: West
+      - anchor: 56430
+        tier: Intermediate
+        approach: East
+      - anchor: 56431
+        tier: Intermediate
+        approach: East
+      - anchor: 56432
+        tier: Far
+        approach: West
+      - anchor: 56433
+        tier: Far
+        approach: West
+      - anchor: 56434
+        tier: Far
+        approach: East
+      - anchor: 56435
+        tier: Far
+        approach: East
     - type: DropshipDestination
       forceOnForceFaction: govfor
     - type: MetaData
@@ -99773,6 +99818,49 @@ entities:
       pos: 37.5,43.5
   - uid: 42277
     components:
+    - type: CMUFobSite
+      id: EasternPad
+      utilityExclusions:
+      - "147.65,25.65,160.35,47.35"
+      - "147.15,28.15,159.85,44.85"
+      - "147.15,28.15,159.85,46.85"
+      relays:
+      - anchor: 56436
+        tier: Near
+        approach: West
+      - anchor: 56437
+        tier: Near
+        approach: West
+      - anchor: 56426
+        tier: Near
+        approach: North
+      - anchor: 56427
+        tier: Near
+        approach: North
+      - anchor: 56438
+        tier: Intermediate
+        approach: North
+      - anchor: 56430
+        tier: Intermediate
+        approach: North
+      - anchor: 56439
+        tier: Intermediate
+        approach: West
+      - anchor: 56425
+        tier: Intermediate
+        approach: West
+      - anchor: 56434
+        tier: Far
+        approach: North
+      - anchor: 56435
+        tier: Far
+        approach: North
+      - anchor: 56440
+        tier: Far
+        approach: West
+      - anchor: 56432
+        tier: Far
+        approach: West
     - type: DropshipDestination
       forceOnForceFaction: thirdparty
     - type: MetaData
@@ -251889,4 +251977,125 @@ entities:
       kind: Ground
       id: bosenmori_basho.ground.relay
       displayName: Bosenmori Basho Ground Relay
+- proto: CMUFobRelayMarker
+  entities:
+  - uid: 56424
+    components:
+    - type: Transform
+      parent: 1
+      pos: 20.5,110.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-west-riverbank
+  - uid: 56425
+    components:
+    - type: Transform
+      parent: 1
+      pos: 39.5,111.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-western-crossing
+  - uid: 56426
+    components:
+    - type: Transform
+      parent: 1
+      pos: 97.5,80.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-north-sector-west
+  - uid: 56427
+    components:
+    - type: Transform
+      parent: 1
+      pos: 100.5,97.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-north-sector-road
+  - uid: 56428
+    components:
+    - type: Transform
+      parent: 1
+      pos: 20.5,136.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-northwest-barrens
+  - uid: 56429
+    components:
+    - type: Transform
+      parent: 1
+      pos: 42.5,139.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-mining-approach
+  - uid: 56430
+    components:
+    - type: Transform
+      parent: 1
+      pos: 102.5,124.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-filtration-west-approach
+  - uid: 56431
+    components:
+    - type: Transform
+      parent: 1
+      pos: 116.5,135.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-filtration-north-approach
+  - uid: 56432
+    components:
+    - type: Transform
+      parent: 1
+      pos: 47.5,164.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-mining-western-clearing
+  - uid: 56433
+    components:
+    - type: Transform
+      parent: 1
+      pos: 68.5,175.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-mining-northern-clearing
+  - uid: 56434
+    components:
+    - type: Transform
+      parent: 1
+      pos: 120.5,163.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-field-research-south
+  - uid: 56435
+    components:
+    - type: Transform
+      parent: 1
+      pos: 145.5,174.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-field-research-east
+  - uid: 56436
+    components:
+    - type: Transform
+      parent: 1
+      pos: 94.5,5.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-southwest-sector-south
+  - uid: 56437
+    components:
+    - type: Transform
+      parent: 1
+      pos: 94.5,16.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-southwest-sector-junction
+  - uid: 56438
+    components:
+    - type: Transform
+      parent: 1
+      pos: 125.5,114.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-northern-crossing
+  - uid: 56439
+    components:
+    - type: Transform
+      parent: 1
+      pos: 69.5,103.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-west-river-approach
+  - uid: 56440
+    components:
+    - type: Transform
+      parent: 1
+      pos: 75.5,155.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-bosenmori-relay-pilgrim-path
 ...

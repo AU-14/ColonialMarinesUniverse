@@ -1,0 +1,19 @@
+# The quota of the metropolis
+rumc-government-tab-quotas = Квоты
+rumc-quota-title = Квота метрополии
+rumc-quota-none = Квота не задана.
+rumc-quota-metropolis-name = Денежный план метрополии
+rumc-quota-metropolis-desc = Метрополия требует внести в план сумму денег за отведённое время. Деньги вносятся из бюджета, который наполняют горожане арендой, пошлинами и торговлей. Выполнили план в срок — метрополия даёт грант больше внесённого. Не выполнили — внесённое возвращается, но бюджет штрафуют, а фракции думают о городе хуже.
+rumc-quota-terms = Сумма плана: { $amount }. Грант за выполнение: { $grant }. Штраф за провал: { $fine }. Планов подряд выполнено: { $level }.
+rumc-quota-active = План идёт
+rumc-quota-progress = Внесено { $paid } из { $amount } ({ $percent }%)
+rumc-quota-left = Осталось времени: { $time }
+rumc-quota-pay = Внести { $sum }
+rumc-quota-pay-rest = Внести остаток ({ $sum })
+rumc-quota-active-hint = Вносить можно в любой момент, по частям. Когда сумма набрана, грант приходит в бюджет сразу.
+rumc-quota-waiting = Новый план пока не назначен
+rumc-quota-next = Следующий план через { $time }
+rumc-quota-log = Что было с планами
+rumc-quota-log-none = Планов ещё не было.
+rumc-quota-log-success = План { $amount } выполнен. Грант метрополии: { $grant }.
+rumc-quota-log-failure = План { $amount } провален. Внесено { $paid } (возвращено), штраф { $fine }, фракции думают о городе хуже.

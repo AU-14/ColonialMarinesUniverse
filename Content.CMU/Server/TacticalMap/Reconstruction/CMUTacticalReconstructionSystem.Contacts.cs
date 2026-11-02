@@ -71,7 +71,7 @@ public sealed partial class CMUTacticalReconstructionSystem
                 // Sensor intel deliberately hides enemy identity, even when the entity is a marine.
                 var named = blip.Image?.RsiState != "enemy_blip" &&
                     (HasComp<MarineComponent>(target) || HasComp<SquadMemberComponent>(target));
-                string? name = named ? Identity.Name(target, EntityManager) : null;
+                string? name = blip.CMUFobLabel ?? (named ? Identity.Name(target, EntityManager) : null);
                 NetEntity? cameraTarget = named && canWatch && _overwatch.TryGetWatchCamera(console!, target, out _)
                     ? GetNetEntity(target) : null;
                 NetEntity? xenoWatchTarget = source == actor && blip.Image?.RsiState != "enemy_blip" &&
@@ -98,6 +98,9 @@ public sealed partial class CMUTacticalReconstructionSystem
         {
             Add(computer.SquadBlips);
             Add(computer.Blips);
+            if (computer.Faction?.Equals("govfor", StringComparison.OrdinalIgnoreCase) == true
+                && IncludesLayer(survey, CMUReconLayer.Govfor))
+                Add(_tacticalMaps.GetFobMarkers(actor));
         }
         var operatorLevel = Array.IndexOf(survey.Atlas.Maps, Transform(actor).MapUid);
         ValidateCamera(survey, contacts);

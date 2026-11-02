@@ -1,5 +1,7 @@
+using System.Globalization;
 using Content.Client.CMU14.Interface;
 using Content.Client.Message;
+using Content.Client.Stylesheets;
 using Content.Shared._RMC14.SupplyDrop;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
@@ -14,10 +16,12 @@ namespace Content.Client.CMU14.Overwatch;
 public sealed class CMUSupplyReadinessLabel : RichTextLabel
 {
     [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private ILocalizationManager _localization = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private readonly EntityUid _console;
     private string _last = string.Empty;
+    private (bool Charging, bool HasCrate, int Seconds, CultureInfo? Culture, bool Crt, Color Accent)? _displayed;
 
     public CMUSupplyReadinessLabel(EntityUid console)
     {
@@ -42,9 +46,17 @@ public sealed class CMUSupplyReadinessLabel : RichTextLabel
         string state;
         Color color;
         var left = supplyDrop.NextLaunchAt - _timing.CurTime;
+        var charging = left > TimeSpan.Zero;
+        var seconds = charging ? (int) Math.Ceiling(left.TotalSeconds) : 0;
+        var displayed = (charging, !charging && supplyDrop.HasCrate, seconds, _localization.DefaultCulture,
+            StyleNano.CrtUiEnabled, StyleNano.CrtGreen);
+        if (_displayed == displayed)
+            return;
+
+        _displayed = displayed;
         if (left > TimeSpan.Zero)
         {
-            state = Loc.GetString("cmu-overwatch-supply-recharging", ("seconds", (int) Math.Ceiling(left.TotalSeconds)));
+            state = Loc.GetString("cmu-overwatch-supply-recharging", ("seconds", seconds));
             color = CrtTerminalPalette.Caution;
         }
         else if (!supplyDrop.HasCrate)

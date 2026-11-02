@@ -1,0 +1,62 @@
+- type: construction
+  id: CMUCavernStairUp
+  name: cmu-cavern-stair-up
+  description: cmu-cavern-stair-up-desc
+  graph: AU14ZStairUpGraph
+  startNode: start
+  targetNode: stair
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  isCM: true
+  spawnlist: ZLevel
+  conditions:
+  - !type:TileNotBlocked
+  - !type:ZBuildAllowed
+
+- type: construction
+  id: CMUCavernStairDown
+  name: cmu-cavern-stair-down
+  description: cmu-cavern-stair-down-desc
+  graph: AU14ZStairDownGraph
+  startNode: start
+  targetNode: stair
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  isCM: true
+  spawnlist: ZLevel
+  conditions:
+  - !type:TileNotBlocked
+  - !type:ZBuildAllowed
+
+- type: construction
+  id: CMUCavernLadder
+  name: cmu-cavern-ladder
+  description: cmu-cavern-ladder-desc
+  graph: CMUCavernLadderGraph
+  startNode: start
+  targetNode: ladder
+  category: construction-category-tools
+  objectType: Item
+  isCM: true
+  spawnlist: ZLevel
+
+- type: constructionGraph
+  id: CMUCavernLadderGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: ladder
+      steps:
+      - material: CMSteel
+        amount: 10
+        doAfter: 6
+      - material: CMPlasteel
+        amount: 5
+        doAfter: 4
+  - node: ladder
+    entity: CMUDeployableZLevelLadder

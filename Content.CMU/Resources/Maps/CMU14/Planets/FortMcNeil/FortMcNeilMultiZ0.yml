@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 10/11/2026 15:52:16
-  entityCount: 11238
+  entityCount: 11251
 maps:
 - 1
 grids:
@@ -167,6 +167,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMUFobMap
+      sites: [6647]
     - type: MetaData
       name: Mapping Fort McNeil
     - type: Transform
@@ -27464,6 +27466,52 @@ entities:
   entities:
   - uid: 6647
     components:
+    - type: CMUFobSite
+      id: FortMcNeil
+      utilityExclusions:
+      - "144.65,10.65,157.35,32.35"
+      - "144.15,13.15,156.85,29.85"
+      - "144.15,13.15,156.85,31.85"
+      - "97.65,11.65,110.35,33.35"
+      - "97.15,14.15,109.85,30.85"
+      - "97.15,14.15,109.85,32.85"
+      relays:
+      - anchor: 1000000002
+        tier: Near
+        approach: North
+      - anchor: 1000000003
+        tier: Near
+        approach: North
+      - anchor: 1000000004
+        tier: Near
+        approach: South
+      - anchor: 1000000005
+        tier: Near
+        approach: South
+      - anchor: 1000000006
+        tier: Intermediate
+        approach: North
+      - anchor: 1000000007
+        tier: Intermediate
+        approach: North
+      - anchor: 1000000008
+        tier: Intermediate
+        approach: South
+      - anchor: 1000000009
+        tier: Intermediate
+        approach: South
+      - anchor: 1000000010
+        tier: Far
+        approach: North
+      - anchor: 1000000011
+        tier: Far
+        approach: North
+      - anchor: 1000000012
+        tier: Far
+        approach: South
+      - anchor: 1000000013
+        tier: Far
+        approach: South
     - type: MetaData
       name: Fort McNeil Landing Zone
     - type: Transform
@@ -86449,4 +86497,90 @@ entities:
     - type: Transform
       parent: 1
       pos: 113.5,3.5
+- proto: CMUFobRelayMarker
+  entities:
+  - uid: 1000000002
+    components:
+    - type: Transform
+      parent: 1
+      pos: 95.5,51.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-eastern-road-north
+  - uid: 1000000003
+    components:
+    - type: Transform
+      parent: 1
+      pos: 111.5,76.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-smuggler-approach
+  - uid: 1000000004
+    components:
+    - type: Transform
+      parent: 1
+      pos: 87.5,27.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-hydroponics-south-approach
+  - uid: 1000000005
+    components:
+    - type: Transform
+      parent: 1
+      pos: 84.5,11.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-southeast-exterior
+  - uid: 1000000006
+    components:
+    - type: Transform
+      parent: 1
+      pos: 85.5,81.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-northern-exterior-east
+  - uid: 1000000007
+    components:
+    - type: Transform
+      parent: 1
+      pos: 77.5,89.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-northern-drill-approach
+  - uid: 1000000008
+    components:
+    - type: Transform
+      parent: 1
+      pos: 75.5,9.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-southern-exterior-east
+  - uid: 1000000009
+    components:
+    - type: Transform
+      parent: 1
+      pos: 55.5,29.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-southern-drill-approach
+  - uid: 1000000010
+    components:
+    - type: Transform
+      parent: 1
+      pos: 53.5,81.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-northern-exterior-west
+  - uid: 1000000011
+    components:
+    - type: Transform
+      parent: 1
+      pos: 49.5,79.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-northwest-drill-passage
+  - uid: 1000000012
+    components:
+    - type: Transform
+      parent: 1
+      pos: 49.5,43.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-western-exterior-south
+  - uid: 1000000013
+    components:
+    - type: Transform
+      parent: 1
+      pos: 36.5,42.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-fort-mcneil-relay-central-caves-east
 ...

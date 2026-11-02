@@ -1,0 +1,431 @@
+# More goods of the world trade (see world_trade.yml and ColonyWorldGoodPrototype): food and seeds, fuel and chemistry, electrics, medicines, luxuries and spare parts. A good is bought by the colony and
+# sold to the cities in the same way as the others: a stack is known by what it is made of, anything else by its prototype (what is accepted at the shuttle is `item`, what is brought is `spawn`).
+# A good with `soldBy` is for sale only in the cities of those kinds; one with `boughtBy` is paid in full only by those, and the others pay 0.6 of the price; `premium` cities pay a quarter more.
+
+# ---------------------------------------------------------------- Food and seeds: the farm cities sell them; cheap, but the colony needs them all the time
+
+- type: colonyWorldGood
+  id: RUMCGoodWheat
+  name: rumc-good-wheat-name
+  item: WheatBushel
+  spawn: WheatBushel
+  buyPrice: 14
+  sellPrice: 9
+  capacity: 120
+  lot: 10
+  soldBy: [ Agrarian ]
+
+- type: colonyWorldGood
+  id: RUMCGoodFlour
+  name: rumc-good-flour-name
+  item: ReagentContainerFlour
+  spawn: ReagentContainerFlour
+  buyPrice: 22
+  sellPrice: 14
+  capacity: 60
+  lot: 5
+  soldBy: [ Agrarian ]
+
+- type: colonyWorldGood
+  id: RUMCGoodPotato
+  name: rumc-good-potato-name
+  item: FoodPotato
+  spawn: FoodPotato
+  buyPrice: 12
+  sellPrice: 7
+  capacity: 100
+  lot: 10
+  soldBy: [ Agrarian ]
+
+- type: colonyWorldGood
+  id: RUMCGoodTomato
+  name: rumc-good-tomato-name
+  item: FoodTomato
+  spawn: FoodTomato
+  buyPrice: 14
+  sellPrice: 9
+  capacity: 100
+  lot: 10
+  soldBy: [ Agrarian ]
+
+- type: colonyWorldGood
+  id: RUMCGoodWheatSeeds
+  name: rumc-good-wheat-seeds-name
+  item: WheatSeeds
+  spawn: WheatSeeds
+  buyPrice: 10
+  sellPrice: 6
+  capacity: 60
+  lot: 5
+  soldBy: [ Agrarian ]
+
+- type: colonyWorldGood
+  id: RUMCGoodPotatoSeeds
+  name: rumc-good-potato-seeds-name
+  item: PotatoSeeds
+  spawn: PotatoSeeds
+  buyPrice: 10
+  sellPrice: 6
+  capacity: 60
+  lot: 5
+  soldBy: [ Agrarian ]
+
+- type: colonyWorldGood
+  id: RUMCGoodCornSeeds
+  name: rumc-good-corn-seeds-name
+  item: CornSeeds
+  spawn: CornSeeds
+  buyPrice: 12
+  sellPrice: 7
+  capacity: 60
+  lot: 5
+  soldBy: [ Agrarian ]
+
+# ---------------------------------------------------------------- Fuel and chemistry: for the forges and the steam engines; the powders are traded by the arms markets
+
+- type: colonyWorldGood
+  id: RUMCGoodCoke
+  name: rumc-good-coke-name
+  stack: RUMCCokeCoal
+  buyPrice: 38
+  sellPrice: 24
+  capacity: 80
+  lot: 10
+
+- type: colonyWorldGood
+  id: RUMCGoodSaltpeter
+  name: rumc-good-saltpeter-name
+  stack: RUMCSaltpeterPowder
+  buyPrice: 46
+  sellPrice: 29
+  capacity: 50
+  lot: 10
+  premium: [ ArmsMarket ]
+  soldBy: [ ArmsMarket ]
+  boughtBy: [ ArmsMarket, TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodSulfur
+  name: rumc-good-sulfur-name
+  stack: RUMCSulfurPowder
+  buyPrice: 44
+  sellPrice: 28
+  capacity: 50
+  lot: 10
+  premium: [ ArmsMarket ]
+  soldBy: [ ArmsMarket ]
+  boughtBy: [ ArmsMarket, TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodPhosphorus
+  name: rumc-good-phosphorus-name
+  stack: RUMCPhosphorusPowder
+  buyPrice: 58
+  sellPrice: 36
+  capacity: 40
+  lot: 5
+  premium: [ ArmsMarket ]
+  soldBy: [ ArmsMarket ]
+  boughtBy: [ ArmsMarket, TradeHub ]
+
+# ---------------------------------------------------------------- Electrics: the trade hubs sell them
+
+- type: colonyWorldGood
+  id: RUMCGoodCable
+  name: rumc-good-cable-name
+  stack: RMCCable
+  buyPrice: 26
+  sellPrice: 16
+  capacity: 80
+  lot: 10
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodWiringKit
+  name: rumc-good-wiring-kit-name
+  stack: RUMCKitWiring
+  buyPrice: 70
+  sellPrice: 44
+  capacity: 40
+  lot: 5
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodCircuitsKit
+  name: rumc-good-circuits-kit-name
+  stack: RUMCKitSimpleCircuits
+  buyPrice: 90
+  sellPrice: 56
+  capacity: 40
+  lot: 5
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodElectronicsKit
+  name: rumc-good-electronics-kit-name
+  stack: RUMCKitElectronics
+  buyPrice: 130
+  sellPrice: 82
+  capacity: 30
+  lot: 5
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodLightBulb
+  name: rumc-good-light-bulb-name
+  item: LightBulb
+  spawn: LightBulb
+  buyPrice: 18
+  sellPrice: 11
+  capacity: 40
+  lot: 5
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodLightTube
+  name: rumc-good-light-tube-name
+  item: LightTube
+  spawn: LightTube
+  buyPrice: 22
+  sellPrice: 14
+  capacity: 40
+  lot: 5
+  soldBy: [ TradeHub ]
+
+# ---------------------------------------------------------------- Medicines: a small market and small lots; the cities of the intelligence pay more
+
+- type: colonyWorldGood
+  id: RUMCGoodGauze
+  name: rumc-good-gauze-name
+  stack: CMGauze
+  buyPrice: 28
+  sellPrice: 17
+  capacity: 24
+  lot: 3
+  premium: [ Intelligence ]
+
+- type: colonyWorldGood
+  id: RUMCGoodOintment
+  name: rumc-good-ointment-name
+  stack: CMOintment
+  buyPrice: 34
+  sellPrice: 21
+  capacity: 24
+  lot: 3
+  premium: [ Intelligence ]
+
+- type: colonyWorldGood
+  id: RUMCGoodTraumaKit
+  name: rumc-good-trauma-kit-name
+  stack: CMTraumaKit
+  buyPrice: 70
+  sellPrice: 44
+  capacity: 18
+  lot: 3
+  premium: [ Intelligence ]
+
+- type: colonyWorldGood
+  id: RUMCGoodBurnKit
+  name: rumc-good-burn-kit-name
+  stack: CMBurnKit
+  buyPrice: 70
+  sellPrice: 44
+  capacity: 18
+  lot: 3
+  premium: [ Intelligence ]
+
+- type: colonyWorldGood
+  id: RUMCGoodAntiseptic
+  name: rumc-good-antiseptic-name
+  stack: CMUAntiseptic
+  buyPrice: 50
+  sellPrice: 31
+  capacity: 18
+  lot: 3
+  premium: [ Intelligence ]
+
+# ---------------------------------------------------------------- Luxuries and gems: dear, and the market of them is small, so the price falls after a few pieces; only the rich cities sell them and pay in full
+
+- type: colonyWorldGood
+  id: RUMCGoodWine
+  name: rumc-good-wine-name
+  item: DrinkWineBottleFull
+  spawn: DrinkWineBottleFull
+  buyPrice: 90
+  sellPrice: 56
+  capacity: 14
+  lot: 2
+  premium: [ Wealthy ]
+  soldBy: [ Wealthy ]
+  boughtBy: [ Wealthy, TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodDiamond
+  name: rumc-good-diamond-name
+  stack: RUMCGemDiamond
+  buyPrice: 480
+  sellPrice: 300
+  capacity: 6
+  lot: 1
+  premium: [ Wealthy ]
+  soldBy: [ Wealthy ]
+  boughtBy: [ Wealthy, TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodRuby
+  name: rumc-good-ruby-name
+  stack: RUMCGemRuby
+  buyPrice: 360
+  sellPrice: 225
+  capacity: 6
+  lot: 1
+  premium: [ Wealthy ]
+  soldBy: [ Wealthy ]
+  boughtBy: [ Wealthy, TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodEmerald
+  name: rumc-good-emerald-name
+  stack: RUMCGemEmerald
+  buyPrice: 330
+  sellPrice: 205
+  capacity: 6
+  lot: 1
+  premium: [ Wealthy ]
+  soldBy: [ Wealthy ]
+  boughtBy: [ Wealthy, TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodAlexandrite
+  name: rumc-good-alexandrite-name
+  stack: RUMCGemAlexandrite
+  buyPrice: 400
+  sellPrice: 250
+  capacity: 6
+  lot: 1
+  premium: [ Wealthy ]
+  soldBy: [ Wealthy ]
+  boughtBy: [ Wealthy, TradeHub ]
+
+# ---------------------------------------------------------------- Spare parts: for the repair of the machines and for new ones
+
+- type: colonyWorldGood
+  id: RUMCGoodBrassParts
+  name: rumc-good-brass-parts-name
+  stack: RUMCBrassParts
+  buyPrice: 60
+  sellPrice: 38
+  capacity: 50
+  lot: 5
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodFastenersKit
+  name: rumc-good-fasteners-kit-name
+  stack: RUMCKitFasteners
+  buyPrice: 48
+  sellPrice: 30
+  capacity: 50
+  lot: 5
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodHydraulicsKit
+  name: rumc-good-hydraulics-kit-name
+  stack: RUMCKitHydraulics
+  buyPrice: 120
+  sellPrice: 76
+  capacity: 30
+  lot: 5
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodDriveKit
+  name: rumc-good-drive-kit-name
+  stack: RUMCKitDrive
+  buyPrice: 140
+  sellPrice: 88
+  capacity: 30
+  lot: 5
+  soldBy: [ TradeHub, ArmsMarket ]
+
+- type: colonyWorldGood
+  id: RUMCGoodQualityPartsKit
+  name: rumc-good-quality-parts-kit-name
+  stack: RUMCKitQualityParts
+  buyPrice: 210
+  sellPrice: 130
+  capacity: 20
+  lot: 2
+  soldBy: [ TradeHub, ArmsMarket ]
+
+# The rest of the assembled parts (the kits that the assembler makes and the machines are built of): heating, boards, chips and hulls
+- type: colonyWorldGood
+  id: RUMCGoodHeatingKit
+  name: rumc-good-heating-kit-name
+  stack: RUMCKitHeating
+  buyPrice: 80
+  sellPrice: 50
+  capacity: 40
+  lot: 5
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodQualityBoardsKit
+  name: rumc-good-quality-boards-kit-name
+  stack: RUMCKitQualityBoards
+  buyPrice: 150
+  sellPrice: 95
+  capacity: 24
+  lot: 2
+  soldBy: [ TradeHub, ArmsMarket ]
+
+- type: colonyWorldGood
+  id: RUMCGoodChipIc
+  name: rumc-good-chip-ic-name
+  stack: RUMCKitChipIC
+  buyPrice: 160
+  sellPrice: 100
+  capacity: 20
+  lot: 2
+  soldBy: [ TradeHub, Intelligence ]
+
+- type: colonyWorldGood
+  id: RUMCGoodChipUlpic
+  name: rumc-good-chip-ulpic-name
+  stack: RUMCKitChipULPIC
+  buyPrice: 220
+  sellPrice: 140
+  capacity: 16
+  lot: 2
+  soldBy: [ TradeHub, Intelligence ]
+
+- type: colonyWorldGood
+  id: RUMCGoodChipRam
+  name: rumc-good-chip-ram-name
+  stack: RUMCKitChipRAM
+  buyPrice: 260
+  sellPrice: 165
+  capacity: 12
+  lot: 1
+  soldBy: [ TradeHub, Intelligence ]
+
+- type: colonyWorldGood
+  id: RUMCGoodChipCpu
+  name: rumc-good-chip-cpu-name
+  stack: RUMCKitChipCPU
+  buyPrice: 420
+  sellPrice: 265
+  capacity: 10
+  lot: 1
+  soldBy: [ TradeHub, Intelligence ]
+
+- type: colonyWorldGood
+  id: RUMCGoodMachineHull
+  name: rumc-good-machine-hull-name
+  stack: RUMCMachineHull
+  buyPrice: 180
+  sellPrice: 115
+  capacity: 20
+  lot: 2
+  soldBy: [ TradeHub, ArmsMarket ]

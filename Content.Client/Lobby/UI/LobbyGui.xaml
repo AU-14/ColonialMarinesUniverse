@@ -124,7 +124,8 @@
                      target captures the subtree at its origin, so any offset between the two
                      shows up as the shaded copy sitting a few pixels off its original. Padding
                      therefore goes on the rows inside, never on Content itself. -->
-                <Control Name="LobbyCrtScreen" HorizontalExpand="True">
+                <!-- CMU14: capture the live content once through its CRT sibling. -->
+                <cmu:CrtScreenContainer Name="LobbyCrtScreen" HorizontalExpand="True">
                     <Control Name="LobbyCrtContent" HorizontalExpand="True">
                         <PanelContainer Name="LobbyCrtBacking" HorizontalExpand="True"
                                         VerticalExpand="True" />
@@ -235,7 +236,7 @@
                     </Control>
                     <cmu:CrtScreenControl Name="LobbyCrt" HorizontalExpand="True"
                                           VerticalExpand="True" />
-                </Control>
+                </cmu:CrtScreenContainer>
                     <!-- Scanlines over the chat, as an overlay rather than a shader pass. The full
                          pass has to capture its source to a texture, and capturing a live scrolling
                          subtree means its clipping and scroll offsets have to survive a re-entrant

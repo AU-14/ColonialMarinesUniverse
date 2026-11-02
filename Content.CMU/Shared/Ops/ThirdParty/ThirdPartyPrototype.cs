@@ -83,6 +83,11 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     [DataField("announcearrival")]
     public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict zone.";
 
+    // optional header for the arrival line instead of the plain announcement wrap,
+    // e.g. Dutch's Dozen uses cmss13's "Intercepted Transmission:"
+    [DataField("announcearrivaltitle")]
+    public LocId? AnnounceArrivalTitle { get; private set; }
+
     /// <summary>
     ///     Announced when a scheduled party goes ready and starts gathering ghost volunteers,
     ///     before it deploys. Worded as responders en route so a delayed landing reads as intended.
