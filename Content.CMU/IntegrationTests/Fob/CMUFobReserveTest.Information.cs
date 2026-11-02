@@ -159,7 +159,7 @@ public sealed partial class CMUFobReserveTest
                 user.Map = grid; user.Govfor = true; user.Opfor = true; user.Xenos = true;
                 return (uid, user);
             }
-            var friendly = Viewer("govfor");
+            var friendly = Viewer("GOVFOR");
             var enemy = Viewer("opfor");
             Assert.That(Reserve.TryOfferRelays(_network, _first, _second, out var job), Is.True);
             maps.UpdateUserData(friendly, map);

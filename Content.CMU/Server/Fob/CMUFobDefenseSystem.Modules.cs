@@ -6,7 +6,6 @@ using Content.Shared.Item;
 using Content.Shared.Interaction;
 using Content.Shared.Examine;
 using Content.Shared._RMC14.Construction;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.GameObjects;
 using Content.Shared.Physics;
@@ -19,11 +18,14 @@ public sealed partial class CMUFobDefenseSystem
     [Dependency] private SharedMapSystem _maps = default!;
     [Dependency] private CMUFobMapSystem _sites = default!;
 
+    private const float ModuleInstallRange = 2.5f;
+
     private void InitializeModules()
     {
         SubscribeLocalEvent<CMUFobSupportGunComponent, PowerLoaderInteractEvent>(OnModuleInstall);
         SubscribeLocalEvent<CMUFobSupportGunComponent, GettingPickedUpAttemptEvent>(OnModulePickup);
         SubscribeLocalEvent<CMUFobGunMountComponent, MapInitEvent>(OnPlatformMapInit);
+        SubscribeLocalEvent<CMUFobGunMountComponent, ExaminedEvent>(OnPlatformExamined);
         SubscribeLocalEvent<CMUFobGunMountComponent, InteractUsingEvent>(OnPlatformWrench,
             before: [typeof(SentrySystem), typeof(CMUSentryRepairSystem)]);
     }
@@ -32,6 +34,13 @@ public sealed partial class CMUFobDefenseSystem
     {
         // This engine cannot deserialize boxed Boolean appearance defaults from YAML.
         _appearance.SetData(mount, CMUFobVisuals.Stowed, !Transform(mount).Anchored);
+    }
+
+    private void OnPlatformExamined(Entity<CMUFobGunMountComponent> mount, ref ExaminedEvent args)
+    {
+        if (_reserve.Enabled && args.IsInDetailsRange)
+            args.PushMarkup(Loc.GetString(Transform(mount).Anchored
+                ? "cmu-fob-platform-deployed" : "cmu-fob-platform-folded"));
     }
 
     private void OnPlatformWrench(Entity<CMUFobGunMountComponent> mount, ref InteractUsingEvent args)
@@ -46,9 +55,20 @@ public sealed partial class CMUFobDefenseSystem
         }
         if (mount.Comp.Network is not { } uid || !TryComp<CMUFobNetworkComponent>(uid, out var bank)
             || bank.State is CMUFobReserveState.Active or CMUFobReserveState.Starting or CMUFobReserveState.Closed
-            || mount.Comp.Gun != null || !_controls.CanOperate(mount, args.User, bank.Faction)
+            || !_controls.CanOperate(mount, args.User, bank.Faction)
             || Transform(mount).MapUid != bank.Map
-            || System.Numerics.Vector2.DistanceSquared(_transform.GetWorldPosition(mount), mount.Comp.Position) > 0.01f) return;
+            || System.Numerics.Vector2.DistanceSquared(_transform.GetWorldPosition(mount), mount.Comp.Position) > 0.01f)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-fob-platform-pack-denied"), mount, args.User);
+            return;
+        }
+        // Packing the base also detaches its real weapon. Both entities and the registered slot survive.
+        if (mount.Comp.Gun is { } gun && (!TryComp<CMUFobSupportGunComponent>(gun, out var weapon)
+            || !TryRemoveModule((gun, weapon), args.User)))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-fob-platform-pack-denied"), mount, args.User);
+            return;
+        }
         _transform.Unanchor(mount);
         _appearance.SetData(mount, CMUFobVisuals.Stowed, !Transform(mount).Anchored);
         _effects.Play(mount, CMUFobPresentationCue.Pack);
@@ -61,13 +81,17 @@ public sealed partial class CMUFobDefenseSystem
             || platform.Comp.Gun != null || !_reserve.TryGetNetwork("govfor", out var bank)
             || bank.Comp.State is CMUFobReserveState.Active or CMUFobReserveState.Starting or CMUFobReserveState.Closed
             || platform.Comp.Network != null && platform.Comp.Network != bank.Owner
-            || Transform(platform).MapUid != bank.Comp.Map || Transform(platform).GridUid is not { } grid
-            || !TryComp<MapGridComponent>(grid, out var mapGrid) || !_controls.CanOperate(platform, user, bank.Comp.Faction)) return false;
-        var tile = _maps.GetTileRef(grid, mapGrid, Transform(platform).Coordinates);
+            || Transform(platform).MapUid != bank.Comp.Map
+            || !_maps.TryFindGridAt(_transform.GetMapCoordinates(platform), out var grid, out var mapGrid)
+            || !_controls.CanOperate(platform, user, bank.Comp.Faction)) return false;
+        // Dropping cargo can leave it parented to the map until grid traversal runs. Resolve the
+        // floor under its current position instead of requiring a cached grid parent from transport.
+        var coordinates = _transform.ToCoordinates(grid, _transform.GetMapCoordinates(platform));
+        var tile = _maps.GetTileRef(grid, mapGrid, coordinates);
         var position = _maps.GridTileToWorld(grid, mapGrid, tile.GridIndices).Position;
         if (tile.Tile.IsEmpty || System.Numerics.Vector2.DistanceSquared(position, _transform.GetWorldPosition(bank))
                 > bank.Comp.DeploymentRange * bank.Comp.DeploymentRange || !_sites.CanPlaceUtility(bank, position)
-            || !_construction.CanBuildAt(Transform(platform).Coordinates, Name(platform), out _, anchoring: true,
+            || !_construction.CanBuildAt(coordinates, Name(platform), out _, anchoring: true,
                 collision: CollisionGroup.Impassable | CollisionGroup.MidImpassable)) return false;
         var defense = EnsureComp<CMUFobDefenseNetworkComponent>(bank);
         var registered = defense.Mounts.Contains(platform);
@@ -75,7 +99,7 @@ public sealed partial class CMUFobDefenseSystem
         foreach (var existing in defense.Mounts)
             if (existing != platform.Owner && Exists(existing)
                 && System.Numerics.Vector2.DistanceSquared(_transform.GetWorldPosition(existing), position) < 1) return false;
-        if (!_transform.AnchorEntity(platform)) return false;
+        if (!_transform.AnchorEntity((platform.Owner, Transform(platform), MetaData(platform)), coordinates)) return false;
         if (!registered) defense.Mounts.Add(platform);
         platform.Comp.Network = bank;
         platform.Comp.Position = position;
@@ -127,9 +151,9 @@ public sealed partial class CMUFobDefenseSystem
         if (!_reserve.Enabled || gun.Comp.Mount != null || !TryComp<CMUFobGunMountComponent>(mountId, out var comp)
             || comp.Gun != null || !ValidMount((mountId, comp), out var bank)
             || bank.Comp.State is CMUFobReserveState.Active or CMUFobReserveState.Starting
-            || !_controls.CanOperate(mountId, user, bank.Comp.Faction)
+            || !_controls.CanOperate(mountId, user, bank.Comp.Faction, ModuleInstallRange)
             || !TryComp<PowerLoaderComponent>(loader, out _) || !_hands.IsHolding(loader, gun)
-            || !_interaction.InRangeUnobstructed(loader, mountId, 2.5f)) return false;
+            || !_interaction.InRangeUnobstructed(loader, mountId, ModuleInstallRange)) return false;
         if (!_hands.TryDrop(loader, gun)) return false;
         _transform.SetCoordinates(gun, Transform(mountId).Coordinates);
         if (!_transform.AnchorEntity(gun)) return false;
@@ -142,7 +166,7 @@ public sealed partial class CMUFobDefenseSystem
         _targeting.TryApplyDefaultFaction(gun, bank.Comp.Faction);
         _appearance.SetData(gun, CMUFobGunVisuals.Installed, true);
         EnsureComp<CMUFobInstructionsComponent>(gun);
-        SetCollision(gun, true);
+        SetCollision(gun, !HasComp<CMUSentryBrokenComponent>(gun));
         UpdatePresentation(gun);
         _effects.Play(gun, CMUFobPresentationCue.Deploy);
         return true;

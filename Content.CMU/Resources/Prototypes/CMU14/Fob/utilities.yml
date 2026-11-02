@@ -186,6 +186,7 @@
   id: CMUFobCrateBase
   abstract: true
   components:
+  - type: CMUFobCrate
   - type: CMUFobInstructions
   - type: CMUFobPresentation
     device: Crate
