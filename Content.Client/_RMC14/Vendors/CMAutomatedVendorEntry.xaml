@@ -1,20 +1,25 @@
-﻿<cc:CMAutomatedVendorEntry
+<!-- CMU14: CRT presentation for the existing vendor UI; vendor gameplay logic is unchanged. -->
+<cc:CMAutomatedVendorEntry
     xmlns="https://spacestation14.io"
     xmlns:cc="clr-namespace:Content.Client._RMC14.Vendors"
     HorizontalExpand="True">
-    <BoxContainer Orientation="Horizontal">
-        <!-- CMU14: the vendor icon comes from the prototype's Sprite sheet, and guns.rsi is 64x32 while the
-             armour/bow/disc sheets are 32x32 - so gun rows reserved a 64px icon cell and left a gap before the
-             stock text. Bounding the cell to the 32x32 default (CM-SS13's vending32x32) scales the wide sheets
-             in and keeps every row aligned. -->
-        <LayeredTextureRect Name="Texture" Access="Public"
-                            HorizontalExpand="False" VerticalExpand="False"
-                            MinSize="32 32" MaxSize="32 32"
-                            Stretch="Scale" />
-        <Label Name="Amount" Access="Public" MinWidth="30" Align="Left" Margin="5 0 0 0" />
-        <Label Name="Stock" Access="Public" MinWidth="30" Align="Left" Margin="5 0 0 0" />
-        <Control MinWidth="5" />
-        <cc:CMAutomatedVendorPanel Name="Panel" Access="Public" />
-        <Button Text="?" Name="TooltipLabel" Access="Public" ModulateSelfOverride="#00000000" />
-    </BoxContainer>
+    <PanelContainer Name="RowSurface" HorizontalExpand="True">
+        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+            <PanelContainer Name="IconSurface" VerticalAlignment="Center">
+                <LayeredTextureRect Name="Texture" Access="Public"
+                                    HorizontalExpand="False" VerticalExpand="False"
+                                    MinSize="32 32" MaxSize="32 32" Stretch="Scale" />
+            </PanelContainer>
+            <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                <cc:CMAutomatedVendorPanel Name="Panel" Access="Public" />
+                <BoxContainer Orientation="Horizontal" SeparationOverride="7">
+                    <Label Name="Amount" Access="Public" VerticalAlignment="Center" />
+                    <Label Name="Stock" Access="Public" VerticalAlignment="Center" />
+                    <Control HorizontalExpand="True" />
+                    <Label Name="Availability" VerticalAlignment="Center" />
+                </BoxContainer>
+            </BoxContainer>
+            <Button Text="?" Name="TooltipLabel" Access="Public" VerticalAlignment="Center" />
+        </BoxContainer>
+    </PanelContainer>
 </cc:CMAutomatedVendorEntry>
