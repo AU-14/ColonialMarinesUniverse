@@ -6,6 +6,10 @@
   name: empty mold
   description: A blank plate of iron, waiting to be cut into a shape. Forged on an anvil, then worked with a chisel and a hammer.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Objects/Smelting/shapes.rsi
@@ -22,6 +26,10 @@
   name: sheet mold
   description: A plate with the hollow of a sheet cut into it. Seated in the solid-fuel press with an ingot, it presses the ingot into a sheet.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Objects/Smelting/shapes.rsi
@@ -40,6 +48,10 @@
   name: ingot mold for three
   description: A plate with the hollows of three ingots cut into it. Seated in the steam smelter with ore for three ingots, it makes three ingots at once.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Objects/Smelting/shapes.rsi
@@ -59,6 +71,10 @@
   parent: RUMCSteamMachineBase
   id: RUMCPressBase
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Production/Smelting/fuel_press.rsi

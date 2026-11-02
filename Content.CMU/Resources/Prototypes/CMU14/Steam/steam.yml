@@ -35,6 +35,10 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Transform
     anchored: true
   - type: Clickable
@@ -142,6 +146,10 @@
   name: boiler
   description: A boiler. Put coal, coke, planks or branches in its fuel slot and pipe water in, and it turns the water into steam in the gas pipes joined to it.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Production/Steam/boiler.rsi
@@ -213,6 +221,10 @@
   name: steam generator
   description: A generator turned by steam. Join a gas pipe with steam to it and a high voltage cable, and it makes power for as long as the steam lasts.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Steam/steam_generator.rsi
     state: generator
@@ -240,6 +252,10 @@
   name: brass water pump
   description: A brass pump that draws water up, slowly, and gives it to a pipe.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Production/Steam/pump_brass.rsi
@@ -262,6 +278,10 @@
   name: steel water pump
   description: A steel pump that draws water up twice as fast as the brass one, and holds twice as much, and gives it to a pipe.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Production/Steam/pump_steel.rsi
@@ -283,6 +303,10 @@
   name: fluid barrel
   description: A brass barrel for liquids, big enough for ten thousand litres. Pour a beaker into it, draw from it with a container in the hand using the right click, or join pipes to its inlet and outlet with a screwdriver. It takes any liquid.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     offset: 0,0.25
@@ -309,6 +333,10 @@
   parent: RUMCSteamMachineBase
   id: RUMCCondenserBase
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Condenser
   - type: ItemSlots
     slots:
@@ -389,6 +417,10 @@
   name: steam smelter
   description: A brass smelter driven by steam. It has no thermostat and no recipes of its own, so seat a mold for three ingots and enough ore for them, and it makes three ingots, leaving slag that goes out through a liquid pipe.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Production/Steam/steam_smelter.rsi

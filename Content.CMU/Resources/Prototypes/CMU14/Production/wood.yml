@@ -110,6 +110,10 @@
   name: hand saw
   description: A broad hand saw with a steel blade. Hold it to a log and it makes planks.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     noRot: true
     sprite: CMU14/Objects/Tools/hand_saw.rsi
