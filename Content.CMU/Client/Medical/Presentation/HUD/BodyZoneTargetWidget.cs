@@ -42,6 +42,7 @@ public sealed class BodyZoneTargetWidget : Control
     };
 
     private readonly Dictionary<string, Texture> _textures = new();
+    private readonly Dictionary<string, Texture> _hoverTextures = new();
 
     private TargetBodyZone? _hovered;
 
@@ -59,7 +60,8 @@ public sealed class BodyZoneTargetWidget : Control
             foreach (var state in button.States)
             {
                 LoadState(rsi, state);
-                LoadState(rsi, $"{state}_hover");
+                if (rsi.TryGetState($"{state}_hover", out var hover))
+                    _hoverTextures[state] = hover.Frame0;
             }
         }
 
@@ -134,13 +136,14 @@ public sealed class BodyZoneTargetWidget : Control
         if (!hover && button.Zone != selected)
             return;
 
-        foreach (var state in hover ? button.HoverStates : button.States)
-            DrawState(handle, state);
+        foreach (var state in button.States)
+            DrawState(handle, state, hover);
     }
 
-    private void DrawState(DrawingHandleScreen handle, string state)
+    private void DrawState(DrawingHandleScreen handle, string state, bool hover = false)
     {
-        if (!_textures.TryGetValue(state, out var texture))
+        var textures = hover ? _hoverTextures : _textures;
+        if (!textures.TryGetValue(state, out var texture))
             return;
 
         handle.DrawTextureRect(texture, ScaleRect(new UIBox2(0, 0, LayoutWidth, LayoutHeight)));
@@ -160,17 +163,5 @@ public sealed class BodyZoneTargetWidget : Control
     private readonly record struct ZoneButton(
         TargetBodyZone Zone,
         UIBox2 Rect,
-        string[] States)
-    {
-        public readonly string[] HoverStates = CreateHoverStates(States);
-
-        private static string[] CreateHoverStates(string[] states)
-        {
-            var hoverStates = new string[states.Length];
-            for (var i = 0; i < states.Length; i++)
-                hoverStates[i] = $"{states[i]}_hover";
-
-            return hoverStates;
-        }
-    }
+        string[] States);
 }

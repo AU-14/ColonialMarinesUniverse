@@ -198,7 +198,7 @@ public sealed partial class MarineOverlay : Overlay
                 // Keep its contrast in dim lighting while retaining the overlay's normal FOV.
                 handle.UseShader(null);
                 // CMU14: faction gameplay fixes.
-                DrawUnidentifiedQuestionMark(handle, center);
+                DrawCachedQuestionMark(args.RenderHandle, handle, center); // CMU14: one cached outlined marker.
                 handle.UseShader(_shader);
                 continue;
             }
@@ -265,27 +265,6 @@ public sealed partial class MarineOverlay : Overlay
 
         handle.SetTransform(Matrix3x2.Identity);
         handle.UseShader(null);
-    }
-
-    // CMU14: faction identification.
-    private void DrawUnidentifiedQuestionMark(DrawingHandleWorld handle, Vector2 center)
-    {
-        // CMU14: faction gameplay fixes.
-        var size = new Vector2(_unidentifiedIcon.Width, _unidentifiedIcon.Height) * (3f / EyeManager.PixelsPerMeter);
-        var bounds = Box2.CenteredAround(center, size);
-        for (var x = -1; x <= 1; x++)
-        for (var y = -1; y <= 1; y++)
-        {
-            // CMU14: faction gameplay fixes.
-            if (x == 0 && y == 0)
-                continue;
-
-            var offset = new Vector2(x, y) / EyeManager.PixelsPerMeter;
-            handle.DrawTextureRect(_unidentifiedIcon, bounds.Translated(offset), Color.Black);
-        }
-        // CMU14: faction gameplay fixes.
-
-        handle.DrawTextureRect(_unidentifiedIcon, bounds, UnidentifiedColor);
     }
 
     private Texture GetTexture(SpriteSpecifier specifier)

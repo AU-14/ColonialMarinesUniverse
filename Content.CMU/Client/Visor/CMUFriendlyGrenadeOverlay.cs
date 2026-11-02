@@ -45,19 +45,19 @@ public sealed class CMUFriendlyGrenadeOverlay : Overlay
     protected override void Draw(in OverlayDrawArgs args)
     {
         var handle = args.WorldHandle;
+        var bounds = args.WorldAABB.Enlarged(RingRadius);
         var query = _entity.EntityQueryEnumerator<ActiveTimerTriggerComponent, TimerTriggerComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var timer, out var xform))
         {
             if (xform.MapID != args.MapId ||
                 timer.User is not { } user ||
-                !_entity.TryGetComponent(uid, out CMUSmartGrenadeComponent? smart) || !smart.Enabled ||
-                !IsFriendly(user))
+                !_entity.TryGetComponent(uid, out CMUSmartGrenadeComponent? smart) || !smart.Enabled)
             {
                 continue;
             }
 
             var position = _transform.GetWorldPosition(xform);
-            if (!args.WorldAABB.Enlarged(RingRadius).Contains(position))
+            if (!bounds.Contains(position) || !IsFriendly(user))
                 continue;
 
             // A single outline: stacked outlines overlap and read as solid instead of half transparent.
