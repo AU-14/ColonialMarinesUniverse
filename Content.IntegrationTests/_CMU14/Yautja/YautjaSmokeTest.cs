@@ -8907,6 +8907,9 @@ public sealed class YautjaSmokeTest
             var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var scimitar = entMan.SpawnEntity("CMUYautjaScimitar", MapCoordinates.Nullspace);
             var altScimitar = entMan.SpawnEntity("CMUYautjaScimitarAlt", MapCoordinates.Nullspace);
+            var shieldHunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var shieldScimitar = entMan.SpawnEntity("CMUYautjaScimitar", MapCoordinates.Nullspace);
+            var shield = entMan.SpawnEntity("CMUYautjaBracerShield", MapCoordinates.Nullspace);
 
             try
             {
@@ -8928,6 +8931,13 @@ public sealed class YautjaSmokeTest
                     Assert.That(melee.GetAttackRate(altScimitar, hunter), Is.EqualTo(1f / 0.6f).Within(0.0001f),
                         "CMSS13 scimitar/alt inherits the same paired speed bonus.");
                 });
+
+                // the cmss13 bracer shield is a riot shield, not a bracer_attachment, so it never unlocks the pair speed
+                entMan.EnsureComponent<YautjaComponent>(shieldHunter);
+                Assert.That(hands.TryPickupAnyHand(shieldHunter, shieldScimitar), Is.True);
+                Assert.That(hands.TryPickupAnyHand(shieldHunter, shield), Is.True);
+                Assert.That(melee.GetAttackRate(shieldScimitar, shieldHunter), Is.EqualTo(1f),
+                    "A scimitar next to the bracer shield must keep cmss13's unpaired 1 second attack_speed.");
             }
             finally
             {
@@ -8937,6 +8947,12 @@ public sealed class YautjaSmokeTest
                     entMan.DeleteEntity(scimitar);
                 if (!entMan.Deleted(altScimitar))
                     entMan.DeleteEntity(altScimitar);
+                if (!entMan.Deleted(shield))
+                    entMan.DeleteEntity(shield);
+                if (!entMan.Deleted(shieldScimitar))
+                    entMan.DeleteEntity(shieldScimitar);
+                if (!entMan.Deleted(shieldHunter))
+                    entMan.DeleteEntity(shieldHunter);
             }
         });
 
