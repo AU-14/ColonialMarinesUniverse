@@ -82,7 +82,6 @@
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 2.0
-  - type: ManageHive
   - type: XenoPlasma
     plasma: 2000
     maxPlasma: 2000
