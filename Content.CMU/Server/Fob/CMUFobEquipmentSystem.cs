@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Numerics;
-using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Construction;
 using Content.Shared.CMU14.Fob;
 using Content.Shared.Audio;
@@ -19,6 +18,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
+using Content.Shared.Stunnable;
 using Content.Shared.Tools.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
@@ -53,6 +53,7 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
     [Dependency] private CMUFobReserveSystem _reserve = default!;
     [Dependency] private SharedRoofSystem _roof = default!;
     [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedToolSystem _tools = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -288,9 +289,10 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
     private void Shock(Entity<CMUFobEquipmentComponent> ent, EntityUid target)
     {
         if (ent.Comp.Kind != CMUFobEquipmentKind.Fence || !IsPowered(ent) || _timing.CurTime < ent.Comp.NextShock
-            || !HasComp<XenoComponent>(target) || !TryComp<MobStateComponent>(target, out var mob) || mob.CurrentState == MobState.Dead) return;
+            || !TryComp<MobStateComponent>(target, out var mob) || mob.CurrentState == MobState.Dead) return;
         ent.Comp.NextShock = _timing.CurTime + TimeSpan.FromSeconds(2);
         _damage.TryChangeDamage(target, ent.Comp.ShockDamage, origin: ent);
+        _stun.TryUpdateStunDuration(target, ent.Comp.ShockStunDuration, visualized: true);
         _effects.Play(ent, CMUFobPresentationCue.Shock);
     }
 
