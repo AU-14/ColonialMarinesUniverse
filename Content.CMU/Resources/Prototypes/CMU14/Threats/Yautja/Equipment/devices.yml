@@ -2763,6 +2763,7 @@
     jobs:
     - CMUYautjaYoungblood
     - CMUYautjaHunter
+    - CMUYautjaAncient
     sections:
     - name: Essential Hunting Supplies
       entries:
