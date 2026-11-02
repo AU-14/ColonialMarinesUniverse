@@ -995,6 +995,9 @@ ent-CMUYautjaRunnerSkullTrophy = Runner skull
 ent-CMUYautjaDroneSkullTrophy = Drone skull
     .desc = Skull of a weak but essential xenomorph, a hive worker.
 
+ent-CMUYautjaAbominationSkullTrophy = Abomination skull
+    .desc = Skull of a mysterious hybrid xenomorph, a horror on the field.
+
 ent-CMUYautjaQueenPeltTrophy = Queen pelt
     .desc = The pelt of a prime hive ruler, mother to many.
 
@@ -1057,6 +1060,9 @@ ent-CMUYautjaDronePeltTrophy = Drone pelt
 
 ent-CMUYautjaLarvaPeltTrophy = Larva pelt
     .desc = The hide of a juvenile Xenomorph, a grim trophy from a fledgling that never reached its full potential.
+
+ent-CMUYautjaAbominationPeltTrophy = Abomination pelt
+    .desc = The pelt of a mysterious hybrid xenomorph, a horror on the field.
 
 ent-CMUYautjaHumanHide = flayed hide
     .desc = A sheet of human hide removed during Yautja butchery.

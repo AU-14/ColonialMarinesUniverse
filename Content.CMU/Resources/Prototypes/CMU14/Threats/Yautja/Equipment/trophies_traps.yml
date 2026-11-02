@@ -381,6 +381,15 @@
     state: drone_skull
 
 - type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaAbominationSkullTrophy
+  name: Abomination skull
+  description: Skull of a mysterious hybrid xenomorph, a horror on the field.
+  components:
+  - type: Sprite
+    state: predalien_skull
+
+- type: entity
   parent: CMUYautjaXenoPeltTrophy
   id: CMUYautjaQueenPeltTrophy
   name: Queen pelt
@@ -568,6 +577,15 @@
   components:
   - type: Sprite
     state: larva_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaAbominationPeltTrophy
+  name: Abomination pelt
+  description: The pelt of a mysterious hybrid xenomorph, a horror on the field.
+  components:
+  - type: Sprite
+    state: predalien_pelt
 
 - type: entity
   parent: BaseItem
