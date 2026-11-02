@@ -94,7 +94,12 @@
   - type: PresetIdCard
     job: CMUJobDutchsDozenArnold
   - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/gold_id.rsi
     state: gold
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/gold_id.rsi
 
 - type: entity
   parent: CMMobHuman
