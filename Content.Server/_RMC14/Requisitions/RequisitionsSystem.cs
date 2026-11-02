@@ -821,7 +821,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private static bool IsLimitedStock(RequisitionsEntry entry)
     {
-        return entry.MaxStock > 0;
+        // CMU14: round stock is independent of terminal-local replenishing stock.
+        // return entry.MaxStock > 0;
+        return entry.MaxStock > 0 || entry.RoundLimit > 0;
     }
 
     private void EnsureStockEntries(Entity<RequisitionsComputerComponent> computer, TimeSpan time)
@@ -837,7 +839,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             for (var orderIndex = 0; orderIndex < category.Entries.Count; orderIndex++)
             {
                 var entry = category.Entries[orderIndex];
-                if (!IsLimitedStock(entry))
+                // CMU14: faction round stock has no terminal-local counter.
+                // if (!IsLimitedStock(entry))
+                if (!IsLimitedStock(entry) || entry.RoundLimit > 0)
                     continue;
 
                 if (HasItemizedSource(computer.Owner, (categoryIndex, orderIndex)))
@@ -883,6 +887,10 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         int order,
         RequisitionsEntry entry)
     {
+        // CMU14: reserve round stock only after checkout has validated funds and delivery space.
+        if (entry.RoundLimit > 0)
+            return TryTakeRoundStock(computer, entry);
+
         if (TryTakeItemizedBundle(computer, (category, order)))
             return true;
 
@@ -945,7 +953,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             for (var orderIndex = 0; orderIndex < category.Entries.Count; orderIndex++)
             {
                 var entry = category.Entries[orderIndex];
-                if (!IsLimitedStock(entry))
+                // CMU14: round stock never replenishes.
+                // if (!IsLimitedStock(entry))
+                if (!IsLimitedStock(entry) || entry.RoundLimit > 0)
                     continue;
 
                 if (HasItemizedSource(computer.Owner, (categoryIndex, orderIndex)))
@@ -1013,6 +1023,14 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             for (var orderIndex = 0; orderIndex < category.Entries.Count; orderIndex++)
             {
                 var entry = category.Entries[orderIndex];
+                // CMU14 Begin: display the shared remaining allowance on every terminal.
+                if (entry.RoundLimit > 0)
+                {
+                    stockInfo.Add(new RequisitionsStockInfo(categoryIndex, orderIndex,
+                        GetRoundStock(computer, entry), entry.RoundLimit, -1));
+                    continue;
+                }
+                // CMU14 End
                 if (!IsLimitedStock(entry))
                     continue;
 

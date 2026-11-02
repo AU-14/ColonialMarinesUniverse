@@ -1,0 +1,90 @@
+# Finite ammunition is CMU's adaptation; PR 9293's weapons had no ammo supply.
+- type: Tag
+  id: CMUFob30mmMagazine
+- type: Tag
+  id: CMUFobRocketMagazine
+
+- type: entity
+  parent: RMCMagazineSentry
+  id: CMUFob30mmMagazine
+  components:
+  - type: Tag
+    tags: [CMUFob30mmMagazine]
+  - type: BallisticAmmoProvider
+    proto: CMUFob30mmCartridge
+    capacity: 100
+    mayTransfer: false
+
+- type: entity
+  parent: RMCCartridgeSentry
+  id: CMUFob30mmCartridge
+  categories: [HideSpawnMenu]
+  components:
+  - type: CartridgeAmmo
+    proto: CMUFob30mmProjectile
+
+- type: entity
+  parent: RMCBulletSentry
+  id: CMUFob30mmProjectile
+  categories: [HideSpawnMenu]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 40
+  - type: CMArmorPiercing
+    amount: 35
+
+- type: entity
+  parent: BaseItem
+  id: CMUFobRocketMagazine
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/crates.rsi
+    layers:
+    - state: fob_crate
+  - type: Tag
+    tags: [CMUFobRocketMagazine]
+  - type: BallisticAmmoProvider
+    proto: CMUFob72mmCartridge
+    capacity: 12
+    mayTransfer: false
+    cycleable: false
+
+- type: entity
+  parent: RMCRocket84mm
+  id: CMUFob72mmCartridge
+  categories: [HideSpawnMenu]
+  components:
+  - type: CartridgeAmmo
+    proto: CMUFob72mmProjectile
+    deleteOnSpawn: true
+
+- type: entity
+  parent: RMCBaseProjectileRocket84mm
+  id: CMUFob72mmProjectile
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 1100
+    maxFixedRange: null
+  - type: CMArmorPiercing
+    amount: 35
+  - type: CMUFobMissile
+  - type: RMCProjectileAccuracy
+    accuracy: 100
+    thresholds: []
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 10
+    intensitySlope: 10
+    totalIntensity: 30
+    maxTileBreak: 0
+  - type: CMExplosionEffect

@@ -1015,6 +1015,10 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         if (!_stock.TryGetValue((category, order), out var stock))
             return "Stock: unlimited";
 
+        // CMU14: a negative replenishment time means a shared allowance that lasts the entire round.
+        if (stock.SecondsUntilNextReplenish < 0)
+            return Loc.GetString("cmu-fob-round-stock", ("current", stock.Current), ("max", stock.Max));
+
         var refill = stock.Current < stock.Max
             ? $"  +{FormatTime(stock.SecondsUntilNextReplenish)}"
             : string.Empty;

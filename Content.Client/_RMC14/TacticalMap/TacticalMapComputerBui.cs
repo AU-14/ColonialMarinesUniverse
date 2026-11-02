@@ -215,16 +215,19 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
             return;
         }
 
-        var blips = new TacticalMapBlip[computer.Blips.Count];
-        var entityIds = new int[computer.Blips.Count];
+        // CMU14 FOB Begin: merge the private UI overlay without modifying replicated console data.
+        var visibleBlips = WithFobMarkers(computer.Blips);
+        var blips = new TacticalMapBlip[visibleBlips.Count];
+        var entityIds = new int[visibleBlips.Count];
         var i = 0;
 
-        foreach (var (entityId, blip) in computer.Blips)
+        foreach (var (entityId, blip) in visibleBlips)
         {
             blips[i] = blip;
             entityIds[i] = entityId;
             i++;
         }
+        // CMU14 End
 
         Window.Wrapper.UpdateBlips(blips, entityIds);
 
@@ -256,14 +259,17 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
         TabContainer.SetTabTitle(Window.Wrapper.SquadTab, Loc.GetString("ui-tactical-map-tab-squad"));
         TabContainer.SetTabVisible(Window.Wrapper.SquadTab, true);
 
-        var totalCount = computer.SquadBlips.Count;
+        // CMU14 FOB Begin: include the same private overlay on the squad tab.
+        var squadBlips = WithFobMarkers(computer.SquadBlips);
+        var totalCount = squadBlips.Count;
         var blips = new TacticalMapBlip[totalCount];
         var i = 0;
-        foreach (var (_, blip) in computer.SquadBlips)
+        foreach (var (_, blip) in squadBlips)
         {
             blips[i] = blip;
             i++;
         }
+        // CMU14 End
 
         Window.Wrapper.UpdateSquadBlips(blips);
 

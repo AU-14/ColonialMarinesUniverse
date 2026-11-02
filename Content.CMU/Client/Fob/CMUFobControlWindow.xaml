@@ -1,0 +1,23 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc cmu-fob-control-title}" MinSize="440 320">
+    <BoxContainer Orientation="Vertical" Margin="12" SeparationOverride="8">
+        <Label Name="ReserveLabel" />
+        <Label Name="StateLabel" />
+        <Label Name="StartupLabel" />
+        <Label Name="RestartLabel" />
+        <Label Name="MinimumLabel" />
+        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+            <Button Name="Activate" Access="Public" Text="{Loc cmu-fob-activate}" HorizontalExpand="True" />
+            <Button Name="Deactivate" Access="Public" Text="{Loc cmu-fob-deactivate}" HorizontalExpand="True" />
+        </BoxContainer>
+        <Label Name="FirstGun" />
+        <Label Name="SecondGun" />
+        <Button Name="Instructions" Access="Public" Text="{Loc cmu-fob-guide-open}" />
+        <Label Name="JobLabel" />
+        <Label Name="FirstRelay" />
+        <Label Name="SecondRelay" />
+        <Label Name="RewardLabel" />
+        <Label Text="{Loc cmu-fob-evacuation-boarding}" />
+        <Label Text="{Loc cmu-fob-evacuation-reserve}" />
+    </BoxContainer>
+</DefaultWindow>

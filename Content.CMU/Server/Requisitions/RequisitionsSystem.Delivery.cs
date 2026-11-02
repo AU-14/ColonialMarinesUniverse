@@ -18,6 +18,8 @@ public sealed partial class RequisitionsSystem
         using var profile = _profiler.Group("CMU Requisitions Prepare");
         using var operation = _performance.MeasureOperation("requisitions-prepare");
         TryGiveRoundStartFreeCrate(elevator);
+        var preparing = new Content.Server.CMU14.Requisitions.CMURequisitionsPreparingEvent(elevator, GetElevatorCapacity(elevator));
+        RaiseLocalEvent(ref preparing);
         var delivery = EnsureComp<RequisitionsDeliveryComponent>(elevator);
         while (delivery.Remaining.Count > 0 || delivery.Roots.Count < elevator.Comp.Orders.Count)
         {

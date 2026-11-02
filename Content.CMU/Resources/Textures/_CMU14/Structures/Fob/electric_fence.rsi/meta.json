@@ -1,0 +1,308 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Thwomper (FOB rework sprites), CM-SS13 contributors. Source: https://github.com/cmss13-devs/cmss13/blob/2cb8bdbb3e2ae072e3a46293856adddceec334d1/icons/obj/structures/machinery/fob_machinery/electric_fence.dmi (PR 9293). Converted from DMI to RSI without redrawing; directions and animation timings retained.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "fence0_off",
+      "directions": 1
+    },
+    {
+      "name": "fence1_off",
+      "directions": 1
+    },
+    {
+      "name": "fence2_off",
+      "directions": 1
+    },
+    {
+      "name": "fence3_off",
+      "directions": 1
+    },
+    {
+      "name": "fence4_off",
+      "directions": 1
+    },
+    {
+      "name": "fence5_off",
+      "directions": 1
+    },
+    {
+      "name": "fence6_off",
+      "directions": 1
+    },
+    {
+      "name": "fence7_off",
+      "directions": 1
+    },
+    {
+      "name": "fence8_off",
+      "directions": 1
+    },
+    {
+      "name": "fence9_off",
+      "directions": 1
+    },
+    {
+      "name": "fence10_off",
+      "directions": 1
+    },
+    {
+      "name": "fence11_off",
+      "directions": 1
+    },
+    {
+      "name": "fence12_off",
+      "directions": 1
+    },
+    {
+      "name": "fence13_off",
+      "directions": 1
+    },
+    {
+      "name": "fence14_off",
+      "directions": 1
+    },
+    {
+      "name": "fence15_off",
+      "directions": 1
+    },
+    {
+      "name": "fence0",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence1",
+      "directions": 1
+    },
+    {
+      "name": "fence2",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence3",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence4",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence5",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence6",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence7",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence8",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence9",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence10",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence11",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence12",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence13",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence14",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence15",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "fence_stack",
+      "directions": 1
+    }
+  ]
+}

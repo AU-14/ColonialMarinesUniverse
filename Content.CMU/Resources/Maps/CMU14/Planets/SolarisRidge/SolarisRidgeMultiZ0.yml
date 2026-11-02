@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 10/22/2026 06:46:59
-  entityCount: 29391
+  entityCount: 29411
 maps:
 - 1
 grids:
@@ -390,6 +390,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMUFobMap
+      sites: [1271, 1272]
     - type: MetaData
       name: Mapping LV-1413 Solaris Ridge
     - type: Transform
@@ -64979,6 +64981,49 @@ entities:
   entities:
   - uid: 1271
     components:
+    - type: CMUFobSite
+      id: Communications
+      utilityExclusions:
+      - "20.65,-30.35,33.35,-8.65"
+      - "20.15,-27.85,32.85,-11.15"
+      - "20.15,-27.85,32.85,-9.15"
+      relays:
+      - anchor: 30054
+        tier: Near
+        approach: South
+      - anchor: 30055
+        tier: Near
+        approach: South
+      - anchor: 30056
+        tier: Near
+        approach: North
+      - anchor: 30057
+        tier: Near
+        approach: North
+      - anchor: 30058
+        tier: Intermediate
+        approach: South
+      - anchor: 30059
+        tier: Intermediate
+        approach: South
+      - anchor: 30060
+        tier: Intermediate
+        approach: North
+      - anchor: 30061
+        tier: Intermediate
+        approach: North
+      - anchor: 30062
+        tier: Far
+        approach: South
+      - anchor: 30063
+        tier: Far
+        approach: South
+      - anchor: 30064
+        tier: Far
+        approach: North
+      - anchor: 30065
+        tier: Far
+        approach: North
     - type: MetaData
       name: 'LZ1: Communications Landing Zone'
     - type: Transform
@@ -64986,6 +65031,49 @@ entities:
       pos: 26.5,-19.5
   - uid: 1272
     components:
+    - type: CMUFobSite
+      id: Engineering
+      utilityExclusions:
+      - "26.65,-130.35,39.35,-108.65"
+      - "26.15,-127.85,38.85,-111.15"
+      - "26.15,-127.85,38.85,-109.15"
+      relays:
+      - anchor: 30066
+        tier: Near
+        approach: South
+      - anchor: 30067
+        tier: Near
+        approach: South
+      - anchor: 30068
+        tier: Near
+        approach: North
+      - anchor: 30069
+        tier: Near
+        approach: North
+      - anchor: 30070
+        tier: Intermediate
+        approach: South
+      - anchor: 30071
+        tier: Intermediate
+        approach: South
+      - anchor: 30058
+        tier: Intermediate
+        approach: North
+      - anchor: 30054
+        tier: Intermediate
+        approach: North
+      - anchor: 30072
+        tier: Far
+        approach: South
+      - anchor: 30073
+        tier: Far
+        approach: South
+      - anchor: 30061
+        tier: Far
+        approach: North
+      - anchor: 30057
+        tier: Far
+        approach: North
     - type: MetaData
       name: 'LZ2: Engineering Landing Zone'
     - type: Transform
@@ -212532,4 +212620,146 @@ entities:
     - type: Transform
       parent: 1
       pos: 30.5,-81.5
+- proto: CMUFobRelayMarker
+  entities:
+  - uid: 30054
+    components:
+    - type: Transform
+      parent: 1
+      pos: 79.5,-65.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-medical-east-approach
+  - uid: 30055
+    components:
+    - type: Transform
+      parent: 1
+      pos: 105.5,-61.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-dormitory-road
+  - uid: 30056
+    components:
+    - type: Transform
+      parent: 1
+      pos: 102.5,-22.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-north-colony-road
+  - uid: 30057
+    components:
+    - type: Transform
+      parent: 1
+      pos: 116.5,-24.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-northern-clearing
+  - uid: 30058
+    components:
+    - type: Transform
+      parent: 1
+      pos: 111.5,-91.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-central-colony-road
+  - uid: 30059
+    components:
+    - type: Transform
+      parent: 1
+      pos: 124.5,-105.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-office-approach
+  - uid: 30060
+    components:
+    - type: Transform
+      parent: 1
+      pos: 138.5,-29.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-north-cave-approach
+  - uid: 30061
+    components:
+    - type: Transform
+      parent: 1
+      pos: 149.5,-64.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-hydroponics-approach
+  - uid: 30062
+    components:
+    - type: Transform
+      parent: 1
+      pos: 102.5,-138.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-south-colony-road
+  - uid: 30063
+    components:
+    - type: Transform
+      parent: 1
+      pos: 121.5,-125.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-filtration-approach
+  - uid: 30064
+    components:
+    - type: Transform
+      parent: 1
+      pos: 151.5,-90.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-eastern-colony-road
+  - uid: 30065
+    components:
+    - type: Transform
+      parent: 1
+      pos: 167.5,-84.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-lambda-cave-approach
+  - uid: 30066
+    components:
+    - type: Transform
+      parent: 1
+      pos: 81.5,-162.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-southwest-cave-bend
+  - uid: 30067
+    components:
+    - type: Transform
+      parent: 1
+      pos: 65.5,-188.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-mining-eastern-approach
+  - uid: 30068
+    components:
+    - type: Transform
+      parent: 1
+      pos: 95.5,-134.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-engineering-east-approach
+  - uid: 30069
+    components:
+    - type: Transform
+      parent: 1
+      pos: 105.5,-116.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-filtration-west-approach
+  - uid: 30070
+    components:
+    - type: Transform
+      parent: 1
+      pos: 103.5,-153.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-eta-approach
+  - uid: 30071
+    components:
+    - type: Transform
+      parent: 1
+      pos: 120.5,-180.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-research-west-approach
+  - uid: 30072
+    components:
+    - type: Transform
+      parent: 1
+      pos: 133.5,-196.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-research-southern-passage
+  - uid: 30073
+    components:
+    - type: Transform
+      parent: 1
+      pos: 151.5,-176.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-solaris-relay-research-eastern-passage
 ...

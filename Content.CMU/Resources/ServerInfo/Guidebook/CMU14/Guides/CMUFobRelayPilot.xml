@@ -1,0 +1,10 @@
+<Document>
+  <CMUFobGuideText Key="cmu-fob-guide-intro" />
+  <CMUFobGuideText Key="cmu-fob-guide-reserve" />
+  <CMUFobGuideText Key="cmu-fob-guide-relays" />
+  <CMUFobGuideText Key="cmu-fob-guide-guns" />
+  <CMUFobGuideText Key="cmu-fob-guide-equipment" />
+  <CMUFobGuideText Key="cmu-fob-guide-feedback" />
+  <CMUFobGuideText Key="cmu-fob-guide-xenos" />
+  <CMUFobGuideText Key="cmu-fob-guide-extraction" />
+</Document>

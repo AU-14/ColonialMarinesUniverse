@@ -1,0 +1,95 @@
+- type: entity
+  parent: CMUFobSupportGun
+  id: CMUFobRocketLauncher
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/weapons_platform.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - state: platform_off
+      map: [base]
+      visible: false
+    - sprite: _CMU14/Structures/Fob/rocket_launcher.rsi
+      state: rocket_launcher
+      map: [sentry]
+      visible: false
+    - sprite: _CMU14/Structures/Fob/rocket_launcher.rsi
+      state: rocket_launcher
+      map: [fob-effect]
+      color: "#ffbc40"
+      shader: unshaded
+      visible: false
+    - sprite: _CMU14/Structures/Fob/rocket_launcher.rsi
+      state: rocket_launcher_undeployed
+      map: [stowed]
+      visible: true
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFobGunVisuals.Installed:
+        fob-effect:
+          True: { state: rocket_launcher }
+          False: { state: rocket_launcher_undeployed }
+        base:
+          True: { visible: true }
+          False: { visible: false }
+        sentry:
+          True: { visible: true }
+          False: { visible: false }
+        stowed:
+          True: { visible: false }
+          False: { visible: true }
+      enum.SentryLayers.Layer:
+        base:
+          Off: { state: platform_off }
+          On: { state: platform }
+        sentry:
+          Off: { state: rocket_launcher_off }
+          On: { state: rocket_launcher }
+  - type: CMUFobPresentation
+    device: Rocket
+    bodyLayer: sentry
+  - type: CMUFobSupportGun
+    halfArc: 180
+    requiresSensor: true
+    acquisitionDelay: 3
+    reloadDelay: 12
+    magazinePrototype: CMUFobRocketMagazine
+    magazineTag: CMUFobRocketMagazine
+  - type: Sentry
+    maxDeviation: 180
+  - type: Gun
+    fireRate: 0.2
+    projectileSpeed: 12
+    soundGunshot: /Audio/_RMC14/Weapons/Guns/Gunshots/m5_shoot.ogg
+
+- type: entity
+  parent: CMUFobRocketLauncher
+  id: CMUFobRocketModule
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  # Requisitions prepares cargo in nullspace; entity-relative fills work there too.
+  - type: EntityTableContainerFill
+    containers:
+      gun_magazine:
+        id: CMUFobRocketMagazine
+
+- type: entity
+  id: CMUFobTargetWarning
+  categories: [HideSpawnMenu]
+  components:
+  - type: CMUFobPresentation
+    device: Target
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/targeted.rsi
+    state: lockon_sensor
+    noRot: true
+    drawdepth: Effects
+    shader: unshaded
+  - type: Appearance
+  - type: TimedDespawn
+    lifetime: 4

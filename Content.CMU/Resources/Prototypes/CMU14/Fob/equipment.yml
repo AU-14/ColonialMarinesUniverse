@@ -1,0 +1,135 @@
+- type: entity
+  id: CMUFobDevice
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      device:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        hard: false
+        layer: [LowImpassable]
+  - type: Appearance
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: CMUFobRepairable
+
+- type: entity
+  parent: CMUFobDevice
+  id: CMUFobRelay
+  name: HVT-7T transformer relay
+  description: A field relay that can replenish a FOB's support reserve when assigned for repair.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/transformer.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - state: transformer
+      map: [fob-body]
+    - state: on-overlay
+      map: [available]
+      visible: false
+      shader: unshaded
+    - state: transformer
+      map: [fob-effect]
+      visible: false
+      shader: unshaded
+  - type: CMUFobPresentation
+    device: Relay
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFobVisuals.Available:
+        available:
+          True: { visible: true }
+          False: { visible: false }
+  - type: CMUFobRelay
+
+- type: entity
+  parent: CMUFobDevice
+  id: CMUFobControl
+  name: UE-09 service terminal
+  description: Local controls for the FOB's support reserve. Requires a registered FOB site.
+  components:
+  - type: Item
+    size: Ginormous
+  - type: PowerLoaderGrabbable
+    virtualRight: RMCVirtualDropshipGearRight
+    virtualLeft: RMCVirtualDropshipGearLeft
+  - type: Sprite
+    sprite: _CMU14/Structures/Fob/service_terminal.rsi
+    drawdepth: Mobs
+    noRot: true
+    offset: 0, 0.5
+    layers:
+    - state: terminal_off
+      map: [terminal]
+    - state: terminal_off
+      map: [broken]
+      color: "#444444"
+      visible: false
+    - state: terminal_undeployed
+      map: [stowed]
+      visible: false
+    - state: terminal
+      map: [fob-effect]
+      visible: false
+      shader: unshaded
+  - type: CMUFobPresentation
+    device: Terminal
+    bodyLayer: terminal
+    powerOnSound: /Audio/Machines/quickbeep.ogg
+    powerOffSound: /Audio/Machines/buzz-sigh.ogg
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFobVisuals.Available:
+        terminal:
+          True: { state: terminal }
+          False: { state: terminal_off }
+      enum.CMUFobVisuals.Broken:
+        broken:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CMUFobVisuals.Stowed:
+        fob-effect:
+          True: { state: terminal_undeployed }
+          False: { state: terminal }
+        terminal:
+          True: { visible: false }
+          False: { visible: true }
+        stowed:
+          True: { visible: true }
+          False: { visible: false }
+  - type: CMUFobControl
+    faction: govfor
+  - type: CMUFobRepairable
+    trainedDuration: 20
+    untrainedDuration: 20
+  - type: ActivatableUI
+    key: enum.CMUFobControlUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUFobControlUiKey.Key:
+        type: CMUFobControlBui
+
+- type: entity
+  parent: CMUFobControl
+  id: CMUFobControlModule
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Appearance
+    data:
+      enum.CMUFobVisuals.Stowed: true
