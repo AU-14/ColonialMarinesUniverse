@@ -3,6 +3,8 @@
 
   [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
 
+  [textlink="Tool controls (OOC)" link="CMUGuideIndustryTools"] · Right-click equipment → [bold]Help[/bold] for its instructions.
+
   ## 1. Make something from almost nothing
   <Box>
     <GuideEntityEmbed Entity="RUMCWoodenShovel" Caption="2 planks"/>
@@ -11,6 +13,8 @@
   </Box>
 
   [bold]Right-click yourself → Craft.[/bold] Carry the ingredients in your hands or worn storage, plus any required tools. A missing recipe usually means missing materials or skills. Tools are kept after crafting.
+
+  If a crafting challenge opens, follow its mouse-control hint: click in the timing zone, hold/release to steer the slider, or follow the marked target. Performance can change material use or output. The recipe finder shows base quantities.
 
   One plank makes two branches. Wooden digging tools last [bold]two uses[/bold]; stone ones last [bold]six[/bold]. Upgrade before your last shovel becomes a story.
 

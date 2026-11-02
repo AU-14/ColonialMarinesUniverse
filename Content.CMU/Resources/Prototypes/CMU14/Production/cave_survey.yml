@@ -2,6 +2,10 @@
   parent: BaseItem
   id: CMUCaveSurveyMap
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
     state: paper

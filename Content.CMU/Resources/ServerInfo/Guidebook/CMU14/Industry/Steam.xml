@@ -1,27 +1,37 @@
 <Document>
-  # Make steam work
+  # Steam workshop
 
-  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+  [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Equipment recipes" link="CMUGuideIndustryRecipes"]
 
-  ## Your first powered chain
   <Box>
     <GuideEntityEmbed Entity="RUMCBrassPump" Caption="WATER"/>
     <GuideEntityEmbed Entity="RUMCBoiler" Caption="STEAM"/>
     <GuideEntityEmbed Entity="RUMCSteamDrill" Caption="ORE"/>
   </Box>
+  [bold]Water → pump → liquid pipe → boiler → gas pipe → machine.[/bold]
 
-  [bold]Pump on water → liquid pipe → fueled boiler → gas pipe → machine.[/bold]
+  ## Place and connect
+  - Right-click portable machinery → [bold]Pick up[/bold]. Free both hands, then click a reachable clear floor tile to place it. Operate it after placing it.
+  - Place a water pump on suitable water. Supply the boiler through its water port; load fuel in the boiler window.
+  - [bold]Liquid pipes:[/bold] use a screwdriver on the pipe, then on another pipe or the machine. Choose a port if prompted. Repeat a connection to disconnect it; click the selected pipe again to cancel.
+  - [bold]Steam pipes:[/bold] use the gas-pipe network. Place and wrench compatible pipe ends together. Liquid pipes do not carry the boiler's atmospheric steam.
 
-  - Carry portable equipment with [bold]both hands[/bold]. Click a reachable clear floor tile to place and anchor it.
-  - Put a pump on suitable water. Dry ground is not a water supply.
-  - Use a screwdriver on a [bold]liquid pipe[/bold], then its destination, to connect liquid ports.
-  - Supply the boiler with water and fuel. Route its steam through [bold]gas pipes[/bold]. These are a different network from liquid pipes.
-  - Put a drill over a deposit and leave room for its output. Presses, grinders and smelters use the same steam stage.
+  ## Open machine → fill slots → collect
+  Click a placed machine with an empty hand to open its window. Hold an ingredient and click its input slot to insert it; use an empty hand on an occupied slot to retrieve it. Matching stacks can be topped up. Machines process automatically when their requirements are met.
 
-  ## Nothing happening?
-  [bold]Check in this order:[/bold] anchored machine → source water and fuel → correct pipe network → required input or mold → output space.
+  <Box>
+    <GuideEntityEmbed Entity="RUMCSteamPress" Caption="INGOT → SHEET"/>
+    <GuideEntityEmbed Entity="RUMCSteamGrinder" Caption="ORE → POWDER"/>
+    <GuideEntityEmbed Entity="RUMCBrassCondenser" Caption="COOL LIQUIDS"/>
+  </Box>
+  - [bold]Drill:[/bold] place over a deposit or supported rock floor. Supply steam or electricity and empty the output slots. It extracts material; use a handheld tool to open a shaft.
+  - [bold]Press:[/bold] insert the correct reusable mold and ingots. The solid-fuel version takes fuel; the steam version takes steam.
+  - [bold]Grinder:[/bold] load materials and supply power/steam. Collect powder and byproducts from its output slots.
+  - [bold]Steam smelter:[/bold] load ore/powder and the required mold. Use its regulator and route liquids/byproducts through the indicated ports.
+  - [bold]Condenser:[/bold] supply the material fluid and coolant to their ports, plus any solid material the recipe needs in its slot. The brass model needs steady coolant; the electric model also needs power.
+  - [bold]Steam generator:[/bold] connect steam, then take electricity from its HV connection.
 
-  A generator turns steam into electricity. A drill turns a deposit into resources. Pick the machine for the job, then keep it fed.
+  [bold]Stopped?[/bold] Check placement → water/fuel/steam → inputs and mold → output room. Examine the machine for its status.
 
-  [textlink="Find pump, boiler and machine recipes" link="CMUGuideIndustryRecipes"] · [textlink="Next: electricity and oil" link="CMUGuideIndustryElectric"]
+  [textlink="Next: power and oil" link="CMUGuideIndustryElectric"]
 </Document>

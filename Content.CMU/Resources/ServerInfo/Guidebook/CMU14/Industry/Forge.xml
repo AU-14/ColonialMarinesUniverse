@@ -1,31 +1,32 @@
 <Document>
   # From ore to metal
 
-  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+  [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Make this equipment" link="CMUGuideIndustryRecipes"]
 
   <Box>
     <GuideEntityEmbed Entity="RUMCSmeltery" Caption="HEAT"/>
     <GuideEntityEmbed Entity="RUMCCrucible" Caption="MELT"/>
-    <GuideEntityEmbed Entity="RUMCAnvil" Caption="SHAPE"/>
+    <GuideEntityEmbed Entity="RUMCIngotMold" Caption="CAST"/>
   </Box>
 
-  ## The smith's loop
-  - [bold]Prepare:[/bold] collect ore, fuel and a suitable mold. A hammer or grinder breaks raw materials into powders where a recipe needs them.
-  - [bold]Melt:[/bold] fuel and ignite the furnace; heat the crucible and its metal.
-  - [bold]Cast:[/bold] handle hot work with tongs and pour into the right mold. Let the casting cool before taking it.
-  - [bold]Forge:[/bold] put a suitable hot workpiece on the anvil, choose its recipe and follow the required tool sequence. Reheat it if it gets too cold.
+  ## First casting: click by click
+  1. Use ore on the [bold]crucible[/bold] to load it. Fuel the furnace and ignite it with a striker or ignition source.
+  2. Hold [bold]tongs[/bold], click the crucible to grip it, then click the furnace to seat it. Examine the crucible to check temperature.
+  3. When molten, lift the crucible with tongs and click the [bold]casting mold[/bold] to pour. Clicking bare floor with loaded tongs puts the held workpiece down.
+  4. Let the mold cool. Right-click it → [bold]Extract casting[/bold]. Handle hot metal with tongs; bare hands can burn.
 
-  <GuideEntityEmbed Entity="RUMCForgeTongs" Caption="Hot metal? Bring tongs."/>
+  [bold]Iron won't melt?[/bold] The clay furnace reaches 1500°C; iron needs 1538°C. Use the stone furnace, which reaches 2000°C. Equal copper and zinc make brass.
 
-  ## What should I make first?
-  [bold]Sheets + parts → pipes and machinery.[/bold] Brass gets an early workshop moving; iron and steel carry it further. Stone hammer, tongs and chisel let you start before you have metal tools.
+  ## Forge an ingot into parts
+  <Box>
+    <GuideEntityEmbed Entity="RUMCAnvil" Caption="HOT WORKPIECE"/>
+    <GuideEntityEmbed Entity="RUMCForgeHammer" Caption="HAMMER"/>
+    <GuideEntityEmbed Entity="RUMCForgeChisel" Caption="CHISEL"/>
+  </Box>
+  Heat an ingot, then use tongs to seat it on the anvil. Click the [bold]workpiece[/bold] with a hammer or chisel to open the recipe menu. Choose the result, then click with the tool requested for each step. Examine progress; reheat a cold workpiece.
 
-  [textlink="Find furnace, crucible and tool recipes" link="CMUGuideIndustryRecipes"]
+  ## Cast or press?
+  A [bold]casting mold[/bold] takes molten liquid. A [bold]sheet/ingot press mold[/bold] goes in a machine's mold slot. They are different tools. Hammer suitable loose stone, ore or crystals to crush them; the grinder handles batches.
 
-  ## Upgrade the production line
-  [bold]Ore → powder → metal → parts.[/bold] Washing, separation and machine recipes add other routes. Check each machine's recipe before feeding it: powder, ingots and sheets are different inputs.
-
-  Molds used by machines are reusable unless that recipe says otherwise. Keep an output space free and clear slag when it builds up.
-
-  [textlink="Next: power your first steam machine" link="CMUGuideIndustrySteam"]
+  [textlink="Presses, grinders and smelters" link="CMUGuideIndustrySteam"] · [textlink="Electric processing" link="CMUGuideIndustryMachines"]
 </Document>

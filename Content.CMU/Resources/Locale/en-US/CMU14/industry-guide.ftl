@@ -1,9 +1,11 @@
 cmu-guide-entry-industry = Mining & Industry
 cmu-guide-entry-industry-start = Your First Workshop
+cmu-guide-entry-industry-tools = Tools: OOC Controls
 cmu-guide-entry-industry-dig = Dig, Build & Map
 cmu-guide-entry-industry-forge = From Ore to Metal
 cmu-guide-entry-industry-steam = Make Steam Work
 cmu-guide-entry-industry-electric = Power & Oil
+cmu-guide-entry-industry-machines = Machine Controls & Quick Reference
 cmu-guide-entry-industry-products = Food, Goods & Trade
 cmu-guide-entry-industry-recipes = Crafting Recipe Finder
 cmu-industry-recipes-search = Find a recipe or ingredient

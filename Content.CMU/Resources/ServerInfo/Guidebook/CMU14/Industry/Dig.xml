@@ -3,6 +3,8 @@
 
   [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
 
+  [textlink="Shovels, pickaxes and powered tools: OOC controls" link="CMUGuideIndustryTools"]
+
   ## Pick the tool for the layer you enter
   <Box>
     <GuideEntityEmbed Entity="RMCShovel" Caption="Z-1 and Z-2"/>
@@ -24,6 +26,9 @@
   - Open construction with [keybind="OpenCraftingMenu"] → [bold]Z-Level (Experimental)[/bold] for portable ladders and stairs.
   - A portable ladder needs a supporting wall or beam and an opening above. It cannot drill through a ceiling.
   - Support wide excavations with beams or pillars. Digging away the roof's support can cause a cave-in.
+
+  <GuideEntityEmbed Entity="AU14StructuralScanner" Caption="CHECK THE CEILING"/>
+  Hold a structural scanner and press [keybind="UseItemInHand"] to toggle its roof-stability overlay. Check support before widening a room. Click a ladder to climb; right-click it for the available climb and look directions. Open a closed hatch before trying again.
 
   ## Bring back knowledge, too
   <GuideEntityEmbed Entity="CMUCaveSurveyMap" Caption="Explore → transcribe → share"/>

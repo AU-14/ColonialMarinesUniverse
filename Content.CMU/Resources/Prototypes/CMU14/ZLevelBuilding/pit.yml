@@ -5,6 +5,10 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Transform
     anchored: true
   - type: Physics
@@ -26,6 +30,10 @@
   name: coil of rope
   description: A sturdy coil of rope, long enough to reach the level below.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Structures/rope_item.rsi
     state: rope
@@ -37,6 +45,10 @@
   parent: CMUZLevelRopeThroughDown2
   id: RUMCPitRopeDown
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Structures/rope_down.rsi
     drawdepth: WallTops
@@ -48,6 +60,10 @@
   parent: CMUZLevelRopeThroughUp
   id: RUMCPitRopeUp
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Structures/rope_up.rsi
     drawdepth: WallTops
@@ -57,6 +73,10 @@
   parent: CMUZLevelLadderThroughDown3
   id: RUMCPitLadderDown
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Structures/pit_ladder.rsi
     drawdepth: WallTops
@@ -68,6 +88,10 @@
   parent: CMUZLevelLadderThroughUp3
   id: RUMCPitLadderUp
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Structures/pit_ladder.rsi
     drawdepth: WallTops
@@ -80,6 +104,10 @@
   name: hatch
   description: A hatch leading down. It's closed.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Structures/hatch.rsi
     drawdepth: WallTops
@@ -103,6 +131,10 @@
   parent: AU14ZStairDown
   id: RUMCPitStairDown
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: ZStair
     direction: -1
     partnerProto: AU14ZStairUp

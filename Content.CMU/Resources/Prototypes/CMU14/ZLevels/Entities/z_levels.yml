@@ -177,6 +177,10 @@
   name: retractable ladder
   description: A portable ladder that can be deployed against objects to traverse z-levels.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Construction
     graph: CMUCavernLadderGraph
     node: ladder

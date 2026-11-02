@@ -1,26 +1,28 @@
 <Document>
   # Food, goods & trade
 
-  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+  [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Crafting recipes" link="CMUGuideIndustryRecipes"]
 
+  ## Cook a meal
   <Box>
-    <GuideEntityEmbed Entity="RUMCCookingPot" Caption="FEED"/>
-    <GuideEntityEmbed Entity="RUMCMarketStall" Caption="SELL"/>
-    <GuideEntityEmbed Entity="RUMCLogisticsConsole" Caption="SHIP"/>
+    <GuideEntityEmbed Entity="RUMCCookingPot" Caption="SOUP"/>
+    <GuideEntityEmbed Entity="RUMCFryingPan" Caption="FRY"/>
+    <GuideEntityEmbed Entity="RUMCStoveOven" Caption="BAKE"/>
   </Box>
+  Put ingredients into the appropriate pot, pan or pie plate; add the required liquid. Place the vessel in the stove's cooking slot. Open the door to add fuel; ignite a fueled wood stove. For the electric oven, insert cookware while open, then [bold]close the door[/bold] and supply power.
 
-  ## A colony runs on more than ore
-  Grow ingredients, prepare food and use the appropriate cooking vessel and heat source. Sewing, tanning, canning and assembly turn workshop supplies into useful finished goods.
+  Examine cookware for progress. Use a bowl or plate on prepared food to serve it. [textlink="Kitchen basics" link="CMUGuideCooking"]
 
-  [textlink="Kitchen basics" link="CMUGuideCooking"] · [textlink="Find pots, bowls and workshop equipment" link="CMUGuideIndustryRecipes"]
+  ## Sell locally
+  <GuideEntityEmbed Entity="RUMCMarketStall" Caption="LOAD → PRICE → SELL"/>
+  The stall owner needs a [bold]trade licence[/bold]. Use an item on the stall to stock it, then open its window to set the price. Buyers open the stall and choose what to buy. Citizen consoles also offer player trade and auctions.
 
-  ## Make something someone needs
-  Ask the colony for an order before filling a warehouse. Tools, parts, food and clothing all give your workshop a purpose. Market stalls support local selling; the administration and citizen consoles handle colony requests and trade services.
+  ## Ship an order
+  <GuideEntityEmbed Entity="RUMCLogisticsConsole" Caption="PICK CITY → CALL → LOAD → SEND"/>
+  An authorized requisitions/colony-command user opens the anchored logistics console, chooses a landing zone and world-map city, then calls the trade shuttle. Order goods in the console; physically load exports and unload deliveries. Check the destination and cargo before sending the shuttle away.
 
-  ## Shipping is physical
-  Use the logistics console for the colony's outside trade. Orders travel by shuttle: keep the landing area and cargo route clear, and load or unload the actual goods. Check the order and destination before sending cargo.
+  ## Skip the slow start
+  Cargo can supply hand saws, a concrete mixer and an [bold]industry starter crate[/bold]. Open the sealed industry crate with a crowbar. Job starter crates may supply logistics, administration or production equipment. Check current cargo listings for availability and prices.
 
-  [bold]Small goal:[/bold] equip one miner, feed one crew, or finish one order. A working supply chain beats a room full of idle machines.
-
-  [textlink="Back to the recipe finder" link="CMUGuideIndustryRecipes"]
+  [bold]Try one small order:[/bold] equip a miner, feed a crew or deliver building supplies. Use the [textlink="machine reference" link="CMUGuideIndustryMachines"] for sewing, tanning, canning and other finished goods.
 </Document>

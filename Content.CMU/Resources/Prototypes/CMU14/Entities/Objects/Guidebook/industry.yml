@@ -6,10 +6,12 @@
   text: "/ServerInfo/Guidebook/CMU14/Industry/Industry.xml"
   children:
   - CMUGuideIndustryStart
+  - CMUGuideIndustryTools
   - CMUGuideIndustryDig
   - CMUGuideIndustryForge
   - CMUGuideIndustrySteam
   - CMUGuideIndustryElectric
+  - CMUGuideIndustryMachines
   - CMUGuideIndustryProducts
   - CMUGuideIndustryRecipes
 
@@ -24,40 +26,54 @@
   parent: RMC
   id: CMUGuideIndustryDig
   name: cmu-guide-entry-industry-dig
-  priority: 1
+  priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Industry/Dig.xml"
 
 - type: guideEntry
   parent: RMC
   id: CMUGuideIndustryForge
   name: cmu-guide-entry-industry-forge
-  priority: 2
+  priority: 3
   text: "/ServerInfo/Guidebook/CMU14/Industry/Forge.xml"
 
 - type: guideEntry
   parent: RMC
   id: CMUGuideIndustrySteam
   name: cmu-guide-entry-industry-steam
-  priority: 3
+  priority: 4
   text: "/ServerInfo/Guidebook/CMU14/Industry/Steam.xml"
 
 - type: guideEntry
   parent: RMC
   id: CMUGuideIndustryElectric
   name: cmu-guide-entry-industry-electric
-  priority: 4
+  priority: 5
   text: "/ServerInfo/Guidebook/CMU14/Industry/Electric.xml"
 
 - type: guideEntry
   parent: RMC
   id: CMUGuideIndustryProducts
   name: cmu-guide-entry-industry-products
-  priority: 5
+  priority: 7
   text: "/ServerInfo/Guidebook/CMU14/Industry/Products.xml"
 
 - type: guideEntry
   parent: RMC
   id: CMUGuideIndustryRecipes
   name: cmu-guide-entry-industry-recipes
-  priority: 6
+  priority: 8
   text: "/ServerInfo/Guidebook/CMU14/Industry/Recipes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideIndustryTools
+  name: cmu-guide-entry-industry-tools
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Industry/Tools.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideIndustryMachines
+  name: cmu-guide-entry-industry-machines
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Industry/Machines.xml"

@@ -1,28 +1,37 @@
 <Document>
   # Power & oil
 
-  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+  [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Equipment recipes" link="CMUGuideIndustryRecipes"]
 
   <Box>
-    <GuideEntityEmbed Entity="RUMCSteamGenerator" Caption="POWER"/>
-    <GuideEntityEmbed Entity="RUMCOilPump" Caption="EXTRACT"/>
-    <GuideEntityEmbed Entity="RUMCDistillationTower" Caption="REFINE"/>
+    <GuideEntityEmbed Entity="RUMCSteamGenerator" Caption="GENERATE"/>
+    <GuideEntityEmbed Entity="RUMCTransformerDown" Caption="HV → MV"/>
+    <GuideEntityEmbed Entity="RUMCColonyApc" Caption="SUPPLY MACHINES"/>
   </Box>
+  [bold]Generator → HV cable → step-down transformer → MV cable → APC/power panel → nearby machines.[/bold] Anchor equipment and connect the matching cable networks. A generator alone does not power every machine in the room.
 
-  ## One machine at a time
-  [bold]Generation → cables and distribution → machine → output storage.[/bold]
+  ## Choose a source
+  - [bold]Steam:[/bold] feed steam from your boiler to the generator.
+  - [bold]Solar:[/bold] expose panels to sunlight and orient them toward it; shade reduces output.
+  - [bold]Diesel / gas turbine:[/bold] supply the specified fuel through a suitable container or fluid connection. Keep the tank filled.
+  - [bold]Geothermal:[/bold] place near lava; ordinary cave floor supplies no heat.
+  - [bold]Battery buffer / bank:[/bold] store surplus generation. They need charging before they can cover shortages.
 
-  Make or obtain a generator, establish power, then add one processing machine. Supply its listed items and fluids; select the recipe or circuit it needs. Expand after that first machine runs reliably.
+  Cable shafts connect matching voltage networks between Z-levels. Keep HV, MV and LV separate. Use a powered cell charger for removable tool cells.
 
-  Motors, circuits, cables and machine casing parts are the building blocks. Use the [textlink="recipe finder" link="CMUGuideIndustryRecipes"] to plan them before building the whole factory.
+  [textlink="Cable and APC basics" link="CMUGuideEngPower"] · [textlink="Run a processing machine" link="CMUGuideIndustryMachines"]
 
-  ## Oil becomes more than fuel
-  [bold]Oil deposit → pump → distillation → fuel and chemical processing.[/bold]
+  ## Turn oil into useful supplies
+  <Box>
+    <GuideEntityEmbed Entity="RUMCOilPump" Caption="ON THE DEPOSIT"/>
+    <GuideEntityEmbed Entity="RUMCDistillationTower" Caption="SEPARATE FRACTIONS"/>
+  </Box>
+  1. Activate a [textlink="prospector" link="CMUGuideIndustryTools"] to find nearby deposits. Place the oil pump on one and power it.
+  2. Use a screwdriver to connect a liquid pipe to its output, then to a tank or the distillation tower's input. Choose the named port when prompted.
+  3. Connect storage/output routes for [bold]all fractions[/bold]: naphtha, light fuel, heavy fuel and refinery gas. Full outputs can stop production.
+  4. Use the fuel mixer for diesel. Crack suitable fractions into ethylene, then polymerize it into plastic pellets; a bender makes sheets.
 
-  Distillation splits crude into several products. Plan tanks and outlets for the byproducts as well as the product you want. Further processing makes fuels and polymer materials.
+  Open each machine's window for its exact inputs, fluids and circuit. To fill a canister, hold it and right-click a fillable tank → [bold]Draw the liquid into the container[/bold]. Click a fillable tank or generator with the filled canister to pour it in.
 
-  ## Less carrying, more making
-  Conveyors, filters and machine input/output settings move materials between stages. Keep outputs clear: a powered machine can still stop when it has nowhere to put its product.
-
-  [textlink="Colony power and distribution" link="CMUGuideEngPower"] · [textlink="Build useful finished goods" link="CMUGuideIndustryProducts"]
+  [textlink="Pipe connection controls" link="CMUGuideIndustrySteam"] · [textlink="Machine quick reference" link="CMUGuideIndustryMachines"]
 </Document>
