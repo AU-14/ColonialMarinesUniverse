@@ -21,3 +21,4 @@ cmu-vendor-showing = Showing { $shown } of { $total } items
 cmu-vendor-dispense = ISSUE
 cmu-vendor-unavailable = UNAVAILABLE
 cmu-vendor-points-cost = Cost: { $count } P
+cmu-vendor-stock-count = STOCK { $current } / { $max }
