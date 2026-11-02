@@ -568,3 +568,13 @@ cmu-yautja-plasma-weapon-examine-charge = Текущий заряд: [bold]{$cha
 
 ent-CMUActionYautjaLeap = прыжок
     .desc = Быстро прыгнуть в ближайшее место.
+
+cmu-yautja-lobby-cape-color = Цвет плаща
+cmu-yautja-lobby-cape-color-help = Красит ткань каждого вашего плаща: при появлении и из стойки снаряжения.
+cmu-yautja-lobby-cape-color-fixed = Костяные плащи сохраняют свой цвет.
+cmu-yautja-cape-mount-occupied = К {$armor} уже пристёгнут плащ.
+cmu-yautja-cape-mount-attached = Вы пристёгиваете {$cape} к {$armor}.
+cmu-yautja-cape-mount-remove = Отстегнуть плащ
+cmu-yautja-cape-mount-removed = Вы отстёгиваете {$cape}.
+cmu-yautja-cape-mount-examine = К нему пристёгнут {$cape}.
+cmu-yautja-cape-mount-hint = Его можно пристегнуть к клановой броне, чтобы освободить спину.

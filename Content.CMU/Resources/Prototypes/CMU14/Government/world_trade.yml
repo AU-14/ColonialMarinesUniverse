@@ -7,6 +7,10 @@
   description: The logistics console. The heads pick a landing zone and a city of the world map here, call the trade shuttle, order goods of the cities and send the shuttle away with what the colonists have put on it.
   suffix: Colony, Heads
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryProducts
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Government/logistics_console.rsi
     state: console

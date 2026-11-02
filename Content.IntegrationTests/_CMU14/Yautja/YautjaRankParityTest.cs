@@ -11,8 +11,9 @@ public sealed class YautjaRankParityTest
     [TestCase(YautjaRank.Unblooded, "predhud", false, false, new[] { "CMUAccessYautjaSecure" })]
     [TestCase(YautjaRank.YoungBlood, "predhud", false, false, new[] { "CMUAccessYautjaSecure" })]
     [TestCase(YautjaRank.Blooded, "predhud", false, false, new[] { "CMUAccessYautjaSecure" })]
-    [TestCase(YautjaRank.Elite, "predhud", true, false, new[] { "CMUAccessYautjaSecure", "CMUAccessYautjaElite" })]
-    [TestCase(YautjaRank.Elder, "predhud", true, false, new[] { "CMUAccessYautjaSecure", "CMUAccessYautjaElite", "CMUAccessYautjaElder" })]
+    // Elite and Elder get no sets here, unlike cmss13: CMU splits sets between the legacy whitelist and clan leaders.
+    [TestCase(YautjaRank.Elite, "predhud", false, false, new[] { "CMUAccessYautjaSecure", "CMUAccessYautjaElite" })]
+    [TestCase(YautjaRank.Elder, "predhud", false, false, new[] { "CMUAccessYautjaSecure", "CMUAccessYautjaElite", "CMUAccessYautjaElder" })]
     [TestCase(YautjaRank.Leader, "leaderhud", true, true, new[] { "CMUAccessYautjaSecure", "CMUAccessYautjaElite", "CMUAccessYautjaElder", "CMUAccessYautjaLeader" })]
     [TestCase(YautjaRank.Ancient, "councilhud", true, true, new[] { "CMUAccessYautjaSecure", "CMUAccessYautjaElite", "CMUAccessYautjaElder", "CMUAccessYautjaLeader", "CMUAccessYautjaAncient" })]
     public void RankMetadataMatchesCmss13(

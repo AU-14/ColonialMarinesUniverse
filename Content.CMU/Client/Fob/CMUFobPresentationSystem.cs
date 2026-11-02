@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.Clickable;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.CMU14.Fob;
 using Robust.Client.GameObjects;
@@ -13,6 +14,7 @@ namespace Content.Client.CMU14.Fob;
 /// <summary>Articulates the original artwork without moving gameplay transforms or fixtures.</summary>
 public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPresentationComponent>
 {
+    [Dependency] private IClickMapManager _clickMaps = default!;
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -79,6 +81,8 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
         var gun = device is CMUFobDeviceAnimation.HeavyGun or CMUFobDeviceAnimation.Rocket;
 
         foreach (var layer in animation.Layers)
+            SpriteSystem.LayerSetVisible(layer, false);
+        foreach (var layer in animation.StatusLayers)
             SpriteSystem.LayerSetVisible(layer, false);
         if (SpriteSystem.LayerExists(ent.Owner, ent.Comp.EffectLayer))
             SpriteSystem.LayerSetVisible((ent.Owner, sprite), ent.Comp.EffectLayer, false);
@@ -164,10 +168,10 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
         {
             // A dark interior behind the hinged lid prevents the floor showing through the open case.
             var interior = GetLayer(ent, sprite, animation, index++);
-            SpriteSystem.LayerSetTexture(interior, Texture.White);
+            SpriteSystem.LayerSetTexture(interior, _clickMaps.CMUSolidTexture);
             SpriteSystem.LayerSetVisible(interior, true);
             SpriteSystem.LayerSetOffset(interior, new Vector2(0, 3f / 32));
-            SpriteSystem.LayerSetScale(interior, new Vector2(22f / Texture.White.Width, 18f / Texture.White.Height));
+            SpriteSystem.LayerSetScale(interior, new Vector2(22f / _clickMaps.CMUSolidTexture.Width, 18f / _clickMaps.CMUSolidTexture.Height));
             SpriteSystem.LayerSetRotation(interior, Angle.Zero);
             SpriteSystem.LayerSetColor(interior, Color.FromHex("#111715"));
         }
@@ -266,6 +270,11 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
     private void DrawIndicator(Entity<CMUFobPresentationComponent> ent, SpriteComponent sprite, CMUFobAnimationComponent animation,
         RSI.State source, Angle yaw, float age, ref int index)
     {
+        if (ent.Comp.Device is CMUFobDeviceAnimation.HeavyGun or CMUFobDeviceAnimation.Rocket)
+        {
+            DrawGunStatus(ent, sprite, animation, age);
+            return;
+        }
         if (animation.Status is CMUFobPresentationStatus.Off or CMUFobPresentationStatus.Broken or CMUFobPresentationStatus.Spent
             || ent.Comp.Device == CMUFobDeviceAnimation.Crate)
             return;
@@ -275,8 +284,6 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
             return;
         var pixel = ent.Comp.Device switch
         {
-            CMUFobDeviceAnimation.HeavyGun => new Vector2(32, 26),
-            CMUFobDeviceAnimation.Rocket => new Vector2(26, 40),
             CMUFobDeviceAnimation.Relay => new Vector2(13, 27),
             CMUFobDeviceAnimation.Terminal => new Vector2(16, 36),
             CMUFobDeviceAnimation.Light => new Vector2(16, 12),
@@ -288,9 +295,9 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
             : busy || warning ? Color.Orange
             : animation.Status == CMUFobPresentationStatus.Ready ? Color.LightSkyBlue : Color.LightGreen;
         var layer = GetLayer(ent, sprite, animation, index++);
-        SpriteSystem.LayerSetTexture(layer, Texture.White);
+        SpriteSystem.LayerSetTexture(layer, _clickMaps.CMUSolidTexture);
         SpriteSystem.LayerSetVisible(layer, true);
-        SpriteSystem.LayerSetScale(layer, new Vector2((ent.Comp.Device == CMUFobDeviceAnimation.Terminal ? 12 : 2) / (float) Texture.White.Width, 1f / Texture.White.Height));
+        SpriteSystem.LayerSetScale(layer, new Vector2((ent.Comp.Device == CMUFobDeviceAnimation.Terminal ? 12 : 2) / (float) _clickMaps.CMUSolidTexture.Width, 1f / _clickMaps.CMUSolidTexture.Height));
         SpriteSystem.LayerSetOffset(layer, yaw.RotateVec(new Vector2(pixel.X - source.Size.X / 2f, source.Size.Y / 2f - pixel.Y) / 32));
         SpriteSystem.LayerSetRotation(layer, yaw);
         SpriteSystem.LayerSetColor(layer, color);
@@ -299,7 +306,8 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
     private SpriteComponent.Layer GetLayer(Entity<CMUFobPresentationComponent> ent, SpriteComponent sprite, CMUFobAnimationComponent animation, int index)
     {
         while (animation.Layers.Count <= index)
-            animation.Layers.Add(SpriteSystem.AddBlankLayer((ent, sprite)));
+            animation.Layers.Add(SpriteSystem.AddBlankLayer((ent, sprite),
+                animation.StatusLayers.Count > 0 ? SpriteSystem.LayerMapGet((ent, sprite), GunStatusLayer.Panel) : null));
         return animation.Layers[index];
     }
 

@@ -193,6 +193,11 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
         {
             _strandedPlayers.Add(ev.Player.UserId);
             _strandedMobs.Add(ev.Mob);
+
+            // the slot is spent for the round. GameTicker refunds every job a player holds when they spawn again,
+            // so an erased or dead stranded hunter respawning as anything else reopened it and the hunt card came back
+            if (_stationJobs.TryGetPlayerJobs(ev.Station, ev.Player.UserId, out var jobs))
+                jobs.Remove(StrandedJob);
             _popup.PopupEntity(Loc.GetString("cmu-yautja-stranded-greeting"), ev.Mob, ev.Mob, PopupType.Large);
         }
         else if (ev.JobId == HunterJob.Id)

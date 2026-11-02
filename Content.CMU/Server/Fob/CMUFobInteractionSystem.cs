@@ -85,7 +85,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
         _appearance.SetData(control, CMUFobVisuals.Stowed, !Transform(control).Anchored);
     }
 
-    private bool CanInteract(EntityUid target, EntityUid user, string faction)
+    private bool CanInteract(EntityUid target, EntityUid user, string faction, float range = 1.5f)
     {
         return _reserve.Enabled && Exists(user) && !TerminatingOrDeleted(user) && !TerminatingOrDeleted(target)
             && !MetaData(user).EntityPaused && !MetaData(target).EntityPaused
@@ -93,7 +93,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
             && TryComp<MarineComponent>(user, out var marine)
             && string.Equals(marine.Faction, faction, StringComparison.OrdinalIgnoreCase)
             && TryComp<MobStateComponent>(user, out var mob) && mob.CurrentState == MobState.Alive
-            && _blocker.CanInteract(user, target) && _interaction.InRangeUnobstructed(user, target, range: 1.5f);
+            && _blocker.CanInteract(user, target) && _interaction.InRangeUnobstructed(user, target, range: range);
     }
 
     private bool IsOperator(EntityUid user)
@@ -102,8 +102,8 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
             || HasComp<SquadLeaderComponent>(user);
     }
 
-    public bool CanOperate(EntityUid device, EntityUid user, string faction)
-        => CanInteract(device, user, faction) && IsOperator(user);
+    public bool CanOperate(EntityUid device, EntityUid user, string faction, float range = 1.5f)
+        => CanInteract(device, user, faction, range) && IsOperator(user);
 
     public bool HasOperationalControl(EntityUid network)
     {
