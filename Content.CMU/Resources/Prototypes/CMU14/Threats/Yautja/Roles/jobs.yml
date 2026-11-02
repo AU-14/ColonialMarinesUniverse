@@ -1,5 +1,12 @@
+# cmss13 only hands service medals to marine presets (EQUIPMENT_PRESET_MARINE), never to preds
 - type: job
+  abstract: true
   parent: CMJobBase
+  id: CMUYautjaJobBase
+  medals: {}
+
+- type: job
+  parent: CMUYautjaJobBase
   id: CMUYautjaHunter
   name: cmu-yautja-job-name-hunter
   description: cmu-yautja-job-description-hunter
@@ -23,7 +30,7 @@
       preset: CMUSkillPresetYautjaWarrior
 
 - type: job
-  parent: CMJobBase
+  parent: CMUYautjaJobBase
   id: CMUYautjaHellhound
   name: cmu-yautja-job-name-hellhound
   description: cmu-yautja-job-description-hellhound
@@ -39,7 +46,7 @@
   applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
 
 - type: job
-  parent: CMJobBase
+  parent: CMUYautjaJobBase
   id: CMUYautjaYoungblood
   name: cmu-yautja-job-name-youngblood
   description: cmu-yautja-job-description-youngblood
@@ -57,7 +64,7 @@
   applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
 
 - type: job
-  parent: CMJobBase
+  parent: CMUYautjaJobBase
   id: CMUYautjaBadBlood
   name: cmu-yautja-job-name-badblood
   description: cmu-yautja-job-description-badblood
@@ -75,7 +82,7 @@
   applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
 
 - type: job
-  parent: CMJobBase
+  parent: CMUYautjaJobBase
   id: CMUYautjaMilitaryCasteSoldier
   name: cmu-yautja-job-name-military-soldier
   description: cmu-yautja-job-description-military-soldier
@@ -93,7 +100,7 @@
   applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
 
 - type: job
-  parent: CMJobBase
+  parent: CMUYautjaJobBase
   id: CMUYautjaMilitaryCasteEnforcer
   name: cmu-yautja-job-name-military-enforcer
   description: cmu-yautja-job-description-military-enforcer

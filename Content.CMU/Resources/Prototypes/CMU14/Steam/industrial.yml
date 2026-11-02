@@ -1,0 +1,164 @@
+# The start of the industry: the machines of the steam age made in steel and gray, and the crate they come in. The machines are the
+# ordinary ones with a gray look, and each does a little more than the brass one (the generator twice the power, the smelter leaves no slag).
+# The crate is sealed: it is opened with a crowbar, and everything in it comes out next to where it stood.
+
+# The steel boiler: the boiler, gray.
+- type: entity
+  parent: RUMCBoiler
+  id: RUMCSteelBoiler
+  name: steel boiler
+  description: A boiler of steel. Put coal, coke, planks or branches in its fuel slot and pipe water in, and it turns the water into steam in the gas pipes joined to it.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Industrial/boiler_steel.rsi
+    layers:
+    - state: boiler
+      map: [ "cold" ]
+    - state: boiler_on
+      map: [ "hot" ]
+      visible: false
+  - type: AutoPorts
+    inputSlots: [ fuel ]
+
+# The industrial steam generator: gives twice the power of the brass one, from the same steam.
+- type: entity
+  parent: RUMCSteamGenerator
+  id: RUMCIndustrialSteamGenerator
+  name: industrial steam generator
+  description: A gray generator turned by steam, built for the industry, it makes twice the power of the ordinary steam generator from the same steam. Join a gas pipe with steam to it and a high voltage cable.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Industrial/steam_generator_industrial.rsi
+    state: generator
+  - type: PowerSupplier
+    supplyRate: 6000
+
+# The industrial steam drill: the steam drill, gray.
+- type: entity
+  parent: RUMCSteamDrill
+  id: RUMCIndustrialSteamDrill
+  name: industrial steam drill
+  description: A gray drilling rig that runs on steam. Join a gas pipe with steam to it, set it on a deposit of ore and it takes ore out of the deposit.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Industrial/drill_steam_industrial.rsi
+    layers:
+    - state: drill-off
+      map: [ "off" ]
+    - state: drill
+      map: [ "on" ]
+      visible: false
+    - state: base
+    - state: drill-on-unlit
+      shader: unshaded
+      map: [ "light" ]
+      visible: false
+  - type: AutoPorts
+    outputSlots: [ output1, output2, output3, output4, output5, output6 ]
+
+# The industrial steam press: the steam press, gray.
+- type: entity
+  parent: RUMCSteamPress
+  id: RUMCIndustrialSteamPress
+  name: industrial steam press
+  description: A heavy gray press driven by steam. Join a gas pipe with steam to it, seat a mold and one or two ingots, and it presses them.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Industrial/steam_press_industrial.rsi
+    state: press
+  - type: AutoPorts
+    inputSlots: [ input1, input2 ]
+    outputSlots: [ output1, output2, output3, output4 ]
+
+# The industrial steam smelter: the steam smelter, gray, and it melts the ore clean: no slag.
+- type: entity
+  parent: RUMCSteamSmelter
+  id: RUMCIndustrialSteamSmelter
+  name: industrial steam smelter
+  description: A gray smelter driven by steam. It has no thermostat and no recipes of its own, so seat a mold for three ingots and enough ore for them, and it makes three ingots. It leaves no slag.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Industrial/steam_smelter_industrial.rsi
+    state: smelter
+  - type: SteamSmelter
+    producesSlag: false
+  - type: AutoPorts
+    inputSlots: [ material1, material2, material3, material4 ]
+    outputSlots: [ output ]
+
+# The industrial steam extractor: the steam extractor, gray, and it works twice as fast on the same steam. It is built of machine hulls.
+- type: entity
+  parent: RUMCSteamExtractor
+  id: RUMCIndustrialSteamExtractor
+  name: industrial steam extractor
+  description: A gray extractor driven by steam, built of machine hulls. It presses resin out of wood and turns resin into raw rubber, twice as fast as the brass one on the same steam. Join a gas pipe with steam to it.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Industrial/steam_extractor_industrial.rsi
+  - type: RecipeMachine
+    speed: 2
+
+# The industrial solid-fuel press: the press that runs on planks, gray, and built of machine hulls.
+- type: entity
+  parent: RUMCSolidFuelPress
+  id: RUMCIndustrialSolidFuelPress
+  name: industrial solid-fuel press
+  description: A heavy gray press that runs on wood instead of the grid, built of machine hulls. Open it, put planks in for fuel, seat a mold and one or two ingots, and it presses them into a piece.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Industrial/fuel_press_industrial.rsi
+    state: press
+  - type: AutoPorts
+    inputSlots: [ input1, input2, fuel ]
+    outputSlots: [ output1, output2, output3, output4 ]
+
+# The industrial steam grinder: the steam grinder in steel, built of machine hulls.
+- type: entity
+  parent: RUMCSteamGrinder
+  id: RUMCIndustrialSteamGrinder
+  name: industrial steam grinder
+  description: A gray shredder driven by steam, built of machine hulls. Join a gas pipe with steam to it and it chews through every slot it can at once.
+  components:
+  # The upstream steel grinder RSI was not committed; use the inherited grinder art.
+  - type: AutoPorts
+    inputSlots: [ material1, material2, material3, material4, material5, material6, material7, material8, material9 ]
+    outputSlots: [ output1, output2, output3, output4, output5, output6, output7, output8, output9, output10, output11, output12, output13, output14, output15, output16, output17, output18 ]
+
+# The industrial condenser: the brass condenser in steel. It needs neither power nor steam, only a steady supply of the coolant.
+- type: entity
+  parent: RUMCBrassCondenser
+  id: RUMCIndustrialCondenser
+  name: industrial condenser
+  description: A steel condenser that needs no power, only a steady supply of the liquid that cools. A liquid comes in at one inlet and the coolant at the other, and with a material in its slot the liquid sets into solid pieces. Slag is cooled with water.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Steam/condenser_steel.rsi
+    state: condenser
+  - type: AutoPorts
+    outputSlots: [ output ]
+
+# The crate of the start of the industry. It is sealed and opens with a crowbar.
+- type: entity
+  parent: RMCSecureCaseStrapped
+  id: RUMCCrateIndustryStart
+  name: industry start crate
+  description: A sealed crate with what is needed to begin the industry, a steel pump and pipes, a steel boiler, an industrial steam generator, drill and press and smelter and two molds. Open it with a crowbar.
+  components:
+  - type: CrateOpenable
+    spawn:
+    - id: RUMCSteelPump
+    - id: RUMCSteelPipe
+      amount: 3
+    - id: RUMCSteelBoiler
+    - id: RUMCIndustrialSteamGenerator
+    - id: RUMCIndustrialSteamDrill
+    - id: RUMCIndustrialSteamPress
+    - id: RUMCMoldIngots
+    - id: RUMCMoldSheet
+    - id: RUMCIndustrialSteamSmelter

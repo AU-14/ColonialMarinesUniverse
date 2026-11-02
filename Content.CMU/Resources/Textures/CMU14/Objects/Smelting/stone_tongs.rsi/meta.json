@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created for Colonial Marines Universe Painted dark grey for the stone version.",
+  "size": {
+    "x": 28,
+    "y": 11
+  },
+  "states": [
+    {
+      "name": "tongs"
+    }
+  ]
+}

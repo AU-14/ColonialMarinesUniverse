@@ -1,0 +1,81 @@
+# Native RSI assets retain the licenses in their original meta.json files.
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernShale
+  components:
+  - type: Sprite
+    sprite: Objects/Decoration/Flora/flora_stalagmite.rsi
+    state: grey_stalagmite2
+    scale: 0.95, 0.25
+    color: "#777C86"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernCalcite
+  components:
+  - type: Sprite
+    sprite: Objects/Decoration/Flora/flora_stalagmite.rsi
+    state: grey_stalagmite5
+    scale: 0.75, 0.45
+    color: "#D5D0BA"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernLimestone
+  components:
+  - type: Sprite
+    sprite: Objects/Decoration/Flora/flora_stalagmite.rsi
+    state: grey_stalagmite1
+    scale: 0.6, 0.5
+    color: "#BCB59B"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernSilt
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Flora/rocks.rsi
+    state: rock
+    scale: 0.85, 0.25
+    color: "#77736C"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernRootTangle
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/kudzu.rsi
+    state: kudzu_22
+    scale: 0.65, 0.65
+    color: "#847762"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernFungalMat
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Kitchen/Plants/plump.rsi
+    state: dead
+    scale: 1.1, 0.4
+    color: "#8B9580"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernIronCrust
+  components:
+  - type: Sprite
+    sprite: Structures/Windows/cracks.rsi
+    state: DamageOverlay_10
+    scale: 0.75, 0.65
+    color: "#A17346"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernScoria
+  components:
+  - type: Sprite
+    sprite: Objects/Decoration/Flora/flora_stalagmite.rsi
+    state: grey_stalagmite4
+    scale: 0.65, 0.4
+    color: "#544A47"

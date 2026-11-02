@@ -31,6 +31,9 @@ public readonly partial record struct TacticalMapBlip
         FireteamNumber = fireteamNumber;
     }
 
+    // CMU14: server-authorized private relay annotation, absent from ordinary/sensor contacts.
+    public string? CMUFobLabel { get; init; }
+
     public Vector2i Indices { get; init; }
     public SpriteSpecifier.Rsi? Image { get; init; }
     public Color Color { get; init; }

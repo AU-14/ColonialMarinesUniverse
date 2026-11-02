@@ -34,6 +34,7 @@ public sealed partial class TeslaCoilSystem : EntitySystem
     private readonly HashSet<EntityUid> _potentialTargets = new();
     private readonly List<EntityUid> _validTargets = new();
 
+    // CMU14 method: reject ineligible entities before building obstruction raycasts.
     public override void Update(float frameTime)
     {
         if (_net.IsClient)
@@ -68,12 +69,6 @@ public sealed partial class TeslaCoilSystem : EntitySystem
                 if (targetUid == uid)
                     continue;
 
-                if (!_interaction.InRangeUnobstructed(uid, targetUid, teslaComp.Range, popup: false))
-                    continue;
-
-                if (!_targeting.IsValidTarget((uid, targetingComp), targetUid))
-                    continue;
-
                 var isValidTarget = false;
 
                 if (TryComp<SentryComponent>(targetUid, out var targetSentry))
@@ -87,11 +82,17 @@ public sealed partial class TeslaCoilSystem : EntitySystem
                     isValidTarget = true;
                 }
 
-                if (isValidTarget)
-                {
-                    _validTargets.Add(targetUid);
-                    currentTargets++;
-                }
+                if (!isValidTarget)
+                    continue;
+
+                if (!_interaction.InRangeUnobstructed(uid, targetUid, teslaComp.Range, popup: false))
+                    continue;
+
+                if (!_targeting.IsValidTarget((uid, targetingComp), targetUid))
+                    continue;
+
+                _validTargets.Add(targetUid);
+                currentTargets++;
             }
             teslaComp.LastFired = time;
 

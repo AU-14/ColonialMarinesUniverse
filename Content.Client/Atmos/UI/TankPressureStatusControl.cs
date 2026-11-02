@@ -29,18 +29,19 @@ public sealed partial class TankPressureStatusControl : PollingItemStatusControl
         _label.SetMarkup(markup);
     }
 
+    // CMU14 method: compare the exact displayed pressure before localization and markup.
     protected override Data PollData()
     {
         var tank = _parent.Comp;
         var pressureKpa = tank.Air.Pressure;
         var isValveOpen = tank.ReleaseValveOpen;
 
-        return new Data(pressureKpa, isValveOpen);
+        return new Data(CMUFormatPressure(pressureKpa), isValveOpen, _cmuLocalization.DefaultCulture);
     }
 
     protected override void Update(in Data data)
     {
-        var markup = Loc.GetString("tank-pressure-status", ("pressure", $"{data.PressureKpa:F1}"));
+        var markup = Loc.GetString("tank-pressure-status", ("pressure", data.PressureKpa)); // CMU14
 
         var stateValue = data.IsValveOpen ? "open" : "closed";
         var stateColor = Loc.GetString("tank-status-switchable-state", ("state", stateValue));
@@ -50,5 +51,5 @@ public sealed partial class TankPressureStatusControl : PollingItemStatusControl
         _label.SetMarkup(markup);
     }
 
-    public readonly record struct Data(float PressureKpa, bool IsValveOpen);
+    public readonly record struct Data(string PressureKpa, bool IsValveOpen, System.Globalization.CultureInfo? Culture); // CMU14
 }
