@@ -1,6 +1,8 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Client.CMU14.TacticalMap.Reconstruction;
 using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Input;
 using Content.Server.CMU14.CaveSurvey;
 using Content.Server.CMU14.ZLevelBuilding;
 using Content.Server.CMU14.ZLevels.Core;
@@ -37,7 +39,7 @@ public sealed class CMUCaveToolsTest : GameTest
                 map = maps.CreateMap(runMapInit: true);
                 var grid = SEntMan.EnsureComponent<MapGridComponent>(map);
                 var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
-                for (var x = -1; x <= 10; x++)
+                for (var x = -66; x <= 70; x++)
                 for (var y = -1; y <= 2; y++) maps.SetTile(map, grid, new Vector2i(x, y), floor);
                 var levels = Server.System<CMUZLevelsSystem>();
                 var createdNetwork = levels.CreateZNetwork();
@@ -45,7 +47,16 @@ public sealed class CMUCaveToolsTest : GameTest
                 Assert.That(levels.TryAddMapsIntoZNetwork(createdNetwork, new() { [map] = -3 }), Is.True);
                 actor = SEntMan.SpawnEntity(ghost ? "MobObserver" : "MobHuman", new EntityCoordinates(map, new Vector2(0.5f)));
                 Server.PlayerMan.SetAttachedEntity(session, actor);
-                Server.System<CMUCaveSurveySystem>().Observe(actor);
+                var survey = Server.System<CMUCaveSurveySystem>();
+                survey.Observe(actor);
+                var memory = SEntMan.GetComponent<CMUCaveSurveyMemoryComponent>(actor);
+                foreach (var x in new[] { -64.5f, 64.5f })
+                {
+                    Server.System<SharedTransformSystem>().SetCoordinates(actor, new EntityCoordinates(map, new Vector2(x, 0.5f)));
+                    memory.NextObservation = TimeSpan.Zero;
+                    survey.Observe(actor);
+                }
+                Server.System<SharedTransformSystem>().SetCoordinates(actor, new EntityCoordinates(map, new Vector2(0.5f)));
                 if (ghost)
                 {
                     var actions = Server.System<SharedActionsSystem>();
@@ -71,6 +82,13 @@ public sealed class CMUCaveToolsTest : GameTest
                     Is.EqualTo((byte) CMUReconMaterial.Ground));
                 Assert.That(scene.Cells[CMUReconGeometry.Index(local.X + 7, local.Y, -3 - scene.MinDepth, scene.Width, scene.Height)],
                     Is.EqualTo((byte) CMUReconMaterial.Empty), "Existing nearby floor outside the recording must stay unknown over the wire.");
+                foreach (var x in new[] { -65, 64 })
+                    Assert.That(scene.Cells[CMUReconGeometry.Index(local.X + x, local.Y, -3 - scene.MinDepth, scene.Width, scene.Height)],
+                        Is.EqualTo((byte) CMUReconMaterial.Ground), "Both sides of the former sector boundaries belong to one map.");
+                var camera = view.CaptureCamera();
+                view.Pan(new Vector2(64, 0));
+                Assert.That(view.Scene, Is.SameAs(scene));
+                Assert.That(view.CaptureCamera().Center.X, Is.EqualTo(camera.Center.X + 64).Within(0.01f));
             });
             await Server.WaitPost(() => Server.System<SharedTransformSystem>().SetCoordinates(actor, new EntityCoordinates(map, new Vector2(2.5f, 0.5f))));
             await Pair.RunSeconds(1);
@@ -81,6 +99,49 @@ public sealed class CMUCaveToolsTest : GameTest
             });
             if (ghost)
             {
+                await Server.WaitPost(() =>
+                {
+                    var maps = Server.System<SharedMapSystem>();
+                    var grid = SEntMan.GetComponent<MapGridComponent>(map);
+                    maps.SetTile(map, grid, new Vector2i(5000, 0), new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId));
+                    var transform = Server.System<SharedTransformSystem>();
+                    transform.SetCoordinates(actor, new EntityCoordinates(map, new Vector2(5000.5f, 0.5f)));
+                    Server.System<CMUCaveSurveySystem>().Observe(actor);
+                    transform.SetCoordinates(actor, new EntityCoordinates(map, new Vector2(2.5f, 0.5f)));
+                });
+                var window = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single();
+                var refresh = window.FindControl<Button>("CaveRefresh");
+                var point = new ScreenCoordinates(refresh.GlobalPixelPosition + refresh.PixelSize / 2, refresh.Root!.Window!.Id);
+                foreach (var state in new[] { BoundKeyState.Down, BoundKeyState.Up })
+                    await Client.DoGuiEvent(refresh, new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick,
+                        state, point, true, refresh.Size / 2, refresh.PixelSize / 2));
+                await Pair.RunSeconds(2);
+                Vector2 camera = default;
+                await Client.WaitAssertion(() =>
+                {
+                    Assert.That(window.IsRefreshing, Is.False);
+                    Assert.That(window.SurveyView.Scene!.Width, Is.EqualTo(CMUReconGeometry.MaxSize));
+                    window.SurveyView.Pan(new Vector2(900, 0));
+                    camera = window.SurveyView.CaptureCamera().Center;
+                });
+                await Pair.RunSeconds(2);
+                await Client.WaitAssertion(() =>
+                {
+                    Assert.That(window.IsRefreshing, Is.False, "Panning into an unrecorded gap must complete without waiting for nonexistent chunks.");
+                    Assert.That(window.SurveyView.Scene!.Origin.X, Is.GreaterThan(0), "Panning must move the loaded window automatically.");
+                    Assert.That(window.SurveyView.Scene.TotalChunks, Is.Zero, "Unknown terrain must not be generated to fill the view.");
+                    Assert.That(window.SurveyView.CaptureCamera().Center, Is.EqualTo(camera), "Loading more map must not jump the camera.");
+                    window.SurveyView.Pan(new Vector2(-2000, 0));
+                });
+                await Pair.RunSeconds(2);
+                await Client.WaitAssertion(() =>
+                {
+                    Assert.That(window.IsRefreshing, Is.False);
+                    var scene = window.SurveyView.Scene!;
+                    var local = new Vector2i(-65, 0) - scene.Origin;
+                    Assert.That(scene.Cells[CMUReconGeometry.Index(local.X, local.Y, -3 - scene.MinDepth, scene.Width, scene.Height)],
+                        Is.EqualTo((byte) CMUReconMaterial.Ground), "Panning back must restore earlier recordings.");
+                });
                 await Server.WaitAssertion(() =>
                 {
                     var colonyMap = new CMUOpenCaveSurveyEvent();

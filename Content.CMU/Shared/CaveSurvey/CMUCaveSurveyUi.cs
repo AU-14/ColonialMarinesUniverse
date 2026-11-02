@@ -23,7 +23,7 @@ public struct CMUOpenCaveSurveyEvent
 [Serializable, NetSerializable]
 public sealed class CMUCaveSurveyViewMessage : BoundUserInterfaceMessage
 {
-    public Vector2i Origin;
+    public Vector2i Focus;
     public int MinDepth = -8;
     public bool Center = true;
     public bool NextWorld;
@@ -34,12 +34,15 @@ public sealed class CMUCaveSurveyViewMessage : BoundUserInterfaceMessage
 public sealed class CMUCaveSurveySurfaceMessage : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
-public sealed class CMUCaveSurveySectionMessage(int requestId, NetEntity world, string name, int blocks) : BoundUserInterfaceMessage
+public sealed class CMUCaveSurveySectionMessage(int requestId, NetEntity world, string name, int blocks,
+    Vector2i min, Vector2i max) : BoundUserInterfaceMessage
 {
     public int RequestId = requestId;
     public NetEntity World = world;
     public string Name = name;
     public int Blocks = blocks;
+    public Vector2i Min = min;
+    public Vector2i Max = max;
 }
 
 public sealed partial class CMUOpenCaveSurveyActionEvent : InstantActionEvent;

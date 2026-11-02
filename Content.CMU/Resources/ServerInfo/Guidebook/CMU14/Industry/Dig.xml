@@ -37,6 +37,8 @@
 
   Reading maps combines their observations in the 3D tactical survey. Overlaps use the [bold]newest observation[/bold]. Survey knowledge lasts for this round.
 
+  [bold]Drag to pan · Middle-drag to orbit · Scroll to zoom.[/bold] Recorded areas join into one continuous map. Use the depth controls to look further down.
+
   [bold]Spectating?[/bold] Visit an underground level, then use your [bold]Mining map[/bold] action. Hit [bold]Refresh[/bold] after exploring further. A ghost's observations stay private; the normal tactical map still works separately.
 
   [textlink="Make spare tools" link="CMUGuideIndustryRecipes"] · [textlink="Process your ore" link="CMUGuideIndustryForge"]
