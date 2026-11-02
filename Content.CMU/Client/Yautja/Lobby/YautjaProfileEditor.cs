@@ -554,7 +554,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             var preview = YautjaCharacterProfile.Default.WithLegacy(legacy).ArmorPrototype;
             var locked = YautjaProfileEditorLayout.IsLegacySetLocked(_capabilities, legacy);
             var tooltip = locked
-                ? Loc.GetString("cmu-yautja-lobby-locked-legacy")
+                ? SetLockTooltip(YautjaCharacterProfile.GetSetLock(legacy))
                 : Loc.GetString(YautjaCharacterProfile.GetLegacyDisplayName(legacy));
             AddEntitySelector(_legacyGrid,
                 group,
@@ -587,11 +587,8 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
 
             var preview = YautjaCharacterProfile.Default.WithUnique(unique).ArmorPrototype;
             var locked = YautjaProfileEditorLayout.IsUniqueSetLocked(_capabilities, unique);
-            var lockRank = unique == YautjaUniqueSet.Praetorian ? YautjaRank.Leader : YautjaRank.Elite;
             var tooltip = locked
-                ? Loc.GetString(
-                    "cmu-yautja-lobby-locked-rank",
-                    ("rank", Loc.GetString(YautjaRankMetadata.For(lockRank).LocalizedName)))
+                ? SetLockTooltip(YautjaCharacterProfile.GetSetLock(unique))
                 : Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique));
             AddEntitySelector(_uniqueGrid,
                 group,
@@ -602,6 +599,13 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                 Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique)),
                 locked);
         }
+    }
+
+    private static string SetLockTooltip(YautjaSetLock setLock)
+    {
+        return setLock == YautjaSetLock.LegacyWhitelist
+            ? Loc.GetString("cmu-yautja-lobby-locked-legacy")
+            : Loc.GetString("cmu-yautja-lobby-locked-leader-ancient");
     }
 
     private void RebuildArmorSelector(YautjaCharacterProfile yautja)
@@ -756,13 +760,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             {
                 var capturedMaterial = material;
                 var locked = YautjaProfileEditorLayout.IsBracerLocked(_capabilities, material);
-                var tooltip = locked && YautjaCharacterProfile.IsLegacyBracer(material)
-                    ? Loc.GetString("cmu-yautja-lobby-locked-legacy")
-                    : locked
-                        ? Loc.GetString(
-                            "cmu-yautja-lobby-locked-rank",
-                            ("rank", Loc.GetString(YautjaRankMetadata.For(YautjaRank.Elite).LocalizedName)))
-                        : Loc.GetString(YautjaCharacterProfile.GetBracerDisplayName(material));
+                var tooltip = Loc.GetString(YautjaCharacterProfile.GetBracerDisplayName(material));
                 AddStaticBracerSelector(grid,
                     group,
                     material,

@@ -731,17 +731,18 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(sanitized.Unique, Is.EqualTo(YautjaUniqueSet.None));
         });
 
-        var authorizedLegacy = YautjaCharacterProfile.Default
+        // Dragon is a clan leader set, Anubys a legacy whitelist one
+        var leaderLegacy = YautjaCharacterProfile.Default
             .WithLegacy(YautjaLegacySet.Dragon)
-            .SanitizeForCapabilities(new YautjaProfileCapabilities(YautjaRank.Blooded, false, true));
-        var authorizedUnique = YautjaCharacterProfile.Default
+            .SanitizeForCapabilities(new YautjaProfileCapabilities(YautjaRank.Leader, true, false));
+        var whitelistedUnique = YautjaCharacterProfile.Default
             .WithUnique(YautjaUniqueSet.Anubys)
-            .SanitizeForCapabilities(new YautjaProfileCapabilities(YautjaRank.Elite, true, false));
+            .SanitizeForCapabilities(new YautjaProfileCapabilities(YautjaRank.Blooded, false, true));
 
         Assert.Multiple(() =>
         {
-            Assert.That(authorizedLegacy.Legacy, Is.EqualTo(YautjaLegacySet.Dragon));
-            Assert.That(authorizedUnique.Unique, Is.EqualTo(YautjaUniqueSet.Anubys));
+            Assert.That(leaderLegacy.Legacy, Is.EqualTo(YautjaLegacySet.Dragon));
+            Assert.That(whitelistedUnique.Unique, Is.EqualTo(YautjaUniqueSet.Anubys));
         });
     }
 
@@ -785,7 +786,7 @@ public sealed class YautjaCharacterProfileTest
             .WithCapeStyle(YautjaCapeStyle.Ceremonial)
             .WithBracer(YautjaBracerMaterial.Bronze)
             .SanitizeForCapabilities(ordinaryCapabilities);
-        var unauthorizedLegacyBracer = YautjaCharacterProfile.Default
+        var legacySkinBracer = YautjaCharacterProfile.Default
             .WithBracer(YautjaBracerMaterial.Dragon)
             .SanitizeForCapabilities(ordinaryCapabilities);
         var elite = YautjaCharacterProfile.Default
@@ -795,18 +796,19 @@ public sealed class YautjaCharacterProfileTest
             .WithCapeStyle(YautjaCapeStyle.Ceremonial)
             .SanitizeForCapabilities(leaderCapabilities);
         var legacy = YautjaCharacterProfile.Default
-            .WithLegacy(YautjaLegacySet.Collector)
+            .WithLegacy(YautjaLegacySet.Enforcer)
             .WithBracer(YautjaBracerMaterial.Enforcer)
             .SanitizeForCapabilities(legacyCapabilities);
 
         Assert.Multiple(() =>
         {
             Assert.That(ordinary.CapeStyle, Is.EqualTo(YautjaCapeStyle.Full));
-            Assert.That(ordinary.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Ebony));
-            Assert.That(unauthorizedLegacyBracer.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Ebony));
+            // every bracer skin is open to everyone
+            Assert.That(ordinary.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Bronze));
+            Assert.That(legacySkinBracer.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Dragon));
             Assert.That(elite.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Crimson));
             Assert.That(leader.CapeStyle, Is.EqualTo(YautjaCapeStyle.Ceremonial));
-            Assert.That(legacy.Legacy, Is.EqualTo(YautjaLegacySet.Collector));
+            Assert.That(legacy.Legacy, Is.EqualTo(YautjaLegacySet.Enforcer));
             Assert.That(legacy.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Enforcer));
         });
     }

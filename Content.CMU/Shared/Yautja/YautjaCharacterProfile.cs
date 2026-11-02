@@ -83,6 +83,15 @@ public enum YautjaUniqueSet : byte
     Praetorian,
 }
 
+/// <summary>
+/// What unlocks a legacy or elite set. Elites and elders get no sets; the list decides per set, not per picker row.
+/// </summary>
+public enum YautjaSetLock : byte
+{
+    LegacyWhitelist,
+    ClanLeader,
+}
+
 [Serializable, NetSerializable]
 public enum YautjaSkinColor : byte
 {
@@ -688,7 +697,8 @@ public sealed partial class YautjaCharacterProfile
             OwnerRank = YautjaRankResolver.ToOwnerRank(rank),
         };
 
-        return YautjaRankResolver.CanUseUnique(rank)
+        // Rank only decides the clan leader sets; the legacy whitelist ones are checked against capabilities.
+        return GetSetLock(profile.Unique) == YautjaSetLock.LegacyWhitelist || YautjaRankResolver.CanUseUnique(rank)
             ? profile
             : profile.WithUnique(YautjaUniqueSet.None);
     }
@@ -813,6 +823,25 @@ public sealed partial class YautjaCharacterProfile
                 ? "elite"
                 : "clan";
         return $"cmu-yautja-profile-bracer-{BracerMaterialKey(material)}-{variant}";
+    }
+
+    public static YautjaSetLock GetSetLock(YautjaLegacySet legacy)
+    {
+        return legacy is YautjaLegacySet.Enforcer or YautjaLegacySet.Seeker
+            ? YautjaSetLock.LegacyWhitelist
+            : YautjaSetLock.ClanLeader;
+    }
+
+    public static YautjaSetLock GetSetLock(YautjaUniqueSet unique)
+    {
+        return unique is YautjaUniqueSet.Anubys or
+            YautjaUniqueSet.Cleopatra or
+            YautjaUniqueSet.Ronin or
+            YautjaUniqueSet.Praetorian or
+            YautjaUniqueSet.SeekerInitiate or
+            YautjaUniqueSet.SeekerAdept
+            ? YautjaSetLock.LegacyWhitelist
+            : YautjaSetLock.ClanLeader;
     }
 
     public static bool IsLegacyBracer(YautjaBracerMaterial material)

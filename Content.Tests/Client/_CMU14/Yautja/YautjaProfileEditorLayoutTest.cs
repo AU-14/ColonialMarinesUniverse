@@ -36,30 +36,24 @@ public sealed class YautjaProfileEditorLayoutTest
         Assert.That(YautjaProfileEditorLayout.IsCategoryActive(active, candidate), Is.EqualTo(expected));
     }
 
-    [TestCase(YautjaRank.Unblooded, true)]
-    [TestCase(YautjaRank.YoungBlood, true)]
-    [TestCase(YautjaRank.Blooded, true)]
-    [TestCase(YautjaRank.Elite, false)]
-    [TestCase(YautjaRank.Elder, false)]
-    [TestCase(YautjaRank.Leader, false)]
-    [TestCase(YautjaRank.Ancient, false)]
-    public void UniqueSetsAreLockedUntilElite(YautjaRank rank, bool locked)
+    // Owner's split: the legacy whitelist sets and the clan leader sets. Elites and elders get none.
+    [TestCase(YautjaRank.Elite, false, YautjaUniqueSet.Anubys, true)]
+    [TestCase(YautjaRank.Ancient, false, YautjaUniqueSet.Anubys, true)]
+    [TestCase(YautjaRank.Blooded, true, YautjaUniqueSet.Anubys, false)]
+    [TestCase(YautjaRank.Blooded, true, YautjaUniqueSet.Praetorian, false)]
+    [TestCase(YautjaRank.Leader, false, YautjaUniqueSet.SeekerAdept, true)]
+    [TestCase(YautjaRank.Elder, false, YautjaUniqueSet.Plated, true)]
+    [TestCase(YautjaRank.Blooded, true, YautjaUniqueSet.Plated, true)]
+    [TestCase(YautjaRank.Leader, false, YautjaUniqueSet.Plated, false)]
+    [TestCase(YautjaRank.Ancient, false, YautjaUniqueSet.Defender, false)]
+    [TestCase(YautjaRank.Blooded, false, YautjaUniqueSet.None, false)]
+    public void UniqueSetsFollowTheirLock(YautjaRank rank, bool canUseLegacy, YautjaUniqueSet unique, bool locked)
     {
-        var profile = YautjaCharacterProfile.Default.WithRank(rank);
+        var capabilities = new YautjaProfileCapabilities(rank, YautjaRankResolver.CanUseUnique(rank), canUseLegacy);
 
         Assert.That(
-            YautjaProfileEditorLayout.IsUniqueSetLocked(profile, YautjaUniqueSet.Anubys),
+            YautjaProfileEditorLayout.IsUniqueSetLocked(capabilities, unique),
             Is.EqualTo(locked));
-    }
-
-    [Test]
-    public void NoneOptionIsNeverLocked()
-    {
-        var profile = YautjaCharacterProfile.Default.WithRank(YautjaRank.Blooded);
-
-        Assert.That(
-            YautjaProfileEditorLayout.IsUniqueSetLocked(profile, YautjaUniqueSet.None),
-            Is.False);
     }
 
     [Test]
@@ -72,12 +66,18 @@ public sealed class YautjaProfileEditorLayoutTest
         });
     }
 
-    [TestCase(false, YautjaLegacySet.Dragon, true)]
-    [TestCase(true, YautjaLegacySet.Dragon, false)]
-    [TestCase(false, YautjaLegacySet.None, false)]
-    public void LegacySetsFollowServerCapability(bool canUseLegacy, YautjaLegacySet legacy, bool locked)
+    [TestCase(YautjaRank.Blooded, false, YautjaLegacySet.Enforcer, true)]
+    [TestCase(YautjaRank.Blooded, true, YautjaLegacySet.Enforcer, false)]
+    [TestCase(YautjaRank.Blooded, true, YautjaLegacySet.Seeker, false)]
+    [TestCase(YautjaRank.Blooded, true, YautjaLegacySet.Dragon, true)]
+    [TestCase(YautjaRank.Elite, true, YautjaLegacySet.Knight, true)]
+    [TestCase(YautjaRank.Leader, false, YautjaLegacySet.Dragon, false)]
+    [TestCase(YautjaRank.Ancient, false, YautjaLegacySet.Serpent, false)]
+    [TestCase(YautjaRank.Ancient, false, YautjaLegacySet.Enforcer, true)]
+    [TestCase(YautjaRank.Blooded, false, YautjaLegacySet.None, false)]
+    public void LegacySetsFollowTheirLock(YautjaRank rank, bool canUseLegacy, YautjaLegacySet legacy, bool locked)
     {
-        var capabilities = new YautjaProfileCapabilities(YautjaRank.Blooded, false, canUseLegacy);
+        var capabilities = new YautjaProfileCapabilities(rank, YautjaRankResolver.CanUseUnique(rank), canUseLegacy);
 
         Assert.That(
             YautjaProfileEditorLayout.IsLegacySetLocked(capabilities, legacy),
@@ -105,41 +105,13 @@ public sealed class YautjaProfileEditorLayoutTest
             Is.EqualTo(locked));
     }
 
-    [TestCase(YautjaRank.Blooded, false, YautjaBracerMaterial.Bronze, true)]
-    [TestCase(YautjaRank.Blooded, false, YautjaBracerMaterial.Crimson, true)]
-    [TestCase(YautjaRank.Blooded, false, YautjaBracerMaterial.Bone, true)]
-    [TestCase(YautjaRank.Elite, false, YautjaBracerMaterial.Bronze, false)]
-    [TestCase(YautjaRank.Elder, false, YautjaBracerMaterial.Crimson, false)]
-    [TestCase(YautjaRank.Leader, false, YautjaBracerMaterial.Bone, false)]
-    [TestCase(YautjaRank.Blooded, false, YautjaBracerMaterial.Ebony, false)]
-    [TestCase(YautjaRank.Ancient, false, YautjaBracerMaterial.Dragon, true)]
-    [TestCase(YautjaRank.Blooded, true, YautjaBracerMaterial.Dragon, false)]
-    [TestCase(YautjaRank.Ancient, true, YautjaBracerMaterial.Collector, false)]
-    [TestCase(YautjaRank.Ancient, false, YautjaBracerMaterial.Shadow, true)]
-    [TestCase(YautjaRank.Blooded, true, YautjaBracerMaterial.Serpent, false)]
-    [TestCase(YautjaRank.Ancient, true, YautjaBracerMaterial.Xenobone, true)]
-    public void BracersFollowRankAndLegacyWhitelist(
-        YautjaRank rank,
-        bool canUseLegacy,
-        YautjaBracerMaterial bracer,
-        bool locked)
+    [Test]
+    public void EveryBracerIsOpenToEveryone()
     {
-        var capabilities = new YautjaProfileCapabilities(rank, false, canUseLegacy);
+        var capabilities = new YautjaProfileCapabilities(YautjaRank.Blooded, false, false);
 
-        Assert.That(
-            YautjaProfileEditorLayout.IsBracerLocked(capabilities, bracer),
-            Is.EqualTo(locked));
-    }
-
-    [TestCase(false, true)]
-    [TestCase(true, false)]
-    public void UniqueSetsFollowServerCapability(bool canUseUnique, bool locked)
-    {
-        var capabilities = new YautjaProfileCapabilities(YautjaRank.Blooded, canUseUnique, false);
-
-        Assert.That(
-            YautjaProfileEditorLayout.IsUniqueSetLocked(capabilities, YautjaUniqueSet.Anubys),
-            Is.EqualTo(locked));
+        foreach (var bracer in YautjaCharacterProfile.BracerMaterialOrder)
+            Assert.That(YautjaProfileEditorLayout.IsBracerLocked(capabilities, bracer), Is.False, bracer.ToString());
     }
 
     [Test]

@@ -616,7 +616,7 @@ public sealed class YautjaPredatorRoleTest
                     .WithEyeColor(YautjaEyeColor.Gold)
                     .WithArmor(YautjaGearMaterial.Bronze, 3)
                     .WithStatus(YautjaProfileStatus.Normal)
-                    .WithUnique(YautjaUniqueSet.Anubys)
+                    .WithUnique(YautjaUniqueSet.Plated)
                     .WithLegacy(YautjaLegacySet.None)
                     .WithCapeStyle(YautjaCapeStyle.Ceremonial)
                     .WithBracer(YautjaBracerMaterial.Bone);
@@ -655,7 +655,7 @@ public sealed class YautjaPredatorRoleTest
                             Is.EqualTo(YautjaCharacterProfile.GetEyeColorColor(YautjaEyeColor.Gold)));
                         Assert.That(spawnedYautja.Profile.Status, Is.EqualTo(YautjaProfileStatus.Normal));
                         Assert.That(spawnedYautja.Profile.ClanRank, Is.EqualTo(YautjaRank.Blooded));
-                        Assert.That(spawnedYautja.Profile.Unique, Is.EqualTo(YautjaUniqueSet.Anubys));
+                        Assert.That(spawnedYautja.Profile.Unique, Is.EqualTo(YautjaUniqueSet.Plated));
                         Assert.That(spawnedYautja.Profile.CapeStyle, Is.EqualTo(YautjaCapeStyle.Ceremonial));
                         Assert.That(spawnedYautja.Profile.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Bone));
                     });

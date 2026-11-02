@@ -8,47 +8,57 @@ public sealed class YautjaRankAccessTest
     [TestCase(YautjaRank.Unblooded, false)]
     [TestCase(YautjaRank.YoungBlood, false)]
     [TestCase(YautjaRank.Blooded, false)]
-    [TestCase(YautjaRank.Elite, true)]
-    [TestCase(YautjaRank.Elder, true)]
+    [TestCase(YautjaRank.Elite, false)]
+    [TestCase(YautjaRank.Elder, false)]
     [TestCase(YautjaRank.Leader, true)]
     [TestCase(YautjaRank.Ancient, true)]
-    public void UniqueSetsFollowRank(YautjaRank rank, bool allowed)
+    public void ClanLeaderSetsFollowRank(YautjaRank rank, bool allowed)
     {
         var profile = YautjaCharacterProfile.Default
             .WithRank(rank)
-            .WithUnique(YautjaUniqueSet.Ronin);
+            .WithUnique(YautjaUniqueSet.Plated);
 
         Assert.Multiple(() =>
         {
             Assert.That(YautjaRankResolver.CanUseUnique(rank), Is.EqualTo(allowed));
             Assert.That(YautjaRankResolver.CanUseUnique(profile), Is.EqualTo(allowed));
-            Assert.That(profile.Unique, Is.EqualTo(YautjaUniqueSet.Ronin));
+            Assert.That(profile.Unique, Is.EqualTo(YautjaUniqueSet.Plated));
         });
     }
 
-    [TestCase(YautjaRank.Unblooded)]
-    [TestCase(YautjaRank.YoungBlood)]
     [TestCase(YautjaRank.Blooded)]
-    public void ApplyingBelowEliteRankClearsUniqueSet(YautjaRank rank)
+    [TestCase(YautjaRank.Elite)]
+    [TestCase(YautjaRank.Elder)]
+    public void DroppingBelowClanLeaderClearsALeaderSet(YautjaRank rank)
     {
         var profile = YautjaCharacterProfile.Default
-            .WithUnique(YautjaUniqueSet.Ronin)
+            .WithUnique(YautjaUniqueSet.Plated)
             .WithRank(rank);
 
         Assert.That(profile.Unique, Is.EqualTo(YautjaUniqueSet.None));
     }
 
-    // cmss13 #12174 keeps the Praetorian xenobone set for clan leaders; the other new elite sets follow the elite rule.
-    [TestCase(YautjaRank.Blooded, YautjaUniqueSet.SeekerAdept, false)]
-    [TestCase(YautjaRank.Elite, YautjaUniqueSet.SeekerAdept, true)]
-    [TestCase(YautjaRank.Elite, YautjaUniqueSet.Defender, true)]
-    [TestCase(YautjaRank.Elite, YautjaUniqueSet.Praetorian, false)]
-    [TestCase(YautjaRank.Elder, YautjaUniqueSet.Praetorian, false)]
-    [TestCase(YautjaRank.Leader, YautjaUniqueSet.Praetorian, true)]
-    [TestCase(YautjaRank.Ancient, YautjaUniqueSet.Praetorian, true)]
-    public void PraetorianSetIsLeaderOnly(YautjaRank rank, YautjaUniqueSet unique, bool allowed)
+    [Test]
+    public void RankChangesKeepALegacyWhitelistSet()
     {
-        var capabilities = new YautjaProfileCapabilities(rank, YautjaRankResolver.CanUseUnique(rank), false);
+        var profile = YautjaCharacterProfile.Default
+            .WithUnique(YautjaUniqueSet.Ronin)
+            .WithRank(YautjaRank.Blooded);
+
+        Assert.That(profile.Unique, Is.EqualTo(YautjaUniqueSet.Ronin));
+    }
+
+    // Legacy whitelist: Anubys, Cleopatra, Ronin, Praetorian, Enforcer and the three Seekers. Everything else is
+    // clan leader and above. Elites and elders get no sets.
+    [TestCase(YautjaRank.Elite, false, YautjaUniqueSet.Ronin, false)]
+    [TestCase(YautjaRank.Blooded, true, YautjaUniqueSet.Praetorian, true)]
+    [TestCase(YautjaRank.Ancient, false, YautjaUniqueSet.Praetorian, false)]
+    [TestCase(YautjaRank.Blooded, true, YautjaUniqueSet.SeekerInitiate, true)]
+    [TestCase(YautjaRank.Elder, true, YautjaUniqueSet.Defender, false)]
+    [TestCase(YautjaRank.Leader, false, YautjaUniqueSet.Warrior, true)]
+    public void UniqueSetsSanitizeToTheirLock(YautjaRank rank, bool canUseLegacy, YautjaUniqueSet unique, bool allowed)
+    {
+        var capabilities = new YautjaProfileCapabilities(rank, YautjaRankResolver.CanUseUnique(rank), canUseLegacy);
         var profile = YautjaCharacterProfile.Default
             .WithUnique(unique)
             .SanitizeForCapabilities(capabilities);
@@ -58,6 +68,20 @@ public sealed class YautjaRankAccessTest
             Assert.That(capabilities.CanUseUniqueSet(unique), Is.EqualTo(allowed));
             Assert.That(profile.Unique, Is.EqualTo(allowed ? unique : YautjaUniqueSet.None));
         });
+    }
+
+    [TestCase(YautjaRank.Blooded, true, YautjaLegacySet.Seeker, true)]
+    [TestCase(YautjaRank.Blooded, true, YautjaLegacySet.Collector, false)]
+    [TestCase(YautjaRank.Leader, false, YautjaLegacySet.Shadow, true)]
+    [TestCase(YautjaRank.Leader, false, YautjaLegacySet.Enforcer, false)]
+    public void LegacySetsSanitizeToTheirLock(YautjaRank rank, bool canUseLegacy, YautjaLegacySet legacy, bool allowed)
+    {
+        var capabilities = new YautjaProfileCapabilities(rank, YautjaRankResolver.CanUseUnique(rank), canUseLegacy);
+        var profile = YautjaCharacterProfile.Default
+            .WithLegacy(legacy)
+            .SanitizeForCapabilities(capabilities);
+
+        Assert.That(profile.Legacy, Is.EqualTo(allowed ? legacy : YautjaLegacySet.None));
     }
 
     [Test]

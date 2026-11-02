@@ -53,17 +53,6 @@ public static class YautjaProfileEditorLayout
         new(YautjaProfileEditorCategory.Description, "cmu-yautja-lobby-category-description"),
     ];
 
-    public static bool IsUniqueSetLocked(YautjaCharacterProfile profile, YautjaUniqueSet unique)
-    {
-        if (unique == YautjaUniqueSet.None)
-            return false;
-
-        if (unique == YautjaUniqueSet.Praetorian)
-            return profile.ClanRank is not (YautjaRank.Leader or YautjaRank.Ancient);
-
-        return !YautjaRankResolver.CanUseUnique(profile);
-    }
-
     public static bool IsUniqueSetLocked(YautjaProfileCapabilities capabilities, YautjaUniqueSet unique)
     {
         return !capabilities.CanUseUniqueSet(unique);
