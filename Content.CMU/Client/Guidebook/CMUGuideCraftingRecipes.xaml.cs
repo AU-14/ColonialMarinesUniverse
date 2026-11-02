@@ -26,8 +26,14 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
 
     private readonly List<(CraftingRecipePrototype Recipe, string Name, string Search)> _entries = new();
     private readonly List<CraftingRecipePrototype> _matches = new();
+    private readonly Dictionary<EntProtoId, HashSet<string>> _itemRecipes = new();
+    private readonly Dictionary<ProtoId<StackPrototype>, HashSet<string>> _stackRecipes = new();
+    private readonly Stack<NavigationState> _history = new();
+    private HashSet<string>? _scope;
     private CraftingRecipePrototype? _selected;
     private int _batches = 1;
+
+    private sealed record NavigationState(HashSet<string>? Scope, string Search, CraftingRecipePrototype? Selected, int Batches);
 
     public CMUGuideCraftingRecipes()
     {
@@ -46,6 +52,7 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
             ShowRecipe();
         };
         Search.OnTextChanged += _ => FilterRecipes();
+        Back.OnPressed += _ => GoBack();
         Recipes.OnItemSelected += args =>
         {
             _selected = _matches[args.ItemIndex];
@@ -56,26 +63,36 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
     public bool TryParseTag(Dictionary<string, string> args, [NotNullWhen(true)] out Control? control)
     {
         control = null;
-        var recipes = _prototypes.EnumeratePrototypes<CraftingRecipePrototype>();
         if (args.TryGetValue("Recipes", out var ids))
         {
-            var chosen = new List<CraftingRecipePrototype>();
+            _scope = new HashSet<string>();
             foreach (var id in ids.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
             {
-                if (!_prototypes.TryIndex<CraftingRecipePrototype>(id, out var recipe))
+                if (!_prototypes.HasIndex<CraftingRecipePrototype>(id))
                     return false;
 
-                chosen.Add(recipe);
+                _scope.Add(id);
             }
-
-            recipes = chosen;
         }
 
-        foreach (var recipe in recipes)
+        // Ingredient links can leave a chapter's starter list. Index all outputs once, without resolving sprites.
+        foreach (var recipe in _prototypes.EnumeratePrototypes<CraftingRecipePrototype>())
         {
             var name = Loc.GetString(recipe.Name);
             var ingredients = recipe.Consumables.Select(IngredientName);
             _entries.Add((recipe, name, string.Join(" ", ingredients.Prepend(name))));
+
+            if (!_itemRecipes.TryGetValue(recipe.Output, out var itemRecipes))
+                _itemRecipes.Add(recipe.Output, itemRecipes = new HashSet<string>());
+            itemRecipes.Add(recipe.ID);
+
+            // Crafting accepts any entity with the required stack type, including alternative output prototypes.
+            if (!_prototypes.Index(recipe.Output).TryComp<StackComponent>(out var stack, _entities.ComponentFactory))
+                continue;
+
+            if (!_stackRecipes.TryGetValue(stack.StackTypeId, out var stackRecipes))
+                _stackRecipes.Add(stack.StackTypeId, stackRecipes = new HashSet<string>());
+            stackRecipes.Add(recipe.ID);
         }
 
         _entries.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.CurrentCultureIgnoreCase));
@@ -95,14 +112,50 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
         return ingredient.Item is { } item ? _prototypes.Index(item).Name : string.Empty;
     }
 
+    private HashSet<string>? IngredientRecipes(CraftConsumable ingredient)
+    {
+        if (ingredient.Item is { } item)
+            return _itemRecipes.GetValueOrDefault(item);
+
+        return ingredient.Stack is { } stack ? _stackRecipes.GetValueOrDefault(stack) : null;
+    }
+
+    private void OpenIngredient(HashSet<string> recipes)
+    {
+        _history.Push(new NavigationState(_scope, Search.Text, _selected, _batches));
+        _scope = recipes;
+        Search.Text = string.Empty;
+        _selected = null;
+        _batches = 1;
+        Batches.SelectId(_batches);
+        FilterRecipes();
+    }
+
+    private void GoBack()
+    {
+        if (!_history.TryPop(out var state))
+            return;
+
+        _scope = state.Scope;
+        Search.Text = state.Search;
+        _selected = state.Selected;
+        _batches = state.Batches;
+        Batches.SelectId(_batches);
+        FilterRecipes();
+    }
+
     private void FilterRecipes()
     {
+        Back.Visible = _history.Count > 0;
         var previous = _selected;
         var query = Search.Text.Trim();
         Recipes.Clear();
         _matches.Clear();
         foreach (var entry in _entries)
         {
+            if (_scope != null && !_scope.Contains(entry.Recipe.ID))
+                continue;
+
             if (!entry.Search.Contains(query, StringComparison.CurrentCultureIgnoreCase))
                 continue;
 
@@ -133,21 +186,49 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
         OutputCount.Text = Loc.GetString("cmu-industry-recipes-output", ("count", recipe.OutputCount * _batches));
         RecipeTime.Text = Loc.GetString("cmu-industry-recipes-time", ("seconds", recipe.Time.TotalSeconds));
         Ingredients.RemoveAllChildren();
-        foreach (var ingredient in card.Ingredients)
+        for (var i = 0; i < card.Ingredients.Count; i++)
         {
-            var row = new BoxContainer { SeparationOverride = 8, HorizontalExpand = true };
+            var ingredient = card.Ingredients[i];
+            var recipes = IngredientRecipes(recipe.Consumables[i]);
+            var button = new ContainerButton
+            {
+                HorizontalExpand = true,
+                Disabled = recipes == null,
+                ToolTip = recipes == null
+                    ? Loc.GetString("cmu-industry-recipes-no-recipe")
+                    : Loc.GetString("cmu-industry-recipes-open-ingredient", ("name", ingredient.Name)),
+            };
+            button.AddStyleClass(ContainerButton.StyleClassButton);
+            if (recipes != null)
+                button.OnPressed += _ => OpenIngredient(recipes);
+
+            var row = new BoxContainer
+            {
+                SeparationOverride = 8,
+                HorizontalExpand = true,
+                MouseFilter = MouseFilterMode.Ignore,
+            };
             row.AddChild(new TextureRect
             {
                 Texture = ingredient.Icon,
                 MinSize = new Vector2(32, 32),
                 MaxSize = new Vector2(32, 32),
                 Stretch = TextureRect.StretchMode.KeepAspectCentered,
+                MouseFilter = MouseFilterMode.Ignore,
             });
-            var label = new RichTextLabel { HorizontalExpand = true, VerticalAlignment = VAlignment.Center };
+            var label = new RichTextLabel
+            {
+                HorizontalExpand = true,
+                VerticalAlignment = VAlignment.Center,
+                MouseFilter = MouseFilterMode.Ignore,
+            };
             SetText(label, Loc.GetString("cmu-industry-recipes-ingredient",
                 ("count", ingredient.Amount * _batches), ("name", ingredient.Name)));
             row.AddChild(label);
-            Ingredients.AddChild(row);
+            if (recipes != null)
+                row.AddChild(new Label { Text = "→", MouseFilter = MouseFilterMode.Ignore });
+            button.AddChild(row);
+            Ingredients.AddChild(button);
         }
 
         SetText(Tools, string.IsNullOrEmpty(card.Tools)
