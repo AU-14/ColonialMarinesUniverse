@@ -257,6 +257,7 @@ cmu-yautja-bracer-menu-add-tracked-item = Добавить предмет
 cmu-yautja-bracer-menu-remove-tracked-item = Удалить предмет
 cmu-yautja-bracer-menu-tracker-empty = На этой карте не найдено незаявленных технологий яутжа.
 cmu-yautja-bracer-menu-tracker-entry-detail = {$distance}м / азимут {$bearing}град
+cmu-yautja-tracker-unknown-area = Неизвестно
 
 cmu-yautja-bracer-ui-tab-hunt = Охота
 cmu-yautja-bracer-ui-tab-thrall = Раб
