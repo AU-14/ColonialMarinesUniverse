@@ -1,8 +1,6 @@
 - type: entity
   parent: ActionMarineBase
   id: CMUActionGunshipCrewIFF
-  name: Toggle Gunship IFF
-  description: Toggle the advanced crew HUD's interlock against firing a door gun into its own gunship.
   components:
   - type: Action
     checkCanInteract: false

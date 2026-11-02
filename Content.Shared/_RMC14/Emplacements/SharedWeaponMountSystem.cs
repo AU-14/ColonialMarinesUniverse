@@ -87,6 +87,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
 
     public override void Initialize()
     {
+        InitializeDeletedWeaponCleanup(); // CMU14: clear replicated references when a mounted gun is deleted.
         SubscribeLocalEvent<WeaponMountComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<WeaponMountComponent, FoldAttemptEvent>(OnFoldAttempt);
         SubscribeLocalEvent<WeaponMountComponent, AnchorAttemptEvent>(OnAnchorAttempt);

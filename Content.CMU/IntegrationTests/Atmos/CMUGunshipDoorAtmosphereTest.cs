@@ -15,10 +15,28 @@ public sealed class CMUGunshipDoorAtmosphereTest : AtmosTest
 {
     protected override ResPath? TestMapPath => new("Maps/Test/Atmospherics/DeltaPressure/deltapressuretest.yml");
 
-    [TestCase(0f)]
-    [TestCase(60f)]
+    // Mirror the Dynamic Gunship's mapped Normandy door and fan overrides.
+    [TestPrototypes]
+    private const string Prototypes = """
+- type: entity
+  parent: CMNormandyDoorSinglePort
+  id: CMUTestGunshipAtmosphereDoor
+  components:
+  - type: Airtight
+    noAirWhenFullyAirBlocked: false
+
+- type: entity
+  parent: RMCTinyFan
+  id: CMUTestGunshipAtmosphereFan
+  components:
+  - type: CMUGunshipDoorAtmosphere
+""";
+
+    [TestCase(0f, Atmospherics.OneAtmosphere)]
+    [TestCase(0.001f, Atmospherics.OneAtmosphere)]
+    [TestCase(60f, 60f)]
     [RunOnSide(Side.Server)]
-    public void HatchAndFanStartWithAirAndPreserveItWhenCycled(float startingPressure)
+    public void HatchAndFanStartWithAirAndPreserveItWhenCycled(float startingPressure, float expectedPressure)
     {
         SAtmos.RunProcessingFull(ProcessEnt, MapData.Grid.Owner, SAtmos.AtmosTickRate);
         var air = RelevantAtmos.Comp.Tiles[Vector2i.Zero].Air!;
@@ -29,19 +47,18 @@ public sealed class CMUGunshipDoorAtmosphereTest : AtmosTest
         air.SetMoles(Gas.Nitrogen, moles * Atmospherics.NitrogenStandard);
 
         var coordinates = new EntityCoordinates(RelevantAtmos.Owner, new Vector2(0.5f, 0.5f));
-        SEntMan.SpawnEntity("RMCTinyFan", coordinates);
-        var door = SEntMan.SpawnEntity("CMUMohawkOmahaOmaha3098f2de4a", coordinates);
+        var fan = SEntMan.SpawnEntity("CMUTestGunshipAtmosphereFan", coordinates);
+        var door = SEntMan.SpawnEntity("CMUTestGunshipAtmosphereDoor", coordinates);
         var airtight = SEntMan.GetComponent<AirtightComponent>(door);
         Assert.That(airtight.NoAirWhenFullyAirBlocked, Is.False);
         SAtmos.RunProcessingFull(ProcessEnt, MapData.Grid.Owner, SAtmos.AtmosTickRate);
 
         var startup = SEntMan.System<CMUGunshipDoorAtmosphereSystem>();
         startup.Update(0);
-        var expected = startingPressure == 0 ? Atmospherics.OneAtmosphere : startingPressure;
         air = RelevantAtmos.Comp.Tiles[Vector2i.Zero].Air!;
-        Assert.That(air.Pressure, Is.EqualTo(expected).Within(0.01f));
+        Assert.That(air.Pressure, Is.EqualTo(expectedPressure).Within(0.01f));
         Assert.That(air.GetMoles(Gas.Oxygen) / air.TotalMoles, Is.EqualTo(Atmospherics.OxygenStandard).Within(0.001f));
-        Assert.That(SEntMan.GetComponent<CMUGunshipDoorAtmosphereComponent>(door).Initialized, Is.True);
+        Assert.That(SEntMan.GetComponent<CMUGunshipDoorAtmosphereComponent>(fan).Initialized, Is.True);
 
         // Exercise the same airtight changes used by opening and closing a door.
         var airtightSystem = SEntMan.System<AirtightSystem>();
@@ -52,7 +69,7 @@ public sealed class CMUGunshipDoorAtmosphereTest : AtmosTest
             airtightSystem.SetAirblocked((door, airtight), true);
             SAtmos.RunProcessingFull(ProcessEnt, MapData.Grid.Owner, SAtmos.AtmosTickRate);
             Assert.That(RelevantAtmos.Comp.Tiles[Vector2i.Zero].Air, Is.SameAs(air));
-            Assert.That(air.Pressure, Is.EqualTo(expected).Within(0.01f));
+            Assert.That(air.Pressure, Is.EqualTo(expectedPressure).Within(0.01f));
         }
 
         air.Clear();

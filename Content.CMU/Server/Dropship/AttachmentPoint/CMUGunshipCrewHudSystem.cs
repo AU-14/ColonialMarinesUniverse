@@ -15,8 +15,8 @@ public sealed partial class CMUGunshipCrewHudSystem : EntitySystem
 {
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedWeaponMountSystem _mounts = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private TimeSpan _nextUpdate;
     private readonly HashSet<EntityUid> _wearers = new();
@@ -69,12 +69,12 @@ public sealed partial class CMUGunshipCrewHudSystem : EntitySystem
     private bool TryGetShip(EntityUid gun, out EntityUid ship)
     {
         ship = default;
-        if (!HasComp<CMUDoorGunVisualComponent>(gun) ||
-            !TryComp(gun, out ActiveGunshipDoorGunnerComponent? active) ||
-            active.AttachmentPoint is not { } point ||
-            !HasComp<GunshipHardpointAttachmentPointComponent>(point) ||
-            Transform(point).GridUid is not { } grid ||
-            Transform(gun).GridUid != grid || !HasComp<DropshipComponent>(grid))
+        if (!HasComp<CMUDoorGunVisualComponent>(gun)
+            || !TryComp(gun, out ActiveGunshipDoorGunnerComponent? active)
+            || active.AttachmentPoint is not { } point
+            || !HasComp<GunshipHardpointAttachmentPointComponent>(point)
+            || Transform(point).GridUid is not { } grid
+            || Transform(gun).GridUid != grid || !HasComp<DropshipComponent>(grid))
             return false;
 
         ship = grid;
@@ -88,9 +88,9 @@ public sealed partial class CMUGunshipCrewHudSystem : EntitySystem
         var gunType = string.Empty;
         var ammo = 0;
         var capacity = 0;
-        if (TryComp(wearer, out BuckleComponent? buckle) && buckle.BuckledTo is { } mountedGun &&
-            TryComp(mountedGun, out WeaponMountComponent? currentMount) && currentMount.User == wearer &&
-            TryGetShip(mountedGun, out var grid))
+        if (TryComp(wearer, out BuckleComponent? buckle) && buckle.BuckledTo is { } mountedGun
+            && TryComp(mountedGun, out WeaponMountComponent? currentMount) && currentMount.User == wearer
+            && TryGetShip(mountedGun, out var grid))
         {
             ship = grid;
             currentGun = mountedGun;
@@ -104,14 +104,18 @@ public sealed partial class CMUGunshipCrewHudSystem : EntitySystem
             var guns = EntityQueryEnumerator<ActiveGunshipDoorGunnerComponent, WeaponMountComponent>();
             while (guns.MoveNext(out var gun, out _, out var mount))
             {
-                if (gun == currentGun || mount.MountedEntity == null || !TryGetShip(gun, out var otherShip) || otherShip != linked)
+                if (gun == currentGun || mount.MountedEntity == null
+                    || !TryGetShip(gun, out var otherShip) || otherShip != linked)
                     continue;
 
                 ReadAmmo(gun, out var rounds, out var maximum);
-                var facing = Angle.ShortestDistance(_transform.GetWorldRotation(linked), _transform.GetWorldRotation(gun));
+                var facing = Angle.ShortestDistance(
+                    _transform.GetWorldRotation(linked), _transform.GetWorldRotation(gun));
                 others.Add(new CMUGunshipCrewGunStatus(facing.GetCardinalDir(), Name(gun), rounds, maximum));
             }
-            others.Sort((a, b) => a.Side != b.Side ? a.Side.CompareTo(b.Side) : string.CompareOrdinal(a.GunType, b.GunType));
+            others.Sort((a, b) => a.Side != b.Side
+                ? a.Side.CompareTo(b.Side)
+                : string.Compare(a.GunType, b.GunType, StringComparison.CurrentCulture));
         }
 
         var integrity = ship is { } uid ? CompOrNull<DropshipIntegrityComponent>(uid) : null;
@@ -123,10 +127,10 @@ public sealed partial class CMUGunshipCrewHudSystem : EntitySystem
             alarms.Add(DropshipAlarm.LowIntegrity);
 
         var hud = EnsureComp<CMUGunshipCrewHudComponent>(wearer);
-        if (hud.Dropship == ship && hud.GunType == gunType && hud.Ammo == ammo && hud.Capacity == capacity &&
-            hud.OtherGuns.SequenceEqual(others) && hud.Integrity == (integrity?.Integrity ?? 0) &&
-            hud.MaxIntegrity == (integrity?.MaxIntegrity ?? 0) && hud.Malfunctions.SequenceEqual(malfunctions) &&
-            hud.Alarms.SequenceEqual(alarms) && hud.MasterAlarmSilenced == (integrity?.MasterAlarmSilenced ?? false))
+        if (hud.Dropship == ship && hud.GunType == gunType && hud.Ammo == ammo && hud.Capacity == capacity
+            && hud.OtherGuns.SequenceEqual(others) && hud.Integrity == (integrity?.Integrity ?? 0)
+            && hud.MaxIntegrity == (integrity?.MaxIntegrity ?? 0) && hud.Malfunctions.SequenceEqual(malfunctions)
+            && hud.Alarms.SequenceEqual(alarms) && hud.MasterAlarmSilenced == (integrity?.MasterAlarmSilenced ?? false))
             return;
 
         hud.Dropship = ship;

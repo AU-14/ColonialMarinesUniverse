@@ -132,50 +132,6 @@
     emptyDrawDepth: Overdoors
 
 - type: entity
-  parent: RMCML66DNestDropship
-  id: CMUM2CDoorGunDropship
-  name: M2C heavy machine gun
-  suffix: Dropship
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: CMUDoorGunVisual # CMU14: half-pixel left alignment for M2C north/south gun frames only
-    northSouthGunOffset: -0.015625, 0
-  - type: Sprite # CMU14: fixed pivot and independently aimed gun layers
-    sprite: CMU14/Objects/Weapons/Guns/DoorGuns/M2C/pivot.rsi
-    noRot: true
-    granularLayersRendering: true
-    layers:
-    - state: mount
-      renderingStrategy: NoRotation
-    - sprite: CMU14/Objects/Weapons/Guns/DoorGuns/M2C/gun.rsi
-      state: gun
-      renderingStrategy: NoRotation
-      rotation: 0
-      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
-      visible: false
-    - sprite: CMU14/Objects/Weapons/Guns/DoorGuns/M2C/gun.rsi
-      state: ammo
-      renderingStrategy: NoRotation
-      rotation: 0
-      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
-      visible: false
-    - sprite: CMU14/Objects/Weapons/Guns/DoorGuns/M2C/gun.rsi
-      state: heat
-      renderingStrategy: NoRotation
-      rotation: 0
-      map: [ "enum.WeaponMountComponentVisualLayers.Overheated" ]
-      visible: false
-  - type: WeaponMount
-    fixedWeaponPrototype: CMUMachineGunM2CDropshipLoaded
-    isWeaponSecured: true
-    isWeaponLocked: true
-    canRotateWithoutTool: true
-    mountExclusionAreaSize: 0
-    barricadeExclusionAreaSize: 0
-    occupiedDrawDepth: Overdoors
-    emptyDrawDepth: Overdoors
-
-- type: entity
   parent: [RMCBaseWeaponMount, BaseDeployFoldable, BaseItem]
   id: RMCML66DMount
   name: M56D mount

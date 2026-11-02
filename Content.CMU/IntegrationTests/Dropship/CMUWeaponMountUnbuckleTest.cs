@@ -22,7 +22,7 @@ public sealed class CMUWeaponMountUnbuckleTest : GameTest
   parent: CMMobHuman
   components:
   - type: Buckle
-    range: 0
+    range: 0.01
 """;
 
     [TestCase("CMUM2CDoorGunDropship")]
@@ -37,7 +37,8 @@ public sealed class CMUWeaponMountUnbuckleTest : GameTest
         await Server.WaitAssertion(() =>
         {
             gun = SEntMan.SpawnEntity(prototype, map.GridCoords);
-            user = SEntMan.SpawnEntity("CMUTestShortReachGunner", map.GridCoords);
+            user = SEntMan.SpawnEntity("CMUTestShortReachGunner",
+                SEntMan.GetComponent<TransformComponent>(gun).Coordinates);
             SEntMan.System<SharedTransformSystem>().SetLocalRotation(gun, Direction.West.ToAngle());
             Assert.That(SEntMan.System<SharedBuckleSystem>().TryBuckle(user, user, gun), Is.True);
         });

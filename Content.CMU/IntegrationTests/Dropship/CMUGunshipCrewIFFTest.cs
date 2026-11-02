@@ -106,6 +106,8 @@ public sealed class CMUGunshipCrewIFFTest : GameTest
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
+            for (var x = 1; x <= 4; x++)
+                SEntMan.System<SharedMapSystem>().SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
             SEntMan.EnsureComponent<DropshipComponent>(map.Grid.Owner);
             var coordinates = map.GridCoords.Offset(new Vector2(0.5f, 0.5f));
             var mount = SEntMan.SpawnEntity("CMUM2CDoorGunDropship", coordinates);
@@ -120,6 +122,8 @@ public sealed class CMUGunshipCrewIFFTest : GameTest
             Assert.That(SEntMan.System<SharedBuckleSystem>().TryBuckle(user, user, mount), Is.True);
             var weapon = SEntMan.GetComponent<WeaponMountComponent>(mount).MountedEntity!.Value;
             var hull = SEntMan.SpawnEntity("WallSolid", coordinates.Offset(new Vector2(4, 0)));
+            Assert.That(SEntMan.GetComponent<TransformComponent>(hull).Anchored, Is.True);
+            Assert.That(SEntMan.GetComponent<TransformComponent>(hull).GridUid, Is.EqualTo(map.Grid.Owner));
 
             Assert.That(Shot().Cancelled, Is.True, "An unobstructed shot into the linked hull must be cancelled.");
             Toggle();

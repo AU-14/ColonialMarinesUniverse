@@ -20,14 +20,14 @@ namespace Content.Client.CMU14.Dropship.AttachmentPoint;
 public sealed partial class CMUDoorGunVisualSystem : EntitySystem
 {
     [Dependency] private CMUDoorGunAimSystem _aim = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IInputManager _input = default!;
     [Dependency] private IPlayerManager _player = default!;
-    [Dependency] private SpriteSystem _sprites = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedCombatModeSystem _combat = default!;
     [Dependency] private RMCSpriteSystem _rmcSprites = default!;
+    [Dependency] private SpriteSystem _sprites = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private EntityUid? _localMount;
     private Angle _localAim;
@@ -42,9 +42,9 @@ public sealed partial class CMUDoorGunVisualSystem : EntitySystem
 
     private void OnOperatorDrawDepth(Entity<BuckleComponent> ent, ref GetDrawDepthEvent args)
     {
-        if (ent.Comp.BuckledTo is not { } mount ||
-            !HasComp<CMUDoorGunVisualComponent>(mount) ||
-            !TryComp(mount, out SpriteComponent? sprite))
+        if (ent.Comp.BuckledTo is not { } mount
+            || !HasComp<CMUDoorGunVisualComponent>(mount)
+            || !TryComp(mount, out SpriteComponent? sprite))
             return;
 
         args.DrawDepth = (Content.Shared.DrawDepth.DrawDepth) (sprite.DrawDepth - 1);
@@ -95,12 +95,16 @@ public sealed partial class CMUDoorGunVisualSystem : EntitySystem
                 foreach (var buckled in strap.BuckledEntities)
                     _rmcSprites.UpdateDrawDepth(buckled);
             }
-            AimLayer((uid, sprite), WeaponMountComponentVisualLayers.Mounted, frame.Rotation, gunScreenAngle, frameOffset);
-            AimLayer((uid, sprite), WeaponMountComponentVisualLayers.MountedAmmo, frame.Rotation, gunScreenAngle, frameOffset);
-            AimLayer((uid, sprite), WeaponMountComponentVisualLayers.Overheated, frame.Rotation, gunScreenAngle, frameOffset);
+            AimLayer((uid, sprite), WeaponMountComponentVisualLayers.Mounted,
+                frame.Rotation, gunScreenAngle, frameOffset);
+            AimLayer((uid, sprite), WeaponMountComponentVisualLayers.MountedAmmo,
+                frame.Rotation, gunScreenAngle, frameOffset);
+            AimLayer((uid, sprite), WeaponMountComponentVisualLayers.Overheated,
+                frame.Rotation, gunScreenAngle, frameOffset);
 
-            if (_sprites.LayerMapTryGet((uid, sprite), WeaponMountComponentVisualLayers.Overheated, out var heatLayer, false) &&
-                TryComp(mount.MountedEntity, out OverheatComponent? overheat) && overheat.MaxHeat > 0)
+            if (_sprites.LayerMapTryGet((uid, sprite), WeaponMountComponentVisualLayers.Overheated,
+                    out var heatLayer, false)
+                && TryComp(mount.MountedEntity, out OverheatComponent? overheat) && overheat.MaxHeat > 0)
             {
                 var alpha = Math.Clamp(overheat.Heat / overheat.MaxHeat, 0f, 1f);
                 _sprites.LayerSetColor((uid, sprite), heatLayer, new Color(1f, 0.25f, 0.05f, alpha));

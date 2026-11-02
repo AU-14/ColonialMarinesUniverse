@@ -1,8 +1,6 @@
 - type: entity
   parent: ActionMarineBase
   id: CMUActionMountedIFF
-  name: Toggle Door Gun IFF
-  description: Toggle the door gun's interlock against firing when its predicted shot would hit a friendly IFF target.
   components:
   - type: Action
     checkCanInteract: false

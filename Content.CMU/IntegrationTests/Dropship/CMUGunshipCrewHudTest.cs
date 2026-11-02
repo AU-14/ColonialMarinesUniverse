@@ -43,6 +43,10 @@ public sealed class CMUGunshipCrewHudTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var transforms = SEntMan.System<SharedTransformSystem>();
+            var maps = SEntMan.System<SharedMapSystem>();
+            // Installed hardpoints must have floor tiles belonging to this grid.
+            for (var x = 1; x <= 12; x++)
+                maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
             SEntMan.EnsureComponent<DropshipComponent>(map.Grid.Owner);
             SEntMan.EnsureComponent<DropshipComponent>(foreignMap.Grid.Owner);
             var integrity = SEntMan.EnsureComponent<DropshipIntegrityComponent>(map.Grid.Owner);
@@ -152,6 +156,8 @@ public sealed class CMUGunshipCrewHudTest : GameTest
         EntityUid InstallGun(string prototype, EntityCoordinates coordinates, Direction side)
         {
             var point = SEntMan.SpawnEntity("CMUGunshipHardpointAttachmentPoint", coordinates);
+            Assert.That(SEntMan.GetComponent<TransformComponent>(point).GridUid,
+                Is.EqualTo(coordinates.EntityId));
             var installed = SEntMan.SpawnEntity(prototype, coordinates);
             SEntMan.EnsureComponent<ActiveGunshipDoorGunnerComponent>(installed).AttachmentPoint = point;
             SEntMan.System<SharedTransformSystem>().SetLocalRotation(installed, side.ToAngle());

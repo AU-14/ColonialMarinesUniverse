@@ -3,6 +3,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Emplacements;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Buckle;
+using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.GameObjects;
@@ -89,6 +90,8 @@ public sealed class CMUM56DDoorGunIFFTest : GameTest
             Assert.That(SEntMan.GetComponent<CMUMountedIFFOperatorComponent>(next).ToggleAction, Is.Not.Null);
             SEntMan.DeleteEntity(weapon);
             Assert.That(SEntMan.HasComponent<CMUMountedIFFOperatorComponent>(next), Is.False);
+            Assert.That(SEntMan.GetComponent<WeaponMountComponent>(mount).MountedEntity, Is.Null);
+            Assert.That(SEntMan.GetComponent<BuckleComponent>(next).BuckledTo, Is.Null);
 
             AttemptShootEvent Shot()
             {

@@ -45,7 +45,7 @@ def gun_pixel(option, direction, x, y):
 def write_rsi(directory, metadata, states, images):
     directory.mkdir(parents=True, exist_ok=True)
     metadata = {**metadata, "states": [{"name": name, "directions": 4} for name in states]}
-    (directory / "meta.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+    (directory / "meta.json").write_text(json.dumps(metadata, indent=4) + "\n", encoding="utf-8")
     for name, image in images.items():
         image.save(directory / (name + ".png"))
 

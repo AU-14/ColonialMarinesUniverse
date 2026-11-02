@@ -13,6 +13,7 @@ using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Network;
 
@@ -64,9 +65,12 @@ public sealed class CMUDoorGunIFFPopupTest : GameTest
         EntityUid user = default, weapon = default;
         NetEntity userNet = default;
         var coordinates = map.GridCoords.Offset(new Vector2(0.5f, 0.5f));
-        var message = Loc.GetString(gunshipIff ? "cmu-gunship-crew-iff-blocked" : "rmc-iff-friendly-in-line");
+        var message = string.Empty;
         await Server.WaitAssertion(() =>
         {
+            message = Loc.GetString(gunshipIff ? "cmu-gunship-crew-iff-blocked" : "rmc-iff-friendly-in-line");
+            for (var x = 1; x <= 4; x++)
+                SEntMan.System<SharedMapSystem>().SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
             SEntMan.EnsureComponent<DropshipComponent>(map.Grid.Owner);
             var mount = SEntMan.SpawnEntity(gunshipIff ? "CMUM2CDoorGunDropship" : "RMCML66DNestDropship", coordinates);
             user = SEntMan.SpawnEntity("CMUTestDoorGunPopupUser", coordinates);

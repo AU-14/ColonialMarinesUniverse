@@ -8,8 +8,8 @@ namespace Content.Server.CMU14.Dropship.AttachmentPoint;
 public sealed partial class CMUDoorGunAimRelaySystem : EntitySystem
 {
     [Dependency] private CMUDoorGunAimSystem _aim = default!;
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -18,10 +18,10 @@ public sealed partial class CMUDoorGunAimRelaySystem : EntitySystem
 
     private void OnAim(CMUDoorGunAimEvent args, EntitySessionEventArgs session)
     {
-        if (session.SenderSession.AttachedEntity is not { } user ||
-            !_aim.TryGetMount(user, out var mount, out var visual) ||
-            _timing.CurTime < visual.NextAimUpdate ||
-            !TryGetEntity(args.Coordinates.NetEntity, out _))
+        if (session.SenderSession.AttachedEntity is not { } user
+            || !_aim.TryGetMount(user, out var mount, out var visual)
+            || _timing.CurTime < visual.NextAimUpdate
+            || !TryGetEntity(args.Coordinates.NetEntity, out _))
             return;
 
         visual.NextAimUpdate = _timing.CurTime + TimeSpan.FromMilliseconds(50);

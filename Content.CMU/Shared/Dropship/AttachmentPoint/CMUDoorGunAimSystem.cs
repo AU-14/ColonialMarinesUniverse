@@ -8,19 +8,19 @@ namespace Content.Shared.CMU14.Dropship.AttachmentPoint;
 
 public sealed partial class CMUDoorGunAimSystem : EntitySystem
 {
-    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public bool TryGetMount(EntityUid user, out EntityUid mount,
         [NotNullWhen(true)] out CMUDoorGunVisualComponent? visual)
     {
         mount = default;
         visual = null;
-        if (!_combat.IsInCombatMode(user) ||
-            !TryComp(user, out BuckleComponent? buckle) || buckle.BuckledTo is not { } strapped ||
-            !TryComp(strapped, out WeaponMountComponent? weaponMount) ||
-            !TryComp(strapped, out CMUDoorGunVisualComponent? gunVisual) ||
-            weaponMount.User != user && gunVisual.Operator != user)
+        if (!_combat.IsInCombatMode(user)
+            || !TryComp(user, out BuckleComponent? buckle) || buckle.BuckledTo is not { } strapped
+            || !TryComp(strapped, out WeaponMountComponent? weaponMount)
+            || !TryComp(strapped, out CMUDoorGunVisualComponent? gunVisual)
+            || weaponMount.User != user && gunVisual.Operator != user)
             return false;
 
         mount = strapped;
@@ -31,9 +31,9 @@ public sealed partial class CMUDoorGunAimSystem : EntitySystem
     public bool TryGetAimOffset(EntityUid mount, EntityCoordinates target, out Angle offset)
     {
         offset = Angle.Zero;
-        if (!target.IsValid(EntityManager) ||
-            !TryComp(mount, out WeaponMountComponent? weaponMount) ||
-            !TryComp(weaponMount.MountedEntity, out MountableWeaponComponent? weapon))
+        if (!target.IsValid(EntityManager)
+            || !TryComp(mount, out WeaponMountComponent? weaponMount)
+            || !TryComp(weaponMount.MountedEntity, out MountableWeaponComponent? weapon))
             return false;
 
         var mapTarget = _transform.ToMapCoordinates(target);
@@ -44,7 +44,8 @@ public sealed partial class CMUDoorGunAimSystem : EntitySystem
         if (!float.IsFinite(direction.X) || !float.IsFinite(direction.Y) || direction.LengthSquared() < 0.000001f)
             return false;
 
-        return TryGetAimOffset(_transform.GetWorldRotation(mount), Angle.FromWorldVec(direction), weapon.ShootArc, out offset);
+        return TryGetAimOffset(_transform.GetWorldRotation(mount), Angle.FromWorldVec(direction),
+            weapon.ShootArc, out offset);
     }
 
     public static bool TryGetAimOffset(Angle facing, Angle target, int shootArc, out Angle offset)

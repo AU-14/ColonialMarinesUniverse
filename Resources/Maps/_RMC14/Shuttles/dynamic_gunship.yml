@@ -609,6 +609,8 @@ entities:
     mapInit: true
     paused: true
     components:
+    - type: Airtight # CMU14: retain hatch air when closed above a sealing fan.
+      noAirWhenFullyAirBlocked: false
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 0.5,-1.5
@@ -672,6 +674,8 @@ entities:
     mapInit: true
     paused: true
     components:
+    - type: Airtight # CMU14: retain hatch air when closed above a sealing fan.
+      noAirWhenFullyAirBlocked: false
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -1.5,3.5
@@ -744,6 +748,8 @@ entities:
     mapInit: true
     paused: true
     components:
+    - type: Airtight # CMU14: retain hatch air when closed above a sealing fan.
+      noAirWhenFullyAirBlocked: false
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 2.5,3.5
@@ -2073,26 +2079,31 @@ entities:
   entities:
   - uid: 73
     components:
+    - type: CMUGunshipDoorAtmosphere # CMU14: initialize each isolated hatch tile once.
     - type: Transform
       parent: 1
       pos: -1.5,3.5
   - uid: 74
     components:
+    - type: CMUGunshipDoorAtmosphere # CMU14: initialize each isolated hatch tile once.
     - type: Transform
       parent: 1
       pos: 2.5,3.5
   - uid: 75
     components:
+    - type: CMUGunshipDoorAtmosphere # CMU14: initialize each isolated hatch tile once.
     - type: Transform
       parent: 1
       pos: -0.5,-1.5
   - uid: 76
     components:
+    - type: CMUGunshipDoorAtmosphere # CMU14: initialize each isolated hatch tile once.
     - type: Transform
       parent: 1
       pos: 0.5,-1.5
   - uid: 77
     components:
+    - type: CMUGunshipDoorAtmosphere # CMU14: initialize each isolated hatch tile once.
     - type: Transform
       parent: 1
       pos: 1.5,-1.5

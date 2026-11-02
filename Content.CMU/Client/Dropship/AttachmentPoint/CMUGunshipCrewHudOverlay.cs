@@ -39,20 +39,21 @@ public sealed class CMUGunshipCrewHudOverlay : Overlay
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
-        => args.ViewportControl == _eye.MainViewport && _player.LocalEntity is { } player &&
-           _entities.HasComponent<CMUGunshipCrewHudComponent>(player);
+        => args.ViewportControl == _eye.MainViewport && _player.LocalEntity is { } player
+           && _entities.HasComponent<CMUGunshipCrewHudComponent>(player);
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        if (_player.LocalEntity is not { } player ||
-            !_entities.TryGetComponent(player, out CMUGunshipCrewHudComponent? hud))
+        if (_player.LocalEntity is not { } player
+            || !_entities.TryGetComponent(player, out CMUGunshipCrewHudComponent? hud))
             return;
 
         var handle = args.ScreenHandle;
         var bounds = args.ViewportBounds;
         var text = hud.Dropship == null
             ? Loc.GetString("cmu-gunship-crew-unlinked")
-            : Loc.GetString("cmu-gunship-crew-current-ammo", ("gun", hud.GunType), ("count", hud.Ammo), ("capacity", hud.Capacity));
+            : Loc.GetString("cmu-gunship-crew-current-ammo",
+                ("gun", hud.GunType), ("count", hud.Ammo), ("capacity", hud.Capacity));
         var size = handle.GetDimensions(_font, text, 1);
         var position = new Vector2(bounds.Left + (bounds.Width - size.X) * 0.5f, bounds.Top + 18f);
         handle.DrawString(_font, position + Vector2.One * 2f, text, Color.Black);
@@ -62,7 +63,8 @@ public sealed class CMUGunshipCrewHudOverlay : Overlay
 
         DrawOtherGuns(handle, bounds, hud);
         _statusDisplay.DrawIntegrityBar(handle, bounds, hud.Integrity, hud.MaxIntegrity);
-        _statusDisplay.DrawWarnings(handle, bounds, hud.Malfunctions, hud.Alarms, hud.MasterAlarmSilenced, _timing.CurTime);
+        _statusDisplay.DrawWarnings(handle, bounds, hud.Malfunctions, hud.Alarms,
+            hud.MasterAlarmSilenced, _timing.CurTime);
     }
 
     private void DrawOtherGuns(DrawingHandleScreen handle, UIBox2i bounds, CMUGunshipCrewHudComponent hud)

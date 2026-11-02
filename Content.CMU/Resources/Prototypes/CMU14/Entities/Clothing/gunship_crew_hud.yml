@@ -1,8 +1,6 @@
 - type: entity
   parent: RMCVisorBase
   id: CMUVisorGunshipCrew
-  name: Basic gunship crew HUD
-  description: A helmet-mounted display linking a door gunner to their gunship's ammunition, hull integrity, and system warnings.
   components:
   - type: Sprite
     state: hud_sight
@@ -20,8 +18,6 @@
 - type: entity
   parent: CMUVisorGunshipCrew
   id: CMUVisorGunshipCrewAdvanced
-  name: Advanced Gunship crew HUD
-  description: An aircrew helmet display combining gunship status, medical overlays, and toggleable protection against firing into its own gunship. Requires Aircrew training.
   components:
   - type: Visor
     skillsRequired:

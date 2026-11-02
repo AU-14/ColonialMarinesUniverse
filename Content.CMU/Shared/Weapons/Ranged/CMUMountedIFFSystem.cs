@@ -5,6 +5,7 @@ using Content.Shared.Buckle.Components;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Weapons.Ranged;
 
@@ -12,8 +13,10 @@ public sealed partial class CMUMountedIFFSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private AttachableIFFSystem _iff = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+
+    private static readonly EntProtoId ToggleActionPrototype = "CMUActionMountedIFF";
 
     public override void Initialize()
     {
@@ -29,16 +32,16 @@ public sealed partial class CMUMountedIFFSystem : EntitySystem
 
     private void OnBuckled(Entity<BuckleComponent> ent, ref BuckledEvent args)
     {
-        if (_net.IsClient || ent.Comp.BuckledTo is not { } mount ||
-            !TryComp(mount, out WeaponMountComponent? mounted) || mounted.MountedEntity is not { } weapon ||
-            !TryComp(weapon, out CMUMountedIFFComponent? iff))
+        if (_net.IsClient || ent.Comp.BuckledTo is not { } mount
+            || !TryComp(mount, out WeaponMountComponent? mounted) || mounted.MountedEntity is not { } weapon
+            || !TryComp(weapon, out CMUMountedIFFComponent? iff))
             return;
 
         var op = EnsureComp<CMUMountedIFFOperatorComponent>(ent);
         op.Weapon = weapon;
         op.Mount = mount;
         iff.Operator = ent.Owner;
-        _actions.AddAction(ent.Owner, ref op.ToggleAction, "CMUActionMountedIFF");
+        _actions.AddAction(ent.Owner, ref op.ToggleAction, ToggleActionPrototype);
         _actions.SetToggled(op.ToggleAction, iff.Enabled);
         Dirty(ent.Owner, op);
     }
@@ -67,19 +70,20 @@ public sealed partial class CMUMountedIFFSystem : EntitySystem
 
     private void OnGunShutdown(Entity<CMUMountedIFFComponent> ent, ref ComponentShutdown args)
     {
-        if (!_net.IsClient && ent.Comp.Operator is { } user &&
-            TryComp(user, out CMUMountedIFFOperatorComponent? op) && op.Weapon == ent.Owner)
+        if (!_net.IsClient && ent.Comp.Operator is { } user
+            && TryComp(user, out CMUMountedIFFOperatorComponent? op) && op.Weapon == ent.Owner)
             RemComp<CMUMountedIFFOperatorComponent>(user);
     }
 
     private bool IsOperator(EntityUid user, EntityUid mount, EntityUid weapon)
-        => TryComp(user, out BuckleComponent? buckle) && buckle.BuckledTo == mount &&
-           TryComp(mount, out WeaponMountComponent? mounted) && mounted.User == user && mounted.MountedEntity == weapon;
+        => TryComp(user, out BuckleComponent? buckle) && buckle.BuckledTo == mount
+           && TryComp(mount, out WeaponMountComponent? mounted)
+           && mounted.User == user && mounted.MountedEntity == weapon;
 
     private void OnToggle(Entity<CMUMountedIFFOperatorComponent> ent, ref CMUToggleMountedIFFActionEvent args)
     {
-        if (args.Handled || !IsOperator(ent, ent.Comp.Mount, ent.Comp.Weapon) ||
-            !TryComp(ent.Comp.Weapon, out CMUMountedIFFComponent? iff))
+        if (args.Handled || !IsOperator(ent, ent.Comp.Mount, ent.Comp.Weapon)
+            || !TryComp(ent.Comp.Weapon, out CMUMountedIFFComponent? iff))
             return;
 
         args.Handled = true;
@@ -91,9 +95,9 @@ public sealed partial class CMUMountedIFFSystem : EntitySystem
 
     private void OnAttemptShoot(Entity<CMUMountedIFFComponent> ent, ref AttemptShootEvent args)
     {
-        if (args.Cancelled || !ent.Comp.Enabled ||
-            !TryComp(args.User, out CMUMountedIFFOperatorComponent? op) || op.Weapon != ent.Owner ||
-            !IsOperator(args.User, op.Mount, ent.Owner))
+        if (args.Cancelled || !ent.Comp.Enabled
+            || !TryComp(args.User, out CMUMountedIFFOperatorComponent? op) || op.Weapon != ent.Owner
+            || !IsOperator(args.User, op.Mount, ent.Owner))
             return;
 
         _iff.CheckPreventFriendlyFire(ent, ref args);
