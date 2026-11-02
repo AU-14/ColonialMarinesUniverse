@@ -9185,8 +9185,6 @@ public sealed class YautjaBowTest
                 var smartDisc = entMan.GetComponent<YautjaSmartDiscComponent>(disc);
                 var embeddable = entMan.GetComponent<EmbeddableProjectileComponent>(disc);
                 var thrownDamage = entMan.GetComponent<DamageOtherOnHitComponent>(disc);
-                var staminaCollide = entMan.GetComponent<StaminaDamageOnCollideComponent>(disc);
-                var staminaEmbed = entMan.GetComponent<StaminaDamageOnEmbedComponent>(disc);
 
                 Assert.Multiple(() =>
                 {
@@ -9210,10 +9208,8 @@ public sealed class YautjaBowTest
                         "CMSS13 smartdisc embeddable = FALSE.");
                     Assert.That(DamageTotal(thrownDamage.Damage), Is.EqualTo((FixedPoint2) 25),
                         "CMSS13 smartdisc throwforce = 25.");
-                    Assert.That(staminaCollide.Damage, Is.EqualTo(25f),
-                        "CMSS13 smartdisc throwforce has no separate stamina payload; keep local collide stamina aligned to throwforce.");
-                    Assert.That(staminaEmbed.Damage, Is.EqualTo(0f),
-                        "CMSS13 smartdisc embeddable = FALSE means no embed stamina payload.");
+                    Assert.That(entMan.HasComponent<StaminaDamageOnCollideComponent>(disc), Is.False,
+                        "CMSS13 smartdisc throwforce has no stamina payload.");
                     Assert.That(entMan.GetComponent<ItemThrowRangeComponent>(disc).Range, Is.EqualTo(14f),
                         "CMSS13 boomerang throws back toward the user with range 12.");
                     Assert.That(entMan.TryGetComponent<MeleeWeaponComponent>(disc, out var melee), Is.True,

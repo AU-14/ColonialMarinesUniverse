@@ -11,7 +11,7 @@ using Content.Server.Damage.Systems;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Humanoid;
+using Content.Shared.FixedPoint;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Item.ItemToggle;
@@ -22,6 +22,7 @@ using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Physics;
+using Content.Shared.Stunnable;
 using Content.Shared.Popups;
 using Content.Shared.Toggleable;
 using Content.Shared.Throwing;
@@ -63,6 +64,8 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
 
     public override void Initialize()
     {
@@ -713,35 +716,23 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         if (_timing.CurTime < disc.NextHit || !IsValidTarget((uid, disc), target))
             return false;
 
-        if (TryComp(uid, out DamageOtherOnHitComponent? damage))
-        {
-            var damageSpec = GetDiscDamageAgainstTarget(disc, target, damage.Damage);
-            var dealt = _damage.TryChangeDamage(
-                target,
-                damageSpec * _damage.UniversalThrownDamageModifier,
-                damage.IgnoreResistances,
-                origin: disc.YautjaOwner ?? uid,
-                tool: uid);
+        var amount = _random.NextFloat(disc.StrikeDamageMin, disc.StrikeDamageMax);
+        var damage = new DamageSpecifier(_prototypes.Index(disc.StrikeDamageType), FixedPoint2.New(amount));
+        var dealt = _damage.TryChangeDamage(
+            target,
+            damage,
+            ignoreResistances: true,
+            origin: disc.YautjaOwner ?? uid,
+            tool: uid);
 
-            if (dealt != null && !dealt.Empty)
-                _audio.PlayPvs(disc.HitSound, target);
-        }
+        if (dealt != null && !dealt.Empty)
+            _audio.PlayPvs(disc.HitSound, target);
+
+        if (_random.Prob(disc.KnockdownChance))
+            _stun.TryKnockdown(target, disc.KnockdownTime);
 
         RegisterHit((uid, disc), target);
         return true;
-    }
-
-    private DamageSpecifier GetDiscDamageAgainstTarget(YautjaSmartDiscComponent disc, EntityUid target, DamageSpecifier damage)
-    {
-        if (IsHumanDiscTarget(target))
-            return damage * disc.HumanDamageMultiplier;
-
-        return damage;
-    }
-
-    private bool IsHumanDiscTarget(EntityUid target)
-    {
-        return HasComp<HumanoidProfileComponent>(target) && !HasComp<YautjaComponent>(target);
     }
 
     private bool TryFindHitTarget(Entity<YautjaSmartDiscComponent> ent, out EntityUid target)

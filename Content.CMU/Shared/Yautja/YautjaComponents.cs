@@ -1529,8 +1529,23 @@ public sealed partial class YautjaSmartDiscComponent : Component
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public float NonYautjaFiddleChance = 0.75f;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public float HumanDamageMultiplier = 0.7f;
+    // cmss13's active disc is a simple mob: rand(15, 25) brute per slash through attack_animal, which
+    // never checks armour
+    [DataField]
+    public ProtoId<DamageTypePrototype> StrikeDamageType = "Slash";
+
+    [DataField]
+    public float StrikeDamageMin = 15f;
+
+    [DataField]
+    public float StrikeDamageMax = 25f;
+
+    [DataField]
+    public float KnockdownChance = 0.05f;
+
+    // WEAKEN 3, each unit is 2 seconds there
+    [DataField]
+    public TimeSpan KnockdownTime = TimeSpan.FromSeconds(6);
 
     [DataField]
     public SoundSpecifier HitSound = new SoundPathSpecifier("/Audio/Weapons/star_hit.ogg");

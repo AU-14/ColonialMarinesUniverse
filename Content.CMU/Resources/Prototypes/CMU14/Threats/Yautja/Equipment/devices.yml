@@ -554,10 +554,6 @@
       types:
         Slash: 12.5
         Piercing: 12.5
-  - type: StaminaDamageOnCollide
-    damage: 25
-  - type: StaminaDamageOnEmbed
-    damage: 0
 
   - type: MeleeWeapon
     wideAttackAllowed: false
