@@ -86,10 +86,11 @@
     device: Target
   - type: Sprite
     sprite: _CMU14/Structures/Fob/targeted.rsi
-    state: lockon_sensor
     noRot: true
     drawdepth: Effects
-    shader: unshaded
+    layers:
+    - state: lockon_sensor
+      shader: unshaded
   - type: Appearance
   - type: TimedDespawn
     lifetime: 4

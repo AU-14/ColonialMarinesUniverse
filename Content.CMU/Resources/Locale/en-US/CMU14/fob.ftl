@@ -2,6 +2,7 @@ ent-CMUFobRelay = FOB relay
     .desc = A field relay that can replenish a FOB's support reserve when assigned for repair.
 ent-CMUFobControl = FOB reserve control
     .desc = Local controls for the FOB's support reserve. Requires a registered FOB site.
+cmu-requisitions-category-fob = FOB
 cmu-fob-disabled = FOB reserve equipment is disabled for this round.
 cmu-fob-control-title = FOB Support Reserve
 cmu-fob-control-denied = Control unavailable. Use an intact control at the registered FOB site as a faction engineer or squad leader.

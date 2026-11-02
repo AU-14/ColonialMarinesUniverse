@@ -1,5 +1,7 @@
 using Content.Shared.CMU14.Fob;
+using Content.Shared.Guidebook;
 using Robust.Client.UserInterface;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.Fob;
 
@@ -11,7 +13,9 @@ public sealed class CMUFobControlBui(EntityUid owner, Enum uiKey) : BoundUserInt
     {
         base.Open();
         _window = this.CreateWindow<CMUFobControlWindow>();
-        _window.Instructions.OnPressed += _ => EntMan.System<Content.Client.Guidebook.GuidebookSystem>().OpenHelp(["CMUFobGuide"]);
+        // List collection expressions emit CollectionsMarshal.SetCount, which the content sandbox forbids.
+        _window.Instructions.OnPressed += _ => EntMan.System<Content.Client.Guidebook.GuidebookSystem>()
+            .OpenHelp(new List<ProtoId<GuideEntryPrototype>> { "CMUFobGuide" });
         _window.Activate.OnPressed += _ => SendMessage(new CMUFobControlMessage(true));
         _window.Deactivate.OnPressed += _ => SendMessage(new CMUFobControlMessage(false));
     }

@@ -131,5 +131,5 @@
   - type: Physics
     bodyType: Dynamic
   - type: Appearance
-    data:
-      enum.CMUFobVisuals.Stowed: true
+    appearanceDataInit:
+      enum.CMUFobVisuals.Stowed: !type:Bool true

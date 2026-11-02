@@ -69,6 +69,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         ["Dropship Parts"] = "rmc-requisitions-category-dropship-parts",
         ["Engineering"] = "rmc-requisitions-category-engineering",
         ["Explosives"] = "rmc-requisitions-category-explosives",
+        ["FOB"] = "cmu-requisitions-category-fob",
         ["Food"] = "rmc-requisitions-category-food",
         ["Food and Drinks"] = "rmc-requisitions-category-food-and-drinks",
         ["Furniture"] = "rmc-requisitions-category-furniture",

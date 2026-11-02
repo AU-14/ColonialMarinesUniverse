@@ -50,6 +50,9 @@
     capacity: 12
     mayTransfer: false
     cycleable: false
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
 
 - type: entity
   parent: RMCRocket84mm
