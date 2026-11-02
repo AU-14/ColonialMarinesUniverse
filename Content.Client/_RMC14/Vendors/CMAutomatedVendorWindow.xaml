@@ -1,24 +1,27 @@
-<!-- CMU14: CRT presentation for the existing vendor UI; vendor gameplay logic is unchanged. -->
+<!-- CMU14 Begin: complete CRT vendor inventory layout; shared by every CMAutomatedVendor. -->
 <controls:CMAutomatedVendorWindow
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Vendors"
-    MinSize="440 500">
+    MinSize="620 520">
     <PanelContainer Name="Background" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="10">
             <PanelContainer Name="HeaderStrip" HorizontalExpand="True">
-                <BoxContainer Orientation="Horizontal" SeparationOverride="8">
-                    <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-                        <Label Name="Heading" Text="VENDOR INVENTORY" />
+                <BoxContainer Orientation="Horizontal" SeparationOverride="10">
+                    <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4">
+                        <Label Name="Heading" />
                         <Label Name="SummaryLabel" />
                     </BoxContainer>
-                    <Label Name="StatusLabel" VerticalAlignment="Center" />
+                    <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                        <Label Name="StatusLabel" HorizontalAlignment="Right" />
+                        <Label Name="PointsLabel" Access="Public" HorizontalAlignment="Right" />
+                    </BoxContainer>
                 </BoxContainer>
             </PanelContainer>
-            <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
                 <LineEdit Name="Search" Access="Public" HorizontalExpand="True" />
+                <Button Name="AvailableOnly" Access="Public" />
                 <Button Name="LowStockOnly" Access="Public" />
             </BoxContainer>
-            <Label Name="PointsLabel" Access="Public" />
             <PanelContainer Name="ReagentsStrip">
                 <BoxContainer Orientation="Horizontal" Name="ReagentsContainer" Access="Public" SeparationOverride="8">
                     <Label Name="ReagentsTitle" VerticalAlignment="Center" />
@@ -27,17 +30,29 @@
                     </ProgressBar>
                 </BoxContainer>
             </PanelContainer>
-            <PanelContainer Name="StockPanel" VerticalExpand="True" HorizontalExpand="True">
-                <BoxContainer Orientation="Vertical" SeparationOverride="5" HorizontalExpand="True" VerticalExpand="True">
-                    <Label Name="EmptyLabel" Visible="False" />
-                    <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
-                        <BoxContainer Orientation="Vertical" Name="Sections" Access="Public" SeparationOverride="6" HorizontalExpand="True" Margin="4 4" />
-                    </ScrollContainer>
-                </BoxContainer>
-            </PanelContainer>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8" VerticalExpand="True">
+                <PanelContainer Name="NavigationStrip" MinWidth="170" MaxWidth="200">
+                    <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                        <Label Name="CategoryHeading" />
+                        <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                            <BoxContainer Name="CategoryButtons" Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" />
+                        </ScrollContainer>
+                    </BoxContainer>
+                </PanelContainer>
+                <PanelContainer Name="StockPanel" VerticalExpand="True" HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True" VerticalExpand="True">
+                        <Label Name="ResultCount" />
+                        <Label Name="EmptyLabel" Visible="False" />
+                        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+                            <BoxContainer Orientation="Vertical" Name="Sections" Access="Public" SeparationOverride="8" HorizontalExpand="True" Margin="2 2 6 2" />
+                        </ScrollContainer>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
             <PanelContainer Name="FooterStrip">
                 <Label Name="FooterLabel" />
             </PanelContainer>
         </BoxContainer>
     </PanelContainer>
 </controls:CMAutomatedVendorWindow>
+<!-- CMU14 End -->
