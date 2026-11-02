@@ -1,25 +1,30 @@
-<!-- CMU14: CRT presentation for the existing vendor UI; vendor gameplay logic is unchanged. -->
+<!-- CMU14 Begin: an equipment row with a distinct item name, stock information and dispense action. -->
 <cc:CMAutomatedVendorEntry
     xmlns="https://spacestation14.io"
     xmlns:cc="clr-namespace:Content.Client._RMC14.Vendors"
     HorizontalExpand="True">
     <PanelContainer Name="RowSurface" HorizontalExpand="True">
-        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+        <BoxContainer Orientation="Horizontal" SeparationOverride="10">
             <PanelContainer Name="IconSurface" VerticalAlignment="Center">
                 <LayeredTextureRect Name="Texture" Access="Public"
                                     HorizontalExpand="False" VerticalExpand="False"
-                                    MinSize="32 32" MaxSize="32 32" Stretch="Scale" />
+                                    MinSize="40 40" MaxSize="40 40" Stretch="Scale" />
             </PanelContainer>
-            <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
-                <cc:CMAutomatedVendorPanel Name="Panel" Access="Public" />
+            <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
+                <BoxContainer Orientation="Horizontal" SeparationOverride="5">
+                    <RichTextLabel Name="ItemTitle" HorizontalExpand="True" />
+                    <Button Name="TooltipLabel" Access="Public" Text="i" />
+                </BoxContainer>
                 <BoxContainer Orientation="Horizontal" SeparationOverride="7">
-                    <Label Name="Amount" Access="Public" VerticalAlignment="Center" />
                     <Label Name="Stock" Access="Public" VerticalAlignment="Center" />
+                    <Label Name="Amount" Access="Public" VerticalAlignment="Center" />
                     <Control HorizontalExpand="True" />
                     <Label Name="Availability" VerticalAlignment="Center" />
                 </BoxContainer>
             </BoxContainer>
-            <Button Text="?" Name="TooltipLabel" Access="Public" VerticalAlignment="Center" />
+            <cc:CMAutomatedVendorPanel Name="Panel" Access="Public"
+                HorizontalExpand="False" MinWidth="104" VerticalAlignment="Center" />
         </BoxContainer>
     </PanelContainer>
 </cc:CMAutomatedVendorEntry>
+<!-- CMU14 End -->
