@@ -1,0 +1,48 @@
+- type: entity
+  abstract: true
+  parent: ActionMarineBase
+  id: CMUActionReportBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/map_blips.rsi
+      state: enemy_blip
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 0 # Scout-report settings and optical visibility determine the range.
+    checkCanAccess: false
+    interactOnMiss: false
+
+- type: entity
+  parent: CMUActionReportBase
+  id: CMUActionReportInfantry
+  components:
+  - type: WorldTargetAction
+    event: !type:CMUScoutReportActionEvent
+      contactType: Infantry
+
+- type: entity
+  parent: CMUActionReportBase
+  id: CMUActionReportVehicle
+  components:
+  - type: WorldTargetAction
+    event: !type:CMUScoutReportActionEvent
+      contactType: Vehicle
+
+- type: entity
+  parent: CMUActionReportBase
+  id: CMUActionReportEmplacement
+  components:
+  - type: WorldTargetAction
+    event: !type:CMUScoutReportActionEvent
+      contactType: Emplacement
+
+- type: entity
+  parent: CMUActionReportBase
+  id: CMUActionReportUnknown
+  components:
+  - type: WorldTargetAction
+    event: !type:CMUScoutReportActionEvent
+      contactType: Unknown

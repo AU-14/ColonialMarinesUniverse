@@ -1,0 +1,11 @@
+- type: cmuScoutReportSettings
+  id: CMUScoutReports
+  maxActiveReports: 3
+  lifetime: 240 # Seconds.
+  cooldown: 15 # Seconds; zero disables the reporting cooldown.
+  reportRange: 40 # Tiles; the observer must also see the location through their optics.
+  radioChannels:
+    GOVFOR: [radioGovforJTAC, radioGovforCommand]
+    OPFOR: [radioOpforJTAC, radioOpforCommand]
+    MARINES: [MarineJTAC, MarineCommand]
+    CLF: [radioCLFCommand]

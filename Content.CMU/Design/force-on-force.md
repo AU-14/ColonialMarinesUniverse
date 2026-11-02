@@ -15,6 +15,44 @@ Players select a preferred side (or either side) and one fallback policy:
 
 The roll maximizes balanced assignments, then prefers higher role priorities and the preferred side. A later overflow pass cannot change these limits. Direct late joins keep the selected job and return to the lobby if that side is full, rather than substituting a different role. Preferences are saved per character, with SQLite and PostgreSQL migrations.
 
+## Scout contact reports
+
+Trained scouts using scout laser-designator binoculars and trained spotters using
+a spotter laser designator or M707 spotter scope can report observed contacts.
+While scoped in, choose **Report infantry**, **Report vehicle**, **Report
+emplacement**, or **Report unknown contact**, then click the observed location.
+Handheld and tripod-mounted spotter scopes are supported. Ordinary binoculars,
+rangefinders and rifle scopes do not grant reporting actions.
+
+Reports appear on the faction's personal and console tactical maps, in both
+classic and reconstruction views, with contact type, reporter and age. They are
+manual observations, not confirmed enemies or tracking locks: a moving vehicle
+leaves its report behind, and scouts must report its new position to guide an
+interception. By default, reports require line of sight through the optics and expire after
+240 seconds. Each character has a shared 15-second reporting cooldown and at most
+three active reports across all optics, types and maps; a fourth replaces their
+oldest. Reports are separate from sensor feeds and are never shared with enemies
+through sensor ownership. Deleting the reporter or reported map clears reports.
+
+Each accepted report is also transmitted on the scout's faction JTAC and Command
+nets, using their assigned callsign as both the sender and the radio report's
+identification. The call gives contact type, rangefinder-compatible grid
+coordinates and area, followed by "Time now. Position marked on tactical map.
+Over." Normal range, relay and jamming rules apply; failed radio delivery does
+not remove the tactical-map mark. A missing callsign produces a warning rather
+than broadcasting the character's personal name. CLF has only a Command net;
+factions without a configured reporting channel receive a warning and retain the mark.
+
+Edit [scout report settings](../Resources/Prototypes/CMU14/TacticalMap/scout_reports.yml)
+to tune all scouts together: `maxActiveReports`, `lifetime` and `cooldown` (seconds),
+`reportRange` (tiles), and `radioChannels` (channel prototype IDs keyed by uppercase
+faction). The default range is 40 tiles, further limited by optical visibility.
+The limit, lifetime and range must be positive; cooldown may be zero to disable it.
+Missing faction entries or empty channel lists disable that faction's radio reports
+without disabling map marks. Action descriptions and cooldown indicators use these
+settings too. Restart the server after editing the YAML. Optic eligibility and
+training remain on the optics' YAML components.
+
 ## Dropships
 
 The CIP foundation exposes shared console-faction lookup and target selection
