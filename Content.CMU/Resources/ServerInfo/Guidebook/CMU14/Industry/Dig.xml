@@ -12,7 +12,7 @@
     <GuideEntityEmbed Entity="RUMCJackhammer" Caption="Z-10 and deeper"/>
   </Box>
 
-  [bold]Hold tool → aim at nearby clear floor → [keybind="UseItemInHand"] → stay still.[/bold] Right-click the tool to switch between digging down and digging up. Walls, furniture and protected supports can block the route.
+  [bold]Hold tool → aim at nearby clear floor → [keybind="ActivateItemInHand"] → stay still.[/bold] Right-click the tool to switch between digging down and digging up. Walls, furniture and protected supports can block the route.
 
   Large caverns begin at [bold]Z-3[/bold]. They can span several levels. Watch your step; the floor you see below may be a long way down.
 
@@ -28,7 +28,7 @@
   - Support wide excavations with beams or pillars. Digging away the roof's support can cause a cave-in.
 
   <GuideEntityEmbed Entity="AU14StructuralScanner" Caption="CHECK THE CEILING"/>
-  Hold a structural scanner and press [keybind="UseItemInHand"] to toggle its roof-stability overlay. Check support before widening a room. Click a ladder to climb; right-click it for the available climb and look directions. Open a closed hatch before trying again.
+  Hold a structural scanner and press [keybind="ActivateItemInHand"] to toggle its roof-stability overlay. Check support before widening a room. Click a ladder to climb; right-click it for the available climb and look directions. Open a closed hatch before trying again.
 
   ## Bring back knowledge, too
   <GuideEntityEmbed Entity="CMUCaveSurveyMap" Caption="Explore → transcribe → share"/>
