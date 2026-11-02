@@ -56,6 +56,10 @@ public sealed partial class CMAutomatedVendorWindow : DefaultWindow
         CmuButtonStyles.Apply(LowStockOnly, CmuButtonStyles.Variant.Neutral);
         AvailableOnly.Label.FontOverride = _kit.Small;
         LowStockOnly.Label.FontOverride = _kit.Small;
+        // CMU14: activated filters need visible state, not only changed search results.
+        AvailableOnly.OnToggled += _ => UpdateFilterAppearance();
+        LowStockOnly.OnToggled += _ => UpdateFilterAppearance();
+        UpdateFilterAppearance();
 
         CategoryHeading.Text = Loc.GetString("cmu-vendor-categories");
         CategoryHeading.FontOverride = _kit.Bold;
@@ -123,6 +127,30 @@ public sealed partial class CMAutomatedVendorWindow : DefaultWindow
         }
 
         HighlightCategories();
+    }
+
+    // CMU14 method: filter toggles show their state on both neutral and Yautja palettes.
+    private void UpdateFilterAppearance()
+    {
+        foreach (var button in new[] { AvailableOnly, LowStockOnly })
+        {
+            var selected = button.Pressed;
+            button.StyleBoxOverride = new StyleBoxFlat
+            {
+                BackgroundColor = _yautjaTheme
+                    ? (selected ? YautjaBracerUiStyle.Row : YautjaBracerUiStyle.DeepCard)
+                    : (selected ? CrtTerminalPalette.Surface4 : CrtTerminalPalette.Surface2),
+                BorderColor = _yautjaTheme ? YautjaBracerUiStyle.HotRed : CrtTerminalPalette.Accent,
+                BorderThickness = new Thickness(selected ? 1 : 0),
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
+                ContentMarginTopOverride = 6,
+                ContentMarginBottomOverride = 6,
+            };
+            button.Label.FontColorOverride = _yautjaTheme
+                ? YautjaBracerUiStyle.Text
+                : selected ? CrtTerminalPalette.TextBright : CrtTerminalPalette.Text;
+        }
     }
 
     private void HighlightCategories()
@@ -201,6 +229,7 @@ public sealed partial class CMAutomatedVendorWindow : DefaultWindow
         if (_kit.Tube.GetChild(1) is CrtScreenControl crt)
             crt.Phosphor = YautjaBracerUiStyle.HotRed;
 
+        UpdateFilterAppearance();
         HighlightCategories();
     }
 
