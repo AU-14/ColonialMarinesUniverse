@@ -75,6 +75,10 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     {
         ["CMUYautjaEssentials"] = 0,
         ["CMUYautjaArmor"] = 0,
+        // thrall rack only: cmss13 YAUTJA_CAN_BUY_UNIFORM / _MASK / _SHOES rows
+        ["CMUYautjaUniform"] = 0,
+        ["CMUYautjaMask"] = 0,
+        ["CMUYautjaShoes"] = 0,
         ["CMUYautjaPrimary"] = 0,
         ["CMUYautjaBracer"] = 0,
         ["CMUYautjaRanged"] = 0,

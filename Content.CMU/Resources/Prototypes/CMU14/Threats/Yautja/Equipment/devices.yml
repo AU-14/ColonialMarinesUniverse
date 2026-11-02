@@ -2190,7 +2190,6 @@
     state: icon
   - type: CMVendorBundle
     bundle:
-    - CMUYautjaThrallChainshirt
     - CMUYautjaHuntingPouch
     - CMUYautjaLantern
     - CMUYautjaCommunicator
@@ -2393,81 +2392,6 @@
     - CMUYautjaEmissaryArmorCamoConforming
     - CMUYautjaMaskBadBloodEmissaryClassic
     - CMUYautjaEmissaryGreavesCamoConforming
-
-- type: entity
-  id: CMUYautjaThrallArmorEbonyBundle
-  name: Ebony
-  description: Contains the ebony armor issued to a Yautja thrall.
-  categories: [HideSpawnMenu]
-  components:
-  - type: Sprite
-    sprite: CMU14/Yautja/armor_thrall_ebony.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - CMUYautjaThrallArmorEbony
-    - CMUYautjaThrallGreavesEbony
-    - CMUYautjaMaskThrallEbony
-
-- type: entity
-  id: CMUYautjaThrallArmorSilverBundle
-  name: Silver
-  description: Contains the silver armor issued to a Yautja thrall.
-  categories: [HideSpawnMenu]
-  components:
-  - type: Sprite
-    sprite: CMU14/Yautja/armor_thrall_silver.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - CMUYautjaThrallArmorSilver
-    - CMUYautjaThrallGreavesSilver
-    - CMUYautjaMaskThrallSilver
-
-- type: entity
-  id: CMUYautjaThrallArmorGoldBundle
-  name: Gold
-  description: Contains the gold armor issued to a Yautja thrall.
-  categories: [HideSpawnMenu]
-  components:
-  - type: Sprite
-    sprite: CMU14/Yautja/armor_thrall_gold.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - CMUYautjaThrallArmorGold
-    - CMUYautjaThrallGreavesGold
-    - CMUYautjaMaskThrallGold
-
-- type: entity
-  id: CMUYautjaThrallArmorCrimsonBundle
-  name: Crimson
-  description: Contains the crimson armor issued to a Yautja thrall.
-  categories: [HideSpawnMenu]
-  components:
-  - type: Sprite
-    sprite: CMU14/Yautja/armor_thrall_crimson.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - CMUYautjaThrallArmorCrimson
-    - CMUYautjaThrallGreavesCrimson
-    - CMUYautjaMaskThrallCrimson
-
-- type: entity
-  id: CMUYautjaThrallArmorBoneBundle
-  name: Bone
-  description: Contains the bone armor issued to a Yautja thrall.
-  categories: [HideSpawnMenu]
-  components:
-  - type: Sprite
-    sprite: CMU14/Yautja/armor_thrall_bone.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - CMUYautjaThrallArmorBone
-    - CMUYautjaThrallGreavesBone
-    - CMUYautjaMaskThrallBone
 
 - type: entity
   id: CMUYautjaBloodedThrallEquipmentBundle
@@ -2954,26 +2878,203 @@
         choices: {CMUYautjaEssentials: 1}
         maxPerUser: 1
         mandatory: true
-    - name: Armor Material (CHOOSE 1)
-      choices: {CMUYautjaArmor: 1}
+    # cmss13 #12577 thrall rack: pick an undersuit, one mask and one chest and greaves piece of any style
+    - name: Undersuit (CHOOSE 1)
+      choices: {CMUYautjaUniform: 1}
       entries:
-      - id: CMUYautjaThrallArmorEbonyBundle
+      - id: CMUYautjaThrallChainshirt
+        name: Chain
+        maxPerUser: 1
+        mandatory: true
+      - id: CMUYautjaThrallClothSuit
+        name: Crimson Cloth
+        maxPerUser: 1
+        mandatory: true
+      - id: CMUYautjaThrallClothSuitAlt
+        name: Tan Cloth
+        maxPerUser: 1
+        mandatory: true
+    - name: Full-Mask (CHOOSE 1)
+      choices: {CMUYautjaMask: 1}
+      entries:
+      - id: CMUYautjaMaskThrallEbony
         name: Ebony
         maxPerUser: 1
         recommended: true
-      - id: CMUYautjaThrallArmorSilverBundle
+      - id: CMUYautjaMaskThrallSilver
         name: Silver
         maxPerUser: 1
         recommended: true
-      - id: CMUYautjaThrallArmorGoldBundle
+      - id: CMUYautjaMaskThrallGold
         name: Gold
         maxPerUser: 1
         recommended: true
-      - id: CMUYautjaThrallArmorCrimsonBundle
+      - id: CMUYautjaMaskThrallCrimson
         name: Crimson
         maxPerUser: 1
         recommended: true
-      - id: CMUYautjaThrallArmorBoneBundle
+      - id: CMUYautjaMaskThrallBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Half-Mask (CHOOSE 1)
+      choices: {CMUYautjaMask: 1}
+      entries:
+      - id: CMUYautjaMaskThrallAltEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaMaskThrallAltSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaMaskThrallAltGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaMaskThrallAltCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaMaskThrallAltBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Full-Armor Chest (CHOOSE 1)
+      choices: {CMUYautjaArmor: 1}
+      entries:
+      - id: CMUYautjaThrallArmorEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Half-Armor Chest (CHOOSE 1)
+      choices: {CMUYautjaArmor: 1}
+      entries:
+      - id: CMUYautjaThrallArmorHalfEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorHalfSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorHalfGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorHalfCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorHalfBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Light-Armor Chest (CHOOSE 1)
+      choices: {CMUYautjaArmor: 1}
+      entries:
+      - id: CMUYautjaThrallArmorLightEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorLightSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorLightGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorLightCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorLightBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Full-Armor Greaves (CHOOSE 1)
+      choices: {CMUYautjaShoes: 1}
+      entries:
+      - id: CMUYautjaThrallGreavesEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Half-Armor Greaves (CHOOSE 1)
+      choices: {CMUYautjaShoes: 1}
+      entries:
+      - id: CMUYautjaThrallGreavesHalfEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesHalfSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesHalfGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesHalfCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesHalfBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Light-Armor Greaves (CHOOSE 1)
+      choices: {CMUYautjaShoes: 1}
+      entries:
+      - id: CMUYautjaThrallGreavesLightEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesLightSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesLightGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesLightCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesLightBone
         name: Bone
         maxPerUser: 1
         recommended: true

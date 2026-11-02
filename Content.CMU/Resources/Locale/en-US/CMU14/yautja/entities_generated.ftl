@@ -57,6 +57,9 @@ ent-CMUYautjaAncientAlienMesh = ancient alien mesh suit
 ent-CMUYautjaThrallChainshirt = alien mesh suit
     .desc = A strange alloy weave in the form of a vest. It feels cold with an alien weight. It has been adapted for human physiology.
 
+ent-CMUYautjaThrallClothSuit = alien fiberweave suit
+    .desc = A lightweight one-piece suit woven from an unfamiliar alien fibre, adapted for humans, who are bound to Yautja clans.
+
 ent-CMUYautjaAncientAlienGreaves = ancient alien greaves
     .desc = Greaves made from scraps of cloth and a strange alloy. They feel cold with an alien weight.
 
@@ -313,21 +316,6 @@ ent-CMUYautjaBadBloodArmorCommandoAltBundle = Commando Armor (Alt)
 
 ent-CMUYautjaBadBloodArmorEmissaryBundle = Emissary Armor
     .desc = Contains the emissary armor issued to a Bad Blood hunter.
-
-ent-CMUYautjaThrallArmorEbonyBundle = Ebony
-    .desc = Contains the ebony armor issued to a Yautja thrall.
-
-ent-CMUYautjaThrallArmorSilverBundle = Silver
-    .desc = Contains the silver armor issued to a Yautja thrall.
-
-ent-CMUYautjaThrallArmorGoldBundle = Gold
-    .desc = Contains the gold armor issued to a Yautja thrall.
-
-ent-CMUYautjaThrallArmorCrimsonBundle = Crimson
-    .desc = Contains the crimson armor issued to a Yautja thrall.
-
-ent-CMUYautjaThrallArmorBoneBundle = Bone
-    .desc = Contains the bone armor issued to a Yautja thrall.
 
 ent-CMUYautjaBloodedThrallEquipmentBundle = Blooded Equipment
     .desc = Contains the equipment issued to a blooded Yautja thrall.

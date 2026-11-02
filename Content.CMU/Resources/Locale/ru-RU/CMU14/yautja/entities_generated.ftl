@@ -341,21 +341,6 @@ ent-CMUYautjaBadBloodArmorCommandoAltBundle = Commando броня (альт.)
 ent-CMUYautjaBadBloodArmorEmissaryBundle = Emissary броня
     .desc = содержит emissary броня выданный для яутжа плохой крови охотник.
 
-ent-CMUYautjaThrallArmorEbonyBundle = эбеновый
-    .desc = содержит эбеновый броня выданный для яутжа thrall.
-
-ent-CMUYautjaThrallArmorSilverBundle = Серебро
-    .desc = содержит серебряный броня выданный для яутжа thrall.
-
-ent-CMUYautjaThrallArmorGoldBundle = Золото
-    .desc = содержит золотой броня выданный для яутжа thrall.
-
-ent-CMUYautjaThrallArmorCrimsonBundle = Нуб
-    .desc = содержит алый броня выданный для яутжа thrall.
-
-ent-CMUYautjaThrallArmorBoneBundle = Кости
-    .desc = содержит костяной броня выданный для яутжа thrall.
-
 ent-CMUYautjaBloodedThrallEquipmentBundle = окровавленный снаряжение
     .desc = содержит снаряжение выданный для окровавленный яутжа thrall.
 

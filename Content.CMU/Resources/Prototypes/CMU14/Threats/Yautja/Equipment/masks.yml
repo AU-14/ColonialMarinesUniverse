@@ -2040,6 +2040,63 @@
     slots:
     - Mask
     - Suitstorage
+
+# cmss13 thrall half-mask, same mask with a different sprite
+- type: entity
+  parent: CMUYautjaMaskThrallEbony
+  id: CMUYautjaMaskThrallAltEbony
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/thrallmask_alt_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/thrallmask_alt_ebony.rsi
+
+- type: entity
+  parent: CMUYautjaMaskThrallSilver
+  id: CMUYautjaMaskThrallAltSilver
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/thrallmask_alt_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/thrallmask_alt_silver.rsi
+
+- type: entity
+  parent: CMUYautjaMaskThrallGold
+  id: CMUYautjaMaskThrallAltGold
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/thrallmask_alt_gold.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/thrallmask_alt_gold.rsi
+
+- type: entity
+  parent: CMUYautjaMaskThrallCrimson
+  id: CMUYautjaMaskThrallAltCrimson
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/thrallmask_alt_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/thrallmask_alt_crimson.rsi
+
+- type: entity
+  parent: CMUYautjaMaskThrallBone
+  id: CMUYautjaMaskThrallAltBone
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/thrallmask_alt_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/thrallmask_alt_bone.rsi
+
 - type: entity
   parent: CMUYautjaMaskFunctionalBase
   id: CMUYautjaBadBloodMaskBase
