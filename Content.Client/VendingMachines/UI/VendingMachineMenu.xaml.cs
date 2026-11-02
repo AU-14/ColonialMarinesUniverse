@@ -1,4 +1,7 @@
 using System.Numerics;
+using System.Linq; // CMU14: inventory summary
+using Content.Client.CMU14.Interface; // CMU14: CRT presentation
+using Robust.Client.Graphics; // CMU14: CRT presentation
 using Content.Client.Stylesheets;
 using Content.Shared.Labels.Components;
 using Content.Shared.VendingMachines;
@@ -32,10 +35,42 @@ public sealed partial class VendingMachineMenu : FancyWindow
 
     public VendingMachineMenu()
     {
-        MinSize = SetSize = new Vector2(250, 150);
+        // CMU14 Begin: CRT shell for standard vending machines.
+        MinSize = new Vector2(440, 420);
+        SetSize = new Vector2(500, 590);
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
+        var kit = new CrtConsoleKit();
+        Surface.PanelOverride = new StyleBoxFlat { BackgroundColor = CrtTerminalPalette.Surface0 };
+        HeaderStrip.PanelOverride = new StyleBoxFlat
+        {
+            BackgroundColor = CrtTerminalPalette.Surface3,
+            ContentMarginLeftOverride = 10,
+            ContentMarginRightOverride = 10,
+            ContentMarginTopOverride = 6,
+            ContentMarginBottomOverride = 6,
+        };
+        FooterStrip.PanelOverride = new StyleBoxFlat
+        {
+            BackgroundColor = CrtTerminalPalette.Surface1,
+            ContentMarginLeftOverride = 10,
+            ContentMarginRightOverride = 10,
+            ContentMarginTopOverride = 6,
+            ContentMarginBottomOverride = 6,
+        };
+        InventoryHeading.Text = Loc.GetString("cmu-vendor-heading");
+        InventoryHeading.FontOverride = kit.Title;
+        InventoryHeading.FontColorOverride = CrtTerminalPalette.TextBright;
+        StockSummary.FontOverride = kit.Small;
+        StockSummary.FontColorOverride = CrtTerminalPalette.TextDim;
+        EmptyLabel.Text = Loc.GetString("cmu-vendor-empty");
+        EmptyLabel.FontColorOverride = CrtTerminalPalette.TextDim;
+        FooterText.Text = Loc.GetString("cmu-vendor-footer");
+        FooterText.FontOverride = kit.Small;
+        FooterText.FontColorOverride = CrtTerminalPalette.TextDim;
+
+        // CMU14 End
         VendingContents.SearchBar = SearchBar;
         VendingContents.DataFilterCondition += DataFilterCondition;
         VendingContents.GenerateItem += GenerateButton;
@@ -61,6 +96,13 @@ public sealed partial class VendingMachineMenu : FancyWindow
         _listItems[key] = (button, item);
         button.AddChild(item);
         button.AddStyleClass(StyleClass.ButtonSquare);
+        // CMU14: inventory row styling
+        button.StyleBoxOverride = new StyleBoxFlat
+        {
+            BackgroundColor = CrtTerminalPalette.Surface2,
+            BorderColor = CrtTerminalPalette.Line,
+            BorderThickness = new Thickness(1),
+        };
         button.Disabled =
             !_enabled ||
             !_amounts.TryGetValue(key, out var amount) ||
@@ -77,27 +119,17 @@ public sealed partial class VendingMachineMenu : FancyWindow
         _listItems.Clear();
         _amounts.Clear();
 
-        if (inventory.Count == 0 && VendingContents.Visible)
+        // CMU14 Begin: empty-state and summary UI; existing vending selection remains unchanged.
+        EmptyLabel.Visible = inventory.Count == 0;
+        VendingContents.Visible = inventory.Count > 0;
+        UpdateStockSummary(inventory);
+        if (inventory.Count == 0)
         {
-            SearchBar.Visible = false;
-            VendingContents.Visible = false;
-
-            var outOfStockLabel = new Label
-            {
-                Text = Loc.GetString("vending-machine-component-try-eject-out-of-stock"),
-                Margin = new Thickness(4, 4),
-                HorizontalExpand = true,
-                VerticalAlignment = VAlignment.Stretch,
-                HorizontalAlignment = HAlignment.Center
-            };
-
-            MainContainer.AddChild(outOfStockLabel);
-
-            SetSizeAfterUpdate(outOfStockLabel.Text.Length, 0);
-
+            SetSizeAfterUpdate(0, 0);
             return;
         }
 
+        // CMU14 End
         var longestEntry = string.Empty;
         var listData = new List<VendorItemsListData>();
 
@@ -135,6 +167,7 @@ public sealed partial class VendingMachineMenu : FancyWindow
     public void UpdateAmounts(List<VendingMachineInventoryEntry> cachedInventory, bool enabled)
     {
         _enabled = enabled;
+        UpdateStockSummary(cachedInventory); // CMU14: live inventory summary
 
         foreach (var (key, button) in _listItems)
         {
@@ -154,6 +187,13 @@ public sealed partial class VendingMachineMenu : FancyWindow
         }
     }
 
+    // CMU14 method: live stock summary
+    private void UpdateStockSummary(List<VendingMachineInventoryEntry> inventory)
+    {
+        StockSummary.Text = Loc.GetString("cmu-vendor-summary",
+            ("total", inventory.Count), ("empty", inventory.Count(entry => entry.Amount == 0)));
+    }
+
     private string GetItemText(EntityPrototype prototype, uint amount)
     {
         var itemName = prototype.Name;
@@ -171,8 +211,9 @@ public sealed partial class VendingMachineMenu : FancyWindow
 
     private void SetSizeAfterUpdate(int longestEntryLength, int contentCount)
     {
-        SetSize = new Vector2(Math.Clamp((longestEntryLength + 2) * 12, 250, 400),
-            Math.Clamp(contentCount * 50, 150, 350));
+        // CMU14: size controls for the CRT inventory shell
+        SetSize = new Vector2(Math.Clamp((longestEntryLength + 2) * 12, 440, 620),
+            Math.Clamp(contentCount * 48 + 175, 420, 760));
     }
 }
 
