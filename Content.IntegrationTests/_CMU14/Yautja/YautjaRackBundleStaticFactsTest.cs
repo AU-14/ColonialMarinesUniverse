@@ -261,7 +261,6 @@ public sealed class YautjaRackBundleStaticFactsTest
             YautjaPath("body_mesh.rsi"),
             "icon",
             [
-                "CMUYautjaThrallChainshirt",
                 "CMUYautjaHuntingPouch",
                 "CMUYautjaLantern",
                 "CMUYautjaCommunicator",
@@ -320,9 +319,6 @@ public sealed class YautjaRackBundleStaticFactsTest
             ]);
 
         foreach (var row in BadBloodArmorRows())
-            yield return row;
-
-        foreach (var row in ThrallArmorRows())
             yield return row;
 
         yield return new BundleWrapperRow(
@@ -399,7 +395,7 @@ public sealed class YautjaRackBundleStaticFactsTest
         yield return new RackBundleRow("CMUYautjaStrandedLoadoutVendor", "Essential Hunting Supplies", "CMUYautjaStrandedHuntingEquipmentBundle", "Hunting Equipment", "CMUYautjaEssentials", Mandatory: true, Recommended: false);
         yield return new RackBundleRow("CMUYautjaStrandedLoadoutVendor", "Essential Hunting Supplies", "CMUYautjaStrandedArmorBundle", "Armor", "CMUYautjaArmor", Mandatory: true, Recommended: false);
 
-        foreach (var row in RackMaterialRows("CMUYautjaThrallLoadoutVendor", "Armor Material (CHOOSE 1)", "CMUYautjaThrallArmor", "CMUYautjaArmor", recommended: true))
+        foreach (var row in ThrallRackRows())
             yield return row;
 
         foreach (var row in RackMaterialRows("CMUYautjaBloodedThrallLoadoutVendor", "Blooded Bracer Material (CHOOSE 1)", "CMUYautjaBloodedThrallBracer", "CMUYautjaBracer", recommended: true))
@@ -430,15 +426,6 @@ public sealed class YautjaRackBundleStaticFactsTest
         yield return ArmorSet("CMUYautjaBadBloodArmorEmissaryBundle", "Emissary Armor", "Contains the emissary armor issued to a Bad Blood hunter.", "armor_emissary_classic.rsi", "CMUYautjaEmissaryArmorCamoConforming", "CMUYautjaMaskBadBloodEmissaryClassic", "CMUYautjaEmissaryGreavesCamoConforming");
     }
 
-    private static IEnumerable<BundleWrapperRow> ThrallArmorRows()
-    {
-        yield return ThrallArmorSet("Ebony", "ebony", "armor_thrall_ebony.rsi", "CMUYautjaThrallArmorEbony", "CMUYautjaThrallGreavesEbony", "CMUYautjaMaskThrallEbony");
-        yield return ThrallArmorSet("Silver", "silver", "armor_thrall_silver.rsi", "CMUYautjaThrallArmorSilver", "CMUYautjaThrallGreavesSilver", "CMUYautjaMaskThrallSilver");
-        yield return ThrallArmorSet("Gold", "gold", "armor_thrall_gold.rsi", "CMUYautjaThrallArmorGold", "CMUYautjaThrallGreavesGold", "CMUYautjaMaskThrallGold");
-        yield return ThrallArmorSet("Crimson", "crimson", "armor_thrall_crimson.rsi", "CMUYautjaThrallArmorCrimson", "CMUYautjaThrallGreavesCrimson", "CMUYautjaMaskThrallCrimson");
-        yield return ThrallArmorSet("Bone", "bone", "armor_thrall_bone.rsi", "CMUYautjaThrallArmorBone", "CMUYautjaThrallGreavesBone", "CMUYautjaMaskThrallBone");
-    }
-
     private static IEnumerable<BundleWrapperRow> BloodedThrallBracerRows()
     {
         yield return BloodedBracerSet("Ebony", "ebony", "bracer", "CMUYautjaBloodedThrallBracer");
@@ -455,6 +442,33 @@ public sealed class YautjaRackBundleStaticFactsTest
         yield return new RackBundleRow(rackId, section, $"{bundlePrefix}GoldBundle", "Gold", choice, SectionChoice: true, Mandatory: false, Recommended: recommended);
         yield return new RackBundleRow(rackId, section, $"{bundlePrefix}CrimsonBundle", "Crimson", choice, SectionChoice: true, Mandatory: false, Recommended: recommended);
         yield return new RackBundleRow(rackId, section, $"{bundlePrefix}BoneBundle", "Bone", choice, SectionChoice: true, Mandatory: false, Recommended: recommended);
+    }
+
+    // cmss13 #12577 thrall rack: undersuit, full/half mask, full/half/light chest and greaves, one pick per category
+    private static IEnumerable<RackBundleRow> ThrallRackRows()
+    {
+        const string rack = "CMUYautjaThrallLoadoutVendor";
+        yield return new RackBundleRow(rack, "Undersuit (CHOOSE 1)", "CMUYautjaThrallChainshirt", "Chain", "CMUYautjaUniform", SectionChoice: true, Mandatory: true, Recommended: false);
+        yield return new RackBundleRow(rack, "Undersuit (CHOOSE 1)", "CMUYautjaThrallClothSuit", "Crimson Cloth", "CMUYautjaUniform", SectionChoice: true, Mandatory: true, Recommended: false);
+        yield return new RackBundleRow(rack, "Undersuit (CHOOSE 1)", "CMUYautjaThrallClothSuitAlt", "Tan Cloth", "CMUYautjaUniform", SectionChoice: true, Mandatory: true, Recommended: false);
+
+        var rows = new (string Section, string Prefix, string Choice)[]
+        {
+            ("Full-Mask (CHOOSE 1)", "CMUYautjaMaskThrall", "CMUYautjaMask"),
+            ("Half-Mask (CHOOSE 1)", "CMUYautjaMaskThrallAlt", "CMUYautjaMask"),
+            ("Full-Armor Chest (CHOOSE 1)", "CMUYautjaThrallArmor", "CMUYautjaArmor"),
+            ("Half-Armor Chest (CHOOSE 1)", "CMUYautjaThrallArmorHalf", "CMUYautjaArmor"),
+            ("Light-Armor Chest (CHOOSE 1)", "CMUYautjaThrallArmorLight", "CMUYautjaArmor"),
+            ("Full-Armor Greaves (CHOOSE 1)", "CMUYautjaThrallGreaves", "CMUYautjaShoes"),
+            ("Half-Armor Greaves (CHOOSE 1)", "CMUYautjaThrallGreavesHalf", "CMUYautjaShoes"),
+            ("Light-Armor Greaves (CHOOSE 1)", "CMUYautjaThrallGreavesLight", "CMUYautjaShoes"),
+        };
+
+        foreach (var (section, prefix, choice) in rows)
+        {
+            foreach (var material in new[] { "Ebony", "Silver", "Gold", "Crimson", "Bone" })
+                yield return new RackBundleRow(rack, section, $"{prefix}{material}", material, choice, SectionChoice: true, Mandatory: false, Recommended: true);
+        }
     }
 
     private static IEnumerable<RackBundleRow> BadBloodArmorRackRows()
@@ -492,23 +506,6 @@ public sealed class YautjaRackBundleStaticFactsTest
         string greaves)
     {
         return new BundleWrapperRow(id, name, description, YautjaPath(sprite), "icon", [armor, mask, greaves]);
-    }
-
-    private static BundleWrapperRow ThrallArmorSet(
-        string colorName,
-        string descriptionColor,
-        string sprite,
-        string armor,
-        string greaves,
-        string mask)
-    {
-        return new BundleWrapperRow(
-            $"CMUYautjaThrallArmor{colorName}Bundle",
-            colorName,
-            $"Contains the {descriptionColor} armor issued to a Yautja thrall.",
-            YautjaPath(sprite),
-            "icon",
-            [armor, greaves, mask]);
     }
 
     private static BundleWrapperRow BloodedBracerSet(

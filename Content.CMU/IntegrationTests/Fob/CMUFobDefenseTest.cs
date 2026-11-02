@@ -82,7 +82,7 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
     private void SetAmmo(EntityUid magazine, int count)
         => Guns.SetBallisticUnspawned((magazine, SEntMan.GetComponent<BallisticAmmoProviderComponent>(magazine)), count);
 
-    private async Task SetupGuns(int ammo = 20)
+    private async Task SetupGuns(int ammo = 20, bool portablePlatforms = false)
     {
         await SetTile(Plating, TargetCoords);
         await SpawnTarget("CMUFobControl");
@@ -105,8 +105,14 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
             Assert.That(Server.System<CMUFobInteractionSystem>().TryBindControl((_control,
                 SEntMan.GetComponent<CMUFobControlComponent>(_control)), out _), Is.True);
             _gunCoords = SEntMan.GetCoordinates(TargetCoords);
-            _mount = SEntMan.SpawnAtPosition("CMUFobGunMount", _gunCoords);
-            _secondMount = SEntMan.SpawnAtPosition("CMUFobGunMount", SEntMan.GetCoordinates(second));
+            var platformPrototype = portablePlatforms ? "CMUFobPlatformModule" : "CMUFobGunMount";
+            _mount = SEntMan.SpawnAtPosition(platformPrototype, _gunCoords);
+            _secondMount = SEntMan.SpawnAtPosition(platformPrototype, SEntMan.GetCoordinates(second));
+            if (portablePlatforms)
+            {
+                Assert.That(Transform.AnchorEntity(_mount), Is.True);
+                Assert.That(Transform.AnchorEntity(_secondMount), Is.True);
+            }
             Transform.SetWorldRotation(_mount, Vector2.UnitX.ToWorldAngle());
             Transform.SetWorldRotation(_secondMount, Vector2.UnitX.ToWorldAngle());
             Assert.That(Defense.TryRegisterMounts(_network, _mount, _secondMount), Is.True);

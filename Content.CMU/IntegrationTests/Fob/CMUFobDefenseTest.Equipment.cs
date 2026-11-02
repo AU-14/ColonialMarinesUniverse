@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Content.Server.CMU14.Fob;
+using Content.Shared._RMC14.PowerLoader;
 using Content.Shared.CMU14.Fob;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Tag;
@@ -13,6 +14,25 @@ namespace Content.IntegrationTests.CMU14.Fob;
 public sealed partial class CMUFobDefenseTest
 {
     private CMUFobEquipmentSystem Equipment => Server.System<CMUFobEquipmentSystem>();
+
+    [Test]
+    public async Task RemovedGunReinstallsThroughLoaderAtLoaderReachWithBothSlotsAllocated()
+    {
+        await SetupGuns(ammo: 7);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Defense.TryRemoveModule((_gun, Gun), SPlayer), Is.True);
+            var loaderCoords = _gunCoords.Offset(new Vector2(-2, 0));
+            Transform.SetCoordinates(SPlayer, loaderCoords);
+            var loader = SEntMan.SpawnAtPosition("RMCMechPowerLoader", loaderCoords);
+            Assert.That(HandSys.TryPickupAnyHand(loader, _gun, checkActionBlocker: false), Is.True);
+            var install = new PowerLoaderInteractEvent(loader, _mount, _gun, new List<EntityUid> { SPlayer });
+            SEntMan.EventBus.RaiseLocalEvent(_gun, ref install);
+            Assert.That(Gun.Mount, Is.EqualTo(_mount), "Installation must use the loader's reach, not bare-hand reach.");
+            Assert.That(Ammo, Is.EqualTo(7));
+            Assert.That(SEntMan.GetComponent<CMUFobDefenseNetworkComponent>(_network).Mounts.Count, Is.EqualTo(2));
+        });
+    }
 
     private async Task<Entity<CMUFobEquipmentComponent>> DeployEquipment(string prototype, Vector2 offset)
     {

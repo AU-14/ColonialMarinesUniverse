@@ -1944,6 +1944,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
         AddScoutReportsToUser(user, map); // CMU14
         ApplyFobMarkers(user, map); // CMU14: private mission overlay after sensor filtering.
+        ApplyFobMarkers(user); // CMU14: private mission overlay after sensor filtering.
         Dirty(user, lines);
         Dirty(user, labels);
     }
@@ -2414,6 +2415,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
         AddScoutReports(computer.Comp.Blips, map, normalizedFaction); // CMU14
         ApplyFobMarkers(computer, map); // CMU14: never place private missions in sensor source buckets.
+        ApplyFobMarkers(computer); // CMU14: never place private missions in sensor source buckets.
         Dirty(computer);
     }
 
