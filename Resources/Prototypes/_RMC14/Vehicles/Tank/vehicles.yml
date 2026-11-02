@@ -5,6 +5,9 @@
   description: "An older light tank made for all ground forces of the United Americas, although being phased out due to being outdated by the American Army and the CCAF, the longstreet still remains in service with USCM and LACN detachments in colonial sectors."
   components:
   - type: TankCookOff # CMU14
+  - type: CMUVehicleBlastPenetration # CMU14: AP ordnance replicates inside the crew cabin; grenades and plain mortars can't breach tank armour.
+    extraIntensities:
+      RMCMortar: 0
   - type: RMCNightVisionVisible # CMU14
     priority: -2
   - type: Vehicle

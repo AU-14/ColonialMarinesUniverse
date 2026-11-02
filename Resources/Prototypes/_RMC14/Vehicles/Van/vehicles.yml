@@ -4,6 +4,8 @@
   name: van
   description: A rugged transport van.
   components:
+  - type: CMUVehicleBlastPenetration # CMU14: soft-skinned cabin, even grenades blast through into the interior.
+    defaultIntensity: 10
   - type: Vehicle
     movementKind: Grid
     transferDamage: false
@@ -227,6 +229,8 @@
   name: box van
   description: A rugged transport van fitted with a box body.
   components:
+  - type: CMUVehicleBlastPenetration # CMU14: soft-skinned cabin, even grenades blast through into the interior.
+    defaultIntensity: 10
   - type: Vehicle
     movementKind: Grid
     transferDamage: false

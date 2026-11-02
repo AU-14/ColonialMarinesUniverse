@@ -81,6 +81,7 @@ public sealed class DoAfterOverlay : Overlay
         _unshadedShader = protoManager.Index(UnshadedShader).Instance();
     }
 
+    // CMU14 method: share live visibility and bounds within each entity's group of bars.
     protected override void Draw(in OverlayDrawArgs args)
     {
         var handle = args.WorldHandle;
@@ -96,6 +97,8 @@ public sealed class DoAfterOverlay : Overlay
 
         var bounds = args.WorldAABB.Enlarged(5f);
         var localEnt = _player.LocalSession?.AttachedEntity;
+        var localIsXeno = localEnt is { } localPlayer && _entManager.HasComponent<XenoComponent>(localPlayer);
+        var invisibleQuery = _entManager.GetEntityQuery<EntityActiveInvisibleComponent>();
 
         var metaQuery = _entManager.GetEntityQuery<MetaDataComponent>();
         var enumerator = _entManager.AllEntityQueryEnumerator<ActiveDoAfterComponent, DoAfterComponent, SpriteComponent, TransformComponent>();
@@ -132,6 +135,10 @@ public sealed class DoAfterOverlay : Overlay
             var offset = 0f;
 
             var isInContainer = _container.IsEntityOrParentInContainer(uid, meta, xform);
+            var needsVisibilityCheck = localIsXeno && !_entManager.HasComponent<XenoComponent>(uid);
+            bool? visibleToLocal = null;
+            float? visibleAlpha = null;
+            float? spriteHeight = null;
 
             foreach (var doAfter in comp.DoAfters.Values)
             {
@@ -156,25 +163,22 @@ public sealed class DoAfterOverlay : Overlay
                         continue;
 
                     // RMC: If the local player is a xeno and the target is not, hide doafter bars behind FOV shadow.
-                    if (localEnt is { } local &&
-                        _entManager.HasComponent<XenoComponent>(local) &&
-                        !_entManager.HasComponent<XenoComponent>(uid) &&
-                        !_examine.InRangeUnOccluded(uid, local))
+                    if (needsVisibilityCheck &&
+                        !(visibleToLocal ??= _examine.InRangeUnOccluded(uid, localEnt!.Value)))
                     {
                         continue;
                     }
 
                     // Set the doafter bar alpha to the alpha of the sprite, without making hidden local hints
                     // more visible than the shared do-after rules allow.
-                    maxAlpha = Math.Min(maxAlpha, sprite.Color.A);
-
-                    // The system using this component does not edit the sprite alpha, so we use separate logic for it.
-                    var invisibleQuery = _entManager.GetEntityQuery<EntityActiveInvisibleComponent>();
-                    invisibleQuery.TryGetComponent(uid, out var invisible);
-
-                    // Make the doafter bar alpha the same as the opacity of the invisibility.
-                    if (invisible != null)
-                        maxAlpha = Math.Min(maxAlpha, invisible.Opacity);
+                    if (visibleAlpha == null)
+                    {
+                        visibleAlpha = sprite.Color.A;
+                        // This invisibility component does not modify the sprite alpha itself.
+                        if (invisibleQuery.TryGetComponent(uid, out var invisible))
+                            visibleAlpha = Math.Min(visibleAlpha.Value, invisible.Opacity);
+                    }
+                    maxAlpha = Math.Min(maxAlpha, visibleAlpha.Value);
                 }
 
                 var elapsed = time - doAfter.StartTime;
@@ -186,8 +190,8 @@ public sealed class DoAfterOverlay : Overlay
 
                 // Use the sprite itself if we know its bounds. This means short or tall sprites don't get overlapped
                 // by the bar.
-                var spriteBounds = _sprite.GetLocalBounds((uid, sprite));
-                var yFinished = spriteBounds.Height / 2f + 0.05f;
+                spriteHeight ??= _sprite.GetLocalBounds((uid, sprite)).Height;
+                var yFinished = spriteHeight.Value / 2f + 0.05f;
                 var yStart = yFinished / 6f;
                 var yOffset = MathHelper.Lerp(yStart, yFinished, Easings.OutSine((float)Math.Clamp(elapsed / MaxYPosTime, 0.0, 1.0)));
 

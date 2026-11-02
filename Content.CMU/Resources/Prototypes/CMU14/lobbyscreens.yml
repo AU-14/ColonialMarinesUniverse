@@ -35,6 +35,12 @@
   artist: cmu-lobby-background-au14parkalwayswins-artist
 
 - type: lobbyBackground
+  id: AU14HijackChaos
+  background: /Textures/CMU14/Lobby/HijackChaos.png
+  title: cmu-lobby-background-au14HijackChaos-title
+  artist: cmu-lobby-background-au14HijackChaos-artist
+
+- type: lobbyBackground
   id: CMU14LobbyWorkingJoes
   background: /Textures/CMU14/Lobby/Joes.png
   title: cmu-lobby-background-cmu14lobbyworkingjoes-title
