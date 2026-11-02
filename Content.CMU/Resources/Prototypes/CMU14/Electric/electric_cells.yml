@@ -1,0 +1,62 @@
+# The power cells of the electric age, bigger than the ones of the game. They are the same cells in their slots and in the charger, with the look of
+# the cells of the game under a tint, and they are assembled by the assembler out of the metals and the liquids of the chemistry: the lead cell
+# takes sulfuric acid, the silver-zinc cell caustic soda, the cobalt cell hydrochloric acid.
+
+- type: entity
+  parent: BasePowerCell
+  id: RUMCCellLeadAcid
+  name: lead-acid cell
+  description: A heavy cell of lead plates in acid. It holds more than the high-capacity cell, is cheap to make, and is bulky.
+  suffix: Full
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "enum.PowerCellVisualLayers.Base" ]
+      state: medium
+      color: "#7d8aa0"
+    - map: [ "enum.PowerCellVisualLayers.Unshaded" ]
+      state: o2
+      shader: unshaded
+  - type: Item
+    size: Normal
+  - type: Battery
+    maxCharge: 1500
+    startingCharge: 1500
+
+- type: entity
+  parent: BasePowerCell
+  id: RUMCCellSilverZinc
+  name: silver-zinc cell
+  description: A cell of silver and zinc plates in a caustic bath. It stores half as much again as the lead cell and is light for it.
+  suffix: Full
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "enum.PowerCellVisualLayers.Base" ]
+      state: hyper
+      color: "#d4d9e0"
+    - map: [ "enum.PowerCellVisualLayers.Unshaded" ]
+      state: o2
+      shader: unshaded
+  - type: Battery
+    maxCharge: 2400
+    startingCharge: 2400
+
+- type: entity
+  parent: BasePowerCell
+  id: RUMCCellCobalt
+  name: cobalt cell
+  description: The best cell the colony can make, of cobalt and silver in plastic, holding twice as much as the hyper-capacity cell of the game. It is costly.
+  suffix: Full
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "enum.PowerCellVisualLayers.Base" ]
+      state: hyper
+      color: "#5d7fd6"
+    - map: [ "enum.PowerCellVisualLayers.Unshaded" ]
+      state: o2
+      shader: unshaded
+  - type: Battery
+    maxCharge: 3600
+    startingCharge: 3600

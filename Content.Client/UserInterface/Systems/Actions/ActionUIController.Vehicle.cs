@@ -83,13 +83,15 @@ public sealed partial class ActionUIController
                EntityManager.HasComponent<BlackfootPilotActionComponent>(user);
     }
 
+    // CMU14 method: poll live context, but sort and reconcile only when membership changes.
     private bool RebuildVehicleActionList()
     {
         if (_actionsSystem == null)
             return false;
 
-        var old = _vehicleActions.ToList();
-        var desiredOrdered = new List<EntityUid?>();
+        var desiredOrdered = _cmuDesiredVehicleActions;
+        desiredOrdered.Clear();
+        _cmuHardpointActions.Clear();
         var includeHardpointActions = true;
         var allowActionsInsideView = LocalVehicleActionsAllowedInsideView();
 
@@ -122,19 +124,15 @@ public sealed partial class ActionUIController
             desiredOrdered.Add(combatAction);
         }
 
+        var hardpointStart = desiredOrdered.Count;
         if (includeHardpointActions)
         {
-            var hardpointActions = _actionsSystem
-                .GetClientActions()
-                .Where(action => EntityManager.TryGetComponent<VehicleHardpointActionComponent>(action, out _))
-                .OrderBy(action =>
-                {
-                    EntityManager.TryGetComponent<VehicleHardpointActionComponent>(action, out var hardpointAction);
-                    return hardpointAction?.SortOrder ?? 0;
-                });
-
-            foreach (var (uid, _) in hardpointActions)
+            foreach (var (uid, _) in _actionsSystem.GetClientActions())
             {
+                if (!EntityManager.TryGetComponent<VehicleHardpointActionComponent>(uid, out var hardpoint))
+                    continue;
+
+                _cmuHardpointActions.Add((uid, hardpoint.SortOrder, _cmuHardpointActions.Count));
                 desiredOrdered.Add(uid);
             }
         }
@@ -199,15 +197,46 @@ public sealed partial class ActionUIController
         if (vehicleLockAction is { } ensuredVehicleLockAction)
             desiredOrdered.Add(ensuredVehicleLockAction);
 
-        // Preserve manual ordering while all current actions still exist.
-        var remaining = new HashSet<EntityUid>();
+        var remaining = _cmuRemainingVehicleActions;
+        remaining.Clear();
         foreach (var desired in desiredOrdered)
         {
             if (desired is { } uid)
                 remaining.Add(uid);
         }
 
-        var rebuilt = new List<EntityUid?>();
+        // Manual ordering wins over SortOrder after an action has been placed.
+        // Compare membership first, including duplicates/holes from hotbar editing.
+        if (remaining.Count == _vehicleActions.Count)
+        {
+            foreach (var existing in _vehicleActions)
+            {
+                if (existing is { } uid)
+                    remaining.Remove(uid);
+            }
+
+            if (remaining.Count == 0)
+                return false;
+
+            remaining.Clear();
+            foreach (var desired in desiredOrdered)
+            {
+                if (desired is { } uid)
+                    remaining.Add(uid);
+            }
+        }
+
+        // Stable tie order matches OrderBy; only new actions need this ordering.
+        _cmuHardpointActions.Sort(static (a, b) =>
+        {
+            var order = a.SortOrder.CompareTo(b.SortOrder);
+            return order != 0 ? order : a.Index.CompareTo(b.Index);
+        });
+        for (var i = 0; i < _cmuHardpointActions.Count; i++)
+            desiredOrdered[hardpointStart + i] = _cmuHardpointActions[i].Uid;
+
+        var rebuilt = _cmuRebuiltVehicleActions;
+        rebuilt.Clear();
         foreach (var existing in _vehicleActions)
         {
             if (existing is not { } existingUid || !remaining.Remove(existingUid))
@@ -226,17 +255,7 @@ public sealed partial class ActionUIController
 
         _vehicleActions.Clear();
         _vehicleActions.AddRange(rebuilt);
-
-        if (old.Count != _vehicleActions.Count)
-            return true;
-
-        for (var i = 0; i < old.Count; i++)
-        {
-            if (old[i] != _vehicleActions[i])
-                return true;
-        }
-
-        return false;
+        return true;
     }
 
     private bool LocalVehicleActionsAllowedInsideView()

@@ -31,6 +31,7 @@ namespace Content.Client.Hands
         public ShowHandItemOverlay()
         {
             IoCManager.InjectDependencies(this);
+            _cmuDrawHeldItem = CMUDrawHeldItem; // CMU14: one callback per overlay, not per draw.
 
             _renderBackbuffer = _clyde.CreateRenderTarget(
                 (64, 64),
@@ -56,6 +57,7 @@ namespace Content.Client.Hands
             return base.BeforeDraw(in args);
         }
 
+        // CMU14 method: render live sprites with a reusable, synchronous callback.
         protected override void Draw(in OverlayDrawArgs args)
         {
             var mousePos = _inputManager.MouseScreenPosition;
@@ -83,10 +85,16 @@ namespace Content.Client.Hands
             var halfSize = _renderBackbuffer.Size / 2;
             var uiScale = (args.ViewportControl as Control)?.UIScale ?? 1f;
 
-            screen.RenderInRenderTarget(_renderBackbuffer, () =>
+            var previous = _cmuHeldItemDraw;
+            _cmuHeldItemDraw = (screen, handEntity.Value, halfSize, Vector2.One * uiScale, sprite);
+            try
             {
-                screen.DrawEntity(handEntity.Value, halfSize, new Vector2(1f, 1f) * uiScale, Angle.Zero, Angle.Zero, Direction.South, sprite);
-            }, Color.Transparent);
+                screen.RenderInRenderTarget(_renderBackbuffer, _cmuDrawHeldItem, Color.Transparent);
+            }
+            finally
+            {
+                _cmuHeldItemDraw = previous;
+            }
 
             screen.DrawTexture(_renderBackbuffer.Texture, mousePos.Position - halfSize + offsetVec, Color.White.WithAlpha(0.75f));
         }

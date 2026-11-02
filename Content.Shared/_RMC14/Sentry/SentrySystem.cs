@@ -499,6 +499,10 @@ public sealed partial class SentrySystem : EntitySystem
                 _pointLight.SetEnabled(sentry, true);
                 break;
         }
+
+        // CMU14: let fixed support variants keep broken wrecks nonblocking after a mode refresh.
+        var updated = new CMUSentryStateUpdatedEvent();
+        RaiseLocalEvent(sentry, ref updated);
     }
 
     private bool CanDeployPopup(

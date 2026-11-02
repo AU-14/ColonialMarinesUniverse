@@ -621,6 +621,9 @@ public sealed partial class TacticalMapControl : TextureRect
             if (blip.ScoutReport is { } expiredReport && curTime >= expiredReport.ExpiresAt) // CMU14
                 continue; // CMU14
             Vector2 position = IndicesToPosition(blip.Indices) * overlayScale + actualTopLeft;
+            // CMU14: relay annotations arrive only in the authorized faction view.
+            if (blip.CMUFobLabel is { } label)
+                DrawLabelAtPosition(handle, label, position - new Vector2(0, 12 * overlayScale), overlayScale, false);
             float scaledBlipSize = GetScaledBlipSize(overlayScale);
             position -= new Vector2(scaledBlipSize / 2); // CMU14: keep the icon center fixed as its size changes.
             UIBox2 rect = UIBox2.FromDimensions(position, new Vector2(scaledBlipSize, scaledBlipSize));

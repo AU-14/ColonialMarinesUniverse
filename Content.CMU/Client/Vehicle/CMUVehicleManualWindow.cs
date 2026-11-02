@@ -144,7 +144,7 @@ public sealed class CMUVehicleManualWindow : DefaultWindow
         };
 
         // A manual is read: the tube without its roll bar or grain crawling under the text.
-        var screen = new Control { HorizontalExpand = true, VerticalExpand = true };
+        var screen = new CrtScreenContainer { HorizontalExpand = true, VerticalExpand = true };
         screen.AddChild(tube);
         screen.AddChild(new CrtScreenControl { Source = tube, Roll = false, Grain = false });
         Contents.AddChild(screen);
