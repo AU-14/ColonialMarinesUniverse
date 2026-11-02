@@ -46,6 +46,11 @@ public sealed partial class CMUFobDefenseSystem
         if (args.Handled || HasComp<CMUSentryBrokenComponent>(gun))
             return;
         args.Handled = true;
+        if (_reserve.Enabled && gun.Comp.Mount == null && _tools.HasQuality(args.Used, Anchoring))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-fob-module-install"), gun, args.User);
+            return;
+        }
         if (!CanService(gun, args.User))
             return;
         if (_tools.HasQuality(args.Used, Anchoring))

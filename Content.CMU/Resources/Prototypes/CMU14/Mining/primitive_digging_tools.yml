@@ -8,6 +8,10 @@
   name: wooden shovel
   description: "A shovel carved of wood. Good for the ground and the clay, but it will not last: two blocks, and it is gone."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Tools/wooden_shovel.rsi
     state: icon
@@ -37,6 +41,10 @@
   name: wooden pickaxe
   description: "A pickaxe of hard wood. It gets through the soft rock, but it will not last: two blocks, and it is gone."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Tools/wooden_pickaxe.rsi
     state: icon
@@ -74,6 +82,10 @@
   name: stone shovel
   description: "A shovel with a blade of flaked stone. It digs better than the wooden one and lasts six blocks."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Tools/stone_shovel.rsi
     state: icon
@@ -103,6 +115,10 @@
   name: stone pickaxe
   description: "A pickaxe with a head of flaked stone. It breaks the rock better than the wooden one and lasts six blocks."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Tools/stone_pickaxe.rsi
     state: icon

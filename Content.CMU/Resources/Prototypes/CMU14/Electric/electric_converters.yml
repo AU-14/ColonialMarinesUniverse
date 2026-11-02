@@ -8,6 +8,10 @@
   parent: [ CoreSubstation, BaseMachine, BaseMachineDestructible ]
   id: RUMCTransformerBase
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Electric/transformer.rsi
     state: transformer
@@ -137,6 +141,10 @@
   name: colony APC
   description: A steel power cabinet with a door. Shut, it shows its screen; open, it shows the wiring. Feed it the medium voltage and it gives the low one to a cable run by hand and to every device in its reach.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Structures/Electric/lkp.rsi
     offset: 0,0

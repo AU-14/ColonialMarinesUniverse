@@ -281,6 +281,20 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
 
         var ladderPosition = _transform.GetWorldPosition(ent);
 
+        if (Transform(user).MapUid is not { } map || !_zLevels.TryMapOffset((map, null), offset, out var destination))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-ladder-no-level"), ent, user, PopupType.SmallCaution);
+            return;
+        }
+
+        // Recheck when the climb finishes: the floor or supporting ladder may have disappeared during it.
+        if (!HasComp<GhostComponent>(user) &&
+            !_zLevels.HasClimbLanding(user, destination.Value, ladderPosition, ent.Comp.LandingLocalPosition))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-ladder-no-footing"), ent, user, PopupType.SmallCaution);
+            return;
+        }
+
         if (!_zLevels.TryMove(user, offset, worldPosition: ladderPosition))
         {
             _popup.PopupEntity(Loc.GetString("cmu-zlevel-ladder-no-level"), ent, user, PopupType.SmallCaution);

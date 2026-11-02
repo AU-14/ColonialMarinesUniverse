@@ -9,6 +9,10 @@
   description: A heavy cell of lead plates in acid. It holds more than the high-capacity cell, is cheap to make, and is bulky.
   suffix: Full
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     layers:
     - map: [ "enum.PowerCellVisualLayers.Base" ]
@@ -30,6 +34,10 @@
   description: A cell of silver and zinc plates in a caustic bath. It stores half as much again as the lead cell and is light for it.
   suffix: Full
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     layers:
     - map: [ "enum.PowerCellVisualLayers.Base" ]
@@ -49,6 +57,10 @@
   description: The best cell the colony can make, of cobalt and silver in plastic, holding twice as much as the hyper-capacity cell of the game. It is costly.
   suffix: Full
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     layers:
     - map: [ "enum.PowerCellVisualLayers.Base" ]

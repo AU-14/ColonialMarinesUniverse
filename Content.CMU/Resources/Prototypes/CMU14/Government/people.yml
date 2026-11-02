@@ -10,6 +10,10 @@
   description: "A terminal of the city hall for the townsfolk: write to the mayor, vote, take the orders of the city, and have a deal sealed by the notary."
   suffix: Colony, Citizens
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryProducts
+    - CMUGuideIndustry
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
