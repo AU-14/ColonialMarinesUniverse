@@ -17,6 +17,7 @@
       tags:
       - Knife
   - type: YautjaTechItem
+  - type: YautjaCapeMount # cmss13 wears the cape on the armour as an accessory, freeing the back slot
   - type: RMCArmorSpeedTier
     speedTier: very light
   - type: CMArmor

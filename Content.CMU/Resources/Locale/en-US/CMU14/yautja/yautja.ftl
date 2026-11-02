@@ -1344,3 +1344,13 @@ cmu-yautja-temple-door-lock = You rotate your wristblades and heavy stone bolts 
 cmu-yautja-temple-door-unlock = You rotate your wristblades and the stone bolts slide free.
 cmu-yautja-wall-torch-placed = You place the torch on the wall.
 cmu-yautja-wall-torch-no-room = There's no room on that side of the wall.
+
+cmu-yautja-lobby-cape-color = Cape colour
+cmu-yautja-lobby-cape-color-help = Dyes the cloth of every cape you take, on spawn and from the gear rack.
+cmu-yautja-lobby-cape-color-fixed = Bone capes keep their own colour.
+cmu-yautja-cape-mount-occupied = {CAPITALIZE(THE($armor))} already has a cape fastened to it.
+cmu-yautja-cape-mount-attached = You fasten {THE($cape)} to {THE($armor)}.
+cmu-yautja-cape-mount-remove = Unfasten cape
+cmu-yautja-cape-mount-removed = You unfasten {THE($cape)}.
+cmu-yautja-cape-mount-examine = {CAPITALIZE(THE($cape))} is fastened to it.
+cmu-yautja-cape-mount-hint = It can be fastened to clan armor to keep your back free.

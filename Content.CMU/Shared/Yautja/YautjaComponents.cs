@@ -412,6 +412,18 @@ public sealed partial class YautjaCapeComponent : Component
     public bool Recolorable = true;
 }
 
+/// <summary>
+/// cmss13 lets a pred wear the cape on the armour as an accessory so the back slot stays free.
+/// Use a cape on the armour to fasten it; the cape keeps its colour and draws on the armour.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class YautjaCapeMountComponent : Component
+{
+    [DataField]
+    public string ContainerId = "cmu-yautja-cape-mount";
+
+    public ContainerSlot? Container;
+}
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class YautjaBracerProfileVisualComponent : Component

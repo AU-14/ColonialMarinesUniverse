@@ -302,7 +302,7 @@ public sealed class YautjaPostVendorHookTest
     }
 
     [Test]
-    public async Task CapePostVendorHookKeepsSelectedSubtypeAndUsesDefaultColorAcrossSourceCapeRacks()
+    public async Task CapePostVendorHookKeepsSelectedSubtypeAndUsesProfileColorAcrossSourceCapeRacks()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -341,7 +341,7 @@ public sealed class YautjaPostVendorHookTest
                         AssertEquippedPrototype(entMan, inventory, user, "back", capePrototype);
                         Assert.That(inventory.TryGetSlotEntity(user, "back", out var cape), Is.True, $"{capePrototype} equipped");
                         Assert.That(entMan.GetComponent<YautjaCapeComponent>(cape.Value).Color,
-                            Is.EqualTo(YautjaCharacterProfile.Default.CapeColor), capePrototype);
+                            Is.EqualTo(ProfileCapeColor), capePrototype);
                     }
                     finally
                     {
@@ -453,7 +453,7 @@ public sealed class YautjaPostVendorHookTest
     }
 
     [Test]
-    public async Task BloodedThrallCapePostVendorHookUsesDefaultColorWithoutYautjaComponentLikeCmss13Prefs()
+    public async Task BloodedThrallCapePostVendorHookUsesProfileColorWithoutYautjaComponentLikeCmss13Prefs()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -480,7 +480,7 @@ public sealed class YautjaPostVendorHookTest
                 AssertEquippedPrototype(entMan, inventory, user, "back", "CMUYautjaCapeQuarter");
                 Assert.That(inventory.TryGetSlotEntity(user, "back", out var cape), Is.True);
                 Assert.That(entMan.GetComponent<YautjaCapeComponent>(cape.Value).Color,
-                    Is.EqualTo(YautjaCharacterProfile.Default.CapeColor));
+                    Is.EqualTo(ProfileCapeColor));
             }
             finally
             {

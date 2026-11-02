@@ -340,7 +340,7 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         if (!capeComp.Recolorable)
             return;
 
-        capeComp.Color = YautjaCharacterProfile.Default.CapeColor;
+        capeComp.Color = profile.CapeColor;
         Dirty(cape, capeComp);
     }
 

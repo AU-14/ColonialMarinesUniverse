@@ -15216,7 +15216,7 @@ public sealed class YautjaBowTest
     }
 
     [Test]
-    public async Task CapePostVendorHookKeepsSelectedSubtypeAndUsesDefaultColorLikeCmss13()
+    public async Task CapePostVendorHookKeepsSelectedSubtypeAndUsesProfileColorLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -15253,7 +15253,7 @@ public sealed class YautjaBowTest
                 AssertEquippedPrototype(entMan, inventory, hunter, "back", "CMUYautjaCapeQuarter");
                 Assert.That(inventory.TryGetSlotEntity(hunter, "back", out var cape), Is.True);
                 Assert.That(entMan.GetComponent<YautjaCapeComponent>(cape.Value).Color,
-                    Is.EqualTo(YautjaCharacterProfile.Default.CapeColor));
+                    Is.EqualTo(new Color((byte) 0x2a, (byte) 0x5c, (byte) 0x8a)));
             }
             finally
             {

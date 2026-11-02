@@ -76,6 +76,8 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
     private readonly BoxContainer _bracerSections = EquipmentSectionContainer();
     private readonly BoxContainer _casterSections = EquipmentSectionContainer();
     private readonly GridContainer _capeGrid = new() { Columns = 4 };
+    private readonly ColorSelectorSliders _capeColor = new() { IsAlphaVisible = false };
+    private readonly Label _capeColorHelp = new();
     private readonly ButtonGroup _categoryButtonGroup = new();
     private readonly BoxContainer _categoryNavigation = new()
     {
@@ -125,6 +127,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
     public YautjaProfileEditor()
     {
         IoCManager.InjectDependencies(this);
+        _capeColor.OnColorChanged += color => Mutate(profile => profile.WithCapeColor(color));
         _previewWithoutGear.Text = Loc.GetString("cmu-yautja-lobby-preview-without-gear");
         _flavorText.Placeholder = new Rope.Leaf(Loc.GetString("cmu-yautja-lobby-flavor-placeholder"));
         _flavorText.ToolTip = Loc.GetString("cmu-yautja-lobby-flavor-limit-tooltip", ("max", YautjaCharacterProfile.MaxFlavorTextLength));
@@ -423,6 +426,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         RebuildBracerSelector(yautja);
         RebuildCasterSelector(yautja);
         RebuildCapeSelector(yautja);
+        UpdateCapeColor(yautja);
         UpdateResponsiveGridColumns();
     }
 
@@ -844,6 +848,16 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         }
     }
 
+    private void UpdateCapeColor(YautjaCharacterProfile yautja)
+    {
+        var recolorable = YautjaCharacterProfile.IsCapeRecolorable(yautja.CapeStyle);
+        _capeColor.Color = yautja.CapeColor;
+        _capeColor.Visible = recolorable;
+        _capeColorHelp.Text = Loc.GetString(recolorable
+            ? "cmu-yautja-lobby-cape-color-help"
+            : "cmu-yautja-lobby-cape-color-fixed");
+    }
+
     private void ReloadPreview(YautjaCharacterProfile yautja)
     {
         DeletePreview();
@@ -863,11 +877,20 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
 
             EquipPreview("shoes", yautja.GreavesPrototype);
             EquipPreview("gloves", yautja.BracerPrototype);
-            EquipPreview("back", yautja.CapePrototype);
+            EquipPreview("back", yautja.CapePrototype, cape => ApplyPreviewCapeColor(cape, yautja));
             EquipPreview("suitStorage", yautja.CasterPrototype);
         }
 
         _preview.SetEntity(_previewDummy);
+    }
+
+    private void ApplyPreviewCapeColor(EntityUid cape, YautjaCharacterProfile yautja)
+    {
+        if (!_entManager.TryGetComponent(cape, out YautjaCapeComponent? capeComp) || !capeComp.Recolorable)
+            return;
+
+        capeComp.Color = yautja.CapeColor;
+        _entManager.System<YautjaCapeVisualsSystem>().UpdateVisuals((cape, capeComp));
     }
 
     private EntityUid? EquipPreview(string slot, string prototype, Action<EntityUid>? beforeEquip = null)
@@ -1443,6 +1466,25 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                 VisualBlock("cmu-yautja-lobby-bracer", _bracerSections),
                 VisualBlock("cmu-yautja-lobby-caster", _casterSections),
                 VisualBlock("cmu-yautja-lobby-cape", _capeGrid),
+                CapeColorBlock(),
+            },
+        };
+    }
+
+    private Control CapeColorBlock()
+    {
+        _capeColorHelp.FontColorOverride = Color.FromHex("#9c8f78");
+        return new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            HorizontalExpand = true,
+            Margin = new Thickness(0, 2, 0, 8),
+            SeparationOverride = 4,
+            Children =
+            {
+                new Label { Text = Loc.GetString("cmu-yautja-lobby-cape-color") },
+                _capeColorHelp,
+                _capeColor,
             },
         };
     }
