@@ -60,8 +60,18 @@ part of this baseline.
   repository. The industrial steam grinder inherits the existing grinder art
   so it can render. Its industrial behavior is retained; custom steel artwork
   remains a visual follow-up.
-- Existing copyright headers, attribution and RSI license metadata are
-  preserved. Farming retains its crystall-punk-14 port/adaptation attribution.
+- Existing copyright headers and attribution are preserved. Farming retains
+  its crystall-punk-14 port/adaptation attribution. Two imported sprite sets
+  were replaced after checking their source licenses:
+  - The seedbed's imported `MIT` label conflicts with the original
+    [all-rights-reserved attribution](https://github.com/crystallpunk-14/crystall-punk-14/blob/e308eec703e012e88fa6910819ed9849601b6cc4/Resources/Textures/_CP14/Tiles/DirtSeedBag/attributions.yml).
+    Seedbeds use the existing `Structures/Hydroponics/misc.rsi` soil sprite.
+  - The ore deposits' `CLA` label refers to StarHorizon's
+    [custom terms](https://git.starhorizon.ru/StarHorizon/StarHorizon_Public/src/commit/b7f515361b1a31099e449901314022ac5a296766/LICENSE-CLA.txt),
+    which restrict public hosting. Deposits use ten existing
+    `_RMC14/Structures/Flora/rocks.rsi` variants at half size, with a darker
+    tint for dark-stone deposits. Both replacement RSIs retain their existing
+    CC-BY-SA-3.0 metadata; farming and ore-deposit behavior is unchanged.
 
 The imported balance is intentionally available as a baseline for rework.
 The gameplay guide records recipe, economy and authority questions separately

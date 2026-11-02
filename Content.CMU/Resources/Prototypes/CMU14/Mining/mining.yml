@@ -82,23 +82,24 @@
     table: RUMCOreTableStone
   - type: Sprite
     drawdepth: FloorTiles
-    sprite: CMU14/Structures/ore_deposits.rsi
+    sprite: _RMC14/Structures/Flora/rocks.rsi
+    scale: 0.5, 0.5
     layers:
-    - state: stone1
+    - state: rock_1
       map: [ "random_deposit" ]
   - type: RandomSprite
     available:
     - random_deposit:
-        stone1: ""
-        stone2: ""
-        stone3: ""
-        stone4: ""
-        stone5: ""
-        stone6: ""
-        stone7: ""
-        stone8: ""
-        stone9: ""
-        stone10: ""
+        rock_1: ""
+        rock_2: ""
+        rock_3: ""
+        rock_4: ""
+        rock_5: ""
+        rock_6: ""
+        rock_7: ""
+        rock_8: ""
+        rock_9: ""
+        rock_10: ""
 
 - type: entity
   parent: RUMCOreDepositBase
@@ -115,22 +116,7 @@
   - type: OreDeposit
     table: RUMCOreTableDarkStone
   - type: Sprite
-    layers:
-    - state: dark1
-      map: [ "random_deposit" ]
-  - type: RandomSprite
-    available:
-    - random_deposit:
-        dark1: ""
-        dark2: ""
-        dark3: ""
-        dark4: ""
-        dark5: ""
-        dark6: ""
-        dark7: ""
-        dark8: ""
-        dark9: ""
-        dark10: ""
+    color: "#888888"
 
 # The drills: six slots for what they take, and the rules of the window machines.
 - type: entity

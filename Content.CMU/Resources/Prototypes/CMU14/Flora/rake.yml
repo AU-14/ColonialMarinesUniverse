@@ -39,8 +39,8 @@
   components:
   - type: Seedbed
   - type: Sprite
-    sprite: CMU14/Flora/seedbed.rsi
-    state: seedbed
+    sprite: Structures/Hydroponics/misc.rsi
+    state: soil
     drawdepth: FloorObjects
     noRot: true
 
