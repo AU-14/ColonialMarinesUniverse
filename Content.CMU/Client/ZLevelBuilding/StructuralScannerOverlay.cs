@@ -91,7 +91,13 @@ public sealed class StructuralScannerOverlay : Overlay
             // Localized caves share an authored station map. Without exact generated-tile state on the client,
             // treating the whole map as underground would paint ordinary colony floors as unstable cavern.
             if (!stone.LocalizedToAuthoredLevel)
-                DrawUndergroundInstability(handle, gridUid, grid, center, GetRoofSpan(mapUid));
+            {
+                var cavern = stone.CavernSeed != 0 && stone.Caverns != null
+                    ? new CMUCavernField(stone.CavernSeed, stone.Caverns)
+                    : null;
+                var depth = _entMan.TryGetComponent<CMUZLevelMapComponent>(mapUid, out var level) ? level.Depth : 0;
+                DrawUndergroundInstability(handle, gridUid, grid, center, GetRoofSpan(mapUid), cavern, depth);
+            }
             return;
         }
 
@@ -122,7 +128,8 @@ public sealed class StructuralScannerOverlay : Overlay
     }
 
     /// <summary>Underground: shade open tiles whose roof is unsupported (red) or marginal (yellow).</summary>
-    private void DrawUndergroundInstability(DrawingHandleWorld handle, EntityUid gridUid, MapGridComponent grid, Vector2i center, int roofSpan)
+    private void DrawUndergroundInstability(DrawingHandleWorld handle, EntityUid gridUid, MapGridComponent grid,
+        Vector2i center, int roofSpan, CMUCavernField? cavern, int depth)
     {
         _solidTiles.Clear();
         for (var dx = -DrawRadius; dx <= DrawRadius; dx++)
@@ -130,7 +137,7 @@ public sealed class StructuralScannerOverlay : Overlay
             for (var dy = -DrawRadius; dy <= DrawRadius; dy++)
             {
                 var tile = center + new Vector2i(dx, dy);
-                if (IsSolid(gridUid, grid, tile))
+                if (cavern?.IsOpen(tile, depth) == true || IsSolid(gridUid, grid, tile))
                     continue;
 
                 var nearest = NearestSolidDistance(gridUid, grid, tile, roofSpan);

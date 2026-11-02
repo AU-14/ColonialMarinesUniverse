@@ -1,0 +1,157 @@
+[
+  {
+    "name": "backup_generator",
+    "source": "icons/obj/structures/machinery/fob_machinery/backup_generator.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "efc30ae4a368151bfe6ce3f3d51ec166dfe32bab08f33fc0fa5a9c9eb47ede48",
+    "states": [
+      "backup_generator_on",
+      "backup_generator",
+      "backup_generator_depleted"
+    ]
+  },
+  {
+    "name": "electric_fence",
+    "source": "icons/obj/structures/machinery/fob_machinery/electric_fence.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "2ccc3d8cd29ed915d4e1ca8cfb7bc6aa727ac0bfdf09252ebf68a3a60ee2a7e2",
+    "states": [
+      "fence0_off",
+      "fence1_off",
+      "fence2_off",
+      "fence3_off",
+      "fence4_off",
+      "fence5_off",
+      "fence6_off",
+      "fence7_off",
+      "fence8_off",
+      "fence9_off",
+      "fence10_off",
+      "fence11_off",
+      "fence12_off",
+      "fence13_off",
+      "fence14_off",
+      "fence15_off",
+      "fence0",
+      "fence1",
+      "fence2",
+      "fence3",
+      "fence4",
+      "fence5",
+      "fence6",
+      "fence7",
+      "fence8",
+      "fence9",
+      "fence10",
+      "fence11",
+      "fence12",
+      "fence13",
+      "fence14",
+      "fence15",
+      "fence_stack"
+    ]
+  },
+  {
+    "name": "illuminator",
+    "source": "icons/obj/structures/machinery/fob_machinery/illuminator.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "b79619981d78ffdb5a30674338352181e0745a9bd9139507640f7b53e23ab1d7",
+    "states": [
+      "floodlight",
+      "floodlight_off",
+      "floodlight_undeployed"
+    ]
+  },
+  {
+    "name": "rocket_launcher",
+    "source": "icons/obj/structures/machinery/fob_machinery/rocket_launcher.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "375a8f6d05aaa36223a35ababc6954daca24a11b62ec4064e43cb9bcf8a1cfc3",
+    "states": [
+      "rocket_launcher",
+      "rocket_launcher_off",
+      "rocket_launcher_undeployed"
+    ]
+  },
+  {
+    "name": "sensor",
+    "source": "icons/obj/structures/machinery/fob_machinery/sensor.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "cb421b31cf7557d49ad5f5e92d51e2f15f131fbd642094b925de703a6908fb56",
+    "states": [
+      "sensor",
+      "sensor_undeployed"
+    ]
+  },
+  {
+    "name": "sentry",
+    "source": "icons/obj/structures/machinery/fob_machinery/sentry.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "e433b2fd466a8ef9c1e5e9d10bd43063ca3422cc2e50d072b390845e75303682",
+    "states": [
+      "sentry",
+      "sentry_undeployed"
+    ]
+  },
+  {
+    "name": "service_terminal",
+    "source": "icons/obj/structures/machinery/fob_machinery/service_terminal.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "3074fb358de9810f762d108d1f98c7037f8807bb6be81ebffdc0271f5ee7aea9",
+    "states": [
+      "terminal",
+      "terminal_off",
+      "terminal_undeployed"
+    ]
+  },
+  {
+    "name": "weapons_platform",
+    "source": "icons/obj/structures/machinery/fob_machinery/weapons_platform.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "800bfac7a3a7070f5ac642cf7a8cb1109923de235a19d4a6959196a9af57d0aa",
+    "states": [
+      "platform",
+      "platform_undeployed",
+      "platform_off"
+    ]
+  },
+  {
+    "name": "transformer",
+    "source": "icons/obj/structures/machinery/transformer.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "aff1a3a6e223fc83bdc66e7953fc89045875053e56856b0480b7b72c61cd971a",
+    "states": [
+      "transformer",
+      "marine-captured",
+      "xeno-captured",
+      "on-overlay"
+    ]
+  },
+  {
+    "name": "targeted",
+    "source": "icons/effects/Targeted.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "eb0c7ff434abf56a019e69c39dd762559fb827317ddff8509a1f66a243fc56d6",
+    "states": [
+      "lockon_sensor"
+    ]
+  },
+  {
+    "name": "map_blips",
+    "source": "icons/ui_icons/map_blips.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "0e3c4d8d23a298bc3efdab6e54f4379f56e0668519b787dc64bf73d627706b0e",
+    "states": [
+      "hvt"
+    ]
+  },
+  {
+    "name": "crates",
+    "source": "icons/obj/structures/crates.dmi",
+    "commit": "2cb8bdbb3e2ae072e3a46293856adddceec334d1",
+    "sha256": "5219d817e89a8c4d83893d4fcfd498a41bb4e28100afbc1026433cbc9d2fded9",
+    "states": [
+      "fob_crate"
+    ]
+  }
+]

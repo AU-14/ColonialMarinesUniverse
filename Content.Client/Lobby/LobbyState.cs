@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.CMU14.Interface;
 using Content.Client.CMU14.Lobby;
+using Content.Client.CMU14.Yautja.Lobby;
 using Content.Client.CMU14.UserInterface.Options;
 using Content.Client._RMC14.LinkAccount;
 using Content.Client.Audio;
@@ -34,7 +35,6 @@ namespace Content.Client.Lobby
 {
     public sealed partial class LobbyState : State
     {
-    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaHunterPrototype = "CMUYautjaHunter";
 
         [Dependency] private IBaseClient _baseClient = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
@@ -63,6 +63,9 @@ namespace Content.Client.Lobby
         // one window rather than stacking another copy on top of it.
         private JoinRoundWindow? _joinRoundWindow;
         private CmuUiSetupWindow? _uiSetupWindow;
+        // CMU14: whitelisted players ready up for the hunt from the lobby instead of late joining
+        private Button? _huntReadyButton;
+        private YautjaHuntLobbySystem _huntLobby = default!;
         private bool _clockPlaced;
 
         protected override Type? LinkedScreenType { get; } = typeof(LobbyGui);
@@ -108,6 +111,20 @@ namespace Content.Client.Lobby
             SetIgnoreAllegiance(false);
             Lobby.ReadyButton.OnPressed += OnReadyPressed;
             Lobby.ReadyButton.OnToggled += OnReadyToggled;
+            // CMU14 start: hunt ready toggle sits right under Ready
+            _huntLobby = _entityManager.System<YautjaHuntLobbySystem>();
+            _huntLobby.Updated += UpdateLobbyUi;
+            _huntReadyButton = new Button
+            {
+                ToggleMode = true,
+                HorizontalExpand = true,
+                MinHeight = CmuPanelMetrics.Row,
+                Visible = false,
+            };
+            _huntReadyButton.OnToggled += OnHuntReadyToggled;
+            Lobby.ReadyButton.Parent?.AddChild(_huntReadyButton);
+            _huntReadyButton.SetPositionInParent(Lobby.ReadyButton.GetPositionInParent() + 1);
+            // CMU14 end
             Lobby.RoundClock.PositionChanged += OnRoundClockMoved;
             Lobby.ClockMinimizeButton.OnPressed += OnClockMinimizePressed;
             Lobby.DockedClockButton.OnPressed += OnClockRestorePressed;
@@ -150,6 +167,15 @@ namespace Content.Client.Lobby
             Lobby.CharacterPreview.IgnoreAllegianceToggle.OnToggled -= OnIgnoreAllegianceToggled;
             Lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             Lobby!.ReadyButton.OnToggled -= OnReadyToggled;
+            // CMU14 start
+            _huntLobby.Updated -= UpdateLobbyUi;
+            if (_huntReadyButton != null)
+            {
+                _huntReadyButton.OnToggled -= OnHuntReadyToggled;
+                _huntReadyButton.Orphan();
+                _huntReadyButton = null;
+            }
+            // CMU14 end
             Lobby!.RoundClock.PositionChanged -= OnRoundClockMoved;
             Lobby!.ClockMinimizeButton.OnPressed -= OnClockMinimizePressed;
             Lobby!.DockedClockButton.OnPressed -= OnClockRestorePressed;
@@ -195,6 +221,10 @@ namespace Content.Client.Lobby
         private void OnReadyToggled(BaseButton.ButtonToggledEventArgs args)
         {
             SetReady(args.Pressed);
+
+            // CMU14: dropping ready drops the hunt too, it'd look armed while you're out of the pool
+            if (!args.Pressed && _huntLobby.HuntReady)
+                _consoleHost.ExecuteCommand("yautjahuntready false");
 
             // Immediately, not on the server's echo. UpdateLobbyUi is what normally repaints this,
             // and it runs on a lobby status update - so without this the mark and the colour lag the
@@ -448,7 +478,8 @@ namespace Content.Client.Lobby
                 // into a join button.
                 Lobby!.ReadyButton.Visible = false;
                 Lobby!.JoinRoundButton.Visible = true;
-                if (_joinRoundWindow != null) _joinRoundWindow.SetHuntVisible(HasYautjaWhitelist());
+                if (_joinRoundWindow != null) _joinRoundWindow.SetHuntVisible(_huntLobby.CanSeeHuntCard); // CMU14
+                if (_huntReadyButton != null) _huntReadyButton.Visible = false; // CMU14
             }
             else
             {
@@ -465,6 +496,7 @@ namespace Content.Client.Lobby
                 Lobby!.ReadyButton.Visible = true;
                 Lobby!.JoinRoundButton.Visible = false;
                 _joinRoundWindow?.Close();
+                UpdateHuntReadyButton(); // CMU14
 
             }
 
@@ -571,7 +603,7 @@ namespace Content.Client.Lobby
             window.JoinColonistsButton.OnPressed += args2 => { window.Close(); OnReadyPressed(args2); };
             window.JoinGovforButton.OnPressed += args2 => { window.Close(); OnJoinGovforPressed(args2); };
             window.JoinOpforButton.OnPressed += args2 => { window.Close(); OnJoinOpforPressed(args2); };
-            window.SetHuntVisible(HasYautjaWhitelist());
+            window.SetHuntVisible(_huntLobby.CanSeeHuntCard); // CMU14
             window.JoinHuntButton.OnPressed += args2 => { window.Close(); OnJoinHuntPressed(args2); };
             window.JoinOtherButton.OnPressed += args2 => { window.Close(); OnJoinOtherPressed(args2); };
             window.OnClose += () =>
@@ -609,13 +641,29 @@ namespace Content.Client.Lobby
             UpdateLobbyUi();
         }
 
-        private bool HasYautjaWhitelist()
+        // CMU14 start: the ready toggle only exists for whitelisted players while a hunt is on. the card
+        // also shows for an open stranded slot, see YautjaHuntLobbySystem.CanSeeHuntCard
+        private bool CanSeeHunt()
         {
-            if (!_protoMan.TryIndex<JobPrototype>(CMUYautjaHunterPrototype, out var hunter))
-                return false;
-
-            return _jobRequirements.CheckWhitelist(hunter, out _);
+            return _huntLobby.HuntActive && _huntLobby.HuntWhitelisted;
         }
+
+        private void UpdateHuntReadyButton()
+        {
+            if (_huntReadyButton == null)
+                return;
+
+            _huntReadyButton.Visible = CanSeeHunt();
+            _huntReadyButton.Pressed = _huntLobby.HuntReady;
+            CmuReadyToggle.Apply(_huntReadyButton, _huntLobby.HuntReady, "cmu-yautja-hunt-ready-button-on", "cmu-yautja-hunt-ready-button-off");
+        }
+
+        private void OnHuntReadyToggled(BaseButton.ButtonToggledEventArgs args)
+        {
+            _consoleHost.ExecuteCommand($"yautjahuntready {args.Pressed}");
+            CmuReadyToggle.Apply(_huntReadyButton!, args.Pressed, "cmu-yautja-hunt-ready-button-on", "cmu-yautja-hunt-ready-button-off");
+        }
+        // CMU14 end
 
         private void OnPrevCharPressed(BaseButton.ButtonEventArgs args)
         {

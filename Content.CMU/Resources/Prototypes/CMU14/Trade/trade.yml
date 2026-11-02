@@ -1,0 +1,80 @@
+# The kits of the heads. A kit is a sealed crate that a character of the job comes into the round with (see jobStartingCrate); it opens with a crowbar, and everything in it comes out next to where it stood.
+
+# ---------------------------------------------------------------- the crafts
+
+# Paper is pressed of plant fiber: three of it make two sheets.
+- type: craftRecipe
+  id: RUMCCraftCardboard
+  name: au14-craft-recipe-cardboard
+  output: RMCSheetCardboard1
+  outputCount: 2
+  time: 6
+  consumables:
+  - stack: RUMCPlantFiber
+    amount: 3
+
+# ---------------------------------------------------------------- the kit of the foreman
+# The logistics console (the trade shuttle is called from it) and a stack of cardboard.
+- type: entity
+  parent: RMCSecureCaseStrapped
+  id: RUMCCrateTradeStart
+  name: logistics kit crate
+  description: A sealed crate with a logistics console and cardboard. Open it with a crowbar, then anchor the console with a wrench where the shuttle is to be called from.
+  components:
+  - type: CrateOpenable
+    spawn:
+    - id: RUMCLogisticsConsole
+    - id: RMCSheetCardboard30
+
+- type: jobStartingCrate
+  id: RUMCJobStartingCrateForeman
+  job: AU14JobCivilianForeman
+  crate: RUMCCrateTradeStart
+
+# ---------------------------------------------------------------- the kit of the administrator
+# One administration console for the office and three consoles of the townsfolk to put out in the colony.
+- type: entity
+  parent: RMCSecureCaseStrapped
+  id: RUMCCrateAdministrationStart
+  name: administration kit box
+  description: A sealed box with an administration console and three consoles of the townsfolk. Open it with a crowbar, then anchor the consoles with a wrench where they are needed.
+  components:
+  - type: CrateOpenable
+    spawn:
+    - id: AU14AdminConsole
+    - id: RUMCCitizenConsole
+    - id: RUMCCitizenConsole
+    - id: RUMCCitizenConsole
+
+- type: jobStartingCrate
+  id: RUMCJobStartingCrateAdministrator
+  job: AU14JobCivilianColonyAdministrator
+  crate: RUMCCrateAdministrationStart
+
+# ---------------------------------------------------------------- the kit of the chief engineer
+# The start of the electric age: three solar panels, a step-down transformer, an assembler and a lathe, and the parts of one colony APC (see RUMCCraftBuildColonyApc: 2 steel, 1 simple circuits kit, 2 electronics kits, 3 wiring kits).
+- type: entity
+  parent: RMCSecureCaseStrapped
+  id: RUMCCrateEngineeringStart
+  name: production kit box
+  description: "A sealed box with the start of the production: three solar panels, a step-down transformer, an assembler, a lathe and the parts for a colony APC. Open it with a crowbar."
+  components:
+  - type: CrateOpenable
+    spawn:
+    - id: RUMCSolarPanel
+      amount: 3
+    - id: RUMCTransformerDown
+    - id: RUMCElectricAssembler
+    - id: RUMCLathe
+    - id: CMSheetMetal1
+      amount: 2
+    - id: RUMCKitSimpleCircuitsItem
+    - id: RUMCKitElectronicsItem
+      amount: 2
+    - id: RUMCKitWiringItem
+      amount: 3
+
+- type: jobStartingCrate
+  id: RUMCJobStartingCrateHeadOfEngineering
+  job: AU14JobCivilianHeadOfEngineering
+  crate: RUMCCrateEngineeringStart

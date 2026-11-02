@@ -1,0 +1,157 @@
+# The trade of the colony with the cities of the world map by the trade shuttle (see ColonyWorldTrade.cs). The logistics console is for the heads; the goods are known by the stack that they are made of.
+
+- type: entity
+  id: RUMCLogisticsConsole
+  parent: RMCCommunicationsConsoleBase
+  name: logistics console
+  description: The logistics console. The heads pick a landing zone and a city of the world map here, call the trade shuttle, order goods of the cities and send the shuttle away with what the colonists have put on it.
+  suffix: Colony, Heads
+  components:
+  - type: Sprite
+    sprite: CMU14/Government/logistics_console.rsi
+    state: console
+  - type: Icon
+    sprite: CMU14/Government/logistics_console.rsi
+    state: console
+  - type: ActivatableUI
+    key: enum.ForemanUi.Key
+  - type: ForemanConsole
+  - type: Anchorable
+  - type: UserInterface
+    interfaces:
+      enum.ForemanUi.Key:
+        type: ForemanConsoleBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [ [ "CMAccessRequisitions" ], [ "CMAccessColonyCommand" ] ]
+
+# ---------------------------------------------------------------- Goods: what the colony pays to buy one, what a city pays for one (before what it has had already), how many a city takes before it pays half
+
+- type: colonyWorldGood
+  id: RUMCGoodSteel
+  name: rumc-good-steel-name
+  stack: Steel
+  buyPrice: 40
+  sellPrice: 24
+  capacity: 80
+  lot: 10
+
+- type: colonyWorldGood
+  id: RUMCGoodWood
+  name: rumc-good-wood-name
+  stack: WoodPlank
+  buyPrice: 24
+  sellPrice: 15
+  capacity: 80
+  lot: 10
+
+- type: colonyWorldGood
+  id: RUMCGoodGlass
+  name: rumc-good-glass-name
+  stack: Glass
+  buyPrice: 30
+  sellPrice: 19
+  capacity: 70
+  lot: 10
+
+- type: colonyWorldGood
+  id: RUMCGoodCloth
+  name: rumc-good-cloth-name
+  stack: Cloth
+  buyPrice: 22
+  sellPrice: 14
+  capacity: 70
+  lot: 10
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodPlastic
+  name: rumc-good-plastic-name
+  stack: Plastic
+  buyPrice: 34
+  sellPrice: 22
+  capacity: 60
+  lot: 10
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodIronOre
+  name: rumc-good-iron-ore-name
+  stack: RUMCIronOre
+  buyPrice: 24
+  sellPrice: 15
+  capacity: 100
+  lot: 10
+
+- type: colonyWorldGood
+  id: RUMCGoodCopperOre
+  name: rumc-good-copper-ore-name
+  stack: RUMCCopperOre
+  buyPrice: 28
+  sellPrice: 18
+  capacity: 100
+  lot: 10
+
+- type: colonyWorldGood
+  id: RUMCGoodIronIngot
+  name: rumc-good-iron-ingot-name
+  stack: RUMCIronIngot
+  buyPrice: 60
+  sellPrice: 38
+  capacity: 60
+  lot: 5
+  boughtBy: [ TradeHub, ArmsMarket ]
+
+- type: colonyWorldGood
+  id: RUMCGoodCopperIngot
+  name: rumc-good-copper-ingot-name
+  stack: RUMCCopperIngot
+  buyPrice: 66
+  sellPrice: 42
+  capacity: 60
+  lot: 5
+  boughtBy: [ TradeHub, ArmsMarket ]
+
+- type: colonyWorldGood
+  id: RUMCGoodSilverIngot
+  name: rumc-good-silver-ingot-name
+  stack: RUMCSilverIngot
+  buyPrice: 130
+  sellPrice: 85
+  capacity: 40
+  lot: 5
+  soldBy: [ TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodTitaniumIngot
+  name: rumc-good-titanium-ingot-name
+  stack: RUMCTitaniumIngot
+  buyPrice: 160
+  sellPrice: 105
+  capacity: 40
+  lot: 5
+  soldBy: [ TradeHub, ArmsMarket ]
+
+- type: colonyWorldGood
+  id: RUMCGoodWeaponSteelIngot
+  name: rumc-good-weapon-steel-ingot-name
+  stack: RUMCWeaponSteelIngot
+  buyPrice: 190
+  sellPrice: 125
+  capacity: 30
+  lot: 5
+  premium: [ ArmsMarket ]
+  soldBy: [ ArmsMarket ]
+  boughtBy: [ ArmsMarket, TradeHub ]
+
+- type: colonyWorldGood
+  id: RUMCGoodPlasteelIngot
+  name: rumc-good-plasteel-ingot-name
+  stack: RUMCPlasteelIngot
+  buyPrice: 210
+  sellPrice: 140
+  capacity: 30
+  lot: 5
+  premium: [ ArmsMarket ]
+  soldBy: [ ArmsMarket ]
+  boughtBy: [ ArmsMarket, TradeHub ]

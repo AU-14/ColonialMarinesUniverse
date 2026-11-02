@@ -1,0 +1,22 @@
+- type: entity
+  parent: BaseAPC
+  id: PowerPanel
+  name: electrical panel
+  description: A compact distribution panel. Feed it power with a cable and it relays it to every powered device in range.
+  components:
+  - type: Battery
+    maxCharge: 50000
+    startingCharge: 50000
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+        connection: Direct
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Both
+  - type: ExtensionCableProvider
+    transferRange: 5

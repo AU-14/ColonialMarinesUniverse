@@ -177,6 +177,9 @@ public sealed partial class YautjaPowerSystem : EntitySystem
         ent.Comp.NextRegen = _timing.CurTime + ent.Comp.RegenEvery;
         if (!ShouldSkipCmss13EquipAutoLock(ent.Comp, args.EquipTarget))
             SetLocked(ent, true);
+        else if (HasComp<YautjaStrandedComponent>(args.EquipTarget))
+            SetLocked(ent, false); // the component defaults to locked, cmss13 stranded bracers start open
+
         UpdateAlert(ent);
         AddBracerTacticalMapMarker(ent, args.EquipTarget);
         _audio.PlayPredicted(ent.Comp.EquipSound, ent.Owner, args.EquipTarget);
@@ -185,6 +188,10 @@ public sealed partial class YautjaPowerSystem : EntitySystem
     private bool ShouldSkipCmss13EquipAutoLock(YautjaBracerComponent bracer, EntityUid wearer)
     {
         if (bracer.BadBlood)
+            return true;
+
+        // cmss13 equipped() returns early for FACTION_YAUTJA_STRANDED too: no lock, no minimap blip
+        if (HasComp<YautjaStrandedComponent>(wearer))
             return true;
 
         return TryComp(wearer, out NpcFactionMemberComponent? faction) &&

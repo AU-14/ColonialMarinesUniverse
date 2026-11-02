@@ -61,6 +61,9 @@ public sealed class CMUSentryBreakSystem : EntitySystem
             LoseAmmo(ent, sentry);
         }
 
+        var broken = new CMUSentryBrokenEvent();
+        RaiseLocalEvent(ent, ref broken);
+
         _audio.PlayPvs(BreakSound, ent);
         _popup.PopupEntity(Loc.GetString("cmu-sentry-broken", ("sentry", ent.Owner)), ent, PopupType.MediumCaution);
     }
