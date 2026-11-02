@@ -251,6 +251,10 @@
   id: CMUMohawkDoor
   name: Mohawk hatch
   components:
+  # The sealing fan beneath a hatch cannot refill a volume emptied by closing it.
+  - type: Airtight
+    noAirWhenFullyAirBlocked: false
+  - type: CMUGunshipDoorAtmosphere
   - type: Airlock
     animatePanel: false
     openingSpriteState: door_opening

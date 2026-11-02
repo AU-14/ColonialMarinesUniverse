@@ -18,6 +18,7 @@ public sealed class CMUDoorGunDrawDepthTest : GameTest
     [TestCase("CMUM2CDoorGunDropship", Direction.North, true)]
     [TestCase("CMUM2CDoorGunDropship", Direction.West, true)]
     [TestCase("CMUUTESCDoorGunDropship", Direction.South, true)]
+    [TestCase("CMUGAU19MDoorGunDropship", Direction.South, true)]
     [TestCase("RMCML66DNestDropship", Direction.South, true)]
     [TestCase("RMCML66DNestMetal", Direction.South, false)]
     public async Task DoorGunsDrawAboveOperator(string prototype, Direction facing, bool gunAboveOperator)

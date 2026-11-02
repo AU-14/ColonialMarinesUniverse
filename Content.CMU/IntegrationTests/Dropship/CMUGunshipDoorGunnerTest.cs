@@ -4,11 +4,14 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Utility.Components;
 using Content.Shared._RMC14.Emplacements;
+using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Weapons.Ranged.Battery;
 using Content.Shared.CMU14.Dropship.AttachmentPoint;
 using Content.Shared.Buckle;
 using Content.Shared.CombatMode;
 using Content.Shared.Doors;
 using Content.Shared.Doors.Components;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -20,6 +23,31 @@ namespace Content.IntegrationTests.CMU14.Dropship;
 public sealed class CMUGunshipDoorGunnerTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
+    [Test]
+    public async Task GAU19MCanShootMountedWithoutBatteryOrSmartgunEquipment()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var mount = SEntMan.SpawnEntity("CMUGAU19MDoorGunDropship", map.GridCoords);
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.System<SkillsSystem>().SetSkill(user, "RMCSkillEngineer", 1);
+            SEntMan.System<SharedTransformSystem>().SetLocalRotation(mount, Direction.East.ToAngle());
+            Assert.That(SEntMan.System<SharedBuckleSystem>().TryBuckle(user, user, mount), Is.True);
+
+            var weapon = SEntMan.GetComponent<WeaponMountComponent>(mount).MountedEntity!.Value;
+            Assert.That(SEntMan.HasComponent<GunDrainBatteryOnShootComponent>(weapon), Is.False);
+            Assert.That(SEntMan.System<SharedWeaponMountSystem>().TryGetWeaponAmmo(mount, out var ammo, out _), Is.True);
+            Assert.That(ammo, Is.EqualTo(1500));
+
+            var shoot = new AttemptShootEvent(user, null,
+                SEntMan.GetComponent<TransformComponent>(weapon).Coordinates,
+                map.GridCoords.Offset(new Vector2(5, 0)));
+            SEntMan.EventBus.RaiseLocalEvent(weapon, ref shoot);
+            Assert.That(shoot.Cancelled, Is.False);
+        });
+    }
 
     [Test]
     public async Task SeatedOperatorRequiresCombatModeAndLosesControlOnDismount()
@@ -65,7 +93,7 @@ public sealed class CMUGunshipDoorGunnerTest : GameTest
             "RMCDropshipAttachmentDoorGun",
             "CMUDropshipAttachmentDoorGunM2C",
             "CMUDropshipAttachmentDoorGunUTESC",
-            "RMCDropshipAttachmentDoorGun", // Exercise the fourth outward direction too.
+            "CMUDropshipAttachmentDoorGunGAU19M", // Exercise the fourth outward direction too.
         ];
         Vector2[] directions = [Vector2.UnitX, -Vector2.UnitX, Vector2.UnitY, -Vector2.UnitY];
 

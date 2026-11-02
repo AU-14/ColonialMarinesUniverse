@@ -12,6 +12,10 @@ public sealed partial class CMUDoorGunVisualComponent : Component
     [DataField]
     public Vector2 NorthSouthGunOffset;
 
+    /// <summary>Distance from the gun's pivot to its barrel light, in tiles.</summary>
+    [DataField]
+    public float BarrelLightDistance = 0.8f;
+
     [DataField, AutoNetworkedField]
     public Angle AimOffset;
 

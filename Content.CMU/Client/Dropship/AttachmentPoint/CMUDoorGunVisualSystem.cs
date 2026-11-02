@@ -35,6 +35,7 @@ public sealed partial class CMUDoorGunVisualSystem : EntitySystem
 
     public override void Initialize()
     {
+        InitializeBarrelLight();
         SubscribeLocalEvent<BuckleComponent, GetDrawDepthEvent>(OnOperatorDrawDepth,
             after: [typeof(RMCBuckleVisualsSystem)]);
     }
@@ -80,6 +81,7 @@ public sealed partial class CMUDoorGunVisualSystem : EntitySystem
         {
             var aim = localMount == uid ? _localAim :
                 _combat.IsInCombatMode(visual.Operator) ? visual.AimOffset : Angle.Zero;
+            UpdateBarrelLight(uid, visual, mount, aim);
             var mountScreenAngle = _transform.GetWorldRotation(uid) + _eye.CurrentEye.Rotation;
             var frame = GetGunFrame(mountScreenAngle, aim);
             var gunScreenAngle = mountScreenAngle + aim;

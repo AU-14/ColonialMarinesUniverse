@@ -521,6 +521,14 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
+    - name: Advanced Gunship Crew HUD
+      choices: { CMUPlatoonAirCrewGunshipHUD: 1 }
+      entries:
+      - id: CMUVisorGunshipCrewAdvanced
+    - name: Basic Gunship Crew HUDs
+      entries:
+      - id: CMUVisorGunshipCrew
+        amount: 5
     - name: au14-vendor-section-fatigues
       choices: { CMUPlatoonAirCrewFatigues: 1 }
       entries:

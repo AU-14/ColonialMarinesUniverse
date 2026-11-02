@@ -17,6 +17,7 @@ public sealed partial class GunshipHardpointAttachmentPointComponent : Component
         "RMCDropshipAttachmentDoorGun",
         "CMUDropshipAttachmentDoorGunM2C",
         "CMUDropshipAttachmentDoorGunUTESC",
+        "CMUDropshipAttachmentDoorGunGAU19M",
     };
 }
 

@@ -1,4 +1,14 @@
 - type: entity
+  parent: RMCSmartGunMountedStatic
+  id: CMUMachineGunM56DDropshipLoaded
+  suffix: Dropship, Loaded
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GunIFF
+    enabled: false
+  - type: CMUMountedIFF
+
+- type: entity
   parent: CMUDropshipAttachmentDoorGunM2C
   id: CMUDropshipAttachmentDoorGunUTESC
   name: UTES-C Door Gunner Hardpoint System
@@ -15,6 +25,7 @@
   components:
   - type: CMUDoorGunVisual
     northSouthGunOffset: 0, 0
+    barrelLightDistance: 0.45
   - type: Sprite
     sprite: CMU14/Objects/Weapons/Guns/DoorGuns/UTESC/pivot.rsi
     noRot: true
@@ -61,3 +72,185 @@
           tags:
           - RuMCMagazineUTES-C
           - RuMCMagazineUTES-CTracter
+
+- type: entity
+  parent: CMUDropshipAttachmentDoorGunM2C
+  id: CMUDropshipAttachmentDoorGunGAU19M
+  name: GAU-19/M Door Gunner Hardpoint System
+  description: A box that deploys a crew-served GAU-19/M minigun. Fits on gunship hardpoint attachment points.
+  components:
+  - type: RMCEquipmentDeployer
+    deployPrototype: CMUGAU19MDoorGunDropship
+
+- type: entity
+  parent: CMUM2CDoorGunDropship
+  id: CMUGAU19MDoorGunDropship
+  name: GAU-19/M mounted minigun
+  description: A crew-served GAU-19/M minigun mounted on a gunship door-gunner hardpoint. Uses GAU-19/H 9mm drums and requires no battery pack.
+  components:
+  - type: CMUDoorGunVisual
+    northSouthGunOffset: 0, 0
+    barrelLightDistance: 0.45
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/DoorGuns/GAU19M/pivot.rsi
+    noRot: true
+    granularLayersRendering: true
+    layers:
+    - state: mount
+      renderingStrategy: NoRotation
+    - sprite: CMU14/Objects/Weapons/Guns/DoorGuns/GAU19M/gun.rsi
+      state: gun
+      renderingStrategy: NoRotation
+      rotation: 0
+      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
+      visible: false
+    - sprite: CMU14/Objects/Weapons/Guns/DoorGuns/GAU19M/gun.rsi
+      state: ammo
+      renderingStrategy: NoRotation
+      rotation: 0
+      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
+      visible: false
+  - type: WeaponMount
+    fixedWeaponPrototype: CMUMinigunGAU19MDropshipLoaded
+
+# Use the ordinary gun base so handheld smartgun power, armor, and wielding
+# requirements do not carry over to this fixed crew-served weapon.
+- type: entity
+  parent: [ CMBaseWeaponGun, BaseItem ]
+  id: CMUMinigunGAU19MDropshipLoaded
+  name: GAU-19/M mounted minigun
+  description: The minigun fitted to a GAU-19/M door-gunner hardpoint.
+  suffix: Dropship, Loaded
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Item
+    size: Huge
+  - type: Clothing
+    slots: NONE
+  - type: AmmoCounter
+  - type: CMUAmmoCounter
+  - type: MagazineAmmoProvider
+    autoEject: true
+  - type: RMCAmmoEject
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/HAZOPS/GAU19E2.rsi
+    layers:
+    - state: base
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: CMULowAmmoFireSound
+    sound:
+      collection: AU14SmartgunRattleFireSound
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      collection: AU14SmartgunFireSound
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - FullAuto
+    recoilUnwielded: 0
+    scatterUnwielded: 2
+    recoilWielded: 0
+    scatterWielded: 2
+    baseFireRate: 11
+    burstScatterMult: 4
+    modifiers:
+      FullAuto:
+        maxScatterModifier: 4
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 1
+        shotsToMaxScatter: 80
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.15
+  - type: GunDamageModifier
+    multiplier: 0.7
+  - type: GunToggleableAmmo
+    settings:
+    - damage:
+        types:
+          Piercing: 30
+      armorPiercing: 0
+      name: rmc-toggleable-ammo-highly-precise
+      icon:
+        sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+        state: ammo_swap_normal
+    - damage:
+        types:
+          Piercing: 20
+      armorPiercing: 40
+      name: rmc-toggleable-ammo-armor-shredding
+      icon:
+        sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+        state: ammo_swap_ap
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineMinigunGAU19M
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineMinigunHAZOPS
+  - type: GunRequiresSkills
+    skills:
+      RMCSkillEngineer: 1
+  - type: GunSkilledRecoil
+    setRecoil: 0
+    skills:
+      RMCSkillFirearms: 0
+    mustBeWielded: false
+  - type: GunUnskilledPenalty
+    firearms: 0
+    angleIncrease: 0
+    accuracyAddMult: 0
+  - type: MountableWeapon
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/lmg_mouse.rsi
+      state: all
+
+- type: entity
+  parent: AU14MagazineMinigunHAZOPS
+  id: CMUMagazineMinigunGAU19M
+  name: GAU-19/M drum magazine (9mm)
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateMagazineGAU19M
+  name: GAU-19/M drum magazine crate (x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineMinigunGAU19M
+      amount: 1
+
+# Client-owned emitter, parented to each deployed door gun by its visual system.
+- type: entity
+  id: CMUDoorGunBarrelLight
+  name: door gun barrel light
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    gridTraversal: false
+  - type: PointLight
+    enabled: true
+    radius: 8
+    energy: 1.7
+    softness: 1
+    lightMask: ConeSingle
+    autoRot: true
+    netsync: false
