@@ -1,0 +1,164 @@
+# Gun wear and jamming.
+#
+# CMUGunJammingDefault is the global profile. Every handheld gun that matches its autoApplyWhitelist gets wear and
+# jamming on spawn and uses these numbers, so balance changes go here.
+#
+# To change one gun, add the component to its prototype, either to tweak it:
+#   - type: CMUGunJamming
+#     wearMultiplier: 0.5          # wears half as fast
+#     jamChanceMultiplier: 2       # jams twice as often at the same wear
+#     slamBreakChanceMultiplier: 0 # a stock slam can never wreck it
+#     canSlam: false               # no stock slamming, e.g. for pistols
+#     wear: 60                     # spawns already worn
+#     enabled: false               # never wears or jams
+# or to give it a whole profile of its own:
+#   - type: CMUGunJamming
+#     profile: CMUGunJammingMyProfile
+# where the profile inherits the default and overrides only what it needs:
+#   - type: cmuGunJamming
+#     id: CMUGunJammingMyProfile
+#     parent: CMUGunJammingDefault
+#     maxJamChance: 0.1
+#
+# Special ammo can also set its own multiplier, ignoring ammoIdKeywords and ammoTagMultipliers, by adding this to the
+# cartridge or projectile prototype:
+#   - type: CMUGunWearAmmo
+#     multiplier: 1.3
+
+- type: cmuGunJamming
+  id: CMUGunJammingDefault
+  # Turns the whole system on or off for guns on this profile. With it off, jammed and broken guns fire again.
+  enabled: true
+  # Whether guns get wear and jamming on spawn. Only read from this profile.
+  autoApply: true
+  autoApplyWhitelist:
+    components:
+    - BallisticAmmoProvider
+    - MagazineAmmoProvider
+    - ChamberMagazineAmmoProvider
+    - RevolverAmmoProvider
+  autoApplyBlacklist:
+    components:
+    # Underbarrel guns can't be cleared from the right click menu while they're mounted.
+    - Attachable
+
+  # Wear goes from 0 to maxWear. Each round fired adds baseWearPerShot times every multiplier below that applies.
+  maxWear: 100
+  baseWearPerShot: 0.05
+
+  # Fire mode multipliers.
+  semiAutoWearMultiplier: 1
+  burstWearMultiplier: 1.35
+  fullAutoWearMultiplier: 1.75
+
+  # Shotguns fired semi-automatically rather than by working a pump take extra wear.
+  shotgunTags:
+  - RMCWeaponShotgun
+  shotgunSemiAutoWearMultiplier: 1.5
+
+  # Special ammo multipliers. A key matches when the cartridge or projectile prototype ID contains it
+  # (case-sensitive). When several match, the largest wins. Ammo nothing matches is standard and counts as 1.
+  # Values below 1 are allowed, for ammo that should be gentler on a gun than standard.
+  ammoIdKeywords:
+    AP: 1.25
+    ArmorPiercing: 1.25
+    HIAP: 1.35
+    HEAP: 1.5
+    HE: 1.4
+    Explosive: 1.5
+    Incendiary: 1.4
+    WP: 1.5
+    Flechette: 1.2
+    Breaching: 1.2
+    Impact: 1.15
+    HighImpact: 1.2
+    HP: 1.1
+    Hollowpoint: 1.1
+    Tungsten: 1.3
+    SquashHead: 1.2
+    Squashhead: 1.2
+    Tracer: 1.1
+    Marksman: 1.1
+  # Same as ammoIdKeywords, but matched against the cartridge's or projectile's tags.
+  ammoTagMultipliers: {}
+
+  # Jam chance per round fired. Below jamWearThreshold (a fraction of maxWear) guns never jam. From there it climbs
+  # from minJamChance to maxJamChance at max wear; a higher jamChanceExponent keeps it low for longer.
+  jamWearThreshold: 0.1
+  minJamChance: 0.0005
+  maxJamChance: 0.05
+  jamChanceExponent: 2
+
+  # Which jam a gun gets is picked by weight.
+  #   cycleDelay: how long working the action takes to clear it.
+  #   cycleClearChance: chance a finished cycle clears it.
+  #   cycleRoundLoss: what clearing it by cycling does to the stuck round. None, Eject (drops it) or Destroy.
+  #   slamClearChance: chance a stock slam that doesn't fire or break the gun clears it.
+  #   slamDischargeChance: chance a stock slam sets off a round into the air, which also clears it.
+  #   slamBreakChanceMultiplier: scales the chance a stock slam wrecks the gun.
+  jamTypes:
+    FailureToFeed:
+      name: cmu-gun-jam-type-feed
+      weight: 3
+      cycleDelay: 1.5
+      cycleClearChance: 1
+      cycleRoundLoss: None
+      slamClearChance: 0.9
+      slamDischargeChance: 0
+      slamBreakChanceMultiplier: 1
+    FailureToEject:
+      name: cmu-gun-jam-type-eject
+      weight: 3
+      cycleDelay: 2.5
+      cycleClearChance: 0.9
+      cycleRoundLoss: None
+      slamClearChance: 0.8
+      slamDischargeChance: 0
+      slamBreakChanceMultiplier: 1.25
+    FailureToChamber:
+      name: cmu-gun-jam-type-chamber
+      weight: 2
+      cycleDelay: 2
+      cycleClearChance: 1
+      cycleRoundLoss: Eject
+      slamClearChance: 0.85
+      slamDischargeChance: 0.35
+      slamBreakChanceMultiplier: 1
+    FailureToFire:
+      name: cmu-gun-jam-type-fire
+      weight: 2
+      cycleDelay: 1.5
+      cycleClearChance: 1
+      cycleRoundLoss: Destroy
+      slamClearChance: 0.85
+      slamDischargeChance: 0.25
+      slamBreakChanceMultiplier: 1
+
+  # Leave jammedSound out to use the gun's own empty click.
+  cycleSound: /Audio/_RMC14/Weapons/Guns/Cock/gun_cocked2.ogg
+
+  # Stock slam. slamWear is added on every slam. The chance to wreck the gun climbs from slamBreakChance with no
+  # wear to slamBreakChanceAtMaxWear at max wear, shaped by slamBreakWearExponent. A wrecked gun never fires again.
+  slamEnabled: true
+  slamDelay: 0.6
+  slamWear: 5
+  slamBreakChance: 0.02
+  slamBreakChanceAtMaxWear: 0.3
+  slamBreakWearExponent: 1.5
+  slamSound: /Audio/Effects/metal_thud1.ogg
+  breakSound: /Audio/Effects/metal_crunch.ogg
+
+  popupCooldown: 1
+
+  # Shown on examine. The tier with the highest threshold at or below the gun's wear fraction is used.
+  conditionTiers:
+  - threshold: 0
+    text: cmu-gun-wear-pristine
+  - threshold: 0.15
+    text: cmu-gun-wear-good
+  - threshold: 0.4
+    text: cmu-gun-wear-worn
+  - threshold: 0.65
+    text: cmu-gun-wear-poor
+  - threshold: 0.85
+    text: cmu-gun-wear-critical

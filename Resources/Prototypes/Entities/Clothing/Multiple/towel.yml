@@ -31,6 +31,12 @@
   - type: DnaSubstanceTrace
   - type: Item
     size: Small
+  # CMU14 start - a towel wipes the worst of the grime off a gun
+  - type: CMUGunMaintenanceTool
+    wearRemoved: 0.15
+    minWear: 0.4
+    delay: 4
+  # CMU14 end
 
 - type: entity
   id: TowelColorWhite

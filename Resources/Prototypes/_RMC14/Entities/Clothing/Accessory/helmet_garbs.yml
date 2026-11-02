@@ -430,6 +430,17 @@
     rsi:
       sprite: _RMC14/Objects/Clothing/HelmetGarb/gun_oil.rsi
       state: helmet
+  # CMU14 start - gun oil cleans wear off guns
+  - type: CMUGunMaintenanceTool
+    wearRemoved: 0.4
+    minWear: 0
+    delay: 5
+    uses: 6
+    sound:
+      path: /Audio/Effects/Fluids/watersplash.ogg
+      params:
+        volume: -6
+  # CMU14 end
 
 - type: entity
   parent: [RMCHelmetGarbBase, RMCUtilityBase]

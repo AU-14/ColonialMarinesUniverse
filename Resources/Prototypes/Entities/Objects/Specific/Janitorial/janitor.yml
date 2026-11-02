@@ -330,6 +330,12 @@
     - type: Absorbent
       pickupAmount: 15
       useAbsorberSolution: true
+    # CMU14 start - a rag wipes the worst of the grime off a gun
+    - type: CMUGunMaintenanceTool
+      wearRemoved: 0.15
+      minWear: 0.4
+      delay: 4
+    # CMU14 end
     - type: Construction
       graph: Rag
       node: rag
