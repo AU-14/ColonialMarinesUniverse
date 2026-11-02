@@ -1,5 +1,6 @@
 - type: reaction
   id: RMCNapalm
+  conserveEnergy: false # CMU14 fuel synthesis must not self-heat past its 500 K ignition (fuel_ignition.yml)
   priority: 10
   reactants:
     Water:
@@ -68,6 +69,9 @@
 
 - type: reaction
   id: RMCNapalmHighCombustion
+  conserveEnergy: false # CMU14 fuel synthesis must not self-heat past its 500 K ignition (fuel_ignition.yml)
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCNapalm:
       amount: 1
@@ -78,6 +82,9 @@
 
 - type: reaction
   id: RMCNapalmSticky
+  conserveEnergy: false # CMU14 fuel synthesis must not self-heat past its 500 K ignition (fuel_ignition.yml)
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCNapalm:
       amount: 1

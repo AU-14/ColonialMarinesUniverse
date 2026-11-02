@@ -166,6 +166,14 @@
                                         </PanelContainer>
                                     </TableContainer>
                                 </BoxContainer>
+                                <BoxContainer HorizontalExpand="True" Orientation="Vertical" Name="ContractsTab" Access="Public">
+                                    <uiControls:HLine Thickness="3" Color="#FFBF00" Margin="0, 5"></uiControls:HLine>
+                                    <BoxContainer Name="ContractsList" Access="Public" HorizontalExpand="True" Orientation="Vertical" Margin="5,0"/>
+                                </BoxContainer>
+                                <BoxContainer HorizontalExpand="True" Orientation="Vertical" Name="PropertiesTab" Access="Public">
+                                    <uiControls:HLine Thickness="3" Color="#FFBF00" Margin="0, 5"></uiControls:HLine>
+                                    <BoxContainer Name="PropertiesList" Access="Public" HorizontalExpand="True" Orientation="Vertical" Margin="5,0"/>
+                                </BoxContainer>
                             </TabContainer>
                         </BoxContainer>
                     </ScrollContainer>

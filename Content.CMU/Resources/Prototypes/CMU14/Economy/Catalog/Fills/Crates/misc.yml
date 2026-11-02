@@ -171,6 +171,28 @@
 
 - type: entity
   parent: RMCCrateScience
+  id: CMUCrateChemistryHotplate
+  name: chemistry hotplate crate
+  description: A crate containing a flatpacked chemistry hotplate for heating solutions.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUChemistryHotplateFlatpack
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateChemistryChiller
+  name: chemistry chiller crate
+  description: A crate containing a flatpacked chemistry chiller for cooling solutions.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUChemistryChillerFlatpack
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
   id: CMUCrateChemGlasses
   name: reagent scanner HUD goggles crate
   description: A crate containing a pair of reagent scanner HUD goggles.

@@ -185,6 +185,7 @@
 
 - type: reaction
   id: CMUFentanylPrecursor
+  conserveEnergy: false # CMU14: the chain must not heat itself past its own heat gate; any outside heat (hotplate, hot reagent) counts
   reactants:
     CMUOxycodone:
       amount: 1
@@ -195,6 +196,8 @@
 
 - type: reaction
   id: CMUFentanyl
+  conserveEnergy: false # CMU14: the chain must not heat itself past its own heat gate; any outside heat (hotplate, hot reagent) counts
+  minTemp: 370 # CMU14: the cooking step needs a heat source
   reactants:
     CMUFentanylPrecursor:
       amount: 1
@@ -213,6 +216,7 @@
 
 - type: reaction
   id: CMUMethPrecursor
+  conserveEnergy: false # CMU14: the chain must not heat itself past its own heat gate; any outside heat (hotplate, hot reagent) counts
   reactants:
     RMCMethylphenidate:
       amount: 2
@@ -231,6 +235,8 @@
 
 - type: reaction
   id: CMUMethBase
+  conserveEnergy: false # CMU14: the chain must not heat itself past its own heat gate; any outside heat (hotplate, hot reagent) counts
+  minTemp: 380 # CMU14: heated reduction at 380 K (above a microwave's 373 K); any heat source works
   reactants:
     CMUMethPrecursor:
       amount: 1
@@ -243,6 +249,8 @@
 
 - type: reaction
   id: CMUMethamphetamine
+  conserveEnergy: false # CMU14: the chain must not heat itself past its own heat gate; any outside heat (hotplate, hot reagent) counts
+  minTemp: 380 # CMU14: heated reduction at 380 K (above a microwave's 373 K); any heat source works
   reactants:
     CMUMethBase:
       amount: 1
@@ -353,6 +361,8 @@
 
 - type: reaction
   id: CMUBiogenicMatrix
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     CMBicaridine:
       amount: 2

@@ -108,6 +108,7 @@
   - type: RMCFlamerTank
     maxIntensity: 70
     maxRange: 8
+    allowBlueFire: true # CMU14: specialist FL3 tanks may fire blue fire
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
@@ -139,6 +140,7 @@
   - type: RMCFlamerTank
     maxIntensity: 70
     maxRange: 8
+    allowBlueFire: true # CMU14: specialist FL3 tanks may fire blue fire
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
@@ -170,6 +172,7 @@
   - type: RMCFlamerTank
     maxIntensity: 70
     maxRange: 8
+    allowBlueFire: true # CMU14: specialist FL3 tanks may fire blue fire
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
