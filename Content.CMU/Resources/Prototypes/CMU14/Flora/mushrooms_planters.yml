@@ -270,6 +270,8 @@
   parent: RUMCPlanterBase
   id: RUMCPlanterSolidBase
   components:
+  - type: CollideOnAnchor
+    enable: true
   - type: Fixtures
     fixtures:
       fix1:

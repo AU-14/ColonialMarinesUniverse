@@ -9,6 +9,9 @@
   - type: PlaceableSurface
     isPlaceable: false
   - type: MarketStall
+  - type: ContainerContainer
+    containers:
+      stall: !type:Container
   - type: ActivatableUI
     key: enum.MarketStallUi.Key
   - type: UserInterface
