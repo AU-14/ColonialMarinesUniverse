@@ -1,6 +1,11 @@
 using Content.Client.UserInterface.Controls;
 using Content.Shared._RMC14.AlertLevel; // CMU14: admin tablet alert level control
 using Content.Shared._RMC14.Marines.Announce;
+// cmu edit start: voice announcements
+using Content.Shared.CCVar;
+using Content.Shared.CMU14.VoiceChat;
+using Robust.Shared.Configuration;
+// cmu edit end
 using Content.Shared._RMC14.Marines.ControlComputer;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.TacticalMap;
@@ -119,6 +124,10 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
         _window.Text.OnTextChanged += args => OnTextChanged((int) Rope.CalcTotalLength(args.TextRope));
 
         _window.Send.OnPressed += _ => SendPredictedMessage(new MarineCommunicationsComputerMsg( Rope.Collapse(_window.Text.TextRope)));
+        // cmu edit start: voice announcements
+        _window.VoiceAnnounceButton.Visible = IoCManager.Resolve<IConfigurationManager>().GetCVar(CCVars.CMUVoiceChatEnabled);
+        _window.VoiceAnnounceButton.OnPressed += _ => SendMessage(new CMUVoiceAnnounceToggleBuiMsg());
+        // cmu edit end
         OnStateUpdate();
         OnTextChanged(0);
     }

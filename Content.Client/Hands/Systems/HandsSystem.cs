@@ -228,6 +228,11 @@ namespace Content.Client.Hands.Systems
                 return;
             }
 
+            // cmu edit start: shift-clicking a headset opens its voice radio window instead
+            if (EntityManager.System<Content.Client.CMU14.VoiceChat.CMUVoiceRadioWindowSystem>().TryOpen(heldEntity.Value))
+                return;
+            // cmu edit end
+
             _examine.DoExamine(heldEntity.Value);
         }
 

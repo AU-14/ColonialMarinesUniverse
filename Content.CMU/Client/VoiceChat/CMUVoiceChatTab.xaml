@@ -1,0 +1,30 @@
+<Control xmlns="https://spacestation14.io"
+         xmlns:ui="clr-namespace:Content.Client.Options.UI"
+         xmlns:cmu="clr-namespace:Content.Client.CMU14.UserInterface.Options">
+    <BoxContainer Orientation="Vertical">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2">
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-voice-chat-connection'}">
+                    <Label Name="StatusLabel" />
+                    <Label Name="CodeLabel" />
+                    <Button Name="OpenPageButton" Text="{Loc 'cmu-ui-options-voice-chat-open'}" HorizontalAlignment="Left" />
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-voice-chat-playback'}">
+                    <ui:OptionSlider Name="VolumeSlider" Title="{Loc 'cmu-ui-options-voice-chat-volume'}" />
+                    <CheckBox Name="HearSelfCheckBox" Text="{Loc 'cmu-ui-options-voice-chat-hear-self'}" />
+                    <CheckBox Name="ShowIntroCheckBox" Text="{Loc 'cmu-ui-options-voice-chat-show-intro'}" />
+                    <CheckBox Name="SpeakerListCheckBox" Text="{Loc 'cmu-ui-options-voice-chat-speaker-list'}" />
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-voice-chat-keys'}">
+                    <Label Name="PushToTalkKeyLabel" />
+                    <Label Name="RadioKeyLabel" />
+                    <Label Name="RadioCycleKeyLabel" />
+                    <Label Text="{Loc 'cmu-ui-options-voice-chat-keys-hint'}" FontColorOverride="#8C96A3" />
+                </cmu:CmuOptionSection>
+            </BoxContainer>
+        </ScrollContainer>
+        <ui:OptionsTabControlRow Name="Control" Access="Public" />
+    </BoxContainer>
+</Control>

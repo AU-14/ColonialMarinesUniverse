@@ -33,7 +33,11 @@ namespace Content.Client.Options.UI
             Tabs.SetTabTitle(4, Loc.GetString("rmc-ui-options-tab-voicelines")); // RMC14
             Tabs.SetTabTitle(5, Loc.GetString("ui-options-tab-accessibility"));
             Tabs.SetTabTitle(6, Loc.GetString("ui-options-tab-cmu"));
-            Tabs.SetTabTitle(7, Loc.GetString("ui-options-tab-admin"));
+            // cmu edit start: voice chat tab
+            // Tabs.SetTabTitle(7, Loc.GetString("ui-options-tab-admin"));
+            Tabs.SetTabTitle(7, Loc.GetString("cmu-ui-options-tab-voice-chat"));
+            Tabs.SetTabTitle(8, Loc.GetString("ui-options-tab-admin"));
+            // cmu edit end
 
             CmuTab.CrtUiPreviewChanged += OnCrtUiPreviewChanged;
             CmuTab.OpenUiSetupRequested += OpenUiSetup;
@@ -105,11 +109,18 @@ namespace Content.Client.Options.UI
         public void UpdateTabs()
         {
             var isAdmin = _adminManager.IsAdmin(true);
-            Tabs.SetTabVisible(7, isAdmin);
+            // cmu edit start: voice chat tab
+            // Tabs.SetTabVisible(7, isAdmin);
+            Tabs.SetTabVisible(8, isAdmin);
+            // cmu edit end
 
             GraphicsTab.Control.ReloadValues();
             MiscTab.Control.ReloadValues();
             CmuTab.Control.ReloadValues();
+            // cmu edit start: voice chat tab
+            VoiceChatTab.Control.ReloadValues();
+            VoiceChatTab.Refresh();
+            // cmu edit end
             AccessibilityTab.Control.ReloadValues();
             AudioTab.Control.ReloadValues();
             VoicelinesTab.Control.ReloadValues();

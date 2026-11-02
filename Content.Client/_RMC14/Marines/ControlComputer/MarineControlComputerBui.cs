@@ -1,4 +1,9 @@
 using Content.Shared._RMC14.Marines.ControlComputer;
+// cmu edit start: voice announcements
+using Content.Shared.CCVar;
+using Content.Shared.CMU14.VoiceChat;
+using Robust.Shared.Configuration;
+// cmu edit end
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
@@ -20,6 +25,10 @@ public sealed class MarineControlComputerBui(EntityUid owner, Enum uiKey) : Boun
 
         _window.AlertButton.OnPressed += _ => SendPredictedMessage(new MarineControlComputerAlertLevelMsg());
         _window.ShipAnnouncementButton.OnPressed += _ => SendPredictedMessage(new MarineControlComputerShipAnnouncementMsg());
+        // cmu edit start: voice announcements
+        _window.VoiceAnnounceButton.Visible = IoCManager.Resolve<IConfigurationManager>().GetCVar(CCVars.CMUVoiceChatEnabled);
+        _window.VoiceAnnounceButton.OnPressed += _ => SendMessage(new CMUVoiceAnnounceToggleBuiMsg());
+        // cmu edit end
         _window.MedalButton.OnPressed += _ => SendPredictedMessage(new MarineControlComputerOpenMedalsPanelMsg());
 
         _window.EvacuationButton.OnPressed += _ =>

@@ -675,6 +675,18 @@ binds:
   type: State
   key: Space
   mod1: Control
+# cmu edit start: voice chat push-to-talk
+- function: CMUVoicePushToTalk
+  type: State
+  key: CapsLock
+- function: CMUVoiceRadioPushToTalk
+  type: State
+  key: J
+- function: CMUVoiceRadioCycleChannel
+  type: State
+  key: J
+  mod1: Shift
+# cmu edit end
 - function: CMUToggleShootDownZLevel
   type: State
   key: Space

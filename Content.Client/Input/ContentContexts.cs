@@ -38,6 +38,11 @@ namespace Content.Client.Input
             common.AddFunction(ContentKeyFunctions.Point);
             common.AddFunction(ContentKeyFunctions.RotateCameraWithMouse);
             common.AddFunction(CMUKeyFunctions.CMUToggleFirstPersonMouse); // CMU14
+            // cmu edit start: voice chat
+            common.AddFunction(CMUKeyFunctions.CMUVoicePushToTalk);
+            common.AddFunction(CMUKeyFunctions.CMUVoiceRadioPushToTalk);
+            common.AddFunction(CMUKeyFunctions.CMUVoiceRadioCycleChannel);
+            // cmu edit end
             common.AddFunction(ContentKeyFunctions.ZoomOut);
             common.AddFunction(ContentKeyFunctions.ZoomIn);
             common.AddFunction(ContentKeyFunctions.ResetZoom);

@@ -21,6 +21,13 @@
         </BoxContainer>
         <BoxContainer Orientation="Horizontal">
             <Control HorizontalExpand="True" />
+            <Button Name="VoiceAnnounceButton" Access="Public" Text="{Loc cmu-voice-announce-button}"
+                    HorizontalExpand="True" SizeFlagsStretchRatio="3"
+                    Margin="0 2" />
+            <Control HorizontalExpand="True" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal">
+            <Control HorizontalExpand="True" />
             <Button Name="Emergency" Access="Public" Text="{Loc colony-comms-console-toggle-siren}"
                     StyleClasses="OpenBoth" HorizontalExpand="True" SizeFlagsStretchRatio="3"
                     Margin="0 2" />

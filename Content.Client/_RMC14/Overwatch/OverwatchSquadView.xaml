@@ -38,6 +38,11 @@
                         <Button Name="MessageSquadButton" Access="Public" Text="{Loc rmc-overwatch-console-message-squad}"
                                 StyleClasses="ActionButton" VerticalAlignment="Top"
                                 Margin="0 10 0 0" MinWidth="250" />
+                        <!-- cmu edit start: voice announcements -->
+                        <Button Name="VoiceAnnounceButton" Access="Public" Text="{Loc cmu-voice-announce-button}"
+                                StyleClasses="ActionButton" VerticalAlignment="Top"
+                                Margin="0 10 0 0" MinWidth="250" />
+                        <!-- cmu edit end -->
                         <Button Name="SquadObjectivesButton" Access="Public" Text="{Loc rmc-overwatch-console-squad-objectives}"
                                 StyleClasses="ActionButton" VerticalAlignment="Top"
                                 Margin="0 10 0 0" MinWidth="250" />

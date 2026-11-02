@@ -18,6 +18,9 @@ public sealed class CMUKeyFunctions
     public static readonly BoundKeyFunction CMUOpenMedicalCraftingMenu = "CMUOpenMedicalCraftingMenu";
     public static readonly BoundKeyFunction CMUToggleShootDownZLevel = "CMUToggleShootDownZLevel";
     public static readonly BoundKeyFunction CMUOpenWornStorage = "CMUOpenWornStorage";
+    public static readonly BoundKeyFunction CMUVoicePushToTalk = "CMUVoicePushToTalk";
+    public static readonly BoundKeyFunction CMUVoiceRadioPushToTalk = "CMUVoiceRadioPushToTalk";
+    public static readonly BoundKeyFunction CMUVoiceRadioCycleChannel = "CMUVoiceRadioCycleChannel";
 
     public static readonly BoundKeyFunction CMUGunshipForward = "CMUGunshipForward";
     public static readonly BoundKeyFunction CMUGunshipBack = "CMUGunshipBack";

@@ -7,4 +7,7 @@ public enum ChatType
     Dead = 1,
     Looc = 1 << 1,
     Ooc = 1 << 2,
+    // cmu edit start: voice chat bans
+    Voice = 1 << 3,
+    // cmu edit end
 }

@@ -10,6 +10,10 @@
                 StyleClasses="OpenBoth" />
         <Button Name="ShipAnnouncementButton" Access="Public" Text="Make a shipwide announcement"
                 StyleClasses="OpenBoth" />
+        <!-- cmu edit start: voice announcements -->
+        <Button Name="VoiceAnnounceButton" Access="Public" Text="{Loc cmu-voice-announce-button}"
+                StyleClasses="OpenBoth" />
+        <!-- cmu edit end -->
         <Button Name="MedalButton" Access="Public" Text="Give a medal"
                 StyleClasses="OpenBoth" />
         <RichTextLabel Text="[bold]Emergency measures[/bold]" Margin="0 20 0 0" />

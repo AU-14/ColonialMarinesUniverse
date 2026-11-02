@@ -4,6 +4,11 @@ using Content.Client.Message;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Maths;
 using Content.Shared._RMC14.Overwatch;
+// cmu edit start: voice announcements
+using Content.Shared.CCVar;
+using Content.Shared.CMU14.VoiceChat;
+using Robust.Shared.Configuration;
+// cmu edit end
 using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.Mobs;
 using Content.Shared.Roles;
@@ -267,6 +272,10 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                         SendPredictedMessage(msg);
                     };
 
+                // cmu edit start: voice announcements
+                monitor.VoiceAnnounceButton.OnPressed += _ => SendMessage(new CMUVoiceAnnounceToggleBuiMsg());
+                // cmu edit end
+
                 monitor.MessageSquadButton.OnPressed += _ =>
                 {
                     var window = new OverwatchTextInputWindow();
@@ -354,11 +363,17 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 {
                     TabContainer.SetTabVisible(monitor.OrbitalBombardment, overwatch.CanOrbitalBombardment);
                     monitor.MessageSquadButton.Visible = overwatch.CanMessageSquad;
+                    // cmu edit start: voice announcements
+                    monitor.VoiceAnnounceButton.Visible = overwatch.CanMessageSquad && IoCManager.Resolve<IConfigurationManager>().GetCVar(CCVars.CMUVoiceChatEnabled);
+                    // cmu edit end
                 }
                 else
                 {
                     TabContainer.SetTabVisible(monitor.OrbitalBombardment, false);
                     monitor.MessageSquadButton.Visible = false;
+                    // cmu edit start: voice announcements
+                    monitor.VoiceAnnounceButton.Visible = false;
+                    // cmu edit end
                 }
 
                 _squadViews[squad.Id] = monitor;

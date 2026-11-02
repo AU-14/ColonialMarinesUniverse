@@ -45,5 +45,9 @@ public static partial class PoolManager
         (CMUBalanceRatingCVars.AutomaticEnabled.Name, "false"),
         // Tests that exercise automatic hunts opt in; pooled round restarts must not load extra maps.
         (YautjaPredatorRoundCVars.RandomEnabled.Name, "false"),
+        // cmu edit start: voice chat is on by default; pooled servers each take a free port and clients skip the intro popup.
+        (CCVars.CMUVoiceChatWebSocketBind.Name, "127.0.0.1:0"),
+        (CCVars.CMUVoiceChatShowIntro.Name, "false"),
+        // cmu edit end
     };
 }
