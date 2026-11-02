@@ -12,7 +12,7 @@
   - type: Transform # CMU14
     anchored: true
   - type: Physics
-    bodytype: Static
+    bodyType: Static
   - type: Anchorable
     flags: [Anchorable, Unanchorable]
 
