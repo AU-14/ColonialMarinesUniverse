@@ -21,3 +21,4 @@ cmu-vendor-showing = Показано: { $shown } из { $total }
 cmu-vendor-dispense = ВЫДАТЬ
 cmu-vendor-unavailable = НЕДОСТУПНО
 cmu-vendor-points-cost = Цена: { $count } очк.
+cmu-vendor-stock-count = ОСТАТОК { $current } / { $max }
