@@ -29,7 +29,16 @@ internal static class Hud
 
     public static Font Font(string path, int size)
     {
-        return IoCManager.Resolve<IResourceCache>().GetFont(path, size);
+        // Chakra Petch has no Cyrillic glyphs. Keep its Latin styling and fall back
+        // to Noto Sans Display for Russian UI text and player-entered names.
+        var weight = path == Sans ? "Regular" : "Bold";
+        return IoCManager.Resolve<IResourceCache>().GetFont(new[]
+        {
+            path,
+            $"/Fonts/NotoSansDisplay/NotoSansDisplay-{weight}.ttf",
+            $"/Fonts/NotoSans/NotoSansSymbols-{weight}.ttf",
+            "/Fonts/NotoSans/NotoSansSymbols2-Regular.ttf",
+        }, size);
     }
 
     // a line with a soft halo under it, which is what makes it read as light rather than ink
