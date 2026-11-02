@@ -35,6 +35,7 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
 {
     [Dependency] private SharedAmbientSoundSystem _ambient = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private CollisionWakeSystem _collisionWake = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private RMCConstructionSystem _construction = default!;
     [Dependency] private CMUFobInteractionSystem _controls = default!;
@@ -244,9 +245,7 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
                 var equipment = Comp<CMUFobEquipmentComponent>(section);
                 equipment.Deployed = true;
                 equipment.Network = bank;
-                if (TryComp<FixturesComponent>(section, out var sectionFixtures))
-                    foreach (var fixture in sectionFixtures.Fixtures.Values)
-                        _physics.SetHard(section, fixture, true);
+                UpdateDeploymentCollision((section, equipment));
                 EnsureComp<CMUFobInstructionsComponent>(section);
                 UpdateVisuals((section, equipment));
                 _effects.Play(section, CMUFobPresentationCue.Deploy);
@@ -256,13 +255,20 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
             if (!args.Deploy) _transform.Unanchor(ent);
             ent.Comp.Deployed = args.Deploy;
             ent.Comp.Network = args.Deploy ? bank.Owner : null;
-            if (TryComp<FixturesComponent>(ent, out var fixtures))
-                foreach (var fixture in fixtures.Fixtures.Values)
-                    _physics.SetHard(ent, fixture, ent.Comp.Kind != CMUFobEquipmentKind.Sensor && args.Deploy);
+            UpdateDeploymentCollision(ent);
             EnsureComp<CMUFobInstructionsComponent>(ent);
             _effects.Play(ent, args.Deploy ? CMUFobPresentationCue.Deploy : CMUFobPresentationCue.Pack);
         }
         UpdateVisuals(ent);
+    }
+
+    private void UpdateDeploymentCollision(Entity<CMUFobEquipmentComponent> ent)
+    {
+        // Portable items may stop colliding when asleep; deployed structures must stay in the broadphase.
+        _collisionWake.SetEnabled(ent, !ent.Comp.Deployed);
+        if (TryComp<FixturesComponent>(ent, out var fixtures))
+            foreach (var fixture in fixtures.Fixtures.Values)
+                _physics.SetHard(ent, fixture, ent.Comp.Deployed && ent.Comp.Kind != CMUFobEquipmentKind.Sensor);
     }
 
     private void OnPickup(Entity<CMUFobEquipmentComponent> ent, ref GettingPickedUpAttemptEvent args)

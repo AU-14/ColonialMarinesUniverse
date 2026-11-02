@@ -84,7 +84,7 @@ cmu-fob-guide-relays = [bold]Repair either relay[/bold]
     The next pair is offered 5 minutes after success. Offers expire after 8 minutes, then retry after 30 seconds. Later pairs reach farther inland. No available route means no free reserve.
 cmu-fob-guide-guns = [bold]Breachable support guns[/bold]
     Each UH-46 heavy sentry tracks through 360 degrees within six tiles and uses a finite 30mm drum. Walls, closed doors and concealed targets prevent fire. An engineer or squad leader may rotate a gun with a screwdriver while support is off, or replace an empty drum through an interruptible reload.
-    Wrench a gun to remove its module while support is off, then use a powerloader to clear it and install a module on the empty UH-02 platform. Ammunition stays inside the removed gun. Empty platforms and terminals can also be folded with a wrench and relocated within 40 tiles of the selected LZ center, outside the landing footprint. Moving them does not create more weapon slots or reserve.
+    Wrench a gun to remove its module while support is off, then use a powerloader to clear it and install a module on the empty UH-02 platform. Ammunition stays inside the removed gun. Wrenching a deployed platform detaches its gun and folds the base while support is off. Move both physical parts, wrench the same platform down again, and reinstall the gun with a powerloader; its existing slot is reused even when both slots are allocated. Platforms and terminals can be relocated within 40 tiles of the selected LZ center, outside the landing footprint. Moving them does not create more weapon slots or reserve.
     The UH-99 rocket module replaces one heavy gun, never adds a third platform. Any powered UE-04 sensor in this FOB can spot a target within seven tiles and clear sight, in any direction from the launcher. A three-second warning precedes every launch. Its twelve-rocket cassette is finite. Each rocket homes on the original target at twelve tiles per second. After launch, walls do not break tracking, but terrain can intercept the missile. If the target moves more than eleven tiles from the original sensor, goes under a roof, or the sensor loses power or is destroyed, tracking ends permanently and the rocket strikes the last tracked position. Losing sight during acquisition still cancels the launch. Replacing a module requires a fresh support activation.
     A direct rocket hit can critically injure a healthy, unshielded T3. Active shields still absorb damage. Wounded T3s and smaller xenos can be killed. Nearby splash remains much weaker than a direct hit.
     Guns take damage even when powered. Broken wrecks do not block movement or shots. Use the normal cutters, welder, cable, screwdriver and tuner repair sequence, then activate support again. Repairing or replacing equipment never refills ammunition or reserve. A broken control takes a 20-second screwdriver or lit-welder repair; it returns in standby.
@@ -141,7 +141,7 @@ cmu-fob-equipment-deployed = Deployed. Requires the selected FOB's active reserv
 cmu-fob-equipment-stowed = Stowed. Put it on clear ground near the selected FOB and use a wrench to deploy it.
 
 cmu-fob-job-unavailable = No relay mission available. Retrying route selection in {$time}. Stored reserve is unchanged.
-cmu-fob-platform-site-required = Place the platform on clear ground within 40 tiles of the selected LZ center and outside its landing footprint. Switch support off and remove its gun before folding. Only two platforms can be registered.
+cmu-fob-platform-site-required = Place the platform on clear ground within 40 tiles of the selected LZ center and outside its landing footprint. Switch support off before folding. Redeploy the same platform to reuse its allocated slot. Only two platforms can be registered.
 cmu-fob-fence-stack = electric fence sections
 ent-CMUFobFenceStack = folded UE-02 fence sections
     .desc = Up to ten electric fence sections. Put the stack down and use a wrench to deploy one section. Unused sections can be split or merged.
@@ -314,3 +314,8 @@ cmu-fob-lv624-relay-southeast-barrens-north = Southeast barrens north relay
 cmu-fob-lv624-relay-temple-approach = Temple approach relay
 cmu-fob-lv624-relay-central-barrens-south = Central barrens south relay
 cmu-fob-lv624-relay-containers-approach = Containers approach relay
+
+cmu-fob-platform-deployed = With support off, wrench to detach the gun and pack the platform.
+cmu-fob-platform-folded = Wrench to deploy this platform within the FOB area.
+cmu-fob-platform-pack-denied = Switch support off and stand beside the platform with engineering or squad-leader access.
+cmu-fob-module-install = Use a powerloader to install this gun on a deployed UH-02 platform.

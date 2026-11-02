@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Content.Server.CMU14.Fob;
+using Content.Shared._RMC14.PowerLoader;
 using Content.Shared.CMU14.Fob;
 using Content.Shared.Interaction;
 using Content.Shared.FixedPoint;
@@ -15,10 +16,11 @@ namespace Content.IntegrationTests.CMU14.Fob;
 
 public sealed partial class CMUFobDefenseTest
 {
-    [Test]
-    public async Task PlatformRelocationPreservesAllocationAndRejectsOutsideDeploymentArea()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task PlatformRelocationPreservesAllocationAndRejectsOutsideDeploymentArea(bool removeGunFirst)
     {
-        await SetupGuns(ammo: 7);
+        await SetupGuns(ammo: 7, portablePlatforms: true);
         NetCoordinates inside = default;
         NetCoordinates outside = default;
         await Server.WaitPost(() =>
@@ -32,23 +34,35 @@ public sealed partial class CMUFobDefenseTest
         await Server.WaitAssertion(() =>
         {
             Transform.SetCoordinates(SPlayer, _gunCoords.Offset(new Vector2(-1, 0)));
-            Assert.That(Defense.TryRemoveModule((_gun, Gun), SPlayer), Is.True);
             var mount = SEntMan.GetComponent<CMUFobGunMountComponent>(_mount);
+            if (removeGunFirst)
+                Assert.That(Defense.TryRemoveModule((_gun, Gun), SPlayer), Is.True);
             var fold = new InteractUsingEvent(SPlayer, wrench, _mount, _gunCoords);
             SEntMan.EventBus.RaiseLocalEvent(_mount, fold);
+            Assert.That(Gun.Mount, Is.Null, "Wrenching the platform must detach its installed module before packing.");
             Assert.That(SEntMan.GetComponent<TransformComponent>(_mount).Anchored, Is.False);
             Transform.SetCoordinates(_mount, SEntMan.GetCoordinates(outside));
             Transform.AttachToGridOrMap(_mount);
             Transform.SetCoordinates(SPlayer, SEntMan.GetCoordinates(outside).Offset(new Vector2(-1, 0)));
             Assert.That(Defense.TryDeployPlatform((_mount, mount), SPlayer), Is.False);
-            Transform.SetCoordinates(_mount, SEntMan.GetCoordinates(inside));
-            Transform.AttachToGridOrMap(_mount);
+            var loader = SEntMan.SpawnAtPosition("RMCMechPowerLoader", SEntMan.GetCoordinates(outside).Offset(new Vector2(-1, 0)));
+            Assert.That(HandSys.TryPickupAnyHand(loader, _mount, checkActionBlocker: false), Is.True);
+            Transform.SetCoordinates(loader, SEntMan.GetCoordinates(inside).Offset(new Vector2(-1.25f, 0)));
+            Assert.That(HandSys.TryDrop(loader, _mount, SEntMan.GetCoordinates(inside), checkActionBlocker: false), Is.True);
             Transform.SetCoordinates(SPlayer, SEntMan.GetCoordinates(inside).Offset(new Vector2(-1, 0)));
-            Assert.That(Defense.TryDeployPlatform((_mount, mount), SPlayer), Is.True);
+            var deploy = new InteractUsingEvent(SPlayer, wrench, _mount, SEntMan.GetCoordinates(inside));
+            SEntMan.EventBus.RaiseLocalEvent(_mount, deploy);
+            Assert.That(SEntMan.GetComponent<TransformComponent>(_mount).Anchored, Is.True,
+                "A transported, previously allocated platform must wrench down again.");
             Assert.That(mount.Position, Is.EqualTo(Transform.GetWorldPosition(_mount)));
             Assert.That(SEntMan.GetComponent<CMUFobDefenseNetworkComponent>(_network).Mounts.Count, Is.EqualTo(2));
             Assert.That(mount.Gun, Is.Null, "Relocating must not mint a replacement gun.");
             Assert.That(Ammo, Is.EqualTo(7), "The removed module retains its finite magazine.");
+            Assert.That(HandSys.TryPickupAnyHand(loader, _gun, checkActionBlocker: false), Is.True);
+            var install = new PowerLoaderInteractEvent(loader, _mount, _gun, new List<EntityUid> { SPlayer });
+            SEntMan.EventBus.RaiseLocalEvent(_gun, ref install);
+            Assert.That(Gun.Mount, Is.EqualTo(_mount));
+            Assert.That(Ammo, Is.EqualTo(7));
             var extra = SEntMan.SpawnAtPosition("CMUFobPlatformModule", _gunCoords);
             Transform.SetCoordinates(SPlayer, _gunCoords.Offset(new Vector2(-1, 0)));
             Assert.That(Defense.TryDeployPlatform((extra, SEntMan.GetComponent<CMUFobGunMountComponent>(extra)), SPlayer), Is.False);
