@@ -58,6 +58,9 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
         _window.Search.OnTextChanged += OnSearchChanged;
         // CMU14: optional low-stock filter is entirely client-side.
         _window.LowStockOnly.OnToggled += _ => ApplySearchFilter(_window?.Search.Text);
+        // CMU14: additional catalog controls use the same client-side filtering path.
+        _window.AvailableOnly.OnToggled += _ => ApplySearchFilter(_window?.Search.Text);
+        _window.OnCategoryChanged += () => ApplySearchFilter(_window?.Search.Text);
         Refresh();
     }
 
@@ -117,7 +120,8 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                         uiEntry.Texture.Modulate = firstLayer.Color;
                     }
 
-                    uiEntry.Panel.Button.TextLabel.Text = entry.Name?.Replace("\\n", "\n") ?? entity.Name;
+                    // CMU14: item identity is separate from the primary dispense button.
+                    uiEntry.SetTitle(entry.Name?.Replace("\\n", " ") ?? entity.Name);
 
                     var name = entity.Name;
                     var color = CMAutomatedVendorPanel.DefaultColor;
@@ -139,7 +143,7 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                     }
                     else if (entry.Recommended)
                     {
-                        uiEntry.Panel.Button.TextLabel.Text = $"★ {uiEntry.Panel.Button.TextLabel.Text}";
+                        uiEntry.SetTitle($"★ {uiEntry.ItemName}"); // CMU14: recommended items remain labelled
                         name = $"Recommended: {name}";
                         color = vendor.UiStyle == CMVendorUiStyle.Yautja ? Color.FromHex("#200606") : Color.FromHex("#102919");
                         borderColor = vendor.UiStyle == CMVendorUiStyle.Yautja ? YautjaBracerUiStyle.Red : Color.FromHex("#3A9B52");
@@ -188,6 +192,11 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
 
             _window.Sections.AddChild(uiSection);
         }
+
+        // CMU14: navigation mirrors the actual vendor sections.
+        var localization = IoCManager.Resolve<ILocalizationManager>();
+        _window.SetCategories(vendor.Sections.Select(section =>
+            localization.TryGetString(section.Name, out var title) ? title : section.Name).ToList());
     }
 
     private void ApplyWindowStyle(CMAutomatedVendorComponent vendor)
@@ -270,38 +279,51 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
             && (amount <= 0 || entry.Max is > 0 && amount * 4L <= entry.Max.Value);
     }
 
-    // CMU14 Begin: inventory filtering and section counters for the CRT presentation.
+    // CMU14 Begin: section navigation, stock-only filters, and visible result totals.
     private void ApplySearchFilter(string? text)
     {
         if (_window == null)
             return;
 
-        var anyVisible = false;
-        var lowOnly = _window.LowStockOnly.Pressed;
-        foreach (var sectionControl in _window.Sections.Children)
+        var shown = 0;
+        var eligible = 0;
+        var category = 0;
+        var query = text?.Trim();
+        foreach (var control in _window.Sections.Children)
         {
-            if (sectionControl is not CMAutomatedVendorSection section)
+            if (control is not CMAutomatedVendorSection section)
                 continue;
 
-            var visible = 0;
-            foreach (var entriesControl in section.Entries.Children)
+            var sectionAllowed = section.Section == null || IsSectionValid(section.Section);
+            if (sectionAllowed)
+                eligible += section.Entries.ChildCount;
+
+            var count = 0;
+            foreach (var itemControl in section.Entries.Children)
             {
-                if (entriesControl is not CMAutomatedVendorEntry entry)
+                if (itemControl is not CMAutomatedVendorEntry entry)
                     continue;
 
-                var matches = string.IsNullOrWhiteSpace(text)
-                    || (entry.Panel.Button.TextLabel.Text?.Contains(text.Trim(), OrdinalIgnoreCase) ?? false);
-                entry.Visible = matches && (!lowOnly || entry.Entry is { } item && IsLowStock(item));
+                var matches = string.IsNullOrEmpty(query)
+                    || entry.ItemName.Contains(query, CurrentCultureIgnoreCase);
+                var low = entry.Entry is { } stock && IsLowStock(stock);
+                var available = !entry.Panel.Button.Disabled;
+                entry.Visible = sectionAllowed
+                    && (_window.SelectedCategory == -1 || _window.SelectedCategory == category)
+                    && matches
+                    && (!_window.LowStockOnly.Pressed || low)
+                    && (!_window.AvailableOnly.Pressed || available);
                 if (entry.Visible)
-                    visible++;
+                    count++;
             }
 
-            section.UpdateCount(visible, section.Entries.ChildCount);
-            section.Visible = visible > 0 && (section.Section == null || IsSectionValid(section.Section));
-            anyVisible |= section.Visible;
+            section.UpdateCount(count, section.Entries.ChildCount);
+            section.Visible = count > 0;
+            shown += count;
+            category++;
         }
 
-        _window.SetNothingFound(!anyVisible);
+        _window.UpdateShownCount(shown, eligible);
     }
     // CMU14 End
 
@@ -353,7 +375,6 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                 }
             }
 
-            var anyAmount = false;
             for (var entryIndex = 0; entryIndex < section.Entries.Count; entryIndex++)
             {
                 var entry = section.Entries[entryIndex];
@@ -382,7 +403,8 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                 if (entry.Points != null)
                 {
                     anyEntryWithPoints = true;
-                    uiEntry.Amount.Text = $"{entry.Points}P";
+                    uiEntry.Amount.Text = Loc.GetString("cmu-vendor-points-cost",
+                        ("count", entry.Points.Value)); // CMU14: explicit price
 
                     var notEnoughPoints = vendor.UseObjectivePoints
                         ? userPoints < entry.Points
@@ -393,45 +415,25 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                 }
                 else
                 {
-                    uiEntry.Amount.Text = entry.Amount.ToString();
+                    uiEntry.Amount.Text = string.Empty; // CMU14: stock is displayed in its own column
                 }
 
                 uiEntry.Amount.Modulate = disabled ? Color.Red : Color.White;
                 uiEntry.Panel.Button.Disabled = disabled;
                 // CMU14: availability is purely visual; the server still enforces all purchase rules.
-                uiEntry.SetAvailability(entry.Amount is <= 0, IsLowStock(entry));
+                uiEntry.SetAvailability(entry.Amount is <= 0, IsLowStock(entry), disabled);
 
-                // Stock line: how many are left to buy at all (an infinity symbol when the entry has no
-                // stock cap).
-                //
-                // Entries without a points cost already print that same remaining count in the Amount
-                // column above, so our "x5" would just repeat the number next to itself. Hide it in that
-                // case - Visible (not an empty string) so the label surrenders its MinWidth instead of
-                // leaving a blank gap in the row.
-                var amountAlreadyShowsStock = entry.Points == null && entry.Amount != null &&
-                                              personalRemaining == null;
-                uiEntry.Stock.Visible = !amountAlreadyShowsStock;
-
-                if (!amountAlreadyShowsStock)
-                {
-                    var stockText = entry.Amount is { } stockLeft
-                        ? Loc.GetString("rmc-vending-stock-remaining", ("count", stockLeft))
-                        : Loc.GetString("rmc-vending-stock-infinite");
-                    uiEntry.Stock.Text = personalRemaining is { } remaining
-                        ? Loc.GetString("rmc-vending-stock-personal", ("count", Math.Max(0, remaining)),
-                            ("stock", stockText))
-                        : stockText;
-                    uiEntry.Stock.Modulate = disabled ? Color.Red : Color.White;
-                }
-
-                if (!string.IsNullOrWhiteSpace(uiEntry.Amount.Text))
-                    anyAmount = true;
-            }
-
-            for (var entryIndex = 0; entryIndex < section.Entries.Count; entryIndex++)
-            {
-                var uiEntry = (CMAutomatedVendorEntry) uiSection.Entries.GetChild(entryIndex);
-                uiEntry.Amount.Visible = anyAmount;
+                // CMU14 Begin: stock and limits are always separate from the issue action.
+                var stockText = entry.Amount is { } stockLeft
+                    ? Loc.GetString("rmc-vending-stock-remaining", ("count", stockLeft))
+                    : Loc.GetString("rmc-vending-stock-infinite");
+                uiEntry.Stock.Text = personalRemaining is { } remaining
+                    ? Loc.GetString("rmc-vending-stock-personal", ("count", Math.Max(0, remaining)),
+                        ("stock", stockText))
+                    : stockText;
+                uiEntry.Stock.Modulate = disabled ? Color.Red : Color.White;
+                uiEntry.Amount.Visible = entry.Points != null;
+                // CMU14 End
             }
         }
 
