@@ -1,6 +1,9 @@
 using System.Linq;
 using Content.Server.CMU14.Yautja;
+using Content.Shared.Climbing.Components;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Physics.Components;
@@ -8,10 +11,56 @@ using Robust.Shared.Physics.Components;
 namespace Content.IntegrationTests.CMU14.HunterShip;
 
 [TestFixture]
-public sealed class HunterShipTrapWrapperTest
+public sealed class HunterShipMappedPropsTest
 {
     // one of the eight pixel-offset traps mapped on both hunter ship decks
     private const string MappedTrap = "CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset9x9";
+
+    // centre piece of the trophy display rack mapped on every deck
+    private const string MappedTrophyRack = "CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsPredTrophyVendorCenterSouth";
+
+    [Test]
+    public async Task MappedTrophyRackTakesItemsAndIsClimbable()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var rack = entMan.SpawnEntity(MappedTrophyRack, map.GridCoords);
+            var user = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(1, 0)));
+            var skull = entMan.SpawnEntity("CMUYautjaHumanSkullTrophy", map.GridCoords.Offset(new System.Numerics.Vector2(1, 0)));
+
+            try
+            {
+                var hands = entMan.System<SharedHandsSystem>();
+                Assert.That(hands.TryPickupAnyHand(user, skull), Is.True);
+
+                // cmss13 trophy_display/attackby drops whatever you hit it with onto the rack
+                entMan.System<SharedInteractionSystem>().InteractUsing(user, skull, rack, entMan.GetComponent<TransformComponent>(rack).Coordinates);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(hands.IsHolding(user, skull), Is.False, "the skull should leave the hand");
+                    Assert.That(entMan.GetComponent<TransformComponent>(skull).ParentUid, Is.EqualTo(map.Grid.Owner),
+                        "the skull should be set down on the rack's tile");
+                    Assert.That(entMan.HasComponent<ClimbableComponent>(rack), Is.True, "cmss13 racks are climbable = TRUE");
+                });
+            }
+            finally
+            {
+                foreach (var uid in new[] { rack, user, skull })
+                {
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
 
     [Test]
     public async Task MappedHuntingTrapCanBeSteppedIntoAndShowsArmed()
