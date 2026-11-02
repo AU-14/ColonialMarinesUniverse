@@ -411,6 +411,7 @@
   name: M707 spotter scope
   description: A high-powered spotting scope intended to support the M707 "Vulture".
   components:
+  - type: CMUScoutOptics # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Devices/vulture_spotter.rsi
     state: vulture_scope

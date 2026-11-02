@@ -182,6 +182,7 @@
   name: spotter's laser designator
   description: "A specially-designed laser designator, issued to UNMC spotters, with two modes: target marking for CAS with IR laser and rangefinding. Click a tile to target something. Additionally, a trained spotter can laze targets for a UNMC marksman, increasing the speed of target acquisition. A targeting beam will connect the binoculars to the target, but it may inherit the user's cloak, if possible."
   components:
+  - type: CMUScoutOptics # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Devices/binoculars.rsi
     layers:
@@ -205,6 +206,9 @@
   name: scout laser designator
   description: "An improved laser designator, issued to UNMC scouts, with two modes: target marking for CAS with IR laser and rangefinding. Click a tile to target something."
   components:
+  # CMU14: trained scouts can send fixed-position contact reports.
+  - type: CMUScoutOptics
+    requiresScoutTraining: true
   - type: Rangefinder
     delay: 3
   - type: Corrodible

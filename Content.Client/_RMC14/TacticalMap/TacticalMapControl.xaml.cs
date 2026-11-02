@@ -618,10 +618,15 @@ public sealed partial class TacticalMapControl : TextureRect
         for (int i = 0; i < _blips.Length; i++)
         {
             TacticalMapBlip blip = _blips[i];
+            if (blip.ScoutReport is { } expiredReport && curTime >= expiredReport.ExpiresAt) // CMU14
+                continue; // CMU14
             Vector2 position = IndicesToPosition(blip.Indices) * overlayScale + actualTopLeft;
             float scaledBlipSize = GetScaledBlipSize(overlayScale);
             position -= new Vector2(scaledBlipSize / 2); // CMU14: keep the icon center fixed as its size changes.
             UIBox2 rect = UIBox2.FromDimensions(position, new Vector2(scaledBlipSize, scaledBlipSize));
+
+            if (blip.ScoutReport is { } report) // CMU14
+                DrawScoutReport(handle, report, position, scaledBlipSize, curTime); // CMU14
 
             try
             {

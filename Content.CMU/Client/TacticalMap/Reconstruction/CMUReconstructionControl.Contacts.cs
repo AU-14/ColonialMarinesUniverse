@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.CMU14.TacticalMap.Scout;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.CMU14.TacticalMap.Reconstruction;
 using Robust.Client.GameObjects;
@@ -34,6 +35,7 @@ public sealed partial class CMUReconstructionControl
         {
             if (contact.Depth != scene.MinDepth + _selectedLevel) continue;
             var blip = contact.Blip;
+            if (blip.ScoutReport is { } expiredReport && _timing.CurTime >= expiredReport.ExpiresAt) continue;
             var point = ContactPosition(contact, scene);
             if (!PixelSizeBox.Contains(new Vector2i((int) point.X, (int) point.Y))) continue;
             if (contact.IsOperator) operatorPoint = point;
@@ -57,7 +59,10 @@ public sealed partial class CMUReconstructionControl
             if (blip.HiveLeader) handle.DrawTextureRect(sprites.GetFrame(HiveLeaderBlip, _timing.CurTime), rect);
             if (blip.OccupantCount > 0) handle.DrawString(_font, point + new Vector2(6, 6), blip.OccupantCount.ToString(), Color.White);
             if (blip.FireteamNumber > 0) handle.DrawString(_font, point - new Vector2(12, 12), blip.FireteamNumber.ToString(), Color.White);
-            if (ShowNames && contact.Name is { Length: > 0 } name)
+            var name = blip.ScoutReport is { } report
+                ? CMUScoutReportPresentation.Label(report, _timing.CurTime)
+                : ShowNames ? contact.Name : null;
+            if (name is { Length: > 0 })
             {
                 var label = point + new Vector2(14, -7) * UIScale;
                 var size = handle.GetDimensions(_font, name, UIScale);

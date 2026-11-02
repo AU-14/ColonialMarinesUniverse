@@ -109,6 +109,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
     public override void Initialize()
     {
         base.Initialize();
+        InitializeScoutReports(); // CMU14
 
         _activeTacticalMapTrackedQuery = GetEntityQuery<ActiveTacticalMapTrackedComponent>();
         _marineMapTrackedQuery = GetEntityQuery<MarineMapTrackedComponent>();
@@ -1940,6 +1941,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             user.Comp.SquadLabels = _emptyLabels;
         }
 
+        AddScoutReportsToUser(user, map); // CMU14
         Dirty(user, lines);
         Dirty(user, labels);
     }
@@ -2408,11 +2410,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             computer.Comp.SquadLabels = _emptyLabels;
         }
 
+        AddScoutReports(computer.Comp.Blips, map, normalizedFaction); // CMU14
         Dirty(computer);
     }
 
     public override void Update(float frameTime)
     {
+        UpdateScoutReports(); // CMU14
         if (_net.IsClient)
         {
             _toInit.Clear();
@@ -2489,7 +2493,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 continue;
 
             // Process updates per-faction using the NextUpdatePerFaction dictionary on the map component.
-            var factions = new[] { "MARINES", "XENONIDS", "OPFOR", "GOVFOR", "CLF", "YAUTJA" }; // CMU14
+            var factions = new[] { "MARINES", "XENONIDS", "OPFOR", "GOVFOR", "CLF", "YAUTJA", "WEYU" }; // CMU14
             var throttled = false; // CMU14: a change inside someone's cooldown still owes them a publish
 
             foreach (var faction in factions)
@@ -2565,6 +2569,8 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                         UpdateUserData((userId, userComp), map);
                     else if (faction == "YAUTJA" && userComp.Yautja) // CMU14
                         UpdateUserData((userId, userComp), map); // CMU14
+                    else if (faction == "WEYU" && userComp.WeYu) // CMU14: scout report publication.
+                        UpdateUserData((userId, userComp), map); // CMU14
                 }
 
                 // Update tunnel UI users as well
@@ -2582,6 +2588,8 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                     else if (faction == "CLF" && tunnelUserComp.Clf)
                         UpdateUserData((tunnelUserId, tunnelUserComp), map);
                     else if (faction == "YAUTJA" && tunnelUserComp.Yautja) // CMU14
+                        UpdateUserData((tunnelUserId, tunnelUserComp), map); // CMU14
+                    else if (faction == "WEYU" && tunnelUserComp.WeYu) // CMU14: scout report publication.
                         UpdateUserData((tunnelUserId, tunnelUserComp), map); // CMU14
                 }
             }

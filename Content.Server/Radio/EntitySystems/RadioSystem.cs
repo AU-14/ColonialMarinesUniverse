@@ -103,9 +103,10 @@ public sealed partial class RadioSystem : SharedRadioSystem
         ProtoId<RadioChannelPrototype> channel,
         EntityUid radioSource,
         ProtoId<LanguagePrototype>? language,
-        bool escapeMarkup = true)
+        bool escapeMarkup = true,
+        string? senderName = null) // CMU14: server-authored callsign reports.
     {
-        SendRadioMessage(messageSource, message, _prototype.Index(channel), radioSource, language, escapeMarkup);
+        SendRadioMessage(messageSource, message, _prototype.Index(channel), radioSource, language, escapeMarkup, senderName); // CMU14
     }
     // RMC14
 
@@ -129,7 +130,8 @@ public sealed partial class RadioSystem : SharedRadioSystem
         RadioChannelPrototype channel,
         EntityUid radioSource,
         ProtoId<LanguagePrototype>? language,
-        bool escapeMarkup = true)
+        bool escapeMarkup = true,
+        string? senderName = null) // CMU14: server-authored callsign reports.
     {
         // TODO if radios ever garble / modify messages, feedback-prevention needs to be handled better than this.
         if (!_messages.Add(message))
@@ -155,7 +157,10 @@ public sealed partial class RadioSystem : SharedRadioSystem
         var evt = new TransformSpeakerNameEvent(messageSource, MetaData(messageSource).EntityName);
         RaiseLocalEvent(messageSource, evt);
 
-        var name = GetRadioSpeakerName(messageSource, channel, evt.VoiceName);
+        // CMU14: explicit report senders bypass personal names and job prefixes, not escaping or radio checks.
+        var name = senderName != null
+            ? FormattedMessage.EscapeText(senderName)
+            : GetRadioSpeakerName(messageSource, channel, evt.VoiceName);
 
         SpeechVerbPrototype speech;
         if (evt.SpeechVerb != null && ProtoMan.Resolve(evt.SpeechVerb, out var evntProto))
