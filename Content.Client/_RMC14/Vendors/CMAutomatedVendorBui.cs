@@ -427,8 +427,10 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
 
                 // CMU14 Begin: stock and limits are always separate from the issue action.
                 var stockText = entry.Amount is { } stockLeft
-                    ? Loc.GetString("rmc-vending-stock-remaining", ("count", stockLeft))
-                    : Loc.GetString("rmc-vending-stock-infinite");
+                    ? entry.Max is { } maximum and > 0
+                        ? Loc.GetString("cmu-vendor-stock-count", ("current", stockLeft), ("max", maximum))
+                        : Loc.GetString("rmc-vending-stock-remaining", ("count", stockLeft))
+                    : Loc.GetString("rmc-vending-stock-infinite"); // CMU14: show the baseline when known
                 uiEntry.Stock.Text = personalRemaining is { } remaining
                     ? Loc.GetString("rmc-vending-stock-personal", ("count", Math.Max(0, remaining)),
                         ("stock", stockText))
