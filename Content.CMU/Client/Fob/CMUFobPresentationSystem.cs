@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.Clickable;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.CMU14.Fob;
 using Robust.Client.GameObjects;
@@ -13,6 +14,7 @@ namespace Content.Client.CMU14.Fob;
 /// <summary>Articulates the original artwork without moving gameplay transforms or fixtures.</summary>
 public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPresentationComponent>
 {
+    [Dependency] private IClickMapManager _clickMaps = default!;
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -164,10 +166,10 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
         {
             // A dark interior behind the hinged lid prevents the floor showing through the open case.
             var interior = GetLayer(ent, sprite, animation, index++);
-            SpriteSystem.LayerSetTexture(interior, Texture.White);
+            SpriteSystem.LayerSetTexture(interior, _clickMaps.CMUSolidTexture);
             SpriteSystem.LayerSetVisible(interior, true);
             SpriteSystem.LayerSetOffset(interior, new Vector2(0, 3f / 32));
-            SpriteSystem.LayerSetScale(interior, new Vector2(22f / Texture.White.Width, 18f / Texture.White.Height));
+            SpriteSystem.LayerSetScale(interior, new Vector2(22f / _clickMaps.CMUSolidTexture.Width, 18f / _clickMaps.CMUSolidTexture.Height));
             SpriteSystem.LayerSetRotation(interior, Angle.Zero);
             SpriteSystem.LayerSetColor(interior, Color.FromHex("#111715"));
         }
@@ -288,9 +290,9 @@ public sealed partial class CMUFobPresentationSystem : VisualizerSystem<CMUFobPr
             : busy || warning ? Color.Orange
             : animation.Status == CMUFobPresentationStatus.Ready ? Color.LightSkyBlue : Color.LightGreen;
         var layer = GetLayer(ent, sprite, animation, index++);
-        SpriteSystem.LayerSetTexture(layer, Texture.White);
+        SpriteSystem.LayerSetTexture(layer, _clickMaps.CMUSolidTexture);
         SpriteSystem.LayerSetVisible(layer, true);
-        SpriteSystem.LayerSetScale(layer, new Vector2((ent.Comp.Device == CMUFobDeviceAnimation.Terminal ? 12 : 2) / (float) Texture.White.Width, 1f / Texture.White.Height));
+        SpriteSystem.LayerSetScale(layer, new Vector2((ent.Comp.Device == CMUFobDeviceAnimation.Terminal ? 12 : 2) / (float) _clickMaps.CMUSolidTexture.Width, 1f / _clickMaps.CMUSolidTexture.Height));
         SpriteSystem.LayerSetOffset(layer, yaw.RotateVec(new Vector2(pixel.X - source.Size.X / 2f, source.Size.Y / 2f - pixel.Y) / 32));
         SpriteSystem.LayerSetRotation(layer, yaw);
         SpriteSystem.LayerSetColor(layer, color);
