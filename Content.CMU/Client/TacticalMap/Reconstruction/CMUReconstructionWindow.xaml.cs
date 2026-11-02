@@ -200,6 +200,7 @@ public sealed partial class CMUReconstructionWindow : RMCPopOutWindow
         ConfigureLayers(_incoming ?? View.Scene);
         CenterPlayer.Disabled = IsRefreshing || View.Scene?.OperatorPosition == null;
         MapSelection.Disabled = View.Scene == null || View.Draft.Sending;
+        UpdateCaveStatus();
     }
 
     public void BeginViewRequest(int requestId, bool keepScene = false)

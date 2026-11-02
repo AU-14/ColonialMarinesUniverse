@@ -166,9 +166,7 @@ public sealed partial class ColonyAtmWindow : BaseWindow
             MouseFilter = MouseFilterMode.Ignore,
         }, View);
 
-        // The screen: the lit tube face with the text over it, drawn a second time through the CRT
-        // shader by its sibling. The shader writes opaque pixels, so the face has to be part of what
-        // it captures rather than something underneath.
+        // Include the lit tube face in the CRT capture: the shader writes opaque pixels.
         var screenContent = new Control { MouseFilter = MouseFilterMode.Ignore };
         _glass = new AtmSprite(Rsi(cache, "atm_screen"));
         _screen = new AtmScreenControl(bodyFont, boldFont, Glass.Width * Px * DefaultScale);
@@ -177,7 +175,6 @@ public sealed partial class ColonyAtmWindow : BaseWindow
         screenContent.AddChild(_screen);
         screenContent.AddChild(_fault);
         _screen.Typed += () => TextTyped?.Invoke();
-        Art(screenContent, Glass);
 
         _crt = new CrtScreenControl
         {
@@ -186,7 +183,10 @@ public sealed partial class ColonyAtmWindow : BaseWindow
             // A prop terminal: the full tube, roll bar and grain included, at the shared cvars' strength.
             ArtifactPeriod = 5f,
         };
-        Art(_crt, Glass);
+        var tube = new CrtScreenContainer { MouseFilter = MouseFilterMode.Ignore };
+        tube.AddChild(screenContent);
+        tube.AddChild(_crt);
+        Art(tube, Glass);
 
         // History scroll arrows, drawn on the tube in its bottom-right corner, above the shader pass.
         BtnScrollUp = new ScrollButton(up: true);
