@@ -15,6 +15,7 @@ public sealed partial class CMUFobEquipmentComponent : Component
     [DataField] public string OnState = string.Empty;
     [DataField] public float SensorRange = 7;
     [DataField] public DamageSpecifier ShockDamage = new() { DamageDict = new() { ["Shock"] = 12 } };
+    [DataField] public TimeSpan ShockStunDuration = TimeSpan.FromSeconds(1);
     [ViewVariables] public bool Deployed;
     [ViewVariables] public bool Powered;
     [ViewVariables] public bool Spent;

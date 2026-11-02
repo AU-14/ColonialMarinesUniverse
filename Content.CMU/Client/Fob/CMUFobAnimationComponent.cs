@@ -24,6 +24,7 @@ public sealed partial class CMUFobAnimationComponent : Component
     public RSI.State? Source;
     public RsiDirection Direction;
     public readonly List<SpriteComponent.Layer> Layers = new();
+    public readonly List<SpriteComponent.Layer> StatusLayers = new();
     public readonly List<CMUFobSpritePart> Parts = new();
 }
 

@@ -38,7 +38,7 @@ Carrier, Hivelord, Lurker, Spitter, Warrior, Burrower and Reaper each received *
 ## Heavy sentry and fence
 
 - Heavy sentry: **40 damage/hit, 100 firing DPS** against the base T2/T3 castes above; 35 armor piercing, 100-round drum, 7-second reload and 1.5-second acquisition. Frontal Charger armor reduces this to **30.1/hit, 75.2 DPS**. Active defensive effects can reduce it further.
-- Electric fence: **12 shock per triggered contact**, at most once per two seconds per section (**6 DPS ceiling**). The cooldown is shared between targets; this is not a continuous damage aura.
+- Electric fence: **12 shock per triggered contact and a 1-second stun**, at most once per two seconds per section (**6 DPS ceiling**). Living mobs, including friendly humans and xenos, trigger it on collision or when damaging the fence from melee range. Normal damage resistance and stun immunity/duration modifiers apply. The cooldown is shared between targets; this is not a continuous damage aura. Unpowered fences block movement without shocking or stunning.
 
 ## Splash and armor
 
