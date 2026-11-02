@@ -12,6 +12,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
+using Content.Shared.Interaction
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -37,6 +38,7 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private XenoRotateSystem _rotate = default!;
+    [Dependency] private SharedInteractionSystem _interact = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _hits = new();
 
@@ -160,6 +162,9 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
                 continue;
 
             if (_mobState.IsDead(target))
+                continue;
+
+            if (!_interact.InRangeUnobstructed(xeno.Owner, target.Owner, range))  
                 continue;
 
             count++;
