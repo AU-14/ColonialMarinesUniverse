@@ -24,6 +24,7 @@ internal sealed class CMUCachedDrawing(IClyde clyde, IPrototypeManager prototype
         var oldModulate = handle.Modulate;
         try
         {
+            // Premultiplied alpha needs zero RGB in empty pixels; Color.Transparent is transparent white.
             handle.RenderInRenderTarget(_target, () =>
             {
                 render.SetScissor(null);
@@ -31,7 +32,7 @@ internal sealed class CMUCachedDrawing(IClyde clyde, IPrototypeManager prototype
                 handle.UseShader(null);
                 handle.Modulate = modulate;
                 draw(handle);
-            }, Color.Transparent);
+            }, Color.Black.WithAlpha(0f));
         }
         finally
         {

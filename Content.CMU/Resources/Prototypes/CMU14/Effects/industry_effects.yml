@@ -1,0 +1,40 @@
+# The effects of the industry that are only to be looked at: the puff of steam from a pipe that lets go of its steam, and the smoke over a
+# lit forge. Both are spawned by the server and are gone by themselves. The sparks of the anvil are the sparks of the game (EffectSparks).
+
+# A puff of white steam. The smoke sprite of the chemistry, whitened and shrunk, rolling for a moment and then gone.
+- type: entity
+  id: RUMCEffectSteamPuff
+  name: steam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 1.2
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    scale: 0.5, 0.5
+    color: "#ffffffcc"
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke_white
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+# A puff of smoke over a lit forge: grayer and a little bigger than the steam, it hangs longer.
+- type: entity
+  id: RUMCEffectForgeSmoke
+  name: smoke
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 2.4
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    scale: 0.6, 0.6
+    color: "#555555aa"
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke
+  - type: Tag
+    tags:
+    - HideContextMenu

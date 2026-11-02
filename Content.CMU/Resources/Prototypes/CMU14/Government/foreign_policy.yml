@@ -1,0 +1,153 @@
+# The relations of the city with the factions of the ambassadors (see ColonyTreatyPrototype and ColonyPetitionPrototype). The administrator is the mayor of one city, not the master of the colony: what he can do is
+# agreements of the city (trade, a mission, advisers on security) and the closing of its market, and what he is asked is a way through the city, medicine, land at its edge, a patrol of it.
+
+# ---------------------------------------------------------------- Agreements: what the mayor can make with the faction of an ambassador
+
+- type: colonyTreaty
+  id: RUMCTreatyTrade
+  name: rumc-treaty-trade-name
+  description: rumc-treaty-trade-desc
+  kind: Trade
+  moneyCost: 1500
+  durationSeconds: 1200
+  minAttitude: 15
+  incomePerMinute: 80
+  dutyCut: 2
+  partnerPointsPerMinute: 0.5
+  attitudeShift: 5
+
+- type: colonyTreaty
+  id: RUMCTreatyPreferences
+  name: rumc-treaty-preferences-name
+  description: rumc-treaty-preferences-desc
+  kind: Trade
+  moneyCost: 4000
+  durationSeconds: 1800
+  minAttitude: 35
+  incomePerMinute: 160
+  dutyCut: 4
+  partnerPointsPerMinute: 1.0
+  attitudeShift: 8
+
+- type: colonyTreaty
+  id: RUMCTreatyDefense
+  name: rumc-treaty-defense-name
+  description: rumc-treaty-defense-desc
+  kind: Defense
+  moneyCost: 2000
+  durationSeconds: 1500
+  minAttitude: 30
+  callDiscountPercent: 15
+  partnerPointsPerMinute: 0.5
+  attitudeShift: 6
+
+# Closing the market of the city is the other kind: the faction thinks ill of the city, the others think well of it, the ambassador has a harder time with his own mother faction, and the city gets a
+# little from the trade that goes elsewhere. It is a thing a city can do; it is not the sanctions of a state, so it is milder.
+- type: colonyTreaty
+  id: RUMCTreatySanction
+  name: rumc-treaty-sanction-name
+  description: rumc-treaty-sanction-desc
+  kind: Sanction
+  moneyCost: 800
+  durationSeconds: 900
+  incomePerMinute: 40
+  attitudeShift: -25
+  othersAttitudeShift: 4
+  trustShift: -5
+
+# ---------------------------------------------------------------- Petitions: what the ambassadors ask
+
+# The requests: from those who do not think ill of the colony.
+- type: colonyPetition
+  id: RUMCPetitionTransit
+  text: rumc-petition-transit
+  minAttitude: -20
+  deadlineSeconds: 360
+  weight: 1.2
+  acceptReward: 1200
+  acceptAttitude: 8
+  acceptPoints: 1
+  declineAttitude: -5
+
+- type: colonyPetition
+  id: RUMCPetitionMedical
+  text: rumc-petition-medical
+  minAttitude: -10
+  deadlineSeconds: 360
+  weight: 1.0
+  acceptCost: 1500
+  acceptAttitude: 12
+  acceptPoints: 2
+  declineAttitude: -6
+
+- type: colonyPetition
+  id: RUMCPetitionMining
+  text: rumc-petition-mining
+  minAttitude: 0
+  deadlineSeconds: 420
+  weight: 0.9
+  acceptReward: 3000
+  acceptAttitude: 10
+  acceptPoints: 2
+  declineAttitude: -4
+
+- type: colonyPetition
+  id: RUMCPetitionPatrol
+  text: rumc-petition-patrol
+  minAttitude: 0
+  deadlineSeconds: 360
+  weight: 0.8
+  acceptCost: 800
+  acceptAttitude: 10
+  acceptPoints: 1
+  declineAttitude: -5
+
+- type: colonyPetition
+  id: RUMCPetitionTechnology
+  text: rumc-petition-technology
+  minAttitude: 10
+  deadlineSeconds: 420
+  weight: 0.7
+  acceptCost: 2500
+  acceptAttitude: 8
+  acceptPoints: 2
+  declineAttitude: -3
+
+# The ultimatums: from those who think ill of the colony. Not to answer is paid for dearer than to refuse.
+- type: colonyPetition
+  id: RUMCPetitionUltimatumDuty
+  text: rumc-petition-ultimatum-duty
+  ultimatum: true
+  minAttitude: -100
+  maxAttitude: 10
+  deadlineSeconds: 240
+  weight: 1.0
+  acceptCost: 1500
+  acceptAttitude: 15
+  declineAttitude: -15
+  ignoreAttitude: -25
+
+- type: colonyPetition
+  id: RUMCPetitionUltimatumPayment
+  text: rumc-petition-ultimatum-payment
+  ultimatum: true
+  minAttitude: -100
+  maxAttitude: 5
+  deadlineSeconds: 240
+  weight: 1.0
+  acceptCost: 2000
+  acceptAttitude: 20
+  declineAttitude: -20
+  ignoreAttitude: -25
+
+- type: colonyPetition
+  id: RUMCPetitionUltimatumApology
+  text: rumc-petition-ultimatum-apology
+  ultimatum: true
+  minAttitude: -100
+  maxAttitude: 0
+  deadlineSeconds: 300
+  weight: 0.8
+  acceptAttitude: 15
+  declineAttitude: -10
+  ignoreAttitude: -20

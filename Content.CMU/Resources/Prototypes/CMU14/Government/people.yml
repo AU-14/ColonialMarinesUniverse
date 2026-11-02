@@ -1,0 +1,214 @@
+# The mayor and the players (see ColonyPeople.cs): the rewards that the mayor gives, the things that he orders from the players, the deals that the notary seals, and the console of the people, where the
+# players write to the mayor, vote, take the orders and make the deals. The townsfolk are real players, so nothing here is a mood of a crowd.
+
+# ---------------------------------------------------------------- The console of the people
+
+- type: entity
+  id: RUMCCitizenConsole
+  parent: RMCCommunicationsConsoleBase
+  name: console of the people
+  description: "A terminal of the city hall for the townsfolk: write to the mayor, vote, take the orders of the city, and have a deal sealed by the notary."
+  suffix: Colony, Citizens
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: ActivatableUI
+    key: enum.CitizenConsoleUi.Key
+  - type: CitizenConsole
+  - type: Anchorable
+  - type: UserInterface
+    interfaces:
+      enum.CitizenConsoleUi.Key:
+        type: CitizenConsoleBui
+
+# ---------------------------------------------------------------- Rewards: what the mayor gives to a player who guarded the city, built, or traded
+
+# The guard
+
+- type: colonyAward
+  id: RUMCAwardGuardCharter
+  name: rumc-award-guard-charter-name
+  description: rumc-award-charter-desc
+  category: Guard
+  cost: 100
+
+- type: colonyAward
+  id: RUMCAwardGuardMedal
+  name: rumc-award-guard-medal-name
+  description: rumc-award-medal-desc
+  category: Guard
+  cost: 400
+  medal: ClothingNeckSecuritymedal
+
+- type: colonyAward
+  id: RUMCAwardGuardBonus
+  name: rumc-award-guard-bonus-name
+  description: rumc-award-bonus-desc
+  category: Guard
+  cost: 100
+  cash: 1000
+
+# The builders
+
+- type: colonyAward
+  id: RUMCAwardBuildCharter
+  name: rumc-award-build-charter-name
+  description: rumc-award-charter-desc
+  category: Build
+  cost: 100
+
+- type: colonyAward
+  id: RUMCAwardBuildMedal
+  name: rumc-award-build-medal-name
+  description: rumc-award-medal-desc
+  category: Build
+  cost: 400
+  medal: ClothingNeckEngineermedal
+
+- type: colonyAward
+  id: RUMCAwardBuildBonus
+  name: rumc-award-build-bonus-name
+  description: rumc-award-bonus-desc
+  category: Build
+  cost: 100
+  cash: 1000
+
+# The traders
+
+- type: colonyAward
+  id: RUMCAwardTradeCharter
+  name: rumc-award-trade-charter-name
+  description: rumc-award-charter-desc
+  category: Trade
+  cost: 100
+
+- type: colonyAward
+  id: RUMCAwardTradeMedal
+  name: rumc-award-trade-medal-name
+  description: rumc-award-medal-desc
+  category: Trade
+  cost: 400
+  medal: ClothingNeckCargomedal
+
+- type: colonyAward
+  id: RUMCAwardTradeBonus
+  name: rumc-award-trade-bonus-name
+  description: rumc-award-bonus-desc
+  category: Trade
+  cost: 100
+  cash: 1000
+
+# Other deserts
+
+- type: colonyAward
+  id: RUMCAwardOtherThanks
+  name: rumc-award-other-thanks-name
+  description: rumc-award-charter-desc
+  category: Other
+  cost: 50
+
+- type: colonyAward
+  id: RUMCAwardOtherGold
+  name: rumc-award-other-gold-name
+  description: rumc-award-medal-desc
+  category: Other
+  cost: 800
+  medal: ClothingNeckGoldmedal
+
+- type: colonyAward
+  id: RUMCAwardOtherBonus
+  name: rumc-award-other-bonus-name
+  description: rumc-award-bonus-desc
+  category: Other
+  cost: 100
+  cash: 1500
+
+# ---------------------------------------------------------------- Orders: what the mayor can ask the players to bring (the thing is known by the stack that it is made of)
+
+- type: colonyOrderKind
+  id: RUMCOrderIronOre
+  name: rumc-order-iron-ore-name
+  description: rumc-order-iron-ore-desc
+  stack: RUMCIronOre
+  unitPrice: 15
+  maxAmount: 100
+
+- type: colonyOrderKind
+  id: RUMCOrderCopperOre
+  name: rumc-order-copper-ore-name
+  description: rumc-order-copper-ore-desc
+  stack: RUMCCopperOre
+  unitPrice: 18
+  maxAmount: 100
+
+- type: colonyOrderKind
+  id: RUMCOrderIronIngot
+  name: rumc-order-iron-ingot-name
+  description: rumc-order-iron-ingot-desc
+  stack: RUMCIronIngot
+  unitPrice: 40
+  maxAmount: 50
+
+- type: colonyOrderKind
+  id: RUMCOrderCopperIngot
+  name: rumc-order-copper-ingot-name
+  description: rumc-order-copper-ingot-desc
+  stack: RUMCCopperIngot
+  unitPrice: 45
+  maxAmount: 50
+
+- type: colonyOrderKind
+  id: RUMCOrderSteel
+  name: rumc-order-steel-name
+  description: rumc-order-steel-desc
+  stack: Steel
+  unitPrice: 25
+  maxAmount: 100
+
+- type: colonyOrderKind
+  id: RUMCOrderWood
+  name: rumc-order-wood-name
+  description: rumc-order-wood-desc
+  stack: WoodPlank
+  unitPrice: 15
+  maxAmount: 100
+
+- type: colonyOrderKind
+  id: RUMCOrderGlass
+  name: rumc-order-glass-name
+  description: rumc-order-glass-desc
+  stack: Glass
+  unitPrice: 20
+  maxAmount: 100
+
+- type: colonyOrderKind
+  id: RUMCOrderCloth
+  name: rumc-order-cloth-name
+  description: rumc-order-cloth-desc
+  stack: Cloth
+  unitPrice: 15
+  maxAmount: 100
+
+# ---------------------------------------------------------------- Deals: what the notary seals (the fee is shared by the two and goes to the budget)
+
+- type: colonyContractKind
+  id: RUMCContractLease
+  name: rumc-contract-lease-name
+  description: rumc-contract-lease-desc
+  mode: Lease
+  fee: 60
+
+- type: colonyContractKind
+  id: RUMCContractPlotSale
+  name: rumc-contract-plot-sale-name
+  description: rumc-contract-plot-sale-desc
+  mode: PlotSale
+  fee: 150
+
+- type: colonyContractKind
+  id: RUMCContractPledge
+  name: rumc-contract-pledge-name
+  description: rumc-contract-pledge-desc
+  mode: Pledge
+  fee: 100

@@ -108,6 +108,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
     public override void Initialize()
     {
+        InitializeFobMarkers(); // CMU14
         base.Initialize();
 
         _activeTacticalMapTrackedQuery = GetEntityQuery<ActiveTacticalMapTrackedComponent>();
@@ -1940,6 +1941,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             user.Comp.SquadLabels = _emptyLabels;
         }
 
+        ApplyFobMarkers(user, map); // CMU14: private mission overlay after sensor filtering.
         Dirty(user, lines);
         Dirty(user, labels);
     }
@@ -2408,6 +2410,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             computer.Comp.SquadLabels = _emptyLabels;
         }
 
+        ApplyFobMarkers(computer, map); // CMU14: never place private missions in sensor source buckets.
         Dirty(computer);
     }
 

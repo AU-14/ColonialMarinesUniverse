@@ -2,6 +2,8 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
+using Content.Shared.Maps; // RUMC: the tile of a built floor that gives way
+using Robust.Shared.Prototypes; // RUMC: the prototype of what it drops
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Chat.Managers;
 using Content.Shared.CMU14.ZLevelBuilding;
@@ -56,6 +58,8 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private ZLandingSystem _landing = default!; // RUMC: where a falling thing lands
+    [Dependency] private ITileDefinitionManager _tileDefs = default!; // RUMC: the item of a floor tile
 
     // Per-map cooldown so a cascading floor collapse (many structures at once) logs/alerts admins once, not per
     // tile. Maps the collapsing level -> the time after which the next collapse there alerts again.
@@ -70,8 +74,9 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
     /// <summary>Crash SFX when an unsupported structure caves in (guarded against a missing path).</summary>
     private static readonly SoundSpecifier CollapseSound = new SoundPathSpecifier("/Audio/Effects/explosion3.ogg");
 
-    /// <summary>Debris that rains onto the level below when a structure caves in.</summary>
-    private const string DebrisProto = "AU14RockDebris";
+    // RUMC: the debris prototype is switched off, not deleted (the prototype AU14RockDebris is commented out in stone.yml): the material of the floor comes down instead.
+    // RUMC: /// <summary>Debris that rains onto the level below when a structure caves in.</summary>
+    // RUMC: private const string DebrisProto = "AU14RockDebris";
 
     private static readonly Vector2i[] Cardinals =
     {
@@ -618,7 +623,18 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             }
         }
 
-        PlayCollapseEffects(coords, mapUid);
+        // RUMC Floor Begin: a built floor that gives way brings its own material down (the item of the floor tile), not plain rubble.
+        EntProtoId? floorMaterial = null;
+        if (xform.GridUid is { } floorGridUid && _gridQuery.TryComp(floorGridUid, out var floorGrid))
+        {
+            var floorTile = _map.GetTileRef(floorGridUid, floorGrid, coords);
+            if (!floorTile.Tile.IsEmpty && _tileDefs[floorTile.Tile.TypeId] is ContentTileDefinition floorDef)
+                floorMaterial = floorDef.ItemDropPrototypeName;
+        }
+
+        // RUMC End
+        // RUMC: the call that was here (kept): PlayCollapseEffects(coords, mapUid);
+        PlayCollapseEffects(coords, mapUid, floorMaterial);
 
         var belowMap = mapUid != null && _zMapQuery.TryComp(mapUid.Value, out var zMap) ? zMap.MapBelow : null;
 
@@ -666,8 +682,19 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             if (HasComp<CMUZLevelHighGroundComponent>(ent) || IsIndestructibleWall(ent))
                 continue;
 
+            // RUMC: a pit is part of the ground: when the tile under it collapses it is gone, it does not fall.
+            if (HasComp<ZDestroyedOnCollapseComponent>(ent))
+            {
+                QueueDel(ent);
+                continue;
+            }
+
             if (TryComp(ent, out TransformComponent? exf) && exf.Anchored)
                 _transform.Unanchor(ent, exf);
+
+            // RUMC: on one level a thing falls only once.
+            if (!_landing.TryMarkFall(ent, Transform(ent).MapUid))
+                continue;
 
             // No longer a structural participant once it has broken loose.
             RemComp<StructuralSupportComponent>(ent);
@@ -675,14 +702,41 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             if (belowMapComp != null)
             {
                 var offset = _random.NextAngle().ToVec() * _random.NextFloat(0.2f, 0.8f);
-                _transform.SetMapCoordinates(ent, new MapCoordinates(worldPos + offset, belowMapComp.MapId));
+
+                // RUMC Landing Begin: it falls on until there is a solid tile under it, not only to the next level.
+                // RUMC was (kept): _transform.SetMapCoordinates(ent, new MapCoordinates(worldPos + offset, belowMapComp.MapId));
+                var landingMap = belowMap != null ? _landing.FindLandingMap(belowMap.Value, worldPos + offset) : default;
+                var landingMapId = belowMap != null && TryComp<MapComponent>(landingMap, out var landingComp) ? landingComp.MapId : belowMapComp.MapId;
+                _transform.SetMapCoordinates(ent, new MapCoordinates(worldPos + offset, landingMapId));
                 _throwing.TryThrow(ent, offset, baseThrowSpeed: 4f);
 
-                // Fallen structures are rubble: strip fixture hardness so they can never grind against rocks
-                // the cave later generates (or gets buried under) at the same spot. That constant jitter of a
-                // solid wall stuck inside a solid rock was a physics-contact drain that degraded server TPS
-                // (felt as ever-worsening UI lag) the longer a round ran.
-                MakeFallenDebrisNonHard(ent);
+                // RUMC was (kept): // Fallen structures are rubble: strip fixture hardness so they can never grind against rocks the cave later generates (or gets buried under) at the same
+                // RUMC was (kept): // spot. That constant jitter of a solid wall stuck inside a solid rock was a physics-contact drain that degraded server TPS (felt as ever-worsening UI lag).
+                // RUMC was (kept): MakeFallenDebrisNonHard(ent);
+                // What lands inside something solid (a rock the cave generates there, a wall) is rubble: strip fixture hardness so it can never grind against it (that constant
+                // jitter was a physics drain that degraded server TPS). What lands on open floor keeps its collision.
+                if (_landing.LandsInsideSolid(landingMap, worldPos + offset))
+                    MakeFallenDebrisNonHard(ent);
+                // RUMC End
+            }
+        }
+
+        // RUMC Loose Begin: what has fallen before and lies loose here falls again with the floor: as many times as there are floors to give way.
+        if (belowMap != null && belowMapComp != null)
+        {
+            var loose = new List<EntityUid>();
+            _landing.GetFallenDebrisOnTile(grid.Owner, grid.Comp, tile, loose);
+            foreach (var ent in loose)
+            {
+                if (!_landing.TryMarkFall(ent, Transform(ent).MapUid))
+                    continue;
+
+                var offset = _random.NextAngle().ToVec() * _random.NextFloat(0.2f, 0.8f);
+                var landingMap = _landing.FindLandingMap(belowMap.Value, worldPos + offset);
+                var landingMapId = TryComp<MapComponent>(landingMap, out var landingComp) ? landingComp.MapId : belowMapComp.MapId;
+                _transform.SetMapCoordinates(ent, new MapCoordinates(worldPos + offset, landingMapId));
+                if (_landing.LandsInsideSolid(landingMap, worldPos + offset))
+                    MakeFallenDebrisNonHard(ent);
             }
         }
 
@@ -713,7 +767,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
     /// <summary>Turns a structure that has fallen through a collapsed floor into inert rubble: every fixture's
     /// collision layer/mask is zeroed (non-hard alone still raises contact events, so bullets would still "hit"
     /// the fallen wall - with no collision bits projectiles pass straight through and cave rocks never grind
-    /// contacts against it). The networked ZFallenDebris marker makes the client draw it battered.</summary>
+    /// contacts against it). The networked ZFallenDebris marker records that it has fallen (it may fall again, as often as the floor under it gives way).</summary>
     private void MakeFallenDebrisNonHard(EntityUid uid)
     {
         EnsureComp<ZFallenDebrisComponent>(uid);
@@ -730,7 +784,8 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
     }
 
     /// <summary>A crash sound at the collapse spot plus a brief vignette for nearby players.</summary>
-    private void PlayCollapseEffects(EntityCoordinates coords, EntityUid? mapUid)
+    // RUMC: it takes the material of the floor too; the signature that was here (kept): private void PlayCollapseEffects(EntityCoordinates coords, EntityUid? mapUid)
+    private void PlayCollapseEffects(EntityCoordinates coords, EntityUid? mapUid, EntProtoId? floorMaterial)
     {
         // A bad audio path must never crash the support tick.
         try
@@ -771,10 +826,19 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             var worldPos = _transform.ToMapCoordinates(coords).Position;
             var belowCoords = new MapCoordinates(worldPos, belowMap.MapId);
 
-            var debris = Spawn(DebrisProto, belowCoords);
+            // RUMC Material Begin: the material of the floor comes down with it, on the first solid tile below.
+            // RUMC was (kept): var debris = Spawn(DebrisProto, belowCoords);
+            var landingMap = _landing.FindLandingMap(below, worldPos);
+            var landingCoords = TryComp<MapComponent>(landingMap, out var landingMapComp) ? new MapCoordinates(worldPos, landingMapComp.MapId) : belowCoords;
+            var landed = _transform.ToCoordinates(landingCoords);
+            if (floorMaterial is { } material)
+                Spawn(material, landed);
+            // RUMC End
+
             try
             {
-                _audio.PlayPvs(CollapseSound, debris);
+                // RUMC: the sound is played at the place it landed; the call that was here (kept): _audio.PlayPvs(CollapseSound, debris);
+                _audio.PlayPvs(CollapseSound, landed);
             }
             catch (Exception e)
             {

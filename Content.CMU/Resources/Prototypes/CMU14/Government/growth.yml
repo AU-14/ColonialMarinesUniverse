@@ -1,0 +1,146 @@
+# What the administrator spends the great sums on (see ColonyGrowth.cs): the projects with the outside and the grey business.
+
+
+# ---------------------------------------------------------------- Projects with the outside
+
+- type: colonyProject
+  id: RUMCProjectEmbassy
+  name: rumc-project-embassy-name
+  description: rumc-project-embassy-desc
+  kind: Embassy
+  cost: 6000
+  upkeepPerMinute: 40
+  minRelation: 20
+  pointsPerMinute: 1.0
+  relationShift: 10
+
+- type: colonyProject
+  id: RUMCProjectMission
+  name: rumc-project-mission-name
+  description: rumc-project-mission-desc
+  kind: Mission
+  cost: 3000
+  durationSeconds: 1800
+  minRelation: 30
+  incomePerMinute: 90
+  relationShift: 8
+
+- type: colonyProject
+  id: RUMCProjectCaravan
+  name: rumc-project-caravan-name
+  description: rumc-project-caravan-desc
+  kind: Caravan
+  cost: 4500
+  durationSeconds: 2400
+  minRelation: 40
+  requires: TradeHub
+  incomePerMinute: 150
+  dutyCut: 2
+  relationShift: 5
+
+- type: colonyProject
+  id: RUMCProjectArmsRoute
+  name: rumc-project-arms-route-name
+  description: rumc-project-arms-route-desc
+  kind: Caravan
+  cost: 5000
+  durationSeconds: 2400
+  minRelation: 40
+  requires: ArmsMarket
+  callDiscountPercent: 10
+  incomePerMinute: 60
+  relationShift: 5
+
+# ---------------------------------------------------------------- The grey business
+
+- type: colonyCovert
+  id: RUMCCovertSpy
+  name: rumc-covert-spy-name
+  description: rumc-covert-spy-desc
+  target: Faction
+  cost: 800
+  successChance: 0.75
+  heat: 10
+  successReward: 1400
+  failureAttitude: -8
+
+- type: colonyCovert
+  id: RUMCCovertBribe
+  name: rumc-covert-bribe-name
+  description: rumc-covert-bribe-desc
+  target: Faction
+  cost: 1500
+  successChance: 0.6
+  heat: 15
+  successAttitude: 20
+  successPoints: 3
+  failureAttitude: -12
+  failureFine: 500
+
+- type: colonyCovert
+  id: RUMCCovertPressure
+  name: rumc-covert-pressure-name
+  description: rumc-covert-pressure-desc
+  target: Faction
+  cost: 1200
+  successChance: 0.55
+  heat: 20
+  successReward: 3000
+  successAttitude: -15
+  failureAttitude: -20
+
+- type: colonyCovert
+  id: RUMCCovertCityIntel
+  name: rumc-covert-city-intel-name
+  description: rumc-covert-city-intel-desc
+  target: City
+  cost: 700
+  successChance: 0.7
+  heat: 10
+  successReward: 1000
+  failureRelation: -10
+
+- type: colonyCovert
+  id: RUMCCovertBlackDeal
+  name: rumc-covert-black-deal-name
+  description: rumc-covert-black-deal-desc
+  target: None
+  cost: 600
+  successChance: 0.8
+  heat: 8
+  successReward: 1500
+  failureFine: 800
+
+# Orders of the city: the ingots that the administrator may order from the townsfolk
+
+- type: colonyOrderKind
+  id: RUMCOrderSilverIngot
+  name: rumc-order-silver-ingot-name
+  description: rumc-order-silver-ingot-desc
+  stack: RUMCSilverIngot
+  unitPrice: 80
+  maxAmount: 50
+
+- type: colonyOrderKind
+  id: RUMCOrderTitaniumIngot
+  name: rumc-order-titanium-ingot-name
+  description: rumc-order-titanium-ingot-desc
+  stack: RUMCTitaniumIngot
+  unitPrice: 90
+  maxAmount: 50
+
+- type: colonyOrderKind
+  id: RUMCOrderWeaponSteelIngot
+  name: rumc-order-weapon-steel-ingot-name
+  description: rumc-order-weapon-steel-ingot-desc
+  stack: RUMCWeaponSteelIngot
+  unitPrice: 120
+  maxAmount: 30
+
+- type: colonyOrderKind
+  id: RUMCOrderPlasteelIngot
+  name: rumc-order-plasteel-ingot-name
+  description: rumc-order-plasteel-ingot-desc
+  stack: RUMCPlasteelIngot
+  unitPrice: 140
+  maxAmount: 30
