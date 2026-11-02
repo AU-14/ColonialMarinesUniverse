@@ -174,6 +174,12 @@ public sealed partial class SynthComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public new bool Initialized;
+    // CMU14 SynthThrowSystem Begin: adding new Datafields for new throw system
+    [DataField] 
+    public float ThrowSpeedMultiplier = 1.1f; 
+    [DataField]
+    public float CarriedThrowRange = 4f;
+    // CMU14 SynthThrowSystem End
 }
 
 public sealed partial class RMCToggleSynthHudActionEvent : InstantActionEvent;
