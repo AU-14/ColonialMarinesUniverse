@@ -60,6 +60,11 @@ public sealed partial class CMUFobPresentationSystem
         // Static pixels first: barrels slide over their sockets instead of vanishing behind them.
         foreach (var box in remaining)
             parts.Insert(0, new CMUFobSpritePart(box, -1, Crop(frame, box)));
+        foreach (var part in parts)
+        {
+            _clickMaps.RegisterRsiRegion(part.Texture, state.RSI, state.StateId, direction,
+                new UIBox2i((Vector2i) part.Bounds.TopLeft, (Vector2i) part.Bounds.BottomRight));
+        }
         _parts.Add(key, parts);
         return parts;
     }
