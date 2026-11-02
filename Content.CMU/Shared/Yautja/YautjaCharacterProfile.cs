@@ -827,7 +827,7 @@ public sealed partial class YautjaCharacterProfile
 
     public static YautjaSetLock GetSetLock(YautjaLegacySet legacy)
     {
-        return legacy is YautjaLegacySet.Enforcer or YautjaLegacySet.Seeker
+        return legacy is YautjaLegacySet.Enforcer or YautjaLegacySet.Seeker or YautjaLegacySet.Serpent
             ? YautjaSetLock.LegacyWhitelist
             : YautjaSetLock.ClanLeader;
     }

@@ -72,7 +72,8 @@ public sealed class YautjaProfileEditorLayoutTest
     [TestCase(YautjaRank.Blooded, true, YautjaLegacySet.Dragon, true)]
     [TestCase(YautjaRank.Elite, true, YautjaLegacySet.Knight, true)]
     [TestCase(YautjaRank.Leader, false, YautjaLegacySet.Dragon, false)]
-    [TestCase(YautjaRank.Ancient, false, YautjaLegacySet.Serpent, false)]
+    [TestCase(YautjaRank.Ancient, false, YautjaLegacySet.Serpent, true)]
+    [TestCase(YautjaRank.Blooded, true, YautjaLegacySet.Serpent, false)]
     [TestCase(YautjaRank.Ancient, false, YautjaLegacySet.Enforcer, true)]
     [TestCase(YautjaRank.Blooded, false, YautjaLegacySet.None, false)]
     public void LegacySetsFollowTheirLock(YautjaRank rank, bool canUseLegacy, YautjaLegacySet legacy, bool locked)
