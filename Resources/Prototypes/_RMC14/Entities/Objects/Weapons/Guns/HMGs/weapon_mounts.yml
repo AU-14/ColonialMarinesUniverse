@@ -127,6 +127,7 @@
   - type: Physics # CMU14: empty fixtures make init disable collision; declared so saves match
     canCollide: false
   - type: WeaponMount
+    fixedWeaponPrototype: CMUMachineGunM56DDropshipLoaded # CMU14: door-gun-specific firing interlock.
     occupiedDrawDepth: Overdoors
     emptyDrawDepth: Overdoors
 

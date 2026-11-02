@@ -30,27 +30,26 @@ public sealed partial class CMUGunshipDoorAtmosphereSystem : EntitySystem
             // Wait until atmos has processed the complete map, including its doors
             // and fans. A MapInit handler can run before this tile has its volume.
             var indices = _map.CoordinatesToTile(grid, gridComp, transform.Coordinates);
-            if (!atmosphere.Tiles.TryGetValue(indices, out var tile))
+            if (!_atmosphere.HasTileAtmosphere((grid, atmosphere), indices))
                 continue;
 
-            if (tile.NoGridTile || tile.Air?.Immutable == true)
+            var air = _atmosphere.GetTileMixture((uid, transform));
+            if (_map.GetTileRef(grid, gridComp, indices).Tile.IsEmpty || air?.Immutable == true)
             {
                 hatch.Initialized = true;
                 continue;
             }
 
-            if (tile.Air == null)
+            if (air == null)
                 continue;
 
             hatch.Initialized = true;
-            if (tile.Air.TotalMoles > Atmospherics.GasMinMoles)
+            if (air.TotalMoles > Atmospherics.GasMinMoles)
                 continue;
 
             // Closed mapped doors may have no saved gas. Fans isolate them even
             // after opening, so supply their initial breathable air explicitly.
-            var air = _atmosphere.GetTileMixture((uid, transform), excite: true);
-            if (air == null || air.Immutable)
-                continue;
+            _atmosphere.GetTileMixture((uid, transform), excite: true);
 
             air.Temperature = Atmospherics.T20C;
             var moles = Atmospherics.OneAtmosphere * air.Volume / (Atmospherics.R * Atmospherics.T20C);
