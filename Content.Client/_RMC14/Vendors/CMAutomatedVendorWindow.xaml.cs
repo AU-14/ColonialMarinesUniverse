@@ -15,7 +15,6 @@ public sealed partial class CMAutomatedVendorWindow : DefaultWindow
 {
     private readonly CrtConsoleKit _kit = new();
     private readonly List<Button> _categoryButtons = new();
-    private readonly List<string> _categoryNames = new();
     private bool _yautjaTheme;
 
     /// <summary>-1 shows all sections; otherwise only the indexed section is visible.</summary>
@@ -28,7 +27,7 @@ public sealed partial class CMAutomatedVendorWindow : DefaultWindow
         RobustXamlLoader.Load(this);
 
         Title = Loc.GetString("cmu-vendor-heading");
-        MinSize = new Vector2(620, 520);
+        MinSize = new Vector2(720, 540);
         SetSize = new Vector2(800, 735);
 
         Background.PanelOverride = new StyleBoxFlat { BackgroundColor = CrtTerminalPalette.Surface0 };
@@ -87,11 +86,16 @@ public sealed partial class CMAutomatedVendorWindow : DefaultWindow
         }
     }
 
+    // CMU14 method: identify the actual machine rather than a generic inventory screen.
+    public void SetVendorName(string name)
+    {
+        Heading.Text = name.ToUpperInvariant();
+        Heading.ToolTip = name;
+    }
+
     /// <summary>Only rebuild this menu when the vendor's section structure changes.</summary>
     public void SetCategories(IReadOnlyList<string> names)
     {
-        _categoryNames.Clear();
-        _categoryNames.AddRange(names);
         if (SelectedCategory >= names.Count)
             SelectedCategory = -1;
 
