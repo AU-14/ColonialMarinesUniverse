@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared.CMU14.Dropship.DirectFire;
+using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared.CMU14.Input;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.ZLevels.Core.Components;
@@ -30,6 +31,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
     private const float CrossZLevelShotDistance = 3f;
 
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private CMUVehicleZViewSystem _vehicleView = default!;
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private RMCProjectileSystem _projectile = default!;
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
@@ -257,7 +259,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         if (offset == 0)
             return true;
 
-        var shooterMap = Transform(shooter).MapUid;
+        var shooterMap = Transform(_vehicleView.GetViewSource(shooter)).MapUid;
         if (shooterMap == null ||
             !_zLevels.TryMapOffset(shooterMap.Value, offset, out var targetMap, out var map))
         {

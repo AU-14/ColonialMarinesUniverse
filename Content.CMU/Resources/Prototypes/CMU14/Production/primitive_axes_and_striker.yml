@@ -7,6 +7,10 @@
   name: wooden axe
   description: "An axe all of hard wood, its edge fire-hardened. It fells a tree and splits a log, but it will not last: some twenty-five blows, and it is gone."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Tools/wooden_axe.rsi
     state: icon
@@ -42,6 +46,10 @@
   name: stone axe
   description: "An axe with a head of flaked stone lashed to a haft. It fells a tree and splits a log better than the wooden one and lasts some sixty blows."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Tools/stone_axe.rsi
     state: icon
@@ -78,6 +86,10 @@
   name: flint striker
   description: "Two stones to strike a spark from. Hold it to a campfire or a stove with fuel in it, or to something that burns, and strike. Not every strike catches, and the stones wear down."
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Objects/Tools/flint_striker.rsi
     state: icon
