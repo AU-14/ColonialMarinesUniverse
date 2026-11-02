@@ -18701,46 +18701,16 @@
 
 - type: entity
   parent: CMUYautjaHuntingTrap
-  name: "Hunting trap"
-  description: "A bizarre Yautja device used for trapping and killing prey."
   suffix: Hunter Ship CMU exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0Template
   abstract: true
+  # hand-edited: only add the cmss13 pixel offset. the generated wrapper swapped the sprite layers, stripped the
+  # GenericVisualizer and replaced the fixtures with one that has no collision layer, so mapped traps never
+  # showed as armed and nobody could step into them
   components:
   - type: Sprite
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
-    drawdepth: Items
     noRot: true
     enableOverrideDir: true
-    layers:
-    - state: "yauttrap0"
-  - type: Icon
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
-    state: "yauttrap0"
-  - type: RemoveComponents
-    components:
-    - type: GenericVisualizer
-      visuals: {}
-    - type: Contraband
-  - type: Item
-    sprite: CMU14/Yautja/yautja_items.rsi
-  - type: Physics
-    bodyType: Dynamic
-    fixedRotation: false
-  - type: Clickable
-  - type: InteractionOutline
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.25,-0.25,0.25,0.25"
-        hard: false
-        density: 20
-        mask:
-        - ItemMask
-        restitution: 0.3
-        friction: 0.2
 
 - type: entity
   parent: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0Template
@@ -21805,19 +21775,7 @@
     components:
     - type: GenericVisualizer
       visuals: {}
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+  # hand-edited: collision comes from the rack itself now, it's a table you can set trophies on
 
 
 - type: entity
@@ -21842,19 +21800,7 @@
     components:
     - type: GenericVisualizer
       visuals: {}
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+  # hand-edited: collision comes from the rack itself now, it's a table you can set trophies on
 
 
 - type: entity
@@ -21879,19 +21825,7 @@
     components:
     - type: GenericVisualizer
       visuals: {}
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+  # hand-edited: collision comes from the rack itself now, it's a table you can set trophies on
 
 
 - type: entity
@@ -21916,19 +21850,7 @@
     components:
     - type: GenericVisualizer
       visuals: {}
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+  # hand-edited: collision comes from the rack itself now, it's a table you can set trophies on
 
 
 - type: entity
@@ -21953,19 +21875,7 @@
     components:
     - type: GenericVisualizer
       visuals: {}
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+  # hand-edited: collision comes from the rack itself now, it's a table you can set trophies on
 
 
 - type: entity
@@ -21990,19 +21900,7 @@
     components:
     - type: GenericVisualizer
       visuals: {}
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+  # hand-edited: collision comes from the rack itself now, it's a table you can set trophies on
 
 
 - type: entity

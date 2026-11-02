@@ -29,9 +29,9 @@ public sealed partial class TacticalMapSystem
         var users = EntityQueryEnumerator<TacticalMapUserComponent>();
         while (users.MoveNext(out var uid, out var user))
         {
-            if (user.Map is { } map && TryComp<TacticalMapComponent>(map, out var tactical))
+            if (user.Map != null)
             {
-                ApplyFobMarkers((uid, user), tactical);
+                ApplyFobMarkers((uid, user));
                 Dirty(uid, user);
             }
         }
@@ -41,8 +41,7 @@ public sealed partial class TacticalMapSystem
             // Normal publication repopulates this view; resolution must also clear closed UI caches now.
             RemoveFobMarkers(computer.Blips);
             RemoveFobMarkers(computer.SquadBlips);
-            if (TryGetTacticalMap(out var map))
-                ApplyFobMarkers((uid, computer), map.Comp);
+            ApplyFobMarkers((uid, computer));
             Dirty(uid, computer);
         }
     }
@@ -53,20 +52,21 @@ public sealed partial class TacticalMapSystem
             blips.Remove(id);
     }
 
-    private void ApplyFobMarkers(Entity<TacticalMapUserComponent> user, TacticalMapComponent map)
+    private void ApplyFobMarkers(Entity<TacticalMapUserComponent> user)
     {
         if (!_fobReserve.Enabled) return;
         foreach (var blips in new[] { user.Comp.GovforBlips, user.Comp.OpforBlips, user.Comp.MarineBlips,
                      user.Comp.ClfBlips, user.Comp.XenoBlips, user.Comp.XenoStructureBlips, user.Comp.SquadBlips })
             RemoveFobMarkers(blips);
         Dirty(user);
-        if (!user.Comp.Govfor || HasComp<XenoComponent>(user) || !TryComp<MarineComponent>(user, out var marine) || marine.Faction != "govfor")
+        if (!user.Comp.Govfor || HasComp<XenoComponent>(user) || !TryComp<MarineComponent>(user, out var marine)
+            || !string.Equals(marine.Faction, "govfor", StringComparison.OrdinalIgnoreCase))
             return;
-        AddFobMarkers(map, user.Comp.GovforBlips, "govfor");
-        if (user.Comp.HasSquad) AddFobMarkers(map, user.Comp.SquadBlips, "govfor");
+        AddFobMarkers(user.Comp.GovforBlips, "govfor");
+        if (user.Comp.HasSquad) AddFobMarkers(user.Comp.SquadBlips, "govfor");
     }
 
-    private void ApplyFobMarkers(Entity<TacticalMapComputerComponent> computer, TacticalMapComponent map)
+    private void ApplyFobMarkers(Entity<TacticalMapComputerComponent> computer)
     {
         if (!_fobReserve.Enabled && _fobMarkerRecipients.Count == 0) return;
         // Computer components replicate in PVS. Private missions travel only to authorized UI actors.
@@ -86,24 +86,24 @@ public sealed partial class TacticalMapSystem
     {
         var result = new Dictionary<int, TacticalMapBlip>();
         if (_fobReserve.Enabled && !HasComp<XenoComponent>(actor)
-            && TryComp<MarineComponent>(actor, out var marine) && marine.Faction == "govfor"
-            && TryGetTacticalMap(out var map))
-            AddFobMarkers(map.Comp, result, "govfor");
+            && TryComp<MarineComponent>(actor, out var marine)
+            && string.Equals(marine.Faction, "govfor", StringComparison.OrdinalIgnoreCase))
+            AddFobMarkers(result, "govfor");
         return result;
     }
 
-    private void AddFobMarkers(TacticalMapComponent map, Dictionary<int, TacticalMapBlip> destination, string faction)
+    private void AddFobMarkers(Dictionary<int, TacticalMapBlip> destination, string faction)
     {
         if (!_fobReserve.Enabled || !_fobReserve.TryGetNetwork(faction, out var bank)
             || bank.Comp.State == CMUFobReserveState.Closed || bank.Comp.JobExpiresAt == null)
             return;
+        // Resolve each objective from its own battlefield, not the first tactical map in the world.
         var seconds = (int) bank.Comp.RelayReward.TotalSeconds;
         var label = Loc.GetString("cmu-fob-map-relay", ("time", $"{seconds / 60}:{seconds % 60:00}"));
         foreach (var relay in new[] { bank.Comp.FirstRelay, bank.Comp.SecondRelay })
         {
             if (relay is not { } uid || TerminatingOrDeleted(uid) || Transform(uid).MapUid != bank.Comp.Map
                 || Transform(uid).GridUid is not { } grid || !TryComp<MapGridComponent>(grid, out var gridComp)
-                || !TryComp<TacticalMapComponent>(grid, out var source) || source != map
                 || !_transform.TryGetGridTilePosition((uid, Transform(uid)), out var indices, gridComp))
                 continue;
             destination[uid.Id] = new TacticalMapBlip(indices,

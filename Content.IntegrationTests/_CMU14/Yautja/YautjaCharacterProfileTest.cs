@@ -164,7 +164,14 @@ public sealed class YautjaCharacterProfileTest
                     YautjaCapeStyle.Quarter,
                     YautjaCapeStyle.Poncho,
                     YautjaCapeStyle.Damaged,
+                    YautjaCapeStyle.BoneFull,
+                    YautjaCapeStyle.BoneThird,
+                    YautjaCapeStyle.BoneCeremonial,
                 }));
+            Assert.That(YautjaCharacterProfile.Default.WithCapeStyle(YautjaCapeStyle.BoneCeremonial).CapePrototype,
+                Is.EqualTo("CMUYautjaCapeBoneCeremonial"));
+            Assert.That(YautjaCharacterProfile.IsCapeRecolorable(YautjaCapeStyle.BoneThird), Is.False);
+            Assert.That(YautjaCharacterProfile.IsCapeRecolorable(YautjaCapeStyle.Poncho), Is.True);
             Assert.That(YautjaCharacterProfile.GetCapeDisplayName(YautjaCapeStyle.Poncho),
                 Is.EqualTo("cmu-yautja-profile-cape-poncho"));
             Assert.That(YautjaCharacterProfile.Default.WithCapeStyle(YautjaCapeStyle.Damaged).CapePrototype,
@@ -190,6 +197,11 @@ public sealed class YautjaCharacterProfileTest
                     YautjaBracerMaterial.Swamp,
                     YautjaBracerMaterial.Enforcer,
                     YautjaBracerMaterial.Collector,
+                    YautjaBracerMaterial.Shadow,
+                    YautjaBracerMaterial.Knight,
+                    YautjaBracerMaterial.Seeker,
+                    YautjaBracerMaterial.Serpent,
+                    YautjaBracerMaterial.Xenobone,
                 }));
             Assert.That(YautjaCharacterProfile.GetBracerDisplayName(YautjaBracerMaterial.Silver),
                 Is.EqualTo("cmu-yautja-profile-bracer-silver-clan"));
@@ -201,6 +213,20 @@ public sealed class YautjaCharacterProfileTest
                 Is.EqualTo("cmu-yautja-profile-bracer-collector-legacy"));
             Assert.That(YautjaCharacterProfile.Default.WithLegacy(YautjaLegacySet.Enforcer).BracerPrototype,
                 Is.EqualTo("CMUYautjaBracerLegacyEnforcer"));
+            Assert.That(YautjaCharacterProfile.Default.WithLegacy(YautjaLegacySet.Shadow).BracerPrototype,
+                Is.EqualTo("CMUYautjaBracerLegacyShadow"));
+            Assert.That(YautjaCharacterProfile.GetBracerDisplayName(YautjaBracerMaterial.Xenobone),
+                Is.EqualTo("cmu-yautja-profile-bracer-xenobone-elite"));
+            // cmss13 #12174: seeker and xenobone elite sets bring their own bracers over the picked material.
+            Assert.That(YautjaCharacterProfile.Default.WithBracer(YautjaBracerMaterial.Silver)
+                    .WithUnique(YautjaUniqueSet.SeekerAdept).BracerPrototype,
+                Is.EqualTo("CMUYautjaBracerLegacySeeker"));
+            Assert.That(YautjaCharacterProfile.Default.WithBracer(YautjaBracerMaterial.Silver)
+                    .WithUnique(YautjaUniqueSet.Praetorian).BracerPrototype,
+                Is.EqualTo("CMUYautjaBracerXenobone"));
+            Assert.That(YautjaCharacterProfile.Default.WithBracer(YautjaBracerMaterial.Silver)
+                    .WithUnique(YautjaUniqueSet.Ronin).BracerPrototype,
+                Is.EqualTo("CMUYautjaBracerSilver"));
         });
     }
 
@@ -538,8 +564,9 @@ public sealed class YautjaCharacterProfileTest
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(rsiPath), row.Id);
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("icon"), row.Id);
                     Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
-                    Assert.That(clothing!.RsiPath, Is.EqualTo($"CMU14/Yautja/masks/{row.Rsi}.rsi"), row.Id);
-                    Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True, row.Id);
+                    var wornRsi = row.WornRsi ?? row.Rsi;
+                    Assert.That(clothing!.RsiPath, Is.EqualTo($"CMU14/Yautja/masks/{wornRsi}.rsi"), row.Id);
+                    Assert.That(cache.TryGetResource<RSIResource>(new ResPath($"/Textures/CMU14/Yautja/masks/{wornRsi}.rsi"), out var resource), Is.True, row.Id);
                     Assert.That(resource!.RSI.Size, Is.EqualTo(row.RsiSize), row.Id);
                     Assert.That(resource.RSI.TryGetState("equipped-MASK", out _), Is.True, row.Id);
                 });
@@ -704,17 +731,18 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(sanitized.Unique, Is.EqualTo(YautjaUniqueSet.None));
         });
 
-        var authorizedLegacy = YautjaCharacterProfile.Default
+        // Dragon is a clan leader set, Anubys a legacy whitelist one
+        var leaderLegacy = YautjaCharacterProfile.Default
             .WithLegacy(YautjaLegacySet.Dragon)
-            .SanitizeForCapabilities(new YautjaProfileCapabilities(YautjaRank.Blooded, false, true));
-        var authorizedUnique = YautjaCharacterProfile.Default
+            .SanitizeForCapabilities(new YautjaProfileCapabilities(YautjaRank.Leader, true, false));
+        var whitelistedUnique = YautjaCharacterProfile.Default
             .WithUnique(YautjaUniqueSet.Anubys)
-            .SanitizeForCapabilities(new YautjaProfileCapabilities(YautjaRank.Elite, true, false));
+            .SanitizeForCapabilities(new YautjaProfileCapabilities(YautjaRank.Blooded, false, true));
 
         Assert.Multiple(() =>
         {
-            Assert.That(authorizedLegacy.Legacy, Is.EqualTo(YautjaLegacySet.Dragon));
-            Assert.That(authorizedUnique.Unique, Is.EqualTo(YautjaUniqueSet.Anubys));
+            Assert.That(leaderLegacy.Legacy, Is.EqualTo(YautjaLegacySet.Dragon));
+            Assert.That(whitelistedUnique.Unique, Is.EqualTo(YautjaUniqueSet.Anubys));
         });
     }
 
@@ -758,7 +786,7 @@ public sealed class YautjaCharacterProfileTest
             .WithCapeStyle(YautjaCapeStyle.Ceremonial)
             .WithBracer(YautjaBracerMaterial.Bronze)
             .SanitizeForCapabilities(ordinaryCapabilities);
-        var unauthorizedLegacyBracer = YautjaCharacterProfile.Default
+        var legacySkinBracer = YautjaCharacterProfile.Default
             .WithBracer(YautjaBracerMaterial.Dragon)
             .SanitizeForCapabilities(ordinaryCapabilities);
         var elite = YautjaCharacterProfile.Default
@@ -768,18 +796,19 @@ public sealed class YautjaCharacterProfileTest
             .WithCapeStyle(YautjaCapeStyle.Ceremonial)
             .SanitizeForCapabilities(leaderCapabilities);
         var legacy = YautjaCharacterProfile.Default
-            .WithLegacy(YautjaLegacySet.Collector)
+            .WithLegacy(YautjaLegacySet.Enforcer)
             .WithBracer(YautjaBracerMaterial.Enforcer)
             .SanitizeForCapabilities(legacyCapabilities);
 
         Assert.Multiple(() =>
         {
             Assert.That(ordinary.CapeStyle, Is.EqualTo(YautjaCapeStyle.Full));
-            Assert.That(ordinary.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Ebony));
-            Assert.That(unauthorizedLegacyBracer.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Ebony));
+            // every bracer skin is open to everyone
+            Assert.That(ordinary.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Bronze));
+            Assert.That(legacySkinBracer.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Dragon));
             Assert.That(elite.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Crimson));
             Assert.That(leader.CapeStyle, Is.EqualTo(YautjaCapeStyle.Ceremonial));
-            Assert.That(legacy.Legacy, Is.EqualTo(YautjaLegacySet.Collector));
+            Assert.That(legacy.Legacy, Is.EqualTo(YautjaLegacySet.Enforcer));
             Assert.That(legacy.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Enforcer));
         });
     }
@@ -1015,10 +1044,22 @@ public sealed class YautjaCharacterProfileTest
 
         yield return HunterSpecialMask("CMUYautjaMaskEliteCleopatra", hunterName, hunterDescription, "pred_mask_elite_cleopatra");
         yield return HunterSpecialMask("CMUYautjaMaskElitePlated", hunterName, hunterDescription, "pred_mask_elite_plated");
-        yield return HunterSpecialMask("CMUYautjaMaskUniqueAnubys", hunterName, hunterDescription, "pred_mask_elite_anubys");
+        // cmss13 draws these two from pred_gear64.dmi, so the worn sprite is its own 64x64 RSI
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueAnubys", hunterName, hunterDescription, "pred_mask_elite_anubys", new Vector2i(64, 64), "pred_mask_elite_anubys_worn");
         yield return HunterSpecialMask("CMUYautjaMaskUniqueCleopatra", hunterName, hunterDescription, "pred_mask_elite_cleopatra");
         yield return HunterSpecialMask("CMUYautjaMaskUniquePlated", hunterName, hunterDescription, "pred_mask_elite_plated");
-        yield return HunterSpecialMask("CMUYautjaMaskUniqueRonin", hunterName, hunterDescription, "pred_mask_elite_ronin");
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueRonin", hunterName, hunterDescription, "pred_mask_elite_ronin", new Vector2i(64, 64), "pred_mask_elite_ronin_worn");
+
+        // cmss13 #12174 sets; the 64px ones come from pred_mask64.dmi
+        yield return HunterSpecialMask("CMUYautjaMaskLegacyShadow", hunterName, hunterDescription, "pred_mask_legacy_collector_dark");
+        yield return HunterSpecialMask("CMUYautjaMaskLegacyKnight", hunterName, hunterDescription, "pred_mask_legacy_knight");
+        yield return HunterSpecialMask("CMUYautjaMaskLegacySeeker", hunterName, hunterDescription, "pred_mask_legacy_seeker", new Vector2i(64, 64), "pred_mask_legacy_seeker_worn");
+        yield return HunterSpecialMask("CMUYautjaMaskLegacySerpent", hunterName, hunterDescription, "pred_mask_legacy_serpent", new Vector2i(64, 64), "pred_mask_legacy_serpent_worn");
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueSeekerInitiate", hunterName, hunterDescription, "pred_mask_elite_seeker_a");
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueSeekerAdept", hunterName, hunterDescription, "pred_mask_elite_seeker_b");
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueDefender", hunterName, hunterDescription, "pred_mask_elite_xenobone_d", new Vector2i(64, 64), "pred_mask_elite_xenobone_d_worn");
+        yield return HunterSpecialMask("CMUYautjaMaskUniqueWarrior", hunterName, hunterDescription, "pred_mask_elite_xenobone_w", new Vector2i(64, 64), "pred_mask_elite_xenobone_w_worn");
+        yield return HunterSpecialMask("CMUYautjaMaskUniquePraetorian", hunterName, hunterDescription, "pred_mask_lead_xenobone_p", new Vector2i(64, 64), "pred_mask_lead_xenobone_p_worn");
 
         foreach (var material in new[] { "Bone", "Crimson", "Ebony", "Gold", "Silver" })
             yield return new SpecialMaskRow(
@@ -1039,7 +1080,8 @@ public sealed class YautjaCharacterProfileTest
         string name,
         string description,
         string rsi,
-        Vector2i? rsiSize = null)
+        Vector2i? rsiSize = null,
+        string? wornRsi = null)
     {
         return new SpecialMaskRow(
             id,
@@ -1051,7 +1093,8 @@ public sealed class YautjaCharacterProfileTest
             30,
             25,
             10,
-            100);
+            100,
+            wornRsi);
     }
 
     // CM-SS13 has six predator skins: code/__DEFINES/pred.dm:11 PRED_SKIN_COLOR = tan, green, purple, blue, red,
@@ -1098,7 +1141,8 @@ public sealed class YautjaCharacterProfileTest
         int Bullet,
         int Bio,
         int Explosion,
-        int AntiHug);
+        int AntiHug,
+        string? WornRsi = null);
 
     [Test]
     public void SkinChoiceSurvivesTheSavedProfileRoundTrip()

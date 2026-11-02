@@ -2209,10 +2209,7 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     AssertVisibleLayer(sprites, clientSnare.Value, sprite, "snare-trap", "arrow_trap_active", true);
-                    AssertVisibleLayer(sprites, clientSnare.Value, sprite, "tail", "tail", false);
-                    AssertVisibleLayer(sprites, clientSnare.Value, sprite, "rod", "rod", false);
-                    AssertVisibleLayer(sprites, clientSnare.Value, sprite, "tip", "tip", false);
-                    AssertVisibleLayer(sprites, clientSnare.Value, sprite, "mark", "solution1", false);
+                    AssertVisibleLayer(sprites, clientSnare.Value, sprite, "base", "arrow_trap", false);
                 });
             });
         }
@@ -7638,6 +7635,10 @@ public sealed class YautjaBowTest
                 {
                     ["CMUYautjaEssentials"] = 1,
                     ["CMUYautjaArmor"] = 1,
+                    // thrall rack since cmss13 #12577: YAUTJA_CAN_BUY_UNIFORM / _MASK / _SHOES
+                    ["CMUYautjaUniform"] = 1,
+                    ["CMUYautjaMask"] = 1,
+                    ["CMUYautjaShoes"] = 1,
                     ["CMUYautjaPrimary"] = 1,
                     ["CMUYautjaBracer"] = 1,
                     ["CMUYautjaSupport"] = 2,
@@ -8235,7 +8236,9 @@ public sealed class YautjaBowTest
                     "CMUYautjaCapePoncho",
                     "CMUYautjaCapeDamaged",
                     "CMUYautjaCapeFull",
+                    "CMUYautjaCapeBoneFull",
                     "CMUYautjaCapeCeremonial",
+                    "CMUYautjaCapeBoneCeremonial",
                 }));
                 AssertVendorRow(capes, "CMUYautjaCapeDamaged", "Damaged-Cape", replaceSlot: SlotFlags.BACK);
                 AssertVendorRow(capes, "CMUYautjaCapeFull", "Full-Cape", replaceSlot: SlotFlags.BACK);
@@ -10379,9 +10382,9 @@ public sealed class YautjaBowTest
                     AssertYautjaTechItemBlocksLikeCmss13ItemPredator(entMan, thrallBracer, "CMUYautjaThrallBracer");
                     AssertNonCorrodible(entMan, thrallBracer);
 
+                    // cmss13 #12577 moved the chainshirt out to the undersuit row
                     AssertBundle(prototypes, entMan, "CMUYautjaThrallHuntingEquipmentBundle",
                     [
-                        "CMUYautjaThrallChainshirt",
                         "CMUYautjaHuntingPouch",
                         "CMUYautjaLantern",
                         "CMUYautjaCommunicator",
@@ -11407,6 +11410,7 @@ public sealed class YautjaBowTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var spawned = rows
                 .SelectMany(row => new[] { row.ArmorId, row.MaskId, row.GreavesId })
+                .OfType<string>()
                 .Select(id => entMan.SpawnEntity(id, MapCoordinates.Nullspace))
                 .ToArray();
 
@@ -11416,15 +11420,9 @@ public sealed class YautjaBowTest
                 {
                     foreach (var row in rows)
                     {
-                        AssertBundle(prototypes, entMan, row.BundleId, new[]
-                        {
-                            row.ArmorId,
-                            row.GreavesId,
-                            row.MaskId,
-                        });
-
                         AssertBadBloodArmorPiece(entMan, row.ArmorId, row.ArmorName, row.ArmorDescription, SlotFlags.OUTERCLOTHING, row.ArmorSprite, humanAccessible: true);
-                        AssertBadBloodArmorPiece(entMan, row.MaskId, row.MaskName, row.MaskDescription, SlotFlags.MASK | SlotFlags.SUITSTORAGE, row.MaskSprite, blockPickup: false, humanAccessible: true);
+                        if (row.MaskId != null)
+                            AssertBadBloodArmorPiece(entMan, row.MaskId, row.MaskName, row.MaskDescription, SlotFlags.MASK | SlotFlags.SUITSTORAGE, row.MaskSprite!, blockPickup: false, humanAccessible: true);
                         AssertBadBloodArmorPiece(entMan, row.GreavesId, row.GreavesName, row.GreavesDescription, SlotFlags.FEET, row.GreavesSprite, humanAccessible: true);
                     }
                 });
@@ -11449,7 +11447,8 @@ public sealed class YautjaBowTest
                 foreach (var row in rows)
                 {
                     AssertPrototypeIconState(prototypes, factory, row.ArmorId, row.ArmorSprite);
-                    AssertPrototypeIconState(prototypes, factory, row.MaskId, row.MaskSprite);
+                    if (row.MaskId != null)
+                        AssertPrototypeIconState(prototypes, factory, row.MaskId, row.MaskSprite!);
                     AssertPrototypeIconState(prototypes, factory, row.GreavesId, row.GreavesSprite);
                 }
             });
@@ -11471,6 +11470,7 @@ public sealed class YautjaBowTest
             var entMan = server.EntMan;
             var spawned = rows
                 .SelectMany(row => new[] { row.ArmorId, row.MaskId, row.GreavesId })
+                .OfType<string>()
                 .Select(id => entMan.SpawnEntity(id, MapCoordinates.Nullspace))
                 .ToArray();
 
@@ -11481,15 +11481,18 @@ public sealed class YautjaBowTest
                     foreach (var row in rows)
                     {
                         var armor = EntityPrototypeIds(entMan, row.ArmorId).Single();
-                        var mask = EntityPrototypeIds(entMan, row.MaskId).Single();
                         var greaves = EntityPrototypeIds(entMan, row.GreavesId).Single();
 
                         AssertCmss13ArmorStats(entMan, armor, row.ArmorId, row.ArmorStats);
-                        Assert.That(entMan.HasComponent<CMArmorComponent>(mask), Is.False,
-                            $"{row.MaskId} keeps the current unarmored thrall mask balance.");
                         AssertCmss13ArmorStats(entMan, greaves, row.GreavesId, row.GreavesStats);
-                        Assert.That(entMan.GetComponent<ParasiteResistanceComponent>(mask).MaxCount, Is.EqualTo(row.MaskAntiHugMaxCount),
-                            $"{row.MaskId} inherits CMSS13 /obj/item/clothing/mask/gas/yautja anti_hug = 5.");
+                        if (row.MaskId != null)
+                        {
+                            var mask = EntityPrototypeIds(entMan, row.MaskId).Single();
+                            Assert.That(entMan.HasComponent<CMArmorComponent>(mask), Is.False,
+                                $"{row.MaskId} keeps the current unarmored thrall mask balance.");
+                            Assert.That(entMan.GetComponent<ParasiteResistanceComponent>(mask).MaxCount, Is.EqualTo(row.MaskAntiHugMaxCount),
+                                $"{row.MaskId} inherits CMSS13 /obj/item/clothing/mask/gas/yautja anti_hug = 5.");
+                        }
 
                         var storage = entMan.GetComponent<AllowSuitStorageComponent>(armor);
                         Assert.That(storage.Whitelist.Components, Is.Not.Null, $"{row.ArmorId} CMSS13 allowed list maps to local suit-storage weapon components.");
@@ -13748,6 +13751,7 @@ public sealed class YautjaBowTest
                     "CMUYautjaCapeThird",
                     "CMUYautjaCapeHalf",
                     "CMUYautjaCapePoncho",
+                    "CMUYautjaCapeBoneThird",
                 }));
             }
             finally
@@ -15211,7 +15215,7 @@ public sealed class YautjaBowTest
     }
 
     [Test]
-    public async Task CapePostVendorHookKeepsSelectedSubtypeAndUsesDefaultColorLikeCmss13()
+    public async Task CapePostVendorHookKeepsSelectedSubtypeAndUsesProfileColorLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -15248,7 +15252,7 @@ public sealed class YautjaBowTest
                 AssertEquippedPrototype(entMan, inventory, hunter, "back", "CMUYautjaCapeQuarter");
                 Assert.That(inventory.TryGetSlotEntity(hunter, "back", out var cape), Is.True);
                 Assert.That(entMan.GetComponent<YautjaCapeComponent>(cape.Value).Color,
-                    Is.EqualTo(YautjaCharacterProfile.Default.CapeColor));
+                    Is.EqualTo(new Color((byte) 0x2a, (byte) 0x5c, (byte) 0x8a)));
             }
             finally
             {
@@ -16923,7 +16927,8 @@ public sealed class YautjaBowTest
             "cm_vending_thrall",
             [
                 "CMUYautjaThrallHuntingEquipmentBundle",
-                "CMUYautjaThrallArmorEbonyBundle",
+                "CMUYautjaThrallChainshirt",
+                "CMUYautjaThrallArmorEbony",
                 "CMUYautjaClanSword",
                 "CMUYautjaLongaxe",
             ],
@@ -17555,7 +17560,8 @@ public sealed class YautjaBowTest
         foreach (var row in Cmss13ThrallArmorMaterialRows())
         {
             yield return new FireIntensityResistanceRow(row.ArmorId, standard);
-            yield return new FireIntensityResistanceRow(row.MaskId, standard);
+            if (row.MaskId != null)
+                yield return new FireIntensityResistanceRow(row.MaskId, standard);
             yield return new FireIntensityResistanceRow(row.GreavesId, standard);
         }
     }
@@ -17668,7 +17674,8 @@ public sealed class YautjaBowTest
         yield return new RackPriorityRow("CMUYautjaLoadoutVendor", "Spare Equipment", "CMUYautjaFalconDrone", false, false);
 
         yield return new RackPriorityRow("CMUYautjaThrallLoadoutVendor", "Essential Hunting Supplies", "CMUYautjaThrallHuntingEquipmentBundle", true, false);
-        yield return new RackPriorityRow("CMUYautjaThrallLoadoutVendor", "Armor Material (CHOOSE 1)", "CMUYautjaThrallArmorEbonyBundle", false, true);
+        yield return new RackPriorityRow("CMUYautjaThrallLoadoutVendor", "Undersuit (CHOOSE 1)", "CMUYautjaThrallChainshirt", true, false);
+        yield return new RackPriorityRow("CMUYautjaThrallLoadoutVendor", "Full-Armor Chest (CHOOSE 1)", "CMUYautjaThrallArmorEbony", false, true);
         yield return new RackPriorityRow("CMUYautjaThrallLoadoutVendor", "Main Weapons (CHOOSE 1)", "CMUYautjaClanSword", false, false);
 
         yield return new RackPriorityRow("CMUYautjaBloodedThrallLoadoutVendor", "Blooded Equipment", "CMUYautjaBloodedThrallEquipmentBundle", false, false);
@@ -18103,12 +18110,11 @@ public sealed class YautjaBowTest
     }
 
     public readonly record struct ThrallArmorMaterialRow(
-        string BundleId,
         string ArmorId,
-        string MaskId,
+        string? MaskId,
         string GreavesId,
         string ArmorSprite,
-        string MaskSprite,
+        string? MaskSprite,
         string GreavesSprite,
         string ArmorName = "alien armor",
         string ArmorDescription = "Armor made from a strange alloy. It feels cold with an alien weight. It has been adapted to carry both human and alien melee weaponry.",
@@ -18123,48 +18129,35 @@ public sealed class YautjaBowTest
         public float MaskAntiHugMaxCount => 5;
     }
 
+    // cmss13 #12577 thrall rack: full, half (old) and light pieces in every material, all with the full set's stats.
+    // the full mask rides with the full row, the half-mask with the half row, so each mask is spawned once
     private static IEnumerable<ThrallArmorMaterialRow> Cmss13ThrallArmorMaterialRows()
     {
-        yield return new ThrallArmorMaterialRow(
-            "CMUYautjaThrallArmorEbonyBundle",
-            "CMUYautjaThrallArmorEbony",
-            "CMUYautjaMaskThrallEbony",
-            "CMUYautjaThrallGreavesEbony",
-            "CMU14/Yautja/armor_thrall_ebony.rsi",
-            "CMU14/Yautja/masks/thrallmask_ebony.rsi",
-            "CMU14/Yautja/greaves_thrall_ebony.rsi");
-        yield return new ThrallArmorMaterialRow(
-            "CMUYautjaThrallArmorSilverBundle",
-            "CMUYautjaThrallArmorSilver",
-            "CMUYautjaMaskThrallSilver",
-            "CMUYautjaThrallGreavesSilver",
-            "CMU14/Yautja/armor_thrall_silver.rsi",
-            "CMU14/Yautja/masks/thrallmask_silver.rsi",
-            "CMU14/Yautja/greaves_thrall_silver.rsi");
-        yield return new ThrallArmorMaterialRow(
-            "CMUYautjaThrallArmorGoldBundle",
-            "CMUYautjaThrallArmorGold",
-            "CMUYautjaMaskThrallGold",
-            "CMUYautjaThrallGreavesGold",
-            "CMU14/Yautja/armor_thrall_gold.rsi",
-            "CMU14/Yautja/masks/thrallmask_gold.rsi",
-            "CMU14/Yautja/greaves_thrall_gold.rsi");
-        yield return new ThrallArmorMaterialRow(
-            "CMUYautjaThrallArmorCrimsonBundle",
-            "CMUYautjaThrallArmorCrimson",
-            "CMUYautjaMaskThrallCrimson",
-            "CMUYautjaThrallGreavesCrimson",
-            "CMU14/Yautja/armor_thrall_crimson.rsi",
-            "CMU14/Yautja/masks/thrallmask_crimson.rsi",
-            "CMU14/Yautja/greaves_thrall_crimson.rsi");
-        yield return new ThrallArmorMaterialRow(
-            "CMUYautjaThrallArmorBoneBundle",
-            "CMUYautjaThrallArmorBone",
-            "CMUYautjaMaskThrallBone",
-            "CMUYautjaThrallGreavesBone",
-            "CMU14/Yautja/armor_thrall_bone.rsi",
-            "CMU14/Yautja/masks/thrallmask_bone.rsi",
-            "CMU14/Yautja/greaves_thrall_bone.rsi");
+        foreach (var material in new[] { "Ebony", "Silver", "Gold", "Crimson", "Bone" })
+        {
+            var lower = material.ToLowerInvariant();
+            yield return new ThrallArmorMaterialRow(
+                $"CMUYautjaThrallArmor{material}",
+                $"CMUYautjaMaskThrall{material}",
+                $"CMUYautjaThrallGreaves{material}",
+                $"CMU14/Yautja/armor_thrall_{lower}.rsi",
+                $"CMU14/Yautja/masks/thrallmask_{lower}.rsi",
+                $"CMU14/Yautja/greaves_thrall_{lower}.rsi");
+            yield return new ThrallArmorMaterialRow(
+                $"CMUYautjaThrallArmorHalf{material}",
+                $"CMUYautjaMaskThrallAlt{material}",
+                $"CMUYautjaThrallGreavesHalf{material}",
+                $"CMU14/Yautja/armor_thrall_half_{lower}.rsi",
+                $"CMU14/Yautja/masks/thrallmask_alt_{lower}.rsi",
+                $"CMU14/Yautja/greaves_thrall_half_{lower}.rsi");
+            yield return new ThrallArmorMaterialRow(
+                $"CMUYautjaThrallArmorLight{material}",
+                null,
+                $"CMUYautjaThrallGreavesLight{material}",
+                $"CMU14/Yautja/armor_thrall_light_{lower}.rsi",
+                null,
+                $"CMU14/Yautja/greaves_thrall_light_{lower}.rsi");
+        }
     }
 
     public readonly record struct BloodedThrallBracerMaterialRow(
@@ -18872,7 +18865,15 @@ public sealed class YautjaBowTest
             new[]
             {
                 "Essential Hunting Supplies",
-                "Armor Material (CHOOSE 1)",
+                "Undersuit (CHOOSE 1)",
+                "Full-Mask (CHOOSE 1)",
+                "Half-Mask (CHOOSE 1)",
+                "Full-Armor Chest (CHOOSE 1)",
+                "Half-Armor Chest (CHOOSE 1)",
+                "Light-Armor Chest (CHOOSE 1)",
+                "Full-Armor Greaves (CHOOSE 1)",
+                "Half-Armor Greaves (CHOOSE 1)",
+                "Light-Armor Greaves (CHOOSE 1)",
                 "Main Weapons (CHOOSE 1)",
             },
             new[]
@@ -18884,14 +18885,92 @@ public sealed class YautjaBowTest
                         new RackExpectedRow("CMUYautjaThrallHuntingEquipmentBundle", "Hunting Equipment"),
                     }),
                 new RackSectionRows(
-                    "Armor Material (CHOOSE 1)",
+                    "Undersuit (CHOOSE 1)",
                     new[]
                     {
-                        new RackExpectedRow("CMUYautjaThrallArmorEbonyBundle", "Ebony"),
-                        new RackExpectedRow("CMUYautjaThrallArmorSilverBundle", "Silver"),
-                        new RackExpectedRow("CMUYautjaThrallArmorGoldBundle", "Gold"),
-                        new RackExpectedRow("CMUYautjaThrallArmorCrimsonBundle", "Crimson"),
-                        new RackExpectedRow("CMUYautjaThrallArmorBoneBundle", "Bone"),
+                        new RackExpectedRow("CMUYautjaThrallChainshirt", "Chain"),
+                        new RackExpectedRow("CMUYautjaThrallClothSuit", "Crimson Cloth"),
+                        new RackExpectedRow("CMUYautjaThrallClothSuitAlt", "Tan Cloth"),
+                    }),
+                new RackSectionRows(
+                    "Full-Mask (CHOOSE 1)",
+                    new[]
+                    {
+                        new RackExpectedRow("CMUYautjaMaskThrallEbony", "Ebony"),
+                        new RackExpectedRow("CMUYautjaMaskThrallSilver", "Silver"),
+                        new RackExpectedRow("CMUYautjaMaskThrallGold", "Gold"),
+                        new RackExpectedRow("CMUYautjaMaskThrallCrimson", "Crimson"),
+                        new RackExpectedRow("CMUYautjaMaskThrallBone", "Bone"),
+                    }),
+                new RackSectionRows(
+                    "Half-Mask (CHOOSE 1)",
+                    new[]
+                    {
+                        new RackExpectedRow("CMUYautjaMaskThrallAltEbony", "Ebony"),
+                        new RackExpectedRow("CMUYautjaMaskThrallAltSilver", "Silver"),
+                        new RackExpectedRow("CMUYautjaMaskThrallAltGold", "Gold"),
+                        new RackExpectedRow("CMUYautjaMaskThrallAltCrimson", "Crimson"),
+                        new RackExpectedRow("CMUYautjaMaskThrallAltBone", "Bone"),
+                    }),
+                new RackSectionRows(
+                    "Full-Armor Chest (CHOOSE 1)",
+                    new[]
+                    {
+                        new RackExpectedRow("CMUYautjaThrallArmorEbony", "Ebony"),
+                        new RackExpectedRow("CMUYautjaThrallArmorSilver", "Silver"),
+                        new RackExpectedRow("CMUYautjaThrallArmorGold", "Gold"),
+                        new RackExpectedRow("CMUYautjaThrallArmorCrimson", "Crimson"),
+                        new RackExpectedRow("CMUYautjaThrallArmorBone", "Bone"),
+                    }),
+                new RackSectionRows(
+                    "Half-Armor Chest (CHOOSE 1)",
+                    new[]
+                    {
+                        new RackExpectedRow("CMUYautjaThrallArmorHalfEbony", "Ebony"),
+                        new RackExpectedRow("CMUYautjaThrallArmorHalfSilver", "Silver"),
+                        new RackExpectedRow("CMUYautjaThrallArmorHalfGold", "Gold"),
+                        new RackExpectedRow("CMUYautjaThrallArmorHalfCrimson", "Crimson"),
+                        new RackExpectedRow("CMUYautjaThrallArmorHalfBone", "Bone"),
+                    }),
+                new RackSectionRows(
+                    "Light-Armor Chest (CHOOSE 1)",
+                    new[]
+                    {
+                        new RackExpectedRow("CMUYautjaThrallArmorLightEbony", "Ebony"),
+                        new RackExpectedRow("CMUYautjaThrallArmorLightSilver", "Silver"),
+                        new RackExpectedRow("CMUYautjaThrallArmorLightGold", "Gold"),
+                        new RackExpectedRow("CMUYautjaThrallArmorLightCrimson", "Crimson"),
+                        new RackExpectedRow("CMUYautjaThrallArmorLightBone", "Bone"),
+                    }),
+                new RackSectionRows(
+                    "Full-Armor Greaves (CHOOSE 1)",
+                    new[]
+                    {
+                        new RackExpectedRow("CMUYautjaThrallGreavesEbony", "Ebony"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesSilver", "Silver"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesGold", "Gold"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesCrimson", "Crimson"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesBone", "Bone"),
+                    }),
+                new RackSectionRows(
+                    "Half-Armor Greaves (CHOOSE 1)",
+                    new[]
+                    {
+                        new RackExpectedRow("CMUYautjaThrallGreavesHalfEbony", "Ebony"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesHalfSilver", "Silver"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesHalfGold", "Gold"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesHalfCrimson", "Crimson"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesHalfBone", "Bone"),
+                    }),
+                new RackSectionRows(
+                    "Light-Armor Greaves (CHOOSE 1)",
+                    new[]
+                    {
+                        new RackExpectedRow("CMUYautjaThrallGreavesLightEbony", "Ebony"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesLightSilver", "Silver"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesLightGold", "Gold"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesLightCrimson", "Crimson"),
+                        new RackExpectedRow("CMUYautjaThrallGreavesLightBone", "Bone"),
                     }),
                 new RackSectionRows(
                     "Main Weapons (CHOOSE 1)",
