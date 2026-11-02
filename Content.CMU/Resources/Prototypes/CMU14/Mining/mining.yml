@@ -124,6 +124,10 @@
   parent: RUMCSteamMachineBase
   id: RUMCDrillBase
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustry
   - type: OreDrill
     # Where there is no deposit, the drill bores the rock floor of a cave: fragments of stone from the floor of the stone layer, of black stone from the black one.
     rockTiles:

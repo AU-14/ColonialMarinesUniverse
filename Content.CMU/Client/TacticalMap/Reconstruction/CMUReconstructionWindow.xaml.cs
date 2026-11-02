@@ -128,6 +128,7 @@ public sealed partial class CMUReconstructionWindow : RMCPopOutWindow
                             ApplyOpeningCenter();
                             ConfigureFloors(saved);
                         }
+                        if (scene.TotalChunks == 0) CompleteRefresh(scene);
                     }
                     break;
                 }
@@ -158,23 +159,7 @@ public sealed partial class CMUReconstructionWindow : RMCPopOutWindow
                     if (_incoming is not { } incoming || incoming.Generation != patch.Generation) return;
                     CMUReconSceneData.Apply(incoming, patch);
                     if (incoming.LoadedChunks != incoming.TotalChunks) break;
-                    var camera = View.CaptureCamera();
-                    View.SetScene(incoming);
-                    if (_incomingContacts is { } latest)
-                    {
-                        View.TrackedContacts = latest.Contacts;
-                        incoming.OperatorPosition = latest.OperatorPosition;
-                        incoming.OperatorDepth = latest.OperatorDepth;
-                    }
-                    View.RestoreCamera(camera);
-                    ApplyOpeningCenter();
-                    ConfigureFloors(incoming);
-                    ConfigureMaps(incoming);
-                    _incoming = null;
-                    IsRefreshing = false;
-                    Feed.Text = Loc.GetString("cmu-recon-feed");
-                    _canOrder = incoming.CanOrder;
-                    Status.Text = Loc.GetString("cmu-recon-live");
+                    CompleteRefresh(incoming);
                     break;
                 }
                 if (View.Scene?.Generation != patch.Generation) return;
@@ -201,6 +186,27 @@ public sealed partial class CMUReconstructionWindow : RMCPopOutWindow
         CenterPlayer.Disabled = IsRefreshing || View.Scene?.OperatorPosition == null;
         MapSelection.Disabled = View.Scene == null || View.Draft.Sending;
         UpdateCaveStatus();
+    }
+
+    private void CompleteRefresh(CMUReconSnapshotMessage incoming)
+    {
+        var camera = View.CaptureCamera();
+        View.SetScene(incoming);
+        if (_incomingContacts is { } latest)
+        {
+            View.TrackedContacts = latest.Contacts;
+            incoming.OperatorPosition = latest.OperatorPosition;
+            incoming.OperatorDepth = latest.OperatorDepth;
+        }
+        View.RestoreCamera(camera);
+        ApplyOpeningCenter();
+        ConfigureFloors(incoming);
+        ConfigureMaps(incoming);
+        _incoming = null;
+        IsRefreshing = false;
+        Feed.Text = Loc.GetString("cmu-recon-feed");
+        _canOrder = incoming.CanOrder;
+        Status.Text = Loc.GetString("cmu-recon-live");
     }
 
     public void BeginViewRequest(int requestId, bool keepScene = false)

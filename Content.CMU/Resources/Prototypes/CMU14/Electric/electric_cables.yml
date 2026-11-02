@@ -6,6 +6,10 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Transform
     anchored: true
   - type: Clickable
