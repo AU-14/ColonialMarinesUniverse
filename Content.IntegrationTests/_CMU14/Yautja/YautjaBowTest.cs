@@ -9188,8 +9188,6 @@ public sealed class YautjaBowTest
                 var smartDisc = entMan.GetComponent<YautjaSmartDiscComponent>(disc);
                 var embeddable = entMan.GetComponent<EmbeddableProjectileComponent>(disc);
                 var thrownDamage = entMan.GetComponent<DamageOtherOnHitComponent>(disc);
-                var staminaCollide = entMan.GetComponent<StaminaDamageOnCollideComponent>(disc);
-                var staminaEmbed = entMan.GetComponent<StaminaDamageOnEmbedComponent>(disc);
 
                 Assert.Multiple(() =>
                 {
@@ -9199,24 +9197,22 @@ public sealed class YautjaBowTest
                         "CMSS13 smartdisc source description.");
                     Assert.That(item.Size.Id, Is.EqualTo("Tiny"),
                         "CMSS13 smartdisc w_class = SIZE_TINY.");
-                    Assert.That(smartDisc.ActiveTime, Is.EqualTo(TimeSpan.FromSeconds(30)),
-                        "CMSS13 smartdisc det_time = 30 before prime().");
+                    Assert.That(smartDisc.ActiveTime, Is.EqualTo(TimeSpan.FromSeconds(16)),
+                        "CMSS13 spawned hostile smartdisc lifetime = 8 Life ticks of 2 seconds.");
                     Assert.That(smartDisc.SearchRange, Is.EqualTo(7f),
                         "CMSS13 spawned hostile smartdisc ListTargets(7) target search radius.");
                     Assert.That(smartDisc.HitRange, Is.EqualTo(1f),
                         "CMSS13 spawned hostile smartdisc attacks adjacent targets with get_dist(src, target_mob) <= 1.");
                     Assert.That(smartDisc.MaxHits, Is.EqualTo(8),
                         "CMSS13 spawned hostile smartdisc lifetime = 8 local mapping.");
-                    Assert.That(smartDisc.HitDelay, Is.EqualTo(TimeSpan.FromSeconds(1)),
-                        "CMSS13 spawned hostile smartdisc turns_per_move = 1 local hit cadence mapping.");
+                    Assert.That(smartDisc.HitDelay, Is.EqualTo(TimeSpan.FromSeconds(2)),
+                        "CMSS13 spawned hostile smartdisc attacks at most once per 2 second Life tick.");
                     Assert.That(embeddable.EmbedOnThrow, Is.False,
                         "CMSS13 smartdisc embeddable = FALSE.");
                     Assert.That(DamageTotal(thrownDamage.Damage), Is.EqualTo((FixedPoint2) 25),
                         "CMSS13 smartdisc throwforce = 25.");
-                    Assert.That(staminaCollide.Damage, Is.EqualTo(25f),
-                        "CMSS13 smartdisc throwforce has no separate stamina payload; keep local collide stamina aligned to throwforce.");
-                    Assert.That(staminaEmbed.Damage, Is.EqualTo(0f),
-                        "CMSS13 smartdisc embeddable = FALSE means no embed stamina payload.");
+                    Assert.That(entMan.HasComponent<StaminaDamageOnCollideComponent>(disc), Is.False,
+                        "CMSS13 smartdisc throwforce has no stamina payload.");
                     Assert.That(entMan.GetComponent<ItemThrowRangeComponent>(disc).Range, Is.EqualTo(14f),
                         "CMSS13 boomerang throws back toward the user with range 12.");
                     Assert.That(entMan.TryGetComponent<MeleeWeaponComponent>(disc, out var melee), Is.True,

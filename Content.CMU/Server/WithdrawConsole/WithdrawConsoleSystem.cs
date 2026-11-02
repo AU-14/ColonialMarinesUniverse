@@ -32,8 +32,18 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     private const string DistressSignalPresetId = "DistressSignal";
 
+    /// <summary>Round policy only; this never grants navigation access or authorizes normal flight.</summary>
+    public bool IsProtectedWithdrawalAllowed()
+    {
+        var ev = new CMUProtectedWithdrawalAttemptEvent();
+        RaiseLocalEvent(ref ev);
+        return !ev.Cancelled;
+    }
+
     public bool IsDropdownBlocked(string faction)
     {
+        if (!IsProtectedWithdrawalAllowed())
+            return false;
         var query = EntityQueryEnumerator<WithdrawConsoleComponent>();
         while (query.MoveNext(out _, out var comp))
         {
@@ -45,6 +55,8 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     public bool IsHijackBlocked(string faction)
     {
+        if (!IsProtectedWithdrawalAllowed())
+            return false;
         var query = EntityQueryEnumerator<WithdrawConsoleComponent>();
         while (query.MoveNext(out _, out var comp))
         {
@@ -56,6 +68,8 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     public bool IsWithdrawReturnUnlocked(string faction)
     {
+        if (!IsProtectedWithdrawalAllowed())
+            return false;
         var query = EntityQueryEnumerator<WithdrawConsoleComponent>();
         while (query.MoveNext(out _, out var comp))
         {
@@ -101,7 +115,8 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
         var query = EntityQueryEnumerator<WithdrawConsoleComponent>();
         while (query.MoveNext(out var uid, out var console))
         {
-            if (!console.WithdrawActive || console.WithdrawStartTime == null || console.RoundEndTriggered)
+            if (!console.WithdrawActive || console.WithdrawStartTime == null || console.RoundEndTriggered
+                || !IsProtectedWithdrawalAllowed())
                 continue;
 
             var elapsed = now - console.WithdrawStartTime.Value;
@@ -313,7 +328,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     private void OnToggleStalemate(Entity<WithdrawConsoleComponent> ent, ref WithdrawConsoleToggleStalemateMsg args)
     {
-        if (ent.Comp.RoundEndTriggered)
+        if (ent.Comp.RoundEndTriggered || !IsProtectedWithdrawalAllowed())
             return;
 
         ent.Comp.StalemateToggled = !ent.Comp.StalemateToggled;
@@ -325,6 +340,8 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     private void CheckStalemate()
     {
+        if (!IsProtectedWithdrawalAllowed())
+            return;
         var consoles = new List<(EntityUid uid, WithdrawConsoleComponent comp)>();
         var query = EntityQueryEnumerator<WithdrawConsoleComponent>();
         while (query.MoveNext(out var uid, out var comp))
@@ -364,7 +381,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     private bool IsFactionAllowedToWithdraw(string faction)
     {
-        if (IsDisabledForGamemode())
+        if (IsDisabledForGamemode() || !IsProtectedWithdrawalAllowed())
             return false;
 
         var query = EntityQueryEnumerator<RMCPlanetComponent>();
@@ -401,6 +418,8 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     private void EndWithdraw(string? faction, bool isStalemate)
     {
+        if (!IsProtectedWithdrawalAllowed())
+            return;
         string text;
         if (isStalemate)
             text = Loc.GetString("withdraw-console-round-end-stalemate");

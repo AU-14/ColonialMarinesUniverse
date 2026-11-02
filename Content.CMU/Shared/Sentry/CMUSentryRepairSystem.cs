@@ -90,6 +90,14 @@ public sealed class CMUSentryRepairSystem : EntitySystem
         var used = args.Used;
         var user = args.User;
 
+        var attempt = new CMUSentryRepairAttemptEvent(user);
+        RaiseLocalEvent(ent, ref attempt);
+        if (attempt.Cancelled)
+        {
+            args.Handled = true;
+            return;
+        }
+
         // Packing it up and setting it down still works while it's broken.
         if (_tools.HasQuality(used, Anchoring))
             return;
@@ -160,6 +168,11 @@ public sealed class CMUSentryRepairSystem : EntitySystem
         if (args.Cancelled || args.Handled || args.Step != ent.Comp.Step || ent.Comp.Step >= Steps.Length)
             return;
 
+        var attempt = new CMUSentryRepairAttemptEvent(args.User);
+        RaiseLocalEvent(ent, ref attempt);
+        if (attempt.Cancelled)
+            return;
+
         if (!TryComp(ent, out SentryComponent? sentry) || sentry.Mode == SentryMode.Item)
             return;
 
@@ -182,6 +195,8 @@ public sealed class CMUSentryRepairSystem : EntitySystem
 
         _damageable.ClearAllDamage(ent.Owner);
         RemCompDeferred<CMUSentryBrokenComponent>(ent);
+        var repaired = new CMUSentryRepairedEvent();
+        RaiseLocalEvent(ent, ref repaired);
         _popup.PopupPredicted(Loc.GetString("cmu-sentry-repair-finished", ("sentry", ent.Owner)),
             Loc.GetString("cmu-sentry-repair-finished-others", ("sentry", ent.Owner), ("user", args.User)),
             ent, args.User, PopupType.Medium);

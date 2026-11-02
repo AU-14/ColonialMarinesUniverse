@@ -114,6 +114,8 @@ public sealed partial class RequisitionsSystem
     private bool TryGetDeterministicManifest(RequisitionsEntry entry, out Dictionary<EntProtoId, int> manifest)
     {
         manifest = new Dictionary<EntProtoId, int>();
+        if (entry.RoundLimit > 0) // CMU14: round-limited kits must remain whole crates.
+            return false;
         if (!_prototypeManager.TryIndex<EntityPrototype>(entry.Crate, out var cratePrototype))
             return false;
 

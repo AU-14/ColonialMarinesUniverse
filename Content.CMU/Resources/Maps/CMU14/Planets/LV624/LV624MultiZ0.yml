@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 10/25/2026 14:32:25
-  entityCount: 23613
+  entityCount: 23630
 maps:
 - 1
 grids:
@@ -225,6 +225,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMUFobMap
+      sites: [443, 444]
     - type: MetaData
       name: Mapping LV624 Lazarus Landing
     - type: Transform
@@ -47386,6 +47388,49 @@ entities:
   entities:
   - uid: 443
     components:
+    - type: CMUFobSite
+      id: Robotics
+      utilityExclusions:
+      - "-57.35,-81.35,-44.65,-59.65"
+      - "-57.85,-78.85,-45.15,-62.15"
+      - "-57.85,-78.85,-45.15,-60.15"
+      relays:
+      - anchor: 23659
+        tier: Near
+        approach: West
+      - anchor: 23660
+        tier: Near
+        approach: West
+      - anchor: 23661
+        tier: Near
+        approach: East
+      - anchor: 23662
+        tier: Near
+        approach: East
+      - anchor: 23663
+        tier: Intermediate
+        approach: West
+      - anchor: 23664
+        tier: Intermediate
+        approach: West
+      - anchor: 23665
+        tier: Intermediate
+        approach: East
+      - anchor: 23666
+        tier: Intermediate
+        approach: East
+      - anchor: 23667
+        tier: Far
+        approach: West
+      - anchor: 23668
+        tier: Far
+        approach: West
+      - anchor: 23669
+        tier: Far
+        approach: East
+      - anchor: 23670
+        tier: Far
+        approach: East
     - type: MetaData
       name: 'LZ2: Robotics Landing Zone'
     - type: Transform
@@ -47393,6 +47438,49 @@ entities:
       pos: -51.5,-70.5
   - uid: 444
     components:
+    - type: CMUFobSite
+      id: Nexus
+      utilityExclusions:
+      - "59.65,-88.35,72.35,-66.65"
+      - "59.15,-85.85,71.85,-69.15"
+      - "59.15,-85.85,71.85,-67.15"
+      relays:
+      - anchor: 23671
+        tier: Near
+        approach: East
+      - anchor: 23666
+        tier: Near
+        approach: East
+      - anchor: 23661
+        tier: Near
+        approach: West
+      - anchor: 23662
+        tier: Near
+        approach: West
+      - anchor: 23672
+        tier: Intermediate
+        approach: East
+      - anchor: 23673
+        tier: Intermediate
+        approach: East
+      - anchor: 23674
+        tier: Intermediate
+        approach: West
+      - anchor: 23659
+        tier: Intermediate
+        approach: West
+      - anchor: 23669
+        tier: Far
+        approach: East
+      - anchor: 23670
+        tier: Far
+        approach: East
+      - anchor: 23667
+        tier: Far
+        approach: West
+      - anchor: 23675
+        tier: Far
+        approach: West
     - type: MetaData
       name: 'LZ1: Nexus Landing Zone'
     - type: Transform
@@ -167044,4 +167132,125 @@ entities:
     - type: Transform
       parent: 1
       pos: -84.5,-47.5
+- proto: CMUFobRelayMarker
+  entities:
+  - uid: 23659
+    components:
+    - type: Transform
+      parent: 1
+      pos: -29.5,-7.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-west-barrens-south
+  - uid: 23660
+    components:
+    - type: Transform
+      parent: 1
+      pos: -38.5,-2.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-southwest-caves-mouth
+  - uid: 23661
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-29.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-north-jungle-west
+  - uid: 23662
+    components:
+    - type: Transform
+      parent: 1
+      pos: 7.5,-43.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-central-road-north
+  - uid: 23663
+    components:
+    - type: Transform
+      parent: 1
+      pos: -14.5,5.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-west-barrens-north
+  - uid: 23664
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,7.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-central-barrens-west
+  - uid: 23665
+    components:
+    - type: Transform
+      parent: 1
+      pos: 29.5,-0.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-east-barrens
+  - uid: 23666
+    components:
+    - type: Transform
+      parent: 1
+      pos: 53.5,-12.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-eastern-riverbank
+  - uid: 23667
+    components:
+    - type: Transform
+      parent: 1
+      pos: 29.5,26.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-north-barrens
+  - uid: 23668
+    components:
+    - type: Transform
+      parent: 1
+      pos: 20.5,33.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-north-pass
+  - uid: 23669
+    components:
+    - type: Transform
+      parent: 1
+      pos: 60.5,26.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-east-cave-approach
+  - uid: 23670
+    components:
+    - type: Transform
+      parent: 1
+      pos: 51.5,26.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-temple-northern-passage
+  - uid: 23671
+    components:
+    - type: Transform
+      parent: 1
+      pos: 73.5,-13.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-southeast-barrens-south
+  - uid: 23672
+    components:
+    - type: Transform
+      parent: 1
+      pos: 80.5,-3.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-southeast-barrens-north
+  - uid: 23673
+    components:
+    - type: Transform
+      parent: 1
+      pos: 58.5,17.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-temple-approach
+  - uid: 23674
+    components:
+    - type: Transform
+      parent: 1
+      pos: 12.5,-8.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-central-barrens-south
+  - uid: 23675
+    components:
+    - type: Transform
+      parent: 1
+      pos: 26.5,13.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-lv624-relay-containers-approach
 ...

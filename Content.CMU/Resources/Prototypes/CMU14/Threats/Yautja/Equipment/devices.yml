@@ -530,8 +530,8 @@
     spinVelocity: 24
     maxHits: 8
     hitRange: 1
-    hitDelay: 1
-    activeTime: 30
+    hitDelay: 2
+    activeTime: 16
     retargetDelay: 0.35
   - type: Corrodible
     isCorrodible: false
@@ -545,6 +545,11 @@
         - ItemMask
         restitution: 0.3
         friction: 0.2
+      shootable: # layer is set to BulletImpassable while the disc is hunting
+        shape: !type:PhysShapeCircle
+          radius: 0.2
+        density: 0
+        hard: true
   - type: EmbeddableProjectile
     embedOnThrow: false
     sound: /Audio/Weapons/star_hit.ogg
@@ -554,10 +559,6 @@
       types:
         Slash: 12.5
         Piercing: 12.5
-  - type: StaminaDamageOnCollide
-    damage: 25
-  - type: StaminaDamageOnEmbed
-    damage: 0
 
   - type: MeleeWeapon
     wideAttackAllowed: false
@@ -1202,22 +1203,9 @@
   - type: Icon
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
     state: pred_vendor_left
+  # no GenericVisualizer here, YautjaGearRackClientSystem draws the rack layers itself every frame. a visualizer
+  # setting pred_vendor_left on a pair it had already swapped to the merged rsi just logged a missing state
   - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.YautjaGearRackVisuals.State:
-        enum.VendingMachineVisualLayers.Base:
-          Left: {state: pred_vendor_left}
-          LeftCentre: {state: pred_vendor_lcenter}
-          Centre: {state: pred_vendor_centre}
-          RightCentre: {state: pred_vendor_rcentre}
-          Right: {state: pred_vendor_right}
-        enum.VendingMachineVisualLayers.BaseUnshaded:
-          Left: {state: pred_vendor_left}
-          LeftCentre: {state: pred_vendor_lcenter}
-          Centre: {state: pred_vendor_centre}
-          RightCentre: {state: pred_vendor_rcentre}
-          Right: {state: pred_vendor_right}
   - type: YautjaGearRack
   - type: RemoveComponents
     components:
@@ -2563,15 +2551,6 @@
   - type: Icon
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
     state: pred_vendor_elder_left
-  - type: GenericVisualizer
-    visuals:
-      enum.YautjaGearRackVisuals.State:
-        enum.VendingMachineVisualLayers.Base:
-          Left: {state: pred_vendor_elder_left}
-          Right: {state: pred_vendor_elder_right}
-        enum.VendingMachineVisualLayers.BaseUnshaded:
-          Left: {state: pred_vendor_elder_left}
-          Right: {state: pred_vendor_elder_right}
   - type: YautjaGearRack
     kind: Elder
   - type: CMAutomatedVendor
