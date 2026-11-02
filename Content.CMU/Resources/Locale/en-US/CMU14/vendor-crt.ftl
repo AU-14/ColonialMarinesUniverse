@@ -1,0 +1,16 @@
+cmu-vendor-heading = VENDOR INVENTORY
+cmu-vendor-search = Search equipment...
+cmu-vendor-low-only = Low stock only
+cmu-vendor-reagents = Reagents
+cmu-vendor-empty = No equipment matches the current filters.
+cmu-vendor-footer = Select an item to dispense it. Availability and access restrictions still apply.
+cmu-vendor-summary = { $total } items, { $empty } out of stock
+cmu-vendor-out-status = { $count } OUT
+cmu-vendor-low-status = { $count } LOW
+cmu-vendor-ready = IN STOCK
+cmu-vendor-details = Item details
+cmu-vendor-out = OUT OF STOCK
+cmu-vendor-low = LOW STOCK
+cmu-vendor-in-stock = IN STOCK
+cmu-vendor-points = Points remaining: { $count }
+cmu-vendor-faction-points = { $faction } win points: { $count }
