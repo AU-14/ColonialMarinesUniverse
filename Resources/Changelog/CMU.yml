@@ -16423,5 +16423,81 @@
   id: 953
   time: '2026-11-02T14:04:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2423
+- author: ArturUr1
+  changes:
+  - message: Synthetics can now throw creatures they are carrying on their shoulder.
+    type: Add
+  id: 954
+  time: '2026-11-02T19:06:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2422
+- author: rokudara-sen
+  changes:
+  - message: 'Thrall gear rack has cmss13''s new pieces: cloth undersuits, a half-mask,
+      and half and light armour and greaves in every material.'
+    type: Add
+  - message: Abomination skull and pelt trophies.
+    type: Add
+  - message: Raised yautja shields, the hunting bow, the falcon drone, worn trophies
+      and the mask visor show on the wearer.
+    type: Fix
+  - message: Hunting traps on the hunter ship can catch people again.
+    type: Fix
+  - message: Hunter ship trophy racks can hold trophies and other items, and can be
+      climbed like a table.
+    type: Add
+  - message: New yautja legacy sets (Shadow, Knight, Seeker, Serpent), elite sets
+      (Seeker Initiate, Seeker Adept, Defender, Warrior, Praetorian), bone capes and
+      new bracers, art by DimDim.
+    type: Add
+  - message: Yautja legacy and elite sets are split between the Legacy whitelist and
+      clan leader and above. Elites and elders no longer get sets.
+    type: Tweak
+  - message: Every yautja bracer skin can be picked by anyone.
+    type: Tweak
+  - message: Taking the stranded yautja slot uses it up for the round, it no longer
+      reopens when that hunter is erased or respawns.
+    type: Fix
+  - message: APOLLO no longer announces yautja waking up.
+    type: Fix
+  - message: Pick your yautja cape colour in the character menu.
+    type: Add
+  - message: Yautja capes can be fastened to clan armour to free the back slot.
+    type: Add
+  - message: Yautja capes show their colour when worn instead of grey.
+    type: Fix
+  - message: Yautja arrows, xeno skulls and pelts, the thrall full armour, the bracers,
+      and the Anubys and Ronin masks use the current cmss13 sprites.
+    type: Tweak
+  id: 955
+  time: '2026-11-02T19:28:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2430
+- author: TheHellFireo
+  changes:
+  - message: FOB weaponry, support and monitoring crates now take two seconds to open
+      with a wrench.
+    type: Tweak
+  - message: Animated FOB equipment and crates can be hovered and clicked normally,
+      including open crate interiors.
+    type: Fix
+  - message: FOB platforms can be packed and relocated without losing their weapon
+      allocation, and powerloaders can reinstall guns at their normal reach.
+    type: Fix
+  - message: Deployed electric fences block movement even while support is off.
+    type: Fix
+  - message: Powered FOB fences now shock humans as well as xenos and apply a brief
+      stun, including to friendly marines.
+    type: Tweak
+  - message: Available FOB relay objectives appear on marine tactical maps across
+      linked floors and disappear when resolved.
+    type: Fix
+  - message: FOB guns now show illuminated status panels for active, off, startup,
+      acquisition, reloading, empty and broken states.
+    type: Tweak
+  - message: Shortened FOB gun prompts and clarified platform relocation and powerloader
+      installation instructions.
+    type: Tweak
+  id: 956
+  time: '2026-11-02T19:30:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2431
 Name: CMU
 Order: -1
