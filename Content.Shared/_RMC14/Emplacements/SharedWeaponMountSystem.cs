@@ -761,6 +761,10 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
     /// <param name="rotationDegrees">The rotation of the mount in degrees</param>
     public void RotateMount(Entity<WeaponMountComponent> ent, EntityUid? user, int rotationDegrees = 90)
     {
+        // CMU14: Auto-positioned door guns must stay facing out of the doorway.
+        if (ent.Comp.RotationLocked)
+            return;
+
         _transform.SetLocalRotation(ent, _transform.GetWorldRotation(ent) + Angle.FromDegrees(rotationDegrees));
         _audio.PlayPredicted(ent.Comp.RotateSound, ent, user);
 

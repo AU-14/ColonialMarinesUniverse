@@ -122,6 +122,10 @@ public sealed partial class WeaponMountComponent : Component
     [DataField, AutoNetworkedField]
     public bool CanRotateWithoutTool;
 
+    // CMU14: Door-mounted guns keep their outward facing, including tool rotation.
+    [DataField, AutoNetworkedField]
+    public bool RotationLocked;
+
     /// <summary>
     ///     Whether the user will mount the emplacement automatically after deploying it from their hand.
     /// </summary>
