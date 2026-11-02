@@ -2,10 +2,15 @@ using System.Numerics;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Item.ItemToggle;
+using Content.Shared.Physics;
+using Content.Shared.Projectiles;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
 
 namespace Content.IntegrationTests.CMU14.Yautja;
 
@@ -54,6 +59,48 @@ public sealed class CMUYautjaSmartDiscParityTest
         {
             Assert.That(SlashOn(server.EntMan, target), Is.InRange(30f, 50f),
                 "the second slash lands after the 2 second Life tick");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ShootingTheActiveDiscKnocksItOutAtSixtyDamage()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var hunter = entities.SpawnEntity("CMUMobYautja", map.GridCoords);
+            var disc = entities.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords);
+            var comp = entities.GetComponent<YautjaSmartDiscComponent>(disc);
+            var fixtures = entities.System<FixtureSystem>();
+
+            Assert.That(fixtures.GetFixtureOrNull(disc, comp.ShootableFixture)!.CollisionLayer, Is.Zero,
+                "a disc lying around must not stop bullets");
+
+            Assert.That(entities.System<SharedHandsSystem>().TryPickupAnyHand(hunter, disc), Is.True);
+            Assert.That(entities.System<ItemToggleSystem>().TryActivate((disc, null), hunter), Is.True);
+            Assert.That(comp.Active, Is.True);
+            Assert.That(fixtures.GetFixtureOrNull(disc, comp.ShootableFixture)!.CollisionLayer & (int) CollisionGroup.BulletImpassable,
+                Is.Not.Zero, "the hunting disc is a 60 health mob in cmss13 and can be shot");
+
+            var bullet = entities.SpawnEntity(null, map.GridCoords);
+            var damage = new DamageSpecifier(server.ProtoMan.Index<DamageTypePrototype>("Piercing"), 30);
+
+            var first = new ProjectileHitTargetEvent(damage, bullet);
+            entities.EventBus.RaiseLocalEvent(disc, ref first);
+            Assert.That(comp.Active, Is.True, "30 of 60 isn't enough");
+
+            var second = new ProjectileHitTargetEvent(damage, bullet);
+            entities.EventBus.RaiseLocalEvent(disc, ref second);
+            Assert.That(comp.Active, Is.False, "at 60 damage the disc spins out onto the floor");
+            Assert.That(entities.Deleted(disc), Is.False, "cmss13 drops a disc back on the floor, it isn't destroyed");
+            Assert.That(fixtures.GetFixtureOrNull(disc, comp.ShootableFixture)!.CollisionLayer, Is.Zero);
+            Assert.That(comp.DamageTaken, Is.Zero, "the next activation starts at full health again");
         });
 
         await pair.CleanReturnAsync();

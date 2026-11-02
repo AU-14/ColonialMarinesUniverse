@@ -22,6 +22,7 @@ using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Physics;
+using Content.Shared.Projectiles;
 using Content.Shared.Stunnable;
 using Content.Shared.Popups;
 using Content.Shared.Toggleable;
@@ -66,6 +67,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
     [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private FixtureSystem _fixtures = default!;
 
     public override void Initialize()
     {
@@ -82,6 +84,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         SubscribeLocalEvent<YautjaSmartDiscComponent, GotEquippedHandEvent>(OnGotEquippedHand);
         SubscribeLocalEvent<YautjaSmartDiscComponent, UseInHandEvent>(OnUseInHand, before: new[] { typeof(ItemToggleSystem) });
         SubscribeLocalEvent<YautjaSmartDiscComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<YautjaSmartDiscComponent, ProjectileHitTargetEvent>(OnProjectileHit);
     }
 
     private void OnCallDisc(Entity<YautjaBracerComponent> ent, ref YautjaCallDiscActionEvent args)
@@ -215,8 +218,23 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
     private void OnPreventCollide(Entity<YautjaSmartDiscComponent> ent, ref PreventCollideEvent args)
     {
+        if (TryComp(args.OtherEntity, out ProjectileComponent? projectile))
+        {
+            if (!ent.Comp.Active || ShotPassesThrough(ent, args.OtherEntity, projectile))
+                args.Cancelled = true;
+
+            return;
+        }
+
         if (!ent.Comp.Active)
             return;
+
+        // the shootable fixture sits on BulletImpassable, which thrown items also collide with
+        if (HasComp<ThrownItemComponent>(args.OtherEntity))
+        {
+            args.Cancelled = true;
+            return;
+        }
 
         if (!ent.Comp.ReturningToOwner && args.OtherEntity == ent.Comp.YautjaOwner)
         {
@@ -357,6 +375,50 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         StopDisc(ent);
     }
 
+    // cmss13 bullet_act: prob(60 - damage) and the bullet flies straight through
+    private bool ShotPassesThrough(Entity<YautjaSmartDiscComponent> ent, EntityUid uid, ProjectileComponent projectile)
+    {
+        if (ent.Comp.MissedProjectiles.Contains(uid))
+            return true;
+
+        if (!ent.Comp.RolledProjectiles.Add(uid))
+            return false;
+
+        var passChance = (ent.Comp.Health - projectile.Damage.GetTotal().Float()) / 100f;
+        if (!_random.Prob(Math.Clamp(passChance, 0f, 1f)))
+            return false;
+
+        ent.Comp.MissedProjectiles.Add(uid);
+        return true;
+    }
+
+    private void OnProjectileHit(Entity<YautjaSmartDiscComponent> ent, ref ProjectileHitTargetEvent args)
+    {
+        if (!ent.Comp.Active)
+            return;
+
+        ent.Comp.DamageTaken += args.Damage.GetTotal().Float();
+        if (ent.Comp.DamageTaken < ent.Comp.Health)
+            return;
+
+        // cmss13 drops a fresh disc on the floor when the mob dies, so it's knocked out, not broken
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-disc-shot-down", ("disc", ent.Owner)), ent.Owner);
+        _toggle.TrySetActive((ent.Owner, null), false, ent.Comp.YautjaOwner, false);
+    }
+
+    private void SetShootable(Entity<YautjaSmartDiscComponent> ent, bool shootable)
+    {
+        if (!TryComp(ent.Owner, out FixturesComponent? fixtures) ||
+            _fixtures.GetFixtureOrNull(ent.Owner, ent.Comp.ShootableFixture, fixtures) is not { } fixture)
+        {
+            return;
+        }
+
+        var layer = shootable ? (int) CollisionGroup.BulletImpassable : 0;
+        if (fixture.CollisionLayer != layer)
+            _physics.SetCollisionLayer(ent.Owner, ent.Comp.ShootableFixture, fixture, layer, fixtures);
+    }
+
     private void StartDisc(Entity<YautjaSmartDiscComponent> ent, EntityUid? user)
     {
         if (TryGetRogueTarget(ent, out var rogueTarget))
@@ -384,6 +446,10 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         ent.Comp.Hits = 0;
         ent.Comp.ActiveUntil = _timing.CurTime + ent.Comp.ActiveTime;
         ent.Comp.IdleSince = _timing.CurTime;
+        ent.Comp.DamageTaken = 0;
+        ent.Comp.RolledProjectiles.Clear();
+        ent.Comp.MissedProjectiles.Clear();
+        SetShootable(ent, true);
         ent.Comp.NextRetarget = _timing.CurTime;
         ent.Comp.NextHit = _timing.CurTime;
         ent.Comp.CurrentTarget = null;
@@ -424,6 +490,10 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         ent.Comp.NextHit = TimeSpan.Zero;
         ent.Comp.ActiveUntil = TimeSpan.Zero;
         ent.Comp.IdleSince = TimeSpan.Zero;
+        ent.Comp.DamageTaken = 0;
+        ent.Comp.RolledProjectiles.Clear();
+        ent.Comp.MissedProjectiles.Clear();
+        SetShootable(ent, false);
 
         if (TryComp(ent.Owner, out ThrownItemComponent? thrown))
             _thrown.StopThrow(ent.Owner, thrown);
@@ -943,6 +1013,10 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         ent.Comp.Hits = 0;
         ent.Comp.ActiveUntil = _timing.CurTime + ent.Comp.ActiveTime;
         ent.Comp.IdleSince = _timing.CurTime;
+        ent.Comp.DamageTaken = 0;
+        ent.Comp.RolledProjectiles.Clear();
+        ent.Comp.MissedProjectiles.Clear();
+        SetShootable(ent, true);
         ent.Comp.NextRetarget = _timing.CurTime;
         ent.Comp.NextHit = _timing.CurTime;
         ent.Comp.CurrentTarget = target;

@@ -1556,10 +1556,27 @@ public sealed partial class YautjaSmartDiscComponent : Component
     public TimeSpan IdleTimeout = TimeSpan.FromSeconds(8);
 
     [DataField]
+    public float Health = 60f;
+
+    // separate fixture so only the active disc stops bullets, the one lying on the floor doesn't
+    [DataField]
+    public string ShootableFixture = "shootable";
+
+    [DataField]
     public SoundSpecifier HitSound = new SoundPathSpecifier("/Audio/Weapons/star_hit.ogg");
 
     [ViewVariables(VVAccess.ReadWrite)]
+    public float DamageTaken;
+
+    [ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan IdleSince;
+
+    // bullets that already rolled their pass-through chance, so a bullet rolls once and not every physics step
+    [ViewVariables]
+    public HashSet<EntityUid> RolledProjectiles = new();
+
+    [ViewVariables]
+    public HashSet<EntityUid> MissedProjectiles = new();
 
     [ViewVariables(VVAccess.ReadWrite)]
     public bool Active;

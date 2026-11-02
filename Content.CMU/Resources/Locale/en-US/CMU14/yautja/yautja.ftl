@@ -277,6 +277,7 @@ cmu-yautja-disc-no-target = The smart disc finds no prey nearby.
 cmu-yautja-disc-owner-denied = The smart disc is keyed to another hunter.
 cmu-yautja-disc-stolen-activated = The stolen smart disc rejects your touch and turns on you!
 cmu-yautja-disc-stolen-active = The active smart disc snaps away from your hand.
+cmu-yautja-disc-shot-down = {CAPITALIZE(THE($disc))} stops whirring and spins out onto the floor.
 cmu-yautja-caster-mode-set = Plasma caster mode set to {$mode}.
 cmu-yautja-caster-examine-mode = Current plasma caster mode: {$mode}. Power cost: {$power}.
 cmu-yautja-caster-mode-stun = stun bolts
