@@ -1,0 +1,64 @@
+name: CI Queue Bouncer
+
+# CMU14: per-PR supersession for the ci.yml fleet gate. the gate itself must never
+# cancel-in-progress (it would kill innocent holders mid-run), so a new push's stale
+# runs die here instead: every queued or running ci.yml run of this PR on an older
+# SHA is cancelled within seconds of the push, freeing its queue slot and the fleet.
+# pull_request_target on purpose: fork PR tokens are read-only, and this script comes
+# from the base branch, never from the PR.
+
+on:
+  pull_request_target:
+    types: [synchronize]
+
+permissions:
+  actions: write
+
+concurrency:
+  group: ci-bouncer-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  supersede:
+    name: Cancel superseded CI runs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const pr = context.payload.pull_request.number;
+            const sha = context.payload.pull_request.head.sha;
+            const headRef = context.payload.pull_request.head.ref;
+            const headRepo = context.payload.pull_request.head.repo.full_name;
+            let cancelled = 0;
+            for (const status of ['queued', 'in_progress']) {
+              const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+                ...context.repo,
+                workflow_id: 'ci.yml',
+                event: 'pull_request',
+                status,
+                per_page: 100,
+              });
+              for (const run of runs) {
+                if (run.head_sha === sha)
+                  continue;
+                // pull_requests is empty on fork PR runs, so match the head ref and
+                // repository, then pin the exact PR: the same branch can be open
+                // against two bases at once
+                if (run.head_branch !== headRef || run.head_repository?.full_name !== headRepo)
+                  continue;
+                const pulls = await github.request('GET /repos/{owner}/{repo}/commits/{ref}/pulls', {
+                  ...context.repo,
+                  ref: run.head_sha,
+                });
+                if (!pulls.data.some(p => p.number === pr))
+                  continue;
+                await github.rest.actions.cancelWorkflowRun({
+                  ...context.repo,
+                  run_id: run.id,
+                });
+                cancelled++;
+              }
+            }
+            core.info(`cancelled ${cancelled} superseded CI run(s) for PR #${pr}`);
