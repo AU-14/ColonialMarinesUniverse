@@ -847,10 +847,6 @@
       - id: AU14ArmorSmartGunDesertCombatHarnessUPP
       - id: RuMCUPPPouchDrum
       - id: RMCScabbardMacheteSGFilled
-    - name: au14-vendor-section-headgear
-      choices: { CMHelmet: 1 }
-      entries:
-      - id: RuMCUPPNavalInfantryHeavyHelmet2
     - name: Firearm System
       choices: { CMUPlatoonMG: 1 }
       entries:
