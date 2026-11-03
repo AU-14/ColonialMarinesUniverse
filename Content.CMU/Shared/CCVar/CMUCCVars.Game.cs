@@ -13,6 +13,13 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.fof.unidentified_marker_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
+    /// Server-wide switch for FoF identification markers above heads. Replicated so admins can
+    /// disable the whole system mid-round; the per-client preference still applies on top.
+    /// </summary>
+    public static readonly CVarDef<bool> ForceOnForceIdentificationMarkersEnabled =
+        CVarDef.Create("cmu.fof.identification_markers_enabled", true, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
     /// Whether each round start rewrites the server name to "name | gamemode day Playtest". Off leaves game.hostname as set.
     /// </summary>
     public static readonly CVarDef<bool> CMUHostnameRoundSuffix =

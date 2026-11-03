@@ -294,6 +294,50 @@ public sealed class ForceOnForceGameplayTest : GameTest
         });
     }
 
+    [Test]
+    public async Task IdentificationSplitsOppositionAlliesAndNeutrals()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var recognition = Server.System<ForceOnForceUniformSystem>();
+            var viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(viewer).Faction = "govfor";
+            var policy = SEntMan.EnsureComponent<ForceOnForceUniformComponent>(viewer);
+            policy.Uniforms.UnionWith(SProtoMan.Index<ForceOnForceUniformPrototype>("USCM").Uniforms);
+
+            var enemy = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(enemy).Faction = "opfor";
+            Assert.That(recognition.Classify(enemy, viewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "the opposing side is the direct competition");
+
+            var ally = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(ally).Faction = "marine";
+            SEntMan.EnsureComponent<ForceOnForceSideComponent>(ally).Side = "opfor";
+            Assert.That(recognition.Classify(ally, viewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "a third party aligned with the opposing side is still the competition");
+
+            var opforViewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(opforViewer).Faction = "opfor";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(opforViewer);
+            Assert.That(recognition.Classify(ally, opforViewer), Is.EqualTo(ForceOnForceIdentification.None),
+                "aligned third parties count as teammates of their side, whatever they wear");
+
+            var colonist = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(colonist).Faction = "marine";
+            Assert.That(recognition.Classify(colonist, viewer), Is.EqualTo(ForceOnForceIdentification.Unknown),
+                "unaffiliated parties stay unknown to a war side");
+
+            var neutralViewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(neutralViewer).Faction = "marine";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(neutralViewer);
+            Assert.That(recognition.Classify(viewer, neutralViewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "neutrals see both war sides as the direct competition");
+            Assert.That(recognition.Classify(colonist, neutralViewer), Is.EqualTo(ForceOnForceIdentification.Unknown),
+                "neutrals cannot tell other unaffiliated parties apart");
+        });
+    }
+
     [TestCase("govfor", "opfor", "USCM", "UPP", "CMJumpsuitXOFormal", "AU14FatiguesUPP")]
     [TestCase("opfor", "govfor", "UPP", "USCM", "AU14ServiceFatiguesUPP", "AU14CamoUSCMFatigues")]
     public async Task UniformMarkerRecognizesVendorStockOnTheClient(
