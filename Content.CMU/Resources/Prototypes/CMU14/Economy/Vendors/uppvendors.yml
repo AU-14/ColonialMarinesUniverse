@@ -1592,7 +1592,7 @@
       - id: RuMCUPPNavalInfantryHeavyHelmet
         amount: 2
       - id: RuMCUPPNavalInfantryHeavyHelmet2
-        amount: 4
+        amount: 2
     - name: Devices
       entries:
       - id: AU14PowerCellSmartgunUPP
