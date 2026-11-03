@@ -16,12 +16,13 @@ public abstract class SharedPortableStructureSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<PortableStructureComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<PortableStructureComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<PortableStructureComponent, ThrowItemAttemptEvent>(OnThrowAttempt);
     }
 
-    private void OnStartup(Entity<PortableStructureComponent> ent, ref ComponentStartup args)
+    private void OnMapInit(Entity<PortableStructureComponent> ent, ref MapInitEvent args)
     {
+        // Runtime weight must not become a component override when saving an uninitialized editor map.
         // The existing held-speed system also handles pulling and prediction after the machine is dropped.
         _heldSpeed.CMUSetPortableSpeed(ent, ent.Comp.SpeedModifier);
     }
