@@ -398,7 +398,7 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
 
         // Re-check the same preconditions a vote needs to start. An overmind crowned
         // while the vote ran makes it moot; crowning again would make a second overmind.
-        if (core.Comp.CurrentOvermind is { } current &&
+        if (core.CurrentOvermind is { } current &&
             !TerminatingOrDeleted(GetEntity(current)))
             return;
 
