@@ -208,8 +208,11 @@ public sealed class ForceOnForceGameplayTest : GameTest
             var popup = typeof(SharedDropshipSystem)
                 .GetMethod("TryDropshipHijackPopup", BindingFlags.Instance | BindingFlags.NonPublic)!;
             var ticker = Server.System<GameTicker>();
-            void SetPreset(Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> id) => typeof(GameTicker)
-                .GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker, SProtoMan.Index<GamePresetPrototype>(id));
+            var currentPreset = typeof(GameTicker)
+                .GetProperty(nameof(GameTicker.CurrentPreset))!;
+            var originalPreset = (GamePresetPrototype?) currentPreset.GetValue(ticker);
+            void SetPreset(Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> id) => currentPreset
+                .SetValue(ticker, SProtoMan.Index<GamePresetPrototype>(id));
             bool Accepted() => (bool) popup.Invoke(dropships,
             [
                 computer,
@@ -222,6 +225,9 @@ public sealed class ForceOnForceGameplayTest : GameTest
 
             SetPreset(ForceOnForcePrototype);
             Assert.That(Accepted(), Is.False, "Force on Force accepts no hijack initiation, whatever the hijacker type");
+
+            // Leave the pooled ticker as found: CurrentPreset drives other systems' behavior.
+            currentPreset.SetValue(ticker, originalPreset);
         });
     }
 

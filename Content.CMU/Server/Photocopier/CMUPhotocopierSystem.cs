@@ -72,6 +72,11 @@ public sealed class CMUPhotocopierSystem : EntitySystem
         if (!TryGetPaper(ent, out _))
             return;
 
+        // One copy at a time: the do-after duplicate guard is per-user, so a second
+        // user could otherwise run a parallel copy and spend toner twice.
+        if (_appearance.TryGetData(ent.Owner, CMUPhotocopierVisuals.Copying, out bool copying) && copying)
+            return;
+
         if (ent.Comp.Toner <= 0)
         {
             _popup.PopupEntity(Loc.GetString("cmu-photocopier-no-toner"), ent, user, PopupType.MediumCaution);

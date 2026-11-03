@@ -118,11 +118,45 @@ public sealed partial class ObjHotspotSystem : ObjectiveSystem
 
     private void DrawZoneRectangle(EntityUid uid, HotspotObjectiveComponent comp, TransformComponent xform, string? controller = null)
     {
-        if (xform.GridUid is not { } grid || !_tacMap.TryGetTrackingMap(grid, out var map))
+        // A relocation can cross z-level grids: clear the rectangle from the old tracking map
+        // first, or the redraw below would strand it there.
+        RemoveZoneRectangle(uid, comp, xform);
+
+        if (!TryGetZoneCanvas(uid, comp, xform, out var map, out var canvas, out var depth, out var halfWidthPx, out var halfHeightPx))
             return;
 
-        if (!TryComp<AreaGridComponent>(map.Owner, out var areas) || areas.Colors.Count == 0)
+        var hex = ZoneColorFor(comp, controller);
+        comp.CurrentMapColorHex = hex;
+        _tacMap.DrawTacticalMapRectangle(map, Color.FromHex(hex), canvas, halfWidthPx, halfHeightPx, depth: depth);
+    }
+
+    /// <summary>
+    /// Clears the zone's drawn rectangle from its tracking map, keyed by the currently drawn
+    /// color and geometry, so a recolor or cross-level move cannot orphan the old strokes.
+    /// </summary>
+    private void RemoveZoneRectangle(EntityUid uid, HotspotObjectiveComponent comp, TransformComponent xform)
+    {
+        if (!TryGetZoneCanvas(uid, comp, xform, out var map, out var canvas, out var depth, out var halfWidthPx, out var halfHeightPx))
             return;
+
+        var hex = comp.CurrentMapColorHex == string.Empty ? comp.ZoneColorHex : comp.CurrentMapColorHex;
+        _tacMap.RemoveTacticalMapRectangle(map, Color.FromHex(hex), canvas, halfWidthPx, halfHeightPx, depth: depth);
+    }
+
+    private bool TryGetZoneCanvas(EntityUid uid, HotspotObjectiveComponent comp, TransformComponent xform,
+        out Entity<TacticalMapComponent> map, out Vector2 canvas, out int depth, out float halfWidthPx, out float halfHeightPx)
+    {
+        map = default;
+        canvas = default;
+        depth = 0;
+        halfWidthPx = 0;
+        halfHeightPx = 0;
+
+        if (xform.GridUid is not { } grid || !_tacMap.TryGetTrackingMap(grid, out map))
+            return false;
+
+        if (!TryComp<AreaGridComponent>(map.Owner, out var areas) || areas.Colors.Count == 0)
+            return false;
 
         var min = Vector2i.Zero;
         var max = Vector2i.Zero;
@@ -132,25 +166,23 @@ public sealed partial class ObjHotspotSystem : ObjectiveSystem
             max = Vector2i.ComponentMax(max, tile);
         }
 
-        var halfHeight = EffectiveHalfHeight(comp);
         var center = _transform.GetGridOrMapTilePosition(uid, xform);
         // Anchor at the tile center and pad by half a tile so the edges land on the zone's tile boundaries.
-        var canvas = CMUReconDrawingCoordinates.ToCanvas(center + new Vector2(0.5f, 0.5f), min, max);
-        var depth = 0;
+        canvas = CMUReconDrawingCoordinates.ToCanvas(center + new Vector2(0.5f, 0.5f), min, max);
         if (TryComp<CMUZLevelMapComponent>(grid, out var zLevel))
             depth = zLevel.Depth;
 
-        var hex = ZoneColorFor(comp, controller);
-        var previous = comp.CurrentMapColorHex == string.Empty ? comp.ZoneColorHex : comp.CurrentMapColorHex;
-        comp.CurrentMapColorHex = hex;
-        _tacMap.DrawTacticalMapRectangle(map, Color.FromHex(hex), canvas, comp.HalfWidth * 3 + 1.5f, halfHeight * 3 + 1.5f, depth: depth, removeColor: Color.FromHex(previous));
+        var halfHeight = EffectiveHalfHeight(comp);
+        halfWidthPx = comp.HalfWidth * 3 + 1.5f;
+        halfHeightPx = halfHeight * 3 + 1.5f;
+        return true;
     }
 
     private void OnReset(EntityUid uid, HotspotObjectiveComponent comp, ref ObjectiveResetEvent args)
     {
         comp.CurrentController = string.Empty;
         comp.ElapsedTicks = 0;
-        _appearance.SetData(uid, HotspotVisuals.Controller, string.Empty);
+        _appearance.SetData(uid, HotspotVisuals.ZoneColor, comp.ZoneColorHex);
         RepaintZoneTiles(uid, comp, null);
         DrawZoneRectangle(uid, comp, Transform(uid));
     }
@@ -250,7 +282,7 @@ public sealed partial class ObjHotspotSystem : ObjectiveSystem
             if (comp.CurrentController != string.Empty)
             {
                 comp.CurrentController = string.Empty;
-                _appearance.SetData(uid, HotspotVisuals.Controller, string.Empty);
+                _appearance.SetData(uid, HotspotVisuals.ZoneColor, comp.ZoneColorHex);
                 RepaintZoneTiles(uid, comp, null);
                 DrawZoneRectangle(uid, comp, Transform(uid));
             }
@@ -261,7 +293,7 @@ public sealed partial class ObjHotspotSystem : ObjectiveSystem
             {
                 comp.CurrentController = controller;
                 comp.ControllerStreak = 1;
-                _appearance.SetData(uid, HotspotVisuals.Controller, controller);
+                _appearance.SetData(uid, HotspotVisuals.ZoneColor, ZoneColorFor(comp, controller));
             }
             else if (++comp.ControllerStreak == 2)
             {
@@ -454,10 +486,12 @@ public sealed partial class ObjHotspotSystem : ObjectiveSystem
         }
 
         var target = _random.Pick(candidates);
+        // Clear the old rectangle before the move: relocation can cross z-level grids.
+        RemoveZoneRectangle(uid, comp, xform);
         _transform.SetCoordinates(uid, Transform(target).Coordinates);
         comp.CurrentController = string.Empty;
         comp.ElapsedTicks = 0;
-        _appearance.SetData(uid, HotspotVisuals.Controller, string.Empty);
+        _appearance.SetData(uid, HotspotVisuals.ZoneColor, comp.ZoneColorHex);
         DrawZoneRectangle(uid, comp, Transform(uid));
         RestoreZoneTiles(uid);
         PaintZoneTiles(uid, comp, Transform(uid));
