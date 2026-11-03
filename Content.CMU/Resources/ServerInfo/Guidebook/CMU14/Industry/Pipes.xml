@@ -19,6 +19,8 @@
   [bold]INPUT = into this machine. OUTPUT = out of this machine.[/bold] A pipe may sit on the machine's tile or touch its footprint. A pipe cannot jump a gap, connect diagonally or reach across the room.
 
   ## See what is connected
+  [bold]Blue arrows = INTO the machine. Amber arrows = OUT.[/bold] These markers sit on connected pipe ends and remain visible while idle, so you can check the route before starting production.
+
   Right-click any machine → [bold]Pipe connections[/bold]. Each port lists its pipes and their tile offsets: +X east, +Y north. Hold a screwdriver and press [bold]Disconnect[/bold] beside the link you want to remove. Reconnect that pipe to the correct port.
 
   [bold]Tanks beside tanks do NOT connect.[/bold] Connect one tank's OUTPUT to the other tank's INPUT through pipes. Keep different liquids on separate pipe runs; one pipe carries one liquid at a time.

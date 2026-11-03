@@ -56,6 +56,8 @@ public sealed partial class FluidSystem : EntitySystem
         SubscribeLocalEvent<FluidPipeComponent, ExaminedEvent>(OnPipeExamined);
         SubscribeLocalEvent<FluidTankComponent, ExaminedEvent>(OnTankExamined);
         SubscribeLocalEvent<FluidPortsComponent, ExaminedEvent>(OnPortsExamined);
+        SubscribeLocalEvent<FluidPortsComponent, MoveEvent>(OnPortsMoved);
+        SubscribeLocalEvent<FluidPortsComponent, ComponentShutdown>(OnPortsShutdown);
     }
 
     private void OnPipeStartup(Entity<FluidPipeComponent> pipe, ref ComponentStartup args)
@@ -205,15 +207,30 @@ public sealed partial class FluidSystem : EntitySystem
         if (!TryComp<FluidPortsComponent>(other, out var ports))
             return false;
 
+        return TryGetMachineContact(pipeUid, pipe, b, ports, start, end, out _);
+    }
+
+    private bool TryGetMachineContact(EntityUid pipeUid, FluidPipeComponent pipe, TransformComponent machine,
+        FluidPortsComponent ports, Vector2i start, Vector2i end, out Vector2i contact)
+    {
+        contact = default;
+        var found = false;
         foreach (var offset in ports.ConnectionTiles)
         {
-            var rotated = b.LocalRotation.RotateVec(offset);
+            var rotated = machine.LocalRotation.RotateVec(offset);
             var tile = end + new Vector2i((int) Math.Round(rotated.X), (int) Math.Round(rotated.Y));
-            if (HasOpening(pipeUid, pipe, tile - start))
+            if (tile == start)
+            {
+                contact = Vector2i.Zero;
                 return true;
+            }
+            if (!found && HasOpening(pipeUid, pipe, tile - start))
+            {
+                contact = tile - start;
+                found = true;
+            }
         }
-
-        return false;
+        return found;
     }
 
     private bool HasOpening(EntityUid uid, FluidPipeComponent pipe, Vector2i offset)
@@ -292,6 +309,7 @@ public sealed partial class FluidSystem : EntitySystem
 
     public void ConnectionsChanged(EntityUid machine)
     {
+        _flowArrowsChanged = true;
         var ev = new CMUFluidConnectionsChangedEvent();
         RaiseLocalEvent(machine, ref ev);
     }
@@ -307,6 +325,8 @@ public sealed partial class FluidSystem : EntitySystem
 
         StepPipes(step);
         StepPorts(step);
+        if (_flowArrowsChanged)
+            RefreshFlowArrows();
 
         _dirtyTimer += frameTime;
         if (_dirtyTimer < DirtyInterval)
@@ -326,6 +346,7 @@ public sealed partial class FluidSystem : EntitySystem
     private void RebuildNeighbours()
     {
         _pipesChanged = false;
+        _flowArrowsChanged = true;
         var query = EntityQueryEnumerator<FluidPipeComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var pipe, out var xform))
         {
@@ -547,6 +568,7 @@ public sealed partial class FluidSystem : EntitySystem
         }
         args.PushMarkup(Loc.GetString("cmu-fluid-pipe-routing",
             ("shape", Loc.GetString($"cmu-fluid-shape-{pipe.Comp.Shape.ToString().ToLowerInvariant()}"))));
+        args.PushMarkup(Loc.GetString("cmu-fluid-flow-legend"));
         if (pipe.Comp.Isolated)
             args.PushMarkup(Loc.GetString("cmu-fluid-pipe-isolated"));
         var machines = EntityQueryEnumerator<FluidPortsComponent>();

@@ -2,12 +2,14 @@
 // Copyright (c) 2026 wray-git
 using Content.Shared.CMU14.Fluids;
 using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
 
 namespace Content.Client.CMU14.Fluids;
 
 // Show every open end. Vertical fittings overlay the shape so their horizontal branches remain visible.
-public sealed class FluidPipeVisualizerSystem : EntitySystem
+public sealed partial class FluidPipeVisualizerSystem : EntitySystem
 {
+    [Dependency] private readonly IOverlayManager _overlays = default!;
     [Dependency] private readonly SpriteSystem _sprite = default!;
 
     public override void Initialize()
@@ -15,12 +17,25 @@ public sealed class FluidPipeVisualizerSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<FluidPipeComponent, AppearanceChangeEvent>(OnAppearanceChange);
+        _overlays.AddOverlay(new CMUFluidPipeFlowOverlay(EntityManager));
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _overlays.RemoveOverlay<CMUFluidPipeFlowOverlay>();
     }
 
     private void OnAppearanceChange(Entity<FluidPipeComponent> pipe, ref AppearanceChangeEvent args)
     {
         if (args.Sprite == null)
             return;
+
+        if (args.AppearanceData.TryGetValue(FluidPipeVisuals.CMUFlowArrows, out var value)
+            && value is CMUFluidPipeArrowState { Arrows: { Count: > 0 } } state)
+            EnsureComp<CMUFluidPipeFlowComponent>(pipe).Arrows = state.Arrows;
+        else
+            RemComp<CMUFluidPipeFlowComponent>(pipe);
 
         if (!args.AppearanceData.TryGetValue(FluidPipeVisuals.Connections, out var raw) || raw is not int mask)
             mask = 0;

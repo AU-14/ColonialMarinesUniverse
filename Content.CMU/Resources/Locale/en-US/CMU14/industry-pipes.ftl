@@ -6,6 +6,7 @@ cmu-fluid-shape-tee = T-junction
 cmu-fluid-shape-cross = Cross
 cmu-fluid-drain-pipe = Drain pipe (discard contents)
 cmu-fluid-pipe-routing = Shape: { $shape }. Right-click to change shape or rotate. Touching open ends connect automatically.
+cmu-fluid-flow-legend = Blue arrows point INTO a machine; amber arrows point OUT. They mark connected ports, including while idle.
 cmu-fluid-pipe-isolated = Isolated: no liquid can flow. Right-click and reconnect to enable this pipe.
 cmu-fluid-connections-verb = Pipe connections
 cmu-fluid-any-liquid = any liquid

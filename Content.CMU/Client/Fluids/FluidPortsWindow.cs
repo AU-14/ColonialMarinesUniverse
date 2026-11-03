@@ -28,7 +28,7 @@ public sealed class FluidPortsWindow : DefaultWindow
     {
         _list.RemoveAllChildren();
         var hint = new RichTextLabel();
-        hint.SetMessage(Loc.GetString("au14-fluid-ports-hint"));
+        hint.SetMessage(Loc.GetString("au14-fluid-ports-hint") + "\n" + Loc.GetString("cmu-fluid-flow-legend"));
         _list.AddChild(hint);
 
         foreach (var entry in state.Ports)
@@ -38,7 +38,7 @@ public sealed class FluidPortsWindow : DefaultWindow
             _list.AddChild(new Label
             {
                 Text = Loc.GetString("cmu-fluid-port-heading", ("port", name), ("direction", way), ("fluid", entry.Kind)),
-                FontColorOverride = entry.Output ? MachineWindowKit.OutputBorder : MachineWindowKit.InputBorder,
+                FontColorOverride = entry.Output ? CMUFluidPipeFlowOverlay.OutputColor : CMUFluidPipeFlowOverlay.InputColor,
             });
             var id = entry.Id;
             foreach (var link in entry.Links)
