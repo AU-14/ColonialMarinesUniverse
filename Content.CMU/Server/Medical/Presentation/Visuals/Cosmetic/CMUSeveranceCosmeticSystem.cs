@@ -42,6 +42,10 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     // until the server ground out. once a second is fast enough to look instant.
     private static readonly TimeSpan StandRetryDelay = TimeSpan.FromSeconds(1);
 
+    // leg restores waiting out their StandRetryDelay; woken into the drain on a later tick.
+    // re-enqueuing into the queue the drain is iterating spins Update forever and freezes the tick.
+    private readonly List<(EntityUid Uid, TimeSpan Due)> _standRetryWait = new();
+
     /// <summary>
     ///     Bodies queued for next-tick glove-drop / shoe-drop / force-down.
     ///     HandOrganSystem owns hand registration; delaying the clothing check
@@ -93,6 +97,14 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             _standing.Down(d.Body);
         }
 
+        for (var i = _standRetryWait.Count - 1; i >= 0; i--)
+        {
+            if (_timing.CurTime < _standRetryWait[i].Due)
+                continue;
+            _deferredLegRestore.Enqueue(_standRetryWait[i].Uid);
+            _standRetryWait.RemoveAt(i);
+        }
+
         while (_deferredLegRestore.TryDequeue(out var restored))
         {
             // nothing else stands up a mob that was only down for missing legs, and RMC blocks item use
@@ -109,7 +121,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
 
             if (_timing.CurTime < marker.NextStandRetry)
             {
-                _deferredLegRestore.Enqueue(restored);
+                _standRetryWait.Add((restored, marker.NextStandRetry));
                 continue;
             }
 
@@ -120,7 +132,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             else
             {
                 marker.NextStandRetry = _timing.CurTime + StandRetryDelay;
-                _deferredLegRestore.Enqueue(restored);
+                _standRetryWait.Add((restored, marker.NextStandRetry));
             }
         }
 
