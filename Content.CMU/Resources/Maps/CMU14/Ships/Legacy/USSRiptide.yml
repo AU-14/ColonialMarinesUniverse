@@ -52264,4 +52264,34 @@ entities:
       parent: 1
     - type: WarpPoint
       location: USS Riptide Briefing
+
+- proto: CMDropshipHijackDestination
+  entities:
+  - uid: 6419
+    components:
+    - type: MetaData
+      name: Random
+    - type: Transform
+      pos: -32.5,-7.5
+      parent: 1
+    - type: DropshipHijackDestination
+      defenseZone: CIC
+  - uid: 6420
+    components:
+    - type: MetaData
+      name: Random
+    - type: Transform
+      pos: 60.5,-33.5
+      parent: 1
+    - type: DropshipHijackDestination
+      defenseZone: Cryosleep
+  - uid: 6421
+    components:
+    - type: MetaData
+      name: Random
+    - type: Transform
+      pos: 89.5,6.5
+      parent: 1
+    - type: DropshipHijackDestination
+      defenseZone: Engineering
 ...

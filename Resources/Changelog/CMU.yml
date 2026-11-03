@@ -16551,5 +16551,132 @@
   id: 960
   time: '2026-11-02T22:17:14.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2436
+- author: TheHellFireo
+  changes:
+  - message: Liquid pipes now have rotatable straight, elbow, T-junction and cross
+      shapes.
+    type: Add
+  - message: Blue arrows on connected pipes point into machines; amber arrows point
+      out.
+    type: Add
+  - message: Machinery needs touching pipes; inspect INPUT/OUTPUT connections and
+      disconnect individual links.
+    type: Fix
+  - message: Dropped machinery stays heavy when dragged and can no longer be thrown.
+    type: Fix
+  - message: Fuel and industry trade goods now pay into the colony budget when sold
+      through ASRS, loose or in requisitions crates.
+    type: Fix
+  - message: Click Guidebook ingredients and equipment to find gathering sources,
+      drops or the machines and recipes that produce them.
+    type: Add
+  - message: The electrical guide now shows the electrical panel used to supply industry
+      machines.
+    type: Fix
+  - message: Clearer fluid quantities and a short illustrated Pipes guide explain
+      connections, diesel production and selling.
+    type: Tweak
+  id: 961
+  time: '2026-11-03T16:54:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2450
+- author: maertayn
+  changes:
+  - message: 'Photocopiers actually work now: they copy paper, they copy photographs,
+      and the scanning arm animates while they do it (BUG-1186)'
+    type: Add
+  - message: 'Force-on-force identification: hostile and unknown IFF markers so a
+      contact''s allegiance reads at a glance, hotspot cvars and zone tile painting
+      behind the scenes, and the colonist roster now comes from one source shared
+      by the prefs tab and the round rule (this work reverts client-side caching by
+      a later PR, needs fix)'
+    type: Add
+  - message: 'Xeno hive leadership: the overmind is trackable and gets a manage hive
+      actions panel; hive build limits count per hive instead of globally, ascension
+      is one vote per hive with a re-check at resolve, and admins can assign a hive
+      without holding a xeno first e.g. cultists/humans can get HiveMember too (BUG-1195,
+      BUG-1196, BUG-1202, BUG-997)'
+    type: Add
+  - message: Prodigy allegiance joined the roster instead of Neutrality, with platoon
+      allegiances for WEYU and ProdigySF
+    type: Add
+  - message: USS Riptide gained hijack destinations (BUG-1198)
+    type: Add
+  - message: Hazops shotgunners carry shock and flame shells in the case and have
+      broader special ammunition choices (BUG-1189, BUG-1190)
+    type: Add
+  - message: Hellhounds can arm-grab xenomorphs now (BUG-1209)
+    type: Add
+  - message: CLF specialist kits grant their weapon whitelists when requisition vends
+      them (BUG-R2851-01)
+    type: Add
+  - message: A before-you-send intro on the mentor help window, so tickets arrive
+      with context
+    type: Add
+  - message: New characters default to rifleman and survivor roles, and passenger
+      stays joinable as a fallback so rounds stop opening undermanned (BUG-1240)
+    type: Tweak
+  - message: Warship alert beacons are capped and alert light waves flattened, so
+      a full alert stops strobing the entire deck
+    type: Tweak
+  - message: Dropship tactical landing is blocked in level 4 areas
+    type: Tweak
+  - message: Zippos burn fuel at a lighter's pace instead of drinking it (BUG-1210)
+    type: Tweak
+  - message: The freelancer cuirass no longer demands UPP fatigues underneath
+    type: Tweak
+  - message: 'Kit compatibility batch: Kramer enforcers have a sling point (BUG-1211),
+      the SU-6 fits the combat sidearm rig (BUG-1232), UPP APCs take generic APC support
+      modules (BUG-1197), and paramedics can use the civilian medical vendor (BUG-1219)'
+    type: Tweak
+  - message: 'Medical: IV transfusions stop at blood equilibrium instead of overfilling
+      you (BUG-1248), defib pushes through damaged prosthetic limbs (BUG-1201), the
+      leg restore stand retries once per second until it actually works and the leg
+      loss marker pauses correctly (BUG-1217), and cryo removes you from the squad
+      info manifest (BUG-1235)'
+    type: Fix
+  - message: 'Requisition and gear: loadout items reach you even when your slot is
+      taken (BUG-1233), disposable launchers vend loaded (BUG-1224), the L88 empty
+      magazine box whitelist is fixed (BUG-1222), the opfor supply drop console points
+      at the echo pad (BUG-1171), and the army commander ERT carries the mateba belt
+      (BUG-1254)'
+    type: Fix
+  - message: 'Vehicles: no more self-repair while riding (BUG-1200), neomorph mycelium
+      stops fouling running gear (BUG-1242), and wheelchair pilots keep hand use while
+      buckled (BUG-1227)'
+    type: Fix
+  - message: 'Xenos and parasites: bloody bloodburster sprites align (BUG-1194), parasite
+      claim prompts survive ghosts hiding in walls (BUG-1234), hive member assignment
+      gaps are closed, and blight core behaves'
+    type: Fix
+  - message: 'Comms and identification: yautja arrivals stop announcing to marines
+      (BUG-1253), the IFF fire block spares downed friendlies (BUG-1187), the dropship
+      radio set covers the Mohawk cockpits (BUG-1218), Language Impairment blocks
+      learning from radio speech (BUG-1185), and platoon languages land when the round
+      profile does (BUG-935)'
+    type: Fix
+  - message: 'The rest of the hunt: mopping consumes mop solution (BUG-1180), authorized
+      evacuations fuel and unlock doors before the crash (BUG-1230), the landing warning
+      border covers the real hull tiles (BUG-1204), the character primer opens once
+      per round (BUG-1179), third party fallback deploy needs interest first (BUG-1205),
+      damage-yourself allows full-auto self shots (BUG-1028), marine RPG glasses correct
+      nearsightedness (BUG-1244), aux support synths get ATGM training (BUG-1070),
+      and a missed 3D first-person click falls through to the 2D pick instead of dying
+      (BUG-994)'
+    type: Fix
+  - message: Fort McNeil got its long overdue power cables
+    type: Map
+  - message: Soft max players adjustable mid-round via changecvar, ahelp admins get
+      the live stripped player list on perms changes, and the player list rebuild
+      no longer aborts on a disconnected player
+    type: Admin
+  - message: CI logs shard with full capture and a failure digest script, the cmu
+      shard split keeps FOB map loads and limb soak apart, the evac self-destruct
+      sits behind enable_evac_sfx, the experimental sensor tower stays gated off in
+      ForceOnForce and Insurgency, gamemode blacklisting consolidated into DestroyOnPreset
+      with an inverted whitelist mode, and FoF playtime privacy landed
+    type: Code
+  id: 962
+  time: '2026-11-03T18:03:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2399
 Name: CMU
 Order: -1

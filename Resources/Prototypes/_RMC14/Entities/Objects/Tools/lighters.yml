@@ -12,6 +12,10 @@
     - suitstorage
   - type: RMCLighter
   - type: ItemTogglePointLight
+  # CMU14: tool rate fuel would burn the flame out in 15s, lighter rate matches the cheap lighter
+  - type: Welder
+    fuelConsumption: 0.02
+    fuelLitCost: 0.2
 
 - type: entity
   abstract: true

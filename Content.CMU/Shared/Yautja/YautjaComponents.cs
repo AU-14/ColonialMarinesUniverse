@@ -2181,21 +2181,23 @@ public sealed partial class YautjaHuntConsoleComponent : Component
         return call;
     }
 
+    // cmss13 pred/mixed rolls CLF, PMCs, royal marines and freelancers. these are our own third party bodies
+    // (aliased in hunting_ground_roles.yml), so prey wear the kits players see when that party lands in a round
     private static List<YautjaHuntSpawnEntry> MixedPrey()
     {
         return new List<YautjaHuntSpawnEntry>
         {
-            RandomHumanoid("CMUYautjaHuntCLFSoldier", 2),
-            RandomHumanoid("CMUYautjaHuntCLFEngineer"),
-            RandomHumanoid("CMUYautjaHuntCLFMedic"),
-            RandomHumanoid("CMUYautjaHuntCLFCellLeader"),
-            RandomHumanoid("CMUYautjaHuntPMCStandardM63B2"),
-            RandomHumanoid("CMUYautjaHuntPMCStandardSSG45"),
-            RandomHumanoid("CMUYautjaHuntPMCStandardM54C2"),
-            RandomHumanoid("CMUYautjaHuntRoyalMarinesCommando"),
-            RandomHumanoid("CMUYautjaHuntRoyalMarinesMedic"),
-            RandomHumanoid("CMUYautjaHuntFreelancerStandard"),
-            RandomHumanoid("CMUYautjaHuntFreelancerLeader"),
+            Entity("CMUYautjaHuntCLFCommando", 2),
+            Entity("CMUYautjaHuntCLFEngineer"),
+            Entity("CMUYautjaHuntCLFCommandoMedic"),
+            Entity("CMUYautjaHuntCLFCommandoLeader"),
+            Entity("CMUYautjaHuntPMCContractorM42A"),
+            Entity("CMUYautjaHuntPMCContractorNSG23"),
+            Entity("CMUYautjaHuntPMCContractorM39B2"),
+            Entity("CMUYautjaHuntRoyalMarinesRifleman"),
+            Entity("CMUYautjaHuntRoyalMarinesCorpsman"),
+            Entity("CMUYautjaHuntFreelancerStandard"),
+            Entity("CMUYautjaHuntFreelancerLeader"),
         };
     }
 
@@ -2245,14 +2247,15 @@ public sealed partial class YautjaHuntConsoleComponent : Component
     {
         return new List<YautjaHuntSpawnEntry>
         {
-            RandomHumanoid("CMUYautjaHuntPMCLeader"),
-            RandomHumanoid("CMUYautjaHuntPMCSniper"),
-            RandomHumanoid("CMUYautjaHuntPMCEngineer"),
-            RandomHumanoid("CMUYautjaHuntPMCMedic"),
-            RandomHumanoid("CMUYautjaHuntRoyalMarinesTeamlead"),
-            RandomHumanoid("CMUYautjaHuntRoyalMarinesSGO"),
-            RandomHumanoid("CMUYautjaHuntRoyalMarinesBreacher"),
-            RandomHumanoid("CMUYautjaHuntRoyalMarinesMarksman"),
+            // the PMC party has no sniper, its smartgunner takes that slot
+            Entity("CMUYautjaHuntPMCLeader"),
+            Entity("CMUYautjaHuntPMCSmartgunner"),
+            Entity("CMUYautjaHuntPMCEngineer"),
+            Entity("CMUYautjaHuntPMCMedic"),
+            Entity("CMUYautjaHuntRoyalMarinesCommander"),
+            Entity("CMUYautjaHuntRoyalMarinesSmartgunner"),
+            Entity("CMUYautjaHuntRoyalMarinesBreacher"),
+            Entity("CMUYautjaHuntRoyalMarinesMarksman"),
         };
     }
 
@@ -2265,14 +2268,6 @@ public sealed partial class YautjaHuntConsoleComponent : Component
         };
     }
 
-    private static YautjaHuntSpawnEntry RandomHumanoid(ProtoId<RandomHumanoidSettingsPrototype> settings, int weight = 1)
-    {
-        return new YautjaHuntSpawnEntry
-        {
-            RandomHumanoidSettings = settings,
-            Weight = weight,
-        };
-    }
 }
 
 [DataDefinition]

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Construction;
+using Content.Shared.CCVar;
 using Content.Shared.CMU14.Government;
 using Content.Shared.Examine;
 using Content.Shared.Popups;
@@ -356,6 +357,9 @@ public sealed partial class ColonyGovernmentSystem
 
     private void OnSetEnforce(Entity<ColonyGovernmentConsoleComponent> console, ref SetEnforceMessage msg)
     {
+        if (!_config.GetCVar(CCVars.CMULandEnforcement))
+            return;
+
         EnsureGovernment().Comp.Enforce = msg.Enforce;
         Refresh();
     }
@@ -442,6 +446,9 @@ public sealed partial class ColonyGovernmentSystem
     // (and nowhere on the plot of another). It is asked only on the maps where a console of the administration is.
     private void OnConstructionAttempt(ref RMCConstructionAttemptEvent ev)
     {
+        if (!_config.GetCVar(CCVars.CMULandEnforcement))
+            return;
+
         if (ev.Cancelled || ev.User is not { } user || !TryGovernment(out var government))
             return;
 

@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Shared._RMC14.Marines.Skills;
-using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.CMU14.Administration;
 using Content.Shared.Eui;
@@ -30,8 +29,8 @@ public sealed partial class RMCAdminEui
 
         var members = new Dictionary<EntityUid, int>();
         var mobState = _entities.System<MobStateSystem>();
-        var memberQuery = _entities.EntityQueryEnumerator<XenoComponent, HiveMemberComponent>();
-        while (memberQuery.MoveNext(out var uid, out _, out var member))
+        var memberQuery = _entities.EntityQueryEnumerator<HiveMemberComponent>();
+        while (memberQuery.MoveNext(out var uid, out var member))
         {
             if (member.Hive is { } hive && !mobState.IsDead(uid))
                 members[hive] = members.GetValueOrDefault(hive) + 1;
@@ -56,7 +55,6 @@ public sealed partial class RMCAdminEui
 
         var currentHive = _hive.GetHive(target.Value);
         return new CMUAdminTargetDetails(_target, metadata.EntityName,
-            _entities.HasComponent<XenoComponent>(target),
             currentHive == null ? null : _entities.GetNetEntity(currentHive.Value.Owner),
             currentSquad, levels, hives.OrderBy(hive => hive.Name).ToList());
     }
@@ -93,9 +91,7 @@ public sealed partial class RMCAdminEui
                 _squad.RemoveSquad(target.Value, null);
                 break;
             case CMUAdminSetHiveMsg change:
-                if (!_entities.HasComponent<XenoComponent>(target))
-                    break;
-
+                // Hive membership is not xeno-only; humans can be hive members.
                 EntityUid? hive = null;
                 if (change.Hive is { } netHive &&
                     (!_entities.TryGetEntity(netHive, out hive) || !_entities.HasComponent<HiveComponent>(hive)))
@@ -110,7 +106,7 @@ public sealed partial class RMCAdminEui
 
                 var name = create.Name.Trim();
                 var created = _hive.CreateHive(string.IsNullOrWhiteSpace(name) ? proto.Name : name, create.Prototype);
-                if (create.AssignTarget && _entities.HasComponent<XenoComponent>(target))
+                if (create.AssignTarget)
                     _hive.SetHive(target.Value, created);
                 break;
         }
