@@ -33,7 +33,7 @@ public sealed class DestroyOnPresetSystem : EntitySystem
         if (preset == null)
             return;
 
-        var matches = preset == component.Preset;
+        var matches = preset == component.Preset || component.Presets.Contains(preset);
 
         // If inverted is true, delete when it does NOT match. Otherwise delete when it matches.
         if ((matches && !component.Inverted) || (!matches && component.Inverted))
@@ -95,6 +95,6 @@ public sealed class DestroyOnPresetSystem : EntitySystem
             || !proto.TryGetComponent(out DestroyOnPresetComponent? destroy, EntityManager.ComponentFactory))
             return false;
 
-        return (preset == destroy.Preset) != destroy.Inverted;
+        return (preset == destroy.Preset || destroy.Presets.Contains(preset)) != destroy.Inverted;
     }
 }
