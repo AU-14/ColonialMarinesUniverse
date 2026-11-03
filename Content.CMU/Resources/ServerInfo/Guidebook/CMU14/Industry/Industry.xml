@@ -1,0 +1,34 @@
+<Document>
+  # Mining & Industry
+
+  [bold]Start with a shovel. End with a factory.[/bold]
+
+  <Box>
+    <GuideEntityEmbed Entity="RUMCWoodenShovel" Caption="DIG"/>
+    <GuideEntityEmbed Entity="RUMCAnvil" Caption="MAKE"/>
+    <GuideEntityEmbed Entity="RUMCSteamDrill" Caption="AUTOMATE"/>
+  </Box>
+
+  ## Pick your next job
+  - [textlink="I'm starting from scraps" link="CMUGuideIndustryStart"] — tools, wood, stone and your first fire.
+  - [textlink="I want to go underground" link="CMUGuideIndustryDig"] — dig a shaft, build an exit, share a map.
+  - [textlink="I've found ore. Now what?" link="CMUGuideIndustryForge"] — melt, cast and forge useful parts.
+  - [textlink="Make the machines do it" link="CMUGuideIndustrySteam"] — water, boiler, pipes, drill.
+  - [textlink="Time for a real factory" link="CMUGuideIndustryElectric"] — electricity, oil and automation.
+  - [textlink="Feed the colony and sell the surplus" link="CMUGuideIndustryProducts"] — food, finished goods and trade.
+
+  <ColorBox Color="#253b45" OutlineThickness="0">
+    <Box Orientation="Vertical" Margin="12">
+      [textlink="OPEN THE RECIPE FINDER" link="CMUGuideIndustryRecipes"]
+
+      Search by item or ingredient. Pick a recipe, see its sprites, and plan supplies for 1, 5 or 10 crafts.
+    </Box>
+  </ColorBox>
+
+  [bold]First expedition:[/bold] pack a digging tool, light, spare tools and a way back up. A hole is easy. Getting home is the clever part.
+
+  ## Need a control reminder?
+  Right-click a tool or machine → [bold]Help[/bold]. These pages explain the OOC clicks and keys.
+
+  [textlink="Tool controls" link="CMUGuideIndustryTools"] · [textlink="Machine controls and quick reference" link="CMUGuideIndustryMachines"]
+</Document>

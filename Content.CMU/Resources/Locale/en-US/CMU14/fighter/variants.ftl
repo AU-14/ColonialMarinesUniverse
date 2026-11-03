@@ -1,0 +1,10 @@
+ent-CMUFighterGroundUPP = UPP two-seat fighter
+    .desc = A UPP tandem-seat strike and reconnaissance jet. Its six pylons and internal cannon can be serviced on the ground with a power loader.
+ent-CMUFighterGroundUPPLoaded = { ent-CMUFighterGroundUPP }
+    .desc = { ent-CMUFighterGroundUPP.desc }
+    .suffix = Fully equipped, mixed missiles
+ent-CMUFighterGroundSwept = swept-wing fighter
+    .desc = A tandem-seat strike and reconnaissance jet. Its wings sweep back for taxiing and extend for flight. The six pylons and internal cannon can be serviced on the ground with a power loader.
+ent-CMUFighterGroundSweptLoaded = { ent-CMUFighterGroundSwept }
+    .desc = { ent-CMUFighterGroundSwept.desc }
+    .suffix = Fully equipped, mixed missiles

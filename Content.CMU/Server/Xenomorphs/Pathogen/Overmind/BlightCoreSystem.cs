@@ -109,14 +109,6 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
 
     private void OnStep(Entity<CMUBlightCoreComponent> core, ref StepTriggeredOffEvent args)
     {
-    Log.Debug($"BlightCore: OnStep odpalony dla {args.Tripper}");
-    
-    if (_net.IsClient)
-    {
-        Log.Debug("BlightCore: IsClient, return");
-        return;
-    }
-
         var tripper = args.Tripper;
 
         if (_hive.GetHive(tripper) is not { } hive)
@@ -128,15 +120,13 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
 
         if (!_player.TryGetSessionByEntity(tripper, out var session))
             return;
-            
+
         _ui.OpenUi(core.Owner, BlightCoreUiKey.Accept, session);
-        Log.Debug($"BlightCore: OpenUi Accept dla {tripper}, session={session.Name}");
         _ui.SetUiState(core.Owner, BlightCoreUiKey.Accept, new BlightCoreBuiState
         {
             Core = GetNetEntity(core.Owner),
             EndsAt = _timing.CurTime + TimeSpan.FromSeconds(InitialVoteSeconds)
         });
-        Log.Debug($"BlightCore: SetUiState Accept done");
     }
 
     private void OnStepTriggerAttempt(Entity<CMUBlightCoreComponent> core, ref StepTriggerAttemptEvent args)
@@ -184,18 +174,31 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
         if (_hive.HasHiveQueen(hive))
             return;
 
-        if (_activeVotes.TryGetValue(coreUid, out var vote))
+        // One ascension vote per hive, even when several blight cores stand in it.
+        // Per-core votes share the per-xeno vote UI key and can crown two overminds.
+        EntityUid voteCore = coreUid;
+        if (!_activeVotes.TryGetValue(coreUid, out var vote))
         {
-            if (vote.Hive.Owner != hive.Owner)
-                return;
+            foreach (var (otherCore, otherVote) in _activeVotes)
+            {
+                if (otherVote.Hive.Owner != hive.Owner)
+                    continue;
 
+                vote = otherVote;
+                voteCore = otherCore;
+                break;
+            }
+        }
+
+        if (vote != null)
+        {
             if (!vote.CandidateVotes.TryAdd(candidate, 0))
                 return;
 
             vote.EndsAt += TimeSpan.FromSeconds(JoinTimeBonusSeconds);
 
-            BroadcastVoteState(coreUid, vote);
-            OpenVoteUiForHive(coreUid, hive);
+            BroadcastVoteState(voteCore, vote);
+            OpenVoteUiForHive(voteCore, hive);
             PopupToHive(hive, Loc.GetString("cmu14-blight-core-candidate-joined",
                 ("name", Name(candidate))));
         }
@@ -300,6 +303,9 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
         if (TerminatingOrDeleted(overmind))
             return;
 
+        if (_mobState.IsDead(overmind))  
+            return;
+
         if (_hive.GetHive(overmind) is not { } hive)
             return;
 
@@ -337,25 +343,23 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
         }
 
         PopupToHive(hive, Loc.GetString("cmu14-blight-core-destroyed-overmind-died"));
-        QueueDel(overmind);
+
+        _mobState.ChangeMobState(overmind, MobState.Dead);
     }
 
-    private void OnOvermindDeath(Entity<CMUXenoOvermindComponent> overmind, ref MobStateChangedEvent args)
-    {
-        if (args.NewMobState != MobState.Dead)
-            return;
-
-        if (overmind.Comp.LinkedCore is { } coreUid && TryComp(coreUid, out CMUBlightCoreComponent? core))
-        {
-            core.CurrentOvermind = null;
+    private void OnOvermindDeath(Entity<CMUXenoOvermindComponent> overmind, ref MobStateChangedEvent args)  
+    {  
+        if (args.NewMobState != MobState.Dead)  
+            return;  
+      
+        if (overmind.Comp.LinkedCore is { } coreUid && TryComp(coreUid, out CMUBlightCoreComponent? core))  
+        {  
+            core.CurrentOvermind = null;  
             Dirty(coreUid, core);
         }
-
+        
         if (_hive.GetHive(overmind.Owner) is { } hive)
-            PopupToHive(hive, Loc.GetString("cmu14-blight-core-overmind-died"));
-
-        if (!TerminatingOrDeleted(overmind.Owner))
-            QueueDel(overmind.Owner);
+            PopupToHive(hive, Loc.GetString("cmu14-blight-core-overmind-died")); 
     }
 
     public override void Update(float frameTime)
@@ -390,6 +394,15 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
         CloseVoteUiForHive(coreUid, vote.Hive);
 
         if (!TryComp(coreUid, out CMUBlightCoreComponent? core))
+            return;
+
+        // Re-check the same preconditions a vote needs to start. An overmind crowned
+        // while the vote ran makes it moot; crowning again would make a second overmind.
+        if (core.CurrentOvermind is { } current &&
+            !TerminatingOrDeleted(GetEntity(current)))
+            return;
+
+        if (_hive.HasHiveQueen(vote.Hive))
             return;
 
         EntityUid? winner = null;

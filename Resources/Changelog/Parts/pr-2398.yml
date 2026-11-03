@@ -1,0 +1,7 @@
+author: byondsucks
+category: CMU
+changes:
+- message: Point blank shots now have double accuracy
+  type: Tweak
+time: '2026-11-01T02:17:20.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2398

@@ -12,7 +12,7 @@ public abstract partial class SharedDropshipWeaponSystem
     /// <summary>Fighter release uses CAS payload effects without pretending its cockpit is an FTL dropship.</summary>
     public bool TryFireFighterAmmo(Entity<DropshipAmmoComponent> ammo, Entity<FighterHardpointComponent> point,
         EntityCoordinates coordinates, EntityUid actor, TimeSpan? strikeTravelTime = null,
-        FighterWeaponKind kind = FighterWeaponKind.Missile, Vector2 aircraftPosition = default)
+        FighterWeaponKind kind = FighterWeaponKind.Missile, Vector2 aircraftPosition = default, EntityUid? designation = null)
     {
         if (_net.IsClient || !coordinates.IsValid(EntityManager) || !_area.CanCAS(coordinates) ||
             point.Comp.Ammo != ammo.Owner || ammo.Comp.RoundsPerShot <= 0 || ammo.Comp.Rounds < ammo.Comp.RoundsPerShot)
@@ -24,10 +24,14 @@ public abstract partial class SharedDropshipWeaponSystem
             ? coordinates.Offset(_random.NextVector2(-payload.TargetSpread, payload.TargetSpread + 1)) : coordinates;
         if (payload.Explosion != null && HasNonDeletableWallOnTile(target))
             target = FindAlternateLandingTile(target, 3);
+        // Every fighter strike reserves the same visible warning window, including
+        // cannon and rockets. Preserve longer missile travel times.
+        var travel = strikeTravelTime ?? payload.TravelTime + TimeSpan.FromSeconds(DefaultMarkerDuration);
+        if (travel < FighterEffects.LaserLead) travel = FighterEffects.LaserLead;
         var flight = new AmmoInFlightComponent
         {
             Target = target,
-            MarkerAt = time + (strikeTravelTime ?? payload.TravelTime),
+            MarkerAt = time + travel,
             ShotsLeft = payload.RoundsPerShot,
             ShotsPerVolley = payload.ShotsPerVolley,
             Damage = payload.Damage,
@@ -40,15 +44,16 @@ public abstract partial class SharedDropshipWeaponSystem
             SoundGround = null,
             SoundImpact = null,
             SoundWarning = null,
-            MarkerWarning = !strikeTravelTime.HasValue && payload.MarkerWarning,
-            WarningMarkerAt = time + TimeSpan.FromSeconds(DefaultMarkerDuration),
+            MarkerWarning = false,
+            // The fighter's strike entity owns both cues. Suppress the legacy
+            // dropship marker so it cannot reveal the strike early.
+            SpawnedMarker = true,
             ImpactEffects = new(payload.ImpactEffects),
             Explosion = payload.Explosion,
             Implosion = payload.Implosion,
             Fire = payload.Fire,
             SoundEveryShots = payload.SoundEveryShots,
-            // A close strafing pass must not wait through the dropship target-marker sequence.
-            MarkerDuration = strikeTravelTime.HasValue ? TimeSpan.Zero : TimeSpan.FromSeconds(DefaultMarkerDuration),
+            MarkerDuration = TimeSpan.Zero,
         };
         var flightUid = Spawn(null, MapCoordinates.Nullspace);
         AddComp(flightUid, flight);
@@ -59,6 +64,12 @@ public abstract partial class SharedDropshipWeaponSystem
         var direction = aircraftPosition - _transform.ToMapCoordinates(target).Position;
         trace.Direction = direction.LengthSquared() > .001f ? Vector2.Normalize(direction) : Vector2.UnitY;
         trace.ImpactAt = flight.MarkerAt + flight.MarkerDuration;
+        if (TryComp(designation, out FighterLaserComponent? laser))
+        {
+            laser.Incoming = true;
+            laser.IncomingAt = trace.ImpactAt - FighterEffects.WarningLead;
+            Dirty(designation!.Value, laser);
+        }
         trace.Volleys = (int) Math.Ceiling(payload.RoundsPerShot / (double) Math.Max(1, payload.ShotsPerVolley));
         trace.VolleyInterval = (float) flight.ShotDelay.TotalSeconds;
         trace.ExpiresAt = trace.ImpactAt + TimeSpan.FromSeconds(trace.Volleys * trace.VolleyInterval + .4f);

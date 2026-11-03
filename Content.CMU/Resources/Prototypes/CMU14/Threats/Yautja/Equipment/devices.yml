@@ -530,8 +530,8 @@
     spinVelocity: 24
     maxHits: 8
     hitRange: 1
-    hitDelay: 1
-    activeTime: 30
+    hitDelay: 2
+    activeTime: 16
     retargetDelay: 0.35
   - type: Corrodible
     isCorrodible: false
@@ -545,6 +545,11 @@
         - ItemMask
         restitution: 0.3
         friction: 0.2
+      shootable: # layer is set to BulletImpassable while the disc is hunting
+        shape: !type:PhysShapeCircle
+          radius: 0.2
+        density: 0
+        hard: true
   - type: EmbeddableProjectile
     embedOnThrow: false
     sound: /Audio/Weapons/star_hit.ogg
@@ -554,10 +559,6 @@
       types:
         Slash: 12.5
         Piercing: 12.5
-  - type: StaminaDamageOnCollide
-    damage: 25
-  - type: StaminaDamageOnEmbed
-    damage: 0
 
   - type: MeleeWeapon
     wideAttackAllowed: false
@@ -826,6 +827,8 @@
     kind: Shield
 
   - type: YautjaShieldBash
+  - type: YautjaShieldHeldPrefix
+    readied: ready
   - type: YautjaSourceShieldBlock
     shieldType: Directional
     readiedBlock: VeryHigh
@@ -1200,22 +1203,9 @@
   - type: Icon
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
     state: pred_vendor_left
+  # no GenericVisualizer here, YautjaGearRackClientSystem draws the rack layers itself every frame. a visualizer
+  # setting pred_vendor_left on a pair it had already swapped to the merged rsi just logged a missing state
   - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.YautjaGearRackVisuals.State:
-        enum.VendingMachineVisualLayers.Base:
-          Left: {state: pred_vendor_left}
-          LeftCentre: {state: pred_vendor_lcenter}
-          Centre: {state: pred_vendor_centre}
-          RightCentre: {state: pred_vendor_rcentre}
-          Right: {state: pred_vendor_right}
-        enum.VendingMachineVisualLayers.BaseUnshaded:
-          Left: {state: pred_vendor_left}
-          LeftCentre: {state: pred_vendor_lcenter}
-          Centre: {state: pred_vendor_centre}
-          RightCentre: {state: pred_vendor_rcentre}
-          Right: {state: pred_vendor_right}
   - type: YautjaGearRack
   - type: RemoveComponents
     components:
@@ -1362,6 +1352,10 @@
         replaceSlot: back
       - id: CMUYautjaCapePoncho
         name: Poncho
+        maxPerUser: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeBoneThird
+        name: Bone Third-Cape
         maxPerUser: 1
         replaceSlot: back
     - name: Spare Equipment
@@ -1629,10 +1623,10 @@
   - type: Item
     storedRotation: 0
   - type: Sprite
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
-    state: visor_nvg
+    sprite: CMU14/Yautja/visor.rsi
+    state: icon
   - type: Clothing
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/visor.rsi
   - type: NightVisionItem
     actionId:
     toggleable: false
@@ -2188,7 +2182,6 @@
     state: icon
   - type: CMVendorBundle
     bundle:
-    - CMUYautjaThrallChainshirt
     - CMUYautjaHuntingPouch
     - CMUYautjaLantern
     - CMUYautjaCommunicator
@@ -2393,81 +2386,6 @@
     - CMUYautjaEmissaryGreavesCamoConforming
 
 - type: entity
-  id: CMUYautjaThrallArmorEbonyBundle
-  name: Ebony
-  description: Contains the ebony armor issued to a Yautja thrall.
-  categories: [HideSpawnMenu]
-  components:
-  - type: Sprite
-    sprite: CMU14/Yautja/armor_thrall_ebony.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - CMUYautjaThrallArmorEbony
-    - CMUYautjaThrallGreavesEbony
-    - CMUYautjaMaskThrallEbony
-
-- type: entity
-  id: CMUYautjaThrallArmorSilverBundle
-  name: Silver
-  description: Contains the silver armor issued to a Yautja thrall.
-  categories: [HideSpawnMenu]
-  components:
-  - type: Sprite
-    sprite: CMU14/Yautja/armor_thrall_silver.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - CMUYautjaThrallArmorSilver
-    - CMUYautjaThrallGreavesSilver
-    - CMUYautjaMaskThrallSilver
-
-- type: entity
-  id: CMUYautjaThrallArmorGoldBundle
-  name: Gold
-  description: Contains the gold armor issued to a Yautja thrall.
-  categories: [HideSpawnMenu]
-  components:
-  - type: Sprite
-    sprite: CMU14/Yautja/armor_thrall_gold.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - CMUYautjaThrallArmorGold
-    - CMUYautjaThrallGreavesGold
-    - CMUYautjaMaskThrallGold
-
-- type: entity
-  id: CMUYautjaThrallArmorCrimsonBundle
-  name: Crimson
-  description: Contains the crimson armor issued to a Yautja thrall.
-  categories: [HideSpawnMenu]
-  components:
-  - type: Sprite
-    sprite: CMU14/Yautja/armor_thrall_crimson.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - CMUYautjaThrallArmorCrimson
-    - CMUYautjaThrallGreavesCrimson
-    - CMUYautjaMaskThrallCrimson
-
-- type: entity
-  id: CMUYautjaThrallArmorBoneBundle
-  name: Bone
-  description: Contains the bone armor issued to a Yautja thrall.
-  categories: [HideSpawnMenu]
-  components:
-  - type: Sprite
-    sprite: CMU14/Yautja/armor_thrall_bone.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - CMUYautjaThrallArmorBone
-    - CMUYautjaThrallGreavesBone
-    - CMUYautjaMaskThrallBone
-
-- type: entity
   id: CMUYautjaBloodedThrallEquipmentBundle
   name: Blooded Equipment
   description: Contains the equipment issued to a blooded Yautja thrall.
@@ -2633,15 +2551,6 @@
   - type: Icon
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
     state: pred_vendor_elder_left
-  - type: GenericVisualizer
-    visuals:
-      enum.YautjaGearRackVisuals.State:
-        enum.VendingMachineVisualLayers.Base:
-          Left: {state: pred_vendor_elder_left}
-          Right: {state: pred_vendor_elder_right}
-        enum.VendingMachineVisualLayers.BaseUnshaded:
-          Left: {state: pred_vendor_elder_left}
-          Right: {state: pred_vendor_elder_right}
   - type: YautjaGearRack
     kind: Elder
   - type: CMAutomatedVendor
@@ -2802,8 +2711,16 @@
         name: Full-Cape
         maxPerUser: 1
         replaceSlot: back
+      - id: CMUYautjaCapeBoneFull
+        name: Bone Full-Cape
+        maxPerUser: 1
+        replaceSlot: back
       - id: CMUYautjaCapeCeremonial
         name: Ceremonial Cape
+        maxPerUser: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeBoneCeremonial
+        name: Ceremonial Bone Cape
         maxPerUser: 1
         replaceSlot: back
     - name: Spare Equipment
@@ -2952,26 +2869,203 @@
         choices: {CMUYautjaEssentials: 1}
         maxPerUser: 1
         mandatory: true
-    - name: Armor Material (CHOOSE 1)
-      choices: {CMUYautjaArmor: 1}
+    # cmss13 #12577 thrall rack: pick an undersuit, one mask and one chest and greaves piece of any style
+    - name: Undersuit (CHOOSE 1)
+      choices: {CMUYautjaUniform: 1}
       entries:
-      - id: CMUYautjaThrallArmorEbonyBundle
+      - id: CMUYautjaThrallChainshirt
+        name: Chain
+        maxPerUser: 1
+        mandatory: true
+      - id: CMUYautjaThrallClothSuit
+        name: Crimson Cloth
+        maxPerUser: 1
+        mandatory: true
+      - id: CMUYautjaThrallClothSuitAlt
+        name: Tan Cloth
+        maxPerUser: 1
+        mandatory: true
+    - name: Full-Mask (CHOOSE 1)
+      choices: {CMUYautjaMask: 1}
+      entries:
+      - id: CMUYautjaMaskThrallEbony
         name: Ebony
         maxPerUser: 1
         recommended: true
-      - id: CMUYautjaThrallArmorSilverBundle
+      - id: CMUYautjaMaskThrallSilver
         name: Silver
         maxPerUser: 1
         recommended: true
-      - id: CMUYautjaThrallArmorGoldBundle
+      - id: CMUYautjaMaskThrallGold
         name: Gold
         maxPerUser: 1
         recommended: true
-      - id: CMUYautjaThrallArmorCrimsonBundle
+      - id: CMUYautjaMaskThrallCrimson
         name: Crimson
         maxPerUser: 1
         recommended: true
-      - id: CMUYautjaThrallArmorBoneBundle
+      - id: CMUYautjaMaskThrallBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Half-Mask (CHOOSE 1)
+      choices: {CMUYautjaMask: 1}
+      entries:
+      - id: CMUYautjaMaskThrallAltEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaMaskThrallAltSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaMaskThrallAltGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaMaskThrallAltCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaMaskThrallAltBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Full-Armor Chest (CHOOSE 1)
+      choices: {CMUYautjaArmor: 1}
+      entries:
+      - id: CMUYautjaThrallArmorEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Half-Armor Chest (CHOOSE 1)
+      choices: {CMUYautjaArmor: 1}
+      entries:
+      - id: CMUYautjaThrallArmorHalfEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorHalfSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorHalfGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorHalfCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorHalfBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Light-Armor Chest (CHOOSE 1)
+      choices: {CMUYautjaArmor: 1}
+      entries:
+      - id: CMUYautjaThrallArmorLightEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorLightSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorLightGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorLightCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorLightBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Full-Armor Greaves (CHOOSE 1)
+      choices: {CMUYautjaShoes: 1}
+      entries:
+      - id: CMUYautjaThrallGreavesEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Half-Armor Greaves (CHOOSE 1)
+      choices: {CMUYautjaShoes: 1}
+      entries:
+      - id: CMUYautjaThrallGreavesHalfEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesHalfSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesHalfGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesHalfCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesHalfBone
+        name: Bone
+        maxPerUser: 1
+        recommended: true
+    - name: Light-Armor Greaves (CHOOSE 1)
+      choices: {CMUYautjaShoes: 1}
+      entries:
+      - id: CMUYautjaThrallGreavesLightEbony
+        name: Ebony
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesLightSilver
+        name: Silver
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesLightGold
+        name: Gold
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesLightCrimson
+        name: Crimson
+        maxPerUser: 1
+        recommended: true
+      - id: CMUYautjaThrallGreavesLightBone
         name: Bone
         maxPerUser: 1
         recommended: true
@@ -3500,3 +3594,90 @@
         name: Oxygen Tank
         points: 5
         maxPerUser: 4
+
+# Bracers by DimDim from cmss13 PR #12174 (never merged upstream).
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacyShadow
+  name: shadow legacy bracers
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer_shadow
+  - type: Icon
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer1_shadow
+  - type: Clothing
+    sprite: CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-shadow
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacyKnight
+  name: knight legacy bracers
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer_knight
+  - type: Icon
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer1_knight
+  - type: Clothing
+    sprite: CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-knight
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacySeeker
+  name: seeker legacy bracers
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer_seeker
+  - type: Icon
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer1_seeker
+  - type: Clothing
+    sprite: CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-seeker
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacySerpent
+  name: serpent legacy bracers
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer_serpent
+  - type: Icon
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer1_serpent
+  - type: Clothing
+    sprite: CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-serpent
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerXenobone
+  name: xenobone elite bracers
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer_xenobone
+  - type: Icon
+    sprite: CMU14/Yautja/bracer.rsi
+    state: bracer1_xenobone
+  - type: Clothing
+    sprite: CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-xenobone

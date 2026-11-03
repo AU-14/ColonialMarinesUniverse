@@ -1,72 +1,40 @@
 using System.Numerics;
+using Content.Client.CMU14.Yautja.ClanHall;
 using Content.Shared.CMU14.Yautja;
-using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
-using Robust.Client.UserInterface.CustomControls;
-using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 
 namespace Content.Client.CMU14.Yautja;
 
-public sealed class YautjaTranslatorWindow : DefaultWindow
+// what you type comes out of the bracer's speaker in a human voice. the power bar is what each broadcast costs
+public sealed class YautjaTranslatorWindow : YautjaHudWindow
 {
+    private readonly HudBar _power;
     private readonly Label _powerLabel;
     private readonly Label _limitLabel;
     private readonly TextEdit _messageEdit;
-    private readonly Button _sendButton;
+    private readonly HudButton _sendButton;
 
     private int _maxLength = 160;
+    private bool _affordable = true;
 
     public event Action<string>? OnSend;
     public event Action? OnTyping;
 
     public YautjaTranslatorWindow()
+        : base(Loc.GetString("cmu-yautja-translator-window-title"), new Vector2(440, 250), new Vector2(380, 220))
     {
-        Title = Loc.GetString("cmu-yautja-translator-window-title");
-        SetSize = new Vector2(360, 190);
-        MinSize = new Vector2(320, 160);
-
-        var rootPanel = YautjaBracerUiStyle.Panel(YautjaBracerUiStyle.Surface, YautjaBracerUiStyle.Border, new Thickness(2));
-        AddChild(rootPanel);
-
-        var root = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            Margin = new Thickness(7),
-            HorizontalExpand = true,
-            VerticalExpand = true,
-        };
-        rootPanel.AddChild(root);
-
-        var header = YautjaBracerUiStyle.Panel(YautjaBracerUiStyle.DeepCard, YautjaBracerUiStyle.MutedBorder);
-        root.AddChild(header);
-
-        var statusRow = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-            Margin = new Thickness(7, 4),
-            HorizontalExpand = true,
-        };
-        header.AddChild(statusRow);
-
-        _powerLabel = YautjaBracerUiStyle.Label(string.Empty, YautjaBracerUiStyle.Muted, "LabelSubText");
-        _powerLabel.HorizontalExpand = true;
-        statusRow.AddChild(_powerLabel);
-
-        _limitLabel = YautjaBracerUiStyle.Label(string.Empty, YautjaBracerUiStyle.Muted, "LabelSubText");
-        statusRow.AddChild(_limitLabel);
-
-        var close = YautjaBracerUiStyle.CloseButton();
-        close.OnPressed += _ => Close();
-        statusRow.AddChild(close);
+        _power = new HudBar(0) { MinSize = new Vector2(90, 8) };
+        Header.AddChild(_power);
+        _powerLabel = Reading(Hud.Text);
+        Header.AddChild(_powerLabel);
+        AddClose();
 
         _messageEdit = new TextEdit
         {
             HorizontalExpand = true,
             VerticalExpand = true,
-            MinHeight = 64,
+            MinHeight = 72,
             Placeholder = new Rope.Leaf(Loc.GetString("cmu-yautja-translator-placeholder")),
         };
         _messageEdit.OnTextChanged += args =>
@@ -74,13 +42,19 @@ public sealed class YautjaTranslatorWindow : DefaultWindow
             UpdateLimit(Rope.Collapse(args.TextRope));
             OnTyping?.Invoke();
         };
-        root.AddChild(YautjaBracerUiStyle.Wrap(_messageEdit, YautjaBracerUiStyle.DeepCard, YautjaBracerUiStyle.MutedBorder, new Thickness(5), new Thickness(1)));
+        Body.AddChild(Field(_messageEdit));
 
-        _sendButton = BuildSendButton(
-            Loc.GetString("cmu-yautja-translator-send"),
-            YautjaBracerUiStyle.HotRed);
-        _sendButton.OnPressed += _ => Send();
-        root.AddChild(_sendButton);
+        var footer = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 8 };
+        _limitLabel = Reading(Hud.Muted);
+        _limitLabel.HorizontalExpand = true;
+        footer.AddChild(_limitLabel);
+        _sendButton = new HudButton(Loc.GetString("cmu-yautja-translator-send").ToUpperInvariant(), LabelFont)
+        {
+            MinWidth = 140,
+        };
+        _sendButton.Activated += Send;
+        footer.AddChild(_sendButton);
+        Body.AddChild(footer);
 
         UpdateLimit(string.Empty);
     }
@@ -88,32 +62,24 @@ public sealed class YautjaTranslatorWindow : DefaultWindow
     public void UpdateState(YautjaTranslatorBuiState state)
     {
         _maxLength = state.MaxLength;
+        _affordable = state.Charge >= state.Cost;
+        _power.Fill = state.MaxCharge <= 0 ? 0 : state.Charge / (float) state.MaxCharge;
         _powerLabel.Text = Loc.GetString("cmu-yautja-translator-power", ("charge", state.Charge), ("max", state.MaxCharge), ("cost", state.Cost));
-        UpdateLimit(Rope.Collapse(_messageEdit.TextRope));
+        _powerLabel.FontColorOverride = _affordable ? Hud.Text : Hud.Hot;
+        UpdateLimit(Collapse(_messageEdit));
     }
 
     private void UpdateLimit(string text)
     {
         var length = text.Length;
         _limitLabel.Text = Loc.GetString("cmu-yautja-translator-limit", ("count", length), ("max", _maxLength));
-        _limitLabel.FontColorOverride = length > _maxLength ? YautjaBracerUiStyle.HotRed : YautjaBracerUiStyle.Muted;
-    }
-
-    private static Button BuildSendButton(string title, Color accent)
-    {
-        return new Button
-        {
-            Text = title,
-            HorizontalExpand = true,
-            MinHeight = 34,
-            SetHeight = 34,
-            StyleBoxOverride = YautjaBracerUiStyle.Flat(YautjaBracerUiStyle.DeepCard, accent),
-        };
+        _limitLabel.FontColorOverride = length > _maxLength ? Hud.Hot : Hud.Muted;
+        _sendButton.Disabled = string.IsNullOrWhiteSpace(text) || !_affordable;
     }
 
     private void Send()
     {
-        var text = Rope.Collapse(_messageEdit.TextRope).Trim();
+        var text = Collapse(_messageEdit).Trim();
         if (string.IsNullOrWhiteSpace(text))
             return;
 

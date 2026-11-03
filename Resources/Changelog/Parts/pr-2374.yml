@@ -1,0 +1,11 @@
+author: ILoveDespoiler
+category: CMU
+changes:
+- message: Added two new Chemical properties, Bloodbursting and Mycotoxigenic.
+  type: Add
+- message: Added Mycohemolymph and Sporoplasm fluids as drawable solutions from every
+    Neomorph, with unique properties compared to Neomorph Blood and Plasma. Research
+    rejoice!
+  type: Add
+time: '2026-11-01T05:41:44.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2374

@@ -1738,6 +1738,10 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
     private void OnWithdrawHijackLock(ref WithdrawFactionHijackLockEvent ev)
     {
+        // CMU14: the FOB pilot keeps boarding/hijacking contested, including stale withdrawal events.
+        if (!_withdrawConsole.IsProtectedWithdrawalAllowed())
+            return;
+
         var query = EntityQueryEnumerator<DropshipNavigationComputerComponent, WhitelistedShuttleComponent>();
         while (query.MoveNext(out var uid, out var nav, out var ws))
         {

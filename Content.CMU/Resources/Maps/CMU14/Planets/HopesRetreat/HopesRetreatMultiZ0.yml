@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 10/26/2026 02:52:49
-  entityCount: 40197
+  entityCount: 40221
 maps:
 - 1
 grids:
@@ -587,6 +587,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMUFobMap
+      sites: [69855, 70003]
     - type: MetaData
       name: Mapping JE-1758 Ascanius
     - type: Transform
@@ -132857,6 +132859,49 @@ entities:
   entities:
   - uid: 69855
     components:
+    - type: CMUFobSite
+      id: HopesRetreat
+      utilityExclusions:
+      - "105.65,51.65,118.35,73.35"
+      - "105.15,54.15,117.85,70.85"
+      - "105.15,54.15,117.85,72.85"
+      relays:
+      - anchor: 1000000026
+        tier: Near
+        approach: East
+      - anchor: 1000000003
+        tier: Near
+        approach: East
+      - anchor: 1000000004
+        tier: Near
+        approach: West
+      - anchor: 1000000005
+        tier: Near
+        approach: West
+      - anchor: 1000000006
+        tier: Intermediate
+        approach: East
+      - anchor: 1000000007
+        tier: Intermediate
+        approach: East
+      - anchor: 1000000008
+        tier: Intermediate
+        approach: West
+      - anchor: 1000000009
+        tier: Intermediate
+        approach: West
+      - anchor: 1000000010
+        tier: Far
+        approach: East
+      - anchor: 1000000011
+        tier: Far
+        approach: East
+      - anchor: 1000000012
+        tier: Far
+        approach: West
+      - anchor: 1000000013
+        tier: Far
+        approach: West
     - type: MetaData
       name: Hope's Retreat (LZ1)
     - type: Transform
@@ -132866,6 +132911,58 @@ entities:
       forceOnForceFaction: opfor
   - uid: 70003
     components:
+    - type: CMUFobSite
+      id: Octanis
+      utilityExclusions:
+      - "9.65,33.65,22.35,55.35"
+      - "9.15,36.15,21.85,52.85"
+      - "9.15,36.15,21.85,54.85"
+      - "45.65,12.65,67.35,25.35"
+      - "47.15,12.15,63.85,24.85"
+      - "45.15,12.15,63.85,24.85"
+      - "-16.35,-0.35,5.35,12.35"
+      - "-14.85,-0.85,1.85,11.85"
+      - "-16.85,-0.85,1.85,11.85"
+      - "26.65,8.65,48.35,21.35"
+      - "28.15,8.15,44.85,20.85"
+      - "26.15,8.15,44.85,20.85"
+      relays:
+      - anchor: 1000000014
+        tier: Near
+        approach: West
+      - anchor: 1000000015
+        tier: Near
+        approach: West
+      - anchor: 1000000016
+        tier: Near
+        approach: East
+      - anchor: 1000000017
+        tier: Near
+        approach: East
+      - anchor: 1000000018
+        tier: Intermediate
+        approach: West
+      - anchor: 1000000019
+        tier: Intermediate
+        approach: West
+      - anchor: 1000000020
+        tier: Intermediate
+        approach: East
+      - anchor: 1000000021
+        tier: Intermediate
+        approach: East
+      - anchor: 1000000022
+        tier: Far
+        approach: West
+      - anchor: 1000000023
+        tier: Far
+        approach: West
+      - anchor: 1000000024
+        tier: Far
+        approach: East
+      - anchor: 1000000025
+        tier: Far
+        approach: East
     - type: MetaData
       name: Octanis Complex Starport (LZ2)
     - type: Transform
@@ -337210,4 +337307,174 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: -100.5,-122.5
+- proto: CMUFobRelayMarker
+  entities:
+  - uid: 1000000026
+    components:
+    - type: Transform
+      parent: 1
+      pos: 110.5,-3.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-east-road
+  - uid: 1000000003
+    components:
+    - type: Transform
+      parent: 1
+      pos: 88.5,-6.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-central-road
+  - uid: 1000000004
+    components:
+    - type: Transform
+      parent: 1
+      pos: 46.5,-9.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-west-road
+  - uid: 1000000005
+    components:
+    - type: Transform
+      parent: 1
+      pos: 52.5,-14.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-west-clearing
+  - uid: 1000000006
+    components:
+    - type: Transform
+      parent: 1
+      pos: 103.5,-45.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-southeast-road
+  - uid: 1000000007
+    components:
+    - type: Transform
+      parent: 1
+      pos: 85.5,-55.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-southern-road
+  - uid: 1000000008
+    components:
+    - type: Transform
+      parent: 1
+      pos: 49.5,-41.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-engineering-approach
+  - uid: 1000000009
+    components:
+    - type: Transform
+      parent: 1
+      pos: 49.5,-58.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-southwest-junction
+  - uid: 1000000010
+    components:
+    - type: Transform
+      parent: 1
+      pos: 109.5,-84.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-southeast-cave-mouth
+  - uid: 1000000011
+    components:
+    - type: Transform
+      parent: 1
+      pos: 110.5,-93.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-southeast-caves
+  - uid: 1000000012
+    components:
+    - type: Transform
+      parent: 1
+      pos: 26.5,-64.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-east-cavern-junction
+  - uid: 1000000013
+    components:
+    - type: Transform
+      parent: 1
+      pos: 13.5,-53.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-octanis-approach
+  - uid: 1000000014
+    components:
+    - type: Transform
+      parent: 1
+      pos: -48.5,10.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-north-cavern-west
+  - uid: 1000000015
+    components:
+    - type: Transform
+      parent: 1
+      pos: -54.5,-3.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-north-cavern-bend
+  - uid: 1000000016
+    components:
+    - type: Transform
+      parent: 1
+      pos: -19.5,-16.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-north-cavern-east
+  - uid: 1000000017
+    components:
+    - type: Transform
+      parent: 1
+      pos: -12.5,-21.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-east-cavern-mouth
+  - uid: 1000000018
+    components:
+    - type: Transform
+      parent: 1
+      pos: -64.5,-27.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-research-west-approach
+  - uid: 1000000019
+    components:
+    - type: Transform
+      parent: 1
+      pos: -48.5,-40.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-research-south-approach
+  - uid: 1000000020
+    components:
+    - type: Transform
+      parent: 1
+      pos: 6.5,-52.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-octanis-north-approach
+  - uid: 1000000021
+    components:
+    - type: Transform
+      parent: 1
+      pos: 17.5,-54.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-octanis-administration-approach
+  - uid: 1000000022
+    components:
+    - type: Transform
+      parent: 1
+      pos: -52.5,-60.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-research-south-cavern
+  - uid: 1000000023
+    components:
+    - type: Transform
+      parent: 1
+      pos: -34.5,-74.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-southwest-cavern
+  - uid: 1000000024
+    components:
+    - type: Transform
+      parent: 1
+      pos: 27.5,-69.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-east-cavern-south
+  - uid: 1000000025
+    components:
+    - type: Transform
+      parent: 1
+      pos: 50.5,-62.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-hopes-retreat-relay-retreat-southwest-approach
 ...
