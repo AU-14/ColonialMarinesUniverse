@@ -155,7 +155,7 @@
         Blunt: 10
         Slash: 10
         Piercing: 10
-  - type: XenoClaw
+  - type: XenoClaws
     clawType: VerySharp
   - type: CMArmor
     explosionArmor: 25
