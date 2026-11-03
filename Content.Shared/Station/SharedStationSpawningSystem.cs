@@ -43,7 +43,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                     continue;
                 }
 
-                EquipStartingGear(entity, loadoutProto, raiseEvent: false);
+                EquipStartingGear(entity, loadoutProto, raiseEvent: false, keepOnFail: true); // CMU14: selected loadouts always reach the player
             }
         }
 
@@ -97,27 +97,27 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
         }
     }
 
-    public void EquipStartingGear(EntityUid entity, LoadoutPrototype loadout, bool raiseEvent = true)
+    public void EquipStartingGear(EntityUid entity, LoadoutPrototype loadout, bool raiseEvent = true, bool keepOnFail = false) // CMU14: keepOnFail
     {
-        EquipStartingGear(entity, loadout.StartingGear, raiseEvent);
-        EquipStartingGear(entity, (IEquipmentLoadout) loadout, raiseEvent);
+        EquipStartingGear(entity, loadout.StartingGear, raiseEvent, keepOnFail);
+        EquipStartingGear(entity, (IEquipmentLoadout) loadout, raiseEvent, keepOnFail);
     }
 
     /// <summary>
     /// <see cref="EquipStartingGear(Robust.Shared.GameObjects.EntityUid,System.Nullable{Robust.Shared.Prototypes.ProtoId{Content.Shared.Roles.StartingGearPrototype}},bool)"/>
     /// </summary>
-    public void EquipStartingGear(EntityUid entity, ProtoId<StartingGearPrototype>? startingGear, bool raiseEvent = true)
+    public void EquipStartingGear(EntityUid entity, ProtoId<StartingGearPrototype>? startingGear, bool raiseEvent = true, bool keepOnFail = false) // CMU14: keepOnFail
     {
         ProtoMan.Resolve(startingGear, out var gearProto);
-        EquipStartingGear(entity, gearProto, raiseEvent);
+        EquipStartingGear(entity, gearProto, raiseEvent, keepOnFail);
     }
 
     /// <summary>
     /// <see cref="EquipStartingGear(Robust.Shared.GameObjects.EntityUid,System.Nullable{Robust.Shared.Prototypes.ProtoId{Content.Shared.Roles.StartingGearPrototype}},bool)"/>
     /// </summary>
-    public void EquipStartingGear(EntityUid entity, StartingGearPrototype? startingGear, bool raiseEvent = true)
+    public void EquipStartingGear(EntityUid entity, StartingGearPrototype? startingGear, bool raiseEvent = true, bool keepOnFail = false) // CMU14: keepOnFail
     {
-        EquipStartingGear(entity, (IEquipmentLoadout?) startingGear, raiseEvent);
+        EquipStartingGear(entity, (IEquipmentLoadout?) startingGear, raiseEvent, keepOnFail);
     }
 
     /// <summary>
@@ -126,7 +126,8 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
     /// <param name="entity">Entity to load out.</param>
     /// <param name="startingGear">Starting gear to use.</param>
     /// <param name="raiseEvent">Should we raise the event for equipped. Set to false if you will call this manually</param>
-    public void EquipStartingGear(EntityUid entity, IEquipmentLoadout? startingGear, bool raiseEvent = true)
+    /// <param name="keepOnFail">CMU14: on a failed slot equip, hold the item in a free hand or leave it at the entity's feet instead of deleting it. Job gear keeps the default so a loadout selection that already filled the slot does not leave a spare.</param>
+    public void EquipStartingGear(EntityUid entity, IEquipmentLoadout? startingGear, bool raiseEvent = true, bool keepOnFail = false) // CMU14: keepOnFail
     {
         if (startingGear == null)
             return;
@@ -144,8 +145,16 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                     var equipmentEntity = Spawn(CMUOverrideGear(equipmentStr), xform.Coordinates);
                     // cmu edit end
                     // cmu edit start: the loadout already filled this slot and keeps it, so don't leave a spare on the floor
+                    // CMU14: a failed loadout item must still reach the player, hand first, then their feet
                     if (!InventorySystem.TryEquip(entity, equipmentEntity, slot.Name, silent: true, force: true))
-                        Del(equipmentEntity);
+                    {
+                        if (keepOnFail
+                            && _handsQuery.TryComp(entity, out var hands)
+                            && _handsSystem.TryGetEmptyHand((entity, hands), out var emptyHand))
+                            _handsSystem.TryPickup(entity, equipmentEntity, emptyHand, checkActionBlocker: false, handsComp: hands);
+                        else
+                            Del(equipmentEntity);
+                    }
                     // cmu edit end
                 }
             }
