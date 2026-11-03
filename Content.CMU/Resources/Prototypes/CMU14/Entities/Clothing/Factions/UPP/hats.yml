@@ -52,7 +52,7 @@
   - type: MycotoxinProtection
     fullProtection: false
   
-  - type: entity
+- type: entity
   parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14UPPPeakedSL
   name: UPP UL3 Peaked Serzhant Cap
@@ -67,8 +67,8 @@
     bullet: 20
     bio: 20
     explosionArmor: 10
-
-  - type: entity
+  
+- type: entity
   parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14UPPPeakedFTL
   name: UPP UL3 Peaked Junior NCO Cap
