@@ -81,7 +81,7 @@ public sealed class CMUPhotocopierSystem : EntitySystem
         var ev = new CMUPhotocopierCopyDoAfterEvent();
         var doAfter = new DoAfterArgs(EntityManager, user, ent.Comp.CopyDelay, ev, ent.Owner, ent.Owner)
         {
-            BreakOnUserMove = true,
+            BreakOnMove = true,
         };
 
         if (!_doAfter.TryStartDoAfter(doAfter))
@@ -155,16 +155,17 @@ public sealed class CMUPhotocopierSystem : EntitySystem
         if (!args.CanAccess || !args.CanInteract || !TryGetPaper(ent, out _))
             return;
 
+        var user = args.User;
         args.Verbs.Add(new InteractionVerb
         {
             Text = Loc.GetString("cmu-photocopier-verb-copy"),
-            Act = () => StartCopy(ent, args.User),
+            Act = () => StartCopy(ent, user),
         });
 
         args.Verbs.Add(new InteractionVerb
         {
             Text = Loc.GetString("cmu-photocopier-verb-eject"),
-            Act = () => EjectPaper(ent, args.User),
+            Act = () => EjectPaper(ent, user),
         });
     }
 
@@ -194,8 +195,8 @@ public sealed class CMUPhotocopierSystem : EntitySystem
         paper = default;
 
         if (_container.TryGetContainer(ent.Owner, PaperSlot, out var container) &&
-            container.ContainedEntity is { } contained)
-            paper = contained;
+            container.ContainedEntities.Count > 0)
+            paper = container.ContainedEntities[0];
 
         return paper != default;
     }

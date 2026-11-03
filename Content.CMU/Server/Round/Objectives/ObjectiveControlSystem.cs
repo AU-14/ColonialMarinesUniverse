@@ -25,6 +25,7 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
 {
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private GameTicker _gameTicker = default!;
@@ -521,12 +522,12 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
             if (proto.TryComp<HotspotObjectiveComponent>(out var hotspotComp, compFactory))
             {
                 if (hotspotComp.Catalog && proto.TryComp<CMUObjectiveComponent>(out var hotObjComp, compFactory))
-                    TrySpawnHotspotObjective(proto, hotObjComp, presetId, planetMaps);
+                    TrySpawnHotspotObjective(proto, hotObjComp, hotspotComp, presetId, planetMaps);
             }
         }
     }
 
-    private void TrySpawnHotspotObjective(EntityPrototype proto, CMUObjectiveComponent objComp, string presetId, HashSet<MapId> planetMaps)
+    private void TrySpawnHotspotObjective(EntityPrototype proto, CMUObjectiveComponent objComp, HotspotObjectiveComponent hotspotComp, string presetId, HashSet<MapId> planetMaps)
     {
         var modeMatch = objComp.AllowedPresets.Count == 0
             || objComp.AllowedPresets.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase));
@@ -536,17 +537,36 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         if (_allObjectives.Any(o => o.Comp.Id == objComp.Id && Exists(o.Uid) && planetMaps.Contains(Transform(o.Uid).MapID)))
             return;
 
+        // Keep the new zone rectangle clear of existing hotspot zones so their tile
+        // snapshots never overlap and fight over restores.
+        var halfWidth = hotspotComp.HalfWidth;
+        var halfHeight = hotspotComp.HalfHeight == 0 ? hotspotComp.HalfWidth : hotspotComp.HalfHeight;
+        var zones = new List<(Vector2 Pos, int HalfWidth, int HalfHeight)>();
+        var hotspotQuery = EntityQueryEnumerator<HotspotObjectiveComponent, TransformComponent>();
+        while (hotspotQuery.MoveNext(out _, out var zone, out var zoneXform))
+        {
+            var zoneHalfHeight = zone.HalfHeight == 0 ? zone.HalfWidth : zone.HalfHeight;
+            zones.Add((_transform.GetWorldPosition(zoneXform), zone.HalfWidth, zoneHalfHeight));
+        }
+
         var markers = new List<Entity<TransformComponent>>();
         var query = EntityQueryEnumerator<CMUObjectiveMarkerComponent, TransformComponent>();
         while (query.MoveNext(out var marker, out _, out var markerXform))
         {
-            if (planetMaps.Contains(markerXform.MapID))
-                markers.Add((marker, markerXform));
+            if (!planetMaps.Contains(markerXform.MapID))
+                continue;
+
+            var pos = _transform.GetWorldPosition(markerXform);
+            if (zones.Any(z => MathF.Abs(pos.X - z.Pos.X) < halfWidth + z.HalfWidth
+                    && MathF.Abs(pos.Y - z.Pos.Y) < halfHeight + z.HalfHeight))
+                continue;
+
+            markers.Add((marker, markerXform));
         }
 
         if (markers.Count == 0)
         {
-            _logs.Warning("[OBJ-CATALOG] Hotspot objective found no objective markers to spawn at.");
+            _logs.Warning("[OBJ-CATALOG] Hotspot objective found no clear objective markers to spawn at.");
             return;
         }
 

@@ -18,6 +18,18 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> CMUHostnameRoundSuffix =
         CVarDef.Create("cmu.game.hostname_round_suffix", false, CVar.SERVERONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// Force on Force round time limit in minutes; 0 uses the FoFTimeLimitRule prototype value.
+    /// </summary>
+    public static readonly CVarDef<int> FoFTimeLimitMinutes =
+        CVarDef.Create("cmu.fof.time_limit_minutes", 0, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Hotspot hold-ticks one force needs to win Force on Force outright; 0 disables win-by-holding.
+    /// </summary>
+    public static readonly CVarDef<int> FoFHotspotTicksToWin =
+        CVarDef.Create("cmu.fof.hotspot_ticks_to_win", 0, CVar.SERVERONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> EnableEvacSfx =
         CVarDef.Create("cmu.game.enable_evac_sfx", false, CVar.SERVERONLY | CVar.ARCHIVE);
 

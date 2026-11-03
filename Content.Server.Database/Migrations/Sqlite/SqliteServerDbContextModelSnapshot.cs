@@ -1225,6 +1225,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("player_id");
 
+                    b.Property<bool>("CMUPlaytimeHidden")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("cmu_playtime_hidden");
+
                     b.Property<DateTime>("FirstSeenTime")
                         .HasColumnType("TEXT")
                         .HasColumnName("first_seen_time");
