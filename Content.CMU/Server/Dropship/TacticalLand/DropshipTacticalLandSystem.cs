@@ -409,7 +409,7 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         // the hull lands origin-anchored and turned with the destination, so the border must
         // cover the real rotated tiles: a hull origin that is not its footprint center puts
         // the tail past a nominal centered rectangle when the dropship lands sideways
-        var turns = (byte) (((int) MathF.Round(-rotation.Degrees / 90f) % 4 + 4) % 4);
+        var turns = (byte) (((int) MathF.Round((float) (-rotation.Degrees / 90f)) % 4 + 4) % 4);
 
         if (!TryComp(dropshipGrid, out MapGridComponent? grid))
             return;
