@@ -11,6 +11,7 @@ using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fighter;
 using Content.Shared.CMU14.Vehicle.Open;
+using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Light.Components;
 using Content.Shared.Preferences;
@@ -36,6 +37,13 @@ public sealed class CMUJeepDeliveryTest : GameTest
             var system = SEntMan.System<DepartmentConsoleSystem>();
             var physician = SEntMan.System<StationSpawningSystem>().SpawnPlayerMob(map.GridCoords,
                 "AU14JobCivilianHeadPhysician", new HumanoidCharacterProfile(), station: null);
+            // BUG-1233 keeps loadout items that lose their slot in a free hand, so a fresh
+            // spawn can start with both occupied. Clear them so the buy asserts delivery,
+            // not spawn loadout luck.
+            var physicianHands = SEntMan.GetComponent<HandsComponent>(physician);
+            foreach (var hand in physicianHands.Hands.Values)
+                if (hand.HeldEntity is { } held)
+                    SEntMan.DeleteEntity(held);
             var outsider = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var cost = department.Supplies[0].Cost;
             department.DepartmentBudget = cost - 1;
