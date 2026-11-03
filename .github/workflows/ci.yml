@@ -17,11 +17,15 @@ concurrency:
   # PR starts only when it finishes. Without this github hands every free slot to whichever PR
   # asks first, so many runs crawl partial and nothing completes. Cancel stays off for PRs: a
   # fresh push queues a new run instead of killing the run currently holding the fleet.
-  # Draft PRs stay outside the group: their jobs all skip, and a no-op run queueing as newest
-  # would cancel a real PR's pending run. Master keeps per-ref supersession; staging/stable
-  # pushes and merge queue runs still finish.
+  # Draft PRs stay outside the group: their jobs all skip, and a no-op run has no business
+  # taking a queue slot. Master keeps per-ref supersession; staging/stable pushes and merge
+  # queue runs still finish.
+  # queue: max keeps every waiting PR's run pending instead of replacing it. the default
+  # single pending slot means each new push cancels whichever other PR was waiting: with a
+  # 20-PR backlog most contributors' CI dies silently and needs a manual re-run.
   group: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft != true && 'ci-pull-requests' || ((github.event_name == 'push' && github.ref == 'refs/heads/master') && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id)) }}
   cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+  queue: max
 
 env:
   DOTNET_VERSION: 10.0.x
