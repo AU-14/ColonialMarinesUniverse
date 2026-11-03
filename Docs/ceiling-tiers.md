@@ -9,7 +9,7 @@ lower tiers. This applies to all area prototypes, including existing maps.
 | 1 | `RMCAreaProtectionOne` | Mortar placement, laser designation, medevac, paradropping |
 | 2 | `RMCAreaProtectionTwo` | Mortar fire, supply drops, Fulton extraction |
 | 3 | `RMCAreaProtectionThree` | Close air support |
-| 4 | `RMCAreaProtectionFour` | Orbital bombardment |
+| 4 | `RMCAreaProtectionFour` | Orbital bombardment, dropship tactical landing |
 
 For new areas, inherit the appropriate protection preset and configure unrelated
 properties such as weather, power, and hive construction separately. Use
@@ -25,4 +25,6 @@ punch a hole through a stronger roof.
 Hive cores and pylons apply their additional runtime protection through
 `RoofingEntity`. Multi-Z mortar and orbital targeting still resolve the vertical
 column; permission to strike does not guarantee impact on the selected floor.
+Dropship tactical landings additionally require an open z-level column above the
+touchdown tile, so solid ceilings block them regardless of the area's tier.
 These tiers describe aerial access, not structural tile durability or weather.
