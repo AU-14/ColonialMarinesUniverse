@@ -24,7 +24,10 @@ concurrency:
   # push cancels whichever OTHER PR was waiting. Superseded same-PR runs are cancelled within
   # seconds by ci-queue-bouncer.yml, so the waiting list never holds outdated work: a push
   # never waits for its own stale run to drain first.
-  group: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft != true && 'ci-pull-requests' || ((github.event_name == 'push' && github.ref == 'refs/heads/master') && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id)) }}
+  # CMU14: group renamed from ci-pull-requests once: a wedged queued run held it and ignored
+  # every cancel, rerun and delete (delete needs admin). renaming the group is the eviction
+  # path when github strands a holder like that again.
+  group: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft != true && 'ci-pr-fleet' || ((github.event_name == 'push' && github.ref == 'refs/heads/master') && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id)) }}
   cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
   queue: max
 

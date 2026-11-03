@@ -44,21 +44,23 @@ jobs:
                 if (run.head_sha === sha)
                   continue;
                 // pull_requests is empty on fork PR runs, so match the head ref and
-                // repository, then pin the exact PR: the same branch can be open
-                // against two bases at once
+                // repository. same branch open against two bases is fine: a push
+                // supersedes both PRs' runs, and the two bouncer runs race to cancel
+                // the same targets harmlessly
                 if (run.head_branch !== headRef || run.head_repository?.full_name !== headRepo)
                   continue;
-                const pulls = await github.request('GET /repos/{owner}/{repo}/commits/{ref}/pulls', {
-                  ...context.repo,
-                  ref: run.head_sha,
-                });
-                if (!pulls.data.some(p => p.number === pr))
-                  continue;
-                await github.rest.actions.cancelWorkflowRun({
-                  ...context.repo,
-                  run_id: run.id,
-                });
-                cancelled++;
+                try {
+                  await github.rest.actions.cancelWorkflowRun({
+                    ...context.repo,
+                    run_id: run.id,
+                  });
+                  cancelled++;
+                } catch (err) {
+                  // 409: already cancelled, or the run finished between listing and
+                  // cancelling. both are success for supersession
+                  if (err.status !== 409)
+                    throw err;
+                }
               }
             }
             core.info(`cancelled ${cancelled} superseded CI run(s) for PR #${pr}`);
