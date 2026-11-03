@@ -17,7 +17,7 @@ public sealed partial class CMUATGMMountComponent : Component
     public TimeSpan LoadDelay = TimeSpan.FromSeconds(4);
 
     /// <summary>
-    ///     How long the spotter takes to wire a finder to the launcher.
+    ///     How long it takes to wire an optional target finder to the launcher.
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan LinkDelay = TimeSpan.FromSeconds(3);

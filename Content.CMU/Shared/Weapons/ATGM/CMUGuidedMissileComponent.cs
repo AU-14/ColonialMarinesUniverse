@@ -8,7 +8,7 @@ namespace Content.Shared.CMU14.Weapons.ATGM;
 
 /// <summary>
 ///     A wire-guided missile in flight. The server steers it: with a <see cref="TargetEntity"/> it homes on that
-///     entity and the guider's cursor bends the path; without one it flies to the guider's cursor
+///     entity and the gunner's cursor bends the path; without one it flies to the gunner's cursor
 ///     (<see cref="Target"/>), or straight until the guider sends one. The guider, finder, target entity and wire
 ///     endpoints are networked, so the guider's client knows when to stream cursor positions and every client
 ///     can draw the wire.
@@ -17,13 +17,13 @@ namespace Content.Shared.CMU14.Weapons.ATGM;
 public sealed partial class CMUGuidedMissileComponent : Component
 {
     /// <summary>
-    ///     The spotter steering this missile. Null once guidance is lost; the missile then flies straight.
+    ///     The gunner steering this missile. Null once guidance is lost; the missile then flies straight.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? Guider;
 
     /// <summary>
-    ///     The finder the guider must keep holding.
+    ///     The optional finder whose target lock the missile copied at launch.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? Finder;
@@ -42,13 +42,13 @@ public sealed partial class CMUGuidedMissileComponent : Component
     public MapCoordinates WireOrigin = MapCoordinates.Nullspace;
 
     /// <summary>
-    ///     The entity the spotter locked before launch. The missile homes on it.
+    ///     The entity the optional finder locked before launch. The missile homes on it.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? TargetEntity;
 
     /// <summary>
-    ///     The guider's latest cursor position. Without a lock this is the aim point; with a lock it bends the
+    ///     The gunner's latest cursor position. Without a lock this is the aim point; with a lock it bends the
     ///     path while fresh. Nullspace until the first accepted update.
     /// </summary>
     [ViewVariables]
@@ -75,7 +75,7 @@ public sealed partial class CMUGuidedMissileComponent : Component
 
     /// <summary>
     ///     Once set, the missile no longer follows <see cref="TargetEntity"/> (deleted, changed map or out of the
-    ///     spotter's sight) and flies to <see cref="TrackedPosition"/> instead.
+    ///     gunner's sight) and flies to <see cref="TrackedPosition"/> instead.
     /// </summary>
     [ViewVariables]
     public bool TrackingFrozen;
@@ -160,7 +160,7 @@ public sealed partial class CMUGuidedMissileComponent : Component
     public TimeSpan NextSightCheck;
 
     /// <summary>
-    ///     Session subscribed to this missile's PVS so the spotter keeps seeing it.
+    ///     Session subscribed to this missile's PVS so the gunner keeps seeing it.
     /// </summary>
     [ViewVariables]
     public ICommonSession? ViewSubscriber;

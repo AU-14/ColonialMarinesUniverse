@@ -23,12 +23,11 @@ namespace Content.Server.CMU14.Weapons.ATGM;
 /// </summary>
 /// <remarks>
 ///     <para>
-///     The gunner's click only sets the launch heading. With a spotter lock the missile homes on the locked
-///     entity and the spotter's cursor bends the path (<see cref="CMUGuidedMissileMath.ComputeAimPoint"/>);
-///     without one it flies straight until the spotter's first cursor update, then to the cursor.
+///     The gunner's click sets the launch heading, and the gunner's cursor guides the missile
+///     (<see cref="CMUGuidedMissileMath.ComputeAimPoint"/>). An optional finder lock lets it home on an entity.
 ///     </para>
 ///     <para>
-///     If the guider stops holding the finder the wire is cut and the missile flies straight, lock or not.
+///     If the guider is incapacitated or dies the wire is cut and the missile flies straight, lock or not.
 ///     If the locked entity is deleted, changes map, or the guider loses sight of it for too long, the missile
 ///     keeps flying to where the entity was last seen and detonates there.
 ///     </para>
@@ -124,16 +123,17 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
             missile.HasGuidance = false;
 
             if (TryComp(projectile, out ProjectileComponent? projectileComp) &&
-                projectileComp.Shooter is { } gunner &&
-                _atgm.TryGetSpotter(ent, gunner, out var spotter, out var finder, out _))
+                projectileComp.Shooter is { } gunner)
             {
-                missile.Guider = spotter;
-                missile.Finder = finder;
-                AddViewer((projectile, missile), spotter);
+                missile.Guider = gunner;
+                AddViewer((projectile, missile), gunner);
 
-                if (TryComp(finder, out CMUATGMFinderComponent? finderComp) &&
+                if (_atgm.IsLinked(ent) &&
+                    ent.Comp.LinkedFinder is { } finder &&
+                    TryComp(finder, out CMUATGMFinderComponent? finderComp) &&
                     _atgm.TryGetLock((finder, finderComp), out var locked))
                 {
+                    missile.Finder = finder;
                     missile.TargetEntity = locked;
                     missile.TrackedPosition = _transform.GetMapCoordinates(locked.Value);
                     missile.TrackedVelocity = Vector2.Zero;
@@ -252,8 +252,7 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
                 continue;
             }
 
-            if (missile.Guider is { } guider &&
-                (missile.Finder is not { } finder || !_atgm.CanGuide(guider, finder)))
+            if (missile.Guider is { } guider && !_atgm.CanGuide(guider))
             {
                 LoseGuidance((uid, missile));
             }
@@ -322,7 +321,7 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
         }
         else
         {
-            // No lock: fly straight until the spotter's first cursor update, then to the cursor.
+            // No lock: fly straight until the gunner's first cursor update, then to the cursor.
             if (!missile.HasGuidance || missile.Target.MapId != position.MapId)
                 return false;
 

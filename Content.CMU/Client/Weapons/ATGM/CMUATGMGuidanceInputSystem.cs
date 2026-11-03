@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Client.CMU14.ThreeD.Scene;
 using Content.Shared.CMU14.Weapons.ATGM;
-using Content.Shared.Hands.EntitySystems;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
@@ -11,7 +10,7 @@ using Robust.Shared.Timing;
 namespace Content.Client.CMU14.Weapons.ATGM;
 
 /// <summary>
-///     Streams the local spotter's cursor to the server while they guide an A.T.G.M. missile.
+///     Streams the local shooter's cursor to the server while they guide an A.T.G.M. missile.
 ///     Throttled and delta-gated, with a heartbeat so the server's latest point stays fresh (a locked missile
 ///     ignores a stale cursor) and an update lost in transit is re-sent; the server validates every update.
 /// </summary>
@@ -23,7 +22,6 @@ public sealed partial class CMUATGMGuidanceInputSystem : EntitySystem
 
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private CMU3DLiveSceneSystem _firstPerson = default!;
-    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private IInputManager _input = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -75,7 +73,7 @@ public sealed partial class CMUATGMGuidanceInputSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUGuidedMissileComponent>();
         while (query.MoveNext(out _, out var missile))
         {
-            if (missile.Guider == local && _hands.IsHolding(local, missile.Finder))
+            if (missile.Guider == local)
                 return true;
         }
 

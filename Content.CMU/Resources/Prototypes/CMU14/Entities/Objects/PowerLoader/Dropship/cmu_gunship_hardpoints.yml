@@ -182,7 +182,7 @@
   parent: CMUDropshipAttachmentDoorGunM2C
   id: CMUDropshipAttachmentDoorGunATGM
   name: MTU-7 FOGO-ATGM Door Gunner Hardpoint System
-  description: A box that deploys a crew-served FOGO-ATGM wire-guided missile launcher. Its missiles still need a crewman with a linked finder to steer them. Fits on gunship hardpoint attachment points.
+  description: A box that deploys a crew-served FOGO-ATGM wire-guided missile launcher. The gunner guides missiles with their cursor; a linked finder is optional for target locks. Fits on gunship hardpoint attachment points.
   components:
   - type: DropshipFabricatorPrintable
     cost: 700

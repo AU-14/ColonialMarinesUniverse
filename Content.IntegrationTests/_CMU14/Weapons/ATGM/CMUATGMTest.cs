@@ -101,6 +101,8 @@ public sealed class CMUATGMTest : GameTest
                     "A fixed range would stop the guided missile mid-flight.");
                 Assert.That(launcher.HasComp<ShootAtFixedPointComponent>(factory), Is.False,
                     "ShootAtFixedPoint is the only source of ProjectileFixedDistanceComponent on shot projectiles.");
+                Assert.That(launcher.HasComp<GunRequiresSkillsComponent>(factory), Is.False,
+                    "The launcher can be fired without an ATGM skill.");
                 Assert.That(launcher.HasComp<GunUseGunOriginComponent>(factory), Is.True,
                     "The missile must launch from the tripod, not the gunner.");
                 Assert.That(launcher.HasComp<CMUATGMLauncherComponent>(factory), Is.True);
@@ -109,49 +111,23 @@ public sealed class CMUATGMTest : GameTest
     }
 
     [Test]
-    public async Task FireInterlockRequiresSeparateSkilledSpotterInRange()
+    public async Task FiringDoesNotRequireSkillOrFinder()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
             var atgm = Server.System<CMUATGMSystem>();
-            var hands = Server.System<SharedHandsSystem>();
-            var skills = Server.System<SkillsSystem>();
             var transform = Server.System<SharedTransformSystem>();
 
             var mount = SEntMan.SpawnEntity("CMUATGMMount", map.GridCoords);
             Assert.That(atgm.TryGetLauncher(mount, out var launcher), Is.True);
 
             var gunner = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var spotter = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            skills.SetSkill(gunner, Skill, 1);
-            skills.SetSkill(spotter, Skill, 1);
 
             var from = transform.GetMoverCoordinates(mount);
             var aim = from.Offset(transform.GetWorldRotation(mount).ToWorldVec() * 3);
 
-            Assert.That(Attempt(), Is.True, "No finder is linked.");
-
-            var finder = SEntMan.SpawnEntity("CMUATGMFinder", map.GridCoords);
-            atgm.Link(launcher, (finder, SEntMan.GetComponent<CMUATGMFinderComponent>(finder)));
-            Assert.That(launcher.Comp.LinkedFinder, Is.EqualTo(finder));
-            Assert.That(Attempt(), Is.True, "The linked finder is not held by anyone.");
-
-            Assert.That(hands.TryPickupAnyHand(spotter, finder), Is.True);
-            Assert.That(Attempt(), Is.False, "A skilled spotter holding the linked finder allows firing.");
-
-            skills.SetSkill(spotter, Skill, 0);
-            Assert.That(Attempt(), Is.True, "An unskilled spotter cannot guide.");
-            skills.SetSkill(spotter, Skill, 1);
-
-            transform.SetCoordinates(spotter, map.GridCoords.Offset(new Vector2(30, 0)));
-            Assert.That(Attempt(), Is.True, "A spotter out of range cannot guide.");
-            transform.SetCoordinates(spotter, map.GridCoords);
-
-            // The two-man interlock: the gunner can never be their own spotter.
-            Assert.That(hands.TryDrop(spotter, finder), Is.True);
-            Assert.That(hands.TryPickupAnyHand(gunner, finder), Is.True);
-            Assert.That(Attempt(), Is.True, "The gunner holding the finder cannot spot for themselves.");
+            Assert.That(Attempt(), Is.False, "The gunner can fire without ATGM skill or a linked finder.");
 
             bool Attempt()
             {

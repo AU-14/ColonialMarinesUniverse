@@ -20,7 +20,7 @@ emplacement-mount-RuMCMachineGunUTES-C-description-mounted = A deployable UPP 12
 
 emplacement-mount-CMUATGMLauncher-name = MGM-120B FOGO-ATGM
 emplacement-mount-CMUATGMLauncher-description = Forward Observer Guided Operation Antitank Guided Missile. Built by the ISCS and distributed amongst the sector to fight against the growing number of long range vehicle heavy insurgencies. This Wire Guided ATGM has served as a staple for the local Neroid military forces ever since.
-emplacement-mount-CMUATGMLauncher-description-mounted = A deployed wire-guided anti-tank missile launcher. The gunner fires it; a second crewman with the linked finder steers the missile onto the target. Slow to set up, slower to reload, and it hits like a freight train.
+emplacement-mount-CMUATGMLauncher-description-mounted = A deployed wire-guided anti-tank missile launcher. The gunner fires and steers it with their cursor; a linked finder can optionally lock a target. Slow to set up, slower to reload, and it hits like a freight train.
 
 emplacement-mount-CMUSmartGunMountedDropship-name = M56D mount
 emplacement-mount-CMUSmartGunMountedDropship-description = A foldable mount for the M56D, provides stability to the M56D.
@@ -32,4 +32,4 @@ emplacement-mount-CMUAGLMK86DropshipLoaded-description-mounted = A Mk86 automati
 
 emplacement-mount-CMUATGMLauncherDropship-name = MGM-120B FOGO-ATGM
 emplacement-mount-CMUATGMLauncherDropship-description = A FOGO-ATGM launcher stripped off its gunship hardpoint rigging.
-emplacement-mount-CMUATGMLauncherDropship-description-mounted = A FOGO-ATGM launcher rigged to a gunship hardpoint. The gunner fires it; a crewman with the linked finder steers the missile onto the target.
+emplacement-mount-CMUATGMLauncherDropship-description-mounted = A FOGO-ATGM launcher rigged to a gunship hardpoint. The gunner fires and guides the missile with their cursor; a linked finder is optional for target locks.

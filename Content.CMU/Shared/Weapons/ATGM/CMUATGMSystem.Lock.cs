@@ -12,19 +12,19 @@ using Robust.Shared.Map.Components;
 namespace Content.Shared.CMU14.Weapons.ATGM;
 
 /// <summary>
-///     Spotter lock-on: the spotter clicks an entity with the linked finder, and missiles fired while the lock
+///     Optional target lock: the finder user clicks an entity with the linked finder, and missiles fired while the lock
 ///     holds home on that entity. The lock is shown with RMC's targeting laser and reticle.
 /// </summary>
 /// <remarks>
 ///     Locks are server-authoritative. The handlers mark the click handled on the client too so nothing else
 ///     acts on it, but only the server validates, changes <see cref="CMUATGMFinderComponent.LockedTarget"/>
 ///     and starts the laser; the networked state and popups then reach the client.
-///     The lock persists after a shot, so the spotter can keep lasing for follow-up missiles. It ends when the
-///     spotter clears it (unique action), drops, stows or deselects the finder, moves (RMC cancels the laser),
+///     The lock persists after a shot, so the finder user can keep lasing for follow-up missiles. It ends when the
+///     finder user clears it (unique action), drops, stows or deselects the finder, moves (RMC cancels the laser),
 ///     the laser times out, the finder is unlinked, or the target is gone.
-///     While a missile guided through the finder is in flight the spotter can neither lock a new target nor
-///     clear the lock (FLOW-07); losing the finder still cuts the wire and the lock as above, and the missile
-///     keeps the target it copied at launch.
+///     While a missile guided through the finder is in flight the finder user can neither lock a new target nor
+///     clear the lock (FLOW-07). Losing the finder clears the lock, but does not interrupt the gunner's cursor
+///     guidance or change the target the missile copied at launch.
 /// </remarks>
 public sealed partial class CMUATGMSystem
 {
@@ -105,7 +105,7 @@ public sealed partial class CMUATGMSystem
 
     private void OnFinderTargetingCancelled(Entity<CMUATGMFinderComponent> ent, ref TargetingCancelledEvent args)
     {
-        // RMC removes the laser itself right after raising this (e.g. the spotter moved).
+        // RMC removes the laser itself right after raising this (e.g. the finder user moved).
         if (_net.IsClient || ent.Comp.LockedTarget is not { } target)
             return;
 
@@ -179,12 +179,6 @@ public sealed partial class CMUATGMSystem
             !IsLinked((launcherUid, launcher)))
         {
             reason = "cmu-atgm-lock-not-linked";
-            return false;
-        }
-
-        if (!_skills.HasSkill(user, launcher.Skill, 1))
-        {
-            reason = "cmu-atgm-lock-unskilled";
             return false;
         }
 
@@ -322,7 +316,7 @@ public sealed partial class CMUATGMSystem
 
     /// <summary>
     ///     Rejects the crew and anything they carry: the gunner buckled to the tripod, and items in the
-    ///     spotter's or anyone's inventory or containers. A locked missile would otherwise home on its own team.
+    ///     finder user's or anyone's inventory or containers. A locked missile would otherwise home on its own team.
     /// </summary>
     private bool IsCrewOrCarried(EntityUid target, EntityUid user, EntityUid launcher, EntityUid? mount)
     {
