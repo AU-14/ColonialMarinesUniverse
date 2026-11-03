@@ -281,31 +281,15 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         if (!TryComp(destination.Owner, out TransformComponent? xform))
             return;
 
-        if (!TryComp(dropshipGrid, out DropshipComponent? dropship))
-            return;
-
         var destCoords = xform.Coordinates;
         var remaining = ftl.StateTime.End - _timing.CurTime;
         var lifetime = (float)remaining.TotalSeconds + 1f;
         if (lifetime < 2f)
             lifetime = 2f;
 
-        Entity<DropshipNavigationComputerComponent>? console = null;
-        var consoleQuery = EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent>();
-        while (consoleQuery.MoveNext(out var navUid, out var navComp, out var navXform))
-        {
-            if (navXform.GridUid == dropshipGrid)
-            {
-                console = (navUid, navComp);
-                break;
-            }
-        }
-
-        var footprint = console is { } c ? GetFootprint(c, dropship) : dropship.TacticalLandFootprint;
-
         _audio.PlayPvs(WarningSound, destCoords, AudioParams.Default.WithVolume(2f));
         if (!TrySpawnMohawkApproachShadows(destination, dropshipGrid, lifetime, ftl.StateTime.End))
-            SpawnWarningBorder(destCoords, footprint, xform.LocalRotation, lifetime);
+            SpawnWarningBorder(destCoords, xform.LocalRotation, lifetime, dropshipGrid);
 
         EnsureComp<DropshipLandingMarkersSpawnedComponent>(destination);
     }
@@ -420,21 +404,42 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         return dropship.TacticalLandFootprint;
     }
 
-    private void SpawnWarningBorder(EntityCoordinates center, Vector2i footprint, Angle rotation, float lifetime)
+    private void SpawnWarningBorder(EntityCoordinates center, Angle rotation, float lifetime, EntityUid dropshipGrid)
     {
-        var halfW = footprint.X / 2;
-        var halfH = footprint.Y / 2;
+        // the hull lands origin-anchored and turned with the destination, so the border must
+        // cover the real rotated tiles: a hull origin that is not its footprint center puts
+        // the tail past a nominal centered rectangle when the dropship lands sideways
+        var turns = (byte) (((int) MathF.Round(-rotation.Degrees / 90f) % 4 + 4) % 4);
 
-        for (var dx = -halfW; dx <= halfW; dx += 2)
+        if (!TryComp(dropshipGrid, out MapGridComponent? grid))
+            return;
+
+        var minX = int.MaxValue;
+        var minY = int.MaxValue;
+        var maxX = int.MinValue;
+        var maxY = int.MinValue;
+        foreach (var tile in _map.GetAllTiles(dropshipGrid, grid))
         {
-            SpawnTimed(center.Offset(rotation.RotateVec(new Vector2(dx,  halfH))), lifetime);
-            SpawnTimed(center.Offset(rotation.RotateVec(new Vector2(dx, -halfH))), lifetime);
+            var rotated = RotateGridTileOffset(tile.GridIndices, turns);
+            minX = Math.Min(minX, rotated.X);
+            minY = Math.Min(minY, rotated.Y);
+            maxX = Math.Max(maxX, rotated.X);
+            maxY = Math.Max(maxY, rotated.Y);
         }
 
-        for (var dy = -halfH + 2; dy <= halfH - 2; dy += 2)
+        if (minX > maxX)
+            return;
+
+        for (var x = minX; x <= maxX; x += 2)
         {
-            SpawnTimed(center.Offset(rotation.RotateVec(new Vector2( halfW, dy))), lifetime);
-            SpawnTimed(center.Offset(rotation.RotateVec(new Vector2(-halfW, dy))), lifetime);
+            SpawnTimed(center.Offset(new Vector2(x + 0.5f, minY + 0.5f)), lifetime);
+            SpawnTimed(center.Offset(new Vector2(x + 0.5f, maxY + 0.5f)), lifetime);
+        }
+
+        for (var y = minY + 2; y <= maxY - 2; y += 2)
+        {
+            SpawnTimed(center.Offset(new Vector2(minX + 0.5f, y + 0.5f)), lifetime);
+            SpawnTimed(center.Offset(new Vector2(maxX + 0.5f, y + 0.5f)), lifetime);
         }
     }
 
