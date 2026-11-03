@@ -1191,11 +1191,12 @@ public sealed partial class SavedBuildSystem : EntitySystem
     private HashSet<string> GetZBuildableTileIds()
     {
         var allowed = new HashSet<string>(StringComparer.Ordinal);
+        // RUMC: a tile is z-buildable if a recipe builds it through a tile applier, whatever list of the menu the recipe is in (the plating is in the main one).
         foreach (var recipe in _prototype.EnumeratePrototypes<ConstructionPrototype>())
         {
-            if (!string.Equals(recipe.Spawnlist, "Tiles", StringComparison.Ordinal))
-                continue;
-
+            // RUMC: the filter that was here (kept): only the recipes of the "Tiles" list counted, and the plating is no longer in it.
+            // RUMC: if (!string.Equals(recipe.Spawnlist, "Tiles", StringComparison.Ordinal))
+            // RUMC:     continue;
             if (TryGetRecipeTarget(recipe, out var target) &&
                 _prototype.TryIndex<EntityPrototype>(target, out var targetProto) &&
                 targetProto.TryComp<TileApplierComponent>(out var applier, _componentFactory))
@@ -1214,9 +1215,16 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         var stack = new Stack<ConstructionGraphNode>();
         stack.Push(targetNode);
+
+        // RUMC: the nodes already looked at. The graphs go back and forth (a thing built is taken down again to where it began), and a graph none of whose entities exists any more
+        // (the modular grenade, in this fork) had this walk go round in circles for ever: the tick that ticked "save the tiles" never ended and took the server down.
+        var seen = new HashSet<string>();
         while (stack.Count > 0)
         {
             var node = stack.Pop();
+            if (!seen.Add(node.Name))
+                continue;
+
             if (node.Entity.GetId(null, null, new(EntityManager)) is { } entityId &&
                 _prototype.HasIndex<EntityPrototype>(entityId))
             {

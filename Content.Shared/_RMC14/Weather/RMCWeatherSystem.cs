@@ -50,9 +50,11 @@ public sealed partial class RMCWeatherSystem : EntitySystem
 
     }
 
-    public bool CanWeatherAffectArea(EntityUid uid, MapGridComponent grid, TileRef tileRef, RoofComponent? roofComp = null)
+    // CMU14: Accept roof coverage already resolved for the current render batch.
+    public bool CanWeatherAffectArea(EntityUid uid, MapGridComponent grid, TileRef tileRef,
+        RoofComponent? roofComp = null, bool? roofed = null)
     {
-        if (Resolve(uid, ref roofComp, false) && _roof.IsRooved((uid, grid, roofComp), tileRef.GridIndices))
+        if (roofed ?? (Resolve(uid, ref roofComp, false) && _roof.IsRooved((uid, grid, roofComp), tileRef.GridIndices)))
             return false;
 
         if (!_area.IsWeatherEnabled((uid, grid), tileRef.GridIndices))

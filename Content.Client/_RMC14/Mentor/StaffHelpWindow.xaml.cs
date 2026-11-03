@@ -21,6 +21,11 @@ public sealed partial class StaffHelpWindow : DefaultWindow
     private static readonly CmuChoiceCard.Palette MentorPalette = new(
         Color.FromHex("#2E6241"), Color.FromHex("#0B1710"), Color.FromHex("#152F20"), Color.FromHex("#8FE9AE"));
 
+    // CMU14: bug report. Blurple, the same hue as the BugHelp embed color, so the card and the
+    // Discord report it opens read as one system.
+    private static readonly CmuChoiceCard.Palette BugReportPalette = new(
+        Color.FromHex("#6E78F5"), Color.FromHex("#101224"), Color.FromHex("#1F2450"), Color.FromHex("#B9BEFF"));
+
     /// <summary>
     ///     Kept as properties because <see cref="StaffHelpUIController"/> binds to them by name, and
     ///     the buttons now belong to the cards rather than to the XAML.
@@ -29,8 +34,12 @@ public sealed partial class StaffHelpWindow : DefaultWindow
 
     public Button MentorHelpButton => _mentorCard.Button;
 
+    // CMU14: bug report choice.
+    public Button BugHelpButton => _bugCard.Button;
+
     private readonly CmuChoiceCard _adminCard;
     private readonly CmuChoiceCard _mentorCard;
+    private readonly CmuChoiceCard _bugCard; // CMU14
 
     public StaffHelpWindow()
     {
@@ -42,7 +51,8 @@ public sealed partial class StaffHelpWindow : DefaultWindow
         // files a report about another player.
         _adminCard = new CmuChoiceCard(
             "Admin Help",
-            "For reporting issues with another player to an admin, or asking about the rules.",
+            // CMU14: shed sentence, part 2 §7 - ahelp sheds game traffic to Bug Report.
+            "For reporting issues with another player to an admin, or asking about the rules. For problems with the game itself, use Bug Report.",
             AdminPalette,
             buttonOnLeft: true);
 
@@ -52,8 +62,17 @@ public sealed partial class StaffHelpWindow : DefaultWindow
             MentorPalette,
             buttonOnLeft: false);
 
+        // CMU14: bug report card - for problems with the game itself, not players or rules.
+        // Copy is final per part 2 §7: dual-mode, get help during the round and report the bug.
+        _bugCard = new CmuChoiceCard(
+            "Bug Report",
+            "Game problems: broken mechanics, bad spawns, being stuck in geometry. Get help during the round and report bugs to the developers.",
+            BugReportPalette,
+            buttonOnLeft: true);
+
         Choices.AddChild(_adminCard);
         Choices.AddChild(_mentorCard);
+        Choices.AddChild(_bugCard); // CMU14: zig-zag continues left-right-left.
     }
 
     /// <summary>
@@ -85,5 +104,6 @@ public sealed partial class StaffHelpWindow : DefaultWindow
 
         _adminCard.ApplyPalette();
         _mentorCard.ApplyPalette();
+        _bugCard.ApplyPalette(); // CMU14
     }
 }

@@ -2455,105 +2455,6 @@ public sealed class YautjaSmokeTest
 
     [Test]
     [NonParallelizable]
-    public async Task NonTechRandomBracerFunctionSlotTwoOpensTrackerLikeCmss13()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Connected = true,
-            Dirty = true,
-        });
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        EntityUid user = default;
-        EntityUid bracer = default;
-        EntityUid deadYautja = default;
-        EntityUid? previousAttached = null;
-
-        try
-        {
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                var inventory = entMan.System<InventorySystem>();
-                var mobState = entMan.System<MobStateSystem>();
-                var session = server.PlayerMan.Sessions.Single();
-                previousAttached = session.AttachedEntity;
-
-                user = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-                bracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
-                deadYautja = entMan.SpawnEntity("CMUMobYautja", map.GridCoords.Offset(new Vector2(0, 3)));
-
-                Assert.That(inventory.TryEquip(user, bracer, "gloves", silent: true, force: true), Is.True);
-                mobState.ChangeMobState(deadYautja, MobState.Dead);
-                server.PlayerMan.SetAttachedEntity(session, user);
-
-                var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
-                comp.NonYautjaWorkingChance = 0f;
-                comp.NonYautjaRandomFunctionChance = 1f;
-                comp.NonYautjaDelimbChance = 0f;
-            });
-
-            await pair.ReallyBeIdle(10);
-
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                var utility = entMan.System<YautjaBracerUtilitySystem>();
-                var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
-
-                entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 1;
-
-                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
-                Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
-            });
-
-            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
-            await server.WaitAssertion(() =>
-            {
-                var entMan = server.EntMan;
-                var ui = entMan.System<SharedUserInterfaceSystem>();
-                var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.Zero);
-                    Assert.That(entMan.GetComponent<YautjaBracerRandomSeedTestComponent>(bracer).Completed, Is.True);
-                    Assert.That(ui.TryGetUiState<YautjaBracerPanelState>(bracer, YautjaBracerUIKey.Key, out var state), Is.True,
-                        "CMSS13 activate_random_verb() slot 2 routes to track_gear_internal(user, TRUE).");
-                    // CMU14: the readout lists every auto-registered piece of Yautja tech, so the deceased Yautja's
-                    // signature is not necessarily the only entry - .Single() here threw
-                    // InvalidOperationException("Sequence contains more than one element"), which aborted the test
-                    // and surfaced as the dirty-dispose warning. Assert the signature is present instead.
-                    Assert.That(state!.TrackedGear.Select(gear => gear.Name),
-                        Does.Contain("deceased Yautja bio signature"),
-                        "Slot 2 must report the deceased Yautja's bio signature.");
-                    Assert.That(comp.IdChipDeployed, Is.False,
-                        "Local slot 2 must not use the old ID chip toggle random-function behavior.");
-                });
-            });
-        }
-        finally
-        {
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                var session = server.PlayerMan.Sessions.Single();
-                server.PlayerMan.SetAttachedEntity(session, previousAttached);
-
-                foreach (var uid in new[] { user, bracer, deadYautja })
-                {
-                    if (uid != default && !entMan.Deleted(uid))
-                        entMan.DeleteEntity(uid);
-                }
-            });
-        }
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotOneDeploysAttachmentsLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -2698,6 +2599,7 @@ public sealed class YautjaSmokeTest
                 comp.NonYautjaWorkingChance = 0f;
                 comp.NonYautjaRandomFunctionChance = 1f;
                 comp.NonYautjaDelimbChance = 0f;
+                comp.NonYautjaShockChance = 0f;
                 comp.Charge = 300;
                 comp.Regen = 0;
             });
@@ -2711,6 +2613,9 @@ public sealed class YautjaSmokeTest
                 var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
 
                 entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 5;
+
+                // Seed the shared RNG directly: the roll must not depend on which tests ran before on this server.
+                server.ResolveDependency<IRobustRandom>().SetSeed(5);
 
                 Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
@@ -3270,11 +3175,13 @@ public sealed class YautjaSmokeTest
                 var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
                 comp.User = user;
                 comp.NonYautjaCloakShockChance = 1f;
+                comp.NonYautjaShockChance = 0f;
                 comp.NonYautjaDelimbChance = 0f;
                 comp.NextNonYautjaCloakShock = TimeSpan.Zero;
                 entMan.EnsureComponent<EntityActiveInvisibleComponent>(user);
 
                 utility.Update(0.1f);
+                comp.NextNonYautjaCloakShock = TimeSpan.FromSeconds(30);
 
                 var damage = entMan.System<DamageableSystem>().GetAllDamage(user);
                 Assert.That(damage.DamageDict.TryGetValue("Heat", out var heat), Is.True);
@@ -3345,11 +3252,13 @@ public sealed class YautjaSmokeTest
                 var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
                 comp.User = user;
                 comp.NonYautjaCloakShockChance = 1f;
+                comp.NonYautjaShockChance = 0f;
                 comp.NonYautjaDelimbChance = 0f;
                 comp.NextNonYautjaCloakShock = TimeSpan.Zero;
                 entMan.EnsureComponent<EntityActiveInvisibleComponent>(user);
 
                 utility.Update(0.1f);
+                comp.NextNonYautjaCloakShock = TimeSpan.FromSeconds(30);
 
                 var damage = entMan.System<DamageableSystem>().GetAllDamage(user);
                 Assert.That(damage.DamageDict.TryGetValue("Heat", out var heat), Is.True);
@@ -3673,25 +3582,23 @@ public sealed class YautjaSmokeTest
                 var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
                 comp.User = user;
                 comp.NonYautjaCloakShockChance = 1f;
+                comp.NonYautjaShockChance = 0f;
                 comp.NonYautjaDelimbChance = 0f;
                 comp.NextNonYautjaCloakShock = TimeSpan.Zero;
                 entMan.EnsureComponent<EntityActiveInvisibleComponent>(user);
 
                 utility.Update(0.1f);
+                comp.NextNonYautjaCloakShock = TimeSpan.FromSeconds(30);
             });
 
             await pair.ReallyBeIdle(10);
 
-            await client.WaitAssertion(() =>
-            {
-                var labels = client.EntMan.System<PopupSystem>().WorldLabels
-                    .Select(label => label.Text)
-                    .ToList();
-
-                Assert.That(labels,
-                    Does.Contain("The hunting bracer beeps and sends a shock through Test Misuser's body!"),
-                    "CMSS13 shock_user() uses M.visible_message(\"[src] beeps and sends a shock through [M]'s body!\") so nearby observers should see the shock, not only the wearer.");
-            });
+            // The client stacks a repeated popup delivery as "<message> x<count>"; the wrap is a
+            // rendering detail, so match the shock message with or without it.
+            await AssertClientHasPopupMatching(client,
+                label => label == "The hunting bracer beeps and sends a shock through Test Misuser's body!"
+                    || label.StartsWith("The hunting bracer beeps and sends a shock through Test Misuser's body! x"),
+                "CMSS13 shock_user() uses M.visible_message(\"[src] beeps and sends a shock through [M]'s body!\") so nearby observers should see the shock, not only the wearer.");
         }
         finally
         {
@@ -3742,11 +3649,13 @@ public sealed class YautjaSmokeTest
                 var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
                 comp.User = user;
                 comp.NonYautjaCloakShockChance = 1f;
+                comp.NonYautjaShockChance = 0f;
                 comp.NonYautjaDelimbChance = 0f;
                 comp.NextNonYautjaCloakShock = TimeSpan.Zero;
                 entMan.EnsureComponent<EntityActiveInvisibleComponent>(user);
 
                 utility.Update(0.1f);
+                comp.NextNonYautjaCloakShock = TimeSpan.FromSeconds(30);
 
                 Assert.That(listener.Emotes, Does.Contain((user, "Scream")),
                     "CMSS13 shock_user() calls M.emote(\"scream\") when the shocked wearer feels pain.");
@@ -8908,7 +8817,8 @@ public sealed class YautjaSmokeTest
                     Assert.That(snareArrowMeta.EntityName, Is.EqualTo("snare arrow"));
                     Assert.That(snareArrowMeta.EntityDescription, Is.EqualTo("A bow launched snare."));
                     Assert.That(quiverMeta.EntityName, Is.EqualTo("quiver strap"));
-                    Assert.That(quiverMeta.EntityDescription, Is.EqualTo("A strap that can hold a bow with a quiver for arrows."));
+                    Assert.That(quiverMeta.EntityDescription, Is.EqualTo("A strap that holds up to eight bows and arrows in total, with room for one hunting bow and seven arrows."),
+                        "The fork's quiver description names its capacity, report 1085.");
                 });
             }
             finally
@@ -8997,6 +8907,9 @@ public sealed class YautjaSmokeTest
             var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var scimitar = entMan.SpawnEntity("CMUYautjaScimitar", MapCoordinates.Nullspace);
             var altScimitar = entMan.SpawnEntity("CMUYautjaScimitarAlt", MapCoordinates.Nullspace);
+            var shieldHunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var shieldScimitar = entMan.SpawnEntity("CMUYautjaScimitar", MapCoordinates.Nullspace);
+            var shield = entMan.SpawnEntity("CMUYautjaBracerShield", MapCoordinates.Nullspace);
 
             try
             {
@@ -9018,6 +8931,13 @@ public sealed class YautjaSmokeTest
                     Assert.That(melee.GetAttackRate(altScimitar, hunter), Is.EqualTo(1f / 0.6f).Within(0.0001f),
                         "CMSS13 scimitar/alt inherits the same paired speed bonus.");
                 });
+
+                // the cmss13 bracer shield is a riot shield, not a bracer_attachment, so it never unlocks the pair speed
+                entMan.EnsureComponent<YautjaComponent>(shieldHunter);
+                Assert.That(hands.TryPickupAnyHand(shieldHunter, shieldScimitar), Is.True);
+                Assert.That(hands.TryPickupAnyHand(shieldHunter, shield), Is.True);
+                Assert.That(melee.GetAttackRate(shieldScimitar, shieldHunter), Is.EqualTo(1f),
+                    "A scimitar next to the bracer shield must keep cmss13's unpaired 1 second attack_speed.");
             }
             finally
             {
@@ -9027,6 +8947,12 @@ public sealed class YautjaSmokeTest
                     entMan.DeleteEntity(scimitar);
                 if (!entMan.Deleted(altScimitar))
                     entMan.DeleteEntity(altScimitar);
+                if (!entMan.Deleted(shield))
+                    entMan.DeleteEntity(shield);
+                if (!entMan.Deleted(shieldScimitar))
+                    entMan.DeleteEntity(shieldScimitar);
+                if (!entMan.Deleted(shieldHunter))
+                    entMan.DeleteEntity(shieldHunter);
             }
         });
 
@@ -10275,7 +10201,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerSelfDestructCanBeArmedWhileCritical()
+    public async Task BracerSelfDestructCanBeArmedAfterRecoveringFromCritical()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -10298,6 +10224,10 @@ public sealed class YautjaSmokeTest
                 mobState.ChangeMobState(hunter, MobState.Critical);
 
                 var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
+                Assert.That(selfDestruct.TryArmSelfDestruct((bracer, bracerComp), hunter, TimeSpan.FromSeconds(30)), Is.False);
+                Assert.That(bracerComp.SelfDestructArmed, Is.False);
+
+                mobState.ChangeMobState(hunter, MobState.Alive);
                 Assert.That(selfDestruct.TryArmSelfDestruct((bracer, bracerComp), hunter, TimeSpan.FromSeconds(30)), Is.True);
                 Assert.That(bracerComp.SelfDestructArmed, Is.True);
             }
@@ -10504,11 +10434,15 @@ public sealed class YautjaSmokeTest
                 mobState.ChangeMobState(criticalHunter, MobState.Critical);
                 Assert.That(selfDestruct.TryArmSelfDestruct(
                     (criticalBracer, entMan.GetComponent<YautjaBracerComponent>(criticalBracer)),
-                    criticalHunter), Is.True);
-                Assert.That(selfDestruct.TryCancelSelfDestruct(
-                    (criticalBracer, entMan.GetComponent<YautjaBracerComponent>(criticalBracer)),
-                    criticalHunter), Is.True);
+                    criticalHunter), Is.False);
+                Assert.That(entMan.GetComponent<YautjaBracerComponent>(criticalBracer).SelfDestructArmed, Is.False);
             });
+
+            await pair.ReallyBeIdle(10);
+            await AssertClientHasPopup(
+                client,
+                "As you fall into unconsciousness you fail to activate your self-destruct device before you collapse.",
+                "The bracer does not answer an unconscious hunter.");
 
             await server.WaitPost(() =>
             {
@@ -12237,15 +12171,21 @@ public sealed class YautjaSmokeTest
             var entMan = server.EntMan;
             var hands = entMan.System<SharedHandsSystem>();
             var serverHands = entMan.System<HandsSystem>();
+            var mapSystem = entMan.System<SharedMapSystem>();
 
-            hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            wall = entMan.SpawnEntity("CMUHunterShipWallTurfClosedWallHuntershipHunterBase", map.GridCoords.Offset(new Vector2(1, 0)));
-            item = entMan.SpawnEntity(itemPrototype, map.GridCoords);
+            mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(1, 0), map.Tile.Tile);
+
+            hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+            wall = entMan.SpawnEntity("CMUHunterShipWallTurfClosedWallHuntershipHunterBase", map.GridCoords.Offset(new Vector2(1.5f, 0.5f)));
+            item = entMan.SpawnEntity(itemPrototype, map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+
+            Assert.That(entMan.GetComponent<TransformComponent>(wall).Anchored, Is.True,
+                "The wall must spawn anchored; an unanchored wall is a Dynamic body thrown items can shove aside.");
 
             entMan.EnsureComponent<YautjaComponent>(hunter);
             Assert.That(hands.TryPickupAnyHand(hunter, item), Is.True);
 
-            var behindWall = map.GridCoords.Offset(new Vector2(3, 0));
+            var behindWall = map.GridCoords.Offset(new Vector2(3.5f, 0.5f));
             Assert.That(serverHands.ThrowHeldItem(hunter, behindWall), Is.True,
                 "HandsSystem accepts a legal throw; hunter-ship walls stop it through hard thrown-item collision.");
             Assert.That(entMan.HasComponent<ThrownItemComponent>(item), Is.True);
@@ -12259,6 +12199,7 @@ public sealed class YautjaSmokeTest
             var transform = entMan.System<SharedTransformSystem>();
             var itemPosition = transform.GetMapCoordinates(item).Position;
             var wallPosition = transform.GetMapCoordinates(wall).Position;
+
             Assert.That(itemPosition.X, Is.LessThan(wallPosition.X + 0.5f),
                 "The thrown item must not finish on the far side of the hunter-ship wall.");
 
@@ -19821,6 +19762,10 @@ public sealed class YautjaSmokeTest
         {
             ["CMUYautjaEssentials"] = 1,
             ["CMUYautjaArmor"] = 1,
+            // thrall rack rows: cmss13 YAUTJA_CAN_BUY_UNIFORM / _MASK / _SHOES
+            ["CMUYautjaUniform"] = 1,
+            ["CMUYautjaMask"] = 1,
+            ["CMUYautjaShoes"] = 1,
             ["CMUYautjaPrimary"] = 1,
             ["CMUYautjaBracer"] = 1,
             ["CMUYautjaSupport"] = 2,

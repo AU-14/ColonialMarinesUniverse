@@ -2,7 +2,9 @@ using Content.Shared._RMC14.Inventory;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
+using Content.Shared.Clothing.Components;
 using Content.Shared.Examine;
+using Content.Shared.Inventory;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Containers;
@@ -17,6 +19,10 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SharedInternalsSystem _internals = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+
+    // same slots cmss13 checks for BLOCKGASEFFECT
+    private static readonly string[] GasBlockSlots = ["mask", "eyes", "head"];
 
     /// <summary>How long internals keep out neurotoxin per continuous exposure.</summary>
     public static readonly TimeSpan InternalsNeurotoxinProtection = TimeSpan.FromSeconds(9);
@@ -35,6 +41,22 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
     private void OnComponentInit(Entity<GasMaskFilterComponent> ent, ref ComponentStartup args)
     {
         ent.Comp.Integrity = ent.Comp.BaseIntegrity;
+    }
+
+    public bool IsGasBlocked(EntityUid uid)
+    {
+        foreach (var slot in GasBlockSlots)
+        {
+            if (!_inventory.TryGetSlotEntity(uid, slot, out var item) || !HasComp<GasBlockComponent>(item))
+                continue;
+
+            if (TryComp<MaskComponent>(item, out var mask) && mask.IsToggled)
+                continue;
+
+            return true;
+        }
+
+        return false;
     }
 
     public bool IsFilterBroken(Entity<GasMaskFilterComponent> ent)

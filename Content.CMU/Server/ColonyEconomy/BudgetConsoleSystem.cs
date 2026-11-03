@@ -44,7 +44,9 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
 
     private void OnWithdraw(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleWithdrawBuiMsg msg)
     {
-        if (msg.Amount > _budget.GetBudget())
+        if (!float.IsFinite(msg.Amount)
+            || msg.Amount <= 0
+            || msg.Amount > _budget.GetBudget())
             return;
 
         _budget.AddToBudget(-msg.Amount);

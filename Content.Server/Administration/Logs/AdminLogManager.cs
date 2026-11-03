@@ -534,6 +534,28 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
         }
     }
 
+    // CMU14 method: same link format as the private overload, but for arbitrary entities with a caller-supplied header
+    public bool CreateTpLinks(string header, List<(EntityUid Entity, string Name)> entities, out string outString)
+    {
+        outString = string.Empty;
+
+        if (entities.Count == 0)
+            return false;
+
+        outString = header;
+
+        for (var i = 0; i < entities.Count; i++)
+        {
+            var (entity, name) = entities[i];
+            outString += $"[cmdlink=\"{FormattedMessage.EscapeStringParameter(name)}\" command=\"tpto {EntityManager.GetNetEntity(entity)}\"/]";
+
+            if (i < entities.Count - 1)
+                outString += ", ";
+        }
+
+        return true;
+    }
+
     /// <summary>
     /// Creates a list of tpto command links of the given players
     /// </summary>

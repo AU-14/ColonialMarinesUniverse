@@ -1,3 +1,4 @@
+using Content.Server.Atmos.Components;
 using Content.Shared.CCVar;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Map;
@@ -16,8 +17,9 @@ namespace Content.Server.CMU14.Atmos;
 /// <summary>
 /// Drives AU14 tile fire creep: opted-in fires periodically ignite an adjacent tile, so a burn creeps
 /// outward from where it was sprayed instead of sitting still until it decays. Spread
-/// never overwrites an existing fire and stops at walls, structures, and
-/// <see cref="BlockTileFireComponent"/> blockers.
+/// never overwrites an existing fire and stops at walls, structures,
+/// <see cref="BlockTileFireComponent"/> blockers, and anything atmos seals:
+/// a closed door or wide-door seal companion is as opaque to fire as to air.
 ///
 /// Depth comes from <see cref="CMUSpreadingFireComponent"/> when the prototype carries it
 /// or otherwise from <see cref="CCVars.CMUFireSpreadDepth"/>. Only fires carrying
@@ -72,6 +74,10 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
         var query = EntityQueryEnumerator<TileFireComponent>();
         while (query.MoveNext(out var uid, out var fire))
         {
+            if (TerminatingOrDeleted(uid)
+                || IsPaused(uid))
+                continue;
+
             if (!HasComp<CMUAllowFireSpreadComponent>(uid))
                 continue;
 
@@ -114,7 +120,8 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
             for (var i = 0; i < Directions.Length; i++)
             {
                 var target = coordinates.Offset(Directions[(start + i) % Directions.Length].ToVec());
-                if (!CanBurn(target))
+                if (!_zLevels.TryProjectToGround(target, out var spawnAt)
+                    || !CanBurn(spawnAt))
                     continue;
 
                 var child = Spawn(spawn, target);
@@ -133,9 +140,6 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
 
     private bool CanBurn(EntityCoordinates target)
     {
-        if (!_zLevels.TryProjectToGround(target, out target))
-            return false;
-
         if (!_rmcMap.TryGetTileDef(target, out var tile) ||
             tile.ID == ContentTileDefinition.SpaceID)
             return false;
@@ -145,6 +149,10 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
         {
             if (_tileFireQuery.HasComp(ent)
                 || _blockQuery.HasComp(ent))
+                return false;
+
+            if (TryComp(ent, out AirtightComponent? airtight)
+                && airtight.AirBlocked)
                 return false;
 
             if (_tag.HasAnyTag(ent, StructureTag, WallTag)

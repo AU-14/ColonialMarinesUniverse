@@ -45,7 +45,7 @@ internal static class LobbyHighJobPreview
 
     private static readonly (string Key, string Label)[] Gamemodes =
     {
-        //("ForceOnForce", "FOF"),
+        ("ForceOnForce", "FOF"), // CMU14: FoF joins the preview; its rows read the dealing priority below.
         ("Insurgency", "INS"),
         ("DistressSignal", "DS"),
         ("ColonyFall", "CF"),
@@ -70,26 +70,47 @@ internal static class LobbyHighJobPreview
         var jobs = new Dictionary<string, JobPrototype>();
         var gamemodeLabels = new Dictionary<string, List<string>>();
 
+        void AddHigh(JobPrototype job, string gamemodeLabel)
+        {
+            if (!jobs.ContainsKey(job.ID))
+            {
+                jobOrder.Add(job.ID);
+                jobs[job.ID] = job;
+                gamemodeLabels[job.ID] = new List<string>();
+            }
+
+            var labels = gamemodeLabels[job.ID];
+            if (!labels.Contains(gamemodeLabel))
+                labels.Add(gamemodeLabel);
+        }
+
         foreach (var (gamemode, label) in Gamemodes)
         {
+            // CMU14: FoF dealing elevates equivalent roles across sides, so its rows scan every
+            // job through the dealing getter; the stored dict alone misses the elevated twins.
+            if (gamemode == "ForceOnForce")
+            {
+                foreach (var job in prototypeManager.EnumeratePrototypes<JobPrototype>())
+                {
+                    if (!profile.IsForceOnForceJobReachable(job))
+                        continue;
+
+                    if (profile.GetForceOnForceJobPriority(job, prototypeManager) == JobPriority.High)
+                        AddHigh(job, label);
+                }
+
+                continue;
+            }
+
             foreach (var (jobId, priority) in profile.GetJobPrioritiesForGamemode(gamemode))
             {
-                if (priority != JobPriority.High ||
-                    !prototypeManager.TryIndex(jobId, out JobPrototype? job))
-                {
+                if (!prototypeManager.TryIndex(jobId, out JobPrototype? job))
                     continue;
-                }
 
-                if (!jobs.ContainsKey(job.ID))
-                {
-                    jobOrder.Add(job.ID);
-                    jobs[job.ID] = job;
-                    gamemodeLabels[job.ID] = new List<string>();
-                }
+                if (priority != JobPriority.High)
+                    continue;
 
-                var labels = gamemodeLabels[job.ID];
-                if (!labels.Contains(label))
-                    labels.Add(label);
+                AddHigh(job, label);
             }
         }
 

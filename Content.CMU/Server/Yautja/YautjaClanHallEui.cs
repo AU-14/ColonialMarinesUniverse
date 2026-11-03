@@ -361,7 +361,7 @@ public sealed partial class YautjaClanHallEui : BaseEui
 
             case YautjaClanHallRoundRandomMessage random:
                 RoundAction((YautjaPredatorRoundSystem round, out string status) =>
-                    round.TryConfigureRandom(random.Enabled, random.MinimumRounds, random.MaximumRounds, out status));
+                    round.TryConfigureRandom(random.Enabled, random.InsurgencyChance, random.DistressSignalChance, out status));
                 return true;
 
             default:
@@ -754,9 +754,8 @@ public sealed partial class YautjaClanHallEui : BaseEui
             ActiveHunterSlots = activeSlots,
             HunterSlots = slots,
             RandomEnabled = round.RandomEnabled,
-            RandomMinimumRounds = round.RandomMinimumRounds,
-            RandomMaximumRounds = round.RandomMaximumRounds,
-            RandomRoundsRemaining = round.RandomRoundsRemaining,
+            InsurgencyChance = round.InsurgencyChance,
+            DistressSignalChance = round.DistressSignalChance,
         };
     }
 }

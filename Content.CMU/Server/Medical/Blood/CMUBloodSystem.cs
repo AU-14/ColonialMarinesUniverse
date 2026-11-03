@@ -348,6 +348,10 @@ public sealed class CMUBloodSystem : EntitySystem
     /// <summary>How much of a body's bleeding gets through, slowed by a recent plasma transfusion.</summary>
     public float GetBleedMultiplier(EntityUid body)
     {
+        // covers both the wound bleed and internal bleeding drains
+        if (HasComp<CMUNoPermanentDamageComponent>(body))
+            return 0f;
+
         var multiplier = TryComp<CMUPlasmaClottingComponent>(body, out var clotting) && _timing.CurTime < clotting.Until
             ? clotting.BleedMultiplier
             : 1f;

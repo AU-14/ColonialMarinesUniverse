@@ -13,13 +13,21 @@ public sealed record ForceInterestInfo(
     int RequiredPlayers,
     bool Ready,
     bool Interested,
-    bool CanJoin);
+    bool CanJoin,
+    bool CanComplete);
 
 [Serializable, NetSerializable]
 public sealed class SetForceInterestMessage(uint identifier, bool interested) : EuiMessageBase
 {
     public uint Identifier { get; } = identifier;
     public bool Interested { get; } = interested;
+}
+
+/// <summary>Admin request to skip the interest wait and deploy a force immediately.</summary>
+[Serializable, NetSerializable]
+public sealed class CompleteForceInterestMessage(uint identifier) : EuiMessageBase
+{
+    public uint Identifier { get; } = identifier;
 }
 
 public static class ForceInterest

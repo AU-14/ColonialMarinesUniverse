@@ -48,8 +48,8 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
     private TimeSpan _amethystTime;
     private TimeSpan _prismaticTime;
 
-    // CMU14: marine dept medals scale with the rank factor, xeno dept raw
-    private float _marineRankScale = 1f;
+    // CMU14: marine rank scale retired here, xeno chevrons use the xeno rank cvar times now.
+    // private float _marineRankScale = 1f;
 
     public RMCPlaytimeStatsWindow()
     {
@@ -150,7 +150,15 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
 
     private void LoadMedalTimes()
     {
-        _marineRankScale = _config.GetCVar(RMCCVars.RMCPlaytimeMarineRankScaleFactor); // CMU14
+        // CMU14: xeno rank hour thresholds, from the rmc.playtime_xeno_*_time_hours cvars.
+        _xenoRankTwoTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeXenoRankTwoTimeHours));
+        _xenoRankThreeTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeXenoRankThreeTimeHours));
+        _xenoRankFourTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeXenoRankFourTimeHours));
+        _xenoRankFiveTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeXenoRankFiveTimeHours));
+        _xenoRankSixTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeXenoRankSixTimeHours));
+        _xenoRankSevenTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeXenoRankSevenTimeHours));
+        _xenoRankEightTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeXenoRankEightTimeHours));
+        // _marineRankScale = _config.GetCVar(RMCCVars.RMCPlaytimeMarineRankScaleFactor); // CMU14
         _bronzeTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeBronzeMedalTimeHours));
         _silverTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeSilverMedalTimeHours));
         _goldTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeGoldMedalTimeHours));
@@ -166,6 +174,15 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
         _amethystTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeAmethystMedalTimeHours));
         _prismaticTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimePrismaticMedalTimeHours));
     }
+
+    // CMU14: xeno rank hour thresholds
+    private TimeSpan _xenoRankTwoTime;
+    private TimeSpan _xenoRankThreeTime;
+    private TimeSpan _xenoRankFourTime;
+    private TimeSpan _xenoRankFiveTime;
+    private TimeSpan _xenoRankSixTime;
+    private TimeSpan _xenoRankSevenTime;
+    private TimeSpan _xenoRankEightTime;
 
     // cmu edit start: the medals the server awards for non-xeno jobs
     private TimeSpan _cmuBronzeTime;
@@ -210,6 +227,27 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
         return null;
     }
 
+    // CMU14 method
+    private string? GetXenoRankIconName(TimeSpan playtime)
+    {
+        // Mirror the in-game HUD mapping: Apex shows the 7 chevron, Royal shows the 8,
+        // Nemesis and Ascendant stay clamped at the 8.
+        if (playtime > _xenoRankSevenTime)
+            return "hudxenoupgrade8-ui";
+        if (playtime > _xenoRankSixTime)
+            return "hudxenoupgrade7-ui";
+        if (playtime > _xenoRankFiveTime)
+            return "hudxenoupgrade5-ui";
+        if (playtime > _xenoRankFourTime)
+            return "hudxenoupgrade4-ui";
+        if (playtime > _xenoRankThreeTime)
+            return "hudxenoupgrade3-ui";
+        if (playtime > _xenoRankTwoTime)
+            return "hudxenoupgrade2-ui";
+
+        return null;
+    }
+
     private IEnumerable<RMCPlaytimeMedalType> GetMedalTypesDescending(RMCPlaytimeMedalType start)
     {
         for (var type = start; type >= RMCPlaytimeMedalType.Bronze; type--)
@@ -229,28 +267,38 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
         //     : GetMedalType(playtime, _marineRankScale);
         var isXenoTracker = _prototypeManager.TryIndex<PlayTimeTrackerPrototype>(job.PlayTimeTracker, out var xenoCheck) &&
                             xenoCheck.IsXeno;
-        var medalType = isXenoTracker
-            ? departmentId == "CMXeno" ? GetMedalType(playtime) : GetMedalType(playtime, _marineRankScale)
-            : CMUGetMedalType(playtime);
+        // CMU14: xeno chevrons follow the xeno rank cvar times so the icon matches the actual rank.
+        if (isXenoTracker)
+        {
+            var iconName = GetXenoRankIconName(playtime);
+            return iconName == null
+                ? null
+                : new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/xeno_hud.rsi"), iconName);
+        }
+
+        // var medalType = isXenoTracker
+        //     ? departmentId == "CMXeno" ? GetMedalType(playtime) : GetMedalType(playtime, _marineRankScale)
+        //     : CMUGetMedalType(playtime); // CMU14
+        var medalType = CMUGetMedalType(playtime);
         // cmu edit end
         if (medalType == null)
             return null;
 
-        // CMU14: xeno rank chevrons.
-        if (_prototypeManager.TryIndex<PlayTimeTrackerPrototype>(job.PlayTimeTracker, out var tracker) && tracker.IsXeno)
-        {
-            var iconName = medalType switch
-            {
-                RMCPlaytimeMedalType.Bronze => "hudxenoupgrade2-ui",
-                RMCPlaytimeMedalType.Silver => "hudxenoupgrade3-ui",
-                RMCPlaytimeMedalType.Gold => "hudxenoupgrade4-ui",
-                RMCPlaytimeMedalType.Platinum => "hudxenoupgrade5-ui",
-                RMCPlaytimeMedalType.Ruby => "hudxenoupgrade7-ui",
-                _ => "hudxenoupgrade8-ui"
-            };
-
-            return new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/xeno_hud.rsi"), iconName);
-        }
+        // CMU14: xeno rank chevrons, now resolved above from the xeno rank cvars.
+        // if (_prototypeManager.TryIndex<PlayTimeTrackerPrototype>(job.PlayTimeTracker, out var tracker) && tracker.IsXeno)
+        // {
+        //     var iconName = medalType switch
+        //     {
+        //         RMCPlaytimeMedalType.Bronze => "hudxenoupgrade2-ui",
+        //         RMCPlaytimeMedalType.Silver => "hudxenoupgrade3-ui",
+        //         RMCPlaytimeMedalType.Gold => "hudxenoupgrade4-ui",
+        //         RMCPlaytimeMedalType.Platinum => "hudxenoupgrade5-ui",
+        //         RMCPlaytimeMedalType.Ruby => "hudxenoupgrade7-ui",
+        //         _ => "hudxenoupgrade8-ui"
+        //     };
+        //
+        //     return new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/xeno_hud.rsi"), iconName);
+        // }
 
         // CMU14: xeno rank chevrons.
         if (job.Medals == null)

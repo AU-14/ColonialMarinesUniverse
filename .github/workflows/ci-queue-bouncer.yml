@@ -1,0 +1,94 @@
+name: CI Queue Bouncer
+
+# CMU14: per-PR supersession and cleanup for the ci.yml fleet gate. the gate itself must
+# never cancel-in-progress (it would kill innocent holders mid-run), so a new push's stale
+# runs die here instead: every queued or running ci.yml run of this PR on an older
+# SHA is cancelled within seconds of the push, freeing its queue slot and the fleet.
+# `closed` cleans up a merged or abandoned PR's runs: nothing else ever cancels
+# them, and they would each burn a runner turn on a PR that no longer exists.
+# `converted_to_draft` does the same cleanup: a run started while the PR was open keeps
+# the payload it was triggered with, so its jobs still pass any draft gate and would burn
+# runner turns on a PR whose work is now moot. cleanup spans every PR-triggered workflow
+# (ci, check-pr, labels, rsi-diff, mapchecker); supersession stays scoped to ci.yml,
+# which is the only run that holds a fleet slot.
+# pull_request_target on purpose: fork PR tokens are read-only, and this script comes
+# from the base branch, never from the PR.
+
+on:
+  pull_request_target:
+    types: [synchronize, closed, converted_to_draft]
+
+permissions:
+  actions: write
+
+concurrency:
+  group: ci-bouncer-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  supersede:
+    name: Cancel superseded CI runs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const pr = context.payload.pull_request.number;
+            const sha = context.payload.pull_request.head.sha;
+            const headRef = context.payload.pull_request.head.ref;
+            const headRepo = context.payload.pull_request.head.repo.full_name;
+            // on close or draft conversion every run of this PR is dead work, including
+            // one on the final SHA pushed minutes before the merge
+            const dead = ['closed', 'converted_to_draft'].includes(context.payload.action);
+            // every workflow that fires on PR events, paired with the event name it
+            // actually records, so the listing matches
+            const targets = [
+              { workflow: 'ci.yml', event: 'pull_request' },
+              { workflow: 'check-pr.yml', event: 'pull_request_target' },
+              { workflow: 'labels.yml', event: 'pull_request_target' },
+              { workflow: 'rsi-diff.yml', event: 'pull_request_target' },
+              { workflow: 'mapchecker.yml', event: 'pull_request' },
+            ];
+            let cancelled = 0;
+            for (const target of targets) {
+              // supersession frees the fleet gate's slot and only ci.yml runs hold one;
+              // the helpers are cheap and supersede themselves, so only cleanup touches them
+              if (!dead && target.workflow !== 'ci.yml')
+                continue;
+              // CMU14: runs waiting on a concurrency queue report status "pending",
+              // not "queued"; without it supersession never sees the queue and
+              // dead-SHA runs hold fleet slots until they execute for real
+              for (const status of ['queued', 'pending', 'in_progress']) {
+                const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+                  ...context.repo,
+                  workflow_id: target.workflow,
+                  event: target.event,
+                  status,
+                  per_page: 100,
+                });
+                for (const run of runs) {
+                  if (!dead && run.head_sha === sha)
+                    continue;
+                  // pull_requests is empty on fork PR runs, so match the head ref and
+                  // repository. same branch open against two bases is fine: a push
+                  // supersedes both PRs' runs, and the two bouncer runs race to cancel
+                  // the same targets harmlessly
+                  if (run.head_branch !== headRef || run.head_repository?.full_name !== headRepo)
+                    continue;
+                  try {
+                    await github.rest.actions.cancelWorkflowRun({
+                      ...context.repo,
+                      run_id: run.id,
+                    });
+                    cancelled++;
+                  } catch (err) {
+                    // 409: already cancelled, or the run finished between listing and
+                    // cancelling. both are success for supersession
+                    if (err.status !== 409)
+                      throw err;
+                  }
+                }
+              }
+            }
+            core.info(`cancelled ${cancelled} workflow run(s) for PR #${pr} on ${context.payload.action}`);

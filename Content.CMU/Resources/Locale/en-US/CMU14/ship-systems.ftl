@@ -35,3 +35,7 @@ cmu-station-alert-detail-tiles = { $tiles } TILES
 cmu-station-alert-detail-pressure = MIN { $pressure } kPa
 cmu-station-alert-detail-temperature = MAX { $temperature }°C
 cmu-station-alert-detail-firelocks = { $count } FIRELOCKS SEALED
+
+cmu-ship-fire-alarm-pulled = Fire alarm pulled. Life support is holding the air.
+cmu-ship-fire-alarm-reset = Fire alarm reset. Life support is running again.
+cmu-ship-fire-alarm-not-installed = No life support system is wired to this alarm.

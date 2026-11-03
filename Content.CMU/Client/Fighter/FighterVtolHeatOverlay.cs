@@ -9,7 +9,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Fighter;
 
-/// <summary>Localized refraction around the lift jets; inactive viewports never copy the screen.</summary>
+/// <summary>Localized exhaust refraction; inactive viewports never copy the screen.</summary>
 public sealed class FighterVtolHeatOverlay(IEntityManager entities) : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
@@ -18,6 +18,7 @@ public sealed class FighterVtolHeatOverlay(IEntityManager entities) : Overlay
     private readonly SharedTransformSystem _transform = entities.System<SharedTransformSystem>();
     private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
     private readonly IConfigurationManager _config = IoCManager.Resolve<IConfigurationManager>();
+    private readonly IPrototypeManager _prototypes = IoCManager.Resolve<IPrototypeManager>();
     private static readonly ProtoId<ShaderPrototype> HeatShader = "CMUFighterVtolHeat";
     private readonly ShaderInstance _shader = IoCManager.Resolve<IPrototypeManager>().Index(HeatShader).InstanceUnique();
     private readonly Vector2[] _positions = new Vector2[MaximumJets];
@@ -34,10 +35,17 @@ public sealed class FighterVtolHeatOverlay(IEntityManager entities) : Overlay
         while (query.MoveNext(out var uid, out var visual, out var xform))
         {
             if (xform.MapID != args.MapId) continue;
-            var power = FighterVtolPresentation.Power(visual, _timing.CurTime);
+            var definition = _prototypes.Index(visual.Airframe);
+            var power = FighterVtolPresentation.Power(visual, definition, _timing.CurTime);
             if (power < .01f) continue;
             var matrix = _transform.GetWorldMatrix(uid);
-            var origin = matrix.Translation;
+            var center = Vector2.Zero;
+            foreach (var socket in definition.EngineOffsets) center += FighterVtolPresentation.Socket(socket);
+            center /= Math.Max(1, definition.EngineOffsets.Length);
+            var lift = CMUFighterTransition.Lift(FighterVtol.Progress(_timing.CurTime, visual.StartedAt, visual.EndsAt), visual.Landing, definition);
+            center = center * (1 + lift * .28f) + new Vector2(0, lift * 2.5f - definition.ExhaustLength * .5f);
+            center += FighterVtolPresentation.Roll(visual, definition, _timing.CurTime);
+            var origin = Vector2.Transform(center, matrix);
             if (!args.WorldAABB.Enlarged(4).Contains(origin)) continue;
             var screen = args.Viewport.WorldToLocal(origin);
             var x = args.Viewport.WorldToLocal(origin + Vector2.TransformNormal(Vector2.UnitX * FighterGroundComponent.SizeMultiplier, matrix)) - screen;
@@ -46,7 +54,7 @@ public sealed class FighterVtolHeatOverlay(IEntityManager entities) : Overlay
             _positions[_count] = new Vector2(screen.X / size.X, 1 - screen.Y / size.Y);
             _axisX[_count] = new Vector2(x.X / size.X, -x.Y / size.Y);
             _axisY[_count] = new Vector2(y.X / size.X, -y.Y / size.Y);
-            _strength[_count] = power;
+            _strength[_count] = power * (1 - FighterVtol.Smooth((lift - .55f) / .45f));
             if (++_count == MaximumJets) break;
         }
         return _count > 0;

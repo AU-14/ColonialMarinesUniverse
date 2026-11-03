@@ -204,6 +204,7 @@
 
 - type: thirdParty
   id: CMUProdigyConstructionCrew
+  allegiance: Prodigy
   displayName: Prodigy Construction Crew
   partyspawn: CMUProdigyConstructionCrewSpawn
   entrymethod: shuttle

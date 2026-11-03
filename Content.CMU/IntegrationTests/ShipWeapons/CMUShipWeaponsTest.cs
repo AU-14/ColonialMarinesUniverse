@@ -555,8 +555,8 @@ public sealed class CMUShipWeaponsTest : GameTest
         {
             var poison = SComp<DamageableComponent>(victim).Damage.DamageDict.GetValueOrDefault("Poison").Float();
             Assert.That(poison > 0, Is.EqualTo(weapon == "CMUGasStrike"), "only the toxic cloud inflicts poison damage");
-            Assert.That(SComp<DamageableComponent>(xeno).Damage.DamageDict.GetValueOrDefault("Poison").Float(), Is.Zero,
-                "orbital gas never damages xenos");
+            var xenoPoison = SComp<DamageableComponent>(xeno).Damage.DamageDict.GetValueOrDefault("Poison").Float();
+            Assert.That(xenoPoison > 0, Is.EqualTo(weapon == "CMUGasStrike"), "orbital gas damages xenos");
             Assert.That(SEntMan.HasComponent<StunnedComponent>(victim), Is.EqualTo(weapon == "CMUEMSStrike"),
                 "EMS actually immobilizes occupants without using a damaging explosion");
             Assert.That(SEntMan.HasComponent<StunnedComponent>(xeno), Is.EqualTo(weapon == "CMUEMSStrike"));

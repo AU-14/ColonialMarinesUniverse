@@ -985,6 +985,13 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             deployedStored.ReinsertedByDeploy = true;
 
         SetGearState(bracer, gear, kind, true);
+        if (kind == YautjaGearKind.Caster)
+        {
+            var effect = EntityManager.System<CMUYautjaEffectsSystem>().Emit(
+                CMUYautjaEffect.CasterDeploy, Transform(user).Coordinates, .972f, user);
+            effect.Comp.Item = deployed;
+            Dirty(effect);
+        }
         PlayGearSound(GetDeploySound(bracer.Comp, kind), user);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-gear-deployed", ("item", deployed)), user, user);
         _adminLog.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user):player} deployed Yautja gear {ToPrettyString(deployed):gear} from {ToPrettyString(bracer.Owner):bracer}");

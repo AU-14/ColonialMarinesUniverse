@@ -74,6 +74,15 @@
                                          BorderColor="#02E74E" BorderThickness="1"
                                          Text="Start Alarm" />
             </BoxContainer>
+            <!-- CMU14: dropship master alarm mute-only toggle -->
+            <BoxContainer Name="MasterAlarmRow" Access="Public" Orientation="Horizontal" HorizontalExpand="True" Margin="5" Visible="False">
+                <RichTextLabel Name="MasterAlarmHeader" Access="Public" MinSize="350, 0"/>
+                <Control HorizontalExpand="True" />
+                <controls:DropshipButton Name="MasterAlarmButton" Access="Public"
+                                         Margin="1" BackgroundColor="#004E25"
+                                         BorderColor="#02E74E" BorderThickness="1"
+                                         Text="Mute Alarm" />
+            </BoxContainer>
             <cc:HSeparator Color="#02E74E" />
             <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="5">
                 <RichTextLabel Name="RemoteControlHeader" Access="Public" />
@@ -82,6 +91,18 @@
                                          Margin="1" BackgroundColor="#004E25"
                                          BorderColor="#02E74E" BorderThickness="1"
                                          Text="???" />
+            </BoxContainer>
+            <!-- CMU14: gunship pilot firearm fire-control toggle -->
+            <BoxContainer Name="FirearmRow" Access="Public" Orientation="Vertical" Visible="False">
+                <cc:HSeparator Color="#02E74E" />
+                <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="5">
+                    <RichTextLabel Name="FirearmHeader" Access="Public" />
+                    <Control HorizontalExpand="True" />
+                    <controls:DropshipButton Name="FirearmButton" Access="Public"
+                                             Margin="1" BackgroundColor="#004E25"
+                                             BorderColor="#02E74E" BorderThickness="1"
+                                             Text="???" />
+                </BoxContainer>
             </BoxContainer>
         </BoxContainer>
     </PanelContainer>

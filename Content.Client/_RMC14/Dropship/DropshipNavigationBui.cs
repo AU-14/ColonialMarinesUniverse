@@ -1,4 +1,5 @@
 using Content.Client.Message;
+using Content.Shared.CMU14.Dropship.DirectFire; // CMU14
 using Content.Shared.CMU14.Dropship; // cmu edit
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Dropship;
@@ -65,6 +66,8 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         SetDoorHeader("Door Controls");
         SetRemoteControlHeader("Remote Control:");
         SetLaunchAlarmHeader("Launch Announcement Alarm");
+        SetFirearmHeader(Loc.GetString("cmu-gunship-firearm-header")); // CMU14
+        SetMasterAlarmHeader(Loc.GetString("cmu-dropship-master-alarm-header")); // CMU14
 
         if (_entities.TryGetComponent(Owner, out TransformComponent? transform) &&
             _entities.TryGetComponent(transform.ParentUid, out MetaDataComponent? metaData))
@@ -113,6 +116,8 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         _window.LockdownButtonStarboard.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.Starboard));
         _window.RemoteControlButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipRemoteControlToggleMsg());
         _window.LaunchAlarmButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipLaunchAlarmToggleMsg());
+        _window.FirearmButton.Button.OnPressed += _ => SendPredictedMessage(new GunshipFirearmToggleMsg()); // CMU14
+        _window.MasterAlarmButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipMasterAlarmToggleMsg()); // CMU14
         _entities.System<DropshipSystem>().Uis.Add(this);
     }
 
@@ -229,6 +234,8 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         RefreshDoorLockStatus(destinations.DoorLockStatus);
         SetRemoteControl(destinations.RemoteControlStatus);
         RefreshLaunchAlarmStatus(destinations.LaunchAlarmStatus);
+        SetFirearm(destinations.HasFirearm, destinations.FirearmArmed); // CMU14
+        SetMasterAlarm(destinations.HasMasterAlarm, destinations.MasterAlarmSilenced); // CMU14
     }
 
     private void Set(DropshipNavigationTacticalLandBuiState tactical)
@@ -335,6 +342,7 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
 
         RefreshDoorLockStatus(tactical.DoorLockStatus);
         SetRemoteControl(tactical.RemoteControlStatus);
+        SetFirearm(tactical.HasFirearm, tactical.FirearmArmed); // CMU14
     }
 
     private void Set(DropshipNavigationTravellingBuiState travelling)
@@ -392,6 +400,8 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         RefreshDoorLockStatus(travelling.DoorLockStatus);
         SetRemoteControl(travelling.RemoteControlStatus);
         RefreshLaunchAlarmStatus(travelling.LaunchAlarmStatus);
+        SetFirearm(false, false); // CMU14: no fire control in transit
+        SetMasterAlarm(travelling.HasMasterAlarm, travelling.MasterAlarmSilenced); // CMU14
 
         var startEndTime = travelling.Time;
         _window.ProgressBar.MinValue = 0;
@@ -412,6 +422,23 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
     private void SetRemoteControlHeader(string label)
     {
         _window?.RemoteControlHeader.SetMarkup($"[color=#0BDC49][font size=16][bold]{label}[/bold][/font][/color]");
+    }
+
+    // CMU14: gunship pilot firearm fire-control toggle
+    private void SetFirearmHeader(string label)
+    {
+        _window?.FirearmHeader.SetMarkup($"[color=#0BDC49][font size=16][bold]{label}[/bold][/font][/color]");
+    }
+
+    private void SetFirearm(bool hasFirearm, bool armed)
+    {
+        if (_window == null)
+            return;
+
+        _window.FirearmRow.Visible = hasFirearm;
+        _window.FirearmButton.Text = armed
+            ? Loc.GetString("cmu-gunship-firearm-enabled")
+            : Loc.GetString("cmu-gunship-firearm-disabled");
     }
 
     private void SetLaunchAlarmHeader(string label)
@@ -501,6 +528,23 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
             return;
 
         _window.LaunchAlarmButton.Text = launchAlarmStatus ? "Stop Alarm" : "Start Alarm";
+    }
+
+    // CMU14: master alarm mute-only toggle, same flag as the gunship pilot action
+    private void SetMasterAlarm(bool hasMasterAlarm, bool silenced)
+    {
+        if (_window == null)
+            return;
+
+        _window.MasterAlarmRow.Visible = hasMasterAlarm;
+        _window.MasterAlarmButton.Text = silenced
+            ? Loc.GetString("cmu-dropship-master-alarm-unmute")
+            : Loc.GetString("cmu-dropship-master-alarm-mute");
+    }
+
+    private void SetMasterAlarmHeader(string label)
+    {
+        _window?.MasterAlarmHeader.SetMarkup($"[color=#0BDC49][font size=16][bold]{label}[/bold][/font][/color]");
     }
 
     public override void Update()

@@ -6,10 +6,12 @@ using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Threats;
 using Content.Server.CMU14.VendorMarker;
 using Content.Server.Chat.Systems;
+using Content.Shared.Chat;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Server.CMU14.Roles; // CMU14
 using Content.Server.Preferences.Managers;
+using Content.Shared.CMU14.ForceOnForce;
 using Content.Shared.CMU14.Threats;
 using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.CrashLand;
@@ -52,6 +54,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private Content.Server.Chat.Managers.IChatManager _chatManager = default!;
     [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IServerPreferencesManager _preferences = default!;
@@ -60,6 +63,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
     [Dependency] private SurvivorSupplementSystem _survivorSupplement = default!; // CMU14
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
@@ -140,7 +144,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             // The ghost-menu entry alone never reaches players who do not open it.
             if (!string.IsNullOrWhiteSpace(party.AnnounceInbound))
-                _chat.DispatchGlobalAnnouncement(party.AnnounceInbound, string.Empty, false,
+                _chat.DispatchGlobalAnnouncement(LocalizeAnnouncement(party.AnnounceInbound), string.Empty, false,
                     colorOverride: Color.DarkOrange);
         }
 
@@ -261,6 +265,13 @@ public sealed partial class ThirdPartySystem : EntitySystem
         string? entryMethod = overrideDropship.HasValue
             ? overrideDropship.Value ? "shuttle" : "ground"
             : string.IsNullOrWhiteSpace(party.EntryMethod) ? "ground" : party.EntryMethod;
+        // Presets can force shuttle entry; ground spawn puts parties inside enemy lines unprepared.
+        // Admin overrides keep precedence.
+        var groundEntryForbidden = _auRoundSystem.SelectedPreset is { ThirdPartyForceShuttle: true };
+        if (groundEntryForbidden
+            && !overrideDropship.HasValue
+            && string.Equals(entryMethod, "ground", StringComparison.OrdinalIgnoreCase))
+            entryMethod = "shuttle";
         _sawmill.Debug($"[ThirdPartySystem] Entry method: {entryMethod} (overrideDropship={overrideDropship})");
         if (_sawmill.Level <= LogLevel.Debug)
         {
@@ -750,6 +761,19 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
         }
 
+        // In Force on Force a party whose allegiance matches exactly one side's platoon is part
+        // of that side: identification treats its members as teammates of it.
+        var alignedSide = ResolveFoFAlignedSide(party);
+        if (alignedSide != null)
+        {
+            foreach (var mob in spawnedLeaders.Concat(spawnedGrunts))
+            {
+                var side = _entityManager.EnsureComponent<ForceOnForceSideComponent>(mob);
+                side.Side = alignedSide;
+                _entityManager.Dirty(mob, side);
+            }
+        }
+
         // Spawn ents
         _sawmill.Debug("[ThirdPartySystem] Spawning ents...");
         foreach ((string protoId, int count) in entityBodies)
@@ -832,9 +856,18 @@ public sealed partial class ThirdPartySystem : EntitySystem
             AssignMinds(memberPlayers, spawnedGrunts, ThirdPartyMemberJobId.Id, "member");
         }
 
-        if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
+        if (!string.IsNullOrWhiteSpace(party.AnnounceArrival) && party.AnnounceArrivalTitle is { } arrivalTitle)
         {
-            _chat.DispatchGlobalAnnouncement(party.AnnounceArrival, string.Empty, false,
+            var arrival = LocalizeAnnouncement(party.AnnounceArrival);
+            var wrapped = Loc.GetString("cmu-third-party-titled-arrival",
+                ("title", FormattedMessage.EscapeText(Loc.GetString(arrivalTitle))),
+                ("message", FormattedMessage.EscapeText(arrival)));
+            _chatManager.ChatMessageToAll(ChatChannel.Radio, arrival, wrapped, default, false, true, Color.DarkOrange);
+            _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
+        }
+        else if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
+        {
+            _chat.DispatchGlobalAnnouncement(LocalizeAnnouncement(party.AnnounceArrival), string.Empty, false,
                 colorOverride: Color.DarkOrange);
             _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
         }
@@ -842,6 +875,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
         _auRoundSystem.MarkThirdPartySpawned(party);
         yield return ForceDeploymentStep.Completed;
     }
+
+    // announcements are raw English on most parties, a loc id is used when one exists
+    private string LocalizeAnnouncement(string announcement)
+        => Loc.TryGetString(announcement, out var localized) ? localized : announcement;
 
     private static IReadOnlyDictionary<string, int> GetSpawnBodies(
         ThreatMarkerType markerType,
@@ -1005,6 +1042,26 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             _scheduledForces[i] = id;
         }
+    }
+
+    // A party fights for the side whose platoon shares its allegiance. When both sides rolled
+    // platoons of that allegiance the tie stays unaligned and shows the question mark to both.
+    private string? ResolveFoFAlignedSide(ThirdPartyPrototype party)
+    {
+        var ticker = _entityManager.System<GameTicker>();
+        var preset = ticker.CurrentPreset?.ID ?? ticker.Preset?.ID;
+        if (!string.Equals(preset, "ForceOnForce", StringComparison.OrdinalIgnoreCase))
+            return null;
+
+        if (party.Allegiance is not { } allegiance)
+            return null;
+
+        var govfor = _platoons.SelectedGovforPlatoon?.Allegiance == allegiance;
+        var opfor = _platoons.SelectedOpforPlatoon?.Allegiance == allegiance;
+        if (govfor == opfor)
+            return null;
+
+        return govfor ? "govfor" : "opfor";
     }
 
     private bool TrySpawnAtMarker(string protoId,

@@ -20,6 +20,7 @@ using Content.Shared.Toggleable;
 using Content.Shared.Verbs;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Timing; // CMU14
 using Robust.Shared.Toolshed.Syntax;
 using Robust.Shared.Utility;
 
@@ -38,6 +39,7 @@ public sealed partial class BlockingSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private IGameTiming _timing = default!; // CMU14
     [Dependency] private TurfSystem _turf = default!;
 
     [Dependency] private EntityQuery<BlockingComponent> _blockQuery;
@@ -319,6 +321,10 @@ public sealed partial class BlockingSystem : EntitySystem
     /// <param name="user">User that is trying to use the blocking entity</param>
     private void StartBlocking(Entity<BlockingComponent> entity, EntityUid user)
     {
+        // CMU14: restored hand containers replay equip events while networked components are enumerated.
+        if (_timing.ApplyingState)
+            return;
+
         entity.Comp.User = user;
         DirtyField(entity, entity.Comp, nameof(BlockingComponent.User));
 
@@ -346,6 +352,10 @@ public sealed partial class BlockingSystem : EntitySystem
     /// <param name="user"> The person holding the blocking item </param>
     private void StopBlocking(Entity<BlockingComponent> entity, EntityUid user)
     {
+        // CMU14: the authoritative state owns blocking membership and shield physics during restoration.
+        if (_timing.ApplyingState)
+            return;
+
         if (entity.Comp.IsRaised)
             LowerShield(entity, user);
 

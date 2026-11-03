@@ -892,6 +892,10 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         if (dropship.WithdrawEvacuating)
             return;
 
+        // CMU14: the cancel button aborts flights, not refuels; the landing cooldown is the refuel window
+        if (ftl.State == FTLState.Cooldown)
+            return;
+
         if (dropship.Destination != dropship.DepartureLocation ||
             _timing.CurTime + dropship.CancelFlightTime >= ftl.StateTime.End)
             return;
@@ -1221,6 +1225,13 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
     protected bool TryDropshipHijackPopup(EntityUid computer, Entity<DropshipHijackerComponent?> user, bool predicted)
     {
+        // CMU14: no hijack in Force on Force, both factions need their carrier for the whole round.
+        if (IsForceOnForceRound())
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-fof-hijack-disabled"), computer, user, PopupType.MediumCaution);
+            return false;
+        }
+
         var roundDuration = _gameTicker.RoundDuration();
         // CMU14: Force on Force roles, hijacking, announcements and identification.
         if ((HasComp<DropshipHijackerComponent>(user) || IsForceOnForceHijacker(computer, user)) && roundDuration < _hijackInitialDelay)

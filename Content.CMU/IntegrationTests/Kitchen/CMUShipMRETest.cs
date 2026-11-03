@@ -1,8 +1,11 @@
+using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.CMU14.Marines;
 using Content.Shared.Doors.Systems;
+using Content.Shared.GameTicking;
 using Content.Shared.Nutrition.EntitySystems;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.CMU14.Kitchen;
 
@@ -17,6 +20,8 @@ public sealed class CMUShipMRETest : GameTest
         var otherMap = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
+            // Pin the clock past the setup seal so this test exercises only the mess-state priority.
+            SetRoundDuration(TimeSpan.FromMinutes(11));
             SEntMan.EnsureComponent<WarshipComponent>(ship.MapUid);
             var user = SEntMan.SpawnEntity("CMMobHuman", ship.GridCoords);
             var vendor = SEntMan.SpawnEntity("RMCNutriCoVendor", ship.GridCoords);
@@ -40,5 +45,14 @@ public sealed class CMUShipMRETest : GameTest
             Server.System<SharedDoorSystem>().StartOpening(shutters);
             Assert.That(OpenRation(), Is.False, "An open foodline provides an alternative even with empty vendors.");
         });
+    }
+
+    private void SetRoundDuration(TimeSpan duration)
+    {
+        var now = Server.ResolveDependency<IGameTiming>().CurTime;
+        typeof(SharedGameTicker)
+            .GetProperty(nameof(SharedGameTicker.RoundStartTimeSpan),
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)!
+            .SetValue(Server.System<SharedGameTicker>(), now - duration);
     }
 }

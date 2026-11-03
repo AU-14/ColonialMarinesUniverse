@@ -12,3 +12,10 @@
   values:
     prefix: cmu-name-yautja-last-
     count: 8
+
+# CMSS13 code/modules/gear_presets/yautja.dm mcaste_names, the Military Caste go by codenames
+- type: localizedDataset
+  id: CMUNamesYautjaMilitaryCaste
+  values:
+    prefix: cmu-name-yautja-mcaste-
+    count: 28

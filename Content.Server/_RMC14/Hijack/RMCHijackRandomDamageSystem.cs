@@ -58,6 +58,7 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
     private const float PipeExplosionSlope = 25f;
     private const float PipeExplosionMax = 20f;
     private const int PipeFireRange = 2;
+    private const int MaxPipeBurstsPerTick = 1; // CMU14: spread a barrage's explosion work across ticks.
 
     private readonly List<(EntityUid Uid, RMCHijackRandomDamageTargetComponent Comp)> _wallTargets = new();
     private readonly List<(EntityUid Uid, RMCHijackRandomDamageTargetComponent Comp)> _windowTargets = new();
@@ -136,6 +137,10 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
 
     private void OnPipeRemove<T>(Entity<RMCHijackActivePipeComponent> ent, ref T args)
     {
+        // CMU14: a deleted pipe must not leave its warning behind.
+        QueueDel(ent.Comp.Warning);
+        ent.Comp.Warning = null;
+
         if (TerminatingOrDeleted(ent.Comp.Map))
             return;
 
@@ -229,7 +234,9 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
         var count = GetRandomCount(map.Comp.Pipes.Count, minPercent, maxPercent);
         if (count == 0)
         {
-            RemCompDeferred<RMCHijackActiveMapComponent>(map);
+            // CMU14: keep the map active until its last queued burst is processed.
+            if (map.Comp.Explode.Count == 0 && map.Comp.ExplodeAt == null)
+                RemCompDeferred<RMCHijackActiveMapComponent>(map);
             return;
         }
 
@@ -256,7 +263,12 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
             return;
         }
 
-        Spawn(PipeExplosionWarning, _transform.GetMoverCoordinates(pipe, xform));
+        // CMU14 Begin: the warning remains visible until this pipe's turn to burst.
+        var active = EnsureComp<RMCHijackActivePipeComponent>(pipe);
+        active.Map = map.Owner;
+        QueueDel(active.Warning);
+        active.Warning = Spawn(PipeExplosionWarning, _transform.GetMoverCoordinates(pipe, xform));
+        // CMU14 End
         _audio.PlayPvs(map.Comp.PipeHiss, pipe);
 
         map.Comp.Explode.Add(pipe);
@@ -268,6 +280,14 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
     /// </summary>
     private void BurstPipe(EntityUid pipe)
     {
+        // CMU14 Begin: also clear warnings for pipes that became invalid while queued.
+        if (TryComp(pipe, out RMCHijackActivePipeComponent? active))
+        {
+            QueueDel(active.Warning);
+            active.Warning = null;
+        }
+        // CMU14 End
+
         if (Deleted(pipe) ||
             !TryComp(pipe, out TransformComponent? xform) ||
             xform.MapUid == null ||
@@ -314,25 +334,33 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
         var query = EntityQueryEnumerator<RMCHijackActiveMapComponent>();
         while (query.MoveNext(out var uid, out var active))
         {
-            if (active.ExplodeAt != null && time >= active.ExplodeAt.Value)
+            // CMU14 Begin: drain each wave incrementally before scheduling another.
+            if (active.ExplodeAt is { } explodeAt && time >= explodeAt)
             {
-                active.ExplodeAt = null;
-
                 try
                 {
-                    foreach (var explode in active.Explode)
+                    for (var burst = 0; burst < MaxPipeBurstsPerTick && active.Explode.Count > 0; burst++)
                     {
-                        BurstPipe(explode);
+                        var last = active.Explode.Count - 1;
+                        var pipe = active.Explode[last];
+                        active.Explode.RemoveAt(last);
+                        BurstPipe(pipe);
                     }
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Error while bursting hijack pipes on {ToPrettyString(uid)}:\n{e}");
                 }
                 finally
                 {
-                    active.Explode.Clear();
+                    if (active.Explode.Count == 0)
+                        active.ExplodeAt = null;
                 }
             }
 
-            if (time < active.Next)
+            if (active.Explode.Count > 0 || time < active.Next)
                 continue;
+            // CMU14 End
 
             DoPipeBarrage((uid, active));
         }

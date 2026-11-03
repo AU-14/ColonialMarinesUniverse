@@ -330,7 +330,7 @@ public sealed partial class YautjaMaskSystem : EntitySystem
             return true;
         }
 
-        if (!CanUseVisorTech(user))
+        if (!mask.Comp.AllowAnyWearer && !CanUseVisorTech(user))
         {
             message = Loc.GetString("cmu-yautja-visor-denied");
             return true;

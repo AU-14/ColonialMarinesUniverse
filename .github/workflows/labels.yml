@@ -192,9 +192,11 @@ jobs:
               }
 
               if (context.payload.action === 'synchronize') {
+                // CMU14: a new push invalidates CI failure state the same as review state
                 await remove(pr.number, [
                   'S: Approved',
                   'S: Awaiting Changes',
+                  'CI Failure',
                 ]);
               }
 

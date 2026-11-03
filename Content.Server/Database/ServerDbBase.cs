@@ -1239,6 +1239,64 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 .ToList();
         }
 
+        // CMU14 method: everyone currently opted out of the playtime leaderboard
+        public async Task<List<Guid>> GetCMUPlaytimeHiddenPlayers(CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            return await db.DbContext.Player
+                .AsNoTracking()
+                .Where(player => player.CMUPlaytimeHidden)
+                .Select(player => player.UserId)
+                .ToListAsync(cancel);
+        }
+
+        // CMU14 method
+        public async Task<bool> GetCMUPlaytimeHidden(NetUserId player, CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            var hidden = await db.DbContext.Player
+                .AsNoTracking()
+                .Where(p => p.UserId == player)
+                .Select(p => (bool?) p.CMUPlaytimeHidden)
+                .SingleOrDefaultAsync(cancel);
+
+            return hidden ?? false;
+        }
+
+        // CMU14 method
+        public async Task SetCMUPlaytimeHidden(NetUserId player, bool hidden)
+        {
+            await using var db = await GetDb();
+
+            var dbPlayer = await db.DbContext.Player
+                .Where(p => p.UserId == player)
+                .SingleOrDefaultAsync();
+
+            if (dbPlayer == null)
+                return;
+
+            dbPlayer.CMUPlaytimeHidden = hidden;
+            await db.DbContext.SaveChangesAsync();
+        }
+
+        // CMU14 method: everyone with an active server ban
+        public async Task<List<Guid>> GetCMUPlaytimeBannedPlayers(CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+            var now = DateTime.UtcNow;
+
+            return await db.DbContext.BanPlayer
+                .AsNoTracking()
+                .Where(bp => bp.Ban!.Type == BanType.Server
+                    && bp.Ban.Unban == null
+                    && (bp.Ban.ExpirationTime == null || bp.Ban.ExpirationTime.Value > now))
+                .Select(bp => bp.UserId)
+                .Distinct()
+                .ToListAsync(cancel);
+        }
+
         private CMURoundOutcomeRecord MakeCMURoundOutcomeRecord(CMURoundOutcome outcome)
         {
             var preset = Enum.TryParse(outcome.PresetId, out CMURoundStatisticsPreset parsedPreset)
@@ -2415,6 +2473,66 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             await using var db = await GetDb(cancel);
             return await db.DbContext.RMCLinkedAccounts.AnyAsync(l => l.PlayerId == player, cancel);
 
+        }
+
+        // CMU14 method
+        public async Task<ulong?> GetLinkedDiscordId(Guid player, CancellationToken cancel)
+        {
+            await using var db = await GetDb(cancel);
+            var link = await db.DbContext.RMCLinkedAccounts.FirstOrDefaultAsync(l => l.PlayerId == player, cancel);
+            return link?.DiscordId;
+        }
+
+        // CMU14 method: completes a lobby-code link posted in the Discord link channel.
+        // Single transaction: validates the code, consumes it (single-use, throwaway), rebinding the
+        // Discord account if it was already linked to another player, and logs the attempt.
+        public async Task<DiscordLinkResult> LinkDiscordAccountByCode(Guid code, ulong discordId)
+        {
+            await using var db = await GetDb();
+            var linking = await db.DbContext.RMCLinkingCodes
+                .Include(l => l.Player)
+                .FirstOrDefaultAsync(l => l.Code == code);
+            if (linking == null)
+                return new DiscordLinkResult(DiscordLinkStatus.UnknownCode, default, string.Empty);
+
+            // CMU14: 15-minute window. Codes are minted live in the lobby and used within minutes,
+            // so a day-old code only extends the interception window.
+            if (linking.CreationTime < DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(15)))
+            {
+                db.DbContext.RMCLinkingCodes.Remove(linking);
+                await db.DbContext.SaveChangesAsync();
+                return new DiscordLinkResult(DiscordLinkStatus.ExpiredCode, linking.PlayerId, linking.Player.LastSeenUserName);
+            }
+
+            var discord = await db.DbContext.RMCDiscordAccounts
+                .Include(d => d.LinkedAccount)
+                .FirstOrDefaultAsync(d => d.Id == discordId);
+            discord ??= db.DbContext.RMCDiscordAccounts.Add(new RMCDiscordAccount { Id = discordId }).Entity;
+
+            // The Discord account was bound to a different player before: unbind it (the old
+            // Content.DiscordBot semantics) so a re-link can't leave two rows on one Discord id.
+            if (discord.LinkedAccount is { } stale && stale.PlayerId != linking.PlayerId)
+                db.DbContext.RMCLinkedAccounts.Remove(stale);
+
+            var linked = await db.DbContext.RMCLinkedAccounts
+                .FirstOrDefaultAsync(l => l.PlayerId == linking.PlayerId);
+            if (linked == null)
+                linked = db.DbContext.RMCLinkedAccounts.Add(new RMCLinkedAccount { PlayerId = linking.PlayerId }).Entity;
+
+            linked.DiscordId = discordId;
+            discord.LinkedAccount = linked;
+
+            db.DbContext.RMCLinkedAccountLogs.Add(new RMCLinkedAccountLogs
+            {
+                PlayerId = linking.PlayerId,
+                DiscordId = discordId,
+                At = DateTime.UtcNow,
+            });
+
+            db.DbContext.RMCLinkingCodes.Remove(linking);
+            await db.DbContext.SaveChangesAsync();
+
+            return new DiscordLinkResult(DiscordLinkStatus.Success, linking.PlayerId, linking.Player.LastSeenUserName);
         }
 
         public async Task<RMCPatron?> GetPatron(Guid player, CancellationToken cancel)

@@ -10,6 +10,13 @@ the aggregate merge gate.
 - Run unit tests on the build runner. Share compiled output with the prototype
   validator and parallel integration jobs; share client/server output in one
   runtime artifact.
+- The unit test, YAML linter, and integration shard jobs restore the tracked
+  source tree from a `source-tree` artifact (`git archive` of HEAD plus
+  `RobustToolbox/Resources`) instead of fetching the repository: one git fetch
+  per run on Build replaces ~38 simultaneous fetches of the same 1.4G pack,
+  which GitHub's git backend throttles into multi-minute checkout stalls.
+  Asset validation still checks out (it reads `RobustToolbox/Schemas`); Build
+  keeps its recursive submodule checkout because it compiles the engine.
 - Run attribution, map, and RSI validation together when relevant assets change.
   Both `Resources/` and `Content.CMU/Resources/` are covered.
 - Run CMU chemistry, medical, ship, spatial, and diagnostic tests in separate
@@ -28,6 +35,10 @@ default when comparing concurrency settings. The existing `DOTNET_PROCESSOR_COUN
 workaround remains in CI to serialize the engine's PLINQ prototype loading; the
 explicit NUnit worker limit still permits test concurrency. Test result artifacts include TRX
 timings, and a test that stops progressing for five minutes aborts its test host.
+
+The mapping/station/shuttle/round shard uses two workers to bound concurrent
+map and round-start pairs, including replacements for pairs discarded after failures.
+Its test selection and five-minute inactivity watchdog remain unchanged.
 
 Normal CI sets `NUnit.ExplicitMode=None` for unit and integration tests. Timing
 benchmarks are explicitly selected experiments; deterministic allocation,

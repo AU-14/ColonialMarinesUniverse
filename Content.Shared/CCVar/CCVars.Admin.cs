@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Configuration;
+using Robust.Shared.Configuration;
 
 using Content.Shared.Administration;
 using Content.Shared.CCVar.CVarAccess;
@@ -150,7 +150,7 @@ public sealed partial class CCVars
     /// </summary>
     [CVarControl(AdminFlags.VarEdit, min: 0f, max: float.MaxValue)]
     public static readonly CVarDef<float> AdminAfkTime =
-        CVarDef.Create("admin.afk_time",10800f, CVar.SERVER | CVar.REPLICATED);
+        CVarDef.Create("admin.afk_time", 600f, CVar.SERVER | CVar.REPLICATED); // CMU14: original default 10800f
 
     /// <summary>
     ///     If true, admins are able to connect even if

@@ -130,6 +130,7 @@
             AU14JobCivilianCorporateAssistant: [1, 1]
 
             AU14JobCivilianScientist: [4, 4]
+            AU14JobCorporateSynthetic: [1, 1]
             AU14JobWYGuard: [3, 3]
 
             # Security/LEO

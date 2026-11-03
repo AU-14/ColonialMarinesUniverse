@@ -1341,6 +1341,62 @@ public sealed class YautjaPlasmaWeaponTest
     }
 
     [Test]
+    public async Task PlasmaRifleBoltKnocksDownHumansLikeCmss13Debilitate()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var shooter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            var projectile = entMan.SpawnEntity("CMUYautjaPlasmaRifleBolt", map.GridCoords);
+            var human = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
+            var synth = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2, 0)));
+            var xeno = entMan.SpawnEntity("CMXenoDrone", map.GridCoords.Offset(new Vector2(3, 0)));
+            var yautja = entMan.SpawnEntity("CMUMobYautja", map.GridCoords.Offset(new Vector2(4, 0)));
+            entMan.EnsureComponent<Content.Shared._RMC14.Synth.SynthComponent>(synth);
+
+            try
+            {
+                RaiseProjectileHit(entMan, projectile, human, shooter);
+                Assert.That(entMan.HasComponent<KnockedDownComponent>(human), Is.True,
+                    "cmss13 rifle bolt debilitate = list(0,2,...) weakens humans for 2 x 20ds.");
+                if (entMan.TryGetComponent<CrawlerComponent>(human, out _))
+                {
+                    var knockedDown = entMan.GetComponent<KnockedDownComponent>(human);
+                    Assert.That(knockedDown.NextUpdate - server.Timing.CurTime, Is.EqualTo(TimeSpan.FromSeconds(4)).Within(TimeSpan.FromMilliseconds(100)));
+                }
+                else
+                {
+                    Assert.That(entMan.System<StatusEffectsSystem>().TryGetTime(human, SharedStunSystem.ParalyzeId, out var knockdown), Is.True);
+                    Assert.That(knockdown.EndEffectTime - knockdown.StartEffectTime, Is.EqualTo(TimeSpan.FromSeconds(4)));
+                }
+
+                RaiseProjectileHit(entMan, projectile, synth, shooter);
+                AssertNoCasterStun(entMan, synth, "cmss13 human bullet_act skips debilitate for synths.");
+
+                RaiseProjectileHit(entMan, projectile, yautja, shooter);
+                AssertNoCasterStun(entMan, yautja, "cmss13 human bullet_act skips debilitate for yautja.");
+
+                RaiseProjectileHit(entMan, projectile, xeno, shooter);
+                AssertNoCasterStun(entMan, xeno, "cmss13 xeno bullet_act never applies debilitate.");
+            }
+            finally
+            {
+                foreach (var uid in new[] { shooter, projectile, human, synth, xeno, yautja })
+                {
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task PlasmaCasterImmobilizerAppliesCmss13AreaStunOnHitAndMaxRange()
     {
         await using var pair = await PoolManager.GetServerClient();

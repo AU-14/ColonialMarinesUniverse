@@ -292,6 +292,15 @@ public sealed partial class ShuttleSystem
         float? hyperspaceTime = null,
         string? priorityTag = null)
     {
+        // CMU14 Begin: reject malformed destinations before starting the FTL transition.
+        if (!coordinates.IsValid(EntityManager) || !double.IsFinite(angle.Theta) ||
+            !_mapSystem.TryGetMap(_transform.GetMapId(coordinates), out var mapUid))
+        {
+            Log.Error($"Found invalid FTL destination with coordinates {coordinates} and angle {angle} for shuttle {shuttleUid}");
+            return;
+        }
+        // CMU14 End
+
         // CMU14: faction gameplay fixes.
         startupTime ??= DefaultStartupTime;
         if (!TrySetupFTL(shuttleUid, component, startupTime.Value, out var hyperspace))
@@ -310,9 +319,11 @@ public sealed partial class ShuttleSystem
 
         _console.RefreshShuttleConsoles(shuttleUid);
 
-        var mapId = _transform.GetMapId(coordinates);
-        var mapUid = _mapSystem.GetMap(mapId);
-        var ev = new FTLRequestEvent(mapUid);
+        // CMU14 Begin: the destination map was resolved before setup could change shuttle state.
+        // var mapId = _transform.GetMapId(coordinates);
+        // var mapUid = _mapSystem.GetMap(mapId);
+        var ev = new FTLRequestEvent(mapUid.Value);
+        // CMU14 End
         RaiseLocalEvent(shuttleUid, ref ev, true);
     }
 

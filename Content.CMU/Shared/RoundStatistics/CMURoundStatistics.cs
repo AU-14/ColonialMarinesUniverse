@@ -56,6 +56,9 @@ public enum CMURoundStatisticsOutcome : byte
     ObjectiveVictory,
     ForceOnForceGovforVictory,
     ForceOnForceOpforVictory,
+    FoFMinorVictory,
+    FoFMajorVictory,
+    FoFDraw,
 }
 
 [Serializable, NetSerializable]

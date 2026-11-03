@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/31/2026 09:55:14
-  entityCount: 43499
+  entityCount: 43500
 maps:
 - 1
 grids:
@@ -66821,6 +66821,13 @@ entities:
     components:
     - type: Transform
       pos: 35.5,67.5
+      parent: 1
+- proto: AU14SpawnPointCorporateSynthetic
+  entities:
+  - uid: 354491
+    components:
+    - type: Transform
+      pos: 27.5,-157.5
       parent: 1
 - proto: AU14SpawnPointMobBoss
   entities:

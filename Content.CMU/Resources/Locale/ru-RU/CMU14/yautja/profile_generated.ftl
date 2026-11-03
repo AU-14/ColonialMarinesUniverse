@@ -589,3 +589,112 @@ cmu-yautja-profile-unique-ronin-armor = Ронин armor
 cmu-yautja-profile-unique-ronin-mask = Ронин mask
 
 cmu-yautja-profile-unique-ronin-greaves = Ронин greaves
+
+# Наборы, наручи и костяные плащи от DimDim из cmss13 PR #12174.
+cmu-yautja-profile-legacy-shadow = Тень
+
+cmu-yautja-profile-legacy-knight = Рыцарь
+
+cmu-yautja-profile-legacy-seeker = Искатель
+
+cmu-yautja-profile-legacy-serpent = Змей
+
+cmu-yautja-profile-unique-seeker-initiate = Посвящённый искатель
+
+cmu-yautja-profile-unique-seeker-adept = Искатель-адепт
+
+cmu-yautja-profile-unique-defender = Защитник
+
+cmu-yautja-profile-unique-warrior = Воин
+
+cmu-yautja-profile-unique-praetorian = Преторианец
+
+cmu-yautja-profile-legacy-shadow-armor = Тень: наследная броня
+
+cmu-yautja-profile-legacy-shadow-mask = Тень: наследная маска
+
+cmu-yautja-profile-legacy-shadow-greaves = Тень: наследная поножи
+
+cmu-yautja-profile-legacy-shadow-bracer = Тень: наследная наручи
+
+cmu-yautja-profile-legacy-knight-armor = Рыцарь: наследная броня
+
+cmu-yautja-profile-legacy-knight-mask = Рыцарь: наследная маска
+
+cmu-yautja-profile-legacy-knight-greaves = Рыцарь: наследная поножи
+
+cmu-yautja-profile-legacy-knight-bracer = Рыцарь: наследная наручи
+
+cmu-yautja-profile-legacy-seeker-armor = Искатель: наследная броня
+
+cmu-yautja-profile-legacy-seeker-mask = Искатель: наследная маска
+
+cmu-yautja-profile-legacy-seeker-greaves = Искатель: наследная поножи
+
+cmu-yautja-profile-legacy-seeker-bracer = Искатель: наследная наручи
+
+cmu-yautja-profile-legacy-serpent-armor = Змей: наследная броня
+
+cmu-yautja-profile-legacy-serpent-mask = Змей: наследная маска
+
+cmu-yautja-profile-legacy-serpent-greaves = Змей: наследная поножи
+
+cmu-yautja-profile-legacy-serpent-bracer = Змей: наследная наручи
+
+cmu-yautja-profile-unique-seeker-initiate-armor = Посвящённый искатель: уникальная броня
+
+cmu-yautja-profile-unique-seeker-initiate-mask = Посвящённый искатель: уникальная маска
+
+cmu-yautja-profile-unique-seeker-initiate-greaves = Посвящённый искатель: уникальная поножи
+
+cmu-yautja-profile-unique-seeker-adept-armor = Искатель-адепт: уникальная броня
+
+cmu-yautja-profile-unique-seeker-adept-mask = Искатель-адепт: уникальная маска
+
+cmu-yautja-profile-unique-seeker-adept-greaves = Искатель-адепт: уникальная поножи
+
+cmu-yautja-profile-unique-defender-armor = Защитник: уникальная броня
+
+cmu-yautja-profile-unique-defender-mask = Защитник: уникальная маска
+
+cmu-yautja-profile-unique-defender-greaves = Защитник: уникальная поножи
+
+cmu-yautja-profile-unique-warrior-armor = Воин: уникальная броня
+
+cmu-yautja-profile-unique-warrior-mask = Воин: уникальная маска
+
+cmu-yautja-profile-unique-warrior-greaves = Воин: уникальная поножи
+
+cmu-yautja-profile-unique-praetorian-armor = Преторианец: уникальная броня
+
+cmu-yautja-profile-unique-praetorian-mask = Преторианец: уникальная маска
+
+cmu-yautja-profile-unique-praetorian-greaves = Преторианец: уникальная поножи
+
+cmu-yautja-profile-bracer-shadow-legacy = теневой наследные наручи
+
+cmu-yautja-profile-bracer-material-shadow = теневой
+
+cmu-yautja-profile-bracer-knight-legacy = рыцарский наследные наручи
+
+cmu-yautja-profile-bracer-material-knight = рыцарский
+
+cmu-yautja-profile-bracer-seeker-legacy = искательский наследные наручи
+
+cmu-yautja-profile-bracer-material-seeker = искательский
+
+cmu-yautja-profile-bracer-serpent-legacy = змеиный наследные наручи
+
+cmu-yautja-profile-bracer-material-serpent = змеиный
+
+cmu-yautja-profile-bracer-xenobone-elite = ксенокостный элитные наручи
+
+cmu-yautja-profile-bracer-material-xenobone = ксенокостный
+
+cmu-yautja-profile-material-group-elite = ЭЛИТА
+
+cmu-yautja-profile-cape-bone-full = костяной плащ
+
+cmu-yautja-profile-cape-bone-third = костяной треть-плащ
+
+cmu-yautja-profile-cape-bone-ceremonial = церемониальный костяной плащ
