@@ -437,6 +437,8 @@ public sealed class YautjaFalconRuntimeTest
             }), Is.True);
 
             mapSystem.SetTile(lowerMap.Grid.Owner, lowerMap.Grid.Comp, new Vector2i(1, 0), lowerMap.Tile.Tile);
+            // ladders only climb onto a floor or ladder top
+            mapSystem.SetTile(upperMap.Grid.Owner, upperMap.Grid.Comp, new Vector2i(1, 0), upperMap.Tile.Tile);
             var ladderCoordinates = lowerMap.GridCoords.Offset(Vector2.UnitX);
             var ladder = entMan.SpawnEntity(null, ladderCoordinates);
             var ladderComp = entMan.EnsureComponent<CMUZLevelLadderComponent>(ladder);
