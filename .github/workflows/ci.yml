@@ -13,10 +13,23 @@ permissions:
   pull-requests: read
 
 concurrency:
-  # CMU14: PR and master runs supersede their predecessors. Runners are too few to let each
-  # queued run finish. staging/stable pushes and merge queue runs still finish
-  group: ${{ (github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')) && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id) }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master') }}
+  # CMU14: PR runs serialize: one PR run at a time holds the whole runner fleet and the next
+  # PR starts only when it finishes. Without this github hands every free slot to whichever PR
+  # asks first, so many runs crawl partial and nothing completes. Cancel stays off for PRs: a
+  # fresh push queues a new run instead of killing the run currently holding the fleet.
+  # Draft PRs stay outside the group: their jobs all skip, and a no-op run has no business
+  # taking a queue slot. Master keeps per-ref supersession; staging/stable pushes and merge
+  # queue runs still finish.
+  # queue: max keeps every waiting PR's run pending: the single default slot means every new
+  # push cancels whichever OTHER PR was waiting. Superseded same-PR runs are cancelled within
+  # seconds by ci-queue-bouncer.yml, so the waiting list never holds outdated work: a push
+  # never waits for its own stale run to drain first.
+  # CMU14: group renamed from ci-pull-requests once: a wedged queued run held it and ignored
+  # every cancel, rerun and delete (delete needs admin). renaming the group is the eviction
+  # path when github strands a holder like that again.
+  group: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft != true && 'ci-pr-fleet' || ((github.event_name == 'push' && github.ref == 'refs/heads/master') && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id)) }}
+  cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+  queue: max
 
 env:
   DOTNET_VERSION: 10.0.x
@@ -168,14 +181,26 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Run Content.Tests
-        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal --logger "trx;LogFileName=unit-tests.trx" --results-directory bin/Content.Tests/TestResults -- NUnit.ExplicitMode=None
+        # capture discipline: green prints nothing, red prints failed blocks and the
+        # summary digest, full log rides the artifact
+        run: |
+          set +e
+          dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal \
+            --logger "trx;LogFileName=unit-tests.trx" \
+            --results-directory bin/Content.Tests/TestResults \
+            -- NUnit.ExplicitMode=None > bin/Content.Tests/test-output.log 2>&1
+          status=$?
+          bash "$GITHUB_WORKSPACE/.github/scripts/report_test_failures.sh" \
+            "$status" bin/Content.Tests/test-output.log "Unit Tests"
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-results-unit-tests
-          path: bin/Content.Tests/TestResults/
+          path: |
+            bin/Content.Tests/TestResults/
+            bin/Content.Tests/test-output.log
           if-no-files-found: ignore
           retention-days: 3
 
@@ -339,6 +364,12 @@ jobs:
             filter: >-
               FullyQualifiedName~RMC14.PlanetMapLoadTests.
               | FullyQualifiedName~CMU14.Dropship.MohawkLandingTest.
+          # CMU14: the limb-loss soak test runs ~19 minutes by itself. in the cmu catch-all it ran
+          # beside FOB map loads and the runner died of memory mid-run, aborting both. on its own
+          # shard it cannot take other tests down (same medicine as cmu_threed)
+          - name: cmu_movement
+            filter: FullyQualifiedName~CMU14.Movement.
+          # CMU14: carved out into cmu_fob / cmu_movement, keep in sync with those shards
           - name: cmu
             filter: >-
               FullyQualifiedName~CMU14.
@@ -368,6 +399,8 @@ jobs:
               & FullyQualifiedName!~CMU14.Yautja.
               & FullyQualifiedName!~CMU14.Diagnostics.
               & FullyQualifiedName!~CMU14.Research.
+              & FullyQualifiedName!~CMU14.Fob.
+              & FullyQualifiedName!~CMU14.Movement.
               & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest.
               & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest.
               & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest.
@@ -395,6 +428,10 @@ jobs:
             filter: >-
               FullyQualifiedName~CMU14.Chemistry.
               | FullyQualifiedName~CMU14.Research.
+          # CMU14: every FOB test loads a full distress-site map, CMUFobMapTest alone is 26 of them.
+          # these were the other half of the old cmu catch-all's memory aborts
+          - name: cmu_fob
+            filter: FullyQualifiedName~CMU14.Fob.
           # CMU14: PostMapInitTest loads every map, two thirds of the old root_1. split by method so
           # neither half is the slowest shard; post_map_init is the catch-all for new methods
           - name: post_map_init
@@ -673,6 +710,9 @@ jobs:
             # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
             cmu_yautja_smoke*) workers=1 ;;
             post_map_init*|cmu|cmu_systems|cmu_spatial|cmu_camera|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
+            cmu_fob) workers=2 ;;
+            # CMU14: the limb soak alone runs ~19 min, past the 5m inactivity watchdog
+            cmu_movement) workers=2; hang_timeout=20m ;;
             cmu_lobby_ui) workers=1 ;;
             # CMU14: every 3D case makes its own pair, two at once is the memory peak
             cmu_threed) workers=1 ;;
@@ -720,12 +760,20 @@ jobs:
           cd bin/Content.IntegrationTests || exit 1
           # Runner shutdowns are retried by ci-retry-infra.yml; test failures need attention.
           # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
+          # The harness streams every pooled pair and engine log line into test output: 40k+
+          # lines on the big shards, and the failures sit at the very end. Capture stdout to
+          # a file; the report script prints failed blocks on red and nothing on green, and
+          # writes the digest to the job summary. The full log rides the test-results artifact.
+          set +e
           dotnet test Content.IntegrationTests.dll \
             --verbosity normal --filter "$FILTER" \
             --blame-hang-timeout "$hang_timeout" --blame-hang-dump-type none \
             --logger "trx;LogFileName=$shard.trx" --results-directory TestResults \
             -- NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.AssemblySelectLimit=10000 \
-            NUnit.NumberOfTestWorkers="$workers" # CMU14
+            NUnit.NumberOfTestWorkers="$workers" > test-output.log 2>&1
+          status=$?
+          bash "$GITHUB_WORKSPACE/.github/scripts/report_test_failures.sh" \
+            "$status" test-output.log "Testcases / ${shard}"
 
       - name: Upload test results
         if: always()
@@ -733,8 +781,10 @@ jobs:
         with:
           name: test-results-${{ matrix.shard.name }}
           # CMU14: retain results and blame sequences without multi-gigabyte process dumps.
+          # test-output.log is the muted full console capture, for deep dives on red shards.
           path: |
             bin/Content.IntegrationTests/TestResults/
+            bin/Content.IntegrationTests/test-output.log
             !bin/Content.IntegrationTests/TestResults/**/*.dmp
           if-no-files-found: ignore
           retention-days: 3

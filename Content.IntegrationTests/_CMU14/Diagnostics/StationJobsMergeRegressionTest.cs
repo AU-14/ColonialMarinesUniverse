@@ -491,7 +491,15 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         var map = await Pair.CreateTestMap();
         var spawning = Server.System<StationSpawningSystem>();
         var ticker = Server.System<GameTicker>();
+        var stations = Server.System<StationSystem>();
         var originalRunLevel = ticker.RunLevel;
+
+        // The late-join picker scopes spawn points to the given station. A null station
+        // scans the whole pair world, where pooled rounds can hold a hunter ship's markers.
+        var stationConfig = SProtoMan.Index<GameMapPrototype>(MapId).Stations["Merge"];
+        var station = EntityUid.Invalid;
+        await Server.WaitPost(() =>
+            station = stations.InitializeNewStation(stationConfig, [map.Grid], "Merge"));
 
         try
         {
@@ -507,7 +515,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
 
                 SetRunLevel(ticker, GameRunLevel.InRound);
 
-                var preferred = spawning.SpawnPlayerCharacterOnStation(null, null, null);
+                var preferred = spawning.SpawnPlayerCharacterOnStation(station, null, null);
                 Assert.That(preferred, Is.Not.Null);
                 Assert.That(transform.GetMapCoordinates(preferred!.Value),
                     Is.EqualTo(transform.ToMapCoordinates(anyJobCoordinates)),
@@ -515,7 +523,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                 SEntMan.DeleteEntity(preferred.Value);
                 SEntMan.DeleteEntity(anyJob);
 
-                var fallback = spawning.SpawnPlayerCharacterOnStation(null, null, null);
+                var fallback = spawning.SpawnPlayerCharacterOnStation(station, null, null);
                 Assert.That(fallback, Is.Not.Null);
                 Assert.That(transform.GetMapCoordinates(fallback!.Value),
                     Is.EqualTo(transform.ToMapCoordinates(lateJoinCoordinates)),
