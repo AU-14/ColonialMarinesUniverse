@@ -1,0 +1,19 @@
+cmu-wy-commando-team-name = WY Commando Team
+cmu-wy-commando-name = WY Commando
+cmu-wy-commando-leader-name = WY Commando Team Leader
+cmu-wy-commando-medic-name = WY Commando Medic
+cmu-wy-commando-gunner-name = WY Commando Smartgunner
+cmu-wy-commando-description = A Weyland-Yutani commando trained to secure company facilities, recover sensitive assets, and protect corporate personnel.
+cmu-wy-commando-greeting = Corporate command has dispatched your commando team to support Weyland-Yutani operations. Report to the corporate representative, secure company personnel and property, and follow your team leader's orders. Your team ultimately answers only to the Directorate. The corporate liaison's orders serve as guidance.
+cmu-wy-commando-rules = You are a Weyland-Yutani commando responding to a corporate support request. Follow your team leader and use the requesting corporate representative's orders as guidance. Protect company personnel and recover company assets. Your team ultimately answers only to the Directorate.
+cmu-wy-commando-prefix = CMD
+cmu-wy-commando-leader-prefix = CMD TL
+cmu-wy-commando-medic-prefix = CMD MED
+cmu-wy-commando-gunner-prefix = CMD SG
+
+ent-CMUJobWYCommando = { cmu-wy-commando-name }
+ent-CMUJobWYCommandoLeader = { cmu-wy-commando-leader-name }
+ent-CMUJobWYCommandoMedic = { cmu-wy-commando-medic-name }
+ent-CMUJobWYCommandoGunner = { cmu-wy-commando-gunner-name }
+ent-CMUIDCardWYCommando = WY commando ID card
+    .desc = A Weyland-Yutani identification card issued to commando personnel.

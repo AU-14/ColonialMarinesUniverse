@@ -1,0 +1,319 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYCommando
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYCommando
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 3
+      RMCSkillFireman: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: cmu-wy-commando-prefix
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_gun
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_wy_com
+  - type: Language
+    spokenLanguages:
+    - English
+    - Japanese
+    understoodLanguages:
+    - English
+    - Japanese
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-wy-commando-name
+  description: cmu-wy-commando-description
+  playTimeTracker: CMUJobWYCommando
+  ranks:
+    RMCRankWeYaCommando: []
+  startingGear: CMUGearWYCommando
+  greeting: cmu-wy-commando-greeting
+  icon: RMCJobIconPMCCommando
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: job
+  parent: CMUJobWYCommando
+  id: CMUJobWYCommandoLeader
+  roundRole: WYCommandoLeader
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 3
+      RMCSkillFireman: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+      RMCSkillLeadership: 3
+      RMCSkillJtac: 3
+      RMCSkillIntel: 1
+  - type: JobPrefix
+    prefix: cmu-wy-commando-leader-prefix
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: leader
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_wy_com
+  - type: MarineOrders
+  name: cmu-wy-commando-leader-name
+  playTimeTracker: CMUJobWYCommandoLeader
+  startingGear: CMUGearWYCommandoLeader
+  icon: RMCJobIconPMCLeader
+
+- type: job
+  parent: CMUJobWYCommando
+  id: CMUJobWYCommandoMedic
+  roundRole: WYCommandoMedic
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 3
+      RMCSkillFireman: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 3
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: cmu-wy-commando-medic-prefix
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: medic
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_wy_com
+  name: cmu-wy-commando-medic-name
+  playTimeTracker: CMUJobWYCommandoMedic
+  startingGear: CMUGearWYCommandoMedic
+  icon: RMCJobIconPMCMedic
+
+- type: job
+  parent: CMUJobWYCommando
+  id: CMUJobWYCommandoGunner
+  roundRole: WYCommandoGunner
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 3
+      RMCSkillFireman: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+      RMCSkillSmartGun: 1
+      RMCSkillSpecialistWeapons: 2
+  - type: SquadArmorWearer
+  - type: JobPrefix
+    prefix: cmu-wy-commando-gunner-prefix
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: smartgunner
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_wy_com
+  name: cmu-wy-commando-gunner-name
+  playTimeTracker: CMUJobWYCommandoGunner
+  startingGear: CMUGearWYCommandoGunner
+  icon: RMCJobIconPMCGunner
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYCommando
+  name: WY commando
+  components:
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wy-commando-name
+    description: cmu-wy-commando-description
+    reregister: false
+    job: CMUJobWYCommando
+    raffle:
+      settings: short
+    rules: cmu-wy-commando-rules
+
+- type: entity
+  parent: CMUJobWYCommando
+  id: CMUJobWYCommandoLeader
+  name: WY commando team leader
+  components:
+  - type: GhostRole
+    name: cmu-wy-commando-leader-name
+    job: CMUJobWYCommandoLeader
+
+- type: entity
+  parent: CMUJobWYCommando
+  id: CMUJobWYCommandoMedic
+  name: WY commando medic
+  components:
+  - type: GhostRole
+    name: cmu-wy-commando-medic-name
+    job: CMUJobWYCommandoMedic
+
+- type: entity
+  parent: CMUJobWYCommando
+  id: CMUJobWYCommandoGunner
+  name: WY commando smartgunner
+  components:
+  - type: GhostRole
+    name: cmu-wy-commando-gunner-name
+    job: CMUJobWYCommandoGunner
+
+- type: startingGear
+  id: CMUGearWYCommando
+  equipment:
+    id: CMUIDCardWYCommando
+    jumpsuit: RMCJumpsuitVeteranPMCCommandoSurvivor
+    outerClothing: CMArmorM4PMCCommando
+    gloves: RMCHandsVeteranPMCCommando
+    head: ArmorHelmetPMCCommando
+    shoes: RMCBootsPMCCommandoFilled
+    mask: RMCMaskCoifPMC
+    ears: RMCHeadsetDistressWeYa
+    back: RMCSatchelPMC
+    belt: RMCMK80BeltPMCFilled
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKFill
+    suitstorage: RMCWeaponRifleM54CWhiteCommando
+  storage:
+    pocket1:
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    outerClothing:
+    - CMMagazineRifleM54CAP
+    - RMCMagazineRifleM54CHEAP
+    back:
+    - RMCMREWeYaPMC
+    - CMCanteen
+    - CMCrowbar
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+
+- type: startingGear
+  parent: CMUGearWYCommando
+  id: CMUGearWYCommandoLeader
+  equipment:
+    suitstorage: CMUWeaponRifleWYCommandoLeader
+  storage:
+    pocket1:
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    outerClothing:
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+  inhand:
+  - RMCRangefinder
+
+- type: entity
+  parent: RMCWeaponRifleM54CWhiteCommando
+  id: CMUWeaponRifleWYCommandoLeader
+  suffix: WY Commando Leader, HEAP
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        startingItem: RMCMagazineRifleM54CHEAP
+
+- type: startingGear
+  parent: AU14GearWYPMCPartyMedic
+  id: CMUGearWYCommandoMedic
+  equipment:
+    id: CMUIDCardWYCommando
+    jumpsuit: RMCJumpsuitVeteranPMCCommandoSurvivor
+    outerClothing: CMArmorM4PMCCommando
+    gloves: RMCHandsVeteranPMCCommando
+    head: ArmorHelmetPMCCommando
+    shoes: RMCBootsPMCCommandoFilled
+    suitstorage: RMCWeaponRifleM54CWhiteCommando
+  inhand:
+  - CMSurgicalCaseFilled
+
+- type: startingGear
+  parent: AU14GearWYPMCPartySmartgunner
+  id: CMUGearWYCommandoGunner
+  equipment:
+    id: CMUIDCardWYCommando
+    jumpsuit: RMCJumpsuitVeteranPMCCommandoSurvivor
+    outerClothing: CMArmorM4PMCSmartGunHarnessCommando
+    gloves: RMCHandsVeteranPMCCommando
+    head: ArmorHelmetPMCCommando
+    shoes: RMCBootsPMCCommandoFilled
+    belt: RMCBeltSmartGunOperatorPistolPMC
+    pocket1: RMCPouchDrumPMC
+  storage:
+    belt:
+    - RMCMK80
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    pocket1:
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    outerClothing:
+    - RMCPowerCellSmartgun
+    - RMCMREWeYaPMC
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardWYCommando
+  categories: [ HideSpawnMenu ]
+  name: WY commando ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWYCommando
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: playTimeTracker
+  id: CMUJobWYCommando
+
+- type: playTimeTracker
+  id: CMUJobWYCommandoLeader
+
+- type: playTimeTracker
+  id: CMUJobWYCommandoMedic
+
+- type: playTimeTracker
+  id: CMUJobWYCommandoGunner
