@@ -54,7 +54,7 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
 
     private bool _enabled = true;
 
-    private readonly List<(EntityUid Uid, EntProtoId Proto, RMCAlertLevels Level)> _pendingBeacons = new();
+    private readonly List<(EntityUid Uid, EntProtoId Proto, RMCAlertLevels Level, EntityUid Ship)> _pendingBeacons = new();
     private const int BeaconsPerTick = 20;
 
     // Alert changes sweep the ship south to north instead of landing in one tick:
@@ -62,9 +62,10 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
     private readonly List<(EntityUid Uid, RMCAlertLevels? Level, float Y, float X)> _pendingLightChanges = new();
     private const int LightWavePerTick = 20;
 
-    // Fixtures marked to carry a beacon for the change currently sweeping.
-    private readonly HashSet<EntityUid> _beaconSelection = new();
-    private int _beaconsSelected;
+    // Fixtures marked to carry a beacon for the change currently sweeping, per ship:
+    // two ships changing alert must not reset each other's in-flight waves.
+    private readonly Dictionary<EntityUid, HashSet<EntityUid>> _beaconSelection = new();
+    private readonly Dictionary<EntityUid, int> _beaconsSelected = new();
 
     public override void Initialize()
     {
@@ -81,7 +82,7 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
 
         if (!value)
         {
-            ResetBeaconSelection();
+            ResetBeaconSelection(null);
             ApplyToWarshipFixtures<PoweredLightComponent>(null, null);
             ApplyToWarshipFixtures<RMCBreakLightOnAttackComponent>(null, null);
             CullWarshipExteriorLights(null, null);
@@ -89,9 +90,9 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
         }
 
         var alerts = EntityQueryEnumerator<RMCAlertLevelComponent>();
-        // One marking for the whole re-enable sweep: wave entries drain over many
-        // ticks, so a reset between ships would strand the earlier ship's beacons.
-        ResetBeaconSelection();
+        // One marking sweep for the re-enable: wave entries drain over many
+        // ticks, and marking is scoped per ship so nothing strands mid-wave.
+        ResetBeaconSelection(null);
         while (alerts.MoveNext(out var uid, out var comp))
         {
             EntityUid? ship = HasComp<MapComponent>(uid) ? uid : null;
@@ -122,7 +123,7 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
         if (!_enabled)
             return;
 
-        ResetBeaconSelection();
+        ResetBeaconSelection(args.Ship);
         ApplyToWarshipFixtures<PoweredLightComponent>(args.Level, args.Ship);
         ApplyToWarshipFixtures<RMCBreakLightOnAttackComponent>(args.Level, args.Ship);
         CullWarshipExteriorLights(args.Level, args.Ship);
@@ -151,33 +152,65 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
             return cmp != 0 ? cmp : a.X.CompareTo(b.X);
         });
 
-        MarkBeaconSelection(batch);
+        MarkBeaconSelection(batch, ship);
 
         _pendingLightChanges.AddRange(batch);
     }
 
-    private void MarkBeaconSelection(List<(EntityUid Uid, RMCAlertLevels? Level, float Y, float X)> batch)
+    private void MarkBeaconSelection(List<(EntityUid Uid, RMCAlertLevels? Level, float Y, float X)> batch, EntityUid? ship)
     {
-        if (batch.Count == 0)
+        if (batch.Count == 0 || ship == null)
             return;
 
         if (batch[0].Level is not { } lvl || !Beacons.TryGetValue(lvl, out var spec))
             return;
 
-        // Every stride-th fixture of the sorted wave: spatial spacing, not spawn order.
-        for (var i = 0; i < batch.Count && _beaconsSelected < MaxBeaconsPerShip; i += spec.Stride)
+        if (!_beaconSelection.TryGetValue(ship.Value, out var selection))
         {
-            if (_beaconSelection.Add(batch[i].Uid))
-                _beaconsSelected++;
+            selection = new HashSet<EntityUid>();
+            _beaconSelection[ship.Value] = selection;
+            _beaconsSelected[ship.Value] = 0;
+        }
+
+        // Every stride-th fixture of the sorted wave: spatial spacing, not spawn order.
+        for (var i = 0; i < batch.Count && _beaconsSelected[ship.Value] < MaxBeaconsPerShip; i += spec.Stride)
+        {
+            if (selection.Add(batch[i].Uid))
+                _beaconsSelected[ship.Value]++;
         }
     }
 
-    private void ResetBeaconSelection()
+    private void ResetBeaconSelection(EntityUid? ship)
     {
-        _beaconSelection.Clear();
-        _beaconsSelected = 0;
+        if (ship == null)
+        {
+            _beaconSelection.Clear();
+            _beaconsSelected.Clear();
+            _pendingBeacons.Clear();
+            return;
+        }
+
+        _beaconSelection.Remove(ship.Value);
+        _beaconsSelected.Remove(ship.Value);
         // Spawn-queue entries from the superseded level would outlive its marking.
-        _pendingBeacons.Clear();
+        _pendingBeacons.RemoveAll(entry => entry.Ship == ship.Value);
+    }
+
+    // The z-network primary that owns the alert level, matching the event's ship.
+    private EntityUid? GetShip(TransformComponent xform)
+    {
+        var map = xform.MapUid;
+        if (map == null)
+            return null;
+
+        if (HasComp<RMCAlertLevelComponent>(map))
+            return map;
+
+        return _zLevels.TryGetZNetwork(map.Value, out var network)
+            && _zLevels.TryGetMapAtDepth(network.Value, 0, out var primary)
+            && HasComp<RMCAlertLevelComponent>(primary)
+                ? primary
+                : null;
     }
 
     private void ApplyAlertColor(EntityUid uid)
@@ -275,7 +308,11 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
 
     private void UpdateBeacon(EntityUid uid, CMUWarshipAlertLightComponent marker, RMCAlertLevels level)
     {
-        if (!_beaconSelection.Contains(uid) || !Beacons.TryGetValue(level, out var spec))
+        var ship = GetShip(Transform(uid));
+        if (ship == null
+            || !_beaconSelection.TryGetValue(ship.Value, out var selection)
+            || !selection.Contains(uid)
+            || !Beacons.TryGetValue(level, out var spec))
         {
             RemoveBeacon(marker);
             return;
@@ -290,7 +327,7 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
 
         // Beacon spawns queue up: Delta arms hundreds of fixtures and spawning
         // every stride-th beacon in one tick hitches the server.
-        _pendingBeacons.Add((uid, spec.Proto, level));
+        _pendingBeacons.Add((uid, spec.Proto, level, ship.Value));
     }
 
     public override void Update(float frameTime)
@@ -321,7 +358,7 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
         var processedBeacons = Math.Min(BeaconsPerTick, _pendingBeacons.Count);
         for (var i = 0; i < processedBeacons; i++)
         {
-            var (uid, proto, level) = _pendingBeacons[i];
+            var (uid, proto, level, _) = _pendingBeacons[i];
             if (!TryComp<CMUWarshipAlertLightComponent>(uid, out var marker)
                 || marker.Beacon != null)
                 continue;

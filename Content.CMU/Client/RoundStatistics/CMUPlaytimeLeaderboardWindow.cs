@@ -120,8 +120,6 @@ public sealed class CMUPlaytimeLeaderboardWindow : DefaultWindow
         _toggle.Text = Loc.GetString(_youHidden
             ? "cmu-playtime-leaderboard-unhide"
             : "cmu-playtime-leaderboard-hide");
-
-        _sections.DisposeAllChildren();
         AddSection(
             Loc.GetString("cmu-playtime-leaderboard-xeno-header"),
             Loc.GetString("cmu-playtime-leaderboard-xeno-champions"),

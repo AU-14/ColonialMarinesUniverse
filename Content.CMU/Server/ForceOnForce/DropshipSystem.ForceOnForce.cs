@@ -102,12 +102,15 @@ public sealed partial class DropshipSystem
             ForceOnForceSystem.Opponent(faction.GetFaction(user)) == shuttle.Faction?.ToLowerInvariant();
     }
 
-    protected override bool IsForceOnForceHuman(EntityUid user) =>
-        EntityManager.System<GameTicker>().CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true &&
-        !HasComp<XenoComponent>(user) && EntityManager.System<ForceOnForceSystem>().GetFaction(user) != null;
-
-    protected override bool IsForceOnForceRound() =>
+    private bool IsForceOnForcePreset() =>
         EntityManager.System<GameTicker>().CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true;
+
+    protected override bool IsForceOnForceHuman(EntityUid user) =>
+        IsForceOnForcePreset()
+        && !HasComp<XenoComponent>(user)
+        && EntityManager.System<ForceOnForceSystem>().GetFaction(user) != null;
+
+    protected override bool IsForceOnForceRound() => IsForceOnForcePreset();
 
     private bool CanLandAt(EntityUid computer, EntityUid destination)
     {

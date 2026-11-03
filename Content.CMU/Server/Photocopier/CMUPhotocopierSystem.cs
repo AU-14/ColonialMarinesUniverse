@@ -111,8 +111,6 @@ public sealed class CMUPhotocopierSystem : EntitySystem
             return;
         }
 
-        ent.Comp.Toner--;
-
         EntityUid copy;
         if (TryComp<PaperComponent>(original, out var source))
         {
@@ -146,6 +144,7 @@ public sealed class CMUPhotocopierSystem : EntitySystem
             return;
         }
 
+        ent.Comp.Toner--;
         _metaData.SetEntityName(copy, Name(original));
         _popup.PopupEntity(Loc.GetString("cmu-photocopier-printed"), ent, user);
     }
