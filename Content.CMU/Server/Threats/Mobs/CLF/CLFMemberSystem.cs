@@ -4,7 +4,6 @@ using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
-using Content.Shared._RMC14.Weapons.Ranged.Whitelist;
 using Content.Shared.Administration;
 using Content.Shared.Database;
 using Content.Shared.Mind;
@@ -28,6 +27,20 @@ public sealed partial class CLFMemberSystem : EntitySystem
     [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private RoleSystem _role = default!;
 
+    // Every weapon-specialist kit whitelist. CLF/INSFOR fighters get them all (plus the
+    // RMCSkillSpecialistWeapons skill on their jobs) so any captured specialist kit is usable;
+    // a marine specialist only ever gets the one his own kit pamphlet grants.
+    // Added by component-factory name: the components are [Access]-locked to CMGunSystem, so typed
+    // AddComp calls from here would trip the access analyzer.
+    private static readonly string[] SpecialistKitWhitelists =
+    {
+        "DemoSpecWhitelist",
+        "GrenadeSpecWhitelist",
+        "PyroWhitelist",
+        "ScoutWhitelist",
+        "SniperWhitelist",
+    };
+
     public override void Initialize()
     {
         base.Initialize();
@@ -37,16 +50,15 @@ public sealed partial class CLFMemberSystem : EntitySystem
         SubscribeLocalEvent<CLFMemberComponent, ComponentInit>(OnMemberInit);
     }
 
-    // CLF/INSFOR fighters get every weapon-specialist kit whitelist (plus the
-    // RMCSkillSpecialistWeapons skill on their jobs) so any captured specialist kit is usable;
-    // a marine specialist only ever gets the one his own kit pamphlet grants.
     private void OnMemberInit(Entity<CLFMemberComponent> ent, ref ComponentInit args)
     {
-        EnsureComp<DemoSpecWhitelistComponent>(ent);
-        EnsureComp<GrenadeSpecWhitelistComponent>(ent);
-        EnsureComp<PyroWhitelistComponent>(ent);
-        EnsureComp<ScoutWhitelistComponent>(ent);
-        EnsureComp<SniperWhitelistComponent>(ent);
+        var factory = EntityManager.ComponentFactory;
+        foreach (var name in SpecialistKitWhitelists)
+        {
+            var reg = factory.GetRegistration(name);
+            if (!HasComp(ent, reg.Type))
+                AddComp(ent, (Component) factory.GetComponent(reg));
+        }
     }
 
     private void AddMakeCLFVerb(GetVerbsEvent<Verb> args)
