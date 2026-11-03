@@ -73,10 +73,10 @@ public sealed partial class VendingMachineMenu : FancyWindow
         // CMU14: without the actual capture tube, this is merely a dark stylesheet.
         // Move the existing functional list into the same CRT rendering path as
         // Requisitions Stock; scrolling and item clicks remain on the live source.
-        Contents.RemoveChild(Surface);
+        ContentsContainer.RemoveChild(Surface);
         kit.Root.AddChild(Surface);
         Surface.VerticalExpand = true;
-        Contents.AddChild(kit.Tube);
+        ContentsContainer.AddChild(kit.Tube);
         if (kit.Tube.GetChild(1) is CrtScreenControl crt)
         {
             crt.Roll = false;
