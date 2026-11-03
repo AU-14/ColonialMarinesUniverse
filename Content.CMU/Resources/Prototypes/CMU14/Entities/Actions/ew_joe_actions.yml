@@ -1,10 +1,13 @@
-# Early Warning Joe level-0 actions. Icons are placeholders until the GM action icon set exists.
+# Early Warning Joe actions, every level (granted by the level table in EWJoe.yml).
 # Names and descriptions come from ent-<id> locale entries (ew-joe.ftl).
 
 - type: entity
   id: CMUActionEWJoeTestOfFaith
   parent: ActionMarineBase
   components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Gaze
   - type: Action
     itemIconStyle: NoItem
     useDelay: 20
@@ -13,13 +16,24 @@
     - sprite: Objects/Weapons/Melee/flash.rsi
       state: flash
       map: ["enum.ActionVisuals.Icon"]
-  - type: InstantAction
+  # playtest 3: one chosen target, who must be meeting the Joe's gaze
+  - type: TargetAction
+    range: 6
+    checkCanAccess: false
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
     event: !type:EWJoeTestOfFaithActionEvent
+    whitelist:
+      components:
+      - MobState
 
 - type: entity
   id: CMUActionEWJoeOpticalZoom
   parent: ActionMarineBase
   components:
+  - type: EWJoeAbilityGroup
+    group: Gaze
   - type: Action
     itemIconStyle: NoItem
     useDelay: 0.2
@@ -29,12 +43,15 @@
       state: toggle_long_range
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:XenoZoomActionEvent
+    event: !type:EWJoeOpticalZoomActionEvent
 
 - type: entity
   id: CMUActionEWJoeDisrupt
   parent: ActionMarineBase
   components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Machine
   - type: Action
     itemIconStyle: NoItem
     useDelay: 45
@@ -45,3 +62,493 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:EWJoeDisruptActionEvent
+
+# E2: entity-target action on the five colony console types; the server validates the same
+# whitelist again and runs the 8 s do-after.
+- type: entity
+  id: CMUActionEWJoeAssimilate
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeAbilityGroup
+    group: Machine
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: Structures/Machines/computers.rsi
+      state: screen_broken
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: true
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:EWJoeAssimilateActionEvent
+    whitelist:
+      components:
+      - BudgetConsole
+      - CorporateConsole
+      - ResearchDataTerminal
+      - DepartmentConsole
+      - ColonyCommsConsole
+
+# ---------------------------------------------------------------------------------------------
+# Phase E4: level 1-2 abilities. Icons are xeno placeholders until the GM set exists.
+
+- type: entity
+  id: CMUActionEWJoeDrown
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Hands
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 30
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: headbite
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: true
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:EWJoeDrownActionEvent
+    whitelist:
+      components:
+      - MobState
+
+- type: entity
+  id: CMUActionEWJoeScour
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeAbilityGroup
+    group: Machine
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: regurgitate
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: true
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:EWJoeScourActionEvent
+    whitelist:
+      components:
+      - Item
+
+# Offer: a loose firearm an Offer directive asks for is taken in and leaves play (EWJoeOfferSystem).
+- type: entity
+  id: CMUActionEWJoeOffer
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeAbilityGroup
+    group: Machine
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: gut
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: true
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:EWJoeOfferActionEvent
+    # a carried firearm, not a sentry, FOB gun, drone, attachment or vehicle hardpoint (EWJoeOfferSystem.IsOfferable)
+    whitelist:
+      requireAll: true
+      components:
+      - Gun
+      - Item
+    blacklist:
+      components:
+      - Sentry
+      - MobState
+      - Attachable
+      - HardpointItem
+
+- type: entity
+  id: CMUActionEWJoeSweep
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Hands
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tail_sweep
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: true
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:EWJoeSweepActionEvent
+    whitelist:
+      components:
+      - MobState
+
+- type: entity
+  id: CMUActionEWJoeSlam
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Hands
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: ram
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 3
+    checkCanAccess: false
+    deselectOnMiss: false
+  # the target is the wall, table, railing or barricade; the victim is whoever the Joe is holding
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:EWJoeSlamActionEvent
+    # RMC walls carry only the Wall tag (no WallComponent); upstream walls carry the component
+    whitelist:
+      components:
+      - Wall
+      - Climbable
+      - Barricade
+      tags:
+      - Wall
+
+- type: entity
+  id: CMUActionEWJoeChoke
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Hands
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 2
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tail_seize
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeChokeActionEvent
+
+- type: entity
+  id: CMUActionEWJoeThrow
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Hands
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: fling
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: true
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:EWJoeThrowActionEvent
+    whitelist:
+      components:
+      - MobState
+
+- type: entity
+  id: CMUActionEWJoeSense
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeAbilityGroup
+    group: Gaze
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_actions.rsi
+      state: focus
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeSenseActionEvent
+
+- type: entity
+  id: CMUActionEWJoeJudgement
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Gaze
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 20
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: screech
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeJudgementActionEvent
+
+# ---------------------------------------------------------------------------------------------
+# Phase E5: level 3-4 abilities (balance A-9 to A-13, A-18).
+- type: entity
+  id: CMUActionEWJoeOverclock
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeHeatGatedAction
+  - type: EWJoeAbilityGroup
+    group: Engine
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 2
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: emit_pheromones
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeOverclockActionEvent
+
+- type: entity
+  id: CMUActionEWJoeCoolant
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeAbilityGroup
+    group: Engine
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 6
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: soak
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeCoolantActionEvent
+
+- type: entity
+  id: CMUActionEWJoeMachete
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: spin_slash
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeMacheteActionEvent
+
+# A-18: one Consecrate per 8 s by cooldown, so heat is the limiter rather than spam.
+- type: entity
+  id: CMUActionEWJoeConsecrate
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Engine
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: psychic_radiance
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 6
+    checkCanAccess: false
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:EWJoeConsecrateActionEvent
+    whitelist:
+      components:
+      - MobState
+
+- type: entity
+  id: CMUActionEWJoeUnwind
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Machine
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: dislocate
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeUnwindActionEvent
+
+# ---------------------------------------------------------------------------------------------
+# Playtest 3.
+# Opens the level and objective panel on the client only; nothing is sent to the server.
+- type: entity
+  id: CMUActionEWJoeStatus
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    clientExclusive: true
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: watch_xeno
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeOpenStatusActionEvent
+
+# The yautja leap, on the Joe's own component: aim at the level you are looking at (up, down or across).
+- type: entity
+  id: CMUActionEWJoeZLeap
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeHeatGatedAction
+  - type: EWJoeAbilityGroup
+    group: Engine
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:YautjaLeapActionEvent
+
+# ---------------------------------------------------------------------------------------------
+# Phase E6: level 5.
+- type: entity
+  id: CMUActionEWJoeSaturate
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Engine
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: stomp
+      map: ["enum.ActionVisuals.Icon"]
+  # playtest 4: aimed at any tile (the cone points toward it), like Consecrate is aimed
+  - type: TargetAction
+    range: 6
+    checkCanAccess: false
+    deselectOnMiss: false
+  - type: WorldTargetAction
+    event: !type:EWJoeSaturateActionEvent
+
+# ---------------------------------------------------------------------------------------------
+# Action-bar consolidation: the Signal wheels. Each opens a radial menu of the earned abilities in its
+# group (EWJoeAbilityGroup on the ability's prototype); the abilities themselves stay off the hotbar.
+# Client-only: nothing is sent until an ability in the wheel is chosen.
+- type: entity
+  id: CMUActionEWJoeWheelGaze
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    clientExclusive: true
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: toggle_queen_zoom
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeOpenWheelActionEvent
+      group: Gaze
+
+- type: entity
+  id: CMUActionEWJoeWheelHands
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    clientExclusive: true
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: punch
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeOpenWheelActionEvent
+      group: Hands
+
+- type: entity
+  id: CMUActionEWJoeWheelMachine
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    clientExclusive: true
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: transfer_plasma
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeOpenWheelActionEvent
+      group: Machine
+
+- type: entity
+  id: CMUActionEWJoeWheelEngine
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    clientExclusive: true
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: toggle_speed
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:EWJoeOpenWheelActionEvent
+      group: Engine

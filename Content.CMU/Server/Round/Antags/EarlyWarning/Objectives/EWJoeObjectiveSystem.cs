@@ -13,7 +13,7 @@ using Content.Shared.Database;
 using Content.Shared.Humanoid;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
-using Content.Shared.Popups;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
 using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
@@ -36,16 +36,18 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
 public sealed partial class EWJoeObjectiveSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private EWJoeMessageSystem _messages = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private EWJoeAssimilateConditionSystem _assimilate = default!;
+    [Dependency] private EWJoeCollectConditionSystem _collect = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private CounterConditionSystem _counter = default!;
     [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private ObjectivesSystem _objectives = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private EWJoeRuleSystem _rule = default!;
 
     private static readonly TimeSpan EvaluateEvery = TimeSpan.FromSeconds(1);
@@ -63,13 +65,57 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
 
     private void OnLevelChanged(Entity<EWJoeComponent> ent, ref EWJoeLevelChangedEvent args)
     {
-        if (args.NewLevel > 0 && _proto.TryIndex(ent.Comp.LevelTable, out var table) && args.NewLevel < table.Levels.Count)
+        // text pass B: progression goes to the Joe's chat log; a level-up names what arrived, a respawn's
+        // drop says what was lost
+        if (_proto.TryIndex(ent.Comp.LevelTable, out var table) && args.NewLevel < table.Levels.Count)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-ew-joe-level-up", ("levelName", Loc.GetString(table.Levels[args.NewLevel].Name))),
-                ent, ent, PopupType.Large);
+            var levelName = Loc.GetString(table.Levels[args.NewLevel].Name);
+            if (args.NewLevel > args.OldLevel && args.NewLevel > 0)
+                AnnounceLevelUp(ent, table, args.OldLevel, args.NewLevel, levelName);
+            else if (args.NewLevel < args.OldLevel)
+                _messages.Notify(ent, Loc.GetString("cmu-ew-joe-level-down", ("levelName", levelName)));
+        }
+
+        // CORE-01: a respawn's drop leaves the higher level's directives unfinishable or judged by the wrong
+        // level's rules; the lower level starts over with its own set
+        if (args.NewLevel < args.OldLevel)
+        {
+            WithdrawUnfinished(ent);
+            ent.Comp.CurrentObjectives.Clear();
+            ent.Comp.CompletedCredit.Clear();
+            ent.Comp.NextOfferAttempt = TimeSpan.Zero;
         }
 
         OfferObjectives(ent);
+        UpdateStatus(ent);
+    }
+
+    /// <summary>The Signal wheels are not abilities; the level-up notice leaves them out.</summary>
+    private const string WheelActionPrefix = "CMUActionEWJoeWheel";
+
+    /// <summary>
+    /// Text pass B: the level-up notice, then one line per level gained naming its new abilities (from the
+    /// level table, wheels left out) and what changed in the Joe itself (<c>cmu-ew-joe-level-gains-N</c>).
+    /// </summary>
+    private void AnnounceLevelUp(EntityUid joe, EWJoeLevelsPrototype table, int oldLevel, int newLevel, string levelName)
+    {
+        _messages.Notify(joe, Loc.GetString("cmu-ew-joe-level-up", ("levelName", levelName)));
+
+        for (var level = Math.Max(1, oldLevel + 1); level <= newLevel; level++)
+        {
+            var names = new List<string>();
+            foreach (var action in table.Levels[level].Actions)
+            {
+                if (_proto.TryIndex(action, out var proto) && !proto.ID.StartsWith(WheelActionPrefix))
+                    names.Add(proto.Name);
+            }
+
+            if (names.Count > 0)
+                _messages.Notify(joe, Loc.GetString("cmu-ew-joe-level-new-abilities", ("abilities", string.Join(", ", names))));
+
+            if (Loc.TryGetString($"cmu-ew-joe-level-gains-{level}", out var gains))
+                _messages.Notify(joe, gains);
+        }
     }
 
     /// <summary>A stood-down antag keeps nothing it has not finished (D10).</summary>
@@ -78,13 +124,15 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
         WithdrawUnfinished(ent);
         ent.Comp.CurrentObjectives.Clear();
         ent.Comp.CompletedCredit.Clear();
+        RemComp<EWJoeStatusComponent>(ent);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        if (_timing.CurTime < _nextEvaluate)
+        // a switched-off antag's directives wait (ewjoemechanics)
+        if (_timing.CurTime < _nextEvaluate || !_rule.Enabled)
             return;
 
         _nextEvaluate = _timing.CurTime + EvaluateEvery;
@@ -99,6 +147,10 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
         foreach (var joe in joes)
         {
             Evaluate(joe);
+
+            // playtest 3: the Joe's own panel follows the ladder
+            if (joe.Comp.Running)
+                UpdateStatus(joe);
         }
     }
 
@@ -213,6 +265,10 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
     /// </summary>
     public void Evaluate(Entity<EWJoeComponent> ent)
     {
+        // death is terminal for the ladder: a corpse neither earns credit nor levels (ARCH-C01)
+        if (_mobState.IsDead(ent))
+            return;
+
         if (!_mind.TryGetMind(ent, out var mindId, out var mind))
             return;
 
@@ -234,8 +290,10 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
                 || _assimilate.CanStillFinish((objective, assimilate), mind.OwnedEntity))
                 continue;
 
-            Withdraw(mindId, mind, objective);
+            Withdraw(ent, mindId, mind, objective);
             ent.Comp.CurrentObjectives.Remove(objective);
+            // retry the forced offer now, so the level-4 gate is never waived while a console still exists
+            ent.Comp.NextOfferAttempt = TimeSpan.Zero;
         }
 
         // credit belongs to the offer it was earned in
@@ -253,8 +311,10 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
             return;
         }
 
-        // the forced objective (level 4's console) is re-offered if it was refused or withdrawn
-        if (def.ForcedObjective is { } forced && _timing.CurTime >= ent.Comp.NextOfferAttempt)
+        // the forced objective (level 4's console) is re-offered if it was refused or withdrawn and the offer
+        // has room; a full offer without it keeps the console requirement waived for the level (CORE-05)
+        if (def.ForcedObjective is { } forced && _timing.CurTime >= ent.Comp.NextOfferAttempt
+            && ent.Comp.CurrentObjectives.Count < ent.Comp.ObjectivesPerLevel)
         {
             var offered = OfferedPrototypes(ent);
             if (!offered.Contains(forced))
@@ -274,7 +334,11 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
 
             var credit = CreditFor(ent.Comp);
             ent.Comp.CompletedCredit[objective] = credit;
-            _popup.PopupEntity(Loc.GetString("cmu-ew-joe-objective-complete"), ent, ent, PopupType.Medium);
+            // items that paid for this objective are spent; a rerolled collect objective needs fresh ones
+            _collect.MarkSpent(ent, objective);
+            if (TryComp(objective, out EWJoeAssimilateConditionComponent? assimilate))
+                assimilate.Spent = true;
+            _messages.Notify(ent, Loc.GetString("cmu-ew-joe-objective-complete"));
             _adminLogger.Add(LogType.Mind, LogImpact.Medium,
                 $"Early Warning Joe {ToPrettyString(ent):joe} completed {ToPrettyString(objective):objective} for {credit} credit");
         }
@@ -303,20 +367,27 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
         if (ent.Comp.CurrentObjectives.Count == 0)
             return false;
 
-        var required = Math.Max(1, Math.Min(ent.Comp.CreditPerLevel, ent.Comp.CurrentObjectives.Count));
+        var required = RequiredCredit(ent.Comp);
         if (ent.Comp.CompletedCredit.Values.Sum() < required)
             return false;
 
         if (!def.RequireAssimilation)
             return true;
 
-        foreach (var objective in ent.Comp.CompletedCredit.Keys)
+        // the console gate applies only while a console objective is on offer; when the planet has no
+        // console left to pin (the forced offer failed), the standard credit carries the level (FLOW-C02)
+        var consoleOffered = false;
+        foreach (var objective in ent.Comp.CurrentObjectives)
         {
-            if (HasComp<EWJoeAssimilateConditionComponent>(objective))
+            if (!HasComp<EWJoeAssimilateConditionComponent>(objective))
+                continue;
+
+            consoleOffered = true;
+            if (ent.Comp.CompletedCredit.ContainsKey(objective))
                 return true;
         }
 
-        return false;
+        return !consoleOffered;
     }
 
     /// <summary>
@@ -326,6 +397,12 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
     public int CreditFor(EWJoeComponent comp)
     {
         return IsPreThreatWindow(comp) ? comp.PreThreatCreditMultiplier : 1;
+    }
+
+    /// <summary>Credit needed to advance: the level's credit, capped by how many directives are on offer.</summary>
+    public static int RequiredCredit(EWJoeComponent comp)
+    {
+        return Math.Max(1, Math.Min(comp.CreditPerLevel, comp.CurrentObjectives.Count));
     }
 
     public bool IsPreThreatWindow(EWJoeComponent comp)
@@ -354,12 +431,16 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
             if (ent.Comp.CompletedCredit.ContainsKey(objective))
                 continue;
 
-            Withdraw(mindId, mind, objective);
+            Withdraw(ent, mindId, mind, objective);
         }
     }
 
-    private void Withdraw(EntityUid mindId, MindComponent mind, EntityUid objective)
+    private void Withdraw(Entity<EWJoeComponent> ent, EntityUid mindId, MindComponent mind, EntityUid objective)
     {
+        // whatever the Joe already obtained for a withdrawn collect objective is used up: a reroll of
+        // the same kind must be earned with items it has not touched for an objective before
+        _collect.MarkSpent(ent, objective);
+
         var index = mind.Objectives.IndexOf(objective);
         if (index >= 0)
             _mind.TryRemoveObjective(mindId, mind, index);
@@ -388,19 +469,14 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
 
     private bool IsOrganicVictim(EntityUid uid)
     {
-        return HasComp<HumanoidProfileComponent>(uid)
-            && !HasComp<SynthComponent>(uid)
-            && !HasComp<ThreatComponent>(uid)
-            && !HasComp<XenoComponent>(uid)
-            && !HasComp<YautjaComponent>(uid)
-            && !HasComp<CMUDroneAndroidComponent>(uid);
+        return EWJoeTargetRules.IsOrganic(EntityManager, uid);
     }
 
     /// <summary>
     /// Walks a damage origin back to the Early Warning Joe: the Joe itself, a projectile it fired, an
     /// item it threw, or a weapon held in its container tree.
     /// </summary>
-    private EntityUid? ResolveKiller(EntityUid? origin)
+    public EntityUid? ResolveKiller(EntityUid? origin)
     {
         if (origin is not { } current)
             return null;

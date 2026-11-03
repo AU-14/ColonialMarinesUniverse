@@ -2,16 +2,23 @@ using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Barricade;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Stealth;
+using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared.Emp;
 using Content.Shared.Examine;
 using Content.Shared.Flash;
+using System.Linq;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Medical;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
+
+using Robust.Shared.Map;
 
 namespace Content.Shared.CMU14.Round.Antags.EarlyWarning;
 
@@ -27,12 +34,13 @@ public sealed partial class EWJoeAbilitySystem : EntitySystem
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedDirectionalAttackBlockSystem _facing = default!;
     [Dependency] private SharedFlashSystem _flash = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private EWJoeMessageSystem _messages = default!;
     [Dependency] private SharedEmpSystem _emp = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
 
-    private readonly HashSet<Entity<MobStateComponent>> _targets = new();
     private readonly HashSet<EntityUid> _pulsed = new();
 
     public override void Initialize()
@@ -46,57 +54,127 @@ public sealed partial class EWJoeAbilitySystem : EntitySystem
         SubscribeLocalEvent<EWJoeComponent, RMCDefibrillatorAttemptEvent>(OnDefibAttempt);
     }
 
-    /// <summary>Sculpted Form: flat melee and bullet armor that grows with level (balance A-4).</summary>
+    /// <summary>
+    /// Sculpted Form: flat melee and bullet armor that grows with level (balance A-4), plus the bullet
+    /// bonus of a digested body armor while Scour lasts (E4, A-6).
+    /// </summary>
     private void OnGetArmor(Entity<EWJoeComponent> ent, ref CMGetArmorEvent args)
     {
         var bonus = ent.Comp.Level * ent.Comp.ArmorPerLevel;
         args.Melee += bonus;
         args.Bullet += bonus;
+
+        if (TryComp(ent, out EWJoeScourComponent? scour))
+            args.Bullet += scour.BulletArmor;
     }
 
     /// <summary>
-    /// Test of Faith: every living, uncontained target in range that the Joe can see, that faces the
-    /// Joe while the Joe faces it, is flashed and briefly paralyzed. Flash immunity (all synths)
-    /// cancels it per target. The hit count is reported from the server, which is the only side
-    /// that sees every target.
+    /// The Test of Faith flash on one target: the shared call Judgement reuses per target. The upstream
+    /// flash popup (which names the flasher) is suppressed; the victim is told what happened to them in the
+    /// signal's terms instead (text pass A): a fumble line when the stun knocked something out of their
+    /// hands (a gun line for Judgement when it was a gun), otherwise a stun line, then an eye line
+    /// (Test of Faith) or the signal's voice (Judgement) in their chat.
+    /// </summary>
+    public bool TryFlash(Entity<EWJoeComponent> joe, EntityUid target, bool judgement = false)
+    {
+        if (HasComp<EntityActiveInvisibleComponent>(target))
+            return false;
+
+        // a pull or a wielded off-hand is a virtual item, not something the victim can fumble
+        var held = _hands.EnumerateHeld(target).Where(i => !HasComp<VirtualItemComponent>(i)).ToList();
+        var hit = _flash.Flash(target, joe, null, (float) joe.Comp.TestOfFaithFlash.TotalMilliseconds,
+            displayPopup: false, stunDuration: joe.Comp.TestOfFaithStun);
+
+        if (hit && _net.IsServer)
+            Afflict(target, held, judgement);
+
+        return hit;
+    }
+
+    private void Afflict(EntityUid victim, List<EntityUid> heldBefore, bool judgement)
+    {
+        var dropped = false;
+        var droppedGun = false;
+        foreach (var item in heldBefore)
+        {
+            if (_hands.IsHolding(victim, item))
+                continue;
+
+            dropped = true;
+            droppedGun |= HasComp<GunComponent>(item);
+        }
+
+        _messages.Sense(victim, _messages.Pick(VictimLines(judgement, dropped, droppedGun)));
+        if (judgement)
+            _messages.Whisper(victim, _messages.Pick(EWJoeMessageSystem.JudgementVoice));
+        else
+            _messages.Sense(victim, _messages.Pick(EWJoeMessageSystem.FaithEyes), PopupType.MediumCaution);
+    }
+
+    /// <summary>
+    /// Which lines a flashed victim is told, by what the stun really did: a gun leaving their hand
+    /// (Judgement), anything leaving it, or nothing.
+    /// </summary>
+    public static EWJoeLines VictimLines(bool judgement, bool dropped, bool droppedGun)
+    {
+        if (judgement)
+        {
+            return droppedGun ? EWJoeMessageSystem.JudgementGun
+                : dropped ? EWJoeMessageSystem.JudgementFumble
+                : EWJoeMessageSystem.JudgementSenses;
+        }
+
+        return dropped ? EWJoeMessageSystem.FaithFumble : EWJoeMessageSystem.FaithJolt;
+    }
+
+    /// <summary>
+    /// Test of Faith (playtest 3): one chosen, living, visible target in range that faces the Joe while
+    /// the Joe faces it is flashed and briefly paralyzed. Flash immunity (all synths) cancels it. A
+    /// refused target leaves the action unspent.
     /// </summary>
     private void OnTestOfFaith(Entity<EWJoeComponent> ent, ref EWJoeTestOfFaithActionEvent args)
     {
         if (args.Handled)
             return;
 
-        args.Handled = true;
-
-        var range = ent.Comp.TestOfFaithRange;
-        _targets.Clear();
-        _lookup.GetEntitiesInRange(Transform(ent).Coordinates, range, _targets, LookupFlags.Uncontained);
-
-        var hit = 0;
-        foreach (var target in _targets)
+        var target = args.Target;
+        if (!CanTestFaith(ent, target, out var reason))
         {
-            if (target.Owner == ent.Owner || !_mobState.IsAlive(target, target.Comp))
-                continue;
-
-            if (HasComp<EntityActiveInvisibleComponent>(target))
-                continue;
-
-            if (!_examine.InRangeUnOccluded(ent, target, range))
-                continue;
-
-            if (!_facing.IsFacingTarget(ent, target) || !_facing.IsFacingTarget(target, ent))
-                continue;
-
-            if (_flash.Flash(target, ent, null, (float) ent.Comp.TestOfFaithFlash.TotalMilliseconds, stunDuration: ent.Comp.TestOfFaithStun))
-                hit++;
+            if (_net.IsServer && reason != null)
+                _popup.PopupEntity(Loc.GetString(reason, ("target", target)), ent, ent, PopupType.SmallCaution);
+            return;
         }
 
+        args.Handled = true;
+
+        var hit = TryFlash(ent, target);
         if (!_net.IsServer)
             return;
 
-        var message = hit == 0
-            ? Loc.GetString("ew-joe-test-of-faith-none")
-            : Loc.GetString("ew-joe-test-of-faith-hit", ("count", hit));
-        _popup.PopupEntity(message, ent, ent);
+        _popup.PopupEntity(Loc.GetString(hit ? "cmu-ew-joe-test-of-faith-done" : "cmu-ew-joe-test-of-faith-resisted", ("target", target)), ent, ent);
+    }
+
+    /// <summary>The single-target rule: living, visible, in range and line of sight, and mutual facing.</summary>
+    public bool CanTestFaith(Entity<EWJoeComponent> joe, EntityUid target, out string? reason)
+    {
+        reason = null;
+        if (target == joe.Owner || !TryComp(target, out MobStateComponent? mob) || !_mobState.IsAlive(target, mob))
+            return false;
+
+        if (HasComp<EntityActiveInvisibleComponent>(target)
+            || !_examine.InRangeUnOccluded(joe.Owner, target, joe.Comp.TestOfFaithRange))
+        {
+            reason = "cmu-ew-joe-test-of-faith-unseen";
+            return false;
+        }
+
+        if (!_facing.IsFacingTarget(joe.Owner, target) || !_facing.IsFacingTarget(target, joe.Owner))
+        {
+            reason = "cmu-ew-joe-test-of-faith-not-facing";
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -112,21 +190,36 @@ public sealed partial class EWJoeAbilitySystem : EntitySystem
         args.Handled = true;
 
         var coordinates = Transform(ent).Coordinates;
+        EmpAround(ent, coordinates, ent.Comp.DisruptRange, ent.Comp.DisruptEnergy, ent.Comp.DisruptDuration);
+
+        if (_net.IsServer)
+        {
+            SpawnAtPosition(SharedEmpSystem.EmpPulseEffectPrototype, coordinates);
+
+            // Disrupt-II (E5, A-2): doors, sapper traps and sentries are server-side systems
+            var pulse = new EWJoeDisruptPulseEvent(ent, coordinates, ent.Comp.DisruptRange, ent.Comp.Level);
+            RaiseLocalEvent(ref pulse);
+        }
+
+        _audio.PlayPredicted(SharedEmpSystem.EmpSound, coordinates, ent);
+    }
+
+    /// <summary>
+    /// EMPs everything within <paramref name="range"/> of <paramref name="coordinates"/> except the Joe
+    /// and what it carries (Disrupt, and the respawn's pulse).
+    /// </summary>
+    public void EmpAround(EntityUid joe, EntityCoordinates coordinates, float range, float energy, TimeSpan duration)
+    {
         _pulsed.Clear();
-        _lookup.GetEntitiesInRange(coordinates, ent.Comp.DisruptRange, _pulsed);
+        _lookup.GetEntitiesInRange(coordinates, range, _pulsed);
 
         foreach (var uid in _pulsed)
         {
-            if (uid == ent.Owner || IsCarriedBy(ent, uid))
+            if (uid == joe || IsCarriedBy(joe, uid))
                 continue;
 
-            _emp.TryEmpEffects(uid, ent.Comp.DisruptEnergy, ent.Comp.DisruptDuration, ent);
+            _emp.TryEmpEffects(uid, energy, duration, joe);
         }
-
-        if (_net.IsServer)
-            SpawnAtPosition(SharedEmpSystem.EmpPulseEffectPrototype, coordinates);
-
-        _audio.PlayPredicted(SharedEmpSystem.EmpSound, coordinates, ent);
     }
 
     /// <summary>A reset key or defibrillator does nothing to an Early Warning Joe (D3).</summary>
@@ -149,7 +242,7 @@ public sealed partial class EWJoeAbilitySystem : EntitySystem
     }
 
     /// <summary>True when <paramref name="uid"/> sits anywhere inside <paramref name="holder"/>'s transform tree.</summary>
-    private bool IsCarriedBy(EntityUid holder, EntityUid uid)
+    public bool IsCarriedBy(EntityUid holder, EntityUid uid)
     {
         var parent = Transform(uid).ParentUid;
         var guard = 0;

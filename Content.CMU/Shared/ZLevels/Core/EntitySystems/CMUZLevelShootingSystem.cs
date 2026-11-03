@@ -172,7 +172,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private bool CanAimAcrossZWithoutGun(EntityUid user)
     {
-        return HasComp<XenoComponent>(user) || HasComp<YautjaComponent>(user);
+        // CMU14: a non-yautja leaper (CMUZLeap) aims its leap at the level above or below the same way
+        return HasComp<XenoComponent>(user) || HasComp<YautjaComponent>(user) || HasComp<CMUZLeapComponent>(user);
     }
 
     private bool TryDisableShootDown(EntityUid user)

@@ -19,6 +19,13 @@ public sealed partial class EWJoeAssimilateConditionComponent : Component
     [DataField]
     public EntityUid? Target;
 
+    /// <summary>
+    /// Playtest 4: the ladder credited this objective. A repaired console it names is not the Joe's to take
+    /// again (the assimilate action is gated on objectives, and each assimilation brings a meld or respawn).
+    /// </summary>
+    [DataField]
+    public bool Spent;
+
     /// <summary>Title locale id; receives "console" and "area".</summary>
     [DataField(required: true)]
     public LocId Title;

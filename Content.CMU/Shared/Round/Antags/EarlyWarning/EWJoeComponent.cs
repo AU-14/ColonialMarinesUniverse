@@ -1,4 +1,9 @@
+using Content.Shared.Alert;
+using Content.Shared.Antag;
+using Content.Shared.CMU14.Threats;
+using Content.Shared.Radio;
 using Content.Shared.Random;
+using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -19,7 +24,10 @@ public sealed partial class EWJoeComponent : Component
     [DataField, AutoNetworkedField]
     public int Level;
 
-    /// <summary>Highest level whose grants have been applied; -1 before the first grant. Levels never go down.</summary>
+    /// <summary>
+    /// Highest level whose grants are applied; -1 before the first grant. A respawn lowers it with the
+    /// level (EWJoeRuleSystem.LowerLevel), so the lost levels are granted again on the way back up.
+    /// </summary>
     [DataField]
     public int AppliedLevel = -1;
 
@@ -66,6 +74,18 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public string CameraSlot = "ears2";
 
+    /// <summary>Only this prototype is deleted from the slot; anything else a Joe wears there stays.</summary>
+    [DataField]
+    public EntProtoId CameraPrototype = "RMCM5CameraGear";
+
+    /// <summary>Selection added CMArmorUser because the body lacked it; stand-down removes it again.</summary>
+    [DataField]
+    public bool AddedArmorUser;
+
+    /// <summary>The machine radio channel was granted to the Joe (first thrall); stand-down revokes it.</summary>
+    [DataField]
+    public bool GrantedMachineRadio;
+
     /// <summary>Actions granted by the level table, in grant order. Server bookkeeping.</summary>
     [DataField]
     public List<EntityUid> GrantedActions = new();
@@ -98,6 +118,13 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public Dictionary<EntityUid, int> CompletedCredit = new();
 
+    /// <summary>
+    /// Items that already satisfied a credited collect objective. A later collect objective never
+    /// counts them again, in progress or in the existence check at assignment. Server bookkeeping.
+    /// </summary>
+    [DataField]
+    public HashSet<EntityUid> SpentCollectibles = new();
+
     /// <summary>When an offer came up empty (no valid targets yet), the next time the pool is retried.</summary>
     [DataField]
     public TimeSpan NextOfferAttempt;
@@ -106,14 +133,265 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public TimeSpan OfferRetryDelay = TimeSpan.FromSeconds(60);
 
+    /// <summary>Live roster of thralls; entries leave on cure, the body's destruction or the Joe's death (the panel hides dead ones).</summary>
     [DataField]
     public List<EntityUid> Thralls = new();
+
+    /// <summary>How many thralls the Joe ever made. The round-end summary reads this, not the roster.</summary>
+    [DataField]
+    public int ThrallsMade;
 
     [DataField]
     public int ConsolesAssimilated;
 
     [DataField]
     public bool AnnouncedMelding;
+
+    /// <summary>
+    /// Consoles the assimilate action accepts (phase E2). Component names only, the same set the
+    /// assimilate objective uses: matching by parent prototype would catch the embassy consoles.
+    /// </summary>
+    [DataField]
+    public EntityWhitelist ConsoleWhitelist = new()
+    {
+        Components = ["BudgetConsole", "CorporateConsole", "ResearchDataTerminal", "DepartmentConsole", "ColonyCommsConsole"],
+    };
+
+    /// <summary>Length of the assimilation do-after (design §8.2: 8 s).</summary>
+    [DataField]
+    public TimeSpan AssimilateDelay = TimeSpan.FromSeconds(8);
+
+    /// <summary>How far the Joe may drift from the console during the do-after.</summary>
+    [DataField]
+    public float AssimilateRange = 1.5f;
+
+    /// <summary>Clamp on every console randomization: ±40% of the current value (audit §8.1).</summary>
+    [DataField]
+    public float ConsoleEffectVariance = 0.4f;
+
+    /// <summary>Spawned once where the Joe dies; the last step of console repair.</summary>
+    [DataField]
+    public EntProtoId CoreShardPrototype = "CMUEWJoeCoreShard";
+
+    /// <summary>Set after the shard dropped so a revived Joe never drops a second one.</summary>
+    [DataField]
+    public bool ShardDropped;
+
+    // ---- Phase E4: level 1-2 abilities (balance A-1, A-5, A-6, A-7, A-8) ----
+
+    /// <summary>Hold time before the drowning lands. Playtest 2 asked for longer than the 4 s of A-5.</summary>
+    [DataField]
+    public TimeSpan DrownDelay = TimeSpan.FromSeconds(8);
+
+    /// <summary>Organ damage to the lungs; 55 puts human lungs in their dead stage.</summary>
+    [DataField]
+    public int DrownLungDamage = 55;
+
+    [DataField]
+    public TimeSpan DrownSleep = TimeSpan.FromSeconds(30);
+
+    /// <summary>Share of the Joe's own dead threshold healed by a drowning.</summary>
+    [DataField]
+    public float DrownHealFraction = 0.15f;
+
+    [DataField]
+    public TimeSpan SweepKnockdown = TimeSpan.FromSeconds(1.5);
+
+    [DataField]
+    public int SlamDamage = 40;
+
+    [DataField]
+    public TimeSpan SlamParalyze = TimeSpan.FromSeconds(2);
+
+    /// <summary>Slow applied by the impact (RMC obstacle slamming bonus).</summary>
+    [DataField]
+    public TimeSpan SlamSlow = TimeSpan.FromSeconds(2);
+
+    /// <summary>How far from the victim the chosen obstacle may be.</summary>
+    [DataField]
+    public float SlamRange = 3f;
+
+    /// <summary>Throw speed into the obstacle; RMC's impact damage scales with it.</summary>
+    [DataField]
+    public float SlamThrowSpeed = 15f;
+
+    [DataField]
+    public double ChokeStaminaPerSecond = 25;
+
+    [DataField]
+    public float ThrowDistance = 4f;
+
+    [DataField]
+    public float ThrowSpeed = 10f;
+
+    [DataField]
+    public TimeSpan RepentanceMemory = TimeSpan.FromSeconds(120);
+
+    [DataField]
+    public float JudgementRange = 5f;
+
+    [DataField]
+    public float JudgementConeDegrees = 100f;
+
+    [DataField]
+    public TimeSpan ScourDelay = TimeSpan.FromSeconds(3);
+
+    /// <summary>How long Offer takes to consume an item, like Scour.</summary>
+    [DataField]
+    public TimeSpan OfferDelay = TimeSpan.FromSeconds(3);
+
+    [DataField]
+    public TimeSpan ScourDuration = TimeSpan.FromMinutes(5);
+
+    [DataField]
+    public int ScourBulletArmor = 10;
+
+    [DataField]
+    public double ScourPunchStamina = 15;
+
+    [DataField]
+    public float ScourRepairPerSecond = 5f;
+
+    [DataField]
+    public TimeSpan ScourRepairDuration = TimeSpan.FromSeconds(60);
+
+    [DataField]
+    public List<ProtoId<RadioChannelPrototype>> ScourRadioChannels = new() { "Colony", "radioCMB" };
+
+    // ---- Phase E5: level 3-4 abilities (balance A-2, A-9 to A-13, A-18, D11) ----
+
+    /// <summary>Emergency Coolant: blood decals and puddles within this range are absorbed.</summary>
+    [DataField]
+    public float CoolantRange = 2f;
+
+    /// <summary>Playtest 3: halved from A-10's ten.</summary>
+    [DataField]
+    public float CoolantPerDecal = 5f;
+
+    [DataField]
+    public float CoolantPerPuddleUnit = 0.5f;
+
+    /// <summary>Playtest 3: at most this much heat (out of 100) is shed per use.</summary>
+    [DataField]
+    public float CoolantCap = 40f;
+
+    /// <summary>Grand Machine's Hand: the summoned machete.</summary>
+    [DataField]
+    public EntProtoId MachetePrototype = "CMUEWJoeMachete";
+
+    [DataField]
+    public float ConsecrateHeat = 25f;
+
+    /// <summary>Targets in the chain, the clicked one included.</summary>
+    [DataField]
+    public int ConsecrateJumps = 3;
+
+    [DataField]
+    public float ConsecrateJumpRange = 3f;
+
+    /// <summary>Raw Heat per target; armor applies (A-12: ~18 through M3).</summary>
+    [DataField]
+    public int ConsecrateDamage = 60;
+
+    [DataField]
+    public TimeSpan ConsecrateParalyze = TimeSpan.FromSeconds(3);
+
+    [DataField]
+    public EntProtoId ConsecrateBeam = "EffectTeslaBeam";
+
+    [DataField]
+    public float UnwindRange = 6f;
+
+    [DataField]
+    public TimeSpan UnwindSentryLockout = TimeSpan.FromSeconds(10);
+
+    /// <summary>Racking the jammed chamber clear takes this long (A-13: 2 s).</summary>
+    [DataField]
+    public float UnwindRackTime = 2f;
+
+    /// <summary>Heat for a completed Z-Level Leap (D11: 15).</summary>
+    [DataField]
+    public float ZLeapHeat = 15f;
+
+    // ---- Phase E6: level 5 (balance A-15) ----
+
+    [DataField]
+    public float SaturateHeat = 10f;
+
+    [DataField]
+    public float SaturateRange = 5f;
+
+    [DataField]
+    public float SaturateConeDegrees = 90f;
+
+    [DataField]
+    public TimeSpan SaturateKnockdown = TimeSpan.FromSeconds(2);
+
+    /// <summary>Worn slots Saturate tears away; held items are dropped as well.</summary>
+    [DataField]
+    public List<string> SaturateSlots = new() { "outerClothing", "head" };
+
+    /// <summary>Playtest 4: flashed on every tile of the cone.</summary>
+    [DataField]
+    public EntProtoId SaturateTileEffect = "CMUEWJoeSaturateTile";
+
+    /// <summary>Playtest 4: the shockwave that rings out from the Joe.</summary>
+    [DataField]
+    public EntProtoId SaturateWaveEffect = "CMUEWJoeSaturateWave";
+
+    /// <summary>Disrupt-II (A-2): the level from which the pulse also opens doors, disarms traps and silences sentries.</summary>
+    [DataField]
+    public int DisruptTierTwoLevel = 2;
+
+    [DataField]
+    public TimeSpan DisruptDoorHold = TimeSpan.FromSeconds(10);
+
+    /// <summary>Phase E3: time from the first warning to the conversion (design: 60/40/20 s warnings).</summary>
+    [DataField]
+    public TimeSpan MeldDuration = TimeSpan.FromSeconds(60);
+
+    /// <summary>Specifier read as a data bag (components, mind roles, briefing) for a synthetic thrall.</summary>
+    [DataField]
+    public ProtoId<AntagSpecifierPrototype> ThrallSpecifier = "EWJoeThrall";
+
+    /// <summary>Machine radio shared by the Joe and its thralls.</summary>
+    [DataField]
+    public ProtoId<RadioChannelPrototype>? ThrallRadioChannel = "CMUGrandMachine";
+
+    // Playtest 4: the river takes synthetics only. An assimilation that finds no synthetic to meld keeps
+    // a copy of the Joe instead: one respawn, never more than one held at a time.
+
+    /// <summary>The Joe holds its one respawn. Shown on its own status panel and as an alert.</summary>
+    [DataField, AutoNetworkedField]
+    public bool RespawnReady;
+
+    /// <summary>How many times the Joe came back; for admins (View Variables) and tests, also in the admin log.</summary>
+    [DataField]
+    public int Respawns;
+
+    [DataField]
+    public ProtoId<AlertPrototype> RespawnAlert = "CMUEWJoeRespawn";
+
+    /// <summary>Levels lost on a respawn (floor 0).</summary>
+    [DataField]
+    public int RespawnLevelLoss = 2;
+
+    [DataField]
+    public float RespawnEmpRange = 8f;
+
+    [DataField]
+    public float RespawnEmpEnergy = 100000f;
+
+    [DataField]
+    public TimeSpan RespawnEmpDuration = TimeSpan.FromSeconds(20);
+
+    /// <summary>The Joe comes back at least this far from every living player when the map allows.</summary>
+    [DataField]
+    public float RespawnClearance = 15f;
+
+    /// <summary>Random tiles tried when looking for a place to come back.</summary>
+    [DataField]
+    public int RespawnAttempts = 300;
 }
 
 /// <summary>
@@ -140,6 +418,13 @@ public sealed partial class EWJoeLevelDef
     /// </summary>
     [DataField]
     public ProtoId<WeightedRandomPrototype>? ObjectiveGroup;
+
+    /// <summary>
+    /// Actions an earlier level granted that this level takes away, by prototype (playtest 3: Judgement
+    /// replaces Test of Faith).
+    /// </summary>
+    [DataField]
+    public List<EntProtoId> RemoveActions = new();
 
     /// <summary>An objective always included in this level's offer, before the random picks (D8: level 4 always offers a console).</summary>
     [DataField]

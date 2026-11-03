@@ -1,5 +1,5 @@
 # Early Warning Joe: a Working Joe secretly corrupted by the Grand Machine.
-# Design: Docs/GraphAudit-EarlyWarnings-Report.md (D1-D15) and Docs/GraphAudit-EarlyWarningsBalance-Report.md §7.
+# Design notes D1-D15 and the balance sheet are referenced by ID in the comments below.
 
 - type: antagSpecifier
   id: EWJoe
@@ -32,6 +32,56 @@
       proto: EWJoe
       count: 1
 
+# Distress Signal clears the planet's jobs, so no colony Working Joe is there to corrupt. Its rule
+# (rolled by DistressAntags) spawns one on the planet instead, as an antag ghost role (subject to antag bans
+# and playtime, not preferences); EWJoeRuleSystem places it at a colony Joe spawn point on the planet, else
+# another spawn point there, else a random tile of the planet's station. The colony Joe mob brings its kit.
+- type: antagSpecifier
+  id: EWJoeDistressHost
+  prefRoles: [ EWJoeRole ]
+  pickPlayer: false
+  spawnerPrototype: CMUSpawnPointGhostEWJoe
+  briefing:
+    text: ew-joe-role-greeting
+    color: DarkOrange
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  components:
+  - type: EWJoe
+  - type: GrandMachineTouched
+  mindRoles:
+  - MindRoleEWJoe
+
+- type: entity
+  id: EWJoeDistress
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: EWJoeRule
+    hostOnPlanet: true
+  - type: AntagSpawner
+    prototype: AU14MobWorkingJoeColony
+  - type: AntagSelection
+    agentName: ew-joe-agent-name
+    selectionTime: Never
+    antags:
+    - !type:FixedAntagCount
+      proto: EWJoeDistressHost
+      count: 1
+
+- type: entity
+  categories: [ HideSpawnMenu, Spawner ]
+  parent: BaseAntagSpawner
+  id: CMUSpawnPointGhostEWJoe
+  components:
+  - type: GhostRole
+    name: ghost-role-information-ew-joe-name
+    description: ghost-role-information-ew-joe-description
+    rules: ghost-role-information-ew-joe-rules
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+    - state: green
+
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleEWJoe
@@ -53,13 +103,13 @@
   id: EWJoeRole
   name: roles-antag-ew-joe-name
   setPreference: true
-  blacklistedGamemodes:
-  - DistressSignal
+  # Colony Fall, Insurgency and Distress Signal (where the rule opens a colony Working Joe slot to host it)
   objective: roles-antag-ew-joe-objective
 
-# Level table. Index = level. Level 0 grants the E0 kit; each level's objectiveGroup is the pool offered
-# on reaching it (phase E1; pools in Objectives/ew_joe.yml). Ability grants for levels 1-5 arrive in E4-E6.
-# Level-0 numbers follow the balance report constants sheet (A-3: 1 s stun + 20 stamina per punch).
+# Level table. Index = level. Each level's actions and components make up the Joe's kit (E0-E6,
+# playtests 1-4); its objectiveGroup is the pool of directives offered at that level.
+# Level-0 numbers follow the balance report constants sheet (A-3: 20 stamina per punch). Playtest 3
+# removed the 1 s stun from unarmed hits and replaced the xeno zoom with the bio-mask style optics.
 - type: ewJoeLevels
   id: CMUEWJoeLevels
   levels:
@@ -69,32 +119,287 @@
     - CMUActionEWJoeTestOfFaith
     - CMUActionEWJoeOpticalZoom
     - CMUActionEWJoeDisrupt
+    # Offer arrives with the level-0 firearms directive it serves
+    - CMUActionEWJoeOffer
+    - CMUActionEWJoeStatus
+    # Signal wheels (action-bar report): Gaze and Machine have members from level 0
+    - CMUActionEWJoeWheelGaze
+    - CMUActionEWJoeWheelMachine
     components:
-    - type: XenoZoom
-    - type: StunOnHit
-      duration: 1
-      whitelist:
-        components:
-        - MobState
+    - type: EWJoeOpticalZoom
     - type: RMCStaminaDamageOnHit
       damage: 20
+  # E2: consoles enter the objective pool at level 1, so the action arrives with them.
+  # E4: Drown and Scour at level 1; the four Sculpted Hands moves, Repentance and Judgement at level 2.
   - name: ew-joe-level-1
     objectiveGroup: CMUEWJoeObjectivesLevel1
+    actions:
+    - CMUActionEWJoeAssimilate
+    - CMUActionEWJoeDrown
+    - CMUActionEWJoeScour
+    - CMUActionEWJoeWheelHands
   - name: ew-joe-level-2
     objectiveGroup: CMUEWJoeObjectivesLevel2
+    actions:
+    - CMUActionEWJoeSweep
+    - CMUActionEWJoeSlam
+    - CMUActionEWJoeChoke
+    - CMUActionEWJoeThrow
+    - CMUActionEWJoeSense
+    - CMUActionEWJoeJudgement
+    # Judgement is Test of Faith's direct upgrade (playtest 3)
+    removeActions:
+    - CMUActionEWJoeTestOfFaith
+    components:
+    - type: EWJoeRepentance
   # D15: the CMB wanted record exists from level 3, when the disfigurement becomes the tell.
   # Synths have no prints or DNA, so the record carries neither.
+  # E5: level 3 brings the Heat gauge (Evolution's stat changes are applied in code when the level is
+  # reached, because the Joe already owns the stun-resistance and slow-modifier components), the
+  # Overclock (formerly Smokescreen), Emergency Coolant and the Grand Machine's Hand.
   - name: ew-joe-level-3
     objectiveGroup: CMUEWJoeObjectivesLevel3
+    actions:
+    - CMUActionEWJoeOverclock
+    - CMUActionEWJoeCoolant
+    - CMUActionEWJoeMachete
+    - CMUActionEWJoeWheelEngine
     components:
+    - type: EWJoeHeat
     - type: ColonyBounty
       bounty: 1500
       reason: Rogue synthetic unit - malfunctioning, hostile, do not approach alone
       recordName: Rogue Working Joe (Unknown)
       capturedFaxPaper: CMUPaperColonyAntagCaptured
   # D8: level 4 always offers a console, and leaving it requires a finished assimilation.
+  # E5: Consecrate and Unwind. Playtest 3: the Z-Level Leap is the yautja leap (up, down or across),
+  # driven by CMUZLeap; the arsenal system charges its heat when the windup completes.
   - name: ew-joe-level-4
     objectiveGroup: CMUEWJoeObjectivesLevel4
     forcedObjective: CMUEWJoeAssimilateConsoleObjective
     requireAssimilation: true
+    actions:
+    - CMUActionEWJoeConsecrate
+    - CMUActionEWJoeUnwind
+    - CMUActionEWJoeZLeap
+    components:
+    - type: CMUZLeap
+  # E6: MELDING. The APOLLO announcement is made in code on reaching this level. THE LIGHT is the
+  # orange light plus the gaze envelope (A-14); Saturate strips and floors a cone (A-15); Magnetic
+  # Resonance is passive reflection (A-16; playtest 4: a real reflection of IFF bullets too, so the CMU
+  # component replaces RMCReflective, which only zeroes IFF bullets).
   - name: ew-joe-level-5
+    actions:
+    - CMUActionEWJoeSaturate
+    components:
+    - type: EWJoeLight
+    # THE LIGHT is orange again (playtest 5) and ripples like light off moving water instead of flashing.
+    # Clients animate radius, energy and colour from EWJoeLightPulse's code defaults (8-9.5, 1.8-2.6,
+    # #ff7000 to #ffa030); these are its resting values, the orange it had before text pass A.
+    - type: PointLight
+      radius: 8
+      energy: 2
+      softness: 1
+      color: "#ff8a00"
+    - type: EWJoeLightPulse
+    - type: EWJoeResonance
+      chance: 0.2
+      angle: 60
+      reflectionMultiplier: 0.5
+      accuracy: 100
+
+# ---------------------------------------------------------------------------------------------
+# Phase E3: River-Melded thralls. These specifiers are NOT listed under EWJoeRule's antags: the
+# melding system reads them as data (components, mind roles, briefing) and converts in place.
+- type: antagSpecifier
+  id: EWJoeThrall
+  prefRoles: []
+  briefing:
+    text: ew-joe-thrall-greeting
+    color: SteelBlue
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  components:
+  - type: RiverMelded
+  - type: GrandMachineTouched
+  mindRoles:
+  - MindRoleEWJoeThrall
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleEWJoeThrall
+  name: River-Melded Mind Role
+  components:
+  # design §6.1: thralls are not exclusive antagonists; the picker already skips exclusive ones
+  - type: MindRole
+    exclusiveAntag: false
+    roleType: TeamAntagonist
+    subtype: cmu-role-subtype-river-melded
+  - type: EWJoeThrallRole
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/job_icons.rsi
+      state: threat_member
+
+# The machine radio the Joe shares with its thralls.
+- type: radioChannel
+  id: CMUGrandMachine
+  name: chat-radio-cmu-grand-machine
+  keycode: '#' # text pass A: typable on any keyboard; no other channel uses it
+  frequency: 1313
+  color: "#7a9cc8"
+  longRange: true
+
+# ---------------------------------------------------------------------------------------------
+# Phase E4: Repentance tracker alert (same shape as the Wendigo scent tracker).
+- type: alertCategory
+  id: CMUEWJoeRepentance
+
+- type: alert
+  id: CMUEWJoeRepentance
+  category: CMUEWJoeRepentance
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackoff
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-center
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-south
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-southeast
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-east
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-northeast
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-north
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-northwest
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-west
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-southwest
+  name: cmu-ew-joe-repentance-alert-name
+  description: cmu-ew-joe-repentance-alert-desc
+  minSeverity: 0
+  maxSeverity: 10
+
+# ---------------------------------------------------------------------------------------------
+# Phase E5: Heat gauge (the xeno plasma alert shape; index 0 = cold, 18 = overheating).
+- type: alertCategory
+  id: CMUEWJoeHeat
+
+- type: alert
+  id: CMUEWJoeHeat
+  category: CMUEWJoeHeat
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_empty
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_0
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_1
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_2
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_3
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_4
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_5
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_6
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_7
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_8
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_9
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_10
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_11
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_12
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_13
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_14
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_15
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_16
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_energy.rsi
+    state: power_display_full
+  name: cmu-ew-joe-heat-alert-name
+  description: cmu-ew-joe-heat-alert-desc
+  minSeverity: 0
+  maxSeverity: 18
+
+# ---------------------------------------------------------------------------------------------
+# Playtest 3: one status alert per Scour buff, with the buff's remaining time as the cooldown sweep.
+- type: alert
+  id: CMUEWJoeScourBaton
+  icons:
+  - sprite: /Textures/Objects/Weapons/Melee/stunbaton.rsi
+    state: stunbaton_on
+  name: cmu-ew-joe-scour-alert-baton-name
+  description: cmu-ew-joe-scour-alert-baton-desc
+
+- type: alert
+  id: CMUEWJoeScourArmor
+  icons:
+  - sprite: /Textures/_RMC14/Objects/Clothing/OuterClothing/Armor/m3/standard/padded/jungle.rsi
+    state: icon
+  name: cmu-ew-joe-scour-alert-armor-name
+  description: cmu-ew-joe-scour-alert-armor-desc
+
+- type: alert
+  id: CMUEWJoeScourFuel
+  icons:
+  - sprite: /Textures/_RMC14/Objects/Misc/fuel_can.rsi
+    state: can_1
+  name: cmu-ew-joe-scour-alert-fuel-name
+  description: cmu-ew-joe-scour-alert-fuel-desc
+
+- type: alert
+  id: CMUEWJoeScourRadio
+  icons:
+  - sprite: /Textures/Clothing/Ears/Headsets/base.rsi
+    state: icon
+  name: cmu-ew-joe-scour-alert-radio-name
+  description: cmu-ew-joe-scour-alert-radio-desc
+
+- type: alert
+  id: CMUEWJoeScourPyro
+  icons:
+  - sprite: /Textures/_RMC14/Objects/Clothing/OuterClothing/Armor/m35.rsi
+    state: icon
+  name: cmu-ew-joe-scour-alert-pyro-name
+  description: cmu-ew-joe-scour-alert-pyro-desc
+
+- type: alert
+  id: CMUEWJoeScourCloak
+  icons:
+  - sprite: /Textures/_RMC14/Objects/Clothing/Back/Backpacks/Marines/scout_cloak.rsi
+    state: icon
+  name: cmu-ew-joe-scour-alert-cloak-name
+  description: cmu-ew-joe-scour-alert-cloak-desc
+
+# ---------------------------------------------------------------------------------------------
+# Playtest 4: the respawn the river keeps for the Joe when it finds no synthetic to meld, and the
+# reminder a River-Melded thrall carries.
+- type: alert
+  id: CMUEWJoeRespawn
+  icons:
+  - sprite: /Textures/_RMC14/Objects/Misc/module.rsi
+    state: mainboard
+  name: cmu-ew-joe-respawn-alert-name
+  description: cmu-ew-joe-respawn-alert-desc
+
+- type: alert
+  id: CMUEWJoeRiverMelded
+  icons:
+  - sprite: /Textures/CMU14/Interface/job_icons.rsi
+    state: threat_member
+  name: cmu-ew-joe-thrall-alert-name
+  description: cmu-ew-joe-thrall-alert-desc

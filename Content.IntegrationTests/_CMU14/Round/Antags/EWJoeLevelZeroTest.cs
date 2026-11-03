@@ -5,11 +5,12 @@ using Content.Shared._RMC14.Stamina;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Zoom;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
+using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared.Inventory;
 using Content.Shared.Medical;
 using Robust.Shared.GameObjects;
 
-namespace Content.IntegrationTests.CMU14.Round.Antags;
+namespace Content.IntegrationTests._CMU14.Round.Antags;
 
 /// <summary>
 /// Early Warning Joe phase E0: the level table grants the level-0 kit, levels shed slowdown and add
@@ -48,12 +49,13 @@ public sealed class EWJoeLevelZeroTest
             Assert.Multiple(() =>
             {
                 Assert.That(ewJoe.Level, Is.EqualTo(0));
-                Assert.That(ewJoe.GrantedActions, Has.Count.EqualTo(3),
-                    "Level 0 grants Test of Faith, Optical Zoom and Disrupt.");
-                Assert.That(entities.HasComponent<XenoZoomComponent>(joe), Is.True);
-                Assert.That(entities.TryGetComponent(joe, out StunOnHitComponent? stun), Is.True);
-                Assert.That(stun!.Duration, Is.LessThanOrEqualTo(TimeSpan.FromSeconds(1.5)),
-                    "The RMC StunOnHit default of 12 s must be overridden (balance A-3).");
+                Assert.That(ewJoe.GrantedActions, Has.Count.EqualTo(7),
+                    "Level 0 grants Test of Faith, Optical Zoom, Disrupt, Offer, Signal Status and the Gaze and Machine wheels.");
+                Assert.That(entities.HasComponent<EWJoeOpticalZoomComponent>(joe), Is.True,
+                    "Optical Zoom is the bio-mask style zoom (playtest 3).");
+                Assert.That(entities.HasComponent<XenoZoomComponent>(joe), Is.False);
+                Assert.That(entities.HasComponent<StunOnHitComponent>(joe), Is.False,
+                    "Unarmed hits no longer stun (playtest 3).");
                 Assert.That(entities.GetComponent<RMCStaminaDamageOnHitComponent>(joe).Damage, Is.EqualTo(20));
                 Assert.That(slowdown.Slowdown, Is.EqualTo(baseSlowdown),
                     "Level 0 sheds no slowdown.");
@@ -61,7 +63,7 @@ public sealed class EWJoeLevelZeroTest
 
             // levels never go down: re-applying a lower level must change nothing
             system.ApplyLevel((joe, ewJoe), 0);
-            Assert.That(ewJoe.GrantedActions, Has.Count.EqualTo(3),
+            Assert.That(ewJoe.GrantedActions, Has.Count.EqualTo(7),
                 "Re-applying an already applied level must not duplicate grants.");
 
             Assert.That(system.TryAdvanceLevel((joe, ewJoe)), Is.True);
@@ -87,7 +89,7 @@ public sealed class EWJoeLevelZeroTest
                 Assert.That(entities.HasComponent<StunOnHitComponent>(joe), Is.False,
                     "Removing the antag takes its granted components back.");
                 Assert.That(entities.HasComponent<RMCStaminaDamageOnHitComponent>(joe), Is.False);
-                Assert.That(entities.HasComponent<XenoZoomComponent>(joe), Is.False);
+                Assert.That(entities.HasComponent<EWJoeOpticalZoomComponent>(joe), Is.False);
                 Assert.That(slowdown.Slowdown, Is.EqualTo(baseSlowdown).Within(0.001f),
                     "Removing the antag restores the mob's own slowdown.");
             });

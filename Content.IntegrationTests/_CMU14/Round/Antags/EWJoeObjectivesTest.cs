@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Round.Antags.EarlyWarning;
+using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
 using Content.Server.Mind;
 using Content.Server.Objectives;
@@ -8,6 +9,7 @@ using Content.Server.Objectives.Components;
 using Content.Server.Objectives.Systems;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Server.GameTicking.Presets;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -18,7 +20,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests.CMU14.Round.Antags;
+namespace Content.IntegrationTests._CMU14.Round.Antags;
 
 /// <summary>
 /// Early Warning Joe phase E1: each level offers three objectives from its pool, two completions
@@ -37,6 +39,130 @@ public sealed class EWJoeObjectivesTest
     private const string KillCountObjective = "CMUEWJoeKillCountObjective";
     private const string AssimilateObjective = "CMUEWJoeAssimilateConsoleObjective";
     private const string GrandMachineIssuer = "GrandMachine";
+    // the collect mechanics (pick up once, spent never again) on guns, which every test map can spawn;
+    // the real firearms directive is an Offer objective now
+    private const string FirearmsObjective = "CMUEWJoeTestCollectGunsObjective";
+
+    [TestPrototypes]
+    private const string Prototypes = """
+- type: entity
+  parent: CMUEWJoeBaseCollectObjective
+  id: CMUEWJoeTestCollectGunsObjective
+  components:
+  - type: EWJoeCollectCondition
+    min: 2
+    max: 3
+    title: cmu-ew-joe-objective-collect-intel-title
+    description: cmu-ew-joe-objective-collect-intel-description
+    whitelist:
+      components:
+      - Gun
+""";
+
+    /// <summary>
+    /// Playtest fixes: an item counts once the Joe has picked it up even if it is put down again
+    /// (rifles cannot be bagged), and items that paid for a credited collect objective never count
+    /// toward a later one, in progress or in the existence check at assignment.
+    /// </summary>
+    [Test]
+    public async Task CollectCountsObtainedOnceAndSpentItemsNeverAgain()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var mindSys = entities.System<MindSystem>();
+            var roles = entities.System<SharedRoleSystem>();
+            var objectives = entities.System<ObjectivesSystem>();
+            var ladder = entities.System<EWJoeObjectiveSystem>();
+            var hands = entities.System<SharedHandsSystem>();
+
+            var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            var mind = mindSys.CreateMind(null, "Early Warning Joe");
+            mindSys.TransferTo(mind, joe);
+            roles.MindAddRole(mind, EWMindRole, silent: true);
+            var comp = entities.EnsureComponent<EWJoeComponent>(joe);
+
+            // exactly two firearms exist, so the objective (min 2, max 3) clamps to 2
+            var revolverA = entities.SpawnEntity(Revolver, map.GridCoords);
+            var revolverB = entities.SpawnEntity(Revolver, map.GridCoords);
+
+            // the loadout fills a hand; both hands must be free for the two-gun section below
+            foreach (var held in hands.EnumerateHeld(joe).ToArray())
+                hands.TryDrop(joe, held);
+
+            Assert.That(objectives.TryCreateObjective((mind, mind.Comp), FirearmsObjective, out var first), "first firearms objective");
+            mindSys.AddObjective(mind, mind.Comp, first!.Value);
+            comp.CurrentObjectives.Add(first.Value);
+            // a second, unfinished objective on offer so one completion does not advance the level
+            Assert.That(mindSys.TryAddObjective(mind, mind.Comp, KillCountObjective));
+            comp.CurrentObjectives.Add(mind.Comp.Objectives.Last());
+            var condition = entities.GetComponent<EWJoeCollectConditionComponent>(first.Value);
+            Assert.That(condition.Target, Is.EqualTo(2), "target clamped to what exists");
+
+            // pick up and put down: acquisition counts, possession is not required
+            Assert.That(hands.TryPickupAnyHand(joe, revolverA), "pick up A");
+            Assert.That(hands.TryDrop(joe, revolverA), "drop A");
+            Assert.That(objectives.GetProgress(first.Value, (mind, mind.Comp)), Is.EqualTo(0.5f).Within(0.01f), "A counts after being dropped");
+
+            Assert.That(hands.TryPickupAnyHand(joe, revolverB), "pick up B");
+            Assert.That(hands.TryDrop(joe, revolverB), "drop B");
+            Assert.That(objectives.IsCompleted(first.Value, (mind, mind.Comp)), "both counted while holding neither");
+
+            // credit spends the items; the credited objective itself keeps reading complete
+            ladder.Evaluate((joe, comp));
+            Assert.That(comp.Level, Is.Zero, "one of two is not enough to advance");
+            Assert.That(comp.CompletedCredit.ContainsKey(first.Value), "credited");
+            Assert.That(comp.SpentCollectibles, Is.EquivalentTo(new[] { revolverA, revolverB }), "both spent");
+            Assert.That(objectives.IsCompleted(first.Value, (mind, mind.Comp)), "credited objective still complete after its items were spent");
+
+            // a reroll with only spent firearms on the planet is refused
+            Assert.That(objectives.TryCreateObjective((mind, mind.Comp), FirearmsObjective, out _), Is.False, "no fresh firearms: refused");
+
+            // fresh firearms allow a reroll, and the spent ones never count toward it
+            var revolverC = entities.SpawnEntity(Revolver, map.GridCoords);
+            var revolverD = entities.SpawnEntity(Revolver, map.GridCoords);
+            Assert.That(objectives.TryCreateObjective((mind, mind.Comp), FirearmsObjective, out var second), "second firearms objective");
+            mindSys.AddObjective(mind, mind.Comp, second!.Value);
+            Assert.That(entities.GetComponent<EWJoeCollectConditionComponent>(second.Value).Target, Is.EqualTo(2), "only the fresh pair exists for it");
+
+            Assert.That(hands.TryPickupAnyHand(joe, revolverA), "hold spent A");
+            Assert.That(hands.TryPickupAnyHand(joe, revolverB), "hold spent B");
+            Assert.That(objectives.GetProgress(second.Value, (mind, mind.Comp)), Is.EqualTo(0f).Within(0.01f), "spent items never count again");
+
+            Assert.That(hands.TryDrop(joe, revolverA));
+            Assert.That(hands.TryPickupAnyHand(joe, revolverC), "pick up fresh C");
+            Assert.That(objectives.GetProgress(second.Value, (mind, mind.Comp)), Is.EqualTo(0.5f).Within(0.01f), "a fresh item counts");
+            Assert.That(entities.Deleted(revolverD), Is.False);
+
+            // a withdrawn, unfinished collect objective also spends what was obtained for it: the level
+            // advances on the two finished kill counters and the half-done firearms objective is withdrawn
+            comp.CurrentObjectives.Clear();
+            comp.CompletedCredit.Clear();
+            comp.CurrentObjectives.Add(second.Value);
+            var counter = entities.System<CounterConditionSystem>();
+            for (var i = 0; i < 2; i++)
+            {
+                Assert.That(mindSys.TryAddObjective(mind, mind.Comp, KillCountObjective));
+                var kill = mind.Comp.Objectives.Last();
+                comp.CurrentObjectives.Add(kill);
+                var target = entities.GetComponent<NumberObjectiveComponent>(kill).Target;
+                for (var k = 0; k < target; k++)
+                    counter.IncreaseCount(kill);
+            }
+
+            ladder.Evaluate((joe, comp));
+            Assert.That(comp.Level, Is.EqualTo(1), "two kill counters advanced the level");
+            Assert.That(mind.Comp.Objectives, Does.Not.Contain(second.Value), "unfinished firearms objective withdrawn");
+            Assert.That(comp.SpentCollectibles, Does.Contain(revolverC), "the rifle obtained for the withdrawn objective is spent");
+            Assert.That(comp.SpentCollectibles, Does.Not.Contain(revolverD), "an untouched rifle is not");
+        });
+
+        await pair.CleanReturnAsync();
+    }
 
     [Test]
     public async Task LevelOffersThreeAndTwoCompletionsAdvance()
@@ -412,11 +538,24 @@ public sealed class EWJoeObjectivesTest
             var containers = entities.System<SharedContainerSystem>();
             var pouch = containers.EnsureContainer<Container>(joe, "ew-test-pouch");
             var coords = entities.GetComponent<TransformComponent>(joe).Coordinates;
-            var held = entities.System<EWJoeCollectConditionSystem>().CountHeld(joe, collect.Whitelist);
+            // spent items no longer count, so insert enough fresh ones
+            var held = entities.System<EWJoeCollectConditionSystem>().Counting(joe, collect).Count;
             for (var i = held; i < collect.Target; i++)
             {
                 var item = entities.SpawnEntity(Revolver, coords);
                 Assert.That(containers.Insert(item, pouch), Is.True);
+            }
+
+            return;
+        }
+
+        if (entities.TryGetComponent(objective, out EWJoeOfferConditionComponent? offer))
+        {
+            var offering = entities.System<EWJoeOfferSystem>();
+            var coords = entities.GetComponent<TransformComponent>(joe).Coordinates;
+            for (var i = offer.Offered; i < offer.Target; i++)
+            {
+                offering.Offer(joe, entities.SpawnEntity(Revolver, coords));
             }
 
             return;
