@@ -37,25 +37,25 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
-  - type: DrawableSolution  
-    solution: blood  
-  - type: Solution  
-    id: blood  
-    solution:  
+  - type: DrawableSolution
+    solution: blood
+  - type: Solution
+    id: blood
+    solution:
       maxVol: 600
-      reagents:  
-      - ReagentId: CMUPathogenRoyalMycohemolymph  
+      reagents:
+      - ReagentId: CMUPathogenRoyalMycohemolymph
         Quantity: 200
       - ReagentId: CMUPathogenSporoplasmRoyal
         Quantity: 200
       - ReagentId: CMUPathogenSporoplasmMycotoxin
         Quantity: 200
-  - type: SolutionRegeneration  
-    generated:  
-      reagents:  
-      - ReagentId: CMUPathogenRoyalMycohemolymph  
-        Quantity: 1  
-      - ReagentId: CMUPathogenSporoplasmRoyal 
+  - type: SolutionRegeneration
+    generated:
+      reagents:
+      - ReagentId: CMUPathogenRoyalMycohemolymph
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmRoyal
         Quantity: 1
       - ReagentId: CMUPathogenSporoplasmMycotoxin
         Quantity: 1
@@ -76,8 +76,10 @@
     - CMU14ActionXenoPathogenPsychicWhisper
     - CMU14ActionXenoPathogenPsychicRadiance
     - CMU14ActionXenoPathogenGiveOrder
+    - CMU14ActionXenoPathogenWordQueen
     - CMU14ActionXenoPathogenPheromones
     - CMU14ActionXenoPathogenDirectSporeInfect
+    - ActionXenoManageHive
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 2.0
@@ -101,7 +103,6 @@
     physicalFormActions:
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenBlightWave
-    - CMU14ActionXenoPathogenWordQueen
   # Needed for heal action logic
   - type: XenoHeal
   # Needed for leader granting
@@ -221,6 +222,10 @@
   - type: XenoAnnounceDeath
     message: cmu-xeno-death-overmind
     color: "#8a8c50"
+  - type: RMCTrackable
+  # Its own tracker stays on Queen like today, the default Overmind mode would track itself
+  - type: HiveTracker
+    mode: Queen
   - type: DropshipHijacker
   - type: RMCGibOnDeath
     gibChance: 0

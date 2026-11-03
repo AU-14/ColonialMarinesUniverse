@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Projectiles;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged;
@@ -27,6 +28,7 @@ public sealed partial class AttachableIFFSystem : EntitySystem
 {
     [Dependency] private AttachableHolderSystem _holder = default!;
     [Dependency] private GunIFFSystem _gunIFF = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -164,7 +166,8 @@ public sealed partial class AttachableIFFSystem : EntitySystem
                     hasHit = true;
                     hitPosition = hit.HitPos;
 
-                    if (IsFriendlyEntity(hit.HitEntity))
+                    // CMU14: downed friendlies lie under the shot line and must not block firing
+                    if (IsFriendlyEntity(hit.HitEntity) && !_mobState.IsIncapacitated(hit.HitEntity))
                     {
                         return true;
                     }

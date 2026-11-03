@@ -7,6 +7,10 @@
   name: geothermal generator
   description: A boiler on a plate of heat-resistant alloy that makes power of the heat of the earth. Set it beside the lava of the black stone layer, and every piece of the lake within its reach gives it a share of the power, up to four.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     sprite: CMU14/Production/Electric/geothermal.rsi
     noRot: true
@@ -83,6 +87,10 @@
   name: battery bank
   description: A big store of power for the high voltage line, many times the battery buffer. It takes in what the generators make beyond use and gives it back when they make less. Join it through a cable terminal, as a big SMES is.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     color: "#ffd890"
   - type: Battery

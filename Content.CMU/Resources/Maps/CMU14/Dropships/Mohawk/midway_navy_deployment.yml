@@ -1986,7 +1986,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 7.5,3.5
-- proto: AU14VehicleRadioSet
+- proto: AU14DropshipRadioSet
   entities:
   - uid: 900
     components:

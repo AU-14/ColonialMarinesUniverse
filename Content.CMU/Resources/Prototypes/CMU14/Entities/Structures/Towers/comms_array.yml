@@ -366,6 +366,20 @@
     - radioOpforJTAC
     - radioOpforMILP
 
+# dropship variant: a Mohawk-class airframe is sixteen tiles stem to stern, far more
+# than the vehicle set's whip antenna covers, and the cockpit crew sat in the static
+# band. longer antenna, same both-sides relay
+- type: entity
+  parent: AU14VehicleRadioSet
+  id: AU14DropshipRadioSet
+  name: dropship radio set
+  description: A hull-mounted transceiver tuned for dropship airframes. The longer antenna keeps every seat, ramp to cockpit, on the net.
+  suffix: Dropship, All Nets
+  components:
+  - type: ANPRCRelayAnchor
+    fullRange: 20
+    partialRange: 26
+
 # field-built antenna mast, the last stage of AU14CommsMastGraph (comms.yml). relays only
 # the nets of the sides keyed into it with a COMSEC fill card - AU14MastAssemblySystem
 # fills the channel list from the keys, so it is empty here

@@ -1,0 +1,8 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Pit and retractable ladders now show the correct downward sprite at their
+    upper ends.
+  type: Fix
+time: '2026-11-02T21:41:54.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2434

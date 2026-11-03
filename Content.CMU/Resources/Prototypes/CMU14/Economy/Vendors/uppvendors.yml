@@ -46,6 +46,8 @@
         amount: 20
     - name: Headgear
       entries:
+      - id: ArmorHelmetSPP
+        amount: 2
       - id: AU14UPPNavalInfantryHelmet
         amount: 40
       - id: AU14UPPPatrolCap
@@ -779,7 +781,11 @@
       - id: RuMCHeadBeretMarien
         amount: 5
       - id: RuMCUPPNavalInfantryCapUshankaCommander
-        amount: 10
+        amount: 5
+      - id: CMHeadCapSPPPeaked
+        amount: 5
+      - id: RMCHeadCapSPPPolKomWhite
+        amount: 2
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
@@ -849,10 +855,6 @@
       - id: AU14ArmorSmartGunDesertCombatHarnessUPP
       - id: RuMCUPPPouchDrum
       - id: RMCScabbardMacheteSGFilled
-    - name: au14-vendor-section-headgear
-      choices: { CMHelmet: 1 }
-      entries:
-      - id: RuMCUPPNavalInfantryHeavyHelmet2
     - name: Firearm System
       choices: { CMUPlatoonMG: 1 }
       entries:
@@ -938,7 +940,7 @@
     - name: Apparel
       choices: { CMHat: 1 }
       entries:
-      - id: RuMCHeadBeretMarien
+      - id: AU14UPPPeakedSL
     - name: Squad Leader Essentials
       takeAll: CMStandard
       entries:
@@ -1594,7 +1596,7 @@
       - id: RuMCUPPNavalInfantryHeavyHelmet
         amount: 2
       - id: RuMCUPPNavalInfantryHeavyHelmet2
-        amount: 4
+        amount: 2
     - name: Devices
       entries:
       - id: AU14PowerCellSmartgunUPP

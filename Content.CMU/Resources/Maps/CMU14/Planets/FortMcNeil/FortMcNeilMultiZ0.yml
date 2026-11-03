@@ -40224,7 +40224,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 77.5,71.5
-- proto: RMCCableRed
+- proto: CMUCableThinHV
   entities:
   - uid: 10723
     components:

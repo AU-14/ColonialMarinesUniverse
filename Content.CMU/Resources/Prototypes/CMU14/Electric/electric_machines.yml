@@ -5,6 +5,10 @@
   abstract: true
   id: RUMCRecipeMachineBase
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
   - type: PortableStructure
   - type: NodeContainer
     examinable: true
@@ -77,6 +81,10 @@
   abstract: true
   id: RUMCFabricatorBase
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
   - type: PortableStructure
   - type: NodeContainer
     examinable: true
@@ -1183,6 +1191,10 @@
   name: concrete mixer crate
   description: A concrete mixer for the builders of the colony. It wants power and a pipe with water.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
   - type: StorageFill
     contents:
     - id: RUMCConcreteMixer
