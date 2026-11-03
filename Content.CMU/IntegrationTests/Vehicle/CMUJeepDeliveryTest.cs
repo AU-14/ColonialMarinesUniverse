@@ -41,9 +41,8 @@ public sealed class CMUJeepDeliveryTest : GameTest
             // spawn can start with both occupied. Clear them so the buy asserts delivery,
             // not spawn loadout luck.
             var physicianHands = SEntMan.GetComponent<HandsComponent>(physician);
-            foreach (var hand in physicianHands.Hands.Values)
-                if (hand.HeldEntity is { } held)
-                    SEntMan.DeleteEntity(held);
+            foreach (var held in SEntMan.System<SharedHandsSystem>().EnumerateHeld((physician, physicianHands)))
+                SEntMan.DeleteEntity(held);
             var outsider = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var cost = department.Supplies[0].Cost;
             department.DepartmentBudget = cost - 1;
