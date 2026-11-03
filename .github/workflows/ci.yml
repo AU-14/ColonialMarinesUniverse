@@ -361,6 +361,7 @@ jobs:
           # shard it cannot take other tests down (same medicine as cmu_threed)
           - name: cmu_movement
             filter: FullyQualifiedName~CMU14.Movement.
+          # CMU14: carved out into cmu_fob / cmu_movement, keep in sync with those shards
           - name: cmu
             filter: >-
               FullyQualifiedName~CMU14.
@@ -390,7 +391,6 @@ jobs:
               & FullyQualifiedName!~CMU14.Yautja.
               & FullyQualifiedName!~CMU14.Diagnostics.
               & FullyQualifiedName!~CMU14.Research.
-              # CMU14: carved out into cmu_fob / cmu_movement, keep in sync with those shards
               & FullyQualifiedName!~CMU14.Fob.
               & FullyQualifiedName!~CMU14.Movement.
               & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest.
@@ -702,7 +702,9 @@ jobs:
             # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
             cmu_yautja_smoke*) workers=1 ;;
             post_map_init*|cmu|cmu_systems|cmu_spatial|cmu_camera|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
-            cmu_fob|cmu_movement) workers=2 ;;
+            cmu_fob) workers=2 ;;
+            # CMU14: the limb soak alone runs ~19 min, past the 5m inactivity watchdog
+            cmu_movement) workers=2; hang_timeout=20m ;;
             cmu_lobby_ui) workers=1 ;;
             # CMU14: every 3D case makes its own pair, two at once is the memory peak
             cmu_threed) workers=1 ;;

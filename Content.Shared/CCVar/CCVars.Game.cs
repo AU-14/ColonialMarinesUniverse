@@ -489,7 +489,7 @@ public sealed partial class CCVars
         // Passenger stays in the list as the joinable fallback: marine squad roles are
         // setPreference false, so validation strips them from job preferences and a profile
         // with nothing seedable left never joins a round.
-        CVarDef.Create("game.new_character_jobs", "AU14JobGOVFORSquadRifleman,AU14JobCivilianColonist", CVar.REPLICATED);
+        CVarDef.Create("game.new_character_jobs", "AU14JobGOVFORSquadRifleman,AU14JobCivilianColonist,Passenger", CVar.REPLICATED);
 
     /// <summary>
     /// Determines whether wall-mounted entities are hidden when viewed from outside their facing arc.
