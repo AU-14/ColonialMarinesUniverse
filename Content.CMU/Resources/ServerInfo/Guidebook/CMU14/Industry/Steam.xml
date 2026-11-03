@@ -13,7 +13,7 @@
   ## Place and connect
   - Right-click portable machinery → [bold]Pick up[/bold]. Free both hands, then click a reachable clear floor tile to place it. Operate it after placing it.
   - Place a water pump on suitable water. Supply the boiler through its water port; load fuel in the boiler window.
-  - [bold]Liquid pipes:[/bold] use a screwdriver on the pipe, then on another pipe or the machine. Choose a port if prompted. Repeat a connection to disconnect it; click the selected pipe again to cancel.
+  - [bold]Liquid pipes:[/bold] [textlink="choose a shape and rotate" link="CMUGuideIndustryPipes"], then wrench each piece down. Touching open ends connect automatically. Use a screwdriver on a pipe, then its touching machine; explicitly choose INPUT or OUTPUT. Right-click the machine → Pipe connections to inspect or disconnect a link.
   - [bold]Steam pipes:[/bold] use the gas-pipe network. Place and wrench compatible pipe ends together. Liquid pipes do not carry the boiler's atmospheric steam.
 
   ## Open machine → fill slots → collect

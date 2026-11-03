@@ -17,6 +17,7 @@ public sealed class FluidPortsBoundUserInterface(EntityUid owner, Enum uiKey) : 
 
         _window = this.CreateWindow<FluidPortsWindow>();
         _window.OnPortChosen += port => SendMessage(new FluidPortChosenMessage(port));
+        _window.OnDisconnect += (port, pipe) => SendMessage(new CMUFluidPortDisconnectMessage(port, pipe));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

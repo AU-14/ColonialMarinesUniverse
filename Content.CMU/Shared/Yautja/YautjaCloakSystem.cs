@@ -82,23 +82,21 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, GetMobFootstepVolumeEvent>(OnFootstepVolume);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnAnyDamageChanged);
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
-        SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentStartup>(OnInvisibilityStartup);
-        SubscribeLocalEvent<EntityActiveInvisibleComponent, ComponentShutdown>(OnInvisibilityShutdown);
+        SubscribeLocalEvent<CMUYautjaOpticalCloakComponent, ActiveInvisibleToggledEvent>(OnInvisibilityToggled);
     }
 
-    private void OnInvisibilityStartup(Entity<EntityActiveInvisibleComponent> ent, ref ComponentStartup args)
+    private void OnInvisibilityToggled(Entity<CMUYautjaOpticalCloakComponent> ent, ref ActiveInvisibleToggledEvent args)
     {
+        if (!_net.IsServer || TerminatingOrDeleted(ent))
+            return;
+
         // Another cloak may take over during the reverse sweep. Return its shader ownership immediately.
-        if (_net.IsServer && TryComp<CMUYautjaOpticalCloakComponent>(ent, out var optical) && !optical.Enabled)
+        if (args.enabled && !ent.Comp.Enabled)
             RemComp<CMUYautjaOpticalCloakComponent>(ent);
-    }
 
-    private void OnInvisibilityShutdown(Entity<EntityActiveInvisibleComponent> ent, ref ComponentShutdown args)
-    {
         // A worn thermal harness can also end invisibility without using the bracer action.
-        if (_net.IsServer && !TerminatingOrDeleted(ent) &&
-            TryComp<CMUYautjaOpticalCloakComponent>(ent, out var optical) && optical.Enabled)
-            SetOpticalTransition(ent, optical.Preset, false);
+        if (!args.enabled && ent.Comp.Enabled)
+            SetOpticalTransition(ent, ent.Comp.Preset, false);
     }
 
     public override void Update(float frameTime)
