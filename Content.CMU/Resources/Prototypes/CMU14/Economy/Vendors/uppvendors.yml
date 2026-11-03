@@ -773,7 +773,11 @@
       - id: RuMCHeadBeretMarien
         amount: 5
       - id: RuMCUPPNavalInfantryCapUshankaCommander
-        amount: 10
+        amount: 5
+      - id: CMHeadCapSPPPeaked
+        amount: 5
+      - id: RMCHeadCapSPPPolKomWhite
+        amount: 2
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
