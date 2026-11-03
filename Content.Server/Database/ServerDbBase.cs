@@ -1239,6 +1239,64 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 .ToList();
         }
 
+        // CMU14 method: everyone currently opted out of the playtime leaderboard
+        public async Task<List<Guid>> GetCMUPlaytimeHiddenPlayers(CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            return await db.DbContext.Player
+                .AsNoTracking()
+                .Where(player => player.CMUPlaytimeHidden)
+                .Select(player => player.UserId)
+                .ToListAsync(cancel);
+        }
+
+        // CMU14 method
+        public async Task<bool> GetCMUPlaytimeHidden(NetUserId player, CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            var hidden = await db.DbContext.Player
+                .AsNoTracking()
+                .Where(p => p.UserId == player)
+                .Select(p => (bool?) p.CMUPlaytimeHidden)
+                .SingleOrDefaultAsync(cancel);
+
+            return hidden ?? false;
+        }
+
+        // CMU14 method
+        public async Task SetCMUPlaytimeHidden(NetUserId player, bool hidden)
+        {
+            await using var db = await GetDb();
+
+            var dbPlayer = await db.DbContext.Player
+                .Where(p => p.UserId == player)
+                .SingleOrDefaultAsync();
+
+            if (dbPlayer == null)
+                return;
+
+            dbPlayer.CMUPlaytimeHidden = hidden;
+            await db.DbContext.SaveChangesAsync();
+        }
+
+        // CMU14 method: everyone with an active server ban
+        public async Task<List<Guid>> GetCMUPlaytimeBannedPlayers(CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+            var now = DateTime.UtcNow;
+
+            return await db.DbContext.BanPlayer
+                .AsNoTracking()
+                .Where(bp => bp.Ban!.Type == BanType.Server
+                    && bp.Ban.Unban == null
+                    && (bp.Ban.ExpirationTime == null || bp.Ban.ExpirationTime.Value > now))
+                .Select(bp => bp.UserId)
+                .Distinct()
+                .ToListAsync(cancel);
+        }
+
         private CMURoundOutcomeRecord MakeCMURoundOutcomeRecord(CMURoundOutcome outcome)
         {
             var preset = Enum.TryParse(outcome.PresetId, out CMURoundStatisticsPreset parsedPreset)
