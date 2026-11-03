@@ -101,6 +101,7 @@
   components:
   - type: GuideHelp
     guides:
+    - CMUGuideIndustryPipes
     - CMUGuideIndustryElectric
     - CMUGuideIndustry
   - type: Sprite
@@ -123,6 +124,7 @@
     capacity: 5000
   - type: FluidFillable
   - type: FluidPorts
+    connectionTiles: ["0,0", "1,0"]
     ports:
     - id: liquid_in
       rate: 40
@@ -161,6 +163,7 @@
   components:
   - type: GuideHelp
     guides:
+    - CMUGuideIndustryPipes
     - CMUGuideIndustryElectric
     - CMUGuideIndustry
   - type: Sprite
@@ -203,6 +206,7 @@
     guides:
     - CMUGuideIndustryElectric
     - CMUGuideIndustry
+  - type: CMUIndustryExport
   - type: Sprite
     sprite: CMU14/Objects/Electric/items.rsi
     state: FuelCanister
@@ -447,6 +451,7 @@
     - id: liquid_in
       rate: 8
     - id: liquid_out
+      kind: RUMCDiesel
       output: true
       rate: 8
     - id: light_in

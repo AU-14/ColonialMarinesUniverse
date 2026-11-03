@@ -35,10 +35,21 @@
   id: RMCPhotocopier
   name: Photocopier
   components:
+  # CMU14: paper and photo copying with a toner pool, CM-SS13 numbers
+  - type: CMUPhotocopier
   - type: Sprite
     sprite: _RMC14/Structures/Machines/photocopier.rsi
     drawdepth: Objects
-    state: bigscanner
+    layers:
+    - state: bigscanner
+      map: ["enum.CMUPhotocopierVisuals.Copying"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUPhotocopierVisuals.Copying:
+        enum.CMUPhotocopierVisuals.Copying:
+          True: { state: bigscannercopying }
+          False: { state: bigscanner }
   - type: Icon
     sprite: _RMC14/Structures/Machines/photocopier.rsi
     state: bigscanner
@@ -66,10 +77,23 @@
   name: We-Yu Photocopier
   description: A photocopier used for copying... you know, photos! Also useful for copying documents on paper. This specific model has been manufactured by We-Yu in a more modern and robust frame than the average photocopiers you see from smaller companies. It uses some of the most advanced technologies in the area of paper-printing such as bigger toner economy and much higher printing capabilities. All that makes it the favorite among consumers that need to print high amounts of paperwork for their daily duties.
   components:
+  # CMU14: the Pro model ships the big toner drum
+  - type: CMUPhotocopier
+    toner: 180
+    tonerMax: 180
   - type: Sprite
     sprite: _RMC14/Structures/Machines/photocopier.rsi
     drawdepth: Objects
-    state: bigscannerpro
+    layers:
+    - state: bigscannerpro
+      map: ["enum.CMUPhotocopierVisuals.Copying"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUPhotocopierVisuals.Copying:
+        enum.CMUPhotocopierVisuals.Copying:
+          True: { state: bigscannerprocopying }
+          False: { state: bigscannerpro }
   - type: Icon
     sprite: _RMC14/Structures/Machines/photocopier.rsi
     state: bigscannerpro

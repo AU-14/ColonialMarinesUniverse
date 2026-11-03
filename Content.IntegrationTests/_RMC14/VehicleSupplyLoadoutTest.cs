@@ -546,6 +546,9 @@ public sealed class VehicleSupplyLoadoutTest
         "VehicleSPPAPCAutocannon",
         "VehicleSPPAPCHJ35Launcher",
         "VehicleSPPAPCFlareLauncher",
+        // CMU14: BUG-1197 generic APC support modules
+        "RMCAPCCommsRelay",
+        "RMCAPCFreightStorage",
     };
 
     private static readonly string[] TankHardpoints =

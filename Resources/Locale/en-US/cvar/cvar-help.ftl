@@ -31,3 +31,9 @@ changecvar-simple-playtest_stamina_damage_modifier = Multiplier affecting stamin
 changecvar-full-playtest_stamina_damage_modifier = Multiplier affecting all stamina damage dealt.
 changecvar-simple-playtest_mob_damage_modifier = Multiplier affecting all damage dealt to mobs.
 changecvar-full-playtest_mob_damage_modifier = Multiplier affecting all damage dealt to entities with MobStateComponent.
+
+# CMU14
+changecvar-simple-game_soft_max_players = Maximum number of players who can connect.
+changecvar-full-game_soft_max_players = Maximum number of players who can connect. Applies immediately to new connection attempts.
+changecvar-simple-game_soft_max_notice = Custom message shown when the server is at its player cap.
+changecvar-full-game_soft_max_notice = Custom message shown to players denied for being over the player cap. Leave empty to use the default message.

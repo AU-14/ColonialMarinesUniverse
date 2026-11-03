@@ -10,7 +10,6 @@ namespace Content.Shared.CMU14.Administration;
 public sealed record CMUAdminTargetDetails(
     NetEntity Target,
     string Name,
-    bool IsXeno,
     NetEntity? CurrentHive,
     EntProtoId? CurrentSquad,
     Dictionary<EntProtoId<SkillDefinitionComponent>, int> Skills,

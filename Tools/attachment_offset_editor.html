@@ -279,7 +279,7 @@
   $("parseYaml").onclick = async () => {
     const t = $("yamlIn").value.replace(/\r\n/g, "\n");
     const msgs = [];
-    const sm = t.match(/- type: Sprite[^\n]*\n(?:\s+[^\n]*\n)*?\s+sprite:\s*(\S+\.rsi)/);
+    const sm = t.match(/- type: Sprite[^\n]*\n(?:[ \t]+[^\n]*\n)*?\s+sprite:\s*(\S+\.rsi)/); // CMU14: match tab-indented YAML without swallowing blank lines
     if (sm) { model.gun.rsi = sm[1]; gunRsiEl.value = sm[1]; msgs.push("sprite"); }
     const bm = t.match(/-\s*state:\s*(\S+)\s*\n\s*map:\s*\[\s*"?enum\.GunVisualLayers\.Base/) || t.match(/-\s*state:\s*(\S+)/);
     if (bm) model.gun.state = bm[1];
