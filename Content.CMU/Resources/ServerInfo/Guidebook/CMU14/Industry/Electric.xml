@@ -27,11 +27,15 @@
     <GuideEntityEmbed Entity="RUMCDistillationTower" Caption="SEPARATE FRACTIONS"/>
   </Box>
   1. Activate a [textlink="prospector" link="CMUGuideIndustryTools"] to find nearby deposits. Place the oil pump on one and power it.
-  2. Use a screwdriver to connect a liquid pipe to its output, then to a tank or the distillation tower's input. Choose the named port when prompted.
+  2. Lay a touching [textlink="liquid pipe run" link="CMUGuideIndustryPipes"] from the pump to the tower. Use a screwdriver on the first pipe, then the pump → OUTPUT → Connect selected pipe. Select the last pipe, then the tower → crude oil INPUT → Connect selected pipe.
   3. Connect storage/output routes for [bold]all fractions[/bold]: naphtha, light fuel, heavy fuel and refinery gas. Full outputs can stop production.
-  4. Use the fuel mixer for diesel. Crack suitable fractions into ethylene, then polymerize it into plastic pellets; a bender makes sheets.
+  4. Route light fuel and heavy fuel to the fuel mixer's matching INPUTS. [bold]30 units light fuel + 20 units heavy fuel → 50 units diesel.[/bold] Connect its diesel OUTPUT to a separate barrel's INPUT. Supply power and leave room for the finished fuel.
+
+  [bold]Sell diesel:[/bold] move the filled barrel onto the colony ASRS elevator and send it away using the requisitions console. Diesel pays per unit actually inside; an empty barrel does not earn the fuel's value. [textlink="Selling controls" link="CMUGuideIndustryProducts"]
+
+  For plastics: crack suitable fractions into ethylene, polymerize it into pellets, then use a bender for sheets.
 
   Open each machine's window for its exact inputs, fluids and circuit. To fill a canister, hold it and right-click a fillable tank → [bold]Draw the liquid into the container[/bold]. Click a fillable tank or generator with the filled canister to pour it in.
 
-  [textlink="Pipe connection controls" link="CMUGuideIndustrySteam"] · [textlink="Machine quick reference" link="CMUGuideIndustryMachines"]
+  [textlink="Pipe connection controls" link="CMUGuideIndustryPipes"] · [textlink="Machine quick reference" link="CMUGuideIndustryMachines"]
 </Document>

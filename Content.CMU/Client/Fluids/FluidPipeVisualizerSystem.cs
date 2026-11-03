@@ -5,8 +5,7 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.CMU14.Fluids;
 
-// Shows a pipe as the piece of the sprite that has an arm on every side the pipe is joined on; a pipe that goes down is shown
-// as the piece that looks down, from the side its liquid comes from.
+// Show every open end. Vertical fittings overlay the shape so their horizontal branches remain visible.
 public sealed class FluidPipeVisualizerSystem : EntitySystem
 {
     [Dependency] private readonly SpriteSystem _sprite = default!;
@@ -28,8 +27,10 @@ public sealed class FluidPipeVisualizerSystem : EntitySystem
 
         var down = args.AppearanceData.TryGetValue(FluidPipeVisuals.Down, out var rawDown) && rawDown is true;
 
-        var state = down ? DownState(mask) : $"c{mask}";
-        _sprite.LayerSetRsiState((pipe.Owner, args.Sprite), 0, state);
+        _sprite.LayerSetRsiState((pipe.Owner, args.Sprite), 0, $"c{mask}");
+        _sprite.LayerSetVisible((pipe.Owner, args.Sprite), "down", down);
+        if (down)
+            _sprite.LayerSetRsiState((pipe.Owner, args.Sprite), "down", DownState(mask));
     }
 
     // Down pipes: one piece for each side the liquid can come from; the north one serves the south as well.
