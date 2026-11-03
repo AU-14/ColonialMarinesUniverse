@@ -492,7 +492,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         EntityCoordinates toCoordinates,
         [NotNullWhen(true)] out List<LineTile>? tiles,
         [NotNullWhen(true)] out Entity<SolutionComponent>? solution,
-        out Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfile fuel, // CMU14
+        out Content.Shared.CMU14.Chemistry.Fuel.CMUFireSpec spec, // CMU14
         [NotNullWhen(true)] out Entity<RMCFlamerTankComponent>? tank,
         List<LineTile>? buffer = null)
     {
@@ -528,7 +528,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         if (delta.Length() > maxRange)
             toCoordinates = fromCoordinates.Offset(normalized * range);
 
-        tiles = _line.DrawLine(fromCoordinates, toCoordinates, flamer.Comp.DelayPer, maxRange, out _, true);
+        tiles = _line.DrawLine(fromCoordinates, toCoordinates, flamer.Comp.DelayPer, maxRange, out _, true, buffer: buffer);
         tiles = _flameCone.WidenToCone(fromCoordinates, tiles, spec.FireSpread, tank.Value.Comp.AllowBlueFire);
 
         // Fuel pays per distance step (see ShootFlamer), and the line is already cut to what the tank affords.
