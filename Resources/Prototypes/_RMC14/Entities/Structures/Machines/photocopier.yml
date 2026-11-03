@@ -35,12 +35,21 @@
   id: RMCPhotocopier
   name: Photocopier
   components:
-  # CMU14: paper copying with a toner pool, CM-SS13 numbers
+  # CMU14: paper and photo copying with a toner pool, CM-SS13 numbers
   - type: CMUPhotocopier
   - type: Sprite
     sprite: _RMC14/Structures/Machines/photocopier.rsi
     drawdepth: Objects
-    state: bigscanner
+    layers:
+    - state: bigscanner
+      map: ["enum.CMUPhotocopierVisuals.Copying"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUPhotocopierVisuals.Copying:
+        enum.CMUPhotocopierVisuals.Copying:
+          True: { state: bigscannercopying }
+          False: { state: bigscanner }
   - type: Icon
     sprite: _RMC14/Structures/Machines/photocopier.rsi
     state: bigscanner
@@ -75,7 +84,16 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/photocopier.rsi
     drawdepth: Objects
-    state: bigscannerpro
+    layers:
+    - state: bigscannerpro
+      map: ["enum.CMUPhotocopierVisuals.Copying"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUPhotocopierVisuals.Copying:
+        enum.CMUPhotocopierVisuals.Copying:
+          True: { state: bigscannercopyingpro }
+          False: { state: bigscannerpro }
   - type: Icon
     sprite: _RMC14/Structures/Machines/photocopier.rsi
     state: bigscannerpro

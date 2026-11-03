@@ -4,15 +4,17 @@ using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Paper;
+using Content.Shared.Photography;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Server.CMU14.Photocopier;
 
 /// <summary>
-/// Paper copying with a toner pool, per CM-SS13's photocopier. Insert a sheet, activate to copy.
+/// Paper and photograph copying with a toner pool, per CM-SS13's photocopier. Insert a sheet, activate to copy.
 /// </summary>
 public sealed class CMUPhotocopierSystem : EntitySystem
 {
@@ -20,6 +22,7 @@ public sealed class CMUPhotocopierSystem : EntitySystem
 
     private static readonly EntProtoId CopyPrototype = "CMPaper";
 
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
@@ -32,13 +35,14 @@ public sealed class CMUPhotocopierSystem : EntitySystem
         SubscribeLocalEvent<CMUPhotocopierComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<CMUPhotocopierComponent, ActivateInWorldEvent>(OnActivate);
         SubscribeLocalEvent<CMUPhotocopierComponent, CMUPhotocopierCopyDoAfterEvent>(OnCopyDoAfter);
-        SubscribeLocalEvent<CMUPhotocopierComponent, GetVerbsEvent<InteractionVerbEvent>>(OnGetVerbs);
+        SubscribeLocalEvent<CMUPhotocopierComponent, GetVerbsEvent<InteractionVerb>>(OnGetVerbs);
         SubscribeLocalEvent<CMUPhotocopierComponent, ExaminedEvent>(OnExamined);
     }
 
     private void OnInteractUsing(Entity<CMUPhotocopierComponent> ent, ref InteractUsingEvent args)
     {
-        if (!TryComp<PaperComponent>(args.Used, out _))
+        if (!TryComp<PaperComponent>(args.Used, out _) &&
+            !TryComp<PhotographComponent>(args.Used, out _))
             return;
 
         args.Handled = true;
@@ -80,19 +84,25 @@ public sealed class CMUPhotocopierSystem : EntitySystem
             BreakOnUserMove = true,
         };
 
-        _doAfter.TryStartDoAfter(doAfter);
+        if (!_doAfter.TryStartDoAfter(doAfter))
+            return;
+
+        // Only a running do-after clears this, so never set it when none started
+        _appearance.SetData(ent.Owner, CMUPhotocopierVisuals.Copying, true);
         _popup.PopupEntity(Loc.GetString("cmu-photocopier-copying"), ent, user);
     }
 
     private void OnCopyDoAfter(Entity<CMUPhotocopierComponent> ent, ref CMUPhotocopierCopyDoAfterEvent args)
     {
+        // Every exit clears the scanning state, a cancelled copy must not leave the scanner stuck mid-sweep
+        _appearance.SetData(ent.Owner, CMUPhotocopierVisuals.Copying, false);
+
         if (args.Cancelled || args.Handled || args.User is not { Valid: true } user)
             return;
 
         args.Handled = true;
 
-        if (!TryGetPaper(ent, out var original) ||
-            !TryComp<PaperComponent>(original, out var source))
+        if (!TryGetPaper(ent, out var original))
             return;
 
         if (ent.Comp.Toner <= 0)
@@ -103,21 +113,44 @@ public sealed class CMUPhotocopierSystem : EntitySystem
 
         ent.Comp.Toner--;
 
-        var copy = Spawn(CopyPrototype, _transform.GetMapCoordinates(ent.Owner));
-        if (TryComp<PaperComponent>(copy, out var paper))
+        EntityUid copy;
+        if (TryComp<PaperComponent>(original, out var source))
         {
-            paper.Content = source.Content;
-            paper.ContentSize = source.ContentSize;
-            paper.StampedBy = new List<StampDisplayInfo>(source.StampedBy);
-            paper.StampState = source.StampState;
-            Dirty(copy, paper);
+            copy = Spawn(CopyPrototype, _transform.GetMapCoordinates(ent.Owner));
+            if (TryComp<PaperComponent>(copy, out var paper))
+            {
+                paper.Content = source.Content;
+                paper.ContentSize = source.ContentSize;
+                paper.StampedBy = new List<StampDisplayInfo>(source.StampedBy);
+                paper.StampState = source.StampState;
+                Dirty(copy, paper);
+            }
+        }
+        else if (TryComp<PhotographComponent>(original, out var photo))
+        {
+            // A photograph copy keeps the original's prototype so the frame matches
+            if (MetaData(original).EntityPrototype is not { } proto)
+                return;
+
+            copy = Spawn(proto.ID, _transform.GetMapCoordinates(ent.Owner));
+            if (TryComp<PhotographComponent>(copy, out var newPhoto))
+            {
+                newPhoto.NameText = photo.NameText;
+                // Examine mutates the message, the copy must not share it with the original
+                newPhoto.Description = photo.Description == null ? null : new FormattedMessage(photo.Description);
+                Dirty(copy, newPhoto);
+            }
+        }
+        else
+        {
+            return;
         }
 
         _metaData.SetEntityName(copy, Name(original));
         _popup.PopupEntity(Loc.GetString("cmu-photocopier-printed"), ent, user);
     }
 
-    private void OnGetVerbs(Entity<CMUPhotocopierComponent> ent, ref GetVerbsEvent<InteractionVerbEvent> args)
+    private void OnGetVerbs(Entity<CMUPhotocopierComponent> ent, ref GetVerbsEvent<InteractionVerb> args)
     {
         if (!args.CanAccess || !args.CanInteract || !TryGetPaper(ent, out _))
             return;
