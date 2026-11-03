@@ -1,0 +1,8 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Ladders warn and keep you in place if their exit has no secure footing,
+    instead of dropping you into a shaft.
+  type: Fix
+time: '2026-11-02T21:42:05.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2437

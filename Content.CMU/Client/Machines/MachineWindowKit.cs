@@ -55,9 +55,10 @@ public static class MachineWindowKit
 
         var lines = new System.Collections.Generic.List<string>();
         foreach (var (kind, amount) in tank.Contents)
-            lines.Add($"{LiquidName(entMan, kind)}: {(int) amount}");
+            lines.Add(Loc.GetString("au14-fluid-tank-examine", ("fluid", LiquidName(entMan, kind)), ("amount", Math.Round(amount, 1))));
 
-        return string.Join("\n", lines) + $"\n{(int) tank.Total}/{(int) tank.Capacity}";
+        return string.Join("\n", lines) + "\n" + Loc.GetString("cmu-fluid-tank-volume",
+            ("amount", Math.Round(tank.Total, 1)), ("capacity", tank.Capacity));
     }
 
     public static SlotView MakeSlot(IEntityManager entMan, string slotId, Color border, Action<string>? onPressed, int size = SlotSize)

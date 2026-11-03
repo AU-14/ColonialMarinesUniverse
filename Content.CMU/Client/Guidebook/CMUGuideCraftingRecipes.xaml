@@ -9,15 +9,18 @@
             <TextureRect Name="OutputIcon" MinSize="64 64" MaxSize="64 64" Stretch="KeepAspectCentered" />
             <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4">
                 <RichTextLabel Name="RecipeName" HorizontalExpand="True" />
-                <Label Name="OutputCount" />
+                <RichTextLabel Name="OutputCount" HorizontalExpand="True" />
                 <Label Name="RecipeTime" />
             </BoxContainer>
         </BoxContainer>
-        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+        <RichTextLabel Name="Instructions" HorizontalExpand="True" />
+        <Label Name="EquipmentHeading" Text="{Loc cmu-industry-source-equipment}" StyleClasses="LabelHeading" />
+        <BoxContainer Name="Equipment" Orientation="Vertical" SeparationOverride="4" />
+        <BoxContainer Name="BatchRow" Orientation="Horizontal" SeparationOverride="8">
             <Label Text="{Loc cmu-industry-recipes-batches}" VerticalAlignment="Center" />
             <OptionButton Name="Batches" />
         </BoxContainer>
-        <Label Text="{Loc cmu-industry-recipes-ingredients}" StyleClasses="LabelHeading" />
+        <Label Name="IngredientsHeading" Text="{Loc cmu-industry-recipes-ingredients}" StyleClasses="LabelHeading" />
         <RichTextLabel Text="{Loc cmu-industry-recipes-ingredient-hint}" HorizontalExpand="True" />
         <BoxContainer Name="Ingredients" Orientation="Vertical" SeparationOverride="4" />
         <RichTextLabel Name="Tools" HorizontalExpand="True" />

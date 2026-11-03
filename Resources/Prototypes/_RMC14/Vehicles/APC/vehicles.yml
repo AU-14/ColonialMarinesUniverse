@@ -562,7 +562,11 @@
     - id: support
       hardpointType: SupportAttachment
       slotType: SupportAttachment
-      compatibilityId: SPPAPC
+      # CMU14: generic APC support modules (comms relay, freight storage) carry no
+      # compatibilityId; gating this slot locked the UPP APC out of every support
+      # module except its branded flare launcher. Wolfpack leaves the wheel slot
+      # ungated for the same reason.
+      # compatibilityId: SPPAPC
       visualLayer: support
       insertDelay: 2.0
       required: false
