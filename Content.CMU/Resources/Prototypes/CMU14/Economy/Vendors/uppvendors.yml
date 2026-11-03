@@ -932,7 +932,7 @@
     - name: Apparel
       choices: { CMHat: 1 }
       entries:
-      - id: RuMCHeadBeretMarien
+      - id: AU14UPPPeakedSL
     - name: Squad Leader Essentials
       takeAll: CMStandard
       entries:
