@@ -1,3 +1,6 @@
+// CMU14: CVarControl attribute on game.soft_max_players
+using Content.Shared.Administration;
+using Content.Shared.CCVar.CVarAccess;
 using Content.Shared.Roles;
 using Robust.Shared.Configuration;
 
@@ -189,8 +192,15 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> GameDiagonalMovement =
         CVarDef.Create("game.diagonalmovement", true, CVar.ARCHIVE);
 
+    // CMU14: allow admins to adjust the pop cap mid-round via changecvar
+    [CVarControl(AdminFlags.Server)]
     public static readonly CVarDef<int> SoftMaxPlayers =
-        CVarDef.Create("game.soft_max_players", 30, CVar.SERVERONLY | CVar.ARCHIVE);
+        CVarDef.Create("game.soft_max_players", 350, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    // CMU14: optional custom soft-cap denial notice, empty falls back to soft-player-cap-full
+    [CVarControl(AdminFlags.Server)]
+    public static readonly CVarDef<string> SoftMaxNotice =
+        CVarDef.Create("game.soft_max_notice", string.Empty, CVar.SERVERONLY);
 
     /// <summary>
     ///     If a player gets denied connection to the server,
