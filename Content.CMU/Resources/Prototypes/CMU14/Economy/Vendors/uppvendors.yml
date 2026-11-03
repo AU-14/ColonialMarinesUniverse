@@ -46,6 +46,8 @@
         amount: 20
     - name: Headgear
       entries:
+      - id: ArmorHelmetSPP
+        amount: 2
       - id: AU14UPPNavalInfantryHelmet
         amount: 40
       - id: AU14UPPPatrolCap
