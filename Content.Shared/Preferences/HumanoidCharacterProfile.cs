@@ -990,14 +990,23 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile WithJobFromCvar(IConfigurationManager cfg)
         {
             // This path should run only rarely, so the cvar does not need to be locally stored
-            var jobs = new HashSet<string>(cfg.GetCVar(CCVars.NewCharacterJobs).Split(","));
+            // CMU14: walk the cvar in list order so the first entry reliably gets High priority;
+            // a HashSet iterates in hash order. Skip jobs validation would drop anyway (unknown ids
+            // and setPreference false roles like marine squad jobs, which cannot hold preferences).
+            var jobs = cfg.GetCVar(CCVars.NewCharacterJobs).Split(",");
+            var prototypes = IoCManager.Resolve<IPrototypeManager>();
             var priority = JobPriority.High;
             Dictionary<ProtoId<JobPrototype>, JobPriority> priorities = new();
 
-            foreach (var job in jobs)
+            foreach (var entry in jobs)
             {
                 // Remove whitespaces in case the input contained any
-                priorities.Add(job.Trim(), priority);
+                var job = entry.Trim();
+                if (!prototypes.TryIndex<JobPrototype>(job, out var proto) || !proto.SetPreference)
+                    continue;
+
+                if (!priorities.TryAdd(job, priority))
+                    continue;
 
                 // There can be only one High priority
                 priority = JobPriority.Medium;
