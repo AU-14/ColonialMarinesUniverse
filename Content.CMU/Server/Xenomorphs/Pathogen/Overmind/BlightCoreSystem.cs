@@ -174,18 +174,31 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
         if (_hive.HasHiveQueen(hive))
             return;
 
-        if (_activeVotes.TryGetValue(coreUid, out var vote))
+        // One ascension vote per hive, even when several blight cores stand in it.
+        // Per-core votes share the per-xeno vote UI key and can crown two overminds.
+        EntityUid voteCore = coreUid;
+        if (!_activeVotes.TryGetValue(coreUid, out var vote))
         {
-            if (vote.Hive.Owner != hive.Owner)
-                return;
+            foreach (var (otherCore, otherVote) in _activeVotes)
+            {
+                if (otherVote.Hive.Owner != hive.Owner)
+                    continue;
 
+                vote = otherVote;
+                voteCore = otherCore;
+                break;
+            }
+        }
+
+        if (vote != null)
+        {
             if (!vote.CandidateVotes.TryAdd(candidate, 0))
                 return;
 
             vote.EndsAt += TimeSpan.FromSeconds(JoinTimeBonusSeconds);
 
-            BroadcastVoteState(coreUid, vote);
-            OpenVoteUiForHive(coreUid, hive);
+            BroadcastVoteState(voteCore, vote);
+            OpenVoteUiForHive(voteCore, hive);
             PopupToHive(hive, Loc.GetString("cmu14-blight-core-candidate-joined",
                 ("name", Name(candidate))));
         }
@@ -381,6 +394,15 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
         CloseVoteUiForHive(coreUid, vote.Hive);
 
         if (!TryComp(coreUid, out CMUBlightCoreComponent? core))
+            return;
+
+        // Re-check the same preconditions a vote needs to start. An overmind crowned
+        // while the vote ran makes it moot; crowning again would make a second overmind.
+        if (core.Comp.CurrentOvermind is { } current &&
+            !TerminatingOrDeleted(GetEntity(current)))
+            return;
+
+        if (_hive.HasHiveQueen(vote.Hive))
             return;
 
         EntityUid? winner = null;
