@@ -220,6 +220,13 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
 
     private void OnFoldAttempt(Entity<WeaponMountComponent> ent, ref FoldAttemptEvent args)
     {
+        // CMU14: empty tripods must not bypass the gunship's complete-mount deployment restriction.
+        if (args.Comp.IsFolded && CMUBlocksEmplacementDeployment(Transform(ent).Coordinates))
+        {
+            args.Cancelled = true;
+            return;
+        }
+
         if (Transform(ent).Anchored || ent.Comp.MountedEntity != null)
         {
             args.Cancelled = true;
@@ -228,6 +235,13 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
 
     private void OnAnchorAttempt(Entity<WeaponMountComponent> ent, ref AnchorAttemptEvent args)
     {
+        // CMU14: also reject a tripod carried aboard after being unfolded elsewhere.
+        if (CMUBlocksEmplacementDeployment(Transform(ent).Coordinates))
+        {
+            args.Cancel();
+            return;
+        }
+
         if (TryComp(ent, out FoldableComponent? foldable) && foldable.IsFolded)
         {
             args.Cancel();
@@ -439,6 +453,9 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
 
         var direction = rotation.GetCardinalDir();
         coordinates = coordinates.Offset(direction.ToVec());
+        if (!CMUCanDeployEmplacement(user, coordinates)) // CMU14: gunships reserve mounted weapons for hardpoints.
+            return false;
+
         // CMU14: barricades may share the deployment tile's edges.
         // if (_rmcMap.IsTileBlocked(coordinates, CollisionGroup.MidImpassable))
         if (!_rmcMap.CanDeployWeaponOn(coordinates, CollisionGroup.MidImpassable, checkStructures: false))
@@ -718,6 +735,10 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
     private bool TryGetNearbyMounts(Entity<MapGridComponent> grid, EntityCoordinates coordinates, out List<Entity<WeaponMountComponent>> mounts, float range = 1.5f)
     {
         mounts = new List<Entity<WeaponMountComponent>>();
+        // CMU14: zero disables exclusion; it must not construct an inverted search box.
+        if (range <= 0)
+            return false;
+
         var position = _mapSystem.LocalToTile(grid, grid, coordinates);
         var checkArea = new Box2(position.X - range + 1, position.Y - range + 1, position.X + range, position.Y + range);
         var enumerable = _mapSystem.GetLocalAnchoredEntities(grid, grid, checkArea);

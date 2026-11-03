@@ -4,6 +4,7 @@ using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.CMU14.Atmos;
 using Content.Shared.Atmos;
+using Content.Shared.CMU14.Emplacements;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Tag;
@@ -36,6 +37,7 @@ public sealed class CMUDynamicGunshipFittingsTest : GameTest
                 out var loadedMap, out var grids, DeserializationOptions.Default with { InitializeMaps = true }), Is.True);
             Assert.That(grids, Has.Count.EqualTo(1));
             grid = grids!.Single();
+            Assert.That(SEntMan.HasComponent<CMUBlockEmplacementDeploymentComponent>(grid), Is.True);
             // The ship template is saved paused; deployment normally moves it to a live map.
             SEntMan.System<SharedMapSystem>().SetPaused(loadedMap!.Value.Owner, false);
         });

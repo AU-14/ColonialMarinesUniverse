@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Emplacements;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Weapons.Ranged.Battery;
 using Content.Shared.CMU14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.Emplacements;
 using Content.Shared.Buckle;
 using Content.Shared.CombatMode;
 using Content.Shared.Doors;
@@ -99,6 +100,7 @@ public sealed class CMUGunshipDoorGunnerTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
+            SEntMan.AddComponent<CMUBlockEmplacementDeploymentComponent>(map.Grid.Owner);
             var maps = SEntMan.System<SharedMapSystem>();
             for (var x = -2; x <= 15; x++)
             for (var y = -2; y <= 2; y++)
