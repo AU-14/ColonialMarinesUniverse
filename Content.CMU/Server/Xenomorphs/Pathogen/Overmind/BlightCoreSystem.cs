@@ -109,14 +109,6 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
 
     private void OnStep(Entity<CMUBlightCoreComponent> core, ref StepTriggeredOffEvent args)
     {
-    Log.Debug($"BlightCore: OnStep odpalony dla {args.Tripper}");
-    
-    if (_net.IsClient)
-    {
-        Log.Debug("BlightCore: IsClient, return");
-        return;
-    }
-
         var tripper = args.Tripper;
 
         if (_hive.GetHive(tripper) is not { } hive)
@@ -128,15 +120,13 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
 
         if (!_player.TryGetSessionByEntity(tripper, out var session))
             return;
-            
+
         _ui.OpenUi(core.Owner, BlightCoreUiKey.Accept, session);
-        Log.Debug($"BlightCore: OpenUi Accept dla {tripper}, session={session.Name}");
         _ui.SetUiState(core.Owner, BlightCoreUiKey.Accept, new BlightCoreBuiState
         {
             Core = GetNetEntity(core.Owner),
             EndsAt = _timing.CurTime + TimeSpan.FromSeconds(InitialVoteSeconds)
         });
-        Log.Debug($"BlightCore: SetUiState Accept done");
     }
 
     private void OnStepTriggerAttempt(Entity<CMUBlightCoreComponent> core, ref StepTriggerAttemptEvent args)
