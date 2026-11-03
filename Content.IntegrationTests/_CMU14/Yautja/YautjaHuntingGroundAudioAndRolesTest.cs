@@ -5,11 +5,12 @@ using Content.Server.Maps;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.Audio;
 using Content.Shared.CMU14.Yautja;
-using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Inventory;
 using Robust.Shared.Audio;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
+using Robust.Shared.Localization;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Server.GameObjects;
@@ -117,7 +118,7 @@ public sealed class YautjaHuntingGroundAudioAndRolesTest
     }
 
     [Test]
-    public async Task HuntingGroundCallsUseCmuRandomHumanoidSettings()
+    public async Task HuntingGroundCallsUseCmuThirdPartyBodies()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -133,37 +134,111 @@ public sealed class YautjaHuntingGroundAudioAndRolesTest
 
             Assert.That(consoles, Is.Not.Empty);
 
-            var options = new List<YautjaHuntCallOption>();
+            var spawns = new List<YautjaHuntSpawnEntry>();
             foreach (var console in consoles)
             {
                 Assert.That(console.TryComp<YautjaHuntConsoleComponent>(out var component, factory), Is.True, console.ID);
-                options.AddRange(component!.HuntCallOptions);
+                foreach (var option in component!.HuntCallOptions)
+                {
+                    spawns.AddRange(option.Spawns);
+                    spawns.AddRange(option.Tiers.SelectMany(tier => tier.Spawns));
+                }
             }
 
-            var settings = options
-                .SelectMany(option => option.Spawns)
-                .Where(spawn => spawn.RandomHumanoidSettings is not null)
-                .Select(spawn => spawn.RandomHumanoidSettings!.Value.Id)
-                .Distinct()
-                .ToArray();
+            Assert.That(spawns.Where(spawn => spawn.RandomHumanoidSettings is not null), Is.Empty,
+                "Hunt prey spawn CMU third party bodies, not RMC random humanoid presets.");
 
-            Assert.That(settings, Is.Not.Empty);
-            foreach (var setting in settings)
+            var humanBodies = 0;
+            foreach (var id in spawns.Select(spawn => spawn.EntityPrototype).OfType<EntProtoId>().Select(id => id.Id).Distinct())
             {
-                Assert.That(setting, Does.StartWith("CMUYautjaHunt"), setting);
-                Assert.That(setting, Does.Not.Contain("RMC"), setting);
-                Assert.That(prototypes.HasIndex<RandomHumanoidSettingsPrototype>(setting), Is.True, setting);
+                Assert.That(prototypes.TryIndex<EntityPrototype>(id, out var body), Is.True, id);
+                if (!body!.TryComp<GhostRoleComponent>(out var ghostRole, factory) || ghostRole!.JobProto is not { } job)
+                    continue;
 
-                var randomSettings = prototypes.Index<RandomHumanoidSettingsPrototype>(setting);
-                Assert.That(randomSettings.Components, Is.Not.Null, setting);
-                var ghostRoleId = factory.GetComponentName<GhostRoleComponent>();
-                Assert.That(randomSettings.Components!.TryGetComponent(ghostRoleId, out var ghostRoleValue),
-                    Is.True, $"{setting} must define a CMU ghost-role override.");
-                Assert.That(ghostRoleValue, Is.TypeOf<GhostRoleComponent>(), setting);
-                Assert.That(((GhostRoleComponent) ghostRoleValue!).Requirements, Is.Empty,
-                    $"{setting} must not inherit RMC playtime requirements.");
+                humanBodies++;
+                Assert.That(prototypes.HasIndex(job), Is.True, $"{id} job {job}");
+                Assert.That(job.Id, Does.Not.StartWith("RMC"), $"{id} still plays an RMC job.");
+
+                if (!id.StartsWith("CMUYautjaHunt", StringComparison.Ordinal))
+                    continue;
+
+                Assert.That(ghostRole.Requirements, Is.Not.Null.And.Empty, $"{id} must not keep its job playtime gates.");
             }
+
+            Assert.That(humanBodies, Is.GreaterThan(0));
         });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HuntPreyGetPreyGhostRoleWithoutPlaytimeGates()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid hunter = default;
+        EntityUid flightConsole = default;
+        EntityUid huntsmasterConsole = default;
+        var before = new HashSet<EntityUid>();
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+                flightConsole = entMan.SpawnEntity("CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13", map.GridCoords);
+                huntsmasterConsole = entMan.SpawnEntity("CMUHunterShipPlacedCMUHunterShipHuntsmastersConsoleOverwatchSouthOffsetNeg1x13", map.GridCoords);
+
+                entMan.EventBus.RaiseLocalEvent(flightConsole, new YautjaHuntingGroundSelectedEvent(entMan.GetNetEntity(hunter), "jungle_moon"));
+
+                var query = entMan.EntityQueryEnumerator<YautjaHuntPreyComponent>();
+                while (query.MoveNext(out var uid, out _))
+                    before.Add(uid);
+
+                entMan.EventBus.RaiseLocalEvent(huntsmasterConsole, new YautjaHuntCallSelectedEvent(entMan.GetNetEntity(hunter), "mixed_small"));
+            });
+
+            await pair.RunTicksSync(5);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var inventory = entMan.System<InventorySystem>();
+                var prey = new List<EntityUid>();
+                var query = entMan.EntityQueryEnumerator<YautjaHuntPreyComponent, GhostRoleComponent>();
+                while (query.MoveNext(out var uid, out _, out var ghostRole))
+                {
+                    if (before.Contains(uid))
+                        continue;
+
+                    prey.Add(uid);
+                    var name = entMan.ToPrettyString(uid);
+                    Assert.That(ghostRole.JobProto, Is.Not.Null, $"{name}");
+                    Assert.That(ghostRole.RoleDescription, Is.EqualTo(Loc.GetString("cmu-yautja-hunt-prey-ghost-description")), $"{name}");
+                    Assert.That(ghostRole.RoleRules, Is.EqualTo(Loc.GetString("cmu-yautja-hunt-prey-ghost-rules")), $"{name}");
+                    Assert.That(ghostRole.Requirements, Is.Not.Null.And.Empty, $"{name} must not keep its job playtime gates.");
+                    Assert.That(inventory.TryGetSlotEntity(uid, "jumpsuit", out _), Is.True, $"{name} spawned without its kit.");
+                    Assert.That(inventory.TryGetSlotEntity(uid, "ears", out _), Is.False, $"{name} kept a worn headset.");
+                }
+
+                Assert.That(prey, Has.Count.EqualTo(4));
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                foreach (var uid in new[] { hunter, flightConsole, huntsmasterConsole })
+                {
+                    if (uid != default && !server.EntMan.Deleted(uid))
+                        server.EntMan.DeleteEntity(uid);
+                }
+            });
+        }
 
         await pair.CleanReturnAsync();
     }

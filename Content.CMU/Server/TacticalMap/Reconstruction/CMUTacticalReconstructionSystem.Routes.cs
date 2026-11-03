@@ -21,7 +21,8 @@ public sealed partial class CMUTacticalReconstructionSystem
             if (valid)
             {
                 var orders = Orders(survey);
-                foreach (var id in args.Removals) orders.RemoveAll(o => o.Id == id);
+                // Shared orders are server-truth overlays; erasing strokes cannot remove them.
+                foreach (var id in args.Removals) orders.RemoveAll(o => o.Id == id && !o.Shared);
                 foreach (var annotation in args.Additions)
                 {
                     if (orders.Count >= CMUReconRoutes.MaxAnnotations) orders.RemoveAt(0);

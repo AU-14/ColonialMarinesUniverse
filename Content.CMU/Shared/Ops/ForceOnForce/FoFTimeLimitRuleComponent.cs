@@ -23,5 +23,5 @@ public sealed partial class FoFTimeLimitRuleComponent : Component
     public bool SuddenDeathAnnounced;
 
     /// <summary>Who led the zone at the 75:00 limit (empty if none). Used for veto check.</summary>
-    public string ZoneLeaderAtLimit;
+    public string ZoneLeaderAtLimit = string.Empty;
 }
