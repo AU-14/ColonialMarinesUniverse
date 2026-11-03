@@ -158,6 +158,15 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
             _guidebook.ToggleGuidebook();
         };
 
+        // cmu edit start: voice chat
+        _escapeWindow.VoiceChatButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _console.ExecuteCommand("voicechat");
+        };
+        _cfg.OnValueChanged(CCVars.CMUVoiceChatEnabled, OnVoiceChatEnabledChanged, true);
+        // cmu edit end
+
         // Hide wiki button if we don't have a link for it.
         _escapeWindow.WikiButton.Visible = _cfg.GetCVar(CCVars.InfoLinksWiki) != "";
 
@@ -172,6 +181,9 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
     public void OnStateExited(GameplayState state)
     {
         _cfg.UnsubValueChanged(CCVars.SeeOwnNotes, OnSeeOwnNotesChanged);
+        // cmu edit start: voice chat
+        _cfg.UnsubValueChanged(CCVars.CMUVoiceChatEnabled, OnVoiceChatEnabledChanged);
+        // cmu edit end
 
         if (_gameTicker != null)
         {
@@ -198,6 +210,14 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
             ? _loc.GetString("ui-escape-remarks-button-disabled")
             : null;
     }
+
+    // cmu edit start: voice chat
+    private void OnVoiceChatEnabledChanged(bool enabled)
+    {
+        if (_escapeWindow != null)
+            _escapeWindow.VoiceChatButton.Visible = enabled;
+    }
+    // cmu edit end
 
     private void EscapeButtonOnOnPressed(ButtonEventArgs obj)
     {

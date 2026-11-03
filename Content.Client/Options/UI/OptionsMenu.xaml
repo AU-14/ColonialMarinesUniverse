@@ -2,6 +2,7 @@
             xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
             xmlns:options="clr-namespace:Content.Client._RMC14.UserInterface.Options"
             xmlns:cmu="clr-namespace:Content.Client.CMU14.Interface"
+            xmlns:cmuVoice="clr-namespace:Content.Client.CMU14.VoiceChat"
             Title="{Loc 'ui-options-title'}"
             MinSize="800 450">
     <!-- CMU14: capture the live content once through its CRT sibling. -->
@@ -21,6 +22,9 @@
                 <options:VoicelinesTab Name="VoicelinesTab" />
                 <tabs:AccessibilityTab Name="AccessibilityTab" />
                 <tabs:CmuTab Name="CmuTab" />
+                <!-- cmu edit start: voice chat tab (also the xmlns:cmuVoice attribute on the root tag, where comments are not allowed) -->
+                <cmuVoice:CMUVoiceChatTab Name="VoiceChatTab" />
+                <!-- cmu edit end -->
                 <tabs:AdminOptionsTab Name="AdminOptionsTab" />
             </TabContainer>
             </PanelContainer>

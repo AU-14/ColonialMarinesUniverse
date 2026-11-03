@@ -23,6 +23,9 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="10.0.6" />
     <PackageVersion Include="NetCord" Version="1.0.0-alpha.388" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+    <!-- cmu edit start: voice chat effects -->
+    <PackageVersion Include="NWaves" Version="0.9.6" />
+    <!-- cmu edit end -->
     <PackageVersion Include="OpenTK" Version="4.9.4" />
     <PackageVersion Include="Veldrid" Version="4.9.0" />
     <PackageVersion Include="Veldrid.SPIRV" Version="1.0.15" />

@@ -78,6 +78,9 @@ namespace Content.Client.IoC
             // CMU14
             collection.Register<ServerLogsDownloadManager>();
             collection.Register<Content.Client.CMU14.ThreeD.CMU3DModelLibrary>();
+            // cmu edit start: voice chat
+            collection.Register<Content.Client.CMU14.VoiceChat.CMUVoiceChatManager>();
+            // cmu edit end
 
             // RMC14
             collection.Register<LinkAccountManager>();

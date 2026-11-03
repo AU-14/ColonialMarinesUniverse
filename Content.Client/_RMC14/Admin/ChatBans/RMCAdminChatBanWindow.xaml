@@ -16,6 +16,10 @@
                          StyleClasses="OpenBoth" ToggleMode="True" />
             <CheckButton Name="OocButton" Access="Public" Text="{Loc rmc-chat-bans-ooc}"
                          StyleClasses="OpenBoth" ToggleMode="True" />
+            <!-- cmu edit start: voice chat bans -->
+            <CheckButton Name="VoiceButton" Access="Public" Text="{Loc cmu-chat-bans-voice}"
+                         StyleClasses="OpenBoth" ToggleMode="True" />
+            <!-- cmu edit end -->
         </BoxContainer>
         <BoxContainer Orientation="Horizontal">
             <Label Text="{Loc rmc-chat-bans-duration}" MinWidth="90" />

@@ -211,6 +211,11 @@ namespace Content.Client.Inventory
             if (!TryGetSlotEntity(uid, slot, out var item))
                 return;
 
+            // cmu edit start: shift-clicking a headset opens its voice radio window instead
+            if (EntityManager.System<Content.Client.CMU14.VoiceChat.CMUVoiceRadioWindowSystem>().TryOpen(item.Value))
+                return;
+            // cmu edit end
+
             _examine.DoExamine(item.Value);
         }
 

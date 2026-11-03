@@ -21,6 +21,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.ObjectPool" />
     <PackageReference Include="NetCord" />
+    <!-- cmu edit start: voice chat effects -->
+    <PackageReference Include="NWaves" />
+    <!-- cmu edit end -->
     <PackageReference Include="prometheus-net" />
     <PackageReference Include="Serilog" />
     <PackageReference Include="SixLabors.ImageSharp" />
@@ -42,6 +45,9 @@
 
   <ItemGroup>
     <Compile Include="..\Content.CMU\Server\**\*.cs" Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
+    <!-- cmu edit start: voice chat web page -->
+    <EmbeddedResource Include="..\Content.CMU\Server\VoiceChat\Web\*.html;..\Content.CMU\Server\VoiceChat\Web\*.js;..\Content.CMU\Server\VoiceChat\Web\*.woff2" LogicalName="CMUVoiceChat.Web.%(Filename)%(Extension)" />
+    <!-- cmu edit end -->
   </ItemGroup>
   <Import Project="..\RobustToolbox\MSBuild\Robust.EntitySystemSubscriptionsGenerator.targets" />
 

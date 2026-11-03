@@ -48,6 +48,10 @@
             <Label Name="CharacterCount" Access="Public" />
             <Button Name="Send" Access="Public" Text="Send" HorizontalExpand="True"
                     StyleClasses="OpenBoth" />
+            <!-- cmu edit start: voice announcements -->
+            <Button Name="VoiceAnnounceButton" Access="Public" Text="{Loc cmu-voice-announce-button}" HorizontalExpand="True"
+                    StyleClasses="OpenBoth" />
+            <!-- cmu edit end -->
         </BoxContainer>
     </PanelContainer>
 </controls:MarineCommunicationsComputerWindow>

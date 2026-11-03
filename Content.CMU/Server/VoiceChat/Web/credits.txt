@@ -1,0 +1,9 @@
+index.html, voice.js, voice-worker.js and voice-worklet.js are ported from Goob Station
+(https://github.com/Goob-Station/Goob-Station, master as of 2026-10-27), AGPL-3.0.
+CMU change: the voice activation mode is hidden; CMU voice chat is push-to-talk only.
+
+noto-sans-regular.woff2, noto-sans-bold.woff2: Noto Sans, Apache License 2.0
+(see Resources/Fonts/NotoSans/LICENSE.txt).
+
+boxfont-round.woff2: Boxfont Round, https://fontlibrary.org/en/font/boxfont-round, CC0
+(see Resources/Fonts/Boxfont-round/credits.txt).

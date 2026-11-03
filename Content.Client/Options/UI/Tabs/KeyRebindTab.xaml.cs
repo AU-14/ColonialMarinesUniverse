@@ -285,6 +285,13 @@ namespace Content.Client.Options.UI.Tabs
             AddToggleCvarCheckBox("ui-options-cmu-zlevels-look-aim", CMUZLevelsCVars.LookAim); // CMU14
             AddButton(CMUKeyFunctions.CMUToggleShootDownZLevel);
 
+            // cmu edit start: voice chat
+            AddHeader("ui-options-header-cmu-voice-chat");
+            AddButton(CMUKeyFunctions.CMUVoicePushToTalk);
+            AddButton(CMUKeyFunctions.CMUVoiceRadioPushToTalk);
+            AddButton(CMUKeyFunctions.CMUVoiceRadioCycleChannel);
+            // cmu edit end
+
             AddHeader("ui-options-header-cmu-gunship");
             AddButton(CMUKeyFunctions.CMUGunshipForward);
             AddButton(CMUKeyFunctions.CMUGunshipBack);

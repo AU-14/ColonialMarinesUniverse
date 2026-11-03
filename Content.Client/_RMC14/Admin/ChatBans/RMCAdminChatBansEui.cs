@@ -30,6 +30,11 @@ public sealed class RMCAdminChatBansEui : BaseEui
             if (_window.OocButton.Pressed)
                 type |= ChatType.Ooc;
 
+            // cmu edit start: voice chat bans
+            if (_window.VoiceButton.Pressed)
+                type |= ChatType.Voice;
+            // cmu edit end
+
             if (!double.TryParse(_window.TimeEdit.Text, out var time))
                 time = 0;
 

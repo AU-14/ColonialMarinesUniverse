@@ -105,6 +105,9 @@ internal static class ServerContentIoC
         // CMU14
         deps.Register<HelpRelayManager>();
         deps.Register<DiscordLinkAccountManager>();
+        // cmu edit start: voice chat
+        deps.Register<Content.Server.CMU14.VoiceChat.CMUVoiceChatManager>();
+        // cmu edit end
 
         // RMC14
         deps.Register<LinkAccountManager>();
