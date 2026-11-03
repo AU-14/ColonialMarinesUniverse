@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Linq;
 using Content.Shared.CMU14.Dropship.Integrity;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Dropship;
@@ -178,14 +179,20 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         }
 
         var roundsPerShot = Math.Max(1, ammo.RoundsPerShot);
+        var ammoConfig = CompOrNull<GunshipDirectFireAmmoComponent>(loadedAmmo);
+        var projectilePrototype = ammoConfig?.Projectile ?? ent.Comp.Projectile;
+        var projectilesPerShot = Math.Max(1, ammoConfig?.ProjectilesPerShot ?? 1);
         for (var i = 0; i < args.Shots; i++)
         {
             if (ammo.Rounds < roundsPerShot)
                 break;
 
             ammo.Rounds -= roundsPerShot;
-            var projectile = Spawn(ent.Comp.Projectile, args.Coordinates);
-            args.Ammo.Add((projectile, _guns.EnsureShootable(projectile)));
+            for (var j = 0; j < projectilesPerShot; j++)
+            {
+                var projectile = Spawn(projectilePrototype, args.Coordinates);
+                args.Ammo.Add((projectile, _guns.EnsureShootable(projectile)));
+            }
         }
 
         _appearance.SetData(loadedAmmo, DropshipAmmoVisuals.Fill, ammo.Rounds);
@@ -260,7 +267,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         foreach (var contained in ammoContainer.ContainedEntities)
         {
             if (!TryComp(contained, out DropshipAmmoComponent? foundAmmo) ||
-                MetaData(contained).EntityPrototype?.ID != weapon.Comp.AmmoPrototype.Id)
+                !IsSupportedAmmo(weapon, contained))
             {
                 continue;
             }
@@ -271,5 +278,12 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         }
 
         return true;
+    }
+
+    private bool IsSupportedAmmo(Entity<GunshipDirectFireWeaponComponent> weapon, EntityUid ammo)
+    {
+        var prototype = MetaData(ammo).EntityPrototype?.ID;
+        return prototype == weapon.Comp.AmmoPrototype.Id ||
+               weapon.Comp.AdditionalAmmoPrototypes.Any(additional => additional.Id == prototype);
     }
 }

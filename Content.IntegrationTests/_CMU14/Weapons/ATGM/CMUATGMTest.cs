@@ -1,6 +1,7 @@
 #pragma warning disable RA0002 // Arrange guided-missile state directly to exercise the server guidance validator.
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Weapons.ATGM;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Emplacements;
 using Content.Shared._RMC14.Explosion;
@@ -28,6 +29,7 @@ using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
@@ -101,8 +103,6 @@ public sealed class CMUATGMTest : GameTest
                     "A fixed range would stop the guided missile mid-flight.");
                 Assert.That(launcher.HasComp<ShootAtFixedPointComponent>(factory), Is.False,
                     "ShootAtFixedPoint is the only source of ProjectileFixedDistanceComponent on shot projectiles.");
-                Assert.That(launcher.HasComp<GunRequiresSkillsComponent>(factory), Is.False,
-                    "The launcher can be fired without an ATGM skill.");
                 Assert.That(launcher.HasComp<GunUseGunOriginComponent>(factory), Is.True,
                     "The missile must launch from the tripod, not the gunner.");
                 Assert.That(launcher.HasComp<CMUATGMLauncherComponent>(factory), Is.True);
@@ -111,7 +111,7 @@ public sealed class CMUATGMTest : GameTest
     }
 
     [Test]
-    public async Task FiringDoesNotRequireSkillOrFinder()
+    public async Task OnlyGunshipATGMCanFireWithoutSkillOrFinder()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -119,22 +119,61 @@ public sealed class CMUATGMTest : GameTest
             var atgm = Server.System<CMUATGMSystem>();
             var transform = Server.System<SharedTransformSystem>();
 
-            var mount = SEntMan.SpawnEntity("CMUATGMMount", map.GridCoords);
-            Assert.That(atgm.TryGetLauncher(mount, out var launcher), Is.True);
-
-            var gunner = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-
-            var from = transform.GetMoverCoordinates(mount);
-            var aim = from.Offset(transform.GetWorldRotation(mount).ToWorldVec() * 3);
-
-            Assert.That(Attempt(), Is.False, "The gunner can fire without ATGM skill or a linked finder.");
-
-            bool Attempt()
+            bool Attempt(EntProtoId mountId, bool skilled)
             {
+                var mount = SEntMan.SpawnEntity(mountId, map.GridCoords);
+                Assert.That(atgm.TryGetLauncher(mount, out var launcher), Is.True);
+                var gunner = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                if (skilled)
+                    Server.System<SkillsSystem>().SetSkill(gunner, Skill, 1);
+                var from = transform.GetMoverCoordinates(mount);
+                var aim = from.Offset(transform.GetWorldRotation(mount).ToWorldVec() * 3);
                 var ev = new AttemptShootEvent(gunner, null, from, aim);
                 SEntMan.EventBus.RaiseLocalEvent(launcher, ref ev);
                 return ev.Cancelled;
             }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(Attempt("CMUATGMMount", false), Is.True,
+                    "The ground tripod still requires ATGM skill.");
+                Assert.That(Attempt("CMUATGMMount", true), Is.True,
+                    "A trained ground gunner still needs a separate spotter with the linked finder.");
+                Assert.That(Attempt("CMUATGMMountDropship", false), Is.False,
+                    "The gunship hardpoint can be fired and guided without a spotter or ATGM skill.");
+            });
+        });
+    }
+
+    [Test]
+    public async Task GroundTripodGuidanceStillUsesSkilledFinderHolder()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var atgm = Server.System<CMUATGMSystem>();
+            var skills = Server.System<SkillsSystem>();
+            var hands = Server.System<SharedHandsSystem>();
+            var mount = SEntMan.SpawnEntity("CMUATGMMount", map.GridCoords);
+            Assert.That(atgm.TryGetLauncher(mount, out var launcher), Is.True);
+
+            var gunner = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var spotter = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            skills.SetSkill(gunner, Skill, 1);
+            skills.SetSkill(spotter, Skill, 1);
+
+            var finder = SEntMan.SpawnEntity("CMUATGMFinder", map.GridCoords);
+            atgm.Link(launcher, (finder, SEntMan.GetComponent<CMUATGMFinderComponent>(finder)));
+            Assert.That(hands.TryPickupAnyHand(spotter, finder), Is.True);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(atgm.TryGetSpotter(launcher, gunner, out var actualSpotter, out var actualFinder, out _), Is.True);
+                Assert.That(actualSpotter, Is.EqualTo(spotter));
+                Assert.That(actualFinder, Is.EqualTo(finder));
+                Assert.That(atgm.CanGuide(spotter, finder), Is.True);
+                Assert.That(atgm.CanGuide(gunner, finder), Is.False);
+            });
         });
     }
 
@@ -187,6 +226,111 @@ public sealed class CMUATGMTest : GameTest
                 "Aim points are clamped to the guidance distance.");
 
             SEntMan.DeleteEntity(missileUid);
+        });
+    }
+
+    [Test]
+    public async Task MissileTracksLowerZLevelTargetsAndAcceptsCursorGuidanceThere()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            var zLevels = Server.System<CMUZLevelsSystem>();
+            var guidance = Server.System<CMUATGMGuidanceSystem>();
+            var transform = Server.System<SharedTransformSystem>();
+            var network = zLevels.CreateZNetwork();
+            var lower = maps.CreateMap(runMapInit: true);
+            var upper = maps.CreateMap(runMapInit: true);
+            try
+            {
+                Assert.That(zLevels.TryAddMapsIntoZNetwork(network, new() { [lower] = 0, [upper] = 1 }), Is.True);
+
+                var guider = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(upper, Vector2.Zero));
+                var target = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(lower, new Vector2(4, 0)));
+                var missileUid = SEntMan.SpawnEntity(ProjectileId, new EntityCoordinates(upper, new Vector2(1, 0)));
+                var missile = SEntMan.EnsureComponent<CMUGuidedMissileComponent>(missileUid);
+                missile.Guider = guider;
+                missile.TargetEntity = target;
+                missile.TargetLastSeen = SGameTiming.CurTime;
+                missile.NextSightCheck = SGameTiming.CurTime + TimeSpan.FromSeconds(1);
+                missile.ArmedAt = SGameTiming.CurTime + TimeSpan.FromSeconds(1);
+                missile.DetonateAt = SGameTiming.CurTime + TimeSpan.FromSeconds(10);
+
+                var lowerAim = new EntityCoordinates(lower, new Vector2(5, 0));
+                Assert.That(guidance.TryApplyGuidance(guider, lowerAim), Is.True,
+                    "A guider may send a cursor position on a lower map in the same z-level network.");
+
+                guidance.Update(0.1f);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(missile.TrackingFrozen, Is.False,
+                        "A target on a lower z-level remains trackable.");
+                    Assert.That(missile.TrackedPosition.MapId, Is.EqualTo(transform.GetMapId(target)));
+                    Assert.That(missile.Target.MapId, Is.EqualTo(transform.GetMapId(target)));
+                });
+            }
+            finally
+            {
+                SEntMan.DeleteEntity(upper);
+                SEntMan.DeleteEntity(lower);
+                SEntMan.DeleteEntity(network);
+            }
+        });
+    }
+
+    [Test]
+    public async Task DownwardShotLaunchesGuidedMissileOnLowerZLevel()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            var zLevels = Server.System<CMUZLevelsSystem>();
+            var shooting = Server.System<CMUZLevelShootingSystem>();
+            var atgm = Server.System<CMUATGMSystem>();
+            var guidance = Server.System<CMUATGMGuidanceSystem>();
+            var transform = Server.System<SharedTransformSystem>();
+            var network = zLevels.CreateZNetwork();
+            var lower = maps.CreateMap(runMapInit: true);
+            var upper = maps.CreateMap(runMapInit: true);
+            try
+            {
+                Assert.That(zLevels.TryAddMapsIntoZNetwork(network, new() { [lower] = 0, [upper] = 1 }), Is.True);
+
+                var source = new EntityCoordinates(upper, Vector2.Zero);
+                var target = new EntityCoordinates(lower, new Vector2(4, 0));
+                var gunner = SEntMan.SpawnEntity("CMMobHuman", source);
+                shooting.SetShootDown(gunner, true);
+
+                Assert.That(shooting.TryAdjustShotCoordinates(gunner, source, target, out var adjustedFrom, out var adjustedTo), Is.True);
+                Assert.That(transform.ToMapCoordinates(adjustedFrom).MapId, Is.EqualTo(transform.GetMapId(lower)),
+                    "The standard downward-shot path places the projectile on the lower map.");
+
+                var mount = SEntMan.SpawnEntity("CMUATGMMountDropship", source);
+                Assert.That(atgm.TryGetLauncher(mount, out var launcher), Is.True);
+                SEntMan.GetComponent<GunComponent>(launcher).ShootCoordinates = adjustedTo;
+
+                var targetEntity = SEntMan.SpawnEntity("CMMobHuman", target);
+                var projectile = SEntMan.SpawnEntity(ProjectileId, adjustedFrom);
+                SEntMan.GetComponent<ProjectileComponent>(projectile).Shooter = gunner;
+                SEntMan.EventBus.RaiseLocalEvent(launcher.Owner,
+                    new AmmoShotEvent { FiredProjectiles = new List<EntityUid> { projectile } });
+
+                Assert.That(transform.GetMapId(projectile), Is.EqualTo(transform.GetMapId(lower)));
+                Assert.That(guidance.TryApplyGuidance(gunner, target), Is.True,
+                    "The launched missile accepts cursor guidance on the lower map.");
+                Assert.That(SEntMan.GetComponent<CMUGuidedMissileComponent>(projectile).Target.MapId,
+                    Is.EqualTo(transform.GetMapId(lower)));
+
+                SEntMan.DeleteEntity(targetEntity);
+                SEntMan.DeleteEntity(projectile);
+            }
+            finally
+            {
+                SEntMan.DeleteEntity(upper);
+                SEntMan.DeleteEntity(lower);
+                SEntMan.DeleteEntity(network);
+            }
         });
     }
 

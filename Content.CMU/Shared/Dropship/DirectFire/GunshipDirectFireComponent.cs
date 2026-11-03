@@ -36,6 +36,9 @@ public sealed partial class GunshipDirectFireWeaponComponent : Component
     [DataField(required: true)]
     public EntProtoId AmmoPrototype;
 
+    [DataField]
+    public List<EntProtoId> AdditionalAmmoPrototypes = new();
+
     [DataField, AutoNetworkedField]
     public float GimbalDegrees = 30f;
 
@@ -45,6 +48,16 @@ public sealed partial class GunshipDirectFireWeaponComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float MuzzleOffset = 1.25f;
+}
+
+[RegisterComponent]
+public sealed partial class GunshipDirectFireAmmoComponent : Component
+{
+    [DataField]
+    public EntProtoId? Projectile;
+
+    [DataField]
+    public int ProjectilesPerShot = 1;
 }
 
 [Serializable, NetSerializable]

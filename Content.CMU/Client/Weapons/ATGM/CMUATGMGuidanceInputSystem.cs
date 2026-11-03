@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Client.CMU14.ThreeD.Scene;
 using Content.Shared.CMU14.Weapons.ATGM;
+using Content.Shared.Hands.EntitySystems;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
@@ -22,6 +23,7 @@ public sealed partial class CMUATGMGuidanceInputSystem : EntitySystem
 
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private CMU3DLiveSceneSystem _firstPerson = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private IInputManager _input = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -73,7 +75,8 @@ public sealed partial class CMUATGMGuidanceInputSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUGuidedMissileComponent>();
         while (query.MoveNext(out _, out var missile))
         {
-            if (missile.Guider == local)
+            if (missile.Guider == local &&
+                (missile.GuidanceFinder is not { } finder || _hands.IsHolding(local, finder)))
                 return true;
         }
 

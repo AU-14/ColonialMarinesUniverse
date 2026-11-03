@@ -1,9 +1,11 @@
+using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Weapons.ATGM;
 
 /// <summary>
-///     The fixed A.T.G.M. launcher inside the tripod. Holds the optional finder link and the guidance
+///     The fixed A.T.G.M. launcher inside the tripod. Holds the finder link and the guidance
 ///     tunables copied onto every missile it fires.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -11,12 +13,17 @@ namespace Content.Shared.CMU14.Weapons.ATGM;
 public sealed partial class CMUATGMLauncherComponent : Component
 {
     /// <summary>
-    ///     The finder whose holder steers missiles fired from this launcher.
+    ///     The finder linked to this launcher.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? LinkedFinder;
 
     /// <summary>
+    ///     Skill required to crew the ground tripod.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntProtoId<SkillDefinitionComponent> Skill = "CMUSkillATGM";
+
     /// <summary>
     ///     Missile cruise speed in tiles per second.
     /// </summary>

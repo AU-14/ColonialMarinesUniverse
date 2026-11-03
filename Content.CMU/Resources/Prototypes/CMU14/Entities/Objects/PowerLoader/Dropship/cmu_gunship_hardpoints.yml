@@ -115,7 +115,7 @@
       - CMUATGMMissile
       - CMUGunshipATGMMissile
   - type: GunshipHardpointAutoload
-    reloadDelay: 6
+    reloadDelay: 3
 
 # Deployed mounts
 
@@ -148,7 +148,7 @@
   categories: [ HideSpawnMenu ]
   name: MGM-120B FOGO-ATGM
   suffix: Dropship
-  description: A FOGO-ATGM launcher rigged to a gunship hardpoint. The gunner fires it; a crewman with the linked finder steers the missile onto the target.
+  description: A FOGO-ATGM launcher rigged to a gunship hardpoint. The gunner fires and guides the missile with their cursor; a linked finder is optional for target locks.
   components:
   - type: Sprite
     sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_mount.rsi

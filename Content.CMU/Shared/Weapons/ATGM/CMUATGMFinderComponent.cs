@@ -4,8 +4,8 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared.CMU14.Weapons.ATGM;
 
 /// <summary>
-///     Optional target finder for an A.T.G.M. The holder can click an entity to lock the next missiles onto it;
-///     the gunner still guides each missile with their cursor.
+///     A.T.G.M. finder for ground tripod guidance or optional target locks. The holder can click an entity to lock
+///     the next missile onto it.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(CMUATGMSystem))]
@@ -18,6 +18,11 @@ public sealed partial class CMUATGMFinderComponent : Component
     public EntityUid? LinkedLauncher;
 
     /// <summary>
+    ///     Maximum distance from the ground launcher for its holder to guide a missile.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float MaxLinkRange = 10f;
+
     /// <summary>
     ///     The entity the finder user has lased. Missiles fired while this is set home on it. Server-authoritative;
     ///     validated on use because the entity may since have been deleted.

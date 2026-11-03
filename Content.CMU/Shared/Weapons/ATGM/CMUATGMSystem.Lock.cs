@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using Content.Shared._RMC14.Emplacements;
 using Content.Shared._RMC14.Targeting;
 using Content.Shared._RMC14.Weapons.Common;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Hands;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -182,6 +184,12 @@ public sealed partial class CMUATGMSystem
             return false;
         }
 
+        if (RequiresFinderGuidance((launcherUid, launcher)) && !_skills.HasSkill(user, launcher.Skill, 1))
+        {
+            reason = "cmu-atgm-lock-unskilled";
+            return false;
+        }
+
         var resolved = ResolveLockTarget(clickedUid);
         EntityUid? mount = TryComp(launcherUid, out MountableWeaponComponent? mountable)
             ? GetEntity(mountable.MountedTo)
@@ -208,8 +216,12 @@ public sealed partial class CMUATGMSystem
             return false;
         }
 
-        // The target's own occluder (a wall, a vehicle hull) must not block the view of itself.
-        if (!_examine.InRangeUnOccluded(user, resolved, finder.Comp.LockRange, uid => uid == resolved))
+        var userMap = Transform(user).MapUid;
+        var targetMap = Transform(resolved).MapUid;
+        var inSight = userMap == targetMap
+            ? _examine.InRangeUnOccluded(user, resolved, finder.Comp.LockRange, uid => uid == resolved)
+            : CanSeeTargetBelow(user, resolved, finder.Comp.LockRange);
+        if (!inSight)
         {
             reason = "cmu-atgm-lock-no-sight";
             return false;
@@ -258,8 +270,8 @@ public sealed partial class CMUATGMSystem
     }
 
     /// <summary>
-    ///     Gets the finder's lock if its target still exists on the same map, clearing it (with a popup to the
-    ///     holder, on the server) otherwise.
+    ///     Gets the finder's lock if its target still exists on the same map or a lower map in the same z-level
+    ///     network, clearing it (with a popup to the holder, on the server) otherwise.
     /// </summary>
     public bool TryGetLock(Entity<CMUATGMFinderComponent> finder, [NotNullWhen(true)] out EntityUid? target)
     {
@@ -269,7 +281,7 @@ public sealed partial class CMUATGMSystem
 
         if (!TerminatingOrDeleted(uid) &&
             !EntityManager.IsQueuedForDeletion(uid) &&
-            _transform.GetMapId(uid) == _transform.GetMapId(finder.Owner))
+            IsSameOrLowerZLevel(finder.Owner, uid))
         {
             return true;
         }
@@ -281,6 +293,50 @@ public sealed partial class CMUATGMSystem
             ClearLock(finder);
 
         return false;
+    }
+
+    public bool CanSeeTargetBelow(EntityUid viewer, EntityUid target, float maxRange)
+    {
+        var viewerMap = Transform(viewer).MapUid;
+        var targetMap = Transform(target).MapUid;
+        if (viewerMap is not { } source ||
+            targetMap is not { } destination ||
+            !TryComp(source, out CMUZLevelMapComponent? sourceLevel) ||
+            !TryComp(destination, out CMUZLevelMapComponent? targetLevel) ||
+            sourceLevel.NetworkUid != targetLevel.NetworkUid ||
+            targetLevel.Depth >= sourceLevel.Depth)
+        {
+            return false;
+        }
+
+        var from = _transform.GetWorldPosition(viewer);
+        var to = _transform.GetWorldPosition(target);
+        if (Vector2.DistanceSquared(from, to) > maxRange * maxRange)
+            return false;
+
+        return _zLevels.TryFindZShotOpening(
+            source,
+            destination,
+            targetLevel.Depth - sourceLevel.Depth,
+            from,
+            to,
+            out _);
+    }
+
+    private bool IsSameOrLowerZLevel(EntityUid source, EntityUid target)
+    {
+        var sourceMap = Transform(source).MapUid;
+        var targetMap = Transform(target).MapUid;
+        if (sourceMap is not { } sourceUid || targetMap is not { } targetUid)
+            return false;
+
+        if (sourceUid == targetUid)
+            return true;
+
+        return TryComp(sourceUid, out CMUZLevelMapComponent? sourceLevel) &&
+               TryComp(targetUid, out CMUZLevelMapComponent? targetLevel) &&
+               sourceLevel.NetworkUid == targetLevel.NetworkUid &&
+               targetLevel.Depth < sourceLevel.Depth;
     }
 
     /// <summary>
