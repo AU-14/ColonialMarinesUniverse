@@ -4,6 +4,7 @@ using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
@@ -72,6 +73,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
         SubscribeLocalEvent<CMUHumanMedicalComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<CMUHumanMedicalComponent, DamageModifyAfterResistEvent>(OnDamageModifyAfterResist);
         SubscribeLocalEvent<CMUHumanMedicalComponent, DamageDealtEvent>(OnHealingDamageDealt, before: [typeof(DamageableSystem)]);
+        SubscribeLocalEvent<CMUHumanMedicalComponent, RMCDefibrillatorProtectedDamageEvent>(OnDefibProtectedDamage);
 
         CacheRepairableDamageTypes();
 
@@ -137,6 +139,41 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
 
         if (adjusted is not null)
             args.Damage = adjusted;
+    }
+
+    private void OnDefibProtectedDamage(Entity<CMUHumanMedicalComponent> ent, ref RMCDefibrillatorProtectedDamageEvent args)
+    {
+        if (HasComp<SynthComponent>(ent.Owner))
+            return;
+
+        args.Protected = GetProtectedDefibDamage(ent.Owner);
+    }
+
+    /// <summary>
+    /// Returns the robotic limb damage medical healing cannot remove, per damage type.
+    /// The defib revival threshold must not count it against the patient.
+    /// </summary>
+    public DamageSpecifier GetProtectedDefibDamage(EntityUid body)
+    {
+        var aggregate = _damageable.GetAllDamage(body);
+        var protectedDamage = new DamageSpecifier();
+        foreach (var (part, _) in _medicalIndex.GetBodyParts(body))
+        {
+            if (!HasComp<CMURoboticLimbComponent>(part) ||
+                !TryComp<BodyPartHealthComponent>(part, out var health))
+                continue;
+
+            foreach (var (type, amount) in health.BodyDamage.DamageDict)
+            {
+                var available = aggregate.DamageDict.GetValueOrDefault(type);
+                if (amount <= FixedPoint2.Zero || available <= FixedPoint2.Zero)
+                    continue;
+
+                protectedDamage.DamageDict[type] = FixedPoint2.Min(amount, available);
+            }
+        }
+
+        return protectedDamage;
     }
 
     private void OnInteractUsing(Entity<CMUHumanMedicalComponent> ent, ref InteractUsingEvent args)
