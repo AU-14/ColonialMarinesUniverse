@@ -18,8 +18,14 @@ concurrency:
   # asks first, so many runs crawl partial and nothing completes. Cancel stays off for PRs: a
   # fresh push queues a new run instead of killing the run currently holding the fleet.
   # Draft PRs stay outside the group: their jobs all skip, and a no-op run has no business
-  # taking a queue slot. Master keeps per-ref supersession; staging/stable pushes and merge
-  # queue runs still finish.
+  # taking a queue slot. Conversion to draft does not clear the fleet: a run keeps the
+  # payload it was triggered with, so its jobs still pass the draft gate, and
+  # ci-queue-bouncer.yml cancels the PR's runs on converted_to_draft. queue and
+  # cancel-in-progress are rejected together at dispatch: every run whose cancel-in-progress
+  # evaluates true dies at submit with zero jobs (master pushes failed instantly for an
+  # evening on exactly that). master lost push supersession instead of the PR waiting list;
+  # master runs serialize per-ref and a merge burst waits for its evidence. staging/stable
+  # pushes and merge queue runs still finish.
   # queue: max keeps every waiting PR's run pending: the single default slot means every new
   # push cancels whichever OTHER PR was waiting. Superseded same-PR runs are cancelled within
   # seconds by ci-queue-bouncer.yml, so the waiting list never holds outdated work: a push
@@ -28,7 +34,7 @@ concurrency:
   # every cancel, rerun and delete (delete needs admin). renaming the group is the eviction
   # path when github strands a holder like that again.
   group: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft != true && 'ci-pr-fleet' || ((github.event_name == 'push' && github.ref == 'refs/heads/master') && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id)) }}
-  cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+  cancel-in-progress: false # CMU14: see queue comment above
   queue: max
 
 env:
@@ -159,6 +165,27 @@ jobs:
           retention-days: 1
           compression-level: 0
 
+      # CMU14: consumers restore the tracked tree from this artifact. one git fetch per
+      # run replaces ~38 simultaneous fetches of the same 1.4G pack, which the git
+      # backend throttled into 5-15 min checkout stalls. git archive carries tracked
+      # files only: build output stays out and tracked obj texture dirs survive
+      - name: Pack source tree
+        run: |
+          git archive --format=tar.gz -o source-tree.tar.gz HEAD
+          # CMU14: -o resolves inside the -C directory, so climb out for the upload root
+          git -C RobustToolbox archive --format=tar.gz -o ../toolbox-resources.tar.gz HEAD -- Resources
+
+      - name: Upload source tree
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-tree
+          path: |
+            source-tree.tar.gz
+            toolbox-resources.tar.gz
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
   unit-tests:
     name: Unit Tests
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
@@ -166,10 +193,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
+      # CMU14: source tree arrives as a Build artifact, no git fetch in this job
+      - uses: actions/download-artifact@v8.0.2
         with:
-          persist-credentials: true
-          submodules: recursive
+          name: source-tree
+          path: .
+
+      - name: Restore source tree
+        run: |
+          tar -xzf source-tree.tar.gz
+          tar -xzf toolbox-resources.tar.gz -C RobustToolbox
+          rm source-tree.tar.gz toolbox-resources.tar.gz
 
       - uses: actions/download-artifact@v8.0.2
         with:
@@ -211,10 +245,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
+      # CMU14: source tree arrives as a Build artifact, no git fetch in this job
+      - uses: actions/download-artifact@v8.0.2
         with:
-          persist-credentials: true
-          submodules: recursive
+          name: source-tree
+          path: .
+
+      - name: Restore source tree
+        run: |
+          tar -xzf source-tree.tar.gz
+          tar -xzf toolbox-resources.tar.gz -C RobustToolbox
+          rm source-tree.tar.gz toolbox-resources.tar.gz
 
       - uses: actions/download-artifact@v8.0.2
         with:
@@ -264,7 +305,9 @@ jobs:
       - uses: actions/checkout@v7
         if: steps.changes.outputs.any == 'true'
         with:
-          submodules: recursive
+          # CMU14: single-level submodules: validators read RobustToolbox/Schemas at depth 1,
+          # the nested engine submodules are never read here
+          submodules: true
 
       - uses: actions/setup-python@v7.1.0
         if: steps.changes.outputs.any == 'true'
@@ -344,7 +387,9 @@ jobs:
       group: ${{ github.ref == 'refs/heads/staging' && format('ci-shard-{0}-{1}', github.ref, matrix.shard.name) || format('ci-shard-{0}-{1}-{2}', github.ref, matrix.shard.name, github.run_id) }}
       cancel-in-progress: false
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # hard ceiling for every shard: reach it and the shard fails. any shard legitimately
+    # needing longer must be split until it fits, so PR-to-PR delta cannot stretch the tail
+    timeout-minutes: 35
     strategy:
       fail-fast: false
       matrix:
@@ -369,7 +414,7 @@ jobs:
           # shard it cannot take other tests down (same medicine as cmu_threed)
           - name: cmu_movement
             filter: FullyQualifiedName~CMU14.Movement.
-          # CMU14: carved out into cmu_fob / cmu_movement, keep in sync with those shards
+          # CMU14: carved out into cmu_fob / cmu_movement / cmu_vehicle_bugs, keep in sync with those shards
           - name: cmu
             filter: >-
               FullyQualifiedName~CMU14.
@@ -401,6 +446,14 @@ jobs:
               & FullyQualifiedName!~CMU14.Research.
               & FullyQualifiedName!~CMU14.Fob.
               & FullyQualifiedName!~CMU14.Movement.
+              & FullyQualifiedName!~CMU14.Vehicle.
+              & FullyQualifiedName!~CMU14.BugReports.
+              & FullyQualifiedName!~CMU14.Xenonids.
+              & FullyQualifiedName!~CMU14.Requisitions.
+              & FullyQualifiedName!~CMU14.Radio.
+              & FullyQualifiedName!~CMU14.HunterShip.
+              & FullyQualifiedName!~CMU14.Insurgency.
+              & FullyQualifiedName!~CMU14.Nutrition.
               & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest.
               & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest.
               & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest.
@@ -428,6 +481,19 @@ jobs:
             filter: >-
               FullyQualifiedName~CMU14.Chemistry.
               | FullyQualifiedName~CMU14.Research.
+          # CMU14: the heavy half of the cmu catch-all (vehicle interiors, bug-repro and
+          # Xenomorph pairs). neither half may legitimately cross the 35-minute job cap;
+          # keep this list in sync with cmu's exclusions
+          - name: cmu_vehicle_bugs
+            filter: >-
+              FullyQualifiedName~CMU14.Vehicle.
+              | FullyQualifiedName~CMU14.BugReports.
+              | FullyQualifiedName~CMU14.Xenonids.
+              | FullyQualifiedName~CMU14.Requisitions.
+              | FullyQualifiedName~CMU14.Radio.
+              | FullyQualifiedName~CMU14.HunterShip.
+              | FullyQualifiedName~CMU14.Insurgency.
+              | FullyQualifiedName~CMU14.Nutrition.
           # CMU14: every FOB test loads a full distress-site map, CMUFobMapTest alone is 26 of them.
           # these were the other half of the old cmu catch-all's memory aborts
           - name: cmu_fob
@@ -454,13 +520,16 @@ jobs:
             filter: >-
               FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest.
               & Name!~Blooding & Name!~Bracer & Name!~Huntsmaster
+          # CMU14: name exclusions bind to CameraNetworkSystemTest explicitly so the
+          # method-name split with cmu_camera stays scoped no matter how the surrounding
+          # filter evolves; no other shard covers ZLevels, keep it that way
           - name: cmu_spatial
             filter: >-
               (FullyQualifiedName~CMU14.ZLevels.
               | FullyQualifiedName~CMU14.Camera.
               | FullyQualifiedName~Content.IntegrationTests.CMU.)
               & (FullyQualifiedName!~CMU14.Camera.CameraNetworkSystemTest.
-              | (Name!~Rmc & Name!~Static & Name!~Member & Name!~Cmu))
+              | (FullyQualifiedName~CMU14.Camera.CameraNetworkSystemTest. & Name!~Rmc & Name!~Static & Name!~Member & Name!~Cmu))
           # CMU14: half of CameraNetworkSystemTest by method name, it was most of cmu_spatial.
           # cmu_spatial runs the other half, keep these words in sync with its exclusions
           - name: cmu_camera
@@ -546,7 +615,8 @@ jobs:
           # end. they were most of cmu_systems' memory, on their own they can't push the others over
           - name: cmu_threed
             filter: FullyQualifiedName~CMU14.ThreeD.
-          # CMU14: every shard pays ~1.5 min of checkout and ~2 min building its first pairs before a
+          # CMU14: every shard pays checkout (~1.5 min typical, 5-15 min when the git backend
+          # throttles the shard fan-out) plus ~2 min building its first pairs before a
           # test runs, so the small shards are merged in pairs. old storage_misc_au14 is folded in here
           - name: items_storage_crafting
             filter: >-
@@ -638,10 +708,19 @@ jobs:
           - name: cmu_yautja_roles
             filter: FullyQualifiedName~CMU14.Yautja.YautjaPredatorRoleTest.
     steps:
-      - uses: actions/checkout@v7
+      # CMU14: source tree arrives as a Build artifact. one git fetch per run replaces
+      # 36 simultaneous shard fetches of the same pack, which the git backend throttled
+      # into multi-minute checkout stalls before every test wave
+      - uses: actions/download-artifact@v8.0.2
         with:
-          persist-credentials: true
-          submodules: recursive
+          name: source-tree
+          path: .
+
+      - name: Restore source tree
+        run: |
+          tar -xzf source-tree.tar.gz
+          tar -xzf toolbox-resources.tar.gz -C RobustToolbox
+          rm source-tree.tar.gz toolbox-resources.tar.gz
 
       - uses: actions/download-artifact@v8.0.2
         with:
@@ -709,7 +788,7 @@ jobs:
           case "$shard" in
             # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
             cmu_yautja_smoke*) workers=1 ;;
-            post_map_init*|cmu|cmu_systems|cmu_spatial|cmu_camera|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
+            post_map_init*|cmu|cmu_systems|cmu_spatial|cmu_camera|cmu_medical_anatomy|cmu_vehicle_bugs|cmu_yautja*) workers=2 ;;
             cmu_fob) workers=2 ;;
             # CMU14: the limb soak alone runs ~19 min, past the 5m inactivity watchdog
             cmu_movement) workers=2; hang_timeout=20m ;;
