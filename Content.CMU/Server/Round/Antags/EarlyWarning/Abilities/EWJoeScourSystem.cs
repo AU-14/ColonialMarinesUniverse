@@ -90,7 +90,6 @@ public sealed partial class EWJoeScourSystem : EntitySystem
         SubscribeLocalEvent<EWJoeComponent, MeleeHitEvent>(OnMeleeHit);
         SubscribeLocalEvent<EWJoeScourComponent, ComponentShutdown>(OnScourShutdown);
         SubscribeLocalEvent<EWJoeRemovedEvent>(OnJoeRemoved);
-        SubscribeLocalEvent<EWJoeMechanicsChangedEvent>(OnMechanicsChanged);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
     }
 
@@ -133,24 +132,6 @@ public sealed partial class EWJoeScourSystem : EntitySystem
 
             if (scour.Expiries.Count == 0)
                 RemComp<EWJoeScourComponent>(uid);
-        }
-    }
-
-    /// <summary>The scoured cloak's action is not one of the level grants, so it is greyed out and restored here.</summary>
-    private void OnMechanicsChanged(ref EWJoeMechanicsChangedEvent args)
-    {
-        var query = EntityQueryEnumerator<EWJoeScourComponent, ThermalCloakComponent>();
-        while (query.MoveNext(out var joe, out var scour, out var cloak))
-        {
-            if (!scour.CloakAdded)
-                continue;
-
-            if (cloak.Action is { } action)
-                _actions.SetEnabled(action, args.Enabled);
-
-            // with the action greyed out it could not uncloak itself
-            if (!args.Enabled && cloak.Enabled && HasComp<EntityTurnInvisibleComponent>(joe))
-                _thermalCloak.SetInvisibility((joe, cloak), joe, false, true);
         }
     }
 

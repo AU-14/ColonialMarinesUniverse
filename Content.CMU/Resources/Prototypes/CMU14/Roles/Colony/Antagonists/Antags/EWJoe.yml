@@ -103,7 +103,7 @@
   id: EWJoeRole
   name: roles-antag-ew-joe-name
   setPreference: true
-  # Colony Fall, Insurgency and Distress Signal (where the rule opens a colony Working Joe slot to host it)
+  # Colony Fall, Insurgency and Distress Signal (where its own rule spawns a colony Working Joe on the planet as a ghost role)
   objective: roles-antag-ew-joe-objective
 
 # Level table. Index = level. Each level's actions and components make up the Joe's kit (E0-E6,

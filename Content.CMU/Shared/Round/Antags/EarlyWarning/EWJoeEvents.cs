@@ -51,10 +51,3 @@ public readonly record struct EWJoeThrallFreedEvent(EntityUid? Master);
 [ByRefEvent]
 public readonly record struct EWJoeDisruptPulseEvent(EntityUid Joe, EntityCoordinates Coordinates, float Range, int Level);
 
-/// <summary>
-/// Broadcast when the ewjoemechanics switch changes. Off: systems end what a Joe has running (a choke, a drawn
-/// machete) and grey out actions they granted themselves (the scoured cloak).
-/// </summary>
-[ByRefEvent]
-public readonly record struct EWJoeMechanicsChangedEvent(bool Enabled);
-

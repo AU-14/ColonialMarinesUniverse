@@ -1,10 +1,8 @@
 using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Projectiles.Reflect;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
-using Content.Shared.CCVar;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
-using Robust.Shared.Configuration;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
 
@@ -19,7 +17,6 @@ namespace Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 public sealed partial class EWJoeResonanceSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private GunIFFSystem _gunIFF = default!;
     [Dependency] private RMCProjectileSystem _rmcProjectile = default!;
@@ -35,7 +32,7 @@ public sealed partial class EWJoeResonanceSystem : EntitySystem
 
     private void OnPreventCollide(Entity<EWJoeResonanceComponent> ent, ref PreventCollideEvent args)
     {
-        if (!HasComp<ProjectileComponent>(args.OtherEntity) || _mobState.IsDead(ent) || !_cfg.GetCVar(CCVars.CMUEWJoeEnabled))
+        if (!HasComp<ProjectileComponent>(args.OtherEntity) || _mobState.IsDead(ent))
             return;
 
         _rmcProjectile.SetProjectileAccuracy(args.OtherEntity, ent.Comp.Accuracy);
@@ -44,7 +41,7 @@ public sealed partial class EWJoeResonanceSystem : EntitySystem
     private void OnReflectAttempt(Entity<EWJoeResonanceComponent> ent, ref ProjectileReflectAttemptEvent args)
     {
         // ABIL-12: a dead shell turns nothing back
-        if (args.Cancelled || _mobState.IsDead(ent) || !_cfg.GetCVar(CCVars.CMUEWJoeEnabled))
+        if (args.Cancelled || _mobState.IsDead(ent))
             return;
 
         var projectile = args.ProjUid;

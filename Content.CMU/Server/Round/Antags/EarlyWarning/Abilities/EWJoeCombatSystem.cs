@@ -94,26 +94,6 @@ public sealed partial class EWJoeCombatSystem : EntitySystem
         SubscribeLocalEvent<EWJoeComponent, EWJoeJudgementActionEvent>(OnJudgement);
         SubscribeLocalEvent<EWJoeDropsSurrenderComponent, ActionPerformedEvent>(OnHostileActionPerformed);
         SubscribeLocalEvent<EWJoeRemovedEvent>(OnJoeRemoved);
-        SubscribeLocalEvent<EWJoeMechanicsChangedEvent>(OnMechanicsChanged);
-    }
-
-    /// <summary>Switched off (ewjoemechanics): every running choke lets go; its action is greyed out with the rest.</summary>
-    private void OnMechanicsChanged(ref EWJoeMechanicsChangedEvent args)
-    {
-        if (args.Enabled)
-            return;
-
-        var chokes = new List<EntityUid>();
-        var query = EntityQueryEnumerator<EWJoeChokeComponent>();
-        while (query.MoveNext(out var uid, out _))
-        {
-            chokes.Add(uid);
-        }
-
-        foreach (var joe in chokes)
-        {
-            StopChoke(joe, "the antag was switched off");
-        }
     }
 
     /// <summary>A hostile ability used with raised hands ends the surrender.</summary>

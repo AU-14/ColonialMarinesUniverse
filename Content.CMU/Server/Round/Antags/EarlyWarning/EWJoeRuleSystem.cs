@@ -71,7 +71,9 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
 
     private static readonly ProtoId<JobPrototype> HostJob = "AU14JobColonyWorkingJoe";
 
-    /// <summary>The admin switch (ewjoemechanics): off, no Joe is made and the ones in the round are suspended.</summary>
+    /// <summary>
+    /// The admin switch (ewjoemechanics): off, the rules roll no Joe. Joes already in the round are untouched.
+    /// </summary>
     public bool Enabled { get; private set; } = true;
 
     /// <summary>The Grand Machine threat prototype; the antag stands down when it is the round's threat.</summary>
@@ -90,34 +92,19 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
     }
 
     /// <summary>
-    /// Suspends or resumes every Joe in the round: their granted actions grey out or come back, and the ability
-    /// systems end what is running (EWJoeMechanicsChangedEvent).
+    /// Off, a Distress Signal ghost role nobody has taken yet is withdrawn: it is a roll that has not made a Joe.
     /// </summary>
     private void OnEnabledChanged(bool enabled)
     {
         Enabled = enabled;
-        var ev = new EWJoeMechanicsChangedEvent(enabled);
-        RaiseLocalEvent(ref ev);
+        if (enabled)
+            return;
 
-        // a Distress Signal ghost role nobody has taken yet goes away
-        if (!enabled)
+        var spawners = EntityQueryEnumerator<GhostRoleAntagSpawnerComponent>();
+        while (spawners.MoveNext(out var spawner, out var antag))
         {
-            var spawners = EntityQueryEnumerator<GhostRoleAntagSpawnerComponent>();
-            while (spawners.MoveNext(out var spawner, out var antag))
-            {
-                if (antag.Definition == DistressHostId)
-                    QueueDel(spawner);
-            }
-        }
-
-        var query = EntityQueryEnumerator<EWJoeComponent>();
-        while (query.MoveNext(out _, out var joe))
-        {
-            foreach (var action in joe.GrantedActions)
-            {
-                if (Exists(action))
-                    _actions.SetEnabled(action, enabled);
-            }
+            if (antag.Definition == DistressHostId)
+                QueueDel(spawner);
         }
     }
 
@@ -192,7 +179,7 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
 
         var joe = args.EntityUid;
 
-        // an admin forcing the antag while it is switched off gets nothing
+        // a rule that selects while the antag is switched off makes nobody
         if (!Enabled)
         {
             StandDown(joe);
@@ -465,12 +452,9 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         record.ConsolesAssimilated = ent.Comp.ConsolesAssimilated;
     }
 
-    /// <summary>Records a granted action; one granted while the antag is switched off arrives greyed out.</summary>
     private void Grant(Entity<EWJoeComponent> ent, EntityUid action)
     {
         ent.Comp.GrantedActions.Add(action);
-        if (!Enabled)
-            _actions.SetEnabled(action, false);
     }
 
     private void GrantLevel(Entity<EWJoeComponent> ent, EWJoeLevelDef def, int level)

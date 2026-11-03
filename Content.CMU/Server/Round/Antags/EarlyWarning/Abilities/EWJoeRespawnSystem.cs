@@ -88,10 +88,6 @@ public sealed partial class EWJoeRespawnSystem : EntitySystem
             return;
         }
 
-        // a switched-off antag dies like any Joe (ewjoemechanics)
-        if (!_rule.Enabled)
-            return;
-
         if (!ent.Comp.RespawnReady)
             return;
 

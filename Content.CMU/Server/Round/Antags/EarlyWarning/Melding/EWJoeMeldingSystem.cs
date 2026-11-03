@@ -76,7 +76,7 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
         base.Update(frameTime);
 
         var now = _timing.CurTime;
-        if (now < _nextUpdate || !_rule.Enabled)
+        if (now < _nextUpdate)
             return;
 
         _nextUpdate = now + TimeSpan.FromSeconds(1);

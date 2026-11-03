@@ -15,13 +15,12 @@ public sealed partial class EWJoeMechanicsCommand : LocalizedEntityCommands
 
     public override string Command => "ewjoemechanics";
 
-    public override string Description => "Enables or disables the Early Warning Joe antagonist and its mechanics.";
+    public override string Description => "Enables or disables rolling the Early Warning Joe antagonist.";
 
     public override string Help
         => "ewjoemechanics [true/false]\n"
-        + " Off: the Early Warning Joe is not rolled or made, and any Joe already in the round is suspended: its actions"
-        + " are greyed out, its directives stop advancing, and it neither respawns nor turns bullets. Turning it back on"
-        + " restores all of that. No argument toggles.";
+        + " Off: the Early Warning Joe game rules roll nobody, and an untaken Distress Signal ghost role is withdrawn."
+        + " Joes already in the round are not affected. No argument toggles.";
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -40,7 +39,7 @@ public sealed partial class EWJoeMechanicsCommand : LocalizedEntityCommands
 
         _cfg.SetCVar(CCVars.CMUEWJoeEnabled, value);
         _chatManager.SendAdminAnnouncement(
-            $"{shell.Player} {(value ? "enabled" : "disabled")} the Early Warning Joe. {(value ? "It can be rolled again and any suspended Joe is active." : "It will not be rolled, and any Joe in the round is suspended.")}");
+            $"{shell.Player} {(value ? "enabled" : "disabled")} the Early Warning Joe. {(value ? "It can be rolled again." : "It will not be rolled; Joes already in the round are unaffected.")}");
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)

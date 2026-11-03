@@ -37,7 +37,6 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 public sealed partial class EWJoeLevelFiveSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLogger = default!;
-    [Dependency] private EWJoeRuleSystem _rule = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private SharedDirectionalAttackBlockSystem _facing = default!;
@@ -107,10 +106,6 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
-        // a switched-off Joe's light is only light (ewjoemechanics)
-        if (!_rule.Enabled)
-            return;
 
         var now = _timing.CurTime;
         var query = EntityQueryEnumerator<EWJoeLightComponent, EWJoeComponent>();

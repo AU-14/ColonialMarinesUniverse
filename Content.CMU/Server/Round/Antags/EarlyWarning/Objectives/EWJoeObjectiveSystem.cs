@@ -131,8 +131,7 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        // a switched-off antag's directives wait (ewjoemechanics)
-        if (_timing.CurTime < _nextEvaluate || !_rule.Enabled)
+        if (_timing.CurTime < _nextEvaluate)
             return;
 
         _nextEvaluate = _timing.CurTime + EvaluateEvery;

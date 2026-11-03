@@ -105,7 +105,6 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
 
         SubscribeLocalEvent<EWJoeDisruptPulseEvent>(OnDisruptPulse);
         SubscribeLocalEvent<EWJoeRemovedEvent>(OnJoeRemoved);
-        SubscribeLocalEvent<EWJoeMechanicsChangedEvent>(OnMechanicsChanged);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<EWJoeLevelChangedEvent>(OnLevelChanged);
     }
@@ -144,19 +143,6 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
                 _door.TrySetBoltDown((uid, bolt), false);
 
             RemCompDeferred<EWJoeDoorHeldOpenComponent>(uid);
-        }
-    }
-
-    /// <summary>Switched off (ewjoemechanics): drawn machetes vanish, as the action that puts one away is greyed out.</summary>
-    private void OnMechanicsChanged(ref EWJoeMechanicsChangedEvent args)
-    {
-        if (args.Enabled)
-            return;
-
-        var query = EntityQueryEnumerator<EWJoeMacheteComponent>();
-        while (query.MoveNext(out var uid, out _))
-        {
-            QueueDel(uid);
         }
     }
 
