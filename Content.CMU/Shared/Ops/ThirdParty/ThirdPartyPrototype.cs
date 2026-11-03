@@ -81,7 +81,7 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     public ProtoId<PartySpawnPrototype> PartySpawn { get; private set; }
 
     [DataField("announcearrival")]
-    public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict zone.";
+    public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict.";
 
     // optional header for the arrival line instead of the plain announcement wrap,
     // e.g. Dutch's Dozen uses cmss13's "Intercepted Transmission:"
