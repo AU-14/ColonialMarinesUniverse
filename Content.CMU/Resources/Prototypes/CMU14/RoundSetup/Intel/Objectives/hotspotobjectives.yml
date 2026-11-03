@@ -1,7 +1,5 @@
-# Presence-based zone objective for Force on Force. The strongest alive force inside the
-# rectangular zone scores each tick into the faction win-point pool, scaled by team size so
-# a minority side earns more per head. Relocates to a fresh objective marker after scoring
-# ticks to keep both teams moving.
+# Force on Force king of the hill. The strongest force inside the rectangle scores per tick,
+# and the zone relocates between objective markers to keep both sides moving.
 - type: entity
   id: CMUHotspotObjective
   name: Hotspot
@@ -29,6 +27,13 @@
     feedWinPoints: true
     relocateAfterTicks: 5
     zoneColorHex: "#FFB300"
+    factionZoneColors:
+      govfor: "#4CA44C"
+      opfor: "#FF4136"
+    zoneTile: FloorBlueCircuit
+    factionZoneTiles:
+      govfor: FloorGreenCircuit
+      opfor: FloorRedCircuit
   - type: NavMapBeacon
     text: Hotspot
   - type: Sprite

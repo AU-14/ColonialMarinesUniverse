@@ -13,6 +13,18 @@
 
   Examine cookware for progress. Use a bowl or plate on prepared food to serve it. [textlink="Kitchen basics" link="CMUGuideCooking"]
 
+  ## Sell through colony ASRS
+  <Box>
+    <GuideEntityEmbed Entity="RUMCOilBarrel" Caption="FILL → LOAD → SELL"/>
+    <GuideEntityEmbed Entity="RUMCFuelCanister" Caption="SMALL FUEL SHIPMENTS"/>
+  </Box>
+  Place fuel barrels/canisters or industry trade goods on the colony ASRS elevator. Canisters and goods can also go inside a requisitions crate. Open its requisitions console and send the elevator away. The sale pays into the [bold]colony budget[/bold]. Cargo on a departing elevator is consumed: remove tools and items you want to keep first.
+
+  [bold]Fuel pays by actual contents.[/bold] Diesel, crude oil and refinery fractions have per-unit values. The same trade-goods list used by world trade also enables industry stacks such as wiring, drive kits and machine casings at ASRS; existing material prices still apply.
+
+  ## Other trade options
+  These require their consoles and round setup; ASRS exports do not require a world-map city or trade shuttle.
+
   ## Sell locally
   <GuideEntityEmbed Entity="RUMCMarketStall" Caption="LOAD → PRICE → SELL"/>
   The stall owner needs a [bold]trade licence[/bold]. Use an item on the stall to stock it, then open its window to set the price. Buyers open the stall and choose what to buy. Citizen consoles also offer player trade and auctions.

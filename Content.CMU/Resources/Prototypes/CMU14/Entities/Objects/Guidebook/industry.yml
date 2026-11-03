@@ -10,6 +10,7 @@
   - CMUGuideIndustryDig
   - CMUGuideIndustryForge
   - CMUGuideIndustrySteam
+  - CMUGuideIndustryPipes
   - CMUGuideIndustryElectric
   - CMUGuideIndustryMachines
   - CMUGuideIndustryProducts
@@ -49,6 +50,13 @@
   name: cmu-guide-entry-industry-electric
   priority: 5
   text: "/ServerInfo/Guidebook/CMU14/Industry/Electric.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideIndustryPipes
+  name: cmu-guide-entry-industry-pipes
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Industry/Pipes.xml"
 
 - type: guideEntry
   parent: RMC
