@@ -156,7 +156,7 @@
         Slash: 10
         Piercing: 10
   - type: XenoClaw
-    sharpness: VerySharp
+    clawType: VerySharp
   - type: CMArmor
     explosionArmor: 25
     xenoArmor: 15
