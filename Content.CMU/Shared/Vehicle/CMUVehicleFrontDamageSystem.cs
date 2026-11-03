@@ -15,6 +15,7 @@ public sealed class CMUVehicleFrontDamageSystem : EntitySystem
 {
     [Dependency] private SharedCMUVehicleCrayonSystem _crayon = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private CMUVehicleSeatSystem _seats = default!;
     [Dependency] private SharedToolSystem _tool = default!;
 
     public override void Initialize()
@@ -74,6 +75,14 @@ public sealed class CMUVehicleFrontDamageSystem : EntitySystem
         }
 
         args.Handled = true;
+
+        // A rider can't straighten the hull they are sitting in
+        if (_seats.IsSeatedIn(args.User, ent))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-vehicle-repair-while-riding"), ent, args.User);
+            return;
+        }
+
         _tool.UseTool(args.Used, args.User, ent, (float) ent.Comp.RepairDelay.TotalSeconds,
             ent.Comp.RepairQuality, new CMUVehicleFrontRepairDoAfterEvent(), fuel: ent.Comp.RepairFuel);
     }

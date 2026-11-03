@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Vendors;
@@ -11,6 +12,9 @@ namespace Content.Server.CMU14;
 public sealed class DestroyOnPresetSystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _prototype = default!;
+    // Ticker preset fields stay null through AU round start; SelectedPreset is the only live source there.
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
 
     public override void Initialize()
     {
@@ -25,19 +29,15 @@ public sealed class DestroyOnPresetSystem : EntitySystem
 
     private void OnStartup(EntityUid uid, DestroyOnPresetComponent component, MapInitEvent args)
     {
-        var gameTicker = EntityManager.System<GameTicker>();
-        var preset = gameTicker.Preset;
+        var preset = _ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? _auRound.SelectedPreset?.ID;
+        if (preset == null)
+            return;
 
-        if (preset != null)
-        {
-            var matches = preset.ID == component.Preset;
+        var matches = preset == component.Preset || component.Presets.Contains(preset);
 
-            // If inverted is true, delete when it does NOT match. Otherwise delete when it matches.
-            if ((matches && !component.Inverted) || (!matches && component.Inverted))
-            {
-                QueueDel(uid);
-            }
-        }
+        // If inverted is true, delete when it does NOT match. Otherwise delete when it matches.
+        if ((matches && !component.Inverted) || (!matches && component.Inverted))
+            QueueDel(uid);
     }
 
     private void OnVendorInit(Entity<CMAutomatedVendorComponent> ent, ref ComponentInit args)
@@ -88,13 +88,13 @@ public sealed class DestroyOnPresetSystem : EntitySystem
 
     private bool DestroyedThisRound(EntProtoId id)
     {
-        if (EntityManager.System<GameTicker>().Preset is not { } preset ||
-            !_prototype.TryIndex(id, out var proto) ||
-            !proto.TryGetComponent(out DestroyOnPresetComponent? destroy, EntityManager.ComponentFactory))
-        {
-            return false;
-        }
+        var preset = _ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? _auRound.SelectedPreset?.ID;
 
-        return (preset.ID == destroy.Preset) != destroy.Inverted;
+        if (preset == null
+            || !_prototype.TryIndex(id, out var proto)
+            || !proto.TryGetComponent(out DestroyOnPresetComponent? destroy, EntityManager.ComponentFactory))
+            return false;
+
+        return (preset == destroy.Preset || destroy.Presets.Contains(preset)) != destroy.Inverted;
     }
 }

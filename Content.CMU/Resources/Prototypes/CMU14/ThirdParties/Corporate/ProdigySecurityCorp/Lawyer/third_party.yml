@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: ProdigyLawyer
+  allegiance: Prodigy
   announceAsSurvivors: true
   partyspawn: ProdigyLawyerSpawn
   whitelistedGamemodes:

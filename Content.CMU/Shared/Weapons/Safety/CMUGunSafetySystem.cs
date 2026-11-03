@@ -106,7 +106,10 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
             }
         }
 
-        if (HasComp<BallisticAmmoProviderComponent>(gun) || HasComp<RevolverAmmoProviderComponent>(gun))
+        // A ballistic provider that can't be cycled is sealed, like a disposable
+        // launcher's integral rocket: taking its round destroys the weapon.
+        if ((TryComp<BallisticAmmoProviderComponent>(gun, out var provider) && provider.Cycleable)
+            || HasComp<RevolverAmmoProviderComponent>(gun))
         {
             var count = new GetAmmoCountEvent();
             RaiseLocalEvent(gun, ref count);
