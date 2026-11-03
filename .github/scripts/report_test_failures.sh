@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# CMU14: fork CI test-failure reporting, keep through upstream downmerges.
 # Prints failed test blocks and a job-summary digest from a captured dotnet test log.
 # Green runs (status 0) print nothing. With no failed blocks it tails the log, since
 # dotnet itself died and its error output is the only witness.
