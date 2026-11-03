@@ -17,6 +17,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Medical.Presentation.Visuals.Cosmetic;
 
@@ -35,6 +36,11 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
     [Dependency] private CMULegSupportSystem _legSupport = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private IGameTiming _timing = default!;
+
+    // a buckled or crit patient fails Stand forever; retrying every tick spun the queue
+    // until the server ground out. once a second is fast enough to look instant.
+    private static readonly TimeSpan StandRetryDelay = TimeSpan.FromSeconds(1);
 
     /// <summary>
     ///     Bodies queued for next-tick glove-drop / shoe-drop / force-down.
@@ -93,11 +99,17 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             // for a downed mob with both legs. not forced, so knockdown/rest/buckle/crit still win.
             // part-added also fires for every limb at spawn, so only mobs that lost leg support get stood up
             if (Deleted(restored) ||
-                !HasComp<CMULegLossDownedComponent>(restored) ||
+                !TryComp<CMULegLossDownedComponent>(restored, out var marker) ||
                 !_standing.IsDown(restored) ||
                 _container.IsEntityInContainer(restored) || // body bags and cryo own their down state
                 !_legSupport.HasLegsToStand(restored))
             {
+                continue;
+            }
+
+            if (_timing.CurTime < marker.NextStandRetry)
+            {
+                _deferredLegRestore.Enqueue(restored);
                 continue;
             }
 
@@ -106,7 +118,10 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             if (_standing.Stand(restored))
                 RemComp<CMULegLossDownedComponent>(restored);
             else
+            {
+                marker.NextStandRetry = _timing.CurTime + StandRetryDelay;
                 _deferredLegRestore.Enqueue(restored);
+            }
         }
 
         while (_deferredHeadSever.TryDequeue(out var body))
