@@ -119,6 +119,9 @@ namespace Content.Client.Chat.UI
             _zLevels = _entityManager.System<CMUClientZLevelsSystem>();
             MouseFilter = MouseFilterMode.Ignore;
 
+            // CMU14: bubbles can render before FrameUpdate first positions them above the sender.
+            Modulate = Color.White.WithAlpha(0);
+
             // Use text clipping so new messages don't overlap old ones being pushed up.
             RectClipContent = true;
 
