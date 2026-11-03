@@ -168,14 +168,26 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Run Content.Tests
-        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal --logger "trx;LogFileName=unit-tests.trx" --results-directory bin/Content.Tests/TestResults -- NUnit.ExplicitMode=None
+        # capture discipline: green prints nothing, red prints failed blocks and the
+        # summary digest, full log rides the artifact
+        run: |
+          set +e
+          dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal \
+            --logger "trx;LogFileName=unit-tests.trx" \
+            --results-directory bin/Content.Tests/TestResults \
+            -- NUnit.ExplicitMode=None > bin/Content.Tests/test-output.log 2>&1
+          status=$?
+          bash "$GITHUB_WORKSPACE/.github/scripts/report_test_failures.sh" \
+            "$status" bin/Content.Tests/test-output.log "Unit Tests"
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-results-unit-tests
-          path: bin/Content.Tests/TestResults/
+          path: |
+            bin/Content.Tests/TestResults/
+            bin/Content.Tests/test-output.log
           if-no-files-found: ignore
           retention-days: 3
 
@@ -720,12 +732,20 @@ jobs:
           cd bin/Content.IntegrationTests || exit 1
           # Runner shutdowns are retried by ci-retry-infra.yml; test failures need attention.
           # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
+          # The harness streams every pooled pair and engine log line into test output: 40k+
+          # lines on the big shards, and the failures sit at the very end. Capture stdout to
+          # a file; the report script prints failed blocks on red and nothing on green, and
+          # writes the digest to the job summary. The full log rides the test-results artifact.
+          set +e
           dotnet test Content.IntegrationTests.dll \
             --verbosity normal --filter "$FILTER" \
             --blame-hang-timeout "$hang_timeout" --blame-hang-dump-type none \
             --logger "trx;LogFileName=$shard.trx" --results-directory TestResults \
             -- NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.AssemblySelectLimit=10000 \
-            NUnit.NumberOfTestWorkers="$workers" # CMU14
+            NUnit.NumberOfTestWorkers="$workers" > test-output.log 2>&1
+          status=$?
+          bash "$GITHUB_WORKSPACE/.github/scripts/report_test_failures.sh" \
+            "$status" test-output.log "Testcases / ${shard}"
 
       - name: Upload test results
         if: always()
@@ -733,8 +753,10 @@ jobs:
         with:
           name: test-results-${{ matrix.shard.name }}
           # CMU14: retain results and blame sequences without multi-gigabyte process dumps.
+          # test-output.log is the muted full console capture, for deep dives on red shards.
           path: |
             bin/Content.IntegrationTests/TestResults/
+            bin/Content.IntegrationTests/test-output.log
             !bin/Content.IntegrationTests/TestResults/**/*.dmp
           if-no-files-found: ignore
           retention-days: 3
