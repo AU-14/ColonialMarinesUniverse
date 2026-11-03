@@ -364,6 +364,7 @@
         whitelist:
           tags:
           - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentMagneticHarness
       rmc-aslot-underbarrel:
         whitelist:
           tags:
@@ -373,6 +374,7 @@
   # The built-in 2x sight is part of the rifle's sprite, so the rail has no offset and its scope isn't drawn.
   - type: AttachableHolderVisuals
     offsets:
+      cmu-aslot-sling: 0, 0.1875
       rmc-aslot-barrel: 0.97, 0.031
       rmc-aslot-underbarrel: 0.56, -0.31
 
@@ -428,6 +430,7 @@
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentMagneticHarness
       rmc-aslot-underbarrel:
         whitelist:
           tags:
@@ -436,6 +439,7 @@
           - RMCAttachmentLaserSight
   - type: AttachableHolderVisuals
     offsets:
+      cmu-aslot-sling: 0, 0.1875
       rmc-aslot-rail: -0.22, 0.21
       rmc-aslot-barrel: 0.97, 0.031
       rmc-aslot-underbarrel: 0.56, -0.31

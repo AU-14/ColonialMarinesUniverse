@@ -1,0 +1,49 @@
+# cmss13 /datum/emergency_call/dutch (code/datums/emergency_calls/dutch.dm): admin-called only (probability = 0).
+# Half dozen is 4-6 strong with at most 1 minigunner, 1 flamer and 1 medic; the full dozen is 8-12 with 2 flamers and 2 medics.
+# cmss13 rolls each rifleman's gun 60/30/10 between the M16, the M16 + M203 and the M60. Ghost roles can't roll their
+# gear, so the rifle variants are separate slots in roughly that split instead.
+# Call it with: spawnthirdparty CMUDutchsDozen true  (or CMUDutchsDozenFull for the full dozen)
+
+- type: partySpawn
+  id: CMUDutchsDozenSpawn
+  leadersToSpawn:
+    CMUMobDutchsDozenArnold: 1
+  gruntsToSpawn:
+    CMUMobDutchsDozenRifleman: 1
+    CMUMobDutchsDozenGrenadier: 1
+    CMUMobDutchsDozenMinigunner: 1
+    CMUMobDutchsDozenFlamer: 1
+    CMUMobDutchsDozenMedic: 1
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUDutchsDozen
+  displayName: cmu-dutchs-dozen-party-name
+  partyspawn: CMUDutchsDozenSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/genericthirdpartyshuttle.yml
+  # admin only: a negative cap keeps it out of every automatic roll
+  minplayers: 0
+  maxplayers: -1
+  announcearrival: cmu-dutchs-dozen-arrival
+  # cmss13 sends it as marine_announcement(arrival_message, "Intercepted Transmission:")
+  announcearrivaltitle: cmu-dutchs-dozen-arrival-title
+
+- type: partySpawn
+  id: CMUDutchsDozenFullSpawn
+  leadersToSpawn:
+    CMUMobDutchsDozenArnold: 1
+  gruntsToSpawn:
+    CMUMobDutchsDozenRifleman: 3
+    CMUMobDutchsDozenGrenadier: 2
+    CMUMobDutchsDozenMachineGunner: 1
+    CMUMobDutchsDozenMinigunner: 1
+    CMUMobDutchsDozenFlamer: 2
+    CMUMobDutchsDozenMedic: 2
+  spawnTogether: true
+
+- type: thirdParty
+  parent: CMUDutchsDozen
+  id: CMUDutchsDozenFull
+  displayName: cmu-dutchs-dozen-full-party-name
+  partyspawn: CMUDutchsDozenFullSpawn

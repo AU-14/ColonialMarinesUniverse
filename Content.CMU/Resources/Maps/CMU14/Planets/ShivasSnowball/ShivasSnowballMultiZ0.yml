@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/20/2026 04:31:20
-  entityCount: 52770
+  entityCount: 52786
 maps:
 - 1
 grids:
@@ -168,6 +168,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMUFobMap
+      sites: [1168, 1169]
     - type: MetaData
       name: Mapping Shivas Snowball
     - type: Transform
@@ -45031,6 +45033,52 @@ entities:
   entities:
   - uid: 1168
     components:
+    - type: CMUFobSite
+      id: Research
+      utilityExclusions:
+      - "16.65,127.65,29.35,149.35"
+      - "16.15,130.15,28.85,146.85"
+      - "16.15,130.15,28.85,148.85"
+      - "40.65,112.65,62.35,125.35"
+      - "43.15,112.15,59.85,124.85"
+      - "43.15,112.15,61.85,124.85"
+      relays:
+      - anchor: 1000000007
+        tier: Near
+        approach: North
+      - anchor: 1000000008
+        tier: Near
+        approach: North
+      - anchor: 1000000009
+        tier: Near
+        approach: South
+      - anchor: 1000000010
+        tier: Near
+        approach: South
+      - anchor: 1000000011
+        tier: Intermediate
+        approach: North
+      - anchor: 1000000012
+        tier: Intermediate
+        approach: North
+      - anchor: 1000000013
+        tier: Intermediate
+        approach: South
+      - anchor: 1000000014
+        tier: Intermediate
+        approach: South
+      - anchor: 1000000015
+        tier: Far
+        approach: North
+      - anchor: 1000000016
+        tier: Far
+        approach: North
+      - anchor: 1000000017
+        tier: Far
+        approach: South
+      - anchor: 1000000018
+        tier: Far
+        approach: South
     - type: MetaData
       name: 'LZ2: Research Landing Zone'
     - type: Transform
@@ -45038,6 +45086,49 @@ entities:
       pos: 22.5,138.5
   - uid: 1169
     components:
+    - type: CMUFobSite
+      id: Valley
+      utilityExclusions:
+      - "17.65,21.65,30.35,43.35"
+      - "17.15,24.15,29.85,40.85"
+      - "17.15,24.15,29.85,42.85"
+      relays:
+      - anchor: 1000000019
+        tier: Near
+        approach: East
+      - anchor: 1000000020
+        tier: Near
+        approach: East
+      - anchor: 1000000009
+        tier: Near
+        approach: North
+      - anchor: 1000000010
+        tier: Near
+        approach: North
+      - anchor: 1000000017
+        tier: Intermediate
+        approach: East
+      - anchor: 1000000018
+        tier: Intermediate
+        approach: East
+      - anchor: 1000000007
+        tier: Intermediate
+        approach: North
+      - anchor: 1000000008
+        tier: Intermediate
+        approach: North
+      - anchor: 1000000021
+        tier: Far
+        approach: East
+      - anchor: 1000000022
+        tier: Far
+        approach: East
+      - anchor: 1000000011
+        tier: Far
+        approach: North
+      - anchor: 1000000012
+        tier: Far
+        approach: North
     - type: MetaData
       name: LZ1 Landing Zone
     - type: Transform
@@ -309352,4 +309443,118 @@ entities:
       kind: Ground
       id: shivas-snowball.ground.relay
       displayName: Shivas' Snowball Ground Relay
+- proto: CMUFobRelayMarker
+  entities:
+  - uid: 1000000007
+    components:
+    - type: Transform
+      parent: 1
+      pos: 86.5,132.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-colony-northwest-clearing
+  - uid: 1000000008
+    components:
+    - type: Transform
+      parent: 1
+      pos: 98.5,143.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-colony-north-approach
+  - uid: 1000000009
+    components:
+    - type: Transform
+      parent: 1
+      pos: 63.5,82.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-camp-west-passage
+  - uid: 1000000010
+    components:
+    - type: Transform
+      parent: 1
+      pos: 76.5,77.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-camp-east-passage
+  - uid: 1000000011
+    components:
+    - type: Transform
+      parent: 1
+      pos: 127.5,126.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-colony-central-approach
+  - uid: 1000000012
+    components:
+    - type: Transform
+      parent: 1
+      pos: 142.5,118.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-colony-east-road
+  - uid: 1000000013
+    components:
+    - type: Transform
+      parent: 1
+      pos: 98.5,63.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-junkyard-north-approach
+  - uid: 1000000014
+    components:
+    - type: Transform
+      parent: 1
+      pos: 105.5,70.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-south-administration-approach
+  - uid: 1000000015
+    components:
+    - type: Transform
+      parent: 1
+      pos: 153.5,95.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-colony-east-clearing
+  - uid: 1000000016
+    components:
+    - type: Transform
+      parent: 1
+      pos: 166.5,82.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-garage-east-approach
+  - uid: 1000000017
+    components:
+    - type: Transform
+      parent: 1
+      pos: 123.5,42.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-junkyard-central
+  - uid: 1000000018
+    components:
+    - type: Transform
+      parent: 1
+      pos: 133.5,26.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-junkyard-south
+  - uid: 1000000019
+    components:
+    - type: Transform
+      parent: 1
+      pos: 88.5,33.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-southwest-valley-east
+  - uid: 1000000020
+    components:
+    - type: Transform
+      parent: 1
+      pos: 87.5,16.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-warehouse-caves-east
+  - uid: 1000000021
+    components:
+    - type: Transform
+      parent: 1
+      pos: 157.5,31.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-research-south-approach
+  - uid: 1000000022
+    components:
+    - type: Transform
+      parent: 1
+      pos: 161.5,57.5
+    - type: CMUFobMapAnchor
+      relayName: cmu-fob-shivas-relay-research-west-clearing
 ...

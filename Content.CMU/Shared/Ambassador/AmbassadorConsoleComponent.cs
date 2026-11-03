@@ -19,11 +19,17 @@ public sealed partial class AmbassadorConsoleComponent : Component
     [DataField("budget")]
     public float Budget = 0f;
 
+    // RUMC: the part of the account that cannot be taken out as cash: only what is above it can be withdrawn.
+    public const float WithdrawFloorDefault = 10000f;
+
+    [DataField("withdrawFloor")]
+    public float WithdrawFloor = WithdrawFloorDefault;
+
     /// <summary>
     /// How much money is added each replenish tick.
     /// </summary>
     [DataField("replenishAmount")]
-    public float ReplenishAmount = 10f;
+    public float ReplenishAmount = 2f; // RUMC: was 10, the incomes of the ambassadors are cut
 
     /// <summary>
     /// How often (in seconds) budget replenishes.

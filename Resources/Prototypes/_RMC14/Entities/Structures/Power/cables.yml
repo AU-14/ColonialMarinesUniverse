@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   abstract: true
   parent: CableHV
   id: RMCCableBase
@@ -28,14 +28,17 @@
     state: cable_4
 
 - type: entity
-  parent: RMCCableTerminal
-  id: RMCCableBlue
+  # CMU14: parent: RMCCableTerminal
+  parent: CMUCableThinDecorative
+  id: RMCCableBlue # CMU14: decorative only, no power
   name: power cable
-  suffix: Blue
-  description: This cable is tough. It cannot be cut with simple hand tools.
+  suffix: Blue, decorative # CMU14
+  description: A thin cable run. Purely decorative, it carries no power. # CMU14
+  categories: [ HideSpawnMenu ] # CMU14
   components:
-  - type: Cable
-    cuttingQuality: null
+  # CMU14 Cable removed: decorative only, nothing to cut
+  #- type: Cable
+  #  cuttingQuality: null
   - type: Sprite
     sprite: _RMC14/Structures/Power/cables_thin.rsi
     state: intactblue
@@ -47,7 +50,8 @@
   parent: RMCCableBlue
   id: RMCCableRed
   name: power cable
-  suffix: Red
+  suffix: Red, decorative # CMU14
+  categories: [ HideSpawnMenu ] # CMU14
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Power/cables_thin.rsi
@@ -60,7 +64,8 @@
   parent: RMCCableBlue
   id: RMCCableYellow
   name: power cable
-  suffix: Yellow
+  suffix: Yellow, decorative # CMU14
+  categories: [ HideSpawnMenu ] # CMU14
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Power/cables_thin.rsi

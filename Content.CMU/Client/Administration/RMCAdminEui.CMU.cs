@@ -88,7 +88,7 @@ public sealed partial class RMCAdminEui
         }
         _cmuWindow.HiveName.IsValid = name => name.Length <= 64;
         _cmuWindow.CreateCorruptedHive.OnPressed += _ => SendMessage(new CMUAdminCreateHiveMsg(
-            "CMUCorruptedHive", string.Empty, _cmuState?.CMUDetails?.IsXeno == true));
+            "CMUCorruptedHive", string.Empty, true));
         _cmuWindow.LeaveHive.OnPressed += _ => SendMessage(new CMUAdminSetHiveMsg(null));
         _cmuWindow.RemoveSquad.OnPressed += _ => SendMessage(new CMUAdminRemoveSquadMsg());
         _cmuWindow.HiveSearch.OnTextChanged += _ => RefreshCMUHives();
@@ -274,9 +274,8 @@ public sealed partial class RMCAdminEui
         var current = details.Hives.FirstOrDefault(hive => hive.Id == details.CurrentHive);
         _cmuWindow.CurrentHive.Text = Loc.GetString("cmu-admin-current-hive",
             ("hive", current.Name ?? Loc.GetString("cmu-admin-none")));
-        _cmuWindow.LeaveHive.Disabled = !details.IsXeno || details.CurrentHive == null;
-        _cmuWindow.AssignCreatedHive.Disabled = !details.IsXeno;
-        _cmuWindow.HiveHint.SetMessage(Loc.GetString(details.IsXeno ? "cmu-admin-hive-hint" : "cmu-admin-hive-needs-xeno"));
+        _cmuWindow.LeaveHive.Disabled = details.CurrentHive == null;
+        _cmuWindow.HiveHint.SetMessage(Loc.GetString("cmu-admin-hive-hint"));
         _cmuWindow.Hives.RemoveAllChildren();
         foreach (var hive in details.Hives)
         {
@@ -307,7 +306,7 @@ public sealed partial class RMCAdminEui
             var assign = new Button
             {
                 Text = Loc.GetString(details.CurrentHive == hive.Id ? "cmu-admin-current" : "cmu-admin-assign"),
-                Disabled = !details.IsXeno || details.CurrentHive == hive.Id,
+                Disabled = details.CurrentHive == hive.Id,
                 MinWidth = 100,
                 VerticalAlignment = Control.VAlignment.Center,
             };
