@@ -170,7 +170,11 @@ public sealed partial class AdminSystem : EntitySystem
 
         if (!obj.IsAdmin || obj.Flags is not { } flags || (flags & AdminFlags.PlayerList) == 0) // cmu edit: needs the player list flag
         {
-            RaiseNetworkEvent(new FullPlayerListEvent(), obj.Player.Channel);
+            // CMU14: an ahelp-capable in-game admin gets the stripped list instead of a blind window
+            if (CMUIsIngameAhelpAdmin(obj.Player))
+                CMUSendIngamePlayerList(obj.Player);
+            else
+                RaiseNetworkEvent(new FullPlayerListEvent(), obj.Player.Channel);
             return;
         }
 
