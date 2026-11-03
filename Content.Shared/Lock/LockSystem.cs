@@ -166,7 +166,7 @@ public sealed partial class LockSystem : EntitySystem
     /// <summary>
     ///     Forces a given entity to be locked, does not activate a do-after.
     /// </summary>
-    public void Lock(EntityUid uid, EntityUid? user, LockComponent? lockComp = null)
+    public void Lock(EntityUid uid, EntityUid? user, LockComponent? lockComp = null, bool playSound = true) // CMU14: mass alert toggles suppress per-entity sounds
     {
         if (!Resolve(uid, ref lockComp))
             return;
@@ -180,7 +180,8 @@ public sealed partial class LockSystem : EntitySystem
                 ("entityName", Identity.Name(uid, EntityManager))), uid, user);
         }
 
-        _audio.PlayPredicted(lockComp.LockSound, uid, user);
+        if (playSound) // CMU14
+            _audio.PlayPredicted(lockComp.LockSound, uid, user);
 
         lockComp.Locked = true;
         _appearanceSystem.SetData(uid, LockVisuals.Locked, true);
@@ -199,7 +200,7 @@ public sealed partial class LockSystem : EntitySystem
     /// <param name="uid">The entity with the lock</param>
     /// <param name="user">The person unlocking it. Can be null</param>
     /// <param name="lockComp"></param>
-    public void Unlock(EntityUid uid, EntityUid? user, LockComponent? lockComp = null)
+    public void Unlock(EntityUid uid, EntityUid? user, LockComponent? lockComp = null, bool playSound = true) // CMU14: mass alert toggles suppress per-entity sounds
     {
         if (!Resolve(uid, ref lockComp))
             return;
@@ -213,7 +214,8 @@ public sealed partial class LockSystem : EntitySystem
                 ("entityName", Identity.Name(uid, EntityManager))), uid, user.Value);
         }
 
-        _audio.PlayPredicted(lockComp.UnlockSound, uid, user);
+        if (playSound) // CMU14
+            _audio.PlayPredicted(lockComp.UnlockSound, uid, user);
 
         lockComp.Locked = false;
         _appearanceSystem.SetData(uid, LockVisuals.Locked, false);
