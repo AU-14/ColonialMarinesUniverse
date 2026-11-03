@@ -2,8 +2,8 @@
 // Copyright (c) 2026 wray-git
 using Content.Shared.CMU14.Fluids;
 using Content.Shared._RMC14.Chemistry.Reagent;
-using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Examine;
+using Content.Shared.Verbs;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.Map;
@@ -17,7 +17,7 @@ namespace Content.Server.CMU14.Fluids;
 // a single liquid (any reagent, the one that came into it first) and levels out with the pipes around it a little every tick,
 // so that a liquid spreads slowly and a long run of pipe fills up from the end that is fed. Machines take it in and give it
 // out through their ports at the rate of the port. Steam is not carried here: it is a gas and goes through the gas pipes.
-public sealed class FluidSystem : EntitySystem
+public sealed partial class FluidSystem : EntitySystem
 {
     [Dependency] private readonly RMCReagentSystem _reagents = default!;
     [Dependency] private readonly CMUSharedZLevelsSystem _zLevels = default!;
@@ -33,10 +33,6 @@ public sealed class FluidSystem : EntitySystem
 
     // The longest step a pipe is levelled in: a stalled tick must not move more than a second's worth.
     private const float MaxStep = 0.5f;
-
-    // The farthest a link made with a screwdriver reaches, in tiles, between two pipes or between a pipe and a machine. A link is a long pipe that is not drawn: the farther it
-    // reaches the less goes through it (see Conductance), and one that is stretched past this is cut.
-    public const float MaxLinkDistance = 12f;
 
     private EntityQuery<FluidPipeComponent> _pipeQuery;
     private EntityQuery<FluidTankComponent> _tankQuery;
@@ -55,8 +51,13 @@ public sealed class FluidSystem : EntitySystem
         SubscribeLocalEvent<FluidPipeComponent, ComponentStartup>(OnPipeStartup);
         SubscribeLocalEvent<FluidPipeComponent, ComponentShutdown>(OnPipeShutdown);
         SubscribeLocalEvent<FluidPipeComponent, AnchorStateChangedEvent>(OnPipeAnchor);
+        SubscribeLocalEvent<FluidPipeComponent, MoveEvent>(OnPipeMove);
+        SubscribeLocalEvent<FluidPipeComponent, GetVerbsEvent<Verb>>(OnPipeVerbs);
         SubscribeLocalEvent<FluidPipeComponent, ExaminedEvent>(OnPipeExamined);
         SubscribeLocalEvent<FluidTankComponent, ExaminedEvent>(OnTankExamined);
+        SubscribeLocalEvent<FluidPortsComponent, ExaminedEvent>(OnPortsExamined);
+        SubscribeLocalEvent<FluidPortsComponent, MoveEvent>(OnPortsMoved);
+        SubscribeLocalEvent<FluidPortsComponent, ComponentShutdown>(OnPortsShutdown);
     }
 
     private void OnPipeStartup(Entity<FluidPipeComponent> pipe, ref ComponentStartup args)
@@ -71,6 +72,50 @@ public sealed class FluidSystem : EntitySystem
 
     private void OnPipeAnchor(Entity<FluidPipeComponent> pipe, ref AnchorStateChangedEvent args)
     {
+        _pipesChanged = true;
+    }
+
+    private void OnPipeMove(Entity<FluidPipeComponent> pipe, ref MoveEvent args)
+    {
+        if (args.Component.Anchored)
+            _pipesChanged = true;
+        else if (args.OldRotation != args.NewRotation)
+            SetLook(pipe, pipe.Comp, GetPortMask(pipe, pipe.Comp));
+    }
+
+    private void OnPipeVerbs(Entity<FluidPipeComponent> pipe, ref GetVerbsEvent<Verb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract || !args.CanComplexInteract)
+            return;
+
+        foreach (var shape in Enum.GetValues<CMUFluidPipeShape>())
+        {
+            args.Verbs.Add(new Verb
+            {
+                Text = Loc.GetString($"cmu-fluid-shape-{shape.ToString().ToLowerInvariant()}"),
+                Category = new VerbCategory("cmu-fluid-shape-category", null),
+                Disabled = pipe.Comp.Shape == shape,
+                Act = () => SetShape(pipe, shape),
+            });
+        }
+
+        if (pipe.Comp.Amount > 0)
+        {
+            args.Verbs.Add(new Verb
+            {
+                Text = Loc.GetString("cmu-fluid-drain-pipe"),
+                Act = () =>
+                {
+                    pipe.Comp.Amount = 0;
+                    pipe.Comp.Kind = null;
+                },
+            });
+        }
+    }
+
+    public void SetShape(Entity<FluidPipeComponent> pipe, CMUFluidPipeShape shape)
+    {
+        pipe.Comp.Shape = shape;
         _pipesChanged = true;
     }
 
@@ -138,24 +183,90 @@ public sealed class FluidSystem : EntitySystem
 
     #endregion
 
-    public void MarkPipesChanged()
+    /// <summary>Only anchored, touching pipe ends on the same grid can carry liquid.</summary>
+    public bool CanConnect(EntityUid pipeUid, EntityUid other)
     {
-        _pipesChanged = true;
+        if (TerminatingOrDeleted(pipeUid) || TerminatingOrDeleted(other)
+            || !_pipeQuery.TryComp(pipeUid, out var pipe) || pipe.Isolated)
+            return false;
+
+        var a = Transform(pipeUid);
+        var b = Transform(other);
+        if (!a.Anchored || !b.Anchored || a.GridUid is not { } gridUid || b.GridUid != gridUid
+            || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return false;
+
+        var start = _map.TileIndicesFor(gridUid, grid, a.Coordinates);
+        var end = _map.TileIndicesFor(gridUid, grid, b.Coordinates);
+        if (_pipeQuery.TryComp(other, out var otherPipe))
+        {
+            return !otherPipe.Isolated && HasOpening(pipeUid, pipe, end - start)
+                   && HasOpening(other, otherPipe, start - end);
+        }
+
+        if (!TryComp<FluidPortsComponent>(other, out var ports))
+            return false;
+
+        return TryGetMachineContact(pipeUid, pipe, b, ports, start, end, out _);
     }
 
-    // How much of its flow a link lets through: all of it between neighbours, and the less of it the longer the link, as a long pipe would, so that a liquid does not
-    // arrive as fast from the far end of a link as from the next tile.
-    public static float Conductance(float distance) => 1f / Math.Max(1f, distance);
-
-    // How far apart two things stand, in tiles; two things on different maps are as far as can be.
-    public float DistanceBetween(EntityUid a, EntityUid b)
+    private bool TryGetMachineContact(EntityUid pipeUid, FluidPipeComponent pipe, TransformComponent machine,
+        FluidPortsComponent ports, Vector2i start, Vector2i end, out Vector2i contact)
     {
-        var first = _transform.GetMapCoordinates(a);
-        var second = _transform.GetMapCoordinates(b);
-        return first.MapId == second.MapId ? (first.Position - second.Position).Length() : float.MaxValue;
+        contact = default;
+        var found = false;
+        foreach (var offset in ports.ConnectionTiles)
+        {
+            var rotated = machine.LocalRotation.RotateVec(offset);
+            var tile = end + new Vector2i((int) Math.Round(rotated.X), (int) Math.Round(rotated.Y));
+            if (tile == start)
+            {
+                contact = Vector2i.Zero;
+                return true;
+            }
+            if (!found && HasOpening(pipeUid, pipe, tile - start))
+            {
+                contact = tile - start;
+                found = true;
+            }
+        }
+        return found;
     }
 
-    // Cuts a pipe off from everything: its links to pipes and machines go, and it is no longer joined to the pipes next to it either. Taking it back joins it again.
+    private bool HasOpening(EntityUid uid, FluidPipeComponent pipe, Vector2i offset)
+    {
+        if (offset == Vector2i.Zero)
+            return true;
+        var mask = GetPortMask(uid, pipe);
+        foreach (var (side, bit) in Sides)
+        {
+            if (side == offset)
+                return (mask & bit) != 0;
+        }
+
+        return false;
+    }
+
+    private int GetPortMask(EntityUid uid, FluidPipeComponent pipe)
+    {
+        var mask = 0;
+        foreach (var (offset, bit) in Sides)
+        {
+            if (((int) pipe.Shape & bit) == 0)
+                continue;
+            var rotated = Transform(uid).LocalRotation.RotateVec(offset);
+            var direction = new Vector2i((int) Math.Round(rotated.X), (int) Math.Round(rotated.Y));
+            foreach (var (side, rotatedBit) in Sides)
+            {
+                if (side == direction)
+                    mask |= rotatedBit;
+            }
+        }
+
+        return mask;
+    }
+
+    // Isolating a pipe removes machine links and prevents flow through neighbouring pipes.
     public void SetIsolated(EntityUid uid, bool isolated)
     {
         if (!_pipeQuery.TryComp(uid, out var pipe) || pipe.Isolated == isolated)
@@ -163,27 +274,21 @@ public sealed class FluidSystem : EntitySystem
 
         pipe.Isolated = isolated;
         if (isolated)
-            CutLinks(uid, pipe);
+            CutLinks(uid);
 
         _pipesChanged = true;
     }
 
-    // Every link of a pipe goes: the links it has to pipes, and the ones machines have to it.
-    public void CutLinks(EntityUid uid, FluidPipeComponent pipe)
+    private void CutLinks(EntityUid uid)
     {
-        foreach (var other in pipe.Links)
-        {
-            if (_pipeQuery.TryComp(other, out var otherPipe))
-                otherPipe.Links.Remove(uid);
-        }
-
-        pipe.Links.Clear();
-
         var machines = EntityQueryEnumerator<FluidPortsComponent>();
-        while (machines.MoveNext(out _, out var ports))
+        while (machines.MoveNext(out var machine, out var ports))
         {
+            var changed = false;
             foreach (var port in ports.Ports)
-                port.Links.Remove(uid);
+                changed |= port.Links.Remove(uid);
+            if (changed)
+                ConnectionsChanged(machine);
         }
 
         _pipesChanged = true;
@@ -198,7 +303,15 @@ public sealed class FluidSystem : EntitySystem
         foreach (var port in ports.Ports)
             port.Links.Clear();
 
+        ConnectionsChanged(machine);
         _pipesChanged = true;
+    }
+
+    public void ConnectionsChanged(EntityUid machine)
+    {
+        _flowArrowsChanged = true;
+        var ev = new CMUFluidConnectionsChangedEvent();
+        RaiseLocalEvent(machine, ref ev);
     }
 
     public override void Update(float frameTime)
@@ -212,6 +325,8 @@ public sealed class FluidSystem : EntitySystem
 
         StepPipes(step);
         StepPorts(step);
+        if (_flowArrowsChanged)
+            RefreshFlowArrows();
 
         _dirtyTimer += frameTime;
         if (_dirtyTimer < DirtyInterval)
@@ -227,86 +342,46 @@ public sealed class FluidSystem : EntitySystem
         _dirtyTanks.Clear();
     }
 
-    // The pipes next to a pipe, and the ones it was linked to, found again after a pipe was built or taken away. The same
-    // pass works out how each pipe is to look: an arm on every side where a pipe is next to it, where it was linked to a pipe
-    // or a machine on the next tile.
+    // Rebuild only when topology changes. Open ends define both the sprite and connectivity.
     private void RebuildNeighbours()
     {
         _pipesChanged = false;
-
-        // The pipes joined to a port of a machine on the next tile have an arm towards the machine.
-        var toMachine = new Dictionary<EntityUid, int>();
-        var machines = EntityQueryEnumerator<FluidPortsComponent, TransformComponent>();
-        while (machines.MoveNext(out var machine, out var ports, out var machineXform))
-        {
-            foreach (var port in ports.Ports)
-            {
-                foreach (var link in port.Links)
-                {
-                    if (!_pipeQuery.HasComp(link) || TerminatingOrDeleted(link))
-                        continue;
-
-                    var bit = SideOf(link, machine);
-                    if (bit != 0)
-                        toMachine[link] = toMachine.GetValueOrDefault(link) | bit;
-                }
-            }
-        }
-
+        _flowArrowsChanged = true;
         var query = EntityQueryEnumerator<FluidPipeComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var pipe, out var xform))
         {
             pipe.Neighbours.Clear();
-            var mask = toMachine.GetValueOrDefault(uid);
+            SetLook(uid, pipe, GetPortMask(uid, pipe));
+            if (pipe.Isolated || !xform.Anchored || xform.GridUid is not { } gridUid
+                || !TryComp<MapGridComponent>(gridUid, out var grid))
+                continue;
 
-            if (!pipe.Isolated && xform.Anchored && xform.GridUid is { } gridUid && TryComp<MapGridComponent>(gridUid, out var grid))
+            var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
+            AddAt(tile);
+            foreach (var (offset, _) in Sides)
+                AddAt(tile + offset);
+
+            void AddAt(Vector2i position)
             {
-                var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
-
-                // Pipes on the same tile level each other too.
-                var here = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
-                while (here.MoveNext(out var other))
+                var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, position);
+                while (anchored.MoveNext(out var other))
                 {
-                    if (other.Value != uid && _pipeQuery.TryComp(other.Value, out var sameTile) && !sameTile.Isolated)
+                    if (other.Value != uid && _pipeQuery.HasComp(other.Value) && CanConnect(uid, other.Value))
                         pipe.Neighbours.Add(other.Value);
                 }
-
-                foreach (var (offset, bit) in Sides)
-                {
-                    var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile + offset);
-                    while (anchored.MoveNext(out var other))
-                    {
-                        if (other.Value == uid || !_pipeQuery.TryComp(other.Value, out var next) || next.Isolated)
-                            continue;
-
-                        pipe.Neighbours.Add(other.Value);
-                        mask |= bit;
-                    }
-                }
             }
-
-            // The links made with a screwdriver reach as far as they were made to, and are kept only while both ends are there.
-            pipe.Links.RemoveAll(other => TerminatingOrDeleted(other) || !_pipeQuery.HasComp(other) || DistanceBetween(uid, other) > MaxLinkDistance);
-            foreach (var link in pipe.Links)
-            {
-                mask |= SideOf(uid, link);
-            }
-
-            SetLook(uid, pipe, mask);
         }
 
-        // A pipe that goes down is joined to the pipes in the same place on the level below, and they to it.
         var down = EntityQueryEnumerator<FluidPipeComponent, TransformComponent>();
         while (down.MoveNext(out var uid, out var pipe, out var xform))
         {
-            if (!pipe.Down || !xform.Anchored || xform.MapUid is not { } map)
+            if (!pipe.Down || pipe.Isolated || !xform.Anchored || xform.MapUid is not { } map)
                 continue;
 
             foreach (var below in PipesBelow(uid, map))
             {
-                if (!_pipeQuery.TryComp(below, out var lower))
+                if (!_pipeQuery.TryComp(below, out var lower) || lower.Isolated)
                     continue;
-
                 pipe.Neighbours.Add(below);
                 lower.Neighbours.Add(uid);
             }
@@ -333,25 +408,7 @@ public sealed class FluidSystem : EntitySystem
         }
     }
 
-    // The bit of the side of the first entity that the second stands on, if it is on the next tile of the same grid.
-    private int SideOf(EntityUid from, EntityUid to)
-    {
-        var a = Transform(from);
-        var b = Transform(to);
-        if (!a.Anchored || !b.Anchored || a.GridUid == null || a.GridUid != b.GridUid || !TryComp<MapGridComponent>(a.GridUid, out var grid))
-            return 0;
-
-        var diff = _map.TileIndicesFor(a.GridUid.Value, grid, b.Coordinates) - _map.TileIndicesFor(a.GridUid.Value, grid, a.Coordinates);
-        foreach (var (offset, bit) in Sides)
-        {
-            if (offset == diff)
-                return bit;
-        }
-
-        return 0;
-    }
-
-    // The look of a pipe goes to the clients as the sides it is joined on.
+    // Send open ends to clients, including ends that are not connected yet.
     private void SetLook(EntityUid uid, FluidPipeComponent pipe, int mask)
     {
         if (pipe.Look == mask)
@@ -369,30 +426,15 @@ public sealed class FluidSystem : EntitySystem
         {
             foreach (var other in pipe.Neighbours)
             {
-                Level(uid, pipe, other, step, 1f);
+                Level(uid, pipe, other, step);
             }
 
-            foreach (var other in pipe.Links)
-            {
-                // A link stretched past its reach carries nothing (it is cut when the pipes are next counted).
-                if (other.Id <= uid.Id)
-                    continue;
-
-                var distance = DistanceBetween(uid, other);
-                if (distance > MaxLinkDistance)
-                {
-                    _pipesChanged = true;
-                    continue;
-                }
-
-                Level(uid, pipe, other, step, Conductance(distance));
-            }
         }
     }
 
     // Moves liquid between two pipes so that they fill the same share of themselves; each pair is done once, from the lower id.
     // Two pipes with different liquids in them do not mix; an empty one takes whatever the other has.
-    private void Level(EntityUid uid, FluidPipeComponent pipe, EntityUid other, float step, float conductance)
+    private void Level(EntityUid uid, FluidPipeComponent pipe, EntityUid other, float step)
     {
         if (other.Id < uid.Id || !_pipeQuery.TryComp(other, out var otherPipe))
             return;
@@ -407,7 +449,7 @@ public sealed class FluidSystem : EntitySystem
 
         // The amounts the two would have if they were levelled out, and the part of the way there that this step covers.
         var target = (pipe.Amount + otherPipe.Amount) * pipe.Capacity / total;
-        var move = (pipe.Amount - target) * Math.Min(1f, pipe.Rate * step * conductance);
+        var move = (pipe.Amount - target) * Math.Min(1f, pipe.Rate * step);
 
         pipe.Amount = Math.Clamp(pipe.Amount - move, 0f, pipe.Capacity);
         otherPipe.Amount = Math.Clamp(otherPipe.Amount + move, 0f, otherPipe.Capacity);
@@ -440,15 +482,15 @@ public sealed class FluidSystem : EntitySystem
                 if (port.Links.Count == 0)
                     continue;
 
-                port.Links.RemoveAll(link => TerminatingOrDeleted(link) || !_pipeQuery.HasComp(link) || DistanceBetween(uid, link) > MaxLinkDistance);
+                if (port.Links.RemoveAll(link => !CanConnect(link, uid)) > 0)
+                    ConnectionsChanged(uid);
 
                 foreach (var link in port.Links)
                 {
                     if (!_pipeQuery.TryComp(link, out var pipe) || pipe.Isolated)
                         continue;
 
-                    // A pipe far from the machine gives and takes less, the way the link between two pipes does.
-                    var rate = port.Rate * port.Scale * step * Conductance(DistanceBetween(uid, link));
+                    var rate = port.Rate * port.Scale * step;
                     if (rate <= 0f)
                         continue;
 
@@ -518,11 +560,28 @@ public sealed class FluidSystem : EntitySystem
         if (pipe.Comp.Kind == null)
         {
             args.PushMarkup(Loc.GetString("au14-fluid-pipe-empty"));
-            return;
         }
-
-        var percent = pipe.Comp.Capacity <= 0f ? 0 : (int) Math.Round(pipe.Comp.Amount / pipe.Comp.Capacity * 100f);
-        args.PushMarkup(Loc.GetString("au14-fluid-pipe-examine", ("fluid", Name(pipe.Comp.Kind)), ("percent", percent)));
+        else
+        {
+            args.PushMarkup(Loc.GetString("au14-fluid-pipe-examine", ("fluid", Name(pipe.Comp.Kind)),
+                ("amount", Math.Round(pipe.Comp.Amount, 1)), ("capacity", pipe.Comp.Capacity)));
+        }
+        args.PushMarkup(Loc.GetString("cmu-fluid-pipe-routing",
+            ("shape", Loc.GetString($"cmu-fluid-shape-{pipe.Comp.Shape.ToString().ToLowerInvariant()}"))));
+        args.PushMarkup(Loc.GetString("cmu-fluid-flow-legend"));
+        if (pipe.Comp.Isolated)
+            args.PushMarkup(Loc.GetString("cmu-fluid-pipe-isolated"));
+        var machines = EntityQueryEnumerator<FluidPortsComponent>();
+        while (machines.MoveNext(out var machine, out var ports))
+        {
+            foreach (var port in ports.Ports)
+            {
+                if (port.Links.Contains(pipe))
+                    args.PushMarkup(Loc.GetString("cmu-fluid-pipe-machine", ("machine", Name(machine)),
+                        ("port", Loc.GetString($"au14-fluid-port-{port.Id}")),
+                        ("direction", Loc.GetString(port.Output ? "cmu-fluid-from-machine" : "cmu-fluid-to-machine"))));
+            }
+        }
     }
 
     private void OnTankExamined(Entity<FluidTankComponent> tank, ref ExaminedEvent args)
@@ -530,6 +589,7 @@ public sealed class FluidSystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
+        args.PushMarkup(Loc.GetString("cmu-fluid-tank-volume", ("amount", Math.Round(tank.Comp.Total, 1)), ("capacity", tank.Comp.Capacity)));
         if (tank.Comp.Contents.Count == 0)
         {
             args.PushMarkup(Loc.GetString("au14-fluid-tank-empty"));
@@ -538,7 +598,31 @@ public sealed class FluidSystem : EntitySystem
 
         foreach (var (kind, amount) in tank.Comp.Contents)
         {
-            args.PushMarkup(Loc.GetString("au14-fluid-tank-examine", ("fluid", Name(kind)), ("amount", (int) amount), ("capacity", (int) tank.Comp.Capacity)));
+            args.PushMarkup(Loc.GetString("au14-fluid-tank-examine", ("fluid", Name(kind)), ("amount", Math.Round(amount, 1))));
         }
+    }
+
+    public string ConnectionPosition(EntityUid machine, EntityUid pipe)
+    {
+        var xform = Transform(machine);
+        if (xform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return Loc.GetString("cmu-fluid-port-unconnected");
+        var offset = _map.TileIndicesFor(gridUid, grid, Transform(pipe).Coordinates) -
+                     _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
+        return Loc.GetString("cmu-fluid-link-position", ("x", offset.X), ("y", offset.Y));
+    }
+
+    private void OnPortsExamined(Entity<FluidPortsComponent> machine, ref ExaminedEvent args)
+    {
+        if (!args.IsInDetailsRange)
+            return;
+        foreach (var port in machine.Comp.Ports)
+        {
+            args.PushMarkup(Loc.GetString("cmu-fluid-port-status",
+                ("port", Loc.GetString($"au14-fluid-port-{port.Id}")),
+                ("direction", Loc.GetString(port.Output ? "au14-fluid-ports-out" : "au14-fluid-ports-in")),
+                ("count", port.Links.Count), ("capacity", port.MaxLinks)));
+        }
+        args.PushMarkup(Loc.GetString("cmu-fluid-connections-hint"));
     }
 }

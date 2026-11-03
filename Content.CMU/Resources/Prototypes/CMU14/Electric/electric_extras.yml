@@ -9,6 +9,10 @@
   name: automatic hydroponics tray
   description: A hydroponics tray with a pump and a tank of its own. Give it water and fertilizer, and power, plant a seed once, and it waters and feeds the plant, harvests it when it is ripe and plants the same one again.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
   - type: NodeContainer
     examinable: true
     nodes:
@@ -28,6 +32,10 @@
     ports:
     - id: liquid_in
       rate: 8
+  - type: UserInterface
+    interfaces:
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
   - type: AutoFeedTray
 
 # ---------------------------------------------------------------- the electric welder
@@ -38,6 +46,10 @@
   name: electric welder
   description: A welding tool that runs on a power cell instead of fuel. Put a charged cell in it and weld. Mind your eyes.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: Objects/Tools/welder.rsi
     color: "#a8c8ff"
@@ -99,6 +111,10 @@
   name: charger
   description: Charges the power cell set in it much faster than the old recharger, as long as it has power.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: NodeContainer
     examinable: true
     nodes:
@@ -123,6 +139,10 @@
   name: battery buffer
   description: A small energy store for the high voltage line. It takes in power when the generators make more than is used and gives it back when they make less. Join it through a cable terminal, as a big SMES is.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Sprite
     color: "#a8c8ff"
   - type: Battery

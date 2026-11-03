@@ -12,6 +12,15 @@
   description: A creature of the Mycelial Confluence.
   components:
   - type: CMUPathogenHiveMember
+  # The overmind is this hive's queen, track it by default
+  - type: HiveTracker
+    mode: Overmind
+    trackerModes:
+    - Queen
+    - HiveLeader
+    - Tunnel
+    - HiveCore
+    - Overmind
   - type: TacticalMapLiveUpdateOnOvi
     enabled: false
   - type: NpcFactionMember # overrides the RMCXeno inherited from the xeno mob base
@@ -67,6 +76,8 @@
       enum.XenoParasiteGhostUI.Key:
         type: XenoParasiteGhostBui
         requireInputValidation: false
+        # Ghost claim prompts must survive the ghost standing inside a wall; the default 2 range closes them.
+        interactionRange: 0
       enum.DialogUiKey.Key:
         type: DialogBui
       enum.BlightCoreUiKey.Vote:

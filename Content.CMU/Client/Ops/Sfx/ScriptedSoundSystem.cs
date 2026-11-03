@@ -29,7 +29,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
     // dozen loop layers; anything past this is a flood, and scripted sound must
     // never be the system that pushes an exhausted OpenAL source budget over.
     private readonly List<EntityUid> _activePlays = new();
-    private const int MaxConcurrentPlays = 48;
+    private const int MaxConcurrentPlays = 24;
 
     // Cap episode bookkeeping: warn once going into a flood, summarize coming out.
     private int? _suppressedPlays;

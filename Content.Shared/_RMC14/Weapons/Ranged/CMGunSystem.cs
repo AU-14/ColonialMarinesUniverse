@@ -495,14 +495,14 @@ public sealed partial class CMGunSystem : EntitySystem
         var session = CompOrNull<ActorComponent>(user)?.PlayerSession;
         if (gunComp.Target.Value == user.Owner)
         {
-            if (gunComp.SelectedMode == SelectiveFire.FullAuto)
-                return;
+            // CMU14: the damage-yourself option is explicit consent, including full-auto self-shots;
+            // without it the old refusals stand
+            var consented = session != null &&
+                _netConfig.GetClientCVar(session.Channel, RMCCVars.RMCDamageYourself);
 
-            if (session != null &&
-                !_netConfig.GetClientCVar(session.Channel, RMCCVars.RMCDamageYourself))
-            {
+            if (!consented &&
+                (session != null || gunComp.SelectedMode == SelectiveFire.FullAuto))
                 return;
-            }
         }
 
         if (!_interaction.InRangeUnobstructed(gun.Owner, gunComp.Target.Value, gun.Comp.Range, user: user))
