@@ -6,9 +6,9 @@
   <Box>
     <GuideEntityEmbed Entity="RUMCSteamGenerator" Caption="GENERATE"/>
     <GuideEntityEmbed Entity="RUMCTransformerDown" Caption="HV → MV"/>
-    <GuideEntityEmbed Entity="RUMCColonyApc" Caption="SUPPLY MACHINES"/>
+    <GuideEntityEmbed Entity="PowerPanel" Caption="ELECTRICAL PANEL"/>
   </Box>
-  [bold]Generator → HV cable → step-down transformer → MV cable → APC/power panel → nearby machines.[/bold] Anchor equipment and connect the matching cable networks. A generator alone does not power every machine in the room.
+  [bold]Generator → HV cable → step-down transformer → MV cable → electrical panel → nearby machines.[/bold] Anchor the electrical panel directly over the MV cable; it supplies powered devices within five tiles. Anchor equipment and connect the matching cable networks. A generator alone does not power every machine in the room.
 
   ## Choose a source
   - [bold]Steam:[/bold] feed steam from your boiler to the generator.
@@ -19,7 +19,7 @@
 
   Cable shafts connect matching voltage networks between Z-levels. Keep HV, MV and LV separate. Use a powered cell charger for removable tool cells.
 
-  [textlink="Cable and APC basics" link="CMUGuideEngPower"] · [textlink="Run a processing machine" link="CMUGuideIndustryMachines"]
+  [textlink="Make an electrical panel" link="CMUGuideIndustryRecipes"] · [textlink="Run a processing machine" link="CMUGuideIndustryMachines"]
 
   ## Turn oil into useful supplies
   <Box>
