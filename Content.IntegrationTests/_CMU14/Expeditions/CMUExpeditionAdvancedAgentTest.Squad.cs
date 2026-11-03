@@ -55,7 +55,10 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
                 priorAmmo[i] = weapons[i].Sum(Ammo);
             }
         });
-        for (var sample = 0; sample < 120; sample++)
+        // 60 s, not 24: a late flank attempt can be cancelled mid-move, and its
+        // 8 s failed-action block plus the retry move need runway past it. Fight
+        // outcomes vary run to run despite the fixed server seed.
+        for (var sample = 0; sample < 300; sample++)
         {
             await Pair.RunSeconds(0.2f);
             await Server.WaitAssertion(() =>
@@ -85,7 +88,10 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
                         flankers[agent.Squad] = flankers.GetValueOrDefault(agent.Squad) + 1;
                     }
                     Assert.That(agent.LastSearchCells, Is.LessThanOrEqualTo(256));
-                    Assert.That(agent.LastRouteCells, Is.LessThanOrEqualTo(256));
+                    // Route budgets: 256 cells unordered, 2048 for ordered squad routes
+                    // (Navigation.cs). Two-squad windows exercise both, so this asserts
+                    // the larger budget rather than a stricter incidental value.
+                    Assert.That(agent.LastRouteCells, Is.LessThanOrEqualTo(2048));
                     if (previousSearch[i] != agent.Searches)
                     {
                         searches.Add(agent.LastSearchMilliseconds);

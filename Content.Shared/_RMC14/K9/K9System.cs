@@ -217,7 +217,8 @@ public sealed partial class K9System : EntitySystem
         if (!target.IsValid() || target == ent.Owner)
             return;
 
-        if (HasComp<XenoComponent>(target))
+        // CMU14: hellhounds are built to drag xenos into the open, marine dogs keep the refusal
+        if (HasComp<XenoComponent>(target) && !ent.Comp.CanGrabXenos)
         {
             args.Handled = true;
             _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-xeno"), ent.Owner, ent.Owner);

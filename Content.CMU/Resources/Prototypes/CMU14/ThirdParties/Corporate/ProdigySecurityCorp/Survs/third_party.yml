@@ -11,6 +11,7 @@
 
 - type: thirdParty
   id: ProdigySurvLarge
+  allegiance: Prodigy
   announceAsSurvivors: true
   displayName: Prodigy Survivors
   partyspawn: ProdigySurvSpawnLarge
@@ -38,6 +39,7 @@
 
 - type: thirdParty
   id: ProdigySurvMedium
+  allegiance: Prodigy
   announceAsSurvivors: true
   displayName: Prodigy Survivors
   partyspawn: ProdigySurvSpawnMedium
@@ -65,6 +67,7 @@
 
 - type: thirdParty
   id: ProdigySurvSmall
+  allegiance: Prodigy
   announceAsSurvivors: true
   displayName: Prodigy Survivors
   partyspawn: ProdigySurvSpawnSmall

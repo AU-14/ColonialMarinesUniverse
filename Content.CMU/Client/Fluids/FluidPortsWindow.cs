@@ -9,39 +9,59 @@ using Robust.Client.UserInterface.CustomControls;
 
 namespace Content.Client.CMU14.Fluids;
 
-// Asks which port of a machine the pipe in hand is to be joined to, as the configurator does with the links of devices:
-// every port of the machine is a button, and one that the pipe is joined to already lets it go.
+// Shows machine flow directions and individual links independently of each viewer's selected pipe.
 public sealed class FluidPortsWindow : DefaultWindow
 {
     private readonly BoxContainer _list = MachineWindowKit.Column(4);
 
     public event Action<string>? OnPortChosen;
+    public event Action<string, NetEntity>? OnDisconnect;
 
     public FluidPortsWindow()
     {
         Title = Loc.GetString("au14-fluid-ports-title");
-        MinSize = new Vector2(280, 120);
-        Contents.AddChild(_list);
+        MinSize = new Vector2(460, 260);
+        Contents.AddChild(new ScrollContainer { Children = { _list } });
     }
 
     public void Update(FluidPortsBoundUserInterfaceState state)
     {
         _list.RemoveAllChildren();
-        _list.AddChild(new Label { Text = Loc.GetString("au14-fluid-ports-hint"), FontColorOverride = MachineWindowKit.SectionTitle });
+        var hint = new RichTextLabel();
+        hint.SetMessage(Loc.GetString("au14-fluid-ports-hint") + "\n" + Loc.GetString("cmu-fluid-flow-legend"));
+        _list.AddChild(hint);
 
         foreach (var entry in state.Ports)
         {
             var name = Loc.GetString($"au14-fluid-port-{entry.Id}");
             var way = Loc.GetString(entry.Output ? "au14-fluid-ports-out" : "au14-fluid-ports-in");
-            var text = entry.Kind.Length > 0 ? $"{name} ({way}, {entry.Kind})" : $"{name} ({way})";
-
-            if (entry.Joined)
-                text += " - " + Loc.GetString("au14-fluid-ports-joined");
-            else if (entry.Links > 0)
-                text += " - " + Loc.GetString("au14-fluid-ports-taken");
-
-            var button = new Button { Text = text, HorizontalExpand = true };
+            _list.AddChild(new Label
+            {
+                Text = Loc.GetString("cmu-fluid-port-heading", ("port", name), ("direction", way), ("fluid", entry.Kind)),
+                FontColorOverride = entry.Output ? CMUFluidPipeFlowOverlay.OutputColor : CMUFluidPipeFlowOverlay.InputColor,
+            });
             var id = entry.Id;
+            foreach (var link in entry.Links)
+            {
+                var row = MachineWindowKit.Row(4);
+                row.AddChild(new Label
+                {
+                    Text = Loc.GetString("cmu-fluid-port-link", ("pipe", link.Name), ("position", link.Position)),
+                    HorizontalExpand = true,
+                });
+                var disconnect = new Button { Text = Loc.GetString("cmu-fluid-disconnect") };
+                disconnect.OnPressed += _ => OnDisconnect?.Invoke(id, link.Pipe);
+                row.AddChild(disconnect);
+                _list.AddChild(row);
+            }
+            if (entry.Links.Count == 0)
+                _list.AddChild(new Label { Text = Loc.GetString("cmu-fluid-port-unconnected") });
+            var button = new Button
+            {
+                Text = Loc.GetString("cmu-fluid-connect-selected"),
+                Disabled = entry.Links.Count >= entry.MaxLinks,
+                HorizontalExpand = true,
+            };
             button.OnPressed += _ => OnPortChosen?.Invoke(id);
             _list.AddChild(button);
         }

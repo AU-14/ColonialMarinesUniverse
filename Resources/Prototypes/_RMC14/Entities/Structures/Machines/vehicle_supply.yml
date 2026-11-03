@@ -188,6 +188,10 @@
       - VehicleSPPAPCAutocannon
       - VehicleSPPAPCHJ35Launcher
       - VehicleSPPAPCFlareLauncher
+      # CMU14: generic APC support modules; the UPP APC has no branded variants,
+      # and its support slot accepts them now that the slot compat gate is lifted
+      - RMCAPCCommsRelay
+      - RMCAPCFreightStorage
 
     # CMU14: Wolfpack MGS. Entry and option names come from the localized prototype names;
     # the hardpoint list holds only parts with art in the Wolfpack RSI.

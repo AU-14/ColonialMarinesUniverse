@@ -1,0 +1,42 @@
+<Document>
+  # Pipes: connect, rotate, fix
+
+  [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Equipment recipes" link="CMUGuideIndustryRecipes"]
+
+  <Box>
+    <GuideEntityEmbed Entity="RUMCBrassPipe" Caption="LIQUID PIPE"/>
+    <GuideEntityEmbed Entity="CMScrewdriver" Caption="CHOOSE PORT"/>
+    <GuideEntityEmbed Entity="RUMCOilBarrel" Caption="STORE / SELL"/>
+  </Box>
+  [bold]Source OUTPUT → pipe run → destination INPUT.[/bold]
+
+  ## Four steps to connect — OOC
+  1. Place the machines. Place and wrench pipes down so they touch, with no gaps.
+  2. Right-click a pipe → [bold]Pipe shape[/bold]: Straight, Elbow, T-junction or Cross. Use [bold]Rotate[/bold] to point its open ends toward the next piece. Touching open ends connect automatically.
+  3. Hold a [bold]screwdriver[/bold]. Click the pipe beside the source, then the source machine. Under [bold]OUTPUT[/bold], press [bold]Connect selected pipe[/bold].
+  4. Select the pipe beside the destination with the screwdriver, then click the destination. Connect it under [bold]INPUT[/bold].
+
+  [bold]INPUT = into this machine. OUTPUT = out of this machine.[/bold] A pipe may sit on the machine's tile or touch its footprint. A pipe cannot jump a gap, connect diagonally or reach across the room.
+
+  ## See what is connected
+  [bold]Blue arrows = INTO the machine. Amber arrows = OUT.[/bold] These markers sit on connected pipe ends and remain visible while idle, so you can check the route before starting production.
+
+  Right-click any machine → [bold]Pipe connections[/bold]. Each port lists its pipes and their tile offsets: +X east, +Y north. Hold a screwdriver and press [bold]Disconnect[/bold] beside the link you want to remove. Reconnect that pipe to the correct port.
+
+  [bold]Tanks beside tanks do NOT connect.[/bold] Connect one tank's OUTPUT to the other tank's INPUT through pipes. Keep different liquids on separate pipe runs; one pipe carries one liquid at a time.
+
+  ## Wrong liquid or no flow?
+  - [bold]Wrong port:[/bold] open Pipe connections → Disconnect → choose the right INPUT/OUTPUT.
+  - [bold]Wrong liquid in a pipe:[/bold] disconnect its source, then right-click each affected pipe → Drain pipe. This discards its contents.
+  - [bold]No flow:[/bold] check anchors, open ends, port connections and room in the destination. Isolated pipes need [bold]Connect back[/bold].
+  - [bold]Going down:[/bold] use a down-pipe over an anchored pipe at the same position on the level below.
+
+  ## Move or empty a barrel
+  Right-click → [bold]Pick up[/bold] with both hands free. Click a clear nearby floor tile to place it. Dropping it keeps it heavy when dragged; machinery cannot be thrown.
+
+  Hold a canister and right-click the barrel → [bold]Draw the liquid into the container[/bold]. Click a tank with a filled canister to pour it in. Examine shows units stored and total capacity.
+
+  [bold]Steam uses gas pipes.[/bold] These liquid pipes carry water, oil and other reagents; they do not carry the boiler's atmospheric steam.
+
+  [textlink="Make diesel" link="CMUGuideIndustryElectric"] · [textlink="Sell your goods" link="CMUGuideIndustryProducts"]
+</Document>

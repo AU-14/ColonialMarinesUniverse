@@ -16,6 +16,7 @@ public sealed class CMUPlaytimeLeaderboardEui : BaseEui
 
         _window = new CMUPlaytimeLeaderboardWindow();
         _window.OnRefresh += OnRefresh;
+        _window.OnSetHidden += OnSetHidden;
         _window.OnClose += () => SendMessage(new CloseEuiMessage());
         _window.OpenCentered();
     }
@@ -25,7 +26,10 @@ public sealed class CMUPlaytimeLeaderboardEui : BaseEui
         base.Closed();
 
         if (_window != null)
+        {
             _window.OnRefresh -= OnRefresh;
+            _window.OnSetHidden -= OnSetHidden;
+        }
 
         _window?.Close();
         _window = null;
@@ -42,5 +46,10 @@ public sealed class CMUPlaytimeLeaderboardEui : BaseEui
     private void OnRefresh()
     {
         SendMessage(new CMUPlaytimeLeaderboardRefreshMsg());
+    }
+
+    private void OnSetHidden(bool hidden)
+    {
+        SendMessage(new CMUPlaytimeLeaderboardSetHiddenMsg(hidden));
     }
 }
