@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 using Robust.Shared.GameStates;
+using Robust.Shared.Maths;
 
 namespace Content.Shared.CMU14.Fluids;
 
@@ -44,6 +45,10 @@ public sealed partial class FluidTankComponent : Component
 [RegisterComponent]
 public sealed partial class FluidPipeComponent : Component
 {
+    /// <summary>Open ends before the entity's rotation, using north/east/south/west bits.</summary>
+    [DataField]
+    public CMUFluidPipeShape Shape = CMUFluidPipeShape.Straight;
+
     // The reagent in the pipe; null while it is empty.
     [DataField]
     public string? Kind;
@@ -66,15 +71,11 @@ public sealed partial class FluidPipeComponent : Component
     [ViewVariables]
     public float Amount;
 
-    // The pipes it was linked to with a screwdriver, besides the ones it touches.
-    [ViewVariables]
-    public List<EntityUid> Links = new();
-
     // The pipes next to it, found again whenever a pipe is built or taken away.
     [ViewVariables]
     public List<EntityUid> Neighbours = new();
 
-    // The sides it is joined on, as it is shown to the clients (-1 until it has been worked out).
+    // Open ends shown to clients (-1 until first computed).
     [ViewVariables]
     public int Look = -1;
 }
@@ -86,7 +87,23 @@ public sealed partial class FluidPortsComponent : Component
 {
     [DataField]
     public List<FluidPort> Ports = new();
+
+    /// <summary>Occupied tiles relative to the machine. Pipes must touch one of these tiles.</summary>
+    [DataField]
+    public List<Vector2i> ConnectionTiles = new() { Vector2i.Zero };
 }
+
+public enum CMUFluidPipeShape : byte
+{
+    Straight = 5,
+    Elbow = 3,
+    Tee = 11,
+    Cross = 15,
+}
+
+/// <summary>Refreshes connection displays after a link is added, removed or invalidated.</summary>
+[ByRefEvent]
+public readonly record struct CMUFluidConnectionsChangedEvent;
 
 [DataDefinition]
 public sealed partial class FluidPort
