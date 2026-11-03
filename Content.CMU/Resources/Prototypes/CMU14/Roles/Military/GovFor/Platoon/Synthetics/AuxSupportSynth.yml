@@ -82,6 +82,7 @@
         RMCSkillIntel: 2
         RMCSkillDomestics: 2
         RMCSkillNavigations: 1
+        CMUSkillATGM: 1
     UPP:
     - type: Skills
       skills:
@@ -104,6 +105,7 @@
         RMCSkillIntel: 2
         RMCSkillDomestics: 2
         RMCSkillNavigations: 1
+        CMUSkillATGM: 1
 
   requirements:
   - !type:TraitsRequirement
