@@ -51,7 +51,7 @@ public sealed partial class ForceOnForceUniformSystem : EntitySystem
 
         if (targetSide == null)
         {
-            // An unaffiliated party stays unknown even in a recognized uniform.
+            // A recognized uniform identifies an unaffiliated party; unrecognized stays unknown.
             return RecognizesUniform(policy, target)
                 ? ForceOnForceIdentification.None
                 : ForceOnForceIdentification.Unknown;

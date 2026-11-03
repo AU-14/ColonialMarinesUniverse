@@ -126,7 +126,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
     /// <param name="entity">Entity to load out.</param>
     /// <param name="startingGear">Starting gear to use.</param>
     /// <param name="raiseEvent">Should we raise the event for equipped. Set to false if you will call this manually</param>
-    /// <param name="keepOnFail">CMU14: on a failed slot equip, hold the item in a free hand or leave it at the entity's feet instead of deleting it. Job gear keeps the default so a loadout selection that already filled the slot does not leave a spare.</param>
+    /// <param name="keepOnFail">CMU14: on a failed slot equip, hold the item in a free hand instead of deleting it; with no free hand it is deleted. Job gear keeps the default so a loadout selection that already filled the slot does not leave a spare.</param>
     public void EquipStartingGear(EntityUid entity, IEquipmentLoadout? startingGear, bool raiseEvent = true, bool keepOnFail = false) // CMU14: keepOnFail
     {
         if (startingGear == null)

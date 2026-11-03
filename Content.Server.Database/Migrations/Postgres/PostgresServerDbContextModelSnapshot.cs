@@ -1289,6 +1289,7 @@ namespace Content.Server.Database.Migrations.Postgres
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    // CMU14: playtime leaderboard opt-out column
                     b.Property<bool>("CMUPlaytimeHidden")
                         .HasColumnType("boolean")
                         .HasColumnName("cmu_playtime_hidden");
