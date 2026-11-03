@@ -125,6 +125,8 @@
           tags:
           - RMCMagazineM2C
           - AU14MagazineM2CTracter
+          - CMUGunshipMagazineM2C # CMU14
+  - type: GunshipHardpointAutoload # CMU14
 
 # Magazines
 - type: entity

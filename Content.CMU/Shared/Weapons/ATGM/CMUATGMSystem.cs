@@ -343,11 +343,20 @@ public sealed partial class CMUATGMSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Whether the tripod is anchored and unfolded.
+    ///     Whether the tripod is unfolded and anchored, or, when <see cref="CMUATGMMountComponent.RequireAnchored"/>
+    ///     is off, unfolded and out of storage.
     /// </summary>
     public bool IsDeployed(EntityUid mount)
     {
-        return Transform(mount).Anchored && !_foldable.IsFolded(mount);
+        if (TryComp(mount, out FoldableComponent? foldable) && _foldable.IsFolded(mount, foldable))
+            return false;
+
+        if (Transform(mount).Anchored)
+            return true;
+
+        return TryComp(mount, out CMUATGMMountComponent? atgm) &&
+               !atgm.RequireAnchored &&
+               !_container.IsEntityInContainer(mount);
     }
 
     /// <summary>

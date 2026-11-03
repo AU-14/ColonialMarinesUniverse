@@ -99,6 +99,7 @@
   - type: Physics # CMU14: empty fixtures make init disable collision; declared so saves match
     canCollide: false
   - type: WeaponMount
+    fixedWeaponPrototype: CMUSmartGunMountedDropship # CMU14: takes gunship hardpoint drums and autoloads from the ammo rack
     occupiedDrawDepth: Overdoors
     emptyDrawDepth: Overdoors
 

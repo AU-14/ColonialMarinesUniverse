@@ -16,6 +16,8 @@ public sealed partial class GunshipHardpointAttachmentPointComponent : Component
     {
         "RMCDropshipAttachmentDoorGun",
         "CMUDropshipAttachmentDoorGunM2C",
+        "CMUDropshipAttachmentDoorGunMk86",
+        "CMUDropshipAttachmentDoorGunATGM",
     };
 }
 
@@ -31,6 +33,7 @@ public sealed partial class GunshipUtilityAttachmentPointComponent : Component
     {
         "CMUDropshipAttachmentEEXRappelSystem",
         "RMCDropshipAttachmentLaunchBay",
+        "CMUDropshipAttachmentAmmoRack",
     };
 }
 
