@@ -1,0 +1,140 @@
+# Thin cable runs, cm-ss13 look. The RMC thin cables (RMCCableBlue/Red/Yellow)
+# were HV terminals in disguise and are decorative now; these are honestly rated.
+# The thin sprite has one state per color, no junction states: lay straight runs
+# and rotate segments, a junction renders as a plain segment.
+# Color per voltage: HV red, MV yellow, LV blue. All draw below floor, subfloor
+# hidden like every cable.
+
+- type: entity
+  abstract: true
+  id: CMUCableThinDecorative
+  name: power cable
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: BelowFloor
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Visibility
+    layer: 1
+  - type: Appearance
+  - type: SubFloorHide
+    blockAmbience: false
+    blockInteractions: false
+  - type: CollideOnAnchor
+
+- type: entity
+  abstract: true
+  parent: CableBase
+  id: CMUCableThinBase
+  suffix: CMU
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Power/cables_thin.rsi
+    drawdepth: BelowFloor
+  - type: Icon
+    sprite: _RMC14/Structures/Power/cables_thin.rsi
+
+# ├──[ HV ]──────────────────────────────────────────────────────────┤
+- type: entity
+  parent: CMUCableThinBase
+  id: CMUCableThinHV
+  name: thin HV power cable
+  description: A thin high voltage power cable. Just as lethal, half the footprint.
+  components:
+  - type: Sprite
+    state: intactred
+  - type: Icon
+    state: intactred
+  - type: NodeContainer
+    nodes:
+      power:
+        !type:CableNode
+        nodeGroupID: HVPower
+  - type: Cable
+    cableDroppedOnCutPrototype: CableHVStack1
+    cableType: HighVoltage
+  - type: Destructible
+    thresholds:
+    - trigger: &CMUThinCableDamage
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/cig_snuff.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CableHVStack1:
+            min: 1
+            max: 1
+
+# ├──[ MV ]──────────────────────────────────────────────────────────┤
+- type: entity
+  parent: CMUCableThinBase
+  id: CMUCableThinMV
+  name: thin MV power cable
+  description: A thin medium voltage power cable.
+  components:
+  - type: Sprite
+    state: intactyellow
+  - type: Icon
+    state: intactyellow
+  - type: NodeContainer
+    nodes:
+      power:
+        !type:CableNode
+        nodeGroupID: MVPower
+  - type: Cable
+    cableDroppedOnCutPrototype: CableMVStack1
+    cableType: MediumVoltage
+  - type: Destructible
+    thresholds:
+    - trigger: *CMUThinCableDamage
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/cig_snuff.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CableMVStack1:
+            min: 1
+            max: 1
+
+# ├──[ LV ]──────────────────────────────────────────────────────────┤
+- type: entity
+  parent: CMUCableThinBase
+  id: CMUCableThinLV
+  name: thin LV power cable
+  description: A thin cable used to connect machines to an APC.
+  components:
+  - type: Sprite
+    state: intactblue
+  - type: Icon
+    state: intactblue
+  - type: NodeContainer
+    nodes:
+      power:
+        !type:CableNode
+        nodeGroupID: Apc
+  - type: PowerProvider
+    voltage: Apc
+  - type: ExtensionCableProvider
+  - type: Cable
+    cableDroppedOnCutPrototype: CableApcStack1
+    cableType: Apc
+  - type: Destructible
+    thresholds:
+    - trigger: *CMUThinCableDamage
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/cig_snuff.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CableApcStack1:
+            min: 1
+            max: 1

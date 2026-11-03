@@ -13,6 +13,7 @@
 
 - type: thirdParty
   id: UPPGROMRRUSquad
+  allegiance: UPP
   displayName: GROM Rapid-Response-Unit Squad
   partyspawn: UPPGROMRRUSquadSpawn
   entrymethod: shuttle
@@ -36,6 +37,7 @@
 
 - type: thirdParty
   id: UPPGROMRRUTeam
+  allegiance: UPP
   displayName: GROM Rapid-Response-Unit Team
   partyspawn: UPPGROMRRUTeamSpawn
   entrymethod: shuttle

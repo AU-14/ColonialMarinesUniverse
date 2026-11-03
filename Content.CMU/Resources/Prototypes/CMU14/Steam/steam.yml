@@ -8,6 +8,15 @@
   parent: CMBaseStructure
   id: RUMCSteamMachineBase
   components:
+  - type: UserInterface
+    interfaces:
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustrySteam
+    - CMUGuideIndustryPipes
+    - CMUGuideIndustry
   - type: PortableStructure
   - type: Damageable
   - type: Injurable
@@ -37,6 +46,7 @@
   components:
   - type: GuideHelp
     guides:
+    - CMUGuideIndustryPipes
     - CMUGuideIndustrySteam
     - CMUGuideIndustry
   - type: Transform
@@ -51,6 +61,9 @@
   - type: CollideOnAnchor
   - type: Appearance
   - type: FluidPipe
+  - type: Rotatable
+    rotateWhileAnchored: true
+    rotateWhilePulling: false
   # A pipe that a wrench has taken off the floor is carried in the hand or in a bag, as a gas pipe is, and is anchored again where it is wanted.
   - type: Item
     size: Normal
@@ -66,8 +79,11 @@
     drawdepth: FloorObjects
     sprite: CMU14/Production/Steam/pipes_brass.rsi
     layers:
-    - state: c0
+    - state: c5
       map: [ "pipe" ]
+    - state: down_n
+      map: [ "down" ]
+      visible: false
 
 - type: entity
   parent: RUMCFluidPipeBase
@@ -80,8 +96,11 @@
     drawdepth: FloorObjects
     sprite: CMU14/Production/Steam/pipes_steel.rsi
     layers:
-    - state: c0
+    - state: c5
       map: [ "pipe" ]
+    - state: down_n
+      map: [ "down" ]
+      visible: false
 
 - type: entity
   parent: RUMCBrassPipe

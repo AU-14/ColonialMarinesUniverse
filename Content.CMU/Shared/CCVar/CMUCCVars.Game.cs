@@ -13,11 +13,34 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.fof.unidentified_marker_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
+    /// Server-wide switch for FoF identification markers above heads. Replicated so admins can
+    /// disable the whole system mid-round; the per-client preference still applies on top.
+    /// </summary>
+    public static readonly CVarDef<bool> ForceOnForceIdentificationMarkersEnabled =
+        CVarDef.Create("cmu.fof.identification_markers_enabled", true, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
     /// Whether each round start rewrites the server name to "name | gamemode day Playtest". Off leaves game.hostname as set.
     /// </summary>
     public static readonly CVarDef<bool> CMUHostnameRoundSuffix =
         CVarDef.Create("cmu.game.hostname_round_suffix", false, CVar.SERVERONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// Force on Force round time limit in minutes; 0 uses the FoFTimeLimitRule prototype value.
+    /// </summary>
+    public static readonly CVarDef<int> FoFTimeLimitMinutes =
+        CVarDef.Create("cmu.fof.time_limit_minutes", 0, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Hotspot hold-ticks one force needs to win Force on Force outright; 0 disables win-by-holding.
+    /// </summary>
+    public static readonly CVarDef<int> FoFHotspotTicksToWin =
+        CVarDef.Create("cmu.fof.hotspot_ticks_to_win", 0, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Master switch for the evac destruct show: MU/TH/UR narration, sirens, the Delta alert and the scuttle itself.
+    /// Off, evacuation still runs but no self-destruct sequence ever arms.
+    /// </summary>
     public static readonly CVarDef<bool> EnableEvacSfx =
         CVarDef.Create("cmu.game.enable_evac_sfx", false, CVar.SERVERONLY | CVar.ARCHIVE);
 

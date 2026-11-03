@@ -9,6 +9,7 @@ cmu-vehicle-seat-verb = Sit in the {$seat}
 cmu-vehicle-seat-lie-verb = Lie on the {$seat}
 cmu-vehicle-seat-exit-verb = Get out
 cmu-vehicle-seat-none-free = There's no free seat.
+cmu-vehicle-repair-while-riding = Not while you're riding in it. Get out first.
 
 cmu-jeep-part-hood = hood
 cmu-jeep-part-windshield = windshield
