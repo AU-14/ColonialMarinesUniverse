@@ -438,6 +438,8 @@ public sealed class YautjaFalconRuntimeTest
 
             mapSystem.SetTile(lowerMap.Grid.Owner, lowerMap.Grid.Comp, new Vector2i(1, 0), lowerMap.Tile.Tile);
             var ladderCoordinates = lowerMap.GridCoords.Offset(Vector2.UnitX);
+            // The ladder must have a supported landing on the destination level.
+            mapSystem.SetTile(upperMap.Grid.Owner, upperMap.Grid.Comp, new Vector2i(1, 0), upperMap.Tile.Tile);
             var ladder = entMan.SpawnEntity(null, ladderCoordinates);
             var ladderComp = entMan.EnsureComponent<CMUZLevelLadderComponent>(ladder);
             ladderComp.Offset = 1;
