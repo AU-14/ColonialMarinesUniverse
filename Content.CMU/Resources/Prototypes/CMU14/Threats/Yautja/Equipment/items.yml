@@ -709,11 +709,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
     state: falcon_drone
   - type: Item
     size: Small
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
   - type: Fixtures
     fixtures:
       fix1:
@@ -732,6 +732,8 @@
   components:
   - type: Sprite
     state: falcon_drone_badblood
+  - type: Clothing
+    equippedPrefix: badblood
   - type: YautjaFalconDrone
     deployedPrototype: CMUYautjaFalconDroneBadBloodDeployed
 
@@ -743,11 +745,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
     state: falcon_drone_destroyed
   - type: Item
     size: Small
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
   - type: Fixtures
     fixtures:
       fix1:
@@ -777,7 +779,7 @@
   - type: Sprite
     drawdepth: OverMobs
     scale: 0.8, 0.8
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
     layers:
     - state: falcon_drone_active
       map: ["enum.YautjaFalconVisualLayers.Base"]
@@ -816,7 +818,7 @@
   components:
   - type: Sprite
     drawdepth: OverMobs
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
     layers:
     - state: falcon_drone_badblood_active
       map: ["enum.YautjaFalconVisualLayers.Base"]

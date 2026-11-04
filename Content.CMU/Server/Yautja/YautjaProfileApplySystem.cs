@@ -54,6 +54,9 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         ["CMUYautjaCapeQuarter"] = "back",
         ["CMUYautjaCapePoncho"] = "back",
         ["CMUYautjaCapeDamaged"] = "back",
+        ["CMUYautjaCapeBoneFull"] = "back",
+        ["CMUYautjaCapeBoneThird"] = "back",
+        ["CMUYautjaCapeBoneCeremonial"] = "back",
     };
 
     public override void Initialize()
@@ -252,6 +255,9 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
             case "CMUYautjaCapeQuarter":
             case "CMUYautjaCapePoncho":
             case "CMUYautjaCapeDamaged":
+            case "CMUYautjaCapeBoneFull":
+            case "CMUYautjaCapeBoneThird":
+            case "CMUYautjaCapeBoneCeremonial":
                 ApplyVendedCapeColor(ent, slot, profile, args.Item);
                 return;
             default:
@@ -331,7 +337,10 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
     private void ApplyCapeColor(EntityUid cape, YautjaCharacterProfile profile)
     {
         var capeComp = EnsureComp<YautjaCapeComponent>(cape);
-        capeComp.Color = YautjaCharacterProfile.Default.CapeColor;
+        if (!capeComp.Recolorable)
+            return;
+
+        capeComp.Color = profile.CapeColor;
         Dirty(cape, capeComp);
     }
 

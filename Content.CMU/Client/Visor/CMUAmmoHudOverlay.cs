@@ -30,6 +30,12 @@ public sealed class CMUAmmoHudOverlay : Overlay
     private const int Margin = 12;
     private const int AlertGap = 4;
 
+    private static readonly SpriteSpecifier.Rsi Background = new(Rsi, "ammo");
+    private static readonly SpriteSpecifier.Rsi EmptyDigit = new(Rsi, "o0_flash");
+    private static readonly SpriteSpecifier.Rsi[] Ones = CreateDigits("o");
+    private static readonly SpriteSpecifier.Rsi[] Tens = CreateDigits("t");
+    private static readonly SpriteSpecifier.Rsi[] Hundreds = CreateDigits("h");
+
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IPlayerManager _player = default!;
@@ -43,10 +49,10 @@ public sealed class CMUAmmoHudOverlay : Overlay
 
     // Which icon a gun prototype gets never changes, so work it out once.
     private readonly Dictionary<string, string> _typeCache = new();
-
+    private readonly Dictionary<string, (SpriteSpecifier.Rsi Loaded, SpriteSpecifier.Rsi Empty)> _typeIcons = new();
     private readonly List<SpriteSpecifier.Rsi> _layers = new(5);
-    private int _lastRounds = -1;
-    private string? _lastType;
+    private string? _displayedType;
+    private int _displayedRounds = -1;
 
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
 
@@ -87,46 +93,55 @@ public sealed class CMUAmmoHudOverlay : Overlay
         _entity.EventBus.RaiseLocalEvent(held, ref ev);
         var rounds = Math.Clamp(ev.Count, 0, 999);
 
-        UpdateLayers(rounds, GetAmmoType(held));
-        var box = GetBox(args.ViewportBounds);
+        var type = GetAmmoType(held);
+        if (rounds != _displayedRounds || type != _displayedType)
+            UpdateLayers(type, rounds);
 
-        // Keep sampling animated states every frame, even when the layer selection is unchanged.
+        var box = GetBox(args.ViewportBounds);
         var time = _timing.CurTime;
-        foreach (var layer in _layers)
+        foreach (var icon in _layers)
         {
-            var texture = _sprite.GetFrame(layer, time);
+            // Descriptors are stable, but empty-ammo icons must keep animating.
+            var texture = _sprite.GetFrame(icon, time);
             args.ScreenHandle.DrawTextureRect(texture, box);
         }
     }
 
-    private void UpdateLayers(int rounds, string type)
+    private void UpdateLayers(string type, int rounds)
     {
-        if (_lastRounds == rounds && _lastType == type)
-            return;
+        if (!_typeIcons.TryGetValue(type, out var icons))
+        {
+            icons = (new SpriteSpecifier.Rsi(Rsi, type), new SpriteSpecifier.Rsi(Rsi, EmptyState(type)));
+            _typeIcons.Add(type, icons);
+        }
 
-        _lastRounds = rounds;
-        _lastType = type;
         _layers.Clear();
-        AddLayer("ammo");
+        _layers.Add(Background);
         if (rounds == 0)
         {
-            AddLayer(EmptyState(type));
-            AddLayer("o0_flash");
+            _layers.Add(icons.Empty);
+            _layers.Add(EmptyDigit);
         }
         else
         {
-            AddLayer(type);
-            AddLayer("o" + (rounds % 10));
+            _layers.Add(icons.Loaded);
+            _layers.Add(Ones[rounds % 10]);
             if (rounds >= 10)
-                AddLayer("t" + (rounds / 10 % 10));
+                _layers.Add(Tens[rounds / 10 % 10]);
             if (rounds >= 100)
-                AddLayer("h" + (rounds / 100));
+                _layers.Add(Hundreds[rounds / 100]);
         }
+
+        _displayedType = type;
+        _displayedRounds = rounds;
     }
 
-    private void AddLayer(string state)
+    private static SpriteSpecifier.Rsi[] CreateDigits(string prefix)
     {
-        _layers.Add(new SpriteSpecifier.Rsi(Rsi, state));
+        var digits = new SpriteSpecifier.Rsi[10];
+        for (var i = 0; i < digits.Length; i++)
+            digits[i] = new SpriteSpecifier.Rsi(Rsi, $"{prefix}{i}");
+        return digits;
     }
 
     /// <summary>

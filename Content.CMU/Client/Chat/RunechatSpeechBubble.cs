@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Numerics;
 using System.Text;
+using Content.Client.CMU14.Overlays;
 using Content.Client.Resources;
 using Content.Shared.CMU14.Chat;
 using Content.Shared._RMC14.Language.Prototypes;
@@ -787,6 +788,12 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         private readonly Font _regularFont;
         private readonly Font _italicFont;
 
+        private readonly CMUCachedDrawing _drawing;
+        private int _drawnPage = -1;
+        private float _drawnScale;
+        private float _drawnOpacity;
+        private Color _drawnModulate;
+        private Vector2i _drawnSize;
         private readonly List<RunechatPageLayout> _layouts = new();
         private Vector2 _cachedSize;
         private bool _layoutDirty = true;
@@ -808,6 +815,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                      Math.Clamp(_configManager.GetCVar(CCVars.ChatRunechatBubbleScale), MinimumRunechatScale, MaximumRunechatScale);
 
             var fontSize = style.GetScaledFontSize(_scale);
+            _drawing = new CMUCachedDrawing(IoCManager.Resolve<IClyde>(), IoCManager.Resolve<IPrototypeManager>());
             _regularFont = LoadRunechatFont(fontSize, false);
             _italicFont = LoadRunechatFont(fontSize, true);
         }
@@ -835,7 +843,58 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             return _cachedSize;
         }
 
-        protected override void Draw(DrawingHandleScreen handle)
+        protected override void ExitedTree()
+        {
+            _drawing.Dispose();
+            base.ExitedTree();
+        }
+
+        protected override void Draw(IRenderHandle render)
+        {
+            if (_pages.Count == 0)
+                return;
+
+            EnsureLayout();
+            var handle = render.DrawingHandleScreen;
+            var size = PixelSize;
+            // Bound each bubble's texture. Unusually large UI scales retain the direct drawing path.
+            if (size.X <= 0 || size.Y <= 0 || size.X > 2048 || size.Y > 2048 || (long) size.X * size.Y > 1048576)
+            {
+                _drawing.Dispose();
+                DrawText(handle, animate: true);
+                return;
+            }
+
+            var opacity = _configManager.GetCVar(CCVars.SpeechBubbleTextOpacity);
+            if (_drawing.Texture == null || _drawnPage != _currentPage || _drawnScale != UIScale ||
+                _drawnSize != size || _drawnOpacity != opacity || _drawnModulate != handle.Modulate)
+            {
+                // Bake the original halo/stroke passes, including their alpha overlap. Parent fades
+                // invalidate the snapshot; the steady part of a bubble's lifetime is one texture draw.
+                _drawing.Update(render, size, handle.Modulate, cached => DrawText(cached, animate: false));
+                _drawnPage = _currentPage;
+                _drawnScale = UIScale;
+                _drawnSize = size;
+                _drawnOpacity = opacity;
+                _drawnModulate = handle.Modulate;
+            }
+
+            var modulate = handle.Modulate;
+            var shader = handle.GetShader();
+            try
+            {
+                handle.Modulate = Color.White;
+                handle.UseShader(_drawing.Shader);
+                handle.DrawTexture(_drawing.Texture!, new Vector2(GetPanicShakeOffset(), 0));
+            }
+            finally
+            {
+                handle.Modulate = modulate;
+                handle.UseShader(shader);
+            }
+        }
+
+        private void DrawText(DrawingHandleScreen handle, bool animate)
         {
             base.Draw(handle);
 
@@ -849,7 +908,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             var textColor = _color.WithAlpha(_color.A * textOpacity);
             var lineHeight = GetLineHeight();
             var y = (PixelSize.Y - layout.Height) / 2f;
-            var shakeOffset = GetPanicShakeOffset();
+            var shakeOffset = animate ? GetPanicShakeOffset() : 0f;
 
             for (var i = 0; i < layout.Lines.Count; i++)
             {

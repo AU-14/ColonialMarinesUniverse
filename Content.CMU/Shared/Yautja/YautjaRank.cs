@@ -99,31 +99,40 @@ public sealed class YautjaProfileCapabilities
     public bool CanUseCape(YautjaCapeStyle style)
     {
         return Enum.IsDefined(style) &&
-               (style != YautjaCapeStyle.Ceremonial ||
+               (style is not (YautjaCapeStyle.Ceremonial or YautjaCapeStyle.BoneCeremonial) ||
                 Rank is YautjaRank.Leader or YautjaRank.Ancient);
     }
 
+    /// <summary>
+    /// Sets are split between the legacy whitelist and clan leader and above (Leader, Ancient). Elites and elders
+    /// get none; this is a CMU rule, cmss13 opens elite sets from Elite rank.
+    /// </summary>
+    public bool CanUseSetLock(YautjaSetLock setLock)
+    {
+        return setLock switch
+        {
+            YautjaSetLock.LegacyWhitelist => CanUseLegacy,
+            YautjaSetLock.ClanLeader => CanUseUnique,
+            _ => false,
+        };
+    }
+
+    public bool CanUseUniqueSet(YautjaUniqueSet unique)
+    {
+        return Enum.IsDefined(unique) &&
+               (unique == YautjaUniqueSet.None || CanUseSetLock(YautjaCharacterProfile.GetSetLock(unique)));
+    }
+
+    // Every bracer skin is open to everyone.
     public bool CanUseBracer(YautjaBracerMaterial material)
     {
-        if (!Enum.IsDefined(material))
-            return false;
-
-        return material switch
-        {
-            YautjaBracerMaterial.Bronze or
-            YautjaBracerMaterial.Crimson or
-            YautjaBracerMaterial.Bone => Rank >= YautjaRank.Elite,
-            YautjaBracerMaterial.Dragon or
-            YautjaBracerMaterial.Swamp or
-            YautjaBracerMaterial.Enforcer or
-            YautjaBracerMaterial.Collector => CanUseLegacy,
-            _ => true,
-        };
+        return Enum.IsDefined(material);
     }
 
     public bool CanUseLegacySet(YautjaLegacySet legacy)
     {
-        return Enum.IsDefined(legacy) && (legacy == YautjaLegacySet.None || CanUseLegacy);
+        return Enum.IsDefined(legacy) &&
+               (legacy == YautjaLegacySet.None || CanUseSetLock(YautjaCharacterProfile.GetSetLock(legacy)));
     }
 
     public static YautjaProfileCapabilities Default =>
@@ -185,8 +194,8 @@ public static class YautjaRankMetadata
             YautjaRank.Unblooded => new YautjaRankInfo("cmu-yautja-rank-unblooded", "predhud", SecureAccess, false, false),
             YautjaRank.YoungBlood => new YautjaRankInfo("cmu-yautja-rank-youngblood", "predhud", SecureAccess, false, false),
             YautjaRank.Blooded => new YautjaRankInfo("cmu-yautja-rank-blooded", "predhud", SecureAccess, false, false),
-            YautjaRank.Elite => new YautjaRankInfo("cmu-yautja-rank-elite", "predhud", EliteAccess, true, false),
-            YautjaRank.Elder => new YautjaRankInfo("cmu-yautja-rank-elder", "predhud", ElderAccess, true, false),
+            YautjaRank.Elite => new YautjaRankInfo("cmu-yautja-rank-elite", "predhud", EliteAccess, false, false),
+            YautjaRank.Elder => new YautjaRankInfo("cmu-yautja-rank-elder", "predhud", ElderAccess, false, false),
             YautjaRank.Leader => new YautjaRankInfo("cmu-yautja-rank-leader", "leaderhud", LeaderAccess, true, true),
             YautjaRank.Ancient => new YautjaRankInfo("cmu-yautja-rank-ancient", "councilhud", AncientAccess, true, true),
             _ => new YautjaRankInfo("cmu-yautja-rank-blooded", "predhud", SecureAccess, false, false),
