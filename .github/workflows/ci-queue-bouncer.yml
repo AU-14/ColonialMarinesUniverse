@@ -1,16 +1,17 @@
 name: CI Queue Bouncer
 
-# CMU14: per-PR supersession and cleanup for the ci.yml fleet gate. the gate itself must
-# never cancel-in-progress (it would kill innocent holders mid-run), so a new push's stale
-# runs die here instead: every queued or running ci.yml run of this PR on an older
-# SHA is cancelled within seconds of the push, freeing its queue slot and the fleet.
+# CMU14: per-PR supersession and cleanup for ci.yml runs. same-PR supersession is now
+# native (ci.yml runs share a per-PR concurrency group with cancel-in-progress, so a new
+# push cancels its own stale run at dispatch); this workflow remains as insurance for
+# runs that slip past native cancellation and for cleanup nothing else does:
 # `closed` cleans up a merged or abandoned PR's runs: nothing else ever cancels
-# them, and they would each burn a runner turn on a PR that no longer exists.
+# them, and they would each burn a build lane or shard wave admission on a PR that no
+# longer exists.
 # `converted_to_draft` does the same cleanup: a run started while the PR was open keeps
 # the payload it was triggered with, so its jobs still pass any draft gate and would burn
 # runner turns on a PR whose work is now moot. cleanup spans every PR-triggered workflow
 # (ci, check-pr, labels, rsi-diff, mapchecker); supersession stays scoped to ci.yml,
-# which is the only run that holds a fleet slot.
+# the only workflow with gated admission worth freeing early.
 # pull_request_target on purpose: fork PR tokens are read-only, and this script comes
 # from the base branch, never from the PR.
 
