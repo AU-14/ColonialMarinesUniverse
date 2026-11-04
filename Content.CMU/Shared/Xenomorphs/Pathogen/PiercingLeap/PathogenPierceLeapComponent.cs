@@ -37,20 +37,14 @@ public sealed partial class PathogenPierceLeapComponent : Component
     public int IgnoredCollisionGroupLarge;  
   
     [DataField, AutoNetworkedField]  
-    public SoundSpecifier? LeapSound;  
+    public SoundSpecifier? LeapSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_pounce.ogg");
   
     [DataField, AutoNetworkedField]  
-    public SoundSpecifier? HitSound;  
+    public SoundSpecifier? HitSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_claw_flesh3.ogg");
   
     [DataField, AutoNetworkedField]  
-    public EntProtoId? HitEffect;  
+    public EntProtoId? HitEffect = "RMCEffectTailHit";
   
     [DataField, AutoNetworkedField]  
-    public EntProtoId? TagEffect;  
-  
-    [DataField, AutoNetworkedField]  
-    public EntProtoId? Telegraph;  
-  
-    [DataField, AutoNetworkedField]  
-    public string? Emote;  
+    public EntProtoId? TagEffect = "CMEffectPunch";
 }
