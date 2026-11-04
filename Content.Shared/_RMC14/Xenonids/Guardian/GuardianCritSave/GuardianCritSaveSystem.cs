@@ -5,8 +5,10 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;  
 using Content.Shared.FixedPoint;  
 using Content.Shared.Mobs.Components;  
-using Content.Shared.Mobs.Systems;  
-using Robust.Shared.Timing;  
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Popups.SharedPopupSystem;
+using Robust.Shared.Timing;
+using Robust.Shared.Network.INetManager;
   
 namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianCritSave;  
   
