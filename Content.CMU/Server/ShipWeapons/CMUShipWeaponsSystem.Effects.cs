@@ -1,4 +1,6 @@
+using System.Linq;
 using System.Numerics;
+using Content.Server.Atmos.Components;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Xenonids;
@@ -10,13 +12,17 @@ using Content.Shared.CMU14.ShipWeapons;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Doors.Components;
+using Content.Shared.Light.Components;
 using Content.Shared.Explosion;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Spawners;
 
 namespace Content.Server.CMU14.ShipWeapons;
 
@@ -27,9 +33,14 @@ public sealed partial class CMUShipWeaponsSystem
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     private readonly HashSet<Entity<DamageableComponent>> _railTargets = new();
+    private readonly HashSet<Entity<IsRoofComponent>> _cloudRoofs = new();
+    private readonly List<(EntityUid Field, Vector2i Tile)> _verticalCloudSpread = new();
     public static readonly EntProtoId EmsStun = "CMUShipWeaponEmsStun";
     private static readonly ProtoId<ExplosionPrototype> RailExplosion = "RMCOBXenoTunnel";
     public static readonly EntProtoId GasHaze = "CMUShipWeaponGasHaze";
+    private static readonly Vector2i[] CloudSpreadDirections =
+        [new(1, 0), new(-1, 0), new(0, 1), new(0, -1)];
+    private static readonly int[] CloudLevelOffsets = [-1, 1];
 
     private void InitializeEffects()
     {
@@ -77,6 +88,178 @@ public sealed partial class CMUShipWeaponsSystem
         }
     }
 
+    private void UpdateCloudSpread()
+    {
+        _verticalCloudSpread.Clear();
+        var fields = EntityQueryEnumerator<CMUShipWeaponCloudSpreadComponent>();
+        while (fields.MoveNext(out var uid, out var field))
+        {
+            if (_timing.CurTime >= field.EndsAt)
+            {
+                QueueDel(uid);
+                continue;
+            }
+
+            var profile = _prototypes.Index(field.Weapon);
+            if (_timing.CurTime < field.NextSpread ||
+                profile.CloudMaxRadius <= profile.CloudRadius)
+                continue;
+
+            var center = _transform.GetMapCoordinates(uid);
+            foreach (var tile in field.CoveredTiles)
+                QueueVerticalCloudSpread(center, tile, field);
+
+            var nextFrontier = new HashSet<Vector2i>();
+            foreach (var tile in field.Frontier)
+            {
+                if (!IsCloudTileOpen(center.Offset(new Vector2(tile.X, tile.Y))))
+                {
+                    nextFrontier.Add(tile);
+                    continue;
+                }
+
+                foreach (var direction in CloudSpreadDirections)
+                {
+                    var neighbor = tile + direction;
+                    if (neighbor.X * neighbor.X + neighbor.Y * neighbor.Y >
+                        profile.CloudMaxRadius * profile.CloudMaxRadius ||
+                        field.CoveredTiles.Contains(neighbor))
+                        continue;
+
+                    if (TrySpawnCloudTile(profile, center, neighbor, field))
+                        nextFrontier.Add(neighbor);
+                    else
+                        nextFrontier.Add(tile);
+                }
+            }
+
+            field.Frontier = nextFrontier;
+            field.NextSpread = _timing.CurTime + TimeSpan.FromSeconds(1);
+        }
+
+        // Apply vertical arrivals after all fronts advance so entity iteration order cannot cascade through decks.
+        foreach (var (uid, tile) in _verticalCloudSpread)
+        {
+            if (!TryComp<CMUShipWeaponCloudSpreadComponent>(uid, out var field) ||
+                _timing.CurTime >= field.EndsAt || field.CoveredTiles.Contains(tile))
+                continue;
+
+            if (TrySpawnCloudTile(_prototypes.Index(field.Weapon), _transform.GetMapCoordinates(uid), tile, field))
+                field.Frontier.Add(tile);
+        }
+    }
+
+    private void QueueVerticalCloudSpread(MapCoordinates center, Vector2i tile,
+        CMUShipWeaponCloudSpreadComponent field)
+    {
+        var cell = center.Offset(new Vector2(tile.X, tile.Y));
+        var map = _map.GetMap(center.MapId);
+        foreach (var offset in CloudLevelOffsets)
+        {
+            if (!_zLevels.TryMapOffset(map, offset, out _, out var otherMap) ||
+                !field.LevelFields.TryGetValue(otherMap.MapId, out var target) ||
+                !TryComp<CMUShipWeaponCloudSpreadComponent>(target, out var targetField) ||
+                targetField.CoveredTiles.Contains(tile) ||
+                !IsCloudTileOpen(cell))
+                continue;
+
+            var other = new MapCoordinates(cell.Position, otherMap.MapId);
+            var upper = offset > 0 ? other : cell;
+            var lower = offset > 0 ? cell : other;
+            if (!_ordnance.IsOpening(upper) || !IsCloudTileOpen(other))
+                continue;
+
+            _cloudRoofs.Clear();
+            _lookup.GetEntitiesInRange(lower, 0.1f, _cloudRoofs);
+            if (_cloudRoofs.Any(roof => roof.Comp.Enabled))
+                continue;
+
+            _verticalCloudSpread.Add((target, tile));
+        }
+    }
+
+    private bool TryGetCloudCoordinates(MapCoordinates cell, out EntityCoordinates coordinates)
+    {
+        if (TryGetGroundCoordinates(cell, out coordinates))
+            return true;
+
+        var map = _map.GetMap(cell.MapId);
+        if (!_zLevels.TryGetZNetwork(map, out _) || !HasComp<MapGridComponent>(map))
+            return false;
+
+        coordinates = _transform.ToCoordinates(map, cell);
+        return true;
+    }
+
+    private bool IsCloudTileOpen(MapCoordinates cell)
+    {
+        var anchored = _rmcMap.GetAnchoredEntitiesEnumerator(cell);
+        while (anchored.MoveNext(out var entity))
+        {
+            if (!HasComp<DoorComponent>(entity) &&
+                TryComp<AirtightComponent>(entity, out var airtight) && airtight.AirBlocked)
+                return false;
+        }
+
+        return true;
+    }
+
+    private bool TrySpawnCloudTile(CMUShipWeaponPrototype profile, MapCoordinates impact,
+        Vector2i tile, CMUShipWeaponCloudSpreadComponent field)
+    {
+        if (profile.Cloud is not { } cloud)
+            return false;
+
+        var cell = impact.Offset(new Vector2(tile.X, tile.Y));
+        if (!TryGetCloudCoordinates(cell, out var coordinates) ||
+            !_area.CanOrbitalBombard(coordinates, out _) ||
+            !IsCloudTileOpen(cell))
+            return false;
+
+        ExtendCloudHold(field);
+        var spawned = Spawn(cloud, coordinates);
+        // Spread clouds share the impact's deadline rather than extending it with each generation.
+        Comp<TimedDespawnComponent>(spawned).Lifetime = (float) (field.EndsAt - _timing.CurTime).TotalSeconds;
+        field.CoveredTiles.Add(tile);
+        field.Clouds.Add(spawned);
+        return true;
+    }
+
+    private void ExtendCloudHold(CMUShipWeaponCloudSpreadComponent source)
+    {
+        var minimumEnd = _timing.CurTime + TimeSpan.FromSeconds(7);
+        if (source.EndsAt >= minimumEnd)
+            return;
+
+        foreach (var uid in source.LevelFields.Values)
+        {
+            if (!TryComp<CMUShipWeaponCloudSpreadComponent>(uid, out var field))
+                continue;
+
+            field.EndsAt = minimumEnd;
+            foreach (var cloud in field.Clouds)
+            {
+                if (TryComp<TimedDespawnComponent>(cloud, out var despawn))
+                    despawn.Lifetime = 7f;
+            }
+
+            if (!TryComp<CMUShipWeaponEmsFieldComponent>(uid, out var ems))
+                continue;
+
+            ems.EndsAt = minimumEnd;
+            foreach (var mob in ems.Exposures.Keys)
+            {
+                if (TerminatingOrDeleted(mob) || !_status.TryGetTime(mob, EmsStun, out var active) ||
+                    active.EndEffectTime == null || active.EndEffectTime >= minimumEnd + ems.StunAfterField)
+                    continue;
+
+                if (!_status.TryUpdateStatusEffectDuration(mob, EmsStun,
+                        minimumEnd + ems.StunAfterField - _timing.CurTime, force: true))
+                    Log.Warning($"Could not extend orbital EMS stun on {ToPrettyString(mob)}.");
+            }
+        }
+    }
+
     private void UpdateEmsFields()
     {
         var fields = EntityQueryEnumerator<CMUShipWeaponEmsFieldComponent>();
@@ -108,9 +291,18 @@ public sealed partial class CMUShipWeaponsSystem
         var position = _transform.GetMapCoordinates(mob);
         if (position.MapId != center.MapId ||
             Vector2.DistanceSquared(position.Position, center.Position) > field.Radius * field.Radius ||
-            !TryGetGroundCoordinates(position, out var coordinates) ||
+            !TryGetCloudCoordinates(position, out var coordinates) ||
             !_area.CanOrbitalBombard(coordinates, out _))
             return;
+
+        if (TryComp<CMUShipWeaponCloudSpreadComponent>(fieldUid, out var spread))
+        {
+            var tile = new Vector2i(
+                (int) MathF.Floor(position.X) - (int) MathF.Floor(center.X),
+                (int) MathF.Floor(position.Y) - (int) MathF.Floor(center.Y));
+            if (!spread.CoveredTiles.Contains(tile) || !IsCloudTileOpen(position))
+                return;
+        }
 
         ApplyEmsBurn(mob, fieldUid, field);
 
