@@ -28,6 +28,7 @@ public sealed partial class CMUVoiceChatTab : Control
 
         Control.AddOptionPercentSlider(CCVars.CMUVoiceChatVolume, VolumeSlider, max: 2f);
         Control.AddOptionCheckBox(CCVars.CMUVoiceChatHearSelf, HearSelfCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUVoiceChatEcho, EchoCheckBox);
         Control.AddOptionCheckBox(CCVars.CMUVoiceChatShowIntro, ShowIntroCheckBox);
         Control.AddOptionCheckBox(CCVars.CMUVoiceChatSpeakerList, SpeakerListCheckBox);
         Control.Initialize();

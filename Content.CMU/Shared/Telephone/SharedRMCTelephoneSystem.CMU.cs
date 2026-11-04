@@ -77,6 +77,51 @@ public abstract partial class SharedRMCTelephoneSystem
     }
 
     /// <summary>
+    /// The person at the other end of a connected call the user is on: both handsets are off the hook,
+    /// the user holds one and someone holds the other. Used to carry voice chat over phones.
+    /// </summary>
+    public bool CMUTryGetCallListener(EntityUid user, out EntityUid listener)
+    {
+        listener = default;
+        foreach (var held in _hands.EnumerateHeld(user))
+        {
+            var telephone = held;
+            if (TryComp(held, out RotaryPhoneComponent? mobile) && HasComp<CMUMobilePhoneComponent>(held))
+            {
+                if (mobile.Phone is not { } handset)
+                    continue;
+
+                telephone = handset;
+            }
+
+            if (!TryComp(telephone, out RMCTelephoneComponent? phone) ||
+                phone.RotaryPhone is not { } rotary ||
+                !CMUIsOffHook(rotary) ||
+                !TryGetOtherPhone(rotary, out var other) ||
+                !TryComp(other, out RMCTelephoneComponent? otherPhone) ||
+                otherPhone.RotaryPhone is not { } otherRotary ||
+                !CMUIsOffHook(otherRotary) ||
+                !CMUTryGetPhoneHolder(other, out listener) ||
+                listener == user)
+            {
+                continue;
+            }
+
+            return true;
+        }
+
+        listener = default;
+        return false;
+    }
+
+    private bool CMUIsOffHook(EntityUid rotary)
+    {
+        return TryComp(rotary, out RotaryPhoneComponent? comp) &&
+               _container.TryGetContainer(rotary, comp.ContainerId, out var container) &&
+               container.ContainedEntities.Count == 0;
+    }
+
+    /// <summary>
     /// Using a mobile phone in hand: hang up an active call, answer a ringing one, or open the dialer.
     /// </summary>
     public void CMUUseMobilePhone(Entity<RotaryPhoneComponent> ent, EntityUid user)

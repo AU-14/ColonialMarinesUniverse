@@ -61,6 +61,27 @@ public sealed class CMUVoiceChatIntroTest
     }
 
     [Test]
+    public async Task VoiceEchoIsOffByDefaultAndMeasuresRooms()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var client = pair.Client;
+        var cfg = client.ResolveDependency<IConfigurationManager>();
+
+        await client.WaitAssertion(() =>
+        {
+            Assert.That(cfg.GetCVar(CCVars.CMUVoiceChatEcho), Is.False, "Voice echo is off unless the player turns it on.");
+
+            // Something off any grid (in space) never echoes.
+            var floating = client.EntMan.Spawn(null, Robust.Shared.Map.MapCoordinates.Nullspace);
+            var echo = client.System<Content.Goobstation.Client.Audio.AreaEchoSystem>();
+            Assert.That(echo.CMUGetEchoPreset(floating), Is.Null);
+            client.EntMan.DeleteEntity(floating);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task HeadsetWindowAndSpeakerListBuild()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });

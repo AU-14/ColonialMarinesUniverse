@@ -109,6 +109,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
 
         InitializeRadio();
         InitializeAnnouncements();
+        InitializeTelephone();
 
         _voice.PushToTalkReceived += OnPushToTalk;
 
@@ -274,6 +275,8 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
             ? speaker.Loudness.Update(speaker.Analyzer.LastDb, _shoutThreshold, _whisperThreshold)
             : CMUVoiceLoudness.Normal;
         range = GetDirectRange(loudness);
+        if (IsUsingMegaphone(uid))
+            range = MathF.Max(range, _megaphoneRange);
 
         var selfFlags = loudness switch
         {
@@ -287,6 +290,10 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
 
         if (speaker.Announcement != null)
             selfFlags |= CMUVoiceSelfFlags.Announcement;
+
+        var onTelephone = TryGetTelephoneListener(uid, out var telephoneListener);
+        if (onTelephone)
+            selfFlags |= CMUVoiceSelfFlags.Telephone;
 
         SendSelf(session, speaker, levels, selfFlags);
 
@@ -331,6 +338,9 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
         }
 
         SendRadioFrame(session, speaker, uid, frame, source, now);
+
+        if (onTelephone)
+            SendTelephoneFrame(speaker, uid, frame, source, telephoneListener);
     }
 
     private void SendSelf(ICommonSession session, Speaker speaker, CMUVoiceLevels levels, CMUVoiceSelfFlags flags)
@@ -346,7 +356,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
     /// <summary>
     /// Names the speaker for any listener who hasn't been told yet this transmission, for their speaker list.
     /// </summary>
-    private void SendSpeakerInfo(Speaker speaker, EntityUid uid, List<INetChannel> channels)
+    private void SendSpeakerInfo(Speaker speaker, EntityUid uid, List<INetChannel> channels, string? channelOverride = null)
     {
         foreach (var channel in channels)
         {
@@ -357,7 +367,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
             {
                 Speaker = speaker.Id,
                 Name = Identity.Name(uid, EntityManager),
-                Channel = IsTransmittingRadio(speaker) ? speaker.RadioChannel!.ID : string.Empty,
+                Channel = channelOverride ?? (IsTransmittingRadio(speaker) ? speaker.RadioChannel!.ID : string.Empty),
             }, channel);
         }
     }
@@ -576,7 +586,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
             else if (TryComp<CMUVoiceChatEffectComponent>(uid, out var builtIn))
                 effect = builtIn.Effect;
 
-            settings = new CMUVoiceEffectSettings(effect, GetMuffle(uid));
+            settings = new CMUVoiceEffectSettings(effect, GetMuffle(uid), IsUsingMegaphone(uid));
         }
 
         if (settings == speaker.AppliedEffect)

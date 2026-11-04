@@ -27,6 +27,18 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.voice.radio_common", true, CVar.SERVER | CVar.REPLICATED | CVar.ARCHIVE);
 
     /// <summary>
+    /// Whether voice carries over connected telephone calls to the person holding the other handset.
+    /// </summary>
+    public static readonly CVarDef<bool> CMUVoiceChatTelephoneEnabled =
+        CVarDef.Create("cmu.voice.telephone_enabled", true, CVar.SERVER | CVar.REPLICATED | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Distance in tiles your voice carries while you hold a megaphone in your active hand.
+    /// </summary>
+    public static readonly CVarDef<float> CMUVoiceChatMegaphoneRange =
+        CVarDef.Create("cmu.voice.megaphone_range", 20f, CVar.SERVER | CVar.REPLICATED | CVar.ARCHIVE);
+
+    /// <summary>
     /// Distance in tiles at which voice chat fades out completely.
     /// </summary>
     public static readonly CVarDef<float> CMUVoiceChatRange =
@@ -141,4 +153,10 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> CMUVoiceChatHearSelf =
         CVarDef.Create("cmu.voice.hear_self", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Voices echo in large rooms and halls, like other sounds do. Off by default.
+    /// </summary>
+    public static readonly CVarDef<bool> CMUVoiceChatEcho =
+        CVarDef.Create("cmu.voice.echo", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 }

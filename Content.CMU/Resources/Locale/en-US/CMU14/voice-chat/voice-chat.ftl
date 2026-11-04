@@ -1,5 +1,6 @@
 cmu-ui-options-voice-chat-volume = Voice chat volume
 cmu-ui-options-voice-chat-hear-self = Hear yourself in voice chat
+cmu-ui-options-voice-chat-echo = Voices echo in large rooms
 ui-options-header-cmu-voice-chat = Voice Chat
 ui-options-function-cmu-voice-push-to-talk = Voice push-to-talk
 
@@ -60,6 +61,7 @@ cmu-voice-intro-tips-heading = Good to know
 cmu-voice-intro-tips = • The list in the bottom-right shows who you're hearing and how: radio channel, PA, shouting or whispering.
     • Whisper and only people right next to you hear it; shout and it carries further.
     • Gas masks and helmets muffle your voice. Voice reaches other floors only through openings.
+    • On a phone call, the person on the other end hears your voice. Hold a megaphone in your active hand to be heard further.
     • Command staff can make live voice announcements from overwatch and communications consoles.
     • Only humans can use voice chat. Ghosts can listen but can't speak.
 cmu-voice-intro-open = Open voice chat
@@ -74,6 +76,7 @@ cmu-voice-speaker-self = You
 cmu-voice-speaker-unknown = Unknown
 cmu-voice-route-radio = Radio
 cmu-voice-route-announcement = PA
+cmu-voice-route-telephone = Phone
 cmu-voice-loudness-shout = Shouting
 cmu-voice-loudness-whisper = Whispering
 cmu-voice-self-blocked = Can't speak

@@ -2,9 +2,11 @@
 # Sets up a fresh Ubuntu 22.04/24.04 VPS to run the CMU game server with voice chat.
 #
 # Run as root on the VPS, from the folder holding SS14.Server_linux-x64.zip:
-#   sudo bash setup-server.sh <duckdns-subdomain> <duckdns-token> "<server name>"
-# Example:
-#   sudo bash setup-server.sh cmu-voice 1234abcd-... "CMU Main"
+#   sudo bash setup-server.sh <domain> "<server name>" [duckdns-token]
+# The domain must already point at this server (an A record). Examples:
+#   sudo bash setup-server.sh voice.example.com "CMU Main"
+#   sudo bash setup-server.sh cmu-voice.duckdns.org "CMU Main" 1234abcd-...
+# The DuckDNS token is only needed for a duckdns.org name; it keeps that name pointed at this server.
 #
 # Safe to run again: it updates the server files and services but keeps an existing server_config.toml.
 set -euo pipefail
@@ -14,15 +16,20 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-if [[ $# -lt 2 ]]; then
-    echo "Usage: sudo bash setup-server.sh <duckdns-subdomain> <duckdns-token> [\"server name\"]" >&2
+if [[ $# -lt 1 ]]; then
+    echo "Usage: sudo bash setup-server.sh <domain> [\"server name\"] [duckdns-token]" >&2
     exit 1
 fi
 
-SUBDOMAIN="${1%.duckdns.org}"
-DUCKDNS_TOKEN="$2"
-SERVER_NAME="${3:-CMU}"
-DOMAIN="${SUBDOMAIN}.duckdns.org"
+DOMAIN="$1"
+SERVER_NAME="${2:-CMU}"
+DUCKDNS_TOKEN="${3:-}"
+SUBDOMAIN="${DOMAIN%.duckdns.org}"
+
+if [[ "$DOMAIN" == *.duckdns.org && -z "$DUCKDNS_TOKEN" ]]; then
+    echo "A duckdns.org name needs your DuckDNS token as the third argument." >&2
+    exit 1
+fi
 PACKAGE="$(pwd)/SS14.Server_linux-x64.zip"
 INSTALL_DIR=/opt/cmu-server
 SERVICE_USER=cmu
@@ -51,6 +58,7 @@ if ! command -v caddy >/dev/null; then
     apt-get install -y caddy
 fi
 
+if [[ -n "$DUCKDNS_TOKEN" ]]; then
 echo "==> Keeping ${DOMAIN} pointed at this server"
 mkdir -p /opt/duckdns
 cat > /opt/duckdns/update.sh <<EOF
@@ -64,6 +72,7 @@ if [[ "$(cat /opt/duckdns/last.log)" != "OK" ]]; then
     exit 1
 fi
 echo "*/5 * * * * root /opt/duckdns/update.sh" > /etc/cron.d/duckdns
+fi
 
 echo "==> Opening the firewall"
 ufw allow OpenSSH

@@ -5,7 +5,7 @@ namespace Content.Client.CMU14.VoiceChat;
 /// <summary>
 /// Makes 16 kHz voice sound like it came through a speaker: a band-pass, soft-clipped drive for
 /// crunch and a faint hiss. The default is a headset (350 Hz–3 kHz); <see cref="PublicAddress"/>
-/// is a wider, cleaner ship PA. Holds filter state, so use one per stream.
+/// is a wider, cleaner ship PA and <see cref="Telephone"/> a phone line. Holds filter state, so use one per stream.
 /// </summary>
 public sealed class CMUVoiceRadioFilter
 {
@@ -40,6 +40,14 @@ public sealed class CMUVoiceRadioFilter
     public static CMUVoiceRadioFilter PublicAddress(int seed = 0)
     {
         return new CMUVoiceRadioFilter(250f, 4500f, 1.6f, 0.9f, 0.002f, seed);
+    }
+
+    /// <summary>
+    /// A telephone line: the classic 300 Hz–3.4 kHz band, a little warmer and quieter than a headset.
+    /// </summary>
+    public static CMUVoiceRadioFilter Telephone(int seed = 0)
+    {
+        return new CMUVoiceRadioFilter(300f, 3400f, 1.5f, 0.9f, 0.003f, seed);
     }
 
     public void Process(Span<short> pcm)

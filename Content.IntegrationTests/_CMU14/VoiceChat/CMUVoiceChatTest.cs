@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using CMUVoiceRadioFilter = Content.Client.CMU14.VoiceChat.CMUVoiceRadioFilter;
 using Content.Server._RMC14.Admin;
+using Content.Server._RMC14.Telephone;
 using Content.Server.CMU14.VoiceChat;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.CCVar;
@@ -9,6 +10,10 @@ using Content.Shared.Chat;
 using Content.Shared.CMU14.VoiceChat;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Database;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
+using Content.Shared._RMC14.Telephone;
+using Robust.Server.GameObjects;
 using Content.Shared.Inventory;
 using Content.Shared.Radio.Components;
 using Robust.Shared.Configuration;
@@ -391,6 +396,88 @@ public sealed class CMUVoiceChatTest
 
             Assert.That(voice.TrySelectVoiceRadioChannel(human, "Hivemind"), Is.False,
                 "A channel the headset doesn't carry can't be picked.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task MegaphoneInActiveHandCountsAsMegaphone()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var voice = server.System<CMUVoiceChatSystem>();
+            var hands = server.System<SharedHandsSystem>();
+
+            var human = entities.SpawnEntity("CMMobHuman", testMap.GridCoords);
+            Assert.That(voice.IsUsingMegaphone(human), Is.False);
+
+            var megaphone = entities.SpawnEntity("RMCMegaphone", testMap.GridCoords);
+            Assert.That(hands.TryPickup(human, megaphone), Is.True);
+            Assert.That(voice.IsUsingMegaphone(human), Is.True, "A megaphone in the active hand boosts voice.");
+
+            hands.TryDrop(human, megaphone);
+            Assert.That(voice.IsUsingMegaphone(human), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task VoiceReachesTheOtherEndOfAnAnsweredCall()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        EntityUid caller = default, callee = default, callerRotary = default, calleeRotary = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var far = testMap.GridCoords.Offset(new Vector2(30, 0));
+            callerRotary = entities.SpawnEntity("RMCRotaryPhone", testMap.GridCoords);
+            calleeRotary = entities.SpawnEntity("RMCRotaryPhone", far);
+            caller = entities.SpawnEntity("CMMobHuman", testMap.GridCoords);
+            callee = entities.SpawnEntity("CMMobHuman", far);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var ui = server.System<UserInterfaceSystem>();
+            var telephone = server.System<RMCTelephoneSystem>();
+
+            Assert.That(telephone.CMUTryGetCallListener(caller, out _), Is.False, "No call yet.");
+
+            ui.OpenUi(callerRotary, RMCTelephoneUiKey.Key, caller);
+            ui.RaiseUiMessage(callerRotary, RMCTelephoneUiKey.Key,
+                new RMCTelephoneCallBuiMsg(entities.GetNetEntity(calleeRotary)) { Actor = caller });
+
+            Assert.That(entities.HasComponent<RotaryPhoneDialingComponent>(callerRotary), Is.True, "The caller is dialing.");
+            Assert.That(telephone.CMUTryGetCallListener(caller, out _), Is.False,
+                "A ringing phone nobody picked up carries no voice.");
+
+            var interact = new InteractHandEvent(callee, calleeRotary);
+            entities.EventBus.RaiseLocalEvent(calleeRotary, interact);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(telephone.CMUTryGetCallListener(caller, out var listener), Is.True);
+                Assert.That(listener, Is.EqualTo(callee), "The caller is heard by whoever answered.");
+                Assert.That(telephone.CMUTryGetCallListener(callee, out var back), Is.True);
+                Assert.That(back, Is.EqualTo(caller), "And the callee is heard back.");
+            });
+
+            entities.DeleteEntity(caller);
+            entities.DeleteEntity(callee);
         });
 
         await pair.CleanReturnAsync();

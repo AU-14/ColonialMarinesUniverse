@@ -13,6 +13,7 @@
                 <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-voice-chat-playback'}">
                     <ui:OptionSlider Name="VolumeSlider" Title="{Loc 'cmu-ui-options-voice-chat-volume'}" />
                     <CheckBox Name="HearSelfCheckBox" Text="{Loc 'cmu-ui-options-voice-chat-hear-self'}" />
+                    <CheckBox Name="EchoCheckBox" Text="{Loc 'cmu-ui-options-voice-chat-echo'}" />
                     <CheckBox Name="ShowIntroCheckBox" Text="{Loc 'cmu-ui-options-voice-chat-show-intro'}" />
                     <CheckBox Name="SpeakerListCheckBox" Text="{Loc 'cmu-ui-options-voice-chat-speaker-list'}" />
                 </cmu:CmuOptionSection>

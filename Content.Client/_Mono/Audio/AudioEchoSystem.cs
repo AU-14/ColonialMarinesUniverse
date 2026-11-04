@@ -489,6 +489,34 @@ public sealed partial class AreaEchoSystem : EntitySystem
             _audioEffectSystem.TryRemoveEffect(entity);
     }
 
+    // cmu edit start: voice chat echo
+    /// <summary>
+    ///     The echo preset for the area around <paramref name="uid"/>, picked the same way as for sounds,
+    ///         or null where it shouldn't echo. Used by voice chat, whose audio isn't an audio entity.
+    /// </summary>
+    public ProtoId<AudioPresetPrototype>? CMUGetEchoPreset(EntityUid uid)
+    {
+        if (!_echoEnabled || _unconsciousHearing.Active || DistancePresets.Count == 0)
+            return null;
+
+        var minimumMagnitude = DistancePresets[0].Item1;
+        var maximumMagnitude = DistancePresets[^1].Item1;
+        if (!TryProcessAreaSpaceMagnitude((uid, Transform(uid)), maximumMagnitude, out var echoMagnitude) ||
+            echoMagnitude <= minimumMagnitude)
+        {
+            return null;
+        }
+
+        foreach (var (distance, preset) in DistancePresets)
+        {
+            if (distance >= echoMagnitude)
+                return preset;
+        }
+
+        return null;
+    }
+    // cmu edit end
+
     // Maybe TODO: defer this onto ticks? but whatever its just clientside
     private void OnAudioParentChanged(Entity<AudioComponent> entity, ref EntParentChangedMessage args)
     {

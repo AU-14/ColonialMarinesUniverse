@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared.CMU14.VoiceChat;
 using Robust.Client.Audio;
+using Robust.Shared.Audio.Effects;
 using Robust.Shared.Audio.Sources;
 
 namespace Content.Client.CMU14.VoiceChat;
@@ -89,6 +90,16 @@ public sealed class CMUVoicePlaybackStream : IDisposable
     /// </summary>
     public bool RadioOpen;
     public TimeSpan LastActivity;
+
+    /// <summary>
+    /// Room reverb for the speaker's surroundings, applied to each new chunk. Null for none.
+    /// </summary>
+    public IAuxiliaryAudio? Echo;
+
+    /// <summary>
+    /// When the speaker's room size is next measured for <see cref="Echo"/>.
+    /// </summary>
+    public TimeSpan NextEchoCheck;
 
     public CMUVoicePlaybackStream(IAudioManager audioManager)
     {
@@ -218,6 +229,8 @@ public sealed class CMUVoicePlaybackStream : IDisposable
         chunk.Source.RolloffFactor = 1f;
         chunk.Source.ReferenceDistance = _params.ReferenceDistance;
         chunk.Source.MaxDistance = _params.MaxDistance;
+
+        chunk.Source.SetAuxiliary(Echo);
 
         if (offsetSamples > 0)
             chunk.Source.PlaybackPosition = offsetSamples / (float) SampleRate;

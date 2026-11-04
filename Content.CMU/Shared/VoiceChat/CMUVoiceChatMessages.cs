@@ -18,6 +18,9 @@ public enum CMUVoiceRoute : byte
 
     /// <summary>A live announcement from a console: in the ear, through the PA filter.</summary>
     Announcement,
+
+    /// <summary>Over a connected telephone call: in the ear, through the phone line filter.</summary>
+    Telephone,
 }
 
 public sealed class CMUMsgVoiceFrame : NetMessage
@@ -221,6 +224,7 @@ public enum CMUVoiceSelfFlags : byte
     Shout = 1 << 2,
     Whisper = 1 << 3,
     Blocked = 1 << 4,
+    Telephone = 1 << 5,
 }
 
 /// <summary>

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Goobstation.Client.Audio;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Input;
 using Content.Shared.CMU14.VoiceChat;
@@ -8,6 +9,7 @@ using Content.Shared.Radio;
 using Robust.Client.Audio;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
+using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Sources;
 using Robust.Shared.Configuration;
 using Robust.Shared.Input.Binding;
@@ -28,8 +30,15 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private AreaEchoSystem _areaEcho = default!;
+    [Dependency] private AudioEffectSystem _audioEffect = default!;
 
     private static readonly TimeSpan IdleTimeout = TimeSpan.FromSeconds(10);
+
+    /// <summary>
+    /// How often a speaker's room size is re-measured for echo. It casts rays, so not every frame.
+    /// </summary>
+    private static readonly TimeSpan EchoCheckInterval = TimeSpan.FromSeconds(2);
 
     /// <summary>
     /// A radio transmission counts as closed once no frame has arrived for this long.
@@ -50,6 +59,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
     private static readonly Color BlockedColor = Color.FromHex("#E04545");
     private static readonly Color ShoutColor = Color.FromHex("#FF9F43");
     private static readonly Color WhisperColor = Color.FromHex("#A7B6D6");
+    private static readonly Color TelephoneColor = Color.FromHex("#9956D3");
 
     private readonly Dictionary<int, CMUVoicePlaybackStream> _streams = new();
     private readonly Dictionary<ushort, (string Name, string Channel)> _speakerInfo = new();
@@ -67,6 +77,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
 
     private float _range;
     private float _volume;
+    private bool _echo;
 
     public override void Initialize()
     {
@@ -81,6 +92,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
 
         Subs.CVar(_cfg, CCVars.CMUVoiceChatRange, value => _range = value, true);
         Subs.CVar(_cfg, CCVars.CMUVoiceChatVolume, value => _volume = Math.Clamp(value, 0f, 2f), true);
+        Subs.CVar(_cfg, CCVars.CMUVoiceChatEcho, value => _echo = value, true);
         Subs.CVar(_cfg, CCVars.CMUVoiceChatEnabled, enabled =>
         {
             if (!enabled)
@@ -151,6 +163,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
                     PlayClick(CMUVoiceRadioFilter.CreateCloseClick(ClickVolume));
             }
 
+            UpdateEcho(stream, now);
             stream.Update(now, GetParams(stream, listener));
             stream.UpdateLevels(frameTime);
 
@@ -182,6 +195,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
             {
                 CMUVoiceRoute.Radio => new CMUVoiceRadioFilter(message.Speaker),
                 CMUVoiceRoute.Announcement => CMUVoiceRadioFilter.PublicAddress(message.Speaker),
+                CMUVoiceRoute.Telephone => CMUVoiceRadioFilter.Telephone(message.Speaker),
                 _ => null,
             };
 
@@ -219,7 +233,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
         var gain = MathF.Min(_volume, 1f);
         var boost = MathF.Max(_volume, 1f);
 
-        // Radio and announcements are heard in the ear, not from the speaker's position.
+        // Radio, announcements and phone calls are heard in the ear, not from the speaker's position.
         stream.Audibility = 0f;
         if (stream.RadioFilter != null)
         {
@@ -245,6 +259,33 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
         var occlusion = distance > 0.1f ? _audio.GetOcclusion(listener, delta, distance, uid.Value) * WallMuffle : 0f;
         stream.Audibility = Math.Clamp(1f - distance / MathF.Max(stream.Range > 0f ? stream.Range : _range, 0.1f), 0f, 1f) * MathF.Exp(-occlusion * 0.5f);
         return new CMUVoicePlaybackParams(coordinates.Position, gain, occlusion, referenceDistance, maxDistance, boost);
+    }
+
+    /// <summary>
+    /// Voices heard in the world echo like other sounds when the speaker stands in a large room.
+    /// Radio, PA and phone voices are already in the ear and stay dry.
+    /// </summary>
+    private void UpdateEcho(CMUVoicePlaybackStream stream, TimeSpan now)
+    {
+        if (now < stream.NextEchoCheck)
+            return;
+
+        stream.NextEchoCheck = now + EchoCheckInterval;
+        stream.Echo = null;
+
+        if (!_echo ||
+            stream.RadioFilter != null ||
+            stream.Relayed ||
+            !TryGetEntity(stream.Source, out var speaker) ||
+            TerminatingOrDeleted(speaker.Value) ||
+            _areaEcho.CMUGetEchoPreset(speaker.Value) is not { } preset ||
+            !_audioEffect.ResolveCachedEffect(preset, out var auxiliary, out _) ||
+            !TryComp<AudioAuxiliaryComponent>(auxiliary, out var auxiliaryComp))
+        {
+            return;
+        }
+
+        stream.Echo = auxiliaryComp.Auxiliary;
     }
 
     /// <summary>
@@ -311,6 +352,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
                 ? channel.LocalizedName
                 : Loc.GetString("cmu-voice-route-radio"),
             CMUVoiceRoute.Announcement => Loc.GetString("cmu-voice-route-announcement"),
+            CMUVoiceRoute.Telephone => Loc.GetString("cmu-voice-route-telephone"),
             _ => GetLoudness(stream) switch
             {
                 > 0 => Loc.GetString("cmu-voice-loudness-shout"),
@@ -326,6 +368,7 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
         {
             CMUVoiceRoute.Radio => TryGetRadioChannel(stream.Speaker, out var channel) ? channel.Color : RadioColor,
             CMUVoiceRoute.Announcement => AnnouncementColor,
+            CMUVoiceRoute.Telephone => TelephoneColor,
             _ => GetLoudness(stream) switch
             {
                 > 0 => ShoutColor,
@@ -344,6 +387,8 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
             return Loc.GetString("cmu-voice-route-announcement");
         if ((flags & CMUVoiceSelfFlags.Radio) != 0)
             return TryGetRadioChannel(Self.Speaker, out var channel) ? channel.LocalizedName : Loc.GetString("cmu-voice-route-radio");
+        if ((flags & CMUVoiceSelfFlags.Telephone) != 0)
+            return Loc.GetString("cmu-voice-route-telephone");
         if ((flags & CMUVoiceSelfFlags.Shout) != 0)
             return Loc.GetString("cmu-voice-loudness-shout");
         if ((flags & CMUVoiceSelfFlags.Whisper) != 0)
@@ -360,6 +405,8 @@ public sealed partial class CMUVoiceChatSystem : EntitySystem
             return AnnouncementColor;
         if ((flags & CMUVoiceSelfFlags.Radio) != 0)
             return TryGetRadioChannel(Self.Speaker, out var channel) ? channel.Color : RadioColor;
+        if ((flags & CMUVoiceSelfFlags.Telephone) != 0)
+            return TelephoneColor;
         if ((flags & CMUVoiceSelfFlags.Shout) != 0)
             return ShoutColor;
         if ((flags & CMUVoiceSelfFlags.Whisper) != 0)
