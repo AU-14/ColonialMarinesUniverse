@@ -260,6 +260,27 @@
     checkCanAccess: false
   - type: WorldTargetAction
     event: !type:XenoLeapActionEvent
+
+- type: entity  
+  id: CMU14ActionPathogenPierceLeap  
+  parent: ActionXenoBase  
+  name: Pierce Leap  
+  description: Leap through enemies in your path, marking them for a delayed strike.  
+  components:  
+  - type: Action  
+    itemIconStyle: NoItem  
+    useDelay: 12  
+  - type: Sprite  
+    layers:  
+    - sprite: CMU14/Actions/actions_pathogen.rsi  
+      state: pounce 
+      map: ["enum.ActionVisuals.Icon"]  
+  - type: TargetAction  
+    range: 6  
+    checkCanAccess: false  
+  - type: WorldTargetAction  
+    event: !type:PathogenPierceLeapActionEvent  
+  - type: RMCDazeableAction
  
 - type: entity
   id: CMU14ActionXenoPathogenHeadbutt
