@@ -302,6 +302,28 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             transferred.AddReagent(referenceReagent, quantity);
         }
 
+        // CMU14: blood volume past the reference equilibrium is invisible to every readout (blood level
+        // clamps at 100%) but still crowds out injected doses, so reference reagents may only fill up to
+        // the equilibrium and the surplus returns to the pack.
+        foreach (var (referenceReagent, referenceQuantity) in bloodstream.BloodReferenceSolution)
+        {
+            var incoming = transferred.GetTotalPrototypeQuantity(referenceReagent.Prototype);
+            if (incoming <= FixedPoint2.Zero)
+                continue;
+
+            var room = referenceQuantity - destination.Comp.Solution.GetTotalPrototypeQuantity(referenceReagent.Prototype);
+            var accepted = room >= incoming
+                ? incoming
+                : room > FixedPoint2.Zero ? room : FixedPoint2.Zero;
+
+            var surplus = incoming - accepted;
+            if (surplus <= FixedPoint2.Zero)
+                continue;
+
+            transferred.RemoveReagent(referenceReagent, surplus, ignoreReagentData: true);
+            _solutionContainer.TryAddReagent(source, new ReagentId(referenceReagent.Prototype, null), surplus, out _);
+        }
+
         // CMU14: whatever doesn't fit after harmful blood was destroyed goes back into the pack
         var overflow = transferred.Volume - destination.Comp.Solution.AvailableVolume;
         if (overflow > FixedPoint2.Zero)

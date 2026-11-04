@@ -4,6 +4,10 @@
   name: electrical panel
   description: A compact distribution panel. Feed it power with a cable and it relays it to every powered device in range.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryElectric
+    - CMUGuideIndustry
   - type: Battery
     maxCharge: 50000
     startingCharge: 50000

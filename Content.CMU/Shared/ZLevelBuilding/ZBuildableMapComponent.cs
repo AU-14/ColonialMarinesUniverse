@@ -74,6 +74,7 @@ public sealed partial class ZBuildableMapComponent : Component
     {
         Metal("RUMCRockWallIron", 0.15f),
         Metal("RUMCRockWallCopper", 0.12f),
+        Metal("CMURockWallZinc", 0.12f),
         Metal("RUMCRockWallAluminum", 0.10f),
         Metal("RUMCRockWallLead", 0.08f),
         Metal("RUMCRockWallSilver", 0.02f),
@@ -187,6 +188,7 @@ public sealed partial class ZBuildableMapComponent : Component
                 Metal("RUMCBlackRockWallUranium", 0.08f),
                 Metal("RUMCBlackRockWallIron", 0.10f),
                 Metal("RUMCBlackRockWallCopper", 0.08f),
+                Metal("CMUBlackRockWallZinc", 0.08f),
                 Metal("RUMCBlackRockWallAluminum", 0.07f),
                 Metal("RUMCBlackRockWallLead", 0.05f),
                 Metal("RUMCBlackRockWallChrome", 0.04f),

@@ -13,10 +13,6 @@
         <Label Name="Feed" Text="{Loc cmu-recon-feed}" FontColorOverride="#75C8BA" />
       </BoxContainer>
       <BoxContainer Name="CaveNavigation" Orientation="Horizontal" SeparationOverride="6" Visible="False">
-        <Button Name="CaveWest" Text="←" ToolTip="{Loc cmu-survey-west}" />
-        <Button Name="CaveNorth" Text="↑" ToolTip="{Loc cmu-survey-north}" />
-        <Button Name="CaveSouth" Text="↓" ToolTip="{Loc cmu-survey-south}" />
-        <Button Name="CaveEast" Text="→" ToolTip="{Loc cmu-survey-east}" />
         <Button Name="CaveDeeper" Text="{Loc cmu-survey-deeper}" />
         <Button Name="CaveShallower" Text="{Loc cmu-survey-shallower}" />
         <Button Name="CaveCenter" Text="{Loc cmu-survey-here}" />

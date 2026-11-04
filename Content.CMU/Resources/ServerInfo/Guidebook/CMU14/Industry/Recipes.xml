@@ -1,0 +1,15 @@
+<Document>
+  # Recipes & where to get things
+
+  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
+
+  [bold]What are we building?[/bold] Search for an item, material or machine. Click a material or equipment sprite to see how to make it, where it drops, or which machine produces it. Use Back to return to your project.
+
+  Pick a production method, then choose how many batches to pack for. Tools and molds marked [bold]kept[/bold] are reusable. Gathering cards show possible sources; drops and deposits can vary.
+
+  <CMUGuideCraftingRecipes/>
+
+  [bold]Ready to make it?[/bold] Hand recipes: carry the supplies and right-click yourself → Craft. Machine recipes: use the listed equipment and follow the card's instructions. The planner shows base quantities; crafting challenges and machine speed can change the result or time.
+
+  [textlink="First workshop" link="CMUGuideIndustryStart"] · [textlink="Forge" link="CMUGuideIndustryForge"] · [textlink="Steam" link="CMUGuideIndustrySteam"] · [textlink="Electricity" link="CMUGuideIndustryElectric"]
+</Document>

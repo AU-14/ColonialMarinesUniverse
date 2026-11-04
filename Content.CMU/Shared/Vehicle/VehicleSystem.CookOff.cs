@@ -33,11 +33,11 @@ public sealed partial class VehicleSystem
 
     private void OnCookOffRuptured(Entity<TankCookOffComponent> ent, ref TankCookOffRupturedEvent args)
     {
-        EjectOccupants(ent, ent.Comp.EjectionDistance, ent.Comp.EjectionSpeed);
+        EjectOccupants(ent, ent.Comp.EjectionDistance, ent.Comp.EjectionSpeed, cookOff: true);
     }
 
     // shared with the OB write-off, which boots the crew the same way
-    public void EjectOccupants(EntityUid vehicle, float distance, float speed)
+    public void EjectOccupants(EntityUid vehicle, float distance, float speed, bool cookOff = false)
     {
         if (_net.IsClient || !TryComp<VehicleInteriorComponent>(vehicle, out var interior) ||
             interior.MapId == MapId.Nullspace)
@@ -87,6 +87,9 @@ public sealed partial class VehicleSystem
             UntrackOccupant(occupant, vehicle);
             _throwing.TryThrow(occupant, direction * distance, speed,
                 recoil: false, playSound: false, doSpin: false);
+
+            var ejected = new CMUVehicleOccupantEjectedEvent(vehicle, cookOff);
+            RaiseLocalEvent(occupant, ref ejected);
         }
     }
 }

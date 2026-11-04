@@ -20,6 +20,7 @@ cmu-zlevel-voice-from-up = {$name} (from above)
 cmu-zlevel-voice-from-down = {$name} (from below)
 
 cmu-zlevel-ladder-no-level = The ladder doesn't continue there.
+cmu-zlevel-ladder-no-footing = You feel no secure footing at the other end and hold on. You stay where you are.
 cmu-zlevel-ladder-look-up = Look up
 cmu-zlevel-ladder-look-down = Look down
 cmu-zlevel-ladder-start-self = You start climbing the ladder.
