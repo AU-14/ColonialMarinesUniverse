@@ -1,14 +1,15 @@
 namespace Content.Server.CMU14.HelpRelay;
 
 /// <summary>
-/// The three help systems the relay delivers for. They stay separate systems; only their Discord
-/// delivery is unified.
+/// The sources the relay delivers for: the help systems plus the round-end news digest. They stay
+/// separate systems; only their Discord delivery is unified.
 /// </summary>
 public enum HelpSource
 {
     AHelp,
     MHelp,
     BugHelp,
+    News,
 }
 
 public static class HelpSourceExt
@@ -18,13 +19,15 @@ public static class HelpSourceExt
     {
         HelpSource.AHelp => 0xED4245,
         HelpSource.MHelp => 0xE67E22,
-        _ => 0x5865F2,
+        HelpSource.BugHelp => 0x5865F2,
+        _ => 0x7CFC00,
     };
 
     public static string Label(this HelpSource source) => source switch
     {
         HelpSource.AHelp => "AHelp",
         HelpSource.MHelp => "MHelp",
-        _ => "BugHelp",
+        HelpSource.BugHelp => "BugHelp",
+        _ => "News",
     };
 }

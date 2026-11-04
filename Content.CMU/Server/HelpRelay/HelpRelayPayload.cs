@@ -49,6 +49,14 @@ public sealed record HelpPost
     /// <summary>Forum thread name for the post; requires a forum/media channel webhook.</summary>
     public string? ThreadName { get; init; }
 
+    /// <summary>Existing forum post id to deliver into, instead of creating a new thread. Sent as the
+    /// thread_id query parameter, not a payload field; the spool records it for manual recovery.</summary>
+    public string? ThreadId { get; init; }
+
+    /// <summary>Drop the shared Round/Mode/Map/Server fields. For posts inside a round's own thread,
+    /// where the opener already carries them.</summary>
+    public bool OmitContextFields { get; init; }
+
     /// <summary>Forum tag ids to apply to the created thread.</summary>
     public IReadOnlyList<string>? AppliedTags { get; init; }
 
@@ -91,7 +99,9 @@ public static class HelpRelayPayload
                         : post.Description,
                     Color = source.Color(),
                     Timestamp = DateTime.UtcNow.ToString("o"),
-                    Fields = [.. ContextFields(context), ..post.ExtraFields ?? []],
+                    Fields = post.OmitContextFields
+                        ? [.. post.ExtraFields ?? []]
+                        : [.. ContextFields(context), .. post.ExtraFields ?? []],
                     Footer = new() { Text = FooterText(revision, builtAt, context?.Server) },
                 },
             ],
@@ -179,6 +189,10 @@ public sealed class DroppedPost
     [JsonPropertyName("source")] public string Source { get; set; } = string.Empty;
 
     [JsonPropertyName("dropped_at")] public string DroppedAt { get; set; } = string.Empty;
+
+    /// <summary>Forum post the item belonged to, when it was thread-targeted; the payload itself
+    /// carries no thread binding, so this is the only record of it.</summary>
+    [JsonPropertyName("thread_id")] public string? ThreadId { get; set; }
 
     [JsonPropertyName("payload")] public JsonNode? Payload { get; set; }
 

@@ -54,6 +54,16 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.help_relay_webhook_bughelp", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
 
     /// <summary>
+    ///     URL of the Discord webhook that receives the round's station news at round end: one forum
+    ///     thread per round, one message per article inside it. Must be a forum-channel webhook; the
+    ///     primary chat webhook cannot carry threads, so this never falls through. Empty disables
+    ///     news delivery. Upstream's <c>discord.news_webhook</c> path stays dormant either way; this
+    ///     is the CMU replacement for it.
+    /// </summary>
+    public static readonly CVarDef<string> HelpRelayWebhookNews =
+        CVarDef.Create("cmu.help_relay_webhook_news", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    /// <summary>
     ///     Forum tag ids for bughelp report categories, grammar <c>code:&lt;id&gt;,mapping:&lt;id&gt;</c>.
     ///     Names match BugHelpCategory case-insensitively; unknown names are ignored, so tags for
     ///     future categories can sit in the config before the enum grows. Requires the bughelp

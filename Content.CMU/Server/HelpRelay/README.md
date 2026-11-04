@@ -1,7 +1,7 @@
 # HelpRelay
 
-One Discord delivery pipe for the help systems (ahelp, mhelp, bughelp): per-source webhooks, one spaced queue, one embed family.
-Conversations and reports stay their own systems. Everything after the player types a help command lives here.
+One Discord delivery pipe for the help systems (ahelp, mhelp, bughelp) and the round news digest: per-source webhooks, one spaced queue, one embed family.
+Conversations, reports and news stay their own systems. Everything after the player types a help command, plus the round-end news dump, lives here.
 
 ## Server setup
 
@@ -10,12 +10,13 @@ Conversations and reports stay their own systems. Everything after the player ty
 | `cmu.help_relay_webhook` | empty | Primary webhook for ahelp/mhelp. Empty disables sources without an override. |
 | `cmu.help_relay_webhook_ahelp` / `_mhelp` | empty | Per-source override for ahelp/mhelp; empty falls through to the primary. |
 | `cmu.help_relay_webhook_bughelp` | empty | Bughelp webhook, forum channel only. Never falls through: empty disables bughelp. |
+| `cmu.help_relay_webhook_news` | empty | News webhook, forum channel only. Never falls through: empty disables the round digest. |
 | `cmu.help_relay_revision` | empty | Stamped in embed footers; the publish pipeline fills it. |
 | `cmu.help_relay_built_at` | empty | Build date (ISO yyyy-MM-dd) in footers next to the revision; empty on dev builds. |
 | `cmu.help_relay_bughelp_tags` | empty | Forum tags per report category, grammar `code:<id>,mapping:<id>`. Unknown names ignored. |
 | `CCVars.AdminLogsServerName` (vanilla) | | Server name in embed fields and footers. |
 
-Channel types: the bughelp webhook must be a **forum channel** - the relay always sends `thread_name`, and Discord rejects forum posts without one (one thread per report).
+Channel types: the bughelp and news webhooks must be **forum channels** - bughelp always sends `thread_name` (one thread per report, Discord rejects forum posts without one), news creates one thread per round and posts the round's articles into it via `thread_id`.
 ahelp/mhelp use **text channels**: one message per conversation, created with `wait=true`, then edited in place per line.
 When a transcript outgrows one message, the continuation post links back to the earlier message using the ids captured from the create response.
 
@@ -41,6 +42,14 @@ Probe the chain without the game: `POST <webhook url>?wait=true` with a JSON bod
 `allowed_mentions` is load-bearing, not decoration: message edits re-parse content with default allowances unless the request sets it,
 so transcript text can never grow a ping later. Interactive components (buttons) are application-webhook-only per Discord's docs; incoming webhooks cannot send them.
 
+News (round digest) rides both models: at round end `NewsRelaySystem` creates the round's forum thread
+(`thread_name = Round {id} · {mode} · {map}`, `?wait=true`, captures `channel_id` from the response), then each article
+posts into it with `?thread_id`, one message per article, ordered by publish time. Article embeds omit the
+Round/Mode/Map/Server fields - the opener carries them. If the thread cannot be created after retries the whole
+round is dropped with an error log: news is best-effort, nothing was promised to a reporter. Spooled news followers
+record their `thread_id` in the drop file; the payload itself carries no thread binding, so manual recovery needs that id.
+Upstream's `discord.news_webhook` must stay unset, or articles deliver through both pipes.
+
 ## Queue behavior
 
 | Rule | Value |
@@ -55,10 +64,11 @@ so transcript text can never grow a ping later. Interactive components (buttons)
 
 | Path | Job |
 |---|---|
-| `HelpRelayManager.cs` | Webhook resolution, queue, conversation edit-in-place, linked-id cache |
+| `HelpRelayManager.cs` | Webhook resolution, queue, conversation edit-in-place, linked-id cache, forum thread create |
 | `HelpRelayPayload.cs` | Embed builders and Discord DTOs (self-contained, no upstream DTOs) |
 | `HelpRelaySystem.cs` | Round-restart cleanup |
 | `HelpSource.cs` | Source enum, per-source colors and labels |
+| `../NewsRelay/NewsRelaySystem.cs` | Round-end news digest: gathers articles, creates the round thread, enqueues per-article followers |
 
 Checks: `Content.Tests/Server/CMU14/HelpRelayPayloadTest.cs`.
 Category tags grammar and the report flow: `Content.CMU/Shared/BugHelp/README.md`.
