@@ -1,8 +1,10 @@
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Weapons.Melee.Events;
@@ -14,6 +16,7 @@ namespace Content.Shared.CMU14.Yautja;
 public sealed partial class YautjaHumanMeleeSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPainShockSystem _pain = default!;
     [Dependency] private SkillsSystem _skills = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MeleeSkill = "RMCSkillMeleeWeapons";
@@ -25,6 +28,7 @@ public sealed partial class YautjaHumanMeleeSystem : EntitySystem
         // known here, CMGetArmorPiercingEvent just gets the target
         SubscribeLocalEvent<HumanoidProfileComponent, DamageModifyEvent>(OnHumanDamageModify,
             before: [typeof(CMArmorSystem)]);
+        SubscribeLocalEvent<PainShockComponent, DamageChangedEvent>(OnPainedDamageChanged);
     }
 
     private void OnMeleeHit(Entity<YautjaHumanMeleeComponent> ent, ref MeleeHitEvent args)
@@ -73,6 +77,28 @@ public sealed partial class YautjaHumanMeleeSystem : EntitySystem
         }
 
         args.ArmorPiercing += melee.Penetration;
+    }
+
+    private void OnPainedDamageChanged(Entity<PainShockComponent> ent, ref DamageChangedEvent args)
+    {
+        if (!args.DamageIncreased ||
+            args.DamageDelta is not { } delta ||
+            args.Tool is not { } tool ||
+            !TryComp<YautjaHumanMeleeComponent>(tool, out var melee) ||
+            !IsHuman(ent))
+        {
+            return;
+        }
+
+        // armour already took its cut, so this is what actually landed
+        var landed = FixedPoint2.Zero;
+        foreach (var amount in delta.DamageDict.Values)
+        {
+            if (amount > FixedPoint2.Zero)
+                landed += amount;
+        }
+
+        _pain.AddPainPulse(ent, landed * melee.PainPerDamage);
     }
 
     private bool IsHuman(EntityUid target)

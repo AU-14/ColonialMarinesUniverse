@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Hands.EntitySystems;
@@ -59,6 +60,36 @@ public sealed class YautjaHumanMeleeTest : GameTest
             var human = Hit("CMUYautjaClanSword", null, map.GridCoords).Damage;
             var xeno = Hit("CMUYautjaClanSword", null, map.GridCoords, victimProto: "CMXenoDrone").Damage;
             Assert.That(xeno, Is.GreaterThan(human));
+        });
+    }
+
+    // cmss13 two-shots a naked marine with a wielded glaive: 90 brute is 90 pain on the spot
+    [Test]
+    public async Task TwoGlaiveHitsPutANakedMarineInShock()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var hit = Hit("CMUYautjaWarGlaive", null, map.GridCoords, hits: 2, wield: true);
+            var pain = SEntMan.GetComponent<PainShockComponent>(hit.Victim);
+
+            Assert.That(hit.Damage, Is.EqualTo(90f).Within(0.5f));
+            Assert.That(pain.Pain.Float(), Is.EqualTo(hit.Damage).Within(1f), "pain follows what landed");
+            Assert.That(pain.Tier, Is.EqualTo(PainTier.Shock));
+        });
+    }
+
+    [Test]
+    public async Task ArmourThatStopsTheEdgeKeepsAMarineOutOfShock()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var hit = Hit("CMUYautjaWarGlaive", Armor, map.GridCoords, hits: 2, wield: true, stripChance: 1f);
+            var pain = SEntMan.GetComponent<PainShockComponent>(hit.Victim);
+
+            Assert.That(pain.Pain.Float(), Is.EqualTo(hit.Damage).Within(1f));
+            Assert.That(pain.Tier, Is.LessThan(PainTier.Shock));
         });
     }
 
