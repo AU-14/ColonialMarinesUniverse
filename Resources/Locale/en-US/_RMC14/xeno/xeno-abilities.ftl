@@ -477,7 +477,10 @@ rmc-destroy-cant-area = We can't leap to that area!
 rmc-xeno-guardian-link-self = We cannot link to ourself!  
 rmc-xeno-guardian-link-dead = {$target} is already dead!  
 rmc-xeno-guardian-link-see-fail = We can't see that target clearly enough!  
-rmc-xeno-guardian-link-start-self = We link ourselves to {$target}, ready to absorb their wounds!  
-rmc-xeno-guardian-link-start-target = {$user} links itself to us, ready to absorb our wounds!
+rmc-xeno-guardian-link-start-self = We link ourselves to {$target}, ready to absorb HALF their wounds!  
+rmc-xeno-guardian-link-start-target = {$user} links itself to us, ready to absorb HALF our wounds!
+rmc-xeno-guardian-critsave-start-self = {$target} is CRITICALLY WOUNDED, we begin absorbing ALL their wounds!  
+rmc-xeno-guardian-critsave-start-target = {$user} shields us, taking ALL our wounds as its own!  
+rmc-xeno-guardian-critsave-end-target = {$user}'s protection fades!
 rmc-xeno-guardian-absorbing-damage = The Confluence shields {$target} from harm!
 
