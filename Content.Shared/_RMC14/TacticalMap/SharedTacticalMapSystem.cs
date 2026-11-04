@@ -166,6 +166,29 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
     // Center and half sizes are classic canvas units: 3 px per tile, min-offset, Y flipped.
     public void DrawTacticalMapRectangle(Entity<TacticalMapComponent> map, Color color, Vector2 center, float halfWidth, float halfHeight, float thickness = 3f, int depth = 0)
     {
+        var rect = BuildRectangleLines(color, center, halfWidth, halfHeight, thickness, depth);
+
+        // CMU14: rebuild the list so the new reference marks shared lines dirty for recon baselines.
+        // Replacement is scoped to an identical redraw: same-colored strokes elsewhere survive.
+        var shared = map.Comp.SharedLines.Where(l => !rect.Contains(l)).ToList();
+        shared.AddRange(rect);
+        map.Comp.SharedLines = shared;
+
+        Dirty(map);
+    }
+
+    // CMU14 method: removes only strokes matching this rectangle's geometry and color, so clearing
+    // a zone rectangle never deletes unrelated shared lines (player recon strokes) in the same color.
+    public void RemoveTacticalMapRectangle(Entity<TacticalMapComponent> map, Color color, Vector2 center, float halfWidth, float halfHeight, float thickness = 3f, int depth = 0)
+    {
+        var rect = BuildRectangleLines(color, center, halfWidth, halfHeight, thickness, depth);
+        map.Comp.SharedLines = map.Comp.SharedLines.Where(l => !rect.Contains(l)).ToList();
+
+        Dirty(map);
+    }
+
+    private static List<TacticalMapLine> BuildRectangleLines(Color color, Vector2 center, float halfWidth, float halfHeight, float thickness, int depth)
+    {
         var corners = new List<Vector2>(4);
         corners.Add(new Vector2(center.X - halfWidth, center.Y - halfHeight));
         corners.Add(new Vector2(center.X + halfWidth, center.Y - halfHeight));
@@ -177,16 +200,10 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         {
             var a = corners[i];
             var b = corners[(i + 1) % 4];
-            // CMU14
             rect.Add(new TacticalMapLine(new Vector2i((int) a.X, (int) a.Y), new Vector2i((int) b.X, (int) b.Y), color, thickness, null, depth));
         }
 
-        // CMU14
-        var shared = map.Comp.SharedLines.Where(l => l.Color != color).ToList();
-        shared.AddRange(rect);
-        map.Comp.SharedLines = shared;
-
-        Dirty(map);
+        return rect;
     }
 
     protected void UpdateMapData(Entity<TacticalMapComputerComponent> computer)

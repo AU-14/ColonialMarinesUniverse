@@ -627,7 +627,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     private bool Sell(Entity<RequisitionsElevatorComponent> elevator)
     {
         var account = GetAccount(elevator.Comp.Faction);
-        var entities = _lookup.GetEntitiesIntersecting(elevator);
+        // CMU14: Price contained goods through their parent once, including industry exports in crates.
+        // var entities = _lookup.GetEntitiesIntersecting(elevator);
+        var entities = _lookup.GetEntitiesIntersecting(elevator, LookupFlags.Uncontained);
         var soldAny = false;
         var rewards = 0;
 
@@ -639,9 +641,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             // Instead of blacklist, we use a whitelist to selectively control generated funds from selling
             // if (HasComp<CargoSellBlacklistComponent>(entity))
             //     continue;
-            // cmu edit start: loose invoices and order slips pay out too, not just ones in or on a crate
-            if (!HasComp<CargoSellWhitelistComponent>(entity) && !HasComp<RequisitionsInvoiceComponent>(entity))
-            // cmu edit end
+            // CMU14: Accept loose invoices and industry exports as well as explicitly whitelisted cargo.
+            if (!HasComp<CargoSellWhitelistComponent>(entity) && !HasComp<RequisitionsInvoiceComponent>(entity)
+                && !_industryExports.CanExport(entity))
             {
                 QueueDel(entity);
                 continue;
@@ -651,7 +653,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             {
                 var entRewards = SubmitInvoices(entity);
                 if (TryComp(entity, out RequisitionsCrateComponent? crate))
-                    entRewards += crate.Reward;
+                {
+                    // CMU14: Preserve the crate refund and pay for eligible industry contents.
+                    // entRewards += crate.Reward;
+                    entRewards += crate.Reward + (int) Math.Round(_industryExports.GetContainedExportPrice(entity));
+                }
                 else
                     entRewards += (int)Math.Round(_pricing.GetPrice(entity));
 

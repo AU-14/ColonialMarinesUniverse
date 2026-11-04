@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 using Robust.Shared.Serialization;
+using Robust.Shared.Maths;
 
 namespace Content.Shared.CMU14.Fluids;
 
@@ -10,6 +11,21 @@ public enum FluidPipeVisuals : byte
 {
     Connections,
     Down,
+    CMUFlowArrows,
+}
+
+/// <summary>A machine connection marker on one side of a pipe, in grid coordinates.</summary>
+[Serializable, NetSerializable]
+public readonly record struct CMUFluidPipeArrow(Vector2i Side, bool Output, bool OnMachineTile);
+
+// Appearance payloads must both register their collection type and support client-side snapshots.
+[Serializable, NetSerializable]
+public sealed class CMUFluidPipeArrowState(List<CMUFluidPipeArrow> arrows) : ICloneable
+{
+    public readonly List<CMUFluidPipeArrow> Arrows = arrows;
+
+    public object Clone()
+        => new CMUFluidPipeArrowState(new List<CMUFluidPipeArrow>(Arrows));
 }
 
 // The window that asks which port of a machine a pipe is to be joined to, when the machine has more than one that fits.
@@ -26,21 +42,29 @@ public sealed class FluidPortsBoundUserInterfaceState(List<FluidPortEntry> ports
     public List<FluidPortEntry> Ports = ports;
 }
 
-// One port of the machine in the window: its id, whether it is an inlet or an outlet, the liquid it is for (empty for any),
-// whether the pipe in the user's hand is joined to it, and how many pipes are joined to it.
+// Connection state is shared by viewers; the selected pipe stays private to each user on the server.
 [Serializable, NetSerializable]
-public sealed class FluidPortEntry(string id, bool output, string kind, bool joined, int links)
+public sealed class FluidPortEntry(string id, bool output, string kind, int maxLinks, List<CMUFluidPortLink> links)
 {
     public string Id = id;
     public bool Output = output;
     public string Kind = kind;
-    public bool Joined = joined;
-    public int Links = links;
+    public int MaxLinks = maxLinks;
+    public List<CMUFluidPortLink> Links = links;
 }
 
-// The port picked in the window.
+[Serializable, NetSerializable]
+public sealed record CMUFluidPortLink(NetEntity Pipe, string Name, string Position);
+
 [Serializable, NetSerializable]
 public sealed class FluidPortChosenMessage(string port) : BoundUserInterfaceMessage
 {
     public string Port = port;
+}
+
+[Serializable, NetSerializable]
+public sealed class CMUFluidPortDisconnectMessage(string port, NetEntity pipe) : BoundUserInterfaceMessage
+{
+    public string Port = port;
+    public NetEntity Pipe = pipe;
 }
