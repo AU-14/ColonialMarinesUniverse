@@ -104,5 +104,13 @@ public sealed class GuardianAbsorbSystem : EntitySystem
         if (type != null && comp.Type != type)  
             return;  
         RemComp<GuardianAbsorbComponent>(target);  
-    }  
+    }
+
+    public static int GetPriority(GuardianAbsorbType type) => type switch  
+    {  
+        GuardianAbsorbType.PassiveCritSave => 3,  
+        GuardianAbsorbType.DirectLink => 2,  
+        GuardianAbsorbType.AuraLink => 1,  
+        _ => 0,  
+    };
 }
