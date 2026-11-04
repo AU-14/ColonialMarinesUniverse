@@ -66,7 +66,7 @@ public sealed partial class VendingMachineMenu : FancyWindow
         StockSummary.FontColorOverride = CrtTerminalPalette.TextDim;
         EmptyLabel.Text = Loc.GetString("cmu-vendor-empty");
         EmptyLabel.FontColorOverride = CrtTerminalPalette.TextDim;
-        FooterText.Text = Loc.GetString("cmu-vendor-footer");
+        FooterText.Text = Loc.GetString("cmu-vendor-standard-footer");
         FooterText.FontOverride = kit.Small;
         FooterText.FontColorOverride = CrtTerminalPalette.TextDim;
 
@@ -79,8 +79,8 @@ public sealed partial class VendingMachineMenu : FancyWindow
         ContentsContainer.AddChild(kit.Tube);
         if (kit.Tube.GetChild(1) is CrtScreenControl crt)
         {
-            crt.Roll = false;
-            crt.Grain = false;
+            crt.Roll = true;
+            crt.Grain = true;
         }
 
         // CMU14 End
@@ -88,6 +88,13 @@ public sealed partial class VendingMachineMenu : FancyWindow
         VendingContents.DataFilterCondition += DataFilterCondition;
         VendingContents.GenerateItem += GenerateButton;
         VendingContents.ItemKeyBindDown += (args, data) => OnItemSelected?.Invoke(args, data);
+    }
+
+    // CMU14 method: keep the CRT heading consistent with the window's entity name.
+    public void SetVendorName(string name)
+    {
+        InventoryHeading.Text = name;
+        InventoryHeading.ToolTip = name;
     }
 
     private bool DataFilterCondition(string filter, ListData data)

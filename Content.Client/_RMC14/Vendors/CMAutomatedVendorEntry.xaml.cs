@@ -29,16 +29,14 @@ public sealed partial class CMAutomatedVendorEntry : Control
             ContentMarginTopOverride = 8,
             ContentMarginBottomOverride = 8,
         };
-        IconSurface.PanelOverride = new StyleBoxFlat { BackgroundColor = CrtTerminalPalette.Surface1 };
-        Amount.FontColorOverride = CrtTerminalPalette.TextBright;
-        Stock.FontColorOverride = CrtTerminalPalette.TextDim;
-        Availability.FontColorOverride = CrtTerminalPalette.Accent;
+        TooltipLabel.StyleBoxOverride = IconStyle(CrtTerminalPalette.Surface1);
         TooltipLabel.ToolTip = Loc.GetString("cmu-vendor-details");
-        CmuButtonStyles.Apply(TooltipLabel, CmuButtonStyles.Variant.Neutral);
 
         Panel.Button.TextLabel.Text = Loc.GetString("cmu-vendor-dispense");
         Panel.Button.TextLabel.FontColorOverride = CrtTerminalPalette.TextBright;
-        Panel.Button.MinHeight = 32;
+        Panel.Button.MinHeight = 36;
+        Panel.Button.TextLabel.HorizontalExpand = true;
+        Panel.Button.TextLabel.Align = Robust.Client.UserInterface.Controls.Label.AlignMode.Center;
     }
 
     public void SetTitle(string name)
@@ -56,25 +54,57 @@ public sealed partial class CMAutomatedVendorEntry : Control
     {
         _yautjaTheme = true;
         RowSurface.PanelOverride = YautjaBracerUiStyle.Flat(YautjaBracerUiStyle.DeepCard, YautjaBracerUiStyle.MutedBorder);
-        IconSurface.PanelOverride = YautjaBracerUiStyle.Flat(YautjaBracerUiStyle.Surface, YautjaBracerUiStyle.MutedBorder);
-        Amount.FontColorOverride = YautjaBracerUiStyle.Text;
-        Stock.FontColorOverride = YautjaBracerUiStyle.Muted;
-        TooltipLabel.StyleBoxOverride = YautjaBracerUiStyle.Flat(YautjaBracerUiStyle.DeepCard, YautjaBracerUiStyle.MutedBorder);
-        TooltipLabel.Label.FontColorOverride = YautjaBracerUiStyle.Text;
+        TooltipLabel.StyleBoxOverride = IconStyle(YautjaBracerUiStyle.Surface);
         Panel.Button.TextLabel.FontColorOverride = YautjaBracerUiStyle.Text;
     }
 
-    /// <summary>Visual feedback only. The actual purchase restrictions remain authoritative on the server.</summary>
-    public void SetAvailability(bool outOfStock, bool low, bool disabled)
+    public void SetStock(int? current, int? maximum, int? personalRemaining, int? personalMaximum, int? cost)
     {
-        Availability.Text = Loc.GetString(outOfStock
-            ? "cmu-vendor-out"
-            : disabled ? "cmu-vendor-unavailable"
-                : low ? "cmu-vendor-low" : "cmu-vendor-in-stock");
-        Availability.FontColorOverride = _yautjaTheme
-            ? (outOfStock || disabled ? YautjaBracerUiStyle.HotRed
+        var stock = current is { } count
+            ? maximum is > 0
+                ? Loc.GetString("cmu-vendor-stock-count", ("current", count), ("max", maximum.Value))
+                : Loc.GetString("cmu-vendor-stock-remaining", ("count", count))
+            : Loc.GetString("cmu-vendor-stock-infinite");
+        var limit = personalRemaining is { } remaining
+            ? Loc.GetString("cmu-vendor-personal-limit", ("remaining", Math.Max(0, remaining)),
+                ("max", personalMaximum ?? 0))
+            : null;
+        var price = cost is { } points ? Loc.GetString("cmu-vendor-points-cost", ("count", points)) : null;
+        var details = (limit, price) switch
+        {
+            (not null, not null) => Loc.GetString("cmu-vendor-stock-limit-cost", ("stock", stock), ("limit", limit), ("cost", price)),
+            (not null, null) => Loc.GetString("cmu-vendor-stock-limit", ("stock", stock), ("limit", limit)),
+            (null, not null) => Loc.GetString("cmu-vendor-stock-cost", ("stock", stock), ("cost", price)),
+            _ => stock,
+        };
+        Stock.SetMessage(details, _yautjaTheme ? YautjaBracerUiStyle.Text : CrtTerminalPalette.Text);
+    }
+
+    /// <summary>Visual feedback only. The actual purchase restrictions remain authoritative on the server.</summary>
+    public void SetAvailability(bool outOfStock, bool low, string? reason)
+    {
+        Panel.Button.Disabled = reason != null;
+        Panel.ToolTip = reason;
+        var color = _yautjaTheme
+            ? (outOfStock || reason != null ? YautjaBracerUiStyle.HotRed
                 : low ? YautjaBracerUiStyle.Amber : YautjaBracerUiStyle.Red)
-            : (outOfStock || disabled ? CrtTerminalPalette.Alert
+            : (outOfStock || reason != null ? CrtTerminalPalette.Caution
                 : low ? CrtTerminalPalette.Caution : CrtTerminalPalette.Accent);
+        // Keep the status slot present even when empty, so live restrictions cannot move later rows.
+        Availability.Text = reason ?? (low ? Loc.GetString("cmu-vendor-low") : string.Empty);
+        Availability.ToolTip = Availability.Text;
+        Availability.FontColorOverride = color;
+    }
+
+    private static StyleBoxFlat IconStyle(Color color)
+    {
+        return new StyleBoxFlat
+        {
+            BackgroundColor = color,
+            ContentMarginLeftOverride = 4,
+            ContentMarginRightOverride = 4,
+            ContentMarginTopOverride = 4,
+            ContentMarginBottomOverride = 4,
+        };
     }
 }

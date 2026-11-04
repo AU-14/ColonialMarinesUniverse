@@ -6,21 +6,18 @@
     <PanelContainer Name="Background" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="10">
             <PanelContainer Name="HeaderStrip" HorizontalExpand="True">
-                <BoxContainer Orientation="Horizontal" SeparationOverride="10">
-                    <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4">
-                        <Label Name="Heading" />
-                        <Label Name="SummaryLabel" />
-                    </BoxContainer>
-                    <BoxContainer Orientation="Vertical" SeparationOverride="4">
-                        <Label Name="StatusLabel" HorizontalAlignment="Right" />
-                        <Label Name="PointsLabel" Access="Public" HorizontalAlignment="Right" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                    <Label Name="Heading" ClipText="True" />
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="16">
+                        <Label Name="PointsLabel" Access="Public" />
+                        <Label Name="SummaryLabel" HorizontalExpand="True" ClipText="True" />
                     </BoxContainer>
                 </BoxContainer>
             </PanelContainer>
-            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
-                <LineEdit Name="Search" Access="Public" HorizontalExpand="True" />
-                <Button Name="AvailableOnly" Access="Public" />
-                <Button Name="LowStockOnly" Access="Public" />
+            <LineEdit Name="Search" Access="Public" HorizontalExpand="True" />
+            <BoxContainer Orientation="Horizontal" SeparationOverride="16">
+                <CheckBox Name="AvailableOnly" Access="Public" />
+                <CheckBox Name="LowStockOnly" Access="Public" />
             </BoxContainer>
             <PanelContainer Name="ReagentsStrip">
                 <BoxContainer Orientation="Horizontal" Name="ReagentsContainer" Access="Public" SeparationOverride="8">
@@ -31,7 +28,7 @@
                 </BoxContainer>
             </PanelContainer>
             <BoxContainer Orientation="Horizontal" SeparationOverride="8" VerticalExpand="True">
-                <PanelContainer Name="NavigationStrip" MinWidth="170" MaxWidth="200">
+                <PanelContainer Name="NavigationStrip" MinWidth="240" MaxWidth="240">
                     <BoxContainer Orientation="Vertical" SeparationOverride="8">
                         <Label Name="CategoryHeading" />
                         <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
@@ -42,15 +39,15 @@
                 <PanelContainer Name="StockPanel" VerticalExpand="True" HorizontalExpand="True">
                     <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True" VerticalExpand="True">
                         <Label Name="ResultCount" />
-                        <Label Name="EmptyLabel" Visible="False" />
-                        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+                        <RichTextLabel Name="EmptyLabel" Visible="False" HorizontalExpand="True" />
+                        <ScrollContainer Name="InventoryScroll" Access="Public" HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
                             <BoxContainer Orientation="Vertical" Name="Sections" Access="Public" SeparationOverride="8" HorizontalExpand="True" Margin="2 2 6 2" />
                         </ScrollContainer>
                     </BoxContainer>
                 </PanelContainer>
             </BoxContainer>
             <PanelContainer Name="FooterStrip">
-                <Label Name="FooterLabel" />
+                <Label Name="FooterLabel" HorizontalExpand="True" ClipText="True" MinHeight="24" MaxHeight="24" />
             </PanelContainer>
         </BoxContainer>
     </PanelContainer>
