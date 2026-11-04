@@ -8,7 +8,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Robust.Shared.Timing;
-using Robust.Shared.Network.INetManager;
+using Robust.Shared.Network;
   
 namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianCritSave;  
   
