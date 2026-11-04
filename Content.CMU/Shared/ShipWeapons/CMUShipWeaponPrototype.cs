@@ -7,6 +7,8 @@ namespace Content.Shared.CMU14.ShipWeapons;
 [Prototype("cmuShipWeapon")]
 public sealed partial class CMUShipWeaponPrototype : IPrototype
 {
+    public const int RailCannonRadius = 2;
+
     [IdDataField]
     public string ID { get; private set; } = default!;
 
@@ -59,7 +61,7 @@ public sealed partial class CMUShipWeaponPrototype : IPrototype
     /// Includes the complete barrage pattern, not just an individual shell's blast.
     /// </summary>
     public float FootprintRadius => Math.Max(
-        RailDamage != null ? 2.5f * MathF.Sqrt(2) : Spread + WalkingDistance / 2 + BlastRadius,
+        RailDamage != null ? RailCannonRadius : Spread + WalkingDistance / 2 + BlastRadius,
         CloudRadius + 0.75f);
 }
 

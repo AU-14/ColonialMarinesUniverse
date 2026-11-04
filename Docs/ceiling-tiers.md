@@ -28,3 +28,7 @@ column; permission to strike does not guarantee impact on the selected floor.
 Dropship tactical landings additionally require an open z-level column above the
 touchdown tile, so solid ceilings block them regardless of the area's tier.
 These tiers describe aerial access, not structural tile durability or weather.
+Rail-cannon orbital strikes on eligible tiles lower the struck area's tier to 0
+and damage structures and remove floor tiles in their circular impact footprint
+across connected z-levels. Area permissions are stored per named area, so
+lowering a tier affects all tiles assigned to that area on the struck grid.

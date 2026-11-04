@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.Maps;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
@@ -171,6 +172,8 @@ public sealed partial class CMUShipWeaponsSystem
     {
         var centerTile = new Vector2(MathF.Floor(impact.X), MathF.Floor(impact.Y));
         var center = centerTile + new Vector2(0.5f);
+        var radiusSquared = CMUShipWeaponPrototype.RailCannonRadius * CMUShipWeaponPrototype.RailCannonRadius;
+
         _railTargets.Clear();
         _lookup.GetEntitiesInRange(new MapCoordinates(center, impact.MapId), 4, _railTargets, LookupFlags.Uncontained);
         foreach (var target in _railTargets)
@@ -180,8 +183,9 @@ public sealed partial class CMUShipWeaponsSystem
 
             var position = _transform.GetMapCoordinates(target);
             var tile = new Vector2(MathF.Floor(position.X), MathF.Floor(position.Y));
+            var offset = tile - centerTile;
             if (position.MapId != impact.MapId ||
-                MathF.Abs(tile.X - centerTile.X) > 2 || MathF.Abs(tile.Y - centerTile.Y) > 2 ||
+                offset.LengthSquared() > radiusSquared ||
                 !TryGetGroundCoordinates(position, out var coordinates) ||
                 !_area.CanOrbitalBombard(coordinates, out _))
                 continue;
@@ -193,6 +197,25 @@ public sealed partial class CMUShipWeaponsSystem
                 origin: source, impact: DamageImpact.Explosion);
             var received = new ExplosionReceivedEvent(RailExplosion, impact, applied ?? new DamageSpecifier(), stateBeforeDamage);
             RaiseLocalEvent(target, ref received);
+        }
+
+        for (var x = -CMUShipWeaponPrototype.RailCannonRadius; x <= CMUShipWeaponPrototype.RailCannonRadius; x++)
+        for (var y = -CMUShipWeaponPrototype.RailCannonRadius; y <= CMUShipWeaponPrototype.RailCannonRadius; y++)
+        {
+            if (x * x + y * y > radiusSquared)
+                continue;
+
+            var coordinatesOnMap = new MapCoordinates(center + new Vector2(x, y), impact.MapId);
+            if (!TryGetGroundCoordinates(coordinatesOnMap, out var coordinates) ||
+                !_area.CanOrbitalBombard(coordinates, out _) ||
+                !_map.TryFindGridAt(coordinatesOnMap, out var grid, out var mapGrid))
+            {
+                continue;
+            }
+
+            _area.SetCeilingLevelZero(coordinates);
+            var tile = _map.WorldToTile(grid, mapGrid, coordinatesOnMap.Position);
+            _map.SetTile(grid, mapGrid, tile, Tile.Empty);
         }
 
         var effect = Spawn("RMCExplosionEffectClusterOB", _transform.ToCoordinates(impact));

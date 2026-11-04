@@ -1,3 +1,5 @@
+using Robust.Shared.Map;
+
 namespace Content.Shared._RMC14.Areas;
 
 public sealed partial class AreaSystem
@@ -26,5 +28,23 @@ public sealed partial class AreaSystem
         area.CAS = tier < 3;
         area.Fulton = area.SupplyDrop = area.MortarFire = tier < 2;
         area.MortarPlacement = area.Lasing = area.Medevac = area.Paradropping = tier < 1;
+    }
+
+    public bool SetCeilingLevelZero(EntityCoordinates coordinates)
+    {
+        if (!TryGetArea(coordinates, out var area, out _))
+            return false;
+
+        var comp = area.Value.Comp;
+        if (comp.OB && comp.CAS && comp.Fulton && comp.SupplyDrop && comp.MortarFire &&
+            comp.MortarPlacement && comp.Lasing && comp.Medevac && comp.Paradropping)
+        {
+            return false;
+        }
+
+        comp.OB = comp.CAS = comp.Fulton = comp.SupplyDrop = comp.MortarFire = true;
+        comp.MortarPlacement = comp.Lasing = comp.Medevac = comp.Paradropping = true;
+        Dirty(area.Value);
+        return true;
     }
 }
