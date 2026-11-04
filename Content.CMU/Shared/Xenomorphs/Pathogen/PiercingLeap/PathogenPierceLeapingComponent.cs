@@ -13,23 +13,37 @@ public sealed partial class PathogenPierceLeapingComponent : Component
     public EntityCoordinates Origin;  
   
     [DataField, AutoNetworkedField]  
-    public TimeSpan LeapEndTime;  
+    public MapCoordinates Destination;  
   
     [DataField, AutoNetworkedField]  
-    public HashSet<EntityUid> Tagged = new();  
+    public Vector2 Direction;  
+  
+    [DataField, AutoNetworkedField]  
+    public TimeSpan LeapEndTime;  
   
     [DataField, AutoNetworkedField]  
     public DamageSpecifier Damage = new();  
   
     [DataField, AutoNetworkedField]  
-    public TimeSpan StrikeDelay;  
+    public float PathWidth = 1.0f;  
   
     [DataField, AutoNetworkedField]  
-    public float PathWidth;  
+    public TimeSpan StrikeDelay = TimeSpan.FromSeconds(0.75);  
   
     [DataField, AutoNetworkedField]  
     public EntProtoId? HitEffect;  
   
     [DataField, AutoNetworkedField]  
     public SoundSpecifier? HitSound;  
+  
+    [DataField, AutoNetworkedField]  
+    public EntProtoId? TagEffect;  
+  
+    [DataField, AutoNetworkedField]  
+    public CollisionGroup IgnoredCollisionGroupLarge = CollisionGroup.None;  
+  
+    [DataField, AutoNetworkedField]  
+    public CollisionGroup IgnoredCollisionGroupSmall = CollisionGroup.None;  
+  
+    public HashSet<EntityUid> Tagged = new();  
 }
