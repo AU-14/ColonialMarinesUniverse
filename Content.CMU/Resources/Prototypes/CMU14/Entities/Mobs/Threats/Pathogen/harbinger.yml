@@ -64,7 +64,9 @@
   - type: PathogenPierceLeap
     range: 6
     plasmaCost: 25
-    leapSound: /Audio/CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
+    damage:
+      types:
+        Slash: 30
   - type: XenoImpale
     damage:
       types:
