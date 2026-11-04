@@ -18,24 +18,16 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;  
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;  
     [Dependency] private readonly IGameTiming _timing = default!;  
+    [Dependency] private readonly INetManager _net = default!;  
+    [Dependency] private readonly SharedPopupSystem _popup = default!;  
   
     private readonly HashSet<Entity<MobStateComponent>> _nearby = new();  
   
-    public override void Initialize()  
-    {  
-        SubscribeLocalEvent<GuardianCritSaveComponent, DamageChangedEvent>(OnGuardianDamageChanged);  
-    }  
-  
-    private void OnGuardianDamageChanged(Entity<GuardianCritSaveComponent> ent, ref DamageChangedEvent args)  
-    {  
-        if (args.DamageDelta is not { } delta)  
-            return;  
-  
-        ent.Comp.CachedDamage += delta.GetTotal();  
-    }  
-  
     public override void Update(float frameTime)  
     {  
+        if (_net.IsClient)  
+            return;  
+  
         var time = _timing.CurTime;  
         var query = EntityQueryEnumerator<GuardianCritSaveComponent>();  
         while (query.MoveNext(out var uid, out var save))  
@@ -45,15 +37,24 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
   
             save.NextCheck = time + save.CheckEvery;  
   
-            // Self-gate: stop tanking if within MinimumHealth of the Guardian's own crit threshold  
             if (!_mobThreshold.TryGetIncapThreshold(uid, out var incapThreshold))  
                 continue;  
   
-            var remaining = incapThreshold.Value - save.CachedDamage;  
+            // Live damage read instead of a cached accumulator.  
+            var guardianDamage = FixedPoint2.Zero;  
+            if (TryComp<DamageableComponent>(uid, out var damageable))  
+                guardianDamage = damageable.TotalDamage;  
+  
+            var remaining = incapThreshold.Value - guardianDamage;  
             if (remaining <= save.MinimumHealth)  
             {  
                 foreach (var old in save.ActiveTargets)  
+                {  
                     _guardianAbsorb.RemoveAbsorb(old, GuardianAbsorbType.PassiveCritSave);  
+                    _popup.PopupEntity(  
+                        Loc.GetString("rmc-xeno-guardian-critsave-end-target", ("user", uid)),  
+                        old, old, PopupType.SmallCaution);  
+                }  
   
                 save.ActiveTargets.Clear();  
                 continue;  
@@ -61,11 +62,14 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
   
             _nearby.Clear();  
             var coords = Transform(uid).Coordinates;  
-            _lookup.GetEntitiesInRange(coords, save.Range, _nearby, LookupFlags.Uncontained); 
+            _lookup.GetEntitiesInRange(coords, save.Range, _nearby, LookupFlags.Uncontained);  
   
             var stillActive = new HashSet<EntityUid>();  
             foreach (var nearby in _nearby)  
             {  
+                if (nearby.Owner == uid)  
+                    continue;  
+  
                 if (!HasComp<XenoComponent>(nearby.Owner))  
                     continue;  
   
@@ -75,14 +79,29 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
                 if (!_mobState.IsCritical(nearby.Owner, nearby.Comp))  
                     continue;  
   
-                _guardianAbsorb.SetAbsorb(nearby.Owner, uid, GuardianAbsorbType.PassiveCritSave, save.AbsorbPercent);  
+                if (_guardianAbsorb.SetAbsorb(nearby.Owner, uid, GuardianAbsorbType.PassiveCritSave, save.AbsorbPercent)  
+                    && !save.ActiveTargets.Contains(nearby.Owner))  
+                {  
+                    _popup.PopupEntity(  
+                        Loc.GetString("rmc-xeno-guardian-critsave-start-target", ("user", uid)),  
+                        nearby.Owner, nearby.Owner, PopupType.LargeCaution);  
+                    _popup.PopupEntity(  
+                        Loc.GetString("rmc-xeno-guardian-critsave-start-self", ("target", nearby.Owner)),  
+                        uid, uid, PopupType.LargeCaution);  
+                }  
+  
                 stillActive.Add(nearby.Owner);  
             }  
   
             foreach (var old in save.ActiveTargets)  
             {  
-                if (!stillActive.Contains(old))  
-                    _guardianAbsorb.RemoveAbsorb(old, GuardianAbsorbType.PassiveCritSave);  
+                if (stillActive.Contains(old))  
+                    continue;  
+  
+                _guardianAbsorb.RemoveAbsorb(old, GuardianAbsorbType.PassiveCritSave);  
+                _popup.PopupEntity(  
+                    Loc.GetString("rmc-xeno-guardian-critsave-end-target", ("user", uid)),  
+                    old, old, PopupType.MediumCaution);  
             }  
   
             save.ActiveTargets.Clear();  
@@ -91,4 +110,3 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
         }  
     }  
 }
-
