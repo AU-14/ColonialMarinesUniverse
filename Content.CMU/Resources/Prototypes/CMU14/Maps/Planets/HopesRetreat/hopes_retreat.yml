@@ -53,7 +53,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - biomorphThirdParty
+    # - biomorphThirdParty # biomorph kill
     - IASFSurvLarge
     - IASFSurvMedium
     - IASFSurvSmall
@@ -68,7 +68,7 @@
     - NeomorphsThreatCF
     - CultistThreatCF
     - WendigoThreatCF
-    - BiomorphsThreatCF
+    # - BiomorphsThreatCF #biomorph kill
     - TribalsThreatCF
     - ApeThreatCF
     joboverrides:

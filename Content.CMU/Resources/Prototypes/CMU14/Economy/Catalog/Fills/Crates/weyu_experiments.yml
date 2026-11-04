@@ -98,15 +98,15 @@
       - id: CMUWeYuHivebreaker
         prob: 0.1
       weight: 1
-    - !type:AllSelector
-      children:
-      - id: AU14BiomorphVenomSyringe
-      - id: AU14BiomorphVenomSyringe
-      - id: AU14BiomorphVenomSyringe
-      - id: AU14BiomorphVenomSyringe
-      - id: AU14BiomorphVenomSyringe
-      - id: AU14BiomorphVenomSyringe
-      weight: 1
+#    - !type:AllSelector
+#      children:
+#      - id: AU14BiomorphVenomSyringe
+#      - id: AU14BiomorphVenomSyringe
+#      - id: AU14BiomorphVenomSyringe
+#      - id: AU14BiomorphVenomSyringe
+#      - id: AU14BiomorphVenomSyringe
+#      - id: AU14BiomorphVenomSyringe
+#      weight: 1
     - !type:AllSelector
       children:
       - id: RMCBottleMindbreaker

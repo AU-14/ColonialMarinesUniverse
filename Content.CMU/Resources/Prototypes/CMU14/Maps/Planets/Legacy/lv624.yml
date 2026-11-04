@@ -55,7 +55,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - biomorphThirdParty
+    # - biomorphThirdParty # biomorph kill
     - tribalThirdParty
     - DrugSmuggler
     - CMBParoleeTransport
@@ -74,7 +74,7 @@
     # - NeomorphsThreatCF # no xenocf markers
     # - CultistThreatCF # map has no threat spawn markers
     # - WendigoThreatCF # map has no threat spawn markers
-    # - AbominationsThreatCF # no xenocf markers
+    # - BiomorphThreatCF # no xenocf markers/biomorph kill
     # - TribalsThreatCF # map has no threat spawn markers
     # - ApeThreatCF # map has no threat spawn markers
     joboverrides:

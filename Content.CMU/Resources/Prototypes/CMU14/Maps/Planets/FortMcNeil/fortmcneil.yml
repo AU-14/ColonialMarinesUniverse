@@ -57,7 +57,7 @@
     - ProfessorVonBandolier
     - WYPMCParty
     - WYPMCPartyAlt
-    - biomorphThirdParty
+    # - biomorphThirdParty # biomorph kill
     threats:
     - XenoThreat
     - NeomorphsThreat
@@ -66,16 +66,16 @@
     # - NeomorphsThreatCF # no xenocf markers
     # - CultistThreatCF
     # - WendigoThreatCF
-    # - AbominationsThreatCF # no xenocf markers
+    # - BiomorphThreatCF # no xenocf markers/biomorph kill
     # - TribalsThreatCF
     # - ApeThreatCF
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
-    
+
 - type: lorePrimer
   id: CMUPrimerPlanetFortMcNeil
   planetText: "An automated distress signal has been received from the colony site of Fort McNeil, on the border world of White Antre. A response team has been dispatched to investigate."
-  
+
 - type: gameMap
   id: cmufortmcneil
   mapName: Fort McNeil

@@ -41,7 +41,7 @@
     - ICRCReliefParty
     - UACGLostTeam
     - USArmy
-    - biomorphThirdParty
+    # - biomorphThirdParty # biomorph kill
     - tribalThirdParty
     - DrugSmuggler
     - CMBParoleeTransport
@@ -60,7 +60,7 @@
     - NeomorphsThreatCF
     - CultistThreatCF
     - WendigoThreatCF
-    - BiomorphsThreatCF
+    # - BiomorphsThreatCF # biomorph kill
     - TribalsThreatCF
     - ApeThreatCF
     joboverrides:

@@ -58,7 +58,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - biomorphThirdParty
+    # - biomorphThirdParty # biomorph kill
     # threats:
     # - XenoThreat # map has no threat spawn markers
     # - NeomorphsThreat # map has no threat spawn markers
@@ -67,7 +67,7 @@
     # - NeomorphsThreatCF # no xenocf markers
     # - CultistThreatCF # map has no threat spawn markers
     # - WendigoThreatCF # map has no threat spawn markers
-    # - AbominationsThreatCF # no xenocf markers
+    # - BiomorphThreatCF # no xenocf markers/biomorph kill
     # - TribalsThreatCF # map has no threat spawn markers
     # - ApeThreatCF # map has no threat spawn markers
     jobScalingFof: DefaultGovforOpforScale

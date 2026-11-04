@@ -33,7 +33,7 @@
     # - NeomorphsThreatCF # no xenocf markers
     - CultistThreatCF
     - WendigoThreatCF
-    # - AbominationsThreatCF # no xenocf markers
+    # - BiomorphThreatCF # no xenocf markers/biomorph kill
     - TribalsThreatCF
     - ApeThreatCF
     thirdpartyinterval: 1800
@@ -50,7 +50,7 @@
     - ApeThirdParty
     - WYPMCParty
     - WYPMCPartyAlt
-    - biomorphThirdParty
+    # - biomorphThirdParty # biomorph kill
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy

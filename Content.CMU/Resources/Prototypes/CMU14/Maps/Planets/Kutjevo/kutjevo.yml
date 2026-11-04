@@ -57,7 +57,7 @@
     - ProfessorVonBandolier
     - WYPMCParty
     - WYPMCPartyAlt
-    - biomorphThirdParty
+    # - biomorphThirdParty # biomorph kill
     threats:
     - XenoThreat
     - NeomorphsThreat
@@ -66,7 +66,7 @@
     # - NeomorphsThreatCF # no xenocf markers
     - CultistThreatCF
     - WendigoThreatCF
-    # - AbominationsThreatCF # no xenocf markers
+    # - BiomorphThreatCF # no xenocf markers/biomorph kill
     - TribalsThreatCF
     - ApeThreatCF
     jobScalingFof: DefaultGovforOpforScale

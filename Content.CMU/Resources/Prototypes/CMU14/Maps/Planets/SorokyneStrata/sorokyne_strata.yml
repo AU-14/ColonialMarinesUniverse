@@ -58,7 +58,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - biomorphThirdParty
+    # - biomorphThirdParty # biomorph kill
     threats:
     - XenoThreat
     - NeomorphsThreat
@@ -67,7 +67,7 @@
     - NeomorphsThreatCF
     - CultistThreatCF
     - WendigoThreatCF
-    - BiomorphsThreatCF
+    # - BiomorphsThreatCF # biomorph kill
     - TribalsThreatCF
     - ApeThreatCF
     jobScalingFof: DefaultGovforOpforScale
