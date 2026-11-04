@@ -17,7 +17,7 @@ using Robust.Shared.Log;
 using Robust.Shared.Network;
 using Robust.Shared.Utility;
 
-namespace Content.Server.CMU14.HelpRelay;
+namespace Content.Server.CMU14.HelpRelay.Systems;
 
 /// <summary>
 /// Single Discord delivery pipe for the help systems (ahelp/mhelp/bughelp) and the round news

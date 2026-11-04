@@ -1,5 +1,5 @@
 using System;
-using Content.Server.CMU14.HelpRelay;
+using Content.Server.CMU14.HelpRelay.Systems;
 using Content.Server.GameTicking;
 using NUnit.Framework;
 

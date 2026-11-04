@@ -67,11 +67,13 @@ Upstream's `discord.news_webhook` must stay unset, or articles deliver through b
 
 | Path | Job |
 |---|---|
-| `HelpRelayManager.cs` | Webhook resolution, queue, conversation edit-in-place, linked-id cache, forum thread create |
-| `HelpRelayPayload.cs` | Embed builders and Discord DTOs (self-contained, no upstream DTOs) |
-| `HelpRelaySystem.cs` | Round-restart cleanup |
-| `HelpSource.cs` | Source enum, per-source colors and labels |
-| `../NewsRelay/NewsRelaySystem.cs` | Round-end news digest: gathers articles, creates the round thread, enqueues per-article followers |
+| `Systems/HelpRelayManager.cs` | Webhook resolution, queue, conversation edit-in-place, linked-id cache, forum thread create |
+| `Systems/HelpRelayPayload.cs` | Embed builders and Discord DTOs (self-contained, no upstream DTOs) |
+| `Systems/HelpRelaySystem.cs` | Round-restart cleanup |
+| `Systems/HelpSource.cs` | Source enum, per-source colors and labels |
+| `BugHelp/BugHelpSystem.cs` | Bug report intake, artifact, posting |
+| `BugHelp/BugHelpCommand.cs` | The `bughelp` command |
+| `NewsRelay/NewsRelaySystem.cs` | Round-end news digest: gathers articles, creates the round thread, enqueues per-article followers |
 
 Checks: `Content.Tests/Server/CMU14/HelpRelayPayloadTest.cs`.
-Category tags grammar and the report flow: `Content.CMU/Shared/BugHelp/README.md`.
+Category tags grammar and the report flow: `Content.CMU/Shared/HelpRelay/BugHelp/README.md`.

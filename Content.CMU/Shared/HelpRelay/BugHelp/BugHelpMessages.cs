@@ -2,7 +2,7 @@ using Lidgren.Network;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.CMU14.BugHelp;
+namespace Content.Shared.CMU14.HelpRelay.BugHelp;
 
 /// <summary>
 /// Which kind of bug a report describes. Grows by adding a member plus a

@@ -72,11 +72,11 @@ Paths relative to `Content.CMU/`.
 
 | Path | Job |
 |---|---|
-| `Shared/BugHelp/BugHelpMessages.cs` | Net messages, `BugHelpCategory` |
-| `Server/BugHelp/BugHelpSystem.cs` | Submit/promote flows, snapshot, report build, thread title |
-| `Server/BugHelp/BugHelpCommand.cs` | `bughelp` command |
-| `Client/BugHelp/BugHelpWindow.xaml(.cs)` | Report form |
-| `Client/BugHelp/BugHelpUIController.cs` | Window lifecycle, send |
+| `Shared/HelpRelay/BugHelp/BugHelpMessages.cs` | Net messages, `BugHelpCategory` |
+| `Server/HelpRelay/BugHelp/BugHelpSystem.cs` | Submit/promote flows, snapshot, report build, thread title |
+| `Server/HelpRelay/BugHelp/BugHelpCommand.cs` | `bughelp` command |
+| `Client/HelpRelay/BugHelp/BugHelpWindow.xaml(.cs)` | Report form |
+| `Client/HelpRelay/BugHelp/BugHelpUIController.cs` | Window lifecycle, send |
 | `Server/HelpRelay/` | Discord delivery, per-source webhooks (separate subsystem) |
 | `Resources/Locale/en-US/CMU14/bug-help.ftl` | All strings |
 | `Content.Tests/Server/CMU14/BugHelpItemScorerTest.cs` | Item candidate scorer |

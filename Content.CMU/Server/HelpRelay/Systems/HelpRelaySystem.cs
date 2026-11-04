@@ -1,6 +1,6 @@
 using Content.Shared.GameTicking;
 
-namespace Content.Server.CMU14.HelpRelay;
+namespace Content.Server.CMU14.HelpRelay.Systems;
 
 /// <summary>
 /// Round lifecycle for relay state that must not outlive a round: conversation messages end with the

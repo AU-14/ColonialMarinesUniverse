@@ -1,4 +1,4 @@
-namespace Content.Server.CMU14.HelpRelay;
+namespace Content.Server.CMU14.HelpRelay.Systems;
 
 /// <summary>
 /// The sources the relay delivers for: the help systems plus the round-end news digest. They stay

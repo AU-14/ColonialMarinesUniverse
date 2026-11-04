@@ -1,14 +1,14 @@
 using Content.Client.Lobby.UI;
 using Content.Client._RMC14.Mentor;
 using Content.Client.Stylesheets;
-using Content.Shared.CMU14.BugHelp;
+using Content.Shared.CMU14.HelpRelay.BugHelp;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.IoC;
 using Robust.Shared.Network;
 
-namespace Content.Client.CMU14.BugHelp;
+namespace Content.Client.CMU14.HelpRelay.BugHelp;
 
 /// <summary>
 /// Owns the bug report window: player-bound, so a plain UI controller over raw net messages —

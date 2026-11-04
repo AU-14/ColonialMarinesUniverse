@@ -4,7 +4,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Content.Server.GameTicking;
 
-namespace Content.Server.CMU14.HelpRelay;
+namespace Content.Server.CMU14.HelpRelay.Systems;
 
 /// <summary>
 /// Round context stamped on every relayed message, and reused by the bug report artifact. Prototype

@@ -2,12 +2,12 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Content.Server.CMU14.HelpRelay;
+using Content.Server.CMU14.HelpRelay.Systems;
 using Content.Server._RMC14.Mentor;
 using Content.Server.Chat.Managers;
 using Content.Server.Players.RateLimiting;
 using Content.Shared.CCVar;
-using Content.Shared.CMU14.BugHelp;
+using Content.Shared.CMU14.HelpRelay.BugHelp;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
@@ -22,7 +22,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Server.CMU14.BugHelp;
+namespace Content.Server.CMU14.HelpRelay.BugHelp;
 
 /// <summary>
 /// Turns a player's bughelp message into a report and hands it to the help relay,

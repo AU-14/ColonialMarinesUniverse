@@ -1,10 +1,9 @@
-using Content.Server.CMU14.BugHelp;
 using Content.Shared.Administration;
-using Content.Shared.CMU14.BugHelp;
+using Content.Shared.CMU14.HelpRelay.BugHelp;
 using Robust.Shared.Console;
 using Robust.Shared.Network;
 
-namespace Content.Server.CMU14.BugHelp;
+namespace Content.Server.CMU14.HelpRelay.BugHelp;
 
 [AnyCommand]
 public sealed class BugHelpCommand : IConsoleCommand

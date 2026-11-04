@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Content.Server.CMU14.HelpRelay;
+using Content.Server.CMU14.HelpRelay.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.MassMedia.Components;
 using Content.Shared.MassMedia.Systems;
@@ -8,7 +8,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
-namespace Content.Server.CMU14.NewsRelay;
+namespace Content.Server.CMU14.HelpRelay.NewsRelay;
 
 /// <summary>
 /// Delivers the round's station news to Discord at round end: one forum thread per round, one

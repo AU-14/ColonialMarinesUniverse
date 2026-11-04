@@ -2,7 +2,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.CartridgeLoader.Cartridges;
 using Content.Server.CartridgeLoader;
 using Content.Server.Chat.Managers;
-using Content.Server.CMU14.NewsRelay; // CMU14: author identity event for the news relay
+using Content.Server.CMU14.HelpRelay.NewsRelay; // CMU14: author identity event for the news relay
 using Content.Server.Discord;
 using Content.Server.GameTicking;
 using Content.Server.MassMedia.Components;
