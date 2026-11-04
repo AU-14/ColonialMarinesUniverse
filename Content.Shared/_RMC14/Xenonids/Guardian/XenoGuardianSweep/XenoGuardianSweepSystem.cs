@@ -10,7 +10,8 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;  
 using Content.Shared.FixedPoint;  
 using Content.Shared.Interaction;  
-using Content.Shared.Mobs.Components;  
+using Content.Shared.Mobs.Components;
+using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;  
 using Robust.Shared.Network;  
 using Robust.Shared.Player;  
@@ -32,7 +33,8 @@ public sealed partial class XenoGuardianSweepSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;  
     [Dependency] private SharedHitLocationSystem _hitLocation = default!;  
     [Dependency] private RMCSlowSystem _slow = default!;  
-    [Dependency] private RMCSizeStunSystem _size = default!;  
+    [Dependency] private RMCSizeStunSystem _size = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
   
     public override void Initialize()  
     {  
@@ -70,7 +72,9 @@ public sealed partial class XenoGuardianSweepSystem : EntitySystem
             }  
   
             _slow.TrySlowdown(ent, xeno.Comp.SlowDuration);  
-            _size.KnockBack(ent, origin, xeno.Comp.KnockBackDistance, xeno.Comp.KnockBackDistance);  
+            _size.KnockBack(ent, origin, xeno.Comp.KnockBackDistance, xeno.Comp.KnockBackDistance);
+            if (!_size.TryGetSize(ent, out var size) || size < RMCSizes.Big)  
+                _stun.TryParalyze(ent, _xeno.TryApplyXenoDebuffMultiplier(ent, xeno.Comp.ParalyzeTime), true);
   
             if (_net.IsServer)  
                 SpawnAttachedTo(xeno.Comp.Effect, ent.Owner.ToCoordinates());  
