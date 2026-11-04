@@ -4,6 +4,10 @@ using Content.Shared.Damage.Components;
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
 using Content.Server.CMU14.ZLevels.Core;
+using Content.Server.Procedural; // RUMC: the dungeons of the depth layers
+using Content.Shared._RMC14.Entrenching; // RUMC: the shovel of the game
+using Content.Shared._RMC14.Vehicle; // RUMC: nothing is dug under a vehicle
+using Content.Shared.Burial.Components; // RUMC: the shovel component
 using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Damage;
@@ -11,14 +15,18 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Ghost;
 using Content.Shared.Ghost.Components;
+using Content.Shared.Gravity;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
+using Content.Shared.Procedural; // RUMC: the noise features of the layers
 using Content.Shared.Station.Components;
 using Content.Shared.Tag;
+using Content.Shared.Whitelist; // RUMC: the tool that digs a layer
 using Robust.Server.GameObjects;
 using Robust.Shared.Random;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Noise; // RUMC: the noise of the caves and of the pools
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -49,7 +57,11 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!; // RUMC: the tool that digs a layer
+    [Dependency] private EntityLookupSystem _lookup = default!; // RUMC: what lies on a tile of a cave
     [Dependency] private ZBorderSyncSystem _borderSync = default!;
+    [Dependency] private DungeonSystem _dungeon = default!; // RUMC: the dungeons of the depth layers
+    [Dependency] private IPrototypeManager _protoMan = default!; // RUMC: the dungeon configs
 
     /// <summary>
     /// Global code switch for the whole building overhaul. Set to <c>false</c> to disable dig-down / lazy
@@ -58,7 +70,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     public bool GloballyEnabled = true;
 
     /// <summary>How far (in chunks) around a player to pre-generate stone as they move on a stone level.</summary>
-    private const int StreamRadiusChunks = 1;
+    private const int StreamRadiusChunks = 3;
 
     // The bare walk-through traversal stair spawned by the dig commands. It always goes on the LOWER of the two
     // connected levels, and the shaft tile on the upper level is opened (emptied) so descent works - see the
@@ -67,10 +79,11 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     private const string TraversalStair = "AU14ZStairPure";
 
     private TimeSpan _nextStream;
-    private static readonly TimeSpan StreamInterval = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan StreamInterval = TimeSpan.FromSeconds(0.25);
 
     private EntityQuery<MapGridComponent> _gridQuery;
     private EntityQuery<GhostComponent> _ghostQuery;
+    private readonly ZBuildableMapComponent _defaultSettings = new();
 
     public override void Initialize()
     {
@@ -79,7 +92,11 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         _ghostQuery = GetEntityQuery<GhostComponent>();
 
         // Keyed by round-scoped map uids; drop with the round so stale entries never accumulate.
-        SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ => _reflectedBorderChunks.Clear());
+        SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ =>
+        {
+            _reflectedBorderChunks.Clear();
+            ClearGenerationQueue();
+        });
         _borderSync.ListsChanged += ClearReflectedBorderChunks;
     }
 
@@ -95,12 +112,44 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         if (!GloballyEnabled)
             return false;
 
+        // RUMC: the inside of a vehicle is a separate map; nothing may be dug or built under it.
+        if (HasComp<VehicleInteriorLinkComponent>(mapUid))
+            return false;
+
         // Default-on: only a component that explicitly says enabled:false opts the map out.
         return !TryComp<ZBuildableMapComponent>(mapUid, out var settings) || settings.Enabled;
     }
 
     private ZBuildableMapComponent GetSettings(EntityUid mapUid)
-        => CompOrNull<ZBuildableMapComponent>(mapUid) ?? new ZBuildableMapComponent();
+        => CompOrNull<ZBuildableMapComponent>(mapUid) ?? _defaultSettings;
+
+    // RUMC method
+    /// <summary>The settings that govern a stone level: those of the map it was dug from.</summary>
+    public ZBuildableMapComponent GetLevelSettings(EntityUid stoneMapUid)
+        => GetSettings(GetSourceMapForStone(stoneMapUid));
+
+    // RUMC method
+    /// <summary>Every entity that generating this level can leave behind: its rock, its veins, its pools and what lies about in its caves.</summary>
+    public HashSet<string> GetGeneratedEntityIds(EntityUid stoneMapUid)
+    {
+        var settings = GetLevelSettings(stoneMapUid);
+        var ids = new HashSet<string>(GetGeneratedRockIds(settings, stoneMapUid));
+
+        var tier = GetBiomeTier(settings, GetDepth(stoneMapUid));
+        foreach (var decor in tier != null ? tier.CaveDecor : settings.StoneCaveDecor)
+            ids.Add(decor.Entity.Id);
+
+        if (settings.Caverns != null)
+        {
+            foreach (var scenery in Enum.GetValues<CMUCavernScenery>())
+            {
+                if (CavernSceneryPrototype(scenery) is { } prototype)
+                    ids.Add(prototype);
+            }
+        }
+
+        return ids;
+    }
 
     /// <summary>True if there is a grid with a real (non-empty) floor tile directly under <paramref name="worldPos"/>.</summary>
     private bool HasWalkableFloorAt(EntityUid mapUid, Vector2 worldPos)
@@ -183,6 +232,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         // grid entity leaves the level invisible to DistanceToGround/HasTileAbove, so stairs and falling
         // silently stop working the moment a player stands on a lazily created level.
         EnsureComp<MapGridComponent>(newMapUid);
+        SetGeneratedGravity(newMapUid);
 
         if (!_zLevels.TryAddMapsIntoZNetwork(network.Value, new Dictionary<EntityUid, int> { [newMapUid] = depth - 1 }))
         {
@@ -203,7 +253,8 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     ///
     /// Mirrors <see cref="DigIntoStone"/> but does NOT teleport any entity - only prepares the underground.
     /// </summary>
-    public bool PrepareStoneForStair(EntityUid mapUid, EntityUid sourceGrid, Vector2 worldPos, out EntityUid stoneGrid)
+    // RUMC: a stair may clear a single tile; the signature that was here (kept): public bool PrepareStoneForStair(EntityUid mapUid, EntityUid sourceGrid, Vector2 worldPos, out EntityUid stoneGrid)
+    public bool PrepareStoneForStair(EntityUid mapUid, EntityUid sourceGrid, Vector2 worldPos, out EntityUid stoneGrid, bool singleTile = false)
     {
         stoneGrid = default;
 
@@ -244,9 +295,14 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
 
         var landingCoords = new MapCoordinates(worldPos, belowMapComp.MapId);
         var landingTile = _map.TileIndicesFor(below.Comp.StoneGrid, belowGridComp, landingCoords);
+        var sourceMapUid = GetSourceMapForStone(below.Owner); // RUMC
 
         EnsureChunkAt(below, below.Owner, landingTile);
-        ClearLandingPocket((below.Comp.StoneGrid, belowGridComp), landingTile, GetSettings(GetSourceMapForStone(below.Owner)).StoneRockEntity);
+        if (!singleTile)
+            EnsureStairLanding(below, belowGridComp, landingTile);
+        // RUMC: every rock and vein of the level is cleared, not the one rock; the line that was here (kept): ClearLandingPocket((below.Comp.StoneGrid, belowGridComp), landingTile, GetSettings(GetSourceMapForStone(below.Owner)).StoneRockEntity);
+        ClearLandingPocket((below.Comp.StoneGrid, belowGridComp), landingTile, GetGeneratedRockIds(GetSettings(sourceMapUid), below.Owner), singleTile);
+        TryScheduleBiomeDungeon(below, sourceMapUid, landingTile); // RUMC: a dungeon may be laid at the landing of a layer that has them
 
         stoneGrid = below.Comp.StoneGrid;
         return true;
@@ -293,6 +349,8 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
             // Map-grid, not a child grid: the CMU z-movement code only sees tiles/high-grounds on the map
             // entity's own MapGridComponent (see CreateStoneBelow).
             EnsureComp<MapGridComponent>(newMap);
+            if (depth + direction < 0)
+                SetGeneratedGravity(newMap);
 
             if (!_zLevels.TryAddMapsIntoZNetwork(network.Value, new Dictionary<EntityUid, int> { [newMap] = depth + direction }))
             {
@@ -330,6 +388,8 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
 
         if (TryComp<ZGeneratedStoneComponent>(belowMap, out var existing) && _gridQuery.HasComponent(existing.StoneGrid))
         {
+            if (!existing.LocalizedToAuthoredLevel)
+                SetGeneratedGravity(belowMap);
             below = (belowMap, existing);
             return true;
         }
@@ -358,9 +418,26 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         var stone = EnsureComp<ZGeneratedStoneComponent>(belowMap);
         stone.StoneGrid = stoneGrid;
         stone.LocalizedToAuthoredLevel = localized;
+        if (!localized)
+            SetGeneratedGravity(belowMap);
         Dirty(belowMap, stone);
         below = (belowMap, stone);
         return true;
+    }
+
+    private void SetGeneratedGravity(EntityUid map)
+    {
+        var gravity = EnsureComp<GravityComponent>(map);
+        if (gravity.Inherent && gravity.Enabled)
+            return;
+        var changed = !gravity.Enabled;
+        gravity.Inherent = true;
+        gravity.Enabled = true;
+        Dirty(map, gravity);
+        if (!changed)
+            return;
+        var ev = new GravityChangedEvent(map, true);
+        RaiseLocalEvent(map, ref ev, true);
     }
 
     /// <summary>
@@ -368,7 +445,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     /// every tile with the stone floor and plants a minable rock on each, so the player has solid ground to
     /// mine through. The landing pocket is cleared separately by the caller.
     /// </summary>
-    public void EnsureChunkAt(Entity<ZGeneratedStoneComponent> below, EntityUid mapUid, Vector2i tile)
+    private void GenerateChunk(Entity<ZGeneratedStoneComponent> below, EntityUid mapUid, Vector2i tile)
     {
         if (!_gridQuery.TryComp(below.Comp.StoneGrid, out var grid))
             return;
@@ -377,13 +454,38 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         var size = Math.Max(2, settings.ChunkSize);
         var chunk = new Vector2i(FloorDiv(tile.X, size), FloorDiv(tile.Y, size));
 
-        if (!below.Comp.GeneratedChunks.Add(chunk))
+        if (below.Comp.GeneratedChunks.Contains(chunk))
             return;
 
-        if (settings.StoneFloorTiles.Count == 0)
+        // RUMC Layers Begin: the floor, the rock, the caves and the pools are those of the layer of this depth (clay, stone, black stone), not one set for all
+        var floorTiles = GetEffectiveFloorTiles(settings, mapUid);
+        var rockEntity = GetEffectiveRockEntity(settings, mapUid);
+
+        // RUMC: the check that was here (kept): if (settings.StoneFloorTiles.Count == 0)
+        if (floorTiles.Count == 0)
             return;
+
+        below.Comp.GeneratedChunks.Add(chunk);
 
         var origin = new Vector2i(chunk.X * size, chunk.Y * size);
+
+        var tier = GetBiomeTier(settings, GetDepth(mapUid));
+        var caves = tier != null ? tier.Caves : settings.StoneCaves;
+        var water = tier != null ? tier.Water : settings.StoneWater;
+        var decorations = tier != null ? tier.CaveDecor : settings.StoneCaveDecor;
+        var cavern = GetCavernField(below, settings);
+        var depth = GetDepth(mapUid);
+        if (below.Comp.NoiseSeed == 0)
+            below.Comp.NoiseSeed = cavern == null ? _random.Next(1, int.MaxValue) :
+                Math.Max(1, cavern.TileSeed(Vector2i.Zero, depth));
+        var caveNoise = cavern == null ? MakeNoise(below.Comp.NoiseSeed, caves) : null;
+        var waterNoise = cavern == null ? MakeNoise(below.Comp.NoiseSeed, water) : null;
+        // RUMC End
+
+        // Tile changes are batched before entities are anchored. Setting each tile separately rebuilds
+        // grid collision and dispatches terrain changes repeatedly while preparing a vertical column.
+        var floors = new List<(Vector2i, Tile)>();
+        var spawns = new List<(string Prototype, EntityCoordinates Coordinates)>();
         for (var x = 0; x < size; x++)
         {
             for (var y = 0; y < size; y++)
@@ -400,15 +502,21 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
                     continue;
 
                 // Random stone/dirt mix for the floor.
-                var floorId = _random.Pick(settings.StoneFloorTiles);
+                // RUMC: the floor of the layer; the line that was here (kept): var floorId = _random.Pick(settings.StoneFloorTiles);
+                var floorId = _random.Pick(floorTiles);
                 if (!_tileDef.TryGetDefinition(floorId, out var floorDef))
                     continue;
 
-                _map.SetTile(below.Comp.StoneGrid, grid, index, new Tile(floorDef.TileId));
-                if (below.Comp.LocalizedToAuthoredLevel)
-                    below.Comp.GeneratedTiles.Add(index);
-
                 var coords = _map.GridTileToLocal(below.Comp.StoneGrid, grid, index);
+                var natural = cavern?.IsOpen(index, depth) ??
+                              (caveNoise != null && caves != null && caveNoise.GetNoise(index.X, index.Y) > caves.Threshold);
+                var opening = natural && cavern != null && cavern.IsOpen(index, depth - 1);
+                // Authored levels below must never become an unprepared destination for a natural shaft.
+                if (opening && (!TryComp<CMUZLevelMapComponent>(mapUid, out var zMap) ||
+                                zMap.MapBelow is not { } lower ||
+                                !TryComp<ZGeneratedStoneComponent>(lower, out var lowerStone) ||
+                                lowerStone.LocalizedToAuthoredLevel))
+                    opening = false;
 
                 // Map-border reflection: if an indestructible border wall stands at this spot on the level
                 // above, mirror THAT wall here instead of a mineable rock, so the playfield boundary continues
@@ -416,13 +524,209 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
                 // border never propagates into levels nobody has entered.
                 if (TryGetBorderWallAbove(mapUid, _transform.ToMapCoordinates(coords).Position, out var wallProto))
                 {
-                    Spawn(wallProto, coords);
+                    floors.Add((index, new Tile(floorDef.TileId)));
+                    spawns.Add((wallProto, coords));
                     continue;
                 }
 
-                Spawn(settings.StoneRockEntity, coords);
+                if (!opening)
+                    floors.Add((index, new Tile(floorDef.TileId)));
+                if (below.Comp.LocalizedToAuthoredLevel)
+                    below.Comp.GeneratedTiles.Add(index);
+                if (natural)
+                    below.Comp.NaturalCaves.Add(index);
+                if (opening)
+                    continue;
+
+                if (cavern != null && natural)
+                {
+                    if (CavernSceneryPrototype(cavern.SceneryAt(index, depth)) is { } scenery)
+                        spawns.Add((scenery, coords));
+                    continue;
+                }
+
+                // RUMC Caves Begin: a pool where the water noise is high, an empty cave where the cave noise is.
+                // RUMC: the rock was spawned everywhere here (kept): Spawn(settings.StoneRockEntity, coords);
+                if ((cavern == null || natural) && waterNoise != null && water != null &&
+                    waterNoise.GetNoise(index.X, index.Y) > water.Threshold)
+                {
+                    below.Comp.NaturalCaves.Add(index);
+                    spawns.Add((tier?.WaterEntity ?? settings.WaterEntity, coords));
+                    continue;
+                }
+
+                if (natural)
+                {
+                    foreach (var decor in decorations)
+                    {
+                        if (_random.Prob(decor.Chance))
+                        {
+                            spawns.Add((decor.Entity.Id, coords));
+                            break;
+                        }
+                    }
+
+                    continue;
+                }
+
+                spawns.Add((rockEntity, coords));
+                // RUMC End
             }
         }
+
+        _map.SetTiles(below.Comp.StoneGrid, grid, floors);
+        foreach (var spawn in spawns)
+            Spawn(spawn.Prototype, spawn.Coordinates);
+
+        // RUMC: veins of ore and deposits are laid in a fresh chunk
+        SpawnOreVeins(below.Comp.StoneGrid, grid, GetEffectiveOreVeins(settings, mapUid), origin, size, rockEntity);
+        SpawnDeposits(below.Comp.StoneGrid, grid, below.Comp.NaturalCaves, tier != null ? tier.Deposits : settings.StoneDeposits, origin, size);
+    }
+
+    private static string? CavernSceneryPrototype(CMUCavernScenery scenery) => scenery switch
+    {
+        CMUCavernScenery.Water => "CMUCavernWater",
+        CMUCavernScenery.Lava => "CMUCavernLava",
+        CMUCavernScenery.Spring => "CMUCavernSpring",
+        CMUCavernScenery.Mineral => "CMUCavernMineral",
+        CMUCavernScenery.Crystal => "CMUCavernCrystal",
+        CMUCavernScenery.Stalagmite => "CMUCavernStalagmite",
+        CMUCavernScenery.DeadRoots => "CMUCavernDeadRoots",
+        CMUCavernScenery.DeadFungi => "CMUCavernDeadFungi",
+        CMUCavernScenery.Vent => "CMUCavernVent",
+        CMUCavernScenery.Pebbles => "CMUCavernPebbles",
+        CMUCavernScenery.Shale => "CMUCavernShale",
+        CMUCavernScenery.Calcite => "CMUCavernCalcite",
+        CMUCavernScenery.Limestone => "CMUCavernLimestone",
+        CMUCavernScenery.Silt => "CMUCavernSilt",
+        CMUCavernScenery.RootTangle => "CMUCavernRootTangle",
+        CMUCavernScenery.FungalMat => "CMUCavernFungalMat",
+        CMUCavernScenery.IronCrust => "CMUCavernIronCrust",
+        CMUCavernScenery.Scoria => "CMUCavernScoria",
+        _ => null,
+    };
+
+    // RUMC method
+    // Lays deposits (the ore, and the oil) on the floor of the caves of a fresh chunk, each with its chance for the chunk, on a cave tile where nothing lies
+    // yet: they lie in the open, where the cave is, and are found without breaking the rock. A chunk that has no cave has none of them.
+    private void SpawnDeposits(EntityUid gridUid, MapGridComponent grid, HashSet<Vector2i> caves, List<ZLevelDeposit> deposits, Vector2i origin, int size)
+    {
+        if (deposits.Count == 0)
+            return;
+
+        var free = new List<Vector2i>();
+        for (var x = 0; x < size; x++)
+        {
+            for (var y = 0; y < size; y++)
+            {
+                var tile = origin + new Vector2i(x, y);
+                if (caves.Contains(tile) && _map.TryGetTileRef(gridUid, grid, tile, out var floor) && !floor.Tile.IsEmpty &&
+                    !TileHasAnchored(gridUid, grid, tile) &&
+                    _lookup.GetLocalEntitiesIntersecting(gridUid, tile, gridComp: grid).Count == 0)
+                {
+                    free.Add(tile);
+                }
+            }
+        }
+
+        foreach (var deposit in deposits)
+        {
+            if (free.Count == 0)
+                return;
+
+            if (!_random.Prob(deposit.ChancePerChunk))
+                continue;
+
+            var index = _random.Next(free.Count);
+            var chosen = free[index];
+            free.RemoveAt(index);
+            Spawn(deposit.Entity, _map.GridTileToLocal(gridUid, grid, chosen));
+        }
+    }
+
+    // RUMC method
+    private static FastNoiseLite? MakeNoise(int levelSeed, ZLevelNoiseFeature? feature)
+    {
+        if (feature == null)
+            return null;
+
+        var noise = new FastNoiseLite(levelSeed + feature.SeedOffset * 7919);
+        noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+        noise.SetFractalType(FastNoiseLite.FractalType.FBm);
+        noise.SetFractalOctaves(Math.Max(1, feature.Octaves));
+        noise.SetFrequency(feature.Frequency);
+        return noise;
+    }
+
+    // RUMC method
+    private List<ZLevelOreVein> GetEffectiveOreVeins(ZBuildableMapComponent settings, EntityUid levelMapUid)
+    {
+        var tier = GetBiomeTier(settings, GetDepth(levelMapUid));
+        return tier != null ? tier.OreVeins : settings.StoneOreVeins;
+    }
+
+    // RUMC method
+    // Replaces some of the rock of a fresh chunk with veins of ore, in groups, the way the vanilla biomes lay their ore.
+    private void SpawnOreVeins(EntityUid gridUid, MapGridComponent grid, List<ZLevelOreVein> veins, Vector2i origin, int size, string rockEntity)
+    {
+        foreach (var vein in veins)
+        {
+            if (!_random.Prob(vein.ChancePerChunk))
+                continue;
+
+            var center = origin + new Vector2i(_random.Next(size), _random.Next(size));
+            var wanted = _random.Next(vein.MinGroupSize, Math.Max(vein.MinGroupSize, vein.MaxGroupSize) + 1);
+
+            // The tiles around the middle that are still inside this chunk, in a random order.
+            var candidates = new List<Vector2i>();
+            for (var dx = -vein.Radius; dx <= vein.Radius; dx++)
+            {
+                for (var dy = -vein.Radius; dy <= vein.Radius; dy++)
+                {
+                    var tile = center + new Vector2i(dx, dy);
+                    if (dx * dx + dy * dy <= vein.Radius * vein.Radius &&
+                        tile.X >= origin.X && tile.X < origin.X + size &&
+                        tile.Y >= origin.Y && tile.Y < origin.Y + size)
+                    {
+                        candidates.Add(tile);
+                    }
+                }
+            }
+
+            _random.Shuffle(candidates);
+
+            var placed = 0;
+            foreach (var tile in candidates)
+            {
+                if (placed >= wanted)
+                    break;
+
+                if (ReplaceRock(gridUid, grid, tile, rockEntity, vein.Entity))
+                    placed++;
+            }
+        }
+    }
+
+    // RUMC method
+    private bool ReplaceRock(EntityUid gridUid, MapGridComponent grid, Vector2i tile, string rockEntity, EntProtoId vein)
+    {
+        EntityUid? rock = null;
+        foreach (var anchored in _map.GetAnchoredEntities(gridUid, grid, tile))
+        {
+            if (MetaData(anchored).EntityPrototype?.ID == rockEntity)
+            {
+                rock = anchored;
+                break;
+            }
+        }
+
+        if (rock == null)
+            return false;
+
+        var coords = _map.GridTileToLocal(gridUid, grid, tile);
+        Del(rock.Value);
+        Spawn(vein, coords);
+        return true;
     }
 
     /// <summary>
@@ -482,12 +786,17 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         var landingCoords = new MapCoordinates(worldPos, Comp<MapComponent>(below.Owner).MapId);
         var landingTile = _map.TileIndicesFor(below.Comp.StoneGrid, belowGrid, landingCoords);
 
-        var settings = GetSettings(GetSourceMapForStone(below.Owner));
+        // RUMC: the source map is kept for the dungeon; the line that was here (kept): var settings = GetSettings(GetSourceMapForStone(below.Owner));
+        var settingsSourceMap = GetSourceMapForStone(below.Owner);
+        var settings = GetSettings(settingsSourceMap);
 
         // NOTE: pass the STONE level itself (below.Owner), not the digger's current map - EnsureChunkAt
         // resolves generation settings relative to the map it is handed.
         EnsureChunkAt(below, below.Owner, landingTile);
-        ClearLandingPocket((below.Comp.StoneGrid, belowGrid), landingTile, settings.StoneRockEntity);
+        EnsureStairLanding(below, belowGrid, landingTile);
+        // RUMC: every rock and vein of the level is cleared; the line that was here (kept): ClearLandingPocket((below.Comp.StoneGrid, belowGrid), landingTile, settings.StoneRockEntity);
+        ClearLandingPocket((below.Comp.StoneGrid, belowGrid), landingTile, GetGeneratedRockIds(settings, below.Owner));
+        TryScheduleBiomeDungeon(below, settingsSourceMap, landingTile); // RUMC: a dungeon may be laid at the landing of a layer that has them
 
         // One traversal stair on the LOWER (stone) level, and an OPEN shaft on the surface above it so the dig
         // hole is a real, re-traversable shaft. Putting a stair on both levels (the old behavior) stacked two
@@ -590,24 +899,59 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     }
 
     /// <summary>Removes the generated rock on the landing tile (and its cardinal neighbours) so the digger isn't buried.</summary>
-    private void ClearLandingPocket(Entity<MapGridComponent> grid, Vector2i tile, string rockId)
+    // RUMC: it clears the rocks and veins of the level (a list), and a single tile on request. The version that was here (kept):
+    // RUMC: private void ClearLandingPocket(Entity<MapGridComponent> grid, Vector2i tile, string rockId)
+    // RUMC: {
+    // RUMC:     ClearRockAt(grid, tile, rockId);
+    // RUMC:     ClearRockAt(grid, tile + new Vector2i(1, 0), rockId);
+    // RUMC:     ClearRockAt(grid, tile + new Vector2i(-1, 0), rockId);
+    // RUMC:     ClearRockAt(grid, tile + new Vector2i(0, 1), rockId);
+    // RUMC:     ClearRockAt(grid, tile + new Vector2i(0, -1), rockId);
+    // RUMC: }
+    private void ClearLandingPocket(Entity<MapGridComponent> grid, Vector2i tile, List<string> rockIds, bool singleTile = false)
     {
-        ClearRockAt(grid, tile, rockId);
-        ClearRockAt(grid, tile + new Vector2i(1, 0), rockId);
-        ClearRockAt(grid, tile + new Vector2i(-1, 0), rockId);
-        ClearRockAt(grid, tile + new Vector2i(0, 1), rockId);
-        ClearRockAt(grid, tile + new Vector2i(0, -1), rockId);
+        ClearRockAt(grid, tile, rockIds);
+
+        if (singleTile)
+            return;
+
+        ClearRockAt(grid, tile + new Vector2i(1, 0), rockIds);
+        ClearRockAt(grid, tile + new Vector2i(-1, 0), rockIds);
+        ClearRockAt(grid, tile + new Vector2i(0, 1), rockIds);
+        ClearRockAt(grid, tile + new Vector2i(0, -1), rockIds);
     }
 
-    private void ClearRockAt(Entity<MapGridComponent> grid, Vector2i tile, string rockId)
+    // RUMC: it takes a list of rock ids; the signature that was here (kept): private void ClearRockAt(Entity<MapGridComponent> grid, Vector2i tile, string rockId)
+    private void ClearRockAt(Entity<MapGridComponent> grid, Vector2i tile, List<string> rockIds)
     {
         var anchored = _map.GetAnchoredEntities(grid.Owner, grid.Comp, tile);
         foreach (var ent in anchored)
         {
-            // Only remove our generated rock, never the player's own builds.
-            if (MetaData(ent).EntityPrototype?.ID == rockId)
+            // Only remove our generated rock (and its ore veins), never the player's own builds.
+            // RUMC: the check that was here (kept): if (MetaData(ent).EntityPrototype?.ID == rockId)
+            if (MetaData(ent).EntityPrototype?.ID is { } id && rockIds.Contains(id))
                 QueueDel(ent);
         }
+    }
+
+    // RUMC method
+    // The walls the level generates: its rock and every vein that can replace some of it.
+    private List<string> GetGeneratedRockIds(ZBuildableMapComponent settings, EntityUid levelMapUid)
+    {
+        var ids = new List<string> { GetEffectiveRockEntity(settings, levelMapUid) };
+
+        foreach (var vein in GetEffectiveOreVeins(settings, levelMapUid))
+            ids.Add(vein.Entity.Id);
+
+        // A landing pocket is dug out of a pool as well.
+        var tier = GetBiomeTier(settings, GetDepth(levelMapUid));
+        if ((tier != null ? tier.Water : settings.StoneWater) != null)
+            ids.Add(tier?.WaterEntity ?? settings.WaterEntity);
+
+        if (settings.Caverns != null)
+            ids.AddRange(["CMUCavernWater", "CMUCavernLava", "CMUCavernSpring"]);
+
+        return ids;
     }
 
     /// <summary>Spawns an anchored entity at a tile, but never stacks a duplicate of the same prototype there.</summary>
@@ -771,20 +1115,132 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         }
     }
 
-    /// <summary>Find the map directly above a stone level (its "source" / parent map) so we can read its settings.</summary>
+    // RUMC: the source map is now the nearest one up that has settings (a stone level may lie under another stone level). The version that was here (kept):
+    // RUMC: /// <summary>Find the map directly above a stone level (its "source" / parent map) so we can read its settings.</summary>
+    // RUMC: private EntityUid GetSourceMapForStone(EntityUid stoneMap)
+    // RUMC: {
+    // RUMC:     if (TryComp<CMUZLevelMapComponent>(stoneMap, out var z) && z.MapAbove is { } above)
+    // RUMC:         return above;
+    // RUMC:     return stoneMap;
+    // RUMC: }
     private EntityUid GetSourceMapForStone(EntityUid stoneMap)
     {
-        if (TryComp<CMUZLevelMapComponent>(stoneMap, out var z) && z.MapAbove is { } above)
-            return above;
-        return stoneMap;
+        var current = stoneMap;
+        for (var guard = 0; guard < 64; guard++)
+        {
+            if (HasComp<ZBuildableMapComponent>(current))
+                return current;
+
+            if (!TryComp<CMUZLevelMapComponent>(current, out var z) || z.MapAbove is not { } above)
+                break;
+
+            current = above;
+        }
+
+        return current;
+    }
+
+    // RUMC Depth Begin: the layers of depth (clay, stone, black stone): which tier a depth is in, and the floor, the rock and the tool of it
+    private static ZLevelBiomeTier? GetBiomeTier(ZBuildableMapComponent settings, int depth)
+    {
+        foreach (var tier in settings.DepthBiomes)
+        {
+            if (tier.Contains(depth))
+                return tier;
+        }
+
+        return null;
+    }
+
+    public int GetDepth(EntityUid mapUid)
+        => TryComp<CMUZLevelMapComponent>(mapUid, out var z) ? z.Depth : 0;
+
+    private List<string> GetEffectiveFloorTiles(ZBuildableMapComponent settings, EntityUid levelMapUid)
+    {
+        var tier = GetBiomeTier(settings, GetDepth(levelMapUid));
+        return tier?.StoneFloorTiles is { Count: > 0 } tiles ? tiles : settings.StoneFloorTiles;
+    }
+
+    private string GetEffectiveRockEntity(ZBuildableMapComponent settings, EntityUid levelMapUid)
+    {
+        var tier = GetBiomeTier(settings, GetDepth(levelMapUid));
+        return !string.IsNullOrEmpty(tier?.StoneRockEntity) ? tier.StoneRockEntity : settings.StoneRockEntity;
+    }
+
+    /// <summary>
+    /// Whether the tool may dig a pit at the level: it is the tool the level asks for (<see cref="GetEffectiveDigTool"/>), and below the clay it is
+    /// not a shovel. A shovel can carry the Pickaxe tag (the shovel of the game does, so that it breaks rock walls), and that must not let it dig into
+    /// the stone and on in it: the ground and the clay are for the shovel, the stone is for the pickaxe and the black stone for the jackhammer.
+    /// </summary>
+    public bool CanDigWith(EntityUid levelMapUid, EntityUid tool)
+    {
+        var need = GetEffectiveDigTool(levelMapUid);
+        if (_whitelist.IsWhitelistFail(need, tool))
+            return false;
+
+        if (!HasComp<ShovelComponent>(tool) && !HasComp<RMCShovelComponent>(tool))
+            return true;
+
+        return need?.Components is { } components && (components.Contains("Shovel") || components.Contains("RMCShovel"));
+    }
+
+    public EntityWhitelist? GetEffectiveDigTool(EntityUid levelMapUid)
+    {
+        var settings = GetSettings(GetSourceMapForStone(levelMapUid));
+        var depth = GetDepth(levelMapUid);
+        var tier = GetBiomeTier(settings, depth);
+        var below = GetBiomeTier(settings, depth - 1);
+
+        // Breaking from one layer into the next asks for the tool of the layer entered: a shovel from the ground into the clay, a pickaxe from the clay into the stone (the plain
+        // stone layer is the one with no tier: the pickaxe of the settings), and a jackhammer from the stone into the black stone.
+        if (below != tier)
+            return below?.RequiredEntryTool ?? below?.RequiredDigTool ?? settings.RequiredDigTool;
+
+        return tier?.RequiredDigTool ?? settings.RequiredDigTool;
+    }
+
+    // RUMC End
+    // RUMC method: lays a dungeon of the layer, once for a level, with the chance of the layer
+    private void TryScheduleBiomeDungeon(Entity<ZGeneratedStoneComponent> below, EntityUid sourceMapUid, Vector2i landingTile)
+    {
+        if (below.Comp.DungeonAttempted)
+            return;
+
+        below.Comp.DungeonAttempted = true;
+
+        var settings = GetSettings(sourceMapUid);
+        var tier = GetBiomeTier(settings, GetDepth(below.Owner));
+        if (tier is not { DungeonConfigs.Count: > 0 } || !_random.Prob(tier.DungeonChance))
+            return;
+
+        if (!_gridQuery.TryComp(below.Comp.StoneGrid, out var grid))
+            return;
+
+        var configId = _random.Pick(tier.DungeonConfigs);
+        if (!_protoMan.TryIndex(configId, out var config))
+            return;
+
+        var seed = _random.Next();
+
+        EnsureChunkAt(below, below.Owner, landingTile);
+
+        _dungeon.GenerateDungeon(config, below.Comp.StoneGrid, grid, landingTile, seed);
     }
 
     public override void Update(float frameTime)
     {
-        if (!GloballyEnabled || _timing.CurTime < _nextStream)
+        if (!GloballyEnabled)
             return;
 
+        if (_timing.CurTime < _nextStream)
+        {
+            ProcessGenerationQueue();
+            return;
+        }
+
         _nextStream = _timing.CurTime + StreamInterval;
+        _wantedChunks.Clear();
+        QueueDigPreparation();
 
         // Per-chunk-on-approach: generate stone around every player standing on a stone level.
         var query = EntityQueryEnumerator<ActorComponent, TransformComponent>();
@@ -815,14 +1271,9 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
             if (stone.LocalizedToAuthoredLevel && !IsNearGeneratedChunk(stone, tile, size))
                 continue;
 
-            for (var cx = -StreamRadiusChunks; cx <= StreamRadiusChunks; cx++)
-            {
-                for (var cy = -StreamRadiusChunks; cy <= StreamRadiusChunks; cy++)
-                {
-                    EnsureChunkAt((mapUid, stone), mapUid, tile + new Vector2i(cx * size, cy * size));
-                }
-            }
+            QueueExploration((mapUid, stone), tile, size);
         }
+        ProcessGenerationQueue();
     }
 
     private static bool IsNearGeneratedChunk(ZGeneratedStoneComponent stone, Vector2i tile, int chunkSize)

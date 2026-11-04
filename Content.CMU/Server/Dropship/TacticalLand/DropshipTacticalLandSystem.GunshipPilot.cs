@@ -27,6 +27,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Mobs;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -123,6 +124,22 @@ public sealed partial class DropshipTacticalLandSystem
         SubscribeNetworkEvent<GunshipPilotPanningInputEvent>(OnGunshipPilotPanningInput);
         SubscribeNetworkEvent<GunshipOpenNavigationInputEvent>(OnGunshipOpenNavigationInput);
         SubscribeNetworkEvent<GunshipDirectFireAimEvent>(OnGunshipDirectFireAim);
+        SubscribeLocalEvent<MobStateChangedEvent>(OnPilotMobStateChanged);
+    }
+
+    private void OnPilotMobStateChanged(MobStateChangedEvent args)
+    {
+        if (args.NewMobState != MobState.Critical && args.NewMobState != MobState.Dead)
+            return;
+
+        if (!TryComp(args.Target, out BuckleComponent? buckle)
+            || buckle.BuckledTo is not { } seatUid
+            || !TryComp(seatUid, out GunshipPilotSeatComponent? seatComp)
+            || seatComp.Pilot != args.Target)
+            return;
+
+        seatComp.HeldInputs = GunshipControlInput.None;
+        seatComp.PressedActions = 0;
     }
 
     private void OnGunshipVisorStartup(Entity<GunshipPilotVisorComponent> ent, ref ComponentStartup args)

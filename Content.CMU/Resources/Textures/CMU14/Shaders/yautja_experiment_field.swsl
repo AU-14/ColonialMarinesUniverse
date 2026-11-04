@@ -1,0 +1,68 @@
+light_mode unshaded;
+uniform highp vec4 tint;
+uniform highp vec4 core;
+uniform highp float phase;
+uniform highp float material;
+uniform highp float shape;
+uniform highp vec2 extent;
+
+highp float hash(highp vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+highp float noise(highp vec2 p) {
+    highp vec2 i = floor(p);
+    highp vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+        mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+highp float turbulence(highp vec2 p) {
+    return noise(p) * 0.58 + noise(p * 2.07 + vec2(7.0)) * 0.28 + noise(p * 4.13) * 0.14;
+}
+
+void fragment() {
+    // Half-native-pixel sampling keeps the moving material attached to the sprite world's resolution.
+    highp vec2 uv = (floor(UV2 * extent * 2.0) + 0.5) / (extent * 2.0);
+    highp vec2 q = uv * 2.0 - 1.0;
+    highp float radius = length(q);
+    highp vec2 drift = vec2(phase * 0.25, -phase * 0.7);
+    highp vec2 warp = vec2(noise(q * 2.0 + drift), noise(q * 2.0 - drift + vec2(19.0))) - vec2(0.5);
+    highp float n = turbulence(q * 3.0 + warp * 2.0 + drift);
+    highp float mask = 1.0 - smoothstep(0.5, 0.98, radius);
+    highp float density = smoothstep(0.35, 0.8, n) * mask;
+    highp float hot = 0.0;
+    if (shape < 0.5) {
+        // A magnetically contained corona with advecting filaments and a small incandescent core.
+        highp float shell = exp(-pow((radius - 0.48 - (n - 0.5) * 0.3) * 10.0, 2.0));
+        hot = exp(-radius * radius * 30.0) * (0.7 + n * 0.3);
+        density = (shell * 0.65 + hot + density * 0.35) * mask;
+    } else if (shape < 1.5) {
+        // A lifted plume: broad curling head, narrow emitter, transparent turbulent boundaries.
+        highp float width = mix(0.65, 0.13, uv.y);
+        mask = (1.0 - smoothstep(width * 0.5, width, abs(q.x + warp.x * 0.28))) *
+            smoothstep(0.0, 0.2, uv.y) * (1.0 - smoothstep(0.8, 1.0, uv.y));
+        density = smoothstep(0.28, 0.78, n) * mask * 0.65;
+    } else if (shape < 2.5) {
+        // Interference ripples inside an optical membrane, not an opaque tinted rectangle.
+        highp float caustic = pow(max(0.0, sin(radius * 25.0 - phase * 4.0 + n * 7.0)), 8.0);
+        density = (caustic * 0.3 + density * 0.18) * mask;
+    } else if (shape < 3.5) {
+        highp float angle = atan(q.y, q.x);
+        highp float spiral = pow(max(0.0, sin(angle * 3.0 + radius * 19.0 - phase * 4.0 + n * 2.0)), 6.0);
+        density = spiral * mask * smoothstep(0.12, 0.3, radius) * 0.65;
+        hot = spiral * smoothstep(0.6, 0.9, n);
+    } else {
+        highp float bands = pow(max(0.0, sin(uv.y * 48.0 - phase * 3.0)), 14.0);
+        highp float cells = step(0.73, hash(floor(uv * vec2(24.0, 32.0)) + floor(phase * 3.0)));
+        density = (bands * 0.25 + cells * 0.35) * mask * (0.3 + n);
+    }
+    if (material > 2.5 && material < 4.5) {
+        hot = smoothstep(0.6, 0.9, n) * mask * 0.5;
+    } else if (material > 6.5) {
+        hot = smoothstep(0.4, 0.75, n) * mask;
+        density *= 0.65 + sin(phase * 4.0) * 0.2;
+    }
+    // The final UV-edge gate prevents a visible quad boundary at every phase and aspect ratio.
+    highp float edge = smoothstep(0.0, 0.06, min(min(UV2.x, UV2.y), min(1.0 - UV2.x, 1.0 - UV2.y)));
+    COLOR = vec4(mix(tint.rgb, core.rgb, clamp(hot, 0.0, 1.0)), clamp(density * tint.a * edge, 0.0, 0.85));
+}

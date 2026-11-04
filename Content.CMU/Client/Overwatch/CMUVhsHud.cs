@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Numerics;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -16,6 +17,7 @@ public sealed class CMUVhsHud : BoxContainer
     [Dependency] private IGameTiming _timing = default!;
 
     private readonly Label _timecode;
+    private (int Hours, int Minutes, int Seconds, CultureInfo Culture)? _displayedTime;
 
     public CMUVhsHud(int channel)
     {
@@ -74,6 +76,11 @@ public sealed class CMUVhsHud : BoxContainer
     {
         base.FrameUpdate(args);
         var time = _timing.CurTime;
+        var displayed = ((int) time.TotalHours, time.Minutes, time.Seconds, CultureInfo.CurrentCulture);
+        if (_displayedTime == displayed)
+            return;
+
+        _displayedTime = displayed;
         _timecode.Text = $"{(int) time.TotalHours:00}:{time.Minutes:00}:{time.Seconds:00}";
     }
 

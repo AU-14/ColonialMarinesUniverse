@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/obj/items/hunter/thrall_gear.dmi, https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/hunter/thrall_gear.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "equipped-FEET",
+      "directions": 4
+    }
+  ]
+}

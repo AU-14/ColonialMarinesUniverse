@@ -107,7 +107,7 @@ public sealed class YautjaEdgeCaseRegressionTest
     }
 
     [Test]
-    public async Task DeadYautjaCannotBeButchered()
+    public async Task DeadYautjaCanBeButcheredButNotTrophied()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -121,13 +121,14 @@ public sealed class YautjaEdgeCaseRegressionTest
             entMan.System<MobStateSystem>().ChangeMobState(fallen, MobState.Dead);
 
             var trophies = entMan.System<YautjaTrophySystem>();
+            // cmss13 PR 11542 lets yautja butcher fellow yautja (bad bloods), trophies and the dagger still refuse them
             Assert.Multiple(() =>
             {
-                Assert.That(trophies.TryStartButcher(hunter, fallen, YautjaButcherProcedure.Skin), Is.False,
-                    "A fallen hunter is not prey; harvest and the ceremonial dagger already refuse Yautja.");
-                Assert.That(trophies.TryStartButcher(hunter, fallen, YautjaButcherProcedure.LeftArm), Is.False);
-                Assert.That(trophies.TryOpenButcherDialog(hunter), Is.False,
-                    "The butcher dialog must not offer a corpse the procedure refuses.");
+                Assert.That(trophies.TryStartHarvestTrophy(hunter, fallen, YautjaTrophyKind.HumanSkull), Is.False,
+                    "a fallen hunter is still not a trophy");
+                Assert.That(trophies.TryOpenButcherDialog(hunter), Is.True,
+                    "the butcher dialog offers the corpse the procedure accepts");
+                Assert.That(trophies.TryStartButcher(hunter, fallen, YautjaButcherProcedure.Skin), Is.True);
             });
 
             entMan.DeleteEntity(hunter);

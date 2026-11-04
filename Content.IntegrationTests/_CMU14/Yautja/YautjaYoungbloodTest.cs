@@ -84,7 +84,8 @@ public sealed class YautjaYoungbloodTest
             Assert.That(Loc.GetString(option.DisplayName), Is.EqualTo(localizedName));
             Assert.That(option.SpawnCount, Is.EqualTo(count));
             Assert.That(option.CooldownMultiplier, Is.EqualTo(cooldownMultiplier).Within(0.001f));
-            Assert.That(option.Spawns, Is.Not.Empty);
+            // tiered calls (serpents) roll from Tiers instead of Spawns
+            Assert.That(option.Spawns.Concat(option.Tiers.SelectMany(tier => tier.Spawns)), Is.Not.Empty);
         });
 
         await pair.CleanReturnAsync();
@@ -317,6 +318,10 @@ public sealed class YautjaYoungbloodTest
 
         EntityUid nonYautjaTech = default;
         EntityUid nonYautjaTechMask = default;
+        EntityUid humanBracer = default;
+        EntityUid nonThrallUser = default;
+        EntityUid nonThrallMask = default;
+        EntityUid nonThrallBracer = default;
         EntityUid looseMaskUser = default;
         EntityUid looseMask = default;
         EntityUid noBracerUser = default;
@@ -348,6 +353,10 @@ public sealed class YautjaYoungbloodTest
 
                 nonYautjaTech = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
                 nonYautjaTechMask = entMan.SpawnEntity("CMUYautjaMask", map.GridCoords);
+                humanBracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
+                nonThrallUser = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(5, 0)));
+                nonThrallMask = entMan.SpawnEntity("CMUYautjaMaskThrallEbony", map.GridCoords.Offset(new Vector2(5, 0)));
+                nonThrallBracer = entMan.SpawnEntity("CMUYautjaThrallBracer", map.GridCoords.Offset(new Vector2(5, 0)));
                 looseMaskUser = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 1)));
                 looseMask = entMan.SpawnEntity("CMUYautjaMask", map.GridCoords.Offset(new Vector2(0, 1)));
                 noBracerUser = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
@@ -363,10 +372,12 @@ public sealed class YautjaYoungbloodTest
                 thrallMask = entMan.SpawnEntity("CMUYautjaMaskThrallEbony", map.GridCoords.Offset(new Vector2(4, 0)));
                 thrallBracer = entMan.SpawnEntity("CMUYautjaThrallBracer", map.GridCoords.Offset(new Vector2(4, 0)));
 
-                entMan.EnsureComponent<YautjaTechAuthorizedComponent>(nonYautjaTech);
                 entMan.EnsureComponent<YautjaThrallComponent>(thrallUser);
 
                 Assert.That(inventory.TryEquip(nonYautjaTech, nonYautjaTechMask, "mask", silent: true, force: true), Is.True);
+                Assert.That(inventory.TryEquip(nonYautjaTech, humanBracer, "gloves", silent: true, force: true), Is.True);
+                Assert.That(inventory.TryEquip(nonThrallUser, nonThrallMask, "mask", silent: true, force: true), Is.True);
+                Assert.That(inventory.TryEquip(nonThrallUser, nonThrallBracer, "gloves", silent: true, force: true), Is.True);
                 Assert.That(inventory.TryEquip(noBracerUser, noBracerMask, "mask", silent: true, force: true), Is.True);
                 Assert.That(inventory.TryEquip(blockedEyesUser, blockedEyesMask, "mask", silent: true, force: true), Is.True);
                 Assert.That(inventory.TryEquip(blockedEyesUser, blockedEyesBracer, "gloves", silent: true, force: true), Is.True);
@@ -381,15 +392,19 @@ public sealed class YautjaYoungbloodTest
                 entMan.EnsureComponent<YautjaComponent>(blockedEyesUser);
                 entMan.EnsureComponent<YautjaComponent>(techUser);
 
-                Assert.That(entMan.GetComponent<YautjaMaskComponent>(nonYautjaTechMask).RequiresYautjaWearer, Is.True);
+                // CMU lets any human run the clan mask visor, the thrall mask stays for thralls
+                Assert.That(entMan.GetComponent<YautjaMaskComponent>(nonYautjaTechMask).RequiresYautjaWearer, Is.False);
+                Assert.That(entMan.GetComponent<YautjaMaskComponent>(nonYautjaTechMask).AllowAnyWearer, Is.True);
                 Assert.That(entMan.GetComponent<YautjaMaskComponent>(thrallMask).RequiresYautjaWearer, Is.False);
+                Assert.That(entMan.GetComponent<YautjaMaskComponent>(thrallMask).AllowAnyWearer, Is.False);
                 Assert.That(entMan.GetComponent<YautjaMaskComponent>(thrallMask).User, Is.EqualTo(thrallUser));
                 Assert.That(entMan.HasComponent<YautjaThrallBracerComponent>(thrallBracer), Is.True);
                 Assert.That(inventory.TryGetSlotEntity(thrallUser, "gloves", out var equippedThrallBracer), Is.True);
                 Assert.That(equippedThrallBracer, Is.EqualTo(thrallBracer));
             });
 
-            await UseVisorAndAssert(nonYautjaTech, nonYautjaTechMask, "You have no idea how to work this thing!", false);
+            await UseVisorAndAssert(nonThrallUser, nonThrallMask, "You have no idea how to work this thing!", false);
+            await UseVisorAndAssert(nonYautjaTech, nonYautjaTechMask, "Low-light vision module: activated.", true);
             await UseVisorAndAssert(looseMaskUser, looseMask, "You must wear the clan mask!", false);
             await UseVisorAndAssert(noBracerUser, noBracerMask, "You must be wearing your bracers, as they have the power source.", false);
             await UseVisorAndAssert(blockedEyesUser, blockedEyesMask, "You need to remove your glasses first. Why are you even wearing these?", false);
@@ -410,7 +425,8 @@ public sealed class YautjaYoungbloodTest
 
                 foreach (var uid in new[]
                          {
-                             nonYautjaTech, nonYautjaTechMask, looseMaskUser, looseMask, noBracerUser,
+                             nonYautjaTech, nonYautjaTechMask, humanBracer, nonThrallUser, nonThrallMask,
+                             nonThrallBracer, looseMaskUser, looseMask, noBracerUser,
                              noBracerMask, blockedEyesUser, blockedEyesMask, blockedEyesBracer, glasses,
                              techUser, techMask, techBracer, thrallUser, thrallMask, thrallBracer,
                          })
@@ -1262,7 +1278,7 @@ public sealed class YautjaYoungbloodTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var client = pair.Client;
-        var sourceSprite = new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_gear.rsi");
+        var sourceSprite = new ResPath("/Textures/CMU14/Yautja/visor.rsi");
 
         await client.WaitAssertion(() =>
         {
@@ -1272,7 +1288,9 @@ public sealed class YautjaYoungbloodTest
 
             Assert.That(glasses.TryComp<SpriteComponent>(out var sprite, factory), Is.True);
             Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(sourceSprite));
-            Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("visor_nvg"));
+            Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("icon"));
+            // cmss13 draws the visor_nvg lens from onmob/hunter/pred_gear.dmi while it's on WEAR_EYES
+            Assert.That(sprite.BaseRSI!.TryGetState("equipped-EYES", out _), Is.True);
         });
 
         await server.WaitAssertion(() =>
@@ -1285,7 +1303,7 @@ public sealed class YautjaYoungbloodTest
             Assert.That(glasses.Description, Is.EqualTo("A vision overlay generated by the Bio-Mask. Used for low-light conditions."));
 
             Assert.That(glasses.TryComp<ClothingComponent>(out var clothing, factory), Is.True);
-            Assert.That(clothing!.RsiPath, Is.EqualTo("CMU14/HunterShip/obj/items/hunter/pred_gear.rsi"));
+            Assert.That(clothing!.RsiPath, Is.EqualTo("CMU14/Yautja/visor.rsi"));
             Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.EYES));
 
             Assert.That(glasses.TryComp<ItemComponent>(out var item, factory), Is.True);
@@ -1878,7 +1896,15 @@ public sealed class YautjaYoungbloodTest
                 Assert.That(sectionNames, Is.EqualTo(new[]
                 {
                     "Essential Hunting Supplies",
-                    "Armor Material (CHOOSE 1)",
+                    "Undersuit (CHOOSE 1)",
+                    "Full-Mask (CHOOSE 1)",
+                    "Half-Mask (CHOOSE 1)",
+                    "Full-Armor Chest (CHOOSE 1)",
+                    "Half-Armor Chest (CHOOSE 1)",
+                    "Light-Armor Chest (CHOOSE 1)",
+                    "Full-Armor Greaves (CHOOSE 1)",
+                    "Half-Armor Greaves (CHOOSE 1)",
+                    "Light-Armor Greaves (CHOOSE 1)",
                     "Main Weapons (CHOOSE 1)",
                 }));
 
@@ -1891,52 +1917,44 @@ public sealed class YautjaYoungbloodTest
                 AssertChoice(essentials.Entries.Single(), "CMUYautjaEssentials", 1);
                 AssertBundle(entMan, SpawnBundle("CMUYautjaThrallHuntingEquipmentBundle"), new[]
                 {
-                    "CMUYautjaThrallChainshirt",
                     "CMUYautjaHuntingPouch",
                     "CMUYautjaLantern",
                     "CMUYautjaCommunicator",
                 });
 
-                var armor = vendor.Sections.Single(section => section.Name == "Armor Material (CHOOSE 1)");
-                AssertChoice(armor, "CMUYautjaArmor", 1);
-                Assert.That(armor.Entries.Select(entry => (entry.Id.Id, entry.Name, entry.Recommended)).ToArray(), Is.EqualTo(new[]
+                // cmss13 #12577: the three chest rows share one armour pick, the greaves rows one shoes pick, the masks one mask pick
+                var undersuit = vendor.Sections.Single(section => section.Name == "Undersuit (CHOOSE 1)");
+                AssertChoice(undersuit, "CMUYautjaUniform", 1);
+                Assert.That(undersuit.Entries.Select(entry => (entry.Id.Id, entry.Name, entry.Mandatory)).ToArray(), Is.EqualTo(new[]
                 {
-                    ("CMUYautjaThrallArmorEbonyBundle", "Ebony", true),
-                    ("CMUYautjaThrallArmorSilverBundle", "Silver", true),
-                    ("CMUYautjaThrallArmorGoldBundle", "Gold", true),
-                    ("CMUYautjaThrallArmorCrimsonBundle", "Crimson", true),
-                    ("CMUYautjaThrallArmorBoneBundle", "Bone", true),
+                    ("CMUYautjaThrallChainshirt", "Chain", true),
+                    ("CMUYautjaThrallClothSuit", "Crimson Cloth", true),
+                    ("CMUYautjaThrallClothSuitAlt", "Tan Cloth", true),
                 }));
-                AssertBundle(entMan, SpawnBundle("CMUYautjaThrallArmorEbonyBundle"), new[]
+
+                foreach (var (sectionName, prefix, choice) in new[]
+                         {
+                             ("Full-Mask (CHOOSE 1)", "CMUYautjaMaskThrall", "CMUYautjaMask"),
+                             ("Half-Mask (CHOOSE 1)", "CMUYautjaMaskThrallAlt", "CMUYautjaMask"),
+                             ("Full-Armor Chest (CHOOSE 1)", "CMUYautjaThrallArmor", "CMUYautjaArmor"),
+                             ("Half-Armor Chest (CHOOSE 1)", "CMUYautjaThrallArmorHalf", "CMUYautjaArmor"),
+                             ("Light-Armor Chest (CHOOSE 1)", "CMUYautjaThrallArmorLight", "CMUYautjaArmor"),
+                             ("Full-Armor Greaves (CHOOSE 1)", "CMUYautjaThrallGreaves", "CMUYautjaShoes"),
+                             ("Half-Armor Greaves (CHOOSE 1)", "CMUYautjaThrallGreavesHalf", "CMUYautjaShoes"),
+                             ("Light-Armor Greaves (CHOOSE 1)", "CMUYautjaThrallGreavesLight", "CMUYautjaShoes"),
+                         })
                 {
-                    "CMUYautjaThrallArmorEbony",
-                    "CMUYautjaThrallGreavesEbony",
-                    "CMUYautjaMaskThrallEbony",
-                });
-                AssertBundle(entMan, SpawnBundle("CMUYautjaThrallArmorSilverBundle"), new[]
-                {
-                    "CMUYautjaThrallArmorSilver",
-                    "CMUYautjaThrallGreavesSilver",
-                    "CMUYautjaMaskThrallSilver",
-                });
-                AssertBundle(entMan, SpawnBundle("CMUYautjaThrallArmorGoldBundle"), new[]
-                {
-                    "CMUYautjaThrallArmorGold",
-                    "CMUYautjaThrallGreavesGold",
-                    "CMUYautjaMaskThrallGold",
-                });
-                AssertBundle(entMan, SpawnBundle("CMUYautjaThrallArmorCrimsonBundle"), new[]
-                {
-                    "CMUYautjaThrallArmorCrimson",
-                    "CMUYautjaThrallGreavesCrimson",
-                    "CMUYautjaMaskThrallCrimson",
-                });
-                AssertBundle(entMan, SpawnBundle("CMUYautjaThrallArmorBoneBundle"), new[]
-                {
-                    "CMUYautjaThrallArmorBone",
-                    "CMUYautjaThrallGreavesBone",
-                    "CMUYautjaMaskThrallBone",
-                });
+                    var section = vendor.Sections.Single(candidate => candidate.Name == sectionName);
+                    AssertChoice(section, choice, 1);
+                    Assert.That(section.Entries.Select(entry => (entry.Id.Id, entry.Name, entry.Recommended)).ToArray(), Is.EqualTo(new[]
+                    {
+                        ($"{prefix}Ebony", "Ebony", true),
+                        ($"{prefix}Silver", "Silver", true),
+                        ($"{prefix}Gold", "Gold", true),
+                        ($"{prefix}Crimson", "Crimson", true),
+                        ($"{prefix}Bone", "Bone", true),
+                    }), sectionName);
+                }
 
                 var weapons = vendor.Sections.Single(section => section.Name == "Main Weapons (CHOOSE 1)");
                 AssertChoice(weapons, "CMUYautjaAccessory", 1);
@@ -2037,7 +2055,8 @@ public sealed class YautjaYoungbloodTest
             {
                 var vendor = entMan.GetComponent<CMAutomatedVendorComponent>(rack);
                 var essentialsIndex = vendor.Sections.FindIndex(section => section.Name == "Essential Hunting Supplies");
-                var armorIndex = vendor.Sections.FindIndex(section => section.Name == "Armor Material (CHOOSE 1)");
+                var armorIndex = vendor.Sections.FindIndex(section => section.Name == "Full-Armor Chest (CHOOSE 1)");
+                var halfArmorIndex = vendor.Sections.FindIndex(section => section.Name == "Half-Armor Chest (CHOOSE 1)");
                 var weaponsIndex = vendor.Sections.FindIndex(section => section.Name == "Main Weapons (CHOOSE 1)");
                 Assert.That(essentialsIndex, Is.GreaterThanOrEqualTo(0));
                 Assert.That(armorIndex, Is.GreaterThanOrEqualTo(0));
@@ -2047,7 +2066,7 @@ public sealed class YautjaYoungbloodTest
                 var armor = vendor.Sections[armorIndex];
                 var weapons = vendor.Sections[weaponsIndex];
                 var huntingIndex = essentials.Entries.FindIndex(entry => entry.Id.Id == "CMUYautjaThrallHuntingEquipmentBundle");
-                var ebonyIndex = armor.Entries.FindIndex(entry => entry.Id.Id == "CMUYautjaThrallArmorEbonyBundle");
+                var ebonyIndex = armor.Entries.FindIndex(entry => entry.Id.Id == "CMUYautjaThrallArmorEbony");
                 var swordIndex = weapons.Entries.FindIndex(entry => entry.Id.Id == "CMUYautjaClanSword");
                 Assert.That(huntingIndex, Is.GreaterThanOrEqualTo(0));
                 Assert.That(ebonyIndex, Is.GreaterThanOrEqualTo(0));
@@ -2061,6 +2080,10 @@ public sealed class YautjaYoungbloodTest
                 Assert.That(user.Choices.GetValueOrDefault("CMUYautjaThrallPrimary"), Is.Zero);
 
                 Vend(entMan, rack, thrall, armorIndex, ebonyIndex);
+                Assert.That(user.Choices.GetValueOrDefault("CMUYautjaArmor"), Is.EqualTo(1));
+
+                // the half chest shares the armour pick, so a second chest is refused
+                Vend(entMan, rack, thrall, halfArmorIndex, 0);
                 Assert.That(user.Choices.GetValueOrDefault("CMUYautjaArmor"), Is.EqualTo(1));
 
                 Vend(entMan, rack, thrall, weaponsIndex, swordIndex);
@@ -3697,11 +3720,49 @@ public sealed class YautjaYoungbloodTest
         return
         [
             "CMUYautjaThrallHuntingEquipmentBundle",
-            "CMUYautjaThrallArmorEbonyBundle",
-            "CMUYautjaThrallArmorSilverBundle",
-            "CMUYautjaThrallArmorGoldBundle",
-            "CMUYautjaThrallArmorCrimsonBundle",
-            "CMUYautjaThrallArmorBoneBundle",
+            "CMUYautjaThrallChainshirt",
+            "CMUYautjaThrallClothSuit",
+            "CMUYautjaThrallClothSuitAlt",
+            "CMUYautjaMaskThrallEbony",
+            "CMUYautjaMaskThrallSilver",
+            "CMUYautjaMaskThrallGold",
+            "CMUYautjaMaskThrallCrimson",
+            "CMUYautjaMaskThrallBone",
+            "CMUYautjaMaskThrallAltEbony",
+            "CMUYautjaMaskThrallAltSilver",
+            "CMUYautjaMaskThrallAltGold",
+            "CMUYautjaMaskThrallAltCrimson",
+            "CMUYautjaMaskThrallAltBone",
+            "CMUYautjaThrallArmorEbony",
+            "CMUYautjaThrallArmorSilver",
+            "CMUYautjaThrallArmorGold",
+            "CMUYautjaThrallArmorCrimson",
+            "CMUYautjaThrallArmorBone",
+            "CMUYautjaThrallArmorHalfEbony",
+            "CMUYautjaThrallArmorHalfSilver",
+            "CMUYautjaThrallArmorHalfGold",
+            "CMUYautjaThrallArmorHalfCrimson",
+            "CMUYautjaThrallArmorHalfBone",
+            "CMUYautjaThrallArmorLightEbony",
+            "CMUYautjaThrallArmorLightSilver",
+            "CMUYautjaThrallArmorLightGold",
+            "CMUYautjaThrallArmorLightCrimson",
+            "CMUYautjaThrallArmorLightBone",
+            "CMUYautjaThrallGreavesEbony",
+            "CMUYautjaThrallGreavesSilver",
+            "CMUYautjaThrallGreavesGold",
+            "CMUYautjaThrallGreavesCrimson",
+            "CMUYautjaThrallGreavesBone",
+            "CMUYautjaThrallGreavesHalfEbony",
+            "CMUYautjaThrallGreavesHalfSilver",
+            "CMUYautjaThrallGreavesHalfGold",
+            "CMUYautjaThrallGreavesHalfCrimson",
+            "CMUYautjaThrallGreavesHalfBone",
+            "CMUYautjaThrallGreavesLightEbony",
+            "CMUYautjaThrallGreavesLightSilver",
+            "CMUYautjaThrallGreavesLightGold",
+            "CMUYautjaThrallGreavesLightCrimson",
+            "CMUYautjaThrallGreavesLightBone",
             "CMUYautjaClanSword",
             "CMUYautjaRendingSword",
             "CMUYautjaPiercingSword",

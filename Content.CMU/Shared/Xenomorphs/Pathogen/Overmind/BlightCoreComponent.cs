@@ -1,5 +1,6 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 
@@ -8,7 +9,7 @@ namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 /// Any Pathogen xeno can step on it to become the Overmind (queen)
 /// if no Overmind currently exists for the hive.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
 public sealed partial class CMUBlightCoreComponent : Component
 {
     /// <summary>The xeno currently merged into this core as Overmind.</summary>
@@ -23,5 +24,6 @@ public sealed partial class CMUBlightCoreComponent : Component
     [DataField, AutoNetworkedField]
     public int MaxHealth = 600;
 
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan LastDamageAnnounceAt = TimeSpan.Zero;
 }

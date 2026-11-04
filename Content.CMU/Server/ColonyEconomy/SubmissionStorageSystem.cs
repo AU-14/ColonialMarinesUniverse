@@ -1,9 +1,6 @@
 using Content.Server.CMU14.Ambassador;
-using Content.Server.Containers;
 using Content.Shared.CMU14.ColonyEconomy;
-using Content.Shared.Containers;
 using Content.Shared.Stacks;
-using Content.Shared.Tag;
 using Robust.Shared.Containers;
 
 namespace Content.Server.CMU14.ColonyEconomy;
@@ -13,57 +10,34 @@ public sealed partial class SubmissionStorageSystem : EntitySystem
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
     [Dependency] private AmbassadorConsoleSystem _ambassador = default!;
     [Dependency] private CorporateConsoleSystem _corporateConsole = default!;
- 
+    [Dependency] private SubmissionCommoditySystem _commodity = default!;
+    [Dependency] private SubmissionMarketSystem _market = default!;
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<SubmissionStorageComponent, EntInsertedIntoContainerMessage>(OnEntityInserted);
     }
 
-
-
     private void OnEntityInserted(EntityUid uid,
         SubmissionStorageComponent storage,
         EntInsertedIntoContainerMessage args)
     {
-        if (!TryComp(uid, out SubmissionStorageComponent? submission))
+        // the insert veto already bounced anything that doesn't match
+        if (!_commodity.TryMatch(storage, args.Entity, out var commodity, out var basePrice))
             return;
 
-        if (!TryComp<TagComponent>(args.Entity, out var tags))
-            return;
-        if (submission.Rewards is null)
-            return;
+        var count = TryComp<StackComponent>(args.Entity, out var stack) ? stack.Count : 1;
+        var baseValue = basePrice * count;
 
-        float sum = 0f;
-        int num = 0;
-        foreach (var tag in tags.Tags)
-        {
-            if (submission.Rewards.TryGetValue(tag, out var val))
-            {
-                sum += val;
-                num++;
-            }
-        }
-        // can never be too careful
-        if (num == 0)
-            num = 1;
-
-        // e.g. $10 + $15 != $25 instead it equals $12.5
-        float amount = sum / num;
-
-        var mult = _ambassador.GetSubmissionMultiplier();
-        var tariff = _corporateConsole.GetTariff();
-        //var amount = submission.Rewards.TryGetValue()
-
-        float reward;
-        if (TryComp<StackComponent>(args.Entity, out var stack))
-            reward = amount * stack.Count * mult;
-        else
-            reward = amount * mult;
+        // priced before the sale counts, so it pays what the board showed
+        var reward = baseValue * _market.GetMultiplier(commodity) * _ambassador.GetSubmissionMultiplier();
+        _market.RecordSale(commodity, baseValue);
 
         PredictedQueueDel(args.Entity);
 
         // Split: tariff % goes to corporate budget, remainder to colony budget
+        var tariff = _corporateConsole.GetTariff();
         var tariffAmount = reward * tariff;
         var colonyAmount = reward - tariffAmount;
 

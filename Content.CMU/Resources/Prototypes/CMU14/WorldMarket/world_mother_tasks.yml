@@ -1,0 +1,224 @@
+# What the mother faction asks of an ambassador (see WorldMotherTaskPrototype): reports (once in half an hour, sent by hand in time) and missions (the main goals: no time, always a few, counted by themselves, paid in trust and money). The requirements are
+# counted from when the task is given.
+
+- type: worldMotherTask
+  id: RUMCTaskReportHold
+  name: rumc-task-reporthold-name
+  description: rumc-task-reporthold-desc
+  report: true
+  durationSeconds: 600
+  cities: 1
+  cityInfluence: 12
+  rewardPoints: 1
+  trustGain: 6
+  trustLoss: 8
+
+- type: worldMotherTask
+  id: RUMCTaskReportHoldTwo
+  name: rumc-task-reportholdtwo-name
+  description: rumc-task-reportholdtwo-desc
+  report: true
+  durationSeconds: 600
+  cities: 2
+  cityInfluence: 12
+  rewardPoints: 1
+  trustGain: 6
+  trustLoss: 8
+
+- type: worldMotherTask
+  id: RUMCTaskReportWork
+  name: rumc-task-reportwork-name
+  description: rumc-task-reportwork-desc
+  report: true
+  durationSeconds: 600
+  projects: 1
+  rewardPoints: 1
+  trustGain: 6
+  trustLoss: 8
+
+- type: worldMotherTask
+  id: RUMCTaskReportProfit
+  name: rumc-task-reportprofit-name
+  description: rumc-task-reportprofit-desc
+  report: true
+  durationSeconds: 600
+  earn: 20
+  rewardPoints: 1
+  trustGain: 6
+  trustLoss: 8
+
+- type: worldMotherTask
+  id: RUMCTaskReportMixed
+  name: rumc-task-reportmixed-name
+  description: rumc-task-reportmixed-desc
+  report: true
+  durationSeconds: 600
+  cities: 1
+  cityInfluence: 12
+  projects: 1
+  rewardPoints: 2
+  trustGain: 8
+  trustLoss: 10
+
+- type: worldMotherTask
+  id: RUMCTaskMissionHold
+  name: rumc-task-missionhold-name
+  description: rumc-task-missionhold-desc
+  cities: 3
+  cityInfluence: 25
+  rewardPoints: 0
+  rewardMoney: 1200
+  rewardCrate: RMCCratePlasteelSheets
+  trustGain: 10
+
+- type: worldMotherTask
+  id: RUMCTaskMissionEarn
+  name: rumc-task-missionearn-name
+  description: rumc-task-missionearn-desc
+  earn: 90
+  rewardPoints: 0
+  rewardMoney: 1000
+  trustGain: 8
+
+- type: worldMotherTask
+  id: RUMCTaskMissionProjects
+  name: rumc-task-missionprojects-name
+  description: rumc-task-missionprojects-desc
+  projects: 4
+  rewardPoints: 0
+  rewardMoney: 900
+  rewardCrate: AU14CrateBoxFusionCells
+  trustGain: 8
+
+- type: worldMotherTask
+  id: RUMCTaskMissionCrises
+  name: rumc-task-missioncrises-name
+  description: rumc-task-missioncrises-desc
+  crises: 2
+  rewardPoints: 0
+  rewardMoney: 1000
+  rewardCrate: RMCCrateMedicalSurgery
+  trustGain: 10
+
+- type: worldMotherTask
+  id: RUMCTaskMissionWorkers
+  name: rumc-task-missionworkers-name
+  description: rumc-task-missionworkers-desc
+  workers: 2
+  rewardPoints: 0
+  rewardMoney: 800
+  trustGain: 8
+
+- type: worldMotherTask
+  id: RUMCTaskMissionBig
+  name: rumc-task-missionbig-name
+  description: rumc-task-missionbig-desc
+  cities: 2
+  cityInfluence: 40
+  projects: 3
+  rewardPoints: 0
+  rewardMoney: 2000
+  rewardCrate: RMCCrateSuperPacmanParts
+  trustGain: 12
+
+- type: worldMotherTask
+  id: RUMCTaskMissionNetwork
+  name: rumc-task-missionnetwork-name
+  description: rumc-task-missionnetwork-desc
+  cities: 4
+  cityInfluence: 12
+  rewardPoints: 0
+  rewardMoney: 900
+  trustGain: 8
+
+- type: worldMotherTask
+  id: RUMCTaskMissionPatron
+  name: rumc-task-missionpatron-name
+  description: rumc-task-missionpatron-desc
+  cities: 1
+  cityInfluence: 60
+  rewardPoints: 0
+  rewardMoney: 1500
+  trustGain: 12
+
+- type: worldMotherTask
+  id: RUMCTaskMissionIndustry
+  name: rumc-task-missionindustry-name
+  description: rumc-task-missionindustry-desc
+  earn: 180
+  rewardPoints: 0
+  rewardMoney: 1800
+  rewardCrate: RMCCrateFoodPizza
+  trustGain: 10
+
+- type: worldMotherTask
+  id: RUMCTaskMissionRescue
+  name: rumc-task-missionrescue-name
+  description: rumc-task-missionrescue-desc
+  crises: 4
+  rewardPoints: 0
+  rewardMoney: 1800
+  rewardCrate: RMCCrateMedicalFirstAid
+  trustGain: 12
+
+- type: worldMotherTask
+  id: RUMCTaskMissionBuilders
+  name: rumc-task-missionbuilders-name
+  description: rumc-task-missionbuilders-desc
+  projects: 8
+  rewardPoints: 0
+  rewardMoney: 1600
+  rewardCrate: RMCCrateFoodIngredients
+  trustGain: 10
+
+- type: worldMotherTask
+  id: RUMCTaskMissionExpedition
+  name: rumc-task-missionexpedition-name
+  description: rumc-task-missionexpedition-desc
+  workers: 4
+  rewardPoints: 0
+  rewardMoney: 1500
+  trustGain: 10
+
+- type: worldMotherTask
+  id: RUMCTaskMissionGrowth
+  name: rumc-task-missiongrowth-name
+  description: rumc-task-missiongrowth-desc
+  cities: 3
+  cityInfluence: 12
+  rewardPoints: 0
+  rewardMoney: 700
+  trustGain: 6
+
+- type: worldMotherTask
+  id: RUMCTaskMissionWealth
+  name: rumc-task-missionwealth-name
+  description: rumc-task-missionwealth-desc
+  earn: 45
+  projects: 2
+  rewardPoints: 0
+  rewardMoney: 800
+  rewardCrate: RMCCrateMedicalStasisBag
+  trustGain: 7
+
+- type: worldMotherTask
+  id: RUMCTaskMissionFriends
+  name: rumc-task-missionfriends-name
+  description: rumc-task-missionfriends-desc
+  cities: 2
+  cityInfluence: 25
+  crises: 1
+  rewardPoints: 0
+  rewardMoney: 1300
+  trustGain: 9
+
+- type: worldMotherTask
+  id: RUMCTaskMissionLegacy
+  name: rumc-task-missionlegacy-name
+  description: rumc-task-missionlegacy-desc
+  cities: 5
+  cityInfluence: 25
+  rewardPoints: 0
+  rewardMoney: 3000
+  rewardCrate: RMCCrateSuperPacmanParts
+  trustGain: 15

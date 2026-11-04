@@ -192,9 +192,11 @@ jobs:
               }
 
               if (context.payload.action === 'synchronize') {
+                // CMU14: a new push invalidates CI failure state the same as review state
                 await remove(pr.number, [
                   'S: Approved',
                   'S: Awaiting Changes',
+                  'CI Failure',
                 ]);
               }
 
@@ -211,6 +213,15 @@ jobs:
               } else if (review.state === 'changes_requested' && trusted) {
                 await add(pullNumber, ['S: Awaiting Changes']);
                 await remove(pullNumber, ['S: Approved']);
+                // CMU14: re-request the reviewer so they see the author's response
+                if (pr && review.user.login !== pr.user.login) {
+                  await github.rest.pulls.requestReviewers({
+                    owner,
+                    repo,
+                    pull_number: pullNumber,
+                    reviewers: [review.user.login],
+                  });
+                }
               }
             }
 

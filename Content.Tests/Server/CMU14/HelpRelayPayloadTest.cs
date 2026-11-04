@@ -170,19 +170,24 @@ namespace Content.Tests.Server.CMU14
         }
 
         [Test]
-        public void ConversationPayloadCarriesTranscript()
+        public void ConversationPayloadCarriesTranscriptAndContext()
         {
             var payload = HelpRelayPayload.BuildConversationPayload(
                 HelpSource.MHelp,
                 "dev",
                 "\n:inbox_tray: **PFC Jane Doe:** hi",
                 revision: "20a11caad6",
-                server: "CMU Main");
+                context: Context());
 
             Assert.That(payload.Username, Is.EqualTo("MHelp · dev"));
             var embed = payload.Embeds[0];
             Assert.That(embed.Description, Does.Contain("PFC Jane Doe"));
             Assert.That(embed.Color, Is.EqualTo(0xE67E22));
+            Assert.That(embed.Fields, Has.Count.EqualTo(4));
+            Assert.That(embed.Fields[0].Name, Is.EqualTo("Round"));
+            Assert.That(embed.Fields[0].Value, Is.EqualTo("1234"));
+            Assert.That(embed.Fields[1].Value, Is.EqualTo("CMLowPop"));
+            Assert.That(embed.Fields[2].Value, Is.EqualTo("MapAtlas"));
             Assert.That(embed.Footer!.Text, Is.EqualTo("rev 20a11caad6 · CMU Main · CMU help relay"));
         }
 

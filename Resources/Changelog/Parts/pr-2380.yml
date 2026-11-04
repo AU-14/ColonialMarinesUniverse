@@ -1,0 +1,20 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Humans can turn on the clan mask visor while wearing yautja bracers.
+  type: Add
+- message: 'Linked thralls become the cmss13 Thrall species: more health, half brute
+    and burn, stun resistance, no bleeding or broken bones, stronger punches, dark
+    vision, butchering, prey marking and dagger flaying.'
+  type: Add
+- message: Yautja and thralls can hang corpses from the ceiling with the strange rope,
+    found on the hunter ship.
+  type: Add
+- message: Yautja can butcher fallen yautja.
+  type: Add
+- message: Dathwei and thwei restore blood on humans and mend shattered bones.
+  type: Tweak
+- message: Yautja and linked thralls no longer choke when a xeno drags them in crit.
+  type: Tweak
+time: '2026-10-30T18:55:08.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2380

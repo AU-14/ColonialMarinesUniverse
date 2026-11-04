@@ -1,0 +1,545 @@
+# Things of the game that the machines of the electric stage make of what the colony has: light, power cells, cable, tools, cloth, boots, furniture, barrels and
+# the like. Each of them is a plain recipe of a machine, in the same format as the others (the machine, what it takes, the thing it gives, the seconds).
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingSandbagsFull
+  machine: sewing
+  inputs:
+    Cloth: 3
+    RUMCSand: 10
+  itemOutputs:
+    CMSandbagFull5: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRWiremillBarbedWire
+  machine: wiremill
+  inputs:
+    CMSteel: 2
+  itemOutputs:
+    BarbedWire15: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingCarpetRed
+  machine: sewing
+  inputs:
+    Cloth: 2
+  itemOutputs:
+    FloorCarpetItemRed: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingCarpetBlue
+  machine: sewing
+  inputs:
+    Cloth: 2
+  itemOutputs:
+    FloorCarpetItemBlue: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingCarpetBlack
+  machine: sewing
+  inputs:
+    Cloth: 2
+  itemOutputs:
+    FloorCarpetItemBlack: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingCarpetGreen
+  machine: sewing
+  inputs:
+    Cloth: 2
+  itemOutputs:
+    FloorCarpetItemGreen: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerLightTube
+  machine: assembler
+  inputs:
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 1
+  itemOutputs:
+    LightTube: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerLightBulb
+  machine: assembler
+  inputs:
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 1
+  itemOutputs:
+    LightBulb: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerFlashlight
+  machine: assembler
+  inputs:
+    CMSteel: 1
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    RMCFlashlight: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerPowerCellSmall
+  machine: assembler
+  inputs:
+    RUMCLeadIngot: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    PowerCellSmall: 1
+  fluidInputs:
+    RUMCHydrochloricAcid: 10
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerPowerCellMedium
+  machine: assembler
+  inputs:
+    RUMCLeadIngot: 2
+    RUMCKitWiring: 3
+    CMSteel: 1
+  itemOutputs:
+    PowerCellMedium: 1
+  fluidInputs:
+    RUMCHydrochloricAcid: 20
+  duration: 10
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerPowerCellHigh
+  machine: assembler
+  inputs:
+    RUMCLeadIngot: 3
+    RUMCKitWiring: 4
+    CMSteel: 1
+    RUMCKitSimpleCircuits: 1
+  itemOutputs:
+    PowerCellHigh: 1
+  fluidInputs:
+    RUMCHydrochloricAcid: 30
+  duration: 12
+
+- type: cmuMachineRecipe
+  id: RUMCMRWiremillCableCoil10
+  machine: wiremill
+  inputs:
+    RUMCKitWiring: 10
+    RUMCRubberSheet: 1
+  itemOutputs:
+    RMCCableCoil10: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRWiremillCableCoil20
+  machine: wiremill
+  inputs:
+    RUMCKitWiring: 20
+    RUMCRubberSheet: 2
+  itemOutputs:
+    RMCCableCoil20: 1
+  duration: 7
+
+- type: cmuMachineRecipe
+  id: RUMCMRWiremillCableCoil30
+  machine: wiremill
+  inputs:
+    RUMCKitWiring: 30
+    RUMCRubberSheet: 3
+  itemOutputs:
+    RMCCableCoil30: 1
+  duration: 9
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorHatchet
+  machine: fabricator
+  inputs:
+    RUMCIronRod: 2
+    CMSteel: 2
+  itemOutputs:
+    RMCToolHatchet: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorMachete
+  machine: fabricator
+  inputs:
+    CMSteel: 3
+    RUMCIronRod: 1
+  itemOutputs:
+    AU14ToolMachete: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorHandSaw
+  machine: fabricator
+  inputs:
+    CMSteel: 2
+    RUMCIronRod: 1
+  itemOutputs:
+    RUMCHandSaw: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorFireExtinguisher
+  machine: fabricator
+  inputs:
+    CMSteel: 3
+    RUMCIronRod: 1
+    RUMCRubberSheet: 1
+  itemOutputs:
+    FireExtinguisher: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorToolbox
+  machine: fabricator
+  inputs:
+    CMSteel: 4
+  itemOutputs:
+    ToolboxMechanical: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorBucket
+  machine: fabricator
+  inputs:
+    CMSteel: 2
+  itemOutputs:
+    Bucket: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorCanteen
+  machine: fabricator
+  inputs:
+    CMSteel: 1
+    RUMCRubberSheet: 1
+  itemOutputs:
+    CMCanteen: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorFuelTank
+  machine: fabricator
+  inputs:
+    CMSteel: 4
+    RUMCIronRod: 2
+  itemOutputs:
+    WeldingFuelTank: 1
+  duration: 7
+
+- type: cmuMachineRecipe
+  id: RUMCMRTanneryBootsBlack
+  machine: tannery
+  inputs:
+    RUMCLeather: 4
+  itemOutputs:
+    CMBootsBlack: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRTanneryBootsBrown
+  machine: tannery
+  inputs:
+    RUMCLeather: 4
+  itemOutputs:
+    CMBootsBrown: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRTanneryBootsUrban
+  machine: tannery
+  inputs:
+    RUMCLeather: 4
+  itemOutputs:
+    CMBootsUrban: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRTanneryBootsJungle
+  machine: tannery
+  inputs:
+    RUMCLeather: 4
+  itemOutputs:
+    CMBootsJungle: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRTanneryBootsThigh
+  machine: tannery
+  inputs:
+    RUMCLeather: 6
+  itemOutputs:
+    CMBootsThigh: 1
+  duration: 8
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingMaskCoif
+  machine: sewing
+  inputs:
+    Cloth: 2
+  itemOutputs:
+    CMMaskCoif: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingHydroApron
+  machine: sewing
+  inputs:
+    Cloth: 3
+  itemOutputs:
+    RMCHydroApron: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingHydroArmband
+  machine: sewing
+  inputs:
+    Cloth: 1
+  itemOutputs:
+    RMCHydroArmband: 1
+  duration: 3
+
+- type: cmuMachineRecipe
+  id: RUMCMRCutterBeaker
+  machine: cutter
+  inputs:
+    CMGlass: 1
+  itemOutputs:
+    CMBeaker: 2
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRCutterBeakerLarge
+  machine: cutter
+  inputs:
+    CMGlass: 2
+  itemOutputs:
+    CMBeakerLarge: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaSoap
+  machine: pharma
+  inputs:
+    RUMCStonePowder: 1
+  itemOutputs:
+    CMSoap: 2
+  fluidInputs:
+    RUMCResin: 10
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaMedkit
+  machine: pharma
+  inputs:
+    Cloth: 2
+    Paper: 2
+  itemOutputs:
+    Medkit: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRPharmaBurnAidKit
+  machine: pharma
+  inputs:
+    Cloth: 2
+    Paper: 2
+  itemOutputs:
+    CMBurnAidKit: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorBed
+  machine: fabricator
+  inputs:
+    RMCWood: 4
+    RUMCIronRod: 2
+  itemOutputs:
+    CMBed: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorCloset
+  machine: fabricator
+  inputs:
+    CMSteel: 6
+  itemOutputs:
+    CMClosetBase: 1
+  duration: 7
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorRackParts
+  machine: fabricator
+  inputs:
+    CMSteel: 2
+  itemOutputs:
+    RMCRackParts: 1
+  duration: 4
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBedsheetBlue
+  machine: sewing
+  inputs:
+    Cloth: 4
+  itemOutputs:
+    CMBedsheetBlue: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBedsheetGray
+  machine: sewing
+  inputs:
+    Cloth: 4
+  itemOutputs:
+    CMBedsheetGray: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBedsheetWhite
+  machine: sewing
+  inputs:
+    Cloth: 4
+  itemOutputs:
+    CMBedsheetWhite: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBedsheetRed
+  machine: sewing
+  inputs:
+    Cloth: 4
+  itemOutputs:
+    CMBedsheetRed: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBedsheetGreen
+  machine: sewing
+  inputs:
+    Cloth: 4
+  itemOutputs:
+    CMBedsheetGreen: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRSewingBedsheetBrown
+  machine: sewing
+  inputs:
+    Cloth: 4
+  itemOutputs:
+    CMBedsheetBrown: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorPottedPlant0
+  machine: fabricator
+  inputs:
+    RUMCClay: 4
+  itemOutputs:
+    CMPottedPlant0: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorPottedPlant1
+  machine: fabricator
+  inputs:
+    RUMCClay: 4
+  itemOutputs:
+    CMPottedPlant1: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorPottedPlant2
+  machine: fabricator
+  inputs:
+    RUMCClay: 4
+  itemOutputs:
+    CMPottedPlant2: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorPottedPlant10
+  machine: fabricator
+  inputs:
+    RUMCClay: 4
+  itemOutputs:
+    CMPottedPlant10: 1
+  duration: 5
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderBarrelBase
+  machine: bender
+  inputs:
+    CMSteel: 4
+  itemOutputs:
+    RMCBarrelBase: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderBarrelBlue
+  machine: bender
+  inputs:
+    CMSteel: 4
+  itemOutputs:
+    RMCBarrelBlue: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderBarrelRed
+  machine: bender
+  inputs:
+    CMSteel: 4
+  itemOutputs:
+    RMCBarrelRed: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderChemBarrel
+  machine: bender
+  inputs:
+    CMSteel: 5
+    RUMCRubberSheet: 1
+  itemOutputs:
+    BarrelChemEmpty: 1
+  duration: 7
+
+- type: cmuMachineRecipe
+  id: RUMCMRBenderCanister
+  machine: bender
+  inputs:
+    CMSteel: 3
+    RUMCIronRod: 1
+  itemOutputs:
+    RMCCanisterBase: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRFabricatorBinoculars
+  machine: fabricator
+  inputs:
+    RUMCKitElectronics: 2
+    CMSteel: 2
+    RUMCIronRod: 2
+  itemOutputs:
+    RMCBinoculars: 1
+  duration: 6
+
+- type: cmuMachineRecipe
+  id: RUMCMRAssemblerMotionDetector
+  machine: assembler
+  inputs:
+    RUMCKitSimpleCircuits: 1
+    RUMCKitElectronics: 1
+    CMSteel: 1
+    RUMCKitWiring: 2
+  itemOutputs:
+    RMCMotionDetectorCompact: 1
+  duration: 8

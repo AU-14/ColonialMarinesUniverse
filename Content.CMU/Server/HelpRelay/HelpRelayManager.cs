@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -63,7 +64,7 @@ public sealed class HelpRelayManager : IPostInjectInit
         public string Username = string.Empty;
         public string? Revision;
         public string? BuiltAt;
-        public string? Server;
+        public HelpContext? Context;
         public string? MessageId;
         public string? ChannelId;
         public string? GuildId;
@@ -189,7 +190,7 @@ public sealed class HelpRelayManager : IPostInjectInit
             conversation.Username = username;
             conversation.Revision = NullIfEmpty(_revision);
             conversation.BuiltAt = NullIfEmpty(_builtAt);
-            conversation.Server = NullIfEmpty(_serverName);
+            conversation.Context = GetContext();
             conversation.LastRunLevel = CurrentRunLevel();
         }
 
@@ -198,6 +199,8 @@ public sealed class HelpRelayManager : IPostInjectInit
         {
             conversation.Pending.Enqueue(HelpRelayPayload.BuildRunLevelSeparator(runLevel));
             conversation.LastRunLevel = runLevel;
+            // Re-stamp context so Round names the round the separator announces.
+            conversation.Context = GetContext();
         }
 
         var roundTime = runLevel == GameRunLevel.InRound
@@ -274,7 +277,7 @@ public sealed class HelpRelayManager : IPostInjectInit
             conversation.Username,
             conversation.Description,
             conversation.Revision,
-            conversation.Server,
+            conversation.Context,
             conversation.BuiltAt);
         var json = JsonSerializer.Serialize(payload);
 
@@ -313,8 +316,9 @@ public sealed class HelpRelayManager : IPostInjectInit
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     _sawmill.Error($"Help relay conversation edit failed: {(int) response.StatusCode} {response.StatusCode}\n{content}");
-                    // The message may have been deleted; fall back to posting a fresh one next line.
-                    conversation.MessageId = null;
+                    // Only a deleted message warrants a fresh post; a 429 or 5xx retries the same message next line.
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                        conversation.MessageId = null;
                 }
             }
         }

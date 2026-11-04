@@ -186,7 +186,6 @@ namespace Content.Server.Database
         Task<bool> DeleteYautjaClanMemberAsync(Guid userId);
         // CMU14: round-start antag pity persistence
         Task<List<CmuAntagPityEntry>> GetCmuAntagPityAsync(long pruneBefore);
-        Task SaveCmuAntagPityAsync(CmuAntagPityEntry entry);
         // CMU14: round-end flush writes every entry in one transaction
         Task SaveCmuAntagPityBatchAsync(IReadOnlyList<CmuAntagPityEntry> entries);
         Task<int> GetYautjaWhitelistFlagsAsync(Guid userId);
@@ -281,6 +280,18 @@ namespace Content.Server.Database
         Task<List<CMUPlaytimeLeaderboardRow>> GetCMUPlaytimeLeaderboardRows(
             IReadOnlyCollection<string> trackers,
             CancellationToken cancel = default);
+
+        // CMU14 method
+        Task<List<Guid>> GetCMUPlaytimeHiddenPlayers(CancellationToken cancel = default);
+
+        // CMU14 method
+        Task<bool> GetCMUPlaytimeHidden(NetUserId player, CancellationToken cancel = default);
+
+        // CMU14 method
+        Task SetCMUPlaytimeHidden(NetUserId player, bool hidden);
+
+        // CMU14 method
+        Task<List<Guid>> GetCMUPlaytimeBannedPlayers(CancellationToken cancel = default);
 
         #endregion
 
@@ -832,12 +843,6 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.GetCmuAntagPityAsync(pruneBefore));
         }
 
-        public Task SaveCmuAntagPityAsync(CmuAntagPityEntry entry)
-        {
-            DbWriteOpsMetric.Inc();
-            return RunDbCommand(() => _db.SaveCmuAntagPityAsync(entry));
-        }
-
         // CMU14
         public Task SaveCmuAntagPityBatchAsync(IReadOnlyList<CmuAntagPityEntry> entries)
         {
@@ -1145,6 +1150,34 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetCMUPlaytimeLeaderboardRows(trackers, cancel));
+        }
+
+        // CMU14 method
+        public Task<List<Guid>> GetCMUPlaytimeHiddenPlayers(CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetCMUPlaytimeHiddenPlayers(cancel));
+        }
+
+        // CMU14 method
+        public Task<bool> GetCMUPlaytimeHidden(NetUserId player, CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetCMUPlaytimeHidden(player, cancel));
+        }
+
+        // CMU14 method
+        public Task SetCMUPlaytimeHidden(NetUserId player, bool hidden)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetCMUPlaytimeHidden(player, hidden));
+        }
+
+        // CMU14 method
+        public Task<List<Guid>> GetCMUPlaytimeBannedPlayers(CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetCMUPlaytimeBannedPlayers(cancel));
         }
 
         public Task UpdateAdminRankAsync(AdminRank rank, CancellationToken cancel = default)

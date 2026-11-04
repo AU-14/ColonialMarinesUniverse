@@ -3,7 +3,7 @@ using Content.Shared.Hands.Components;
 
 namespace Content.Client.UserInterface.Systems.Hands.Controls;
 
-public sealed class HandButton : SlotControl
+public sealed partial class HandButton : SlotControl // CMU14: surrender overlay partial.
 {
     public HandLocation HandLocation { get; }
 

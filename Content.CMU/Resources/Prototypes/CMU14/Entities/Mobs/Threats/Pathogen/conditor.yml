@@ -24,6 +24,28 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood
+    solution:  
+      maxVol: 600
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 200
+      - ReagentId: CMUPathogenSporoplasmPhero
+        Quantity: 200
+      - ReagentId: CMUPathogenSporoplasmNeuro
+        Quantity: 200
+  - type: SolutionRegeneration  
+    generated:  
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmPhero
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmNeuro
+        Quantity: 1
   - type: XenoDevour
   - type: Xeno
     role: CMU14JobPathogenConditor
@@ -42,6 +64,7 @@
     - CMU14ActionXenoPathogenSecreteStructure
     - CMU14ActionXenoPathogenSlowingSpit
     - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenDirectSporeInfect
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenOrderConstruction
     - CMU14ActionXenoPathogenRegurgitate
@@ -117,6 +140,10 @@
     chance: 0.3
     stunMin: 3
     stunMax: 4
+  - type: CMUXenoDirectSporeInfect
+    plasmaCost: 50
+    embryoSpawn: CMU14XenoBloodburster
+    protectionBypassChance: 0.9
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/CMU14/Interface/neo_blips.rsi

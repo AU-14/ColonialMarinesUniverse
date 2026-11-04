@@ -709,11 +709,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
     state: falcon_drone
   - type: Item
     size: Small
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
   - type: Fixtures
     fixtures:
       fix1:
@@ -721,9 +721,6 @@
   - type: Clothing
     slots:
     - ears
-    clothingVisuals:
-      ears:
-      - state: falcon_drone
   - type: YautjaFalconDrone
   - type: ActiveListener
   - type: YautjaTechItem
@@ -736,9 +733,7 @@
   - type: Sprite
     state: falcon_drone_badblood
   - type: Clothing
-    clothingVisuals:
-      ears:
-      - state: falcon_drone_badblood
+    equippedPrefix: badblood
   - type: YautjaFalconDrone
     deployedPrototype: CMUYautjaFalconDroneBadBloodDeployed
 
@@ -750,11 +745,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
     state: falcon_drone_destroyed
   - type: Item
     size: Small
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
   - type: Fixtures
     fixtures:
       fix1:
@@ -783,7 +778,8 @@
   components:
   - type: Sprite
     drawdepth: OverMobs
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    scale: 0.8, 0.8
+    sprite: CMU14/Yautja/falcon_drone.rsi
     layers:
     - state: falcon_drone_active
       map: ["enum.YautjaFalconVisualLayers.Base"]
@@ -802,15 +798,14 @@
           radius: 0.2
         density: 10
         hard: true
+        # cmss13 falcon is a hologram with PASS_ALL, it drifts through doors and tables without opening them.
+        # walls still stop it
         mask:
-        - MobMask
+        - Impassable
         layer:
         - MobLayer
   - type: Climbing
   - type: ActiveInputMover
-  - type: Tag
-    tags:
-    - DoorBumpOpener
   - type: YautjaFalconDroneDeployed
   - type: CMUZLevelAutoTransition
   - type: YautjaFalconHudIcon
@@ -823,7 +818,7 @@
   components:
   - type: Sprite
     drawdepth: OverMobs
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    sprite: CMU14/Yautja/falcon_drone.rsi
     layers:
     - state: falcon_drone_badblood_active
       map: ["enum.YautjaFalconVisualLayers.Base"]
