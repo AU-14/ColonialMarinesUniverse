@@ -55,20 +55,16 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
-    - CMU14ActionXenoPathogenLeap
+    - CMU14ActionPathogenPierceLeap
     - CMU14ActionXenoPathogenImpale
     - CMU14ActionXenoPathogenCyclone
     - CMU14ActionXenoPathogenMycotoxinInject
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
-  - type: XenoLeap
-    delay: 0
-    knockdownTime: 0
-    range: 5
-    moveDelayTime: 0
+  - type: PathogenPierceLeap
+    range: 6
     plasmaCost: 25
     leapSound: /Audio/CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
-    destroyObjects: true
   - type: XenoImpale
     damage:
       types:
