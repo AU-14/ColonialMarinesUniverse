@@ -48,10 +48,13 @@ permissions:
   pull-requests: read
 
 concurrency:
-  # CMU14: single-flight. only the freshest evaluation matters, and a cancelled pass just
-  # re-evaluates on the next tick; approvals already granted are not undone
+  # CMU14: passes serialize. each pass recounts live fleet state when it runs, so a
+  # queued pass is never stale. cancelling in-progress let event bursts kill every
+  # pass mid-flight, leaving zero completed passes for hours. approvals already
+  # granted are not undone
   group: ci-scheduler
-  cancel-in-progress: true
+  # CMU14: commented out, passes must run to completion (see above)
+  # cancel-in-progress: true
 
 jobs:
   admit:
