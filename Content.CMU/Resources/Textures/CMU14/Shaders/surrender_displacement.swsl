@@ -11,7 +11,17 @@ void vertex() {
 void fragment() {
     highp vec4 displacementSample = texture2D(displacementMap, displacementUVOut);
     highp vec2 displacementValue = (displacementSample.xy - vec2(128.0 / 255.0)) / (1.0 - 128.0 / 255.0);
+    // Ordinary 32px offsets cannot reach this channel range. Generated side
+    // fill uses it for a same-row fallback within the current sprite frame.
+    bool sideFill = displacementSample.g > 160.0 / 255.0;
+    if (sideFill) {
+        displacementValue.y = 0.0;
+    }
     COLOR = zTexture(UV + displacementValue * TEXTURE_PIXEL_SIZE * displacementSize * vec2(1.0, -1.0));
+    if (sideFill && COLOR.a < 0.5 / 255.0) {
+        highp float fallback = floor(displacementSample.g * 255.0 + 0.5) - 192.0;
+        COLOR = zTexture(UV + vec2(fallback * TEXTURE_PIXEL_SIZE.x, 0.0));
+    }
     // The lookup shades only generated side fill; untouched artwork keeps its shading.
     COLOR.rgb = COLOR.rgb * (1.0 - displacementSample.b * 0.55);
     COLOR.a *= displacementSample.a;

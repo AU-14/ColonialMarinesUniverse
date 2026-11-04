@@ -1,4 +1,6 @@
 using Content.Client.CMU14.Surrender;
+using Robust.Client.Graphics;
+using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Chat.Systems;
 using Content.Server.CMU14.Surrender;
@@ -11,8 +13,9 @@ namespace Content.IntegrationTests.CMU14.Surrender;
 [TestFixture]
 public sealed class CMUSurrenderFacingTest : GameTest
 {
-    [Test]
-    public async Task SidewaysTurnsKeepTheLastVerticalPoseAndLoweringRestoresDirectionControl()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task TurningUsesAllFourPosesAndLoweringRestoresDirectionControl(bool fixedFacing)
     {
         var map = await Pair.CreateTestMap();
         var attached = ServerSession!.AttachedEntity;
@@ -31,6 +34,11 @@ public sealed class CMUSurrenderFacingTest : GameTest
             await Client.WaitPost(() =>
             {
                 var sprite = CEntMan.GetComponent<SpriteComponent>(client);
+                if (fixedFacing)
+                {
+                    sprite.EnableDirectionOverride = true;
+                    sprite.DirectionOverride = Direction.East;
+                }
                 originalOverride = sprite.EnableDirectionOverride;
                 originalDirection = sprite.DirectionOverride;
             });
@@ -48,9 +56,28 @@ public sealed class CMUSurrenderFacingTest : GameTest
                     var sprite = CEntMan.GetComponent<SpriteComponent>(client);
                     Assert.That(sprite.EnableDirectionOverride, Is.True);
                     Assert.That(sprite.DirectionOverride,
-                        Is.EqualTo(direction is Direction.South or Direction.East ? Direction.South : Direction.North));
+                        Is.EqualTo(fixedFacing ? Direction.East : direction));
                 });
             }
+            await Client.WaitAssertion(() =>
+            {
+                var eye = Client.ResolveDependency<IEyeManager>().CurrentEye;
+                var rotation = eye.Rotation;
+                var sprite = CEntMan.GetComponent<SpriteComponent>(client);
+                var layers = sprite.AllLayers.ToArray();
+                try
+                {
+                    // The character last faced west. A quarter-turn camera must
+                    // select its south frame without allocating another pose.
+                    eye.Rotation = rotation + Angle.FromDegrees(90);
+                    Client.System<CMUSurrenderVisualsSystem>().FrameUpdate(0);
+                    Assert.That(sprite.DirectionOverride,
+                        Is.EqualTo(fixedFacing ? Direction.East : Direction.South));
+                    Assert.That(sprite.AllLayers, Is.EqualTo(layers),
+                        "Turning the camera must reuse the existing pose layers.");
+                }
+                finally { eye.Rotation = rotation; }
+            });
             await Server.WaitAssertion(() => Assert.That(Server.System<ChatSystem>()
                 .TryEmoteWithChat(human, CMUSurrenderSystem.SurrenderEmote), Is.True));
             await Pair.RunUntilSynced();

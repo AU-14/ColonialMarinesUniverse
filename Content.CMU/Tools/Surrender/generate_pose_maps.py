@@ -1,9 +1,10 @@
 """Generate four-direction, 32-pixel displacement maps for the standard human pose.
 
-Uses only Python's standard library. The renderer encodes a signed source-pixel
-lookup as (128 + dx, 128 + dy, fill shade, alpha), with 128 meaning no displacement.
-The blue channel shades only generated side fill, stepping from its dark outer
-contour into the native chest colour without blurring or resampling the artwork.
+Uses only Python's standard library. Ordinary pixels store a signed source-pixel
+lookup in RG around 128, with fill shade in B and visibility in A. Side fill has
+no vertical displacement, so G above 160 instead encodes 192 + a horizontal
+fallback offset. The shader tries that adjacent chest pixel only if its preferred
+patch sample is transparent. This keeps narrow garments from acquiring holes.
 These channels must be loaded as linear data, without sRGB colour conversion.
 Run this tool only when editing the pose; the game loads its PNG output and
 never invokes Python during a round.
@@ -37,6 +38,20 @@ def side_cutout(kind, direction, x, y):
     return sx, sy, 255
 
 
+def side_fill_source(kind, direction, x, y):
+    # Reflect a small chest patch into the vacated arm region. The seam-facing
+    # edge samples the adjacent chest column; the middle retains texture detail
+    # instead of extruding that one column across the entire side.
+    inward = x - 11 if direction == 2 else 20 - x
+    if kind == 'torso':
+        offset = min(inward, 3 - inward)
+        sx = 15 + offset if direction == 2 else 16 - offset
+    else:
+        offset = min(inward, 4 - inward)
+        sx = 16 + offset if direction == 2 else 15 - offset
+    return sx, y, 255
+
+
 def base_source_pixel(kind, direction, x, y):
     side = direction in (2, 3)
     if kind.startswith('foreground_'):
@@ -64,9 +79,9 @@ def base_source_pixel(kind, direction, x, y):
             if y <= 12 and x == (11 if direction == 2 else 20):
                 return x, y, 0
             if direction == 2 and 11 <= x <= 14:
-                return 15, y, 255
+                return side_fill_source(kind, direction, x, y)
             if direction == 3 and 17 <= x <= 20:
-                return 16, y, 255
+                return side_fill_source(kind, direction, x, y)
         elif not side and 11 <= y <= 14:
             if x in (9, 21):
                 return x, y, 0
@@ -81,7 +96,7 @@ def base_source_pixel(kind, direction, x, y):
         if arm and y <= 18:
             if y <= 12 or (x < 11 if direction == 2 else x > 20):
                 return x, y, 0
-            return (16 if direction == 2 else 15), y, 255
+            return side_fill_source(kind, direction, x, y)
 
     if side:
         arm = 11 <= x < 16 if direction == 2 else 16 <= x < 21
@@ -89,7 +104,7 @@ def base_source_pixel(kind, direction, x, y):
             return x, y, 0
         if arm and 12 < y <= 18:
             # Fill the sleeve's contact strip without remapping the waist below the arm.
-            return (16 if direction == 2 else 15), y, 255
+            return side_fill_source(kind, direction, x, y)
     elif (5 <= x < 11 or 20 <= x < 26) and y < 22:
         if x in (10, 20) and 12 <= y <= 14:
             return (11 if x == 10 else 19), y, 255
@@ -138,16 +153,30 @@ def fill_shade(kind, direction, x, y):
     inward = x - edge if direction == 2 else edge - x
     if kind == 'torso':
         if 13 <= y <= 18 and 0 <= inward <= 3:
-            return (255, 144, 64, 16)[inward]
+            return ((224, 112, 32, 0) if y <= 14 else (144, 48, 16, 0))[inward]
         if 11 <= y <= 12 and 1 <= inward <= 3:
-            return (255, 80, 16)[inward - 1]
-    if kind in ('clothing', 'armor'):
-        if 13 <= y <= 18 and 0 <= inward <= 4:
-            # The underarm rim fades toward the chest instead of drawing a full
-            # dark horizontal bar through every material and camouflage pattern.
-            shades = (255, 176, 112, 64, 24) if y == 13 else (255, 144, 72, 24, 0)
-            return shades[inward]
+            return (192, 64, 0)[inward - 1]
+    if kind in ('clothing', 'armor') and 13 <= y <= 18 and 0 <= inward <= 4:
+        # Contact shade is strongest at the armpit and narrows down the side.
+        # Armor keeps a firmer edge; fabric retains a wider, softer fold.
+        if kind == 'armor':
+            shades = (224, 96, 24, 0, 0) if y <= 14 else (144, 48, 0, 0, 0)
+        else:
+            shades = (224, 128, 64, 16, 0) if y <= 14 else (128, 64, 24, 0, 0)
+        return shades[inward]
     return 0
+
+
+def encoded_pixel(kind, direction, x, y):
+    sx, sy, alpha = source_pixel(kind, direction, x, y)
+    green = 128 + sy - y
+    base = kind.removesuffix('_none').removesuffix('_left').removesuffix('_right')
+    if direction in (2, 3) and alpha and base in ('torso', 'clothing', 'armor') and sx != x:
+        # Only same-row reconstructed side fill owns this spare channel range.
+        # Raised limbs and front/back maps retain the ordinary displacement ABI.
+        fallback = (15 if direction == 2 else 16) if base == 'torso' else (16 if direction == 2 else 15)
+        green = 192 + fallback - x
+    return 128 + sx - x, green, fill_shade(kind, direction, x, y), alpha
 
 
 def png_chunk(kind, data):
@@ -161,9 +190,8 @@ def generate():
         for direction in range(4):
             for y in range(32):
                 for x in range(32):
-                    sx, sy, alpha = source_pixel(kind, direction, x, y)
                     offset = (((direction // 2) * 32 + y) * 64 + (direction % 2) * 32 + x) * 4
-                    pixels[offset:offset + 4] = bytes((128 + sx - x, 128 + sy - y, fill_shade(kind, direction, x, y), alpha))
+                    pixels[offset:offset + 4] = bytes(encoded_pixel(kind, direction, x, y))
         rows = b''.join(b'\0' + pixels[y * 256:(y + 1) * 256] for y in range(64))
         png = b'\x89PNG\r\n\x1a\n'
         png += png_chunk(b'IHDR', struct.pack('>IIBBBBB', 64, 64, 8, 6, 0, 0, 0))

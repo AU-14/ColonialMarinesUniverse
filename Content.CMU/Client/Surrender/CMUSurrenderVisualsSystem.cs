@@ -24,7 +24,6 @@ public sealed partial class CMUSurrenderFacingComponent : Component
 {
     public bool OriginalOverride;
     public Direction OriginalDirection;
-    public Direction VerticalDirection = Direction.South;
 }
 
 public sealed class CMUSurrenderVisualsSystem : EntitySystem
@@ -378,9 +377,7 @@ public sealed class CMUSurrenderVisualsSystem : EntitySystem
         var requested = facing.OriginalOverride
             ? facing.OriginalDirection
             : (_transform.GetWorldRotation(uid) + _eye.CurrentEye.Rotation).GetCardinalDir();
-        if (requested is Direction.North or Direction.South)
-            facing.VerticalDirection = requested;
-        sprite.DirectionOverride = facing.VerticalDirection;
+        sprite.DirectionOverride = requested;
         sprite.EnableDirectionOverride = true;
     }
 

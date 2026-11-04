@@ -464,7 +464,11 @@ public sealed class CMUSurrenderTextureTest
                         if (pixel.A == 0)
                             continue;
                         Assert.That(x + pixel.R - 128, Is.InRange(0, 31), "A pose must not read another atlas sprite.");
-                        Assert.That(y + pixel.G - 128, Is.InRange(0, 31), "A pose must not read another atlas sprite.");
+                        Assert.That(pixel.G > 160 ? y : y + pixel.G - 128, Is.InRange(0, 31),
+                            "A pose must not read another atlas sprite.");
+                        if (pixel.G > 160)
+                            Assert.That(x + pixel.G - 192, Is.InRange(0, 31),
+                                "A transparent patch must fall back inside the same sprite frame.");
                     }
                 }
             }
@@ -485,8 +489,8 @@ public sealed class CMUSurrenderTextureTest
                     .Select(i => FramePixel(map, direction, direction == 2 ? 11 + i : 20 - i, y).B)
                     .ToArray();
                 Assert.That(shades[0], Is.GreaterThan(shades[1]), "Keep the native-style dark outside contour.");
-                Assert.That(shades.Distinct().Count(), Is.GreaterThanOrEqualTo(4),
-                    "A one-column outline around a flat fill must not replace the stepped side shading.");
+                Assert.That(shades.Distinct().Count(), Is.GreaterThanOrEqualTo(3),
+                    "The side must retain a stepped shadow rather than a flat dark strip.");
                 Assert.That(shades, Is.Ordered.Descending, "The shadow must fade inward in both facing directions.");
                 Assert.That(shades[^1], Is.Zero, "The original chest pixels must retain their native shading.");
             }
@@ -543,6 +547,71 @@ public sealed class CMUSurrenderTextureTest
         Assert.That(marked, Is.GreaterThan(0));
     }
 
+    [TestCase("torso")]
+    [TestCase("clothing")]
+    [TestCase("armor")]
+    public void SideFillRetainsAChestPatchInsteadOfExtrudingOneColumn(string state)
+    {
+        using var map = LoadMap(state);
+        foreach (var direction in new[] { 2, 3 })
+        {
+            var columns = new HashSet<int>();
+            for (var x = 0; x < 32; x++)
+            {
+                var pixel = FramePixel(map, direction, x, 14);
+                if (pixel.A == 0 || pixel.B == 0)
+                    continue;
+                Assert.That(pixel.G > 160 ? 14 : 14 + pixel.G - 128, Is.EqualTo(14),
+                    "Texture features must stay on their original garment row.");
+                columns.Add(x + pixel.R - 128);
+            }
+            Assert.That(columns.Count, Is.GreaterThan(1),
+                "Repeating one source column stretches camouflage into stripes.");
+        }
+    }
+
+    [TestCase("torso")]
+    [TestCase("clothing")]
+    [TestCase("armor")]
+    public void ContactShadowRelaxesBelowTheRaisedShoulder(string state)
+    {
+        using var map = LoadMap(state);
+        foreach (var direction in new[] { 2, 3 })
+        {
+            var edge = direction == 2 ? 11 : 20;
+            Assert.That(FramePixel(map, direction, edge, 17).B,
+                Is.LessThan(FramePixel(map, direction, edge, 13).B),
+                "The underarm contact shadow must not become a full-height dark stripe.");
+        }
+    }
+
+    [TestCase(2)]
+    [TestCase(3)]
+    public void NarrowCoatsUseTheAdjacentChestWhenThePatchIsTransparent(int direction)
+    {
+        using var coat = Image.Load<Rgba32>(Path.Combine(SourceRoot(),
+            "Resources/Textures/Clothing/OuterClothing/Coats/gentlecoat.rsi/equipped-OUTERCLOTHING.png"));
+        using var map = LoadMap("armor");
+        var fallbackPixels = 0;
+        for (var y = 13; y <= 18; y++)
+        {
+            for (var x = 0; x < 32; x++)
+            {
+                var lookup = FramePixel(map, direction, x, y);
+                if (lookup.A == 0 || lookup.G <= 160)
+                    continue;
+                var preferred = FramePixel(coat, direction, x + lookup.R - 128, y);
+                var adjacent = FramePixel(coat, direction, x + lookup.G - 192, y);
+                if (preferred.A != 0 || adjacent.A == 0)
+                    continue;
+                fallbackPixels++;
+                Assert.That(Sample(coat, map, direction, x, y), Is.EqualTo(adjacent),
+                    "A narrow coat must not gain a hole when a wider chest-patch sample is transparent.");
+            }
+        }
+        Assert.That(fallbackPixels, Is.GreaterThan(0), "This coat must exercise the transparent-patch fallback.");
+    }
+
     private static Rgba32 Sample(Image<Rgba32> source, Image<Rgba32> map, int direction, int x, int y)
     {
         var offset = FramePixel(map, direction, x, y);
@@ -550,10 +619,13 @@ public sealed class CMUSurrenderTextureTest
             return default;
 
         var sx = x + offset.R - 128;
-        var sy = y + offset.G - 128;
+        var sy = offset.G > 160 ? y : y + offset.G - 128;
         Assert.That(sx, Is.InRange(0, 31), "A pose must sample its own frame, not neighbouring atlas sprites.");
         Assert.That(sy, Is.InRange(0, 31), "A pose must sample its own frame, not neighbouring atlas sprites.");
-        return FramePixel(source, direction, sx, sy);
+        var result = FramePixel(source, direction, sx, sy);
+        if (offset.G > 160 && result.A == 0)
+            result = FramePixel(source, direction, x + offset.G - 192, y);
+        return result;
     }
 
     private static Rgba32 FramePixel(Image<Rgba32> image, int direction, int x, int y)
