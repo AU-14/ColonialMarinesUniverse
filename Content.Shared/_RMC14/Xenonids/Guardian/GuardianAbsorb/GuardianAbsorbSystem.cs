@@ -84,12 +84,17 @@ public sealed class GuardianAbsorbSystem : EntitySystem
     public void SetAbsorb(EntityUid target, EntityUid guardian, GuardianAbsorbType type,  
         float percent = 0.5f, bool ignoreResistances = false)  
     {  
-        var comp = EnsureComp<GuardianAbsorbComponent>(target);  
+        var comp = EnsureComp<GuardianAbsorbComponent>(target);
+
+        if (comp.Guardian != null && GetPriority(comp.Type) > GetPriority(type))
+            return false;
+        
         comp.Guardian = guardian;  
         comp.Type = type;  
         comp.AbsorbPercent = percent;  
         comp.IgnoreGuardianResistances = ignoreResistances;  
-        Dirty(target, comp);  
+        Dirty(target, comp);
+        return true;
     }  
   
     public void RemoveAbsorb(EntityUid target, GuardianAbsorbType? type = null)  
