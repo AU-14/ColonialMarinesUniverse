@@ -25,8 +25,11 @@ public sealed partial class XenoGuardianSweepComponent : Component
     public ProtoId<EmotePrototype> HissEmote = "Hiss";  
   
     [DataField]  
-    public TimeSpan SlowDuration = TimeSpan.FromSeconds(5);  
+    public TimeSpan SlowDuration = TimeSpan.FromSeconds(6);  
   
     [DataField]  
-    public float KnockBackDistance = 2f;  
+    public float KnockBackDistance = 2f;
+
+    [DataField]  
+    public TimeSpan ParalyzeTime = TimeSpan.FromSeconds(3);
 }
