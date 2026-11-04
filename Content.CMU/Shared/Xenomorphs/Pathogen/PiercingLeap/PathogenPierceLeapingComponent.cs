@@ -12,7 +12,7 @@ namespace Content.CMU.Shared.Xenomorphs.Pathogen.PierceLeap;
 public sealed partial class PathogenPierceLeapingComponent : Component  
 {  
     [DataField, AutoNetworkedField]  
-    public EntityCoordinates Origin;  
+    public MapCoordinates Origin;  
   
     [DataField, AutoNetworkedField]  
     public MapCoordinates Destination;  
