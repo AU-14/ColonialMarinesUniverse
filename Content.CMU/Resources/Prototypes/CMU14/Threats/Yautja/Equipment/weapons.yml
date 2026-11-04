@@ -1514,25 +1514,21 @@
     - Arrow
     - CMUYautjaArrow
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    sprite: CMU14/Yautja/bow.rsi
     layers:
-    - state: tail
-      map: [tail]
-      color: darkred
-    - state: rod
-      map: [rod]
-      color: brown
-    - state: tip
-      map: [tip]
-    - state: solution1
-      map: [mark]
-      visible: false
+    - state: arrow_expl
+      map: [base]
     - sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
       state: solution1
       map: ["enum.SolutionContainerLayers.Fill"]
       visible: false
   - type: Item
     size: Small
+    # cmss13 arrows have no inhand sprite, keep the plain arrow in hand
+    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+  # the cmss13 arrow points east, the base arrow sprite points north
+  - type: ThrowingAngle
+    angle: 90
   - type: Tool
     qualities: [Slicing]
   - type: MeleeWeapon
@@ -1546,15 +1542,6 @@
     soundEject:
     soundInsert: /Audio/Weapons/Guns/Misc/arrow_nock.ogg
   - type: YautjaArrow
-  - type: GenericVisualizer
-    visuals:
-      enum.YautjaArrowVisuals.State:
-        mark:
-          Inert: {visible: false}
-          Explosive: {visible: true}
-          Emp: {visible: true}
-          Dynamic: {visible: true}
-          Snare: {visible: true}
   - type: Projectile
     damage:
       types:
@@ -1569,6 +1556,14 @@
   id: CMUYautjaExplosiveArrowActive
   name: activated explosive arrow
   components:
+  - type: Sprite
+    layers:
+    - state: arrow_expl_active
+      map: [base]
+    - sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+      state: solution1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
   - type: CartridgeAmmo
     proto: CMUYautjaExplosiveArrowProjectile
     muzzleFlash:
@@ -1580,6 +1575,14 @@
   parent: CMUYautjaArrowBase
   id: CMUYautjaEmpArrow
   components:
+  - type: Sprite
+    layers:
+    - state: arrow_emp
+      map: [base]
+    - sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+      state: solution1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
   - type: YautjaArrow
     secondaryWarhead: Emp
 
@@ -1588,6 +1591,14 @@
   id: CMUYautjaEmpArrowActive
   name: activated emp arrow
   components:
+  - type: Sprite
+    layers:
+    - state: arrow_emp_active
+      map: [base]
+    - sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+      state: solution1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
   - type: CartridgeAmmo
     proto: CMUYautjaEmpArrowProjectile
     muzzleFlash:
@@ -1601,6 +1612,14 @@
   id: CMUYautjaDynamicArrow
   name: inert dynamic arrow
   components:
+  - type: Sprite
+    layers:
+    - state: arrow_inert
+      map: [base]
+    - sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+      state: solution1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
   - type: YautjaArrow
     dynamic: true
     secondaryWarhead:
@@ -1612,24 +1631,15 @@
   description: A bow launched snare.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
     layers:
-    - state: tail
-      map: [tail]
-      color: darkred
-    - state: rod
-      map: [rod]
-      color: brown
-    - state: tip
-      map: [tip]
-    - state: solution1
-      map: [mark]
-      visible: false
+    - state: arrow_trap
+      map: [base]
     - sprite: CMU14/Yautja/bow.rsi
       state: arrow_trap_active
       map: [snare-trap]
       visible: false
-    - state: solution1
+    - sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+      state: solution1
       map: ["enum.SolutionContainerLayers.Fill"]
       visible: false
   - type: CartridgeAmmo
@@ -1642,24 +1652,8 @@
     selectedWarhead: Snare
   - type: GenericVisualizer
     visuals:
-      enum.YautjaArrowVisuals.State:
-        mark:
-          Inert: {visible: false}
-          Explosive: {visible: true}
-          Emp: {visible: true}
-          Dynamic: {visible: true}
-          Snare: {visible: true}
       enum.ToggleableVisuals.Enabled:
-        tail:
-          True: {visible: false}
-          False: {visible: true}
-        rod:
-          True: {visible: false}
-          False: {visible: true}
-        tip:
-          True: {visible: false}
-          False: {visible: true}
-        mark:
+        base:
           True: {visible: false}
           False: {visible: true}
         snare-trap:
@@ -1685,13 +1679,17 @@
     damageCoefficient: 0
     worn: false
   - type: Clothing
+    # cmss13 draws the one worn quiver on the back, belt and suit storage alike
     clothingVisuals:
       belt:
       - sprite: CMU14/Yautja/quiver.rsi
         state: equipped-BELT
+      back:
+      - sprite: CMU14/Yautja/quiver.rsi
+        state: equipped-BELT
       suitStorage:
       - sprite: CMU14/Yautja/quiver.rsi
-        state: icon
+        state: equipped-BELT
     slots:
     - Belt
     - suitStorage
@@ -1742,13 +1740,8 @@
   categories: [HideSpawnMenu]
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
-    layers:
-    - state: tail
-      color: darkred
-    - state: rod
-      color: brown
-    - state: tip
+    sprite: CMU14/Yautja/bow.rsi
+    state: projectile_expl
   - type: Projectile
     damage:
       types:
@@ -1765,14 +1758,9 @@
   categories: [HideSpawnMenu]
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    sprite: CMU14/Yautja/bow.rsi
     layers:
-    - state: tail
-      color: darkred
-    - state: rod
-      color: brown
-    - state: tip
-      color: orange
+    - state: projectile_expl_active
   - type: ExplodeOnTrigger
   - type: Projectile
     damage:
@@ -1800,14 +1788,9 @@
   categories: [HideSpawnMenu]
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    sprite: CMU14/Yautja/bow.rsi
     layers:
-    - state: tail
-      color: darkred
-    - state: rod
-      color: brown
-    - state: tip
-      color: cyan
+    - state: projectile_emp_active
   - type: Projectile
     damage:
       types:
@@ -1832,14 +1815,9 @@
   categories: [HideSpawnMenu]
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    sprite: CMU14/Yautja/bow.rsi
     layers:
-    - state: tail
-      color: forestgreen
-    - state: rod
-      color: brown
-    - state: tip
-      color: lawngreen
+    - state: projectile_trap
   - type: StaminaDamageOnCollide
     damage: 80
   - type: Projectile

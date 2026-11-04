@@ -156,9 +156,8 @@ public sealed class YautjaClanHallRoundState
     public int ActiveHunterSlots;
     public int HunterSlots;
     public bool RandomEnabled;
-    public int RandomMinimumRounds;
-    public int RandomMaximumRounds;
-    public int RandomRoundsRemaining;
+    public float InsurgencyChance;
+    public float DistressSignalChance;
 }
 
 [Serializable, NetSerializable]
@@ -303,9 +302,9 @@ public sealed class YautjaClanHallRoundSlotsMessage(int slots) : EuiMessageBase
 }
 
 [Serializable, NetSerializable]
-public sealed class YautjaClanHallRoundRandomMessage(bool enabled, int minimumRounds, int maximumRounds) : EuiMessageBase
+public sealed class YautjaClanHallRoundRandomMessage(bool enabled, float insurgencyChance, float distressSignalChance) : EuiMessageBase
 {
     public readonly bool Enabled = enabled;
-    public readonly int MinimumRounds = minimumRounds;
-    public readonly int MaximumRounds = maximumRounds;
+    public readonly float InsurgencyChance = insurgencyChance;
+    public readonly float DistressSignalChance = distressSignalChance;
 }

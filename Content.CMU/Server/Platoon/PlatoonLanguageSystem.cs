@@ -1,5 +1,6 @@
 using Content.Server._RMC14.Language.Systems;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Roles;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.util;
@@ -20,6 +21,24 @@ public sealed partial class PlatoonLanguageSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawn);
         SubscribeLocalEvent<MarineComponent, DetermineEntityLanguagesEvent>(OnDetermineLanguages);
+        SubscribeLocalEvent<RoundJobProfileAppliedComponent, ComponentStartup>(OnProfileApplied);
+    }
+
+    private void OnProfileApplied(Entity<RoundJobProfileAppliedComponent> ent, ref ComponentStartup args)
+    {
+        // The round profile is what sets Marine.Faction, and it lands after the spawn
+        // language pass, so re-derive here where the faction is guaranteed current.
+        if (!TryComp<MarineComponent>(ent.Owner, out var marine))
+            return;
+
+        var platoon = GetPlatoonForMarine(marine);
+        if (platoon == null)
+            return;
+
+        _language.UpdateEntityLanguages(ent.Owner);
+
+        foreach (var lang in platoon.LearnableLanguages)
+            _learning.AddLearnableLanguage(ent.Owner, lang);
     }
 
     private PlatoonPrototype? GetPlatoonForMarine(MarineComponent marine)

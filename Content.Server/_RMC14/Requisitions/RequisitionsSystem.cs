@@ -627,7 +627,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     private bool Sell(Entity<RequisitionsElevatorComponent> elevator)
     {
         var account = GetAccount(elevator.Comp.Faction);
-        var entities = _lookup.GetEntitiesIntersecting(elevator);
+        // CMU14: Price contained goods through their parent once, including industry exports in crates.
+        // var entities = _lookup.GetEntitiesIntersecting(elevator);
+        var entities = _lookup.GetEntitiesIntersecting(elevator, LookupFlags.Uncontained);
         var soldAny = false;
         var rewards = 0;
 
@@ -639,9 +641,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             // Instead of blacklist, we use a whitelist to selectively control generated funds from selling
             // if (HasComp<CargoSellBlacklistComponent>(entity))
             //     continue;
-            // cmu edit start: loose invoices and order slips pay out too, not just ones in or on a crate
-            if (!HasComp<CargoSellWhitelistComponent>(entity) && !HasComp<RequisitionsInvoiceComponent>(entity))
-            // cmu edit end
+            // CMU14: Accept loose invoices and industry exports as well as explicitly whitelisted cargo.
+            if (!HasComp<CargoSellWhitelistComponent>(entity) && !HasComp<RequisitionsInvoiceComponent>(entity)
+                && !_industryExports.CanExport(entity))
             {
                 QueueDel(entity);
                 continue;
@@ -651,7 +653,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             {
                 var entRewards = SubmitInvoices(entity);
                 if (TryComp(entity, out RequisitionsCrateComponent? crate))
-                    entRewards += crate.Reward;
+                {
+                    // CMU14: Preserve the crate refund and pay for eligible industry contents.
+                    // entRewards += crate.Reward;
+                    entRewards += crate.Reward + (int) Math.Round(_industryExports.GetContainedExportPrice(entity));
+                }
                 else
                     entRewards += (int)Math.Round(_pricing.GetPrice(entity));
 
@@ -821,7 +827,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private static bool IsLimitedStock(RequisitionsEntry entry)
     {
-        return entry.MaxStock > 0;
+        // CMU14: round stock is independent of terminal-local replenishing stock.
+        // return entry.MaxStock > 0;
+        return entry.MaxStock > 0 || entry.RoundLimit > 0;
     }
 
     private void EnsureStockEntries(Entity<RequisitionsComputerComponent> computer, TimeSpan time)
@@ -837,7 +845,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             for (var orderIndex = 0; orderIndex < category.Entries.Count; orderIndex++)
             {
                 var entry = category.Entries[orderIndex];
-                if (!IsLimitedStock(entry))
+                // CMU14: faction round stock has no terminal-local counter.
+                // if (!IsLimitedStock(entry))
+                if (!IsLimitedStock(entry) || entry.RoundLimit > 0)
                     continue;
 
                 if (HasItemizedSource(computer.Owner, (categoryIndex, orderIndex)))
@@ -883,6 +893,10 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         int order,
         RequisitionsEntry entry)
     {
+        // CMU14: reserve round stock only after checkout has validated funds and delivery space.
+        if (entry.RoundLimit > 0)
+            return TryTakeRoundStock(computer, entry);
+
         if (TryTakeItemizedBundle(computer, (category, order)))
             return true;
 
@@ -945,7 +959,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             for (var orderIndex = 0; orderIndex < category.Entries.Count; orderIndex++)
             {
                 var entry = category.Entries[orderIndex];
-                if (!IsLimitedStock(entry))
+                // CMU14: round stock never replenishes.
+                // if (!IsLimitedStock(entry))
+                if (!IsLimitedStock(entry) || entry.RoundLimit > 0)
                     continue;
 
                 if (HasItemizedSource(computer.Owner, (categoryIndex, orderIndex)))
@@ -1013,6 +1029,14 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             for (var orderIndex = 0; orderIndex < category.Entries.Count; orderIndex++)
             {
                 var entry = category.Entries[orderIndex];
+                // CMU14 Begin: display the shared remaining allowance on every terminal.
+                if (entry.RoundLimit > 0)
+                {
+                    stockInfo.Add(new RequisitionsStockInfo(categoryIndex, orderIndex,
+                        GetRoundStock(computer, entry), entry.RoundLimit, -1));
+                    continue;
+                }
+                // CMU14 End
                 if (!IsLimitedStock(entry))
                     continue;
 

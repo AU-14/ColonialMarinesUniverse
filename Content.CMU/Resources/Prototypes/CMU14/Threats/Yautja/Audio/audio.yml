@@ -332,3 +332,11 @@
 - type: emoteSounds
   parent: [ CMUBaseYautja, RMCBaseFemaleSounds ]
   id: CMUFemaleYautja
+
+- type: soundCollection
+  id: CMUYautjaElderOverseer
+  files:
+  - /Audio/CMU14/Yautja/Voice/Overseer/pred_elder_overseer_1.wav
+  - /Audio/CMU14/Yautja/Voice/Overseer/pred_elder_overseer_2.wav
+  - /Audio/CMU14/Yautja/Voice/Overseer/pred_elder_overseer_3.wav
+  - /Audio/CMU14/Yautja/Voice/Overseer/pred_elder_overseer_4.wav

@@ -267,7 +267,7 @@
     - state: "base"
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
   - type: CMAutomatedVendor
-    jobs: [ AU14JobCivilianNurse, AU14JobCivilianPhysician, AU14JobCivilianHeadPhysician, AU14JobCLFPhysician, AU14JobCLFSurgeon ]
+    jobs: [ AU14JobCivilianNurse, AU14JobCivilianPhysician, AU14JobCivilianHeadPhysician, AU14JobCivilianEmergencyResponseOfficer, AU14JobCLFPhysician, AU14JobCLFSurgeon ]
     sections:
     - name: cmu-vendor-section-pressurized-canisters
       entries:
