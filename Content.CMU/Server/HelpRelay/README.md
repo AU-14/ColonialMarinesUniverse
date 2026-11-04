@@ -44,7 +44,10 @@ so transcript text can never grow a ping later. Interactive components (buttons)
 
 News (round digest) rides both models: at round end `NewsRelaySystem` creates the round's forum thread
 (`thread_name = Round {id} · {mode} · {map}`, `?wait=true`, captures `channel_id` from the response), then each article
-posts into it with `?thread_id`, one message per article, ordered by publish time. Article embeds omit the
+posts into it with `?thread_id`, one message per article, ordered by publish time. Reporter identity is captured
+at publish time through a CMU14-tagged raise in upstream's `TryAddNews` (articles carry only IC identity) and shows
+as the linked Discord account when one exists - a mention that never pings, the payload stays quiet - the ckey
+otherwise; mid-round deletions are respected. Article embeds omit the
 Round/Mode/Map/Server fields - the opener carries them. If the thread cannot be created after retries the whole
 round is dropped with an error log: news is best-effort, nothing was promised to a reporter. Spooled news followers
 record their `thread_id` in the drop file; the payload itself carries no thread binding, so manual recovery needs that id.
