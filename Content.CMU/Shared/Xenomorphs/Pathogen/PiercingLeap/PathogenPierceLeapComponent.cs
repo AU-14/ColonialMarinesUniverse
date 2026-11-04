@@ -2,7 +2,8 @@ using Content.Shared.Damage;
 using Content.Shared.FixedPoint;  
 using Robust.Shared.Audio;  
 using Robust.Shared.GameStates;  
-using Robust.Shared.Prototypes;  
+using Robust.Shared.Prototypes;
+using Robust.Shared.Physics;
   
 namespace Content.CMU.Shared.Xenomorphs.Pathogen.PierceLeap;  
   
@@ -31,10 +32,10 @@ public sealed partial class PathogenPierceLeapComponent : Component
     public TimeSpan StrikeDelay = TimeSpan.FromSeconds(0.75);  
   
     [DataField, AutoNetworkedField]  
-    public int IgnoredCollisionGroupSmallm  = CollisionGroup.None;
+    public CollisionGroup IgnoredCollisionGroupLarge = CollisionGroup.None;  
   
     [DataField, AutoNetworkedField]  
-    public int IgnoredCollisionGroupLarge = CollisionGroup.None;
+    public CollisionGroup IgnoredCollisionGroupSmall = CollisionGroup.None;
   
     [DataField, AutoNetworkedField]  
     public SoundSpecifier? LeapSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/pathogen_pounce1.ogg");
