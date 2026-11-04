@@ -1,7 +1,7 @@
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.CMU14.Administration.Tickets;
+namespace Content.Shared.CMU14.HelpRelay.AHelp;
 
 [Serializable, NetSerializable]
 public enum CMUTicketStatus : byte
@@ -73,9 +73,7 @@ public sealed class CMUTicketUpdatedEvent : EntityEventArgs
     public readonly CMUTicketInfo Ticket;
 
     public CMUTicketUpdatedEvent(CMUTicketInfo ticket)
-    {
-        Ticket = ticket;
-    }
+        => Ticket = ticket;
 }
 
 /// <summary>
@@ -92,9 +90,7 @@ public sealed class CMUTicketClaimRequestEvent : EntityEventArgs
     public readonly NetUserId Player;
 
     public CMUTicketClaimRequestEvent(NetUserId player)
-    {
-        Player = player;
-    }
+        => Player = player;
 }
 
 /// <summary>
@@ -106,9 +102,7 @@ public sealed class CMUTicketAcknowledgeRequestEvent : EntityEventArgs
     public readonly NetUserId Player;
 
     public CMUTicketAcknowledgeRequestEvent(NetUserId player)
-    {
-        Player = player;
-    }
+        => Player = player;
 }
 
 [Serializable, NetSerializable]
@@ -117,9 +111,7 @@ public sealed class CMUTicketUnclaimRequestEvent : EntityEventArgs
     public readonly NetUserId Player;
 
     public CMUTicketUnclaimRequestEvent(NetUserId player)
-    {
-        Player = player;
-    }
+        => Player = player;
 }
 
 [Serializable, NetSerializable]

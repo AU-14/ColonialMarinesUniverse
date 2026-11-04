@@ -1,7 +1,7 @@
-using Content.Client.CMU14.Administration.Tickets;
+using Content.Client.CMU14.HelpRelay.AHelp;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared.Administration;
-using Content.Shared.CMU14.Administration.Tickets;
+using Content.Shared.CMU14.HelpRelay.AHelp;
 using Robust.Client.Player;
 using Robust.Shared.Network;
 
@@ -89,13 +89,10 @@ public sealed partial class BwoinkControl
     /// Open tickets nobody has acknowledged, answered or claimed; these sort to the top.
     /// </summary>
     private bool CMUIsTicketWaiting(NetUserId player)
-    {
-        return _cmuTickets?.GetTicket(player) is { Status: CMUTicketStatus.Open, AcknowledgedBy: null, AnsweredBy: null };
-    }
+        => _cmuTickets?.GetTicket(player) is { Status: CMUTicketStatus.Open, AcknowledgedBy: null, AnsweredBy: null };
 
     private string CMUTicketGlyph(NetUserId player)
-    {
-        return _cmuTickets?.GetTicket(player) switch
+        => _cmuTickets?.GetTicket(player) switch
         {
             { Status: CMUTicketStatus.Open, AcknowledgedBy: null, AnsweredBy: null } => Loc.GetString("cmu-ahelp-ticket-glyph-open") + " ",
             { Status: CMUTicketStatus.Open, AnsweredBy: not null } => Loc.GetString("cmu-ahelp-ticket-glyph-answered") + " ",
@@ -103,7 +100,6 @@ public sealed partial class BwoinkControl
             { Status: CMUTicketStatus.Claimed } => Loc.GetString("cmu-ahelp-ticket-glyph-claimed") + " ",
             _ => string.Empty,
         };
-    }
 
     private void CMUUpdateTicketControls()
     {

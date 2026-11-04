@@ -17,12 +17,13 @@ using Robust.Shared.Log;
 using Robust.Shared.Network;
 using Robust.Shared.Utility;
 
-namespace Content.Server.CMU14.HelpRelay;
+namespace Content.Server.CMU14.HelpRelay.Systems;
 
 /// <summary>
-/// Single Discord delivery pipe for the help systems (ahelp/mhelp/bughelp): one webhook endpoint
-/// with per-source overrides, one queue, one HttpClient, one embed family. Conversations and reports
-/// stay their own systems; only what happens after a player types a help command lives here.
+/// Single Discord delivery pipe for the help systems (ahelp/mhelp/bughelp) and the round news
+/// digest: one webhook family with per-source overrides, one queue, one HttpClient, one embed
+/// family. Conversations, reports and news stay their own systems; only their Discord delivery
+/// lives here.
 /// </summary>
 public sealed class HelpRelayManager : IPostInjectInit
 {
@@ -44,7 +45,7 @@ public sealed class HelpRelayManager : IPostInjectInit
     private static readonly ResPath DroppedPostDir = new("/dropped_relay");
 
     private readonly HttpClient _http = new();
-    private readonly ConcurrentQueue<(HelpSource Source, string Url, string PayloadJson, string? AttachmentJson, int Attempts)> _pending = new();
+    private readonly ConcurrentQueue<(HelpSource Source, string Url, string PayloadJson, string? AttachmentJson, string? ThreadId, int Attempts)> _pending = new();
     private readonly ConcurrentDictionary<NetUserId, ulong?> _discordIds = new();
     private int _queueRunning;
     private int _spoolSeq;
@@ -54,8 +55,10 @@ public sealed class HelpRelayManager : IPostInjectInit
     private ISawmill _sawmill = default!;
 
     // One Discord message per conversation, edited in place as lines arrive (the ahelp relay model).
-    // Main-thread only: created and cleared there; only the owning processor task mutates the rest.
-    private readonly Dictionary<NetUserId, HelpConversation> _conversations = new();
+    // Keys are any stable per-conversation id: ahelp keys by player id, the error relay's admin log
+    // feed by a fixed one. Main-thread only: created and cleared there; only the owning processor
+    // task mutates the rest.
+    private readonly Dictionary<Guid, HelpConversation> _conversations = new();
 
     private sealed class HelpConversation
     {
@@ -75,9 +78,12 @@ public sealed class HelpRelayManager : IPostInjectInit
     }
 
     private string _webhook = string.Empty;
+    private bool _initialized;
     private string _webhookAHelp = string.Empty;
     private string _webhookMHelp = string.Empty;
     private string _webhookBugHelp = string.Empty;
+    private string _webhookNews = string.Empty;
+    private string _webhookErrors = string.Empty;
     private string _revision = string.Empty;
     private string _builtAt = string.Empty;
     private string _serverName = string.Empty;
@@ -89,14 +95,22 @@ public sealed class HelpRelayManager : IPostInjectInit
 
     /// <summary>
     /// CVar subscriptions live here, not in PostInject: unit tests build the IoC graph before
-    /// content CVars are registered, and OnValueChanged would throw for every fixture.
+    /// content CVars are registered, and OnValueChanged would throw for every fixture. Idempotent:
+    /// whichever consumer initializes first wires the cvars, so no consumer sees an empty webhook
+    /// while another system has not initialized yet.
     /// </summary>
     public void Initialize()
     {
+        if (_initialized)
+            return;
+
+        _initialized = true;
         _config.OnValueChanged(CCVars.HelpRelayWebhook, v => _webhook = v, true);
         _config.OnValueChanged(CCVars.HelpRelayWebhookAHelp, v => _webhookAHelp = v, true);
         _config.OnValueChanged(CCVars.HelpRelayWebhookMHelp, v => _webhookMHelp = v, true);
         _config.OnValueChanged(CCVars.HelpRelayWebhookBugHelp, v => _webhookBugHelp = v, true);
+        _config.OnValueChanged(CCVars.HelpRelayWebhookNews, v => _webhookNews = v, true);
+        _config.OnValueChanged(CCVars.HelpRelayWebhookErrors, v => _webhookErrors = v, true);
         _config.OnValueChanged(CCVars.HelpRelayRevision, v => _revision = v, true);
         _config.OnValueChanged(CCVars.HelpRelayBuiltAt, v => _builtAt = v, true);
         _config.OnValueChanged(CCVars.AdminLogsServerName, v => _serverName = v, true);
@@ -122,12 +136,61 @@ public sealed class HelpRelayManager : IPostInjectInit
         if (_pending.Count >= MaxQueued)
         {
             _sawmill.Error($"Help relay queue full ({MaxQueued} posts), dropping a new one");
-            SpoolDropped(source, payloadJson, post.AttachmentJson);
+            SpoolDropped(source, payloadJson, post.AttachmentJson, post.ThreadId);
             return;
         }
 
-        _pending.Enqueue((source, url, payloadJson, post.AttachmentJson, 0));
+        _pending.Enqueue((source, url, payloadJson, post.AttachmentJson, post.ThreadId, 0));
         StartQueueProcessor();
+    }
+
+    /// <summary>
+    /// Creates a forum thread with the opener post and returns the new thread's id (the create
+    /// response's channel_id). Retries like the queue; null means the thread never appeared and the
+    /// round's follower posts should be dropped. Same threading rules as <see cref="Post"/>: main
+    /// thread or Context set, so context is gathered before the first await.
+    /// </summary>
+    public async Task<string?> CreateThread(HelpSource source, HelpPost opener)
+    {
+        var url = UrlFor(source);
+        if (string.IsNullOrWhiteSpace(url))
+            return null;
+
+        var payloadJson = JsonSerializer.Serialize(
+            HelpRelayPayload.Build(source, opener with { Context = opener.Context ?? GetContext() }, NullIfEmpty(_revision), NullIfEmpty(_builtAt)));
+
+        for (var attempt = 1; attempt <= MaxRetries; attempt++)
+        {
+            try
+            {
+                using var response = await _http.PostAsync($"{url}?wait=true", new StringContent(payloadJson, Encoding.UTF8, "application/json"));
+                var content = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    var threadId = JsonNode.Parse(content)?["channel_id"]?.ToString();
+                    if (threadId != null)
+                        return threadId;
+
+                    _sawmill.Error($"Help relay could not find channel id in thread create response: {content}");
+                }
+                else
+                {
+                    _sawmill.Error($"Help relay thread create failed: {(int) response.StatusCode} {response.StatusCode}\n{content}");
+                }
+            }
+            catch (Exception e)
+            {
+                _sawmill.Error($"Help relay thread create error: {e}");
+            }
+
+            if (attempt < MaxRetries)
+            {
+                _sawmill.Warning($"Help relay thread create failed, retry {attempt}/{MaxRetries}");
+                await Task.Delay(RetryDelay);
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -167,8 +230,9 @@ public sealed class HelpRelayManager : IPostInjectInit
     }
 
     /// <summary>
-    /// Queues one line into the conversation's Discord message: created on first line, then edited in
-    /// place per line (the ahelp relay model). Main thread only — reads round state from entity systems.
+    /// Queues one transcript line into the conversation's Discord message: created on first line,
+    /// then edited in place per line (the ahelp relay model). Main thread only — reads round state
+    /// from entity systems.
     /// </summary>
     public void RelayConversationLine(
         HelpSource source,
@@ -177,6 +241,25 @@ public sealed class HelpRelayManager : IPostInjectInit
         bool fromStaff,
         string speaker,
         string text)
+    {
+        // No entity-system reads when the webhook is unset.
+        if (!IsEnabled(source))
+            return;
+
+        var roundTime = CurrentRunLevel() == GameRunLevel.InRound
+            ? _entMan.System<GameTicker>().RoundDuration().ToString(@"hh\:mm\:ss")
+            : null;
+        RelayConversationText(source, conversationId.UserId, username,
+            HelpRelayPayload.BuildConversationLine(speaker, fromStaff, roundTime, text));
+    }
+
+    /// <summary>
+    /// Queues one pre-formatted line into a conversation keyed by any stable id. Same lifecycle as
+    /// <see cref="RelayConversationLine"/>: the Discord message is created on first line, edited in
+    /// place, and a fresh chained message starts when the description overflows. Main thread only —
+    /// reads round state from entity systems.
+    /// </summary>
+    public void RelayConversationText(HelpSource source, Guid conversationId, string username, string line)
     {
         var url = UrlFor(source);
         if (string.IsNullOrWhiteSpace(url))
@@ -203,10 +286,7 @@ public sealed class HelpRelayManager : IPostInjectInit
             conversation.Context = GetContext();
         }
 
-        var roundTime = runLevel == GameRunLevel.InRound
-            ? _entMan.System<GameTicker>().RoundDuration().ToString(@"hh\:mm\:ss")
-            : null;
-        conversation.Pending.Enqueue(HelpRelayPayload.BuildConversationLine(speaker, fromStaff, roundTime, text));
+        conversation.Pending.Enqueue(line);
         ProcessConversation(conversation);
     }
 
@@ -224,7 +304,7 @@ public sealed class HelpRelayManager : IPostInjectInit
         var dropped = 0;
         while (_pending.TryDequeue(out var item))
         {
-            SpoolDropped(item.Source, item.PayloadJson, item.AttachmentJson);
+            SpoolDropped(item.Source, item.PayloadJson, item.AttachmentJson, item.ThreadId);
             dropped++;
         }
 
@@ -329,7 +409,11 @@ public sealed class HelpRelayManager : IPostInjectInit
     {
         HelpSource.AHelp => NullIfEmpty(_webhookAHelp) ?? NullIfEmpty(_webhook),
         HelpSource.MHelp => NullIfEmpty(_webhookMHelp) ?? NullIfEmpty(_webhook),
-        _ => NullIfEmpty(_webhookBugHelp) ?? NullIfEmpty(_webhook),
+        // Bughelp and news post forum threads; the primary chat webhook cannot carry them. Errors
+        // serves its own channel by design, so none of the three falls through.
+        HelpSource.News => NullIfEmpty(_webhookNews),
+        HelpSource.Errors => NullIfEmpty(_webhookErrors),
+        _ => NullIfEmpty(_webhookBugHelp),
     };
 
     private static string? NullIfEmpty(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
@@ -349,20 +433,20 @@ public sealed class HelpRelayManager : IPostInjectInit
             while (_pending.TryDequeue(out var item))
             {
                 var gen = Volatile.Read(ref _roundGen);
-                var sent = await PostWebhook((item.Url, item.PayloadJson, item.AttachmentJson, item.Attempts));
+                var sent = await PostWebhook((item.Url, item.PayloadJson, item.AttachmentJson, item.ThreadId, item.Attempts));
 
                 if (!sent && gen == Volatile.Read(ref _roundGen) && item.Attempts < MaxRetries)
                 {
                     _sawmill.Warning($"Help relay post failed, retry {item.Attempts + 1}/{MaxRetries}");
                     await Task.Delay(RetryDelay);
-                    _pending.Enqueue((item.Source, item.Url, item.PayloadJson, item.AttachmentJson, item.Attempts + 1));
+                    _pending.Enqueue((item.Source, item.Url, item.PayloadJson, item.AttachmentJson, item.ThreadId, item.Attempts + 1));
                     continue;
                 }
 
                 if (!sent)
                 {
                     _sawmill.Error("Help relay post dropped after retries, webhook unreachable");
-                    SpoolDropped(item.Source, item.PayloadJson, item.AttachmentJson);
+                    SpoolDropped(item.Source, item.PayloadJson, item.AttachmentJson, item.ThreadId);
                 }
 
                 await Task.Delay(PostSpacing);
@@ -375,15 +459,16 @@ public sealed class HelpRelayManager : IPostInjectInit
         }
     }
 
-    private async Task<bool> PostWebhook((string Url, string PayloadJson, string? AttachmentJson, int Attempts) item)
+    private async Task<bool> PostWebhook((string Url, string PayloadJson, string? AttachmentJson, string? ThreadId, int Attempts) item)
     {
         try
         {
+            var url = item.ThreadId is { } thread ? $"{item.Url}?thread_id={thread}" : item.Url;
             using HttpContent content = item.AttachmentJson is { } attachment
                 ? Multipart(item.PayloadJson, attachment)
                 : new StringContent(item.PayloadJson, Encoding.UTF8, "application/json");
 
-            using var response = await _http.PostAsync(item.Url, content);
+            using var response = await _http.PostAsync(url, content);
             if (!response.IsSuccessStatusCode)
             {
                 var body = await response.Content.ReadAsStringAsync();
@@ -404,7 +489,7 @@ public sealed class HelpRelayManager : IPostInjectInit
     /// sent, so the payload lands on disk for manual recovery instead of vanishing with the round.
     /// The webhook URL never goes in the file.
     /// </summary>
-    private void SpoolDropped(HelpSource source, string payloadJson, string? attachmentJson)
+    private void SpoolDropped(HelpSource source, string payloadJson, string? attachmentJson, string? threadId)
     {
         try
         {
@@ -415,6 +500,7 @@ public sealed class HelpRelayManager : IPostInjectInit
             {
                 Source = source.ToString(),
                 DroppedAt = DateTime.UtcNow.ToString("o"),
+                ThreadId = threadId,
                 Payload = JsonNode.Parse(payloadJson),
                 Attachment = attachmentJson is null ? null : JsonNode.Parse(attachmentJson),
             };

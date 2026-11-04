@@ -271,7 +271,9 @@
     - id: CMWirecutter
     - id: CMWelder
     - id: CMMultitool
-    - id: RMCCableCoil
+    - id: CMUCableThinHVStack
+    - id: CMUCableThinMVStack
+    - id: CMUCableThinLVStack
 
 - type: entity
   parent: CMUFobCrateBase

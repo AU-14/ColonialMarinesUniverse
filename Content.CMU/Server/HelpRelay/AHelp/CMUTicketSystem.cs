@@ -5,7 +5,7 @@ using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
-using Content.Shared.CMU14.Administration.Tickets;
+using Content.Shared.CMU14.HelpRelay.AHelp;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
 using Robust.Server.Player;
@@ -15,7 +15,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
-namespace Content.Server.CMU14.Administration.Tickets;
+namespace Content.Server.CMU14.HelpRelay.AHelp;
 
 public enum CMUTicketActionResult : byte
 {
@@ -79,29 +79,23 @@ public sealed partial class CMUTicketSystem : EntitySystem
     }
 
     public CMUTicketInfo? GetTicket(NetUserId player)
-    {
-        return _tickets.GetValueOrDefault(player);
-    }
+        => _tickets.GetValueOrDefault(player);
 
     public IReadOnlyList<CMUTicketMessageEntry> GetHistory(NetUserId player)
-    {
-        return _history.TryGetValue(player, out var list) ? list : Array.Empty<CMUTicketMessageEntry>();
-    }
+        => _history.TryGetValue(player, out var list) ? list : Array.Empty<CMUTicketMessageEntry>();
 
     /// <summary>
     /// Called by <see cref="BwoinkSystem"/> once a bwoink passed its auth and rate limit checks.
     /// <paramref name="adminMessage"/> is the line exactly as admins receive it.
     /// </summary>
     public void OnMessageAccepted(NetUserId channel, ICommonSession sender, SharedBwoinkSystem.BwoinkTextMessage adminMessage)
-    {
-        RecordMessage(channel,
+        => RecordMessage(channel,
             sender.UserId,
             sender.Name,
             adminMessage.Text,
             adminMessage.AdminOnly,
             adminMessage.PlaySound,
             adminMessage.SentAt);
-    }
 
     /// <summary>
     /// Stores one channel line, opening a ticket first when the player writes in their own channel
@@ -386,11 +380,9 @@ public sealed partial class CMUTicketSystem : EntitySystem
     }
 
     private DateTime LastActivity(CMUTicketInfo ticket)
-    {
-        return _history.TryGetValue(ticket.Player, out var lines) && lines.Count > 0
+        => _history.TryGetValue(ticket.Player, out var lines) && lines.Count > 0
             ? lines[^1].SentAt
             : ticket.OpenedAt;
-    }
 
     private CMUTicketInfo OpenTicket(NetUserId player, string playerName, DateTime openedAt)
     {
@@ -468,11 +460,9 @@ public sealed partial class CMUTicketSystem : EntitySystem
     /// The claim notice the player sees. Names the claimer only as <see cref="PlayerFacingAdminName"/> allows.
     /// </summary>
     public string BuildPlayerClaimText(NetUserId admin, string adminName)
-    {
-        return PlayerFacingAdminName(admin, adminName) is { } name
+        => PlayerFacingAdminName(admin, adminName) is { } name
             ? Loc.GetString("cmu-ahelp-ticket-player-claimed-named", ("admin", name))
             : Loc.GetString("cmu-ahelp-ticket-player-claimed");
-    }
 
     /// <summary>
     /// The admin name a player may see for a ticket action, or null when it must stay anonymous: when
@@ -557,14 +547,10 @@ public sealed partial class CMUTicketSystem : EntitySystem
 
     // In-game admins are inactive but still handle AHelps, so both go through the AHelp view of admin data.
     private bool IsTicketAdmin(ICommonSession session)
-    {
-        return ((AdminManager) _adminManager).CMUHasAhelp(session);
-    }
+        => ((AdminManager) _adminManager).CMUHasAhelp(session);
 
     private IEnumerable<ICommonSession> GetTicketAdmins()
-    {
-        return ((AdminManager) _adminManager).CMUAhelpAdmins;
-    }
+        => ((AdminManager) _adminManager).CMUAhelpAdmins;
 
     private void BroadcastUpdate(CMUTicketInfo ticket)
     {
@@ -576,9 +562,7 @@ public sealed partial class CMUTicketSystem : EntitySystem
     }
 
     private void SendSnapshot(ICommonSession admin)
-    {
-        RaiseNetworkEvent(BuildSnapshot(), admin.Channel);
-    }
+        => RaiseNetworkEvent(BuildSnapshot(), admin.Channel);
 
     private void OnSnapshotRequest(CMUTicketSnapshotRequestEvent ev, EntitySessionEventArgs args)
     {
@@ -623,9 +607,7 @@ public sealed partial class CMUTicketSystem : EntitySystem
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
-    {
-        Reset();
-    }
+        => Reset();
 
     private void OnPermsChanged(AdminPermsChangedEventArgs args)
     {

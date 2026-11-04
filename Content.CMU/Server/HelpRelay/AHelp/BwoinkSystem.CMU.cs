@@ -1,5 +1,5 @@
 using Content.Server.Administration.Managers;
-using Content.Server.CMU14.Administration.Tickets;
+using Content.Server.CMU14.HelpRelay.AHelp;
 using Content.Shared.Administration;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -17,17 +17,13 @@ public sealed partial class BwoinkSystem
     /// Admin data for AHelp purposes; in-game admins are inactive but still handle AHelps.
     /// </summary>
     private AdminData? CMUAhelpAdminData(ICommonSession session)
-    {
-        return ((AdminManager) _adminManager).CMUGetAhelpAdminData(session);
-    }
+        => ((AdminManager) _adminManager).CMUGetAhelpAdminData(session);
 
     /// <summary>
     /// Every session that may handle AHelps, in-game admins included. Replaces ActiveAdmins in AHelp routing.
     /// </summary>
     private IEnumerable<ICommonSession> CMUAhelpAdmins()
-    {
-        return ((AdminManager) _adminManager).CMUAhelpAdmins;
-    }
+        => ((AdminManager) _adminManager).CMUAhelpAdmins;
 
     /// <summary>
     /// Queues a ticket status line (claim, close, ...) on the player's Discord relay embed.

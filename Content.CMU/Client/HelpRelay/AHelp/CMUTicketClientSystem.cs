@@ -1,8 +1,8 @@
 using Content.Shared.Administration;
-using Content.Shared.CMU14.Administration.Tickets;
+using Content.Shared.CMU14.HelpRelay.AHelp;
 using Robust.Shared.Network;
 
-namespace Content.Client.CMU14.Administration.Tickets;
+namespace Content.Client.CMU14.HelpRelay.AHelp;
 
 /// <summary>
 /// Admin-side mirror of the server's AHelp tickets and channel history. The server snapshot replaces
@@ -35,9 +35,7 @@ public sealed class CMUTicketClientSystem : EntitySystem
     }
 
     public CMUTicketInfo? GetTicket(NetUserId player)
-    {
-        return _tickets.GetValueOrDefault(player);
-    }
+        => _tickets.GetValueOrDefault(player);
 
     /// <summary>
     /// Keeps a live bwoink line so the admin window can be rebuilt from the mirror.
@@ -53,29 +51,19 @@ public sealed class CMUTicketClientSystem : EntitySystem
     }
 
     public void RequestSnapshot()
-    {
-        RaiseNetworkEvent(new CMUTicketSnapshotRequestEvent());
-    }
+        => RaiseNetworkEvent(new CMUTicketSnapshotRequestEvent());
 
     public void Acknowledge(NetUserId player)
-    {
-        RaiseNetworkEvent(new CMUTicketAcknowledgeRequestEvent(player));
-    }
+        => RaiseNetworkEvent(new CMUTicketAcknowledgeRequestEvent(player));
 
     public void Claim(NetUserId player)
-    {
-        RaiseNetworkEvent(new CMUTicketClaimRequestEvent(player));
-    }
+        => RaiseNetworkEvent(new CMUTicketClaimRequestEvent(player));
 
     public void Unclaim(NetUserId player)
-    {
-        RaiseNetworkEvent(new CMUTicketUnclaimRequestEvent(player));
-    }
+        => RaiseNetworkEvent(new CMUTicketUnclaimRequestEvent(player));
 
     public void Close(NetUserId player, string reason)
-    {
-        RaiseNetworkEvent(new CMUTicketCloseRequestEvent(player, reason));
-    }
+        => RaiseNetworkEvent(new CMUTicketCloseRequestEvent(player, reason));
 
     private void OnSnapshot(CMUTicketSnapshotEvent ev)
     {

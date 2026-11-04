@@ -2,12 +2,12 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Content.Server.CMU14.HelpRelay;
+using Content.Server.CMU14.HelpRelay.Systems;
 using Content.Server._RMC14.Mentor;
 using Content.Server.Chat.Managers;
 using Content.Server.Players.RateLimiting;
 using Content.Shared.CCVar;
-using Content.Shared.CMU14.BugHelp;
+using Content.Shared.CMU14.HelpRelay.BugHelp;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
@@ -22,7 +22,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Server.CMU14.BugHelp;
+namespace Content.Server.CMU14.HelpRelay.BugHelp;
 
 /// <summary>
 /// Turns a player's bughelp message into a report and hands it to the help relay,
@@ -75,18 +75,17 @@ public sealed class BugHelpSystem : EntitySystem
         _net.RegisterNetMessage<BugHelpPromoteMsg>(OnBugHelpPromote);
         _net.RegisterNetMessage<BugHelpConfigMsg>();
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
-        // Either CVar can flip BugHelp's enabled state: the bughelp webhook falls through to the
-        // primary one. Deferred a tick so the relay's own handlers settle first, then the broadcast
-        // reads HelpRelayManager.IsEnabled instead of duplicating its fallback rule.
+        // Only the bughelp webhook flips BugHelp's enabled state: bug posts need forum threads,
+        // which the primary chat webhook cannot carry. The broadcast is deferred a tick so the
+        // relay's own handler settles first, then reads HelpRelayManager.IsEnabled instead of
+        // duplicating the rule.
         _config.OnValueChanged(CCVars.HelpRelayWebhookBugHelp, OnWebhookChanged, false);
-        _config.OnValueChanged(CCVars.HelpRelayWebhook, OnWebhookChanged, false);
     }
 
     public override void Shutdown()
     {
         _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
         _config.UnsubValueChanged(CCVars.HelpRelayWebhookBugHelp, OnWebhookChanged);
-        _config.UnsubValueChanged(CCVars.HelpRelayWebhook, OnWebhookChanged);
     }
 
     public override void Update(float frameTime)

@@ -8,9 +8,9 @@ Player-typed context is minimal by design. The server snapshots what it can obse
 
 | CVar | Default | Purpose |
 |---|---|---|
-| `cmu.help_relay_webhook_bughelp` | empty | Bug report webhook. Empty falls through to the primary webhook. |
+| `cmu.help_relay_webhook_bughelp` | empty | Bug report webhook (forum channel). Empty disables bughelp; it never falls through to the primary. |
 | `cmu.help_relay_bughelp_tags` | empty | Forum tag ids per category, grammar `code:<id>,mapping:<id>`. Malformed entries are skipped with a server warning. |
-| `cmu.help_relay_webhook` | empty | Primary webhook (ahelp/mhelp/bughelp). Both empty disables bughelp. |
+| `cmu.help_relay_webhook` | empty | Primary webhook (ahelp/mhelp). Not used by bughelp. |
 | `cmu.help_relay_revision` | empty | Build revision stamped on reports; the publish pipeline fills it. |
 | `cmu.help_relay_built_at` | empty | Build date (ISO yyyy-MM-dd) stamped with the revision; says how old the build is. |
 | `cmu.bug_help_rate_limit_period` | 300 | Seconds per rate limit window. |
@@ -23,7 +23,7 @@ each report opens one thread titled `[Category] BUG-R<round>-<seq> · <what happ
 ## Install tips
 
 Tag keys are category names, not tag names: `mapping:` is correct even when the forum tag is called `Map`.
-Tag IDs are invisible in the Discord client; the bot route that fetches them, plus a webhook probe that verifies them, lives in `Content.CMU/Server/HelpRelay/README.md` (Setup tips).
+Tag IDs are invisible in the Discord client; the bot route that fetches them, plus a webhook probe that verifies them, lives in `Content.CMU/Shared/HelpRelay/README.md` (Setup tips).
 
 Reporter pings need the vanilla bot (`discord.token` + `discord.guild_id`) **in the guild** - linked accounts resolve through it.
 Without it the pipeline still works; reports just post without the mention.
@@ -72,11 +72,11 @@ Paths relative to `Content.CMU/`.
 
 | Path | Job |
 |---|---|
-| `Shared/BugHelp/BugHelpMessages.cs` | Net messages, `BugHelpCategory` |
-| `Server/BugHelp/BugHelpSystem.cs` | Submit/promote flows, snapshot, report build, thread title |
-| `Server/BugHelp/BugHelpCommand.cs` | `bughelp` command |
-| `Client/BugHelp/BugHelpWindow.xaml(.cs)` | Report form |
-| `Client/BugHelp/BugHelpUIController.cs` | Window lifecycle, send |
+| `Shared/HelpRelay/BugHelp/BugHelpMessages.cs` | Net messages, `BugHelpCategory` |
+| `Server/HelpRelay/BugHelp/BugHelpSystem.cs` | Submit/promote flows, snapshot, report build, thread title |
+| `Server/HelpRelay/BugHelp/BugHelpCommand.cs` | `bughelp` command |
+| `Client/HelpRelay/BugHelp/BugHelpWindow.xaml(.cs)` | Report form |
+| `Client/HelpRelay/BugHelp/BugHelpUIController.cs` | Window lifecycle, send |
 | `Server/HelpRelay/` | Discord delivery, per-source webhooks (separate subsystem) |
 | `Resources/Locale/en-US/CMU14/bug-help.ftl` | All strings |
 | `Content.Tests/Server/CMU14/BugHelpItemScorerTest.cs` | Item candidate scorer |
