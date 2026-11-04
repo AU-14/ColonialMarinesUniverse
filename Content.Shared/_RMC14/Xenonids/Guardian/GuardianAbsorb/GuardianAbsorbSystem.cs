@@ -4,6 +4,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;  
 using Content.Shared.Mobs.Systems;  
 using Content.Shared.Popups;  
+using Robust.Shared.Network;  
   
 namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;  
   
@@ -12,11 +13,11 @@ public sealed class GuardianAbsorbSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;  
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;  
     [Dependency] private readonly SharedPopupSystem _popup = default!;  
+    [Dependency] private readonly INetManager _net = default!;  
   
     public override void Initialize()  
     {  
         SubscribeLocalEvent<GuardianAbsorbComponent, DamageModifyAfterResistEvent>(OnDamageModify);  
-        SubscribeLocalEvent<GuardianAbsorbComponent, EntityTerminatingEvent>(OnGuardianAbsorbRemoved);  
     }  
   
     private void OnDamageModify(Entity<GuardianAbsorbComponent> ent, ref DamageModifyAfterResistEvent args)  
@@ -37,7 +38,13 @@ public sealed class GuardianAbsorbSystem : EntitySystem
         if (!_mobThreshold.TryGetIncapThreshold(guardian, out var incapThreshold))  
             return;  
   
-        var headroom = incapThreshold.Value - ent.Comp.GuardianCachedDamage;  
+        // Read the guardian's live damage rather than a cached value, so damage from  
+        // other sources and healing are both accounted for.  
+        var guardianDamage = FixedPoint2.Zero;  
+        if (TryComp<DamageableComponent>(guardian, out var damageable))  
+            guardianDamage = damageable.TotalDamage;  
+  
+        var headroom = incapThreshold.Value - guardianDamage;  
         if (headroom < 0)  
             headroom = 0;  
   
@@ -59,15 +66,15 @@ public sealed class GuardianAbsorbSystem : EntitySystem
             }  
         }  
   
-        if (redirected.AnyPositive())  
+        if (redirected.AnyPositive() && _net.IsServer)  
         {  
             _damageable.TryChangeDamage(guardian, redirected,  
                 ignoreResistances: ent.Comp.IgnoreGuardianResistances,  
-                origin: ent.Comp.Guardian);
-
+                origin: args.Origin);  
+  
             var msg = Loc.GetString("rmc-xeno-guardian-absorbing-damage", ("target", ent.Owner));  
             _popup.PopupEntity(msg, ent.Owner, PopupType.Small);  
-            _popup.PopupEntity(msg, guardian, PopupType.Small);
+            _popup.PopupEntity(msg, guardian, PopupType.Small);  
         }  
   
         // Whatever fraction of the original hit was actually redirected comes off the original target.  
@@ -76,12 +83,8 @@ public sealed class GuardianAbsorbSystem : EntitySystem
         args.Damage.ClampMin(0);  
     }  
   
-    private void OnGuardianAbsorbRemoved(Entity<GuardianAbsorbComponent> ent, ref EntityTerminatingEvent args)  
-    {  
-    }  
-  
     public void SetAbsorb(EntityUid target, EntityUid guardian, GuardianAbsorbType type,  
-        float percent = 0.5f, bool ignoreResistances = true)  
+        float percent = 0.5f, bool ignoreResistances = false)  
     {  
         var comp = EnsureComp<GuardianAbsorbComponent>(target);  
         comp.Guardian = guardian;  
