@@ -92,6 +92,7 @@
   - type: Tag
     tags:
     - HideContextMenu
+  - type: CMUXenoVisionObscuringCloud
 
 - type: entity
   parent: CMUShipWeaponSmoke
@@ -134,6 +135,7 @@
     color: "#88cce8"
   - type: TimedDespawn
     lifetime: 30
+  - type: CMUXenoVisionObscuringCloud
 
 - type: entity
   parent: StatusEffectStunned

@@ -470,6 +470,15 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         Dirty(ent);
     }
 
+    public void SetDrawVisibleMobs(Entity<NightVisionComponent?> ent, bool draw)
+    {
+        if (!Resolve(ent, ref ent.Comp, false) || ent.Comp.DrawVisibleMobs == draw)
+            return;
+
+        ent.Comp.DrawVisibleMobs = draw;
+        Dirty(ent);
+    }
+
     public void SetState(Entity<NightVisionComponent?> ent, NightVisionState state)
     {
         if (!Resolve(ent, ref ent.Comp))
