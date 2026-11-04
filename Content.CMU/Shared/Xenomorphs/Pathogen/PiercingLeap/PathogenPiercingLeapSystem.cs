@@ -145,7 +145,7 @@ public sealed partial class PathogenPiercingLeapSystem : EntitySystem
         }  
   
         var length = direction.Length();  
-        var distance = Math.Clamp(length, 0.1f, xeno.Comp.Range.Float());  
+        var distance = Math.Clamp(length, 0.1f, xeno.Comp.Range);  
         direction *= distance / length;  
   
         var impulse = direction.Normalized() * xeno.Comp.Strength * physics.Mass;  
