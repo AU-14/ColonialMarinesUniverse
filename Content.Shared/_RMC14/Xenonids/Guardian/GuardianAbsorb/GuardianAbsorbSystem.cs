@@ -40,9 +40,7 @@ public sealed class GuardianAbsorbSystem : EntitySystem
   
         // Read the guardian's live damage rather than a cached value, so damage from  
         // other sources and healing are both accounted for.  
-        var guardianDamage = FixedPoint2.Zero;  
-        if (TryComp<DamageableComponent>(guardian, out var damageable))  
-            guardianDamage = damageable.TotalDamage;  
+        var guardianDamage = _damageable.GetTotalDamage(guardian);
   
         var headroom = incapThreshold.Value - guardianDamage;  
         if (headroom < 0)  
