@@ -1100,11 +1100,12 @@
   id: CMU14ActionXenoPathogenScissorCutBloodletter
   name: Ravage (25)
   description: Cuts enemies in an area in front of you, causing slight blood loss. Also slows targets.
+
 - type: entity  
   parent: ActionXenoBase  
   id: CMU14ActionXenoPathogenGuardianSweep  
   name: Tentacle Sweep  
-  description: Swing your tentacles in a wide arc, knocking enemies away and slowing them down. 
+  description: Swing your tentacles in a wide arc, knocking enemies away, knocking them down, and slowing them. 
   components:  
   - type: Action  
     itemIconStyle: NoItem
