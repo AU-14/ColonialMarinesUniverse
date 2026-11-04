@@ -15,7 +15,7 @@ public sealed partial class PathogenPierceLeapingComponent : Component
     public EntityCoordinates Origin;  
   
     [DataField, AutoNetworkedField]  
-    public EntityCoordinates Destination;  
+    public MapCoordinates Destination;  
   
     [DataField, AutoNetworkedField]  
     public Vector2 Direction;  
