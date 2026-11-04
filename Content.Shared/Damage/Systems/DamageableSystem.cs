@@ -133,4 +133,12 @@ public sealed partial class DamageableSystem : EntitySystem
         cloneComp.RadiationDamageTypeIDs = new (entity.Comp.RadiationDamageTypeIDs);
         Dirty(clone, cloneComp);
     }
+
+    
+    public FixedPoint2 GetTotalDamage(EntityUid uid, DamageableComponent? comp = null) // CMU14
+    {
+        if (!Resolve(uid, ref comp))
+            return FixedPoint2.Zero;
+        return comp.TotalDamage;
+    }
 }
