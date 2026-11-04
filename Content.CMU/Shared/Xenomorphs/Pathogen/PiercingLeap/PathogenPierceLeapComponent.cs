@@ -11,7 +11,10 @@ namespace Content.CMU.Shared.Xenomorphs.Pathogen.PierceLeap;
 public sealed partial class PathogenPierceLeapComponent : Component  
 {
     [DataField, AutoNetworkedField]  
-    public float Range = 6f;  
+    public float Range = 6f;
+
+    [DataField, AutoNetworkedField]  
+    public FixedPoint2 PlasmaCost = 25;
     
     [DataField, AutoNetworkedField]  
     public float Strength = 20f;  
