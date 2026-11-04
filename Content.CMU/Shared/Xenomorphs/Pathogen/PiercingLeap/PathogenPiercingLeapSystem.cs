@@ -1,12 +1,10 @@
 using System.Numerics;  
 using Content.Shared._RMC14.Actions;  
 using Content.Shared._RMC14.Areas;  
-using Content.Shared._RMC14.Emote;  
 using Content.Shared._RMC14.Map;  
 using Content.Shared._RMC14.Pulling;  
 using Content.Shared._RMC14.Stun;  
 using Content.Shared._RMC14.Xenonids;  
-using Content.Shared.ActionBlocker;  
 using Content.Shared.Actions;  
 using Content.Shared.Coordinates;  
 using Content.Shared.Damage.Systems;  
@@ -14,22 +12,17 @@ using Content.Shared.DoAfter;
 using Content.Shared.Effects;  
 using Content.Shared.FixedPoint;  
 using Content.Shared.Interaction;  
-using Content.Shared.Interaction.Events;  
 using Content.Shared.Jittering;  
-using Content.Shared.Maps;  
 using Content.Shared.Mobs;  
 using Content.Shared.Mobs.Components;  
 using Content.Shared.Mobs.Systems;  
-using Content.Shared.Movement.Events;  
-using Content.Shared.Movement.Pulling.Events;  
-using Content.Shared.Popups;  
-using Content.Shared.Throwing;  
+using Content.Shared.Movement.Events;
+using Content.Shared.Movement.Systems;
 using Robust.Shared.Audio.Systems;  
 using Robust.Shared.Map.Components;  
 using Robust.Shared.Network;  
 using Robust.Shared.Physics;  
 using Robust.Shared.Physics.Components;  
-using Robust.Shared.Physics.Events;  
 using Robust.Shared.Physics.Systems;  
 using Robust.Shared.Player;  
 using Robust.Shared.Timing;  
@@ -43,21 +36,16 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
     [Dependency] private readonly AreaSystem _area = default!;  
     [Dependency] private readonly SharedJitteringSystem _jitter = default!;  
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;  
-    [Dependency] private readonly TurfSystem _turf = default!;  
-    [Dependency] private readonly SharedRMCEmoteSystem _emote = default!;  
     [Dependency] private readonly RotateToFaceSystem _rotateToFace = default!;  
     [Dependency] private readonly SharedTransformSystem _transform = default!;  
     [Dependency] private readonly MobStateSystem _mob = default!;  
     [Dependency] private readonly IGameTiming _timing = default!;  
-    [Dependency] private readonly SharedMapSystem _map = default!;  
     [Dependency] private readonly EntityLookupSystem _entityLookup = default!;  
     [Dependency] private readonly DamageableSystem _damage = default!;  
     [Dependency] private readonly RMCSizeStunSystem _size = default!;  
     [Dependency] private readonly SharedAudioSystem _audio = default!;  
-    [Dependency] private readonly SharedPopupSystem _popup = default!;  
     [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;  
     [Dependency] private readonly SharedActionsSystem _actions = default!;  
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;  
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;  
     [Dependency] private readonly SharedColorFlashEffectSystem _colorFlash = default!;  
     [Dependency] private readonly XenoSystem _xeno = default!;  
@@ -70,24 +58,14 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
         SubscribeLocalEvent<PathogenPierceLeapComponent, PathogenPierceLeapActionEvent>(OnLeapAction);  
         SubscribeLocalEvent<PathogenPierceLeapComponent, PathogenPierceLeapDoAfterEvent>(OnLeapDoAfter);  
   
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, ComponentInit>(OnLeapingInit);  
         SubscribeLocalEvent<PathogenPierceLeapingComponent, ComponentRemove>(OnLeapingRemove);  
   
-        // Cancel every form of interaction while airborne.  
+        // Cancelling these two is what makes the leaper pass through mobs  
+        // instead of stopping on the first hit like the standard leap.  
         SubscribeLocalEvent<PathogenPierceLeapingComponent, AttemptMobCollideEvent>(OnLeapCollide);  
         SubscribeLocalEvent<PathogenPierceLeapingComponent, AttemptMobTargetCollideEvent>(OnLeapTargetCollide);  
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, ChangeDirectionAttemptEvent>(OnAttempt);  
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, UpdateCanMoveAttemptEvent>(OnAttempt);  
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, UseAttemptEvent>(OnAttempt);  
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, InteractionAttemptEvent>(OnAttempt);  
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, DropAttemptEvent>(OnAttempt);  
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, AttackAttemptEvent>(OnAttempt);  
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, PushAttemptEvent>(OnAttempt);  
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, PullAttemptEvent>(OnAttempt);  
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, ThrowAttemptEvent>(OnAttempt);  
     }  
   
-    // Cancelling these two is what makes the leaper pass through mobs  
     private void OnLeapCollide(Entity<PathogenPierceLeapingComponent> xeno, ref AttemptMobCollideEvent args)  
     {  
         args.Cancelled = true;  
@@ -96,11 +74,6 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
     private void OnLeapTargetCollide(Entity<PathogenPierceLeapingComponent> xeno, ref AttemptMobTargetCollideEvent args)  
     {  
         args.Cancelled = true;  
-    }  
-  
-    private void OnAttempt(Entity<PathogenPierceLeapingComponent> xeno, ref CancellableEntityEventArgs args)  
-    {  
-        args.Cancel();  
     }  
   
     private void OnLeapAction(Entity<PathogenPierceLeapComponent> xeno, ref PathogenPierceLeapActionEvent args)  
@@ -122,7 +95,6 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
         args.Handled = true;  
   
         _jitter.DoJitter(xeno, xeno.Comp.WindupTime, true, 80, 8, true);  
-        _emote.TryEmoteWithChat(xeno, xeno.Comp.Emote);  
   
         var doAfter = new DoAfterArgs(EntityManager, xeno, xeno.Comp.WindupTime,  
             new PathogenPierceLeapDoAfterEvent(), xeno, xeno, args)  
@@ -170,7 +142,7 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
   
         _rmcPulling.TryStopAllPullsFromAndOn(xeno);  
   
-        // same as XenoLeap.  
+        // Same launch as XenoLeap: impulse + InAir + collision mask XOR.  
         if (TryComp<PhysicsComponent>(xeno, out var physics))  
         {  
             var impulse = direction * xeno.Comp.Strength * physics.Mass;  
@@ -178,7 +150,6 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
             _physics.SetBodyStatus(xeno, physics, BodyStatus.InAir);  
         }  
   
-    
         if (TryComp<FixturesComponent>(xeno, out var fixtures))  
         {  
             var collisionGroup = (int) xeno.Comp.IgnoredCollisionGroupSmall;  
@@ -219,7 +190,7 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
         }  
     }  
   
-    // Leap end restore physics, then arm a delayed strike on every tagged mob.  
+    // Leap end: restore physics, then arm a delayed strike on every tagged mob.  
     private void StopLeap(Entity<PathogenPierceLeapingComponent> xeno)  
     {  
         if (TryComp<PhysicsComponent>(xeno, out var physics))  
@@ -314,20 +285,11 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
         }  
     }  
   
-    private void OnLeapingInit(Entity<PathogenPierceLeapingComponent> xeno, ref ComponentInit args)  
-    {  
-        var actions = _actions.GetActions(xeno);  
-        foreach (var action in actions)  
-        {  
-            _actions.SetEnabled(action.AsNullable(), false);  
-        }  
-  
-        _blocker.UpdateCanMove(xeno);  
-    }  
-  
+    // Safety net: if the leaping comp is removed early (death, stun, admin),  
+    // restore physics and the full collision mask so the leaper isn't left  
+    // ghosting through things or floating forever.  
     private void OnLeapingRemove(Entity<PathogenPierceLeapingComponent> xeno, ref ComponentRemove args)  
     {  
-        // Safety net  
         if (TryComp<PhysicsComponent>(xeno, out var physics))  
         {  
             _physics.SetLinearVelocity(xeno, Vector2.Zero, body: physics);  
@@ -337,16 +299,7 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
         if (TryComp<FixturesComponent>(xeno, out var fixtures))  
         {  
             var fixture = fixtures.Fixtures.First();  
-            // Restore all groups  
             _physics.SetCollisionMask(xeno, fixture.Key, fixture.Value, -1);  
         }  
-  
-        var actions = _actions.GetActions(xeno);  
-        foreach (var action in actions)  
-        {  
-            _actions.SetEnabled(action.AsNullable(), true);  
-        }  
-  
-        _blocker.UpdateCanMove(xeno);  
     }  
 }
