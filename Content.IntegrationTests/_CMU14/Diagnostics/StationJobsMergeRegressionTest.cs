@@ -13,6 +13,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.Maps;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Content.Shared.Station.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -498,6 +499,9 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         // scans the whole pair world, where pooled rounds can hold a hunter ship's markers.
         var stationConfig = SProtoMan.Index<GameMapPrototype>(MapId).Stations["Merge"];
         var station = EntityUid.Invalid;
+        var anyJob = EntityUid.Invalid;
+        var lateJoin = EntityUid.Invalid;
+        var observer = EntityUid.Invalid;
         await Server.WaitPost(() =>
             station = stations.InitializeNewStation(stationConfig, [map.Grid], "Merge"));
 
@@ -509,9 +513,18 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                 var anyJobCoordinates = map.GridCoords.Offset(new Vector2(5, 0));
                 var lateJoinCoordinates = map.GridCoords.Offset(new Vector2(10, 0));
                 var observerCoordinates = map.GridCoords.Offset(new Vector2(15, 0));
-                var anyJob = SEntMan.SpawnEntity("StationJobsMergeAnyJobSpawn", anyJobCoordinates);
-                SEntMan.SpawnEntity("StationJobsMergeLateJoinSpawn", lateJoinCoordinates);
-                SEntMan.SpawnEntity("StationJobsMergeObserverSpawn", observerCoordinates);
+                anyJob = SEntMan.SpawnEntity("StationJobsMergeAnyJobSpawn", anyJobCoordinates);
+                lateJoin = SEntMan.SpawnEntity("StationJobsMergeLateJoinSpawn", lateJoinCoordinates);
+                observer = SEntMan.SpawnEntity("StationJobsMergeObserverSpawn", observerCoordinates);
+
+                // The picker's station filter needs each marker to resolve to the station. The grid
+                // branch of GetOwningStation does not resolve this fixture grid under pooled CI runs,
+                // so the markers are tethered through StationTracker, which the filter reads first.
+                foreach (var marker in new[] { anyJob, lateJoin, observer })
+                {
+                    var tracker = SEntMan.AddComponent<StationTrackerComponent>(marker);
+                    stations.SetStation((marker, tracker), station);
+                }
 
                 SetRunLevel(ticker, GameRunLevel.InRound);
 
@@ -533,7 +546,20 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         }
         finally
         {
-            await Server.WaitPost(() => SetRunLevel(ticker, originalRunLevel));
+            // Trackers left on the markers reference the station; once cleanup deletes the
+            // station the next PVS tick serializes the dead reference and fails the clean
+            // dispose. Delete markers and station in the same tick.
+            await Server.WaitPost(() =>
+            {
+                foreach (var marker in new[] { anyJob, lateJoin, observer })
+                {
+                    if (!SEntMan.Deleted(marker))
+                        SEntMan.DeleteEntity(marker);
+                }
+
+                SEntMan.DeleteEntity(station);
+                SetRunLevel(ticker, originalRunLevel);
+            });
         }
     }
 
