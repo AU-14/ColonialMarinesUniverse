@@ -3,14 +3,14 @@ using System.Linq;
 using System.Threading;
 using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;
-using Content.Client.CMU14.BugHelp; // CMU14: bug report window, opened from the third choice card
+using Content.Client.CMU14.HelpRelay.BugHelp; // CMU14: bug report window, opened from the third choice card
 using Content.Client.CMU14.Interface; // CMU14: CRT palette, colors the mentor help intro header
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Mentor;
-using Content.Shared.CMU14.BugHelp; // CMU14: promotion message from the staff window
+using Content.Shared.CMU14.HelpRelay.BugHelp; // CMU14: promotion message from the staff window
 using Content.Shared.CCVar;
 using Content.Shared.Input;
 using Robust.Client.Audio;

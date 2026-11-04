@@ -1,5 +1,5 @@
 using System;
-using Content.Server.CMU14.BugHelp;
+using Content.Server.CMU14.HelpRelay.BugHelp;
 using NUnit.Framework;
 
 namespace Content.Tests.Server.CMU14
