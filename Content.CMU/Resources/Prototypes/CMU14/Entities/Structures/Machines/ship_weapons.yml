@@ -88,7 +88,7 @@
     state: smoke2
     color: "#adadad"
   - type: TimedDespawn
-    lifetime: 60
+    lifetime: 30
   - type: Tag
     tags:
     - HideContextMenu
@@ -133,7 +133,7 @@
   - type: Sprite
     color: "#88cce8"
   - type: TimedDespawn
-    lifetime: 60
+    lifetime: 30
 
 - type: entity
   parent: StatusEffectStunned
@@ -191,17 +191,14 @@
   name: cmu-ship-weapons-gas
   cloud: CMUShipWeaponGas
   cloudRadius: 30
-  cloudMaxRadius: 45
-  fieldDuration: 60
 
 - type: cmuShipWeapon
   id: CMUEMSStrike
   name: cmu-ship-weapons-ems
   cloud: CMUShipWeaponEmsCloud
   cloudRadius: 30
-  cloudMaxRadius: 45
   ems: true
-  fieldDuration: 60
+  fieldDuration: 30
   stunAfterField: 35
 
 - type: cmuShipWeapon
@@ -209,8 +206,6 @@
   name: cmu-ship-weapons-smoke
   cloud: CMUShipWeaponSmoke
   cloudRadius: 30
-  cloudMaxRadius: 45
-  fieldDuration: 60
 
 - type: cmuShipWeapon
   id: CMUAirburstStrike

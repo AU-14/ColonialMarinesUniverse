@@ -44,9 +44,6 @@ public sealed partial class CMUShipWeaponPrototype : IPrototype
     public int CloudRadius;
 
     [DataField]
-    public int CloudMaxRadius;
-
-    [DataField]
     public bool Ems;
 
     [DataField]
@@ -63,7 +60,7 @@ public sealed partial class CMUShipWeaponPrototype : IPrototype
     /// </summary>
     public float FootprintRadius => Math.Max(
         RailDamage != null ? 2.5f * MathF.Sqrt(2) : Spread + WalkingDistance / 2 + BlastRadius,
-        Math.Max(CloudRadius, CloudMaxRadius) + 0.75f);
+        CloudRadius + 0.75f);
 }
 
 [Serializable, NetSerializable]
