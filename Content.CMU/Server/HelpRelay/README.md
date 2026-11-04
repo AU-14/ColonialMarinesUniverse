@@ -7,8 +7,9 @@ Conversations and reports stay their own systems. Everything after the player ty
 
 | CVar | Default | Purpose |
 |---|---|---|
-| `cmu.help_relay_webhook` | empty | Primary webhook for all sources. Empty disables sources without an override. |
-| `cmu.help_relay_webhook_ahelp` / `_mhelp` / `_bughelp` | empty | Per-source override; empty falls through to the primary. |
+| `cmu.help_relay_webhook` | empty | Primary webhook for ahelp/mhelp. Empty disables sources without an override. |
+| `cmu.help_relay_webhook_ahelp` / `_mhelp` | empty | Per-source override for ahelp/mhelp; empty falls through to the primary. |
+| `cmu.help_relay_webhook_bughelp` | empty | Bughelp webhook, forum channel only. Never falls through: empty disables bughelp. |
 | `cmu.help_relay_revision` | empty | Stamped in embed footers; the publish pipeline fills it. |
 | `cmu.help_relay_built_at` | empty | Build date (ISO yyyy-MM-dd) in footers next to the revision; empty on dev builds. |
 | `cmu.help_relay_bughelp_tags` | empty | Forum tags per report category, grammar `code:<id>,mapping:<id>`. Unknown names ignored. |

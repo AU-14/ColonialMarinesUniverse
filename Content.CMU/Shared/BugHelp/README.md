@@ -8,9 +8,9 @@ Player-typed context is minimal by design. The server snapshots what it can obse
 
 | CVar | Default | Purpose |
 |---|---|---|
-| `cmu.help_relay_webhook_bughelp` | empty | Bug report webhook. Empty falls through to the primary webhook. |
+| `cmu.help_relay_webhook_bughelp` | empty | Bug report webhook (forum channel). Empty disables bughelp; it never falls through to the primary. |
 | `cmu.help_relay_bughelp_tags` | empty | Forum tag ids per category, grammar `code:<id>,mapping:<id>`. Malformed entries are skipped with a server warning. |
-| `cmu.help_relay_webhook` | empty | Primary webhook (ahelp/mhelp/bughelp). Both empty disables bughelp. |
+| `cmu.help_relay_webhook` | empty | Primary webhook (ahelp/mhelp). Not used by bughelp. |
 | `cmu.help_relay_revision` | empty | Build revision stamped on reports; the publish pipeline fills it. |
 | `cmu.help_relay_built_at` | empty | Build date (ISO yyyy-MM-dd) stamped with the revision; says how old the build is. |
 | `cmu.bug_help_rate_limit_period` | 300 | Seconds per rate limit window. |
