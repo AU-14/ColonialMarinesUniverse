@@ -41,7 +41,7 @@ public sealed partial class PathogenPierceLeapComponent : Component
     public CollisionGroup IgnoredCollisionGroupSmall = CollisionGroup.None;
   
     [DataField, AutoNetworkedField]  
-    public SoundSpecifier? LeapSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/pathogen_pounce1.ogg");
+    public SoundSpecifier? LeapSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/Pathogen/pathogen_pounce1.ogg");
   
     [DataField, AutoNetworkedField]  
     public SoundSpecifier? HitSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_claw_flesh3.ogg");
