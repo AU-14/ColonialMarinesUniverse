@@ -16725,5 +16725,25 @@
   id: 967
   time: '2026-11-04T04:05:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2462
+- author: maertayn
+  changes:
+  - message: Consolidated and added new Discord relay systems in `HelpRelay`, check
+      Shared dir for the readme
+    type: Code
+  - message: Server exceptions and extreme severity are sent to Discord
+    type: Admin
+  - message: News integration for sending future press released to Discord threads
+    type: Add
+  - message: aghost/mghost keeps the body's look (BUG-1267)
+    type: Fix
+  - message: para latch lets players know if it landed (BUG-1250)
+    type: Fix
+  - message: Allow dual-support to APCs for tile power and area power, added CMU LV/MV/HV
+      cables and also to the vendors + ASRS, reparented power panels on APCs to CMApc
+      (BUG-1270)
+    type: Fix
+  id: 968
+  time: '2026-11-04T20:01:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2468
 Name: CMU
 Order: -1
