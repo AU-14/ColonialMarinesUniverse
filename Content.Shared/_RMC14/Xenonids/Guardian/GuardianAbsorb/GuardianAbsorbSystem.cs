@@ -81,8 +81,8 @@ public sealed class GuardianAbsorbSystem : EntitySystem
         args.Damage.ClampMin(0);  
     }  
   
-    public void SetAbsorb(EntityUid target, EntityUid guardian, GuardianAbsorbType type,  
-        float percent = 0.5f, bool ignoreResistances = false)  
+        public bool SetAbsorb(EntityUid target, EntityUid guardian, GuardianAbsorbType type,  
+            float percent = 0.5f, bool ignoreResistances = false)  
     {  
         var comp = EnsureComp<GuardianAbsorbComponent>(target);
 
