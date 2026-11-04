@@ -11,6 +11,7 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Server.CMU14.Roles; // CMU14
 using Content.Server.Preferences.Managers;
+using Content.Shared.CMU14.ForceOnForce;
 using Content.Shared.CMU14.Threats;
 using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.CrashLand;
@@ -62,6 +63,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
     [Dependency] private SurvivorSupplementSystem _survivorSupplement = default!; // CMU14
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
@@ -759,6 +761,19 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
         }
 
+        // In Force on Force a party whose allegiance matches exactly one side's platoon is part
+        // of that side: identification treats its members as teammates of it.
+        var alignedSide = ResolveFoFAlignedSide(party);
+        if (alignedSide != null)
+        {
+            foreach (var mob in spawnedLeaders.Concat(spawnedGrunts))
+            {
+                var side = _entityManager.EnsureComponent<ForceOnForceSideComponent>(mob);
+                side.Side = alignedSide;
+                _entityManager.Dirty(mob, side);
+            }
+        }
+
         // Spawn ents
         _sawmill.Debug("[ThirdPartySystem] Spawning ents...");
         foreach ((string protoId, int count) in entityBodies)
@@ -1027,6 +1042,26 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             _scheduledForces[i] = id;
         }
+    }
+
+    // A party fights for the side whose platoon shares its allegiance. When both sides rolled
+    // platoons of that allegiance the tie stays unaligned and shows the question mark to both.
+    private string? ResolveFoFAlignedSide(ThirdPartyPrototype party)
+    {
+        var ticker = _entityManager.System<GameTicker>();
+        var preset = ticker.CurrentPreset?.ID ?? ticker.Preset?.ID;
+        if (!string.Equals(preset, "ForceOnForce", StringComparison.OrdinalIgnoreCase))
+            return null;
+
+        if (party.Allegiance is not { } allegiance)
+            return null;
+
+        var govfor = _platoons.SelectedGovforPlatoon?.Allegiance == allegiance;
+        var opfor = _platoons.SelectedOpforPlatoon?.Allegiance == allegiance;
+        if (govfor == opfor)
+            return null;
+
+        return govfor ? "govfor" : "opfor";
     }
 
     private bool TrySpawnAtMarker(string protoId,

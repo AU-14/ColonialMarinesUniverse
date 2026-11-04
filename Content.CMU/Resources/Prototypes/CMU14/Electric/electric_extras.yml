@@ -32,6 +32,10 @@
     ports:
     - id: liquid_in
       rate: 8
+  - type: UserInterface
+    interfaces:
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
   - type: AutoFeedTray
 
 # ---------------------------------------------------------------- the electric welder
